@@ -167,7 +167,7 @@ END.
 
 FOR EACH bDiscountPlan WHERE
          bDiscountPlan.Brand = gcBrand AND
-  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + {&ADDLINE_DISCOUNTS_HM}) > 0,
+  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
   FIRST DPMember WHERE
         DPMember.DPId       = bDiscountPlan.DPId   AND
         DPMember.HostTable  = "MobSub"             AND
