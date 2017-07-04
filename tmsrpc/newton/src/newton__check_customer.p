@@ -20,7 +20,7 @@
 
 {Syst/commpaa.i}
 {Func/orderchk.i}
-{Func/profunc.i}
+{Func/custfunc.i}
 {Syst/tmsconst.i}
 gcBrand = "1".
 
