@@ -58,7 +58,9 @@ FOR EACH daycampaign NO-LOCK:
                  /*MsRequest.ReqStatus EQ {&REQYEST_STATUS_DONE} AND*/ 
                  (MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} OR
                  MsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} ) AND
-                 MsRequest.ReqCparam3 EQ daycampaign.dcevent
+                 MsRequest.ReqCparam3 EQ daycampaign.dcevent AND
+                 MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
+                 MsRequest.ReqStatus NE {&REQUEST_STATUS_HANDLED}
                  USE-INDEX MsActStamp NO-ERROR.
       IF AVAIL MsRequest THEN DO:
          IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
