@@ -111,7 +111,7 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
    IF NOT AVAIL SalesMan THEN 
       RETURN appl_err("Salesman not found").
 
-   IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS} EQ 0 AND 
+   IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
       LOOKUP(SalesMan.Reseller,{&RESELLERS})         EQ 0 THEN 
       RETURN appl_err("Salesman Reseller not match").
 
@@ -126,7 +126,7 @@ ELSE IF LOOKUP(pcReseller,{&RESELLERS}) > 0 THEN DO:
 
 END.
 ELSE IF AVAIL SalesMan AND
-       (LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS} > 0  OR
+       (LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) > 0  OR
         LOOKUP(SalesMan.Reseller,{&RESELLERS})         > 0) THEN 
    RETURN appl_err("Reseller not match").
 
