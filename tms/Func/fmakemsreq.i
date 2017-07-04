@@ -1135,6 +1135,8 @@ END PROCEDURE.
 FUNCTION fIsOrderForProCustomer RETURNS LOGICAL
    (INPUT iiOrderID AS INTEGER):
 
+   DEF BUFFER Order FOR Order.
+
    FIND FIRST Order NO-LOCK WHERE Order.Brand = gcBrand AND Order.OrderID = iiOrderID NO-ERROR.
 
    IF INDEX(Order.orderchannel,"PRO") > 0 THEN
