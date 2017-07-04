@@ -304,9 +304,10 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
    END.
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
-      IF NUM-ENTRIES(bMSRequest.ReqCparam6) > 2 THEN
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 THEN
          lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      ELSE lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 THEN
+         lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
    IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
