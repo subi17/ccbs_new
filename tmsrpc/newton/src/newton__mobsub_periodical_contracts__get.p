@@ -62,14 +62,18 @@ FOR EACH daycampaign NO-LOCK:
                  USE-INDEX MsActStamp NO-ERROR.
       IF AVAIL MsRequest THEN DO:
          IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-            MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-            liStatus = 2. /*Pending activation*/
-         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} AND
-            MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-            liStatus = 3. /*Pending deactivation*/
-         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} THEN
             liStatus = 1. /* activation done*/
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} THEN
+            liStatus = 0. /* Incative */ 
+         /* Show pending when operation is ongoing or pending status */
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} /*AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING}*/ THEN
+            liStatus = 2. /*Pending activation*/
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} /*AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING}*/ THEN
+            liStatus = 3. /*Pending deactivation*/
          ELSE liStatus = 0. /*Inactive*/
       END.
       ELSE liStatus = 0. /*Inactive, never requested activation*/
