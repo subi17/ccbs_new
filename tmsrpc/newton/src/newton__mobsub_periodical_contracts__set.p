@@ -100,11 +100,11 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    /*SVAs*/
    /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
    IF fIsSVA(pcServiceId, OUTPUT liParams) THEN DO:
-      IF liParams EQ 2 AND NOT (pcValue BEGINS "cancel") THEN DO:
+      IF liParams EQ 2 AND (pcValue BEGINS "activate") THEN DO:
          IF pcParam EQ "" OR pcParam2 EQ "" THEN
             RETURN appl_err("Missing SVA parameter").
       END.
-      ELSE IF liParams EQ 1 AND NOT (pcValue BEGINS "cancel") THEN DO:
+      ELSE IF liParams EQ 1 AND (pcValue BEGINS "activate") THEN DO:
          IF pcParam EQ "" THEN
             RETURN appl_err("Missing SVA parameter").
       END.
