@@ -245,6 +245,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
 
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -260,9 +261,9 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
-      FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bOrder.CliType NO-LOCK:
+      FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
 
-      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
           
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
@@ -283,6 +284,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -298,9 +300,9 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
-      FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bOrder.CliType NO-LOCK:
+      FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
 
-      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
           NEXT.
 
       RETURN TRUE.
@@ -351,6 +353,7 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bClitype       FOR Clitype.
 
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
@@ -363,9 +366,9 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.PayType = FALSE                   AND
             (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
              bMobSub.MsStatus = {&MSSTATUS_BARRED}),
-       FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bMobSub.CliType NO-LOCK:
+       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
       
-      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
 
       IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
@@ -386,6 +389,7 @@ FUNCTION fCheckExistingConvergentWithoutALCheck RETURNS LOGICAL
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bClitype       FOR Clitype.
 
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
@@ -398,9 +402,9 @@ FUNCTION fCheckExistingConvergentWithoutALCheck RETURNS LOGICAL
              bMobSub.PayType = FALSE                   AND
             (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
              bMobSub.MsStatus = {&MSSTATUS_BARRED}),
-       FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bMobSub.CliType NO-LOCK:
+       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
 
-      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
           NEXT.
       RETURN TRUE.
    END.
