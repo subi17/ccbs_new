@@ -111,8 +111,8 @@ DO:
    END.
    ELSE IF AVAIL Customer THEN 
    DO:
-       IF NOT (fCheckExistingConvergent    (pcIdType, pcPersonId, pcCliType) OR 
-               fCheckOngoingConvergentOrder(pcIdType, pcPersonId, pcCliType)) THEN
+       IF NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR 
+               fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType)) THEN
        DO:
            llOrderAllowed = FALSE.
            lcReason = "Additional mobile line is not compatible with respective to main convergent line".

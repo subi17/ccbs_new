@@ -236,7 +236,7 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    RETURN FALSE.
 END.                                         
 
-/* Function checks for ongoing 3P convergent for a customer */
+/* Function checks for ongoing 3P convergent for a customer  */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
@@ -267,6 +267,43 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
           
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for ongoing 3P convergent for a customer  */
+FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID,
+      FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bOrder.CliType NO-LOCK:
+
+      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+
+      RETURN TRUE.
 
    END.
 
@@ -339,6 +376,39 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+/* Function checks for existing 3P convergent for a customer 
+   without checking additional line matrix support */
+FUNCTION fCheckExistingConvergentWithoutALCheck RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE                   AND
+            (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}),
+       FIRST CliType WHERE CliType.Brand = Syst.Parameters:gcBrand AND CliType.CliType = bMobSub.CliType NO-LOCK:
+
+      IF CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 
 /* Function checks for existing 2P OR 3P convergent for a customer */
 FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
