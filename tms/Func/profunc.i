@@ -16,7 +16,7 @@
 {Func/fmakemsreq.i}
 {Func/orderfunc.i}
 {Func/femailinvoice.i}
-/*{Func/email.i}*/
+{Func/email.i}
 {Func/fixedlinefunc.i}
 
 FUNCTION fIsPro RETURNS LOGICAL
