@@ -1404,6 +1404,10 @@
 1 "" 2 "Descompte promoció" 0 "CONVDISC" "1" 01/04/17 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONVDISC" "1" 01/04/17 31/12/49
 1 "" 5 "Promotional discount" 0 "CONVDISC" "1" 01/04/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
 1 "" 1 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 2 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 3 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
@@ -7233,6 +7237,11 @@
 1 "" 3 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 4 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 5 "Huawei Y635 White" 0 "P043Y65W2" "1" 26/03/15 31/12/49
+1 "" 1 "Huawei Y6 2017 Color Oro" 0 "P043Y67D2" "1" 04/07/17 31/12/49
+1 "" 2 "Huawei Y6 2017 Color Oro" 0 "P043Y67D2" "1" 04/07/17 31/12/49
+1 "" 3 "Huawei Y6 2017 Color Oro" 0 "P043Y67D2" "1" 04/07/17 31/12/49
+1 "" 4 "Huawei Y6 2017 Color Oro" 0 "P043Y67D2" "1" 04/07/17 31/12/49
+1 "" 5 "Huawei Y6 2017 Color Gold" 0 "P043Y67D2" "1" 04/07/17 31/12/49
 1 "" 1 "Huawei Y6 2017 Negro" 0 "P043Y67N2" "1" 19/06/17 31/12/49
 1 "" 2 "Huawei Y6 2017 Negro" 0 "P043Y67N2" "1" 19/06/17 31/12/49
 1 "" 3 "Huawei Y6 2017 Negro" 0 "P043Y67N2" "1" 19/06/17 31/12/49
