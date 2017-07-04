@@ -12,6 +12,7 @@
 {Syst/eventval.i}
 {Func/femailinvoice.i}
 {Func/profunc.i}
+{Func/custfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

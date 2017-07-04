@@ -11,7 +11,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
 {Func/fixedlinefunc.i}
-{Func/profunc.i}
+{Func/custfunc.i}
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liPrintXML AS INT NO-UNDO.

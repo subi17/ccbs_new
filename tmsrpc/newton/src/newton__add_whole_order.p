@@ -735,7 +735,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           IF llIsProCustomer AND NOT fIsConvergenceTariff(pcSubType) THEN
           DO:
               /* This is to validate, whether this additional mobile line is compatable with existing convergent */
-              IF NOT (fCheckExistingConvergent (lcIdtypeOrderCustomer, lcIdOrderCustomer, pcSubType) OR fCheckOngoingConvergentOrder (lcIdtypeOrderCustomer, lcIdOrderCustomer, pcSubType)) THEN
+              IF NOT (fCheckExistingConvergentWithoutALCheck (lcIdtypeOrderCustomer, lcIdOrderCustomer, pcSubType) OR fCheckOngoingConvergentOrderWithoutALCheck (lcIdtypeOrderCustomer, lcIdOrderCustomer, pcSubType)) THEN
                   lcFError = "PRO customer is allowed for mobile lines, only when there exists atleast one active convergent subscription or an ongoing convergent order".                                  
           END.
       END.
