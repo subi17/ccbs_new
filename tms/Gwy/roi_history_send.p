@@ -221,7 +221,14 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
    add_boolean(pcStruct,"mark_email_3rd",OrderCustomer.OutEMailMarketing).
    add_boolean(pcStruct,"mark_post_3rd",OrderCustomer.OutPostMarketing).
    add_string(pcStruct,"id_type",OrderCustomer.CustIdType).
- 
+   
+   /* YPRO-24 ROI History Segment field WITH Category */
+   FIND FIRST CustCat NO-LOCK WHERE
+              CustCat.Brand    = gcBrand AND
+              CustCat.Category = OrderCustomer.Category NO-ERROR.
+   IF AVAILABLE CustCat THEN
+      add_string(pcStruct,"segment",CustCat.Segment).
+
    IF Order.OrdererId NE "" AND OrderCustomer.RowType NE 5 THEN DO:
       add_string(pcStruct,"person_id",Order.OrdererId).
       add_string(pcStruct,"company_id",OrderCustomer.CustId).

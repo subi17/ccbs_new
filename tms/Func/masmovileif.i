@@ -11,6 +11,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
 {Func/fixedlinefunc.i}
+{Func/custfunc.i}
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liPrintXML AS INT NO-UNDO.
@@ -92,6 +93,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcServiceArray AS CHAR NO-UNDO.
    DEF VAR lcContactStruct AS CHAR NO-UNDO.
    DEF VAR lcAddressStruct AS CHAR NO-UNDO.
+   DEF VAR lcClientStruct AS CHAR NO-UNDO.
    DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcCharacteristicsArray AS CHAR NO-UNDO.
    DEF VAR lcOrderType AS CHAR NO-UNDO.
@@ -105,6 +107,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR ldaSellDate AS DATE NO-UNDO.
    DEF VAR ldaCreDate AS DATE NO-UNDO.
    DEF VAR lcLastName AS CHAR NO-UNDO.
+   DEF VAR lcCategory AS CHAR NO-UNDO.
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -183,7 +186,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    add_string(lcOutputStruct, "createdBy", "YOIGO").
    add_string(lcOutputStruct, "createdDate", 
               Class.timedate:ConvertToISO8601(ldaCreDate)). 
-
+   lcClientStruct = add_struct(lcOutputStruct, "Client").
+   add_string(lcClientStruct, "clientID", OrderCustomer.CustId).
+   add_string(lcClientStruct, "type", 
+                              fgetCustSegment(bordercustomer.CustIdType,
+                                              bordercustomer.selfemployed,
+                                              bordercustomer.pro,
+                                              lcCategory)). 
    /*Installation*/
    lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
    lcContactStruct = add_struct(lcInstallationStruct, "Contact").
