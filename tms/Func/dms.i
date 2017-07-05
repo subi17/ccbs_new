@@ -87,7 +87,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
 
    /*YPR-3077:A0 response must erase SENT doocuments*/
    IF DMS.StatusCode EQ "A0" THEN DO:
-      FOR EACH DMSDoc WHERE
+      FOR EACH DMSDoc EXCLUSIVE-LOCK WHERE
                DMSDoc.DMSID EQ DMS.DMSID AND
                DMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT}:
          DELETE DMSDoc.         
