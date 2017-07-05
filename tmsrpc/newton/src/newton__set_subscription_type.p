@@ -30,6 +30,7 @@ katun = "Newton".
 {Func/fmakemsreq.i}
 {Func/fcharge_comp_loaded.i}
 {Syst/tmsconst.i}
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN             AS CHAR NO-UNDO.
@@ -48,6 +49,7 @@ DEF VAR pcMemoTitle          AS CHAR NO-UNDO.
 DEF VAR pcMemoContent        AS CHAR NO-UNDO.
 DEF VAR pcContractID         AS CHAR NO-UNDO.
 DEF VAR pcChannel            AS CHAR NO-UNDO.
+DEF VAR lcProValidation      AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcc AS CHAR NO-UNDO.
@@ -133,10 +135,18 @@ IF fValidateMobTypeCh(
    pcCliType,
    pdActivation,
    plExtendContract,
-   fIsConvergenceTariff(MobSub.CliType), /* bypass stc type check */
+   FALSE, /* bypass stc type check */
    0, /* stc order id */
    {&REQUEST_SOURCE_NEWTON}, 
    OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
+
+  /*YPRO*/
+  lcProValidation = fValidateProSTC(MobSub.Custnum,
+                                    MobSub.CliType,
+                                    pcCliType).
+  IF lcProValidation NE "" THEN 
+     RETURN appl_err("Pro customer validatuin error: " + lcProValidation).
+
 
 /* Set the katun again with original username */
 katun = "VISTA_" + pcSalesman.

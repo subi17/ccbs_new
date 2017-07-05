@@ -156,6 +156,7 @@ PROCEDURE pBundleChange:
                                   "",
                                   0,
                                   0,
+                                  "",
                                   OUTPUT lcError).
    IF liTerminate = 0 OR liTerminate = ? THEN 
       RETURN "ERROR: Bundle termination request creation failed; " + 
@@ -175,6 +176,7 @@ PROCEDURE pBundleChange:
                                  "",
                                  0,
                                  0,
+                                 "",
                                  OUTPUT lcError).
    IF liActivate = 0 THEN 
       RETURN "ERROR: Bundle activation request creation failed; " + 
@@ -559,6 +561,7 @@ PROCEDURE pCloseContracts:
                                    "", 
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -639,6 +642,7 @@ PROCEDURE pCloseContracts:
                        "",
                        0,
                        0,
+                       "",
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */

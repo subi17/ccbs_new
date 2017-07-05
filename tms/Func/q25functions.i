@@ -8,7 +8,10 @@
   CREATED ......: 19.11.15
   CHANGED ......: 
   ------------------------------------------------------------------------*/
+&IF "{&fQ25FUNCTIONS}" NE "YES"
+&THEN
 
+&GLOBAL-DEFINE fQ25FUNCTIONS YES
 {Syst/commali.i}
 {Func/timestamp.i}
 {Func/cparam2.i}
@@ -952,3 +955,4 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
    END.
    RETURN TRUE.
 END.
+&ENDIF
