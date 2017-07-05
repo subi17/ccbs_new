@@ -428,10 +428,21 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    IF Customer.CustIDType = "CIF" THEN lcSegment = "20".
    ELSE DO:
       CASE Customer.Category:
-      WHEN "11" OR WHEN "12" OR WHEN "30" OR WHEN "31" THEN 
-         lcSegment = Customer.Category.
-      WHEN "41" THEN lcSegment = "11".   
-      OTHERWISE lcSegment = "10".
+         WHEN "10" OR 
+         WHEN "40" THEN lcSegment = "10".
+         WHEN "11" OR 
+         WHEN "13" OR 
+         WHEN "41" THEN lcSegment = "11".
+         WHEN "42" OR 
+         WHEN "43" OR 
+         WHEN "44" OR 
+         WHEN "45" THEN lcSegment = "12".
+         WHEN "21" THEN lcSegment = "21".
+         WHEN "22" OR 
+         WHEN "23" THEN lcSegment = "22".
+         WHEN "30" THEN lcSegment = "30".
+         WHEN "31" THEN lcSegment = "31".
+         OTHERWISE lcSegment = "99".
       END CASE.
    END.
    

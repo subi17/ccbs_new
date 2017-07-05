@@ -198,6 +198,13 @@ FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
                      idtDate,
                      FALSE).
 
+   /* Additional Line with mobile only ALFMO-5 */
+   IF NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
+
    RETURN TRUE.
 
 END FUNCTION.
