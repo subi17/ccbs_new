@@ -301,10 +301,10 @@ IF AVAILABLE lbOrderCustomer THEN DO:
       DO:
          IF NOT fCheckOngoingMobileOnly(lbOrderCustomer.CustIdType,
                                         lbOrderCustomer.CustID,
-                                        Order.CliType) AND
+                                        lbOrder.CliType) AND
             NOT fCheckExistingMobileOnly(lbOrderCustomer.CustIdType,
                                          lbOrderCustomer.CustID,
-                                         Order.CliType) THEN 
+                                         lbOrder.CliType) THEN 
          DO:
             DELETE OrderAction.
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
