@@ -15,7 +15,7 @@ SESSION:NUMERIC-FORMAT = "European".
 
 {Syst/commali.i}
 {Mc/femaildata.i}
-{Func/email.i}
+/*{Func/email.i}*/
 {Func/ftransdir.i}
 /*{femaildata2.i}*/
 

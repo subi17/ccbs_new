@@ -11,6 +11,7 @@
 {Func/orderfunc.i}
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
+{Func/profunc.i}
 
 DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
@@ -24,6 +25,7 @@ DEF VAR lcOldStatus     AS CHAR NO-UNDO.
 DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
 DEF VAR lcError         AS CHAR NO-UNDO.
 DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
+DEF VAR liRequest       AS INT NO-UNDO.
 
 DEF BUFFER lbOrder          FOR Order.
 
@@ -420,19 +422,29 @@ IF llDoEvent THEN DO:
 END.
 
 /* Release pending additional lines orders, in case of pending convergent 
-   mail line order is released */
-/* YTS-10832 FIX */
+   main line order is released */
+/* YTS-10832 fix, checking correct status of order */
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
-   IF (lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       OR
-       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
-       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
-       lcOldStatus EQ {&ORDER_STATUS_OFFER_SENT})               AND
-      (lcNewStatus = {&ORDER_STATUS_NEW}  OR
-       lcNewStatus = {&ORDER_STATUS_MNP}) THEN DO:
+   IF lcNewStatus = {&ORDER_STATUS_NEW}  OR
+      lcNewStatus = {&ORDER_STATUS_MNP} THEN DO:
        
        fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                        OrderCustomer.CustID) . 
-   END.   
+   END.
+END.
+
+/* Additional Line with mobile only ALFMO-5  
+   Release pending additional lines orders, in case of pending 
+   main Moblie only line order is released */
+ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                 CLIType.Brand      = gcBrand  AND
+                 CLIType.CLIType    = Order.CliType AND
+                 CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
+                (lcNewStatus = {&ORDER_STATUS_NEW}  OR
+                 lcNewStatus = {&ORDER_STATUS_MNP}) THEN 
+DO:
+   fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                   OrderCustomer.CustID). 
 END.
 
 RETURN "".

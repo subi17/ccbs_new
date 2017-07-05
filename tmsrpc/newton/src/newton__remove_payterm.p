@@ -143,6 +143,7 @@ liCreated = fPCActionRequest(MobSub.MsSeq,
                              "",
                              0,
                              DCCLI.PerContractID,
+                             "",
                              OUTPUT lcResult).
 IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Request creation failed: &1",
