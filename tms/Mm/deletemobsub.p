@@ -143,6 +143,7 @@ PROCEDURE pTerminate:
    DEF VAR llCloseRVTermFee   AS LOG  NO-UNDO INIT TRUE.
    DEF VAR lcResult           AS CHAR NO-UNDO. 
    DEF VAR ldeActStamp        AS DEC  NO-UNDO.  
+   DEF VAR ldtCloseDate       AS DATE NO-UNDO. /* Mobile only additional line ALFMO-5 */
 
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
@@ -940,6 +941,21 @@ PROCEDURE pTerminate:
                      MobSub.MsSeq,
                      fLastDayOfMonth(TODAY),
                      FALSE).
+      
+      /* Additional Line with mobile only ALFMO-5 */
+      IF MONTH(MobSub.ActivationDate) = MONTH(TODAY) AND 
+         YEAR(MobSub.ActivationDate) = YEAR(TODAY) THEN
+         ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+      ELSE IF MONTH(MobSub.ActivationDate) < MONTH(TODAY) OR
+           YEAR(MobSub.ActivationDate) < YEAR(TODAY) THEN
+         ASSIGN ldtCloseDate = TODAY.
+
+      fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
+                     MobSub.MsSeq,
+                     ldtCloseDate,
+                     FALSE).
+
+
    END.
 
    /* COFF Partial termination */
@@ -976,13 +992,18 @@ PROCEDURE pTerminate:
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
    /* ADDLine-20 Additional Line 
-      ADDLINE-323 fixed bug */
+      ADDLINE-323 fixed bug 
+      Additional Line with mobile only ALFMO-5 */
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Parameters:gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(TermMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
-                     bCLIType.CLIType    = TermMobSub.CLIType                AND
-                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
-                    (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN DO:
+               bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+               bCLIType.CLIType    = TermMobSub.CLIType                AND
+               bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
+              (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
+   DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand            AND
                bMobSub.AgrCust = TermMobSub.CustNum AND
@@ -995,6 +1016,38 @@ PROCEDURE pTerminate:
       END.
    END.
 
+   /* Additional Line with mobile only ALFMO-5 */
+   ELSE IF AVAIL DiscountPlan AND 
+        CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                 bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                 bCLIType.CLIType    = TermMobSub.CLIType                AND                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
+        NOT CAN-FIND(FIRST DPMember WHERE
+                           DPMember.DPId = DiscountPlan.DPId AND
+                           DPMember.HostTable = "MobSub" AND
+                           DPMember.KeyValue  = STRING(TermMobSub.MsSeq) AND
+                           DPMember.ValidTo   <> 12/31/49) THEN 
+   DO:            
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobSub.Brand   = gcBrand            AND
+               bMobSub.AgrCust = TermMobSub.CustNum AND
+               bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
+               LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
+    
+          /* Additional Line with mobile only ALFMO-5 */
+         IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) AND 
+            YEAR(bMobSub.ActivationDate) = YEAR(TODAY) THEN
+            ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+         ELSE IF MONTH(bMobSub.ActivationDate) < MONTH(TODAY) OR
+            YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
+            ASSIGN ldtCloseDate = TODAY.
+    
+         fCloseDiscount(ENTRY(LOOKUP(bMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
+                        bMobSub.MsSeq,
+                        ldtCloseDate,
+                        FALSE).
+      END.      
+   END. 
+   
    /* Find Original request */
    FIND FIRST MSRequest WHERE
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.

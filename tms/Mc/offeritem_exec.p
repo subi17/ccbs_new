@@ -476,6 +476,15 @@ PROCEDURE pDiscountPlanMember:
                               OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) THEN RETURN "".
          END.
+         /* Additional Line with mobile only ALFMO-5 */
+         IF fCheckExistingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) OR
+            fCheckOngoingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) THEN DO:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand           AND
+                              OrderAction.OrderID  = Order.OrderID     AND
+                              OrderAction.ItemType = "AddLineDiscount" AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) THEN RETURN "".
+         END.
       END.
    END.
 

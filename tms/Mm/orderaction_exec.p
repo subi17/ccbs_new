@@ -655,11 +655,11 @@ PROCEDURE pAddLineDiscountPlan:
               DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN 
       RETURN "ERROR:Additional Line DiscountPlan ID: " + OrderAction.ItemKey + " not found".
-
+    /* Additional Line with mobile only ALFMO-5 */
    fCreateAddLineDiscount(MobSub.MsSeq,
                           MobSub.CLIType,
                           TODAY,
-                          "").
+                          OrderAction.ItemKey).
    IF RETURN-VALUE BEGINS "ERROR" THEN
       RETURN RETURN-VALUE.
 
