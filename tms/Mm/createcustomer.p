@@ -338,8 +338,6 @@ ELSE DO:
                Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
                   WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
 
-            fUpdEmailDelType(Order.OrderId).
-
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:
                IF AVAILABLE Customer AND Customer.BankAcc = "" AND
@@ -358,6 +356,7 @@ ELSE DO:
             END.
 
          END. /* IF llUpdateCust THEN DO: */
+         fUpdEmailDelType(Order.OrderId).
       END.
    END.
 

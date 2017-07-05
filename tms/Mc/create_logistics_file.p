@@ -521,6 +521,12 @@ FUNCTION fDelivSIM RETURNS LOG
       WHEN "fusion_pos" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
+      WHEN "Telesales_PRO" OR 
+      WHEN "Fusion_Telesales_PRO" THEN lcOrderChannel = "08".
+      WHEN "CC_PRO" OR
+      WHEN "Fusion_CC_PRO" THEN lcOrderChannel = "09".
+      WHEN "Emission_PRO" OR
+      WHEN "Fusion_Emission_PRO" THEN lcOrderChannel = "10".
    END CASE.
 
    FIND FIRST DelivCustomer WHERE

@@ -329,17 +329,19 @@ FUNCTION fConvertPayType RETURNS CHAR
 END.   
 
 FUNCTION fGetSegment RETURNS CHAR
-   (iiOrderID AS INT):
-   DEF BUFFER bOC FOR Ordercustomer.
-   FIND FIRST bOC NO-LOCK  WHERE
-              bOC.Brand EQ gcBrand AND
-              bOC.OrderID EQ iiOrderID AND
-              bOC.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+   (iiCustNum AS INT):
+   DEF BUFFER bCust FOR Customer.
+   FIND FIRST bCust NO-LOCK  WHERE
+              bCust.CustNum EQ iiCustNum
               NO-ERROR.
-   IF AVAIL bOC THEN DO:
-      IF bOC.CustIdType EQ "CIF" THEN RETURN "Company".
-      ELSE IF bOC.SelfEmployed EQ TRUE THEN RETURN "Self-employed".
-      ELSE RETURN "Consumer".
+   IF AVAIL bCust THEN DO:
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand = gcBrand AND
+                 CustCat.Category = bCust.Category
+                 NO-ERROR.
+      IF AVAIL CustCat THEN
+         RETURN CustCat.Segment.
+      RETURN "Consumer".
    END.
    ELSE RETURN "-".
 END.   
@@ -777,7 +779,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    STRING(Order.OrderType)         + lcDelim +
    /**/
-   fGetSegment(Order.OrderID)      + lcDelim +
+   fGetSegment(Order.Custnum)      + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    /*q25Extension YPR-3269*/
@@ -1410,7 +1412,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    /*Order type*/
    STRING(Order.OrderType)        + lcDelim +
    /*Segment*/
-   fGetSegment(Order.OrderID)     + lcDelim +
+   fGetSegment(Order.CustNum)     + lcDelim +
    /*Terminal type*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    ( IF Order.DeliverySecure EQ 1
