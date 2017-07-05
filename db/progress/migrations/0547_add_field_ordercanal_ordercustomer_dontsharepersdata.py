@@ -6,7 +6,7 @@ class AddFieldDontSharePersData(Migration):
 
     def up(self):
         t = self.alter_table('OrderCustomer')
-        t.column('DontSharePersData', 'logical', format="Yes/No", initial="No", max_width=1, label="DontSharePersData", column_label="DontSharePersData", position=76, order=295, help="Do Not Share Personal Data among Mas Movil Group")
+        t.column('DontSharePersData', 'logical', format="Yes/No", initial="No", max_width=1, label="DontSharePersData", column_label="DontSharePersData", position=77, order=1160, help="Do Not Share Personal Data among Mas Movil Group")
 
     def down(self):
         t = self.alter_table('OrderCustomer')

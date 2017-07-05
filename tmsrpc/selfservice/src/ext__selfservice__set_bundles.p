@@ -275,6 +275,7 @@ ELSE
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
 
 IF liRequest = 0 THEN RETURN appl_err("Bundle request not created"). 
