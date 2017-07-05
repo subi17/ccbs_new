@@ -1385,6 +1385,7 @@
 "Salesman" "SmPrefix" "IFS" "AN" "ATAKAM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AO" "AON CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AP" "Apple" "" "28" 1
+"Salesman" "SmPrefix" "IFS" "AT" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AW" "AON WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "BE" "BYMOVIL EMISION" "" "15" 1
@@ -1393,6 +1394,7 @@
 "Salesman" "SmPrefix" "IFS" "BL" "Vista internal users" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "BM" "BYMOVIL RETENCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BR" "BYMOVIL RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BT" "B12 DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BY" "ByMovil" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "CA" "Carrefour" "" "12" 0

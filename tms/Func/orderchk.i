@@ -19,7 +19,8 @@
 FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
                                       INPUT iiLimitType    AS INT,
                                       INPUT icIdType       AS CHAR,
-                                      INPUT ilSelfEmployed AS LOG):
+                                      INPUT ilSelfEmployed AS LOG,
+                                      INPUT ilpro          AS LOG):
 
    DEF VAR liLimit AS INT NO-UNDO.
 
@@ -33,7 +34,8 @@ FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
       FIND FIRST CustCat WHERE
                  CustCat.Brand = gcBrand AND
                  CustCat.CustIdType = icIdType AND
-                 CustCat.SelfEmployed = ilSelfEmployed NO-LOCK NO-ERROR. 
+                 CustCat.SelfEmployed = ilSelfEmployed AND
+                 CustCat.pro EQ ilpro NO-LOCK NO-ERROR. 
       IF AVAIL CustCat THEN DO:
          IF iiLimitType = {&LIMIT_TYPE_SUBQTY} THEN
             liLimit = CustCat.MobSubLimit.
@@ -79,6 +81,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    (pcPersonId AS CHAR,
     pcIdType AS CHAR,
     plSelfEmployed AS LOG,
+    plpro AS LOG, 
     piOrders AS INT,
     OUTPUT ocReason AS CHAR,
     OUTPUT oiSubLimit AS INT,
@@ -154,12 +157,14 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
        oiSubLimit    = fCheckSubsLimit(INPUT Customer.Custnum,
                                        INPUT {&LIMIT_TYPE_SUBQTY},
                                        INPUT pcIdType,
-                                       INPUT plSelfEmployed).
+                                       INPUT plSelfEmployed,
+                                       INPUT plpro).
        oiSubActLimit = fCheckSubsLimit(INPUT Customer.Custnum,
 
                                        INPUT {&LIMIT_TYPE_SUBACTQTY},
                                        INPUT pcIdType,
-                                       INPUT plSelfEmployed).
+                                       INPUT plSelfEmployed,
+                                       INPUT plpro).
        /* check barring subscriptions */
        IF fExistBarredSubForCustomer(Customer.CustNum) THEN DO: 
           ocReason = "barring".
