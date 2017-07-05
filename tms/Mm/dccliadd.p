@@ -56,7 +56,7 @@ FORM
    lcDCEvent COLON 20
       LABEL "Contract"
       HELP "Periodical contract ID (F9)"
-      FORMAT "X(16)"
+      FORMAT "X(20)"
    DayCampaign.DCName
       FORMAT "X(30)"
       NO-LABEL
@@ -373,6 +373,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       END. /* ELSE DO: */
       IF liCreated > 0 THEN 

@@ -260,6 +260,7 @@ PROCEDURE pHandleRow:
                                 "PMDUBDeActBatch",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult). 
 
    IF liRequest = 0 THEN RETURN 

@@ -66,6 +66,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
 
 END.   
 
+
 /*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsConvergenceTariff RETURNS LOGICAL
@@ -235,7 +236,7 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    RETURN FALSE.
 END.                                         
 
-/* Function checks for ongoing 3P convergent for a customer */
+/* Function checks for ongoing 3P convergent for a customer  */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
@@ -244,6 +245,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
 
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -258,10 +260,52 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
             bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
-            bOrderFusion.OrderID = bOrder.OrderID:
+            bOrderFusion.OrderID = bOrder.OrderID,
+      FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
 
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+          NEXT.
+          
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for ongoing 3P convergent for a customer  */
+FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID,
+      FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
+
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+
+      RETURN TRUE.
 
    END.
 
@@ -309,6 +353,7 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
 
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bClitype       FOR Clitype.
 
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
@@ -320,8 +365,12 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE                   AND
             (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
-             bMobSub.MsStatus = {&MSSTATUS_BARRED}):
-    
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}),
+       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
+      
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+          NEXT.
+
       IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
          RETURN TRUE.
 
@@ -330,6 +379,40 @@ FUNCTION fCheckExistingConvergent RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+/* Function checks for existing 3P convergent for a customer 
+   without checking additional line matrix support */
+FUNCTION fCheckExistingConvergentWithoutALCheck RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bClitype       FOR Clitype.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE                   AND
+            (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
+             bMobSub.MsStatus = {&MSSTATUS_BARRED}),
+       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
+
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 
 /* Function checks for existing 2P OR 3P convergent for a customer */
 FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
@@ -356,6 +439,108 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
    END.
 
    RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fIsProSubscription RETURNS LOGICAL
+   (INPUT iiMsSeq   AS INT):
+
+   DEFINE BUFFER bMobSub   FOR MobSub.
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bCustCat  FOR CustCat.
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = iiMsSeq AND bMobSub.PayType = FALSE NO-LOCK NO-ERROR.
+   IF AVAIL bMobsub THEN 
+   DO:
+       FIND FIRST bCustomer WHERE bCustomer.CustNum = bMobSub.InvCust AND bCustomer.Roles <> "inactive" NO-LOCK NO-ERROR.
+       IF AVAIL bCustomer THEN 
+       DO:
+           FIND FIRST bCustCat WHERE bCustCat.Brand = Syst.Parameters:gcBrand AND bCustCat.Category = bCustomer.Category AND bCustCat.Pro = TRUE NO-LOCK NO-ERROR.
+           IF AVAIL bCustCat THEN 
+               RETURN TRUE.    
+       END.        
+   END.    
+END FUNCTION.
+/* Additional Line with mobile only ALFMO-5  */ 
+FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
+   (icCLIType    AS CHARACTER,
+    icCLITypeAddLine AS CHARACTER):
+
+   DEF VAR lcResult AS CHAR NO-UNDO.
+
+   DEF BUFFER bCLIType FOR CLIType.
+   
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+               bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+               bCLIType.CLIType    = icCLIType                         AND
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO:
+      
+      IF fMatrixAnalyse(Syst.Parameters:gcBrand,
+                        "ADDLINEHM",
+                        "SubsTypeFrom;SubsTypeTo",
+                        icCLIType + ";" + icCLITypeAddLine,
+                        OUTPUT lcResult) = 1 THEN
+         RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END.
+
+/* Function checks for existing Mobile Only for a customer 
+   Additional Line with mobile only ALFMO-5 */
+FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bCustomer FOR Customer.
+   DEFINE BUFFER bMobSub   FOR MobSub.
+
+   FOR FIRST bCustomer WHERE
+             bCustomer.Brand      = Syst.Parameters:gcBrand AND
+             bCustomer.OrgId      = icCustID                AND
+             bCustomer.CustidType = icCustIDType            AND
+             bCustomer.Roles     NE "inactive"              NO-LOCK,
+       EACH  bMobSub NO-LOCK WHERE
+             bMobSub.Brand   = Syst.Parameters:gcBrand AND
+             bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.PayType = FALSE:
+
+       IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
+          RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for ongoing mobile only for a customer 
+   Additional Line with mobile only ALFMO-5  */
+FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+            LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+
+      IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
+         RETURN TRUE.
+   END.
+
 
 END FUNCTION.
 
