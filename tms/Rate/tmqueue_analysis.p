@@ -598,7 +598,11 @@ PROCEDURE pAnalyseQueueRow:
                              FraudCDR.dtlseq = TMQueue.EventId 
                      NO-LOCK NO-ERROR.
                         
-                  IF NOT AVAIL FraudCDR THEN DO:
+                  IF NOT AVAIL FraudCDR OR
+                     FraudCDR.BDest EQ "ROAM_EU" OR
+                     FraudCDR.BDest EQ "ROAM_EU_HTS" OR
+                     FraudCDR.BDest EQ "ROAM_EU_FREE" OR
+                     FraudCDR.BDest EQ "633800800" THEN DO:
                      llMatch = FALSE.
                      LEAVE FieldCheck.
                   END.

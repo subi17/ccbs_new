@@ -21,6 +21,7 @@
 gcBrand = "1".
 {Syst/tmsconst.i}
 &SCOPED-DEFINE RESELLERS "PH,TC,TP"
+&SCOPED-DEFINE EXCLUSIVERESELLERS "AX,BY,DX,KH,TA,MD"
 
 /* Input parameters */
 DEF VAR pcMSISDN AS CHAR NO-UNDO. 
@@ -101,17 +102,32 @@ FIND Salesman WHERE
   by Phone house
 - Other user can find all other subscriptions, but not those which are sold
   from Phone house 
-- YOT-1851 - added TC, TP to behave like PH */
-IF LOOKUP(pcReseller,{&RESELLERS}) > 0 THEN DO:
-   
+- YOT-1851 - added TC, TP to behave like PH 
+- YOT-5165 - User Exclusive can find Exclusive subscriptions,PH,TP & TC */
+
+
+IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
+
+   IF NOT AVAIL SalesMan THEN 
+      RETURN appl_err("Salesman not found").
+
+   IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
+      LOOKUP(SalesMan.Reseller,{&RESELLERS})         EQ 0 THEN 
+      RETURN appl_err("Salesman Reseller not match").
+
+END.
+ELSE IF LOOKUP(pcReseller,{&RESELLERS}) > 0 THEN DO:
+
    IF NOT AVAIL SalesMan THEN 
       RETURN appl_err("Salesman not found").
 
    IF SalesMan.Reseller NE pcReseller THEN 
       RETURN appl_err("Reseller not match").
+
 END.
-ELSE IF AVAIL SalesMan AND 
-        LOOKUP(SalesMan.Reseller,{&RESELLERS}) > 0 THEN 
+ELSE IF AVAIL SalesMan AND
+       (LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) > 0  OR
+        LOOKUP(SalesMan.Reseller,{&RESELLERS})         > 0) THEN 
    RETURN appl_err("Reseller not match").
 
 top_struct = add_struct(response_toplevel_id, "").
