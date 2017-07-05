@@ -95,7 +95,6 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
-                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -132,7 +131,6 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
-                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -173,7 +171,6 @@
                  mark_post_3rd;boolean;optional;
                  mark_sms_3rd;boolean;optional;
                  mark_email_3rd;boolean;optional;
-                 mark_dont_share_personal_data;boolean;optional;
                  mark_bank_3rd;boolean;optional;
                  language;string;optional;
                  lantitude;string;optional;
@@ -214,7 +211,6 @@
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
                     coverage_token;string;mandatory;
-                    address_id;string;optional;address id;
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -635,7 +631,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR lcField               AS CHARACTER NO-UNDO. 
    DEF VAR lcMarkOut             AS CHARACTER NO-UNDO. 
    DEF VAR lcMarketing           AS CHARACTER NO-UNDO. 
-   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 42.
+   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 41.
    DEF VAR lcIdOrderCustomer     AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR ldBirthDay            AS DATE      NO-UNDO.
@@ -825,7 +821,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.ExtInvRef          = data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
          OrderCustomer.TerritoryOwner     = data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken      = data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
-         OrderCustomer.AddressId          = data[LOOKUP("address_id", gcCustomerStructStringFields)] 
          OrderCustomer.pro                = llIsProCustomer
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
@@ -1299,7 +1294,6 @@ gcCustomerStructFields = "birthday," +
                          "lname2," +
                          "mark_email," +
                          "mark_email_3rd," +
-                         "mark_dont_share_personal_data," +
                          "mark_post," +
                          "mark_post_3rd," +
                          "mark_sms," +
@@ -1335,8 +1329,7 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token," +
-                         "address_id". 
+                         "coverage_token".
 
 gcCustomerStructStringFields = "city," +
                                "city_code," +
@@ -1378,8 +1371,8 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token," +
-                               "address_id".   /* EXTENT value count 42 */
+                               "coverage_token".
+                               /* EXTENT value count 41 */
 
 /* common validation */
 /* YBP-513 */
