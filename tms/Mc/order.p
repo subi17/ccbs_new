@@ -1711,9 +1711,12 @@ PROCEDURE local-find-others.
       lcAuthCustId     = ""
       lcAuthCustIdType = "".
 
-   FOR EACH OrderCustomer OF Order NO-LOCK:
+   FOR EACH OrderCustomer NO-LOCK USE-INDEX OrderId WHERE
+            OrderCustomer.Brand = Order.Brand AND
+            OrderCustomer.OrderId = Order.OrderId:
+
       CASE OrderCustomer.RowType:
-      WHEN 1 THEN DO:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
          IF OrderCustomer.CustNum > 0 THEN 
             FIND AgrCust WHERE AgrCust.CustNum = OrderCustomer.CustNum 
                NO-LOCK NO-ERROR.
@@ -1727,15 +1730,25 @@ PROCEDURE local-find-others.
          IF Order.UserRole    = 1 THEN lcUser    = lcAgrCust.
          
       END. 
-      WHEN 2 THEN DO:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
          lcInvCust = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
                                       BUFFER OrderCustomer).
          IF Order.UserRole = 2 THEN lcUser = lcInvCust.
       END. 
-      WHEN 3 THEN DO:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_USER} THEN DO:
          lcUser = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
                                       BUFFER OrderCustomer).
-      END. 
+      END.
+      /* Because of the index this will come after the rowtype 1
+         and thus lcAuthCustId and lcAuthCustIdType will have a
+         correct value */
+      WHEN {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+      THEN DO:
+         IF OrderCustomer.AuthCustId > ""
+         THEN ASSIGN
+                 lcAuthCustId     = OrderCustomer.AuthCustId
+                 lcAuthCustIdType = OrderCustomer.AuthCustIdType.
+      END.
       END CASE.
    END.
         

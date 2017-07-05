@@ -202,6 +202,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    DEF BUFFER AgrCust  FOR Customer.
    DEF BUFFER InvCust  FOR Customer.
    DEF BUFFER UserCust FOR Customer.
+   DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 
    DEF VAR lcCategory AS CHAR NO-UNDO.
 
@@ -271,10 +272,23 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
 
    IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
       OrderCustomer.CustIdType = "CIF"
-   THEN ASSIGN
-           Customer.AuthCustId     = OrderCustomer.AuthCustId
-           Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
-           .
+   THEN DO:
+      FIND FIRST lbOrderCustomer NO-LOCK WHERE
+                 lbOrderCustomer.Brand = gcBrand AND
+                 lbOrderCustomer.OrderId = Order.OrderId AND
+                 lbOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+      NO-ERROR.
+
+      IF AVAILABLE lbOrderCustomer AND lbOrderCustomer.AuthCustId > ""
+      THEN ASSIGN
+              Customer.AuthCustId     = lbOrderCustomer.AuthCustId
+              Customer.AuthCustIdType = lbOrderCustomer.AuthCustIdType
+              .
+      ELSE ASSIGN
+              Customer.AuthCustId     = OrderCustomer.AuthCustId
+              Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
+              .
+   END.
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).

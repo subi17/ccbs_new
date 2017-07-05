@@ -332,11 +332,24 @@ ELSE DO:
                Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN
                                           OrderCustomer.CustIdType = "CIF"
                Customer.Profession      = TRIM(OrderCustomer.Profession) WHEN
-                                          TRIM(OrderCustomer.Profession) > ""
-               Customer.AuthCustId      = OrderCustomer.AuthCustId
-                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-               Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
-                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+                                          TRIM(OrderCustomer.Profession) > "".
+
+            IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+               OrderCustomer.CustIdType = "CIF"
+            THEN DO:
+               FIND FIRST bOrderCustomer NO-LOCK WHERE
+                          bOrderCustomer.Brand   = gcBrand   AND
+                          bOrderCustomer.OrderID = iiOrderID AND
+                          bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+               NO-ERROR.
+               IF AVAILABLE bOrderCustomer AND bOrderCustomer.AuthCustID > ""
+               THEN ASSIGN
+                      Customer.AuthCustId      = bOrderCustomer.AuthCustId
+                      Customer.AuthCustIdType  = bOrderCustomer.AuthCustIdType.
+               ELSE ASSIGN
+                      Customer.AuthCustId      = OrderCustomer.AuthCustId
+                      Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType.
+            END.
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:

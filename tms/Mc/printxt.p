@@ -793,9 +793,22 @@ IF NOT llErrors THEN DO:
          liLanguage      = INTEGER(OrderCustomer.Language) NO-ERROR.
       /* Corporate customer */
       IF OrderCustomer.CustIDType EQ "CIF" THEN DO:
+
+         FIND FIRST ContactCustomer  NO-LOCK WHERE
+            ContactCustomer.Brand   = Order.Brand AND
+            ContactCustomer.OrderId = Order.OrderID AND
+            ContactCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+         NO-ERROR.
+
+         IF AVAILABLE ContactCustomer AND ContactCustomer.AuthCustID > ""
+         THEN ASSIGN
+                 lcTagCustIDType  = ContactCustomer.AuthCustIdType
+                 lcTagCustID      = ContactCustomer.AuthCustId.
+         ELSE ASSIGN
+                 lcTagCustIDType  = OrderCustomer.AuthCustIdType
+                 lcTagCustID      = OrderCustomer.AuthCustId.
+
          ASSIGN
-            lcTagCustIDType  = OrderCustomer.AuthCustIdType
-            lcTagCustID      = OrderCustomer.AuthCustId
             lcTagCompanyName = OrderCustomer.Company
             lcTagCompanyCIF  = OrderCustomer.CustId
             lcTagLastName2   = OrderCustomer.SurName2
@@ -803,31 +816,26 @@ IF NOT llErrors THEN DO:
             lcTagCompanyFoundDate =
                STRING(OrderCustomer.FoundationDate,"99-99-9999").
 
-            FIND FIRST Region WHERE
-               Region.Region = OrderCustomer.Region
-            NO-LOCK NO-ERROR.
+         FIND FIRST Region WHERE
+            Region.Region = OrderCustomer.Region
+         NO-LOCK NO-ERROR.
 
-            IF AVAIL Region THEN
-               lcTagCustRegion = Region.RgName.
-            ELSE lcTagCustRegion = "".
+         IF AVAIL Region THEN
+            lcTagCustRegion = Region.RgName.
+         ELSE lcTagCustRegion = "".
 
-            FIND FIRST ContactCustomer WHERE
-               ContactCustomer.Brand   = Order.Brand AND
-               ContactCustomer.OrderId = Order.OrderID AND
-               ContactCustomer.RowType = 5 NO-LOCK NO-ERROR.
+         IF AVAIL ContactCustomer THEN DO:
+            lcTagContactData =
+            ContactCustomer.FirstName + " " +
+            ContactCustomer.Surname1  + " " +
+            ContactCustomer.Surname2  + CHR(10) +
+            ContactCustomer.MobileNumber + CHR(10) +
+            ContactCustomer.Email + CHR(10) +
+            ContactCustomer.Address + " " + ContactCustomer.ZipCode + " " +
+            ContactCustomer.PostOffice +  " " + lcTagCustRegion.
 
-            IF AVAIL ContactCustomer THEN DO:
-               lcTagContactData =
-               ContactCustomer.FirstName + " " +
-               ContactCustomer.Surname1  + " " +
-               ContactCustomer.Surname2  + CHR(10) +
-               ContactCustomer.MobileNumber + CHR(10) +
-               ContactCustomer.Email + CHR(10) +
-               ContactCustomer.Address + " " + ContactCustomer.ZipCode + " " +
-               ContactCustomer.PostOffice +  " " + lcTagCustRegion.
-
-            END.
-            ELSE lcTagContactData = fTeksti(302,liLanguage).
+         END.
+         ELSE lcTagContactData = fTeksti(302,liLanguage).
       END.
 
       /* format bank account */

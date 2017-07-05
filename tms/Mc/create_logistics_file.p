@@ -760,13 +760,20 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.InvoiceTotal  = (IF AVAIL Invoice THEN STRING(Invoice.CurrAmt) ELSE "0")
       ttOneDelivery.DiscountTotal = (IF AVAIL Invoice THEN STRING(Invoice.DirDisc) ELSE "0")
       .
-      
+
    /* YDR-896: Add admin id in case of CIF order customer */
-   IF AgreeCustomer.CustIdType = "CIF" THEN
-   ASSIGN
-      ttOneDelivery.NIE           = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIE"
-      ttOneDelivery.NIF           = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIF"
-      ttOneDelivery.PassPort      = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "PassPort".
+   IF AgreeCustomer.CustIdType = "CIF"
+   THEN DO:
+      IF ContactCustomer.AuthCustId > ""
+      THEN ASSIGN
+              ttOneDelivery.NIE      = ContactCustomer.AuthCustId WHEN ContactCustomer.AuthCustIdType = "NIE"
+              ttOneDelivery.NIF      = ContactCustomer.AuthCustId WHEN ContactCustomer.AuthCustIdType = "NIF"
+              ttOneDelivery.PassPort = ContactCustomer.AuthCustId WHEN ContactCustomer.AuthCustIdType = "PassPort".
+      ELSE ASSIGN
+              ttOneDelivery.NIE      = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIE"
+              ttOneDelivery.NIF      = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIF"
+              ttOneDelivery.PassPort = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "PassPort".
+   END.
 
    IF Order.OrderType eq 2 THEN DO:
       /* Overwrite certain expeptional values */

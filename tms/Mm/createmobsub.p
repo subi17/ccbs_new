@@ -340,9 +340,9 @@ IF NOT AVAIL mobsub THEN DO:
       CASE OrderCustomer.RowType:
          WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
          THEN MobSub.AgrCust = OrderCustomer.CustNum.
-         WHEN 2
+         WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE}
          THEN MobSub.InvCust = OrderCustomer.CustNum.
-         WHEN 3
+         WHEN {&ORDERCUSTOMER_ROWTYPE_USER}
          THEN MobSub.CustNum = OrderCustomer.CustNum.
          WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
          THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
