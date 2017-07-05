@@ -1933,7 +1933,7 @@ PROCEDURE pGetCTNAME:
                        OfferItem.Offer       = Order.Offer         AND
                        OfferItem.ItemType    = "discountplan"      AND
                        LOOKUP(OfferItem.ItemKey,
-                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC,CONVDISC") > 0 AND
+                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC,CONVDISC,CONVDISC20_3") > 0 AND
                        OfferItem.BeginStamp <= Order.CrStamp       AND
                        OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
                  FIRST DiscountPlan WHERE
