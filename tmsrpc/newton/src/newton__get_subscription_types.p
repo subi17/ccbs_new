@@ -88,10 +88,10 @@ FOR EACH CLIType NO-LOCK WHERE
       lcStatusCode = CLIType.StatusCode.
       /* Mobile subscrition should be allowed to do STC in convergent
          tariffs, but fixed part should remain same */
-      IF fIsConvergenceTariff(pcClitype) AND
-         fIsConvergenceTariff(CliType.Clitype) AND
-         fCheckConvergentSTCCompability(pcClitype,Clitype.clitype) THEN
-         lcStatusCode = 1.
+      IF fIsConvergenceTariff(CliType.Clitype) AND
+         (fIsConvergenceTariff(pcClitype) EQ FALSE OR
+          NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN
+            lcStatusCode = 0.
       fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
    END.
 END. /* FOR EACH CLIType WHERE */
