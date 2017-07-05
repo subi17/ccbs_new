@@ -27,6 +27,8 @@
               fixed_bundle_usage;double;mandatory;fixed line bundle usage
               fixed_bdest_limit;int;mandatory;fixed line bundle destination limit
               fixed_bdest_usage;int;mandatory;fixed line bundle destination usage
+              flex_500mb_upsell;int;mandatory;Mobile Data Usage Flex Upsell 500mb
+              flex_5gb_upsell;int;mandatory;Mobile Data Usage Flex Upsell 5gb
 
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
@@ -48,78 +50,82 @@ DEF VAR piMsSeq AS INT NO-UNDO.
 DEF VAR first_level_struct  AS CHARACTER NO-UNDO.
 
 /* Local variables */
-DEF VAR ldGprsTrafficIn  AS DECIMAL INITIAL 0.0 NO-UNDO.
-DEF VAR ldGprsTrafficOut AS DECIMAL INITIAL 0.0 NO-UNDO.
-DEF VAR ldbalance        AS DECIMAL INITIAL 0.0 NO-UNDO.
-DEF VAR first_of_month   AS DATE NO-UNDO.
-DEF VAR liPeriod         AS INT NO-UNDO.
-DEF VAR liDayPeriod      AS INT NO-UNDO.
-DEF VAR tthCDR           AS HANDLE  NO-UNDO.
-DEF VAR liErrorCodeOut   AS INTEGER NO-UNDO.
-DEF VAR ldPeriodFrom     AS DEC     NO-UNDO.
-DEF VAR ldPeriodTo       AS DEC     NO-UNDO.
-DEF VAR ldaLastDay       AS DATE    NO-UNDO.
-DEF VAR ldeCurrentTS     AS DECIMAL NO-UNDO.
-DEF VAR liUpsellCount    AS INT     NO-UNDO.
-DEF VAR lcError          AS CHAR    NO-UNDO.
-DEF VAR ldeDSSTotalLimit AS DEC     NO-UNDO.
-DEF VAR ldeDSSDataUsed   AS DEC     NO-UNDO.
-DEF VAR llDSSActive      AS LOG     NO-UNDO.
-DEF VAR lcDSSBundleId    AS CHAR    NO-UNDO.
-DEF VAR ldeDataBundleLimit  AS DEC  NO-UNDO.
-DEF VAR ldeDataBundleUsage  AS DEC  NO-UNDO.
-DEF VAR ldeVoiceBundleLimit AS DEC  NO-UNDO.
-DEF VAR ldeVoiceBundleUsage AS DEC  NO-UNDO.
-DEF VAR ldeTotalDataBundleLimit AS DEC  NO-UNDO.
-DEF VAR ldeTotalDataBundleUsage AS DEC  NO-UNDO.
-DEF VAR ldeDSSDataBundleUsage   AS DEC  NO-UNDO.
-DEF VAR ldeRoamBundleUsage AS DEC  NO-UNDO.
-DEF VAR liRoamUpsellCount AS INT     NO-UNDO.
-DEF VAR liDSSUpsellCount        AS INT  NO-UNDO.
-DEF VAR liVoiceBDestLimit       AS INT  NO-UNDO.
-DEF VAR liVoiceBDestUsage       AS INT  NO-UNDO.
-DEF VAR liFixedBdestLimit       AS INT  NO-UNDO.
-DEF VAR liFixedBdestUsage       AS INT  NO-UNDO.
-DEF VAR ldeFixedBundleLimit     AS DEC  NO-UNDO.
-DEF VAR ldeFixedBundleUsage     AS DEC  NO-UNDO.
-DEF VAR ldeIntRoamUsage AS DEC NO-UNDO. 
-DEF VAR liDialTypes AS INT NO-UNDO EXTENT 5.
-DEF VAR liLoop AS INTEGER NO-UNDO. 
-DEF VAR ldaDate AS DATE NO-UNDO. 
-DEF VAR liTime AS INT NO-UNDO. 
-DEF VAR ldePackageFromTS AS DECIMAL NO-UNDO.
-DEF VAR liUpSellCountDay AS INT NO-UNDO.
-DEF VAR liGPRSTMRuleSeq AS INT NO-UNDO.
-DEF VAR ldeTARJ6DailyChargeMonth AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6DailyChargeDay AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6UpsellChargeMonth AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6UpsellChargeDay AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6DataUsageMonthly AS DEC NO-UNDO INIT 0.0. 
-DEF VAR ldeTARJ6DataUsageDaily AS DEC NO-UNDO INIT 0.0.
-DEF VAR lcBONOContracts       AS CHAR NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-DEF VAR lcExcludeBundles      AS CHAR NO-UNDO.
-DEF VAR liBonoCount AS INT NO-UNDO. 
-DEF VAR liDSS2BonoCount AS INT NO-UNDO. 
-DEF VAR ldePrepDataUsageMonthly AS DEC NO-UNDO.
-DEF VAR ldePrepVoiceUsageMonthly AS DEC NO-UNDO.
-DEF VAR ldaPrepRenewal AS DATE NO-UNDO. 
-DEF VAR ldePrepDataLimit AS DEC NO-UNDO.
-DEF VAR ldePrepVoiceimit AS DEC NO-UNDO.
-DEF VAR liPrepRenewal AS INT NO-UNDO. 
-DEF VAR ldaActDate AS DATE NO-UNDO. 
-DEF VAR ldaCDRCollectFrom AS DATE NO-UNDO. 
-DEF VAR ldaiSTCDate AS DATE NO-UNDO.
-DEF VAR liiSTCTime  AS INT  NO-UNDO.
-DEF VAR lliSTC      AS LOG  NO-UNDO.
-DEF VAR lcUpSellBundle AS CHAR NO-UNDO.
-DEF VAR liData200Count AS INT NO-UNDO.
-DEF VAR liDSS200Count AS INT NO-UNDO.
-DEF VAR lcData200Bundle AS CHAR NO-UNDO.
-DEF VAR lcUpsellId AS CHAR NO-UNDO. 
-DEF VAR liCount AS INT NO-UNDO.
-DEF VAR liRstTime AS INT NO-UNDO. 
-DEF VAR ldaRstDate AS DATE NO-UNDO.
+DEF VAR ldGprsTrafficIn            AS DECIMAL INITIAL 0.0 NO-UNDO.
+DEF VAR ldGprsTrafficOut           AS DECIMAL INITIAL 0.0 NO-UNDO.
+DEF VAR ldbalance                  AS DECIMAL INITIAL 0.0 NO-UNDO.
+DEF VAR first_of_month             AS DATE    NO-UNDO.
+DEF VAR liPeriod                   AS INT     NO-UNDO.
+DEF VAR liDayPeriod                AS INT     NO-UNDO.
+DEF VAR tthCDR                     AS HANDLE  NO-UNDO.
+DEF VAR liErrorCodeOut             AS INTEGER NO-UNDO.
+DEF VAR ldPeriodFrom               AS DEC     NO-UNDO.
+DEF VAR ldPeriodTo                 AS DEC     NO-UNDO.
+DEF VAR ldaLastDay                 AS DATE    NO-UNDO.
+DEF VAR ldeCurrentTS               AS DECIMAL NO-UNDO.
+DEF VAR liUpsellCount              AS INT     NO-UNDO.
+DEF VAR lcError                    AS CHAR    NO-UNDO.
+DEF VAR ldeDSSTotalLimit           AS DEC     NO-UNDO.
+DEF VAR ldeDSSDataUsed             AS DEC     NO-UNDO.
+DEF VAR llDSSActive                AS LOG     NO-UNDO.
+DEF VAR lcDSSBundleId              AS CHAR    NO-UNDO.
+DEF VAR ldeDataBundleLimit         AS DEC     NO-UNDO.
+DEF VAR ldeDataBundleUsage         AS DEC     NO-UNDO.
+DEF VAR ldeVoiceBundleLimit        AS DEC     NO-UNDO.
+DEF VAR ldeVoiceBundleUsage        AS DEC     NO-UNDO.
+DEF VAR ldeTotalDataBundleLimit    AS DEC     NO-UNDO.
+DEF VAR ldeTotalDataBundleUsage    AS DEC     NO-UNDO.
+DEF VAR ldeDSSDataBundleUsage      AS DEC     NO-UNDO.
+DEF VAR ldeRoamBundleUsage         AS DEC     NO-UNDO.
+DEF VAR liRoamUpsellCount          AS INT     NO-UNDO.
+DEF VAR liDSSUpsellCount           AS INT     NO-UNDO.
+DEF VAR liVoiceBDestLimit          AS INT     NO-UNDO.
+DEF VAR liVoiceBDestUsage          AS INT     NO-UNDO.
+DEF VAR liFixedBdestLimit          AS INT     NO-UNDO.
+DEF VAR liFixedBdestUsage          AS INT     NO-UNDO.
+DEF VAR ldeFixedBundleLimit        AS DEC     NO-UNDO.
+DEF VAR ldeFixedBundleUsage        AS DEC     NO-UNDO.
+DEF VAR ldeIntRoamUsage            AS DEC     NO-UNDO. 
+DEF VAR liDialTypes                AS INT     NO-UNDO EXTENT 5.
+DEF VAR liLoop                     AS INTEGER NO-UNDO. 
+DEF VAR ldaDate                    AS DATE    NO-UNDO. 
+DEF VAR liTime                     AS INT     NO-UNDO. 
+DEF VAR ldePackageFromTS           AS DECIMAL NO-UNDO.
+DEF VAR liUpSellCountDay           AS INT     NO-UNDO.
+DEF VAR liGPRSTMRuleSeq            AS INT     NO-UNDO.
+DEF VAR ldeTARJ6DailyChargeMonth   AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6DailyChargeDay     AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6UpsellChargeMonth  AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6UpsellChargeDay    AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6DataUsageMonthly   AS DEC     NO-UNDO INIT 0.0. 
+DEF VAR ldeTARJ6DataUsageDaily     AS DEC     NO-UNDO INIT 0.0.
+DEF VAR lcBONOContracts            AS CHAR    NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType      AS CHAR    NO-UNDO.
+DEF VAR lcExcludeBundles           AS CHAR    NO-UNDO.
+DEF VAR liBonoCount                AS INT     NO-UNDO. 
+DEF VAR liDSS2BonoCount            AS INT     NO-UNDO. 
+DEF VAR ldePrepDataUsageMonthly    AS DEC     NO-UNDO.
+DEF VAR ldePrepVoiceUsageMonthly   AS DEC     NO-UNDO.
+DEF VAR ldaPrepRenewal             AS DATE    NO-UNDO. 
+DEF VAR ldePrepDataLimit           AS DEC     NO-UNDO.
+DEF VAR ldePrepVoiceimit           AS DEC     NO-UNDO.
+DEF VAR liPrepRenewal              AS INT     NO-UNDO. 
+DEF VAR ldaActDate                 AS DATE    NO-UNDO. 
+DEF VAR ldaCDRCollectFrom          AS DATE    NO-UNDO. 
+DEF VAR ldaiSTCDate                AS DATE    NO-UNDO.
+DEF VAR liiSTCTime                 AS INT     NO-UNDO.
+DEF VAR lliSTC                     AS LOG     NO-UNDO.
+DEF VAR lcUpSellBundle             AS CHAR    NO-UNDO.
+DEF VAR liData200Count             AS INT     NO-UNDO.
+DEF VAR liDSS200Count              AS INT     NO-UNDO.
+DEF VAR lcData200Bundle            AS CHAR    NO-UNDO.
+DEF VAR lcUpsellId                 AS CHAR    NO-UNDO. 
+DEF VAR liCount                    AS INT     NO-UNDO.
+DEF VAR liRstTime                  AS INT     NO-UNDO. 
+DEF VAR ldaRstDate                 AS DATE    NO-UNDO.
+DEF VAR lcFlexData500MB            AS CHAR    NO-UNDO. 
+DEF VAR lcFlexData5GB              AS CHAR    NO-UNDO. 
+DEF VAR liFlexData500MB            AS INT     NO-UNDO. 
+DEF VAR liFlexData5GB              AS INT     NO-UNDO. 
 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
@@ -547,10 +553,16 @@ DO liLoop = 1 TO 5:
                ldeDataBundleLimit = MserviceLPool.LimitAmt.
                ldeTotalDataBundleLimit = ldeTotalDataBundleLimit +
                                          MserviceLPool.LimitAmt.
-               IF DayCampaign.DCEvent EQ "DATA200_UPSELL" THEN
-                  lcData200Bundle= DayCampaign.DCEvent.
-               ELSE   
-                  lcUpSellBundle = DayCampaign.DCEvent.
+               CASE DayCampaign.DCEvent:
+                  WHEN "DATA200_UPSELL" THEN 
+                     lcData200Bundle= DayCampaign.DCEvent.
+                  WHEN "FLEX_500MB_UPSELL" THEN 
+                     lcFlexData500MB = DayCampaign.DCEvent.
+                  WHEN "FLEX_5GB_UPSELL" THEN 
+                     lcFlexData5GB = DayCampaign.DCEvent.
+                  OTHERWISE 
+                     lcUpSellBundle = DayCampaign.DCEvent.
+               END CASE.
             END.           
          END. /* IF bDayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO: */
          ELSE
@@ -645,6 +657,17 @@ IF lcData200Bundle > "" THEN
                                    MobSub.MsSeq,
                                    MobSub.Custnum,
                                    OUTPUT lcError).
+IF lcFlexData500MB > "" THEN
+   liFlexData500MB = fGetUpSellCount(lcFlexData500MB,
+                                     MobSub.MsSeq,
+                                     MobSub.Custnum,
+                                     OUTPUT lcError).
+IF lcFlexData5GB > "" THEN
+   liFlexData5GB = fGetUpSellCount(lcFlexData5GB,
+                                   MobSub.MsSeq,
+                                   MobSub.Custnum,
+                                   OUTPUT lcError).
+
 /*ilkka add 200 countesr*/
 IF MobSub.CliType = "TARJ6" THEN DO:
    FOR FIRST ServiceLimit NO-LOCK WHERE
@@ -727,6 +750,8 @@ add_double(first_level_struct, "fixed_bundle_limit", ldeFixedBundleLimit).
 add_double(first_level_struct, "fixed_bundle_usage", ldeFixedBundleUsage).
 add_int(first_level_struct,    "fixed_bdest_limit", liFixedBdestLimit).
 add_int(first_level_struct,    "fixed_bdest_usage", liFixedBdestUsage).
+add_int(first_level_struct,    "flex_500mb_upsell", liFlexData500MB).
+add_int(first_level_struct,    "flex_5gb_upsell", liFlexData5GB).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.
