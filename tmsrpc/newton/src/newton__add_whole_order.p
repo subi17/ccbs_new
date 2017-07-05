@@ -286,6 +286,7 @@ DEF VAR lcFusionStructFields AS CHAR NO-UNDO.
 DEF VAR gcOrderStructFields AS CHARACTER NO-UNDO.  
 DEF VAR gcCustomerStructFields AS CHARACTER NO-UNDO.
 DEF VAR gcCustomerStructStringFields AS CHARACTER NO-UNDO. 
+DEF VAR gcPoUserStructFields AS CHARACTER NO-UNDO. 
 
 DEF VAR pcSalesman      AS CHAR INITIAL "selforder" NO-UNDO.
 DEF VAR pcReseller      AS CHAR NO-UNDO.
