@@ -20,6 +20,9 @@ FUNCTION fgetCustSegment RETURNS CHAR
     INPUT ilProCust AS LOG,
     INPUT-OUTPUT ocCategory AS CHAR):
    DEF VAR lcSegment AS CHAR NO-UNDO.
+
+   DEF BUFFER CustCat FOR CustCat.
+
    IF ilProCust THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
                  Custcat.brand EQ Syst.Parameters:gcBrand AND

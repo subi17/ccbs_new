@@ -14,10 +14,8 @@
 &THEN
 &GLOBAL-DEFINE VASFUNC_I YES
 
-{Func/orderfunc.i}
 {Func/profunc.i}
 
-DEF BUFFER bMsRequest FOR MSRequest.
 /*SVA of Yoigo PRO*/
 /*This function provides a dirty solution.
 Later in YPRO project we will consider if it is reason to make 
@@ -54,6 +52,10 @@ FUNCTION fTerminateSVAs RETURNS LOGICAL
     INPUT ilWaitConfirm AS LOG):
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF VAR liAmt AS INT  NO-UNDO.
+   
+   DEF BUFFER MSRequest FOR MSRequest.
+   DEF BUFFER bMsRequest FOR MSRequest.
+
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.MsSeq EQ iiMsSeq AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
@@ -61,7 +63,7 @@ FUNCTION fTerminateSVAs RETURNS LOGICAL
             BREAK BY MsRequest.ReqCparam3
             BY MsRequest.actstamp DESC:
       IF NOT FIRST-OF(MsRequest.ReqCparam3) THEN NEXT.
-      IF NOT fisSVA(msRequest.reqcparam3, liAmt) THEN NEXT.
+      IF NOT fisSVA(msRequest.reqcparam3, OUTPUT liAmt) THEN NEXT.
       IF CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
                         bMsRequest.MsSeq EQ iiMsSeq AND
                         bMsRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} AND
