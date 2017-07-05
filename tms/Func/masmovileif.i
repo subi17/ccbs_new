@@ -279,8 +279,8 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       fAddCharacteristic(lcCharacteristicsArray,          /*base*/
                          "lastName",                      /*param name*/
                          IF bHolderOrderCustomer.Surname2 > "" /*param value*/
-                         THEN lcLastName = bHolderOrderCustomer.Surname2
-                         ELSE lcLastName = bHolderOrderCustomer.Surname1,
+                         THEN bHolderOrderCustomer.Surname2
+                         ELSE bHolderOrderCustomer.Surname1,
                          "").                             /*old value*/
       fAddCharacteristic(lcCharacteristicsArray,          /*base*/
                          "documentType",                  /*param name*/
