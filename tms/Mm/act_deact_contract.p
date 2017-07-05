@@ -160,6 +160,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    
    IF liRequest = 0 THEN
