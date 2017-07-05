@@ -883,9 +883,11 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                   WHEN NOT OrderCustomer.CustIDType > "".
                
          END.
-         fgetCustSegment(lcIdtypeOrderCustomer, llSelfEmployed,
-                         llIsProCustomer, lcCategory).
-         OrderCustomer.category = lcCategory.
+         IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
+            fgetCustSegment(lcIdtypeOrderCustomer, llSelfEmployed,
+                            llIsProCustomer, lcCategory).
+            OrderCustomer.category = lcCategory.
+         END.
    END.
 
    IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN

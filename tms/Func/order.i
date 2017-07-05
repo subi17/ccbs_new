@@ -324,10 +324,9 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       Customer.Category = OrderCustomer.Category.      
       fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
                       ordercustomer.pro, lcCategory).
-      IF Ordercustomer.Category EQ "" THEN  
       IF lcCategory > "" THEN DO:
          Customer.Category = lcCategory.
-         IF Ordercustomer.Category EQ "" THEN 
+         IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
             Ordercustomer.Category = lcCategory.
       END.
       IF iiTarget = 1 THEN DO:
