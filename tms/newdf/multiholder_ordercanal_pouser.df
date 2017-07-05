@@ -1,5 +1,5 @@
 ADD TABLE "PoUser"
-  AREA "Sta_Data_64"
+  AREA "Sta_Data_32"
   LABEL "Portability user"
   DESCRIPTION "Portability user"
   DUMP-NAME "pouser"
@@ -97,7 +97,7 @@ ADD FIELD "FirstName" OF "PoUser" AS character
   ORDER 90
 
 ADD INDEX "MsSeq" ON "PoUser" 
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
