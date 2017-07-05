@@ -165,10 +165,10 @@ ELSE IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
    END.
 END.
 
-FOR EACH bDiscountPlan WHERE
+FOR EACH bDiscountPlan NO-LOCK WHERE
          bDiscountPlan.Brand = gcBrand AND
   LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
-  FIRST DPMember WHERE
+  FIRST DPMember NO-LOCK WHERE
         DPMember.DPId       = bDiscountPlan.DPId   AND
         DPMember.HostTable  = "MobSub"             AND
         DPMember.KeyValue   = STRING(MobSub.MsSeq) AND

@@ -883,9 +883,11 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                   WHEN NOT OrderCustomer.CustIDType > "".
                
          END.
-         fgetCustSegment(lcIdtypeOrderCustomer, llSelfEmployed,
-                         llIsProCustomer, lcCategory).
-         OrderCustomer.category = lcCategory.
+         IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
+            fgetCustSegment(lcIdtypeOrderCustomer, llSelfEmployed,
+                            llIsProCustomer, lcCategory).
+            OrderCustomer.category = lcCategory.
+         END.
    END.
 
    IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
@@ -1577,7 +1579,10 @@ IF pcOfferId NE "" THEN DO:
                    ELSE IF LOOKUP(pcChannel,"telesales_PRO,emission_PRO") > 0 
                       THEN "cc_PRO"
                    ELSE IF LOOKUP(pcChannel,"fusion_telesales,fusion_emission,fusion_cc") > 0
-                   THEN "fusion_telesales" ELSE pcChannel).
+                   THEN "fusion_telesales" 
+                   ELSE IF LOOKUP(pcChannel,"fusion_telesales_pro,fusion_emission_pro,fusion_cc_pro") > 0
+                   THEN "fusion_telesales_pro" ELSE pcChannel).
+
                if lookup(lcOfferOrderChannel, offercriteria.includedvalue) = 0 then do:
                   lcErrors = lcErrors + "OrderChannel " + lcOfferOrderChannel + " not in " + offercriteria.includedvalue + ";".
                end.
