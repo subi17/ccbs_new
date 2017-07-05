@@ -30,6 +30,10 @@ DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
 
+FIND FIRST MSRequest WHERE
+           MSRequest.brand EQ gcBrand AND
+           MsRequest.msRequest = iiOrigRequest NO-ERROR.
+
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN RETURN "ERROR:Subscription not available".
 
@@ -64,6 +68,20 @@ ORDERACTION_LOOP:
 FOR EACH OrderAction NO-LOCK WHERE
          OrderAction.Brand     = gcBrand AND
          OrderAction.OrderId   = iiOrderId:
+   
+   IF OrderAction.ItemType = "BundleItem" THEN     
+   DO:
+       FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK NO-ERROR.
+       IF AVAIL DayCampaign THEN 
+       DO:
+           IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_FIXED} THEN 
+               NEXT ORDERACTION_LOOP.
+           ELSE IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
+               NEXT ORDERACTION_LOOP.
+       END.
+       ELSE 
+           NEXT ORDERACTION_LOOP.
+   END.    
 
    CASE OrderAction.ItemType:
       WHEN "BundleItem" THEN DO:
@@ -101,6 +119,9 @@ FOR EACH OrderAction NO-LOCK WHERE
                        "Creation failed. " + RETURN-VALUE).
    END.   
 END.
+
+IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN 
+   RETURN "".
 
 /* DSS Order Action will be executed now other */
 /* data bundle request has been created        */
@@ -289,6 +310,7 @@ PROCEDURE pPeriodicalContract:
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    END.
  
@@ -496,6 +518,7 @@ PROCEDURE pQ25Extension:
                              "",
                              0,
                              liPercontractId,
+                             "",
                              OUTPUT lcResult).
 
    katun = lcOrigKatun.
@@ -632,11 +655,11 @@ PROCEDURE pAddLineDiscountPlan:
               DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN 
       RETURN "ERROR:Additional Line DiscountPlan ID: " + OrderAction.ItemKey + " not found".
-
+    /* Additional Line with mobile only ALFMO-5 */
    fCreateAddLineDiscount(MobSub.MsSeq,
                           MobSub.CLIType,
                           TODAY,
-                          "").
+                          OrderAction.ItemKey).
    IF RETURN-VALUE BEGINS "ERROR" THEN
       RETURN RETURN-VALUE.
 

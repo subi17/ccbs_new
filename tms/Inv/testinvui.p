@@ -46,7 +46,7 @@ DEF VAR ciperiod   AS i                          NO-UNDO.
 def var i          as int  format "zzzzzzz9"     NO-UNDO.
 def var atpvm1     as Date format "99-99-99" NO-UNDO.
 def var atpvm2     as Date format "99-99-99" NO-UNDO.
-def var CustNum2      as int  format "zzzzzzz9" NO-UNDO.
+def var CustNum2      as int  format "zzzzzzzz9" NO-UNDO.
 DEF VAR mininv     LIKE InvGroup.MinInvAmt   NO-UNDO.
 DEF VAR upmth      LIKE InvGroup.UnbilledLimit    NO-UNDO.
 DEF VAR kysy_rajat AS LOG                    NO-UNDO.
@@ -118,7 +118,7 @@ form
            help "Invoice run code, 0=ALL"
            FORMAT ">9" SKIP 
    CustNum1   label  " Customer number ........"
-           help "Customers FROM number"
+           help "Customers FROM number" FORMAT "zzzzzzzz9" 
    "-"
    CustNum2   no-label help "Customers TO number"  SKIP
    atpvm1  label " Time Period ............"

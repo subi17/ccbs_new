@@ -146,10 +146,11 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icDMSInfo      AS CHAR,   /* For DMS usage contract_id, channel */
     OUTPUT ocResult       AS CHAR).
 
-   DEF VAR llCRes      AS LOG  NO-UNDO.
-   DEF VAR lcCReqTime  AS CHAR NO-UNDO.
-   DEF VAR liCReqTime  AS INT  NO-UNDO.
-   DEF VAR ldtCReqDate AS DATE NO-UNDO.
+   DEF VAR llCRes        AS LOG  NO-UNDO.
+   DEF VAR lcCReqTime    AS CHAR NO-UNDO.
+   DEF VAR liCReqTime    AS INT  NO-UNDO.
+   DEF VAR ldtCReqDate   AS DATE NO-UNDO.
+   DEF VAR llProCustomer AS LOGI NO-UNDO.
 
    ocResult = fChkRequest(iiMsSeq,
                           0,
@@ -205,6 +206,9 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                           icCreator).
    IF ocResult > "" THEN RETURN 0.                       
    
+   /* PRO */
+   ASSIGN llProCustomer = fIsProSubscription(iiMsSeq).
+
    fCreateRequest(0,
                   fMakeTS(),
                   icCreator,
@@ -225,6 +229,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
           bCreaReq.ReqIParam2  = iiOrderID
+          bCreaReq.ReqIParam4  = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated*/
           bCreaReq.ReqIParam5  = iiRequestFlags
           bCreaReq.Salesman    = icSalesman
           bCreaReq.ReqSource   = icSource
@@ -783,6 +788,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
     INPUT  icSMS          AS CHAR,   /* sms */
     INPUT  ideResidualFee AS DEC,    /* payterm residual fee */
     INPUT  iiPerContID    AS INT,    /* Periodical Contract-ID */
+    INPUT  icSVAParams    AS CHAR,   /* Parameters to be stoerd for SVA vase*/
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqType  AS INT  NO-UNDO.
@@ -871,6 +877,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    ASSIGN bCreaReq.ReqSource   = icSource
           bCreaReq.ReqCParam2  = icActType
           bCreaReq.ReqCParam3  = icContrType
+          bCreaReq.ReqCparam6  = icSVAParams
           bCreaReq.ReqIParam3  = iiPerContID 
           bCreaReq.ReqIParam2  = liWaitFor
           bCreaReq.ReqDParam2  = ideResidualFee
@@ -1125,6 +1132,20 @@ PROCEDURE pCheckServiceLinks:
   
 END PROCEDURE.
 
+FUNCTION fIsOrderForProCustomer RETURNS LOGICAL
+   (INPUT iiOrderID AS INTEGER):
+
+   DEF BUFFER Order FOR Order.
+
+   FIND FIRST Order NO-LOCK WHERE Order.Brand = gcBrand AND Order.OrderID = iiOrderID NO-ERROR.
+
+   IF INDEX(Order.orderchannel,"PRO") > 0 THEN
+       RETURN TRUE.
+   ELSE 
+       RETURN FALSE.
+   
+END FUNCTION.
+
 FUNCTION fSubscriptionRequest RETURNS INTEGER
    (INPUT  iiMSSeq       AS INT,    /* MSSeq */
     INPUT  icCli         AS CHAR,
@@ -1142,9 +1163,11 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  icReqSource   AS CHAR,
     OUTPUT ocResult      AS CHAR).
 
-   DEFINE VARIABLE liReqType AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcSpecial AS CHARACTER NO-UNDO.
-      
+   DEFINE VARIABLE liReqType     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcSpecial     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llProCustomer AS LOGICAL   NO-UNDO INIT FALSE.
+   DEFINE VARIABLE liOrderId     AS INTEGER   NO-UNDO.
+
    IF (icReqParam EQ "CREATE" OR
       icReqParam EQ "CREATE-FIXED") AND
       (iiMSSeq  = 0 OR
@@ -1182,6 +1205,13 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    IF idActStamp = ? OR idActStamp = 0 THEN
       idActStamp = fMakeTS().
 
+   IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN 
+   DO:  
+       ASSIGN
+           liOrderId     = INT(icReqParam2) 
+           llProCustomer = fIsOrderForProCustomer(liOrderId).
+   END.
+     
    fCreateRequest(liReqType,
                   idActStamp,
                   icCreator,
@@ -1198,6 +1228,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
       bCreaReq.ReqCParam4 = icReqParam4
       bCreaReq.ReqCParam6 = icReqParam6
       bCreaReq.ReqIParam1 = iiTrafficType
+      bCreaReq.ReqIParam4 = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated */
       bCreaReq.ReqDParam2 = ideCharge
       bCreaReq.ReqSource  = icReqSource
       liReqCreated        = bCreaReq.MsRequest.
