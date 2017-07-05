@@ -48,7 +48,7 @@
 "11815" "11815 de Líneas de Red Inteligente (VODA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 37
 "11816" " de Teleatención Mediterránea" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 38
 "11817" "11817 de Andarosa TV (FT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 39
-"11818" "Servicio  (T>11 seg)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 40
+"11818" "11818 de ATENCIÓN CLIENTE TELECOM. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 40
 "11819" "11819 de Nirnet Invest (AVYS TELECOM)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 41
 "11820" " de Operadora de Serv. de Telecom. de RI" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 42
 "11821" " Audiotex Internet Services (France Telecom)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 43
@@ -68,7 +68,7 @@
 "11835" " de Incotel Servicios (Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 57
 "11836" " de Información Telefónica 11836" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 58
 "11837" " de Foreign Information Services (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 59
-"11838" " de Opera" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60
+"11838" "11838 de DELIMAX CONCEPT. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60
 "11839" " de Movilservicio Urgente (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 61
 "11840" " de Euskaltel" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 62
 "11841" "11841 de LINOCIO HAGEN (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 63
