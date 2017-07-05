@@ -826,8 +826,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
          OrderCustomer.Language           = STRING(liLanguage)
-         OrderCustomer.DontSharePersData   = (LOOKUP("dont_share_personal_data",
-                                              lcMarketing, "|") NE 0)
          OrderCustomer.OperSMSMarketing   = (LOOKUP("SMS", lcMarketing, "|") NE 0)
          OrderCustomer.OperEmailMarketing = (LOOKUP("Email", lcMarketing, "|") NE 0)
          OrderCustomer.OperPostMarketing  = (LOOKUP("Post", lcMarketing, "|") NE 0)
