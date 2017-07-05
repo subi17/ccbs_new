@@ -98,15 +98,16 @@ END FUNCTION.
 
 form
     CustCat.Brand   COLUMN-LABEL "Bran" FORMAT "X(4)"
-    CustCat.Category
+    CustCat.Category COLUMN-LABEL "Cat"
     CustCat.CatName FORMAT "X(23)"
     CustCat.IntType COLUMN-LABEL "Int"
        HELP "0=General, 1=Fixed, 2=Added to confirmed reference rate"
-    CustCat.PaymTerm COLUMN-LABEL "PaymT"
-    CustCat.SelfEmployed COLUMN-LABEL "SelfEmp"
-    CustCat.MobSubLimit COLUMN-LABEL "SubLimit"
-    CustCat.ActivationLimit COLUMN-LABEL "ActLimit"
-
+    CustCat.PaymTerm COLUMN-LABEL "PT"
+    CustCat.SelfEmployed COLUMN-LABEL "SE"
+    CustCat.MobSubLimit COLUMN-LABEL "SL"
+    CustCat.ActivationLimit COLUMN-LABEL "AL"
+    CustCat.pro COLUMN-LABEL "PRO"
+    CustCat.segment COLUMN-LABEL "Segment" FORMAT "X(17)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(cfc)
     title color value(ctc) " " + ynimi +
@@ -136,7 +137,10 @@ form
       HELP "How many subscription activation request can have by default" SKIP
     CustCat.SelfEmployed LABEL "Self Employed" COLON 24
       HELP "Is this category self employed or not" SKIP 
-    
+    CustCat.pro LABEL "PRO" COLON 24
+      HELP "Is PRO customer or not" SKIP
+    CustCat.segment LABEL "Segment" COLON 24
+      HELP "Customer segment" SKIP 
  WITH  OVERLAY ROW 7 col 5
     COLOR value(cfc)
     TITLE COLOR value(ctc)
@@ -216,6 +220,8 @@ add-new:
                CustCat.MobSubLimit
                CustCat.ActivationLimit
                CustCat.SelfEmployed
+               CustCat.pro
+               CustCat.segment
             EDITING:
                READKEY.
                
@@ -325,7 +331,9 @@ print-line:
                CustCat.PaymTerm
                CustCat.MobSubLimit
                CustCat.ActivationLimit
-               CustCat.SelfEmployed.
+               CustCat.SelfEmployed
+               CustCat.pro
+               CustCat.segment.
 
                rtab[FRAME-LINE] = recid(CustCat).
                run pFindNext.
@@ -634,6 +642,8 @@ BROWSE:
                CustCat.MobSubLimit
                CustCat.ActivationLimit
                CustCat.SelfEmployed
+               CustCat.pro
+               CustCat.segment
         WITH FRAME lis
 
         EDITING:
