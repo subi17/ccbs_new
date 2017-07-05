@@ -130,6 +130,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          0,
                                          0,
+                                         "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
