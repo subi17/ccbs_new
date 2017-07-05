@@ -1163,8 +1163,7 @@ PROCEDURE pOrderView:
       ASSIGN
       ufk = 0
       ufk[1] = 7             
-      ufk[2] = 2246
-/*       ufk[3] = 2241 */
+      ufk[2] = 2250
       ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE 
                                   RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS})
                THEN 9844 ELSE 0)
@@ -1185,18 +1184,88 @@ PROCEDURE pOrderView:
         leave.
      end.
   
-     /* agr. customer */
+     /* customer management */
      ELSE IF Toimi = 2 THEN DO:
-        RUN local-update-customer(1,FALSE).
+
+        SUBACTION:
+        repeat with frame lis:
+
+           ASSIGN
+              ufk = 0
+              ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT})
+                        THEN 2246 /* agreement customer */
+                        ELSE 0)
+              ufk[2] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                           RowType = {&ORDERCUSTOMER_ROWTYPE_INVOICE})
+                        THEN 2242 /* invoice customer */
+                        ELSE 0)
+              ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_USER})
+                        THEN 2247 /* user customer */
+                        ELSE 0)
+              ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY})
+                        THEN 1071 /* delivery address */
+                        ELSE 0)
+              ufk[5] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT})
+                        THEN 1096 /* contact data */
+                        ELSE 0)
+              ufk[6] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
+                        THEN 9844 /* mobile donor (holder) */
+                        ELSE 0)
+              ufk[7] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+                              RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
+                        THEN ? /* fixed donor (holder) */
+                        ELSE 0)
+              ufk[8] = 8
+              ehto = 0
+              ufkey = TRUE.
+
+           RUN Syst/ufkey.p.
+
+           IF toimi = 8 THEN LEAVE SubAction.
+
+           ELSE IF toimi = 1
+           THEN RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_AGREEMENT},FALSE).
+
+           ELSE IF toimi = 2 THEN DO:
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_INVOICE},FALSE).
+           END.
+
+           ELSE IF toimi = 3 THEN DO:
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_USER},FALSE).
+           END.
+
+           ELSE IF toimi = 4 THEN DO:
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_DELIVERY},FALSE).
+           END.
+
+           ELSE IF toimi = 5 THEN DO:
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT},FALSE).
+           END.
+
+           ELSE IF toimi = 6 THEN DO:
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER},FALSE).
+           END.
+
+           ELSE IF toimi = 7 THEN DO:
+              RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER},FALSE).
+           END.
+
+        END.
+
         NEXT Action.
      END.
 
-     /* user */  
+     /* logistic address */
      ELSE IF Toimi = 3 THEN DO:
         RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_LOGISTICS},FALSE).
         NEXT Action.
      END.
-  
+
      else if toimi = 4 and ufk[4] > 0 then do:
 
         liMultiSimType = (IF Order.MultiSimType = 1 THEN 2 ELSE 1).
@@ -1256,14 +1325,12 @@ PROCEDURE pOrderView:
 
            ASSIGN
            ufk = 0
-           ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE RowType = 4)
-                     THEN 1071
-                     ELSE 0)
+           ufk[1] = 0
            ufk[2] = 1070
            ufk[3] = 1072
            ufk[4] = 927           
            ufk[5] = 2851
-           ufk[6] = 1096 
+           ufk[6] = 0
            ufk[7] = 9019 
            ufk[8] = 8
            ehto = 0               
@@ -1272,10 +1339,6 @@ PROCEDURE pOrderView:
            RUN Syst/ufkey.p.
   
            IF toimi = 8 THEN LEAVE SubAction.
-
-           ELSE IF toimi = 1 THEN DO:
-              RUN local-update-customer(4,FALSE).
-           END.
            
            ELSE IF toimi = 2 THEN DO:
               RUN Mc/orderaccessory.p (Order.OrderID,0).
@@ -1307,10 +1370,6 @@ PROCEDURE pOrderView:
               
               RUN Mm/msrequest.p(?,?,Order.MsSeq,0,liMsRequest,"").
 
-           END.
-           
-           ELSE IF toimi = 6 THEN DO:
-              RUN local-update-customer(5,FALSE).
            END.
            
            ELSE IF toimi = 7 THEN DO:
@@ -1923,40 +1982,54 @@ PROCEDURE local-update-customer:
 
    DEF VAR lcCurrHeader AS CHAR NO-UNDO.
    DEF VAR lcNewHeader  AS CHAR NO-UNDO.
-
+   DEFINE VARIABLE llCustIdUpdateOK AS LOGICAL INITIAL FALSE NO-UNDO.
     
    ASSIGN liCustRole   = iiRole
           lcCurrHeader = ac-hdr.
           
-
    CASE iiRole:
-   WHEN 1 THEN lcNewHeader = " AGREEMENT".
-   WHEN 2 THEN DO:
-      IF Order.InvCustRole NE 2 THEN DO:
-         MESSAGE "Invoice customer role is" Order.InvCustRole
-         VIEW-AS ALERT-BOX INFORMATION.
-         RETURN.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN lcNewHeader = " AGREEMENT".
+      WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
+         IF Order.InvCustRole NE 2 THEN DO:
+            MESSAGE "Invoice customer role is" Order.InvCustRole
+            VIEW-AS ALERT-BOX INFORMATION.
+            RETURN.
+         END.
+         lcNewHeader = " INVOICE".
       END.
-      lcNewHeader = " INVOICE".
-   END.
-   WHEN 3 THEN DO:
-      IF Order.UserRole NE 3 THEN DO:
-         MESSAGE "User role is" Order.UserRole
-         VIEW-AS ALERT-BOX INFORMATION.
-         RETURN.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_USER} THEN DO:
+         IF Order.UserRole NE 3 THEN DO:
+            MESSAGE "User role is" Order.UserRole
+            VIEW-AS ALERT-BOX INFORMATION.
+            RETURN.
+         END.
+         lcNewHeader = " USER".
       END.
-      lcNewHeader = " USER".
-   END.
-   WHEN 4 THEN DO:
-      lcNewHeader = " DELIVERY".
-   END.
-   WHEN 5 THEN DO:
-      lcNewHeader = " CONTACT".
-   END.
-   WHEN {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} THEN DO:
-      lcNewHeader = " LOGISTICS".
-   END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN DO:
+         lcNewHeader = " DELIVERY".
+      END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} THEN DO:
+         lcNewHeader = " CONTACT".
+      END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} THEN DO:
+         lcNewHeader = " LOGISTICS".
+      END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} THEN DO:
+         lcNewHeader = " MOB DONOR".
+      END.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER} THEN DO:
+         lcNewHeader = " FIX DONOR".
+      END.
    END CASE.
+
+   IF Order.StatusCode = "73" AND
+      (iiRole = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} OR
+       ( iiRole = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+         NOT CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                OrderCustomer.Brand   = gcBrand       AND
+                OrderCustomer.OrderID = Order.OrderID AND
+                OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})))
+   THEN llCustIDUpdateOK = TRUE.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
               OrderCustomer.Brand   = gcBrand       AND
@@ -1966,10 +2039,10 @@ PROCEDURE local-update-customer:
       MESSAGE "Customer data is not available"
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
-   END. 
+   END.
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderCustomer).
-   
+
    ACTION: 
    repeat with frame fCustomer:
  
@@ -2131,8 +2204,8 @@ PROCEDURE local-update-customer:
          OrderCustomer.ZipCode WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 
          OrderCustomer.PostOffice WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0
          
-         OrderCustomer.CustIDType WHEN Order.StatusCode = "73"
-         OrderCustomer.CustID     WHEN Order.StatusCode = "73"
+         OrderCustomer.CustIDType WHEN llCustIDUpdateOK
+         OrderCustomer.CustID     WHEN llCustIDUpdateOK
          
          OrderCustomer.Region WHEN LOOKUP(Order.StatusCode,"31") > 0
          OrderCustomer.CustTitle WHEN LOOKUP(Order.StatusCode,"31") > 0

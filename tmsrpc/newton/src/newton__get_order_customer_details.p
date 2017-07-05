@@ -39,7 +39,8 @@
                        contact_person;array;
  *  @delivery_address  delivery_struct;struct
  *  @contact_person    contact_struct;struct
- *  @line_holder       line_holder;struct
+ *  @mobile_pouser_data  mobile_pouser_data;struct
+ *  @fixed_pouser_data   fixed_pouser_data;struct
  *  @delivery_struct   street_code;string;address validation C code
                        city_code;string;address validation P code
                        title;string;title of the person for the delivery
@@ -66,14 +67,20 @@
                      city;string;city for the contact person
                      region;string;region for the contact person
                      country;string;country for the contact person
- *  @line_holder       line_type;string;line type mobile or fixed
+ *  @mobile_pouser_data first_name;string;first name
+                        surname_1;string;first surname
+                        surname_2;string;second surname
+                        customer_id_type;string;person id type
+                        customer_id;string;person id
+                        company_id;string;company cif id
+                        company;string;company name
+ *  @fixed_pouser_data first_name;string;first name
+                       surname_1;string;first surname
+                       surname_2;string;second surname
+                       customer_id_type;string;person id type
+                       customer_id;string;person id
                        company_id;string;company cif id
                        company;string;company name
-                       first_name;string;first name of the holder
-                       surname_1;string;first surname of the holder
-                       surname_2;string;second surname of the holder
-                       customer_id_type;string;person id type of the holder
-                       customer_id;string;person id of the holder
  */
 
 
@@ -92,7 +99,6 @@ FUNCTION fAddHolderCustomer RETURN LOGICAL
    (INPUT piRowType AS INTEGER):
 
    DEFINE VARIABLE lcStruct       AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE llCompany      AS LOGICAL   INITIAL FALSE NO-UNDO.
 
    FIND OrderCustomer WHERE
      OrderCustomer.Brand = "1"         AND
@@ -102,28 +108,25 @@ FUNCTION fAddHolderCustomer RETURN LOGICAL
    IF NOT AVAILABLE OrderCustomer
    THEN RETURN.
 
-   lcStruct = add_struct(top_struct, "line_holder").
+   lcStruct = add_struct(top_struct, IF piRowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
+                                     THEN "mobile_pouser_data" ELSE "fixed_pouser_data").
 
-   add_string(lcStuct, "line_type", IF piRowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
-                                    THEN "mobile" ELSE "fixed").
+   add_string(lcStruct, "first_name", OrderCustomer.FirstName).
+   add_string(lcStruct, "surname1", OrderCustomer.SurName1).
+   add_string(lcStruct, "surname2", OrderCustomer.SurName2).
 
    IF OrderCustomer.CustIdType EQ "CIF"
    THEN DO:
-      add_string(lcStuct, "company_id", OrderCustomer.CustId).
+      add_string(lcStruct, "customer_id_type", OrderCustomer.AuthCustIDType).
+      add_string(lcStruct, "customer_id", OrderCustomer.AuthCustID).
+      add_string(lcStruct, "company_id", OrderCustomer.CustId).
       add_string(lcStruct, "company" , OrderCustomer.Company).
-      llCompany = TRUE.
+   END.
+   ELSE DO:
+      add_string(lcStruct, "customer_id_type", OrderCustomer.CustIdType).
+      add_string(lcStruct, "customer_id", OrderCustomer.CustId).
    END.
 
-   add_string(lcStruct, "first_name" , OrderCustomer.FirstName  ).
-   add_string(lcStruct, "surname1"   , OrderCustomer.SurName1   ).
-   add_string(lcStruct, "surname2"   , OrderCustomer.SurName2   ).
-
-   add_string(lcStruct, "customer_id_type", IF llCompany
-                                            THEN OrderCustomer.AuthCustIDType
-                                            ELSE OrderCustomer.CustIdType).
-   add_string(lcStruct, "customer_id", IF llCompany
-                                       THEN OrderCustomer.AuthCustID
-                                       ELSE OrderCustomer.CustId).
    RETURN TRUE.
 
 END FUNCTION.
