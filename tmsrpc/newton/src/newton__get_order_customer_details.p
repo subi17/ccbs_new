@@ -85,6 +85,7 @@
 
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE top_struct            AS CHARACTER NO-UNDO. 
@@ -106,7 +107,7 @@ FUNCTION fAddHolderCustomer RETURN LOGICAL
      OrderCustomer.RowType = piRowType NO-LOCK NO-ERROR.
 
    IF NOT AVAILABLE OrderCustomer
-   THEN RETURN.
+   THEN RETURN FALSE.
 
    lcStruct = add_struct(top_struct, IF piRowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
                                      THEN "mobile_pouser_data" ELSE "fixed_pouser_data").
