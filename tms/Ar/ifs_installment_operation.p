@@ -164,22 +164,6 @@ FUNCTION fGetDueDate RETURNS DATE
 
 END FUNCTION.  
 
-FUNCTION fGetFixedFeeOrderChannel RETURNS CHARACTER
-    (BUFFER ibFixedFee FOR FixedFee):
-    
-    /* YTS-11101 - add order.orderchannel for reactivations */
-    DEF VAR lcOrderChannel AS CHARACTER NO-UNDO.
-
-    FIND Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
-         Order.Orderid = ibFixedFee.OrderID NO-ERROR.
-    IF NOT AVAIL Order THEN lcOrderChannel = "".
-    ELSE lcOrderChannel = order.Orderchannel.
-
-    RETURN lcOrderChannel.
-    
-END FUNCTION.
-
 
 /******* MAIN start *********/
 
@@ -1114,6 +1098,7 @@ PROCEDURE pCollectReactivations:
    DEF VAR llTerminationSent AS LOG NO-UNDO. 
    DEF VAR ldResidual    AS DEC  NO-UNDO.     
    DEF VAR ldResidualNB  AS DEC  NO-UNDO.
+   DEF VAR lcOrderType AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest     FOR MsRequest.
    DEF BUFFER bMainMsRequest FOR MsRequest.
@@ -1304,7 +1289,7 @@ PROCEDURE pCollectReactivations:
                    ELSE ldaReacDate)
                ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
                ttInstallment.ResidualAmount = ldResidual
-               ttInstallment.Channel = fGetFixedFeeOrderChannel(BUFFER FixedFee)
+               ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
                ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
                ttInstallment.RowSource = "REACTIVATION"
                ttInstallment.FFNum = FixedFee.FFNum
@@ -1337,8 +1322,7 @@ PROCEDURE pCollectReactivations:
             ttInstallment.OperDate = ldaReacDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldResidualNB
-            ttInstallment.Channel = (IF FixedFee.BegDate < 11/19/2014 THEN ""
-                                ELSE fGetFixedFeeOrderChannel(BUFFER FixedFee))
+            ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
             ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN "" 
                                      ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
             ttInstallment.RowSource = "REACTIVATION"
