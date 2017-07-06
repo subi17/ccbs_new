@@ -10,6 +10,7 @@
 {Syst/funcrunprocess_update.i}
 {Syst/host.i}
 {Syst/tmsconst.i}
+{Func/profunc.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -513,8 +514,10 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("CustomerAddress").
   
       lhXML:WRITE-DATA-ELEMENT("CustomerTaxZone",Invoice.TaxZone).
-      
-      FIND FIRST CustCat NO-LOCK WHERE Customer.Category = CustCat.Category.
+     
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand EQ Syst.Parameters:gcbrand AND
+                 CustCat.Category EQ Customer.Category NO-ERROR.
          IF AVAILABLE CustCat THEN
             lhXML:WRITE-DATA-ELEMENT("Segment",CustCat.Segment).
          ELSE
@@ -733,16 +736,10 @@ PROCEDURE pSubInvoice2XML:
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
          
-
-      FIND FIRST CustCat NO-LOCK WHERE Customer.Category = CustCat.Category.
-         IF AVAILABLE CustCat THEN DO:
-            IF CustCat.Segment BEGINS "PRO" THEN
-               lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + "PRO").
-            ELSE
-               lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
-         END.
-         ELSE
-            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
+      IF fIsPro(Customer.Category) THEN
+         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").
+      ELSE
+         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /*No PRO logic needed*/
          
          lhXML:WRITE-DATA-ELEMENT("TariffType",ttSub.OldCLIType).
          lhXML:WRITE-DATA-ELEMENT("TariffDate",ttSub.TariffActDate).
