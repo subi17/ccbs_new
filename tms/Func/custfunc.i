@@ -59,7 +59,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
                     Custcat.brand EQ Syst.Parameters:gcBrand AND
                     CustCat.custidtype EQ icIdType AND
                     CustCat.selfemployed EQ ilSelfemployed AND
-                    CustCat.pro EQ ilProCust.
+                    CustCat.pro EQ ilProCust NO-ERROR.
          IF AVAIL CustCat THEN DO:
             lcSegment = CustCat.Segment.
             ocCategory = CustCat.category.
