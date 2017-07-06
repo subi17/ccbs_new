@@ -1214,11 +1214,11 @@ PROCEDURE pOrderView:
                         ELSE 0)
               ufk[6] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
-                        THEN 9844 /* mobile donor (holder) */
+                        THEN 2248 /* mobile donor (holder) */
                         ELSE 0)
               ufk[7] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
-                        THEN ? /* fixed donor (holder) */
+                        THEN 2249 /* fixed donor (holder) */
                         ELSE 0)
               ufk[8] = 8
               ehto = 0
