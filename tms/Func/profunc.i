@@ -47,7 +47,6 @@ FUNCTION fMakeProActRequest RETURNS INT(
    DEF VAR lcParams AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner FOR MSOwner. 
-   DEF BUFFER Msrequest FOR Msrequest.   
 
    FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 
