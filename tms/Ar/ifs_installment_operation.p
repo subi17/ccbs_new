@@ -164,7 +164,6 @@ FUNCTION fGetDueDate RETURNS DATE
 
 END FUNCTION.  
 
-
 /******* MAIN start *********/
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
@@ -1272,7 +1271,6 @@ PROCEDURE pCollectReactivations:
             END.
             
             CREATE ttInstallment.
-            /* YTS-11101 ttInstallment.Channel in Reactivations */
             ASSIGN
                ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM" 
                                         THEN "G"
@@ -1289,7 +1287,7 @@ PROCEDURE pCollectReactivations:
                    ELSE ldaReacDate)
                ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
                ttInstallment.ResidualAmount = ldResidual
-               ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
+               ttInstallment.Channel = "" 
                ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
                ttInstallment.RowSource = "REACTIVATION"
                ttInstallment.FFNum = FixedFee.FFNum
