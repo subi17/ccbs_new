@@ -323,7 +323,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       /* category according to id type */
       Customer.Category = OrderCustomer.Category.      
       fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
-                      ordercustomer.pro, lcCategory).
+                      ordercustomer.pro, OUTPUT lcCategory).
       IF lcCategory > "" THEN DO:
          Customer.Category = lcCategory.
          IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
