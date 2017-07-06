@@ -19,13 +19,10 @@
 {Func/email.i}
 {Func/fixedlinefunc.i}
 
-DEF TEMP-TABLE ttOrderList
-   FIELD OrderID AS INT
-   INDEX OrderID OrderID DESC.
-DEF STREAM soutfile.
-
 FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
+
+   DEF BUFFER CustCat FOR CustCat.
 
    FIND FIRST CustCat NO-LOCK where
               CustCat.Brand EQ Syst.Parameters:gcbrand AND
@@ -50,6 +47,8 @@ FUNCTION fMakeProActRequest RETURNS INT(
    DEF VAR lcParams AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner FOR MSOwner. 
+   DEF BUFFER Msrequest FOR Msrequest.   
+
    FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 
    IF NOT AVAIL bOwner THEN RETURN 0.
@@ -117,6 +116,8 @@ END.
 FUNCTION fIsProOrder RETURNS LOGICAL
    (iiOrderID as INT):
 
+   DEF BUFFER Order FOR Order.
+
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ  Syst.Parameters:gcBrand AND
               Order.OrderID EQ iiOrderID NO-ERROR.
@@ -151,6 +152,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
 
    DEF BUFFER bCurr FOR CLIType.
    DEF BUFFER bNew FOR CLIType.
+   DEF BUFFER Customer FOR Customer.
    
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum EQ iiCustomer NO-ERROR.
@@ -184,77 +186,14 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
    (iiMsSeq AS INT):
    DEF BUFFER bOrder FOR Order.
 
-   EMPTY TEMP-TABLE ttOrderList.
-   FOR EACH  bOrder NO-LOCK WHERE
-             bOrder.MsSeq EQ iiMsSeq:
-      IF fIsConvergenceTariff(bOrder.CLIType) THEN DO:
-        CREATE ttOrderList.
-        ASSIGN ttOrderList.OrderID = bOrder.OrderId.
-      END.
+   FOR EACH bOrder NO-LOCK WHERE
+            bOrder.MsSeq EQ iiMsSeq BY CrStamp DESC:
+      IF fIsConvergenceTariff(bOrder.CLIType) THEN
+         RETURN STRING(bOrder.OrderId).
    END.
-   FIND FIRST ttOrderList NO-ERROR.
-   IF AVAIL ttORderList THEN RETURN STRING(ttOrderList.OrderID).
 
    RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
 END.
-
-
-
-FUNCTION fParseEmailByRequest RETURNS CHAR
-   (iiMsRequest AS INT,
-    icTemplate AS CHAR):
-   DEF VAR lcOutput AS CHAR NO-UNDO.
-   DEF VAR lcMailHeader AS CHAR NO-UNDO.
-   DEF VAR lcReplace AS CHAR NO-UNDO.
-   DEF BUFFER bMsRequest FOR MsRequest.
-   DEF BUFFER bCustomer FOR Customer.
-   FIND FIRST bMsRequest NO-LOCK WHERE
-              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
-   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
-                                   STRING(iiMsRequest).
-   FIND FIRST bCustomer NO-LOCK WHERE
-              bCustomer.CustNum EQ bMsRequest.CustNum.
-    IF NOT AVAIL bCustomer THEN
-       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
-
-   lcOutput = fGetEmailText("EMAIL",
-                               icTemplate,
-                               1,
-                               OUTPUT lcMailHeader).
-   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
-      RETURN "ERROR: Email content fetching error" +
-             STRING(BCustomer.CustID) + " " +
-             STRING(icTemplate).
-
-   /*Seek tags:*/
-   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
-         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
-   END.
-   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, 
-                         "#ORDERID", 
-                         fFindCOFFOrder(bMsRequest.MsSeq)).
-   END.
-   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
-   END.
-   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Custid)).
-   END.
-   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
-      lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
-   END.
-   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
-      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
-      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
-   END.
-
-   RETURN lcOutput.
-
-END.
-
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
    (iiMsRequest AS INT,
