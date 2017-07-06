@@ -537,6 +537,13 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
             LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
 
+       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                   OrderAction.Brand    = Syst.Parameters:gcBrand AND
+                   OrderAction.OrderID  = bOrder.OrderID   AND
+                   OrderAction.ItemType = "AddLineDiscount" AND
+          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+             NEXT.
+
       IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
          RETURN TRUE.
    END.
