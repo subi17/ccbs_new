@@ -229,7 +229,7 @@ function! Check_syntax() range
     silent echo "COMPILE " . l:tempfile . "."
     redir END
 
-    let l:output = system("pike -C " . g:ccbspath . "/tms vimbatch " . l:pfile . " current_dir=" . getcwd())
+    let l:output = system("pike -C " . g:ccbspath . "/tms vimbatch " . l:pfile . " current_dir=" . getcwd() . " tenant=" . $TENANT)
     let dummy = delete(l:tempfile)
     let dummy = delete(l:pfile)
 
