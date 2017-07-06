@@ -200,7 +200,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                               fgetCustSegment(bordercustomer.CustIdType,
                                               bordercustomer.selfemployed,
                                               bordercustomer.pro,
-                                              lcCategory)). 
+                                              OUTPUT lcCategory)). 
    /*Installation*/
    lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
    lcContactStruct = add_struct(lcInstallationStruct, "Contact").
