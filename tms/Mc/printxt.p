@@ -811,6 +811,12 @@ IF NOT llErrors THEN DO:
             lcTagCustRegion = Region.RgName.
          ELSE lcTagCustRegion = "".
 
+         FIND FIRST ContactCustomer NO-LOCK WHERE
+            ContactCustomer.Brand   = Order.Brand AND
+            ContactCustomer.OrderId = Order.OrderID AND
+            ContactCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+         NO-ERROR.
+
          IF AVAIL ContactCustomer THEN DO:
             lcTagContactData =
             ContactCustomer.FirstName + " " +
