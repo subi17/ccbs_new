@@ -45,15 +45,26 @@ FUNCTION fgetCustSegment RETURNS CHAR
          ocCategory = "45".         
       ELSE IF icIDType EQ "NIE" AND NOT ilSelfEmployed THEN
          ocCategory = "11". 
-      FIND FIRST CustCat NO-LOCK WHERE
-                 Custcat.brand EQ Syst.Parameters:gcBrand AND
-                 Custcat.category EQ ocCategory NO-ERROR.
-      IF AVAIL CustCat THEN   
-         lcSegment = CustCat.Segment.
-   END.
-   IF lcSegment = "" THEN
-      lcSegment = "NEW". /* Unknown, should not come here */
+      IF ocCategory > "" THEN DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.category EQ ocCategory NO-ERROR.
 
+         IF AVAIL CustCat THEN
+            lcSegment = CustCat.Segment.
+      END.
+      ELSE DO:
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    CustCat.custidtype EQ icIdType AND
+                    CustCat.selfemployed EQ ilSelfemployed AND
+                    CustCat.pro EQ ilProCust.
+         IF AVAIL CustCat THEN DO:
+            lcSegment = CustCat.Segment.
+            ocCategory = CustCat.category.
+         END.
+      END.
+   END.
    RETURN lcSegment.
 END.
 
