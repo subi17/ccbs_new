@@ -290,6 +290,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                    (IF AVAIL DayCampaign AND
                                      DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                                      THEN iiPerContID ELSE 0),
+                                   "",  
                                    OUTPUT lcError).
 
       IF liCreated > 0 THEN DO:

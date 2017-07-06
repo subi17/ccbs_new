@@ -170,6 +170,7 @@ FUNCTION fActivateMDUBPerContract RETURNS LOGICAL
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcError).
    IF liRequest = 0 THEN 
       RETURN FALSE.
@@ -300,6 +301,7 @@ FUNCTION fTerminateMDUBPerContract RETURNS LOGICAL
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcError).
    RETURN (liRequest > 0).       
 

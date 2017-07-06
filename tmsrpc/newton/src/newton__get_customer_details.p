@@ -44,6 +44,7 @@
        self_employed;boolean; is customer self employed
        profession;string; customer profession
        site_name;string; employer company
+       segment;string;customer segment
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -61,7 +62,12 @@
                     person_idr;string;
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{newton/src/findtenant.i NO Common Customer CustNum piCustnum}
+{Syst/commpaa.i}
+katun = "NewtonRPC".
+gcBrand = "1".
 
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR piCustnum AS INT NO-UNDO.
@@ -100,12 +106,7 @@ IF NUM-ENTRIES(top_array) >= 2 THEN DO:
    pcCLI = get_string(param_toplevel_id, "1").
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
 {newton/src/findtenant.i NO Common Customer CustNum piCustnum}
-
-{Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
@@ -275,10 +276,17 @@ add_boolean(top_struct,"self_employed",llSelfEmployed).
 add_string(top_struct, "profession", Customer.Profession).
 add_string(top_struct, "site_name", Customer.CompanyName).
 
+FIND FIRST CustCat WHERE 
+           CustCat.brand EQ gcBrand AND
+           CustCat.category EQ Customer.category NO-ERROR.
+IF AVAIL custcat THEN           
+   add_string(top_struct, "segment", CustCat.Segment).
+
 llLimitNotReached = fSubscriptionLimitCheck(
    Customer.orgId,
    Customer.custidType,
    llSelfEmployed,
+   fispro(Customer.category),
    1,
    OUTPUT lcReason,
    OUTPUT liSubLimit,

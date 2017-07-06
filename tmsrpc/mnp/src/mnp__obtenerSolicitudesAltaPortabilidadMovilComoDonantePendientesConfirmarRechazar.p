@@ -1,5 +1,5 @@
 /**
- * mnp.obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar
+ * mnp.obtenerSolicitudesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar
  *
  * 1.4 Notifications of portabilities in donor role to be confirmed/rejected (used with buzon interface only)
  *

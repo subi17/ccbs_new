@@ -37,6 +37,7 @@ gcBrand = "1".
 {Func/fcharge_comp_loaded.i}
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN         AS CHAR NO-UNDO.
@@ -58,6 +59,7 @@ DEF VAR lcStruct         AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR ldaActDate       AS DATE NO-UNDO.
 DEF VAR lcApplicationId  AS CHAR NO-UNDO.
+DEF VAR lcProValidation  AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
 
 DEF BUFFER NewCliType    FOR CliType.
@@ -120,6 +122,15 @@ IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
                        INPUT FALSE, OUTPUT lcError) NE 0 THEN DO:
    RETURN appl_err(lcError).
 END.
+
+/*YPRO*/
+lcProValidation = fValidateProSTC(MobSub.Custnum,
+                                  MobSub.CliType,
+                                  pcCliType).
+IF lcProValidation NE "" THEN
+   RETURN appl_err("Pro customer validatuin error: " + lcProValidation).
+
+
 
 /* Check if credit check is needed */
 IF fServAttrValue(MobSub.CLIType,

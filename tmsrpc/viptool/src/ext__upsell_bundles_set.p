@@ -82,6 +82,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcError).
    IF liRequest = 0 THEN RETURN appl_err("Bundle request not created").
 END.

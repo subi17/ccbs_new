@@ -284,6 +284,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError). 
 
       IF liRequest = 0 THEN

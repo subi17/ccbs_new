@@ -131,6 +131,7 @@ FUNCTION fCreateUpsell RETURNS INT
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT ocError).
    
    RETURN liRequest.

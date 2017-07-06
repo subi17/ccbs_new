@@ -351,6 +351,7 @@ PROCEDURE pRevertRenewalOrder:
                                         "",
                                         0,
                                         DCCLI.PerContractID,
+                                        "",
                                         OUTPUT lcError).
                 IF liTermRequest = 0 THEN
                    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -385,6 +386,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
                                                   THEN bDCCLI.PerContractID
                                                   ELSE 0),
+                                                  "",
                                                  OUTPUT lcError).
                 IF liTermRequest = 0 THEN
                    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -417,6 +419,7 @@ PROCEDURE pRevertRenewalOrder:
                                            "",
                                            0,
                                            bSubMsRequest.ReqIParam3, 
+                                           "",
                                            OUTPUT lcError).
           IF liTermRequest = 0 THEN
              DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -544,6 +547,7 @@ PROCEDURE pCloseQ25Discount:
             "",
             0, /* payterm residual fee */
             DCCLI.PercontractId,
+            "",
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN

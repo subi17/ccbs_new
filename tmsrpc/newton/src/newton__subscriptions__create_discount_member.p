@@ -40,6 +40,8 @@ DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
 
+DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+
 lcStructType = validate_request(param_toplevel_id, "int,string,struct,[boolean]").
 IF lcStructType EQ ? THEN RETURN.
 
@@ -127,6 +129,48 @@ IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN DO:
       RETURN appl_err("Discount Plan not allowed").
    END.
 
+END.
+
+/* Additional Line with mobile only ALFMO-5 */
+ELSE IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
+   
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
+      RETURN appl_err("Discount Plan not allowed").
+
+   IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
+      fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
+      (NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,MobSub.CliType) AND
+       NOT fCheckOngoingMobileOnly(Customer.CustIDType,Customer.OrgID,MobSub.CliType)) OR 
+      CAN-FIND(FIRST SubsTerminal WHERE SubsTerminal.Brand = gcBrand AND
+                                        SubsTerminal.MsSeq = MobSub.MsSeq) THEN      
+      RETURN appl_err("Discount Plan not allowed").   
+
+   FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = MobSub.MsSeq AND
+            DCCLI.DCEvent BEGINS "TERM" AND
+            DCCLI.ValidTo >= TODAY AND
+            DCCLI.ValidFrom <= TODAY AND
+            DCCLI.CreateFees = TRUE,
+      FIRST DayCampaign WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCEvent AND
+            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
+            DayCampaign.TermFeeModel NE "" AND
+            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
+      RETURN appl_err("Discount Plan not allowed").
+   END.
+END.
+
+FOR EACH bDiscountPlan NO-LOCK WHERE
+         bDiscountPlan.Brand = gcBrand AND
+  LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
+  FIRST DPMember NO-LOCK WHERE
+        DPMember.DPId       = bDiscountPlan.DPId   AND
+        DPMember.HostTable  = "MobSub"             AND
+        DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+        DPMember.ValidTo   >= ldaValidFrom         AND
+        DPMember.ValidFrom <= ldaValidTo:
+   RETURN appl_err("Discount Plan already exists").
 END.
 
 FIND FIRST DPMember WHERE

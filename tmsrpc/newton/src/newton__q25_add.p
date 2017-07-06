@@ -212,6 +212,7 @@ liCreated = fPCActionRequest(
    "",
    0, /* payterm residual fee */
    DCCLI.PerContractId, /* Periodical Contract-ID */
+   "",
    OUTPUT lcResult).   
    
 IF liCreated = 0 THEN DO:

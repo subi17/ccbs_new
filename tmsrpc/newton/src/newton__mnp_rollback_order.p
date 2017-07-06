@@ -29,6 +29,7 @@ katun = "NewtonRPC".
 {Func/timestamp.i}
 {Func/create_eventlog.i}
 {Mm/fbundle.i}
+{Func/profunc.i}
 
 DEF VAR pcArray              AS CHAR  NO-UNDO.
 DEF VAR pcStruct             AS CHAR  NO-UNDO.
@@ -206,6 +207,7 @@ ELSE liCounter = 1.
 IF NOT fSubscriptionLimitCheck(pcPersonId,
                                pcIdType,
                                FALSE,
+                               fisPro(Customer.category),
                                liCounter,
                                OUTPUT lcError,
                                OUTPUT liCounter,

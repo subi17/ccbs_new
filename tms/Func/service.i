@@ -915,10 +915,14 @@ PROCEDURE pTerminatePackage:
       /* DEFAULT profile should be created from next month.              */
       IF ilSolog THEN DO:
          
-         IF ttServCom.ServCom = "SHAPER" THEN DO:
-            IF icOrigDCEvent = "BONO_VOIP" THEN lcParam = "VOIP_REMOVE".
-               ELSE lcParam = ttServCom.DefParam.
-            END. /* IF ttServCom.ServCom = "SHAPER" THEN DO: */
+         IF ttServCom.ServCom = "SHAPER" THEN 
+         DO:
+            IF icOrigDCEvent = "BONO_VOIP" THEN 
+                lcParam = "VOIP_REMOVE".
+            ELSE 
+                lcParam = ttServCom.DefParam.
+         END. /* IF ttServCom.ServCom = "SHAPER" THEN DO: */
+         
          ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
          ELSE lcParam = ttServCom.DefParam.
       

@@ -243,6 +243,7 @@ FUNCTION fSetMDUB RETURNS INT
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    END.
    

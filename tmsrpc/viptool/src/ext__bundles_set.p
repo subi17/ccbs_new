@@ -212,6 +212,7 @@ ELSE
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    
 IF liRequest = 0 THEN

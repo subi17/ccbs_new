@@ -57,21 +57,24 @@ END FUNCTION. /* FUNCTION fOngoingContractTerm */
 FUNCTION fIsBundle RETURNS LOGIC
    (icDCEvent AS CHAR):
  
-   DEF VAR llBundle AS LOG  NO-UNDO.
-   DEF VAR liCount  AS INT  NO-UNDO.
-   
+   DEF VAR llBundle            AS LOG  NO-UNDO.
+   DEF VAR liCount             AS INT  NO-UNDO.
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO.
+
    DEF BUFFER bPerContract FOR DayCampaign.
    
    /* DUB is not considered as exchangable bundle */
    IF icDCEvent EQ "DUB" THEN RETURN FALSE.
    
-   llBundle = FALSE.
+   ASSIGN
+      llBundle            = FALSE
+      lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
    
    FOR FIRST bPerContract NO-LOCK WHERE 
              bPerContract.Brand = gcBrand AND
              bPerContract.DCEvent = icDCEvent AND
-             LOOKUP(STRING(bPerContract.DCType),
-                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
+             ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
+              (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
       
@@ -87,7 +90,7 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    DEF VAR lcResult AS CHAR NO-UNDO. 
    
    IF NOT fIsBundle(icDCEvent) THEN DO:
-      ocInfo = "Not a bundle".
+      ocInfo = "Not a bundle" + icDCEvent.
       RETURN FALSE.
    END.
    
@@ -207,9 +210,10 @@ FUNCTION fGetActiveBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     idActiveTime AS DEC):
 
-   DEF VAR lcBundleList AS CHAR NO-UNDO.
-   DEF VAR liLoop       AS INT NO-UNDO.
-   DEF VAR licount      AS INT NO-UNDO.
+   DEF VAR lcBundleList        AS CHAR NO-UNDO.
+   DEF VAR liLoop              AS INT  NO-UNDO.
+   DEF VAR licount             AS INT  NO-UNDO.
+
    licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
 
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
