@@ -788,8 +788,11 @@ PROCEDURE pUpdateSubscription:
    /* YPRO. If fixedline is terminated from convergent, also SVAs should be
       terminated. */
    IF fIsConvergenceTariff(bOldType.CliType) AND 
-      NOT fIsConvergenceTariff(CLIType.CliType) THEN 
+      NOT fIsConvergenceTariff(CLIType.CliType) THEN DO:
       fTerminateSVAs(Mobsub.msseq, FALSE).
+      FIND MsRequest NO-LOCK WHERE
+           MsRequest.MsRequest = iiMSRequest.
+   END.
 
    /* Additional Line with mobile only ALFMO-5 
       IF STC happened and the new main line is not mobile only or matrix doesn't meet

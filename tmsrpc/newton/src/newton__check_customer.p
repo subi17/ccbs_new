@@ -90,7 +90,7 @@ DO:
           lcSegment    = CustCat.Segment. 
 END.
 ELSE
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, INPUT-OUTPUT lccategory).
+   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
 
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
