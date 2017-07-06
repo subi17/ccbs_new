@@ -86,3 +86,5 @@ fUpdateMenuText(2249, "FIXED   DONOR").
 fUpdateMenuText(2250, "CUSTOMERMANAGEM.").
 fUpdateDFField(225, "OrderCustomer", "AuthCustId", "AuthCustID", 34, TODAY).
 fUpdateDFField(225, "OrderCustomer", "AuthCustIdType", "AuthCustIDType", 35, TODAY).
+fUpdateDFField(13, "OrderCustomer", "AuthCustId", "AuthCustId", 35, TODAY).
+fUpdateDFField(13, "OrderCustomer", "AuthCustIdType", "AuthCustIDType", 36, TODAY).
