@@ -18,7 +18,8 @@ FUNCTION fgetCustSegment RETURNS CHAR
    (INPUT icIdType AS CHAR,
     INPUT ilSelfemployed AS LOG,
     INPUT ilProCust AS LOG,
-    INPUT-OUTPUT ocCategory AS CHAR):
+    OUTPUT ocCategory AS CHAR):
+
    DEF VAR lcSegment AS CHAR NO-UNDO.
 
    DEF BUFFER CustCat FOR CustCat.
