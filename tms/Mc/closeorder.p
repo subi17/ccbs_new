@@ -244,17 +244,17 @@ DO:
             IF (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0    AND
                 NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
                                                  lbOrderCustomer.CustID,
-                                                 Order.CliType)          AND
+                                                 lbOrder.CliType)          AND
                 NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
                                              lbOrderCustomer.CustID,
-                                             Order.CliType))             OR
+                                             lbOrder.CliType))             OR
                (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0 AND
                 NOT fCheckOngoing2PConvergentOrder(lbOrderCustomer.CustIdType,
                                                    lbOrderCustomer.CustID,
-                                                   Order.CliType)        AND
+                                                   lbOrder.CliType)        AND
                 NOT fCheckExisting2PConvergent(lbOrderCustomer.CustIdType,
                                                lbOrderCustomer.CustID,
-                                               Order.CliType))           THEN DO:
+                                               lbOrder.CliType))           THEN DO:
                DELETE OrderAction.
                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                 "Order",
