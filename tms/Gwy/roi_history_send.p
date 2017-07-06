@@ -188,8 +188,6 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
          (INPUT pcStruct AS CHARACTER,
           INPUT piRowType AS INTEGER):
 
-   DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
-
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND 
@@ -234,16 +232,7 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
    IF OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
       OrderCustomer.CustIdType = "CIF"
    THEN DO:
-      FIND FIRST lbOrderCustomer NO-LOCK WHERE
-                 lbOrderCustomer.Brand = gcBrand AND
-                 lbOrderCustomer.OrderId = Order.OrderId AND
-                 lbOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
-      NO-ERROR.
-
-      IF AVAILABLE lbOrderCustomer AND lbOrderCustomer.AuthCustId > ""
-      THEN add_string(pcStruct,"person_id",lbOrderCustomer.AuthCustId).
-      ELSE add_string(pcStruct,"person_id",OrderCustomer.AuthCustId).
-
+      add_string(pcStruct,"person_id",OrderCustomer.AuthCustId).
       add_string(pcStruct,"company_id",OrderCustomer.CustId).
    END.
    ELSE add_string(pcStruct,"person_id",OrderCustomer.CustId).

@@ -793,22 +793,9 @@ IF NOT llErrors THEN DO:
          liLanguage      = INTEGER(OrderCustomer.Language) NO-ERROR.
       /* Corporate customer */
       IF OrderCustomer.CustIDType EQ "CIF" THEN DO:
-
-         FIND FIRST ContactCustomer  NO-LOCK WHERE
-            ContactCustomer.Brand   = Order.Brand AND
-            ContactCustomer.OrderId = Order.OrderID AND
-            ContactCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
-         NO-ERROR.
-
-         IF AVAILABLE ContactCustomer AND ContactCustomer.AuthCustID > ""
-         THEN ASSIGN
-                 lcTagCustIDType  = ContactCustomer.AuthCustIdType
-                 lcTagCustID      = ContactCustomer.AuthCustId.
-         ELSE ASSIGN
-                 lcTagCustIDType  = OrderCustomer.AuthCustIdType
-                 lcTagCustID      = OrderCustomer.AuthCustId.
-
          ASSIGN
+            lcTagCustIDType  = OrderCustomer.AuthCustIdType
+            lcTagCustID      = OrderCustomer.AuthCustId
             lcTagCompanyName = OrderCustomer.Company
             lcTagCompanyCIF  = OrderCustomer.CustId
             lcTagLastName2   = OrderCustomer.SurName2

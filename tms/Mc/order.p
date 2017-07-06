@@ -1739,16 +1739,6 @@ PROCEDURE local-find-others.
          lcUser = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
                                       BUFFER OrderCustomer).
       END.
-      /* Because of the index this will come after the rowtype 1
-         and thus lcAuthCustId and lcAuthCustIdType will have a
-         correct value */
-      WHEN {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
-      THEN DO:
-         IF OrderCustomer.AuthCustId > ""
-         THEN ASSIGN
-                 lcAuthCustId     = OrderCustomer.AuthCustId
-                 lcAuthCustIdType = OrderCustomer.AuthCustIdType.
-      END.
       END CASE.
    END.
         

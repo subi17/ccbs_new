@@ -664,8 +664,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR llSelfEmployed        AS LOGICAL   NO-UNDO. 
    DEF VAR llIsProCustomer       AS LOGICAL   NO-UNDO INIT FALSE.
    DEF VAR lcCategory            AS CHARACTER NO-UNDO.
-   DEF VAR lcAuthCustID          AS CHARACTER NO-UNDO.
-   DEF VAR lcAuthCustIDType      AS CHARACTER NO-UNDO.
 
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
@@ -870,28 +868,12 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    
          /* replicate install person data from billing person data */
          IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} THEN DO:
-      
-            FIND bOrderCustomer NO-LOCK WHERE
-                 bOrderCustomer.Brand = gcBrand AND
-                 bOrderCustomer.OrderID = liOrderId AND
-                 bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
-            NO-ERROR.
-
-            IF AVAILABLE bOrderCustomer
-            THEN ASSIGN
-                    lcAuthCustID     = bOrderCustomer.AuthCustId
-                    lcAuthCustIDType = bOrderCustomer.AuthCustIdType.
 
             FIND bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand = gcBrand AND
                  bOrderCustomer.OrderID = liOrderId AND
                  bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
             NO-ERROR.
-
-            IF AVAILABLE bOrderCustomer AND lcAuthCustID EQ ""
-            THEN ASSIGN
-                    lcAuthCustID     = bOrderCustomer.AuthCustId
-                    lcAuthCustIDType = bOrderCustomer.AuthCustIdType.
 
             IF AVAIL bOrderCustomer THEN ASSIGN
                OrderCustomer.FirstName = bOrderCustomer.FirstName
@@ -912,12 +894,12 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OrderCustomer.MobileNumber = bOrderCustomer.MobileNumber
                   WHEN NOT OrderCustomer.MobileNumber > ""
 
-               OrderCustomer.CustID = (IF lcAuthCustID > "" THEN
-                  lcAuthCustID ELSE bOrderCustomer.CustID)
+               OrderCustomer.CustID = (IF bOrderCustomer.AuthCustId > "" THEN
+                  bOrderCustomer.AuthCustId ELSE bOrderCustomer.CustID)
                   WHEN NOT OrderCustomer.CustId > ""
 
-               OrderCustomer.CustIDType = (IF lcAuthCustIDType > "" THEN
-                  lcAuthCustIDType ELSE bOrderCustomer.CustIDType)
+               OrderCustomer.CustIDType = (IF bOrderCustomer.AuthCustIdType > "" THEN
+                  bOrderCustomer.AuthCustIdType ELSE bOrderCustomer.CustIDType)
                   WHEN NOT OrderCustomer.CustIDType > "".
                
          END.
@@ -2008,10 +1990,10 @@ IF pcContactStruct > "" THEN
    fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, TRUE).
 
 IF pcMobileLinePortabilityUserStruct > "" THEN
-   fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, TRUE).
+   fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, TRUE).
 
 IF pcFixedLinePortabilityUserStruct > "" THEN
-   fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, TRUE).
+   fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, TRUE).
 
 /* YBP-553 */
 /* should be called only after rowtype=1 creation */

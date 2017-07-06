@@ -250,9 +250,7 @@ IF pcActionType EQ "ORDER" THEN DO:
              pcDelFSurname   = OrderCustomer.SurName1                  /* 14 */
              pcDelSSurname   = OrderCustomer.SurName2                  /* 15 */
              pcDelTelphone   = OrderCustomer.MobileNumber              /* 16 */
-             pcDelMail       = OrderCustomer.Email                     /* 17 */
-             pcRepId         = OrderCustomer.AuthCustId /* is overwritten here if needed */
-                                  WHEN OrderCustomer.AuthCustId > "".  /* 5  */
+             pcDelMail       = OrderCustomer.Email.                    /* 17 */
    END.
 
    ASSIGN
