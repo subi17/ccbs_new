@@ -164,6 +164,23 @@ FUNCTION fGetDueDate RETURNS DATE
 
 END FUNCTION.  
 
+FUNCTION fGetFixedFeeOrderChannel RETURNS CHARACTER
+    (BUFFER ibFixedFee FOR FixedFee):
+    
+    /* YTS-11101 - add order.orderchannel for reactivations */
+    DEF VAR lcOrderChannel AS CHARACTER NO-UNDO.
+
+    FIND Order NO-LOCK WHERE
+         Order.Brand = gcBrand AND
+         Order.Orderid = ibFixedFee.OrderID NO-ERROR.
+    IF NOT AVAIL Order THEN lcOrderChannel = "".
+    ELSE lcOrderChannel = order.Orderchannel.
+
+    RETURN lcOrderChannel.
+    
+END FUNCTION.
+
+
 /******* MAIN start *********/
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
@@ -1270,6 +1287,7 @@ PROCEDURE pCollectReactivations:
             END.
             
             CREATE ttInstallment.
+            /* YTS-11101 ttInstallment.Channel in Reactivations */
             ASSIGN
                ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM" 
                                         THEN "G"
@@ -1286,7 +1304,7 @@ PROCEDURE pCollectReactivations:
                    ELSE ldaReacDate)
                ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
                ttInstallment.ResidualAmount = ldResidual
-               ttInstallment.Channel = ""
+               ttInstallment.Channel = fGetFixedFeeOrderChannel(BUFFER FixedFee)
                ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
                ttInstallment.RowSource = "REACTIVATION"
                ttInstallment.FFNum = FixedFee.FFNum
@@ -1305,6 +1323,7 @@ PROCEDURE pCollectReactivations:
          END.
 
          CREATE ttInstallment.
+         /* YTS-11101 ttInstallment.Channel in Reactivations */
          ASSIGN
             ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM"
                                      THEN "G"
@@ -1318,7 +1337,8 @@ PROCEDURE pCollectReactivations:
             ttInstallment.OperDate = ldaReacDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldResidualNB
-            ttInstallment.Channel = ""
+            ttInstallment.Channel = (IF FixedFee.BegDate < 11/19/2014 THEN ""
+                                ELSE fGetFixedFeeOrderChannel(BUFFER FixedFee))
             ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN "" 
                                      ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
             ttInstallment.RowSource = "REACTIVATION"
