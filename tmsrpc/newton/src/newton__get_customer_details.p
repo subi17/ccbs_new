@@ -62,7 +62,6 @@
                     person_idr;string;
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{newton/src/findtenant.i NO Common Customer CustNum piCustnum}
 {Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".

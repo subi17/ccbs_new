@@ -249,7 +249,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF AVAIL DayCampaign THEN add_string(lcResultStruct, "name", DayCampaign.DCName).
 
    /* pass number of activations in case of UPSELL */
-   IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId MATCHES("*_UPSELL") THEN 
+   IF DayCampaign.InstanceLimit > 1 THEN 
    DO:
        liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
        add_int(lcResultStruct, "activations",liActivations).
@@ -268,20 +268,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        lcOptionsStruct = add_struct(lcResultStruct,"options").
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
-   ELSE IF pcBundleId MATCHES("*_UPSELL") THEN DO:
-      liActivations = fGetUpSellCount(pcBundleId,
-                                      piMsSeq,
-                                      MobSub.Custnum,
-                                      OUTPUT lcError).
-       add_int(lcResultStruct, "activations",liActivations).
-       /* ydr_1905 addition for web visibility
-       IF pcBundleId MATCHES("*_UPSELL") AND
-          fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) EQ "" THEN
-          liActAllowed = 0.
-       add_int(lcResultStruct, "activation_allowed",liActAllowed).
-       */
-   END.
-   ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
 
 FINALLY:

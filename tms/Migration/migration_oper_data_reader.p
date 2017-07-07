@@ -481,6 +481,7 @@ FUNCTION fSetMigrationBonos RETURNS CHAR
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcError).
        IF liRequest EQ 0 THEN DO:
           lcReturn = lcReturn + "|" + "Bono request creation failed " + lcError.
