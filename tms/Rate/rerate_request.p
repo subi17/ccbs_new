@@ -27,6 +27,7 @@ DEF VAR ldeDSSActStamp  AS DEC  NO-UNDO.
 DEFINE VARIABLE llCurrentDB AS LOGICAL NO-UNDO.
 DEF VAR ldaActiveFrom   AS DATE NO-UNDO.
 DEF VAR ldaActiveTo     AS DATE NO-UNDO.
+DEF VAR liBatchSize     AS INT  INITIAL 20 NO-UNDO.
 
 DEF BUFFER bSubRequest FOR MsRequest.
 
@@ -97,8 +98,14 @@ ELSE DO:
       RETURN "ERROR:Invalid parameters".
    END.
 
-   ELSE IF NOT SOURCE-PROCEDURE:PRIVATE-DATA BEGINS "Rerate_new_db"
-   THEN RETURN "ERROR:Invalid parameters".
+   ELSE IF SOURCE-PROCEDURE:PRIVATE-DATA BEGINS "Rerate_new_db"
+   THEN ASSIGN
+         /* To be able to call pGetAllRequests we need to
+            assign iiRequest a value greater than zero */
+         iiRequest = 1
+         liBatchSize = 1000.
+
+   ELSE RETURN "ERROR:Invalid parameters".
 END.
 
 RUN Rate/cli_ratep.p PERSISTENT SET lhSubsRerate.
@@ -152,7 +159,7 @@ PROCEDURE pGetAllRequests:
      
       liHandled = liHandled + 1.
       /* don't try to do all at once, give time to other requests also */
-      IF liHandled >= 20 THEN LEAVE.
+      IF liHandled >= liBatchSize THEN LEAVE.
    END.   
    
 END PROCEDURE.
