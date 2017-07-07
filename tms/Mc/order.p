@@ -2330,7 +2330,7 @@ PROCEDURE local-update-customer:
                   IF ( LOOKUP(OrderCustomer.CustIDType,"NIE,NIF,PASSPORT") > 0 AND
                        INPUT FRAME fCustomer OrderCustomer.CustIDType = "CIF" ) OR
                      ( OrderCustomer.CustIDType = "CIF" AND
-                       LOOKUP(INPUT FRAME fCustomer OrderCustomer.CustIDType, "NIE,NIF,PASSPORT" > 0) )
+                       LOOKUP(INPUT FRAME fCustomer OrderCustomer.CustIDType, "NIE,NIF,PASSPORT") > 0 )
                   THEN DO:
                      MESSAGE "Company ID type cannot be changed into Person ID type and vice versa"
                      VIEW-AS ALERT-BOX ERROR.
