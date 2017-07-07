@@ -2320,8 +2320,19 @@ PROCEDURE local-update-customer:
 
                   /* passport cannot always be used */
                   IF LOOKUP(OrderCustomer.CustIDType,"NIE,NIF,CIF") > 0 AND
-                    INPUT FRAME fCustomer OrderCustomer.CustIDType = "Passport"                   THEN DO:
+                    INPUT FRAME fCustomer OrderCustomer.CustIDType = "Passport"
+                  THEN DO:
                      MESSAGE "Normal ID type cannot be changed into passport"
+                     VIEW-AS ALERT-BOX ERROR.
+                     NEXT.
+                  END.
+                  /* Person id cannot change to company id and vice versa  */
+                  IF ( LOOKUP(OrderCustomer.CustIDType,"NIE,NIF,PASSPORT") > 0 AND
+                       INPUT FRAME fCustomer OrderCustomer.CustIDType = "CIF" ) OR
+                     ( OrderCustomer.CustIDType = "CIF" AND
+                       LOOKUP(INPUT FRAME fCustomer OrderCustomer.CustIDType, "NIE,NIF,PASSPORT" > 0) )
+                  THEN DO:
+                     MESSAGE "Company ID type cannot be changed into Person ID type and vice versa"
                      VIEW-AS ALERT-BOX ERROR.
                      NEXT.
                   END.
