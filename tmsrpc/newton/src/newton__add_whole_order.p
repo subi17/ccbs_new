@@ -211,7 +211,7 @@
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
                     coverage_token;string;mandatory;
-                    address_id;string;optional;address id;
+                    address_id;string;optional;address id; 
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -824,8 +824,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken =
             data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
-         OrderCustomer.AddressId =
-            data[LOOKUP("address_id", gcCustomerStructStringFields)]
+         OrderCustomer.AddressId = 
+            data[LOOKUP("address_id", gcCustomerStructStringFields)] 
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
@@ -1333,8 +1333,8 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token," +
-                         "address_id".
+                         "coverage_token," + 
+                         "address_id". 
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1378,7 +1378,7 @@ gcCustomerStructStringFields = "city," +
                                "km," +
                                "territory_owner," +
                                "coverage_token," +
-                               "address_id".   /* EXTENT value count 42 */
+                               "address_id".   /* EXTENT value count 42 */ 
 
 /* common validation */
 /* YBP-513 */
