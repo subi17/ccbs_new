@@ -1287,7 +1287,7 @@ PROCEDURE pCollectReactivations:
                    ELSE ldaReacDate)
                ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
                ttInstallment.ResidualAmount = ldResidual
-               ttInstallment.Channel = "" 
+               ttInstallment.Channel = ""
                ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
                ttInstallment.RowSource = "REACTIVATION"
                ttInstallment.FFNum = FixedFee.FFNum
