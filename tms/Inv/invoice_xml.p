@@ -728,24 +728,26 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
       ELSE 
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
-      lhXML:START-ELEMENT("ContractType").
-      lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
-      lhXML:WRITE-CHARACTERS(ttSub.CLIType).
+      lhXML:START-ELEMENT("ContractType").      
+      IF fIsPro(Customer.Category) THEN
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " PRO").  
+      ELSE
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName). /* No PRO logic needed */               
+      lhXML:WRITE-CHARACTERS(ttSub.CLIType).      
       lhXML:END-ELEMENT("ContractType").
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
-         
-      IF fIsPro(Customer.Category) THEN
-         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").
-      ELSE
-         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /*No PRO logic needed*/
+         IF fIsPro(Customer.Category) THEN
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /* No PRO logic needed */
          
          lhXML:WRITE-DATA-ELEMENT("TariffType",ttSub.OldCLIType).
          lhXML:WRITE-DATA-ELEMENT("TariffDate",ttSub.TariffActDate).
-         lhXML:END-ELEMENT("OldContractType").
+         lhXML:END-ELEMENT("OldContractType").         
       END.
-
+      
       lhXML:START-ELEMENT("ContractName").
       lhXML:WRITE-DATA-ELEMENT("FullName",ttSub.UserName).
       lhXML:END-ELEMENT("ContractName").
