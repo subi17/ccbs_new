@@ -1,3 +1,4 @@
+/* Run after YTS-10755-additional-lines-without-main-line branch deployment */
 def stream sout.
 output stream sout to yts_10755.log.
 
