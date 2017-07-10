@@ -514,7 +514,9 @@ FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
        /* This is to handle where the additional line
           is CONT25 or CONT26 because it can treat itself
           as main line */  
-       IF CAN-FIND(FIRST DPMember WHERE
+       IF (bMobSub.CLIType = ENTRY(3,{&ADDLINE_CLITYPES} ) OR 
+           bMobSub.CLIType = ENTRY(4,{&ADDLINE_CLITYPES} )) AND 
+          CAN-FIND(FIRST DPMember WHERE
                          DPMember.DPId = DiscountPlan.DPId AND
                          DPMember.HostTable = "MobSub" AND
                          DPMember.KeyValue  = STRING(bMobSub.MsSeq) AND

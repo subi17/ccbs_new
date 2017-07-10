@@ -26,8 +26,17 @@ DEF VAR lcQuestion       AS CHARACTER NO-UNDO.
 DEF VAR lcCreditReason   AS CHARACTER NO-UNDO. 
 DEF VAR lcOldOrderStatus AS CHARACTER NO-UNDO. 
 
+/* Additional line mobile only ALFMO-5*/
+DEF VAR lcAddlineCliypes AS CHARACTER NO-UNDO. 
+DEF VAR llDelete         AS LOGICAL   NO-UNDO. 
+
 DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER lbOrder         FOR Order.
+
+/* Additional line mobile only ALFMO-5 */
+DEFINE BUFFER lbOrdCust       FOR OrderCustomer.
+DEFINE BUFFER lbOrd           FOR Order.
+DEFINE BUFFER lbOrdAct        FOR OrderAction.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -280,6 +289,36 @@ FIND FIRST lbOrderCustomer NO-LOCK WHERE
            lbOrderCustomer.OrderId = Order.OrderId AND
            lbOrderCustomer.RowType = 1             NO-ERROR.
 IF AVAILABLE lbOrderCustomer THEN DO:
+
+   /* Just to create the list of 
+     additional line CLITYPES(76 status) 
+     Additional line mobile only ALFMO-5 */
+
+   FOR EACH lbOrdCust NO-LOCK WHERE
+            lbOrdCust.Brand      = gcBrand                    AND
+            lbOrdCust.CustIDType = lbOrderCustomer.CustIDType AND
+            lbOrdCust.CustID     = lbOrderCustomer.CustID     AND
+            lbOrdCust.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+      FIRST lbOrd NO-LOCK WHERE
+            lbOrd.Brand      = gcBrand                           AND
+            lbOrd.OrderID    = lbOrdCust.OrderID                 AND
+            lbOrd.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            LOOKUP(lbOrd.CLIType, {&ADDLINE_CLITYPES}) > 0:
+
+      IF CAN-FIND( FIRST lbOrdAct NO-LOCK WHERE
+                  lbOrdAct.Brand    = gcBrand           AND
+                  lbOrdAct.OrderID  = lbOrd.OrderID   AND
+                  lbOrdAct.ItemType = "AddLineDiscount" AND
+           LOOKUP(lbOrdAct.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+      DO:      
+         IF lcAddlineCliypes = "" THEN
+            ASSIGN lcAddlineCliypes = lbOrd.CLIType.
+         ELSE
+            ASSIGN lcAddlineCliypes = lcAddlineCliypes + "," + lbOrd.CLIType.
+      END.
+   END.
+
+
    /* If Main Line is Closed and customer has no other mobile only 
       main line then removing the additional line discount */
    FOR EACH OrderCustomer NO-LOCK WHERE
@@ -306,13 +345,31 @@ IF AVAILABLE lbOrderCustomer THEN DO:
                                          lbOrderCustomer.CustID,
                                          lbOrder.CliType) THEN 
          DO:
-            DELETE OrderAction.
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
-                             STRING(lbOrder.OrderID),
-                             0,
-                             "ADDLINE DISCOUNT ORDERACTION REMOVED",
-                             "Removed AddLineDiscount Item from OrderAction").
+            llDelete = TRUE.            
+            IF NUM-ENTRIES(lcAddlineCliypes) > 1 THEN
+            DO:
+               IF LOOKUP(ENTRY(3,{&ADDLINE_CLITYPES}),lcAddlineCliypes) > 0 THEN
+               DO:
+                  IF lbOrder.CLIType <> ENTRY(3,{&ADDLINE_CLITYPES}) THEN
+                     llDelete = FALSE.
+               END.
+               ELSE IF LOOKUP(ENTRY(4,{&ADDLINE_CLITYPES}),lcAddlineCliypes) > 0 THEN
+               DO:
+                  IF lbOrder.CLIType <> ENTRY(4,{&ADDLINE_CLITYPES}) THEN
+                     llDelete = FALSE.
+               END.
+            END.
+
+            IF llDelete THEN
+            DO:            
+               DELETE OrderAction.
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "Order",
+                                STRING(lbOrder.OrderID),
+                                0,
+                                "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                                "Removed AddLineDiscount Item from OrderAction").            
+            END.
 
             fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
                                            lbOrderCustomer.CustID).
