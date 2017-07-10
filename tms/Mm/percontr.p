@@ -569,7 +569,8 @@ PROCEDURE pContractActivation:
       fReqStatus(3,"DSS bundle is not active").
       RETURN.
    END. /* IF lcDCEvent BEGINS {&DSS} + "_UPSELL" AND */
-   ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 THEN DO:
+   ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
+      lcDCEvent NE "FLEX_UPSELL" THEN DO: /* avoid business rule for FLEX_UPSELL - YTS-10911 */
       lcBundleId = fGetActiveDSSId(INPUT MsOwner.CustNum,
                                    INPUT MsRequest.ActStamp).
       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
