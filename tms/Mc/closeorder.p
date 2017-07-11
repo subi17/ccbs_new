@@ -329,7 +329,6 @@ IF AVAILABLE lbOrderCustomer THEN DO:
       FIRST lbOrder NO-LOCK WHERE
             lbOrder.Brand      = gcBrand                           AND
             lbOrder.OrderID    = OrderCustomer.OrderID             AND
-            lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
      LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:         
       FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
                  OrderAction.Brand    = gcBrand           AND
@@ -371,8 +370,11 @@ IF AVAILABLE lbOrderCustomer THEN DO:
                                 "Removed AddLineDiscount Item from OrderAction").            
             END.
 
-            fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
-                                           lbOrderCustomer.CustID).
+            IF lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} THEN
+            DO:
+               fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
+                                              lbOrderCustomer.CustID).
+            END.                                  
          END.
       END.
    END.
