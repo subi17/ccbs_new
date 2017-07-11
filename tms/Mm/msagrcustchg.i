@@ -36,13 +36,10 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
               bCustCatDST.Category EQ bCustomerDST.Category NO-ERROR.
    IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect customer category".
 
-   IF INDEX(bCustCatSRC.segment, "PRO") GT 0 AND 
-      INDEX(bCustCatDST.segment, "PRO") EQ 0 THEN
-      RETURN "Not allowed from PRO to NON PRO".
-   
    IF bCustCatSRC.PRO EQ bCustCatDST.PRO THEN RETURN "".
 
-   RETURN "ACC is not allwed between PRO-NON PRO customers".
+   RETURN "ACC is not allowed between PRO-NON PRO customers".
+
 
 END.
 
