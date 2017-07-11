@@ -50,6 +50,7 @@ DEF VAR lcnonPROChannels     AS CHAR NO-UNDO.
 DEF VAR lcCategory           AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder    AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder AS LOGI NO-UNDO.
+DEF VAR liMobsubCount        AS LOGI NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string]").
 IF top_array EQ ? THEN RETURN.
@@ -106,8 +107,17 @@ IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN
 DO:
    IF AVAIL Customer AND NOT llCustCatPro THEN 
    DO:
-      llOrderAllowed = FALSE.
-      lcReason = "non PRO customer".
+      /* YPRO-92 check if migrate order. Possible if just one mobile only */
+      FIND Mobsub WHERE
+           Mobsub.brand EQ gcBrand AND
+           Mobsub.custnum EQ customer.custnum NO-ERROR.
+      IF AVAIL Mobsub THEN DO:
+         
+      END.
+      ELSE
+         ASSIGN
+            llOrderAllowed = FALSE
+            lcReason = "non PRO customer".
    END.
    ELSE IF AVAIL Customer THEN 
    DO:
