@@ -752,6 +752,13 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    IF NOT AVAIL Order THEN
       RETURN "1:Order not available" + STRING(iiOrderId).
 
+   FIND FIRST OrderCustomer NO-LOCK  WHERE
+              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.OrderID EQ iiOrderID AND
+              OrderCustomer.RowType EQ 1 NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN
+      RETURN "1:Ordercustomer not available" + STRING(iiOrderId).
+
    lcq25Extension = fGetQ25Extension(iiOrderId, lcItem).
    IF lcQ25Extension NE "" AND Order.Orderchannel BEGINS "renewal_pos" THEN DO:
       lcBank = fGetQ25BankByOrder(BUFFER Order, lcItem).
@@ -766,6 +773,10 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    STRING(Order.Salesman)          + lcDelim +
    /*MSISDN*/
    STRING(Order.CLI)               + lcDelim +
+   /*Doc ID Type: NIF (ES Personal ID) NIE=foreign id (CIF for company)*/
+   STRING(OrderCustomer.CustIDType) + lcDelim +
+   /*Doc ID: 53233826G*/
+   STRING(OrderCustomer.CustID)    + lcDelim +
    /*Order date*/
    fPrintDate(Order.CrStamp)       + lcDelim +
    /*Status*/
