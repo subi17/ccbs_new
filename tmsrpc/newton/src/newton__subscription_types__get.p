@@ -32,11 +32,11 @@ DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
 DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
 DEF VAR lcFixedLineBB          AS CHAR NO-UNDO.
-DEF VAR lcUnit                 AS CHAR NO-UNDO.
-DEF VAR lcF2FUnit              AS CHAR NO-UNDO.
-DEF VAR lcF2MUnit              AS CHAR NO-UNDO.
-DEF VAR liF2FAmount            AS DECI NO-UNDO.
-DEF VAR liF2MAmount            AS DECI NO-UNDO.
+DEF VAR liUnit                 AS INTE NO-UNDO.
+DEF VAR liF2FUnit              AS INTE NO-UNDO.
+DEF VAR liF2MUnit              AS INTE NO-UNDO.
+DEF VAR ldF2FAmount            AS DECI NO-UNDO.
+DEF VAR ldF2MAmount            AS DECI NO-UNDO.
 
 FUNCTION fTMSCodeName RETURNS CHARACTER
    (iTableName AS CHAR,
@@ -130,22 +130,22 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    IF CLIType.BaseBundle > "" THEN
    DO:
-      add_double(lcResultStruct,"data_amount" , fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_GPRS} ,OUTPUT lcUnit)).
-      add_double(lcResultStruct,"voice_amount", fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_VOICE},OUTPUT lcUnit)).
+      add_double(lcResultStruct,"data_amount" , fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_GPRS} ,OUTPUT liUnit)).
+      add_double(lcResultStruct,"voice_amount", fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_VOICE},OUTPUT liUnit)).
    END.
 
    IF lcFixedLineBB > "" THEN
    DO:
        ASSIGN 
-           liF2FAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST}, OUTPUT lcF2FUnit).
-           liF2MAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE}      , OUTPUT lcF2MUnit).
+           ldF2FAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST}, OUTPUT liF2FUnit)
+           ldF2MAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE}      , OUTPUT liF2MUnit).
 
        add_string(lcResultStruct,"fixed_line_download_speed"     , CliType.FixedLineDownload).
        add_string(lcResultStruct,"fixed_line_upload_speed"       , CliType.FixedLineUpload). 
-       add_double(lcResultStruct,"fixed2fixed_voice_amount"      , liF2FAmount).
-       add_double(lcResultStruct,"fixed2fixed_voice_amount_unit" , lcF2FUnit).
-       add_double(lcResultStruct,"fixed2mobile_voice_amount"     , liF2MAmount).
-       add_double(lcResultStruct,"fixed2mobile_voice_amount_unit", lcF2MUnit).
+       add_double(lcResultStruct,"fixed2fixed_voice_amount"      , STRING(ldF2FAmount)).
+       add_double(lcResultStruct,"fixed2fixed_voice_amount_unit" , STRING(liF2FUnit)).
+       add_double(lcResultStruct,"fixed2mobile_voice_amount"     , STRING(ldF2MAmount)).
+       add_double(lcResultStruct,"fixed2mobile_voice_amount_unit", STRING(liF2MUnit)).
    END.
 
    IF CLIType.UsageType = 1 THEN
