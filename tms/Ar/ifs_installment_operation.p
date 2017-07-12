@@ -1100,6 +1100,7 @@ PROCEDURE pCollectReactivations:
    DEF VAR llTerminationSent AS LOG NO-UNDO. 
    DEF VAR ldResidual    AS DEC  NO-UNDO.     
    DEF VAR ldResidualNB  AS DEC  NO-UNDO.
+   DEF VAR lcOrderType AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest     FOR MsRequest.
    DEF BUFFER bMainMsRequest FOR MsRequest.
@@ -1308,6 +1309,7 @@ PROCEDURE pCollectReactivations:
          END.
 
          CREATE ttInstallment.
+         /* YTS-11101 ttInstallment.Channel in Reactivations */
          ASSIGN
             ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM"
                                      THEN "G"
@@ -1321,7 +1323,7 @@ PROCEDURE pCollectReactivations:
             ttInstallment.OperDate = ldaReacDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldResidualNB
-            ttInstallment.Channel = ""
+            ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
             ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN "" 
                                      ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
             ttInstallment.RowSource = "REACTIVATION"
