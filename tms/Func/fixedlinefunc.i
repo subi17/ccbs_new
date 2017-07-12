@@ -296,7 +296,9 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
            (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR
+            bOrder.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} OR
+            bOrder.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP}),
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
