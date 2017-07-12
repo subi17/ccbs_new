@@ -32,6 +32,11 @@ DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
 DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
 DEF VAR lcFixedLineBB          AS CHAR NO-UNDO.
+DEF VAR lcUnit                 AS CHAR NO-UNDO.
+DEF VAR lcF2FUnit              AS CHAR NO-UNDO.
+DEF VAR lcF2MUnit              AS CHAR NO-UNDO.
+DEF VAR liF2FAmount            AS DECI NO-UNDO.
+DEF VAR liF2MAmount            AS DECI NO-UNDO.
 
 FUNCTION fTMSCodeName RETURNS CHARACTER
    (iTableName AS CHAR,
@@ -50,13 +55,17 @@ END FUNCTION.
 
 FUNCTION fGetSLAmount RETURNS DECIMAL 
   (icServiceLimitGroup AS CHARACTER,
-   iiDialType          AS INTEGER):
+   iiDialType          AS INTEGER,
+   OUTPUT ocUnit       AS CHARACTER):
 
   FIND FIRST ServiceLimit NO-LOCK WHERE ServiceLimit.GroupCode = icServiceLimitGroup AND
                                         ServiceLimit.DialType  = iiDialType          AND
                                         ServiceLimit.ValidTo   >= TODAY              NO-ERROR.
   IF AVAIL ServiceLimit THEN 
-    RETURN ServiceLimit.InclAmt.
+  DO:
+      ASSIGN ocUnit = ServiceLimit.InclUnit.
+      RETURN ServiceLimit.InclAmt.
+  END.  
 
   RETURN 0.                                          
          
@@ -121,16 +130,22 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    IF CLIType.BaseBundle > "" THEN
    DO:
-      add_double(lcResultStruct,"data_amount" , fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_GPRS} )).
-      add_double(lcResultStruct,"voice_amount", fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_VOICE})).
+      add_double(lcResultStruct,"data_amount" , fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_GPRS} ,OUTPUT lcUnit)).
+      add_double(lcResultStruct,"voice_amount", fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_VOICE},OUTPUT lcUnit)).
    END.
 
    IF lcFixedLineBB > "" THEN
    DO:
-       add_string(lcResultStruct,"fixed_line_download_speed", CliType.FixedLineDownload).
-       add_string(lcResultStruct,"fixed_line_upload_speed"  , CliType.FixedLineUpload). 
-       add_double(lcResultStruct,"fixed2fixed_voice_amount" , (IF lcFixedLineBB > "" THEN fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST} ) ELSE 0)).
-       add_double(lcResultStruct,"fixed2mobile_voice_amount", (IF lcFixedLineBB > "" THEN fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE}) ELSE 0)).
+       ASSIGN 
+           liF2FAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST}, OUTPUT lcF2FUnit).
+           liF2MAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE}      , OUTPUT lcF2MUnit).
+
+       add_string(lcResultStruct,"fixed_line_download_speed"     , CliType.FixedLineDownload).
+       add_string(lcResultStruct,"fixed_line_upload_speed"       , CliType.FixedLineUpload). 
+       add_double(lcResultStruct,"fixed2fixed_voice_amount"      , liF2FAmount).
+       add_double(lcResultStruct,"fixed2fixed_voice_amount_unit" , lcF2FUnit).
+       add_double(lcResultStruct,"fixed2mobile_voice_amount"     , liF2MAmount).
+       add_double(lcResultStruct,"fixed2mobile_voice_amount_unit", lcF2MUnit).
    END.
 
    IF CLIType.UsageType = 1 THEN
@@ -138,7 +153,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       add_string(lcResultStruct,"usage_type", "data").
 
-   add_string(lcResultStruct,"tariff_type", fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
+   add_string(lcResultStruct,"tariff_type", STRING(CliType.TariffType)).
 
    lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE
