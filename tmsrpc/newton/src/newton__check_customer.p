@@ -32,7 +32,7 @@ DEF VAR piOrders         AS INT  NO-UNDO.
 DEF VAR pcCliType        AS CHAR NO-UNDO.
 DEF VAR pcChannel        AS CHAR NO-UNDO.
 DEF VAR top_array        AS CHAR NO-UNDO.
-DEF VAR llSTCMigrate     AS LOG  NO-UNDO.
+DEF VAR plSTCMigrate     AS LOG  NO-UNDO.
 
 /* Local variable */
 DEF VAR llOrderAllowed       AS LOG  NO-UNDO.
@@ -73,7 +73,7 @@ ELSE IF NUM-ENTRIES(top_array) GT 6 THEN
    ASSIGN
       pcCliType    = get_string(param_toplevel_id, "4")
       pcChannel    = get_string(param_toplevel_id, "5")
-      llSTCMigrate = get_bool(param_toplevel_id, "6").
+      plSTCMigrate = get_bool(param_toplevel_id, "6").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -119,15 +119,19 @@ DO:
       FIND Mobsub WHERE
            Mobsub.brand EQ gcBrand AND
            Mobsub.custnum EQ customer.custnum NO-ERROR.
-      IF llSTCMigrate AND NOT AVAIL Mobsub THEN
+      IF (plSTCMigrate AND NOT AVAIL Mobsub) OR
+         (plSTCMigrate AND NOT plSelfEmployed) THEN
          ASSIGN
             llOrderAllowed = FALSE
+            /* web wanted same error message for non selfemployed migration
+               check and case of multible lines even it is missleading in
+               TMS point of view */
             lcReason = "PRO migration not possible because of multible mobile lines".
-      ELSE IF llSTCMigrate AND fIsConvergenceTariff(Mobsub.clitype) THEN
+      ELSE IF plSTCMigrate AND fIsConvergenceTariff(Mobsub.clitype) THEN
          ASSIGN
             llOrderAllowed = FALSE
             lcReason = "PRO migration not possible for convergent".
-      ELSE IF NOT llSTCMigrate THEN
+      ELSE IF NOT plSTCMigrate THEN
          ASSIGN
             llOrderAllowed = FALSE
             lcReason = "non PRO customer".
