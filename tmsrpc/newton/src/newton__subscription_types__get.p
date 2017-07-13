@@ -56,14 +56,14 @@ END FUNCTION.
 FUNCTION fGetSLAmount RETURNS DECIMAL 
   (icServiceLimitGroup AS CHARACTER,
    iiDialType          AS INTEGER,
-   OUTPUT ocUnit       AS CHARACTER):
+   OUTPUT oiUnit       AS INTEGER):
 
   FIND FIRST ServiceLimit NO-LOCK WHERE ServiceLimit.GroupCode = icServiceLimitGroup AND
                                         ServiceLimit.DialType  = iiDialType          AND
                                         ServiceLimit.ValidTo   >= TODAY              NO-ERROR.
   IF AVAIL ServiceLimit THEN 
   DO:
-      ASSIGN ocUnit = ServiceLimit.InclUnit.
+      ASSIGN oiUnit = ServiceLimit.InclUnit.
       RETURN ServiceLimit.InclAmt.
   END.  
 
@@ -142,10 +142,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
        add_string(lcResultStruct,"fixed_line_download_speed"     , CliType.FixedLineDownload).
        add_string(lcResultStruct,"fixed_line_upload_speed"       , CliType.FixedLineUpload). 
-       add_double(lcResultStruct,"fixed2fixed_voice_amount"      , STRING(ldF2FAmount)).
-       add_double(lcResultStruct,"fixed2fixed_voice_amount_unit" , STRING(liF2FUnit)).
-       add_double(lcResultStruct,"fixed2mobile_voice_amount"     , STRING(ldF2MAmount)).
-       add_double(lcResultStruct,"fixed2mobile_voice_amount_unit", STRING(liF2MUnit)).
+       add_double(lcResultStruct,"fixed2fixed_voice_amount"      , ldF2FAmount).
+       add_int   (lcResultStruct,"fixed2fixed_voice_amount_unit" , liF2FUnit).
+       add_double(lcResultStruct,"fixed2mobile_voice_amount"     , ldF2MAmount).
+       add_int   (lcResultStruct,"fixed2mobile_voice_amount_unit", liF2MUnit).
    END.
 
    IF CLIType.UsageType = 1 THEN
