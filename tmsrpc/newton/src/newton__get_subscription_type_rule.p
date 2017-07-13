@@ -86,6 +86,9 @@ DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR liFeePeriod       AS INT  NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
+/* Additional line mobile only ALFMO-53 */
+DEF VAR llAddline50Disc AS LOGICAL NO-UNDO.
+DEF VAR llAddline20Disc AS LOGICAL NO-UNDO.
 
 /* q25refinance_remaining Quota 25 refinance remaining amount */
 DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
@@ -173,6 +176,12 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       add_string(warning_array,"","DSS1_TERMINATION").
    IF llDSS2Term THEN
       add_string(warning_array,"","DSS2_TERMINATION").
+
+   /* ALFMO-53 */
+   IF llAddline50Disc THEN
+      add_string(warning_array,"","STC_HAS_50_PER_ADDLINE").
+   IF llAddline20Disc THEN
+      add_string(warning_array,"","STC_HAS_20_PER_ADDLINE").
 
 END FUNCTION.
 
@@ -491,6 +500,69 @@ IF NOT MobSub.PayType THEN DO:
    END. /* FOR EACH DCCLI NO-LOCK WHERE */
 
    lcPenaltyCode = TRIM(lcPenaltyCode,"+").
+
+   /* Check 50% and 20% additional line discount */
+
+   FIND FIRST Customer WHERE
+              Customer.CustNum = MobSub.AgrCust NO-LOCK NO-ERROR.
+
+   /* Mobile only additional line ALFMO-53 20% */
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) NO-LOCK NO-ERROR.
+
+   IF AVAIL DiscountPlan THEN 
+   DO: 
+      IF AVAIL Customer AND 
+      LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 AND
+      CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
+      ASSIGN llAddline20Disc = TRUE.   
+   END.
+
+   /* Mobile only additional line ALFMO-53 50% */
+   ELSE IF NOT AVAIL DiscountPlan THEN
+   DO:
+      FIND FIRST DiscountPlan WHERE
+                 DiscountPlan.Brand = gcBrand AND
+                 DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
+
+      IF AVAIL DiscountPlan THEN 
+      DO: 
+         IF AVAIL Customer AND
+         CAN-FIND(FIRST DPMember WHERE
+                        DPMember.DPId      = DiscountPlan.DPId AND
+                        DPMember.HostTable = "MobSub" AND
+                        DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                        DPMember.ValidTo   >= TODAY) THEN
+         DO:
+            IF NOT fCheckOngoingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) AND
+               NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
+               ASSIGN llAddline50Disc = TRUE.
+         END.
+      END.
+      ELSE
+      DO:
+         FIND FIRST DiscountPlan WHERE
+                    DiscountPlan.Brand = gcBrand AND
+                    DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
+
+         IF AVAIL DiscountPlan AND AVAIL Customer AND
+            CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
+         DO:
+            IF NOT fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) AND
+               NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
+               ASSIGN llAddline50Disc = TRUE.
+         END.
+      END. 
+   END.
 
    /* Check Additional Line */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
