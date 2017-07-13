@@ -222,8 +222,8 @@ PROCEDURE pCheckTargetCustomerForACC:
    IF AVAILABLE bACCNewCust AND
       NOT fSubscriptionLimitCheck(INPUT bACCNewCust.OrgId,
                                   INPUT bACCNewCust.CustIdType,
-                                  INPUT NO,
-                                  fIsPro(bACCNewCust.Category),
+                                  INPUT fIsSelfEmpl(bACCNewCust.Category),
+                                  INPUT fIsPro(bACCNewCust.Category),
                                   1,
                                   OUTPUT ocMessage,
                                   OUTPUT liSubLimit,
