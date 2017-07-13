@@ -71,7 +71,7 @@ DEFINE STREAM strout.
                        1,     /* inv.type */
                        "",
                        0,
-                       99999999,
+                       999999999,
                        "",
                        "ZZZZZZZZZZZZ",
                        YES,

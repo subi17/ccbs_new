@@ -61,7 +61,7 @@ IF lcInputFileDir  EQ ? THEN lcInputFileDir = "".
 
 RUN Inv/ddoutfileco.p ("",
                    0,
-                   99999999,
+                   999999999,
                    "",
                    "_",
                    ldaInvDate,

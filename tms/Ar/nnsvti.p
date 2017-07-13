@@ -93,8 +93,8 @@ DEF VAR i-date1     AS DA   FORMAT "99-99-99"         NO-UNDO.
 DEF VAR i-date2     AS DA   FORMAT "99-99-99"         NO-UNDO.
 DEF VAR lano1       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
 DEF VAR lano2       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
-DEF VAR asno1       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
-DEF VAR asno2       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
+DEF VAR asno1       AS I    FORMAT ">>>>>>>>9"        NO-UNDO.
+DEF VAR asno2       AS I    FORMAT ">>>>>>>>9"        NO-UNDO.
 DEF VAR lcInvGroup     LIKE    invgroup.InvGroup          NO-UNDO.
 DEF VAR CustGroup     LIKE    custgroup.custgroup       NO-UNDO.
 DEF VAR status1     AS I    FORMAT "9"                NO-UNDO.
@@ -231,7 +231,7 @@ cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN lano1 = 000000 lano2 = 99999999
-       asno1 = 0      asno2 = 99999999.
+       asno1 = 0      asno2 = 999999999.
 
 VIEW FRAME taka. PAUSE 0 NO-MESSAGE.
 

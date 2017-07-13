@@ -38,7 +38,7 @@ rap_moduli = "Inv/nnpura" + STRING(moduli).
       IF moduli = 2 THEN 
       RUN value(rap_moduli) 
                  (0,
-                  99999999,
+                  999999999,
                   pvm1,
                   pvm2,
                   1,       /* vain laskutetut puhelutapahtumat */
@@ -50,7 +50,7 @@ rap_moduli = "Inv/nnpura" + STRING(moduli).
       ELSE
       RUN value(rap_moduli) 
                  (0,
-                  99999999,
+                  999999999,
                   pvm1,
                   pvm2,
                   1,       /* vain laskutetut puhelutapahtumat */

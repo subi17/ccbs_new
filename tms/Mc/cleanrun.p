@@ -25,8 +25,8 @@ def var b-acc      as lo                         no-undo.
 def var ciperiod   as i                          no-undo.
 def var i          as int  format "zzzzzzz9"     no-undo.
 
-DEF VAR asno1      AS INT  FORMAT ">>>>>>>9" NO-UNDO.
-DEF VAR asno2      AS INT  FORMAT ">>>>>>>9" NO-UNDO.
+DEF VAR asno1      AS INT  FORMAT ">>>>>>>>9" NO-UNDO.
+DEF VAR asno2      AS INT  FORMAT ">>>>>>>>9" NO-UNDO.
 def var atpvm1     as date format "99-99-99" no-undo.
 def var atpvm2     as date format "99-99-99" no-undo.
 def var mininv     like InvGroup.mininv   no-undo.
@@ -140,7 +140,7 @@ llKilled = TRUE.
 IF asno1 = 0 THEN 
 ASSIGN
    asno1  = unknown + 1
-   asno2  = 99999999.
+   asno2  = 999999999.
 
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = asno1 NO-LOCK NO-ERROR.

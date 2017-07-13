@@ -148,7 +148,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       DO liDelType = 1 TO 11 BY 1:
          RUN Inv/printdoc1co.p ("",
                           0,
-                          99999999,
+                          999999999,
                           "",
                           "ZZZZ",
                           ldtInvDate,

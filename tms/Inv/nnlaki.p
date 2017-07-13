@@ -147,8 +147,8 @@ def var i-date1      AS DATE FORMAT "99-99-99"       NO-UNDO.
 def var i-date2      AS DATE FORMAT "99-99-99"       NO-UNDO.
 DEF VAR lano1        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
 DEF VAR lano2        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR asno1        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR asno2        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
+DEF VAR asno1        AS INT  FORMAT "zzzzzzzz9"      NO-UNDO.
+DEF VAR asno2        AS INT  FORMAT "zzzzzzzz9"      NO-UNDO.
 DEF VAR status1      AS INT  FORMAT "9"              NO-UNDO.
 DEF VAR status2      AS INT  FORMAT "9"              NO-UNDO.
 DEF VAR dlayht       AS CHAR FORMAT  "x(13)"         NO-UNDO.
@@ -556,7 +556,7 @@ view FRAME taka. PAUSE 0 no-message.
 
 ehto = 9. RUN Syst/ufkey.p.
 ASSIGN lano1 = 000000 lano2 = 99999999
-       asno1  = 0 asno2 = 99999999.
+       asno1  = 0 asno2 = 999999999.
 
 view FRAME rajat. view FRAME statu.
 
@@ -723,7 +723,7 @@ repeat:
 
       ELSE IF toimi = 5 THEN DO:
          IF INPUT asno2  = 0  THEN lano2 = 99999999.
-         if input asno2   = "" THEN asno2  = 9999999.
+         if input asno2   = "" THEN asno2  = 999999999.
          llok = FALSE.
          /* are Customer in the ext group in correct i-group also ? */
          if cg-code ne "" THEN DO:

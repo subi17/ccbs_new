@@ -32,7 +32,7 @@ fELog("REFUNDFILE","Started").
 
 RUN Ar/refundfileco.p ("",                 /* InvGroup  */
                   0,                  /* customers from */
-                  99999999,           /* customers to   */
+                  999999999,           /* customers to   */
                   TODAY,              /* payment date */
                   lcFile,
                   FALSE,              /* no empty file */

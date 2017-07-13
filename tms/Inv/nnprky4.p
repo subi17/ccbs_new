@@ -38,8 +38,8 @@ assign tuni1 = "nnpura4"
 
 DEF VAR lcMacros AS CHAR                    NO-UNDO.
 DEF VAR ufkey    AS LOG                     NO-UNDO.
-def var CustNum1 as int format "zzzzzz9"    NO-UNDO.
-def var CustNum2 as int format "zzzzzz9"    NO-UNDO.
+def var CustNum1 as int format "zzzzzzzz9"    NO-UNDO.
+def var CustNum2 as int format "zzzzzzzz9"    NO-UNDO.
 def var pvm1     as date format "99-99-99"  NO-UNDO.
 def var pvm2     as date format "99-99-99"  NO-UNDO.
 def var tilak    as int format "9"          NO-UNDO.
@@ -85,12 +85,12 @@ form
    CustNum1  
       label "Customers ......." 
       help "If invoice nbr is 0, then these are calling customers"
-      format ">>>>>>>9"
+      format ">>>>>>>>9"
    " - " 
    CustNum2 
       no-label 
       help "If invoice nbr is 0, then these are calling customers"
-      format ">>>>>>>9"
+      format ">>>>>>>>9"
       SKIP
    pvm1   
       label "Dates ..........." 
@@ -181,7 +181,7 @@ ASSIGN pvm1          = DATE(MONTH(TODAY),1,YEAR(TODAY))
        pvm2          = IF MONTH(TODAY) = 12
                        THEN DATE(12,31,YEAR(TODAY))
                        ELSE DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)) - 1
-       custnum2      = 99999999                
+       custnum2      = 999999999                
        liLetterClass = fCParamI("EPLGenLClass")
        liAddress     = 3
        liPrintTo     = 1

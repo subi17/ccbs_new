@@ -14,8 +14,8 @@ def var i-date1      AS DATE FORMAT "99-99-99"       NO-UNDO.
 def var i-date2      AS DATE FORMAT "99-99-99"       NO-UNDO.
 DEF VAR InvNum1      AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
 DEF VAR InvNum2      AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR CustNum1     AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR CustNum2     AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
+DEF VAR CustNum1     AS INT  FORMAT "zzzzzzzz9"       NO-UNDO.
+DEF VAR CustNum2     AS INT  FORMAT "zzzzzzzz9"       NO-UNDO.
 DEF VAR status1      AS INT  FORMAT "9"              NO-UNDO.
 DEF VAR status2      AS INT  FORMAT "9"              NO-UNDO.
 
@@ -105,7 +105,7 @@ view FRAME taka. PAUSE 0 no-message.
 
 ehto = 9. RUN Syst/ufkey.p.
 ASSIGN InvNum1 = 000000 InvNum2 = 99999999
-       CustNum1  = 0 CustNum2 = 99999999.
+       CustNum1  = 0 CustNum2 = 999999999.
 
 view FRAME rajat. view FRAME statu.
 
@@ -329,7 +329,7 @@ repeat:
          END.
          
          IF INPUT CustNum2  = 0  THEN InvNum2 = 99999999.
-         if input CustNum2   = "" THEN CustNum2  = 9999999.
+         if input CustNum2   = "" THEN CustNum2  = 999999999.
          
          llok = FALSE.
          

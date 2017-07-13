@@ -34,8 +34,8 @@ DEF VAR ufkey      AS LOG                     NO-UNDO.
 def var ok         as log   format "Yes/No"   NO-UNDO.
 def var date1       as Date  format "99-99-99" NO-UNDO.
 def var date2       as Date  format "99-99-99" NO-UNDO.
-DEF VAR liCust-nr1  AS INT   FORMAT ">>>>>>>9" NO-UNDO.
-DEF VAR liCust-nr2  AS INT   FORMAT ">>>>>>>9" NO-UNDO. 
+DEF VAR liCust-nr1  AS INT   FORMAT ">>>>>>>>9" NO-UNDO.
+DEF VAR liCust-nr2  AS INT   FORMAT ">>>>>>>>9" NO-UNDO. 
 
 DEF VAR xProdLines  AS LOGIC FORMAT "Yes/No"          NO-UNDO.
 DEF VAR xBilled     AS LOGIC FORMAT "Yes/No"          NO-UNDO INIT TRUE.
@@ -168,7 +168,7 @@ ASSIGN date2       = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        llFees      = TRUE
        llExcel     = TRUE
        llSap       = TRUE
-       liCust-nr2  = 99999999
+       liCust-nr2  = 999999999
        ldtUnbilled = date2
        lcFileDir   = fCParamC("RevenueFileDir").
 

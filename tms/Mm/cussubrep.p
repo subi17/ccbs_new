@@ -47,17 +47,17 @@ FORm SKIP(1)
    InvGroup LABEL  " Invoice group .........."
            HELP "Invoice group's code (* = ALL)"
    invgroup.IGName NO-LABEL FORMAT  "x(16)"  skip
-   CustNum1   LABEL  " Customer number ........"       FORMAT "zzzzzzz9"
+   CustNum1   LABEL  " Customer number ........"       FORMAT "zzzzzzzz9"
            HELP "Customers FROM number"
    "-"
-   CustNum2   NO-LABEL HELP "Customers TO number"      FORMAT "zzzzzzz9" skip
+   CustNum2   NO-LABEL HELP "Customers TO number"      FORMAT "zzzzzzzz9" skip
    path    LABEL  " Path and Filename ......"  FORMAT "x(40)"
 
 WITH title color value(ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
    color value(cfc) row 4 centered overlay FRAME rajat.
 ASSIGN
    CustNum1  = 1001
-   CustNum2  = 99999999.
+   CustNum2  = 999999999.
 
 PAUSE 0.
 

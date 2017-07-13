@@ -57,8 +57,8 @@
 {Func/fpdfrun.i}
 {Func/fdivtxt.i}
 
-def input  parameter CustNum1      as int FORMAT "zzzzzz9"   NO-UNDO.
-def input  parameter CustNum2      as int FORMAT "zzzzzz9"   NO-UNDO.
+def input  parameter CustNum1      as int FORMAT "zzzzzzzz9"   NO-UNDO.
+def input  parameter CustNum2      as int FORMAT "zzzzzzzz9"   NO-UNDO.
 def input  parameter pvm1          as date FORMAT "99-99-99" NO-UNDO.
 def input  parameter pvm2          as date FORMAT "99-99-99" NO-UNDO.
 def input  parameter tilak         as int  FORMAT "9"        NO-UNDO.

@@ -44,14 +44,14 @@ FORM
    liCustNum[1] COLON 20
       LABEL  "Customers"
       HELP   "Customers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    "-"
    liCustNum[2]
       NO-LABEL
       HELP "Customers"
       VALIDATE(INPUT liCustNum[2] >= INPUT liCustNum[1],
                "Invalid definition")
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       SKIP(1)
 
    ldtAccDate COLON 20 
@@ -96,7 +96,7 @@ END FUNCTION.
 
 
 ASSIGN ufkey           = FALSE
-       liCustNum[2]    = 99999999
+       liCustNum[2]    = 999999999
        ldtAccDate      = TODAY + 3
        lcFile          = fCParamC("RefundFile")
        lcTransDir      = fCParamC("RefundTransDir").

@@ -35,7 +35,7 @@ fELog("DDOUT","Started").
 
 RUN Inv/ddoutfileco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
-                 99999999,             /* customers to   */
+                 999999999,             /* customers to   */
                  "",                   /* invoices from  */
                  "ZZZZZ",              /* invoices to    */
                  TODAY,                /* invdate   */

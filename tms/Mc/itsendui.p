@@ -72,7 +72,7 @@ FORM
    liCustNum2 
       NO-LABEL 
       HELP  "Maximum limit for customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       VALIDATE(INPUT liCustNum2 >= INPUT liCustNum1,
                "Upper limit cannot be less than lower limit")
       SKIP(1)
@@ -98,7 +98,7 @@ FORM
 VIEW FRAME fCriter.
 PAUSE 0 NO-MESSAGE.
 
-ASSIGN liCustNum2    = 99999999
+ASSIGN liCustNum2    = 999999999
        ldtDate1      = TODAY
        ldtDate2      = TODAY
        llFirst       = TRUE.

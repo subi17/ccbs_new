@@ -28,7 +28,7 @@
 
 DEF VAR asno         AS INTEGER   FORMAT "zzzzzzz9"  INIT "0"        NO-UNDO.
 DEF VAR lano1        AS INTEGER   FORMAT "zzzzzzz9"  INIT "1"        NO-UNDO.
-DEF VAR lano2        AS INTEGER   FORMAT "zzzzzzz9"  INIT "99999999" NO-UNDO.
+DEF VAR lano2        AS INTEGER   FORMAT "zzzzzzz9"  INIT "999999999" NO-UNDO.
 DEF VAR Lpvm         AS DATE      FORMAT "99-99-99"  INIT TODAY      NO-UNDO.
 DEF VAR igroup       AS CHAR      FORMAT "x(8)"                      NO-UNDO.
 
@@ -183,7 +183,7 @@ REPEAT:
       
     END.
 
-    IF lano2 = 0 THEN lano2 = 999999.
+    IF lano2 = 0 THEN lano2 = 999999999.
 
     IF asno NE 0 THEN DO:
         FIND FIRST Customer WHERE 

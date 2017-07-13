@@ -240,7 +240,7 @@ IF NOT llExtGrp THEN DO:
 END.
 
 ELSE DO:
-   ASSIGN cgcustno1 = 99999999
+   ASSIGN cgcustno1 = 999999999
           cgcustno2 = 1. 
 
    FOR EACH TCustGroup,

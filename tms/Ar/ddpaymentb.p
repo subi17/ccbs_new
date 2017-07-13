@@ -28,7 +28,7 @@ fELog("DDPAYM","Started").
 
 RUN Ar/ddpaymentco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
-                 99999999,             /* customers to   */
+                 999999999,             /* customers to   */
                  "",                   /* invoices from  */
                  "ZZZZZ",              /* invoices to    */
                  TODAY,                /* duedate   */
