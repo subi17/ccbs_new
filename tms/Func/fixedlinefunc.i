@@ -158,10 +158,21 @@ END.
 FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    (icContract AS CHAR):
    IF icContract BEGINS "CONTDSL" OR
-      icContract BEGINS "CONTFH" THEN 
+      icContract BEGINS "CONTFH" THEN
       RETURN TRUE.
+   /* SVAs are assosiated with fixed line and should not be
+      terminated until fixedline terminated */
+   IF icContract EQ "FAXTOEMAIL" OR
+      icContract EQ "OFFICE365" OR
+      icContract EQ "SAGEONE" OR
+      icContract EQ "IPFIJA" OR
+      icContract EQ "Centralita" THEN
+      RETURN TRUE.
+   IF INDEX(icContract,"FIX") > 0 THEN
+      RETURN TRUE.
+
    RETURN FALSE.
-END.   
+END.
 
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
