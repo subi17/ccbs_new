@@ -212,8 +212,7 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
 
       /* YPR-2105 */
       IF pcNumberType EQ "retention" AND
-         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT.
-
+         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT. /* shouldn't never happen because of YDR-2575 */
       RETURN TRUE.
    END.
    
