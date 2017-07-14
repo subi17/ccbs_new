@@ -18,7 +18,7 @@
    fechaEstado;datetime;mandatory;status change time
    codigoReferencia;string;mandatory;mnp process code
    fechaMarcaLectura;datetime;optional;message read time
-   estado;string;mandatory;status (ACON, AREC)
+   estado;string;mandatory;status (ASOL)
    causaEstado;string;optional;status reason
    fechaLimiteCambioEstado;datetime;optional;status change time limit
    fechaSolicitudPorAbonado;datetime;mandatory;mnp start date
@@ -42,7 +42,7 @@
 
 FOR EACH ttInput NO-LOCK:
    IF ttInput.statusCode NE "ASOL" THEN 
-      RETURN appl_err("Incorrect statuscode (should be AENV): " +
+      RETURN appl_err("Incorrect statuscode (should be ASOL): " +
          ttInput.statusCode).
 END.
 
