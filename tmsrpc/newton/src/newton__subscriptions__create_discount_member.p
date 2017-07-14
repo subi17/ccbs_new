@@ -119,7 +119,8 @@ PROCEDURE fMobOnlyMainLine :
    FIND FIRST DiscountPlan WHERE
               DiscountPlan.Brand = Syst.Parameters:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCliType, {&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
-
+  
+   for-blk:
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
