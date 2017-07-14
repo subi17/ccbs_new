@@ -157,7 +157,6 @@ END.
    CONTFH (fiber)*/
 FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    (icContract AS CHAR):
-   DEF VAR liParam AS INT NO-UNDO.
    IF icContract BEGINS "CONTDSL" OR
       icContract BEGINS "CONTFH" THEN
       RETURN TRUE.
