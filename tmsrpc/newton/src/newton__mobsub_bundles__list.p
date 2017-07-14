@@ -13,6 +13,7 @@ gcBrand = "1".
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
+{Func/fixedlinefunc.i}
 
 DEF VAR lcResultArray       AS CHAR NO-UNDO. 
 DEF VAR pcStruct            AS CHAR NO-UNDO. 
@@ -30,8 +31,11 @@ DEF VAR lcAllowedBONOContracts   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
 DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
-DEF VAR lcDayCampBundleUpsells AS CHAR NO-UNDO. 
-DEF VAR lcVoiceBundle AS CHARACTER NO-UNDO. 
+DEF VAR lcDayCampBundleUpsells   AS CHAR NO-UNDO. 
+DEF VAR lcVoiceBundle            AS CHAR NO-UNDO. 
+DEF VAR lcPRODSSUpsellList       AS CHAR NO-UNDO.
+DEF VAR llProSubscription        AS LOGI NO-UNDO.
+DEF VAR lcMatrixAnalyseResult    AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -51,10 +55,12 @@ IF NOT AVAIL MobSub THEN RETURN appl_err("Mobsub not found").
 lcResultArray = add_array(response_toplevel_id, "").
 
 ASSIGN ldeCurrTS = fMakeTS()
+       llProSubscription      = fIsProSubscription(piMsSeq)
        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcBONOContracts        = fCParamC("BONO_CONTRACTS")
        lcIPLContracts         = fCParamC("IPL_CONTRACTS")
-       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE").
+       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
+       lcPRODSSUpsellList     = fCParamC("PRO_DSS_FLEX_UPSELL_LIST").
 
 IF NOT MobSub.PayType THEN
    lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,
@@ -108,11 +114,26 @@ IF lcDSSBundleId = {&DSS} OR
    FIND FIRST DayCampaign NO-LOCK WHERE
               DayCampaign.Brand = gcBrand AND
               DayCampaign.DCEvent = lcDSSBundleId NO-ERROR.
-   IF AVAIL DayCampaign AND NOT DayCampaign.BundleUpsell EQ "" THEN DO:
+   IF AVAIL DayCampaign AND NOT DayCampaign.BundleUpsell EQ "" THEN 
+   DO:
       DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-         add_string(lcResultArray,"",
-                    ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
-                    + "|" + STRING(Mobsub.MsSeq)).
+
+         IF llProSubscription THEN
+         DO:
+             IF fMatrixAnalyse(gcBrand,
+                               "PERCONTR",
+                               "PerContract;SubsTypeTo",
+                               ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + ";" + MobSub.CLIType,
+                               OUTPUT lcMatrixAnalyseResult) NE 1 THEN 
+                 NEXT. 
+         END.
+         ELSE 
+         DO:
+             IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcPRODSSUpsellList) > 0 THEN 
+                 NEXT.
+         END.
+
+         add_string(lcResultArray,"",ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
       END.
    END.
 END.
