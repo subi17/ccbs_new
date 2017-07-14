@@ -160,6 +160,10 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    IF icContract BEGINS "CONTDSL" OR
       icContract BEGINS "CONTFH" THEN 
       RETURN TRUE.
+   /* SVAs are assosiated with fixed line and should not be
+      terminated until fixedline terminated */
+   IF fisSVA(icContract, OUTPUT ocParam) THEN
+      RETURN TRUE.
    RETURN FALSE.
 END.   
 
