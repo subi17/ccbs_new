@@ -169,6 +169,8 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
       icContract EQ "IPFIJA" OR
       icContract EQ "Centralita" THEN
       RETURN TRUE.
+   IF INDEX(icContract,"FIX") > 0 THEN
+      RETURN TRUE.
 
    RETURN FALSE.
 END.
