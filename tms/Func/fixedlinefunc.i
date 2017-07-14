@@ -157,15 +157,21 @@ END.
    CONTFH (fiber)*/
 FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    (icContract AS CHAR):
+   DEF VAR liParam AS INT NO-UNDO.
    IF icContract BEGINS "CONTDSL" OR
-      icContract BEGINS "CONTFH" THEN 
+      icContract BEGINS "CONTFH" THEN
       RETURN TRUE.
    /* SVAs are assosiated with fixed line and should not be
       terminated until fixedline terminated */
-   IF fisSVA(icContract, OUTPUT ocParam) THEN
+   IF icContract EQ "FAXTOEMAIL" OR
+      icContract EQ "OFFICE365" OR
+      icContract EQ "SAGEONE" OR
+      icContract EQ "IPFIJA" OR
+      icContract EQ "Centralita" THEN
       RETURN TRUE.
+
    RETURN FALSE.
-END.   
+END.
 
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
