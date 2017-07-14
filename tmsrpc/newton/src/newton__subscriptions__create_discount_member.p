@@ -213,7 +213,7 @@ IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
 
    IF fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
       CAN-FIND(FIRST SubsTerminal WHERE SubsTerminal.Brand = gcBrand AND
-                                        SubsTerminal.MsSeq = MobSub.MsSeq) THEN      
+                                        SubsTerminal.MsSeq = MobSub.MsSeq ) THEN      
       RETURN appl_err("Discount Plan not allowed").      
 END.
 
