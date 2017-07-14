@@ -1042,10 +1042,10 @@ PROCEDURE pTerminate:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
     
-         fCloseDiscount(ENTRY(LOOKUP(bMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
-                        bMobSub.MsSeq,
-                        ldtCloseDate,
-                        FALSE).
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               ldtCloseDate).
       END.      
    END. 
    

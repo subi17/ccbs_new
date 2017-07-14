@@ -141,6 +141,9 @@ ELSE IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
    IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
       RETURN appl_err("Discount Plan not allowed").
 
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) THEN
+      RETURN appl_err("Discount Plan not allowed").
+
    IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
       fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
       (NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,MobSub.CliType) AND

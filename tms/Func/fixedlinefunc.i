@@ -510,6 +510,10 @@ FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
 
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Parameters:gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCliType, {&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
+
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
@@ -519,6 +523,17 @@ FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE:
+
+       /* This is to handle where the additional line
+          is CONT25 or CONT26 because it can treat itself
+          as main line */  
+       IF (bMobSub.CLIType = ENTRY(3,{&ADDLINE_CLITYPES} ) OR 
+           bMobSub.CLIType = ENTRY(4,{&ADDLINE_CLITYPES} )) AND 
+          CAN-FIND(FIRST DPMember WHERE
+                         DPMember.DPId = DiscountPlan.DPId AND
+                         DPMember.HostTable = "MobSub" AND
+                         DPMember.KeyValue  = STRING(bMobSub.MsSeq) AND
+                         DPMember.ValidTo   >= TODAY) THEN NEXT.
 
        IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
           RETURN TRUE.
@@ -549,6 +564,13 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
             LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+
+       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                   OrderAction.Brand    = Syst.Parameters:gcBrand AND
+                   OrderAction.OrderID  = bOrder.OrderID   AND
+                   OrderAction.ItemType = "AddLineDiscount" AND
+          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+             NEXT.
 
       IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
          RETURN TRUE.
