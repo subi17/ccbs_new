@@ -1078,7 +1078,8 @@ PROCEDURE pRequestAction:
                                     "SMS",
                                     "STC_Requested",
                                     "ReqCParam2",
-                                    icMobileBundles).   
+                                    icMobileBundles,
+                                    "").   
    END.
    ELSE
    DO:
