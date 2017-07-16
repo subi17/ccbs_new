@@ -6,13 +6,9 @@
   CREATED ......: Mon Feb 09 20:39:04 EET 2015
   Version ......: Yoigo
   ----------------------------------------------------------------------*/
-  
-/* ***************************  Definitions  ************************** */
-{commpaa.i}
 {Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
 {utilities/newtariff/tariffconfig.i}
