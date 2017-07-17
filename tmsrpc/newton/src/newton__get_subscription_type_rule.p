@@ -524,48 +524,44 @@ IF NOT MobSub.PayType THEN DO:
    END.
 
    /* Mobile only additional line ALFMO-53 50% */
-   ELSE IF NOT AVAIL DiscountPlan THEN
-   DO:
-      FIND FIRST DiscountPlan WHERE
-                 DiscountPlan.Brand = gcBrand AND
-                 DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
 
-      IF AVAIL DiscountPlan THEN 
-      DO: 
-         IF AVAIL Customer AND
-         CAN-FIND(FIRST DPMember WHERE
-                        DPMember.DPId      = DiscountPlan.DPId AND
-                        DPMember.HostTable = "MobSub" AND
-                        DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
-                        DPMember.ValidTo   >= TODAY) THEN
-         DO:
-            IF LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 OR
-               NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
-               ASSIGN llAddline50Disc = TRUE.
-         END.
-      END.
-      ELSE
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
+
+   IF AVAIL DiscountPlan THEN 
+   DO: 
+      IF AVAIL Customer AND
+      CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
       DO:
-         FIND FIRST DiscountPlan WHERE
-                    DiscountPlan.Brand = gcBrand AND
-                    DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
+         IF LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 OR
+            NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
+            ASSIGN llAddline50Disc = TRUE.
+      END.
+   END.
 
-         IF AVAIL DiscountPlan THEN 
-         DO: 
-            IF AVAIL Customer AND
-            CAN-FIND(FIRST DPMember WHERE
-                           DPMember.DPId      = DiscountPlan.DPId AND
-                           DPMember.HostTable = "MobSub" AND
-                           DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
-                           DPMember.ValidTo   >= TODAY) THEN
-            DO:
-               IF LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 OR
-                  NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
-                  ASSIGN llAddline50Disc = TRUE.
-            END.
-         END.         
-      END. 
-   END.   
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
+
+   IF AVAIL DiscountPlan THEN 
+   DO: 
+      IF AVAIL Customer AND
+      CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
+      DO:
+         IF LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 OR
+            NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
+            ASSIGN llAddline50Disc = TRUE.
+      END.
+   END.
 
    /* Check Additional Line */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
