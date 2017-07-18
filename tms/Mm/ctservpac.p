@@ -74,8 +74,8 @@ DEF VAR lcCode       AS CHAR                   NO-UNDO.
 form
     CTServPac.CLIType    
     lcCLIName           COLUMN-LABEL "Name" FORMAT "X(15)"
-    CTServPac.ServPac   FORMAT "X(12)"  
-    lcSPName            COLUMN-LABEL "Name" FORMAT "X(16)"
+    CTServPac.ServPac   FORMAT "X(11)"  
+    lcSPName            COLUMN-LABEL "Name" FORMAT "X(13)"
     CTServPac.ServType  
     CTServPac.FromDate
     CTServPac.ToDate      
