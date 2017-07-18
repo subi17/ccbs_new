@@ -472,7 +472,10 @@ FUNCTION fIsProSubscription RETURNS LOGICAL
            IF AVAIL bCustCat THEN 
                RETURN TRUE.    
        END.        
-   END.    
+   END.
+
+   RETURN FALSE.
+       
 END FUNCTION.
 /* Additional Line with mobile only ALFMO-5  */ 
 FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
