@@ -306,8 +306,8 @@ IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR
 DO:
    fLocalMemo("Invoice",
               STRING(MobSub.MsSeq),
-              "Descuento 50% lía adicional",
-              "Lía principal " + lcMainLine).
+              "Descuento 50% línea adicional",
+              "Línea principal  " + lcMainLine).
 END.
  
 /* update/create the counter */
