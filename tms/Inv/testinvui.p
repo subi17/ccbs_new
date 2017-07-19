@@ -176,7 +176,7 @@ llCreateXML = TRUE.
 IF CustNum1 = 0 THEN 
 ASSIGN
    CustNum1  = unknown + 1
-   CustNum2  = 99999999.
+   CustNum2  = 999999999.
 
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = CustNum1 NO-LOCK NO-ERROR.
@@ -318,7 +318,7 @@ toimi:
 
          IF INPUT atpvm1 = ?  THEN atpvm1 = 01/01/1900.
          IF INPUT atpvm2 = ?  THEN atpvm2 = 12/31/9999.
-         if input CustNum2  = "" THEN CustNum2  = 9999999.
+         if input CustNum2  = "" THEN CustNum2  = 999999999.
 
          kysy_rajat = FALSE.
       END.
