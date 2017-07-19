@@ -153,7 +153,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       add_string(lcResultStruct,"usage_type", "data").
 
-   add_string(lcResultStruct,"tariff_type", STRING(CliType.TariffType)).
+   add_int(lcResultStruct,"tariff_type", CliType.TariffType).
 
    lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE
