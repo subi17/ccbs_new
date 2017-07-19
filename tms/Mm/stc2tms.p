@@ -55,6 +55,9 @@ IF llDoEvent THEN DO:
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
+   
+   DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
 END.
 
 DEF VAR lcAttrValue        AS CHAR NO-UNDO. 
@@ -72,6 +75,7 @@ DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
 DEF BUFFER bOldTariff FOR CLIType.
+DEF BUFFER bCLIType FOR CLIType.
 
 DEF TEMP-TABLE ttContract NO-UNDO
     FIELD DCEvent AS CHAR.
@@ -282,6 +286,7 @@ PROCEDURE pInitialize:
       RUN StarEventInitialize(lhSubSer).
       RUN StarEventInitialize(lhSubSerPara).
       RUN StarEventInitialize(lhSingleFee).
+      RUN StarEventInitialize(lhCustomer).
    END.
    
 END PROCEDURE.
@@ -534,6 +539,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liLoop AS INT NO-UNDO. 
    DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
    DEF VAR liSecs AS INT NO-UNDO. 
+   DEF VAR liNewMSStatus AS INT NO-UNDO. 
    DEF VAR ldtCloseDate AS DATE NO-UNDO.
    
    DEF BUFFER bOwner FOR MsOwner.
@@ -723,6 +729,15 @@ PROCEDURE pUpdateSubscription:
 
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
+   
+   liNewMSStatus = Mobsub.MsStatus.
+
+   IF Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN DO:
+      IF bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN   
+         liNewMSStatus = {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+      ELSE IF bNewTariff.TariffType NE {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+         liNewMSStatus = {&MSSTATUS_ACTIVE}.
+   END.
 
    /* update subscription */
    FIND CURRENT Mobsub EXCLUSIVE-LOCK.
@@ -736,10 +751,9 @@ PROCEDURE pUpdateSubscription:
           MobSub.TariffActTS   = ldeNewBeginTs
           MobSub.FixedNumber   = lcFixedNumber
           MobSub.CLI           = MobSub.FixedNumber WHEN
-                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}
-          MobSub.MsStatus      = {&MSSTATUS_ACTIVE} WHEN
-                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
-                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}.
+                                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} AND
+                                 liNewMSStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}
+          MobSub.MsStatus      = liNewMSStatus.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
@@ -820,11 +834,10 @@ PROCEDURE pUpdateSubscription:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = ldtActDate - 1.
 
-         fCloseDiscount(ENTRY(LOOKUP(bMobSub.CLIType, {&ADDLINE_CLITYPES}), 
-                        {&ADDLINE_DISCOUNTS_HM}),
-                        bMobSub.MsSeq,
-                        ldtCloseDate,
-                        FALSE).      
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               ldtCloseDate).               
       END.
    END.
 
@@ -852,6 +865,8 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
+   DEF BUFFER bMobsub FOR Mobsub.
+
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1234,6 +1249,24 @@ PROCEDURE pFinalize:
 
          END. /* FOR EACH InvRowCounter WHERE */
    END. /* IF DAY(ldtActDate) <> 1 THEN DO: */
+   
+  
+   IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR 
+       Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
+      Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY} AND
+      NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
+                         bMobsub.Brand    = gcBrand        AND
+                         bMobSub.CustNum  = MobSub.CustNum AND
+                         bMobSub.MsSeq   <> MobSub.MsSeq   AND 
+                         bMobSub.PayType  = FALSE AND
+                         bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+
+      FIND CURRENT Customer EXCLUSIVE-LOCK.
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+      Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+      FIND CURRENT Customer NO-LOCK.
+   END.
 
 END PROCEDURE.
 
@@ -2293,3 +2326,4 @@ PROCEDURE pCONTM2BarringReset:
       
    RETURN "OK".
 END PROCEDURE. 
+

@@ -148,6 +148,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF fIsConvergenceTariff(Order.CliType) THEN DO:
       FIND FIRST CLIType NO-LOCK WHERE
                  CLIType.CLIType EQ Order.CliType NO-ERROR.
+
       IF AVAIL CLIType THEN DO:
          IF CLIType.FixedLineType EQ 1 THEN DO:
             lcOrderType = "Alta xDSL + VOIP".
@@ -166,7 +167,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    END.
    ELSE
       RETURN "ERROR: Not allowed CLITYPE " + Order.CliType.
-
    IF fTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
@@ -276,14 +276,38 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
  
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
                          "UploadSpeed",               /*param name*/
                          CLIType.FixedLineUpload,    /*param value*/
                          "").                         /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "DownloadSpeed",             /*param name*/
+                         CLIType.FixedLineDownload,  /*param value*/
+                         "").                         /*old value*/
+
+/* YDR-2532 */
+
+      IF NUM-ENTRIES(OrderCustomer.TerritoryOwner,",") > 1 THEN                  
          fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "DownloadSpeed",             /*param name*/
-                            CLIType.FixedLineDownload,  /*param value*/
-                            "").                         /*old value*/
+                            "TerritoryOwner",             /*param name*/
+                            ENTRY(2,OrderCustomer.TerritoryOwner),  /*param value*/
+                            "").                         /*old value*/               
+      ELSE
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                            "TerritoryOwner",             /*param name*/
+                            OrderCustomer.TerritoryOwner,  /*param value*/
+                            "").                         /*old value*/ 
+                            
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "AddressId",            /*param name*/
+                         OrderCustomer.AddressId,    /*param value*/
+                         "").                   /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,     /*base*/
+                         "CaracteristicaTecnica",    /*param name*/
+                         "DHCP", /*param value*/
+                         "").                         /*old value*/
+/* YDR-2532 */
+
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
