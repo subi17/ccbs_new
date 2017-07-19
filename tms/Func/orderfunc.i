@@ -396,7 +396,8 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
        EACH labOrder NO-LOCK WHERE
             labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
             labOrder.orderid    EQ labOrderCustomer.Orderid AND
-            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            labOrder.PayType    EQ {&MOBSUB_PAYTYPE_POSTPAID}:
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                         CLIType.Brand      = Syst.Parameters:gcBrand           AND

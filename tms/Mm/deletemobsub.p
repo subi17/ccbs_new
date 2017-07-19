@@ -935,7 +935,8 @@ PROCEDURE pTerminate:
                bMobsub.Brand    = gcBrand        AND
                bMobSub.CustNum  = MobSub.CustNum AND
                bMobSub.MsSeq   <> liMsSeq        AND 
-               bMobSub.PayType  = NO:
+               bMobSub.PayType  = NO AND
+               bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}:
          llCallProc = NO.
          LEAVE.
       END.
@@ -1054,10 +1055,10 @@ PROCEDURE pTerminate:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
     
-         fCloseDiscount(ENTRY(LOOKUP(bMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
-                        bMobSub.MsSeq,
-                        ldtCloseDate,
-                        FALSE).
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               ldtCloseDate).
       END.      
    END. 
    
