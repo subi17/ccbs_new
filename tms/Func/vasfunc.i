@@ -13,7 +13,6 @@
 &IF "{&VASFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE VASFUNC_I YES
-
 {Func/profunc.i}
 
 /*SVA of Yoigo PRO*/
