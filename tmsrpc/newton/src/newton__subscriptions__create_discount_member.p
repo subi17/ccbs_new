@@ -141,6 +141,9 @@ ELSE IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
    IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
       RETURN appl_err("Discount Plan not allowed").
 
+   IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) <> LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) THEN
+      RETURN appl_err("Discount Plan not allowed").
+
    IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
       fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
       (NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,MobSub.CliType) AND
@@ -217,7 +220,15 @@ ASSIGN
    DPMember.ValidFrom = ldaValidFrom
    DPMember.ValidTo   = ldaValidTo
    DPMember.DiscValue = ldeAmount.
- 
+
+/* YTS-10992 - Adding logging for dpmember creation 
+   (Using already available Memo creation function instead of 
+    including event creation logic) */
+fLocalMemo("MobSub",
+           STRING(MobSub.MsSeq),
+           "DiscountCreation",
+           "Added from Vista").
+
 /* update/create the counter */
 fUpdateCounter("MobSub",
                STRING(MobSub.MsSeq),
