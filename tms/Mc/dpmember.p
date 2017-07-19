@@ -199,10 +199,10 @@ REPEAT WITH FRAME sel:
               DPMember.DPId = 0 OR DPMember.DiscValue = 0
            THEN UNDO add-row, LEAVE add-row.
 
-           /* dpmember creations not logged anymore YDR-1078 */
-           /*
+           /* Previous - dpmember creations not logged anymore YDR-1078 */
+           /* Current  - Uncommented event logging logic YTS-10992 */
            IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDPMember).
-           */
+           
 
            ASSIGN
            Memory = recid(DPMember)
