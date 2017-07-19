@@ -252,6 +252,10 @@ ELSE DO:
       ASSIGN
          Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
+      /* YPRO migrate YPRO-92 category */
+      IF ordercustomer.pro AND 
+         ordercustomer.category NE customer.category THEN
+         Customer.category = ordercustomer.category.
    END.
 
    /* DCH NEW/MNP */
