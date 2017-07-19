@@ -1744,7 +1744,8 @@ IF piMultiSimType NE 0 AND piMultiSimId <= 0 THEN
    RETURN appl_err("Multi SIM type passed but Multi SIM ID is missing").
 
 IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
-   CLIType.LineType > 0 AND
+   CLIType.LineType  > 0 AND
+   CLIType.LineType <> 3 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
                       CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
