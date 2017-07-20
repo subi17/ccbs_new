@@ -321,6 +321,10 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
 
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
+
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
             bOrderCustomer.CustId     EQ icCustID                AND
@@ -329,11 +333,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Parameters:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
-           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP}),
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
@@ -341,6 +341,8 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
           NEXT.
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.    
 
       RETURN TRUE.
 
