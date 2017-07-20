@@ -69,7 +69,7 @@ END FUNCTION.
 
 /* ALFMO-14 Procedure returns the convergent main line MSISDN 
    For web memo creation */
-PROCEDURE fConvMainLine :
+PROCEDURE pConvMainLine :
    DEFINE INPUT  PARAMETER icCustIDType  AS CHAR NO-UNDO.
    DEFINE INPUT  PARAMETER icCustID      AS CHAR NO-UNDO.
    DEFINE INPUT  PARAMETER icCliType     AS CHAR NO-UNDO.
@@ -107,7 +107,7 @@ END PROCEDURE.
 
 /* ALFMO-14 Procedure returns the Mobile only main line MSISDN 
    For web memo creation */
-PROCEDURE fMobOnlyMainLine :
+PROCEDURE pMobOnlyMainLine :
    DEFINE INPUT  PARAMETER icCustIDType  AS CHAR NO-UNDO.
    DEFINE INPUT  PARAMETER icCustID      AS CHAR NO-UNDO.
    DEFINE INPUT  PARAMETER icCliType     AS CHAR NO-UNDO.
@@ -129,18 +129,8 @@ PROCEDURE fMobOnlyMainLine :
        EACH  bMobSub NO-LOCK WHERE
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
+             bMobSub.MsSeq  <> MobSub.MsSeq            AND
              bMobSub.PayType = FALSE:
-
-       /* This is to handle where the additional line
-          is CONT25 or CONT26 because it can treat itself
-          as main line */  
-       IF (bMobSub.CLIType = ENTRY(3,{&ADDLINE_CLITYPES} ) OR 
-           bMobSub.CLIType = ENTRY(4,{&ADDLINE_CLITYPES} )) AND 
-          CAN-FIND(FIRST DPMember WHERE
-                         DPMember.DPId = DiscountPlan.DPId AND
-                         DPMember.HostTable = "MobSub" AND
-                         DPMember.KeyValue  = STRING(bMobSub.MsSeq) AND
-                         DPMember.ValidTo   >= TODAY) THEN NEXT.
 
        IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
        DO:
@@ -190,11 +180,30 @@ DO:
    IF LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}) = 0 THEN
       RETURN appl_err("Discount Plan not allowed").
 
-   IF fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
-      lcDPRuleID = ENTRY(LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS}).
-   ELSE IF fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,MobSub.CliType) THEN
-      lcDPRuleID = ENTRY(LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}).
+   IF fCheckExistingConvergent(Customer.CustIDType,
+                               Customer.OrgID,
+                               MobSub.CliType) THEN
+   DO:
+      RUN pConvMainLine(Customer.CustIDType,
+                        Customer.OrgID,
+                        MobSub.CliType, 
+                        OUTPUT lcMainLine).
 
+      lcDPRuleID = ENTRY(LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS}).
+   END.
+   ELSE IF fCheckExistingMobileOnly(Customer.CustIDType,
+                                    Customer.OrgID,
+                                    MobSub.CliType) THEN
+   DO:
+      RUN pMobOnlyMainLine(Customer.CustIDType,
+                           Customer.OrgID,
+                           MobSub.CliType, 
+                           OUTPUT lcMainLine).
+      
+      lcDPRuleID = ENTRY(LOOKUP(MobSub.CliType,{&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}).
+   END.
+   IF lcMainLine = "" THEN
+      RETURN appl_err("Discount Plan not allowed").
 END.
 
 FIND FIRST DiscountPlan WHERE
@@ -209,11 +218,12 @@ ELSE
    ldaValidTo = fCalcDPMemberValidTo(ldaValidFrom, liValidPeriods).
 
 /* ALFMO-14 Additional Line with mobile only ALFMO-5 */
-IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:      
+IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN 
+DO:      
 
-   IF fCheckOngoingConvergentOrder(Customer.CustIDType,Customer.OrgID,MobSub.CliType) OR 
-      CAN-FIND(FIRST SubsTerminal WHERE SubsTerminal.Brand = gcBrand AND
-                                        SubsTerminal.MsSeq = MobSub.MsSeq ) THEN      
+   IF fCheckOngoingConvergentOrder(Customer.CustIDType,
+                                   Customer.OrgID,
+                                   MobSub.CliType) THEN      
       RETURN appl_err("Discount Plan not allowed").      
 END.
 
@@ -279,16 +289,6 @@ FOR EACH Counter NO-LOCK WHERE
 END.
 IF ( ldeMonthAmt + ldeMaxAmount) > ldeMonthlyLimit THEN
        RETURN appl_err("Change exceeds the monthly limit ").
-
-/* ALFMO-14 For creating web memo */
-IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN
-DO:
-   RUN fConvMainLine(Customer.CustIDType,Customer.OrgID,MobSub.CliType, OUTPUT lcMainLine).
-END.
-ELSE IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN
-DO:
-   RUN fMobOnlyMainLine(Customer.CustIDType,Customer.OrgID,MobSub.CliType, OUTPUT lcMainLine).
-END.
 
 CREATE DPMember.
 ASSIGN 
