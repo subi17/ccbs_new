@@ -132,6 +132,14 @@ PROCEDURE pMobOnlyMainLine :
              bMobSub.MsSeq  <> MobSub.MsSeq            AND
              bMobSub.PayType = FALSE:
 
+       IF (icCliType = ENTRY(3,{&ADDLINE_CLITYPES} ) OR 
+           icCliType = ENTRY(4,{&ADDLINE_CLITYPES} )) AND 
+          CAN-FIND(FIRST DPMember WHERE
+                         DPMember.DPId = DiscountPlan.DPId AND
+                         DPMember.HostTable = "MobSub" AND
+                         DPMember.KeyValue  = STRING(bMobSub.MsSeq) AND
+                         DPMember.ValidTo   >= TODAY) THEN NEXT.
+
        IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
        DO:
           ASSIGN ocMainLineCli = bMobSub.cli.
