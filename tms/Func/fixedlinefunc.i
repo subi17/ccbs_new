@@ -11,13 +11,30 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
-{Syst/commpaa.i}
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
-{Func/cparam2.i}
+
+FUNCTION fGetOngoingOrderStatusList RETURNS CHAR
+  (INPUT inp AS CHAR).
+
+   DEF VAR ret AS c NO-UNDO init ?.
+
+   FIND FIRST TMSParam where
+              TMSParam.Brand      = Syst.Parameters:gcBrand AND
+              TMSParam.ParamCode  = inp
+   no-lock no-error.
+
+   IF AVAIL TMSParam THEN DO:
+      ret = TMSParam.CharVal.
+      release TMSParam.
+   END.
+
+   RETURN ret.
+
+END.
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -263,7 +280,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fCParamC("ConvOrderOngoing"). 
+   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing"). 
  
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
