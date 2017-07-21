@@ -4,7 +4,6 @@
          string;mandatory;DNI type
          string;mandatory;DNI
          string;mandatory;reseller id
-         string;mandatory;channel
  * @output_struct name;string;name of the owner
            custnum;int;customer number of owner
            subscriptions;array;containing subscription structure
@@ -34,23 +33,22 @@ DEF VAR pcReseller AS CHAR NO-UNDO.
 DEF VAR pcChannel  AS CHAR NO-UNDO. 
 
 /* Output parameters */
-DEF VAR top_struct AS CHAR NO-UNDO.
+DEF VAR top_struct   AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO.
-DEF VAR sub_struct AS CHAR NO-UNDO.
+DEF VAR sub_struct   AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcCallType AS CHAR NO-UNDO.
-DEF VAR lcChannels AS CHAR NO-UNDO. 
+DEF VAR lcCallType         AS CHAR NO-UNDO.
+DEF VAR lcIndirectChannels AS CHAR NO-UNDO. 
 
-lcCallType = validate_request(param_toplevel_id, "string,string,string,string,string").
+lcCallType = validate_request(param_toplevel_id, "string,string,string,string").
 IF lcCallType EQ ? THEN RETURN.
 
 pcMSISDN = get_string(param_toplevel_id, "0").
 pcDNIType = get_string(param_toplevel_id, "1").
 pcDNI = get_string(param_toplevel_id, "2").
 pcReseller = get_string(param_toplevel_id, "3"). 
-pcChannel = get_string(param_toplevel_id, "4").
 
-lcChannels = fCParamC("DirectChannels").
+lcIndirectChannels = fCParamC("InDirectChannels").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -120,10 +118,14 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
 
    /* YOT-5180, User Exclusive could find ANY subscription created from 
       direct channel without restriction of the reseller that made the activation*/
-   IF pcChannel NE "" AND 
-      LOOKUP(pcChannel,lcChannels) > 0 THEN
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand = gcBrand      AND 
+              Order.MsSeq = MobSub.MsSeq AND 
+              Order.CLI   = MobSub.CLI   NO-ERROR. 
+   
+   IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) = 0 THEN
       LEAVE.
-      
+
    IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
       LOOKUP(SalesMan.Reseller,{&RESELLERS})          EQ 0 THEN 
       RETURN appl_err("Salesman Reseller not match").
