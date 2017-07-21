@@ -182,7 +182,7 @@ IF llDoEvent THEN DO:
 END.               
 
 IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-  (Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} OR
+  (Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} OR /* shouldn't never get this value because of YDR-2575 */
    Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}) THEN DO:
    
    FIND FIRST MSISDN WHERE

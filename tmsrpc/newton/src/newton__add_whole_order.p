@@ -1972,7 +1972,7 @@ IF Order.OrderChannel BEGINS "retention" THEN
    FOR EACH lbOrder NO-LOCK WHERE
             lbOrder.Brand = gcBrand AND
             lbOrder.CLI = Order.CLI AND
-            lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
+            lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
             ROWID(lbOrder) NE ROWID(Order):
 
       RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
@@ -2435,7 +2435,7 @@ END.
 /* should overwrite any roi status */
 IF plSendOffer AND NOT llROIClose THEN DO:
 
-   Order.StatusCode = {&ORDER_STATUS_OFFER_SENT}.
+   /* Order.StatusCode = {&ORDER_STATUS_OFFER_SENT}. */  /* shouldn't wait customers response anymore YDR-2575 */
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} OR
       Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
