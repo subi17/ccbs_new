@@ -36,7 +36,6 @@ DEFINE BUFFER lbOrder         FOR Order.
 /* Additional line mobile only ALFMO-5 */
 DEFINE BUFFER lbOrdCust       FOR OrderCustomer.
 DEFINE BUFFER lbOrd           FOR Order.
-DEFINE BUFFER lbOrdAct        FOR OrderAction.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -291,7 +290,7 @@ FIND FIRST lbOrderCustomer NO-LOCK WHERE
 IF AVAILABLE lbOrderCustomer THEN DO:
 
    /* Just to create the list of 
-     additional line CLITYPES(76 status) 
+     additional line CLITYPES in Ongoing status
      Additional line mobile only ALFMO-5 */
 
    FOR EACH lbOrdCust NO-LOCK WHERE
@@ -302,14 +301,15 @@ IF AVAILABLE lbOrderCustomer THEN DO:
       FIRST lbOrd NO-LOCK WHERE
             lbOrd.Brand      = gcBrand                           AND
             lbOrd.OrderID    = lbOrdCust.OrderID                 AND
-            lbOrd.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            LOOKUP(lbOrd.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
             LOOKUP(lbOrd.CLIType, {&ADDLINE_CLITYPES}) > 0:
 
-      IF CAN-FIND( FIRST lbOrdAct NO-LOCK WHERE
-                  lbOrdAct.Brand    = gcBrand           AND
-                  lbOrdAct.OrderID  = lbOrd.OrderID   AND
-                  lbOrdAct.ItemType = "AddLineDiscount" AND
-           LOOKUP(lbOrdAct.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+      /* Buffer not needed in can-find so deleted */
+      IF CAN-FIND( FIRST OrderAction NO-LOCK WHERE
+                  OrderAction.Brand    = gcBrand           AND
+                  OrderAction.OrderID  = lbOrd.OrderID   AND
+                  OrderAction.ItemType = "AddLineDiscount" AND
+           LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
       DO:      
          IF lcAddlineCliypes = "" THEN
             ASSIGN lcAddlineCliypes = lbOrd.CLIType.
