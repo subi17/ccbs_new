@@ -19,6 +19,7 @@
 {Func/email.i}
 {Func/fixedlinefunc.i}
 
+/* check pro */
 FUNCTION fIsPro RETURNS LOGICAL
    (icCategory AS CHAR):
 
@@ -29,6 +30,20 @@ FUNCTION fIsPro RETURNS LOGICAL
               CustCat.Category EQ icCategory NO-ERROR.
               
    IF AVAIL CustCat AND Custcat.pro THEN RETURN TRUE.
+   RETURN FALSE.
+END.
+
+/* check self employee */
+FUNCTION fIsSelfEmpl RETURNS LOGICAL
+   (icCategory AS CHAR):
+
+   DEF BUFFER CustCat FOR CustCat.
+
+   FIND FIRST CustCat NO-LOCK where
+              CustCat.Brand EQ Syst.Parameters:gcbrand AND
+              CustCat.Category EQ icCategory NO-ERROR.
+
+   IF AVAIL CustCat AND INDEX(custcat.catname, "self") > 0 THEN RETURN TRUE.
    RETURN FALSE.
 END.
 

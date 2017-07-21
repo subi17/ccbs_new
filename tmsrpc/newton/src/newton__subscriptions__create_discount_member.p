@@ -318,6 +318,14 @@ DO:
               "Línea principal  " + lcMainLine).
 END.
  
+/* YTS-10992 - Adding logging for dpmember creation 
+   (Using already available Memo creation function instead of 
+    including event creation logic) */
+fLocalMemo("MobSub",
+           STRING(MobSub.MsSeq),
+           "DiscountCreation",
+           "Added from Vista").
+
 /* update/create the counter */
 fUpdateCounter("MobSub",
                STRING(MobSub.MsSeq),
