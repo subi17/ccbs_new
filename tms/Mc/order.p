@@ -590,8 +590,7 @@ FUNCTION fCheckCustomerData RETURNS LOGICAL
    END. 
 
    IF LOOKUP(bChkCustomer.CustIDType,"N/A,CIF") = 0 AND 
-      (bChkCustomer.CustTitle  = ""  OR
-       bChkCustomer.FirstName = ""  OR
+      (bChkCustomer.FirstName = ""  OR
        bChkCustomer.SurName1  = "")
    THEN DO:
       MESSAGE "Name data is missing"
