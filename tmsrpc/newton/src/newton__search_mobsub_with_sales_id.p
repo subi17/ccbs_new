@@ -124,6 +124,7 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
               Order.CLI   = MobSub.CLI   NO-ERROR. 
    
    IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) > 0 THEN
+   DO:
       IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
          LOOKUP(SalesMan.Reseller,{&RESELLERS})          EQ 0 THEN 
       RETURN appl_err("Salesman Reseller not match").
