@@ -2188,37 +2188,37 @@ PROCEDURE local-update-customer:
 
          UPDATE 
          
-         OrderCustomer.FirstName WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0
-         OrderCustomer.SurName1 WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0 
-         OrderCustomer.SurName2 WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0
+         OrderCustomer.FirstName WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.SurName1 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.SurName2 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
          OrderCustomer.Company WHEN 
             OrderCustomer.Custidtype = "cif" and
-            LOOKUP(Order.StatusCode,"20,21,31,73") > 0 and
+            LOOKUP(Order.StatusCode,"20,21,31") > 0 and
             OrderCustomer.RowType = 1
          OrderCustomer.FoundationDate WHEN 
             OrderCustomer.Custidtype = "cif" and
-            LOOKUP(Order.StatusCode,"20,21,31,73") > 0 AND
+            LOOKUP(Order.StatusCode,"20,21,31") > 0 AND
             OrderCustomer.RowType = 1
-         OrderCustomer.Street WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0
-         OrderCustomer.BuildingNum WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0
-         OrderCustomer.AddressCompl WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0
+         OrderCustomer.Street WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.BuildingNum WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.AddressCompl WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
          
-         OrderCustomer.ZipCode WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0 
-         OrderCustomer.PostOffice WHEN LOOKUP(Order.StatusCode,"20,21,31,73") > 0
+         OrderCustomer.ZipCode WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0  AND llCustIDUpdateOK
+         OrderCustomer.PostOffice WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
          
          OrderCustomer.CustIDType WHEN llCustIDUpdateOK
          OrderCustomer.CustID     WHEN llCustIDUpdateOK
          
-         OrderCustomer.Region WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.CustTitle WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.Nationality WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.MobileNumber WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.FixedNumber WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.Email WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.Country WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.BankCode WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.Birthday WHEN LOOKUP(Order.StatusCode,"31,73") > 0
-         OrderCustomer.Language WHEN LOOKUP(Order.StatusCode,"31,73") > 0
+         OrderCustomer.Region WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.CustTitle WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Nationality WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.MobileNumber WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.FixedNumber WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Email WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Country WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.BankCode WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Birthday WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Language WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
          WITH FRAME fCustomer EDITING:
             
             READKEY PAUSE liWaitKey.
