@@ -2188,9 +2188,9 @@ PROCEDURE local-update-customer:
 
          UPDATE 
          
-         OrderCustomer.FirstName WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.SurName1 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.SurName2 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.FirstName WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.SurName1 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.SurName2 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
          OrderCustomer.Company WHEN 
             OrderCustomer.Custidtype = "cif" and
             LOOKUP(Order.StatusCode,"20,21,31") > 0 and
@@ -2199,26 +2199,26 @@ PROCEDURE local-update-customer:
             OrderCustomer.Custidtype = "cif" and
             LOOKUP(Order.StatusCode,"20,21,31") > 0 AND
             OrderCustomer.RowType = 1
-         OrderCustomer.Street WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.BuildingNum WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.AddressCompl WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Street WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.BuildingNum WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.AddressCompl WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
          
-         OrderCustomer.ZipCode WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0  AND llCustIDUpdateOK
-         OrderCustomer.PostOffice WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.ZipCode WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0  OR llCustIDUpdateOK
+         OrderCustomer.PostOffice WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 OR llCustIDUpdateOK
          
          OrderCustomer.CustIDType WHEN llCustIDUpdateOK
          OrderCustomer.CustID     WHEN llCustIDUpdateOK
          
-         OrderCustomer.Region WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.CustTitle WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.Nationality WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.MobileNumber WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.FixedNumber WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.Email WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.Country WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.BankCode WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.Birthday WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
-         OrderCustomer.Language WHEN LOOKUP(Order.StatusCode,"31") > 0 AND llCustIDUpdateOK
+         OrderCustomer.Region WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.CustTitle WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.Nationality WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.MobileNumber WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.FixedNumber WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.Email WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.Country WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.BankCode WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.Birthday WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
+         OrderCustomer.Language WHEN LOOKUP(Order.StatusCode,"31") > 0 OR llCustIDUpdateOK
          WITH FRAME fCustomer EDITING:
             
             READKEY PAUSE liWaitKey.
