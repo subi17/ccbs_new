@@ -36,6 +36,24 @@ FUNCTION fGetOngoingOrderStatusList RETURNS CHAR
 
 END.
 
+FUNCTION fGetParamValues RETURNS CHAR 
+  (INPUT icGroup AS CHAR,
+   INPUT icCode  AS CHAR):
+   
+   DEF VAR lcRet AS CHAR NO-UNDO INIT ?.
+   FIND FIRST TMSParam NO-LOCK WHERE
+              TMSParam.Brand      = Syst.Parameters:gcBrand AND
+              TMSParam.ParamGroup = icGroup                 AND
+              TMSParam.ParamCode  = icCode                  NO-ERROR.
+   
+   IF AVAIL TMSParam THEN DO:
+      lcRet = TMSParam.CharVal.
+      RELEASE TMSParam.
+   END.           
+
+   RETURN lcRet.
+END FUNCTION. 
+
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
    commali.i, katun defined and call fCleanEventObjects after this function */
@@ -603,6 +621,78 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
 
       IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
          RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR):
+
+   DEFINE BUFFER Customer FOR Customer.
+   DEFINE BUFFER MobSub   FOR MobSub.
+
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+
+   lcExtraMainLineCLITypes = fGetParamValues("DiscountType","Extra_MainLine_CLITypes").
+
+   FOR FIRST Customer WHERE
+             Customer.Brand      = Syst.Parameters:gcBrand AND
+             Customer.OrgId      = icCustID                AND
+             Customer.CustidType = icCustIDType            AND
+             Customer.Roles     NE "inactive"              NO-LOCK,
+       EACH  MobSub NO-LOCK WHERE
+             MobSub.Brand   = Syst.Parameters:gcBrand AND
+             MobSub.CustNum = Customer.CustNum        AND
+             MobSub.PayType = FALSE:
+
+       IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+
+       IF MobSub.MultiSimID <> 0 THEN NEXT.
+
+       RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR):
+   
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER OrderFusion   FOR OrderFusion.
+
+   DEF VAR lcConvOngoingStatus     AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+
+   ASSIGN 
+      lcExtraMainLineCLITypes = fGetParamValues("DiscountType","Extra_MainLine_CLITypes")
+      lcConvOngoingStatus     = fGetOngoingOrderStatusList("ConvOrderOngoing").
+
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            OrderCustomer.CustId     EQ icCustID                AND
+            OrderCustomer.CustIdType EQ icCustIDType            AND
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH Order NO-LOCK WHERE
+            Order.Brand      EQ Syst.Parameters:gcBrand AND
+            Order.orderid    EQ OrderCustomer.Orderid   AND
+            Order.OrderType  NE {&ORDER_TYPE_RENEWAL},
+      FIRST OrderFusion NO-LOCK WHERE
+            OrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            OrderFusion.OrderID = Order.OrderID:
+
+      IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+
+      IF LOOKUP(Order.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
+
+      RETURN TRUE.
+ 
    END.
 
    RETURN FALSE.

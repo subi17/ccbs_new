@@ -52,6 +52,7 @@ DEF VAR lcCategory           AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder    AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder AS LOGI NO-UNDO.
 DEF VAR liMobsubCount        AS LOGI NO-UNDO.
+DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO. 
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -74,6 +75,8 @@ ELSE IF NUM-ENTRIES(top_array) GT 6 THEN
       pcCliType    = get_string(param_toplevel_id, "4")
       pcChannel    = get_string(param_toplevel_id, "5")
       plSTCMigrate = get_bool(param_toplevel_id, "6").
+
+lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -219,6 +222,13 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
+END.
+
+IF LOOKUP(pcCLIType,lcExtraLineCLITypes) > 0 THEN DO:
+   IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId) THEN 
+      lcAddLineAllowed = "EXTRA_LINE".
+   ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId) THEN    
+      lcAddLineAllowed = "EXTRA_LINE".
 END.
 
 IF lcAddLineAllowed = "" THEN DO:
