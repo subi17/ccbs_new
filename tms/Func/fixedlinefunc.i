@@ -11,48 +11,12 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
+{Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
-
-FUNCTION fGetOngoingOrderStatusList RETURNS CHAR
-  (INPUT inp AS CHAR).
-
-   DEF VAR ret AS c NO-UNDO init ?.
-
-   FIND FIRST TMSParam where
-              TMSParam.Brand      = Syst.Parameters:gcBrand AND
-              TMSParam.ParamCode  = inp
-   no-lock no-error.
-
-   IF AVAIL TMSParam THEN DO:
-      ret = TMSParam.CharVal.
-      release TMSParam.
-   END.
-
-   RETURN ret.
-
-END.
-
-FUNCTION fGetParamValues RETURNS CHAR 
-  (INPUT icGroup AS CHAR,
-   INPUT icCode  AS CHAR):
-   
-   DEF VAR lcRet AS CHAR NO-UNDO INIT ?.
-   FIND FIRST TMSParam NO-LOCK WHERE
-              TMSParam.Brand      = Syst.Parameters:gcBrand AND
-              TMSParam.ParamGroup = icGroup                 AND
-              TMSParam.ParamCode  = icCode                  NO-ERROR.
-   
-   IF AVAIL TMSParam THEN DO:
-      lcRet = TMSParam.CharVal.
-      RELEASE TMSParam.
-   END.           
-
-   RETURN lcRet.
-END FUNCTION. 
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -298,7 +262,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing"). 
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing"). 
  
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -341,7 +305,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -636,7 +600,7 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
 
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 
-   lcExtraMainLineCLITypes = fGetParamValues("DiscountType","Extra_MainLine_CLITypes").
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    FOR FIRST Customer WHERE
              Customer.Brand      = Syst.Parameters:gcBrand AND
@@ -671,8 +635,8 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
 
    ASSIGN 
-      lcExtraMainLineCLITypes = fGetParamValues("DiscountType","Extra_MainLine_CLITypes")
-      lcConvOngoingStatus     = fGetOngoingOrderStatusList("ConvOrderOngoing").
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+      lcConvOngoingStatus     = fCParamC("ConvOrderOngoing").
 
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
