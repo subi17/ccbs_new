@@ -113,9 +113,6 @@ FIND Salesman WHERE
 
 IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
 
-   IF NOT AVAIL SalesMan THEN 
-      RETURN appl_err("Salesman not found").
-
    /* YOT-5180, User Exclusive could find ANY subscription created from 
       direct channel without restriction of the reseller that made the activation*/
    FIND FIRST Order NO-LOCK WHERE 
@@ -123,7 +120,8 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
               Order.MsSeq = MobSub.MsSeq AND 
               Order.CLI   = MobSub.CLI   NO-ERROR. 
    
-   IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) > 0 THEN
+   IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) > 0 AND 
+      AVAIL Salesman                                                    THEN
    DO:
       IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
          LOOKUP(SalesMan.Reseller,{&RESELLERS})          EQ 0 THEN 
