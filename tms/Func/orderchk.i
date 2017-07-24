@@ -256,20 +256,14 @@ FUNCTION fCheckOngoingOrdersOnCustomer RETURNS LOGICAL
     DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
     DEFINE BUFFER bOrder         FOR Order.
 
-    DEF VAR lcOngoingStatus AS CHAR NO-UNDO. 
-
-    ASSIGN lcOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
-
     FOR EACH bOrderCustomer WHERE
              bOrderCustomer.CustNum = iiCustNum                          AND 
              bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK,
-        EACH bOrder WHERE
-             bOrder.Brand      =  gcBrand                 AND
-             bOrder.orderid    =  bOrderCustomer.OrderId  AND
-             bOrder.OrderType  <> {&ORDER_TYPE_RENEWAL}   NO-LOCK:
-
-      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
-          NEXT.
+        FIRST bOrder WHERE
+             bOrder.Brand      =  gcBrand                             AND
+             bOrder.orderid    =  bOrderCustomer.OrderId              AND
+             LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND 
+             bOrder.OrderType  <> {&ORDER_TYPE_RENEWAL}               NO-LOCK:
 
       RETURN TRUE.
 
