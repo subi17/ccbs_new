@@ -312,7 +312,7 @@ ASSIGN
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN
 DO:
-   fLocalMemo("MobSub",
+   fLocalMemo("Invoice",
               STRING(MobSub.MsSeq),
               "Descuento 50% línea adicional",
               "Línea principal " + lcMainLine).
