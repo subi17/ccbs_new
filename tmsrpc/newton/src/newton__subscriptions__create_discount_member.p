@@ -312,10 +312,10 @@ ASSIGN
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN
 DO:
-   fLocalMemo("Invoice",
+   fLocalMemo("MobSub",
               STRING(MobSub.MsSeq),
-              "Descuento 50% lÃ­nea adicional",
-              "LÃ­nea principal  " + lcMainLine).
+              "Descuento 50% línea adicional",
+              "Línea principal " + lcMainLine).
 END.
  
 /* YTS-10992 - Adding logging for dpmember creation 
