@@ -123,7 +123,7 @@ DO:
               ASSIGN 
                   llOrderAllowed = FALSE
                   lcReason = "PRO migration not possible because, no mobile lines exists".
-          ELSE IF AMBIG MobSub THEN 
+          ELSE IF (AMBIG MobSub) OR (AVAIL MobSub AND fCheckOngoingOrdersOnCustomer(Mobsub.InvCust)) THEN 
               ASSIGN 
                   llOrderAllowed = FALSE
                   lcReason = "PRO migration not possible because of multible mobile lines".
@@ -131,7 +131,7 @@ DO:
               ASSIGN
                   llOrderAllowed = FALSE
                   lcReason = "PRO migration not possible for convergent".         
-          ELSE IF NOT plSelfEmployed THEN
+          ELSE IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
               ASSIGN 
                   llOrderAllowed = FALSE
                   lcReason = "PRO migration not possible because of multible mobile lines". 
