@@ -249,6 +249,29 @@ FUNCTION fOngoingFixedOrders RETURNS CHARACTER
 
 END FUNCTION. 
 
+FUNCTION fCheckOngoingOrdersOnCustomer RETURNS LOGICAL
+    (iiCustNum AS INTEGER):
+
+    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+    DEFINE BUFFER bOrder         FOR Order.
+
+    FOR EACH bOrderCustomer WHERE
+             bOrderCustomer.CustNum = iiCustNum                          AND 
+             bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK,
+        FIRST bOrder WHERE
+             bOrder.Brand      =  gcBrand                             AND
+             bOrder.orderid    =  bOrderCustomer.OrderId              AND
+             LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND 
+             bOrder.OrderType  <> {&ORDER_TYPE_RENEWAL}               NO-LOCK:
+
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.  
+
 FUNCTION fIsPreactivatedCustomer RETURNS LOGICAL
 (iiCustnum AS INTEGER):
    RETURN (LOOKUP(STRING(iiCustnum), "233718,239696,239680,239666") > 0).
