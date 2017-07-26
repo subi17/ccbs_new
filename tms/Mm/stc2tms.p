@@ -57,7 +57,6 @@ IF llDoEvent THEN DO:
    lhSingleFee = BUFFER SingleFee:HANDLE.
    
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
-   lhCustomer = BUFFER Customer:HANDLE.
 END.
 
 DEF VAR lcAttrValue        AS CHAR NO-UNDO. 
@@ -286,7 +285,6 @@ PROCEDURE pInitialize:
       RUN StarEventInitialize(lhSubSer).
       RUN StarEventInitialize(lhSubSerPara).
       RUN StarEventInitialize(lhSingleFee).
-      RUN StarEventInitialize(lhCustomer).
    END.
    
 END PROCEDURE.
@@ -1262,7 +1260,11 @@ PROCEDURE pFinalize:
                          bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
 
       FIND CURRENT Customer EXCLUSIVE-LOCK.
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+      IF llDoEvent THEN DO:
+         lhCustomer = BUFFER Customer:HANDLE.
+         RUN StarEventInitialize(lhCustomer).
+         RUN StarEventSetOldBuffer(lhCustomer).       
+      END.
       Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
       FIND CURRENT Customer NO-LOCK.
