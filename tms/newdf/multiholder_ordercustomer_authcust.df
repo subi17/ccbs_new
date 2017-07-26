@@ -1,0 +1,19 @@
+RENAME FIELD "CustUserId" OF "OrderCustomer" TO "AuthCustId"
+RENAME FIELD "CustPWD" OF "OrderCustomer" TO "AuthCustIdType"
+
+UPDATE FIELD "AuthCustId" OF "OrderCustomer"
+  FORMAT "x(11)"
+  HELP "Authorization Customer ID"
+  LABEL "AuthCustId"
+  COLUMN-LABEL "AuthCustId"
+
+UPDATE FIELD "AuthCustIdType" OF "OrderCustomer"
+  HELP "Authorization Customer ID Type"
+  LABEL "AuthCustIdType"
+  COLUMN-LABEL "AuthCustIdType"
+
+.
+PSC
+cpstream=1252
+.
+0000001153
