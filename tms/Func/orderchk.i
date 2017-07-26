@@ -212,8 +212,7 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
 
       /* YPR-2105 */
       IF pcNumberType EQ "retention" AND
-         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT.
-
+         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT. /* shouldn't never happen because of YDR-2575 */
       RETURN TRUE.
    END.
    
@@ -249,6 +248,29 @@ FUNCTION fOngoingFixedOrders RETURNS CHARACTER
    RETURN "".
 
 END FUNCTION. 
+
+FUNCTION fCheckOngoingOrdersOnCustomer RETURNS LOGICAL
+    (iiCustNum AS INTEGER):
+
+    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+    DEFINE BUFFER bOrder         FOR Order.
+
+    FOR EACH bOrderCustomer WHERE
+             bOrderCustomer.CustNum = iiCustNum                          AND 
+             bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK,
+        FIRST bOrder WHERE
+             bOrder.Brand      =  gcBrand                             AND
+             bOrder.orderid    =  bOrderCustomer.OrderId              AND
+             LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND 
+             bOrder.OrderType  <> {&ORDER_TYPE_RENEWAL}               NO-LOCK:
+
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.  
 
 FUNCTION fIsPreactivatedCustomer RETURNS LOGICAL
 (iiCustnum AS INTEGER):
