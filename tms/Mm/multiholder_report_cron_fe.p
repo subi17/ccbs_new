@@ -46,6 +46,7 @@ FUNCTION fReport RETURNS CHAR
    DEF BUFFER Order FOR Order. 
    DEF BUFFER OrderCustomer FOR OrderCustomer.
    DEF BUFFER OrderCustomer1 FOR OrderCustomer.
+   DEF BUFFER OrderFusion FOR OrderFusion.
    DEF VAR lcRow AS CHAR NO-UNDO.
    OUTPUT STREAM sOutFile to VALUE(lcFile) APPEND.
    FOR EACH Order NO-LOCK WHERE
@@ -57,7 +58,11 @@ FUNCTION fReport RETURNS CHAR
                  OrderCustomer1.Orderid EQ Order.OrderID AND
                  OrderCustomer1.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                  NO-ERROR.
-      IF NOT AVAIL OrderCustomer1 THEN NEXT.           
+      IF NOT AVAIL OrderCustomer1 THEN NEXT.
+      FIND FIRST OrderFusion NO-LOCK WHERE 
+                 OrderFusion.Brand EQ Order.Brand AND
+                 OrderFusion.OrderId EQ Order.OrderID.
+      IF NOT AVAIL OrderFusion THEN NEXT.           
 
       FOR EACH OrderCustomer NO-LOCK WHERE
                OrderCustomer.Brand EQ Order.Brand AND
@@ -67,7 +72,7 @@ FUNCTION fReport RETURNS CHAR
          lcRow = "".
          /*WorkOrderID;PhoneNumber; */
          lcRow = "Y" + STRING(Order.OrderID) + lcDelim +
-              Order.CLI + lcDelim +
+              OrderFusion.FixedNumber + lcDelim +
          /*firstNameHolder;middleNameHolder;lastNameHolder;
          documentTypeHolder;documentNumberHolder; */
               OrderCustomer1.FirstName + lcDelim +
@@ -85,37 +90,6 @@ FUNCTION fReport RETURNS CHAR
          
          PUT STREAM sOutFile UNFORMATTED lcRow SKIP.
       END.
-/* Removed because mobile data was not needed. 
-Comment exist because this is easy way to take the code back if customer needs.
-      FOR EACH OrderCustomer NO-LOCK WHERE
-               OrderCustomer.Brand EQ Order.Brand AND
-               OrderCustomer.Orderid EQ Order.OrderID AND
-               OrderCustomer.RowType EQ 9: /*ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER */
-               
-         lcRow = "".
-          /*WorkOrderID;PhoneNumber; */
-         lcRow = "Y" + STRING(Order.OrderID) + lcDelim +
-              Order.CLI + lcDelim +
-         /*firstNameHolder;middleNameHolder;lastNameHolder;
-         documentTypeHolder;documentNumberHolder; */
-              OrderCustomer1.FirstName + lcDelim +
-              OrderCustomer1.SurName1 + lcDelim +
-              OrderCustomer1.SurName2 + lcDelim +
-              OrderCustomer1.CustIDType + lcDelim +
-              OrderCustomer1.CustID + lcDelim +
-
-         /*firstNameMultiHolder;middleNameMultiHolder;lastNameMultiHolder;
-         documentTypeMultiHolder */
-              OrderCustomer.FirstName + lcDelim +
-              OrderCustomer.SurName1 + lcDelim +
-              OrderCustomer.SurName2 + lcDelim +
-              OrderCustomer.CustIDType + lcDelim +
-              OrderCustomer.CustID + lcDelim.
-
-              PUT STREAM sOutFile UNFORMATTED lcRow SKIP.
-
-      END.
-*/      
    END.
 
 RETURN "".    
@@ -123,11 +97,7 @@ END.
 
 /*Dir and file definition*/
 ASSIGN
-       ldaReadDate  = TODAY        
-/*       lcSpoolDir   = fCParam("DMS","TMS_to_DMS_SpoolDir")
-       lcLogDir     = fCParam("DMS","TMS_to_DMS_LogDir")
-       lcOutDir     = fCParam("DMS","TMS_to_DMS_OutDir")
-*/
+   ldaReadDate  = TODAY        
    lcSpoolDir = "/tmp/"
 
        lcFile   = lcSpoolDir + "multiholder_data_" +
