@@ -252,6 +252,10 @@ ELSE DO:
       ASSIGN
          Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
+      /* YPRO migrate YPRO-92 category */
+      IF ordercustomer.pro AND 
+         ordercustomer.category NE customer.category THEN
+         Customer.category = ordercustomer.category.
    END.
 
    /* DCH NEW/MNP */
@@ -332,14 +336,11 @@ ELSE DO:
                Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN
                                           OrderCustomer.CustIdType = "CIF"
                Customer.Profession      = TRIM(OrderCustomer.Profession) WHEN
-                                          TRIM(OrderCustomer.Profession) > "".
-
-            IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND
-               Customer.CustIdType = "CIF" THEN DO:
-               IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN ASSIGN
-                  Customer.AuthCustId      = Order.OrdererID
-                  Customer.AuthCustIdType  = Order.OrdererIDType.
-            END.
+                                          TRIM(OrderCustomer.Profession) > ""
+               Customer.AuthCustId      = OrderCustomer.AuthCustId
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:

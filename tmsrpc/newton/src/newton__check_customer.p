@@ -32,6 +32,7 @@ DEF VAR piOrders         AS INT  NO-UNDO.
 DEF VAR pcCliType        AS CHAR NO-UNDO.
 DEF VAR pcChannel        AS CHAR NO-UNDO.
 DEF VAR top_array        AS CHAR NO-UNDO.
+DEF VAR plSTCMigrate     AS LOG  NO-UNDO.
 
 /* Local variable */
 DEF VAR llOrderAllowed       AS LOG  NO-UNDO.
@@ -50,22 +51,30 @@ DEF VAR lcnonPROChannels     AS CHAR NO-UNDO.
 DEF VAR lcCategory           AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder    AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder AS LOGI NO-UNDO.
+DEF VAR liMobsubCount        AS LOGI NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string]").
+top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
-pcPersonId     = get_string(param_toplevel_id, "0").
-pcIdType       = get_string(param_toplevel_id, "1").
-plSelfEmployed = get_bool(param_toplevel_id, "2").
-piOrders       = get_int(param_toplevel_id, "3").
+ASSIGN
+   pcPersonId     = get_string(param_toplevel_id, "0")
+   pcIdType       = get_string(param_toplevel_id, "1")
+   plSelfEmployed = get_bool(param_toplevel_id, "2")
+   piOrders       = get_int(param_toplevel_id, "3").
 
-IF NUM-ENTRIES(top_array) = 5 THEN
+IF NUM-ENTRIES(top_array) EQ 5 THEN
    pcCliType   = get_string(param_toplevel_id, "4").
-ELSE IF NUM-ENTRIES(top_array) > 5 THEN 
-DO:
-   pcCliType   = get_string(param_toplevel_id, "4").
-   pcChannel   = get_string(param_toplevel_id, "5").
-END.
+ELSE IF NUM-ENTRIES(top_array) EQ 6 THEN 
+   ASSIGN
+      pcCliType   = get_string(param_toplevel_id, "4")
+      pcChannel   = get_string(param_toplevel_id, "5").
+
+ELSE IF NUM-ENTRIES(top_array) GT 6 THEN
+   ASSIGN
+      pcCliType    = get_string(param_toplevel_id, "4")
+      pcChannel    = get_string(param_toplevel_id, "5")
+      plSTCMigrate = get_bool(param_toplevel_id, "6").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF INDEX(pcChannel,"PRO") > 0 THEN 
@@ -106,8 +115,32 @@ IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN
 DO:
    IF AVAIL Customer AND NOT llCustCatPro THEN 
    DO:
-      llOrderAllowed = FALSE.
-      lcReason = "non PRO customer".
+      /* YPRO-92 check if migrate order. Migrate possible if just one mobile only. */
+      IF plSTCMigrate THEN 
+      DO:
+          FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+          IF NOT AVAIL MobSub THEN 
+              ASSIGN 
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because, no mobile lines exists".
+          ELSE IF (AMBIG MobSub) OR (AVAIL MobSub AND fCheckOngoingOrdersOnCustomer(Mobsub.InvCust)) THEN 
+              ASSIGN 
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines".
+          ELSE IF fIsConvergenceTariff(Mobsub.Clitype) THEN 
+              ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible for convergent".         
+          ELSE IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+              ASSIGN 
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines". 
+                  /* Web wanted same error message for non selfemployed migration check and case of multible lines even it is missleading in TMS point of view */                  
+      END.
+      ELSE 
+          ASSIGN
+              llOrderAllowed = FALSE
+              lcReason       = "non PRO customer".
    END.
    ELSE IF AVAIL Customer THEN 
    DO:

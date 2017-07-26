@@ -52,6 +52,11 @@ DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
 DEF BUFFER bCLIType FOR CLIType.
 
+/* Additional line Mobile only ALFMO */
+DEF BUFFER bCustomer FOR Customer.
+DEF BUFFER bOrder    FOR Order.
+DEF BUFFER bOrdTemp  FOR Order.
+
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
    FIELD PerContID AS INT
@@ -155,6 +160,9 @@ PROCEDURE pTerminate:
    DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
    DEF VAR lcTerminationType AS CHAR NO-UNDO INIT {&TERMINATION_TYPE_FULL}.
+   /* Additional line mobile only ALFMO */
+   DEF VAR lcAddlineClitypes AS CHARACTER   NO-UNDO.
+   DEF VAR llDelete          AS LOGICAL     NO-UNDO.
 
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -922,7 +930,8 @@ PROCEDURE pTerminate:
                bMobsub.Brand    = gcBrand        AND
                bMobSub.CustNum  = MobSub.CustNum AND
                bMobSub.MsSeq   <> liMsSeq        AND 
-               bMobSub.PayType  = NO:
+               bMobSub.PayType  = NO AND
+               bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}:
          llCallProc = NO.
          LEAVE.
       END.
@@ -1027,6 +1036,92 @@ PROCEDURE pTerminate:
                            DPMember.KeyValue  = STRING(TermMobSub.MsSeq) AND
                            DPMember.ValidTo   <> 12/31/49) THEN 
    DO:            
+      FIND FIRST bCustomer WHERE bCustomer.CustNum = TermMobSub.CustNum NO-LOCK NO-ERROR. 
+        /* Just to create the list of clitypes of 
+           additional line in ongoing status 
+           Additional line mobile only ALFMO */
+      IF AVAILABLE bCustomer THEN 
+      DO:
+         FOR EACH OrderCustomer NO-LOCK WHERE
+             OrderCustomer.Brand      = Syst.Parameters:gcBrand    AND
+             OrderCustomer.CustIDType = bCustomer.CustIDType AND
+             OrderCustomer.CustID     = bCustomer.OrgID     AND
+             OrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+         FIRST bOrdTemp NO-LOCK WHERE
+               bOrdTemp.Brand      = Syst.Parameters:gcBrand           AND
+               bOrdTemp.OrderID    = OrderCustomer.OrderID             AND
+               LOOKUP(bOrdTemp.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 AND
+               LOOKUP(bOrdTemp.CLIType, {&ADDLINE_CLITYPES}) > 0:
+    
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = Syst.Parameters:gcBrand AND
+                        OrderAction.OrderID  = bOrdTemp.OrderID   AND
+                        OrderAction.ItemType = "AddLineDiscount" AND
+                        LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+            DO:      
+               IF lcAddlineClitypes = "" THEN
+                  ASSIGN lcAddlineClitypes = bOrdTemp.CLIType.
+               ELSE
+                  ASSIGN lcAddlineClitypes = lcAddlineClitypes + "," + bOrdTemp.CLIType.
+            END.
+         END.
+
+         /* If Main Line is terminated and customer has no other mobile only 
+            main line then removing the orderaction from ongoing
+            additional line */
+         FOR EACH OrderCustomer NO-LOCK WHERE
+                  OrderCustomer.Brand      = Syst.Parameters:gcBrand    AND
+                  OrderCustomer.CustIDType = bCustomer.CustIDType AND
+                  OrderCustomer.CustID     = bCustomer.OrgID     AND
+                  OrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+            FIRST bOrder NO-LOCK WHERE
+                  bOrder.Brand      = Syst.Parameters:gcBrand           AND
+                  bOrder.OrderID    = OrderCustomer.OrderID             AND
+                  LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 AND
+                  LOOKUP(bOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:         
+            FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                       OrderAction.Brand    = Syst.Parameters:gcBrand    AND
+                       OrderAction.OrderID  = bOrder.OrderID   AND
+                       OrderAction.ItemType = "AddLineDiscount" AND
+                LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 NO-ERROR.
+            IF AVAILABLE OrderAction THEN 
+            DO:
+               IF NOT fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
+                                              OrderCustomer.CustID,
+                                              bOrder.CliType) AND
+                  NOT fCheckExistingMobileOnly(OrderCustomer.CustIdType,
+                                               OrderCustomer.CustID,
+                                               bOrder.CliType) THEN 
+               DO:
+                  llDelete = TRUE.            
+                  IF NUM-ENTRIES(lcAddlineClitypes) > 1 THEN
+                  DO:
+                     IF LOOKUP(ENTRY(3,{&ADDLINE_CLITYPES}),lcAddlineClitypes) > 0 THEN
+                     DO:
+                        IF bOrder.CLIType <> ENTRY(3,{&ADDLINE_CLITYPES}) THEN
+                           llDelete = FALSE.
+                     END.
+                     ELSE IF LOOKUP(ENTRY(4,{&ADDLINE_CLITYPES}),lcAddlineClitypes) > 0 THEN
+                     DO:
+                        IF bOrder.CLIType <> ENTRY(4,{&ADDLINE_CLITYPES}) THEN
+                           llDelete = FALSE.
+                     END.
+                  END.
+        
+                  IF llDelete THEN
+                  DO:            
+                     DELETE OrderAction.
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "Order",
+                                      STRING(bOrder.OrderID),
+                                      0,
+                                      "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                                      "Removed AddLineDiscount Item from OrderAction").            
+                  END.      
+               END.
+            END.
+         END.
+      END.
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand            AND
                bMobSub.AgrCust = TermMobSub.CustNum AND
@@ -1041,10 +1136,10 @@ PROCEDURE pTerminate:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
     
-         fCloseDiscount(ENTRY(LOOKUP(bMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
-                        bMobSub.MsSeq,
-                        ldtCloseDate,
-                        FALSE).
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               ldtCloseDate).
       END.      
    END. 
    

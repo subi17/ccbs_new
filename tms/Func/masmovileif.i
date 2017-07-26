@@ -112,6 +112,8 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF BUFFER bHolderOrderCustomer FOR OrderCustomer.
+   
    DEF BUFFER OrderFusion FOR OrderFusion.
    DEF BUFFER CLIType FOR CliType.
 
@@ -138,6 +140,12 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    
    IF NOT AVAIL bOrderCustomer THEN
       RETURN "ERROR: Customer data not found " + STRING(iiOrderID) .
+
+   FIND FIRST bHolderOrderCustomer NO-LOCK WHERE 
+              bHolderOrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              bHolderOrderCustomer.OrderId EQ iiOrderid AND 
+              bHolderOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+              NO-ERROR.
    
    FIND FIRST OrderFusion NO-LOCK WHERE
               OrderFusion.Brand EQ Syst.Parameters:gcBrand AND
@@ -148,6 +156,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF fIsConvergenceTariff(Order.CliType) THEN DO:
       FIND FIRST CLIType NO-LOCK WHERE
                  CLIType.CLIType EQ Order.CliType NO-ERROR.
+
       IF AVAIL CLIType THEN DO:
          IF CLIType.FixedLineType EQ 1 THEN DO:
             lcOrderType = "Alta xDSL + VOIP".
@@ -166,7 +175,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    END.
    ELSE
       RETURN "ERROR: Not allowed CLITYPE " + Order.CliType.
-
    IF fTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
@@ -248,16 +256,104 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                          "donoroperator",        /*param name*/
                          OrderFusion.FixedCurrOperCode,  /*param value*/
                          "").                    /*old value*/
-
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "portabilitytype",      /*param name*/
                          "I", /*port in = I*/    /*param value*/
                          "").                    /*old value*/
-    fAddCharacteristic(lcCharacteristicsArray,  /*base*/
-                      "receptoroperator",        /*param name*/
-                      "00031",/*must be 0031*/   /*param value*/
-                      "").                      /*old value*/
- 
+      fAddCharacteristic(lcCharacteristicsArray,  /*base*/
+                         "receptoroperator",        /*param name*/
+                         "00031",/*must be 0031*/   /*param value*/
+                         "").                      /*old value*/
+   END.
+   
+   IF AVAILABLE bHolderOrderCustomer
+   THEN DO:
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "firstName",                     /*param name*/
+                         bHolderOrderCustomer.FirstName,  /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "middleName",                    /*param name*/
+                         bHolderOrderCustomer.Surname1,   /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "lastName",                      /*param name*/
+                         IF bHolderOrderCustomer.Surname2 > "" /*param value*/
+                         THEN bHolderOrderCustomer.Surname2
+                         ELSE bHolderOrderCustomer.Surname1,
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "documentType",                  /*param name*/
+                         bHolderOrderCustomer.CustIdType, /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "documentNumber",                /*param name*/
+                         bHolderOrderCustomer.CustId,     /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "stair",                         /*param name*/
+                         bHolderOrderCustomer.stair,      /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "letter",                        /*param name*/
+                         bHolderOrderCustomer.Letter,     /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "street",                        /*param name*/
+                         bHolderOrderCustomer.Street,     /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "street",                        /*param name*/
+                         bHolderOrderCustomer.Street,     /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,            /*base*/
+                         "bis_duplicate",                   /*param name*/
+                         bHolderOrderCustomer.BisDuplicate, /*param value*/
+                         "").                               /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "block",                         /*param name*/
+                         bHolderOrderCustomer.Block,      /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "door",                          /*param name*/
+                         bHolderOrderCustomer.Door,       /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,           /*base*/
+                         "number",                         /*param name*/
+                         bHolderOrderCustomer.BuildingNum, /*param value*/
+                         "").                              /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "km",                            /*param name*/
+                         bHolderOrderCustomer.Km,         /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "country",                       /*param name*/
+                         bHolderOrderCustomer.Country,    /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "hand",                          /*param name*/
+                         bHolderOrderCustomer.Hand,       /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "floor",                         /*param name*/
+                         bHolderOrderCustomer.Floor,      /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "zipCode",                       /*param name*/
+                         bHolderOrderCustomer.ZipCode,    /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "province",                      /*param name*/
+                         bHolderOrderCustomer.Region,     /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "town",                          /*param name*/
+                         bHolderOrderCustomer.PostOffice, /*param value*/
+                         "").                             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,          /*base*/
+                         "streetType",                    /*param name*/
+                         bHolderOrderCustomer.StreetType, /*param value*/
+                         "").                             /*old value*/
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
@@ -276,14 +372,38 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
  
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
                          "UploadSpeed",               /*param name*/
                          CLIType.FixedLineUpload,    /*param value*/
                          "").                         /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "DownloadSpeed",             /*param name*/
+                         CLIType.FixedLineDownload,  /*param value*/
+                         "").                         /*old value*/
+
+/* YDR-2532 */
+
+      IF NUM-ENTRIES(OrderCustomer.TerritoryOwner,",") > 1 THEN                  
          fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "DownloadSpeed",             /*param name*/
-                            CLIType.FixedLineDownload,  /*param value*/
-                            "").                         /*old value*/
+                            "TerritoryOwner",             /*param name*/
+                            ENTRY(2,OrderCustomer.TerritoryOwner),  /*param value*/
+                            "").                         /*old value*/               
+      ELSE
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                            "TerritoryOwner",             /*param name*/
+                            OrderCustomer.TerritoryOwner,  /*param value*/
+                            "").                         /*old value*/ 
+                            
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "AddressId",            /*param name*/
+                         OrderCustomer.AddressId,    /*param value*/
+                         "").                   /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,     /*base*/
+                         "CaracteristicaTecnica",    /*param name*/
+                         "DHCP", /*param value*/
+                         "").                         /*old value*/
+/* YDR-2532 */
+
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
