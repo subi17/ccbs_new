@@ -32,7 +32,6 @@ DEF VAR ldaFReadDate    AS DATE NO-UNDO.
 DEF VAR lcActionID      AS CHAR NO-UNDO.
 DEF VAR lcTableName     AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
-DEF BUFFER bDMS FOR DMS.
 
 lcTableName = "DMS".
 lcActionID = {&DMS_CASEFILE_READER}.
