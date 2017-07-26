@@ -91,7 +91,7 @@ FUNCTION fReport RETURNS CHAR
          PUT STREAM sOutFile UNFORMATTED lcRow SKIP.
       END.
    END.
-
+   OUTPUT STREAM sOutFile CLOSE.
 RETURN "".    
 END.
 
