@@ -61,10 +61,10 @@ CLASS Gwy.MqPublisher:
    CONSTRUCTOR PUBLIC MqPublisher ( icConfigurationPrefix AS CHARACTER ):
       
       ASSIGN
-         lcHostName  = Parameters:getc(icConfigurationPrefix + ".ip")
-         liPort      = Parameters:geti(icConfigurationPrefix + ".Port")
-         liTimeOut   = Parameters:geti(icConfigurationPrefix + ".TimeOut")
-         lcQueueName = Parameters:getc(icConfigurationPrefix + ".Name")
+         lcHostName  = Syst.Parameters:getc(icConfigurationPrefix + ".ip")
+         liPort      = Syst.Parameters:geti(icConfigurationPrefix + ".Port")
+         liTimeOut   = Syst.Parameters:geti(icConfigurationPrefix + ".TimeOut")
+         lcQueueName = Syst.Parameters:getc(icConfigurationPrefix + ".Name")
          .
       
       DO ON ERROR UNDO, THROW:
