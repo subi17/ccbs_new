@@ -116,25 +116,31 @@ DO:
    IF AVAIL Customer AND NOT llCustCatPro THEN 
    DO:
       /* YPRO-92 check if migrate order. Migrate possible if just one mobile only. */
-      FIND Mobsub WHERE
-           Mobsub.brand EQ gcBrand AND
-           Mobsub.custnum EQ customer.custnum NO-ERROR.
-      IF (plSTCMigrate AND NOT AVAIL Mobsub) OR
-         (plSTCMigrate AND NOT plSelfEmployed) THEN
-         ASSIGN
-            llOrderAllowed = FALSE
-            /* web wanted same error message for non selfemployed migration
-               check and case of multible lines even it is missleading in
-               TMS point of view */
-            lcReason = "PRO migration not possible because of multible mobile lines".
-      ELSE IF plSTCMigrate AND fIsConvergenceTariff(Mobsub.clitype) THEN
-         ASSIGN
-            llOrderAllowed = FALSE
-            lcReason = "PRO migration not possible for convergent".
-      ELSE IF NOT plSTCMigrate THEN
-         ASSIGN
-            llOrderAllowed = FALSE
-            lcReason = "non PRO customer".
+      IF plSTCMigrate THEN 
+      DO:
+          FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+          IF NOT AVAIL MobSub THEN 
+              ASSIGN 
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because, no mobile lines exists".
+          ELSE IF (AMBIG MobSub) OR (AVAIL MobSub AND fCheckOngoingOrdersOnCustomer(Mobsub.InvCust)) THEN 
+              ASSIGN 
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines".
+          ELSE IF fIsConvergenceTariff(Mobsub.Clitype) THEN 
+              ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible for convergent".         
+          ELSE IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+              ASSIGN 
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines". 
+                  /* Web wanted same error message for non selfemployed migration check and case of multible lines even it is missleading in TMS point of view */                  
+      END.
+      ELSE 
+          ASSIGN
+              llOrderAllowed = FALSE
+              lcReason       = "non PRO customer".
    END.
    ELSE IF AVAIL Customer THEN 
    DO:
