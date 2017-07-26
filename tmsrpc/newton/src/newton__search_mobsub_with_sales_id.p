@@ -20,6 +20,8 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/cparam2.i}
+
 &SCOPED-DEFINE RESELLERS "PH,TC,TP"
 &SCOPED-DEFINE EXCLUSIVERESELLERS "AX,BY,DX,KH,TA,MD"
 
@@ -28,13 +30,15 @@ DEF VAR pcMSISDN AS CHAR NO-UNDO.
 DEF VAR pcDNIType AS CHAR NO-UNDO. 
 DEF VAR pcDNI AS CHAR NO-UNDO. 
 DEF VAR pcReseller AS CHAR NO-UNDO. 
+DEF VAR pcChannel  AS CHAR NO-UNDO. 
 
 /* Output parameters */
-DEF VAR top_struct AS CHAR NO-UNDO.
+DEF VAR top_struct   AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO.
-DEF VAR sub_struct AS CHAR NO-UNDO.
+DEF VAR sub_struct   AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcCallType AS CHAR NO-UNDO.
+DEF VAR lcCallType         AS CHAR NO-UNDO.
+DEF VAR lcIndirectChannels AS CHAR NO-UNDO. 
 
 lcCallType = validate_request(param_toplevel_id, "string,string,string,string").
 IF lcCallType EQ ? THEN RETURN.
@@ -43,6 +47,8 @@ pcMSISDN = get_string(param_toplevel_id, "0").
 pcDNIType = get_string(param_toplevel_id, "1").
 pcDNI = get_string(param_toplevel_id, "2").
 pcReseller = get_string(param_toplevel_id, "3"). 
+
+lcIndirectChannels = fCParamC("InDirectChannels").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -105,15 +111,22 @@ FIND Salesman WHERE
 - YOT-1851 - added TC, TP to behave like PH 
 - YOT-5165 - User Exclusive can find Exclusive subscriptions,PH,TP & TC */
 
-
 IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
 
-   IF NOT AVAIL SalesMan THEN 
-      RETURN appl_err("Salesman not found").
-
-   IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
-      LOOKUP(SalesMan.Reseller,{&RESELLERS})         EQ 0 THEN 
+   /* YOT-5180, User Exclusive could find ANY subscription created from 
+      direct channel without restriction of the reseller that made the activation*/
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand = gcBrand      AND 
+              Order.MsSeq = MobSub.MsSeq AND 
+              Order.CLI   = MobSub.CLI   NO-ERROR. 
+   
+   IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) > 0 AND 
+      AVAIL Salesman                                                    THEN
+   DO:
+      IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
+         LOOKUP(SalesMan.Reseller,{&RESELLERS})          EQ 0 THEN 
       RETURN appl_err("Salesman Reseller not match").
+   END.
 
 END.
 ELSE IF LOOKUP(pcReseller,{&RESELLERS}) > 0 THEN DO:
