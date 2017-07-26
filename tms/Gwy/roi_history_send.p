@@ -229,12 +229,13 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
    IF AVAILABLE CustCat THEN
       add_string(pcStruct,"segment",CustCat.Segment).
 
-   IF Order.OrdererId NE "" AND OrderCustomer.RowType NE 5 THEN DO:
-      add_string(pcStruct,"person_id",Order.OrdererId).
+   IF OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+      OrderCustomer.CustIdType = "CIF"
+   THEN DO:
+      add_string(pcStruct,"person_id",OrderCustomer.AuthCustId).
       add_string(pcStruct,"company_id",OrderCustomer.CustId).
    END.
-   ELSE 
-      add_string(pcStruct,"person_id",OrderCustomer.CustId).
+   ELSE add_string(pcStruct,"person_id",OrderCustomer.CustId).
 
    IF OrderCustomer.BuildingNum NE "" THEN
       add_string(pcStruct,"building_number",OrderCustomer.BuildingNum).
