@@ -13,6 +13,7 @@
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
+                   extra_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS
                    segment;string;mandatory;
  */
 
@@ -52,7 +53,10 @@ DEF VAR lcCategory           AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder    AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder AS LOGI NO-UNDO.
 DEF VAR liMobsubCount        AS LOGI NO-UNDO.
-DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO.
+DEF VAR liMainLineMsSeq      AS INT  NO-UNDO. 
+DEF VAR liOngoingMsSeq       AS INT  NO-UNDO. 
+DEF VAR lcExtraLineAllowed   AS CHAR NO-UNDO. 
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -225,10 +229,11 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 END.
 
 IF LOOKUP(pcCLIType,lcExtraLineCLITypes) > 0 THEN DO:
-   IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId) THEN 
-      lcAddLineAllowed = "EXTRA_LINE".
-   ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId) THEN    
-      lcAddLineAllowed = "EXTRA_LINE".
+   IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineMsSeq) THEN 
+      lcExtraLineAllowed = "EXTRA_LINE".
+   ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingMsSeq) THEN    
+      lcExtraLineAllowed = "EXTRA_LINE".
+   ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
 END.
 
 IF lcAddLineAllowed = "" THEN DO:
@@ -267,11 +272,14 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
+IF lcExtraLineAllowed EQ "" THEN lcExtraLineAllowed = "NO_SUBSCRIPTIONS".
+
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
+add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
 IF liSubs >= liSubLimit THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).

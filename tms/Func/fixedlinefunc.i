@@ -592,8 +592,9 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
-   (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR):
+   (INPUT icCustIDType     AS CHAR,
+    INPUT icCustID         AS CHAR,
+    OUTPUT liMainLineMsSeq AS INT):
 
    DEFINE BUFFER Customer FOR Customer.
    DEFINE BUFFER MobSub   FOR MobSub.
@@ -608,14 +609,18 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
              Customer.CustidType = icCustIDType            AND
              Customer.Roles     NE "inactive"              NO-LOCK,
        EACH  MobSub NO-LOCK WHERE
-             MobSub.Brand   = Syst.Parameters:gcBrand AND
-             MobSub.CustNum = Customer.CustNum        AND
-             MobSub.PayType = FALSE:
+             MobSub.Brand    = Syst.Parameters:gcBrand AND
+             MobSub.CustNum  = Customer.CustNum        AND
+             MobSub.PayType  = FALSE                   AND
+            (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
+             MobSub.MsStatus = {&MSSTATUS_BARRED})     BY MobSub.ActivationTS:
 
        IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
 
        IF MobSub.MultiSimID  <> 0                         AND 
           MobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} THEN NEXT.
+
+       liMainLineMsSeq = MobSub.MsSeq. 
 
        RETURN TRUE.
    END.
@@ -625,8 +630,9 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
-   (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR):
+   (INPUT icCustIDType    AS CHAR,
+    INPUT icCustID        AS CHAR,
+    OUTPUT liOngoingMsSeq AS INT):
    
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
@@ -650,15 +656,38 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
             Order.OrderType  NE {&ORDER_TYPE_RENEWAL},
       FIRST OrderFusion NO-LOCK WHERE
             OrderFusion.Brand   = Syst.Parameters:gcBrand AND
-            OrderFusion.OrderID = Order.OrderID:
+            OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
 
       IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
 
       IF LOOKUP(Order.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
+ 
+      liOngoingMsSeq = Order.MsSeq.
 
       RETURN TRUE.
  
    END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckMainLineConvergentIsOngoing RETURNS LOGICAL
+   (INPUT liMsSeq AS INT):
+
+   DEFINE BUFFER Order FOR Order. 
+
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO.
+
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.MsSeq     EQ liMsSeq                AND
+       LOOKUP(Order.StatusCode,lcConvOngoingStatus) > 0 AND
+              Order.OrderType NE {&ORDER_TYPE_RENEWAL}  NO-ERROR.
+
+   IF AVAIL Order THEN 
+      RETURN TRUE.
 
    RETURN FALSE.
 

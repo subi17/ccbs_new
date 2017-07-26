@@ -429,6 +429,13 @@ DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
+/* Extra lines */
+DEF VAR lcExtraLineDiscRuleId AS LOG NO-UNDO. 
+DEF VAR liMainLineMsSeq        AS INT NO-UNDO. 
+DEF VAR liOngoingMsSeq         AS INT NO-UNDO. 
+
+DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 DEF BUFFER lbMobSub FOR MobSub. 
@@ -1858,6 +1865,47 @@ IF pcQ25Struct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
+/* Extra Lines Validations, 
+   updating multisimid & multisimidtype for hard association */
+ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
+       liMainLineMsSeq       = 0
+       liOngoingMsSeq        = 0
+       lcExtraLineDiscRuleId = "". 
+
+IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
+
+   IF fCheckExistingConvergentAvailForExtraLine(lcIdtypeOrderCustomer,
+                                                lcIdOrderCustomer,
+                                                OUTPUT liMainLineMsSeq) THEN 
+      piMultiSimID = liMainLineMsSeq.
+   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtypeOrderCustomer,
+                                                    lcIdOrderCustomer,
+                                                    OUTPUT liOngoingMsSeq) THEN
+      piMultiSimID = liOngoingMsSeq. 
+
+   piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+   IF piMultiSimID = 0 THEN  
+      RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
+
+   /* Discount rule id input is not necessary from WEB to TMS, 
+      As it is extra line we have to give default discount */
+   CASE pcSubType:
+      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+   END CASE.
+
+   IF lcExtraLineDiscRuleId NE "" THEN DO:
+      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
+                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+      IF NOT AVAIL ExtraLineDiscountPlan THEN
+         RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId)).      
+   END.
+
+END.
+
 /* YBP-532 */
 /*********************************************************************
  Creation and Update begins (All the validations should be done before)
@@ -1917,6 +1965,14 @@ IF AVAIL AddLineDiscountPlan THEN DO:
    fCreateOrderAction(Order.Orderid,
                       "AddLineDiscount",
                       AddLineDiscountPlan.DPRuleId,
+                      "").
+END.
+
+/* Extra line discount */
+IF lcExtraLineDiscRuleId NE "" THEN DO:
+   fCreateOrderAction(Order.Orderid,
+                      "ExtraLineDiscount",
+                      ExtraLineDiscountPlan.DPRuleId,
                       "").
 END.
 
