@@ -445,10 +445,11 @@ DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
 /* Extra lines */
-DEF VAR lcExtraLineDiscRuleId AS LOG NO-UNDO. 
-DEF VAR liMainLineMsSeq        AS INT NO-UNDO. 
-DEF VAR liOngoingMsSeq         AS INT NO-UNDO. 
-
+DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
+DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
+DEF VAR liMainLineMsSeq        AS INT  NO-UNDO. 
+DEF VAR liOngoingMsSeq         AS INT  NO-UNDO. 
+ 
 DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 
 /* Prevent duplicate orders YTS-2166 */
@@ -1924,12 +1925,12 @@ ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
 
 IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
 
-   IF fCheckExistingConvergentAvailForExtraLine(lcIdtypeOrderCustomer,
-                                                lcIdOrderCustomer,
+   IF fCheckExistingConvergentAvailForExtraLine(lcIdtype,
+                                                lcId,
                                                 OUTPUT liMainLineMsSeq) THEN 
       piMultiSimID = liMainLineMsSeq.
-   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtypeOrderCustomer,
-                                                    lcIdOrderCustomer,
+   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtype,
+                                                    lcId,
                                                     OUTPUT liOngoingMsSeq) THEN
       piMultiSimID = liOngoingMsSeq. 
 

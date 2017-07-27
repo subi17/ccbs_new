@@ -179,7 +179,7 @@
 
                   IF lcExtraLineDiscounts <> ""                                AND
                      Order.MultiSimId     <> 0                                 AND 
-                     Order.MultiSimIdType = {&MULTISIMTYPE_EXTRALINE}          AND 
+                     Order.MultiSimType   = {&MULTISIMTYPE_EXTRALINE}          AND 
                      CAN-FIND(FIRST OrderAction NO-LOCK WHERE 
                                     OrderAction.Brand    = gcBrand             AND 
                                     OrderAction.OrderID  = Order.OrderID       AND
