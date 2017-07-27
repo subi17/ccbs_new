@@ -602,11 +602,12 @@ add_int(top_struct,"TF_quantity",liQtyTFs).
 /* Return Subs. based bundle */
 add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).
 
-/* if subscription has one of 50% additional line discount active */
+/* if subscription has one of 50% additional line discount active 
+   ALFMO12_addline_mobile_only added the mobile only discounts as well*/
 IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
    FOR EACH DiscountPlan NO-LOCK WHERE
             DiscountPlan.Brand    = gcBrand AND
-     LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS}) > 0 AND
+     LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
             DiscountPlan.ValidTo >= TODAY,
       FIRST DPMember NO-LOCK WHERE
             DPMember.DPID       = DiscountPlan.DPID AND
