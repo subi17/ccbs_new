@@ -323,7 +323,7 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
 
    lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
 
-   FOR EACH bOrderCustomer NO-LOCK WHERE
+   FOR EACH bOrderCustomer WHERE
             bOrderCustomer.CustNum = iiCustNum                          AND
             bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND 
             bOrderCustomer.Pro     = TRUE                               NO-LOCK,
