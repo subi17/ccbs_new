@@ -617,8 +617,8 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
 
        IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
 
-       IF MobSub.MultiSimID  <> 0                         AND 
-          MobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} THEN NEXT.
+       IF MobSub.MultiSimID  <> 0                       AND 
+          MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
 
        liMainLineMsSeq = MobSub.MsSeq. 
 

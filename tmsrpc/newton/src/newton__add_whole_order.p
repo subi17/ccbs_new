@@ -451,6 +451,7 @@ DEF VAR liMainLineMsSeq        AS INT  NO-UNDO.
 DEF VAR liOngoingMsSeq         AS INT  NO-UNDO. 
  
 DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+DEF BUFFER ExtraLineMainOrder    FOR Order.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -1075,7 +1076,8 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
       Order.Multiorder = plMultiOrder.               
-      
+   
+
 END.
 
 /* YBP-569 */
@@ -1939,6 +1941,12 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
    IF piMultiSimID = 0 THEN  
       RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
 
+   FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
+              ExtraLineMainOrder.MsSeq = liMainLineMsSeq NO-ERROR.
+
+   IF NOT AVAIL ExtraLineMainOrder THEN 
+      RETURN appl_err("Extra line associated main line order is not available").
+
    /* Discount rule id input is not necessary from WEB to TMS, 
       As it is extra line we have to give default discount */
    CASE pcSubType:
@@ -2021,10 +2029,16 @@ END.
 
 /* Extra line discount */
 IF lcExtraLineDiscRuleId NE "" THEN DO:
-   fCreateOrderAction(Order.Orderid,
-                      "ExtraLineDiscount",
-                      ExtraLineDiscountPlan.DPRuleId,
-                      "").
+   
+    /* Update Mainline multisimid and multisimtype values before 
+       extra line discount orderaction record is created */
+    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.MsSeq 
+           ExtraLineMainOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
+   
+    fCreateOrderAction(Order.Orderid,
+                       "ExtraLineDiscount",
+                       ExtraLineDiscountPlan.DPRuleId,
+                       "").
 END.
 
 /* YBP-548 */

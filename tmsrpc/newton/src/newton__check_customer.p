@@ -234,13 +234,12 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
 
-IF LOOKUP(pcCLIType,lcExtraLineCLITypes) > 0 THEN DO:
-   IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineMsSeq) THEN 
-      lcExtraLineAllowed = "EXTRA_LINE".
-   ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingMsSeq) THEN    
-      lcExtraLineAllowed = "EXTRA_LINE".
-   ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
-END.
+/* Check extra lines discount is allowed for customer */
+IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineMsSeq) THEN 
+   lcExtraLineAllowed = "OK".
+ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingMsSeq) THEN    
+   lcExtraLineAllowed = "OK".
+ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
 
 IF lcAddLineAllowed = "" THEN DO:
       
