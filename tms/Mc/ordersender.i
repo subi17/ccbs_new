@@ -190,7 +190,6 @@
                      /* Check Mainline Convergent is still ongoing */
                      IF fCheckMainLineConvergentIsOngoing(Order.MultiSimId) THEN 
                      DO:
- 
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.
                            RUN StarEventInitialize(lh76Order).
@@ -206,11 +205,9 @@
                         END.
 
                         NEXT {1}.
-
                      END.
-  
-                  END.
 
+                  END.
                END.
             END.    
             
