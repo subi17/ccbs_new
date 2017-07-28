@@ -50,11 +50,13 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
       DEF VAR ldeNow AS DEC NO-UNDO. 
       DEF VAR lcReturnValue AS CHAR NO-UNDO. 
       
-      IF Syst.Parameters:geti("OnlineEnabled","Masmovil") EQ 0 THEN DO:
-         IF LOG-MANAGER:LOGFILE-NAME <> ?
-            THEN LOG-MANAGER:WRITE-MESSAGE(
-               "Sending is disabled (TMS parameter Masmovil->OnlineEnabled=0)").
+      IF Syst.Parameters:geti("OnlineEnabled","ThirdPartyDevice") EQ 0 THEN 
+      DO:
+         IF LOG-MANAGER:LOGFILE-NAME <> ? THEN 
+             LOG-MANAGER:WRITE-MESSAGE("Sending is disabled (TMS parameter ThirdPartyDevice->OnlineEnabled=0)").
+
          pauseUntilHeartbeat(10).
+
          RETURN FALSE.
       END.
 
@@ -62,45 +64,35 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
 
       MESSAGE_LOOP:
       FOR EACH FusionMessage NO-LOCK WHERE
-               FusionMessage.Source EQ {&FUSIONMESSAGE_SOURCE_TMS} AND
-               FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}
+               FusionMessage.Source        EQ {&FUSIONMESSAGE_SOURCE_TMS} AND
+               FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
+               FusionMessage.MessageType   BEGINS {&THIRDPARTY_DEVICE}
             BY FusionMessage.CreatedTS 
             liLoop = 1 TO 10:
 
-         IF FusionMessage.MessageType BEGINS {&THIRDPARTY_DEVICE} THEN NEXT MESSAGE_LOOP.
-
          IF FusionMessage.CreatedTS > ldeNow THEN LEAVE.
 
-         FIND bFusionMessage EXCLUSIVE-LOCK WHERE
-              ROWID(bFusionMessage) = ROWID(FusionMessage) NO-WAIT NO-ERROR.
-         IF LOCKED(bFusionMessage) THEN NEXT.
+         FIND bFusionMessage WHERE ROWID(bFusionMessage) = ROWID(FusionMessage) EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         IF LOCKED(bFusionMessage) THEN 
+            NEXT.
 
          lcReturnValue = "".
 
          CASE bFusionMessage.MessageType:
 
-            WHEN {&FUSIONMESSAGE_TYPE_RESERVE_NUMBER} THEN DO:
-               RUN Gwy/masmovil_reserve_number.p(FusionMessage.MessageSeq).
-               lcReturnValue = RETURN-VALUE.
-            END.
-            
-            WHEN {&FUSIONMESSAGE_TYPE_CREATE_ORDER} THEN DO:
-               RUN Gwy/masmovil_create_order.p(FusionMessage.MessageSeq).
-               lcReturnValue = RETURN-VALUE.
-            END.
-            
-            WHEN {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN DO:
-               RUN Gwy/masmovil_cancel_order.p(FusionMessage.MessageSeq). 
+            WHEN {&THIRDPARTY_DEVICE_MESSAGE_TYPE_LOGISTICS} THEN 
+            DO:
+               RUN Gwy/tp_initiate_logistics.p(FusionMessage.MessageSeq).
                lcReturnValue = RETURN-VALUE.
             END.
 
-            OTHERWISE DO:
-               IF LOG-MANAGER:LOGFILE-NAME <> ?
-               THEN LOG-MANAGER:WRITE-MESSAGE(
-                  SUBST("OrderID: &1, MsgSeq: &2, Invalid message type: &3",
-			               bFusionMessage.OrderID,
-			               bFusionMessage.MessageSeq,
-                        bFusionMessage.MessageType, "ERROR")).
+            OTHERWISE 
+            DO:
+               IF LOG-MANAGER:LOGFILE-NAME <> ? THEN 
+                  LOG-MANAGER:WRITE-MESSAGE(SUBST("OrderID: &1, MsgSeq: &2, Invalid message type: &3",
+                                                  bFusionMessage.OrderID,
+                                                  bFusionMessage.MessageSeq,
+                                                  bFusionMessage.MessageType, "ERROR")).
 
                ASSIGN
                   bFusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
@@ -113,13 +105,12 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
             END.
          END.
 
-         IF LOG-MANAGER:LOGFILE-NAME <> ?
-         THEN LOG-MANAGER:WRITE-MESSAGE(
-            SUBST("OrderID: &1, MsgSeq: &2, message type: &3: &4",
-                  bFusionMessage.OrderID,
-                  bFusionMessage.MessageSeq,
-                  bFusionMessage.MessageType,
-                  lcReturnValue)).
+         IF LOG-MANAGER:LOGFILE-NAME <> ? THEN 
+            LOG-MANAGER:WRITE-MESSAGE(SUBST("OrderID: &1, MsgSeq: &2, message type: &3: &4",
+                                            bFusionMessage.OrderID,
+                                            bFusionMessage.MessageSeq,
+                                            bFusionMessage.MessageType,
+                                            lcReturnValue)).
          
          IF lcReturnValue BEGINS "RETRY" THEN DO:
             

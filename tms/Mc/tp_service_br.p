@@ -26,7 +26,6 @@ DEF VAR ac-hdr         AS CHAR                   NO-UNDO.
 DEF VAR rtab           AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i              AS INT                    NO-UNDO.
 DEF VAR lcCreatedTS    AS CHAR                   NO-UNDO.
-DEF VAR lcDoneTS       AS CHAR                   NO-UNDO.
 DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
 
 FORM
@@ -34,7 +33,6 @@ FORM
    OrderTPService.Type         FORMAT "X(15)" COLUMN-LABEL "Type"   
    OrderTPService.Status       FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcCreatedTS                 FORMAT "X(24)" COLUMN-LABEL "Created"
-   lcDoneTS                    FORMAT "X(24)" COLUMN-LABEL "Done"
    lcUpdatedTS                 FORMAT "X(24)" COLUMN-LABEL "Updated"
    OrderTPService.SerialNumber FORMAT "X(25)" COLUMN-LABEL "Serial Number"
    WITH ROW 1 CENTERED OVERLAY 15  DOWN COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Services" FRAME sel.
@@ -54,11 +52,7 @@ FORM
     SKIP
     "Cancellation Reason:" OrderTPService.TermReason
     SKIP
-    "Order Date ........:" lcCreatedTime FORMAT "X(24)"   
-    SKIP
-    "Activation Time ...:" lcActivationTime FORMAT "X(24)"
-    SKIP
-    "Handled Time ......:" lcDoneTime FORMAT "X(24)"
+    "Order Date ........:" lcCreatedTime FORMAT "X(24)"
     SKIP
     "Updated Time ......:" lcUpdatedTime FORMAT "X(24)" 
     SKIP(4)
@@ -278,9 +272,7 @@ REPEAT WITH FRAME sel:
 
         ASSIGN
             lcCreatedTime    = fTS2HMS(OrderTPService.CreatedTS)  
-            lcActivationTime = fTS2HMS(OrderTPService.ActivationTS)
-            lcUpdatedTS      = fTS2HMS(OrderTPService.UpdatedTS)
-            lcDoneTime       = fTS2HMS(OrderTPService.DoneTS).
+            lcUpdatedTS      = fTS2HMS(OrderTPService.UpdatedTS).
 
         DISP OrderTPService.OrderID
              OrderTPService.Product
@@ -290,9 +282,7 @@ REPEAT WITH FRAME sel:
              OrderTPService.SerialNumber
              OrderTPService.TermReason
              lcCreatedTime
-             lcActivationTime
              lcUpdatedTS
-             lcDoneTime
              WITH FRAME fDetails.
      END.
 
@@ -345,16 +335,13 @@ PROCEDURE local-disp-row:
     
     ASSIGN
         lcCreatedTime    = fTS2HMS(OrderTPService.CreatedTS)  
-        lcActivationTime = fTS2HMS(OrderTPService.ActivationTS)
-        lcUpdatedTS      = fTS2HMS(OrderTPService.UpdatedTS)
-        lcDoneTime       = fTS2HMS(OrderTPService.DoneTS).
+        lcUpdatedTS      = fTS2HMS(OrderTPService.UpdatedTS).
 
     DISPLAY 
        OrderTPService.Product
        OrderTPService.Type
        OrderTPService.Status
        lcCreatedTS
-       lcDoneTS
        lcUpdatedTS
        OrderTPService.SerialNumber
        WITH FRAME sel.

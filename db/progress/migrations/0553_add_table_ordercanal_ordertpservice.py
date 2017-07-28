@@ -15,15 +15,11 @@ class AddTableOrderTPService(Migration):
         t.column('SerialNumber', 'character', format="x(25)", initial="", max_width=50, label="SerialNumber", position=6, order=60)
         t.column('TermReason', 'character', format="x(40)", initial="", max_width=80, label="Cancellation Reason", column_label="CancellationReason", position=7, order=70, description="Cancellation reason")
         t.column('CreatedTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="CreatedTS", position=8, order=80)
-        t.column('ActivationTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="ActivationTS", position=9, order=90)
         t.column('UpdatedTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="UpdatedTS", position=10, order=100)
-        t.column('DoneTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="DoneTS", position=11, order=110)        
          
        t.index('OrderId', ['OrderId'], area="Dyn_Index_1", primary=True)
        t.index('Status', [['Status'], ['CreatedTS', 'DESC']], area="Dyn_Index_1")
-       .index('ActivationTS', [['ActivationTS', 'DESC']], area="Dyn_Index_1")
        t.index('UpdatedTS', [['UpdatedTS', 'DESC']], area="Dyn_Index_1")
-       t.index('DoneTS', [['DoneTS', 'DESC']], area="Dyn_Index_1")
 
     def down(self):
         t = self.drop_table('OrderTPService')
@@ -35,6 +31,4 @@ class AddTableOrderTPService(Migration):
         t.drop_column('SerialNumber')
         t.drop_column('TermReason')
         t.drop_column('CreatedTS')
-        t.drop_column('ActivationTS')
-        t.drop_column('DoneTS')
         t.drop_column('UpdatedTS') 
