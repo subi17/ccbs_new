@@ -389,15 +389,9 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
                         CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
          
          CASE labOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
-                                    ELSE {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
-                                    ELSE {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
             OTHERWISE.
          END CASE.
 
@@ -423,58 +417,51 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 END FUNCTION.   
 
 
-FUNCTION fReleaseExtraLineOrders RETURN LOGICAL
-   (INPUT iiMainLineOrderId AS INT):
+FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
+   (INPUT iiExtraLineSubId AS INT,
+    INPUT iiMainLineSubId  AS INT,
+    INPUT icAction         AS CHAR):
 
    DEFINE BUFFER lbMLOrder FOR Order.
    DEFINE BUFFER lbELOrder FOR Order.
 
-   FIND FIRST lbMLOrder NO-LOCK WHERE 
-              lbMLOrder.Brand        EQ  Syst.Parameters:gcBrand AND 
-              lbMLOrder.OrderId      EQ iiMainLineOrderId        AND 
-              lbMLOrder.MultiSimID   NE 0                        AND 
-              lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}  NO-ERROR. 
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO. 
 
-   IF AVAIL lbMLOrder THEN DO:
+   FIND FIRST lbELOrder NO-LOCK WHERE 
+              lbELOrder.MsSeq        EQ iiExtraLineSubId          AND 
+              lbELOrder.MultiSimId   EQ iiMainLineSubId           AND 
+              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
 
-      FIND FIRST lbELOrder NO-LOCK WHERE 
-                 lbELOrder.MsSeq        EQ lbMLOrder.MulitSimId      AND 
-                 lbELOrder.MultiSimId   EQ lbMLOrder.MsSeq           AND 
-                 lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
+   IF AVAIL lbELOrder THEN DO:
 
-      IF AVAIL lbELOrder THEN DO:
-
+      IF icAction EQ "RELEASE" THEN 
          CASE lbELOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
-                                    ELSE {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
-                                    ELSE {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
             OTHERWISE.
          END CASE.
+      ELSE IF icAction EQ "CLOSE" THEN 
+         lcNewOrderStatus = {&ORDER_STATUS_CLOSED}. 
 
-         IF lcNewOrderStatus > "" THEN DO:
-            IF llDoEvent THEN DO:
-               lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
-               RUN StarEventInitialize(lhOrderStatusChange).
-               RUN StarEventSetOldBuffer(lhOrderStatusChange).
-            END.
-
-            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
-
-            IF llDoEvent THEN DO:
-               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
-               fCleanEventObjects().
-            END.
+      IF lcNewOrderStatus > "" THEN DO:
+         IF llDoEvent THEN DO:
+            lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+            RUN StarEventInitialize(lhOrderStatusChange).
+            RUN StarEventSetOldBuffer(lhOrderStatusChange).
          END.
 
-      END.      
-   END.
+         fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
 
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+            fCleanEventObjects().
+         END.
+      END.
+
+   END.      
+
+   RETURN TRUE.
 
 END FUNCTION.
 

@@ -17,15 +17,16 @@ DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent       AS LOG NO-UNDO.
 
-DEF VAR llOk            AS LOG  NO-UNDO.
-DEF VAR lcCampaignType  AS CHAR NO-UNDO.
-DEF VAR lcRenoveSMSText AS CHAR NO-UNDO. 
-DEF VAR ldeSMSStamp     AS DEC  NO-UNDO. 
-DEF VAR lcOldStatus     AS CHAR NO-UNDO. 
-DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
-DEF VAR lcError         AS CHAR NO-UNDO.
-DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
-DEF VAR liRequest       AS INT NO-UNDO.
+DEF VAR llOk                    AS LOG  NO-UNDO.
+DEF VAR lcCampaignType          AS CHAR NO-UNDO.
+DEF VAR lcRenoveSMSText         AS CHAR NO-UNDO. 
+DEF VAR ldeSMSStamp             AS DEC  NO-UNDO. 
+DEF VAR lcOldStatus             AS CHAR NO-UNDO. 
+DEF VAR lcNewStatus             AS CHAR NO-UNDO. 
+DEF VAR lcError                 AS CHAR NO-UNDO.
+DEF VAR llCompanyScoringNeeded  AS LOG  NO-UNDO. 
+DEF VAR liRequest               AS INT  NO-UNDO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 
 DEF BUFFER lbOrder          FOR Order.
 
@@ -423,15 +424,26 @@ IF llDoEvent THEN DO:
    fCleanEventObjects().
 END.
 
-/* Release pending additional lines orders, in case of pending convergent 
-   main line order is released */
+/* Release pending additional lines (OR) extra line orders, 
+   in case of pending convergent main line order is released */
 /* YTS-10832 fix, checking correct status of order */
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
-   IF lcNewStatus = {&ORDER_STATUS_NEW}  OR
-      lcNewStatus = {&ORDER_STATUS_MNP} THEN DO:
+   IF lcNewStatus = {&ORDER_STATUS_NEW} OR
+      lcNewStatus = {&ORDER_STATUS_MNP} OR 
+      lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+     
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+
+      IF lcExtraMainLineCLITypes                       NE "" AND 
+         LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
+         Order.MultiSimId                              NE 0  AND 
+         Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
+         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Subscription ID */
+                                  Order.MsSeq,      /* Main line Subscription ID */
+                                  "RELEASE").       /* Action */
        
-       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                       OrderCustomer.CustID) . 
+      fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                      OrderCustomer.CustID). 
    END.
 END.
 

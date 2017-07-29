@@ -188,7 +188,8 @@
                   DO:
                      
                      /* Check Mainline Convergent is still ongoing */
-                     IF fCheckMainLineConvergentIsOngoing(Order.MultiSimId) THEN 
+                     IF fCheckMainLineConvergentIsOngoing(Order.MultiSimId, /* Mainline Subscription Id */
+                                                          Order.MsSeq) THEN /* Extraline Subscription Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.
