@@ -244,5 +244,29 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
    END.
 END FUNCTION.    
 
+FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
+   (INPUT iExtraLineMsSeq AS INT,
+    INPUT lcExtraLineDisc AS CHAR,
+    INPUT idtDate         AS DATE):
+
+  FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = gcBrand         AND
+             DiscountPlan.DPRuleID = lcExtraLineDisc AND
+             DiscountPlan.ValidTo >= idtDate,
+       FIRST DPRate NO-LOCK WHERE
+             DPRate.DPId       = DiscountPlan.DPId AND
+             DPRate.ValidFrom <= idtDate           AND
+             DPRate.ValidTo   >= idtDate:
+
+      fCloseDiscount(DiscountPlan.DPRuleID,
+                     iExtraLineMsSeq,
+                     idtDate - 1,
+                     FALSE).
+
+   END. 
+
+   RETURN TRUE.
+
+END.    
 
 &ENDIF

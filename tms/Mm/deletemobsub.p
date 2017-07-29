@@ -57,6 +57,14 @@ DEF BUFFER bCustomer FOR Customer.
 DEF BUFFER bOrder    FOR Order.
 DEF BUFFER bOrdTemp  FOR Order.
 
+/* Extra line */
+DEFINE VARIABLE lcExtraLineCLITypes  AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcExtraLineDiscounts AS CHAR NO-UNDO.
+
+DEF BUFFER lELOrder       FOR Order.        
+DEF BUFFER lMLMobSub      FOR MobSub.
+DEF BUFFER lELOrderAction FOR OrderAction.
+
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
    FIELD PerContID AS INT
@@ -999,6 +1007,49 @@ PROCEDURE pTerminate:
 
    END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
+
+   /* Close Extra line discount */
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand     AND
+                     bCLIType.CLIType    = TermMobSub.CLIType          AND
+                     bCLIType.LineType   = {&CLITYPE_LINETYPE_EXTRA}   AND 
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN
+   DO:
+      ASSIGN lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
+             lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+      FIND FIRST lELOrder NO-LOCK WHERE 
+                 lELOrder.MsSeq        EQ TermMobSub.MsSeq          AND           
+                 lELOrder.MultiSimId   NE 0                         AND
+                 lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
+          LOOKUP(lELOrder.CLIType,lcExtraLineCLITypes) GT 0         NO-ERROR.
+
+      IF AVAIL lELOrder THEN DO:
+         FIND FIRST lELOrderAction NO-LOCK WHERE
+                    lELOrderAction.Brand    = gcBrand                 AND
+                    lELOrderAction.OrderID  = Order.OrderID           AND
+                    lELOrderAction.ItemType = "ExtraLineDiscount"     AND
+             LOOKUP(lELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+
+        IF AVAIL lELOrderAction THEN     
+           fCloseExtraLineDiscount(TermMobSub.MsSeq,
+                                   lELOrderAction.ItemKey,
+                                   TODAY).
+
+        /* Main line hard associated it removed,
+           while extra line hard assocition remains same, because it helps 
+           while reactivating extra line subscription */
+        FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
+                   lMLMobSub.MsSeq        EQ lELOrder.MultiSimId     AND
+                   lMLMobSub.MultiSimId   EQ lELOrder.MsSeq          AND 
+                   lMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+ 
+        IF AVAIL lMLMobSub THEN 
+           ASSIGN lMLMobSub.MultiSimId   = 0
+                  lMLMobSub.MultiSimType = 0.
+      END.                              
+
+   END.
 
    /* ADDLine-20 Additional Line 
       ADDLINE-323 fixed bug 
