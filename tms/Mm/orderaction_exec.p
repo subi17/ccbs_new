@@ -101,11 +101,12 @@ FOR EACH OrderAction NO-LOCK WHERE
 
          RUN pPeriodicalContract.
       END.
-      WHEN "Service" THEN RUN pService.
-      WHEN "Discount" THEN RUN pDiscountPlan. 
-      WHEN "AddLineDiscount" THEN RUN pAddLineDiscountPlan.
-      WHEN "Q25Discount" THEN RUN pQ25Discount.
-      WHEN "Q25Extension" THEN RUN pQ25Extension.
+      WHEN "Service"           THEN RUN pService.
+      WHEN "Discount"          THEN RUN pDiscountPlan. 
+      WHEN "AddLineDiscount"   THEN RUN pAddLineDiscountPlan.
+      WHEN "ExtraLineDiscount" THEN RUN pExtraLineDiscountPlan.
+      WHEN "Q25Discount"       THEN RUN pQ25Discount.
+      WHEN "Q25Extension"      THEN RUN pQ25Extension.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
@@ -660,6 +661,21 @@ PROCEDURE pAddLineDiscountPlan:
                           TODAY,
                           OrderAction.ItemKey).
    IF RETURN-VALUE BEGINS "ERROR" THEN
+      RETURN RETURN-VALUE.
+
+END PROCEDURE.
+
+PROCEDURE pExtraLineDiscountPlan:
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE 
+              DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN 
+      RETURN "ERROR: Extra line DiscountPlan id: " + OrderAction.ItemKey + " not found".
+
+   fCreateExtraLineDiscount(MobSub.MsSeq,
+                            DiscountPlan.DPRuleID,
+                            TODAY).
+   IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
 
 END PROCEDURE.

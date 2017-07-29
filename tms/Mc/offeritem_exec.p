@@ -429,8 +429,10 @@ END PROCEDURE.  /* pServicePackage */
 
 PROCEDURE pDiscountPlanMember:
 
-   DEF VAR lcErrorReason AS CHAR NO-UNDO.
-   DEF VAR lcDiscPlan    AS CHAR NO-UNDO.
+   DEF VAR lcErrorReason           AS CHAR NO-UNDO.
+   DEF VAR lcDiscPlan              AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO. 
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
 
@@ -487,6 +489,22 @@ PROCEDURE pDiscountPlanMember:
          END.
       END.
    END.
+
+   /* If Extra line discount is defined in OrderAction, prevent creation of usual discount from Offer */
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes")
+          lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
+
+   IF lcExtraMainLineCLITypes                       NE ""                        AND
+      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0                         AND 
+      Order.MultiSimId                              NE 0                         AND 
+      Order.MultiSimType                            EQ {&MULTISIMTYPE_EXTRALINE} THEN 
+   DO:
+      IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = gcBrand                 AND
+                        OrderAction.OrderID  = Order.OrderID           AND
+                        OrderAction.ItemType = "ExtraLineDiscount"     AND
+                 LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN RETURN "".
+   END.   
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                       lcDiscPlan, /* OfferItem.ItemKey */

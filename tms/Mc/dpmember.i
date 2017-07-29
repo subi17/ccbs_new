@@ -209,4 +209,40 @@ FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
+   (INPUT iExtraLineMsSeq AS INT,
+    INPUT lcExtraLineDisc AS CHAR,
+    INPUT idtDate         AS DATE):
+   
+   DEF VAR liRequest        AS INT  NO-UNDO.
+   DEF VAR lcResult         AS CHAR NO-UNDO.
+
+   FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = gcBrand         AND
+             DiscountPlan.DPRuleID = lcExtraLineDisc AND
+             DiscountPlan.ValidTo >= idtDate,
+       FIRST DPRate NO-LOCK WHERE
+             DPRate.DPId       = DiscountPlan.DPId AND
+             DPRate.ValidFrom <= idtDate           AND
+             DPRate.ValidTo   >= idtDate:
+
+      fCloseDiscount(DiscountPlan.DPRuleID,
+                     iExtraLineMsSeq,
+                     idtDate - 1,
+                     FALSE).
+
+      liRequest = fAddDiscountPlanMember(iExtraLineMsSeq,
+                                         DiscountPlan.DPRuleID,
+                                         DPRate.DiscValue,
+                                         idtDate,
+                                         DiscountPlan.ValidPeriods,
+                                         0,
+                                         OUTPUT lcResult).
+
+      IF liRequest NE 0 THEN
+         RETURN "ERROR:Extra Line Discount not created; " + lcResult.
+   END.
+END FUNCTION.    
+
+
 &ENDIF
