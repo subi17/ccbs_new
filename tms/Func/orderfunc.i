@@ -422,6 +422,62 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 
 END FUNCTION.   
 
+
+FUNCTION fReleaseExtraLineOrders RETURN LOGICAL
+   (INPUT iiMainLineOrderId AS INT):
+
+   DEFINE BUFFER lbMLOrder FOR Order.
+   DEFINE BUFFER lbELOrder FOR Order.
+
+   FIND FIRST lbMLOrder NO-LOCK WHERE 
+              lbMLOrder.Brand        EQ  Syst.Parameters:gcBrand AND 
+              lbMLOrder.OrderId      EQ iiMainLineOrderId        AND 
+              lbMLOrder.MultiSimID   NE 0                        AND 
+              lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}  NO-ERROR. 
+
+   IF AVAIL lbMLOrder THEN DO:
+
+      FIND FIRST lbELOrder NO-LOCK WHERE 
+                 lbELOrder.MsSeq        EQ lbMLOrder.MulitSimId      AND 
+                 lbELOrder.MultiSimId   EQ lbMLOrder.MsSeq           AND 
+                 lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
+
+      IF AVAIL lbELOrder THEN DO:
+
+         CASE lbELOrder.OrderType:
+            WHEN {&ORDER_TYPE_NEW} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
+                                    ELSE {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
+                                    ELSE {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN
+                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            OTHERWISE.
+         END CASE.
+
+         IF lcNewOrderStatus > "" THEN DO:
+            IF llDoEvent THEN DO:
+               lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+               RUN StarEventInitialize(lhOrderStatusChange).
+               RUN StarEventSetOldBuffer(lhOrderStatusChange).
+            END.
+
+            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+               fCleanEventObjects().
+            END.
+         END.
+
+      END.      
+   END.
+
+
+END FUNCTION.
+
 &ENDIF.
 
 

@@ -1267,7 +1267,9 @@ PROCEDURE pOrderView:
 
      else if toimi = 4 and ufk[4] > 0 then do:
 
-        liMultiSimType = (IF Order.MultiSimType = 1 THEN 2 ELSE 1).
+        liMultiSimType = (IF Order.MultiSimType = 1 THEN 2 
+                          ELSE IF Order.MultiSimType = 3 THEN 3 
+                          ELSE 1).
 
         FIND FIRST lbOrder NO-LOCK WHERE
                    lbOrder.Brand = gcBrand AND

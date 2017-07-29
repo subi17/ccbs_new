@@ -651,9 +651,11 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
             OrderCustomer.CustIdType EQ icCustIDType            AND
             OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
        EACH Order NO-LOCK WHERE
-            Order.Brand      EQ Syst.Parameters:gcBrand AND
-            Order.orderid    EQ OrderCustomer.Orderid   AND
-            Order.OrderType  NE {&ORDER_TYPE_RENEWAL},
+            Order.Brand        EQ Syst.Parameters:gcBrand AND
+            Order.orderid      EQ OrderCustomer.Orderid   AND
+            Order.OrderType    NE {&ORDER_TYPE_RENEWAL}   AND
+            Order.MultiSimId   EQ 0                       AND 
+            Order.MultiSimType EQ 0,
       FIRST OrderFusion NO-LOCK WHERE
             OrderFusion.Brand   = Syst.Parameters:gcBrand AND
             OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:

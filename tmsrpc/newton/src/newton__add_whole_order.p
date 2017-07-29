@@ -1942,7 +1942,7 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
       RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
 
    FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
-              ExtraLineMainOrder.MsSeq = liMainLineMsSeq NO-ERROR.
+              ExtraLineMainOrder.MsSeq = piMultiSimID NO-ERROR.
 
    IF NOT AVAIL ExtraLineMainOrder THEN 
       RETURN appl_err("Extra line associated main line order is not available").
