@@ -471,7 +471,8 @@ PROCEDURE pFeesAndServices:
 
       END.   
    END.
-  
+ 
+ 
    /* ADDLINE-20 Additional Line Discounts 
       CHANGE: If New CLIType Matches, Then Change the Discount accordingly to the new type 
       ADDLINE-267 Phase 2 fix */
@@ -516,25 +517,29 @@ END PROCEDURE.
 
 PROCEDURE pUpdateSubscription:
 
-   DEF VAR liBillTarg       AS INT  NO-UNDO. 
-   DEF VAR liChangeTime     AS INT  NO-UNDO.
-   DEF VAR lcFusionSubsType AS CHAR NO-UNDO.
-   DEF VAR ldEndStamp       AS DEC  NO-UNDO.
-   DEF VAR ldBegStamp       AS DEC  NO-UNDO.
-   DEF VAR liManTime      AS INT  NO-UNDO.
-   DEF VAR lcMandateId    AS CHAR NO-UNDO. 
-   DEF VAR ldaMandateDate AS DATE NO-UNDO. 
-   DEF VAR llUpdateMandate AS LOG NO-UNDO. 
-   DEF VAR ldeNewBeginTs AS DEC NO-UNDO. 
-   DEF VAR ldeOrigTsEnd AS DEC NO-UNDO. 
-   DEF VAR liLoop AS INT NO-UNDO. 
-   DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
-   DEF VAR liSecs AS INT NO-UNDO. 
-   DEF VAR liNewMSStatus AS INT NO-UNDO. 
-   DEF VAR ldtCloseDate AS DATE NO-UNDO.
-   
-   DEF BUFFER bOwner FOR MsOwner.
-   DEF BUFFER bMobSub FOR MobSub.
+   DEF VAR liBillTarg              AS INT  NO-UNDO. 
+   DEF VAR liChangeTime            AS INT  NO-UNDO.
+   DEF VAR lcFusionSubsType        AS CHAR NO-UNDO.
+   DEF VAR ldEndStamp              AS DEC  NO-UNDO.
+   DEF VAR ldBegStamp              AS DEC  NO-UNDO.
+   DEF VAR liManTime               AS INT  NO-UNDO.
+   DEF VAR lcMandateId             AS CHAR NO-UNDO. 
+   DEF VAR ldaMandateDate          AS DATE NO-UNDO. 
+   DEF VAR llUpdateMandate         AS LOG  NO-UNDO. 
+   DEF VAR ldeNewBeginTs           AS DEC  NO-UNDO. 
+   DEF VAR ldeOrigTsEnd            AS DEC  NO-UNDO. 
+   DEF VAR liLoop                  AS INT  NO-UNDO. 
+   DEF VAR lcFixedNumber           AS CHAR NO-UNDO. 
+   DEF VAR liSecs                  AS INT  NO-UNDO. 
+   DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
+   DEF VAR ldtCloseDate            AS DATE NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+
+   DEF BUFFER bOwner         FOR MsOwner.
+   DEF BUFFER bMobSub        FOR MobSub.
+   DEF BUFFER lELMobSub      FOR MobSub.
+   DEF BUFFER lbDiscountPlan FOR DiscountPlan.
+   DEF BUFFER lbDPMember     FOR DPMember.
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -768,6 +773,59 @@ PROCEDURE pUpdateSubscription:
                             "STC").
       END. /* FOR FIRST SubSer WHERE */
 
+   /* Close extra line subscription discount, if Main line is moved away 
+      from available extra lines related main lines */
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
+   
+   IF lcExtraMainLineCLITypes                          NE "" AND 
+      LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
+      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
+      MobSub.MultiSimId                                NE 0  AND 
+      MobSub.MultiSimType                              EQ {&MULTISIMTYPE_PRIMARY} THEN  
+   DO: 
+      FIND FIRST lELMobSub NO-LOCK WHERE 
+                 lELMobSub.MsSeq        EQ MobSub.MultiSimId         AND 
+                 lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
+                 lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+
+      FIND FIRST lbDPMember NO-LOCK WHERE 
+                 lbDPMember.HostTable = "MobSub"                  AND
+                 lbDPMember.KeyValue  = STRING(MobSub.MultiSimId) AND
+                 lbDPMember.ValidTo   > TODAY                     AND
+                 lbDPMember.ValidTo  >= lbDPMember.ValidFrom        NO-ERROR.
+      
+      IF AVAIL lELMobSub AND 
+         AVAIL lbDPMember  THEN DO:
+            
+         FIND FIRST lbDiscountPlan NO-LOCK WHERE 
+                    lbDiscountPlan.Brand = gcBrand         AND 
+                    lbDiscountPlan.DPId  = lbDPMember.DPId NO-ERROR.
+            
+         IF AVAIL lbDiscountPlan THEN DO:
+            fCloseExtraLineDiscount(lELMobSub.MsSeq,
+                                    lbDiscountPlan.DPRuleID,
+                                    TODAY).
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                              STRING(lbDPMember.KeyValue),
+                              0,
+                             "ExtraLine Discount is Closed",
+                             "STC done from Extra line associated Main line to other Main line").                        
+         END.
+      END.
+
+      FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+      
+      ASSIGN MobSub.MultiSimId   = 0
+             MobSub.MultiSimType = 0.
+      
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+
+      FIND CURRENT MobSub NO-LOCK.       
+   END.
+   
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
       then CLOSE the all addline discounts to (STC Date - 1) */
