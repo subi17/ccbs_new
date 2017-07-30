@@ -58,8 +58,10 @@ DEF BUFFER bOrder    FOR Order.
 DEF BUFFER bOrdTemp  FOR Order.
 
 /* Extra line */
-DEFINE VARIABLE lcExtraLineCLITypes  AS CHAR NO-UNDO. 
-DEFINE VARIABLE lcExtraLineDiscounts AS CHAR NO-UNDO.
+DEFINE VARIABLE lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcExtraLineDiscounts    AS CHAR NO-UNDO.
+DEFINE VARIABLE liExtraLineMsSeq        AS INT  NO-UNDO. 
 
 DEF BUFFER lELOrder       FOR Order.        
 DEF BUFFER lMLMobSub      FOR MobSub.
@@ -1008,18 +1010,35 @@ PROCEDURE pTerminate:
    END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
 
-   /* Close Extra line discount */
-   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                     bCLIType.Brand      = Syst.Parameters:gcBrand     AND
-                     bCLIType.CLIType    = TermMobSub.CLIType          AND
-                     bCLIType.LineType   = {&CLITYPE_LINETYPE_EXTRA}   AND 
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN
+   /* Close Extra line discount, if associated main line is fully OR partially terminated  */
+   /* OR */
+   /* Close Extra line discount, if extra line subscription is terminated */
+   ASSIGN 
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+      lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes")
+      lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
+
+   IF (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                      bCLIType.Brand      = Syst.Parameters:gcBrand          AND
+                      bCLIType.CLIType    = TermMobSub.CLIType               AND
+                      bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}         AND 
+                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+               LOOKUP(bCLIType.CLIType,lcExtraMainLineCLITypes) > 0)) OR
+      (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                      bCLIType.Brand      = Syst.Parameters:gcBrand          AND
+                      bCLIType.CLIType    = TermMobSub.CLIType               AND
+                      bCLIType.LineType   = {&CLITYPE_LINETYPE_EXTRA}        AND 
+                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
+                LOOKUP(bCLIType.CLIType,lcExtraLineCLITypes) > 0)) THEN
    DO:
-      ASSIGN lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
-             lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+      IF LOOKUP(TermMobSub.CLIType,lcExtraMainLineCLITypes) > 0 THEN 
+         liExtraLineMsSeq = TermMobSub.MultiSimId.
+      ELSE IF  LOOKUP(TermMobSub.CLIType,lcExtraLineCLITypes) > 0 THEN 
+         liExtraLineMsSeq = TermMobSub.MsSeq.
 
       FIND FIRST lELOrder NO-LOCK WHERE 
-                 lELOrder.MsSeq        EQ TermMobSub.MsSeq          AND           
+                 lELOrder.MsSeq        EQ liExtraLineMsSeq          AND           
                  lELOrder.MultiSimId   NE 0                         AND
                  lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
           LOOKUP(lELOrder.CLIType,lcExtraLineCLITypes) GT 0         NO-ERROR.
@@ -1027,12 +1046,12 @@ PROCEDURE pTerminate:
       IF AVAIL lELOrder THEN DO:
          FIND FIRST lELOrderAction NO-LOCK WHERE
                     lELOrderAction.Brand    = gcBrand                 AND
-                    lELOrderAction.OrderID  = Order.OrderID           AND
+                    lELOrderAction.OrderID  = lELOrder.OrderID        AND
                     lELOrderAction.ItemType = "ExtraLineDiscount"     AND
              LOOKUP(lELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
 
         IF AVAIL lELOrderAction THEN     
-           fCloseExtraLineDiscount(TermMobSub.MsSeq,
+           fCloseExtraLineDiscount(lELOrder.MsSeq,
                                    lELOrderAction.ItemKey,
                                    TODAY).
 
