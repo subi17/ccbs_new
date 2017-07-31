@@ -439,37 +439,34 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
    IF AVAIL lbELOrder THEN DO:
 
-      /* Check if Main line order is closed, If closed, THEN delete the extraline 
-         discount orderaction value AND then release the extra line order */ 
-      FIND FIRST lbMLOrder NO-LOCK WHERE 
-                 lbMLOrder.MsSeq        EQ iiMainLineSubId         AND 
-                 lbMLOrder.MultiSimId   EQ iiExtraLineSubId        AND 
-                 lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
-                 lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
-     
-      FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
-                 lbELOrderAction.Brand    = gcBrand                AND
-                 lbELOrderAction.OrderID  = lbELOrder.OrderID      AND
-                 lbELOrderAction.ItemType = "ExtraLineDiscount"    AND
-          LOOKUP(lbELOrderAction.ItemKey,lcExtraLineDiscounts) > 0 NO-ERROR.
-      
-      IF AVAIL lbMLOrder       AND 
-         AVAIL lbELOrderAction THEN DO:
-      
-         DELETE lbELOrderAction.
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
-                          STRING(lbELOrder.OrderID),
-                           0,
-                          "EXTRALINE DISCOUNT ORDERACTION REMOVED",
-                          "Removed ExtraLineDiscount Item from OrderAction").
-
-      END.
-
       IF icAction EQ "RELEASE" THEN 
          RUN Mc/orderhold.p(lbELOrder.OrderId,
                             "RELEASE_ExtraLine").
-         
+      ELSE IF icAction EQ "CLOSE" THEN DO:
+         /* Check if Main line order is closed, If closed, 
+            then close extraline ongoing order */
+         FIND FIRST lbMLOrder NO-LOCK WHERE 
+                    lbMLOrder.MsSeq        EQ iiMainLineSubId         AND 
+                    lbMLOrder.MultiSimId   EQ iiExtraLineSubId        AND 
+                    lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
+                    lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
+
+         IF AVAIL lbMLOrder THEN DO:
+            IF llDoEvent THEN DO:
+               lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+               RUN StarEventInitialize(lhOrderStatusChange).
+               RUN StarEventSetOldBuffer(lhOrderStatusChange).
+            END.
+
+            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+            IF llDoEvent THEN DO:
+               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+               fCleanEventObjects().
+            END.
+         END. /* AVAIL lbMLOrder */
+      END. 
+   
    END.      
 
    RETURN TRUE.
