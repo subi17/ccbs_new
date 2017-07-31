@@ -422,43 +422,54 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
     INPUT iiMainLineSubId  AS INT,
     INPUT icAction         AS CHAR):
 
-   DEFINE BUFFER lbMLOrder FOR Order.
-   DEFINE BUFFER lbELOrder FOR Order.
+   DEFINE BUFFER lbMLOrder       FOR Order.
+   DEFINE BUFFER lbELOrder       FOR Order.
+   DEFINE BUFFER lbELOrderAction FOR OrderAction.
 
-   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO. 
+   DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO. 
+
+   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
    FIND FIRST lbELOrder NO-LOCK WHERE 
-              lbELOrder.MsSeq        EQ iiExtraLineSubId          AND 
-              lbELOrder.MultiSimId   EQ iiMainLineSubId           AND 
-              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
+              lbELOrder.MsSeq        EQ iiExtraLineSubId                  AND 
+              lbELOrder.MultiSimId   EQ iiMainLineSubId                   AND 
+              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
+              lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} NO-ERROR. 
 
    IF AVAIL lbELOrder THEN DO:
 
-      IF icAction EQ "RELEASE" THEN 
-         CASE lbELOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
-            OTHERWISE.
-         END CASE.
-      ELSE IF icAction EQ "CLOSE" THEN 
-         lcNewOrderStatus = {&ORDER_STATUS_CLOSED}. 
+      /* Check if Main line order is closed, If closed, THEN delete the extraline 
+         discount orderaction value AND then release the extra line order */ 
+      FIND FIRST lbMLOrder NO-LOCK WHERE 
+                 lbMLOrder.MsSeq        EQ iiMainLineSubId         AND 
+                 lbMLOrder.MultiSimId   EQ iiExtraLineSubId        AND 
+                 lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
+                 lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
+     
+      FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
+                 lbELOrderAction.Brand    = gcBrand                AND
+                 lbELOrderAction.OrderID  = lbELOrder.OrderID      AND
+                 lbELOrderAction.ItemType = "ExtraLineDiscount"    AND
+          LOOKUP(lbELOrderAction.ItemKey,lcExtraLineDiscounts) > 0 NO-ERROR.
+      
+      IF AVAIL lbMLOrder       AND 
+         AVAIL lbELOrderAction THEN DO:
+      
+         DELETE lbELOrderAction.
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "Order",
+                          STRING(lbELOrder.OrderID),
+                           0,
+                          "EXTRALINE DISCOUNT ORDERACTION REMOVED",
+                          "Removed ExtraLineDiscount Item from OrderAction").
 
-      IF lcNewOrderStatus > "" THEN DO:
-         IF llDoEvent THEN DO:
-            lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
-            RUN StarEventInitialize(lhOrderStatusChange).
-            RUN StarEventSetOldBuffer(lhOrderStatusChange).
-         END.
-
-         fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
-
-         IF llDoEvent THEN DO:
-            RUN StarEventMakeModifyEvent(lhOrderStatusChange).
-            fCleanEventObjects().
-         END.
       END.
 
+      IF icAction EQ "RELEASE" THEN 
+         RUN Mc/orderhold.p(lbELOrder.OrderId,
+                            "RELEASE_ExtraLine").
+         
    END.      
 
    RETURN TRUE.

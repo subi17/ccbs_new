@@ -279,8 +279,8 @@ DO:
          END.
       END.
 
-      /* If Main Line is Closed, then if its associated extra line order is available 
-         THEN it has to be closed */
+      /* If Main Line order is Closed, and if its associated extra line order is available 
+         THEN remove extralinediscount orderaction value and release extra line order from 76 */
       lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
       
       IF lcExtraMainLineCLITypes                       NE "" AND
@@ -289,7 +289,7 @@ DO:
          Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
          fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Subscription Id */
                                   Order.MsSeq,      /* Main line Subscription Id */ 
-                                 "CLOSE").          /* Action */
+                                 "RELEASE").          /* Action */
    
    END.
 END. 

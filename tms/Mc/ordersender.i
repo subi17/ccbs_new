@@ -174,7 +174,9 @@
                      NEXT {1}.
                   END.
 
-                  /* Extra line mobile only tariffs */
+                  /* While processing Extra line mobile only orders, check if its 
+                     associated main line (fixed line) is installed. If it is installed 
+                     THEN don't move extra line order to 76 status */
                   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
                   IF lcExtraLineDiscounts <> ""                                AND
@@ -188,8 +190,8 @@
                   DO:
                      
                      /* Check Mainline Convergent is still ongoing */
-                     IF fCheckMainLineConvergentIsOngoing(Order.MultiSimId, /* Mainline Subscription Id */
-                                                          Order.MsSeq) THEN /* Extraline Subscription Id */
+                     IF NOT fCheckFixedLineInstalledForMainLine(Order.MultiSimId, /* Mainline Subscription Id */
+                                                                Order.MsSeq) THEN /* Extraline Subscription Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.

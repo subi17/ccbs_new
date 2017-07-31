@@ -674,37 +674,32 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fCheckMainLineConvergentIsOngoing RETURNS LOGICAL
+FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
    (INPUT liMainLineMsSeq  AS INT,
     INPUT liExtraLineMsSeq AS INT):
 
    DEFINE BUFFER Order FOR Order. 
 
-   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO.
-
-   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
-
    FIND FIRST Order NO-LOCK WHERE
-              Order.MsSeq        EQ liMainLineMsSeq         AND
-       LOOKUP(Order.StatusCode,lcConvOngoingStatus) > 0     AND
-              Order.MultiSimId   EQ liExtraLineMsSeq        AND
-              Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
-              Order.OrderType    NE {&ORDER_TYPE_RENEWAL}   NO-ERROR.
+              Order.MsSeq        EQ liMainLineMsSeq            AND
+       LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
+              Order.MultiSimId   EQ liExtraLineMsSeq           AND
+              Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND 
+              Order.OrderType    NE {&ORDER_TYPE_RENEWAL}      NO-ERROR.
 
    IF AVAIL Order THEN DO: 
      
       /* If Fixed line is installed for Main line Convergent Order 
          THEN dont move extra line order to 76 */
-      FIND FIRST MsRequest NO-LOCK WHERE 
-                 MsRequest.MsSeq     EQ Order.MsSeq                  AND 
-                 MsRequest.ReqType   EQ {&REQTYPE_FIXED_LINE_CREATE} AND 
-                 MsRequest.ReqStatus EQ 2                            NO-ERROR.
-      
-      IF AVAIL MsRequest AND 
-         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN  
-      RETURN FALSE.   
+      FIND FIRST OrderFusion NO-LOCK WHERE
+                 OrderFusion.Brand        = Syst.Parameters:gcBrand          AND
+                 OrderFusion.OrderID      = Order.OrderID                    AND 
+                 OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+                 
+      IF AVAIL OrderFusion THEN 
+         RETURN TRUE.
 
-      RETURN TRUE.
+      RETURN FALSE.
 
    END.   
 
