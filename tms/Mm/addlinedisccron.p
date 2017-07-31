@@ -20,6 +20,7 @@ DEFINE VARIABLE lcFile       AS CHAR NO-UNDO.
 DEFINE VARIABLE lcSpoolDir   AS CHAR NO-UNDO.
 DEFINE VARIABLE lcOutDir     AS CHAR NO-UNDO.
 DEFINE VARIABLE lcCurrTimeStamp LIKE Order.CrStamp NO-UNDO.
+DEFINE VARIABLE lcYestTimeStamp AS CHAR NO-UNDO.
 
 DEFINE TEMP-TABLE tt-data
     FIELD addlinemsisdn     AS CHAR
@@ -39,15 +40,10 @@ DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
 DEFINE BUFFER bDiscountPlanMob FOR DiscountPlan.
 DEFINE BUFFER lbOrderMain  FOR Order.
 
-
-FIND FIRST TmsParam WHERE
-           TmsParam.Brand      = gcBrand AND
-           TmsParam.ParamGroup = "AddLineCron" AND
-           TmsParam.ParamCode  = "OrdCreateHours" AND 
-           TmsParam.ParamType  = "I" NO-LOCK NO-ERROR.
-
-IF AVAIL TmsParam THEN
-   liHours = TmsParam.IntVal.
+liHours = fCParamI("OrdCreateHours").
+IF liHours = ? OR 
+   liHours = 0 THEN
+   ASSIGN liHours = 1.
 
 ASSIGN lcSpoolDir   = fCParam("AddLineCron","OutSpoolDir")
        lcOutDir     = fCParam("AddLineCron","OutDir").
@@ -56,20 +52,22 @@ ASSIGN
    lcFile = lcSpoolDir + "addlinedisc_" + STRING(TODAY,"99999999") + "_" + REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
 
 lcCurrTimeStamp = fMakeTS().
+lcYestTimeStamp = STRING(fDate2TS(TODAY - 1)).
 
 fSplitTS(lcCurrTimeStamp, OUTPUT ldtCronDate, OUTPUT liCronTime).
 
 ord-blk:
 FOR EACH Order NO-LOCK WHERE 
          Order.Brand = gcBrand AND 
-         ENTRY(1,STRING(Order.CrStamp),".") = ENTRY(1,STRING(lcCurrTimeStamp),".") AND         
+         INT(ENTRY(1,STRING(Order.CrStamp),".")) >= INT(ENTRY(1,STRING(lcYestTimeStamp),".")) AND         
          LOOKUP(STRING(Order.OrderType),"0,1,4") > 0 :
+
    IF Order.StatusCode <> {&ORDER_STATUS_DELIVERED} OR
       Order.PayType     = TRUE THEN NEXT ord-blk.
 
    fSplitTS(Order.crstamp, OUTPUT ldtDate, OUTPUT liTime).
 
-   RUN pOrderCheck(INPUT liCronTime, INPUT liTime, OUTPUT lcResult).
+   RUN pOrderCheck(INPUT ldtDate, INPUT liCronTime, INPUT liTime, OUTPUT lcResult).
    IF lcResult = "Next" THEN
       NEXT ord-blk.   
 
@@ -113,7 +111,7 @@ FOR EACH Order NO-LOCK WHERE
             fSplitTS(bOrder.crstamp, OUTPUT ldtDate, OUTPUT liTime).
 
             /* To check if the order is created within the hours configured in TMS */
-            RUN pOrderCheck(INPUT liCronTime, INPUT liTime, OUTPUT lcResult).
+            RUN pOrderCheck(INPUT ldtDate, INPUT liCronTime, INPUT liTime, OUTPUT lcResult).
             IF lcResult = "Next" THEN
                NEXT OrdCust-blk.
 
@@ -180,12 +178,21 @@ DO:
 END.
 
 PROCEDURE pOrderCheck:   
+   DEFINE INPUT PARAMETER ildOrdCrDate AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER iliCronTime  AS INT  NO-UNDO.
    DEFINE INPUT PARAMETER iliOrdCrTime AS INT  NO-UNDO.
    DEFINE OUTPUT PARAMETER olcResult   AS CHAR NO-UNDO.
 
-   IF iliCronTime - iliOrdCrTime > (liHours * 60 * 60)  THEN
-      olcResult = "Next".
+   IF ildOrdCrDate = TODAY THEN
+   DO:
+      IF iliCronTime - iliOrdCrTime > (liHours * 60 * 60)  THEN
+         olcResult = "Next".
+   END.
+   ELSE IF ildOrdCrDate = TODAY - 1 THEN
+   DO:
+      IF (86399 - iliOrdCrTime) + iliCronTime > (liHours * 60 * 60) THEN
+         olcResult = "Next".
+   END.
 
 END PROCEDURE.
 
