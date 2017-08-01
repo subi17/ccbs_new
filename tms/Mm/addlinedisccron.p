@@ -428,14 +428,21 @@ PROCEDURE pFinalMobOnlyProcess:
    /* If there is existing convergent main line */                     
    IF ocMainline <> "" THEN
    DO:         
-      IF CAN-FIND(FIRST SubsTerminal WHERE
-                        SubsTerminal.Brand = gcBrand AND
-                        SubsTerminal.OrderID = bOrder.OrderId NO-LOCK) THEN 
-      DO:
+      FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = bOrder.MsSeq AND
+            DCCLI.DCEvent BEGINS "TERM" AND
+            DCCLI.ValidTo >= TODAY AND
+            DCCLI.ValidFrom <= TODAY AND
+            DCCLI.CreateFees = TRUE,
+         FIRST DayCampaign WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCEvent AND
+            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
+            DayCampaign.TermFeeModel NE "" AND
+            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
          ASSIGN ocNext = "Next".
          RETURN.
       END.
-      
       /* To delete any other discount */
       FOR EACH DPMember WHERE
           DPMember.HostTable = "MobSub" AND
