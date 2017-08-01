@@ -287,9 +287,9 @@ DO:
          LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
          Order.MultiSimId                              NE 0  AND 
          Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
-         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Subscription Id */
-                                  Order.MsSeq,      /* Main line Subscription Id */ 
-                                 "CLOSE").          /* Action */
+         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                  Order.MsSeq,      /* Main line Order Id  */ 
+                                 "CLOSE").          /* Action              */
    
    END.
 END. 

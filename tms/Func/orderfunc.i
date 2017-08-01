@@ -418,9 +418,9 @@ END FUNCTION.
 
 
 FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
-   (INPUT iiExtraLineSubId AS INT,
-    INPUT iiMainLineSubId  AS INT,
-    INPUT icAction         AS CHAR):
+   (INPUT iiExtraLineOrderId AS INT,
+    INPUT iiMainLineOrderId  AS INT,
+    INPUT icAction           AS CHAR):
 
    DEFINE BUFFER lbMLOrder       FOR Order.
    DEFINE BUFFER lbELOrder       FOR Order.
@@ -431,9 +431,10 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
    lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
-   FIND FIRST lbELOrder NO-LOCK WHERE 
-              lbELOrder.MsSeq        EQ iiExtraLineSubId                  AND 
-              lbELOrder.MultiSimId   EQ iiMainLineSubId                   AND 
+   FIND FIRST lbELOrder NO-LOCK WHERE
+              lbELOrder.Brand        EQ Syst.Parameters:gcBrand           AND
+              lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
+              lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
               lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
               lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} NO-ERROR. 
 
@@ -446,8 +447,9 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
          /* Check if Main line order is closed, If closed, 
             then close extraline ongoing order */
          FIND FIRST lbMLOrder NO-LOCK WHERE 
-                    lbMLOrder.MsSeq        EQ iiMainLineSubId         AND 
-                    lbMLOrder.MultiSimId   EQ iiExtraLineSubId        AND 
+                    lbMLOrder.Brand        EQ Syst.Parameters:gcBrand AND
+                    lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
+                    lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
                     lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
                     lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
 
