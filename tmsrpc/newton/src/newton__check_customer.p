@@ -54,8 +54,8 @@ DEF VAR llPROOngoingOrder    AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder AS LOGI NO-UNDO.
 DEF VAR liMobsubCount        AS LOGI NO-UNDO.
 DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO.
-DEF VAR liMainLineMsSeq      AS INT  NO-UNDO. 
-DEF VAR liOngoingMsSeq       AS INT  NO-UNDO. 
+DEF VAR liMainLineOrderId    AS INT  NO-UNDO. 
+DEF VAR liOngoingOrderId     AS INT  NO-UNDO. 
 DEF VAR lcExtraLineAllowed   AS CHAR NO-UNDO. 
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string],[boolean]").
@@ -235,9 +235,11 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 END.
 
 /* Check extra lines discount is allowed for customer */
-IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineMsSeq) THEN 
+lcExtraLineAllowed = "".
+
+IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineOrderId) THEN 
    lcExtraLineAllowed = "OK".
-ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingMsSeq) THEN    
+ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingOrderId) THEN    
    lcExtraLineAllowed = "OK".
 ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
 

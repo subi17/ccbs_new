@@ -447,8 +447,8 @@ DEF VAR lcItemParam AS CHAR NO-UNDO.
 /* Extra lines */
 DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
 DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
-DEF VAR liMainLineMsSeq        AS INT  NO-UNDO. 
-DEF VAR liOngoingMsSeq         AS INT  NO-UNDO. 
+DEF VAR liMainLineOrderId      AS INT  NO-UNDO. 
+DEF VAR liOngoingOrderId       AS INT  NO-UNDO. 
  
 DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 DEF BUFFER ExtraLineMainOrder    FOR Order.
@@ -1921,20 +1921,20 @@ END.
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
 ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
-       liMainLineMsSeq       = 0
-       liOngoingMsSeq        = 0
+       liMainLineOrderId     = 0
+       liOngoingOrderId      = 0
        lcExtraLineDiscRuleId = "". 
 
 IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
 
    IF fCheckExistingConvergentAvailForExtraLine(lcIdtype,
                                                 lcId,
-                                                OUTPUT liMainLineMsSeq) THEN 
-      piMultiSimID = liMainLineMsSeq.
+                                                OUTPUT liMainLineOrderId) THEN 
+      piMultiSimID = liMainLineOrderId.
    ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtype,
                                                     lcId,
-                                                    OUTPUT liOngoingMsSeq) THEN
-      piMultiSimID = liOngoingMsSeq. 
+                                                    OUTPUT liOngoingOrderId) THEN
+      piMultiSimID = liOngoingOrderId. 
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
@@ -1942,7 +1942,8 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
       RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
 
    FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
-              ExtraLineMainOrder.MsSeq = piMultiSimID NO-ERROR.
+              ExtraLineMainOrder.Brand   = gcBrand      AND 
+              ExtraLineMainOrder.OrderId = piMultiSimID NO-ERROR.
 
    IF NOT AVAIL ExtraLineMainOrder THEN 
       RETURN appl_err("Extra line associated main line order is not available").
@@ -2032,7 +2033,7 @@ IF lcExtraLineDiscRuleId NE "" THEN DO:
    
     /* Update Mainline multisimid and multisimtype values before 
        extra line discount orderaction record is created */
-    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.MsSeq 
+    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.OrderId   /* Extraline order id */ 
            ExtraLineMainOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
    
     fCreateOrderAction(Order.Orderid,

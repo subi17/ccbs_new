@@ -592,12 +592,13 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
-   (INPUT icCustIDType     AS CHAR,
-    INPUT icCustID         AS CHAR,
-    OUTPUT liMainLineMsSeq AS INT):
+   (INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR,
+    OUTPUT liMainLineOrderId AS INT):
 
    DEFINE BUFFER Customer FOR Customer.
    DEFINE BUFFER MobSub   FOR MobSub.
+   DEFINE BUFFER Order    FOR Order.
 
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 
@@ -620,7 +621,10 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
        IF MobSub.MultiSimID  <> 0                       AND 
           MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
 
-       liMainLineMsSeq = MobSub.MsSeq. 
+       FIND FIRST Order NO-LOCK WHERE 
+                  Order.MsSeq = MobSub.MsSeq NO-ERROR.
+
+       liMainLineOrderId = Order.OrderId. 
 
        RETURN TRUE.
    END.
@@ -630,9 +634,9 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
-   (INPUT icCustIDType    AS CHAR,
-    INPUT icCustID        AS CHAR,
-    OUTPUT liOngoingMsSeq AS INT):
+   (INPUT icCustIDType      AS CHAR,
+    INPUT icCustID          AS CHAR,
+    OUTPUT liOngoingOrderId AS INT):
    
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
@@ -664,7 +668,7 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
 
       IF LOOKUP(Order.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
  
-      liOngoingMsSeq = Order.MsSeq.
+      liOngoingOrderId = Order.OrderId.
 
       RETURN TRUE.
  

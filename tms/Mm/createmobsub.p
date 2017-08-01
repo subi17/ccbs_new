@@ -81,17 +81,19 @@ DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 
-DEF BUFFER bInvCust    FOR Customer.
-DEF BUFFER bRefCust    FOR Customer.
-DEF BUFFER bRefMobsub  FOR Mobsub.
-DEF BUFFER bRefCLIType FOR CLIType.
-DEF BUFFER bMsRequest  FOR MsRequest.
-DEF BUFFER lbOrder     FOR Order.
-DEF BUFFER lbMobSub    FOR MobSub.
+DEF BUFFER bInvCust        FOR Customer.
+DEF BUFFER bRefCust        FOR Customer.
+DEF BUFFER bRefMobsub      FOR Mobsub.
+DEF BUFFER bRefCLIType     FOR CLIType.
+DEF BUFFER bMsRequest      FOR MsRequest.
+DEF BUFFER lbOrder         FOR Order.
+DEF BUFFER lbMobSub        FOR MobSub.
 DEF BUFFER lbOrderCustomer FOR OrderCustomer.
-DEFINE BUFFER lbMobSubAD1 FOR MobSub.
-DEF BUFFER bTerMsRequest FOR MsRequest.
-DEF BUFFER bMsOwner FOR MsOwner.
+DEF BUFFER lbMobSubAD1     FOR MobSub.
+DEF BUFFER bTerMsRequest   FOR MsRequest.
+DEF BUFFER bMsOwner        FOR MsOwner.
+DEF BUFFER lbMLOrder       FOR Order.
+DEF BUFFER lbMLMobSub      FOR MobSub.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -419,6 +421,25 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 
+   /* Extra line */
+   /* In case of extra line discount subcription creation,
+      following fields has to be updated */
+   IF Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+      FIND FIRST lbMLOrder NO-LOCK WHERE 
+                 lbMLOrder.Brand      = gcBrand          AND 
+                 lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
+
+      IF AVAIL lbMLOrder THEN 
+         FIND FIRST lbMLMobSub NO-LOCK WHERE 
+                    lbMLMobSub.MsSeq = lbMLOrder.MsSeq NO-ERROR.
+
+      IF AVAIL lbMLMobSub THEN 
+         ASSIGN MobSub.MultiSimID       = lbMLMobSub.MsSeq         /* Mainline Subid  */
+                MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
+                lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
+                lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. /* Primary = 1     */
+   END.
+ 
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 
    /* Initial TopUp */
