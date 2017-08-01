@@ -1,0 +1,145 @@
+ADD TABLE "TPService"
+  AREA "Sta_Data_32"
+  LABEL "Third Party Service"
+  DESCRIPTION "Third Party Service"
+  DUMP-NAME "tpservice"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-tpservice.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "rw-tpservice.p" CRC "?"
+
+ADD FIELD "MsSeq" OF "TPService" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 1
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ServSeq" OF "TPService" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ServSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ServSeq"
+  HELP "Service Sequence"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ServType" OF "TPService" AS character 
+  DESCRIPTION "Service Type"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 3
+  MAX-WIDTH 30
+  COLUMN-LABEL "Type"
+  HELP "Service Type"
+  ORDER 30
+
+ADD FIELD "Product" OF "TPService" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Product"
+  POSITION 4
+  MAX-WIDTH 50
+  HELP "Product"
+  ORDER 40
+
+ADD FIELD "Provider" OF "TPService" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Provider"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "Provider"
+  HELP "Service Provider"
+  ORDER 50
+
+ADD FIELD "SerialNbr" OF "TPService" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Serial Nbr"
+  POSITION 6
+  MAX-WIDTH 50
+  COLUMN-LABEL "Serial Nbr"
+  HELP "Serial Number"
+  ORDER 60
+
+ADD FIELD "Status" OF "TPService" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 7
+  MAX-WIDTH 30
+  COLUMN-LABEL "Status"
+  HELP "Service Status"
+  ORDER 70
+
+ADD FIELD "TermReason" OF "TPService" AS character
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "TermReason"
+  POSITION 8
+  MAX-WIDTH 70
+  COLUMN-LABEL "TermReason"
+  HELP "Termination Reason"
+  ORDER 80
+
+ADD FIELD "CreatedTS" OF "TPService" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  HELP "CreatedTS"
+  ORDER 90
+
+ADD FIELD "UpdatedTS" OF "TPService" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdatedTS"
+  POSITION 10
+  MAX-WIDTH 20
+  COLUMN-LABEL "UpdatedTS"
+  HELP "UpdatedTS"
+  ORDER 100
+
+ADD INDEX "ServSeq" ON "TPService"
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ServSeq" ASCENDING
+
+ADD INDEX "MsSeq" ON "TPService" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq"   ASCENDING 
+  INDEX-FIELD "Product" ASCENDING
+
+ADD INDEX "SerialNbr" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "SerialNbr" ASCENDING
+
+ADD INDEX "CreatedTS" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CreatedTS" DECENDING
+  INDEX-FIELD "Status"    ASCENDING
+
+ADD INDEX "UpdatedTS" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdatedTS" DECENDING
+
+ADD SEQUENCE "TPServiceSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000002052

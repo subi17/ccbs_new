@@ -27,6 +27,23 @@ FUNCTION fFusionMessageError RETURNS CHAR
    RETURN icErrorDesc.
 END.
 
+FUNCTION fTPServiceMessageError RETURNS CHAR
+    (BUFFER bf_TPServiceMessage FOR TPServiceMessage,
+     icErrorDesc AS CHAR):
+
+   FIND CURRENT bf_TPServiceMessage EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   IF AVAIL bf_TPServiceMessage THEN       
+      ASSIGN
+          bf_TPServiceMessage.Status         = {&ERROR}
+          bf_TPServiceMessage.AdditionalInfo = icErrorDesc
+          bf_TPServiceMessage.UpdateTS       = fMakeTS().
+
+   RELEASE ibFusionMessage.
+
+   RETURN "".
+
+END FUNCTION.
+
 FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
  (BUFFER ibFusionMessage FOR FusionMessage,
   icError AS CHAR,
@@ -80,23 +97,18 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
         Order.Brand = Syst.Parameters:gcBrand AND
         Order.OrderID = iiOrderID.
 
-   IF icMessageType BEGINS "TP" THEN
-       ASSIGN lcPrefix = "" lcOrderType = "THIRD_PARTY_SETUP_DEVICE".
-   ELSE
-   DO:
-       FIND CLIType NO-LOCK WHERE
-            CLIType.CLIType = Order.CLiType.
+   FIND CLIType NO-LOCK WHERE
+        CLIType.CLIType = Order.CLiType.
 
-       IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
-          lcPrefix = "Cancelación".
-       ELSE lcPrefix = "Alta".
-          
-       IF CLIType.FixedLineType EQ 1 THEN
-          lcOrderType = "xDSL + VOIP".
-       ELSE IF CLIType.FixedLineType EQ 2 THEN
-          lcOrderType = "FTTH + VOIP".
-   END.
+   IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
+      lcPrefix = "Cancelación".
+   ELSE lcPrefix = "Alta".
       
+   IF CLIType.FixedLineType EQ 1 THEN
+      lcOrderType = "xDSL + VOIP".
+   ELSE IF CLIType.FixedLineType EQ 2 THEN
+      lcOrderType = "FTTH + VOIP".
+     
    CREATE FusionMessage.
    ASSIGN
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
@@ -223,24 +235,5 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
 
    RETURN TRUE.
 END.
-
-FUNCTION fInitiateDeviceLogisticsMessage RETURNS LOGICAL
-    (INPUT  iiOrderID AS INT,
-     OUTPUT ocError AS CHAR):
-
-    DEF BUFFER bf_OrderTPService FOR OrderTPService.
-
-    FIND FIRST bf_OrderTPService WHERE bf_OrderTPService.OrderID = iiOrderId NO-LOCK NO-ERROR.
-    IF AVAIL bf_OrderTPService THEN 
-    DO:
-        _fCreateFusionMessage(bf_OrderTPService.OrderId, {&THIRDPARTY_DEVICE_LOGISTICS}).
-
-        ocError = "ERROR:Order data not found".
-        RETURN FALSE.
-    END.
-
-    RETURN TRUE.
-
-END FUNCTION.    
 
 &ENDIF

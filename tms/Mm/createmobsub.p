@@ -606,7 +606,11 @@ IF NOT AVAIL mobsub THEN DO:
                       ldeActivationTS,
                       MsRequest.MsRequest,
                       {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}). 
+
+      fInitiate_ThirdPartyService_STB_Logistics(MobSub.MsSeq).
+
       fReqStatus(2,"").
+      
       RETURN.
    END.
 

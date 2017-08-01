@@ -1,0 +1,121 @@
+ADD TABLE "TPServiceMessage"
+  AREA "Sta_Data_64"
+  LABEL "Third Party Message"
+  DESCRIPTION "Third Party Message"
+  DUMP-NAME "tpservicemessage"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-tpservicemessage.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "rw-tpservicemessage.p" CRC "?"
+
+ADD FIELD "ServSeq" OF "TPServiceMessage" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ServSeq"
+  COLUMN-LABEL "ServSeq"
+  ORDER 10
+
+ADD FIELD "MessageSeq" OF "TPServiceMessage" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MessageSeq"
+  COLUMN-LABEL "MessageSeq"
+  ORDER 20
+
+ADD FIELD "MessageID" OF "TPServiceMessage" AS character
+  FORMAT "x(37)"
+  INITIAL ""
+  LABEL "MessageId"
+  COLUMN-LABEL "MessageID"
+  DESCRIPTION "Auto-generated UUID"
+  ORDER 30
+
+ADD FIELD "MessageType" OF "TPServiceMessage" AS character
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Message Type"
+  COLUMN-LABEL "MessageType"
+  ORDER 40
+
+ADD FIELD "Source" OF "TPServiceMessage" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Source"
+  COLUMN-LABEL "Source"
+  DESCRIPTION "Messsage source (TMS/Masmovil)"
+  ORDER 50
+
+ADD FIELD "CreatedTS" OF "TPServiceMessage" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdateTS"
+  COLUMN-LABEL "UpdateTS"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "Status" OF "TPServiceMessage" AS character
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Message Status"
+  COLUMN-LABEL "MessageStatus"
+  ORDER 80
+
+ADD FIELD "ResponseCode" OF "TPServiceMessage" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  COLUMN-LABEL "ResponseCode"
+  DESCRIPTION "Response code from Third party"
+  ORDER 90
+
+ADD FIELD "AdditionalInfo" OF "TPServiceMessage" AS character
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Additional Info"
+  COLUMN-LABEL "AdditionalInfo"
+  DESCRIPTION "Additional status info"
+  ORDER 100
+
+ADD INDEX "ServSeq" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ServSeq"      DECENDING
+  INDEX-FIELD "MessageSeq"   ASCENDING
+
+ADD INDEX "MessageSeq" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "MessageSeq"   DECENDING 
+
+ADD INDEX "MessageID" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "MessageID"   DESCENDING
+
+ADD INDEX "Status" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Source" ASCENDING
+  INDEX-FIELD "Status" ASCENDING
+
+ADD INDEX "UpdatedTS" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdatedTS" DECENDING
+
+ADD SEQUENCE "TPServiceMessageSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000002052

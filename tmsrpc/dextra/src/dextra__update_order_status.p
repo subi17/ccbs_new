@@ -211,6 +211,24 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
             FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
    END.   
+   ELSE IF liLOStatusId EQ 11111 THEN  /* StatusId need to be agreed with dextra */
+   DO:
+      FIND FIRST TPService WHERE TPService.MsSeq = Order.MsSeq AND TPService.ServType = "TELEVISION" AND TPService.Status = {&STATUS_ONGOING} NO-LOCK NO-ERROR.
+      IF AVAIL TPService THEN 
+      DO:
+          FIND FIRST TPServiceMessage WHERE TPServiceMessage.ServSeq     = TPService.ServSeq AND 
+                                            TPServiceMessage.MessageType = {&ACTIVATION}     AND 
+                                            TPServiceMessage.Status      = {&STATUS_SENT}    EXCLUSIVE-LOCK NO-ERROR.     
+          IF AVAIL TPServiceMessage THEN 
+          DO:
+               ASSIGN TPServiceMessage.Status = {&WAITING_FOR_VENDOR_ACTIVATION}.
+
+               BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+               IF AVAIL TPService THEN 
+                  ASSIGN TPService.SerialNbr = lcIMEI.
+          END.
+      END.                  
+   END.  
    ELSE DO:
       FIND FIRST OrderAccessory WHERE
          OrderAccessory.Brand = gcBrand AND
@@ -257,65 +275,68 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
       END.
    END.
 END.
-   
-IF llDoEvent THEN DO:
-   DEFINE VARIABLE lhOrderDelivery AS HANDLE NO-UNDO.
-   lhOrderDelivery = BUFFER OrderDelivery:HANDLE.
-   RUN StarEventInitialize(lhOrderDelivery).
-END.
 
-CREATE OrderDelivery.
-ASSIGN
-   OrderDelivery.Brand = gcBrand
-   OrderDelivery.OrderId = Order.OrderId
-   OrderDelivery.LOTimeStamp = ldeLOTimeStamp
-   OrderDelivery.CourierId = liCourierId
-   OrderDelivery.CourierShippingId = lcCourierShippingId
-   OrderDelivery.LOId = liLOId
-   OrderDelivery.LOStatusId = liLOStatusId
-   OrderDelivery.IncidentInfoId = ?
-   OrderDelivery.MeasuresInfoId = ?.
-
-
-IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
-      
-IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
-
-   FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
-              OrderCustomer.OrderId = Order.OrderId AND
-              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
-   NO-ERROR.
-   IF NOT AVAIL OrderCustomer THEN DO:
-      CREATE OrderCustomer.
-      ASSIGN
-         OrderCustomer.Brand     = gcBrand 
-         OrderCustomer.OrderId   = Order.OrderId
-         OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
-   END.
-   ELSE IF llDoEvent THEN DO:
-      DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
-      lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
-      RUN StarEventInitialize(lhOrderCustomer).
-      RUN StarEventSetOldBuffer(lhOrderCustomer).
-   END.
-
-   ASSIGN
-      OrderCustomer.Region       = lcRegion
-      OrderCustomer.Street       = lcStreet
-      OrderCustomer.ZipCode      = lcZip
-      OrderCustomer.PostOffice   = lcCity
-      OrderCustomer.Country      = lcCountry
-      OrderCustomer.AddressCodC  = lcStreetCode
-      OrderCustomer.AddressCodP  = lcCityCode.
-   
+IF liLOStatusId NE 11111 THEN 
+DO:
    IF llDoEvent THEN DO:
-      IF NEW OrderCustomer THEN
-         fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
-                                  "",
-                                  katun,
-                                  "").
-      ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
+      DEFINE VARIABLE lhOrderDelivery AS HANDLE NO-UNDO.
+      lhOrderDelivery = BUFFER OrderDelivery:HANDLE.
+      RUN StarEventInitialize(lhOrderDelivery).
+   END.
+
+   CREATE OrderDelivery.
+   ASSIGN
+      OrderDelivery.Brand = gcBrand
+      OrderDelivery.OrderId = Order.OrderId
+      OrderDelivery.LOTimeStamp = ldeLOTimeStamp
+      OrderDelivery.CourierId = liCourierId
+      OrderDelivery.CourierShippingId = lcCourierShippingId
+      OrderDelivery.LOId = liLOId
+      OrderDelivery.LOStatusId = liLOStatusId
+      OrderDelivery.IncidentInfoId = ?
+      OrderDelivery.MeasuresInfoId = ?.
+
+
+   IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
+         
+   IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
+
+      FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
+                 OrderCustomer.Brand = gcBrand AND
+                 OrderCustomer.OrderId = Order.OrderId AND
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
+      NO-ERROR.
+      IF NOT AVAIL OrderCustomer THEN DO:
+         CREATE OrderCustomer.
+         ASSIGN
+            OrderCustomer.Brand     = gcBrand 
+            OrderCustomer.OrderId   = Order.OrderId
+            OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
+      END.
+      ELSE IF llDoEvent THEN DO:
+         DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
+         lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
+         RUN StarEventInitialize(lhOrderCustomer).
+         RUN StarEventSetOldBuffer(lhOrderCustomer).
+      END.
+
+      ASSIGN
+         OrderCustomer.Region       = lcRegion
+         OrderCustomer.Street       = lcStreet
+         OrderCustomer.ZipCode      = lcZip
+         OrderCustomer.PostOffice   = lcCity
+         OrderCustomer.Country      = lcCountry
+         OrderCustomer.AddressCodC  = lcStreetCode
+         OrderCustomer.AddressCodP  = lcCityCode.
+      
+      IF llDoEvent THEN DO:
+         IF NEW OrderCustomer THEN
+            fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
+                                     "",
+                                     katun,
+                                     "").
+         ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
+      END.
    END.
 END.
 

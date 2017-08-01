@@ -1294,8 +1294,9 @@ FUNCTION pLog RETURNS LOG (INPUT pcLogContent AS CHARACTER):
       fLog(pcLogContent, "DEXTRA-INFO").
 END.
 
-FUNCTION fDelivRouter RETURNS LOG
-   (INPUT piOrderId AS int):
+FUNCTION fDelivDevice RETURNS LOG
+   (INPUT icDevice  AS CHAR):
+
    DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcCustRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcOrderChannel  AS CHARACTER NO-UNDO.
@@ -1414,7 +1415,7 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.OrderId       = Order.OrderId
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
       ttOneDelivery.ActionID      = "1" /* Router */
-      ttOneDelivery.ProductID     = "R075A67W2"
+      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "XXXXXXXXX")
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -1444,7 +1445,7 @@ FUNCTION fDelivRouter RETURNS LOG
    CREATE ttInvRow.
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = "R075A67W2"
+      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "XXXXXXXXX") 
       ttInvRow.Quantity    = "1"
       liLoop1              = 1.
 
@@ -1463,14 +1464,14 @@ FUNCTION fDelivRouter RETURNS LOG
 
    END.
 
-CREATE ttExtra.
+   CREATE ttExtra.
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
           ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
+
    RETURN TRUE.
-END.
 
-
+END FUNCTION.
 
 fBatchLog("START",lcSpoolDir + lcFileName).
 
@@ -1612,9 +1613,42 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
-   IF fDelivRouter(FusionMessage.orderId) THEN ASSIGN
+   IF fDelivDevice("Router") THEN ASSIGN
       FusionMessage.UpdateTS = fMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
+END.
+
+/* Third Party Device Logistics */
+FOR EACH TPServiceMessage WHERE 
+         TPServiceMessage.Source      EQ {&SOURCE_TMS}       AND
+         TPServiceMessage.Status      EQ {&STATUS_NEW}       AND
+         TPServiceMessage.MessageType EQ {&ACTIVATION}       EXCLUSIVE-LOCK:
+
+   FIND FIRST TPService WHERE TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL TPService THEN
+   DO:
+       fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
+       NEXT. 
+   END.
+      
+   FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL MobSub THEN
+   DO: 
+       fTPServiceMessageError(BUFFER TPServiceMessage,"Contract not found").
+       NEXT.
+   END.
+
+   FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-ERROR.
+   IF NOT AVAIL Order OR LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
+   DO:
+      fTPServiceMessageError(BUFFER TPServiceMessage,"No order found or Invalid order status").
+      NEXT.
+   END.
+
+   IF fDelivDevice(TPService.Type) THEN 
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.messagestatus = {&STATUS_SENT}.
 END.
 
 iLargestId = 1.

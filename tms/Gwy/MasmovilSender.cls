@@ -67,8 +67,6 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
             BY FusionMessage.CreatedTS 
             liLoop = 1 TO 10:
 
-         IF FusionMessage.MessageType BEGINS {&THIRDPARTY_DEVICE} THEN NEXT MESSAGE_LOOP.
-
          IF FusionMessage.CreatedTS > ldeNow THEN LEAVE.
 
          FIND bFusionMessage EXCLUSIVE-LOCK WHERE
