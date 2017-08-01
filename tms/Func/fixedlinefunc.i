@@ -679,15 +679,16 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
-   (INPUT liMainLineMsSeq  AS INT,
-    INPUT liExtraLineMsSeq AS INT):
+   (INPUT liMainLineOrderId  AS INT,
+    INPUT liExtraLineOrderId AS INT):
 
    DEFINE BUFFER Order FOR Order. 
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.MsSeq        EQ liMainLineMsSeq            AND
+              Order.Brand        EQ Syst.Parameters:gcBrand    AND
+              Order.OrderId      EQ liMainLineOrderId          AND
        LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
-              Order.MultiSimId   EQ liExtraLineMsSeq           AND
+              Order.MultiSimId   EQ liExtraLineOrderId         AND
               Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND 
               Order.OrderType    NE {&ORDER_TYPE_RENEWAL}      NO-ERROR.
 
@@ -701,9 +702,9 @@ FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
                  OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
                  
       IF AVAIL OrderFusion THEN 
-         RETURN TRUE.
+         RETURN FALSE.
 
-      RETURN FALSE.
+      RETURN TRUE.
 
    END.   
 

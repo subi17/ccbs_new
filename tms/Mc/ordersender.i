@@ -189,9 +189,9 @@
                              LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN 
                   DO:
                      
-                     /* Check Mainline Convergent is still ongoing */
-                     IF NOT fCheckFixedLineInstalledForMainLine(Order.MultiSimId, /* Mainline Subscription Id */
-                                                                Order.MsSeq) THEN /* Extraline Subscription Id */
+                     /* Check Mainline Convergent fixedline is installed OR it is still ongoing */
+                     IF fCheckFixedLineInstalledForMainLine(Order.MultiSimId,   /* Mainline Order Id  */
+                                                            Order.OrderId) THEN /* Extraline Order Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.
