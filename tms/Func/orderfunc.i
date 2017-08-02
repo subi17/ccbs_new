@@ -440,9 +440,24 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
    IF AVAIL lbELOrder THEN DO:
 
-      IF icAction EQ "RELEASE" THEN 
-         RUN Mc/orderhold.p(lbELOrder.OrderId,
-                            "RELEASE_ExtraLine").
+      IF llDoEvent THEN DO:
+         lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+         RUN StarEventInitialize(lhOrderStatusChange).
+         RUN StarEventSetOldBuffer(lhOrderStatusChange).
+      END.
+      
+      IF icAction EQ "RELEASE" THEN DO:
+         
+         CASE lbELOrder.OrderType:
+            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
+            OTHERWISE.
+         END CASE.
+
+         fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+      END.                      
       ELSE IF icAction EQ "CLOSE" THEN DO:
          /* Check if Main line order is closed, If closed, 
             then close extraline ongoing order */
@@ -453,22 +468,15 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                     lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
                     lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
 
-         IF AVAIL lbMLOrder THEN DO:
-            IF llDoEvent THEN DO:
-               lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
-               RUN StarEventInitialize(lhOrderStatusChange).
-               RUN StarEventSetOldBuffer(lhOrderStatusChange).
-            END.
-
-            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
-
-            IF llDoEvent THEN DO:
-               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
-               fCleanEventObjects().
-            END.
-         END. /* AVAIL lbMLOrder */
+         IF AVAIL lbMLOrder THEN
+            fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+      
       END. 
    
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+         fCleanEventObjects().
+      END.
    END.      
 
    RETURN TRUE.
