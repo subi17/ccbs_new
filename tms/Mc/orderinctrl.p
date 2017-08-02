@@ -439,8 +439,8 @@ IF fIsConvergenceTariff(Order.CLIType) THEN DO:
          Order.MultiSimId                              NE 0  AND 
          Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
          fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                                  Order.MsSeq,      /* Main line Order Id  */
-                                  "RELEASE").       /* Action */
+                                  Order.OrderId,    /* Main line Order Id  */
+                                  "RELEASE").       /* Action              */
        
       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                       OrderCustomer.CustID). 
