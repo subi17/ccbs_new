@@ -95,7 +95,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                mservicelimit.slseq EQ servicelimit.slseq AND
                mservicelimit.dialtype EQ servicelimit.dialtype AND
 /*               mservicelimit.EndTS EQ ldeCheckMoment: /*previous month end*/ */
-/*test condition:*/                              
+/*test condition:*/
                mservicelimit.EndTS > ldeNow AND
                (mservicelimit.msseq EQ 70088777 /*OR
                mservicelimit.msseq EQ 70088804 */ ):
@@ -105,6 +105,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
            If DSS is active -> activate DSS_FLEX_ 
            Else -> activate FLEX_.
          */
+         message fGetActiveDSSId(mservicelimit.custnum, ldenow) VIEW-AS ALERT-BOX.
          IF fIsDSSActive(mservicelimit.custnum, 
                          ldeNow) 
          THEN DO:
