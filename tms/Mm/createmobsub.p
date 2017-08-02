@@ -430,7 +430,7 @@ IF NOT AVAIL mobsub THEN DO:
                  lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
 
       IF AVAIL lbMLOrder THEN 
-         FIND FIRST lbMLMobSub NO-LOCK WHERE 
+         FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
                     lbMLMobSub.MsSeq = lbMLOrder.MsSeq NO-ERROR.
 
       IF AVAIL lbMLMobSub THEN 
