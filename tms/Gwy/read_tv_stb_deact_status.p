@@ -37,11 +37,12 @@ DO ON ERROR UNDO, THROW:
 END.
 
 PROCEDURE pUpdateStatus:
-    DEF VAR lcLogFile  AS CHAR NO-UNDO.
-    DEF VAR lcDateTime AS CHAR NO-UNDO.
-    DEF VAR lcMsgType  AS CHAR NO-UNDO.
-    DEF VAR lcError    AS CHAR NO-UNDO.
-
+    DEF VAR lcLogFile   AS CHAR NO-UNDO.
+    DEF VAR lcDateTime  AS CHAR NO-UNDO.
+    DEF VAR lcMsgType   AS CHAR NO-UNDO.
+    DEF VAR lcError     AS CHAR NO-UNDO.
+    DEF VAR liTerminate AS INTE NO-UNDO.
+    
     ASSIGN 
         lcDateTime = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
         lcLogFile  = fCParamC('HuaweiLogFile')
