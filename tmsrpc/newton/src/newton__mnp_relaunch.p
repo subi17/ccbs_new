@@ -83,13 +83,20 @@ IF LOCKED Order THEN
 IF NOT AVAIL Order THEN 
    RETURN appl_err(SUBST("Order &1 not found!", piOrderId)). 
 
-FIND OrderCustomer WHERE
-   OrderCustomer.Brand = "1" AND
-   OrderCustomer.OrderID = Order.OrderId AND
-   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+FIND OrderCustomer OF Order NO-LOCK WHERE
+   OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} NO-ERROR.
+
+IF NOT AVAILABLE OrderCustomer
+THEN DO:
+   FIND OrderCustomer WHERE
+      OrderCustomer.Brand = "1" AND
+      OrderCustomer.OrderID = Order.OrderId AND
+      OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+END.
 
 IF NOT AVAIL OrderCustomer THEN 
    RETURN appl_err("OrderCustomer not found!").
+
 
 IF Order.StatusCode NE "73" THEN
    RETURN appl_err("Cannot create new MNP process with order status " + 

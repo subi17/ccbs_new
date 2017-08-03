@@ -1851,7 +1851,7 @@ PROCEDURE pHandleAdditionalLines:
 
    llIsACCAllowed = fSubscriptionLimitCheck(INPUT Customer.OrgId,
                                           INPUT Customer.CustIdType,
-                                          INPUT NO,
+                                          fIsSelfEmpl(Customer.Category),
                                           fIsPro(Customer.Category),
                                           1,
                                           OUTPUT lcInfo,

@@ -145,7 +145,7 @@ IF fValidateMobTypeCh(
                                     MobSub.CliType,
                                     pcCliType).
   IF lcProValidation NE "" THEN 
-     RETURN appl_err("Pro customer validatuin error: " + lcProValidation).
+     RETURN appl_err("Pro customer validation error: " + lcProValidation).
 
 
 /* Set the katun again with original username */

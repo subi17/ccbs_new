@@ -270,7 +270,7 @@ lcInvoiceTarget = fGetCustomerCurrentGrouping(Customer.Custnum,
 add_string(top_struct,"invoice_target",lcInvoiceTarget).
 
 /* Check if customer is self employed based on customer category */
-IF (Customer.Category EQ "40" OR Customer.Category EQ "41") THEN
+IF fIsSelfEmpl(Customer.Category) THEN
    llSelfEmployed = TRUE.
 add_boolean(top_struct,"self_employed",llSelfEmployed).
 add_string(top_struct, "profession", Customer.Profession).

@@ -760,13 +760,13 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.InvoiceTotal  = (IF AVAIL Invoice THEN STRING(Invoice.CurrAmt) ELSE "0")
       ttOneDelivery.DiscountTotal = (IF AVAIL Invoice THEN STRING(Invoice.DirDisc) ELSE "0")
       .
-      
+
    /* YDR-896: Add admin id in case of CIF order customer */
    IF AgreeCustomer.CustIdType = "CIF" THEN
    ASSIGN
-      ttOneDelivery.NIE           = Order.OrdererID WHEN Order.OrdererIDType = "NIE"
-      ttOneDelivery.NIF           = Order.OrdererID WHEN Order.OrdererIDType = "NIF"
-      ttOneDelivery.PassPort      = Order.OrdererID WHEN Order.OrdererIDType = "PassPort".
+      ttOneDelivery.NIE           = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIE"
+      ttOneDelivery.NIF           = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "NIF"
+      ttOneDelivery.PassPort      = AgreeCustomer.AuthCustId WHEN AgreeCustomer.AuthCustIdType = "PassPort".
 
    IF Order.OrderType eq 2 THEN DO:
       /* Overwrite certain expeptional values */
@@ -1668,23 +1668,6 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                                 oiCustomer,
                                 "CUSTOMER CONTACT CREATION FAILED",
                                 lcError).
-            END.
-         END.
-         ELSE IF OrderCustomer.RowType = 1 AND
-                 NOT Order.PayType         AND
-                 NOT CAN-FIND(FIRST lbMobSub WHERE
-                              lbMobSub.Brand    = gcBrand       AND
-                              lbMobSub.MsSeq   <> Order.MsSeq   AND
-                              lbMobSub.CustNum  = Order.CustNum AND
-                              NOT lbMobSub.PayType) THEN
-         DO:
-            FIND FIRST Customer EXCLUSIVE-LOCK WHERE
-                       Customer.CustNum = oiCustomer NO-ERROR.
-            IF AVAILABLE Customer THEN
-            DO:
-               ASSIGN Customer.AuthCustID     = Order.OrdererID
-                      Customer.AuthCustIDType = Order.OrdererIDType.
-               RELEASE Customer.
             END.
          END.
       END.

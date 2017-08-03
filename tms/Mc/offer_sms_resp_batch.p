@@ -223,7 +223,7 @@ PROCEDURE pHandleOfferSMSResponse:
    DEF VAR ldeCheckBuffer AS DEC NO-UNDO. 
    DEF VAR lcError AS CHAR NO-UNDO. 
    DEF VAR lcContractId AS CHAR NO-UNDO. 
-
+/*
    DEF BUFFER bOrder FOR Order.
 
    RELEASE Order.
@@ -415,6 +415,6 @@ PROCEDURE pHandleOfferSMSResponse:
                            Order.ContractId).
       END.
    END.
-
+*/
    RETURN "OK".
 END.

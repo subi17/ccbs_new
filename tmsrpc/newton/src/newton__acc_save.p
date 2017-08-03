@@ -74,8 +74,11 @@ DEF VAR lcDMSInfo AS CHAR NO-UNDO.
 DEF VAR liActLimit AS INT NO-UNDO.
 DEF VAR liActs AS INT NO-UNDO.
 DEF VAR lcReqSource AS CHAR NO-UNDO.
+DEF VAR llProCust AS LOG NO-UNDO.
+DEF VAR llSelfEmployed AS LOG NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
+DEF BUFFER bDestCustomer FOR Customer.
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
    FIELD cBirthDay AS CHAR
@@ -253,10 +256,18 @@ IF lcError EQ "" AND AVAIL Customer THEN
 IF lcError > "" THEN
    RETURN appl_err(lcError).
 
+FIND bDestCustomer WHERE 
+     bDestCustomer.brand EQ gcBrand AND
+     bDestCustomer.orgId EQ ttCustomer.OrgId NO-ERROR.
+IF AVAIL bDestCustomer THEN DO:
+   llProCust = fIsPro(bDestCustomer.category).
+   llSelfEmployed = fIsSelfEmpl(bDestCustomer.category).
+END.
+
 IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
                                INPUT ttCustomer.CustIdType,
-                               INPUT NO,
-                               fIsPro(ttCustomer.category),
+                               llSelfEmployed,
+                               llProCust,
                                1,
                                OUTPUT lcError,
                                OUTPUT liSubLimit,

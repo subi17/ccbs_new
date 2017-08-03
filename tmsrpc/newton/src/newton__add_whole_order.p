@@ -7,6 +7,8 @@
             address_data;struct;optional
             device_data;struct;optional
             contact_data;struct;optional
+            mobile_pouser_data;struct:optional
+            fixed_pouser_data;struct:optional
             fusion_data;struct;optional
             q25_data;struct;optional
  * @order_data salesman;string;optional;id of the seller
@@ -177,6 +179,20 @@
                  longitude;string;optional;
                  person_id;string;optional;contact person id
                  id_type;string;optional;NIF,NIE,CIF or Passport
+ * @mobile_pouser_data fname;string;mandatory;
+                       lname;string;mandatory;
+                       lname2;string;optional;
+                       person_id;string;mandatory;contact person id
+                       id_type;string;mandatory;NIF,NIE or Passport
+                       company_id;string;optional;
+                       site_name;string;optional;
+ * @fixed_pouser_data fname;string;mandatory;
+                      lname;string;mandatory;
+                      lname2;string;optional;
+                      person_id;string;mandatory;contact person id
+                      id_type;string;mandatory;NIF,NIE or Passport
+                      company_id;string;optional;
+                      site_name;string;optional;
  * @fusion_data  fixed_line_number_type;string;mandatory;NEW/MNP
                  fixed_line_number;string;optional;
                  fixed_line_mnp_old_operator_name;string;optional;
@@ -211,6 +227,7 @@
                     km;string;optional;km
                     territory_owner;string;optional;territory owner
                     coverage_token;string;mandatory;
+                    address_id;string;optional;address id; 
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -261,15 +278,16 @@ DEF VAR lcDeviceStruct  AS CHAR NO-UNDO.
 DEF VAR pcCustomerStruct AS CHAR NO-UNDO.
 
 DEF VAR pcAddressStruct AS CHAR NO-UNDO.
-DEF VAR lcAddressStruct AS CHAR NO-UNDO.
 DEF VAR pcContactStruct AS CHAR NO-UNDO.
-DEF VAR lcContactStruct AS CHAR NO-UNDO.
+DEF VAR pcFixedLinePortabilityUserStruct AS CHAR NO-UNDO.
+DEF VAR pcMobileLinePortabilityUserStruct AS CHAR NO-UNDO.
 DEF VAR pcFusionStruct  AS CHAR NO-UNDO. 
 DEF VAR lcFusionStructFields AS CHAR NO-UNDO. 
 
 DEF VAR gcOrderStructFields AS CHARACTER NO-UNDO.  
 DEF VAR gcCustomerStructFields AS CHARACTER NO-UNDO.
 DEF VAR gcCustomerStructStringFields AS CHARACTER NO-UNDO. 
+DEF VAR gcPoUserStructFields AS CHARACTER NO-UNDO. 
 
 DEF VAR pcSalesman      AS CHAR INITIAL "selforder" NO-UNDO.
 DEF VAR pcReseller      AS CHAR NO-UNDO.
@@ -381,8 +399,6 @@ DEF VAR ldaOrderDate AS DATE NO-UNDO.
 DEF VAR liOrderTime  AS INT  NO-UNDO.
 
 DEF VAR lcIdType AS CHARACTER NO-UNDO.  
-DEF VAR lcContactId AS CHARACTER NO-UNDO. 
-DEF VAR lcContactIdType AS CHARACTER NO-UNDO. 
 DEF VAR lcId AS CHARACTER NO-UNDO. 
 DEF VAR llPendingMainLineOrder AS LOG NO-UNDO. 
    
@@ -631,7 +647,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR lcField               AS CHARACTER NO-UNDO. 
    DEF VAR lcMarkOut             AS CHARACTER NO-UNDO. 
    DEF VAR lcMarketing           AS CHARACTER NO-UNDO. 
-   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 41.
+   DEF VAR data                  AS CHARACTER NO-UNDO EXTENT 42.
    DEF VAR lcIdOrderCustomer     AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR ldBirthDay            AS DATE      NO-UNDO.
@@ -639,6 +655,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR iData                 AS INTEGER   NO-UNDO. 
    DEF VAR lii                   AS INTEGER   NO-UNDO. 
    DEF VAR liFieldIndex          AS INTEGER   NO-UNDO.
+   DEF VAR lcContactId           AS CHARACTER NO-UNDO.
+   DEF VAR lcContactIdType       AS CHARACTER NO-UNDO.
    DEF VAR liSubLimit            AS INTEGER   NO-UNDO. 
    DEF VAR liSubs                AS INTEGER   NO-UNDO. 
    DEF VAR liDelType             AS INTEGER   NO-UNDO.
@@ -714,8 +732,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       lcIdtypeOrderCustomer = data[LOOKUP("id_type", gcCustomerStructStringFields)].
       IF data[LOOKUP("person_id", gcCustomerStructStringFields)] ne "" THEN
           lcIdOrderCustomer = data[LOOKUP("person_id", gcCustomerStructStringFields)].
-      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" THEN 
-      DO:
+      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne ""
+      THEN DO:
           lcContactId = lcIdOrderCustomer.
           lcIdOrderCustomer = data[LOOKUP("company_id", gcCustomerStructStringFields)].
           lcContactIdType = lcIdtypeOrderCustomer.
@@ -778,6 +796,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
+         OrderCustomer.AuthCustId      = lcContactId
+         OrderCustomer.AuthCustIdType  = lcContactIdType
          OrderCustomer.RowType         = piRowType
          OrderCustomer.BankCode        = pcAccount
          OrderCustomer.DataChecked     = ?
@@ -821,6 +841,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.ExtInvRef          = data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
          OrderCustomer.TerritoryOwner     = data[LOOKUP("territory_owner", gcCustomerStructStringFields)]
          OrderCustomer.CoverageToken      = data[LOOKUP("coverage_token", gcCustomerStructStringFields)]
+         OrderCustomer.AddressId          = data[LOOKUP("address_id", gcCustomerStructStringFields)] 
          OrderCustomer.pro                = llIsProCustomer
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
@@ -849,12 +870,13 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    
          /* replicate install person data from billing person data */
          IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} THEN DO:
-      
+
             FIND bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand = gcBrand AND
                  bOrderCustomer.OrderID = liOrderId AND
-                 bOrderCustomer.RowType = 1 NO-ERROR.
-            
+                 bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+            NO-ERROR.
+
             IF AVAIL bOrderCustomer THEN ASSIGN
                OrderCustomer.FirstName = bOrderCustomer.FirstName
                   WHEN NOT OrderCustomer.FirstName > ""
@@ -874,12 +896,12 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OrderCustomer.MobileNumber = bOrderCustomer.MobileNumber
                   WHEN NOT OrderCustomer.MobileNumber > ""
 
-               OrderCustomer.CustID = (IF lcContactId > "" THEN
-                  lcContactId ELSE bOrderCustomer.CustID)
+               OrderCustomer.CustID = (IF bOrderCustomer.AuthCustId > "" THEN
+                  bOrderCustomer.AuthCustId ELSE bOrderCustomer.CustID)
                   WHEN NOT OrderCustomer.CustId > ""
 
-               OrderCustomer.CustIDType = (IF lcContactIdType > "" THEN
-                  lcContactIdType ELSE bOrderCustomer.CustIDType)
+               OrderCustomer.CustIDType = (IF bOrderCustomer.AuthCustIdType > "" THEN
+                  bOrderCustomer.AuthCustIdType ELSE bOrderCustomer.CustIDType)
                   WHEN NOT OrderCustomer.CustIDType > "".
                
          END.
@@ -1014,8 +1036,6 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.InvCustRole     = 1
       Order.UserRole        = 1
       Order.StatusCode      = "1"
-      Order.OrdererId       = lcContactId
-      Order.OrdererIDType   = lcContactIdType 
       Order.CLI        = pcCLI
       Order.CLIType    = pcSubType
       Order.mnpstatus  = INT(pcNumberType EQ "mnp")
@@ -1329,7 +1349,8 @@ gcCustomerStructFields = "birthday," +
                          "hand," + 
                          "km," +
                          "territory_owner," +
-                         "coverage_token".
+                         "coverage_token," + 
+                         "address_id". 
 
 gcCustomerStructStringFields = "city," +
                                "city_code," +
@@ -1371,8 +1392,16 @@ gcCustomerStructStringFields = "city," +
                                "hand," + 
                                "km," +
                                "territory_owner," +
-                               "coverage_token".
-                               /* EXTENT value count 41 */
+                               "coverage_token," +
+                               "address_id".   /* EXTENT value count 42 */ 
+
+gcPoUserStructFields = "fname!," +
+                       "lname!," +
+                       "lname2," +
+                       "person_id!," +
+                       "id_type!," +
+                       "company_id," +
+                       "site_name".
 
 /* common validation */
 /* YBP-513 */
@@ -1381,7 +1410,7 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,q25_data,order_inspection_data,accessory_data").
+   "order_data!,customer_data!,address_data,device_data,contact_data,fixed_pouser_data,mobile_pouser_data,fusion_data,q25_data,order_inspection_data,accessory_data").
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -1393,6 +1422,10 @@ pcDeviceStruct    = get_struct(top_struct, "device_data") WHEN
                        LOOKUP("device_data",top_struct_fields) > 0 
 pcContactStruct   = get_struct(top_struct, "contact_data") WHEN
                        LOOKUP("contact_data",top_struct_fields) > 0
+pcFixedLinePortabilityUserStruct = get_struct(top_struct, "fixed_pouser_data") WHEN
+                       LOOKUP("fixed_pouser_data",top_struct_fields) > 0
+pcMobileLinePortabilityUserStruct = get_struct(top_struct, "mobile_pouser_data") WHEN
+                       LOOKUP("mobile_pouser_data",top_struct_fields) > 0
 pcFusionStruct    = get_struct(top_struct, "fusion_data") WHEN
                        LOOKUP("fusion_data",top_struct_fields) > 0
 pcAccessoryStruct = get_struct(top_struct, "accessory_data") WHEN
@@ -1637,6 +1670,16 @@ DO:
    lccTemp = validate_request(pcContactStruct, gcCustomerStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
+IF pcFixedLinePortabilityUserStruct > "" THEN
+DO:
+   lccTemp = validate_request(pcFixedLinePortabilityUserStruct, gcPoUserStructFields).
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
+IF pcMobileLinePortabilityUserStruct > "" THEN
+DO:
+   lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcPoUserStructFields).
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
    
 /* YBP-536 */
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
@@ -1652,6 +1695,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* YBP-538 */ 
 IF pcContactStruct > "" THEN
    lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
+IF lcError <> "" THEN appl_err(lcError).
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF pcMobileLinePortabilityUserStruct > "" THEN
+   lcError = fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, FALSE).
+IF lcError <> "" THEN appl_err(lcError).
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF pcFixedLinePortabilityUserStruct > "" THEN
+   lcError = fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1928,17 +1981,23 @@ IF plCheck THEN
                pcSalesMan).
 
 /* YBP-550 */
-fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE).
+fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, TRUE).
 pcAccount = "".
 
 /* YBP-551 */
 IF pcAddressStruct > "" THEN 
-   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, 4, TRUE).
+   fCreateOrderCustomer(pcAddressStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_DELIVERY}, TRUE).
 
 /* YBP-552 */
 IF pcContactStruct > "" THEN 
-   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
-   
+   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, TRUE).
+
+IF pcMobileLinePortabilityUserStruct > "" THEN
+   fCreateOrderCustomer(pcMobileLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}, TRUE).
+
+IF pcFixedLinePortabilityUserStruct > "" THEN
+   fCreateOrderCustomer(pcFixedLinePortabilityUserStruct, gcPoUserStructFields, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}, TRUE).
+
 /* YBP-553 */
 /* should be called only after rowtype=1 creation */
 IF pcFixedInstallAddress > "" THEN 
@@ -1969,7 +2028,7 @@ IF Order.OrderChannel BEGINS "retention" THEN
    FOR EACH lbOrder NO-LOCK WHERE
             lbOrder.Brand = gcBrand AND
             lbOrder.CLI = Order.CLI AND
-            lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
+            lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
             ROWID(lbOrder) NE ROWID(Order):
 
       RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
@@ -2432,7 +2491,7 @@ END.
 /* should overwrite any roi status */
 IF plSendOffer AND NOT llROIClose THEN DO:
 
-   Order.StatusCode = {&ORDER_STATUS_OFFER_SENT}.
+   /* Order.StatusCode = {&ORDER_STATUS_OFFER_SENT}. */  /* shouldn't wait customers response anymore YDR-2575 */
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} OR
       Order.OrderType EQ {&ORDER_TYPE_MNP} THEN

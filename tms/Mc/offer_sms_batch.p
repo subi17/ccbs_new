@@ -53,7 +53,7 @@ ASSIGN
 
 FOR EACH Order NO-LOCK WHERE
          Order.Brand = gcBrand AND
-         Order.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
+         Order.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
          Order.Crstamp <= ldePickTo,
    FIRST OrderCustomer NO-LOCK WHERE
          OrderCustomer.Brand = Order.Brand AND
