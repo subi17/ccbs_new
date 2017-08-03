@@ -19,6 +19,7 @@ DEFINE TEMP-TABLE ttCustomer
     FIELD SerialNbr   AS CHAR
     FIELD StatusCode  AS CHAR
     FIELD Description AS CHAR
+    FIELD FileName    AS CHAR
     INDEX IdxCustomerId IS UNIQUE PRIMARY CustomerId Email.
 
 DEFINE BUFFER AgreeCustomer FOR OrderCustomer.

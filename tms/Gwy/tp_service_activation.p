@@ -54,7 +54,7 @@ PROCEDURE pProcessRequests:
        FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = MobSub.Brand   AND 
                                       AgreeCustomer.OrderId = MobSub.AgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
-           RETURN fTPServiceMessageError(BUFFER FusionMessage,"Agreement customer not found").
+           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Agreement customer not found").
 
        ASSIGN lcCustomerId = AgreeCustomer.CustId + "-" + AgreeCustomer.OrgId.
 

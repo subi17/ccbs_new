@@ -52,9 +52,9 @@ FORM
     SKIP
     "Cancellation Reason:" TPService.TermReason
     SKIP
-    "Order Date ........:" lcCreatedTime FORMAT "X(24)"
+    "Created Date ......:" lcCreatedTS FORMAT "X(24)"
     SKIP
-    "Updated Time ......:" lcUpdatedTime FORMAT "X(24)" 
+    "Updated Date ......:" lcUpdatedTS FORMAT "X(24)" 
     SKIP(4)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) TPService.ServType + " service data" NO-LABELS FRAME fDetails.
@@ -276,8 +276,8 @@ REPEAT WITH FRAME sel:
         PAUSE 0. 
 
         ASSIGN
-            lcCreatedTime    = fTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS      = fTS2HMS(TPService.UpdateTS).
+            lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
 
         DISP TPService.MsSeq
              TPService.Product
@@ -286,7 +286,7 @@ REPEAT WITH FRAME sel:
              TPService.ServStatus
              TPService.SerialNbr
              TPService.TermReason
-             lcCreatedTime
+             lcCreatedTS
              lcUpdatedTS
              WITH FRAME fDetails.
      END.
@@ -339,8 +339,8 @@ PROCEDURE local-disp-row:
     CLEAR FRAME sel NO-PAUSE.
     
     ASSIGN
-        lcCreatedTime    = fTS2HMS(TPService.CreatedTS)  
-        lcUpdatedTS      = fTS2HMS(TPService.UpdateTS).
+        lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
+        lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
 
     DISPLAY 
        TPService.Product

@@ -1644,7 +1644,7 @@ FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS} 
       NEXT.
    END.
 
-   IF fDelivDevice(TPService.Type) THEN 
+   IF fDelivDevice(TPService.ServType) THEN 
       ASSIGN
          TPServiceMessage.UpdateTS      = fMakeTS()
          TPServiceMessage.MessageStatus = {&STATUS_SENT}.

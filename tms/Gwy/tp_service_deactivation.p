@@ -43,7 +43,7 @@ PROCEDURE pProcessRequests:
        IF TPServiceMessage.CreatedTS > ldeNow THEN 
           NEXT MESSAGE_LOOP.
 
-       FIND FIRST TPService WHERE TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
+       FIND FIRST TPService WHERE TPService.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
        IF NOT AVAIL TPService THEN
           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
 
@@ -54,9 +54,9 @@ PROCEDURE pProcessRequests:
        FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = MobSub.Brand   AND 
                                       AgreeCustomer.OrderId = MobSub.AgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
-           RETURN fTPServiceMessageError(BUFFER FusionMessage,"Agreement customer not found").
+           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Agreement customer not found").
 
-       ASSIGN lcCustomerId = AgreeCustomer.CustId + "-" + AgreeCustomer.OrgId.
+       ASSIGN lcCustomerId = AgreeCustomer.CustIdType + "-" + AgreeCustomer.OrgId.
 
        FIND FIRST ttCustomer WHERE ttCustomer.CustomerId = lcCustomerId NO-LOCK NO-ERROR.
        IF NOT AVAIL ttCustomer THEN 
