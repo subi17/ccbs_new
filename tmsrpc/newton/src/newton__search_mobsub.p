@@ -10,7 +10,8 @@
  * @output_struct name;string;name of the owner
            custnum;int;customer number of owner
            subscriptions;array;containing mobsub-structures OR
- 
+           discount_type;string;Discount information 
+
  * @subscription seq;int;mandatory;subscription ID
                  description;string;mandatory;MSISDN Number
                  fixed_number;string;optional;Fixed Line Number
@@ -24,6 +25,7 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/cparam2.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
@@ -43,6 +45,10 @@ DEF VAR llSearchByMobsub AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lii AS INTEGER NO-UNDO. 
 DEF VAR pcSearchTypes AS CHARACTER NO-UNDO. 
 DEF VAR plFewRecords  AS LOGICAL   NO-UNDO INIT FALSE.
+DEF VAR lcDiscounts   AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO.
+DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO.
+DEF VAR lcDiscountType AS CHAR NO-UNDO.
 
 lcCallType = validate_request(param_toplevel_id, "int|string,int,int,string,[boolean]").
 IF lcCallType EQ ? THEN RETURN.
@@ -182,12 +188,51 @@ IF NOT llSearchByMobsub AND llPreactivated THEN DO:
    RETURN appl_err("Please search for MSISDN only").
 END.
 
+/* Get available discount info for subscriptions */
+FOR EACH DPMember NO-LOCK WHERE
+         DPMember.HostTable  = "MobSub"             AND
+         DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+         DPMember.ValidFrom <= TODAY                AND
+         DPMember.ValidTo   >= TODAY                AND
+         DPMember.ValidTo   >= DPMember.ValidFrom,
+   FIRST DiscountPlan NO-LOCK WHERE
+         DiscountPlan.DPId    = DPMember.DPId AND
+         DiscountPlan.Subject = "Contract Target"
+   BY DPMember.ValidTo DESC:
+
+   lcDiscounts = DiscountPlan.DPRuleId.
+
+END.
+
+ASSIGN
+   lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
+   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+IF LOOKUP(MobSub.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+
+   IF LOOKUP(lcDiscounts,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
+      lcDiscountType = "additional_20".
+   ELSE IF (LOOKUP(lcDiscounts,{&ADDLINE_DISCOUNTS})    > 0  OR
+            LOOKUP(lcDiscounts,{&ADDLINE_DISCOUNTS_HM}) > 0) THEN
+      lcDiscountType = "additional_50".
+
+END.
+ELSE IF LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) > 0 THEN DO:
+
+   IF LOOKUP(lcDiscounts,lcExtraLineDiscounts) > 0 THEN
+      lcDiscountType = "extra_100".
+   ELSE
+      lcDiscountType = "extra_0".
+
+END.
+
 top_struct = add_struct(response_toplevel_id, "").
 
 add_int(top_struct, "custnum", Customer.CustNum).
 add_string(top_struct, "name", SUBST("&1 &2 &3", Customer.FirstName,
                                               Customer.CustName,
                                               Customer.Surname2)).
+add_string(top_struct, "discount_type", lcDiscountType).
 
 result_array = add_array(top_struct, "subscriptions").
 
