@@ -127,7 +127,7 @@ REPEAT WITH FRAME sel:
         
         IF toimi EQ 1 THEN 
         DO:
-            RUN Mm/tpservicemessage.p(iiOrderID).
+            RUN Mm/tpservicemessage.p(iiMsSeq).
         END.
       END.
 

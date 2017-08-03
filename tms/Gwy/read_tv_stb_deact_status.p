@@ -152,7 +152,6 @@ END PROCEDURE.
 
 FINALLY:
    EMPTY TEMP-TABLE ttCustomer.
-   xmlrpc_finalize().
 END.
 
 

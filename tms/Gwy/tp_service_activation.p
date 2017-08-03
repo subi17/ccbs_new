@@ -4,6 +4,7 @@
 {Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
+{Mc/orderfusion.i}
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
     FIELD CustomerId AS CHAR
@@ -56,7 +57,7 @@ PROCEDURE pProcessRequests:
        IF NOT AVAIL AgreeCustomer THEN 
            RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Agreement customer not found").
 
-       ASSIGN lcCustomerId = AgreeCustomer.CustId + "-" + AgreeCustomer.OrgId.
+       ASSIGN lcCustomerId = AgreeCustomer.CustIdType + AgreeCustomer.CustId.
 
        FIND FIRST ttCustomer WHERE ttCustomer.CustomerId = lcCustomerId NO-LOCK NO-ERROR.
        IF NOT AVAIL ttCustomer THEN 
@@ -135,7 +136,6 @@ END PROCEDURE.
 
 FINALLY:
    EMPTY TEMP-TABLE ttCustomer.
-   xmlrpc_finalize().
 END.
 
 
