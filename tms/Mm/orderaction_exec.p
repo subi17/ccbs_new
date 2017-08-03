@@ -106,7 +106,6 @@ FOR EACH OrderAction NO-LOCK WHERE
       WHEN "AddLineDiscount" THEN RUN pAddLineDiscountPlan.
       WHEN "Q25Discount" THEN RUN pQ25Discount.
       WHEN "Q25Extension" THEN RUN pQ25Extension.
-      WHEN "ThirdPartyService" THEN RUN pThirdPartyService.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
@@ -174,7 +173,12 @@ PROCEDURE pPeriodicalContract:
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
       RETURN "ERROR: Unknown periodical contract " + OrderAction.ItemKey.
-      
+   
+   IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+   DO:
+       RUN pThirdPartyService.
+       RETURN "".
+   END.    
    /* override DayCampaign.Feemodel because of possible reactivation */
    IF Order.OrderType = 2 AND
      LOOKUP(DayCampaign.DCType,"3,5") > 0 THEN llCreateFees = TRUE.
@@ -331,9 +335,9 @@ PROCEDURE pThirdPartyService:
         ASSIGN
             TPService.MsSeq     = iiMsSeq
             TPService.ServSeq   = NEXT-VALUE(TPServiceSeq)
-            TPService.ServType  = "TELEVISION"
+            TPService.ServType  = "Television"
             TPService.Product   = OrderAction.ItemKey
-            TPService.Provider  = (IF TPService.ServType = "TELEVISION" THEN "Huawei" ELSE "")
+            TPService.Provider  = (IF TPService.ServType = "Television" THEN "Huawei" ELSE "")
             TPService.Status    = {&STATUS_NEW}
             TPService.CreatedTS = fMakeTS()
             TPService.UpdatedTS = TPService.CreatedTS.

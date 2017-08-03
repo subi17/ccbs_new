@@ -7,7 +7,7 @@
   CHANGED ......: 
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
-DEF INPUT PARAMETER iiOrderID  AS INT NO-UNDO.
+DEF INPUT PARAMETER iiMsSeq  AS INT NO-UNDO.
 
 {Syst/commali.i}
 {Func/timestamp.i}
@@ -29,43 +29,43 @@ DEF VAR lcCreatedTS    AS CHAR                   NO-UNDO.
 DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
 
 FORM
-   OrderTPService.Product      FORMAT "X(22)" COLUMN-LABEL "Product"
-   OrderTPService.Type         FORMAT "X(15)" COLUMN-LABEL "Type"   
-   OrderTPService.Status       FORMAT "X(8)"  COLUMN-LABEL "Status"
-   lcCreatedTS                 FORMAT "X(24)" COLUMN-LABEL "Created"
-   lcUpdatedTS                 FORMAT "X(24)" COLUMN-LABEL "Updated"
-   OrderTPService.SerialNumber FORMAT "X(25)" COLUMN-LABEL "Serial Number"
+   TPService.Product      FORMAT "X(22)" COLUMN-LABEL "Product"
+   TPService.Type         FORMAT "X(15)" COLUMN-LABEL "Type"   
+   TPService.Status       FORMAT "X(8)"  COLUMN-LABEL "Status"
+   lcCreatedTS            FORMAT "X(24)" COLUMN-LABEL "Created"
+   lcUpdatedTS            FORMAT "X(24)" COLUMN-LABEL "Updated"
+   TPService.SerialNbr    FORMAT "X(25)" COLUMN-LABEL "Serial Number"
    WITH ROW 1 CENTERED OVERLAY 15  DOWN COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Services" FRAME sel.
 
 FORM
-    "OrderID ...........:" OrderTPService.OrderID
+    "MsSeq .............:" TPService.MsSeq
     SKIP
-    "Product ...........:" OrderTPService.Product
+    "Product ...........:" TPService.Product
     SKIP
-    "Service Type ......:" OrderTPService.Type
+    "Service Type ......:" TPService.Type
     SKIP
-    "Service Provider ..:" OrderTPService.Provider
+    "Service Provider ..:" TPService.Provider
     SKIP
-    "Service Status ....:" OrderTPService.Status
+    "Service Status ....:" TPService.Status
     SKIP
-    "Serial Number .....:" OrderTPService.SerialNumber
+    "Serial Number .....:" TPService.SerialNbr
     SKIP
-    "Cancellation Reason:" OrderTPService.TermReason
+    "Cancellation Reason:" TPService.TermReason
     SKIP
     "Order Date ........:" lcCreatedTime FORMAT "X(24)"
     SKIP
     "Updated Time ......:" lcUpdatedTime FORMAT "X(24)" 
     SKIP(4)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) OrderTPService.Type + " service data" NO-LABELS FRAME fDetails.
+    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) TPService.Type + " service data" NO-LABELS FRAME fDetails.
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
 
-IF AVAILABLE OrderTPService THEN ASSIGN
-   Memory       = recid(OrderTPService)
+IF AVAILABLE TPService THEN ASSIGN
+   Memory       = recid(TPService)
    must-print   = TRUE
    must-add     = FALSE.
 ELSE ASSIGN
@@ -84,13 +84,13 @@ REPEAT WITH FRAME sel:
    DO :
       IF must-print THEN DO:
         UP FRAME-LINE - 1.
-        FIND OrderTPService WHERE recid(OrderTPService) = Memory NO-LOCK NO-ERROR.
+        FIND TPService WHERE recid(TPService) = Memory NO-LOCK NO-ERROR.
 
 
         REPEAT WITH FRAME sel:
-           IF AVAILABLE OrderTPService THEN DO:
+           IF AVAILABLE TPService THEN DO:
               RUN local-disp-row.
-              rtab[FRAME-LINE] = recid(OrderTPService).
+              rtab[FRAME-LINE] = recid(TPService).
               RUN local-find-NEXT.
            END.
            ELSE DO:
@@ -117,6 +117,7 @@ REPEAT WITH FRAME sel:
       IF ufkey THEN DO:
         ASSIGN
         ufk    = 0
+        ufk[1] = 9853
         ufk[4] = 0
         ufk[8] = 8 
         ehto   = 3 
@@ -124,12 +125,16 @@ REPEAT WITH FRAME sel:
 
         RUN Syst/ufkey.p.
         
+        IF toimi EQ 1 THEN 
+        DO:
+            RUN Mm/tpservicemessage.p(iiOrderID).
+        END.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderTPService.Product {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) OrderTPService.Product WITH FRAME sel.
+        CHOOSE ROW TPService.Product {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(ccc) TPService.Product WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -153,11 +158,11 @@ REPEAT WITH FRAME sel:
 
       IF order <> pr-order AND MaxOrder > 1 THEN DO:
         ASSIGN FIRSTrow = 0 Memory = rtab[FRAME-LINE].
-        FIND OrderTPService WHERE recid(OrderTPService) = Memory NO-LOCK.
+        FIND TPService WHERE recid(TPService) = Memory NO-LOCK.
         DO i = 1 TO FRAME-LINE - 1:
            RUN local-find-PREV.
-           IF AVAILABLE OrderTPService THEN
-              ASSIGN FIRSTrow = i Memory = recid(OrderTPService).
+           IF AVAILABLE TPService THEN
+              ASSIGN FIRSTrow = i Memory = recid(TPService).
            ELSE LEAVE.
         END.
         must-print = TRUE.
@@ -169,7 +174,7 @@ REPEAT WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
-           IF NOT AVAILABLE OrderTPService THEN DO:
+           IF NOT AVAILABLE TPService THEN DO:
               MESSAGE "YOU ARE ON THE FIRST ROW !".
               BELL. PAUSE 1 NO-MESSAGE.
               NEXT BROWSE.
@@ -182,7 +187,7 @@ REPEAT WITH FRAME sel:
                  rtab[i] = rtab[i - 1].
               END.
               ASSIGN
-                rtab[1] = recid(OrderTPService)
+                rtab[1] = recid(TPService)
                 Memory  = rtab[1].
            END.
         END.
@@ -195,7 +200,7 @@ REPEAT WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-NEXT.
-           IF NOT AVAILABLE OrderTPService THEN DO:
+           IF NOT AVAILABLE TPService THEN DO:
               MESSAGE "YOU ARE ON THE LAST ROW !".
               BELL. PAUSE 1 NO-MESSAGE.
               NEXT BROWSE.
@@ -207,7 +212,7 @@ REPEAT WITH FRAME sel:
               DO i = 1 TO FRAME-DOWN - 1:
                  rtab[i] = rtab[i + 1].
               END.
-              rtab[FRAME-DOWN] = recid(OrderTPService).
+              rtab[FRAME-DOWN] = recid(TPService).
               /* save RECID of uppermost ROW */
               Memory = rtab[1].
            END.
@@ -218,15 +223,15 @@ REPEAT WITH FRAME sel:
       /* PREV page */
       ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
-        FIND OrderTPService WHERE recid(OrderTPService) = Memory NO-LOCK NO-ERROR.
+        FIND TPService WHERE recid(TPService) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
-        IF AVAILABLE OrderTPService THEN DO:
-           Memory = recid(OrderTPService).
+        IF AVAILABLE TPService THEN DO:
+           Memory = recid(TPService).
 
            /* reverse 1 page */
            DO RowNo = 1 TO (FRAME-DOWN - 1):
               RUN local-find-PREV.
-              IF AVAILABLE OrderTPService THEN Memory = recid(OrderTPService).
+              IF AVAILABLE TPService THEN Memory = recid(TPService).
               ELSE RowNo = FRAME-DOWN.
            END.
            must-print = TRUE.
@@ -248,7 +253,7 @@ REPEAT WITH FRAME sel:
        END.
        ELSE DO: /* downmost ROW was NOT empty*/
            Memory = rtab[FRAME-DOWN].
-           FIND OrderTPService WHERE recid(OrderTPService) = Memory NO-LOCK.
+           FIND TPService WHERE recid(TPService) = Memory NO-LOCK.
            must-print = TRUE.
            NEXT LOOP.
        END.
@@ -256,13 +261,13 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
-        ASSIGN Memory = recid(OrderTPService) must-print = TRUE.
+        ASSIGN Memory = recid(TPService) must-print = TRUE.
        NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
-        ASSIGN Memory = recid(OrderTPService) must-print = TRUE.
+        ASSIGN Memory = recid(TPService) must-print = TRUE.
         NEXT LOOP.
      END.
  
@@ -271,16 +276,16 @@ REPEAT WITH FRAME sel:
         PAUSE 0. 
 
         ASSIGN
-            lcCreatedTime    = fTS2HMS(OrderTPService.CreatedTS)  
-            lcUpdatedTS      = fTS2HMS(OrderTPService.UpdatedTS).
+            lcCreatedTime    = fTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS      = fTS2HMS(TPService.UpdatedTS).
 
-        DISP OrderTPService.OrderID
-             OrderTPService.Product
-             OrderTPService.Type
-             OrderTPService.Provider
-             OrderTPService.Status
-             OrderTPService.SerialNumber
-             OrderTPService.TermReason
+        DISP TPService.MsSeq
+             TPService.Product
+             TPService.Type
+             TPService.Provider
+             TPService.Status
+             TPService.SerialNbr
+             TPService.TermReason
              lcCreatedTime
              lcUpdatedTS
              WITH FRAME fDetails.
@@ -299,33 +304,33 @@ PROCEDURE local-find-this:
     DEF INPUT PARAMETER exlock AS lo NO-UNDO.
 
     IF exlock THEN 
-        FIND OrderTPService WHERE recid(OrderTPService) = rtab[frame-line(sel)] EXCLUSIVE-LOCK.
+        FIND TPService WHERE recid(TPService) = rtab[frame-line(sel)] EXCLUSIVE-LOCK.
     ELSE
-        FIND OrderTPService WHERE recid(OrderTPService) = rtab[frame-line(sel)] NO-LOCK.
+        FIND TPService WHERE recid(TPService) = rtab[frame-line(sel)] NO-LOCK.
 
 END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
 
-       IF order = 1 THEN FIND FIRST OrderTPService WHERE OrderTPService.OrderId = iiOrderID NO-LOCK NO-ERROR.
+       IF order = 1 THEN FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
          
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
 
-       IF order = 1 THEN FIND LAST OrderTPService WHERE OrderTPService.OrderId = iiOrderID NO-LOCK NO-ERROR.
+       IF order = 1 THEN FIND LAST TPService WHERE TPService.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
  
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
 
-       IF order = 1 THEN FIND NEXT OrderTPService WHERE OrderTPService.OrderId = iiOrderID NO-LOCK NO-ERROR.
+       IF order = 1 THEN FIND NEXT TPService WHERE TPService.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
           
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
  
-       IF order = 1 THEN FIND PREV OrderTPService WHERE OrderTPService.OrderId = iiOrderID NO-LOCK NO-ERROR.
+       IF order = 1 THEN FIND PREV TPService WHERE TPService.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
   
 END PROCEDURE.
 
@@ -334,16 +339,16 @@ PROCEDURE local-disp-row:
     CLEAR FRAME sel NO-PAUSE.
     
     ASSIGN
-        lcCreatedTime    = fTS2HMS(OrderTPService.CreatedTS)  
-        lcUpdatedTS      = fTS2HMS(OrderTPService.UpdatedTS).
+        lcCreatedTime    = fTS2HMS(TPService.CreatedTS)  
+        lcUpdatedTS      = fTS2HMS(TPService.UpdatedTS).
 
     DISPLAY 
-       OrderTPService.Product
-       OrderTPService.Type
-       OrderTPService.Status
+       TPService.Product
+       TPService.Type
+       TPService.Status
        lcCreatedTS
        lcUpdatedTS
-       OrderTPService.SerialNumber
+       TPService.SerialNbr
        WITH FRAME sel.
 
 END PROCEDURE.

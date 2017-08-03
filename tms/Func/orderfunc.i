@@ -423,11 +423,13 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 END FUNCTION.   
 
 FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
- (iiServSeq     AS INT,
+ (iiMsSeq       AS INT,
+  iiServSeq     AS INT,
   icMessageType AS CHAR):
 
     CREATE TPServiceMessage.
     ASSIGN
+       TPServiceMessage.MsSeq       = iiMsSeq
        TPServiceMessage.ServSeq     = iiServSeq
        TPServiceMessage.MessageSeq  = NEXT-VALUE(TPServiceMessageSeq)
        TPServiceMessage.MessageType = icMessageType
@@ -440,7 +442,7 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fInitiate_ThirdPartyService_STB_Logistics RETURNS LOGICAL
+FUNCTION fInitiate_ThirdParty_BB_Service_STB_Logistics RETURNS LOGICAL
     (INPUT  iiMsSeq AS INT):
 
     FOR EACH TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.Status = {&STATUS_NEW} NO-LOCK:
@@ -449,7 +451,7 @@ FUNCTION fInitiate_ThirdPartyService_STB_Logistics RETURNS LOGICAL
         IF NOT AVAIL TPService THEN 
             RETURN FALSE.
 
-        fCreateTPServiceMessage(TPService.ServSeq , {&ACTIVATION}).
+        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq , {&ACTIVATION}).
 
         ASSIGN
             TPService.Status    = {&STATUS_ONGOING}
@@ -457,7 +459,8 @@ FUNCTION fInitiate_ThirdPartyService_STB_Logistics RETURNS LOGICAL
     END.
 
     RELEASE TPService.
-
+    RELEASE TPServiceMessage.
+    
     RETURN TRUE.
 
 END FUNCTION.

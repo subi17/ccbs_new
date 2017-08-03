@@ -1400,7 +1400,7 @@ FUNCTION fDelivDevice RETURNS LOG
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
-      WHEN "fusion_telesales" THEN lcOrderChannel = "02".
+      WHEN "fusion_telesales" OR "Fusion_Telesales_PRO" THEN lcOrderChannel = "02".
       WHEN "fusion_pos" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
@@ -1414,8 +1414,8 @@ FUNCTION fDelivDevice RETURNS LOG
       ttOneDelivery.RowNum        = liRowNum
       ttOneDelivery.OrderId       = Order.OrderId
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
-      ttOneDelivery.ActionID      = "1" /* Router */
-      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "XXXXXXXXX")
+      ttOneDelivery.ActionID      = (IF icDevice = "Router" THEN "1" ELSE "2")
+      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "TVSTB")
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -1445,7 +1445,7 @@ FUNCTION fDelivDevice RETURNS LOG
    CREATE ttInvRow.
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "XXXXXXXXX") 
+      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "TVSTB") 
       ttInvRow.Quantity    = "1"
       liLoop1              = 1.
 

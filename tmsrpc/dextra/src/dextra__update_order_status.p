@@ -211,9 +211,9 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
             FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
    END.   
-   ELSE IF liLOStatusId EQ 11111 THEN  /* StatusId need to be agreed with dextra */
+   ELSE IF liLOStatusId EQ 88888 THEN
    DO:
-      FIND FIRST TPService WHERE TPService.MsSeq = Order.MsSeq AND TPService.ServType = "TELEVISION" AND TPService.Status = {&STATUS_ONGOING} NO-LOCK NO-ERROR.
+      FIND FIRST TPService WHERE TPService.MsSeq = Order.MsSeq AND TPService.ServType = "Television" AND TPService.Status = {&STATUS_ONGOING} NO-LOCK NO-ERROR.
       IF AVAIL TPService THEN 
       DO:
           FIND FIRST TPServiceMessage WHERE TPServiceMessage.ServSeq     = TPService.ServSeq AND 
@@ -276,89 +276,91 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    END.
 END.
 
-IF liLOStatusId NE 11111 THEN 
-DO:
-   IF llDoEvent THEN DO:
-      DEFINE VARIABLE lhOrderDelivery AS HANDLE NO-UNDO.
-      lhOrderDelivery = BUFFER OrderDelivery:HANDLE.
-      RUN StarEventInitialize(lhOrderDelivery).
+IF llDoEvent THEN DO:
+   DEFINE VARIABLE lhOrderDelivery AS HANDLE NO-UNDO.
+   lhOrderDelivery = BUFFER OrderDelivery:HANDLE.
+   RUN StarEventInitialize(lhOrderDelivery).
+END.
+
+CREATE OrderDelivery.
+ASSIGN
+   OrderDelivery.Brand = gcBrand
+   OrderDelivery.OrderId = Order.OrderId
+   OrderDelivery.LOTimeStamp = ldeLOTimeStamp
+   OrderDelivery.CourierId = liCourierId
+   OrderDelivery.CourierShippingId = lcCourierShippingId
+   OrderDelivery.LOId = liLOId
+   OrderDelivery.LOStatusId = liLOStatusId
+   OrderDelivery.IncidentInfoId = ?
+   OrderDelivery.MeasuresInfoId = ?.
+
+IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
+      
+IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
+
+   FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
+              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.OrderId = Order.OrderId AND
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
+   NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN DO:
+      CREATE OrderCustomer.
+      ASSIGN
+         OrderCustomer.Brand     = gcBrand 
+         OrderCustomer.OrderId   = Order.OrderId
+         OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
+   END.
+   ELSE IF llDoEvent THEN DO:
+      DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
+      lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
+      RUN StarEventInitialize(lhOrderCustomer).
+      RUN StarEventSetOldBuffer(lhOrderCustomer).
    END.
 
-   CREATE OrderDelivery.
    ASSIGN
-      OrderDelivery.Brand = gcBrand
-      OrderDelivery.OrderId = Order.OrderId
-      OrderDelivery.LOTimeStamp = ldeLOTimeStamp
-      OrderDelivery.CourierId = liCourierId
-      OrderDelivery.CourierShippingId = lcCourierShippingId
-      OrderDelivery.LOId = liLOId
-      OrderDelivery.LOStatusId = liLOStatusId
-      OrderDelivery.IncidentInfoId = ?
-      OrderDelivery.MeasuresInfoId = ?.
-
-
-   IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
-         
-   IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
-
-      FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand = gcBrand AND
-                 OrderCustomer.OrderId = Order.OrderId AND
-                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
-      NO-ERROR.
-      IF NOT AVAIL OrderCustomer THEN DO:
-         CREATE OrderCustomer.
-         ASSIGN
-            OrderCustomer.Brand     = gcBrand 
-            OrderCustomer.OrderId   = Order.OrderId
-            OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
-      END.
-      ELSE IF llDoEvent THEN DO:
-         DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
-         lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
-         RUN StarEventInitialize(lhOrderCustomer).
-         RUN StarEventSetOldBuffer(lhOrderCustomer).
-      END.
-
-      ASSIGN
-         OrderCustomer.Region       = lcRegion
-         OrderCustomer.Street       = lcStreet
-         OrderCustomer.ZipCode      = lcZip
-         OrderCustomer.PostOffice   = lcCity
-         OrderCustomer.Country      = lcCountry
-         OrderCustomer.AddressCodC  = lcStreetCode
-         OrderCustomer.AddressCodP  = lcCityCode.
-      
-      IF llDoEvent THEN DO:
-         IF NEW OrderCustomer THEN
-            fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
-                                     "",
-                                     katun,
-                                     "").
-         ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
-      END.
+      OrderCustomer.Region       = lcRegion
+      OrderCustomer.Street       = lcStreet
+      OrderCustomer.ZipCode      = lcZip
+      OrderCustomer.PostOffice   = lcCity
+      OrderCustomer.Country      = lcCountry
+      OrderCustomer.AddressCodC  = lcStreetCode
+      OrderCustomer.AddressCodP  = lcCityCode.
+   
+   IF llDoEvent THEN DO:
+      IF NEW OrderCustomer THEN
+         fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
+                                  "",
+                                  katun,
+                                  "").
+      ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
    END.
 END.
 
+
 /* Remove router prefix 9999 for SMS sending */
 IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId),
-                      LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
-
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
+ELSE IF STRING(liLOStatusId) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_TV_STB_PREFIX}) + 1)).
+      
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 
 FIND CURRENT OrderDelivery NO-LOCK.
 
-IF LOOKUP(STRING(OrderDelivery.LOStatusId),
-   {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
+IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) > 0 THEN 
+DO:
    IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
       RUN Mc/closeorder.p(Order.OrderId,TRUE).
-   ELSE RUN Mc/cancelorder.p(Order.OrderId,TRUE).
+   ELSE 
+      RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+   IF VALID-HANDLE(ghFunc1) THEN 
+      DELETE OBJECT ghFunc1 NO-ERROR. 
+      
+   IF llDoEvent THEN 
+      fCleanEventObjects().
 END.

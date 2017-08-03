@@ -4,7 +4,8 @@
 {Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
-  
+{Func/ftransdir.i}
+
 DEF VAR lcCustomerId AS CHAR NO-UNDO.
 
 DEFINE TEMP-TABLE ttCustomer
@@ -42,45 +43,45 @@ PROCEDURE pUpdateStatus:
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
     FOR EACH ttCustomer,
-        FIRST OrderTPService WHERE OrderTPService.SerialNbr = ttCustomer.SerialNbr           AND 
-                                   OrderTPService.Status    = {&FUSION_ORDER_STATUS_ONGOING} NO-LOCK:
+        FIRST TPService WHERE TPService.SerialNbr = ttCustomer.SerialNbr AND TPService.Status = {&STATUS_ONGOING} NO-LOCK:
 
         /* ASSIGN lcMsgType = (IF ttCustomer.ActionType = "CreateSubscriber" THEN "" ELSE ""). */                            
-        FIND FIRST FusionMessage WHERE FusionMessage.OrderId = OrderTPService.OrderId AND 
-                                       FusionMessage.Source        EQ {&FUSIONMESSAGE_SOURCE_TMS}                  AND
-                                       FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_PENDING_DEACTIVATION} AND
-                                       FusionMessage.MessageType   EQ {&THIRDPARTY_DEVICE_TV_CANCELLATION}         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-        IF LOCKED FusionMessage THEN 
+        FIND FIRST TPServiceMessage WHERE TPServiceMessage.MsSeq       EQ TPService.MsSeq                      AND
+                                          TPServiceMessage.ServSeq     EQ TPService.ServSeq                    AND 
+                                          TPServiceMessage.Source      EQ {&SOURCE_TMS}                        AND
+                                          TPServiceMessage.Status      EQ {&PENDING_DEACTIVATION_CONFIRMATION} AND
+                                          TPServiceMessage.MessageType EQ {&CANCELLATION}                      EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        IF LOCKED TPServiceMessage THEN 
         DO:
             PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to update" SKIP.
             NEXT.
         END.      
 
-        IF AVAIL FusionMessage THEN 
+        IF AVAIL TPServiceMessage THEN 
         DO:
             IF ttCustomer.StatusCode = 0 THEN 
             DO:
                 ASSIGN
-                    FusionMessage.UpdateTS       = fMakeTS()
-                    FusionMessage.ResponseCode   = 0
-                    FusionMessage.AdditionalInfo = ttCustomer.Description 
-                    FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED}.
+                    TPServiceMessage.UpdateTS       = fMakeTS()
+                    TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
+                    TPServiceMessage.AdditionalInfo = ttCustomer.Description 
+                    TPServiceMessage.MessageStatus  = {&STATUS_HANDLED}.
             END.
             ELSE 
             DO:
                 ASSIGN
-                    FusionMessage.UpdateTS       = fMakeTS()
-                    FusionMessage.ResponseCode   = ttCustomer.StatusCode
-                    FusionMessage.AdditionalInfo = ttCustomer.Description 
-                    FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_ERROR}.
+                    TPServiceMessage.UpdateTS       = fMakeTS()
+                    TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
+                    TPServiceMessage.AdditionalInfo = ttCustomer.Description 
+                    TPServiceMessage.MessageStatus  = {&STATUS_ERROR}.
             END.
         END.
 
-        BUFFER OrderTPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-        IF AVAIL OrderTPService THEN 
+        BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+        IF AVAIL TPService THEN 
             ASSIGN 
-                OrderTPService.UpdatedTS = FusionMessage.UpdateTS
-                OrderTPService.Status    = {&FUSION_ORDER_STATUS_FINALIZED}.  
+                TPService.UpdatedTS = TPServiceMessage.UpdateTS
+                TPService.Status    = {&STATUS_DEACTIVATED}.  
     END.
     OUTPUT CLOSE.
 
@@ -89,14 +90,17 @@ PROCEDURE pUpdateStatus:
 END PROCEDURE.
 
 PROCEDURE pReadIncomingDirectory:
-    DEF VAR liCnt         AS INTE NO-UNDO.
-    DEF VAR lcSep         AS CHAR NO-UNDO INIT ",". 
-    DEF VAR lcDateTime    AS CHAR NO-UNDO.
-    DEF VAR lcIncomingDir AS CHAR NO-UNDO.
-    DEF VAR lcFlag        AS CHAR NO-UNDO.
-    DEF VAR lcFileName    AS CHAR NO-UNDO.
+    DEF VAR liCnt            AS INTE NO-UNDO.
+    DEF VAR lcSep            AS CHAR NO-UNDO INIT ",". 
+    DEF VAR lcDateTime       AS CHAR NO-UNDO.
+    DEF VAR lcIncomingDir    AS CHAR NO-UNDO.
+    DEF VAR lcFlag           AS CHAR NO-UNDO.
+    DEF VAR lcFileName       AS CHAR NO-UNDO.
+    DEF VAR lcIncomingArcDir AS CHAR NO-UNDO.
 
-    ASSIGN lcIncomingFileName = fCParamC('HuaweiCancellationIncomingDir').
+    ASSIGN 
+        lcIncomingDir    = fCParamC('DeactivationIncomingDir')
+        lcIncomingArcDir = fCParamC('ActivationIncomingArcDir').
 
     INPUT FROM OS-DIR(lcIncomingDir).
     REPEAT:
@@ -105,6 +109,8 @@ PROCEDURE pReadIncomingDirectory:
             NEXT.
 
         RUN pReadFile(lcFileName).      
+
+        fMove2TransDir(lcFileName, "", lcIncomingArcDir).
     END.
     INPUT CLOSE.
 
