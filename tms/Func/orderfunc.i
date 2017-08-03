@@ -447,7 +447,7 @@ FUNCTION fInitiate_ThirdParty_BB_Service_STB_Logistics RETURNS LOGICAL
 
     FOR EACH TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServStatus = {&STATUS_NEW} NO-LOCK:
 
-        BUFFER TPService:(EXCLUSIVE-LOCK, NO-WAIT).
+        BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
         IF NOT AVAIL TPService THEN 
             RETURN FALSE.
 
