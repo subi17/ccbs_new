@@ -18,11 +18,12 @@ class AddTableTPService(Migration):
         t.column('CreatedTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="CreatedTS", column_label="CreatedTS", position=9, order=90, help="CreatedTS")
         t.column('UpdatedTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="UpdatedTS", column_label="UpdatedTS", position=10, order=100, help="UpdatedTS")
          
-        t.index('ServSeq', ['ServSeq'], primary=True, Unique=True, area="Dyn_Index_1")
-        t.index('MsSeq', [['MsSeq'], ['Product']], area="Dyn_Index_1", area="Dyn_Index_1")
+        t.index('MsSeq', [['MsSeq'], ['ServSeq']], Unique=True, Primary= True, area="Dyn_Index_1", area="Dyn_Index_1")
+        t.index('ServSeq', ['ServSeq'], Unique=True, area="Dyn_Index_1")
+        t.index('MsSeqTypeStatus', [['MsSeq'], ['ServType'], [Status]], area="Dyn_Index_1", area="Dyn_Index_1")
         t.index('SerialNbr', ['SerialNbr'], area="Dyn_Index_1")
         t.index('CreatedTS', [['CreatedTS', 'DESC'], ['Status']], area="Dyn_Index_1")
-        t.index('UpdatedTS', ['UpdatedTS', 'DESC'], area="Dyn_Index_1")
+        t.index('UpdatedTS', ['UpdateTS', 'DESC'], area="Dyn_Index_1")
 
     def down(self):
         t = self.drop_table('TPService')

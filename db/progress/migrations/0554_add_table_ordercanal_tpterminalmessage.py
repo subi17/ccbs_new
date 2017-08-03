@@ -17,11 +17,12 @@ class AddTableTPServiceMessage(Migration):
         t.column('ResponseCode', 'character', format="x(10)", initial="", max_width=20, label="Response Code", column_label="ResponseCode", position=9, order=90, description="Response code")
         t.column('AdditionalInfo', 'character', format="x(40)", initial="", max_width=80, label="Additional Info", column_label="AdditionalInfo", position=10, order=100, description="Additional status info")
         
-        t.index('ServSeq', [['ServSeq', 'DESC'], ['MessageSeq']], area="Dyn_Index_1", primary=True, unique=True)
+        t.index('MsSeq', [['MsSeq', 'DESC'],['ServSeq', 'DESC']], area="Dyn_Index_1", primary=True, unique=True)
         t.index('MessageSeq', ['MessageSeq', 'DESC'], area="Dyn_Index_1", unique=True)
         t.index('MessageID', ['MessageID', 'DESC'], area="Dyn_Index_1", unique=True)
-        t.index('Status', [['Source'], ['Status']], area="Dyn_Index_1")
-        t.index('UpdatedTS', ['UpdatedTS', 'DESC'], area="Dyn_Index_1")
+        t.index('Status', [['Status'], ['Source']], area="Dyn_Index_1")
+        t.index('CreatedTS', ['CreatedTS', 'DESC'], area="Dyn_Index_1")
+        t.index('UpdatedTS', ['UpdateTS', 'DESC'], area="Dyn_Index_1")
 
     def down(self):
         t = self.drop_table('TPServiceMessage')

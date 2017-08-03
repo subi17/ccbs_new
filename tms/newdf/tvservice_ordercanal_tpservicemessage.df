@@ -110,13 +110,12 @@ ADD FIELD "AdditionalInfo" OF "TPServiceMessage" AS character
   DESCRIPTION "Additional status info"
   ORDER 110
 
-ADD INDEX "ServSeq" ON "TPServiceMessage"
+ADD INDEX "MsSeq" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MsSeq"        DECENDING
   INDEX-FIELD "ServSeq"      DECENDING
-  INDEX-FIELD "MessageSeq"   ASCENDING
 
 ADD INDEX "MessageSeq" ON "TPServiceMessage" 
   AREA "Dyn_Index_1"
@@ -130,12 +129,16 @@ ADD INDEX "MessageID" ON "TPServiceMessage"
 
 ADD INDEX "Status" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "Source" ASCENDING
   INDEX-FIELD "Status" ASCENDING
+  INDEX-FIELD "Source" ASCENDING
 
-ADD INDEX "UpdatedTS" ON "TPServiceMessage"
+ADD INDEX "CreatedTS" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "UpdatedTS" DECENDING
+  INDEX-FIELD "CreatedTS" DECENDING
+
+ADD INDEX "UpdateTS" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DECENDING
 
 ADD SEQUENCE "TPServiceMessageSeq"
   INITIAL 0

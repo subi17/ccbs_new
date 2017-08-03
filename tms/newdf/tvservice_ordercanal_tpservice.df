@@ -108,16 +108,23 @@ ADD FIELD "UpdatedTS" OF "TPService" AS decimal
   HELP "UpdatedTS"
   ORDER 100
 
-ADD INDEX "ServSeq" ON "TPService"
+ADD INDEX "MsSeq" ON "TPService" 
   AREA "Dyn_Index_1"
   UNIQUE
   PRIMARY
+  INDEX-FIELD "MsSeq"   ASCENDING 
   INDEX-FIELD "ServSeq" ASCENDING
 
-ADD INDEX "MsSeq" ON "TPService" 
+ADD INDEX "ServSeq" ON "TPService"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "MsSeq"   ASCENDING 
-  INDEX-FIELD "Product" ASCENDING
+  UNIQUE
+  INDEX-FIELD "ServSeq" ASCENDING
+
+ADD INDEX "MsSeqTypeStatus" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq"    ASCENDING
+  INDEX-FIELD "ServType" ASCENDING
+  INDEX-FIELD "Status"   ASCENDING
 
 ADD INDEX "SerialNbr" ON "TPService"
   AREA "Dyn_Index_1"
@@ -128,9 +135,9 @@ ADD INDEX "CreatedTS" ON "TPService"
   INDEX-FIELD "CreatedTS" DECENDING
   INDEX-FIELD "Status"    ASCENDING
 
-ADD INDEX "UpdatedTS" ON "TPService"
+ADD INDEX "UpdateTS" ON "TPService"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "UpdatedTS" DECENDING
+  INDEX-FIELD "UpdateTS" DECENDING
 
 ADD SEQUENCE "TPServiceSeq"
   INITIAL 0
