@@ -124,10 +124,9 @@ ADD INDEX "MessageSeq" ON "TPServiceMessage"
 
 ADD INDEX "MessageID" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
-  UNIQUE
   INDEX-FIELD "MessageID"   DESCENDING
 
-ADD INDEX "Status" ON "TPServiceMessage"
+ADD INDEX "MessageStatus" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
   INDEX-FIELD "MessageStatus" ASCENDING
   INDEX-FIELD "Source" ASCENDING
