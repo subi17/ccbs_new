@@ -29,6 +29,7 @@ gcBrand = "1".
 {Mm/active_bundle.i}
 {Mnp/mnp.i}
 {Func/email.i}
+{Mc/orderfusion.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.

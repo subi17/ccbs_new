@@ -1,3 +1,6 @@
+{Syst/commpaa.i}
+katun = "Cron".
+gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Func/log.i}
@@ -8,6 +11,7 @@
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
     FIELD CustomerId AS CHAR
+    FIELD CustName   AS CHAR
     FIELD Email      AS CHAR
     FIELD Region     AS CHAR
     FIELD Product    AS CHAR
@@ -65,7 +69,7 @@ PROCEDURE pProcessRequests:
           CREATE ttCustomer.
           ASSIGN
               ttCustomer.CustomerId   = lcCustomerId
-              ttCustomer.CustName     = REPLACE(fPrintCustName(BUFFER AgreeCustomer),"|","")
+              ttCustomer.CustName     = REPLACE(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER AgreeCustomer),"|","")
               ttCustomer.Email        = AgreeCustomer.Email
               ttCustomer.Region       = AgreeCustomer.Region
               ttCustomer.Product      = TPService.Product

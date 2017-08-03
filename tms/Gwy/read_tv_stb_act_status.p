@@ -1,3 +1,6 @@
+{Syst/commpaa.i}
+katun = "Cron".
+gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Func/log.i}
