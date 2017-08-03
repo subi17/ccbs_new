@@ -6,7 +6,7 @@ ADD TABLE "TPServiceMessage"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-tpservicemessage.p" CRC "?"
   TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "rw-tpservicemessage.p" CRC "?"
 
-ADD FIELD "MsSeq" OF "TPService" AS integer
+ADD FIELD "MsSeq" OF "TPServiceMessage" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "MsSeq"
@@ -66,30 +66,30 @@ ADD FIELD "Source" OF "TPServiceMessage" AS character
   DESCRIPTION "Messsage source (TMS/Masmovil)"
   ORDER 70
 
+ADD FIELD "MessageStatus" OF "TPServiceMessage" AS character
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Message Status"
+  POSITION 8
+  COLUMN-LABEL "MessageStatus"
+  ORDER 80
+
 ADD FIELD "CreatedTS" OF "TPServiceMessage" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "CreatedTS"
-  POSITION 8
+  POSITION 9
   COLUMN-LABEL "CreatedTS"
   DECIMALS 5
-  ORDER 80
+  ORDER 90
 
 ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "UpdateTS"
-  POSITION 9
+  POSITION 10
   COLUMN-LABEL "UpdateTS"
   DECIMALS 5
-  ORDER 90
-
-ADD FIELD "MessageStatus" OF "TPServiceMessage" AS character
-  FORMAT "x(15)"
-  INITIAL ""
-  LABEL "Message Status"
-  POSITION 10
-  COLUMN-LABEL "MessageStatus"
   ORDER 100
 
 ADD FIELD "ResponseCode" OF "TPServiceMessage" AS character
