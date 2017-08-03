@@ -10,22 +10,22 @@ ADD FIELD "MsSeq" OF "TPService" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "MsSeq"
-  POSITION 1
+  POSITION 2
   MAX-WIDTH 4
   COLUMN-LABEL "MsSeq"
   HELP "Sequence for a Subscription"
-  ORDER 10
+  ORDER 20
   MANDATORY
 
 ADD FIELD "ServSeq" OF "TPService" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "ServSeq"
-  POSITION 2
+  POSITION 3
   MAX-WIDTH 4
   COLUMN-LABEL "ServSeq"
   HELP "Service Sequence"
-  ORDER 20
+  ORDER 30
   MANDATORY
 
 ADD FIELD "ServType" OF "TPService" AS character 
@@ -33,80 +33,80 @@ ADD FIELD "ServType" OF "TPService" AS character
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Type"
-  POSITION 3
+  POSITION 4
   MAX-WIDTH 30
   COLUMN-LABEL "Type"
   HELP "Service Type"
-  ORDER 30
+  ORDER 40
 
 ADD FIELD "Product" OF "TPService" AS character 
   FORMAT "x(25)"
   INITIAL ""
   LABEL "Product"
-  POSITION 4
+  POSITION 5
   MAX-WIDTH 50
   HELP "Product"
-  ORDER 40
+  ORDER 50
 
 ADD FIELD "Provider" OF "TPService" AS character 
   FORMAT "x(20)"
   INITIAL ""
   LABEL "Provider"
-  POSITION 5
+  POSITION 6
   MAX-WIDTH 40
   COLUMN-LABEL "Provider"
   HELP "Service Provider"
-  ORDER 50
+  ORDER 60
 
 ADD FIELD "SerialNbr" OF "TPService" AS character 
   FORMAT "x(25)"
   INITIAL ""
   LABEL "Serial Nbr"
-  POSITION 6
+  POSITION 7
   MAX-WIDTH 50
   COLUMN-LABEL "Serial Nbr"
   HELP "Serial Number"
-  ORDER 60
+  ORDER 70
 
 ADD FIELD "Status" OF "TPService" AS character 
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Status"
-  POSITION 7
+  POSITION 8
   MAX-WIDTH 30
   COLUMN-LABEL "Status"
   HELP "Service Status"
-  ORDER 70
+  ORDER 80
 
 ADD FIELD "TermReason" OF "TPService" AS character
   FORMAT "x(35)"
   INITIAL ""
   LABEL "TermReason"
-  POSITION 8
+  POSITION 9
   MAX-WIDTH 70
   COLUMN-LABEL "TermReason"
   HELP "Termination Reason"
-  ORDER 80
+  ORDER 90
 
 ADD FIELD "CreatedTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "CreatedTS"
-  POSITION 9
+  POSITION 10
   MAX-WIDTH 20
   COLUMN-LABEL "CreatedTS"
   HELP "CreatedTS"
-  ORDER 90
+  ORDER 100
 
 ADD FIELD "UpdatedTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "UpdatedTS"
-  POSITION 10
+  POSITION 11
   MAX-WIDTH 20
   COLUMN-LABEL "UpdatedTS"
   HELP "UpdatedTS"
-  ORDER 100
+  ORDER 110
 
 ADD INDEX "MsSeq" ON "TPService" 
   AREA "Dyn_Index_1"

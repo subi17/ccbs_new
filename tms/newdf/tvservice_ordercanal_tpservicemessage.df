@@ -10,105 +10,105 @@ ADD FIELD "MsSeq" OF "TPService" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "MsSeq"
-  POSITION 1
+  POSITION 2
   MAX-WIDTH 4
   COLUMN-LABEL "MsSeq"
   HELP "Sequence for a Subscription"
-  ORDER 10
+  ORDER 20
   MANDATORY
 
 ADD FIELD "ServSeq" OF "TPServiceMessage" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "ServSeq"
-  POSITION 2
+  POSITION 3
   MAX-WIDTH 4
   COLUMN-LABEL "ServSeq"
   HELP "Service Sequence Number"
-  ORDER 20
+  ORDER 30
   MANDATORY
 
 ADD FIELD "MessageSeq" OF "TPServiceMessage" AS integer
   FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "MessageSeq"
-  POSITION 3
+  POSITION 4
   MAX-WIDTH 4
   COLUMN-LABEL "MessageSeq"
   HELP "Message Sequence Number"
-  ORDER 30
+  ORDER 40
   MANDATORY
 
 ADD FIELD "MessageID" OF "TPServiceMessage" AS character
   FORMAT "x(35)"
   INITIAL ""
   LABEL "MessageId"
-  POSITION 4
+  POSITION 5
   MAX-WIDTH 70
   COLUMN-LABEL "MessageID"
   DESCRIPTION "Auto-generated UUID"
-  ORDER 40
+  ORDER 50
 
 ADD FIELD "MessageType" OF "TPServiceMessage" AS character
   FORMAT "x(16)"
   INITIAL ""
   LABEL "Message Type"
-  POSITION 5
+  POSITION 6
   COLUMN-LABEL "MessageType"
-  ORDER 50
+  ORDER 60
 
 ADD FIELD "Source" OF "TPServiceMessage" AS character
   FORMAT "x(8)"
   INITIAL ""
   LABEL "Message Source"
-  POSITION 6
+  POSITION 7
   COLUMN-LABEL "Source"
   DESCRIPTION "Messsage source (TMS/Masmovil)"
-  ORDER 60
+  ORDER 70
 
 ADD FIELD "CreatedTS" OF "TPServiceMessage" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "CreatedTS"
-  POSITION 7
+  POSITION 8
   COLUMN-LABEL "CreatedTS"
   DECIMALS 5
-  ORDER 70
+  ORDER 80
 
 ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "UpdateTS"
-  POSITION 8
+  POSITION 9
   COLUMN-LABEL "UpdateTS"
   DECIMALS 5
-  ORDER 80
+  ORDER 90
 
 ADD FIELD "Status" OF "TPServiceMessage" AS character
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Message Status"
-  POSITION 9
+  POSITION 10
   COLUMN-LABEL "MessageStatus"
-  ORDER 90
+  ORDER 100
 
 ADD FIELD "ResponseCode" OF "TPServiceMessage" AS character
   FORMAT "x(10)"
   INITIAL ""
   LABEL "Response Code"
-  POSITION 10
+  POSITION 11
   COLUMN-LABEL "ResponseCode"
   DESCRIPTION "Response code from Third party"
-  ORDER 100
+  ORDER 110
 
 ADD FIELD "AdditionalInfo" OF "TPServiceMessage" AS character
   FORMAT "x(40)"
   INITIAL ""
   LABEL "Additional Info"
-  POSITION 11
+  POSITION 12
   COLUMN-LABEL "AdditionalInfo"
   DESCRIPTION "Additional status info"
-  ORDER 110
+  ORDER 120
 
 ADD INDEX "MsSeq" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
