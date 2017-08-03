@@ -451,7 +451,7 @@ FUNCTION fInitiate_ThirdParty_BB_Service_STB_Logistics RETURNS LOGICAL
         IF NOT AVAIL TPService THEN 
             RETURN FALSE.
 
-        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq , {&ACTIVATION}).
+        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq , {&TYPE_ACTIVATION}).
 
         ASSIGN
             TPService.ServStatus = {&STATUS_ONGOING}

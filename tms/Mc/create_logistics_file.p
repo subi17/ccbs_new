@@ -1619,10 +1619,9 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
 END.
 
 /* Third Party Device Logistics */
-FOR EACH TPServiceMessage WHERE 
-         TPServiceMessage.Source        EQ {&SOURCE_TMS} AND
-         TPServiceMessage.MessageStatus EQ {&STATUS_NEW} AND
-         TPServiceMessage.MessageType   EQ {&ACTIVATION} EXCLUSIVE-LOCK:
+FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}      AND
+                                TPServiceMessage.MessageStatus EQ {&STATUS_NEW}      AND
+                                TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION} EXCLUSIVE-LOCK:
 
    FIND FIRST TPService WHERE TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL TPService THEN
@@ -1638,7 +1637,7 @@ FOR EACH TPServiceMessage WHERE
        NEXT.
    END.
 
-   FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-ERROR.
+   FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL Order OR LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
    DO:
       fTPServiceMessageError(BUFFER TPServiceMessage,"No order found or Invalid order status").

@@ -62,11 +62,11 @@ CLASS Gwy.ThirdPartyServiceDaemon INHERITS gearbox.daemons.Daemon:
 
       IF CAN-FIND(FIRST TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                    AND
                                                TPServiceMessage.MessageStatus EQ {&WAITING_FOR_VENDOR_ACTIVATION} AND
-                                               TPServiceMessage.MessageType   EQ {&ACTIVATION}                    NO-LOCK) THEN
+                                               TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION}               NO-LOCK) THEN
           RUN Gwy/tp_service_activation.p.
       ELSE IF CAN-FIND(FIRST FusionMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                      AND
                                                  TPServiceMessage.MessageStatus EQ {&WAITING_FOR_VENDOR_DEACTIVATION} AND
-                                                 TPServiceMessage.MessageType   EQ {&DEACTIVATION}                    NO-LOCK) THEN    
+                                                 TPServiceMessage.MessageType   EQ {&TYPE_DEACTIVATION}               NO-LOCK) THEN    
           RUN Gwy/tp_service_deactivation.p.
 
       pauseUntilHeartbeat(5).

@@ -16,7 +16,8 @@ DEFINE TEMP-TABLE ttCustomer NO-UNDO
 
 DEFINE STREAM str_err.
 
-DEF VAR liLoop AS INT NO-UNDO.
+DEF VAR liLoop AS INTE NO-UNDO.
+DEF VAR ldeNow AS DECI NO-UNDO.
 
 DO ON ERROR UNDO, THROW:
 
@@ -31,6 +32,8 @@ PROCEDURE pProcessRequests:
 
     DEFINE BUFFER AgreeCustomer FOR OrderCustomer.
 
+    ASSIGN ldeNow = fMakeTS().
+    
     MESSAGE_LOOP:
     FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                    AND
                                     TPServiceMessage.MessageStatus EQ {&WAITING_FOR_VENDOR_ACTIVATION} AND
