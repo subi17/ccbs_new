@@ -39,6 +39,7 @@ PROCEDURE pUpdateStatus:
     DEF VAR lcLogFile  AS CHAR NO-UNDO.
     DEF VAR lcDateTime AS CHAR NO-UNDO.
     DEF VAR lcMsgType  AS CHAR NO-UNDO.
+    DEF VAR lcError    AS CHAR NO-UNDO.
 
     ASSIGN 
         lcDateTime = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
@@ -70,6 +71,39 @@ PROCEDURE pUpdateStatus:
                     TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
                     TPServiceMessage.AdditionalInfo = ttCustomer.Description 
                     TPServiceMessage.MessageStatus  = {&STATUS_HANDLED}.
+
+                liTerminate = fPCActionRequest(TPService.MsSeq,
+                                               TPService.Product,
+                                               "term",
+                                               fMakeTS(),
+                                               TRUE,   /* create fee */
+                                               {&REQUEST_SOURCE_TV_SERVICE_DEACTIVATION},
+                                               "",
+                                               0,
+                                               FALSE,   /* mandatory subreq. */
+                                               "",
+                                               0,
+                                               0,
+                                               "",
+                                               OUTPUT lcError).
+
+                IF liTerminate > 0 THEN 
+                DO:
+                    BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+                    IF AVAIL TPService THEN 
+                        ASSIGN 
+                            TPService.UpdateTS   = TPServiceMessage.UpdateTS
+                            TPService.ServStatus = {&STATUS_DEACTIVATED}.
+                END.
+                ELSE 
+                DO:
+                    BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+                    IF AVAIL TPService THEN 
+                        ASSIGN 
+                            TPService.UpdateTS   = TPServiceMessage.UpdateTS
+                            TPService.ServStatus = {&STATUS_ERROR}.
+                    PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to deactivate service: '" + TPService.Product + "' Error: '" + lcError + "'" SKIP.                
+                END. 
             END.
             ELSE 
             DO:
@@ -80,12 +114,6 @@ PROCEDURE pUpdateStatus:
                     TPServiceMessage.MessageStatus  = {&STATUS_ERROR}.
             END.
         END.
-
-        BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-        IF AVAIL TPService THEN 
-            ASSIGN 
-                TPService.UpdateTS   = TPServiceMessage.UpdateTS
-                TPService.ServStatus = {&STATUS_DEACTIVATED}.  
     END.
     OUTPUT CLOSE.
 
