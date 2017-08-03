@@ -16,6 +16,8 @@ DEFINE TEMP-TABLE ttCustomer NO-UNDO
 
 DEFINE STREAM str_err.
 
+DEF VAR liLoop AS INT NO-UNDO.
+
 DO ON ERROR UNDO, THROW:
 
     RUN pProcessRequests.
@@ -32,7 +34,7 @@ PROCEDURE pProcessRequests:
     MESSAGE_LOOP:
     FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                      AND
                                     TPServiceMessage.MessageStatus EQ {&WAITING_FOR_VENDOR_DEACTIVATION} AND
-                                    TPServiceMessage.MessageType   EQ {&DEACTIVATION}                    NO-LOCK BY TPServiceMessage.CreatedTS 
+                                    TPServiceMessage.MessageType   EQ {&TYPE_DEACTIVATION}               NO-LOCK BY TPServiceMessage.CreatedTS 
         liLoop = 1 TO 10:
        
        IF TPServiceMessage.CreatedTS > ldeNow THEN 

@@ -43,14 +43,15 @@ PROCEDURE pUpdateStatus:
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
     FOR EACH ttCustomer,
-        FIRST TPService WHERE TPService.SerialNbr = ttCustomer.SerialNbr AND TPService.ServStatus = {&STATUS_ONGOING} NO-LOCK:
+        FIRST TPService WHERE TPService.SerialNbr = ttCustomer.SerialNbr AND TPService.ServType = "Television" AND TPService.ServStatus = {&STATUS_ONGOING} NO-LOCK:
 
         /* ASSIGN lcMsgType = (IF ttCustomer.ActionType = "CreateSubscriber" THEN "" ELSE ""). */                            
         FIND FIRST TPServiceMessage WHERE TPServiceMessage.MsSeq         = TPService.MsSeq                    AND 
+                                          TPServiceMessage.ServSeq       = TPService.ServSeq                  AND
                                           TPServiceMessage.Source        = {&SOURCE_TMS}                      AND
                                           TPServiceMessage.MessageStatus = {&PENDING_ACTIVATION_CONFIRMATION} AND
-                                          TPServiceMessage.MessageType   = {&ACTIVATION}                      EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-        IF LOCKED TPServiceMessage THEN 
+                                          TPServiceMessage.MessageType   = {&TYPE_ACTIVATION}                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        IF LOCKED TPServiceMessage OR NOT AVAIL TPServiceMessage THEN 
         DO:
             PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to update" SKIP.
             NEXT.
@@ -58,7 +59,7 @@ PROCEDURE pUpdateStatus:
 
         IF AVAIL TPServiceMessage THEN 
         DO:
-            IF ttCustomer.StatusCode = 0 THEN 
+            IF ttCustomer.StatusCode = "0" THEN 
             DO:
                 ASSIGN
                     TPServiceMessage.UpdateTS       = fMakeTS()

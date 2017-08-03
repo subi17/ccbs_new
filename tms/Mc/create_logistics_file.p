@@ -1400,7 +1400,7 @@ FUNCTION fDelivDevice RETURNS LOG
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
-      WHEN "fusion_telesales" OR "Fusion_Telesales_PRO" THEN lcOrderChannel = "02".
+      WHEN "fusion_telesales" OR WHEN "Fusion_Telesales_PRO" THEN lcOrderChannel = "02".
       WHEN "fusion_pos" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".

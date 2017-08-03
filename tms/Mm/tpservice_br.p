@@ -30,7 +30,7 @@ DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
 
 FORM
    TPService.Product      FORMAT "X(22)" COLUMN-LABEL "Product"
-   TPService.Type         FORMAT "X(15)" COLUMN-LABEL "Type"   
+   TPService.ServType     FORMAT "X(15)" COLUMN-LABEL "Type"   
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcCreatedTS            FORMAT "X(24)" COLUMN-LABEL "Created"
    lcUpdatedTS            FORMAT "X(24)" COLUMN-LABEL "Updated"
@@ -42,7 +42,7 @@ FORM
     SKIP
     "Product ...........:" TPService.Product
     SKIP
-    "Service Type ......:" TPService.Type
+    "Service Type ......:" TPService.ServType
     SKIP
     "Service Provider ..:" TPService.Provider
     SKIP
@@ -57,7 +57,7 @@ FORM
     "Updated Time ......:" lcUpdatedTime FORMAT "X(24)" 
     SKIP(4)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) TPService.Type + " service data" NO-LABELS FRAME fDetails.
+    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) TPService.ServType + " service data" NO-LABELS FRAME fDetails.
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
 
         DISP TPService.MsSeq
              TPService.Product
-             TPService.Type
+             TPService.ServType
              TPService.Provider
              TPService.ServStatus
              TPService.SerialNbr
@@ -344,7 +344,7 @@ PROCEDURE local-disp-row:
 
     DISPLAY 
        TPService.Product
-       TPService.Type
+       TPService.ServType
        TPService.ServStatus
        lcCreatedTS
        lcUpdatedTS

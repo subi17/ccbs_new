@@ -38,8 +38,6 @@ FUNCTION fTPServiceMessageError RETURNS CHAR
           bf_TPServiceMessage.AdditionalInfo = icErrorDesc
           bf_TPServiceMessage.UpdateTS       = fMakeTS().
 
-   RELEASE ibFusionMessage.
-
    RETURN "".
 
 END FUNCTION.
