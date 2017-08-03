@@ -1620,9 +1620,9 @@ END.
 
 /* Third Party Device Logistics */
 FOR EACH TPServiceMessage WHERE 
-         TPServiceMessage.Source      EQ {&SOURCE_TMS}       AND
-         TPServiceMessage.Status      EQ {&STATUS_NEW}       AND
-         TPServiceMessage.MessageType EQ {&ACTIVATION}       EXCLUSIVE-LOCK:
+         TPServiceMessage.Source        EQ {&SOURCE_TMS} AND
+         TPServiceMessage.MessageStatus EQ {&STATUS_NEW} AND
+         TPServiceMessage.MessageType   EQ {&ACTIVATION} EXCLUSIVE-LOCK:
 
    FIND FIRST TPService WHERE TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL TPService THEN
@@ -1647,8 +1647,8 @@ FOR EACH TPServiceMessage WHERE
 
    IF fDelivDevice(TPService.Type) THEN 
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
-         FusionMessage.messagestatus = {&STATUS_SENT}.
+         TPServiceMessage.UpdateTS      = fMakeTS()
+         TPServiceMessage.MessageStatus = {&STATUS_SENT}.
 END.
 
 iLargestId = 1.

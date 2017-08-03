@@ -333,14 +333,14 @@ PROCEDURE pThirdPartyService:
     DO:
         CREATE TPService.
         ASSIGN
-            TPService.MsSeq     = iiMsSeq
-            TPService.ServSeq   = NEXT-VALUE(TPServiceSeq)
-            TPService.ServType  = "Television"
-            TPService.Product   = OrderAction.ItemKey
-            TPService.Provider  = (IF TPService.ServType = "Television" THEN "Huawei" ELSE "")
-            TPService.Status    = {&STATUS_NEW}
-            TPService.CreatedTS = fMakeTS()
-            TPService.UpdatedTS = TPService.CreatedTS.
+            TPService.MsSeq      = iiMsSeq
+            TPService.ServSeq    = NEXT-VALUE(TPServiceSeq)
+            TPService.ServType   = "Television"
+            TPService.Product    = OrderAction.ItemKey
+            TPService.Provider   = (IF TPService.ServType = "Television" THEN "Huawei" ELSE "")
+            TPService.ServStatus = {&STATUS_NEW}
+            TPService.CreatedTS  = fMakeTS()
+            TPService.UpdateTS   = TPService.CreatedTS.
     END.
 
     RETURN "".

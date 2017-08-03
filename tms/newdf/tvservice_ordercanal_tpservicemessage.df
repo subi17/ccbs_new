@@ -84,7 +84,7 @@ ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal
   DECIMALS 5
   ORDER 90
 
-ADD FIELD "Status" OF "TPServiceMessage" AS character
+ADD FIELD "MessageStatus" OF "TPServiceMessage" AS character
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Message Status"
@@ -129,7 +129,7 @@ ADD INDEX "MessageID" ON "TPServiceMessage"
 
 ADD INDEX "Status" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "Status" ASCENDING
+  INDEX-FIELD "MessageStatus" ASCENDING
   INDEX-FIELD "Source" ASCENDING
 
 ADD INDEX "CreatedTS" ON "TPServiceMessage"

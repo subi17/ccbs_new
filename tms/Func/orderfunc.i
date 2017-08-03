@@ -429,14 +429,14 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
 
     CREATE TPServiceMessage.
     ASSIGN
-       TPServiceMessage.MsSeq       = iiMsSeq
-       TPServiceMessage.ServSeq     = iiServSeq
-       TPServiceMessage.MessageSeq  = NEXT-VALUE(TPServiceMessageSeq)
-       TPServiceMessage.MessageType = icMessageType
-       TPServiceMessage.Source      = {&SOURCE_TMS}
-       TPServiceMessage.Status      = {&STATUS_NEW}
-       TPServiceMessage.CreatedTS   = fMakeTS()
-       TPServiceMessage.UpdateTS    = TPServiceMessage.CreatedTS.
+       TPServiceMessage.MsSeq         = iiMsSeq
+       TPServiceMessage.ServSeq       = iiServSeq
+       TPServiceMessage.MessageSeq    = NEXT-VALUE(TPServiceMessageSeq)
+       TPServiceMessage.MessageType   = icMessageType
+       TPServiceMessage.Source        = {&SOURCE_TMS}
+       TPServiceMessage.MessageStatus = {&STATUS_NEW}
+       TPServiceMessage.CreatedTS     = fMakeTS()
+       TPServiceMessage.UpdateTS      = TPServiceMessage.CreatedTS.
 
     RETURN TRUE.   
 
@@ -445,7 +445,7 @@ END FUNCTION.
 FUNCTION fInitiate_ThirdParty_BB_Service_STB_Logistics RETURNS LOGICAL
     (INPUT  iiMsSeq AS INT):
 
-    FOR EACH TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.Status = {&STATUS_NEW} NO-LOCK:
+    FOR EACH TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServStatus = {&STATUS_NEW} NO-LOCK:
 
         BUFFER TPService:(EXCLUSIVE-LOCK, NO-WAIT).
         IF NOT AVAIL TPService THEN 
@@ -454,8 +454,8 @@ FUNCTION fInitiate_ThirdParty_BB_Service_STB_Logistics RETURNS LOGICAL
         fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq , {&ACTIVATION}).
 
         ASSIGN
-            TPService.Status    = {&STATUS_ONGOING}
-            TPService.UpdatedTS = fMakeTS().
+            TPService.ServStatus = {&STATUS_ONGOING}
+            TPService.UpdateTS   = fMakeTS().
     END.
 
     RELEASE TPService.

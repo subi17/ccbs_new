@@ -68,7 +68,7 @@ ADD FIELD "SerialNbr" OF "TPService" AS character
   HELP "Serial Number"
   ORDER 70
 
-ADD FIELD "Status" OF "TPService" AS character 
+ADD FIELD "ServStatus" OF "TPService" AS character 
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Status"
@@ -98,14 +98,14 @@ ADD FIELD "CreatedTS" OF "TPService" AS decimal
   HELP "CreatedTS"
   ORDER 100
 
-ADD FIELD "UpdatedTS" OF "TPService" AS decimal 
+ADD FIELD "UpdateTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "UpdatedTS"
   POSITION 11
   MAX-WIDTH 20
-  COLUMN-LABEL "UpdatedTS"
-  HELP "UpdatedTS"
+  COLUMN-LABEL "UpdateTS"
+  HELP "UpdateTS"
   ORDER 110
 
 ADD INDEX "MsSeq" ON "TPService" 
@@ -122,9 +122,9 @@ ADD INDEX "ServSeq" ON "TPService"
 
 ADD INDEX "MsSeqTypeStatus" ON "TPService"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "MsSeq"    ASCENDING
-  INDEX-FIELD "ServType" ASCENDING
-  INDEX-FIELD "Status"   ASCENDING
+  INDEX-FIELD "MsSeq"      ASCENDING
+  INDEX-FIELD "ServType"   ASCENDING
+  INDEX-FIELD "ServStatus" ASCENDING
 
 ADD INDEX "SerialNbr" ON "TPService"
   AREA "Dyn_Index_1"
@@ -132,8 +132,8 @@ ADD INDEX "SerialNbr" ON "TPService"
 
 ADD INDEX "CreatedTS" ON "TPService"
   AREA "Dyn_Index_1"
-  INDEX-FIELD "CreatedTS" DECENDING
-  INDEX-FIELD "Status"    ASCENDING
+  INDEX-FIELD "CreatedTS"  DECENDING
+  INDEX-FIELD "ServStatus" ASCENDING
 
 ADD INDEX "UpdateTS" ON "TPService"
   AREA "Dyn_Index_1"

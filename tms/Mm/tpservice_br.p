@@ -31,7 +31,7 @@ DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
 FORM
    TPService.Product      FORMAT "X(22)" COLUMN-LABEL "Product"
    TPService.Type         FORMAT "X(15)" COLUMN-LABEL "Type"   
-   TPService.Status       FORMAT "X(8)"  COLUMN-LABEL "Status"
+   TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcCreatedTS            FORMAT "X(24)" COLUMN-LABEL "Created"
    lcUpdatedTS            FORMAT "X(24)" COLUMN-LABEL "Updated"
    TPService.SerialNbr    FORMAT "X(25)" COLUMN-LABEL "Serial Number"
@@ -46,7 +46,7 @@ FORM
     SKIP
     "Service Provider ..:" TPService.Provider
     SKIP
-    "Service Status ....:" TPService.Status
+    "Service Status ....:" TPService.ServStatus
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
@@ -277,13 +277,13 @@ REPEAT WITH FRAME sel:
 
         ASSIGN
             lcCreatedTime    = fTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS      = fTS2HMS(TPService.UpdatedTS).
+            lcUpdatedTS      = fTS2HMS(TPService.UpdateTS).
 
         DISP TPService.MsSeq
              TPService.Product
              TPService.Type
              TPService.Provider
-             TPService.Status
+             TPService.ServStatus
              TPService.SerialNbr
              TPService.TermReason
              lcCreatedTime
@@ -340,12 +340,12 @@ PROCEDURE local-disp-row:
     
     ASSIGN
         lcCreatedTime    = fTS2HMS(TPService.CreatedTS)  
-        lcUpdatedTS      = fTS2HMS(TPService.UpdatedTS).
+        lcUpdatedTS      = fTS2HMS(TPService.UpdateTS).
 
     DISPLAY 
        TPService.Product
        TPService.Type
-       TPService.Status
+       TPService.ServStatus
        lcCreatedTS
        lcUpdatedTS
        TPService.SerialNbr

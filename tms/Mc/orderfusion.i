@@ -34,7 +34,7 @@ FUNCTION fTPServiceMessageError RETURNS CHAR
    FIND CURRENT bf_TPServiceMessage EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
    IF AVAIL bf_TPServiceMessage THEN       
       ASSIGN
-          bf_TPServiceMessage.Status         = {&ERROR}
+          bf_TPServiceMessage.MessageStatus  = {&STATUS_ERROR}
           bf_TPServiceMessage.AdditionalInfo = icErrorDesc
           bf_TPServiceMessage.UpdateTS       = fMakeTS().
 
