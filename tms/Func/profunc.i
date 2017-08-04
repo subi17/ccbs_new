@@ -47,6 +47,25 @@ FUNCTION fIsSelfEmpl RETURNS LOGICAL
    RETURN FALSE.
 END.
 
+FUNCTION fGetSegment RETURNS CHAR
+   (iiCustNum AS INT):
+   DEF BUFFER bCust FOR Customer.
+   FIND FIRST bCust NO-LOCK  WHERE
+              bCust.CustNum EQ iiCustNum
+              NO-ERROR.
+   IF AVAIL bCust THEN DO:
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand = gcBrand AND
+                 CustCat.Category = bCust.Category
+                 NO-ERROR.
+      IF AVAIL CustCat THEN
+         RETURN CustCat.Segment.
+      RETURN "Consumer".
+   END.
+   ELSE RETURN "-".
+END.
+
+
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
 FUNCTION fMakeProActRequest RETURNS INT(
    INPUT iiMsSeq AS INT,
