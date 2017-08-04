@@ -68,10 +68,11 @@ IF AVAILABLE TPService THEN ASSIGN
    Memory       = recid(TPService)
    must-print   = TRUE
    must-add     = FALSE.
-ELSE ASSIGN
-   Memory       = ?
-   must-print   = FALSE
-   must-add     = FALSE.
+ELSE 
+DO:
+    MESSAGE "No Third party services available!" VIEW-AS ALERT-BOX.
+    RETURN.
+END.
 
 LOOP:
 REPEAT WITH FRAME sel:
