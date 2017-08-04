@@ -55,7 +55,7 @@ FORM
     "Created Date ......:" lcCreatedTS FORMAT "X(24)"
     SKIP
     "Updated Date ......:" lcUpdatedTS FORMAT "X(24)" 
-    SKIP(4)
+    SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
