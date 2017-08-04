@@ -29,11 +29,11 @@ DEF VAR lcCreatedTS    AS CHAR                   NO-UNDO.
 DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
 
 FORM
-   TPService.Product      FORMAT "X(22)" COLUMN-LABEL "Product"
+   TPService.Product      FORMAT "X(20)" COLUMN-LABEL "Product"
    TPService.ServType     FORMAT "X(15)" COLUMN-LABEL "Type"   
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
-   lcCreatedTS            FORMAT "X(24)" COLUMN-LABEL "Created"
-   lcUpdatedTS            FORMAT "X(24)" COLUMN-LABEL "Updated"
+   lcCreatedTS            FORMAT "X(10)" COLUMN-LABEL "Created"
+   lcUpdatedTS            FORMAT "X(10)" COLUMN-LABEL "Updated"
    WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(cfc) 
    TITLE COLOR VALUE(ctc) "Third Party Services" FRAME sel.
 
