@@ -34,8 +34,8 @@ FORM
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcCreatedTS            FORMAT "X(24)" COLUMN-LABEL "Created"
    lcUpdatedTS            FORMAT "X(24)" COLUMN-LABEL "Updated"
-   TPService.SerialNbr    FORMAT "X(25)" COLUMN-LABEL "Serial Number"
-   WITH ROW 1 CENTERED OVERLAY 15  DOWN COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Services" FRAME sel.
+   WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(cfc) 
+   TITLE COLOR VALUE(ctc) "Third Party Services" FRAME sel.
 
 FORM
     "MsSeq .............:" TPService.MsSeq
@@ -57,7 +57,7 @@ FORM
     "Updated Date ......:" lcUpdatedTS FORMAT "X(24)" 
     SKIP(4)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) TPService.ServType + " service data" NO-LABELS FRAME fDetails.
+    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
@@ -85,7 +85,6 @@ REPEAT WITH FRAME sel:
       IF must-print THEN DO:
         UP FRAME-LINE - 1.
         FIND TPService WHERE recid(TPService) = Memory NO-LOCK NO-ERROR.
-
 
         REPEAT WITH FRAME sel:
            IF AVAILABLE TPService THEN DO:
@@ -126,9 +125,7 @@ REPEAT WITH FRAME sel:
         RUN Syst/ufkey.p.
         
         IF toimi EQ 1 THEN 
-        DO:
             RUN Mm/tpservicemessage.p(iiMsSeq).
-        END.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -348,7 +345,6 @@ PROCEDURE local-disp-row:
        TPService.ServStatus
        lcCreatedTS
        lcUpdatedTS
-       TPService.SerialNbr
        WITH FRAME sel.
 
 END PROCEDURE.
