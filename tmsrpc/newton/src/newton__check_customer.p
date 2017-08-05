@@ -145,7 +145,7 @@ DO:
           END.
       END.
       ELSE 
-      DO:
+      DO: /* NOT llCustCatPro */
           IF plSTCMigrate THEN 
           DO:
               IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
@@ -180,10 +180,14 @@ DO:
                           lcReason = "PRO migration not possible because, no mobile lines exists".        
               END.
           END.
-          ELSE 
+          ELSE DO:
+              /* PRO Order Allowed for non pro customer if customer do not have active subscriptions or ongoing ordres */
+              /*IF ftegoryChangeAllowed(Customer.CustNum) EQ TRUE THEN  /*YTS-11228/1 - function comes from branch of YTS-11227, fix this in merge*/
+                 llOrderAllowed = TRUE.*/
               ASSIGN
                   llOrderAllowed = FALSE
                   lcReason       = "non PRO customer".
+         END.
       END.
    END.
 END.
@@ -245,7 +249,6 @@ IF lcAddLineAllowed = "" THEN DO:
          LEAVE.
       END.
    END.
-
 END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
