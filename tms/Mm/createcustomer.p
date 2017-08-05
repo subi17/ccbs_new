@@ -254,6 +254,7 @@ ELSE DO:
       fUpdateEmail(Order.OrderId).
       /* YPRO migrate YPRO-92 category */
       IF ordercustomer.pro AND 
+         fCategoryChangeAllowed(Customer.CustNum) AND
          ordercustomer.category NE customer.category THEN
          Customer.category = ordercustomer.category.
    END.

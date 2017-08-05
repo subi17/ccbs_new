@@ -301,6 +301,36 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    RETURN "".
 
 END.
+/*YPRO YTS-11227:
+Customer category change is allowed if customer does not have any active
+subscription or ongoing order.*/
+FUNCTION fCategoryChangeAllowed RETURNS LOGICAL
+   (INPUT iiCustNum AS INT):
+   DEF BUFFER Customer FOR Customer.
+   DEF BUFFER Order FOR Order.
+   DEF BUFFER MobSub FOR MobSub.
+
+   /*No customer: change not allowed.*/
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.CustNum EQ iiCustNum NO-ERROR.
+   IF NOT AVAIL Customer THEN RETURN FALSE.
+
+   /*Active order found: change not allowed*/
+   FIND FIRST Order NO-LOCK WHERE
+              Order.CustNum EQ iiCustNum AND
+              LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) EQ 0
+              NO-ERROR.
+   IF AVAIL Order THEN RETURN FALSE.
+
+   /*Active subscription found: change not allowed*/
+   FOR EACH MobSub NO-LOCK WHERE
+            MobSub.CustNum EQ iiCustNum:
+
+   END.
+
+   RETURN TRUE.
+
+END.
 
 
 &ENDIF
