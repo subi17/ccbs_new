@@ -35,24 +35,25 @@ DEF VAR top_array        AS CHAR NO-UNDO.
 DEF VAR plSTCMigrate     AS LOG  NO-UNDO.
 
 /* Local variable */
-DEF VAR llOrderAllowed             AS LOG  NO-UNDO.
-DEF VAR lcReason                   AS CHAR NO-UNDO.
-DEF VAR lcReturnStruct             AS CHAR NO-UNDO.
-DEF VAR liSubLimit                 AS INT  NO-UNDO.
-DEF VAR lisubs                     AS INT  NO-UNDO.
-DEF VAR lcAddLineAllowed           AS CHAR NO-UNDO. 
-DEF VAR liActLimit                 AS INT  NO-UNDO.
-DEF VAR liacts                     AS INT  NO-UNDO.
-DEF VAR lcSegment                  AS CHAR NO-UNDO.
-DEF VAR llProChannel               AS LOG  NO-UNDO.
-DEF VAR llCustCatPro               AS LOG  NO-UNDO.
-DEF VAR lcPROChannels              AS CHAR NO-UNDO.
-DEF VAR lcnonPROChannels           AS CHAR NO-UNDO.
-DEF VAR lcCategory                 AS CHAR NO-UNDO.
-DEF VAR llPROOngoingOrder          AS LOGI NO-UNDO.
-DEF VAR llNonProOngoingOrder       AS LOGI NO-UNDO.
-DEF VAR liMobsubCount              AS LOGI NO-UNDO.
-DEF VAR llNonToProMigrationOngoing AS LOGI NO-UNDO.
+DEF VAR llOrderAllowed                AS LOG  NO-UNDO.
+DEF VAR lcReason                      AS CHAR NO-UNDO.
+DEF VAR lcReturnStruct                AS CHAR NO-UNDO.
+DEF VAR liSubLimit                    AS INT  NO-UNDO.
+DEF VAR lisubs                        AS INT  NO-UNDO.
+DEF VAR lcAddLineAllowed              AS CHAR NO-UNDO. 
+DEF VAR liActLimit                    AS INT  NO-UNDO.
+DEF VAR liacts                        AS INT  NO-UNDO.
+DEF VAR lcSegment                     AS CHAR NO-UNDO.
+DEF VAR llProChannel                  AS LOG  NO-UNDO.
+DEF VAR llCustCatPro                  AS LOG  NO-UNDO.
+DEF VAR lcPROChannels                 AS CHAR NO-UNDO.
+DEF VAR lcnonPROChannels              AS CHAR NO-UNDO.
+DEF VAR lcCategory                    AS CHAR NO-UNDO.
+DEF VAR llPROOngoingOrder             AS LOGI NO-UNDO.
+DEF VAR llNonProOngoingOrder          AS LOGI NO-UNDO.
+DEF VAR liMobsubCount                 AS LOGI NO-UNDO.
+DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
+DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -109,100 +110,106 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActLimit,
    OUTPUT liActs).
 
-lcPROChannels = fCParamC("PRO_CHANNELS").
-lcnonPROChannels = fCParamC("NON_PRO_CHANNELS").
+ASSIGN
+    lcPROChannels                 = fCParamC("PRO_CHANNELS").
+    lcnonPROChannels              = fCParamC("NON_PRO_CHANNELS") 
+    llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
+    llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum).
 
-ASSIGN llNonToProMigrationOngoing = fCheckOngoingProMigration(Customer.CustNum).
-
-IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
+IF AVAIL Customer THEN 
 DO:
-   IF AVAIL Customer THEN 
-   DO:
-      IF llCustCatPro THEN 
-      DO:
-          IF NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR 
-                  fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType)) THEN
-          DO:
-              llOrderAllowed = FALSE.
-              lcReason = "Additional mobile line is not compatible with respective to main convergent line".
-          END.   
-          ELSE 
-          DO:
-             ORDCUSTOMERLOOP:
-             FOR EACH OrderCustomer WHERE OrderCustomer.CustNum = Customer.CustNum                   AND
-                                          OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND 
-                                          OrderCustomer.Pro     = FALSE                              NO-LOCK:
-
-                 FIND FIRST Order WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
-                 IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
-                 DO:
-                     llOrderAllowed = FALSE.
-                     lcReason = "ongoing non PRO order".
-                     LEAVE ORDCUSTOMERLOOP.    
-                 END.
-
-             END.
-          END.
-      END.
-      ELSE 
-      DO: /* NOT llCustCatPro */
-          IF plSTCMigrate THEN 
-          DO:
-              IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-                  ASSIGN 
-                      llOrderAllowed = FALSE
-                      lcReason = "PRO migration not possible because of multible mobile lines".
-              ELSE 
-              DO:
-                  FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
-                  IF AMBIG MobSub THEN 
-                      ASSIGN 
-                          llOrderAllowed = FALSE
-                          lcReason = "PRO migration not possible because of multible mobile lines".
-                  ELSE IF AVAIL MobSub THEN 
-                  DO:
-                      IF fIsConvergenceTariff(Mobsub.Clitype) THEN
-                          ASSIGN
-                              llOrderAllowed = FALSE
-                              lcReason = "PRO migration not possible for convergent".
-                      ELSE 
-                      DO:        
-                          FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
-                          IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-                              ASSIGN 
-                                  llOrderAllowed = FALSE
-                                  lcReason = "Mobile line for non-pro customer from PRO channel".
-                      END.
-                  END.
-                  ELSE IF NOT llNonToProMigrationOngoing THEN 
-                      ASSIGN 
-                          llOrderAllowed = FALSE
-                          lcReason = "PRO migration not possible because, no mobile lines exists".        
-              END.
-          END.
-          ELSE DO:
-              /* PRO Order Allowed for non pro customer if customer do not have active subscriptions or ongoing ordres */
-              /*IF ftegoryChangeAllowed(Customer.CustNum) EQ TRUE THEN  /*YTS-11228/1 - function comes from branch of YTS-11227, fix this in merge*/
-                 llOrderAllowed = TRUE.*/
-              ASSIGN
-                  llOrderAllowed = FALSE
-                  lcReason       = "non PRO customer".
-         END.
-      END.
-   END.
+    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
+    DO:
+        IF llCustCatPro THEN 
+        DO:
+            IF NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType)) THEN
+                ASSIGN 
+                    llOrderAllowed = FALSE
+                    lcReason       = "Additional mobile line is not compatible with respective to main convergent line".
+            ELSE IF llProToNonProMigrationOngoing THEN  
+            DO:
+                ASSIGN
+                    llOrderAllowed = FALSE.
+                    lcReason       = "ongoing non PRO order".
+            END.
+        END.
+        ELSE 
+        DO: /* NOT llCustCatPro */
+            IF plSTCMigrate THEN 
+            DO:
+                IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+                    ASSIGN 
+                        llOrderAllowed = FALSE
+                        lcReason = "PRO migration not possible because of multible mobile lines".
+                ELSE 
+                DO:
+                    FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+                    IF AMBIG MobSub THEN 
+                        ASSIGN 
+                            llOrderAllowed = FALSE
+                            lcReason = "PRO migration not possible because of multible mobile lines".
+                    ELSE IF AVAIL MobSub THEN 
+                    DO:
+                        IF fIsConvergenceTariff(Mobsub.Clitype) THEN
+                            ASSIGN
+                                llOrderAllowed = FALSE
+                                lcReason = "PRO migration not possible for convergent".
+                        ELSE IF NOT llNonProToProMigrationOngoing THEN 
+                        DO: 
+                            /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
+                            FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
+                            IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+                                ASSIGN 
+                                    llOrderAllowed = FALSE
+                                    lcReason = "Mobile line for non-pro customer from PRO channel".
+                        END.
+                    END.
+                    ELSE IF NOT llNonProToProMigrationOngoing THEN 
+                        ASSIGN 
+                            llOrderAllowed = FALSE
+                            lcReason = "PRO migration not possible because, no mobile lines exists".
+                END.
+            END.
+            ELSE DO:
+                /* PRO Order Allowed for non pro customer if customer do not have active subscriptions or ongoing ordres */
+                /*IF ftegoryChangeAllowed(Customer.CustNum) EQ TRUE THEN  /*YTS-11228/1 - function comes from branch of YTS-11227, fix this in merge*/
+                   llOrderAllowed = TRUE.*/
+                ASSIGN
+                    llOrderAllowed = FALSE
+                    lcReason       = "non PRO customer".
+           END.
+        END.
+    END.
+    ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
+    DO:
+        IF llCustCatPro THEN 
+        DO:
+            IF plSTCMigrate THEN 
+            DO:
+                FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+                IF AMBIG MobSub THEN 
+                    ASSIGN 
+                        llOrderAllowed = FALSE
+                        lcReason = "PRO migration not possible because of multible mobile lines".     /* Kept the error messages as same, to avoid enhancing from web */
+                ELSE IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
+                    ASSIGN 
+                        llOrderAllowed = FALSE
+                        lcReason = "Mobile line for non-pro customer from PRO channel".
+                ELSE IF NOT llProToNonProMigrationOngoing THEN 
+                    ASSIGN 
+                        llOrderAllowed = FALSE
+                        lcReason = "PRO migration not possible because, no mobile lines exists".
+            END.        
+        END.
+        ELSE
+        DO:
+            IF llNonProToProMigrationOngoing THEN 
+                ASSIGN
+                    llOrderAllowed = FALSE.
+                    lcReason = "customer already exists with PRO category".
+        END.
+    END.
 END.
-ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
-DO:
-   IF AVAIL Customer THEN 
-   DO:
-      IF llCustCatPro OR llNonToProMigrationOngoing THEN 
-      DO:
-          llOrderAllowed = FALSE.
-          lcReason = "customer already exists with PRO category".
-      END.
-   END.
-END.
-
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
 
