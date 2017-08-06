@@ -445,33 +445,35 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
          RUN StarEventInitialize(lhOrderStatusChange).
          RUN StarEventSetOldBuffer(lhOrderStatusChange).
       END.
-      
-      IF icAction EQ "RELEASE" THEN DO:
+     
+      CASE icAction:
+         WHEN "RELEASE" THEN DO:
          
-         CASE lbELOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
-            OTHERWISE.
-         END CASE.
+            CASE lbELOrder.OrderType:
+               WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+               WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+               WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
+               OTHERWISE.
+            END CASE.
 
-         fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
 
-      END.                      
-      ELSE IF icAction EQ "CLOSE" THEN DO:
-         /* Check if Main line order is closed, If closed, 
-            then close extraline ongoing order */
-         FIND FIRST lbMLOrder NO-LOCK WHERE 
-                    lbMLOrder.Brand        EQ Syst.Parameters:gcBrand AND
-                    lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
-                    lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
-                    lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
-                    lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
+         END.                      
+         WHEN "CLOSE" THEN DO:
+            /* Check if Main line order is closed, If closed, 
+               then close extraline ongoing order */
+            FIND FIRST lbMLOrder NO-LOCK WHERE 
+                       lbMLOrder.Brand        EQ Syst.Parameters:gcBrand AND
+                       lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
+                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
+                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
+                       lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
 
-         IF AVAIL lbMLOrder THEN
-            fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
-      
-      END. 
+            IF AVAIL lbMLOrder THEN
+               fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         
+         END. 
+      END CASE.
    
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrderStatusChange).

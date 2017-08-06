@@ -288,7 +288,7 @@ DO:
          Order.MultiSimId                              NE 0  AND 
          Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
          fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                                  Order.MsSeq,      /* Main line Order Id  */ 
+                                  Order.OrderId,    /* Main line Order Id  */ 
                                  "CLOSE").          /* Action              */
    
    END.
