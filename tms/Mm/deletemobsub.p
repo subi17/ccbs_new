@@ -1059,8 +1059,8 @@ PROCEDURE pTerminate:
            while extra line hard assocition remains same, because it helps 
            while reactivating extra line subscription */
         FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
-                   lMLMobSub.MsSeq        EQ lELOrder.MultiSimId     AND
-                   lMLMobSub.MultiSimId   EQ lELOrder.MsSeq          AND 
+                   lMLMobSub.MsSeq        EQ TermMobSub.MultiSimId   AND
+                   lMLMobSub.MultiSimId   EQ TermMobSub.MsSeq        AND 
                    lMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} NO-ERROR.
  
         IF AVAIL lMLMobSub THEN 
