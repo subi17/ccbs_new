@@ -22,7 +22,6 @@
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
-{Func/fixedlinefunc.i}
 gcBrand = "1".
 
 /* Input parameters */
@@ -112,7 +111,7 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActs).
 
 ASSIGN
-    lcPROChannels                 = fCParamC("PRO_CHANNELS").
+    lcPROChannels                 = fCParamC("PRO_CHANNELS")
     lcnonPROChannels              = fCParamC("NON_PRO_CHANNELS") 
     llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
     llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum).
