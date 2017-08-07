@@ -12,29 +12,11 @@
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {Syst/tmsconst.i}
+{Func/cparam2.i}
 {Func/timestamp.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
-
-FUNCTION fGetOngoingOrderStatusList RETURNS CHAR
-  (INPUT inp AS CHAR).
-
-   DEF VAR ret AS c NO-UNDO init ?.
-
-   FIND FIRST TMSParam where
-              TMSParam.Brand      = Syst.Parameters:gcBrand AND
-              TMSParam.ParamCode  = inp
-   no-lock no-error.
-
-   IF AVAIL TMSParam THEN DO:
-      ret = TMSParam.CharVal.
-      release TMSParam.
-   END.
-
-   RETURN ret.
-
-END.
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -280,7 +262,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing"). 
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing"). 
  
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -321,7 +303,7 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
        EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
@@ -354,7 +336,7 @@ FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
        EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
@@ -385,7 +367,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
+   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
