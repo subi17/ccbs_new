@@ -39,6 +39,7 @@
                send_sms;boolean;optional;Send SMS
                referee;str;optional;referee's MSISDN
                offer_id;string;optional;
+               extra_offers;string;optional;optional offer 
                price_selection_time;timestamp;optional;time when user accepted order price in web
                order_inspection_result;string;mandatory;
                order_inspection_description;string;optional;
@@ -352,6 +353,8 @@ DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
+DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
+DEF VAR pcAdditionalOfferArray  AS CHAR NO-UNDO.
 DEF VAR pcMobsubBundleType      AS CHAR NO-UNDO. 
 DEF VAR plDSSActivate           AS LOG  NO-UNDO. 
 DEF VAR plBonoVoipActivate      AS LOG  NO-UNDO.
@@ -360,6 +363,7 @@ DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
 DEF VAR pcUsageType             AS CHAR NO-UNDO. 
 
 DEF VAR liBundleCnt            AS INT  NO-UNDO.
+DEF VAR liOfferCnt             AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
@@ -520,6 +524,16 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
   
    IF LOOKUP('offer_id', lcOrderStruct) GT 0 THEN 
       pcOfferId = get_string(pcOrderStruct, "offer_id").
+
+   IF LOOKUP("extra_offers",lcOrderStruct) > 0 THEN
+   DO:
+      pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
+
+      DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
+         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
+      END.
+
+   END.
 
    IF LOOKUP('price_selection_time', lcOrderStruct) GT 0 THEN
        pdePriceSelTime = get_timestamp(pcOrderStruct, "price_selection_time").
@@ -1263,6 +1277,7 @@ gcOrderStructFields = "billing_data," +
                       "send_sms," +
                       "referee," +
                       "offer_id," +
+                      "extra_offers," +
                       "price_selection_time," +
                       "order_inspection_result!," +
                       "order_inspection_description," +
