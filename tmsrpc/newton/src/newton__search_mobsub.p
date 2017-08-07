@@ -81,6 +81,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    add_string(sub_struct, "description", mobsub.cli).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
+   add_string(sub_struct, "discount_type", lcDiscountType).
 
    FIND FIRST MsRequest NO-LOCK WHERE
               MsRequest.MsSeq   = MobSub.MsSeq AND
@@ -232,8 +233,6 @@ add_int(top_struct, "custnum", Customer.CustNum).
 add_string(top_struct, "name", SUBST("&1 &2 &3", Customer.FirstName,
                                               Customer.CustName,
                                               Customer.Surname2)).
-add_string(top_struct, "discount_type", lcDiscountType).
-
 result_array = add_array(top_struct, "subscriptions").
 
 IF llPreactivated THEN DO:
