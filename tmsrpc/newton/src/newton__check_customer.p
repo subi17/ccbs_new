@@ -19,9 +19,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
+{Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
-{Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 gcBrand = "1".
 
 /* Input parameters */
