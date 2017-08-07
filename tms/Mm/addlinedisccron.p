@@ -367,11 +367,27 @@ PROCEDURE pFinalConvProcess:
 
    RUN pConvCheck(OrderCustomer.CustIDType,OrderCustomer.CustID,bOrder.CliType, OUTPUT ocMainline).   
                   
-   /* If there is no existing convergent main line */   
+   /* If there is existing convergent main line */   
    IF ocMainline <> "" THEN
    DO:      
-      /* To Create dpmember or orderaction*/
+      /* To Create dpmember */
       
+      FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = bOrder.MsSeq AND
+            DCCLI.DCEvent BEGINS "TERM" AND
+            DCCLI.ValidTo >= TODAY AND
+            DCCLI.ValidFrom <= TODAY AND
+            DCCLI.CreateFees = TRUE,
+         FIRST DayCampaign WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCEvent AND
+            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
+            DayCampaign.TermFeeModel NE "" AND
+            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
+         ASSIGN ocNext = "Next".
+         RETURN.
+      END.
+
       FOR EACH DPMember WHERE
           DPMember.HostTable = "MobSub" AND
           DPMember.KeyValue  = STRING(bOrder.MsSeq) AND
@@ -425,7 +441,7 @@ PROCEDURE pFinalMobOnlyProcess:
 
    RUN pMobOnlyCheck(OrderCustomer.CustIDType,OrderCustomer.CustID,bOrder.CliType, OUTPUT ocMainline).
    
-   /* If there is existing convergent main line */                     
+   /* If there is existing mob only main line */                     
    IF ocMainline <> "" THEN
    DO:         
       FOR EACH DCCLI NO-LOCK WHERE
