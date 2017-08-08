@@ -213,19 +213,24 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    END.   
    ELSE IF liLOStatusId EQ 88888 THEN
    DO:
-      FIND FIRST TPService WHERE TPService.MsSeq = Order.MsSeq AND TPService.ServType = "Television" AND TPService.Status = {&STATUS_ONGOING} NO-LOCK NO-ERROR.
+      FIND FIRST TPService WHERE TPService.MsSeq = Order.MsSeq AND TPService.ServType = "Television" AND TPService.ServStatus = {&STATUS_ONGOING} NO-LOCK NO-ERROR.
       IF AVAIL TPService THEN 
       DO:
-          FIND FIRST TPServiceMessage WHERE TPServiceMessage.ServSeq     = TPService.ServSeq AND 
-                                            TPServiceMessage.MessageType = {&ACTIVATION}     AND 
-                                            TPServiceMessage.Status      = {&STATUS_SENT}    EXCLUSIVE-LOCK NO-ERROR.     
+          FIND FIRST TPServiceMessage WHERE TPServiceMessage.ServSeq       = TPService.ServSeq  AND 
+                                            TPServiceMessage.MessageType   = {&TYPE_ACTIVATION} AND 
+                                            TPServiceMessage.MessageStatus = {&STATUS_SENT}     EXCLUSIVE-LOCK NO-ERROR.     
           IF AVAIL TPServiceMessage THEN 
           DO:
-               ASSIGN TPServiceMessage.Status = {&WAITING_FOR_VENDOR_ACTIVATION}.
-
                BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-               IF AVAIL TPService THEN 
-                  ASSIGN TPService.SerialNbr = lcIMEI.
+               IF NOT AVAIL TPService THEN 
+               DO:
+                   add_int(response_toplevel_id, "", 30). 
+                   RETURN.
+               END.
+
+               ASSIGN 
+                   TPService.SerialNbr            = lcIMEI
+                   TPServiceMessage.MessageStatus = {&WAITING_FOR_VENDOR_ACTIVATION}.   
           END.
       END.                  
    END.  
