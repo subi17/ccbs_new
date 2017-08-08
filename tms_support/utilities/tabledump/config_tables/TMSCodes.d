@@ -647,6 +647,10 @@
 "invtext" "keyvalue" "EMAIL" "REMINDER" "Reminder" "" "" 1
 "invtext" "keyvalue" "EMAIL" "SendEmailInvoice" "Send Email Invoice" "" "" 1
 "InvText" "KeyValue" "EKIRJE" "SMSC" "SMSC Change" "" "" 1
+"Invtext" "KEYVALUE" "EMAIL" "SVA_Centralita" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_FAXTOEMAIL" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_IPFIJA" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_OFFICE365" "" "" "" 0
 "ITSendLog" "RepType" "Report" "InvSpec" "Invoice's Call Specification" "" "" 1
 "ITSendLog" "RepType" "Report" "IT" "Information Text" "" "" 1
 "Limit" "Billing Permission" "Limit" "0" "Allowed" "" "" 1
@@ -990,8 +994,10 @@
 "Order" "OldPayType" "Order" "1" "Postpaid" "" "" 1
 "Order" "OldPayType" "Order" "2" "Prepaid" "" "" 1
 "Order" "OrderChannel" "Order" "CC" "Customer care" "" "" 1
+"Order" "OrderChannel" "Order" "CC_PRO" "Customer care PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_POS" "Fusion POS" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales" "Fusion Telesales" "" "" 1
+"Order" "OrderChannel" "Order" "Fusion_Telesales_PRO" "Fusion Telesales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "POS" "Point of sales" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal" "Renewals" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_CTC" "Renewal CTC" "" "" 1
@@ -1001,6 +1007,7 @@
 "Order" "OrderChannel" "Order" "Retention" "Retention" "" "" 1
 "Order" "OrderChannel" "Order" "Self" "Self order" "" "" 1
 "Order" "OrderChannel" "Order" "Telesales" "Telesales" "" "" 1
+"Order" "OrderChannel" "Order" "Telesales_PRO" "Telesales PRO" "" "" 1
 "Order" "OrderType" "Order" "1" "New subscription" "" "" 1
 "Order" "OrderType" "Order" "2" "Renewal" "" "" 1
 "Order" "StatusCode" "Orders" "" "NEW" "" "" 0
@@ -1398,11 +1405,13 @@
 "Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BY" "ByMovil" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "CA" "Carrefour" "" "12" 0
+"Salesman" "SmPrefix" "IFS" "CE" "CANAL EXCLUSIVO NEGOCIOS" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CL" "Casturtel Leon" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CN" "CANCELACIONES MARKTEL" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CP" "CASTURTEL PALENCIA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CR" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CW" "CARRITO WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "D2" "DOOR TO DOOR" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "EB" "EMERGIA BACKOFFICE" "" "15" 1
@@ -1433,6 +1442,7 @@
 "Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MT" "MARKTEL OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MW" "MARKTEL INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "PA" "PHONE HOUSE CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
 "Salesman" "SmPrefix" "IFS" "PJ" "PhoneHouse Retencion Jerez" "" "15" 1
@@ -1450,6 +1460,7 @@
 "Salesman" "SmPrefix" "IFS" "UR" "Urende" "" "23" 0
 "Salesman" "SmPrefix" "IFS" "WE" "Web" "" "14" 0
 "Salesman" "SmPrefix" "IFS" "WH" "WHISBI" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "XA" "ANEXA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "YC" "YOIGO (Customer Care)" "" "15" 1
 "ServAttr" "APN" "B70" "1" "www.testi.net" "" "" 1
 "ServAttr" "APN" "B70" "2" "www.testi.org" "" "" 1
