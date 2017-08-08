@@ -310,7 +310,7 @@ FUNCTION fCategoryChangeAllowed RETURNS LOGICAL
    DEF BUFFER Order FOR Order.
    DEF BUFFER MobSub FOR MobSub.
 
-   /*
+   
    /*No customer: change not allowed.*/
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum EQ iiCustNum NO-ERROR.
@@ -324,11 +324,10 @@ FUNCTION fCategoryChangeAllowed RETURNS LOGICAL
    IF AVAIL Order THEN RETURN FALSE.
 
    /*Active subscription found: change not allowed*/
-   FOR EACH MobSub NO-LOCK WHERE
-            MobSub.CustNum EQ iiCustNum:
-
-   END.
-   */
+   FIND FIRST MobSub NO-LOCK WHERE
+              MobSub.CustNum EQ iiCustNum NO-ERROR.
+   IF AVAIL MobSub THEN RETURN FALSE.           
+   
    RETURN TRUE.
 
 END FUNCTION.

@@ -338,7 +338,9 @@ ELSE DO:
                Customer.AuthCustId      = OrderCustomer.AuthCustId
                   WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
-                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               Customer.Category        = OrderCustomer.Category WHEN
+                                          fCategoryChangeAllowed(Customer.CustNum).
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:
