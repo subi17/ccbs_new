@@ -455,10 +455,10 @@ IF MobSub.MultiSIMType > 0 AND
    ELSE IF AVAIL lbMobSub THEN 
       ASSIGN 
          liMultiSimTypeValue = MobSub.MultiSimType
-         lcMulitSimCLI       = lbMobSub.CLI.
+         lcMultiSimCLI       = lbMobSub.CLI.
 
    add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
-   add_string(resp_struct,"multisim_msisdn", lcMulitSimCLI).
+   add_string(resp_struct,"multisim_msisdn", lcMultiSimCLI).
    
    IF AVAIL lbMobSub THEN DO:
       /* Return warning flag for secondary line */
