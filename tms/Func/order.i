@@ -318,7 +318,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       END.
 
       /* category according to id type */
-      IF fCategoryChangeAllowed(Customer.Custnum) EQ TRUE THEN DO:
+      IF fCategoryChangeAllowed(Customer.Custnum, iiOrder) EQ TRUE THEN DO:
          Customer.Category = OrderCustomer.Category.      
          fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
                          ordercustomer.pro, OUTPUT lcCategory).
