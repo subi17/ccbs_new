@@ -199,6 +199,7 @@
                  fixed_line_mnp_old_operator_name;string;optional;
                  fixed_line_mnp_old_operator_code;string;optional;
                  fixed_line_serial_number;string;optional;
+                 estimated_data_speed;string;optional;broadband estimated speed
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
                  customer_type;string;mandatory;customer type
@@ -412,6 +413,7 @@ DEF VAR lcFixedLineNumber         AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperName AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperCode AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineSerialNbr      AS CHAR    NO-UNDO.
+DEF VAR liEstimatedDataSpeed      AS INTE    NO-UNDO.
 DEF VAR lcFixedLineMNPTime        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineProduct        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineCustomerType   AS CHAR    NO-UNDO. 
@@ -1836,7 +1838,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1853,6 +1855,8 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
       lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
          WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
+      liEstimatedDataSpeed = get_int(pcFusionStruct, "estimated_data_speed") 
+         WHEN LOOKUP('estimated_data_speed', lcOrderStruct) > 0  
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0.
 
