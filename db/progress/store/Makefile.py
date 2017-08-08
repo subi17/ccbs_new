@@ -292,10 +292,6 @@ def write_pf_file(filename, tenant='', logical_names={}):
     if tenant:
         tenant = '_{0}'.format(tenant)
     with open(filename, 'wt') as fd:
-        if cdr_databases:
-             fd.write('-h %d\n' % (len(databases) + len(cdr_databases)))
-        else:
-             fd.write('-h %d\n' % len(databases))
         for db in databases:
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
             fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
@@ -487,7 +483,7 @@ def a2t_from_database(database):
     if os.path.exists('{0}/tools/{1}.r'.format(work_dir, script)):
         os.unlink('{0}/tools/{1}.r'.format(work_dir, script))
     x = Popen(mpro + ['-pf', '{0}.pf'.format(database),
-                 '-b', '-p', script + '.p'], stdout=PIPE)
+                 '-h', '1', '-b', '-p', script + '.p'], stdout=PIPE)
     if x.wait() != 0:
         print(x.stdout.read())
         raise PikeException('Unable to read schema data from '
@@ -508,7 +504,7 @@ def _migrate(migration_file, direction, a2t_data):
     pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))
     pfile.flush()
 
-    callgrep(mpro + ['-pf', database + '.pf', '-b', '-p', pfile.name], [])
+    callgrep(mpro + ['-pf', database + '.pf', '-h', '1', '-b', '-p', pfile.name], [])
 
     error_file = database + '.e'
     if os.path.exists(error_file):
@@ -643,7 +639,7 @@ def active_cdr_db_pf(tenant):
     else:
         connection_type = "local"
 
-    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type, '-h', '1']
 
     if not tenant == '':
         args.extend(['-pf', 'common_{0}.pf'.format(tenant)])
@@ -668,6 +664,7 @@ def fixtures(*a):
 
     tenantdict = {}
     tenant = None
+
     for tenant in tenancies:
         if tenancies[tenant]['tenanttype'] != 'Super':
             tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{0}.pf'.format(tenant)}
@@ -693,11 +690,15 @@ def fixtures(*a):
                 '-param', 'fix_dir={0},bulk=yes'.format(fixturedir)]
 
         cdr_dict = {}
+        dbcount = len(databases)
 
         for pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf(tenantdict[tenant]['tenant'])
             args.extend(cdr_dict[pp])
+            dbcount += 1
+
+        args.extend(['-h', str(dbcount)])
 
         load_fixture = Popen(mpro + args, stdout=PIPE)
         call('/bin/cat', stdin=load_fixture.stdout)
@@ -713,10 +714,15 @@ def tenanciescreate(*a):
     if tenancies:
         cdr_dict = {}
         args = ['-pf', 'all.pf', '-b', '-p', 'multitenancy/create_tenant.r']
+        dbcount = len(databases)
+
         for pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             args.extend(cdr_dict[pp])
+            dbcount += 1
+
+        args.extend(['-h', str(dbcount)])
 
         multitenancy = Popen(mpro + args, stdout=PIPE)
         call('/bin/cat', stdin=multitenancy.stdout)
@@ -755,5 +761,5 @@ def dumpfixtures(*a):
             pf_entries.update(active_cdr_db_pf(tenantdict[tenant]['tenant']))
 
         for key in sorted(pf_entries):
-            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
+            dump_fixture = Popen(mpro + pf_entries[key] + ['-h', '1', '-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
             call('/bin/cat', stdin=dump_fixture.stdout)
