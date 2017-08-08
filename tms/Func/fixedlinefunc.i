@@ -261,7 +261,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order","C"). 
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
  
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -302,7 +302,7 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order","C").
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
        EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
@@ -335,7 +335,7 @@ FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order","C").
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
        EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
@@ -366,7 +366,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order","C").
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
