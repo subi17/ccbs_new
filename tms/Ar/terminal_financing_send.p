@@ -551,14 +551,14 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
 
 END.
 
-IF lcTFBank = {&TF_BANK_CETELEM} 
-THEN fMove2TransDir(lcFile, "", lcOutDirCetelem).
-ELSE fMove2TransDir(lcFile, "", lcOutDir).
-
 OUTPUT STREAM sout CLOSE.
 
 IF liErrors > 0 THEN
    OUTPUT STREAM sErr CLOSE.
+
+IF lcTFBank = {&TF_BANK_CETELEM} 
+THEN fMove2TransDir(lcFile, "", lcOutDirCetelem).
+ELSE fMove2TransDir(lcFile, "", lcOutDir).
 
 fReqStatus(2,"").
 
