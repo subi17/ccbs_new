@@ -99,6 +99,7 @@
 70518109 "Charge and Compensation" "" "" "" "" "" 0 12 "1"
 70518110 "Revenue" "" "" "" "" "" 0 12 "1"
 70518111 "Revenue" "" "" "" "" "" 0 12 "1"
+70525000 "Revenue" "" "" "" "" "" 0 12 "1"
 70525001 "Q25 discount" "" "" "" "" "" 0 70 "1"
 75900000 "Ingresos por servicios diver." "" "" "" "" "" 0 12 "1"
 75902000 "Ingresos por servicios diver." "" "" "" "" "" 0 12 "1"
