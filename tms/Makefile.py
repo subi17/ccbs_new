@@ -24,7 +24,7 @@ if hardlimit == resource.RLIM_INFINITY or hardlimit >= 4096000:
     resource.setrlimit(resource.RLIMIT_CORE,(4096000, hardlimit))
 
 if 'umask' in globals():
-    os.umask(int(umask))
+    os.umask(int(umask, 8))
 
 def userandpass():
     if 'tenancies' in globals():
