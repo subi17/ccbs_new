@@ -249,12 +249,10 @@ ELSE DO:
    END.
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
       /* bank account is changed with a separate request from stc process */
-      ASSIGN
-         Customer.SMSNumber   = OrderCustomer.MobileNumber.
+      ASSIGN Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
       /* YPRO migrate YPRO-92 category */
-      IF ordercustomer.pro AND 
-         ordercustomer.category NE customer.category THEN
+      IF ordercustomer.pro AND ordercustomer.category NE customer.category THEN
          Customer.category = ordercustomer.category.
    END.
 
@@ -340,7 +338,9 @@ ELSE DO:
                Customer.AuthCustId      = OrderCustomer.AuthCustId
                   WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
-                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               Customer.Category        = OrderCustomer.Category WHEN
+                                          fCategoryChangeAllowed(Customer.CustNum, iiOrderID).
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:
