@@ -29,6 +29,21 @@
 324 01/04/12 31/12/49 "EMAIL" "SendEmailInvoice" 1 "This is your electronic invoice" "<html><body>HI #NAME, <br/>YOUR #MONTH #YEAR BILL IS READY.<br/><br/>Your electronic invoice for this month is now ready for you to take a look at it. It comes to #AMOUNT euros.<br/>To get to it <a href=""#LINK"">click here</a> within the next 30 days or log on to <a href=""#MiYoigoLINK"">Mi Yoigo</a>, where you can look at your most recent bills.<br/><br/>And don&#39t forget &#151 we aren&#39t spam! Add #EMAIL to your contact list to make sure our emails always land in your Inbox.<br/><br/>Thanks!</body></html>" 5 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 325 01/04/12 31/12/49 "EMAIL" "SendEmailInvoice" 1 "=?iso-8859-1?Q?Esta es tu factura electr=F3nica?=" "<html><body>HOLA #NAME, <br/>YA ESTÁ TU FACTURA #MONTH #YEAR.<br/><br/>Tu factura electrónica de este mes ya está lista para que le eches un vistazo. El total es #AMOUNT euros.<br/>Puedes acceder haciendo <a href=""#LINK"">clic aquí</a> durante los próximos 30 días o puedes entrar en <a href=""#MiYoigoLINK"">Mi Yoigo</a>, donde tienes disponibles tus últimas facturas.<br/><br/>¡Ah! Recuerda que no somos spam. Añade #EMAIL a tus contactos y así nuestros emails llegarán siempre a tu Bandeja de entrada.<br/><br/>¡Gracias!</body></html> " 1 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 331 01/04/12 31/12/49 "EMAIL" "SendEmailInvoice" 1 "Hona hemen zure faktura elektronikoa" "<html><body>KAIXO, #NAME: <br/>#YEAR #MONTH FAKTURA PREST DAGO.<br/><br/>Prest duzu hilabete honetako faktura elektronikoa, begiratu bat eman diezaiozun. Guztira #AMOUNT euro dira. <br/>Bertara sartzeko, <a href=""#LINK"">egin klik hemen</a> hurrengo 30 egunetan; bestela, sartu <a href=""#MiYoigoLINK"">Mi Yoigo</a>, non zure azken fakturak izango dituzun eskuragarri. <br/><br/>Ah! Ez ahaztu mezu hau ez dela spama. Gehitu #EMAIL helbidea zure kontaktuetan, gure mezu elektroniko guztiak zure Sarrerako ontzira irits daitezen beti.<br/><br/>Eskerrik asko!</body></html>" 3 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+560 05/07/17 31/12/49 "EMAIL" "SVA_Centralita" 1 "Centralita PRO  #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+557 05/07/17 31/12/49 "EMAIL" "SVA_FAXTOEMAIL" 1 "SVA_ FAXTOMAIL YOIGO #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID
+Dirección de correo electrónico: #EMAIL
+Numeración: #NUMBER" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+559 05/07/17 31/12/49 "EMAIL" "SVA_IPFIJA" 1 "SVA_ IP FIJA YOIGO #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+558 05/07/17 31/12/49 "EMAIL" "SVA_OFFICE365" 1 "SVA_ OFFICE 365 YOIGO #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID
+Dirección de correo electrónico: #EMAIL" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 326 01/04/12 31/12/49 "General" "EmailConfeInvoice" 1 "eInvoice sending finished" "CCBS has finished sending Email invoices." 5 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 242 01/08/11 31/12/49 "General" "EmailConfSMSInv" 1 "SMS invoice sending finished" "CCBS has finished sending SMS invoices." 5 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 45 02/06/07 31/12/49 "General" "PassWdCheck2" 1 "" "The password must contain at least 1 UPPER CASE letter and 1 number.
