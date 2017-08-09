@@ -80,4 +80,5 @@
 "UR" "URENDE" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 99 no "" ""
 "VD" "B2B ULTRATACTICA" "" 0 "" "" "" "sergio.garde@masmovil.com" "1" 99 yes "" ""
 "WH" "WHISBI" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 no "" ""
+"XA" "Anexa" "" 0 "" "" "" "antonio.guijarro@masmovil.com" "1" 99 yes "" ""
 "YC" "YOIGO (Customer Care)" "" 0 "" "" "" "clientes@yoigo.com" "1" 99 yes "" ""

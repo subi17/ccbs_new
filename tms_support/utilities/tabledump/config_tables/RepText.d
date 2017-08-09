@@ -5083,6 +5083,11 @@
 1 "" 3 "LG K10 Blanco" 0 "P030K10W2" "1" 10/06/16 31/12/49
 1 "" 4 "LG K10 Blanco" 0 "P030K10W2" "1" 10/06/16 31/12/49
 1 "" 5 "LG K10 White" 0 "P030K10W2" "1" 10/06/16 31/12/49
+1 "" 1 "LG K10 Blanco" 0 "P030K10WC" "1" 08/08/17 31/12/49
+1 "" 2 "LG K10 Blanco" 0 "P030K10WC" "1" 08/08/17 31/12/49
+1 "" 3 "LG K10 Blanco" 0 "P030K10WC" "1" 08/08/17 31/12/49
+1 "" 4 "LG K10 Blanco" 0 "P030K10WC" "1" 08/08/17 31/12/49
+1 "" 5 "LG K10 White" 0 "P030K10WC" "1" 08/08/17 31/12/49
 1 "" 1 "LG KF310 Negro" 0 "P030KF3N2" "1" 27/10/08 31/12/54
 1 "" 5 "LG KF310 Black" 0 "P030KF3N2" "1" 27/10/08 31/12/54
 1 "" 1 "LG KF701 Virgo" 0 "P030KF702" "1" 24/09/09 31/12/49
@@ -5586,6 +5591,11 @@
 1 "" 3 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
 1 "" 4 "Samsung Galaxy A3 2017 Negro" 0 "P034A37N2" "1" 24/01/17 31/12/49
 1 "" 5 "Samsung Galaxy A3 2017 Black" 0 "P034A37N2" "1" 24/01/17 31/12/49
+1 "" 1 "Samsung Galaxy A3 2017 Negro" 0 "P034A37NC" "1" 08/08/17 31/12/49
+1 "" 2 "Samsung Galaxy A3 2017 Negro" 0 "P034A37NC" "1" 08/08/17 31/12/49
+1 "" 3 "Samsung Galaxy A3 2017 Negro" 0 "P034A37NC" "1" 08/08/17 31/12/49
+1 "" 4 "Samsung Galaxy A3 2017 Negro" 0 "P034A37NC" "1" 08/08/17 31/12/49
+1 "" 5 "Samsung Galaxy A3 2017 Black" 0 "P034A37NC" "1" 08/08/17 31/12/49
 1 "" 1 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
 1 "" 2 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
 1 "" 3 "Samsung Galaxy A3 2017 Rosa" 0 "P034A37P2" "1" 03/03/17 31/12/49
@@ -6092,11 +6102,21 @@
 1 "" 3 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
 1 "" 4 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
 1 "" 5 "Samsung Galaxy J7 2016 Gold" 0 "P034J76D2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76DC" "1" 08/08/17 31/12/49
+1 "" 2 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76DC" "1" 08/08/17 31/12/49
+1 "" 3 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76DC" "1" 08/08/17 31/12/49
+1 "" 4 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76DC" "1" 08/08/17 31/12/49
+1 "" 5 "Samsung Galaxy J7 2016 Gold" 0 "P034J76DC" "1" 08/08/17 31/12/49
 1 "" 1 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
 1 "" 2 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
 1 "" 3 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
 1 "" 4 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
 1 "" 5 "Samsung Galaxy J7 2016 Black" 0 "P034J76N2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J7 2016 Negro" 0 "P034J76NC" "1" 08/08/17 31/12/49
+1 "" 2 "Samsung Galaxy J7 2016 Negro" 0 "P034J76NC" "1" 08/08/17 31/12/49
+1 "" 3 "Samsung Galaxy J7 2016 Negro" 0 "P034J76NC" "1" 08/08/17 31/12/49
+1 "" 4 "Samsung Galaxy J7 2016 Negro" 0 "P034J76NC" "1" 08/08/17 31/12/49
+1 "" 5 "Samsung Galaxy J7 2016 Black" 0 "P034J76NC" "1" 08/08/17 31/12/49
 1 "" 1 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
 1 "" 2 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
 1 "" 3 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
@@ -7297,6 +7317,11 @@
 1 "" 3 "Huawei Y7 Gris" 0 "P043HY7G2" "1" 26/06/17 31/12/49
 1 "" 4 "Huawei Y7 Gris" 0 "P043HY7G2" "1" 26/06/17 31/12/49
 1 "" 5 "Huawei Y7 Grey" 0 "P043HY7G2" "1" 26/06/17 31/12/49
+1 "" 1 "Huawei Y7 Gris" 0 "P043HY7GC" "1" 08/08/17 31/12/49
+1 "" 2 "Huawei Y7 Gris" 0 "P043HY7GC" "1" 08/08/17 31/12/49
+1 "" 3 "Huawei Y7 Gris" 0 "P043HY7GC" "1" 08/08/17 31/12/49
+1 "" 4 "Huawei Y7 Gris" 0 "P043HY7GC" "1" 08/08/17 31/12/49
+1 "" 5 "Huawei Y7 Grey" 0 "P043HY7GC" "1" 08/08/17 31/12/49
 1 "" 1 "Huawei Y7 Negro" 0 "P043HY7N2" "1" 19/06/17 31/12/49
 1 "" 2 "Huawei Y7 Negro" 0 "P043HY7N2" "1" 19/06/17 31/12/49
 1 "" 3 "Huawei Y7 Negro" 0 "P043HY7N2" "1" 19/06/17 31/12/49
@@ -7332,6 +7357,11 @@
 1 "" 3 "Huawei P10 Lite Oro" 0 "P043L10D2" "1" 04/04/17 31/12/49
 1 "" 4 "Huawei P10 Lite Oro" 0 "P043L10D2" "1" 04/04/17 31/12/49
 1 "" 5 "Huawei P10 Lite Gold" 0 "P043L10D2" "1" 04/04/17 31/12/49
+1 "" 1 "Huawei P10 Lite Dorado" 0 "P043L10DC" "1" 08/08/17 31/12/49
+1 "" 2 "Huawei P10 Lite Dorado" 0 "P043L10DC" "1" 08/08/17 31/12/49
+1 "" 3 "Huawei P10 Lite Dorado" 0 "P043L10DC" "1" 08/08/17 31/12/49
+1 "" 4 "Huawei P10 Lite Dorado" 0 "P043L10DC" "1" 08/08/17 31/12/49
+1 "" 5 "Huawei P10 Lite Gold" 0 "P043L10DC" "1" 08/08/17 31/12/49
 1 "" 1 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
 1 "" 2 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
 1 "" 3 "Huawei P10 Lite Negro" 0 "P043L10N2" "1" 24/03/17 31/12/49
@@ -7442,6 +7472,11 @@
 1 "" 3 "Huawei P8 Lite Negro" 0 "P043P8LN2" "1" 22/04/15 31/12/49
 1 "" 4 "Huawei P8 Lite Negro" 0 "P043P8LN2" "1" 22/04/15 31/12/49
 1 "" 5 "Huawei P8 Lite Black" 0 "P043P8LN2" "1" 22/04/15 31/12/49
+1 "" 1 "Huawei P8 Lite Negro" 0 "P043P8LNC" "1" 08/08/17 31/12/49
+1 "" 2 "Huawei P8 Lite Negro" 0 "P043P8LNC" "1" 08/08/17 31/12/49
+1 "" 3 "Huawei P8 Lite Negro" 0 "P043P8LNC" "1" 08/08/17 31/12/49
+1 "" 4 "Huawei P8 Lite Negro" 0 "P043P8LNC" "1" 08/08/17 31/12/49
+1 "" 5 "Huawei P8 Lite Black" 0 "P043P8LNC" "1" 08/08/17 31/12/49
 1 "" 1 "Huawei P8 Lite Blanco" 0 "P043P8LW2" "1" 22/04/15 31/12/49
 1 "" 2 "Huawei P8 Lite Blanco" 0 "P043P8LW2" "1" 22/04/15 31/12/49
 1 "" 3 "Huawei P8 Lite Blanco" 0 "P043P8LW2" "1" 22/04/15 31/12/49
@@ -7626,6 +7661,11 @@
 1 "" 3 "Huawei Y6 2017 Color Oro" 0 "P043Y67D2" "1" 04/07/17 31/12/49
 1 "" 4 "Huawei Y6 2017 Color Oro" 0 "P043Y67D2" "1" 04/07/17 31/12/49
 1 "" 5 "Huawei Y6 2017 Color Gold" 0 "P043Y67D2" "1" 04/07/17 31/12/49
+1 "" 1 "Huawei Y6 2017 Gris" 0 "P043Y67GC" "1" 08/08/17 31/12/49
+1 "" 2 "Huawei Y6 2017 Gris" 0 "P043Y67GC" "1" 08/08/17 31/12/49
+1 "" 3 "Huawei Y6 2017 Gris" 0 "P043Y67GC" "1" 08/08/17 31/12/49
+1 "" 4 "Huawei Y6 2017 Gris" 0 "P043Y67GC" "1" 08/08/17 31/12/49
+1 "" 5 "Huawei Y6 2017 Grey" 0 "P043Y67GC" "1" 08/08/17 31/12/49
 1 "" 1 "Huawei Y6 2017 Negro" 0 "P043Y67N2" "1" 19/06/17 31/12/49
 1 "" 2 "Huawei Y6 2017 Negro" 0 "P043Y67N2" "1" 19/06/17 31/12/49
 1 "" 3 "Huawei Y6 2017 Negro" 0 "P043Y67N2" "1" 19/06/17 31/12/49
@@ -9257,6 +9297,11 @@
 1 "" 3 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
 1 "" 4 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
 1 "" 5 "iPhone 7 Plus 128 GB Black" 0 "P0977P1N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1NC" "1" 08/08/17 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1NC" "1" 08/08/17 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1NC" "1" 08/08/17 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1NC" "1" 08/08/17 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Black" 0 "P0977P1NC" "1" 08/08/17 31/12/49
 1 "" 1 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
