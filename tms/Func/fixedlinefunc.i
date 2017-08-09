@@ -17,25 +17,6 @@
 {Func/create_eventlog.i}
 {Func/matrix.i}
 
-FUNCTION fGetOngoingOrderStatusList RETURNS CHAR
-  (INPUT inp AS CHAR).
-
-   DEF VAR ret AS c NO-UNDO init ?.
-
-   FIND FIRST TMSParam where
-              TMSParam.Brand      = Syst.Parameters:gcBrand AND
-              TMSParam.ParamCode  = inp
-   no-lock no-error.
-
-   IF AVAIL TMSParam THEN DO:
-      ret = TMSParam.CharVal.
-      release TMSParam.
-   END.
-
-   RETURN ret.
-
-END.
-
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
    commali.i, katun defined and call fCleanEventObjects after this function */
@@ -279,7 +260,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing"). 
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
  
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -309,6 +290,68 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Function checks for ongoing pro migration for a customer  */
+FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
+   (INPUT iiCustNum AS INT):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
+
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
+
+   FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
+       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
+       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
+       EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK,
+       FIRST bOrderFusion WHERE bOrderFusion.Brand = Syst.Parameters:gcBrand AND bOrderFusion.OrderID = bOrder.OrderID NO-LOCK,
+       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
+
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN 
+         NEXT.    
+
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
+   (INPUT iiCustNum AS INT):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
+
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
+
+   FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
+       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
+       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = False NO-LOCK,
+       EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK:
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN 
+         NEXT.    
+
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 /* Function checks for ongoing 3P convergent for a customer  */
 FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
@@ -322,7 +365,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fGetOngoingOrderStatusList("ConvOrderOngoing").
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
