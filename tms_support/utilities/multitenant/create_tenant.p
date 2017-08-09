@@ -17,7 +17,7 @@ service = NEW DataAdminService(icDBName).
 
 IF icTenantType NE "Default" THEN DO:
 
-   tenant = service:NewTenant("T" + icTenant).  
+   tenant = service:NewTenant("t" + icTenant).  
 
    /* Create a tenant */
    IF icTenantType EQ "Super" THEN DO:
@@ -25,26 +25,26 @@ IF icTenantType NE "Default" THEN DO:
       tenant:Type = icTenantType.
    END.
    ELSE DO:
-      tenant:name = "T" + icTenant.
+      tenant:name = "t" + icTenant.
       tenant:Type = icTenantType.
       tenant:IsDataEnabled = TRUE.   /* enabled for access */
-      tenant:DefaultAllocation = "Immediate".
-      tenant:DefaultDataArea  = service:GetArea("Sta_Data_64").
-      tenant:DefaultIndexArea = service:GetArea("Sta_Index_64").
-      tenant:DefaultLobArea   = service:GetArea("Sta_Data_64").
+      tenant:DefaultAllocation = "delayed".
+      tenant:DefaultDataArea  = service:GetArea("M_Data").
+      tenant:DefaultIndexArea = service:GetArea("M_Index").
+      tenant:DefaultLobArea   = service:GetArea("M_Lob").
    END.
 
    service:CreateTenant(tenant).
 END.
 
 /* Create a domain */
-domain = service:NewDomain("D" + icTenant).
+domain = service:NewDomain("d" + icTenant).
 IF icTenantType EQ "Default" THEN
    domain:Tenant = service:GetTenant("Default").
 ELSE 
-   domain:Tenant = service:GetTenant("T" + icTenant).
+   domain:Tenant = service:GetTenant("t" + icTenant).
 domain:AuthenticationSystem = service:GetAuthenticationSystem("_oeusertable").
-domain:AccessCode =  "D" + icTenant.
+domain:AccessCode =  "d" + icTenant.
 domain:IsEnabled = TRUE.
 service:CreateDomain(domain). 
 

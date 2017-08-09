@@ -10,13 +10,13 @@ define variable errorhandler as DataAdminErrorHandler no-undo.
 DO TRANSACTION:
 
    MESSAGE "Creating masmovil tenant".
-   RUN ../tms_support/utilities/multitenant/create_tenant.p ("Masmovil", "Regular", icDBName).
+   RUN create_tenant.p ("masmovil", "Regular", icDBName).
 
    MESSAGE 'Creating super tenant'.
-   RUN ../tms_support/utilities/multitenant/create_tenant.p ("Super", "Super", icDBName).
+   RUN create_tenant.p ("super", "Super", icDBName).
 
    MESSAGE 'Creating yoigo/default user'.
-   RUN ../tms_support/utilities/multitenant/create_tenant.p ("Yoigo", "Default", icDBName).
+   RUN create_tenant.p ("yoigo", "Default", icDBName).
 
 END.
 
