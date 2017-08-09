@@ -934,6 +934,7 @@
 "CONTSVOICE_A" "Flat rate voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/07/12 862
 "CONTSVOICE_B" "Flat rate voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/07/12 863
 "EMail" "Email" 104 1 0 0 "" "" 0 no 98 no "" 0 0 "1" 31/12/49 01/12/06 597
+"FIX_VOICE1000" "Fixed Voice 1000 Minutes" 1081 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1088
 "FLATDATA20D_A" "Flat rate data 20D" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/12 764
 "FLATDATA20D_B" "Flat rate data 20D" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/12 765
 "FLATDATA30_A" "Flat rate data 30" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 734
@@ -943,6 +944,8 @@
 "FLATDATA55_A" "Flat rate data 55" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 736
 "FLATDATA55_B" "Flat rate data 55" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 737
 "FLATVOICE" "Flat rate voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 738
+"FLEX_500MB_UPSELL" "Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1090
+"FLEX_5GB_UPSELL" "Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1091
 "FREE100MINUTES" "Free 100 minutes voice package" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/16 1040
 "GOOGLE" "Google Play" 790 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/06/16 1041
 "GPRS" "GPRS" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 598
@@ -1005,8 +1008,12 @@
 "GPRS_DATA5_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 920
 "GPRS_DATA6_UPSELL" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 953
 "GPRS_DATA9_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 890
+"GPRS_DSS_FLEX_500MB_UPSELL" "GPRS DSS 500MB Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 19/07/17 1092
+"GPRS_DSS_FLEX_5GB_UPSELL" "GPRS DSS 5GB Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 19/07/17 1093
 "GPRS_FLEX_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/03/17 1072
 "INTERNATIONAL" "International" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 620
+"INT_FIX_VOICE1000" "International Fixed Voice 1000 Minutes" 1002 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1089
+"INT_VOICE100" "International voice 100 Minutes" 2 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1087
 "OTHER" "SMS sent to other operator" 52 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/01/15 991
 "PD001" "Contrato2 SMS Flat rate" 103 1 0 0 "" "" 0 no 90 no "" 0 0 "1" 30/11/11 01/12/06 621
 "PD002" "Contrato2 Voice Flat rate" 102 1 0 0 "" "" 0 no 4 no "" 0 0 "1" 30/11/11 01/12/06 622
@@ -1033,6 +1040,7 @@
 "RT" "Roaming Terminating" 7 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 632
 "RUS" "Russia" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 30/11/11 01/12/06 633
 "SMS" "SMS" 51 1 0 0 "" "" 0 no 90 no "" 0 0 "1" 31/12/49 01/12/06 634
+"SMS5000" "SMS 5000 QTY" 51 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1086
 "TARJ9_DATA_IN" "TARJ9 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 992
 "TARJ9_DATA_OUT" "TARJ9 DATA_OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 993
 "TARJ9_VOICE_IN" "TARJ9 VOICE_IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 994
@@ -1041,6 +1049,7 @@
 "VOICE100" "Voice 100 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/01/15 977
 "VOICE200" "Voice 200 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/17 1081
 "VOICE3000" "Cont Voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 893
+"VOICE5000" "Voice 5000 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1085
 "WAPVAS" "Premium WAP" 78 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 636
 "YOIGO" "Yoigo" 80 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 637
 "252" "Somalia" 160 1 0 0 "" "" 0 no 1 no "" 0 0 "2" 31/12/49 01/12/06 638
