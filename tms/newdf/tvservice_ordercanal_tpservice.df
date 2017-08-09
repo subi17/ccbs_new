@@ -3,8 +3,8 @@ ADD TABLE "TPService"
   LABEL "Third Party Service"
   DESCRIPTION "Third Party Service"
   DUMP-NAME "tpservice"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-tpservice.p" CRC "?"
-  TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "rw-tpservice.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-tpservice.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "triggers/rw-tpservice.p" CRC "?"
 
 ADD FIELD "MsSeq" OF "TPService" AS integer 
   FORMAT ">>>>>>>9"
