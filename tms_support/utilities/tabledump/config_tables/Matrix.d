@@ -2,6 +2,8 @@
 "1" "Additional line CONT15" "ADDLINE" 140 1 1
 "1" "Additional line CONT26" "ADDLINE" 142 1 1
 "1" "Additional line CONT25" "ADDLINE" 144 1 1
+"1" "Additional line CONT26" "ADDLINEHM" 149 1 1
+"1" "Additional line CONT25" "ADDLINEHM" 150 1 1
 "1" "Data bundle change" "BTC-DENY" 21 0 1
 "1" "Bundle List" "Bundle" 87 1 1
 "1" "Bundle List" "Bundle" 42 1 1
