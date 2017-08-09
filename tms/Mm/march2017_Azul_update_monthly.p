@@ -80,7 +80,8 @@ IF llgSimulate EQ TRUE THEN
 /*Temp table for orders of activated mobsubs during the collection period*/
 DEF TEMP-TABLE ttOrderList NO-UNDO
    FIELD OrderID   AS INT
-   FIELD MsSeq     AS INT.
+   FIELD MsSeq     AS INT
+   INDEX OrderID OrderID.
 
 FUNCTION fIsAzul RETURNS LOG
    (icCliType AS CHAR):
@@ -180,12 +181,30 @@ FUNCTION fMonthStart RETURNS DECIMAL
 
 END.
 
+/*Function counts successful activations*/
+FUNCTION fCountReq RETURNS INT
+   (iiMsSeq AS INT):
+   DEF VAR liC AS INT.
+   DEF Buffer MsRequest FOR MsRequest.
+   FOR EACH MsRequest NO-LOCK where
+            MsRequest.MsSeq EQ iiMsSeq AND
+            MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
+            MsRequest.ReqCparam3 EQ lcUpsell AND
+            MsRequest.crestamp > ldCampaignStart
+            USE-INDEX MsSeq:
+      liC = liC + 1.
+   END.
+   RETURN liC.
+END.
+
 
 /*Function activates upsell for subscription that is related to given order*/
 FUNCTION fUpsellForAzul RETURNS CHAR
    (iiMsSeq AS INT):
    DEF VAR lcError AS CHAR NO-UNDO.
    DEF VAR liRequest AS INT NO-UNDO.
+   DEF VAR liDoneActivations AS INT NO-UNDO.
    DEF BUFFER MsRequest FOR MsRequest.
 
    FIND FIRST MsRequest NO-LOCK where
@@ -194,6 +213,11 @@ FUNCTION fUpsellForAzul RETURNS CHAR
               MsRequest.ReqCparam3 EQ lcUpsell AND 
               MsRequest.crestamp > fMonthStart(fmakets()) /*do not care itmes done in eariler months */
               NO-ERROR.
+
+   /*Do not allow more than 6 activations.*/
+   liDoneActivations = fCountReq(iiMsSeq).
+   IF liDoneActivations > 6 THEN RETURN "Activation month count full".
+
    IF AVAIL MsRequest THEN RETURN "Upsell already activated".
    
    IF llgSimulate EQ FALSE THEN DO:
@@ -248,8 +272,8 @@ END.
 
 /*Actual execution:*/
 ldCollPeriodEndTS = fSecOffSet(ldCampaignStart, -60). /*Now - 1 minute*/
-fCollect(ldCampaignStart, (ldCampaignEnd + 15)). /*Select orders that need activation, 
-                                                  additional 15 days is done to be sure
+fCollect(ldCampaignStart, (ldCampaignEnd + 60)). /*Select orders that need activation, 
+                                                  additional 60 days is done to be sure
                                                   that also delayed activations are found*/
 
 /*Activate upsells*/
