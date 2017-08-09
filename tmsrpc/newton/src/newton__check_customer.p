@@ -111,13 +111,15 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActs).
 
 ASSIGN
-    lcPROChannels                 = fCParamC("PRO_CHANNELS")
-    lcnonPROChannels              = fCParamC("NON_PRO_CHANNELS") 
-    llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
-    llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum).
+    lcPROChannels    = fCParamC("PRO_CHANNELS")
+    lcnonPROChannels = fCParamC("NON_PRO_CHANNELS")
+    .
 
 IF AVAIL Customer THEN 
 DO:
+    ASSIGN 
+       llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
+       llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum). 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
         IF llCustCatPro THEN 
