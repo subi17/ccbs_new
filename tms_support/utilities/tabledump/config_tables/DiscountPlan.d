@@ -9,6 +9,7 @@
 "1" 28 "Contract Target" "List" "Percentage" 2 no "" "CONT23DISC" 12/08/15 31/12/49 "CONT23DISC" "Discount Promo La Sinfín 8GB" "" "List" 0 0 0 6
 "1" 29 "Contract Target" "List" "Percentage" 1 yes "" "CONT23DISCTELE" 01/09/15 31/12/49 "CONT23DISCTELE" "Discount Promo La Sinfín 8GB PROMO TELESALES" "" "List" 0 0 0 0
 "1" 24 "Contract Target" "List" "Percentage" 2 no "" "CONT24DISC" 01/03/15 31/12/49 "CONT24DISC" "Discount March Promo La Sinfín" "" "List" 0 0 0 6
+"1" 62 "Contract Target" "List" "Fixed" 2 no "" "CONT24RETDISC" 19/07/17 31/12/49 "CONT24RETDISC" "Discount retention Sinfin 20" "" "List" 0 0 1 0
 "1" 37 "Contract Target" "List" "Percentage" 2 no "" "CONT25DISC" 12/12/16 31/12/49 "CONT25DISC" "Discount Xmas campaign La Sinfín" "" "List" 0 0 0 6
 "1" 40 "Contract Target" "List" "Percentage" 2 no "" "CONT26DISC" 01/02/17 31/12/49 "CONT26DISC" "La Infinita 5GB discount" "" "List" 0 0 0 6
 "1" 4 "Contract Target" "List" "Fixed" 2 no "" "CONT8DISC" 01/12/12 31/12/49 "CONT8DISC" "Discount MF La del Uno and La del Cero 1.2GB" "" "All " 0 0 0 0
@@ -26,19 +27,24 @@
 "1" 57 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC20_3" 05/07/17 31/12/49 "CONVDISC20_3" "Convergent New Adds Promotion" "" "List" 0 0 0 3
 "1" 47 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10" 05/04/17 31/12/49 "DISCCONT10" "Additional Line CONT10" "" "List" 0 0 1 0
 "1" 53 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10H" 05/06/17 31/12/49 "DISCCONT10H" "Additional Line CONT10 50%" "" "List" 0 0 1 0
+"1" 58 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10HM" 05/07/17 31/12/49 "DISCCONT10HM" "Mobile only - Additional Line CONT10 50%" "" "List" 0 0 1 0
 "1" 46 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT15" 05/04/17 31/12/49 "DISCCONT15" "Additional Line CONT15" "" "List" 0 0 1 0
 "1" 54 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT15H" 05/06/17 31/12/49 "DISCCONT15H" "Additional Line CONT15 50%" "" "List" 0 0 1 0
+"1" 59 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT15HM" 05/07/17 31/12/49 "DISCCONT15HM" "Mobile only - Additional Line CONT15  50%" "" "List" 0 0 1 0
 "1" 49 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT25" 05/04/17 31/12/49 "DISCCONT25" "Additional Line CONT25" "" "List" 0 0 1 0
 "1" 55 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT25H" 05/06/17 31/12/49 "DISCCONT25H" "Additional Line CONT25 50%" "" "List" 0 0 1 0
+"1" 60 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT25HM" 05/07/17 31/12/49 "DISCCONT25HM" "Mobile only - Additional Line CONT25 50%" "" "List" 0 0 1 0
 "1" 48 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT26" 05/04/17 31/12/49 "DISCCONT26" "Additional Line CONT26" "" "List" 0 0 1 0
 "1" 56 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT26H" 05/06/17 31/12/49 "DISCCONT26H" "Additional Line CONT26 50%" "" "List" 0 0 1 0
-"1" 36 "Contract Target" "List" "Fixed" 1 no "" "DISCFH300" 01/11/16 31/12/49 "DISCFH300" "Fixed Fiber 300 MF Discount" "" "List" 0 0 0 3
+"1" 61 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT26HM" 05/07/17 31/12/49 "DISCCONT26HM" "Mobile only - Additional Line CONT26 50%" "" "List" 0 0 1 0
+"1" 36 "Contract Target" "List" "Fixed" 1 no "" "DISCFH300" 01/11/16 31/12/49 "DISCFH300" "Fixed Fiber 300 MF Discount" "" "List" 0 0 0 12
 "1" 44 "Contract Target" "List" "Percentage" 1 no "" "DISCFH3002P" 01/02/17 31/12/49 "DISCFH3002P" "Fixed Fiber 300 MF Discount 2P" "" "List" 0 0 0 0
 "1" 50 "Contract Target" "List" "Percentage" 1 no "" "DISCFH3002PDWN" 02/05/17 31/12/49 "DISCFH3002PDWN" "Fixed Fiber 300 MF Discount 2P Downgrade" "" "List" 10 0 1 0
 "1" 41 "Contract Target" "List" "Percentage" 1 no "" "DISCFH300P" 01/02/17 31/12/49 "DISCFH300P" "Fixed Fiber 300 MF Discount (Percentage)" "" "List" 10 0 0 3
 "1" 51 "Contract Target" "List" "Percentage" 1 no "" "DISCFH300PDWN" 02/05/17 31/12/49 "DISCFH300PDWN" "Fixed Fiber 300 MF Discount Downgrade" "" "List" 10 0 1 0
 "1" 8 "Contract Target" "All " "Percentage" 2 no "" "DISCOUNT10" 01/09/13 31/12/49 "DISCOUNT10" "Discount 10 percent" "" "All " 0 0 0 0
 "1" 42 "Contract Target" "List" "Percentage" 1 no "" "DISCWINBACK" 22/02/17 31/12/49 "DISCWINBACK" "Winback ADSL Discount" "" "List" 0 0 0 6
+"1" 63 "Contract Target" "List" "Fixed" 1 no "" "FIDETVDISC" 01/07/17 31/12/49 "FIDETVDISC" "Loyalty & retention discount" "" "List" 0 0 1 6
 "1" 21 "Contract Target" "List" "Percentage" 3 no "" "INC_DISC" 01/12/14 31/12/49 "INC_DISC" "Descuento Incidencia red" "" "All " 0 0 1 1
 "1" 19 "Contract Target" "List" "Percentage" 2 no "" "INTLCALLDISC" 01/07/14 31/12/49 "INTLCALLDISC" "Discount international Calls" "" "All " 0 0 0 0
 "1" 11 "Contract Target" "List" "Percentage" 3 no "" "LRDISC" 01/02/14 31/12/49 "LRDISC" "Loyalty & retention discount" "" "All " 0 0 0 0
