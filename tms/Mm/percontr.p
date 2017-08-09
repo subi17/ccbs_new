@@ -1202,7 +1202,10 @@ PROCEDURE pContractActivation:
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
       lcDCEvent EQ  "DSS200_UPSELL" OR
-      lcDCEvent BEGINS "DSS2_UPSELL" THEN
+      lcDCEvent BEGINS "DSS2_UPSELL" OR
+     (lcDCEvent EQ "FLEX_UPSELL" AND
+      fIsDSSActive(INPUT MsOwner.CustNum,
+                   INPUT MsRequest.ActStamp)) THEN
       RUN pUpdateDSSNetworkLimit(INPUT MsOwner.MsSeq,
                                  INPUT MsOwner.CustNum,
                                  INPUT ldeDSSUpsellLimit,
