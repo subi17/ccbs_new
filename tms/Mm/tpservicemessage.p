@@ -46,9 +46,9 @@ DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 
 FORM
-   ttDocs.MessageType   FORMAT "X(22)"  COLUMN-LABEL "Msg. Type"
-   ttDocs.Source        FORMAT "X(30)"  COLUMN-LABEL "Source"
-   ttDocs.MessageStatus FORMAT "X(10)"  COLUMN-LABEL "Status"
+   ttDocs.MessageType   FORMAT "X(15)"           COLUMN-LABEL "Msg. Type"
+   ttDocs.Source        FORMAT "X(10)"           COLUMN-LABEL "Source"
+   ttDocs.MessageStatus FORMAT "X(15)"           COLUMN-LABEL "Status"
    ttDocs.CreatedTS     FORMAT "99999999.99999"  COLUMN-LABEL "Created TS"
    ttDocs.UpdateTS      FORMAT "99999999.99999"  COLUMN-LABEL "Update TS"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
