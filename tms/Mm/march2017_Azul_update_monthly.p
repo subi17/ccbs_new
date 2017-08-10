@@ -216,7 +216,7 @@ FUNCTION fUpsellForAzul RETURNS CHAR
 
    /*Do not allow more than 6 activations.*/
    liDoneActivations = fCountReq(iiMsSeq).
-   IF liDoneActivations > 6 THEN RETURN "Activation month count full".
+   IF liDoneActivations >= 6 THEN RETURN "Activation month count full".
 
    IF AVAIL MsRequest THEN RETURN "Upsell already activated".
    
