@@ -124,9 +124,6 @@ REPEAT WITH FRAME sel:
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
-        
-        IF toimi EQ 1 THEN 
-            RUN Mm/tpservicemessage.p(iiMsSeq).
       END.
 
       HIDE MESSAGE NO-PAUSE.
