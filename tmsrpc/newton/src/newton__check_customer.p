@@ -112,14 +112,14 @@ llOrderAllowed = fSubscriptionLimitCheck(
 
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS")
-    lcnonPROChannels = fCParamC("NON_PRO_CHANNELS")
-    .
+    lcnonPROChannels = fCParamC("NON_PRO_CHANNELS").
 
 IF AVAIL Customer THEN 
 DO:
     ASSIGN 
        llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
        llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum). 
+
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
         IF llCustCatPro THEN 
@@ -129,11 +129,9 @@ DO:
                     llOrderAllowed = FALSE
                     lcReason       = "Additional mobile line is not compatible with respective to main convergent line".
             ELSE IF llProToNonProMigrationOngoing THEN  
-            DO:
                 ASSIGN
-                    llOrderAllowed = FALSE.
+                    llOrderAllowed = FALSE
                     lcReason       = "ongoing non PRO order".
-            END.
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
@@ -199,7 +197,7 @@ DO:
         DO:
             IF llNonProToProMigrationOngoing THEN 
                 ASSIGN
-                    llOrderAllowed = FALSE.
+                    llOrderAllowed = FALSE
                     lcReason = "customer already exists with PRO category".
         END.
     END.
