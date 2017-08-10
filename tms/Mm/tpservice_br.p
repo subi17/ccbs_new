@@ -288,7 +288,10 @@ REPEAT WITH FRAME sel:
              lcUpdatedTS
              WITH FRAME fDetails.
      END.
-
+     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN 
+     DO ON ENDKEY UNDO, NEXT LOOP:
+         RUN Mm/tpservicemessage.p(iiMsSeq).
+     END. /* Search-1 */
      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
