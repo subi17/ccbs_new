@@ -1639,12 +1639,18 @@ FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS} 
    END.
 
    FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAIL Order OR LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
+   IF NOT AVAIL Order THEN 
    DO:
-      fTPServiceMessageError(BUFFER TPServiceMessage,"No order found or Invalid order status").
+      fTPServiceMessageError(BUFFER TPServiceMessage,"Failed to identify associated order during logistics initiation").
       NEXT.
    END.
-
+   /*
+   ELSE IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN
+   DO:
+      fTPServiceMessageError(BUFFER TPServiceMessage,"Invalid order status during logistics initiation").
+      NEXT.
+   END.      
+   */
    IF fDelivDevice(TPService.ServType) THEN 
       ASSIGN
          TPServiceMessage.UpdateTS      = fMakeTS()
