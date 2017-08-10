@@ -1002,9 +1002,13 @@ PROCEDURE pContractActivation:
    END.  /* dctype ne 1/4 */
 
    /* Send Shaper if VOIP is added manually or by subs. creation */
-   IF lcDCEvent NE "HSPA_ROAM_EU" AND
+   IF (lcDCEvent NE "HSPA_ROAM_EU" AND
       (lcDCEvent <> "BONO_VOIP" OR MsRequest.OrigRequest = 0 OR
-       LOOKUP(MsRequest.ReqSource,"1,19") > 0) THEN
+       LOOKUP(MsRequest.ReqSource,"1,19") > 0) AND
+       lcDCEvent NE "FLEX_UPSELL") OR
+      (lcDCEvent EQ "FLEX_UPSELL" AND
+       NOT fIsDSSActive(INPUT MsOwner.CustNum,
+                        INPUT MsRequest.ActStamp)) THEN
    RUN pActivateServicePackage(lcDCEvent,
                                MsOwner.MsSeq,
                                lcUseCLIType,
