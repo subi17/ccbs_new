@@ -379,7 +379,8 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
        EACH labOrder NO-LOCK WHERE
             labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
             labOrder.orderid    EQ labOrderCustomer.Orderid AND
-            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            labOrder.PayType    EQ {&MOBSUB_PAYTYPE_POSTPAID}:
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                         CLIType.Brand      = Syst.Parameters:gcBrand           AND
@@ -388,15 +389,9 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
                         CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
          
          CASE labOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
-                                    ELSE {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
-                                    ELSE {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
             OTHERWISE.
          END CASE.
 

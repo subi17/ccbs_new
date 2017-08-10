@@ -269,15 +269,12 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
 
-   ASSIGN
-   Customer.AuthCustId      = Order.OrdererID WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+   IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+      OrderCustomer.CustIdType = "CIF"
+   THEN ASSIGN
+           Customer.AuthCustId     = OrderCustomer.AuthCustId
+           Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
+           .
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).
@@ -321,13 +318,15 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       END.
 
       /* category according to id type */
-      Customer.Category = OrderCustomer.Category.      
-      fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
-                      ordercustomer.pro, OUTPUT lcCategory).
-      IF lcCategory > "" THEN DO:
-         Customer.Category = lcCategory.
-         IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
-            Ordercustomer.Category = lcCategory.
+      IF fCategoryChangeAllowed(Customer.Custnum, iiOrder) EQ TRUE THEN DO:
+         Customer.Category = OrderCustomer.Category.      
+         fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
+                         ordercustomer.pro, OUTPUT lcCategory).
+         IF lcCategory > "" THEN DO:
+            Customer.Category = lcCategory.
+            IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
+               Ordercustomer.Category = lcCategory.
+         END.
       END.
       IF iiTarget = 1 THEN DO:
          /* new user account */

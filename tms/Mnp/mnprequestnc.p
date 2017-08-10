@@ -27,6 +27,9 @@ DEFINE VARIABLE ldeChgStamp   AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE lcProduct     AS CHAR      NO-UNDO. 
 DEFINE VARIABLE lcTariffType  AS CHAR      NO-UNDO. 
 DEFINE VARIABLE lcTenant      AS CHAR      NO-UNDO.
+DEFINE VARIABLE lcRegion AS CHARACTER NO-UNDO. 
+
+DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 
 &SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
 
@@ -36,10 +39,23 @@ FIND Order NO-LOCK WHERE
 
 IF NOT AVAIL Order THEN RETURN ("ERROR: Order not found " + STRING(iiOrderId)).
 
-FIND OrderCustomer OF Order WHERE
-   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+FIND OrderCustomer OF Order NO-LOCK WHERE
+   OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} NO-ERROR.
 
-IF NOT AVAIL OrderCustomer THEN RETURN ("ERROR: OrderCustomer not found " + STRING(iiOrderId)).
+IF NOT AVAILABLE OrderCustomer
+THEN FIND OrderCustomer OF Order NO-LOCK WHERE
+   OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+ELSE DO:
+   FIND lbOrderCustomer OF Order NO-LOCK WHERE
+      lbOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+   IF NOT AVAIL lbOrderCustomer THEN RETURN ("ERROR: OrderCustomer not found " + STRING(iiOrderId)).
+   lcRegion = lbOrderCustomer.Region.
+END.
+
+IF NOT AVAILABLE OrderCustomer THEN RETURN ("ERROR: OrderCustomer not found " + STRING(iiOrderId)).
+
+IF OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+THEN lcRegion = OrderCustomer.Region.
 
 ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).
 
@@ -128,7 +144,7 @@ ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
                 Order.OrderChannel NE "inversa"
              THEN "POS"
              ELSE Order.OrderChannel),
-            OrderCustomer.Region,
+            lcRegion,
             lcProduct,
             lcTariffType,
             Order.DeliveryType).

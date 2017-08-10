@@ -16,6 +16,7 @@
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
+
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
    commali.i, katun defined and call fCleanEventObjects after this function */
@@ -158,10 +159,21 @@ END.
 FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
    (icContract AS CHAR):
    IF icContract BEGINS "CONTDSL" OR
-      icContract BEGINS "CONTFH" THEN 
+      icContract BEGINS "CONTFH" THEN
       RETURN TRUE.
+   /* SVAs are assosiated with fixed line and should not be
+      terminated until fixedline terminated */
+   IF icContract EQ "FAXTOEMAIL" OR
+      icContract EQ "OFFICE365" OR
+      icContract EQ "SAGEONE" OR
+      icContract EQ "IPFIJA" OR
+      icContract EQ "Centralita" THEN
+      RETURN TRUE.
+   IF INDEX(icContract,"FIX") > 0 THEN
+      RETURN TRUE.
+
    RETURN FALSE.
-END.   
+END.
 
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
@@ -247,6 +259,10 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
 
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
+ 
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
             bOrderCustomer.CustId     EQ icCustID                AND
@@ -255,19 +271,81 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Parameters:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND 
-           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}),
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
-
+      
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
           
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
          RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function checks for ongoing pro migration for a customer  */
+FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
+   (INPUT iiCustNum AS INT):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
+
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
+
+   FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
+       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
+       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
+       EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK,
+       FIRST bOrderFusion WHERE bOrderFusion.Brand = Syst.Parameters:gcBrand AND bOrderFusion.OrderID = bOrder.OrderID NO-LOCK,
+       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
+
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN 
+         NEXT.    
+
+      RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
+   (INPUT iiCustNum AS INT):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
+
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
+
+   FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
+       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
+       EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = False NO-LOCK,
+       EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK:
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN 
+         NEXT.    
+
+      RETURN TRUE.
 
    END.
 
@@ -286,6 +364,10 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
 
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
+
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
+
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
             bOrderCustomer.CustId     EQ icCustID                AND
@@ -294,11 +376,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
        EACH bOrder NO-LOCK WHERE
             bOrder.Brand      EQ Syst.Parameters:gcBrand AND
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
-            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
-           (bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} OR
-            bOrder.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP}),
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
       FIRST bOrderFusion NO-LOCK WHERE
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID,
@@ -306,6 +384,8 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
           NEXT.
+
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.    
 
       RETURN TRUE.
 
@@ -461,7 +541,10 @@ FUNCTION fIsProSubscription RETURNS LOGICAL
            IF AVAIL bCustCat THEN 
                RETURN TRUE.    
        END.        
-   END.    
+   END.
+
+   RETURN FALSE.
+       
 END FUNCTION.
 /* Additional Line with mobile only ALFMO-5  */ 
 FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
@@ -499,6 +582,10 @@ FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
    DEFINE BUFFER bCustomer FOR Customer.
    DEFINE BUFFER bMobSub   FOR MobSub.
 
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Parameters:gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCliType, {&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
+
    FOR FIRST bCustomer WHERE
              bCustomer.Brand      = Syst.Parameters:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
@@ -508,6 +595,17 @@ FUNCTION fCheckExistingMobileOnly RETURNS LOGICAL
              bMobSub.Brand   = Syst.Parameters:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE:
+
+       /* This is to handle where the additional line
+          is CONT25 or CONT26 because it can treat itself
+          as main line */  
+       IF (bMobSub.CLIType = ENTRY(3,{&ADDLINE_CLITYPES} ) OR 
+           bMobSub.CLIType = ENTRY(4,{&ADDLINE_CLITYPES} )) AND 
+          CAN-FIND(FIRST DPMember WHERE
+                         DPMember.DPId = DiscountPlan.DPId AND
+                         DPMember.HostTable = "MobSub" AND
+                         DPMember.KeyValue  = STRING(bMobSub.MsSeq) AND
+                         DPMember.ValidTo   >= TODAY) THEN NEXT.
 
        IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
           RETURN TRUE.
@@ -538,6 +636,13 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
             bOrder.orderid    EQ bOrderCustomer.Orderid  AND
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
             LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+
+       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                   OrderAction.Brand    = Syst.Parameters:gcBrand AND
+                   OrderAction.OrderID  = bOrder.OrderID   AND
+                   OrderAction.ItemType = "AddLineDiscount" AND
+          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+             NEXT.
 
       IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
          RETURN TRUE.
