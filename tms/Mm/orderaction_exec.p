@@ -75,7 +75,7 @@ FOR EACH OrderAction NO-LOCK WHERE
        IF AVAIL DayCampaign THEN 
        DO:
            IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND 
-              LOOKUP(Daycampaign.BundleTarget, (STRING({&DC_BUNDLE_TARGET_FIXED}) + "," + STRING({&TELEVISION_BUNDLE}))) = 0 THEN 
+              LOOKUP(STRING(Daycampaign.BundleTarget), (STRING({&DC_BUNDLE_TARGET_FIXED}) + "," + STRING({&TELEVISION_BUNDLE}))) = 0 THEN 
                NEXT ORDERACTION_LOOP.
            ELSE IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
                NEXT ORDERACTION_LOOP.
