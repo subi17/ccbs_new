@@ -46,7 +46,9 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
    FIELD PerContID AS INT.
 
-ldCurrTS = fMakeTS().
+ASSIGN 
+  lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes")
+  ldCurrTS            = fMakeTS().
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -111,6 +113,7 @@ DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
 DEFINE BUFFER bMobSub        FOR MobSub.
+DEFINE BUFFER bMLMobSub      FOR MobSub.
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
 
@@ -132,6 +135,18 @@ DO TRANSACTION:
       fReqError("Invalid Subscription Id").
       RETURN.
    END. /* IF NOT AVAILABLE termMobSub THEN DO: */
+
+   /* Before updating any values, check if it extra line clitype reactivation. 
+      If yes, then check associated main line is not associated to any other 
+      extra line. If associated then reactivation is not allowed */ 
+   IF LOOKUP(TermMobSub.CLIType,lcExtraLineCLITypes) GT 0  AND
+      NOT CAN-FIND(FIRST bMLMobSub NO-LOCK WHERE 
+                         bMLMobSub.MsSeq        EQ TermMobSub.MultiSimId AND 
+                         bMLMobSub.MultiSimId   EQ 0                     AND 
+                         bMLMobSub.MultiSimType EQ 0)                    THEN DO:
+      fReqError("Mainline is already associated to other extra line").
+      RETURN.
+   END.                      
 
    FIND FIRST MSISDN WHERE
               MSISDN.Brand    = gcBrand        AND
@@ -741,14 +756,11 @@ DO TRANSACTION:
   
    /* Reactive Extra line discount, if associated Mainline is not 
       assigned to other Extra line */
-   lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
-
    IF lcExtraLineCLITypes                        NE "" AND 
       LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) GT 0  AND 
       MobSub.MultiSimId                          NE 0  AND
       MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
-   RUN pReacExtraLineDiscount(MobSub.MultiSimId,
-                              MobSub.MsSeq,
+   RUN pReacExtraLineDiscount(MobSub.MsSeq,
                               MobSub.CLIType).   
 
    /* ADDLINE-20 Additional Line 
@@ -1158,39 +1170,31 @@ END PROCEDURE.
 
 PROCEDURE pReacExtraLineDiscount:
 
-   DEF INPUT PARAM liMainLineMsSeq    AS INT  NO-UNDO. 
    DEF INPUT PARAM liExtraLineMsSeq   AS INT  NO-UNDO.    
    DEF INPUT PARAM lcExtraLineCLIType AS CHAR NO-UNDO. 
    
    DEF VAR lcExtraLineDiscRuleId AS CHAR NO-UNDO. 
 
-   DEFINE BUFFER bMLMobSub             FOR MobSub.
    DEFINE BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 
-   IF CAN-FIND(FIRST bMLMobSub NO-LOCK WHERE 
-                     bMLMobSub.MsSeq        EQ liMainLineMsSeq AND 
-                     bMLMobSub.MultiSimId   EQ 0               AND 
-                     bMLMobSub.MultiSimType EQ 0)              THEN 
-   DO:                  
-      CASE lcExtraLineCLIType:
-         WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-      END CASE.
+   CASE lcExtraLineCLIType:
+      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+   END CASE.
 
-      IF lcExtraLineDiscRuleId NE "" THEN DO:
-         FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                    ExtraLineDiscountPlan.Brand      = gcBrand               AND
-                    ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
-                    ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
-                    ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
-         IF NOT AVAIL ExtraLineDiscountPlan THEN
-            RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId).
+   IF lcExtraLineDiscRuleId NE "" THEN DO:
+      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
+                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+      IF NOT AVAIL ExtraLineDiscountPlan THEN
+         RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId).
 
-         fCreateExtraLineDiscount(liExtraLineMsSeq,
-                                  ExtraLineDiscountPlan.DPRuleID,
-                                  TODAY).
-         IF RETURN-VALUE BEGINS "ERROR" THEN
-                     RETURN RETURN-VALUE.
-      END.   
-   END.
+      fCreateExtraLineDiscount(liExtraLineMsSeq,
+                               ExtraLineDiscountPlan.DPRuleID,
+                               TODAY).
+      IF RETURN-VALUE BEGINS "ERROR" THEN
+                  RETURN RETURN-VALUE.
+   END.   
 
 END.
