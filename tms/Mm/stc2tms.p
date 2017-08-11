@@ -534,6 +534,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -775,8 +776,9 @@ PROCEDURE pUpdateSubscription:
 
    /* Close extra line subscription discount, if Main line is moved away 
       from available extra lines related main lines */
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
-   
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+
    IF lcExtraMainLineCLITypes                          NE "" AND 
       LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
@@ -825,7 +827,9 @@ PROCEDURE pUpdateSubscription:
 
       FIND CURRENT MobSub NO-LOCK.       
    END.
+  
    
+
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
       then CLOSE the all addline discounts to (STC Date - 1) */

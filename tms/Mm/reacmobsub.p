@@ -760,8 +760,9 @@ DO TRANSACTION:
       LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) GT 0  AND 
       MobSub.MultiSimId                          NE 0  AND
       MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
-   RUN pReacExtraLineDiscount(MobSub.MsSeq,
-                              MobSub.CLIType).   
+   RUN pReacExtraLineDiscount(MobSub.MultiSimId, /* Mainline SubId    */ 
+                              MobSub.MsSeq,      /* Extaline SubId    */
+                              MobSub.CLIType).   /* Extraline clitype */ 
 
    /* ADDLINE-20 Additional Line 
       IF the Customer reactivates the below additional line tariff's then,
@@ -1170,18 +1171,26 @@ END PROCEDURE.
 
 PROCEDURE pReacExtraLineDiscount:
 
+   DEF INPUT PARAM liMainLineMsSeq    AS INT  NO-UNDO.
    DEF INPUT PARAM liExtraLineMsSeq   AS INT  NO-UNDO.    
    DEF INPUT PARAM lcExtraLineCLIType AS CHAR NO-UNDO. 
    
    DEF VAR lcExtraLineDiscRuleId AS CHAR NO-UNDO. 
 
+   DEFINE BUFFER bMLMobSub             FOR MobSub.
    DEFINE BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 
    CASE lcExtraLineCLIType:
       WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
    END CASE.
 
-   IF lcExtraLineDiscRuleId NE "" THEN DO:
+   FIND FIRST bMLMobSub EXCLUSIVE-LOCK WHERE
+              bMLMobSub.MsSeq        EQ liMainLineMsSeq AND
+              bMLMobSub.MultiSimId   EQ 0               AND
+              bMLMobSub.MultiSimType EQ 0               NO-ERROR.
+
+   IF AVAIL bMLMobSub             AND
+      lcExtraLineDiscRuleId NE "" THEN DO:
       FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
                  ExtraLineDiscountPlan.Brand      = gcBrand               AND
                  ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
@@ -1194,7 +1203,10 @@ PROCEDURE pReacExtraLineDiscount:
                                ExtraLineDiscountPlan.DPRuleID,
                                TODAY).
       IF RETURN-VALUE BEGINS "ERROR" THEN
-                  RETURN RETURN-VALUE.
+         RETURN RETURN-VALUE.
+
+      ASSIGN bMLMobSub.MultiSimId   = liExtraLineMsSeq
+             bMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
    END.   
 
 END.
