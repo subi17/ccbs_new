@@ -761,5 +761,5 @@ def dumpfixtures(*a):
             pf_entries.update(active_cdr_db_pf(tenantdict[tenant]['tenant']))
 
         for key in sorted(pf_entries):
-            dump_fixture = Popen(mpro + pf_entries[key] + ['-h', '1', '-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
+            dump_fixture = Popen(mpro + pf_entries[key] + ['-h', str(len(databases) + cdr_database_count), '-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
             call('/bin/cat', stdin=dump_fixture.stdout)
