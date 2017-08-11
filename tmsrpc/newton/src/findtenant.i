@@ -24,7 +24,7 @@ DEFINE VARIABLE vcTenant    AS CHARACTER NO-UNDO.
 DO ON ERROR UNDO, THROW:
     ASSIGN liRecordCnt = 0 liDBCount = 0 vcTenant = "".
     /* This is to validate availability of multiple records with unique id passed. Ideally, only 1 record is expected, since sequences are globally unique */
-    FOR EACH {3} WHERE &IF {1} &THEN {3}.Brand = gcBrand AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK
+    FOR EACH {3} WHERE &IF {1} &THEN {3}.Brand = "1" AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK
         ON ERROR UNDO, THROW:
 
         ASSIGN liRecordCnt = liRecordCnt + 1.
@@ -34,7 +34,7 @@ DO ON ERROR UNDO, THROW:
     END.
         
     /* This is to find the appropriate record w.r.t input parameters. */
-    FOR FIRST {3} WHERE &IF {1} &THEN {3}.Brand = gcBrand AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+    FOR FIRST {3} WHERE &IF {1} &THEN {3}.Brand = "1" AND &ENDIF {3}.{4} = {5} TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
         ASSIGN vcTenant = BUFFER-TENANT-NAME({3}).                
     END.
     
