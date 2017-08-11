@@ -30,9 +30,9 @@ fCreateRepText(1, /*text type */
                "VOICE200B", /*LinkCode*/
                1, /*Language */
                "Nacionales"). /* text */
-fCreateRepText(2, /*text type */
+fCreateRepText(1, /*text type */
                "VOICE200B", /*LinkCode*/
-               1, /*Language */
+               2, /*Language */
                "Nacionals"). /* text */
 fCreateRepText(1, /*text type */
                "VOICE200B", /*LinkCode*/
@@ -48,9 +48,9 @@ fCreateRepText(1, /*text type */
                "VOICE200BCF", /*LinkCode*/
                1, /*Language */
                "Desvío de Llamadas"). /* text */
-fCreateRepText(2, /*text type */
+fCreateRepText(1, /*text type */
                "VOICE200BCF", /*LinkCode*/
-               1, /*Language */
+               2, /*Language */
                "Desviament de Trucades"). /* text */
 fCreateRepText(1, /*text type */
                "VOICE200BCF", /*LinkCode*/
