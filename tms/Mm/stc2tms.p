@@ -535,10 +535,12 @@ PROCEDURE pUpdateSubscription:
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscRuleId   AS CHAR NO-UNDO. 
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
    DEF BUFFER lELMobSub      FOR MobSub.
+   DEF BUFFER lMLMobSub      FOR MobSub.
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
 
@@ -816,19 +818,58 @@ PROCEDURE pUpdateSubscription:
          END.
       END.
 
-      FIND CURRENT Mobsub EXCLUSIVE-LOCK.
-
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
-      
-      ASSIGN MobSub.MultiSimId   = 0
-             MobSub.MultiSimType = 0.
-      
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
-
-      FIND CURRENT MobSub NO-LOCK.       
    END.
   
-   
+   /* Create extra line discount, if STC is done to extra line subscription type */
+   /* Discount is created only when associated main line is active               */
+   IF lcExtraLineCLITypes                         NE "" AND 
+      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes) GT 0  AND
+      MobSub.MultiSimId                           NE 0  AND
+      MobSub.MultiSimType                         EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+
+      FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
+                 lMLMobSub.MsSeq        EQ MobSub.MultiSimId   AND 
+                 lMLMobSub.MultiSimId   EQ 0                   AND 
+                 lMLMobSub.MultiSimtype EQ 0                   AND 
+                (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
+                 lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}) NO-ERROR.
+
+      CASE MobSub.CLIType:
+         WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+      END CASE.
+
+      IF AVAIL lMLMobSub             AND
+         lcExtraLineDiscRuleId NE "" THEN DO:
+            
+         fCreateExtraLineDiscount(MobSub.MsSeq,
+                                  lcExtraLineDiscRuleId,
+                                  TODAY).
+      
+         ASSIGN lMLMobSub.MultiSimId   = MobSub.MsSeq 
+                lMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
+
+      END.
+
+   END.
+
+   /* If extra line subscription is moved away, THEN associated main line 
+      multisimid AND multisimtype has be updated */
+   IF lcExtraLineCLITypes                          NE "" AND 
+      LOOKUP(bOldType.CliType,lcExtraLineCLITypes) GT 0  AND
+      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)  EQ 0  AND
+      MobSub.MultiSimId                            NE 0  AND
+      MobSub.MultiSimType                          EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+
+      FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
+                 lMLMobSub.MsSeq        EQ MobSub.MultiSimId AND 
+                 lMLMobSub.MultiSimId   EQ 0                 AND 
+                 lMLMobSub.MultiSimtype EQ 0                 NO-ERROR.
+
+      IF AVAIL lMLMobSub THEN 
+         ASSIGN lMLMobSub.MultiSimId   = 0
+                lMLMobSub.MultiSimType = 0.
+
+   END.
 
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
@@ -2208,19 +2249,24 @@ END PROCEDURE.
 PROCEDURE pMultiSimSTC:
 
    DEF INPUT PARAMETER idtActDate AS DATE NO-UNDO.
-
-   DEF VAR liQuarTime         AS INT  NO-UNDO.
-   DEF VAR liSimStat          AS INT  NO-UNDO.
-   DEF VAR liMSISDNStat       AS INT  NO-UNDO.
-   DEF VAR liRequest          AS INT  NO-UNDO.
-   DEF VAR ldaSTCCreateDate   AS DATE NO-UNDO.
-   DEF VAR liSTCCreateTime    AS INT  NO-UNDO.
-   DEF VAR ldaSecSIMTermDate  AS DATE NO-UNDO.
-   DEF VAR ldeSecSIMTermStamp AS DEC  NO-UNDO.
+ 
+   DEF VAR liQuarTime          AS INT  NO-UNDO.
+   DEF VAR liSimStat           AS INT  NO-UNDO.
+   DEF VAR liMSISDNStat        AS INT  NO-UNDO.
+   DEF VAR liRequest           AS INT  NO-UNDO.
+   DEF VAR ldaSTCCreateDate    AS DATE NO-UNDO.
+   DEF VAR liSTCCreateTime     AS INT  NO-UNDO.
+   DEF VAR ldaSecSIMTermDate   AS DATE NO-UNDO.
+   DEF VAR ldeSecSIMTermStamp  AS DEC  NO-UNDO.
+   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
 
    DEF BUFFER lbMobSub    FOR Mobsub.
 
    IF NOT AVAIL Mobsub THEN RETURN.
+
+   lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
+
+   IF LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) > 0 THEN RETURN.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
               lbMobSub.Brand  = gcBrand AND
