@@ -234,7 +234,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
 
-   IF MobSub.MultiSIMID > 0 THEN RUN pMultiSimSTC (INPUT ldtActDate).
+   IF MobSub.MultiSIMID    > 0                         AND 
+      MobSub.MultiSimType <> {&MULTISIMTYPE_EXTRALINE} THEN 
+      RUN pMultiSimSTC (INPUT ldtActDate).
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
       fAdditionalLineSTC(MsRequest.Msrequest,
@@ -861,9 +863,9 @@ PROCEDURE pUpdateSubscription:
       MobSub.MultiSimType                          EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
-                 lMLMobSub.MsSeq        EQ MobSub.MultiSimId AND 
-                 lMLMobSub.MultiSimId   EQ 0                 AND 
-                 lMLMobSub.MultiSimtype EQ 0                 NO-ERROR.
+                 lMLMobSub.MsSeq        EQ MobSub.MultiSimId       AND 
+                 lMLMobSub.MultiSimId   NE 0                       AND 
+                 lMLMobSub.MultiSimtype EQ {&MULTISIMTYPE_PRIMARY} NO-ERROR.
 
       IF AVAIL lMLMobSub THEN 
          ASSIGN lMLMobSub.MultiSimId   = 0
@@ -2263,10 +2265,6 @@ PROCEDURE pMultiSimSTC:
    DEF BUFFER lbMobSub    FOR Mobsub.
 
    IF NOT AVAIL Mobsub THEN RETURN.
-
-   lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
-
-   IF LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) > 0 THEN RETURN.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
               lbMobSub.Brand  = gcBrand AND
