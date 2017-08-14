@@ -416,6 +416,32 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 
 END FUNCTION.   
 
+FUNCTION fCreateTPService RETURNS LOGICAL
+ (iiMsSeq       AS INT,
+  icProduct     AS CHAR,
+  icType        AS CHAR,
+  icOffer       AS CHAR,
+  icUser        AS CHAR):
+
+    FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.Product = icProduct NO-LOCK NO-ERROR.
+    IF NOT AVAIL TPService THEN 
+    DO:
+        CREATE TPService.
+        ASSIGN
+            TPService.MsSeq      = iiMsSeq
+            TPService.ServSeq    = NEXT-VALUE(TPServiceSeq)
+            TPService.ServType   = icType
+            TPService.Product    = icProduct
+            TPService.Provider   = (IF TPService.ServType = "Television" THEN "Huawei" ELSE "")
+            TPService.ServStatus = {&STATUS_NEW}
+            TPService.CreatedTS  = fMakeTS()
+            TPService.UpdateTS   = TPService.CreatedTS.
+    END.
+
+    RETURN TRUE.   
+
+END FUNCTION.
+
 FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
  (iiMsSeq       AS INT,
   iiServSeq     AS INT,

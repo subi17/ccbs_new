@@ -12,7 +12,7 @@
 {Func/fdss.i}
 {Mc/dpmember.i}
 {Func/q25functions.i}
-
+{Func/orderfunc.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -177,7 +177,7 @@ PROCEDURE pPeriodicalContract:
    
    IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
-       RUN pThirdPartyService.
+       fCreateTPService(iiMsSeq, DayCampaign.DCEvent, "Television", "", "").
        RETURN "".
    END.    
    /* override DayCampaign.Feemodel because of possible reactivation */
@@ -326,27 +326,6 @@ PROCEDURE pPeriodicalContract:
    RETURN "".
    
 END PROCEDURE.  /* pPeriodicalContract */
-
-PROCEDURE pThirdPartyService:
-      
-    FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.Product = OrderAction.ItemKey NO-LOCK NO-ERROR.
-    IF NOT AVAIL TPService THEN 
-    DO:
-        CREATE TPService.
-        ASSIGN
-            TPService.MsSeq      = iiMsSeq
-            TPService.ServSeq    = NEXT-VALUE(TPServiceSeq)
-            TPService.ServType   = "Television"
-            TPService.Product    = OrderAction.ItemKey
-            TPService.Provider   = (IF TPService.ServType = "Television" THEN "Huawei" ELSE "")
-            TPService.ServStatus = {&STATUS_NEW}
-            TPService.CreatedTS  = fMakeTS()
-            TPService.UpdateTS   = TPService.CreatedTS.
-    END.
-
-    RETURN "".
-
-END PROCEDURE.
 
 PROCEDURE pService:
 
