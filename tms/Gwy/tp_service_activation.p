@@ -48,7 +48,7 @@ PROCEDURE pProcessRequests:
        IF TPServiceMessage.CreatedTS > ldeNow THEN 
            NEXT MESSAGE_LOOP.
 
-       FIND FIRST TPService WHERE TPServiceSeq.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
+       FIND FIRST TPService WHERE TPService.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
        IF NOT AVAIL TPService THEN
           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
 
