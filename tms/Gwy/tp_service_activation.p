@@ -61,7 +61,7 @@ PROCEDURE pProcessRequests:
        IF NOT AVAIL AgreeCustomer THEN 
            RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Agreement customer not found").
 
-       ASSIGN lcCustomerId = AgreeCustomer.CustIdType + AgreeCustomer.OrgId.
+       ASSIGN lcCustomerId = AgreeCustomer.OrgId.
 
        FIND FIRST ttCustomer WHERE ttCustomer.CustomerId = lcCustomerId NO-LOCK NO-ERROR.
        IF NOT AVAIL ttCustomer THEN 
