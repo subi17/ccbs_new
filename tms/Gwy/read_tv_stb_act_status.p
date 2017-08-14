@@ -134,8 +134,8 @@ PROCEDURE pReadIncomingDirectory:
     DEF VAR lcIncomingArcDir AS CHAR NO-UNDO.
 
     ASSIGN 
-        lcIncomingDir    = fCParamC('ActivationIncomingDir')
-        lcIncomingArcDir = fCParamC('ActivationIncomingArcDir').
+        lcIncomingDir    = fCParamC('ActConfirmationIncomingDir')
+        lcIncomingArcDir = fCParamC('ActConfirmationIncomingArcDir').
 
     INPUT FROM OS-DIR(lcIncomingDir).
     REPEAT:

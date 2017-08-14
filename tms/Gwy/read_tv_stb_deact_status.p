@@ -45,7 +45,7 @@ PROCEDURE pUpdateStatus:
     
     ASSIGN 
         lcDateTime = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
-        lcLogFile  = fCParamC('HuaweiLogFile')
+        lcLogFile  = fCParamC('ActivationIncomingLogFileName')
         lcLogFile  = REPLACE(lcLogFile,"#DATETIME",lcDateTime).
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
@@ -130,8 +130,8 @@ PROCEDURE pReadIncomingDirectory:
     DEF VAR lcIncomingArcDir AS CHAR NO-UNDO.
 
     ASSIGN 
-        lcIncomingDir    = fCParamC('DeactivationIncomingDir')
-        lcIncomingArcDir = fCParamC('ActivationIncomingArcDir').
+        lcIncomingDir    = fCParamC('DeActConfirmationIncomingDir')
+        lcIncomingArcDir = fCParamC('DeActConfirmationIncomingArcDir').
 
     INPUT FROM OS-DIR(lcIncomingDir).
     REPEAT:
