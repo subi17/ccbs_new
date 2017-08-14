@@ -16,6 +16,7 @@
 {Mc/offer.i}
 {Func/dms.i}
 {Func/q25functions.i}
+{Func/custfunc.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -743,6 +744,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    DEF VAR lcBank AS CHAR NO-UNDO.
    DEF VAR lcQ25Extension AS CHAR NO-UNDO.
    DEF VAR lcItem AS CHAR NO-UNDO.
+   DEF VAR lcCategory AS CHAR NO-UNDO.
 
    lcCaseTypeId = "1".
 
@@ -790,7 +792,10 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    STRING(Order.OrderType)         + lcDelim +
    /**/
-   fGetSegment(Order.Custnum)      + lcDelim +
+   fgetCustSegment(ordercustomer.CustIdType,
+                   ordercustomer.selfemployed,
+                   ordercustomer.pro,
+                   OUTPUT lcCategory) + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    /*q25Extension YPR-3269*/
