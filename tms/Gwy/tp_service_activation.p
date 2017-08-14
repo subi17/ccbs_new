@@ -35,7 +35,7 @@ END.
 PROCEDURE pProcessRequests:
     DEF VAR lcCustomerId AS CHAR NO-UNDO.
 
-    DEFINE BUFFER AgreeCustomer FOR OrderCustomer.
+    DEFINE BUFFER AgreeCustomer FOR Customer.
 
     ASSIGN ldeNow = fMakeTS().
     
@@ -57,11 +57,11 @@ PROCEDURE pProcessRequests:
           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Contract not found").
 
        FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = MobSub.Brand   AND 
-                                      AgreeCustomer.OrderId = MobSub.AgrCust NO-LOCK NO-ERROR.
+                                      AgreeCustomer.CustNum = MobSub.AgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
            RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Agreement customer not found").
 
-       ASSIGN lcCustomerId = AgreeCustomer.CustIdType + AgreeCustomer.CustId.
+       ASSIGN lcCustomerId = AgreeCustomer.CustIdType + AgreeCustomer.OrgId.
 
        FIND FIRST ttCustomer WHERE ttCustomer.CustomerId = lcCustomerId NO-LOCK NO-ERROR.
        IF NOT AVAIL ttCustomer THEN 
