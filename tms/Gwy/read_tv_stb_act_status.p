@@ -52,73 +52,70 @@ PROCEDURE pUpdateStatus:
     FOR EACH ttCustomer,
         FIRST TPService WHERE TPService.SerialNbr = ttCustomer.SerialNbr AND TPService.ServType = "Television" AND TPService.ServStatus = {&STATUS_ONGOING} NO-LOCK:
            
-        FIND FIRST TPServiceMessage WHERE TPServiceMessage.MsSeq         = TPService.MsSeq                    AND 
-                                          TPServiceMessage.ServSeq       = TPService.ServSeq                  AND
-                                          TPServiceMessage.Source        = {&SOURCE_TMS}                      AND
-                                          TPServiceMessage.MessageStatus = {&PENDING_ACTIVATION_CONFIRMATION} AND
-                                          TPServiceMessage.MessageType   = {&TYPE_ACTIVATION}                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        FIND FIRST TPServiceMessage WHERE TPServiceMessage.MsSeq         = TPService.MsSeq                            AND 
+                                          TPServiceMessage.ServSeq       = TPService.ServSeq                          AND
+                                          TPServiceMessage.Source        = {&SOURCE_TMS}                              AND
+                                          TPServiceMessage.MessageStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} AND
+                                          TPServiceMessage.MessageType   = {&TYPE_ACTIVATION}                         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
         IF LOCKED TPServiceMessage OR NOT AVAIL TPServiceMessage THEN 
         DO:
             PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to update" SKIP.
             NEXT.
         END.      
 
-        IF AVAIL TPServiceMessage THEN 
+        IF ttCustomer.StatusCode = "0" THEN 
         DO:
-            IF ttCustomer.StatusCode = "0" THEN 
-            DO:
-                ASSIGN
-                    TPServiceMessage.UpdateTS       = fMakeTS()
-                    TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
-                    TPServiceMessage.AdditionalInfo = ttCustomer.Description 
-                    TPServiceMessage.MessageStatus  = {&STATUS_HANDLED}.
+            ASSIGN
+                TPServiceMessage.UpdateTS       = fMakeTS()
+                TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
+                TPServiceMessage.AdditionalInfo = ttCustomer.Description 
+                TPServiceMessage.MessageStatus  = {&STATUS_HANDLED}.
 
-                liRequest = fPCActionRequest(TPService.MsSeq,
-                                             TPService.Product,
-                                             "act",
-                                             fMakeTS(),
-                                             TRUE,
-                                             {&REQUEST_SOURCE_TV_SERVICE_ACTIVATION},
-                                             "",
-                                             0,
-                                             FALSE,
-                                             "",
-                                             0,
-                                             0,
-                                             "",
-                                             OUTPUT lcError).
-                IF liRequest > 0 THEN 
-                DO:
-                    BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-                    IF AVAIL TPService THEN 
-                        ASSIGN 
-                            TPService.UpdateTS   = TPServiceMessage.UpdateTS
-                            TPService.ServStatus = {&STATUS_ACTIVATED}.
-                END.
-                ELSE 
-                DO:
-                    BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-                    IF AVAIL TPService THEN 
-                        ASSIGN 
-                            TPService.UpdateTS   = TPServiceMessage.UpdateTS
-                            TPService.ServStatus = {&STATUS_ERROR}.
-                    PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to activate service: '" + TPService.Product + "' Error: '" + lcError + "'" SKIP.                
-                END.        
-            END.
-            ELSE 
+            liRequest = fPCActionRequest(TPService.MsSeq,
+                                         TPService.Product,
+                                         "act",
+                                         fMakeTS(),
+                                         TRUE,
+                                         {&REQUEST_SOURCE_TV_SERVICE_ACTIVATION},
+                                         "",
+                                         0,
+                                         FALSE,
+                                         "",
+                                         0,
+                                         0,
+                                         "",
+                                         OUTPUT lcError).
+            IF liRequest > 0 THEN 
             DO:
-                ASSIGN
-                    TPServiceMessage.UpdateTS       = fMakeTS()
-                    TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
-                    TPServiceMessage.AdditionalInfo = ttCustomer.Description 
-                    TPServiceMessage.MessageStatus  = {&STATUS_ERROR}.
-
                 BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
                 IF AVAIL TPService THEN 
                     ASSIGN 
                         TPService.UpdateTS   = TPServiceMessage.UpdateTS
-                        TPService.ServStatus = {&STATUS_ERROR}.      
+                        TPService.ServStatus = {&STATUS_ACTIVATED}.
             END.
+            ELSE 
+            DO:
+                BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+                IF AVAIL TPService THEN 
+                    ASSIGN 
+                        TPService.UpdateTS   = TPServiceMessage.UpdateTS
+                        TPService.ServStatus = {&STATUS_ERROR}.
+                PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to activate service: '" + TPService.Product + "' Error: '" + lcError + "'" SKIP.                
+            END.        
+        END.
+        ELSE 
+        DO:
+            ASSIGN
+                TPServiceMessage.UpdateTS       = fMakeTS()
+                TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
+                TPServiceMessage.AdditionalInfo = ttCustomer.Description 
+                TPServiceMessage.MessageStatus  = {&STATUS_ERROR}.
+
+            BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+            IF AVAIL TPService THEN 
+                ASSIGN 
+                    TPService.UpdateTS   = TPServiceMessage.UpdateTS
+                    TPService.ServStatus = {&STATUS_ERROR}.      
         END.
     END.
     OUTPUT CLOSE.

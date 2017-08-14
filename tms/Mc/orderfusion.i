@@ -31,13 +31,24 @@ FUNCTION fTPServiceMessageError RETURNS CHAR
     (BUFFER bf_TPServiceMessage FOR TPServiceMessage,
      icErrorDesc AS CHAR):
 
+   DEFINE BUFFER bf_TPService FOR TPService.
+   
+   FIND FIRST bf_TPService WHERE bf_TPService.MsSeq      = bf_TPServiceMessage.MsSeq      AND 
+                                 bf_TPService.MessageSeq = bf_TPServiceMessage.MessageSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
    FIND CURRENT bf_TPServiceMessage EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-   IF AVAIL bf_TPServiceMessage THEN       
+   IF AVAIL bf_TPServiceMessage AND AVAIL bf_TPService THEN      
+   DO: 
       ASSIGN
           bf_TPServiceMessage.MessageStatus  = {&STATUS_ERROR}
           bf_TPServiceMessage.AdditionalInfo = icErrorDesc
           bf_TPServiceMessage.UpdateTS       = fMakeTS().
-
+      
+      ASSIGN 
+          bf_TPService.ServStatus = {&STATUS_ERROR}   
+          bf_TPService.UpdateTS   = fMakeTS().
+   END.
+   
    RETURN "".
 
 END FUNCTION.

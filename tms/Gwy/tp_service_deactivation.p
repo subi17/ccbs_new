@@ -40,9 +40,9 @@ PROCEDURE pProcessRequests:
     ASSIGN ldeNow = fMakeTS().
     
     MESSAGE_LOOP:
-    FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                      AND
-                                    TPServiceMessage.MessageStatus EQ {&WAITING_FOR_VENDOR_DEACTIVATION} AND
-                                    TPServiceMessage.MessageType   EQ {&TYPE_DEACTIVATION}               NO-LOCK BY TPServiceMessage.CreatedTS 
+    FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                   AND
+                                    TPServiceMessage.MessageStatus EQ {&WAITING_FOR_STB_DEACTIVATION} AND
+                                    TPServiceMessage.MessageType   EQ {&TYPE_DEACTIVATION}            NO-LOCK BY TPServiceMessage.CreatedTS 
         liLoop = 1 TO 10:
        
        IF TPServiceMessage.CreatedTS > ldeNow THEN 
@@ -103,7 +103,7 @@ PROCEDURE pWriteFile:
     FOR EACH ttCustomer:
 
         FIND TPServiceMessage WHERE ROWID(TPServiceMessage) = ttCustomer.MessageRowId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-        IF LOCKED TPServiceMessage THEN 
+        IF LOCKED TPServiceMessage OR NOT AVAIL TPServiceMessage THEN 
         DO:
             OUTPUT STREAM str_err TO VALUE(lcLogFileName) APPEND.
             PUT STREAM str_err UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' Device: '" + ttCustomer.SerialNbr + "' locked from update." SKIP.
@@ -126,7 +126,7 @@ PROCEDURE pWriteFile:
             liCnt                           = liCnt + 1
             TPServiceMessage.MessageId      = lcMessageId
             TPServiceMessage.UpdateTS       = fMakeTS()
-            TPServiceMessage.MessageStatus  = {&PENDING_DEACTIVATION_CONFIRMATION}.
+            TPServiceMessage.MessageStatus  = {&WAITING_FOR_STB_DEACTIVATION_CONFIRMATION}.
 
     END.
     OUTPUT CLOSE.

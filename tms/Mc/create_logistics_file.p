@@ -1624,7 +1624,7 @@ FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS} 
                                 TPServiceMessage.MessageStatus EQ {&STATUS_NEW}      AND
                                 TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION} EXCLUSIVE-LOCK:
 
-   FIND FIRST TPService WHERE TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
+   FIND FIRST TPService WHERE TPService.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL TPService THEN
    DO:
        fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
@@ -1654,7 +1654,7 @@ FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS} 
    IF fDelivDevice(TPService.ServType) THEN 
       ASSIGN
          TPServiceMessage.UpdateTS      = fMakeTS()
-         TPServiceMessage.MessageStatus = {&STATUS_SENT}.
+         TPServiceMessage.MessageStatus = {&STATUS_LOGISTICS_INITIATED}.
 END.
 
 iLargestId = 1.

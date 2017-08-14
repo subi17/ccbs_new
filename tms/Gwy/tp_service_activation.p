@@ -40,15 +40,15 @@ PROCEDURE pProcessRequests:
     ASSIGN ldeNow = fMakeTS().
     
     MESSAGE_LOOP:
-    FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                    AND
-                                    TPServiceMessage.MessageStatus EQ {&WAITING_FOR_VENDOR_ACTIVATION} AND
-                                    TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION}               NO-LOCK BY TPServiceMessage.CreatedTS 
+    FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                 AND
+                                    TPServiceMessage.MessageStatus EQ {&WAITING_FOR_STB_ACTIVATION} AND
+                                    TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION}            NO-LOCK BY TPServiceMessage.CreatedTS 
         liLoop = 1 TO 10:
        
        IF TPServiceMessage.CreatedTS > ldeNow THEN 
            NEXT MESSAGE_LOOP.
 
-       FIND FIRST TPService WHERE TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
+       FIND FIRST TPService WHERE TPServiceSeq.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
        IF NOT AVAIL TPService THEN
           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
 
@@ -130,7 +130,7 @@ PROCEDURE pWriteFile:
             liCnt                          = liCnt + 1
             TPServiceMessage.MessageId     = lcMessageId
             TPServiceMessage.UpdateTS      = fMakeTS()
-            TPServiceMessage.MessageStatus = {&PENDING_ACTIVATION_CONFIRMATION}.
+            TPServiceMessage.MessageStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION}.
     END.
     OUTPUT CLOSE.
 
