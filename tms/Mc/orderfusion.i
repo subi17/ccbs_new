@@ -33,8 +33,8 @@ FUNCTION fTPServiceMessageError RETURNS CHAR
 
    DEFINE BUFFER bf_TPService FOR TPService.
    
-   FIND FIRST bf_TPService WHERE bf_TPService.MsSeq      = bf_TPServiceMessage.MsSeq      AND 
-                                 bf_TPService.MessageSeq = bf_TPServiceMessage.MessageSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   FIND FIRST bf_TPService WHERE bf_TPService.MsSeq   = bf_TPServiceMessage.MsSeq   AND 
+                                 bf_TPService.ServSeq = bf_TPServiceMessage.ServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
 
    FIND CURRENT bf_TPServiceMessage EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
    IF AVAIL bf_TPServiceMessage AND AVAIL bf_TPService THEN      
