@@ -951,13 +951,15 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
     OUTPUT oiDSSTransToMsSeq    AS INT,
     OUTPUT ocError              AS CHAR):
 
-   DEF VAR liMobSubCount         AS INT  NO-UNDO.
-   DEF VAR llFirstActBundle      AS LOG  NO-UNDO INIT TRUE.
-   DEF VAR llActOtherBundle      AS LOG  NO-UNDO.
-   DEF VAR lcExcludeBundles      AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType AS CHAR NO-UNDO.
-   
+   DEF VAR liMobSubCount           AS INT  NO-UNDO.
+   DEF VAR llFirstActBundle        AS LOG  NO-UNDO INIT TRUE.
+   DEF VAR llActOtherBundle        AS LOG  NO-UNDO.
+   DEF VAR lcExcludeBundles        AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMobSub          FOR MobSub.
@@ -966,8 +968,10 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
    IF icBundleId = "DSS2" THEN
-      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+      ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+             lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+             lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand      AND
