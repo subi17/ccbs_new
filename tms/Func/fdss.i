@@ -668,21 +668,28 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
     OUTPUT oiDSS2PriMsSeq AS INT, 
     OUTPUT ocResult       AS CHAR):
 
-   DEF VAR liMobSubCount         AS INT   NO-UNDO.
-   DEF VAR lcExcludeBundles      AS CHAR  NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR  NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType AS CHAR  NO-UNDO.
-   DEF VAR llDSS2PrimaryAvail    AS LOG   NO-UNDO.
-   
+   DEF VAR liMobSubCount           AS INT  NO-UNDO.
+   DEF VAR lcExcludeBundles        AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
+   DEF VAR llDSS2PrimaryAvail      AS LOG  NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+   DEF VAR llgExtraLine            AS LOG  NO-UNDO.
+   DEF VAR liExtraLineMsSeq        AS INT  NO-UNDO.
+   DEF VAR liMainLineMsSeq         AS INT  NO-UNDO. 
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
 
-   ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-          lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-          lcExcludeBundles      = fCParamC("EXCLUDE_BUNDLES").
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+          lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+          lcExcludeBundles        = fCParamC("EXCLUDE_BUNDLES")
+          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    IF iiMsSeq > 0 THEN DO:
       FIND FIRST bMobSub WHERE
@@ -700,6 +707,14 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          ocResult = "ERROR:Contract is not allowed for this subscription type".
          RETURN FALSE.
       END. /* IF fMatrixAnalyse(gcBrand */
+
+      IF LOOKUP(bMobSub.CLItype,lcExtraLineCLITypes) > 0 AND 
+                bMobSub.MultiSimId                  <> 0 AND 
+                bMobSub.MultiSimtype                = {&MULTISIMTYPE_EXTRALINE} THEN 
+         ASSIGN llgExtraLine     = YES
+                liMainLineMsSeq  = bMobSub.MultiSimId
+                liExtraLineMsSeq = bMobSub.MsSeq.
+                  
    END. /* IF iiMsSeq > 0 THEN DO: */
 
    MOBSUB_LOOP:
@@ -711,6 +726,13 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       /* Exclude current operated subs and not allowed list */
       IF bMobSub.MsSeq = iiMsSeq OR
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
+
+      /* For extraline subscription check for its primary hard associated mainline */
+      IF llgExtraLine THEN 
+         IF LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) = 0 OR
+            bMobSub.MsSeq        <> liMainLineMsSeq             OR
+            bMobSub.MultiSimId   <> liExtraLineMsSeq            OR
+            bMobSub.MultiSimType <> {&MULTISIMTYPE_PRIMARY}     THEN NEXT. 
 
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
