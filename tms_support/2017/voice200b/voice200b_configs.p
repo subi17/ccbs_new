@@ -49,6 +49,60 @@ FUNCTION fCreateFee RETURNS CHAR
 
 END.
 
+FUNCTION fCreateSLGAnalyse RETURNS LOGICAL
+   ( icClitype AS CHARACTER,
+     icBillCode AS CHARACTER,
+     iiCCN AS INTEGER,
+     icBDest AS CHARACTER,
+     icServiceLimitGroup AS CHARACTER,
+     iiSLGAType AS INTEGER ):
+
+   FIND FIRST SLGAnalyse EXCLUSIVE-LOCK WHERE
+      SLGAnalyse.Brand    = "1"        AND
+      SLGAnalyse.BelongTo = TRUE       AND
+      SLGAnalyse.Clitype  = icClitype  AND
+      SLGAnalyse.BillCode = icBillCode AND
+      SLGAnalyse.CCN      = iiCCN      AND
+      SLGAnalyse.BDest    = icBDest    AND
+      SLGAnalyse.Prior    = 0          AND
+      SLGAnalyse.ValidTo  = DATE(12,31,2049) AND
+      SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup AND
+      SLGAnalyse.SLGAType = iiSLGAType
+   NO-ERROR.
+
+   IF NOT AVAILABLE SLGAnalyse
+   THEN CREATE SLGAnalyse.
+
+   ASSIGN
+      SLGAnalyse.Brand    = "1"
+      SLGAnalyse.BelongTo = TRUE
+      SLGAnalyse.Clitype  = icClitype
+      SLGAnalyse.BillCode = icBillCode
+      SLGAnalyse.CCN      = iiCCN
+      SLGAnalyse.BDest    = icBDest
+      SLGAnalyse.Prior    = 5
+      SLGAnalyse.ValidFrom = DATE(08,01,2017)
+      SLGAnalyse.ValidTo  = DATE(12,31,2049)
+      SLGAnalyse.ServiceLimitGroup = icServiceLimitGroup
+      SLGAnalyse.SLGAType = iiSLGAType
+      .
+
+END FUNCTION.
+
+
+FUNCTION fcreateVoiceSLGAnalyses RETURNS LOGICAL (INPUT icClitype AS CHAR,
+                                             INPUT icgroup AS CHAR):
+   fCreateSLGAnalyse(icClitype, "10100001", 81, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "10100003", 81, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "10100005", 81, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "CFOTHER", 30, "*", icgroup, 1).
+   fCreateSLGAnalyse(icClitype, "CFYOIGO", 30, "*", icGroup, 1).
+END.
+
+fcreateVoiceSLGAnalyses("CONTDSL39", "VOICE200B").
+fcreateVoiceSLGAnalyses("CONTFH39_50", "VOICE200B").
+fcreateVoiceSLGAnalyses("CONTFH49_300", "VOICE200B").
+fcreateVoiceSLGAnalyses("CONT10", "VOICE200B").
 
 
 fCreateFee("Voice 200 package",
