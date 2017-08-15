@@ -792,10 +792,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    STRING(Order.OrderType)         + lcDelim +
    /**/
-   fgetCustSegment(ordercustomer.CustIdType,
-                   ordercustomer.selfemployed,
-                   ordercustomer.pro,
-                   OUTPUT lcCategory) + lcDelim +
+   fGetSegment(Order.Custnum)      + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    /*q25Extension YPR-3269*/
