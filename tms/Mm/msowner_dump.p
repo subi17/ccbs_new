@@ -97,13 +97,14 @@ FOR EACH Eventlog NO-LOCK WHERE
       IF EventLog.Action = "Create" THEN DO: /* YTS-10342 fix. */
          /* IF create-date is not yesterday, wrong MSOwner was found. Do a new search */
          IF MsOwner.TSBegin <  ldeLastDump OR 
-            MsOwner.TSBegin > ldeToday THEN DO: 
+            MsOwner.TSBegin >= ldeToday THEN DO: 
             /* This begin date for create is not yesterday, so continue to search a new one */
             RELEASE MSOwner.
             FIND FIRST MsOwner NO-LOCK WHERE
                        MsOwner.Brand = "1" AND
                        MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
-                       MsOwner.TSBegin >= ldeLastDump NO-ERROR.
+                       MsOwner.TSBegin >= ldeLastDump AND  
+                       MsOwner.TSBegin < ldeToday NO-ERROR.
          END.
       END.                 
       IF AVAIL MsOwner THEN DO: /* now we got a correct MSOwner */
