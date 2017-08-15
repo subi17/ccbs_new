@@ -8,6 +8,7 @@ import time
 import glob
 import errno
 import resource
+import fnmatch
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -237,11 +238,11 @@ def _compile(compilecommand, compiledir):
     if 'parameters' in globals() and len(parameters) > 0:
         source_files = [ filu for filu in parameters if re.search(r'.*\.(p|cls)$', filu) ]
     else:
-        source_files.extend(['applhelp.p'])
-        for source_dir in os.listdir('.'):
-            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref']:
-                continue
-            source_files.extend([ filu for filu in glob('{0}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
+        excluded_dirs = set(['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref'])
+        for root, dirs, files in os.walk('.', topdown=True):
+            [dirs.remove(d) for d in list(dirs) if d in excluded_dirs]
+            for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
+                source_files.append(os.path.join(root, filename)[2:])
 
     if compiledir:
         seen = []
