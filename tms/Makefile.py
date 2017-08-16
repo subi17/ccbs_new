@@ -239,17 +239,15 @@ def _compile(compilecommand, compiledir):
         source_files = [ filu for filu in parameters if re.search(r'.*\.(p|cls)$', filu) ]
     else:
         excluded_dirs = set(['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref'])
+        seen = []
         for root, dirs, files in os.walk('.', topdown=True):
             [dirs.remove(d) for d in list(dirs) if d in excluded_dirs]
             for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
                 source_files.append(os.path.join(root, filename)[2:])
-
-    if compiledir:
-        seen = []
-        for dir in (os.path.dirname(compiledir +'/' + x) for x in source_files):
-            if dir not in seen:
-               mkdir_p(dir)
-               seen.append(dir)
+                if compiledir:
+                    if root[2:] and root not in seen:
+                        mkdir_p('{0}/{1}'.format(compiledir,root[2:])
+                        seen.append(root)
 
     args = ['-pf', getpf('../db/progress/store/all')]
     dbcount = len(databases)
@@ -278,7 +276,6 @@ def _compile(compilecommand, compiledir):
         comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
         processes.append(comp)
 
-    comp_error = False
     for comp in processes:
         call('/bin/cat', stdin=comp.stdout)
         comp.wait()
