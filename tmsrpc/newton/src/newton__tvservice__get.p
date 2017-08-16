@@ -32,13 +32,13 @@ FIND FIRST MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN
     RETURN appl_err(SUBST("MobSub &1 not found", piMsSeq)).
 
-FIND FRIST TPService WHERE TPService.MsSeq = piMsSeq AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServType = "Television" NO-LOCK NO-ERROR.
+FIND FIRST TPService WHERE TPService.MsSeq = piMsSeq AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServType = "Television" NO-LOCK NO-ERROR.
 IF NOT AVAIL TPService THEN 
     RETURN appl_err("TV Service not found").
 
 resp_struct = add_struct(response_toplevel_id, "").
 
-add_string(resp_struct, "MsSeq", Mobsub.MsSeq).
+add_int(resp_struct, "MsSeq", Mobsub.MsSeq).
 IF Mobsub.fixednumber NE ? THEN
    add_string(resp_struct, "fixed_number", Mobsub.FixedNumber).
 ELSE
