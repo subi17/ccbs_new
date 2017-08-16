@@ -14,6 +14,7 @@
 {Func/timestamp.i}
 {Func/fcreatereq.i}
 {Func/fixedlinefunc.i}
+{Func/cparam2.i}
 
 FUNCTION freacprecheck RETURNS CHARACTER
    (INPUT  iiMsSeq        AS INTEGER,    /* Subscription ID    */
