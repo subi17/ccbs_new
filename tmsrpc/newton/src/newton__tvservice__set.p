@@ -27,7 +27,7 @@ IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN
 pcId         = get_string(param_toplevel_id, "0").
 pcOfferId    = get_string(param_toplevel_id, "1").
 pcUserCode   = get_string(param_toplevel_id, "2").
-plActOrDeAct = get_int   (param_toplevel_id, "3").
+piActOrDeAct = get_int   (param_toplevel_id, "3").
 
 pcBundle   =     ENTRY(1,pcId,"|").
 piMsSeq    = INT(ENTRY(2,pcId,"|")) NO-ERROR.
