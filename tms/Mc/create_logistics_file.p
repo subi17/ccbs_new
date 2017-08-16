@@ -1620,41 +1620,24 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
 END.
 
 /* Third Party Device Logistics */
-FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}      AND
-                                TPServiceMessage.MessageStatus EQ {&STATUS_NEW}      AND
-                                TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION} EXCLUSIVE-LOCK:
-
-   FIND FIRST TPService WHERE TPService.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
-   IF NOT AVAIL TPService THEN
-   DO:
-       fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
-       NEXT. 
-   END.
+FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServStatus = {&STATUS_NEW} NO-LOCK:
       
    FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN
    DO: 
-       fTPServiceMessageError(BUFFER TPServiceMessage,"Contract not found").
+       fTPServiceError(BUFFER TPServiceMessage,"Contract not found").
        NEXT.
    END.
 
    FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN 
    DO:
-      fTPServiceMessageError(BUFFER TPServiceMessage,"Failed to identify associated order during logistics initiation").
+      fTPServiceError(BUFFER TPServiceMessage,"Failed to identify associated order during logistics initiation").
       NEXT.
    END.
-   /*
-   ELSE IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN
-   DO:
-      fTPServiceMessageError(BUFFER TPServiceMessage,"Invalid order status during logistics initiation").
-      NEXT.
-   END.      
-   */
+   
    IF fDelivDevice(TPService.ServType) THEN 
-      ASSIGN
-         TPServiceMessage.UpdateTS      = fMakeTS()
-         TPServiceMessage.MessageStatus = {&STATUS_LOGISTICS_INITIATED}.
+       fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_LOGISTICS_INITIATED}).
 END.
 
 iLargestId = 1.

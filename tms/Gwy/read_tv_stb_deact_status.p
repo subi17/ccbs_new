@@ -30,7 +30,7 @@ DEFINE BUFFER AgreeCustomer FOR OrderCustomer.
 
 DO ON ERROR UNDO, THROW:
 
-    RUN pReadFile.
+    RUN pReadIncomingDirectory.
 
     RUN pUpdateStatus.
 
@@ -50,28 +50,13 @@ PROCEDURE pUpdateStatus:
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
     FOR EACH ttCustomer,
-        FIRST TPService WHERE TPService.SerialNbr = ttCustomer.SerialNbr AND TPService.ServType = "Television" AND TPService.ServStatus = {&STATUS_ONGOING} NO-LOCK:
-
-        /* ASSIGN lcMsgType = (IF ttCustomer.ActionType = "CreateSubscriber" THEN "" ELSE ""). */                            
-        FIND FIRST TPServiceMessage WHERE TPServiceMessage.MsSeq         EQ TPService.MsSeq                              AND
-                                          TPServiceMessage.ServSeq       EQ TPService.ServSeq                            AND 
-                                          TPServiceMessage.Source        EQ {&SOURCE_TMS}                                AND
-                                          TPServiceMessage.MessageStatus EQ {&WAITING_FOR_STB_DEACTIVATION_CONFIRMATION} AND
-                                          TPServiceMessage.MessageType   EQ {&TYPE_DEACTIVATION}                         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-        IF LOCKED TPServiceMessage OR NOT AVAIL TPServiceMessage THEN 
-        DO:
-            PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to update" SKIP.
-            NEXT.
-        END.      
+        FIRST TPService WHERE TPService.SerialNbr  = ttCustomer.SerialNbr           AND   
+                              TPService.ServType   = "Television"                   AND 
+                              TPService.ServStatus = {&STATUS_CANCELLATION_ONGOING} AND 
+                              TPService.Operation  = {&TYPE_DEACTIVATION}           EXCLUSIVE-LOCK:    
 
         IF ttCustomer.StatusCode = "0" THEN 
         DO:
-            ASSIGN
-                TPServiceMessage.UpdateTS       = fMakeTS()
-                TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
-                TPServiceMessage.AdditionalInfo = ttCustomer.Description 
-                TPServiceMessage.MessageStatus  = {&STATUS_HANDLED}.
-
             liTerminate = fPCActionRequest(TPService.MsSeq,
                                            TPService.Product,
                                            "term",
@@ -88,34 +73,27 @@ PROCEDURE pUpdateStatus:
                                            OUTPUT lcError).
 
             IF liTerminate > 0 THEN 
-            DO:
-                BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-                IF AVAIL TPService THEN 
-                    ASSIGN 
-                        TPService.UpdateTS   = TPServiceMessage.UpdateTS
-                        TPService.ServStatus = {&STATUS_DEACTIVATED}.
-            END.
+                fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&TYPE_DEACTIVATION}, {&STATUS_HANDLED}).
             ELSE 
             DO:
-                BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-                IF AVAIL TPService THEN 
-                    ASSIGN 
-                        TPService.UpdateTS   = TPServiceMessage.UpdateTS
-                        TPService.ServStatus = {&STATUS_ERROR}.
-                PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + ttCustomer.SerialNbr + "' failed to deactivate service: '" + TPService.Product + "' Error: '" + lcError + "'" SKIP.                
+                fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&TYPE_DEACTIVATION}, {&STATUS_ERROR}).
+    
+                PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + 
+                                "' with serial number: '" + ttCustomer.SerialNbr + 
+                                "' failed to deactivate service: '" + TPService.Product + 
+                                "' Error: '" + lcError + "'" SKIP.                
             END. 
         END.
         ELSE 
-        DO:
-            ASSIGN
-                TPServiceMessage.UpdateTS       = fMakeTS()
-                TPServiceMessage.ResponseCode   = ttCustomer.StatusCode
-                TPServiceMessage.AdditionalInfo = ttCustomer.Description 
-                TPServiceMessage.MessageStatus  = {&STATUS_ERROR}.
-        END.
+            fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&TYPE_DEACTIVATION}, {&STATUS_ERROR}).
+
+        ASSIGN 
+            TPService.ResponseCode   = ttCustomer.StatusCode
+            TPService.AdditionalInfo = ttCustomer.Description.    
     END.
     OUTPUT CLOSE.
-
+    RELEASE TPService.
+    
     RETURN "".
 
 END PROCEDURE.

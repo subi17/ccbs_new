@@ -40,42 +40,44 @@ PROCEDURE pProcessRequests:
     ASSIGN ldeNow = fMakeTS().
     
     MESSAGE_LOOP:
-    FOR EACH TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                 AND
-                                    TPServiceMessage.MessageStatus EQ {&WAITING_FOR_STB_ACTIVATION} AND
-                                    TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION}            NO-LOCK BY TPServiceMessage.CreatedTS 
-        liLoop = 1 TO 10:
+    FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServStatus = {&WAITING_FOR_STB_ACTIVATION} NO-LOCK 
+        BY TPService.CreatedTS:
        
-       IF TPServiceMessage.CreatedTS > ldeNow THEN 
+       IF TPService.CreatedTS > ldeNow THEN 
            NEXT MESSAGE_LOOP.
-
-       FIND FIRST TPService WHERE TPService.MsSeq = TPServiceMessage.MsSeq AND TPService.ServSeq = TPServiceMessage.ServSeq NO-LOCK NO-ERROR.
-       IF NOT AVAIL TPService THEN
-          RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Service request not found").
 
        FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
        IF NOT AVAIL MobSub THEN 
-          RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Contract not found").
+          RETURN fTPServiceError(BUFFER TPService,"Contract not found").
 
        FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = MobSub.Brand   AND 
                                       AgreeCustomer.CustNum = MobSub.AgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
-           RETURN fTPServiceMessageError(BUFFER TPServiceMessage,"Agreement customer not found").
+           RETURN fTPServiceError(BUFFER TPServiceMessage,"Agreement customer not found").
 
-       ASSIGN lcCustomerId = AgreeCustomer.OrgId.
+       CASE TPService.ServType:
+           WHEN "Television" THEN 
+           DO:
+               ASSIGN lcCustomerId = AgreeCustomer.OrgId.
 
-       FIND FIRST ttCustomer WHERE ttCustomer.CustomerId = lcCustomerId NO-LOCK NO-ERROR.
-       IF NOT AVAIL ttCustomer THEN 
-       DO:
-          CREATE ttCustomer.
-          ASSIGN
-              ttCustomer.CustomerId   = lcCustomerId
-              ttCustomer.CustName     = REPLACE(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER AgreeCustomer),"|","")
-              ttCustomer.Email        = AgreeCustomer.Email
-              ttCustomer.Region       = AgreeCustomer.Region
-              ttCustomer.Product      = TPService.Product
-              ttCustomer.SerialNbr    = TPService.SerialNbr
-              ttCustomer.MessageRowId = ROWID(TPServiceMessage).
-       END.
+               FIND FIRST ttCustomer WHERE ttCustomer.CustomerId = lcCustomerId NO-LOCK NO-ERROR.
+               IF NOT AVAIL ttCustomer THEN 
+               DO:
+                  CREATE ttCustomer.
+                  ASSIGN
+                      ttCustomer.CustomerId   = lcCustomerId
+                      ttCustomer.CustName     = REPLACE(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER AgreeCustomer),"|","")
+                      ttCustomer.Email        = AgreeCustomer.Email
+                      ttCustomer.Region       = AgreeCustomer.Region
+                      ttCustomer.Product      = TPService.Product
+                      ttCustomer.SerialNbr    = TPService.SerialNbr
+                      ttCustomer.MessageRowId = ROWID(TPService).
+               END.
+           END.
+           OTHERWISE
+           DO:
+           END.  
+       END CASE.    
 
     END.
 
@@ -102,8 +104,8 @@ PROCEDURE pWriteFile:
     CUSTOMERLOOP:
     FOR EACH ttCustomer:
 
-        FIND TPServiceMessage WHERE ROWID(TPServiceMessage) = ttCustomer.MessageRowId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-        IF LOCKED TPServiceMessage THEN 
+        FIND TPService WHERE ROWID(TPService) = ttCustomer.MessageRowId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+        IF LOCKED TPService THEN 
         DO:
             OUTPUT STREAM str_err TO VALUE(lcLogFileName) APPEND.
             PUT STREAM str_err UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' Device: '" + ttCustomer.SerialNbr + "' locked from update." SKIP.
@@ -126,14 +128,18 @@ PROCEDURE pWriteFile:
                         ttCustomer.Product    + lcSep +
                         ttCustomer.SerialNbr  SKIP.
           
-        ASSIGN
-            liCnt                          = liCnt + 1
-            TPServiceMessage.MessageId     = lcMessageId
-            TPServiceMessage.UpdateTS      = fMakeTS()
-            TPServiceMessage.MessageStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION}.
+        ASSIGN 
+            liCnt               = liCnt + 1
+            TPService.MessageId = lcMessageId.
+
+        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION}).
+
     END.
     OUTPUT CLOSE.
 
+    RELEASE TPService.
+    RELEASE TPServiceMessage.
+    
     RETURN "".
 
 END PROCEDURE.

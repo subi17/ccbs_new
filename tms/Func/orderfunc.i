@@ -416,14 +416,21 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 
 END FUNCTION.   
 
-FUNCTION fCreateTPService RETURNS LOGICAL
+FUNCTION fCreateNewTPService RETURNS INTEGER
  (iiMsSeq       AS INT,
   icProduct     AS CHAR,
+  icProvider    AS CHAR,
   icType        AS CHAR,
+  icOperation   AS CHAR,
+  icStatus      AS CHAR,
   icOffer       AS CHAR,
   icUser        AS CHAR):
 
-    FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.Product = icProduct NO-LOCK NO-ERROR.
+    FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq           AND 
+                               TPService.Operation   = icOperation       AND  
+                               TPService.ServType    = icType            AND  
+                               TPService.ServStatus <> {&STATUS_HANDLED} AND 
+                               TPService.Product     = icProduct         NO-LOCK NO-ERROR.
     IF NOT AVAIL TPService THEN 
     DO:
         CREATE TPService.
@@ -431,57 +438,45 @@ FUNCTION fCreateTPService RETURNS LOGICAL
             TPService.MsSeq      = iiMsSeq
             TPService.ServSeq    = NEXT-VALUE(TPServiceSeq)
             TPService.ServType   = icType
+            TPService.Operation  = icOperation
             TPService.Product    = icProduct
-            TPService.Provider   = (IF TPService.ServType = "Television" THEN "Huawei" ELSE "")
-            TPService.ServStatus = {&STATUS_NEW}
+            TPService.Provider   = icProvider
+            TPService.ServStatus = icStatus
+            TPService.Offer      = icOffer
+            TPService.UserCode   = icUser
             TPService.CreatedTS  = fMakeTS()
             TPService.UpdateTS   = TPService.CreatedTS.
     END.
 
-    RETURN TRUE.   
+    RETURN TPService.ServSeq.   
 
 END FUNCTION.
 
 FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
  (iiMsSeq       AS INT,
   iiServSeq     AS INT,
-  icMessageType AS CHAR):
+  icSource      AS CHAR,
+  icStatus      AS CHAR):
+
+    FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServSeq = iiServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+    IF LOCKED TPService THEN 
+        RETURN ERROR "TPService is locked from update".
 
     CREATE TPServiceMessage.
     ASSIGN
        TPServiceMessage.MsSeq         = iiMsSeq
        TPServiceMessage.ServSeq       = iiServSeq
        TPServiceMessage.MessageSeq    = NEXT-VALUE(TPServiceMessageSeq)
-       TPServiceMessage.MessageType   = icMessageType
-       TPServiceMessage.Source        = {&SOURCE_TMS}
-       TPServiceMessage.MessageStatus = {&STATUS_NEW}
+       TPServiceMessage.Source        = icSource
+       TPServiceMessage.MessageStatus = icStatus
        TPServiceMessage.CreatedTS     = fMakeTS()
        TPServiceMessage.UpdateTS      = TPServiceMessage.CreatedTS.
 
+    ASSIGN   
+       TPService.ServStatus           = icStatus
+       TPService.UpdateTS             = fMakeTS().
+
     RETURN TRUE.   
-
-END FUNCTION.
-
-FUNCTION fInitiate_ThirdParty_BB_Service_STB_Logistics RETURNS LOGICAL
-    (INPUT  iiMsSeq AS INT):
-
-    FOR EACH TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServStatus = {&STATUS_NEW} NO-LOCK:
-
-        BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-        IF NOT AVAIL TPService THEN 
-            RETURN FALSE.
-
-        fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq , {&TYPE_ACTIVATION}).
-
-        ASSIGN
-            TPService.ServStatus = {&STATUS_ONGOING}
-            TPService.UpdateTS   = fMakeTS().
-    END.
-
-    RELEASE TPService.
-    RELEASE TPServiceMessage.
-    
-    RETURN TRUE.
 
 END FUNCTION.
 

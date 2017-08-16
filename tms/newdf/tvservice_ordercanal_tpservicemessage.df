@@ -39,76 +39,40 @@ ADD FIELD "MessageSeq" OF "TPServiceMessage" AS integer
   ORDER 40
   MANDATORY
 
-ADD FIELD "MessageID" OF "TPServiceMessage" AS character
-  FORMAT "x(35)"
-  INITIAL ""
-  LABEL "MessageId"
-  POSITION 5
-  MAX-WIDTH 70
-  COLUMN-LABEL "MessageID"
-  DESCRIPTION "Auto-generated UUID"
-  ORDER 50
-
-ADD FIELD "MessageType" OF "TPServiceMessage" AS character
-  FORMAT "x(16)"
-  INITIAL ""
-  LABEL "Message Type"
-  POSITION 6
-  COLUMN-LABEL "MessageType"
-  ORDER 60
-
 ADD FIELD "Source" OF "TPServiceMessage" AS character
   FORMAT "x(8)"
   INITIAL ""
   LABEL "Message Source"
-  POSITION 7
+  POSITION 6
   COLUMN-LABEL "Source"
   DESCRIPTION "Messsage source (TMS/Masmovil)"
-  ORDER 70
+  ORDER 60
 
 ADD FIELD "MessageStatus" OF "TPServiceMessage" AS character
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Message Status"
-  POSITION 8
+  POSITION 7
   COLUMN-LABEL "MessageStatus"
-  ORDER 80
+  ORDER 70
 
 ADD FIELD "CreatedTS" OF "TPServiceMessage" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "CreatedTS"
-  POSITION 9
+  POSITION 8
   COLUMN-LABEL "CreatedTS"
   DECIMALS 5
-  ORDER 90
+  ORDER 80
 
 ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "UpdateTS"
-  POSITION 10
+  POSITION 9
   COLUMN-LABEL "UpdateTS"
   DECIMALS 5
-  ORDER 100
-
-ADD FIELD "ResponseCode" OF "TPServiceMessage" AS character
-  FORMAT "x(10)"
-  INITIAL ""
-  LABEL "Response Code"
-  POSITION 11
-  COLUMN-LABEL "ResponseCode"
-  DESCRIPTION "Response code from Third party"
-  ORDER 110
-
-ADD FIELD "AdditionalInfo" OF "TPServiceMessage" AS character
-  FORMAT "x(40)"
-  INITIAL ""
-  LABEL "Additional Info"
-  POSITION 12
-  COLUMN-LABEL "AdditionalInfo"
-  DESCRIPTION "Additional status info"
-  ORDER 120
+  ORDER 90
 
 ADD INDEX "MsSeq" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
@@ -121,10 +85,6 @@ ADD INDEX "MessageSeq" ON "TPServiceMessage"
   AREA "Dyn_Index_1"
   UNIQUE
   INDEX-FIELD "MessageSeq"   DECENDING 
-
-ADD INDEX "MessageID" ON "TPServiceMessage"
-  AREA "Dyn_Index_1"
-  INDEX-FIELD "MessageID"   DESCENDING
 
 ADD INDEX "MessageStatus" ON "TPServiceMessage"
   AREA "Dyn_Index_1"

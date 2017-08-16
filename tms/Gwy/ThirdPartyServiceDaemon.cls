@@ -60,13 +60,9 @@ CLASS Gwy.ThirdPartyServiceDaemon INHERITS gearbox.daemons.Daemon:
 
       ldeNow = Class.timedate:MakeTS().
 
-      IF CAN-FIND(FIRST TPServiceMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                 AND
-                                               TPServiceMessage.MessageStatus EQ {&WAITING_FOR_STB_ACTIVATION} AND
-                                               TPServiceMessage.MessageType   EQ {&TYPE_ACTIVATION}            NO-LOCK) THEN
+      IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServStatus EQ {&WAITING_FOR_STB_ACTIVATION} NO-LOCK) THEN
           RUN Gwy/tp_service_activation.p.
-      ELSE IF CAN-FIND(FIRST FusionMessage WHERE TPServiceMessage.Source        EQ {&SOURCE_TMS}                   AND
-                                                 TPServiceMessage.MessageStatus EQ {&WAITING_FOR_STB_DEACTIVATION} AND
-                                                 TPServiceMessage.MessageType   EQ {&TYPE_DEACTIVATION}            NO-LOCK) THEN    
+      ELSE IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_DEACTIVATION} AND TPService.ServStatus EQ {&WAITING_FOR_STB_DEACTIVATION} NO-LOCK) THEN    
           RUN Gwy/tp_service_deactivation.p.
 
       pauseUntilHeartbeat(5).

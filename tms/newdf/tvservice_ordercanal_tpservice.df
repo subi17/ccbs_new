@@ -39,74 +39,133 @@ ADD FIELD "ServType" OF "TPService" AS character
   HELP "Service Type"
   ORDER 40
 
+ADD FIELD "Operation" OF "TPService" AS character
+  DESCRIPTION "Operation"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Operation"
+  POSITION 5
+  MAX-WIDTH 30
+  COLUMN-LABEL "Operation"
+  HELP "Operation"
+  ORDER 50
+
 ADD FIELD "Product" OF "TPService" AS character 
   FORMAT "x(25)"
   INITIAL ""
   LABEL "Product"
-  POSITION 5
+  POSITION 6
   MAX-WIDTH 50
   HELP "Product"
-  ORDER 50
+  ORDER 60
 
 ADD FIELD "Provider" OF "TPService" AS character 
   FORMAT "x(20)"
   INITIAL ""
   LABEL "Provider"
-  POSITION 6
+  POSITION 7
   MAX-WIDTH 40
   COLUMN-LABEL "Provider"
   HELP "Service Provider"
-  ORDER 60
+  ORDER 70
 
 ADD FIELD "SerialNbr" OF "TPService" AS character 
   FORMAT "x(25)"
   INITIAL ""
   LABEL "Serial Nbr"
-  POSITION 7
+  POSITION 8
   MAX-WIDTH 50
   COLUMN-LABEL "Serial Nbr"
   HELP "Serial Number"
-  ORDER 70
+  ORDER 80
 
 ADD FIELD "ServStatus" OF "TPService" AS character 
   FORMAT "x(15)"
   INITIAL ""
   LABEL "Status"
-  POSITION 8
+  POSITION 9
   MAX-WIDTH 30
   COLUMN-LABEL "Status"
   HELP "Service Status"
-  ORDER 80
+  ORDER 90
+
+ADD FIELD "Offer" OF "TPService" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer"
+  POSITION 10
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer"
+  ORDER 100
+
+ADD FIELD "UserCode" OF "TPService" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 11
+  MAX-WIDTH 20
+  COLUMN-LABEL "User"
+  HELP "User"
+  ORDER 110
 
 ADD FIELD "TermReason" OF "TPService" AS character
   FORMAT "x(35)"
   INITIAL ""
   LABEL "TermReason"
-  POSITION 9
+  POSITION 12
   MAX-WIDTH 70
   COLUMN-LABEL "TermReason"
   HELP "Termination Reason"
-  ORDER 90
+  ORDER 120
 
 ADD FIELD "CreatedTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "CreatedTS"
-  POSITION 10
+  POSITION 13
   MAX-WIDTH 20
   COLUMN-LABEL "CreatedTS"
   HELP "CreatedTS"
-  ORDER 100
+  ORDER 130
 
 ADD FIELD "UpdateTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "UpdatedTS"
-  POSITION 11
+  POSITION 14
   MAX-WIDTH 20
   COLUMN-LABEL "UpdateTS"
   HELP "UpdateTS"
-  ORDER 110
+  ORDER 140
+
+ADD FIELD "MessageID" OF "TPServiceMessage" AS character
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "MessageId"
+  POSITION 15
+  MAX-WIDTH 70 
+  COLUMN-LABEL "MessageID"
+  DESCRIPTION "Auto-generated"
+  ORDER 150
+	
+ADD FIELD "ResponseCode" OF "TPServiceMessage" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  POSITION 16
+  COLUMN-LABEL "ResponseCode"
+  DESCRIPTION "Response code from Third party"
+  ORDER 160
+	
+ADD FIELD "AdditionalInfo" OF "TPServiceMessage" AS character
+  FORMAT "x(40)"
+  INITIAL "" 
+  LABEL "Additional Info"
+  POSITION 17
+  COLUMN-LABEL "AdditionalInfo"
+  DESCRIPTION "Additional status info"
+  ORDER 170
 
 ADD INDEX "MsSeq" ON "TPService" 
   AREA "Dyn_Index_1"
@@ -123,12 +182,17 @@ ADD INDEX "ServSeq" ON "TPService"
 ADD INDEX "MsSeqTypeStatus" ON "TPService"
   AREA "Dyn_Index_1"
   INDEX-FIELD "MsSeq"      ASCENDING
+  INDEX-FIELD "Operation"  ASCENDING
   INDEX-FIELD "ServType"   ASCENDING
   INDEX-FIELD "ServStatus" ASCENDING
 
 ADD INDEX "SerialNbr" ON "TPService"
   AREA "Dyn_Index_1"
   INDEX-FIELD "SerialNbr" ASCENDING
+
+ADD INDEX "MessageId" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MessageID" ASCENDING
 
 ADD INDEX "CreatedTS" ON "TPService"
   AREA "Dyn_Index_1"

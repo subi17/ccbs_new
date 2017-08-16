@@ -27,27 +27,16 @@ FUNCTION fFusionMessageError RETURNS CHAR
    RETURN icErrorDesc.
 END.
 
-FUNCTION fTPServiceMessageError RETURNS CHAR
-    (BUFFER bf_TPServiceMessage FOR TPServiceMessage,
+FUNCTION fTPServiceError RETURNS CHAR
+    (BUFFER bf_TPService FOR TPService,
      icErrorDesc AS CHAR):
-
-   DEFINE BUFFER bf_TPService FOR TPService.
    
    FIND FIRST bf_TPService WHERE bf_TPService.MsSeq   = bf_TPServiceMessage.MsSeq   AND 
                                  bf_TPService.ServSeq = bf_TPServiceMessage.ServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-
-   FIND CURRENT bf_TPServiceMessage EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-   IF AVAIL bf_TPServiceMessage AND AVAIL bf_TPService THEN      
-   DO: 
-      ASSIGN
-          bf_TPServiceMessage.MessageStatus  = {&STATUS_ERROR}
-          bf_TPServiceMessage.AdditionalInfo = icErrorDesc
-          bf_TPServiceMessage.UpdateTS       = fMakeTS().
-      
+   IF AVAIL bf_TPService THEN    
       ASSIGN 
           bf_TPService.ServStatus = {&STATUS_ERROR}   
           bf_TPService.UpdateTS   = fMakeTS().
-   END.
    
    RETURN "".
 

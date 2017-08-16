@@ -163,6 +163,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR ldaPMDUBPromoStartDate AS DATE NO-UNDO.
    DEF VAR ldePMDUBPromoActStamp  AS DEC  NO-UNDO.
    DEF VAR lcWaitFor AS CHAR NO-UNDO. 
+   DEF VAR liServSeq AS INT  NO-UNDO.
 
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER bBundleRequest  FOR MsRequest.
@@ -177,7 +178,18 @@ PROCEDURE pPeriodicalContract:
    
    IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
-       fCreateTPService(iiMsSeq, DayCampaign.DCEvent, "Television", "", "").
+       ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                              OrderAction.ItemKey, 
+                                              "Huawei", 
+                                              "Television", 
+                                              {&TYPE_ACTIVATION}, 
+                                              {&STATUS_NEW}, 
+                                              OrderAction.ItemParam, 
+                                              Order.Salesman).
+
+       IF liServSeq > 0 THEN
+           fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+       
        RETURN "".
    END.    
    /* override DayCampaign.Feemodel because of possible reactivation */

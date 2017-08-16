@@ -213,27 +213,20 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    END.   
    ELSE IF liLOStatusId EQ 88888 THEN
    DO:
-      FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq       AND 
-                                 TPService.ServType   = "Television"      AND 
-                                 TPService.ServStatus = {&STATUS_ONGOING} NO-LOCK NO-ERROR.
+      FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq                   AND 
+                                 TPService.Operation  = {&TYPE_ACTIVATION}            AND    
+                                 TPService.ServType   = "Television"                  AND 
+                                 TPService.ServStatus = {&STATUS_LOGISTICS_INITIATED} EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
       IF AVAIL TPService THEN 
       DO:
-          FIND FIRST TPServiceMessage WHERE TPServiceMessage.ServSeq       = TPService.ServSeq             AND 
-                                            TPServiceMessage.MessageType   = {&TYPE_ACTIVATION}            AND 
-                                            TPServiceMessage.MessageStatus = {&STATUS_LOGISTICS_INITIATED} EXCLUSIVE-LOCK NO-ERROR.     
-          IF AVAIL TPServiceMessage THEN 
-          DO:
-               BUFFER TPService:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-               IF NOT AVAIL TPService THEN 
-               DO:
-                   add_int(response_toplevel_id, "", 30). 
-                   RETURN.
-               END.
-
-               ASSIGN 
-                   TPService.SerialNbr            = lcIMEI
-                   TPServiceMessage.MessageStatus = {&WAITING_FOR_STB_ACTIVATION}.   
-          END.
+          ASSIGN TPService.SerialNbr = lcIMEI.
+          
+          fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_LOGISTICS}, {&WAITING_FOR_STB_ACTIVATION}).
+      END.
+      ELSE 
+      DO:
+          add_int(response_toplevel_id, "", 30). 
+          RETURN. 
       END.                  
    END.  
    ELSE DO:
