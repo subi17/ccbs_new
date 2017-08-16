@@ -328,7 +328,7 @@ FUNCTION fCategoryChangeAllowed RETURNS LOGICAL
                              bf_Order.CustNum                                 = iiCustNum AND 
                              bf_Order.OrderId                                <> iiOrderId AND
                       LOOKUP(bf_Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0         NO-LOCK NO-ERROR.
-   IF AVAIL Order THEN
+   IF AVAIL bf_Order THEN
        RETURN FALSE.
 
    /*Active subscription found: change not allowed*/
