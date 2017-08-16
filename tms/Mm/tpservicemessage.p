@@ -46,7 +46,6 @@ DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 
 FORM
-   ttDocs.MessageType   FORMAT "X(15)"           COLUMN-LABEL "Msg. Type"
    ttDocs.Source        FORMAT "X(10)"           COLUMN-LABEL "Source"
    ttDocs.MessageStatus FORMAT "X(15)"           COLUMN-LABEL "Status"
    ttDocs.CreatedTS     FORMAT "99999999.99999"  COLUMN-LABEL "Created TS"
@@ -61,10 +60,6 @@ form
     SKIP
     "Message Seq.......:" ttDocs.MessageSeq 
     SKIP
-    "Message ID........:" ttDocs.MessageId FORMAT "X(45)" 
-    SKIP
-    "Message Type......:" ttDocs.MessageType FORMAT "X(45)" 
-    SKIP
     "Message Status....:" ttDocs.MessageStatus FORMAT "X(45)"
     SKIP
     "Source............:" ttDocs.Source FORMAT "X(45)" 
@@ -72,10 +67,6 @@ form
     "Created...........:" ttDocs.CreatedTS " " ttDocs.cCreatedTS FORMAT "X(40)" 
     SKIP
     "Handled...........:" ttDocs.UpdateTS " " ttDocs.cUpdateTS FORMAT "X(40)"
-    SKIP
-    "Response Code.....:" ttDocs.ResponseCode FORMAT "X(45)" 
-    SKIP
-    "Additional Info...:" ttDocs.AdditionalInfo FORMAT "X(57)" 
     SKIP(2)
 
     WITH OVERLAY ROW 1 WIDTH 80 centered
@@ -300,16 +291,12 @@ REPEAT WITH FRAME sel:
             ttDocs.MsSeq 
             ttDocs.ServSeq 
             ttDocs.MessageSeq 
-            ttDocs.MessageId
-            ttDocs.MessageType 
             ttDocs.MessageStatus 
             ttDocs.Source
             ttDocs.CreatedTS 
             ttDocs.cCreatedTS
             ttDocs.UpdateTS 
             ttDocs.cUpdateTS
-            ttDocs.ResponseCode 
-            ttDocs.AdditionalInfo 
         WITH FRAME fDetails.
         /*NEXT LOOP.*/
 
@@ -364,7 +351,6 @@ PROCEDURE local-disp-row:
     CLEAR FRAME sel NO-PAUSE.
        
     DISPLAY 
-        ttDocs.MessageType
         ttDocs.Source
         ttDocs.MessageStatus
         ttDocs.CreatedTS

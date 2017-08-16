@@ -1625,14 +1625,14 @@ FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_AC
    FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN
    DO: 
-       fTPServiceError(BUFFER TPServiceMessage,"Contract not found").
+       fTPServiceError(BUFFER TPService,"Contract not found").
        NEXT.
    END.
 
    FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN 
    DO:
-      fTPServiceError(BUFFER TPServiceMessage,"Failed to identify associated order during logistics initiation").
+      fTPServiceError(BUFFER TPService,"Failed to identify associated order during logistics initiation").
       NEXT.
    END.
    

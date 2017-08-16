@@ -9,6 +9,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/fmakemsreq.i}
+{Func/orderfunc.i}
 
 DEF VAR lcCustomerId AS CHAR NO-UNDO.
 

@@ -7,6 +7,7 @@ gcBrand = "1".
 {Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
+{Func/orderfunc.i}
 {Mc/orderfusion.i}
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO

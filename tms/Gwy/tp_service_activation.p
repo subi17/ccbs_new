@@ -53,7 +53,7 @@ PROCEDURE pProcessRequests:
        FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = MobSub.Brand   AND 
                                       AgreeCustomer.CustNum = MobSub.AgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
-           RETURN fTPServiceError(BUFFER TPServiceMessage,"Agreement customer not found").
+           RETURN fTPServiceError(BUFFER TPService,"Agreement customer not found").
 
        CASE TPService.ServType:
            WHEN "Television" THEN 
