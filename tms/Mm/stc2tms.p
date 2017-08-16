@@ -238,11 +238,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    RUN pUpdateSubscription.
 
    IF MobSub.MultiSIMID > 0 THEN RUN pMultiSimSTC (INPUT ldtActDate).
-   ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
-           bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+   ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
-                        "STC").
+                        "STC_FINAL").
 
    /* Remove additional line termination request when correct STC done */
    IF bNewTariff.LineType NE {&CLITYPE_LINETYPE_ADDITIONAL} THEN
