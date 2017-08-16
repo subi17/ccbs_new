@@ -44,4 +44,5 @@ add_string(lcResultStruct, "codigoReferencia", lcvalue).
 add_timestamp(lcResultStruct,"fechaVentanaCambio",ldePortingTime).
 add_string(lcResultStruct,"descripcion","La operacion se ha realizado con exito").
 add_string(lcResultStruct, "codigoRespuesta", "0000 00000").
-
+/* BMNP-21 */
+add_string(lcResultStruct, "SourceApplication", "MNP").
