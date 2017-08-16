@@ -36,7 +36,7 @@ def active_cdr_db_pf():
         connection_type = "local"
 
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
-    args.extend(['-pf', getpf('../../db/progress/store/common')])
+    args.extend(['-pf', getpf('../../db/progress/store/common'), '-h', '1'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(cdr_fetch.communicate()[0])
@@ -95,12 +95,16 @@ def compile(*a):
 
     args = ['-pf', getpf('../../db/progress/store/all')]
     cdr_dict = {}
+    dbcount = len(databases)
 
     for cdr_database in cdr_databases:
         if not cdr_dict:
             cdr_dict = active_cdr_db_pf()
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
+            dbcount += 1
+
+    args.extend(['-h', str(dbcount)])
 
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
@@ -160,14 +164,17 @@ def run_agent(*a):
 
     args = ['-pf', getpf('../../db/progress/store/all')]
     cdr_dict = {}
+    dbcount = len(databases)
 
     for cdr_database in cdr_databases:
         if not cdr_dict:
             cdr_dict = active_cdr_db_pf()
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
+            dbcount += 1
 
-    
+    args.extend(['-h', str(dbcount + cdr_database_count)])
+
     os.environ['PROPATH'] += ',rpcmethods.pl'
     args.extend(['-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())])

@@ -1,21 +1,5 @@
 #!/bin/bash
 
-TMSPATH=/apps/xfera
-RPATH=/tmsapps
-TERM=xterm
-
-export RPATH
-PROPATH=$RPATH,$TMSPATH
-
-for dir in tms tools tools/stompAdapter
-do
-   PROPATH=$PROPATH,$TMSPATH/$dir
-done
-
-export TMSPATH
-export PROPATH
-export TERM
-
 die () {
     echo >&2 "$@"
     exit 1
@@ -23,4 +7,17 @@ die () {
 
 [ -n "$1" ] || die "Expected dumpid as parameter"
 
-mpro -b -q -pf /apps/xfera/tms/pf/batch.pf -p HPD/hpd_filedump_batch.p -clientlog /apps/yoigo/var/log/hpd_filedump_${1}.log -param ${1}
+tenant="yoigo"
+
+if [ -n "$2" ]; then
+   tenant=$2
+fi
+
+[ "$tenant" != "super" ] || die "Super tenant is not allowed"
+
+echo "Using tenant $tenant"
+cd "${0%/*}"
+cd ../
+pike batch -- HPD/hpd_filedump_batch common ordercanal mobile counter star reratelog -clientlog ../var/log/hpd_filedump_${1}_${tenant}.log -param ${1} tenant=${tenant} umask=0000
+
+echo "Please check log file hpd_filedump_${1}_${tenant}.log"
