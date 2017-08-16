@@ -123,7 +123,7 @@ PROCEDURE pActivateTVService:
 
     FIND FIRST TPService WHERE TPService.MsSeq = piMsSeq AND TPService.ServType = lcBundleType AND TPService.ServStatus <> "HANDLED" NO-LOCK NO-ERROR.
     IF AVAIL TPService THEN 
-        RETURN "There exists an ongoing tv service request."
+        RETURN "There exists an ongoing tv service request.".
 
     ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
                                            pcBundle, 
