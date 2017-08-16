@@ -32,6 +32,7 @@ def ci_test(*a):
 def unit(*a):
     def unit_test(pf, tests):
         test = Popen(mpro + ['-clientlog', '/dev/null', '-pf', 'db/' + pf,
+                             '-h', str(len(databases)),
                              '-param', ','.join(tests),
                              '-b', '-p', 'gearbox/unit/run_tests.r'],
                              stdout=PIPE)
@@ -44,6 +45,7 @@ def unit(*a):
 def consistency(*a):
     test = Popen(mpro + ['-clientlog', '/dev/null',
                         '-pf', '../../db/progress/store/all.pf',
+                        '-h', str(len(databases)),
                         '-param', ','.join(parameters or consistency_tests),
                         '-b', '-p', 'gearbox/unit/run_tests.r'], stdout=PIPE)
     call('/bin/cat', stdin=test.stdout)
@@ -62,6 +64,7 @@ def functional(*a):
     for test in parameters or functionals:
         errors += callgrep(mpro + ['-clientlog', '/dev/null',
                                    '-pf', 'db/all.pf',
+                                   '-h', str(len(databases)),
                                   '-param', test + ',../../docs',
                                   '-b', '-p', 'gearbox/functional/run.r'], [])
     if errors != 0:
