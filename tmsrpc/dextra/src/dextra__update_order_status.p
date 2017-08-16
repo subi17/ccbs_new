@@ -179,6 +179,7 @@ gcBrand = "1".
 {Func/dextra.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
+{Func/orderfunc.i}
 
 FIND Order NO-LOCK WHERE
      Order.Brand = gcBrand AND
