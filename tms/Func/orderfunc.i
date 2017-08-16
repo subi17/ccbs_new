@@ -460,7 +460,7 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
 
     FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServSeq = iiServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
     IF LOCKED TPService THEN 
-        RETURN ERROR "TPService is locked from update".
+        RETURN FALSE.
 
     CREATE TPServiceMessage.
     ASSIGN
