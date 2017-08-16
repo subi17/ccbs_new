@@ -71,14 +71,14 @@ PROCEDURE pDeActivateTVService:
     DO:
         IF LOOKUP(TPService.ServStatus,"HANDLED") > 0 THEN 
         DO:
-            ASSIGN liServSeq = fCreateTPService(piMsSeq, 
-                                                pcBundle, 
-                                                "Huawei", 
-                                                lcBundleType, 
-                                                {&TYPE_DEACTIVATION}, 
-                                                {&STATUS_NEW}, 
-                                                pcOfferId, 
-                                                pcUserCode).
+            ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
+                                                   pcBundle, 
+                                                   "Huawei", 
+                                                   lcBundleType, 
+                                                   {&TYPE_DEACTIVATION}, 
+                                                   {&STATUS_NEW}, 
+                                                   pcOfferId, 
+                                                   pcUserCode).
 
             IF liServSeq > 0 THEN 
             DO:
@@ -94,14 +94,14 @@ PROCEDURE pDeActivateTVService:
                TPService.ServStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} THEN 
                 RETURN "Setup box logistics/activation process is already initiated. Cancellation not allowed now.". 
         
-            ASSIGN liServSeq = fCreateTPService(piMsSeq, 
-                                                pcBundle, 
-                                                "Huawei", 
-                                                lcBundleType, 
-                                                {&TYPE_DEACTIVATION}, 
-                                                {&STATUS_NEW}, 
-                                                pcOfferId, 
-                                                pcUserCode).
+            ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
+                                                   pcBundle, 
+                                                   "Huawei", 
+                                                   lcBundleType, 
+                                                   {&TYPE_DEACTIVATION}, 
+                                                   {&STATUS_NEW}, 
+                                                   pcOfferId, 
+                                                   pcUserCode).
 
             IF liServSeq > 0 THEN 
             DO:    
@@ -125,14 +125,14 @@ PROCEDURE pActivateTVService:
     IF AVAIL TPService THEN 
         RETURN "There exists an ongoing tv service request."
 
-    ASSIGN liServSeq = fCreateTPService(piMsSeq, 
-                                        pcBundle, 
-                                        "Huawei", 
-                                        lcBundleType, 
-                                        {&TYPE_ACTIVATION}, 
-                                        {&STATUS_NEW}, 
-                                        pcOfferId, 
-                                        pcUserCode).
+    ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
+                                           pcBundle, 
+                                           "Huawei", 
+                                           lcBundleType, 
+                                           {&TYPE_ACTIVATION}, 
+                                           {&STATUS_NEW}, 
+                                           pcOfferId, 
+                                           pcUserCode).
     
     IF liServSeq > 0 THEN 
         fCreateTPServiceMessage(piMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
