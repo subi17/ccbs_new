@@ -452,11 +452,15 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
               
    EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
 
-   FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand   = gcBrand             AND
-              CLIType.CLIType = MobSub.TariffBundle NO-ERROR.
-   IF NOT AVAIL CLIType OR 
-                CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN RETURN FALSE.
+   /* In case of STC_FINAL, the subs.type is already changed */
+   IF icTermReason NE "STC_FINAL" THEN DO:
+      FIND FIRST CLIType NO-LOCK WHERE
+                 CLIType.Brand   = gcBrand             AND
+                 CLIType.CLIType = MobSub.TariffBundle NO-ERROR.
+      IF NOT AVAIL CLIType OR
+                   CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN}
+         THEN RETURN FALSE.
+   END.
    
    MOBSUB_LOOP:
    FOR EACH lbMobSub NO-LOCK WHERE
@@ -528,7 +532,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
       WHEN "DELETE" THEN ASSIGN
          lcAdditionalSMS = "MainTermToAddSTC"
          lcMainSMS = "".
-      WHEN "STC" THEN ASSIGN
+      WHEN "STC" OR WHEN "STC_FINAL" THEN ASSIGN
          lcAdditionalSMS = "MainSTCToAddSTC"
          lcMainSMS = "MainSTCToNonMain".
       WHEN "MNP" THEN ASSIGN

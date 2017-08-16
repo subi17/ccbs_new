@@ -94,8 +94,11 @@ def active_cdr_db_pf():
     else:
         connection_type = "local"
 
+    if 'dbstate' in globals():
+        connection_type += ',{0}'.format(dbstate)
+
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
-    args.extend(['-pf', getpf('../db/progress/store/common')])
+    args.extend(['-pf', getpf('../db/progress/store/common'), '-h', '1'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(cdr_fetch.communicate()[0])
@@ -147,7 +150,7 @@ def daemon(*a):
             args.append(pp)
 
     if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
+        args.extend(['-h', str(dbcount + cdr_database_count)])
 
     daemonpf = '../etc/pf/' + daemon + '.pf'
     if os.path.exists(daemonpf):
@@ -248,6 +251,8 @@ def _compile(compilecommand, compiledir):
                seen.append(dir)
 
     args = ['-pf', getpf('../db/progress/store/all')]
+    dbcount = len(databases)
+
     cdr_dict = {}
 
     for cdr_database in cdr_databases:
@@ -255,6 +260,7 @@ def _compile(compilecommand, compiledir):
             cdr_dict = active_cdr_db_pf()
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
+            dbcount += 1
 
     compile_p = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
 
@@ -263,6 +269,8 @@ def _compile(compilecommand, compiledir):
 
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
+    args.extend(['-h', str(dbcount)])
 
     processes = []
     for file in compile_p:
@@ -345,6 +353,7 @@ def cui(*a):
         sys.exit(5)
 
     args = ['-pf', getpf('../db/progress/store/all')]
+    dbcount = len(databases)
 
     if a[0] == 'cui' or a[0] == 'forcecui':
         program = 'Syst/tmslogin.p'
@@ -372,8 +381,9 @@ def cui(*a):
             cdr_dict = active_cdr_db_pf()
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
+            dbcount += 1
 
-    args.extend(['-p', program])
+    args.extend(['-h', str(dbcount + cdr_database_count), '-p', program])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -423,7 +433,7 @@ def terminal(*a):
     args.extend(['-p', program + '.p'])
 
     if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
+        args.extend(['-h', str(dbcount + cdr_database_count)])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -506,7 +516,7 @@ def batch(*a):
             args[idx + 1] = 'batchid={0}'.format(args[idx + 1])
 
     if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
+        args.extend(['-h', str(dbcount + cdr_database_count)])
 
     if a[0] == 'batch':
         with open('../var/log/%s.log' % module_base, 'a') as logfile:
@@ -554,5 +564,12 @@ def editor(*a):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
     args = parameters or (['-pf', getpf('../db/progress/store/all')])
+    dbcount = len(databases) + cdr_database_count
+
+    if cdr_databases:
+        dbcount += cdr_database_count
+
+    args.extend(['-h', str(dbcount)])
+
     args = mpro + args + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)
