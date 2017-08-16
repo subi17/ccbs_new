@@ -67,7 +67,8 @@ def compile(*a):
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
-    comp = Popen(mpro + ['-pf', '../../db/progress/store/all.pf', '-s', '120',
+    comp = Popen(mpro + ['-pf', '../../db/progress/store/all.pf',
+                         '-h', str(len(databases)), '-s', '120',
                          '-b', '-p', procedure_file.name], stdout=PIPE)
     call('/bin/cat', stdin=comp.stdout)
     if comp.wait() != 0:
@@ -121,8 +122,10 @@ def run_agent(*a):
     agent_name = parameters[0]
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
-    args = ['-pf', getpf('../../db/progress/store/all'), 
+    args = ['-pf', getpf('../../db/progress/store/all'),
+            '-h', str(len(databases)),
             '-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (agent_name, os.getpid())]
+
     args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p']
     os.execlp(args[0], *args)
