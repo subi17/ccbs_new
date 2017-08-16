@@ -8,6 +8,7 @@ gcBrand = "1".
 {Func/memo.i}
 {Func/cparam2.i}
 {Mc/orderfusion.i}
+{Func/orderfunc.i}
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO
     FIELD CustomerId AS CHAR
