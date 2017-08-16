@@ -24,7 +24,7 @@ IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 lcXMLStruct = get_struct(param_toplevel_id, "0").
 lcValidateFields = validate_struct(lcXMLStruct,"fechaSolicitudPorAbonado,codigoO
 peradorDonante,codigoOperadorReceptor,abonado,codigoContrato,NRNReceptor,fechaVe
-ntanaCambio,MSISDN,ICCID").
+ntanaCambio,MSISDN,ICCID,SourceApplication").
 
 IF LOOKUP("fechaVentanaCambio", lcValidateFields) > 0 THEN
    ldePortingTime = get_timestamp(lcXMLStruct, "fechaVentanaCambio").
@@ -44,5 +44,4 @@ add_string(lcResultStruct, "codigoReferencia", lcvalue).
 add_timestamp(lcResultStruct,"fechaVentanaCambio",ldePortingTime).
 add_string(lcResultStruct,"descripcion","La operacion se ha realizado con exito").
 add_string(lcResultStruct, "codigoRespuesta", "0000 00000").
-/* BMNP-21 */
-add_string(lcResultStruct, "SourceApplication", "MNP").
+
