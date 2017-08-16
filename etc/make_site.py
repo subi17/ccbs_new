@@ -105,6 +105,10 @@ else:
 os.environ['PROPATH'] += ','.join(['%s/%s' % (work_dir, x) \
                           for x in modgen()]) + ',.'
 
+cdr_database_count = 0
+if cdr_databases:
+    cdr_database_count = len(cdr_databases)
+
 if environment == 'development':
     databases.extend(cdr_databases)
     del cdr_databases[:]
