@@ -54,7 +54,7 @@ CASE piActOrDeAct:
 END CASE.
 
 IF RETURN-VALUE = "" THEN 
-    add_struct(response_toplevel_id, "", True).
+    add_boolean(response_toplevel_id, "", True).
 ELSE
     RETURN appl_err(RETURN-VALUE).
 
