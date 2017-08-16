@@ -2,6 +2,7 @@
 {Func/timestamp.i}
 {Func/filltemptable.i}
 {Func/cparam2.i}
+{Syst/host.i}
 
 DEF TEMP-TABLE ttDB NO-UNDO
    FIELD ConnName  AS CHAR
@@ -197,6 +198,8 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
     idaFromDate AS DATE,
     idaToDate   AS DATE):
     
+   DEFINE VARIABLE lcHost AS CHARACTER NO-UNDO.
+
    FOR EACH DBConfig NO-LOCK WHERE
             DBConfig.Brand = gcBrand AND
             DBConfig.TableName = icTable AND
@@ -208,9 +211,15 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
       ASSIGN 
          ttDB.ConnName  = DBConfig.DBConnName
          ttDB.TableName = icTable
-         ttDB.ConnParam = "-H " + DBConfig.Host + " -S " + DBConfig.Service
          ttDb.Connect   = TRUE
          ttDB.DBOrder   = 1.
+
+      RUN pHostName(OUTPUT lcHost).
+
+      IF LOOKUP(lcHost,"pallas,arneb") > 0 AND
+         DBConfig.DirectConnect > "" THEN
+         ttDB.ConnName = DBConfig.DirectConnect + "/" + DBConfig.DBConnName.
+      ELSE ttDB.ConnParam = "-H " + DBConfig.Host + " -S " + DBConfig.Service.
    END.
    
 END FUNCTION.
