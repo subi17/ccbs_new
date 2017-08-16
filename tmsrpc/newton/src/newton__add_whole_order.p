@@ -1223,21 +1223,22 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
    CREATE OrderFusion.
    ASSIGN
-      OrderFusion.Brand             = gcBrand
-      OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
-      OrderFusion.OrderDate         = ldaOrderDate
-      OrderFusion.Salesman          = pcSalesman
-      OrderFusion.FixedNumberType   = lcFixedLineNumberType
-      OrderFusion.FixedNumber       = lcFixedLineNumber
-      OrderFusion.Product           = lcFixedLineProduct
-      OrderFusion.CustomerType      = lcFixedLineCustomerType
-      OrderFusion.FixedMNPTime      = lcFixedLineMNPTime
-      OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName
-      OrderFusion.UpdateTS          = fMakeTS()
-      OrderFusion.FixedCurrOperCode = lcFixedLineMNPOldOperCode
-      OrderFusion.SerialNumber      = lcFixedLineSerialNbr
-      OrderFusion.ADSLLinkState     = lcFixedLineAdslLinkState.
+      OrderFusion.Brand              = gcBrand
+      OrderFusion.OrderId            = liOrderId
+      OrderFusion.FusionStatus       = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
+      OrderFusion.OrderDate          = ldaOrderDate
+      OrderFusion.Salesman           = pcSalesman
+      OrderFusion.FixedNumberType    = lcFixedLineNumberType
+      OrderFusion.FixedNumber        = lcFixedLineNumber
+      OrderFusion.Product            = lcFixedLineProduct
+      OrderFusion.CustomerType       = lcFixedLineCustomerType
+      OrderFusion.FixedMNPTime       = lcFixedLineMNPTime
+      OrderFusion.FixedCurrOper      = lcFixedLineMNPOldOperName
+      OrderFusion.UpdateTS           = fMakeTS()
+      OrderFusion.FixedCurrOperCode  = lcFixedLineMNPOldOperCode
+      OrderFusion.SerialNumber       = lcFixedLineSerialNbr
+      OrderFusion.ADSLLinkState      = lcFixedLineAdslLinkState
+      OrderFusion.EstimatedDataSpeed = liEstimatedDataSpeed.
 
    RETURN TRUE.
 
@@ -2333,8 +2334,14 @@ END.
 /* add databundle */
 IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
-   fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
+
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
+   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
+   ELSE         
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
+
 IF pcMobSubBundleType > "" THEN DO:
    lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
    fCreateOrderAction(Order.Orderid,"BundleItem",pcMobSubBundleType,"").
