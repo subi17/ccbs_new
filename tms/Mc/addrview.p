@@ -25,8 +25,8 @@ END.
 FORM
    "Country..........:" OrderCustomer.Country SKIP
    "Region...........:" OrderCustomer.Region SKIP
-   "Post Office......:" OrderCustomer.PostOffice SKIP
-   "Street...........:" OrderCustomer.Street format "x(59)" SKIP
+   "Post Office......:" OrderCustomer.PostOffice FORMAT "X(59)" SKIP
+   "Street...........:" OrderCustomer.Street FORMAT "X(59)" SKIP
    "Street Type......:" OrderCustomer.StreetType SKIP
    "Building Number..:" OrderCustomer.BuildingNum SKIP
    "Bis Duplicate....:" OrderCustomer.BisDuplicate SKIP
@@ -54,7 +54,7 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
    DISP
       OrderCustomer.Country  
       OrderCustomer.Region 
-      OrderCustomer.PostOffice 
+      OrderCustomer.PostOffice
       OrderCustomer.Street 
       OrderCustomer.StreetType 
       OrderCustomer.BuildingNum 
