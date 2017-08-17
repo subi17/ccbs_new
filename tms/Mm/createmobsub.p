@@ -899,7 +899,10 @@ IF NOT MobSub.PayType THEN DO:
                                INPUT MsRequest.ReqSource,
                                INPUT lcBundleId).        
       ELSE IF llgExtraLine        AND 
-              lcBundleId = "DSS2" THEN DO:
+              lcBundleId = "DSS2" AND 
+              fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                MobSub.MultiSimId,
+                                                MobSub.MultiSimType) THEN DO:
         
          /* If already DSS2 group exists then add extraline subscription 
             AND its associated main line to DSS2 group */  
@@ -910,9 +913,9 @@ IF NOT MobSub.PayType THEN DO:
                  (lbMobSubs.MultiSimType = {&MULTISIMTYPE_PRIMARY} OR
                   lbMobSubs.MultiSimType = {&MULTISIMTYPE_EXTRALINE}):
 
-            RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                  INPUT Mobsub.CLI,
-                                  INPUT MobSub.CustNum,
+            RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                                  INPUT lbMobsub.CLI,
+                                  INPUT lbMobSub.CustNum,
                                   INPUT "ADD",
                                   INPUT "",           /* Optional param list */
                                   INPUT MsRequest.MsRequest,
@@ -922,59 +925,6 @@ IF NOT MobSub.PayType THEN DO:
          END.
  
       END.
-   END.
-   ELSE IF llgExtraLine                                   AND
-        LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0  AND 
-        LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)   > 0  AND
-        NOT fOngoingDSSAct(MobSub.CustNum)                AND
-        fIsDSS2Allowed(MobSub.CustNum,
-                       MobSub.MsSeq,
-                       MobSub.ActivationTS,
-                       OUTPUT liDSSPriMsSeq,
-                       OUTPUT lcResult) THEN DO:
-
-        FIND FIRST lbPriDSSMobSub NO-LOCK WHERE 
-                   lbPriDSSMobSub.MsSeq        EQ liDSSPriMsSeq           AND 
-                   lbPriDSSMobSub.MultiSimId   NE 0                       AND 
-                   lbPriDSSMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} NO-ERROR.
-
-        IF AVAIL lbPriDSSMobSub AND 
-           LOOKUP(lbPriDSSMobSub.CLIType,lcExtraMainLineCLITypes) > 0 THEN DO:
-            
-           liRequest = fDSSRequest(lbPriDSSMobSub.MsSeq,
-                                   lbPriDSSMobSub.CustNum,
-                                   "CREATE",
-                                   "",
-                                   "DSS2",
-                                   lbPriDSSMobSub.ActivationTS,
-                                   {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
-                                   "",
-                                   TRUE, /* create fees */
-                                   0,
-                                   FALSE,
-                                   OUTPUT lcResult).
-           IF liRequest = 0 THEN
-              DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
-                                STRING(lbPriDSSMobSub.MsSeq),
-                                lbMobSubs.Custnum,
-                                "Extraline DSS activation failed",
-                                lcResult).
-           
-           /* Extraline subscription has to be added to DSS group */    
-           IF liRequest <> 0 THEN 
-              RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                    INPUT Mobsub.CLI,
-                                    INPUT MobSub.CustNum,
-                                    INPUT "ADD",
-                                    INPUT "",           /* Optional param list */
-                                    INPUT MsRequest.MsRequest,
-                                    INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
-                                    INPUT MsRequest.ReqSource,
-                                    INPUT lcBundleId).
- 
-        END.
-
    END.
    ELSE IF Order.MultiSimId > 0 AND
            Order.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO: 

@@ -461,6 +461,55 @@ FUNCTION fGetOtherBundleUsages RETURNS DEC (INPUT iiCustNum   AS INT,
 
 END FUNCTION.
 
+FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
+   (INPUT iiMsSeq        AS INT,
+    INPUT iiMultiSimId   AS INT,
+    INPUT iiMultiSimType AS INT):
+
+   DEFINE BUFFER lbMLMobSub FOR MobSub.
+   DEFINE BUFFER lbELMobSub FOR MobSub.
+
+   CASE iiMultiSimType:
+
+      WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
+         
+         FIND FIRST lbMLMobSub NO-LOCK WHERE 
+                    lbMLMobSub.MsSeq      = iiMsSeq             AND 
+                    lbMLMobSub.MultiSimId = iiMultiSimId        AND
+                   (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
+                    lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
+         IF AVAIL lbMLMobSub THEN
+            FIND FIRST lbELMobSub NO-LOCK WHERE 
+                       lbELMobSub.MsSeq        = lbMLMobSub.MultiSimId     AND 
+                       lbMLMobSub.MultiSimId   = lbMLMobSub.MsSeq          AND 
+                       lbMLMobSub.MUltiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+         IF AVAIL lbELMobSub THEN 
+            RETURN TRUE.
+
+      END.
+      WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
+         
+         FIND FIRST lbELMobSub NO-LOCK WHERE 
+                    lbELMobSub.MsSeq      = iiMsSeq      AND
+                    lbELMobSub.MultiSimID = iiMultiSimId NO-ERROR.
+         IF AVAIL lbELMobSub THEN 
+            FIND FIRST lbMLMobSub NO-LOCK WHERE 
+                       lbMLMobSub.MsSeq        = lbELMobSub.MultiSimId   AND 
+                       lbMLMobSub.MultiSimId   = lbELMobSub.MsSeq        AND 
+                       lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND 
+                      (lbMLMobSub.MsStatus     = {&MSSTATUS_ACTIVE}  OR 
+                       lbMLMobSub.MsStatus     = {&MSSTATUS_BARRED})     NO-ERROR.
+         IF AVAIL lbMLMobSub THEN 
+            RETURN TRUE.
+      END.
+      OTHERWISE .
+
+   END CASE.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    (INPUT  iiCustnum            AS INT,
     INPUT  ideActStamp          AS DEC,
@@ -502,8 +551,10 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    END. /* IF fIsDSSActive(INPUT iiCustnum) THEN DO: */
 
    IF icBundleId = "DSS2" THEN
-      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+      ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+             lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+             lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand   AND
@@ -512,9 +563,18 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
 
       IF icBundleId = "DSS2" AND
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
-
-      ASSIGN liMobSubCount = liMobSubCount + 1
-             lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
+           
+      liMobSubCount = liMobSubCount + 1
+      
+      IF icBundleId = "DSS2" AND
+        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR 
+         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+         IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                              bMobSub.MultiSimId,
+                                              bMobSub.MultiSimType) THEN
+         lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
+      ELSE
+         lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
 
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq   = bMobSub.MsSeq AND
@@ -708,13 +768,18 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          RETURN FALSE.
       END. /* IF fMatrixAnalyse(gcBrand */
 
-      IF LOOKUP(bMobSub.CLItype,lcExtraLineCLITypes) > 0 AND 
-                bMobSub.MultiSimId                  <> 0 AND 
-                bMobSub.MultiSimtype                = {&MULTISIMTYPE_EXTRALINE} THEN 
-         ASSIGN llgExtraLine     = YES
-                liMainLineMsSeq  = bMobSub.MultiSimId
-                liExtraLineMsSeq = bMobSub.MsSeq.
-                  
+      IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND 
+        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                  bMobSub.MultiSimId,
+                                                  bMobSub.MultiSimType) THEN 
+         DO:
+            ocResult = "Primary manline or Extraline is not hard associated".
+            RETURN FALSE.
+         END. 
+         ELSE llgExtraLine = TRUE.                                           
+
    END. /* IF iiMsSeq > 0 THEN DO: */
 
    MOBSUB_LOOP:
@@ -726,13 +791,6 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       /* Exclude current operated subs and not allowed list */
       IF bMobSub.MsSeq = iiMsSeq OR
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
-
-      /* For extraline subscription check for its primary hard associated mainline */
-      IF llgExtraLine THEN 
-         IF LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) = 0 OR
-            bMobSub.MsSeq        <> liMainLineMsSeq             OR
-            bMobSub.MultiSimId   <> liExtraLineMsSeq            OR
-            bMobSub.MultiSimType <> {&MULTISIMTYPE_PRIMARY}     THEN NEXT. 
 
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -761,6 +819,10 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
       liMobSubCount = liMobSubCount + 1.
 
+      /* For extraline hard association subscription check for primary multisimtype */
+      IF llgExtraLine AND 
+         bMobSub.MultiSimType <> {&MULTISIMTYPE_PRIMARY} THEN NEXT. 
+      
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq    = bMobSub.MsSeq AND
                bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
@@ -957,8 +1019,6 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
    DEF VAR lcExcludeBundles        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
@@ -969,9 +1029,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
 
    IF icBundleId = "DSS2" THEN
       ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-             lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-             lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand      AND

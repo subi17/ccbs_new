@@ -262,7 +262,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fCParamC("ConvOrderOngoing"). 
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").  
  
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -305,7 +305,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
-   lcConvOngoingStatus = fCParamC("ConvOrderOngoing").
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -647,7 +647,7 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
 
    ASSIGN 
       lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-      lcConvOngoingStatus     = fCParamC("ConvOrderOngoing").
+      lcConvOngoingStatus     = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
 
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
