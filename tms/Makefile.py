@@ -246,7 +246,7 @@ def _compile(compilecommand, compiledir):
                 source_files.append(os.path.join(root, filename)[2:])
                 if compiledir:
                     if root[2:] and root not in seen:
-                        mkdir_p('{0}/{1}'.format(compiledir,root[2:])
+                        mkdir_p('{0}/{1}'.format(compiledir,root[2:]))
                         seen.append(root)
 
     args = ['-pf', getpf('../db/progress/store/all')]
