@@ -339,13 +339,15 @@ ELSE DO:
                   WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
                   WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-               Customer.Category        = OrderCustomer.Category WHEN
-                                          fCategoryChangeAllowed(Customer.CustNum, iiOrderID).
+               Customer.Category   = OrderCustomer.Category WHEN
+                                     OrderCustomer.CustID EQ Customer.OrgID AND
+                                     OrderCustomer.CustIDType EQ Customer.CustIDType.
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:
                IF AVAILABLE Customer AND Customer.BankAcc = "" AND
-                  Customer.OrgID = OrderCustomer.CustID
+                  Customer.OrgID = OrderCustomer.CustID AND
+                  Customer.CustidType = OrderCustomer.CustIDType
                THEN DO:
 
                   FIND Current Customer EXCLUSIVE-LOCK.
@@ -355,7 +357,8 @@ ELSE DO:
                      Order.MNPStatus > 0 THEN
                      ASSIGN
                         Customer.OrgId = OrderCustomer.CustId
-                        Customer.CustIdType = OrderCustomer.CustIdType.
+                        Customer.CustIdType = OrderCustomer.CustIdType
+                        Customer.Category = OrderCustomer.Category.
                END.
             END.
 
