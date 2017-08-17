@@ -11,6 +11,7 @@ from string import Template
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
+exec(open('getpf.py').read())
 
 pike = which('pike')
 if pike == None:
@@ -55,13 +56,6 @@ def recursive_overwrite(src, dest, ignore=None):
                                     ignore)
     else:
         shutil.copyfile(src, dest)
-
-def getpf(pf):
-    if 'tenancies' in globals():
-        for tenant in tenancies:
-            if tenancies[tenant].get('tenanttype', '') == 'Super' or len(tenancies) == 1:
-                return '{0}_{1}.pf'.format(pf, tenant)
-    return '{0}.pf'.format(pf)
 
 def userandpass():
     if 'tenancies' in globals():
@@ -417,6 +411,28 @@ def build(*a):
         shutil.copy(file, build_dir)
 
     if a[0] == 'buildextapi':
-        print('Using r-files located on rpcmethods directories. Please make sure that you have executed a command "pike compile" on a tmsrpc directory!')
+        print('Using r-files located on rpcmethods directories.')
+        print('Please make sure that you have executed a command "pike compile" on a tmsrpc directory')
+    else:
+        require('compile', [])
+
+
+    currentdir = os.getcwd()
     for rpc in rpcs.keys():
-        require('{0}>{1}'.format(rpc,a[0]), [os.path.join(build_dir, rpc)])
+        os.chdir(rpc)
+        rpcbuilddir = os.path.join(build_dir, rpc)
+        mkdir_p(rpcbuilddir)
+        shutil.copy2('Makefile.py', rpcbuilddir)
+
+        if os.path.exists('rpcmethods.pl'):
+            os.unlink('/rpcmethods.pl')
+        call([dlc + '/bin/prolib', 'rpcmethods.pl', '-create'])
+        for dir, _dirs, files in os.walk('rpcmethods'):
+            for file in files:
+                if file.endswith('.r') \
+                or file.endswith('.help') \
+                or file.endswith('.sig'):
+                    call([dlc + '/bin/prolib', 'rpcmethods.pl', '-add',
+                          os.path.join(dir, file)])
+        shutil.move('rpcmethods.pl', rpcbuilddir)
+        os.chdir(currentdir)
