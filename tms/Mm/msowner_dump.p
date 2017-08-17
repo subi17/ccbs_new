@@ -98,8 +98,10 @@ FOR EACH Eventlog NO-LOCK WHERE
          /* IF create-date is not yesterday, wrong MSOwner was found. Do a new search */
          IF MsOwner.TSBegin <  ldeLastDump OR 
             MsOwner.TSBegin >= ldeToday THEN DO: 
-            /* This begin date for create is not yesterday, so continue to search a new one */
+            IF MsOwner.TSBegin >= ldeToday THEN
+               fCollect().
             RELEASE MSOwner.
+            /* This begin date for create is not yesterday, so continue to search a new one */
             FIND FIRST MsOwner NO-LOCK WHERE
                        MsOwner.Brand = "1" AND
                        MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
