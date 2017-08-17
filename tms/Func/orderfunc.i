@@ -419,6 +419,8 @@ FUNCTION fCreateNewTPService RETURNS INTEGER
   icOffer       AS CHAR,
   icUser        AS CHAR):
 
+    DEFINE BUFFER bf_TPService_Activation FOR TPService.
+
     FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq           AND 
                                TPService.Operation   = icOperation       AND  
                                TPService.ServType    = icType            AND  
@@ -439,6 +441,17 @@ FUNCTION fCreateNewTPService RETURNS INTEGER
             TPService.UserCode   = icUser
             TPService.CreatedTS  = fMakeTS()
             TPService.UpdateTS   = TPService.CreatedTS.
+
+        IF icOperation = {&TYPE_DEACTIVATION} THEN 
+        DO:
+            FIND FIRST bf_TPService_Activation WHERE bf_TPService_Activation.MsSeq      = iiMsSeq            AND 
+                                                     bf_TPService_Activation.Operation  = {&TYPE_ACTIVATION} AND 
+                                                     bf_TPService_Activation.ServType   = icType             AND  
+                                                     bf_TPService_Activation.ServStatus > ""                 AND
+                                                     bf_TPService_Activation.Product    = icProduct          NO-LOCK NO-ERROR.
+            IF AVAIL bf_TPService_Activation THEN 
+                ASSIGN TPService.SerialNbr = bf_TPService_Activation.SerialNbr.                                                   
+        END.                                                     
     END.
 
     RETURN TPService.ServSeq.   
@@ -472,6 +485,74 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
     RETURN TRUE.   
 
 END FUNCTION.
+
+FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
+   (INPUT iiExtraLineOrderId AS INT,
+    INPUT iiMainLineOrderId  AS INT,
+    INPUT icAction           AS CHAR):
+
+   DEFINE BUFFER lbMLOrder       FOR Order.
+   DEFINE BUFFER lbELOrder       FOR Order.
+   DEFINE BUFFER lbELOrderAction FOR OrderAction.
+
+   DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO. 
+
+   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+   FIND FIRST lbELOrder NO-LOCK WHERE
+              lbELOrder.Brand        EQ Syst.Parameters:gcBrand           AND
+              lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
+              lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
+              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
+              lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} NO-ERROR. 
+
+   IF AVAIL lbELOrder THEN DO:
+
+      IF llDoEvent THEN DO:
+         lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+         RUN StarEventInitialize(lhOrderStatusChange).
+         RUN StarEventSetOldBuffer(lhOrderStatusChange).
+      END.
+     
+      CASE icAction:
+         WHEN "RELEASE" THEN DO:
+         
+            CASE lbELOrder.OrderType:
+               WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+               WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+               WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
+               OTHERWISE.
+            END CASE.
+
+            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+         END.                      
+         WHEN "CLOSE" THEN DO:
+            /* Check if Main line order is closed, If closed, 
+               then close extraline ongoing order */
+            FIND FIRST lbMLOrder NO-LOCK WHERE 
+                       lbMLOrder.Brand        EQ Syst.Parameters:gcBrand AND
+                       lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
+                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
+                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
+                       lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
+
+            IF AVAIL lbMLOrder THEN
+               fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         
+         END. 
+      END CASE.
+   
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+         fCleanEventObjects().
+      END.
+   END.      
+
+   RETURN TRUE.
+
+END FUNCTION.   
 
 &ENDIF.
 
