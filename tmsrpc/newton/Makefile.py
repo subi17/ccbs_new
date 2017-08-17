@@ -173,7 +173,7 @@ def run_agent(*a):
             args.extend(cdr_dict[cdr_database])
             dbcount += 1
 
-    args.extend(['-h', str(dbcount + cdr_database_count)])
+    args.extend(['-h', str(dbcount + cdr_database_count * 2)])
 
     os.environ['PROPATH'] += ',rpcmethods.pl'
     args.extend(['-clientlog', '../../var/log/%s_agent.%d.log' % \
