@@ -21,7 +21,7 @@ DEFINE VARIABLE pcUserCode    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piActOrDeAct  AS INTEGER   NO-UNDO.
 
 DEFINE VARIABLE lcBundleType  AS CHARACTER NO-UNDO.
-IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN 
+IF validate_request(param_toplevel_id, "string,string,string,int") EQ ? THEN 
     RETURN.
 
 pcId         = get_string(param_toplevel_id, "0").
@@ -35,10 +35,11 @@ piMsSeq    = INT(ENTRY(2,pcId,"|")) NO-ERROR.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF piMsSeq    = 0  OR
-   pcBundle   = "" OR 
-   pcOfferId  = "" OR 
+   pcBundle   = "" OR  
    pcUserCode = "" THEN 
    RETURN appl_err("Invalid parameters").
+ELSE IF piActOrDeAct = 1 AND pcOfferId  = "" THEN
+   RETURN appl_err("Invalid parameters"). 
 
 FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = pcBundle NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DayCampaign OR DayCampaign.BundleTarget <> {&TELEVISION_BUNDLE} THEN 
