@@ -751,7 +751,6 @@ DO TRANSACTION:
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                      CLIType.Brand      = gcBrand                           AND
                      CLIType.CLIType    = MobSub.CLIType                    AND
-                     CLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
                     (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} )) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
