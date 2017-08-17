@@ -320,7 +320,6 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       END.
 
       /* category according to id type */
-      IF fCategoryChangeAllowed(Customer.Custnum, iiOrder) EQ TRUE THEN DO:
          Customer.Category = OrderCustomer.Category.      
          fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
                          ordercustomer.pro, OUTPUT lcCategory).
@@ -329,7 +328,6 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
             IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
                Ordercustomer.Category = lcCategory.
          END.
-      END.
       IF iiTarget = 1 THEN DO:
          /* new user account */
          create_account(Customer.CustNum,?,?).
