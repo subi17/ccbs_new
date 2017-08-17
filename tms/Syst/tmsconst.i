@@ -81,6 +81,7 @@
 /* Third Party Service */
 &GLOBAL-DEFINE SOURCE_TMS 			             		 "TMS"
 &GLOBAL-DEFINE SOURCE_LOGISTICS 						 "LOperator"
+&GLOBAL-DEFINE SOURCE_TV_STB_VENDOR   				     "Huawei"
 &GLOBAL-DEFINE STATUS_NEW                        		 "NEW"
 &GLOBAL-DEFINE STATUS_ERROR                      		 "ERROR"
 &GLOBAL-DEFINE STATUS_ONGOING                    		 "ONGOING"

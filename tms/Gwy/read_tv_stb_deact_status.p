@@ -74,10 +74,10 @@ PROCEDURE pUpdateStatus:
                                            OUTPUT lcError).
 
             IF liTerminate > 0 THEN 
-                fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&TYPE_DEACTIVATION}, {&STATUS_HANDLED}).
+                fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TV_STB_VENDOR}, {&STATUS_HANDLED}).
             ELSE 
             DO:
-                fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&TYPE_DEACTIVATION}, {&STATUS_ERROR}).
+                fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_ERROR}).
     
                 PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + 
                                 "' with serial number: '" + ttCustomer.SerialNbr + 
@@ -86,7 +86,7 @@ PROCEDURE pUpdateStatus:
             END. 
         END.
         ELSE 
-            fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&TYPE_DEACTIVATION}, {&STATUS_ERROR}).
+            fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TV_STB_VENDOR}, {&STATUS_ERROR}).
 
         ASSIGN 
             TPService.ResponseCode   = ttCustomer.StatusCode
