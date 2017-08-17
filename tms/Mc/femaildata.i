@@ -2320,34 +2320,36 @@ PROCEDURE pGetEXTRA_LINE_INFO:
       (LOOKUP(lbOrder.CLIType,lcExtraMainLineCLITypes) > 0  OR
        LOOKUP(lbOrder.CLIType,lcExtraLineCLITypes)     > 0) NO-ERROR.
 
-   IF NOT AVAIL lbOrder OR lbOrder.MultiSimId EQ 0 THEN lcResult = "".
+   IF AVAIL lbOrder                 AND 
+            lbOrder.MultiSimId <> 0 THEN DO: 
+      CASE lbOrder.MultiSimType:
+         WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
+            FIND FIRST lbELOrder NO-LOCK WHERE
+                       lbELOrder.Brand        = gcBrand            AND
+                       lbELOrder.OrderId      = lbOrder.MultiSimId AND
+                       lbELOrder.MultiSimId   = lbOrder.OrderId    AND
+                       lbELOrder.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
 
-   CASE lbOrder.MultiSimType:
-      WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
-         FIND FIRST lbELOrder NO-LOCK WHERE
-                    lbELOrder.Brand        = gcBrand            AND
-                    lbELOrder.OrderId      = lbOrder.MultiSimId AND
-                    lbELOrder.MultiSimId   = lbOrder.OrderId    AND
-                    lbELOrder.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+            IF AVAIL lbELOrder THEN
+               ASSIGN 
+                  lcList   = fTeksti(579,liLang)
+                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbELOrder.OrderId)).
+         END.
+         WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
+            FIND FIRST lbMLOrder NO-LOCK WHERE
+                       lbMLOrder.Brand        = gcBrand            AND
+                       lbMLOrder.OrderId      = lbOrder.MultiSimId AND
+                       lbMLOrder.MultiSimId   = lbOrder.OrderId    AND
+                       lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
 
-         IF AVAIL lbELOrder THEN
-            ASSIGN 
-               lcList   = fTeksti(579,liLang)
-               lcResult = REPLACE(lcList,"#ORDERID", STRING(lbELOrder.OrderId)).
-      END.
-      WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
-         FIND FIRST lbMLOrder NO-LOCK WHERE
-                    lbMLOrder.Brand        = gcBrand            AND
-                    lbMLOrder.OrderId      = lbOrder.MultiSimId AND
-                    lbMLOrder.MultiSimId   = lbOrder.OrderId    AND
-                    lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
-
-         IF AVAIL lbMLOrder THEN
-            ASSIGN 
-               lcList   = fTeksti(580,liLang)
-               lcResult = REPLACE(lcList,"#ORDERID", STRING(lbMLOrder.OrderId)).
-      END.
-      OTHERWISE .
-   END CASE.
+            IF AVAIL lbMLOrder THEN
+               ASSIGN 
+                  lcList   = fTeksti(580,liLang)
+                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbMLOrder.OrderId)).
+         END.
+         OTHERWISE .
+      END CASE.
+   END.
+   ELSE lcResult = "".
 
 END PROCEDURE.
