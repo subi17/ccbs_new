@@ -532,7 +532,9 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR lcAllowedDSS2SubsType  AS CHAR  NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType  AS CHAR  NO-UNDO.
    DEF VAR llDSS2PrimaryAvail     AS LOG   NO-UNDO.
-   
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMserviceLPool   FOR MserviceLPool.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
@@ -564,7 +566,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       IF icBundleId = "DSS2" AND
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
            
-      liMobSubCount = liMobSubCount + 1
+      liMobSubCount = liMobSubCount + 1.
       
       IF icBundleId = "DSS2" AND
         (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR 

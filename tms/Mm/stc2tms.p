@@ -241,7 +241,7 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
-                        "STC").
+                        "STC_FINAL").
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,

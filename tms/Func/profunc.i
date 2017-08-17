@@ -301,6 +301,46 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    RETURN "".
 
 END.
+/*YPRO YTS-11227:
+Customer category change is allowed if customer does not have any active
+subscription or ongoing order.*/
+FUNCTION fCategoryChangeAllowed RETURNS LOGICAL
+   (INPUT iiCustNum AS INT,
+    INPUT iiOrderId AS INT):
+
+   DEF BUFFER bf_Order     FOR Order.
+   DEF BUFFER bf_CurrOrder FOR Order.
+   DEF BUFFER bf_MobSub    FOR MobSub.
+
+   DEF VAR liSkipMsSeq AS INT NO-UNDO.
+
+   IF iiOrderId > 0 THEN 
+   DO:
+       FIND FIRST bf_CurrOrder WHERE bf_CurrOrder.Brand = gcBrand AND bf_CurrOrder.OrderId = iiOrderId NO-LOCK NO-ERROR.
+       IF NOT AVAIL bf_CurrOrder THEN 
+           RETURN FALSE. 
+
+       ASSIGN liSkipMsSeq = bf_CurrOrder.MsSeq.    
+   END.
+
+   /*Active order found: change not allowed*/
+   FIND FIRST bf_Order WHERE bf_Order.Brand                                   = gcBrand   AND 
+                             bf_Order.CustNum                                 = iiCustNum AND 
+                             bf_Order.OrderId                                <> iiOrderId AND
+                      LOOKUP(bf_Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0         NO-LOCK NO-ERROR.
+   IF AVAIL bf_Order THEN
+       RETURN FALSE.
+
+   /*Active subscription found: change not allowed*/
+   FIND FIRST bf_MobSub WHERE bf_MobSub.Brand   = gcBrand   AND 
+                              bf_MobSub.CustNum = iiCustNum AND 
+                              (IF liSkipMsSeq > 0 THEN bf_MobSub.MsSeq <> liSkipMsSeq ELSE TRUE) NO-LOCK NO-ERROR.
+   IF AVAIL bf_MobSub THEN 
+       RETURN FALSE.           
+   
+   RETURN TRUE.
+
+END FUNCTION.
 
 
 &ENDIF

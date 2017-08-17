@@ -319,8 +319,8 @@ si-recid = xrecid.
 
 PROCEDURE LOCAL-FIND-OTHERS:
    
-   liperiod = YEAR(Invseq.FromDate) * 100 +
-              MONTH(Invseq.FromDate).
+   liperiod = YEAR(Invseq.ToDate) * 100 +
+              MONTH(Invseq.Todate).
 
 END.
 
