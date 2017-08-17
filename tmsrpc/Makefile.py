@@ -203,7 +203,6 @@ def compile(match, *a):
     _compile(match, rpclist=list(set(parameters or rpcs.keys())))
 
     if systemrpc_compiledir:
-        shutil.rmtree(systemrpc_compiledir + '/pptemp')
         for rpc in parameters or rpcs.keys():
             recursive_overwrite(systemrpc_compiledir, '{0}/tmsrpc/{1}/rpcmethods'.format(work_dir, rpc))
         shutil.rmtree(systemrpc_compiledir)
@@ -304,6 +303,12 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
             fd = open(sigandhelpfile.replace('.p', '.help'), 'wb')
             call([sys.executable, helper_dir + 'help.py', file], stdout=fd)
             fd.close()
+
+        if rpclist[0] != '':
+            for rpc in rpclist:
+                shutil.rmtree('{0}/pptemp'.format(rpc))
+        else:
+            shutil.rmtree('{0}/pptemp'.format(compile_dir))
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
