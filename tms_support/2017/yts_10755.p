@@ -7,8 +7,8 @@ FOR EACH clitype EXCLUSIVE-LOCK where
          clitype.FixedLineDownload > "":
    put stream sout unformatted
       clitype.clitype ";"
-      clitype.linetype skip
-   clitype.linetype = 0.
+      clitype.linetype skip.
+   clitype.linetype = 0. 
 
 end.
 
