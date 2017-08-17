@@ -31,6 +31,7 @@ DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
 FORM
    TPService.Product      FORMAT "X(20)" COLUMN-LABEL "Product"
    TPService.ServType     FORMAT "X(15)" COLUMN-LABEL "Type"   
+   TPService.Operation    FORMAT "X(12)" COLUMN-LABEL "Operation"   
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcCreatedTS            FORMAT "X(10)" COLUMN-LABEL "Created"
    lcUpdatedTS            FORMAT "X(10)" COLUMN-LABEL "Updated"
@@ -40,22 +41,32 @@ FORM
 FORM
     "MsSeq .............:" TPService.MsSeq
     SKIP
-    "Product ...........:" TPService.Product
-    SKIP
-    "Service Type ......:" TPService.ServType
+    "Service Seq. ......:" TPService.ServSeq
     SKIP
     "Service Provider ..:" TPService.Provider
     SKIP
-    "Service Status ....:" TPService.ServStatus
+    "Service Type ......:" TPService.ServType
+    SKIP
+    "Operation .........:" TPService.Operation
+    SKIP
+    "Product ...........:" TPService.Product
+    SKIP
+    "Offer .............:" TPService.Offer
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
-    "Cancellation Reason:" TPService.TermReason
+    "External Id .......:" TPService.MessageId
+    SKIP
+    "Service Status ....:" TPService.ServStatus FORMAT "X(35)"
+    SKIP
+    "User Activated ....:" TPService.UserCode
     SKIP
     "Created Date ......:" lcCreatedTS FORMAT "X(24)"
     SKIP
     "Updated Date ......:" lcUpdatedTS FORMAT "X(24)" 
-    SKIP(2)
+    SKIP
+    "Cancellation Reason:" TPService.TermReason
+    SKIP(1)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
@@ -275,11 +286,16 @@ REPEAT WITH FRAME sel:
             lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
 
         DISP TPService.MsSeq
-             TPService.Product
-             TPService.ServType
+             TPService.ServSeq
              TPService.Provider
-             TPService.ServStatus
+             TPService.ServType
+             TPService.Operation
+             TPService.Product
+             TPService.Offer
              TPService.SerialNbr
+             TPService.MessageId
+             TPService.ServStatus
+             TPService.UserCode
              TPService.TermReason
              lcCreatedTS
              lcUpdatedTS
@@ -343,6 +359,7 @@ PROCEDURE local-disp-row:
     DISPLAY 
        TPService.Product
        TPService.ServType
+       TPService.Operation
        TPService.ServStatus
        lcCreatedTS
        lcUpdatedTS
