@@ -462,7 +462,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* If DSS is transferred then remove subs. from DSS group */
-         ELSE
+         ELSE DO:
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -473,16 +473,17 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
 
-         /* If it is Extraline associated subscription */
-         IF (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-             LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
-             fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
-                                           MobSub.MultiSimId,
-                                           MobSub.MultiSimType,
-                                           MsRequest.MsRequest,
-                                           MsRequest.ActStamp,
-                                           lcBundleId).
-
+            /* If it is Extraline associated subscription */
+            IF lcBundleId = "DSS2"                                  AND
+               (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.MultiSimId,
+                                              MobSub.MultiSimType,
+                                              MsRequest.MsRequest,
+                                              MsRequest.ActStamp,
+                                              lcBundleId).
+         END.
 
       END. /* IF MobSub.MsSeq = liDSSMsSeq THEN DO: */
       /* DSS is not linked directly */
@@ -503,7 +504,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* Otherwise just remove subs. from DSS group */
-         ELSE
+         ELSE DO:
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -514,15 +515,17 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
 
-         /* If it is Extraline associated subscription */
-         IF (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-             LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
-             fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
-                                           MobSub.MultiSimId,
-                                           MobSub.MultiSimType,
-                                           MsRequest.MsRequest,
-                                           MsRequest.ActStamp,
-                                           lcBundleId).
+            /* If it is Extraline associated subscription */
+            IF lcBundleID = "DSS2"                                  AND 
+               (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.MultiSimId,
+                                              MobSub.MultiSimType,
+                                              MsRequest.MsRequest,
+                                              MsRequest.ActStamp,
+                                              lcBundleId).
+         END.
 
       END. /* ELSE DO: */
    END. /* IF llDSSActive THEN DO: */

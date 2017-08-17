@@ -573,7 +573,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
                                                   bMobSub.MultiSimId,
                                                   bMobSub.MultiSimType) THEN NEXT.
       
-      ASSIGN liMobSubCount = liMobSubCount + 1.
+      ASSIGN liMobSubCount = liMobSubCount + 1
              lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
       
       FOR EACH bMServiceLimit WHERE
@@ -792,12 +792,11 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
       /* Extraline hard association subscription check */
-      IF iiMsSeq = 0                                          AND 
-        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
-         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.MultiSimId,
-                                                  bMobSub.MultiSimType) THEN NEXT. 
+      IF (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+          LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                   bMobSub.MultiSimId,
+                                                   bMobSub.MultiSimType) THEN NEXT. 
       
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE

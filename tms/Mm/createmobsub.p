@@ -251,6 +251,9 @@ ELSE DO:
    END.
 END.
 
+ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+       lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+
 FIND FIRST CustTemp NO-LOCK NO-ERROR.
 
 /*YDR-1824
@@ -682,7 +685,10 @@ ELSE DO:
       MsOwner.CLIEvent  = "C"
       Mobsub.MsStatus   = {&MSSTATUS_ACTIVE}
       Mobsub.Icc        = Order.ICC
-      Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI
+      Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI.
+
+      IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0 OR 
+         LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0 THEN 
       llgExtraLine      = YES.
 END.
 
@@ -873,9 +879,7 @@ RUN Mm/orderaction_exec.p (MobSub.MsSeq,
 IF NOT MobSub.PayType THEN DO:
 
    ASSIGN
-      lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
-      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-      lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+      lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
 
    lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
 
