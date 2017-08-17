@@ -112,7 +112,7 @@ PROCEDURE pReadIncomingDirectory:
 
     INPUT FROM OS-DIR(lcIncomingDir).
     REPEAT:
-        IMPORT ^ lcFlag lcFileName. 
+        IMPORT ^ lcFileName lcFlag. 
         IF lcFlag <> "F" THEN 
             NEXT.
 
