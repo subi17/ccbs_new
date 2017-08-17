@@ -481,8 +481,8 @@ FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
          IF AVAIL lbMLMobSub THEN
             FIND FIRST lbELMobSub NO-LOCK WHERE 
                        lbELMobSub.MsSeq        = lbMLMobSub.MultiSimId     AND 
-                       lbMLMobSub.MultiSimId   = lbMLMobSub.MsSeq          AND 
-                       lbMLMobSub.MUltiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+                       lbELMobSub.MultiSimId   = lbMLMobSub.MsSeq          AND 
+                       lbELMobSub.MUltiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
          IF AVAIL lbELMobSub THEN 
             RETURN TRUE.
 
@@ -566,18 +566,16 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       IF icBundleId = "DSS2" AND
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
            
-      liMobSubCount = liMobSubCount + 1.
-      
       IF icBundleId = "DSS2" AND
         (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR 
          LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN 
-         IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                              bMobSub.MultiSimId,
-                                              bMobSub.MultiSimType) THEN
-         lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
-      ELSE
-         lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
-
+         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                  bMobSub.MultiSimId,
+                                                  bMobSub.MultiSimType) THEN NEXT.
+      
+      ASSIGN liMobSubCount = liMobSubCount + 1.
+             lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
+      
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq   = bMobSub.MsSeq AND
                bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
@@ -780,7 +778,6 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
             ocResult = "Primary manline or Extraline is not hard associated".
             RETURN FALSE.
          END. 
-         ELSE llgExtraLine = TRUE.                                           
 
    END. /* IF iiMsSeq > 0 THEN DO: */
 
@@ -794,6 +791,14 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       IF bMobSub.MsSeq = iiMsSeq OR
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
+      /* Extraline hard association subscription check */
+      IF iiMsSeq = 0                                          AND 
+        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                  bMobSub.MultiSimId,
+                                                  bMobSub.MultiSimType) THEN NEXT. 
+      
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
                    MsRequest.MsSeq   = bMobSub.MsSeq AND
@@ -820,10 +825,6 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
                           {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
 
       liMobSubCount = liMobSubCount + 1.
-
-      /* For extraline hard association subscription check for primary multisimtype */
-      IF llgExtraLine AND 
-         bMobSub.MultiSimType <> {&MULTISIMTYPE_PRIMARY} THEN NEXT. 
       
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq    = bMobSub.MsSeq AND

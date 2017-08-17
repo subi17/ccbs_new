@@ -674,13 +674,16 @@ ELSE DO:
          ROWID(MSOwner) = ROWID(bMsOwner).
    END.
 
+   /* llgExtraLine value has to be set to TRUE when mobile part of 
+      convergent is processed, because of DSS2 activation */
    ASSIGN
       MsRequest.Custnum = Customer.Custnum
-      MsOwner.imsi = IMSI.IMSI WHEN AVAIL IMSI
-      MsOwner.CLIEvent = "C"
-      Mobsub.MsStatus = {&MSSTATUS_ACTIVE}
-      Mobsub.Icc = Order.ICC
-      Mobsub.imsi = IMSI.IMSI WHEN AVAIL IMSI.
+      MsOwner.imsi      = IMSI.IMSI WHEN AVAIL IMSI
+      MsOwner.CLIEvent  = "C"
+      Mobsub.MsStatus   = {&MSSTATUS_ACTIVE}
+      Mobsub.Icc        = Order.ICC
+      Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI
+      llgExtraLine      = YES.
 END.
 
 /* Additional Line with mobile only ALFMO-5  
@@ -913,9 +916,9 @@ IF NOT MobSub.PayType THEN DO:
                  (lbMobSubs.MultiSimType = {&MULTISIMTYPE_PRIMARY} OR
                   lbMobSubs.MultiSimType = {&MULTISIMTYPE_EXTRALINE}):
 
-            RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
-                                  INPUT lbMobsub.CLI,
-                                  INPUT lbMobSub.CustNum,
+            RUN pUpdateDSSNetwork(INPUT lbMobsubs.MsSeq,
+                                  INPUT lbMobsubs.CLI,
+                                  INPUT lbMobSubs.CustNum,
                                   INPUT "ADD",
                                   INPUT "",           /* Optional param list */
                                   INPUT MsRequest.MsRequest,

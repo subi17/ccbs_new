@@ -95,6 +95,48 @@ FUNCTION fLocalMemo RETURNS LOGIC
       
 END FUNCTION.
 
+FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
+   (INPUT iiMsSeq        AS INT,
+    INPUT iiMultiSimId   AS INT,
+    INPUT iiMultiSimType AS INT,
+    INPUT iiMsRequest    AS INT,
+    INPUT ideActStamp    AS DEC, 
+    INPUT lcBundleId     AS CHAR):
+
+   DEFINE BUFFER lbMobSub FOR MobSub.
+
+   DEFINE VARIABLE liELMultiSimType AS INTEGER NO-UNDO.  
+
+   IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
+                                            iiMultiSimId,
+                                            iiMultiSimType) THEN
+   RETURN FALSE.
+
+   CASE iiMultiSimType : 
+      WHEN {&MULTISIMTYPE_PRIMARY}   THEN liELMultiSimType = {&MULTISIMTYPE_EXTRALINE}.  
+      WHEN {&MULTISIMTYPE_EXTRALINE} THEN liELMultiSimType = {&MULTISIMTYPE_PRIMARY}.
+   END CASE.
+   
+   FIND FIRST lbMobSub NO-LOCK WHERE 
+              lbMobSub.MsSeq        = iiMultiSimId     AND 
+              lbMobSub.MultiSimId   = iiMsSeq          AND 
+              lbMobSub.MultiSimType = liELMultiSimType NO-ERROR.
+
+   IF AVAIL lbELMobSub THEN 
+      RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                            INPUT lbMobsub.CLI,
+                            INPUT lbMobsub.CustNum,
+                            INPUT "REMOVE",
+                            INPUT "",        /* Optional param list */
+                            INPUT iiMsRequest,
+                            INPUT ideActStamp,
+                            INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                            INPUT lcBundleId).
+
+   RETURN TRUE. 
+
+END FUNCTION.
+
 
 ldCurrTS = fMakeTS().
 
@@ -375,79 +417,6 @@ PROCEDURE pTerminate:
       /* Nothing if subs. type is not part of DSS2 */
       IF lcBundleId = "DSS2" AND
          LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN .
-      /* Extra lines */
-      ELSE IF lcBundleId = "DSS2"                                AND
-              LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType)   > 0 AND 
-             (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0 OR
-              LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN DO:
-
-         IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0          AND 
-                   MobSub.MultiSimId                      <> 0          AND 
-                   MobSub.MultiSimType                     = {&MULTISIMTYPE_PRIMARY} THEN DO:
-           
-           FIND FIRST lbELMobSub NO-LOCK WHERE 
-                      lbELMobSub.MsSeq        = MobSub.MultiSimId         AND 
-                      lbELMobSub.MultiSimId   = MobSub.MsSeq              AND 
-                      lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
-           
-           IF AVAIL lbELMobSub THEN DO: 
-              RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                    INPUT Mobsub.CLI,
-                                    INPUT Mobsub.CustNum,
-                                    INPUT IF MobSub.MsSeq = liDSSMsSeq THEN "DELETE" 
-                                          ELSE "REMOVE",
-                                    INPUT "",      /* Optional param list */
-                                    INPUT MsRequest.MsRequest,
-                                    INPUT ldeMonthEndTS,
-                                    INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                                    INPUT lcBundleId). 
-
-              RUN pUpdateDSSNetwork(INPUT lbELMobsub.MsSeq,
-                                    INPUT lbELMobsub.CLI,
-                                    INPUT lbELMobsub.CustNum,
-                                    INPUT "REMOVE",
-                                    INPUT "",        /* Optional param list */
-                                    INPUT MsRequest.MsRequest,
-                                    INPUT MsRequest.ActStamp,
-                                    INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                                    INPUT lcBundleId).
-            END. 
-         END.
-         ELSE IF LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) > 0 AND 
-                        MobSub.MultiSimId                  <> 0 AND
-                        MobSub.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
-
-            FIND FIRST lbMLMobSub NO-LOCK WHERE 
-                       lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND
-                       lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND
-                       lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
-              
-            IF AVAIL lbMLMobSub THEN DO:
-               RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                     INPUT Mobsub.CLI,
-                                     INPUT Mobsub.CustNum,
-                                     INPUT "REMOVE",
-                                     INPUT "",        /* Optional param list */
-                                     INPUT MsRequest.MsRequest,
-                                     INPUT MsRequest.ActStamp,
-                                     INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                                     INPUT lcBundleId). 
-
-               RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
-                                     INPUT lbMLMobsub.CLI,
-                                     INPUT lbMLMobsub.CustNum,
-                                     INPUT IF lbMLMobSub.MsSeq = liDSSMsSeq THEN "DELETE" 
-                                           ELSE "REMOVE",
-                                     INPUT "",      /* Optional param list */
-                                     INPUT MsRequest.MsRequest,
-                                     INPUT ldeMonthEndTS,
-                                     INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                                     INPUT lcBundleId). 
-            END.
-
-         END.
-
-      END.
       /* If directly linked to DSS */
       ELSE IF MobSub.MsSeq = liDSSMsSeq THEN DO:
          IF fIsDSSTransferAllowed(INPUT MobSub.CLI,
@@ -504,6 +473,17 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
 
+         /* If it is Extraline associated subscription */
+         IF (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+             LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+             fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                           MobSub.MultiSimId,
+                                           MobSub.MultiSimType,
+                                           MsRequest.MsRequest,
+                                           MsRequest.ActStamp,
+                                           lcBundleId).
+
+
       END. /* IF MobSub.MsSeq = liDSSMsSeq THEN DO: */
       /* DSS is not linked directly */
       ELSE DO:
@@ -533,6 +513,17 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
+
+         /* If it is Extraline associated subscription */
+         IF (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+             LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+             fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                           MobSub.MultiSimId,
+                                           MobSub.MultiSimType,
+                                           MsRequest.MsRequest,
+                                           MsRequest.ActStamp,
+                                           lcBundleId).
+
       END. /* ELSE DO: */
    END. /* IF llDSSActive THEN DO: */
 
