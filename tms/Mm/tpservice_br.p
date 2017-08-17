@@ -33,7 +33,6 @@ FORM
    TPService.ServType     FORMAT "X(15)" COLUMN-LABEL "Type"   
    TPService.Operation    FORMAT "X(12)" COLUMN-LABEL "Operation"   
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
-   lcCreatedTS            FORMAT "X(10)" COLUMN-LABEL "Created"
    lcUpdatedTS            FORMAT "X(10)" COLUMN-LABEL "Updated"
    WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(cfc) 
    TITLE COLOR VALUE(ctc) "Third Party Services" FRAME sel.
@@ -280,7 +279,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
         PAUSE 0. 
-
+        ufk[1] = 0.
         ASSIGN
             lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
             lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
@@ -352,16 +351,13 @@ PROCEDURE local-disp-row:
     
     CLEAR FRAME sel NO-PAUSE.
     
-    ASSIGN
-        lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
-        lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
+    ASSIGN lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
 
     DISPLAY 
        TPService.Product
        TPService.ServType
        TPService.Operation
        TPService.ServStatus
-       lcCreatedTS
        lcUpdatedTS
        WITH FRAME sel.
 
