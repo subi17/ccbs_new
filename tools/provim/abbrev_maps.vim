@@ -1,16 +1,16 @@
 
-iab dv DEFINE VARIABLE
-iab dvi DEFINE INPUT PARAMETER
-iab dvo DEFINE OUTPUT PARAMETER
-iab dvb DEFINE BUFFER
-iab ac AS CHARACTER NO-UNDO.
-iab ai AS INTEGER NO-UNDO.
-iab al AS LOGICAL NO-UNDO.
-iab ade AS DECIMAL NO-UNDO.
+iab dv DEF VAR
+iab dvi DEF INPUT PARAM
+iab dvo DEF OUTPUT PARAM
+iab dvb DEF BUFFER
+iab ac AS CHAR NO-UNDO.
+iab ai AS INT NO-UNDO.
+iab al AS LOG NO-UNDO.
+iab ade AS DEC NO-UNDO.
 iab ada AS DATE NO-UNDO.
 iab ah AS HANDLE NO-UNDO.
 iab psu PUT STREAM sLog UNFORMATTED
-iab dsl DEFINE STREAM sLog.<enter>OUTPUT STREAM sLog TO <C-R>=expand("$HOME")
+iab dsl DEF STREAM sLog.<enter>OUTPUT STREAM sLog TO <C-R>=expand("$HOME")
 iab ff FIND FIRST
 iab fe FOR EACH
 iab nl NO-LOCK
@@ -26,9 +26,9 @@ iab pss PUT SCREEN ROW 1 STRING().
 iab psr PUT SCREEN ROW
 iab tdo THEN DO:<enter>END.<C-O>O<space><space>
 iab edo ELSE DO:<enter>END.<C-O>O<space><space>
-iab dtt DEFINE TEMP-TABLE tt<enter>FIELD i AS INT<enter>INDEX i IS PRIMARY UNIQUE i.
-iab funct FUNCTION fFoo RETURNS LOGICAL<enter>
-\(iiValue AS INTEGER)
+iab dtt DEF TEMP-TABLE tt NO-UNDO<enter>FIELD i AS INT<enter>INDEX i IS PRIMARY UNIQUE i.
+iab funct FUNCTION fFoo RETURNS LOG<enter>
+\(iiValue AS INT)
 \:<enter><enter>END FUNCTION.
 
 iab proc PROCEDURE pFoo:<enter><enter>END PROCEDURE.
