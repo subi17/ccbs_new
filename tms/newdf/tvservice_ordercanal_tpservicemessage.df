@@ -80,7 +80,7 @@ ADD INDEX "MsSeq" ON "TPServiceMessage"
   PRIMARY
   INDEX-FIELD "MsSeq"        DECENDING
   INDEX-FIELD "ServSeq"      DECENDING
-
+  INDEX-FIELD "MessageSeq"   DECENDING
 ADD INDEX "MessageSeq" ON "TPServiceMessage" 
   AREA "Dyn_Index_1"
   UNIQUE
