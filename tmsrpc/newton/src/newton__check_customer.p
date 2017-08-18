@@ -221,7 +221,7 @@ DO:
     ELSE /* not allow other channels */
        ASSIGN
           llOrderAllowed = FALSE
-          lcReason = "Unknown orderchannel".
+          lcReason = "Unknown orderchannel " + pcChannel.
 END.
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
