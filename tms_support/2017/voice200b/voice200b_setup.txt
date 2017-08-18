@@ -1,0 +1,306 @@
+CPARAM
+CUI cparam 
+   add parameter VOICE_BUNDLES (value Voice200B)
+   [staging done]
+
+================================================================================
+   
+3-2-4-4   Periodical contracts   
+   F5 add VOICE200B (similar to Voice100)
+.................................... CHANGE ....................................
+.Ev.       Periodical Term: VOICE200B            PaymentType: 1             .  .
+....                  Name: Voice 200 package                               ....
+.VO.                 Valid: 01-08-2017 - 31-12-2049                         .49.
+.VO.                Status: 1 Active                                        .49.
+.VO.         Campaign Type: 1 Service Package                               .49.
+.YO.        Instance Limit: 1                                               .54.
+.  .          Billing Item:                                                 .  .
+.  .                   CCN: 0                                               .  .
+.  .         Included Unit: 0                                               .  .
+.  .     Incl.Start Charge: yes                                             .  .
+.  .           Incl.Amount: 0.000       Excl.Amount: 0.000                  .  .
+.  .    Calculation Method: 1 Special charge before limit                   .  .
+.  .             Effective: 1 Activation date                               .  .
+.  .      Type Of Duration: 1 Continuous with counters                      .  .
+.  .              Duration: 0   Unit: 0  N/A                                .  .
+.  .               Weekday:           ()                                    .  .
+.  .                Upsell:                                                 .  .
+................................................................................
+
+================================================================================   
+1-1-2-1  Billing items   
+.................. Xfera Moviles S.A. Billing Items 10-08-17 ...................
+.Bran Bi.............................. ADD..............................axClass.
+..... ...Brand .....: 1                                                .........
+.1    01.BillItem ..: VOICE200B                                        .       .
+.1    10.Name ......: Voice 200 package                                .       .
+.1    10.Group .....: 1        Calls                                   .       .
+.1    10.Account ...: 70510100 Revenue                                 .       .
+.1    10.Own Use ...: 70510100 Revenue                                 .       .
+.1    10.VIP Use ...: 70510100 Revenue                                 .       .
+.1    10.EU Consum. : 70510100 Revenue                                 .       .
+.1    10.EU Account : 70510100 Revenue                                 .       .
+.1    10.FS Account : 70510100 Revenue                                 .       .
+.1    10.Section ...:                                                  .       .
+.1    10.Tax Class .: 1        Usage                                   .       .
+.1    10.SAP Data ..: 034                                              .       .
+.1    10.Display MPM: No                                               .       .
+.1    10.Cost Centre: SL                                               .       .
+.1    10.Item Type .: 0                                                .       .
+............................. By Code  .........................................   
+
+.Bran Bi............................ CHANGE ............................axClass.
+..... ...Brand .....: 1                                                .........
+.1    VO.BillItem ..: VOICE200BCF                                      .       .
+.1    VO.Name ......: Voice 200 call forwarding                        .       .
+.1    VO.Group .....: 1        Calls                                   .       .
+.1    VO.Account ...: 70510100 Revenue                                 .       .
+.1    VO.Own Use ...: 70510100 Revenue                                 .       .
+.1    VO.VIP Use ...: 70510100 Revenue                                 .       .
+.1    WC.EU Consum. : 70510100 Revenue                                 .       .
+.1    YO.EU Account : 70510100 Revenue                                 .       .
+.       .FS Account : 70510100 Revenue                                 .       .
+.       .Section ...:                                                  .       .
+.       .Tax Class .: 1        Usage                                   .       .
+.       .SAP Data ..: 034                                              .       .
+.       .Display MPM: No                                               .       .
+.       .Cost Centre: SL                                               .       .
+.       .Item Type .: 0                                                .       .
+............................. By Code  .........................................   
+   
+.Bran Bi............................ CHANGE ............................axClass.
+..... ...Brand .....: 1                                                .........
+.1    VO.BillItem ..: VOICE200BMF                                      .       .
+.1    VO.Name ......: Voice 200 package price                          .       .
+.1    VO.Group .....: 1        Calls                                   .       .
+.1    VO.Account ...: 70510100 Revenue                                 .       .
+.1    VO.Own Use ...: 70510100 Revenue                                 .       .
+.1    VO.VIP Use ...: 70510100 Revenue                                 .       .
+.1    WC.EU Consum. : 70510100 Revenue                                 .       .
+.1    YO.EU Account : 70510100 Revenue                                 .       .
+.       .FS Account : 70510100 Revenue                                 .       .
+.       .Section ...:                                                  .       .
+.       .Tax Class .: 1        Usage                                   .       .
+.       .SAP Data ..: 034                                              .       .
+.       .Display MPM: No                                               .       .
+.       .Cost Centre: SL                                               .       .
+.       .Item Type .: 0                                                .       .
+............................. By Code  .........................................   
+================================================================================   
+3-2-4-5  Servicelimit group (similar to VOICE100)
+............... Xfera Moviles S.A. SERVICELIMIT  GROUPS 10-08-17 ...............
+.Group Code       Group Name                     Valid From Valid To           .
+................. .............................. .......... ........           .
+.TARJ7_UPSELL  ...................... ADD .......................-49           .
+.TARJ9         .       GroupCode: VOICE200B                     .-49           .
+.TARJD1        .      Group Name: Voice 200B                    .-49           .
+.TARJ_UPSELL   .      Valid From: 01-08-17                      .-49           .
+.UPGRADE_UPSELL.        Valid To: 31-12-49                      .-49           .
+.VOICE100      ..................................................-49           .
+
+Under that create
+............... Xfera Moviles S.A. SERVICELIMIT  GROUPS 14-08-17 ...............
+..................................... ADD ......................................
+.               GroupCode: VOICE200B            Voice 200B                    ..
+.            ServiceLimit: VOICE200B_MIN                                      ..
+.         Sequence number: 170                                                ..
+.       Servicelimit name: Voice 200B Minutes Package                         ..
+.           Dialling Type: 4   Mobile Voice MO                                ..
+.         Included Amount: 200.00                                               ..
+.           Included Unit: 1  Minute                                          ..
+.              BDestLimit: 0                                                  ..
+.              Valid From: 01-08-17                                           ..
+.                Valid To: 31-12-49                                           ..
+.  1. month service limit: Relative                                           ..
+.Last month service limit: Full                                               ..
+.                     Web: 0                                                  ..
+................................................................................
+Servicelimit targets:
+............... Xfera Moviles S.A. SERVICELIMIT  GROUPS 14-08-17 ...............
+.Gro..................... ServiceLimit Groups VOICE200B.....................   .
+.....Group.................Servicelimit  members 170..................     .   .
+.VOI.......ServiceLimit Member Name                 InSide   OutSide .......   .
+.VOI.VOICE.................... .................... ........ .........     .   .
+.VOI.     .10100001            Voice Own Network to VOICE200         .     .   .
+.   .     .10100003            Voice Own Network to VOICE200         .     .   .
+.   .     .10100005            Voice Own Network to VOICE200         .     .   .
+.   .     .CFOTHER             Call Forwarding othe VOICE200         .     .   .
+.   .     .CFYOIGO             Call Forwarding to Y VOICE200         .     .   .
+.   .     .                                                          .     .   .
+
+================================================================================
+
+
+1-1-4    Bdestination (VOICE200B)   
+.................. Xfera Moviles S.A. B-DESTINATIONS 10-08-17 ..................
+.Br B-subNo         DestName                            CCN DestType   To      .
+... ............... .................................. .... .......... .........
+.1  010 ............................. ADD .............................31-12-49.
+.1  010A.              Brand: 1                                       .31-12-49.
+.1  010B.    BDestination ID: 1100                                    .31-12-49.
+.1  010B.      B-Destination: VOICE200B                               .31-12-49.
+.1  010C.   Name/description: Voice 200 Minutes B                     .31-12-49.
+.1  011 .   Destination Type: 0   National                            .31-12-49.
+.1  012 .      Reporting CCN: 81   Voice National                     .31-12-49.
+.1  012A.              Class: 1   Normal                              .31-12-49.
+.1  012B.         Valid From: 01-08-17                                .31-12-49.
+.1  012B.           Valid To: 31-12-49                                .31-12-49.
+.1  012C...............................................................31-12-49.
+
+================================================================================
+3-2-5-2 TM Rules 
+   Add record like Voice200 (Minutes)
+................... Xfera Moviles S.A.  TM RULES   10-08-17 ....................
+.Name                           ID From     To       PayType Items             .
+..................................... ADD ......................................
+..         Brand: 1                                                           ..
+.. Rule Sequence: 44                                                          ..
+..          Name: VOICE200B Minutes                                           ..
+..          From: 01-08-17                                                    ..
+..            To: 31-12-49                                                    ..
+..   Ticket Type: 1 Mobile CDR                                                ..
+..  Payment Type: 1 Postpaid                                                  ..
+..  Counter Type: 1 Counter for each period, delete after period              ..
+.. Counter Items:                                                             ..
+..  Counter Unit: 1 Minute                                                    ..
+..                                                                            ..
+..  Limit Source: 3  Default limit from rule                                  ..
+..    Comparison: 1  Triggered when limit is exceeded                         ..
+..Counter Period: 2  Calendar month                                           ..
+.. New Customers: No                                                          ..
+................................................................................   
+   
+
+
+
+
+   
+11.8.:   
+YPR-6014
+7-1-2-1 Requestaction, remove voice200 for Naranja. (CONTDSL39, CONTFH39_50, CONTFH49_300)
+      -> 13 (subscription creation) -> F2 (Request actions) 
+     Remove rows 
+     806       CONTDSL39     DayCampaign        VOICE200     Create      31-12-49
+     807       CONTFH39_50   DayCampaign        VOICE200     Create      31-12-49
+     808       CONTFH49_300  DayCampaign        VOICE200     Create      31-12-49
+     
+
+
+Discount Voice200B     
+.................................... CHANGE ....................................
+..                   Brand: 1                                                 ..
+..        Discount Plan Id: 68                                                ..
+..        Discount Rule Id: CONVDISC20_3                                      ..
+..  ................. SUBJECT TYPES FOR PLAN CONVDISC20_3 .................   ..
+..  .Subject          Name                           From       To        .   ..
+..  ................. .............................. .......... ...........   ..
+..  .CONTFH39_50      La Combinada Naranja 50        27-06-2017 31-12-2049.   ..
+..  .CONTFH45_300     La De Casa 300                 27-06-2017 31-12-2049.   ..
+..  .CONTFH48_50      La Combinada Verde 50          27-06-2017 31-12-2049.   ..
+..  .CONTFH49_300     La Combinada Naranja 300       27-06-2017 31-12-2049.   ..
+..  .CONTFH52_50      La Combinada Morada 50         27-06-2017 31-12-2049.   ..
+..  .CONTFH58_300     La Combinada Verde 300         27-06-2017 31-12-2049.   ..
+..  .CONTFH59_50      La Combinada Azul 50           27-06-2017 31-12-2049.   ..
+..  .CONTFH62_300     La Combinada Morada 300        27-06-2017 31-12-2049.   ..
+..  .CONTFH69_300     La Combinada Azul 300          27-06-2017 31-12-2049.   ..
+..  .VOIVE200B                                       11-08-2017 31-12-2049.   ..
+..  .......................................................................   ..
+Show less     
+
+   
+Translations 
+   Run:
+   /tms_support/2017/voice200b/Voice200B_translations_ypr6012.p
+   Check 1-1-6
+   
+14.8.
+fee model, fmitem:
+.................................... CHANGE ....................................
+.Ev.       Periodical Term: VOICE200B            PaymentType: 1             .  .
+....                  Name: Bono 200 minutos                                ....
+.UP.                 Valid: 01-08-2017 - 31-12-2049                         .49.
+.VO................................. CHANGE .................................49.
+.VO..                                                                      ..49.
+.VO..    Creation Fee Model: VOICE200BMF     Voice 200 package             ..49.
+.VO..Modification Fee Model:                                               ..49.
+.VO.. Termination Fee Model:                                               ..49.
+.YO.. Term. Fee Calculation: 0 Not allowed                                 ..54.
+.  ..                                                                      ..  .
+.  ..1. month service limit: Relative                                      ..  .
+.  ..                                                                      ..  .
+.  ..........................................................................  .
+service limits, slg analyse 3-2-4-5 , 3-2-4-6 
+F3 (Service Limit)
+F3 Service Limit targets
+
+ 
+-Matrix (Cui matrix )
+   Create PercontRact entry for so that it makes subscription creation possible:
+CONTDSL39
+CONTFH39_50
+CONTFH49_300
+CONT10
+.................. Xfera Moviles S.A.  Matrix MENU  14-08-17 ...................
+.Bra....... Xfera Moviles S.A.  ORDER FUNCTION ITEMS MENU  14-08-17 ........   .
+.....MX Seq Matrix Name MX Item          MX Value           MX Res MX Pr   .   .
+.1  ....... ......................... ADD ........................ .....   .   .
+.1  .   124 CON.          MX Seq: 124                           .1    47   .   .
+.1  .   124 CON.     MX Seq Name: CONTDSL39                     .1    47   .   .
+.1  .   124 CON.         MX Name: PerContract                   .1    47   .   .
+.1  .   124 CON.        MX Value: VOICE200B                     .1    47   .   .
+.1  .   124 CON.     MX Response: 124                           .1    47   .   .
+.1  .   124 CON.   Response Name: ALLOWED                       .1    47   .   .
+.1  .   124 CON.             PRI: 47                            .1    47   .   .
+.1  .   124 CON..................................................1    47   .   .
+.1  .   124 CONTDSL39   PerContract      FAXTOEMAIL              1    47   .   .
+.1  .   124 CONTDSL39   PerContract      CENTRALITA              1    47   .   .
+.1  .   124 CONTDSL39   PerContract      SAGEONE                 1    47   .   .
+.1  .   124 CONTDSL39   PerContract      IPFIJA                  1    47   .   .
+.1  .   124 CONTDSL39   SubsTypeTo       CONTDSL39               1    47   .   .
+.1  ........................................................................   .
+.............................   .. ....   ......................................   
+
+
+SLG Analyse 3-2-4-6
+THIS IS DONE IN voice200b_configs.p
+Check that there are configurations
+.B CLIType      BillCode     CCN B-subNo  Valid To   ServiceLimitGroup Priority
+.+ CONTDSL39    10100001      81 *        31-12-2049 VOICE200B               5
+.+ CONTDSL39    10100005      81 *        31-12-2049 VOICE200B               5
+.+ CONTDSL39    10100003      81 *        31-12-2049 VOICE200B               5
+for 
+CONTDSL39
+CONTFH39_50
+CONTFH49_300
+CONT10
+
+fmitem
+1-1-2-5
+.................. Xfera Moviles S.A. Billing Events 16-08-17 ..................
+.Brand    BEvent           Name                                                .
+......... ................ ........................................            .
+1        VOICE200BMF      Voice 200 package  
+F3 event contains
+
+.................. Xfera Moviles S.A. Billing Events 16-08-17 ..................
+.B............ Items of B-Event 1/VOICE200BMF: Voice 200 package ............. .
+...Price List ProdC        BI Name         From     Type    I BM SL     Price. .
+.1........... ............ ............... ........ ...... .. .. .. .......... .
+.1.COMMON     VOICE200B    Voice 200 packa 14-08-17 Fixed   1  2 X       1.65. .
+.1.                                                                          . .
+
+Tariff maintenance:
+............ Xfera Moviles S.A. TARIFF MAINTENANCE 16-08-17 (CCN 0) ............
+.Bra From   To     PL/BNr      CCN Name      BDest          Price1    StFee S B.
+.... ...... ...... .......... .... ......... ............ ........ ........ . ..
+.1   010115 311252 CONTRATO8    81 Voice Nat VOICE100                       F *.
+.1   010617 311252 CONTRATO8    81 Voice Nat VOICE200                       F *.
+CREATE VOICE200B 
+1-2-4
+3-4
+
+TODO Check pricelists once again
+Add to pricelist:
+1-2-2 
+
+
