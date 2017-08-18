@@ -451,7 +451,7 @@ IF MobSub.MultiSIMType > 0 AND
    ELSE IF AVAIL lbMLMobSub THEN
       ASSIGN
          liMultiSimTypeValue = {&MULTISIMTYPE_PRIMARY} 
-         lcMultiSimCLI       = lbMLMobSub.CLI + " / " + lbMLMobSub.FixedNumber. 
+         lcMultiSimCLI       = lbMLMobSub.FixedNumber + " / " + lbMLMobSub.CLI. 
    ELSE IF AVAIL lbMobSub THEN 
       ASSIGN 
          liMultiSimTypeValue = MobSub.MultiSimType
