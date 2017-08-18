@@ -51,10 +51,10 @@ PROCEDURE pUpdateStatus:
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
     FOR EACH ttCustomer,
-        FIRST TPService WHERE TPService.SerialNbr  = ttCustomer.SerialNbr           AND   
-                              TPService.ServType   = "Television"                   AND 
-                              TPService.ServStatus = {&STATUS_CANCELLATION_ONGOING} AND 
-                              TPService.Operation  = {&TYPE_DEACTIVATION}           EXCLUSIVE-LOCK:    
+        FIRST TPService WHERE TPService.SerialNbr  = ttCustomer.SerialNbr                         AND   
+                              TPService.ServType   = "Television"                                 AND 
+                              TPService.ServStatus = {&WAITING_FOR_STB_DEACTIVATION_CONFIRMATION} AND 
+                              TPService.Operation  = {&TYPE_DEACTIVATION}                         EXCLUSIVE-LOCK:    
 
         IF ttCustomer.StatusCode = "0" THEN 
         DO:
