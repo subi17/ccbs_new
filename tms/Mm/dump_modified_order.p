@@ -195,7 +195,10 @@ FOR EACH ttOrder NO-LOCK:
                   lcValue = REPLACE(ttOrder.orderChannel,"fusion","conv").
                ELSE
                   lcValue = ttOrder.orderChannel.
-            END.   
+            END.
+            WHEN "#Segment" THEN DO:
+               lcValue = fGetSegment(ttOrder.CustNum).
+            END.                
             OTHERWISE lcValue = "".
             END CASE.
         END.
