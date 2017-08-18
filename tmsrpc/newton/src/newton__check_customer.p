@@ -150,6 +150,15 @@ DO:
                             lcReason = "PRO migration not possible because of multible mobile lines".
                     ELSE IF AVAIL MobSub THEN 
                     DO:
+                        IF CAN-FIND(First Order WHERE
+                                          Order.brand EQ "1" AND
+                                          Order.CustNum EQ mobsub.custnum AND
+                                          Order.msseq NE mobsub.msseq AND
+                                          LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0) THEN
+                           ASSIGN
+                              llOrderAllowed = FALSE
+                              lcReason = "PRO migration not possible because of multible mobile lines".
+                        
                         IF fIsConvergenceTariff(Mobsub.Clitype) THEN
                             ASSIGN
                                 llOrderAllowed = FALSE
@@ -170,6 +179,10 @@ DO:
                             lcReason = "PRO migration not possible because, no mobile lines exists".
                 END.
             END.
+            ELSE
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines".
         END.
     END.
     ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
@@ -191,7 +204,11 @@ DO:
                     ASSIGN 
                         llOrderAllowed = FALSE
                         lcReason = "PRO migration not possible because, no mobile lines exists".
-            END.        
+            END.
+            ELSE
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines".        
         END.
         ELSE
         DO:
