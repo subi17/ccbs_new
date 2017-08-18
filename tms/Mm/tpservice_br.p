@@ -125,15 +125,13 @@ REPEAT WITH FRAME sel:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-        ASSIGN
-        ufk    = 0
-        ufk[1] = 9853
-        ufk[4] = 0
-        ufk[8] = 8 
-        ehto   = 3 
-        ufkey  = FALSE.
+          ASSIGN
+              ufk    = 0
+              ufk[8] = 8 
+              ehto   = 3 
+              ufkey  = FALSE.
 
-        RUN Syst/ufkey.p.
+          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -142,17 +140,9 @@ REPEAT WITH FRAME sel:
         COLOR DISPLAY VALUE(ccc) TPService.Product WITH FRAME sel.
       END.
 
+      IF rtab[FRAME-LINE] = ? THEN NEXT.
+
       nap = keylabel(LASTKEY).
-
-      IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
-            BELL.
-            MESSAGE "You are on an empty row, move upwards !".
-            PAUSE 1 NO-MESSAGE.
-            NEXT.
-         END.
-      END.
-
 
       IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
@@ -173,6 +163,15 @@ REPEAT WITH FRAME sel:
         must-print = TRUE.
         NEXT LOOP.
       END.
+
+      IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
+        BELL.
+        MESSAGE "You are on an empty row, move upwards !".
+        PAUSE 1 NO-MESSAGE.
+        NEXT.
+      END.
+
+      ASSIGN nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
       IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
@@ -247,7 +246,7 @@ REPEAT WITH FRAME sel:
            MESSAGE "YOU ARE ON THE FIRST PAGE !".
            BELL. PAUSE 1 NO-MESSAGE.
         END.
-     END. /* PREVious page */
+      END. /* PREVious page */
 
      /* NEXT page */
      ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
@@ -264,22 +263,10 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
-        RUN local-find-FIRST.
-        ASSIGN Memory = recid(TPService) must-print = TRUE.
-       NEXT LOOP.
-     END.
-
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
-        RUN local-find-LAST.
-        ASSIGN Memory = recid(TPService) must-print = TRUE.
-        NEXT LOOP.
-     END.
- 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
         PAUSE 0. 
-        ufk[1] = 0.
+        
         ASSIGN
             lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
             lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
@@ -299,13 +286,51 @@ REPEAT WITH FRAME sel:
              lcCreatedTS
              lcUpdatedTS
              WITH FRAME fDetails.
-     END.
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN 
-     DO ON ENDKEY UNDO, NEXT LOOP:
-         RUN Mm/tpservicemessage.p(TPService.MsSeq,TPService.ServSeq).
-     END. /* Search-1 */
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
 
+        TPSERVICEBROWSE:
+        REPEAT:
+            ASSIGN
+             ufkey  = TRUE
+             ufk    = 0  
+             ehto   = 1  
+             ufk[1] = 9853
+             ufk[8] = 8.      
+
+            RUN Syst/ufkey.p. 
+
+            IF toimi = 1  THEN 
+                RUN Mm/tpservicemessage.p(TPService.MsSeq, TPService.ServSeq).
+            ELSE IF toimi = 8 THEN 
+               LEAVE.
+            
+            ASSIGN  Memory = recid(TPService) must-print = TRUE.
+            NEXT LOOP.
+        END.
+     END.
+
+     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+        RUN local-find-FIRST.
+        ASSIGN Memory = recid(TPService) must-print = TRUE.
+       NEXT LOOP.
+     END.
+
+     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+        RUN local-find-LAST.
+        ASSIGN Memory = recid(TPService) must-print = TRUE.
+        NEXT LOOP.
+     END.
+     
+     IF rtab[FRAME-line] = ? THEN DO:
+         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+            BELL.
+            MESSAGE "You are on an empty row, move upwards !".
+            PAUSE 1 NO-MESSAGE.
+            NEXT.
+         END.
+     END.
+
+     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN 
+        LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 
