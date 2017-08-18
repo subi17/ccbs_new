@@ -218,7 +218,6 @@ FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                      bCLIType.Brand      = Syst.Parameters:gcBrand           AND
                      bCLIType.CLIType    = icCLITypeConv                     AND
-                     bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN DO:
       
       IF fMatrixAnalyse(Syst.Parameters:gcBrand,
