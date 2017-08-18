@@ -12,4 +12,5 @@ class AddFieldTenantName(Migration):
     def down(self):
         t = self.alter_table('RepLog')
         t.alter_index('SendTime', [['SendTime'], ['EventTime']], area="CDF_Index", primary=True)
-        t.drop_column('TenantName')
+        u = self.alter_table('RepLog')
+        u.drop_column('TenantName')
