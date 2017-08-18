@@ -8,6 +8,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO.
+DEF INPUT PARAMETER iiServSeq AS INT NO-UNDO.
 
 {Syst/commali.i}
 {Func/timestamp.i}
@@ -16,10 +17,9 @@ DEF TEMP-TABLE ttDocs LIKE TPServiceMessage
   FIELD cCreatedTS AS CHAR
   FIELD cUpdateTS  AS CHAR.
 
-FUNCTION fCollect RETURNS LOGICAL
-   (INPUT iiMsSeq AS INT):
+FUNCTION fCollect RETURNS LOGICAL:
 
-   FOR EACH TPServiceMessage WHERE TPServiceMessage.MsSeq EQ iiMsSeq NO-LOCK:
+   FOR EACH TPServiceMessage WHERE TPServiceMessage.MsSeq EQ iiMsSeq AND TPServiceMessage.ServSeq = iiServSeq NO-LOCK:
       CREATE ttDocs.
       BUFFER-COPY TPServiceMessage to ttDocs
       ASSIGN  
@@ -78,7 +78,7 @@ form
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
-fCollect(iiMsSeq).
+fCollect().
 
 RUN local-find-first.
 
