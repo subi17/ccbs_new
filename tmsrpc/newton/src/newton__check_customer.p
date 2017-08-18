@@ -150,10 +150,19 @@ DO:
                             lcReason = "PRO migration not possible because of multible mobile lines".
                     ELSE IF AVAIL MobSub THEN 
                     DO:
-                        IF fIsConvergenceTariff(Mobsub.Clitype) THEN
+                        IF CAN-FIND(First Order WHERE 
+                                          Order.brand EQ "1" AND
+                                          Order.CustNum EQ mobsub.custnum AND
+                                          Order.msseq NE mobsub.msseq AND
+                                          LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0) THEN
+                           ASSIGN
+                              llOrderAllowed = FALSE
+                              lcReason = "PRO migration not possible because of multible mobile lines".
+
+                        IF fIsFixedOnly(Mobsub.Clitype) THEN
                             ASSIGN
                                 llOrderAllowed = FALSE
-                                lcReason = "PRO migration not possible for convergent".
+                                lcReason = "PRO migration not possible because of multible mobile lines".
                         ELSE IF NOT llNonProToProMigrationOngoing THEN 
                         DO: 
                             /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
