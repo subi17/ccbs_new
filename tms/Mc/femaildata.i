@@ -1968,6 +1968,29 @@ PROCEDURE pGetCTNAME:
                 END.
              END.
        END.
+       
+       /* TV Service */
+       FOR FIRST OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+                                   OrderAction.OrderId  = Order.Orderid AND
+                                   OrderAction.ItemType = "BundleItem"  NO-LOCK,
+           FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
+                                   DayCampaign.DCEvent      = OrderAction.ItemKey  AND 
+                                   DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} NO-LOCK:
+
+           FIND FIRST FMItem WHERE FMItem.Brand     = gcBrand              AND 
+                                   FMItem.FeeModel  = DayCampaign.FeeModel AND
+                                   FMItem.BillCode  = DayCampaign.BillCode AND
+                                   FMItem.PriceList > ""                   AND 
+                                   FMItem.FromDate <= TODAY                AND
+                                   FMItem.ToDate   >= TODAY                NO-LOCK NO-ERROR. 
+
+           ASSIGN lcMFText = lcMFText + 
+                             (IF liLang EQ 5 THEN "<br/>TV Service," ELSE "<br/>Servicio TV,") + " " + 
+                             (IF AVAIL FMItem THEN 
+                                (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
+                              ELSE 
+                                "").
+       END.                                    
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
                   DiscountPlan.DPRuleId = "BONO7DISC" NO-ERROR.
@@ -1996,7 +2019,7 @@ PROCEDURE pGetCTNAME:
           END.
 
           IF llgEmailText THEN DO:
-             lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>3 GB/mes extra free during 6 months"
+             lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>3 GB/mes extra free during 6 months" 
                         ELSE "<br/>3 GB/mes extra gratis durante 6 meses"). 
           
           END.
