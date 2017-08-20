@@ -554,6 +554,30 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
 END FUNCTION.   
 
+FUNCTION fGetRegionDiscountPlan RETURNS CHARACTER
+  (INPUT icRegion AS CHAR):
+
+  DEF VAR lcDiscountPlan AS CHAR NO-UNDO.
+
+  FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
+  IF AVAIL Region THEN 
+  DO:
+      CASE Region.TaxZone:
+          WHEN "1" THEN
+              ASSIGN lcDiscountPlan = "DISCAGILETVIVA".
+          WHEN "2" THEN 
+              ASSIGN lcDiscountPlan = "DISCAGILETVIGIC".
+          WHEN "3" THEN 
+              ASSIGN lcDiscountPlan = "DISCAGILETVIPSIC".
+          WHEN "4" THEN 
+              ASSIGN lcDiscountPlan = "DISCAGILETVIPSIM".        
+      END CASE.
+  END.
+
+  RETURN lcDiscountPlan.
+
+END FUNCTION.  
+
 &ENDIF.
 
 

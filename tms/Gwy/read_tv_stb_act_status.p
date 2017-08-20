@@ -10,6 +10,7 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/fmakemsreq.i}
 {Func/orderfunc.i}
+{Mc/dpmember.i}
 
 DEF VAR lcCustomerId AS CHAR NO-UNDO.
 
@@ -38,16 +39,21 @@ DO ON ERROR UNDO, THROW:
 END.
 
 PROCEDURE pUpdateStatus:
-    DEF VAR lcLogFile  AS CHAR NO-UNDO.
-    DEF VAR lcDateTime AS CHAR NO-UNDO.
-    DEF VAR lcMsgType  AS CHAR NO-UNDO.
-    DEF VAR lcError    AS CHAR NO-UNDO.
-    DEF VAR liRequest  AS INTE NO-UNDO.
+    DEF VAR lcLogFile   AS CHAR NO-UNDO.
+    DEF VAR lcDateTime  AS CHAR NO-UNDO.
+    DEF VAR lcMsgType   AS CHAR NO-UNDO.
+    DEF VAR lcError     AS CHAR NO-UNDO.
+    DEF VAR liRequest   AS INTE NO-UNDO.
+    DEF VAR liDiscReq   AS INTE NO-UNDO.
+    DEF VAR ldeActStamp AS DECI NO-UNDO.
+    DEF VAR lcDiscPlan  AS CHAR NO-UNDO.
+    DEF VAR ldeDiscAmt  AS CHAR NO-UNDO.
 
     ASSIGN 
-        lcDateTime = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
-        lcLogFile  = fCParamC('ActivationIncomingLogFileName')
-        lcLogFile  = REPLACE(lcLogFile,"#DATETIME",lcDateTime).
+        ldeActStamp = fMakeTS()    
+        lcDateTime  = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
+        lcLogFile   = fCParamC('ActivationIncomingLogFileName')
+        lcLogFile   = REPLACE(lcLogFile,"#DATETIME",lcDateTime).
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
     FOR EACH ttCustomer,
@@ -61,7 +67,7 @@ PROCEDURE pUpdateStatus:
             liRequest = fPCActionRequest(TPService.MsSeq,
                                          TPService.Product,
                                          "act",
-                                         fMakeTS(),
+                                         ldeActStamp,
                                          TRUE,
                                          {&REQUEST_SOURCE_TV_SERVICE_ACTIVATION},
                                          "",
@@ -73,7 +79,42 @@ PROCEDURE pUpdateStatus:
                                          "",
                                          OUTPUT lcError).
             IF liRequest > 0 THEN 
+            DO:
                 fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TV_STB_VENDOR}, {&STATUS_HANDLED}).
+                /*
+                IF TPService.Offer > "" THEN 
+                    RUN Mc/offeritem_exec.p(TPService.MsSeq,
+                                            Order.OrderID,
+                                            ldeActStamp,
+                                            MsRequest.MsRequest,
+                                            {&REQUEST_SOURCE_TV_SERVICE_ACTIVATION}).
+                */
+                ASSIGN lcDiscPlan = fGetRegionDiscountPlan(ttCustomer.Region).
+
+                IF lcDiscPlan > "" THEN 
+                DO:
+                    FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
+                    IF AVAIL DiscountPlan THEN 
+                    DO:
+                        FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom >= TODAY AND DPRate.ValidTo <= TODAY NO-LOCK NO-ERROR.
+                        IF AVAIL DPRate THEN    
+                            ASSIGN ldeDiscAmt = DPRate.DiscValue.
+                    END.
+                        
+                    ASSIGN liDiscReq = fAddDiscountPlanMember(TPService.MsSeq,
+                                                              lcDiscPlan,
+                                                              ldeDiscAmt,
+                                                              TODAY,
+                                                              0,
+                                                              0,
+                                                              OUTPUT lcErrMsg).
+
+                    IF liDiscReq NE 0 THEN 
+                        PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + 
+                                                ttCustomer.SerialNbr + "' failed to activate service: '" + 
+                                                TPService.Product + "' Error: '" + lcErrMsg + "'" SKIP.
+                END.
+            END.    
             ELSE 
             DO:
                 fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_ERROR}).
