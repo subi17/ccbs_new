@@ -409,6 +409,175 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 
 END FUNCTION.   
 
+FUNCTION fCreateNewTPService RETURNS INTEGER
+ (iiMsSeq       AS INT,
+  icProduct     AS CHAR,
+  icProvider    AS CHAR,
+  icType        AS CHAR,
+  icOperation   AS CHAR,
+  icStatus      AS CHAR,
+  icOffer       AS CHAR,
+  icUser        AS CHAR):
+
+    DEFINE BUFFER bf_TPService_Activation FOR TPService.
+
+    FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq           AND 
+                               TPService.Operation   = icOperation       AND  
+                               TPService.ServType    = icType            AND  
+                               TPService.ServStatus <> {&STATUS_HANDLED} AND 
+                               TPService.Product     = icProduct         NO-LOCK NO-ERROR.
+    IF NOT AVAIL TPService THEN 
+    DO:
+        CREATE TPService.
+        ASSIGN
+            TPService.MsSeq      = iiMsSeq
+            TPService.ServSeq    = NEXT-VALUE(TPServiceSeq)
+            TPService.ServType   = icType
+            TPService.Operation  = icOperation
+            TPService.Product    = icProduct
+            TPService.Provider   = icProvider
+            TPService.ServStatus = icStatus
+            TPService.Offer      = icOffer
+            TPService.UserCode   = icUser
+            TPService.CreatedTS  = fMakeTS()
+            TPService.UpdateTS   = TPService.CreatedTS.
+
+        IF icOperation = {&TYPE_DEACTIVATION} THEN 
+        DO:
+            FIND FIRST bf_TPService_Activation WHERE bf_TPService_Activation.MsSeq      = iiMsSeq            AND 
+                                                     bf_TPService_Activation.Operation  = {&TYPE_ACTIVATION} AND 
+                                                     bf_TPService_Activation.ServType   = icType             AND  
+                                                     bf_TPService_Activation.ServStatus > ""                 AND
+                                                     bf_TPService_Activation.Product    = icProduct          NO-LOCK NO-ERROR.
+            IF AVAIL bf_TPService_Activation THEN 
+                ASSIGN TPService.SerialNbr = bf_TPService_Activation.SerialNbr.                                                   
+        END.                                                     
+    END.
+
+    RETURN TPService.ServSeq.   
+
+END FUNCTION.
+
+FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
+ (iiMsSeq       AS INT,
+  iiServSeq     AS INT,
+  icSource      AS CHAR,
+  icStatus      AS CHAR):
+
+    FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServSeq = iiServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+    IF LOCKED TPService THEN 
+        RETURN FALSE.
+
+    CREATE TPServiceMessage.
+    ASSIGN
+       TPServiceMessage.MsSeq         = iiMsSeq
+       TPServiceMessage.ServSeq       = iiServSeq
+       TPServiceMessage.MessageSeq    = NEXT-VALUE(TPServiceMessageSeq)
+       TPServiceMessage.Source        = icSource
+       TPServiceMessage.MessageStatus = icStatus
+       TPServiceMessage.CreatedTS     = fMakeTS()
+       TPServiceMessage.UpdateTS      = TPServiceMessage.CreatedTS.
+
+    ASSIGN   
+       TPService.ServStatus           = icStatus
+       TPService.UpdateTS             = fMakeTS().
+
+    RETURN TRUE.   
+
+END FUNCTION.
+
+FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
+   (INPUT iiExtraLineOrderId AS INT,
+    INPUT iiMainLineOrderId  AS INT,
+    INPUT icAction           AS CHAR):
+
+   DEFINE BUFFER lbMLOrder       FOR Order.
+   DEFINE BUFFER lbELOrder       FOR Order.
+   DEFINE BUFFER lbELOrderAction FOR OrderAction.
+
+   DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO. 
+
+   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+   FIND FIRST lbELOrder NO-LOCK WHERE
+              lbELOrder.Brand        EQ Syst.Parameters:gcBrand           AND
+              lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
+              lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
+              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
+              lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} NO-ERROR. 
+
+   IF AVAIL lbELOrder THEN DO:
+
+      IF llDoEvent THEN DO:
+         lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+         RUN StarEventInitialize(lhOrderStatusChange).
+         RUN StarEventSetOldBuffer(lhOrderStatusChange).
+      END.
+     
+      CASE icAction:
+         WHEN "RELEASE" THEN DO:
+         
+            CASE lbELOrder.OrderType:
+               WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+               WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+               WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
+               OTHERWISE.
+            END CASE.
+
+            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+         END.                      
+         WHEN "CLOSE" THEN DO:
+            /* Check if Main line order is closed, If closed, 
+               then close extraline ongoing order */
+            FIND FIRST lbMLOrder NO-LOCK WHERE 
+                       lbMLOrder.Brand        EQ Syst.Parameters:gcBrand AND
+                       lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
+                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
+                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
+                       lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
+
+            IF AVAIL lbMLOrder THEN
+               fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         
+         END. 
+      END CASE.
+   
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+         fCleanEventObjects().
+      END.
+   END.      
+
+   RETURN TRUE.
+
+END FUNCTION.   
+
+FUNCTION fGetRegionDiscountPlan RETURNS CHARACTER
+  (INPUT icRegion AS CHAR):
+
+  DEF VAR lcDiscountPlan AS CHAR NO-UNDO.
+
+  FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
+  IF AVAIL Region THEN 
+  DO:
+      CASE Region.TaxZone:
+          WHEN "1" THEN
+              ASSIGN lcDiscountPlan = fCParam("TVService","Mainland").
+          WHEN "2" THEN 
+              ASSIGN lcDiscountPlan = fCParam("TVService","CanaryIslands").
+          WHEN "3" THEN 
+              ASSIGN lcDiscountPlan = fCParam("TVService","Ceuta").
+          WHEN "4" THEN 
+              ASSIGN lcDiscountPlan = fCParam("TVService","Melilla").
+      END CASE.
+  END.
+
+  RETURN lcDiscountPlan.
+
+END FUNCTION.  
+
 &ENDIF.
 
 

@@ -39,6 +39,7 @@
                send_sms;boolean;optional;Send SMS
                referee;str;optional;referee's MSISDN
                offer_id;string;optional;
+               extra_offers;string;optional;optional offer 
                price_selection_time;timestamp;optional;time when user accepted order price in web
                order_inspection_result;string;mandatory;
                order_inspection_description;string;optional;
@@ -198,6 +199,7 @@
                  fixed_line_mnp_old_operator_name;string;optional;
                  fixed_line_mnp_old_operator_code;string;optional;
                  fixed_line_serial_number;string;optional;
+                 estimated_data_speed;string;optional;broadband estimated speed
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
                  customer_type;string;mandatory;customer type
@@ -352,6 +354,8 @@ DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
+DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
+DEF VAR pcAdditionalOfferArray  AS CHAR NO-UNDO.
 DEF VAR pcMobsubBundleType      AS CHAR NO-UNDO. 
 DEF VAR plDSSActivate           AS LOG  NO-UNDO. 
 DEF VAR plBonoVoipActivate      AS LOG  NO-UNDO.
@@ -360,6 +364,7 @@ DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
 DEF VAR pcUsageType             AS CHAR NO-UNDO. 
 
 DEF VAR liBundleCnt            AS INT  NO-UNDO.
+DEF VAR liOfferCnt             AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
@@ -408,6 +413,7 @@ DEF VAR lcFixedLineNumber         AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperName AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperCode AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineSerialNbr      AS CHAR    NO-UNDO.
+DEF VAR liEstimatedDataSpeed      AS INTE    NO-UNDO.
 DEF VAR lcFixedLineMNPTime        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineProduct        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineCustomerType   AS CHAR    NO-UNDO. 
@@ -520,6 +526,16 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
   
    IF LOOKUP('offer_id', lcOrderStruct) GT 0 THEN 
       pcOfferId = get_string(pcOrderStruct, "offer_id").
+
+   IF LOOKUP("extra_offers",lcOrderStruct) > 0 THEN
+   DO:
+      pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
+
+      DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
+         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
+      END.
+
+   END.
 
    IF LOOKUP('price_selection_time', lcOrderStruct) GT 0 THEN
        pdePriceSelTime = get_timestamp(pcOrderStruct, "price_selection_time").
@@ -1207,21 +1223,22 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
    CREATE OrderFusion.
    ASSIGN
-      OrderFusion.Brand             = gcBrand
-      OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
-      OrderFusion.OrderDate         = ldaOrderDate
-      OrderFusion.Salesman          = pcSalesman
-      OrderFusion.FixedNumberType   = lcFixedLineNumberType
-      OrderFusion.FixedNumber       = lcFixedLineNumber
-      OrderFusion.Product           = lcFixedLineProduct
-      OrderFusion.CustomerType      = lcFixedLineCustomerType
-      OrderFusion.FixedMNPTime      = lcFixedLineMNPTime
-      OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName
-      OrderFusion.UpdateTS          = fMakeTS()
-      OrderFusion.FixedCurrOperCode = lcFixedLineMNPOldOperCode
-      OrderFusion.SerialNumber      = lcFixedLineSerialNbr
-      OrderFusion.ADSLLinkState     = lcFixedLineAdslLinkState.
+      OrderFusion.Brand              = gcBrand
+      OrderFusion.OrderId            = liOrderId
+      OrderFusion.FusionStatus       = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
+      OrderFusion.OrderDate          = ldaOrderDate
+      OrderFusion.Salesman           = pcSalesman
+      OrderFusion.FixedNumberType    = lcFixedLineNumberType
+      OrderFusion.FixedNumber        = lcFixedLineNumber
+      OrderFusion.Product            = lcFixedLineProduct
+      OrderFusion.CustomerType       = lcFixedLineCustomerType
+      OrderFusion.FixedMNPTime       = lcFixedLineMNPTime
+      OrderFusion.FixedCurrOper      = lcFixedLineMNPOldOperName
+      OrderFusion.UpdateTS           = fMakeTS()
+      OrderFusion.FixedCurrOperCode  = lcFixedLineMNPOldOperCode
+      OrderFusion.SerialNumber       = lcFixedLineSerialNbr
+      OrderFusion.ADSLLinkState      = lcFixedLineAdslLinkState
+      OrderFusion.EstimatedDataSpeed = liEstimatedDataSpeed.
 
    RETURN TRUE.
 
@@ -1263,6 +1280,7 @@ gcOrderStructFields = "billing_data," +
                       "send_sms," +
                       "referee," +
                       "offer_id," +
+                      "extra_offers," +
                       "price_selection_time," +
                       "order_inspection_result!," +
                       "order_inspection_description," +
@@ -1821,7 +1839,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1838,6 +1856,8 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
       lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
          WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
+      liEstimatedDataSpeed = get_int(pcFusionStruct, "estimated_data_speed") 
+         WHEN LOOKUP('estimated_data_speed', lcOrderStruct) > 0  
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0.
 
@@ -2314,8 +2334,14 @@ END.
 /* add databundle */
 IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
-   fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
+
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
+   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
+   ELSE         
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
+
 IF pcMobSubBundleType > "" THEN DO:
    lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
    fCreateOrderAction(Order.Orderid,"BundleItem",pcMobSubBundleType,"").

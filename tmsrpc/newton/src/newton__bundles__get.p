@@ -162,7 +162,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcPromotionBundles) > 0 THEN 
       lcBundleType = "promotional".
-   ELSE lcBundleType = "service".
+   ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+      lcBundleType = "tv_service".   
+   ELSE 
+      lcBundleType = "service".
 
    IF lcCLIType > "" THEN DO:
       FIND FIRST CLIType WHERE

@@ -29,6 +29,7 @@ gcBrand = "1".
 {Mm/active_bundle.i}
 {Mnp/mnp.i}
 {Func/email.i}
+{Mc/orderfusion.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -1294,8 +1295,9 @@ FUNCTION pLog RETURNS LOG (INPUT pcLogContent AS CHARACTER):
       fLog(pcLogContent, "DEXTRA-INFO").
 END.
 
-FUNCTION fDelivRouter RETURNS LOG
-   (INPUT piOrderId AS int):
+FUNCTION fDelivDevice RETURNS LOG
+   (INPUT icDevice  AS CHAR):
+
    DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcCustRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcOrderChannel  AS CHARACTER NO-UNDO.
@@ -1399,7 +1401,7 @@ FUNCTION fDelivRouter RETURNS LOG
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
-      WHEN "fusion_telesales" THEN lcOrderChannel = "02".
+      WHEN "fusion_telesales" OR WHEN "Fusion_Telesales_PRO" THEN lcOrderChannel = "02".
       WHEN "fusion_pos" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
@@ -1413,8 +1415,8 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.RowNum        = liRowNum
       ttOneDelivery.OrderId       = Order.OrderId
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
-      ttOneDelivery.ActionID      = "1" /* Router */
-      ttOneDelivery.ProductID     = "R075A67W2"
+      ttOneDelivery.ActionID      = (IF icDevice = "Router" THEN "1" ELSE "2")
+      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "TVSTB")
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -1444,7 +1446,7 @@ FUNCTION fDelivRouter RETURNS LOG
    CREATE ttInvRow.
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = "R075A67W2"
+      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "TVSTB") 
       ttInvRow.Quantity    = "1"
       liLoop1              = 1.
 
@@ -1463,14 +1465,14 @@ FUNCTION fDelivRouter RETURNS LOG
 
    END.
 
-CREATE ttExtra.
+   CREATE ttExtra.
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
           ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
+
    RETURN TRUE.
-END.
 
-
+END FUNCTION.
 
 fBatchLog("START",lcSpoolDir + lcFileName).
 
@@ -1612,9 +1614,30 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
-   IF fDelivRouter(FusionMessage.orderId) THEN ASSIGN
+   IF fDelivDevice("Router") THEN ASSIGN
       FusionMessage.UpdateTS = fMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
+END.
+
+/* Third Party Device Logistics */
+FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServStatus = {&STATUS_NEW} NO-LOCK:
+      
+   FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL MobSub THEN
+   DO: 
+       fTPServiceError(BUFFER TPService,"Contract not found").
+       NEXT.
+   END.
+
+   FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL Order THEN 
+   DO:
+      fTPServiceError(BUFFER TPService,"Failed to identify associated order during logistics initiation").
+      NEXT.
+   END.
+   
+   IF fDelivDevice(TPService.ServType) THEN 
+       fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_LOGISTICS_INITIATED}).
 END.
 
 iLargestId = 1.
