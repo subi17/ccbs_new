@@ -47,8 +47,9 @@ PROCEDURE pUpdateStatus:
     DEF VAR liDiscReq   AS INTE NO-UNDO.
     DEF VAR ldeActStamp AS DECI NO-UNDO.
     DEF VAR lcDiscPlan  AS CHAR NO-UNDO.
-    DEF VAR ldeDiscAmt  AS CHAR NO-UNDO.
-
+    DEF VAR ldeDiscAmt  AS DECI NO-UNDO.
+    DEF VAR lcErrMsg    AS CHAR NO-UNDO.
+    
     ASSIGN 
         ldeActStamp = fMakeTS()    
         lcDateTime  = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
