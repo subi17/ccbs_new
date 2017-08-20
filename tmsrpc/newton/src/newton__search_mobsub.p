@@ -30,25 +30,22 @@ gcBrand = "1".
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
 /* Output parameters */
-DEF VAR top_struct AS CHAR NO-UNDO.
+DEF VAR top_struct   AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO.
-DEF VAR sub_struct AS CHAR NO-UNDO.
+DEF VAR sub_struct   AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcTmp AS CHAR NO-UNDO.
-DEF VAR lcCallType AS CHAR NO-UNDO.
-DEF VAR liOwner AS INT NO-UNDO.
-DEF VAR piOffSet AS INT NO-UNDO.
-DEF VAR piLimit AS INT NO-UNDO.
-DEF VAR liSubCount AS INT NO-UNDO.
-DEF VAR llPreactivated AS LOGICAL NO-UNDO INITIAL FALSE.
-DEF VAR llSearchByMobsub AS LOGICAL NO-UNDO INITIAL FALSE.
-DEF VAR lii AS INTEGER NO-UNDO. 
-DEF VAR pcSearchTypes AS CHARACTER NO-UNDO. 
-DEF VAR plFewRecords  AS LOGICAL   NO-UNDO INIT FALSE.
-DEF VAR lcDiscounts   AS CHAR NO-UNDO. 
-DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO.
-DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO.
-DEF VAR lcDiscountType AS CHAR NO-UNDO.
+DEF VAR lcTmp             AS CHAR    NO-UNDO.
+DEF VAR lcCallType        AS CHAR    NO-UNDO.
+DEF VAR liOwner           AS INT     NO-UNDO.
+DEF VAR piOffSet          AS INT     NO-UNDO.
+DEF VAR piLimit           AS INT     NO-UNDO.
+DEF VAR liSubCount        AS INT     NO-UNDO.
+DEF VAR llPreactivated    AS LOGICAL NO-UNDO INITIAL FALSE.
+DEF VAR llSearchByMobsub  AS LOGICAL NO-UNDO INITIAL FALSE.
+DEF VAR lii               AS INTEGER NO-UNDO. 
+DEF VAR pcSearchTypes     AS CHAR    NO-UNDO. 
+DEF VAR plFewRecords      AS LOGICAL NO-UNDO INIT FALSE.
+DEF VAR lcSubDiscountType AS CHAR    NO-UNDO.
 
 lcCallType = validate_request(param_toplevel_id, "int|string,int,int,string,[boolean]").
 IF lcCallType EQ ? THEN RETURN.
@@ -69,6 +66,56 @@ IF NUM-ENTRIES(lcCallType) >= 5 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+FUNCTION fGetDiscountType RETURNS CHARACTER
+   (INPUT iiMsSeq   AS INT,
+    INPUT icCLIType AS CHAR):
+
+   DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO.
+   DEF VAR lcDiscountType       AS CHAR NO-UNDO INITIAL "".
+
+   ASSIGN
+      lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
+      lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+   /* Get available discount info for subscriptions     */
+   /* Only one additionaline/extraline discount will be
+      available for mobile only tariff                  */
+   FOR FIRST DPMember NO-LOCK WHERE
+             DPMember.HostTable  = "MobSub"        AND
+             DPMember.KeyValue   = STRING(iiMsSeq) AND
+             DPMember.ValidFrom <= TODAY           AND
+             DPMember.ValidTo   >= TODAY           AND
+             DPMember.ValidTo   >= DPMember.ValidFrom,
+       FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.DPId    = DPMember.DPId AND
+             DiscountPlan.Subject = "Contract Target"
+       BY DPMember.ValidTo DESC:
+
+       IF LOOKUP(icCLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+
+          IF LOOKUP(DiscountPlan.DPRuleId,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
+             lcDiscountType = "additional_20".
+          ELSE IF (LOOKUP(DiscountPlan.DPRuleId,{&ADDLINE_DISCOUNTS})    > 0  OR
+                   LOOKUP(DiscountPlan.DPRuleId,{&ADDLINE_DISCOUNTS_HM}) > 0) THEN
+             lcDiscountType = "additional_50".
+
+       END.
+       ELSE IF LOOKUP(icCLIType,lcExtraLineCLITypes) > 0 THEN DO:
+
+          IF LOOKUP(DiscountPlan.DPRuleId,lcExtraLineDiscounts) > 0 THEN
+             lcDiscountType = "extra_100".
+          ELSE
+             lcDiscountType = "extra_0".
+
+       END.
+
+   END.
+
+   RETURN lcDiscountType.
+
+END FUNCTION.
+
 FUNCTION fAddSubStruct RETURNS LOGICAL:
 
    sub_struct = add_json_key_struct(result_array, "").
@@ -81,7 +128,10 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    add_string(sub_struct, "description", mobsub.cli).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
-   add_string(sub_struct, "discount_type", lcDiscountType).
+
+   lcSubDiscountType = fGetDiscountType(MobSub.MsSeq,
+                                        MobSub.CLIType).
+   add_string(sub_struct, "discount_type", lcSubDiscountType).
 
    FIND FIRST MsRequest NO-LOCK WHERE
               MsRequest.MsSeq   = MobSub.MsSeq AND
@@ -187,44 +237,6 @@ IF NOT llSearchByMobsub AND llPreactivated THEN DO:
    IF LOOKUP("msisdn",pcSearchTypes) = 0 THEN
       RETURN appl_err("Too many subscriptions to show").
    RETURN appl_err("Please search for MSISDN only").
-END.
-
-/* Get available discount info for subscriptions */
-FOR EACH DPMember NO-LOCK WHERE
-         DPMember.HostTable  = "MobSub"             AND
-         DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-         DPMember.ValidFrom <= TODAY                AND
-         DPMember.ValidTo   >= TODAY                AND
-         DPMember.ValidTo   >= DPMember.ValidFrom,
-   FIRST DiscountPlan NO-LOCK WHERE
-         DiscountPlan.DPId    = DPMember.DPId AND
-         DiscountPlan.Subject = "Contract Target"
-   BY DPMember.ValidTo DESC:
-
-   lcDiscounts = DiscountPlan.DPRuleId.
-
-END.
-
-ASSIGN
-   lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
-   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
-
-IF LOOKUP(MobSub.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
-
-   IF LOOKUP(lcDiscounts,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
-      lcDiscountType = "additional_20".
-   ELSE IF (LOOKUP(lcDiscounts,{&ADDLINE_DISCOUNTS})    > 0  OR
-            LOOKUP(lcDiscounts,{&ADDLINE_DISCOUNTS_HM}) > 0) THEN
-      lcDiscountType = "additional_50".
-
-END.
-ELSE IF LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) > 0 THEN DO:
-
-   IF LOOKUP(lcDiscounts,lcExtraLineDiscounts) > 0 THEN
-      lcDiscountType = "extra_100".
-   ELSE
-      lcDiscountType = "extra_0".
-
 END.
 
 top_struct = add_struct(response_toplevel_id, "").
