@@ -564,13 +564,13 @@ FUNCTION fGetRegionDiscountPlan RETURNS CHARACTER
   DO:
       CASE Region.TaxZone:
           WHEN "1" THEN
-              ASSIGN lcDiscountPlan = "DISCAGILETVIVA".
+              ASSIGN lcDiscountPlan = fCParam("TVService","Mainland").
           WHEN "2" THEN 
-              ASSIGN lcDiscountPlan = "DISCAGILETVIGIC".
+              ASSIGN lcDiscountPlan = fCParam("TVService","CanaryIslands").
           WHEN "3" THEN 
-              ASSIGN lcDiscountPlan = "DISCAGILETVIPSIC".
+              ASSIGN lcDiscountPlan = fCParam("TVService","Ceuta").
           WHEN "4" THEN 
-              ASSIGN lcDiscountPlan = "DISCAGILETVIPSIM".        
+              ASSIGN lcDiscountPlan = fCParam("TVService","Melilla").
       END CASE.
   END.
 
