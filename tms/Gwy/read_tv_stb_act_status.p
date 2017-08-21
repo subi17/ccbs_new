@@ -90,31 +90,34 @@ PROCEDURE pUpdateStatus:
                                             MsRequest.MsRequest,
                                             {&REQUEST_SOURCE_TV_SERVICE_ACTIVATION}).
                 */
-                ASSIGN lcDiscPlan = fGetRegionDiscountPlan(ttCustomer.Region).
-
-                IF lcDiscPlan > "" THEN 
+                IF LOOKUP(TPService.Product,"AGILESKYTV") > 0 THEN 
                 DO:
-                    FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
-                    IF AVAIL DiscountPlan THEN 
-                    DO:
-                        FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom <= TODAY AND DPRate.ValidTo >= TODAY NO-LOCK NO-ERROR.
-                        IF AVAIL DPRate THEN    
-                            ASSIGN ldeDiscAmt = DPRate.DiscValue.
-                    END.
-                    
-                    IF ldeDiscAmt > 0 THEN     
-                        ASSIGN liDiscReq = fAddDiscountPlanMember(TPService.MsSeq,
-                                                                  lcDiscPlan,
-                                                                  ldeDiscAmt,
-                                                                  TODAY,
-                                                                  0,
-                                                                  0,
-                                                                  OUTPUT lcErrMsg).
+                    ASSIGN lcDiscPlan = fGetRegionDiscountPlan(ttCustomer.Region).
 
-                    IF liDiscReq NE 0 THEN 
-                        PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + 
-                                                ttCustomer.SerialNbr + "' failed to activate service: '" + 
-                                                TPService.Product + "' Error: '" + lcErrMsg + "'" SKIP.
+                    IF lcDiscPlan > "" THEN 
+                    DO:
+                        FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
+                        IF AVAIL DiscountPlan THEN 
+                        DO:
+                            FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom <= TODAY AND DPRate.ValidTo >= TODAY NO-LOCK NO-ERROR.
+                            IF AVAIL DPRate THEN    
+                                ASSIGN ldeDiscAmt = DPRate.DiscValue.
+                        END.
+                        
+                        IF ldeDiscAmt > 0 THEN     
+                            ASSIGN liDiscReq = fAddDiscountPlanMember(TPService.MsSeq,
+                                                                      lcDiscPlan,
+                                                                      ldeDiscAmt,
+                                                                      TODAY,
+                                                                      0,
+                                                                      0,
+                                                                      OUTPUT lcErrMsg).
+
+                        IF liDiscReq NE 0 THEN 
+                            PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + 
+                                                    ttCustomer.SerialNbr + "' failed to activate service: '" + 
+                                                    TPService.Product + "' Error: '" + lcErrMsg + "'" SKIP.
+                    END.
                 END.
             END.    
             ELSE 
