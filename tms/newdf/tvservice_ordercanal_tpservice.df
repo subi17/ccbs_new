@@ -121,6 +121,7 @@ ADD FIELD "TermReason" OF "TPService" AS character
 
 ADD FIELD "CreatedTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
+  DECIMALS 5
   INITIAL "0"
   LABEL "CreatedTS"
   POSITION 13
@@ -131,6 +132,7 @@ ADD FIELD "CreatedTS" OF "TPService" AS decimal
 
 ADD FIELD "UpdateTS" OF "TPService" AS decimal 
   FORMAT "99999999.99999"
+  DECIMALS 5
   INITIAL "0"
   LABEL "UpdatedTS"
   POSITION 14
