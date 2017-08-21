@@ -218,9 +218,9 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
     if compile_type == 'compile':
         compile_dir = compile_dir if compile_dir else '{0}/rpcmethods'
         if rpclist[0] != '':
-            compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pptemp{1}/{2} NO-ERROR.\nCOMPILE {3}/tmsrpc/{0}/pptemp{1}/{2} SAVE INTO {0}/rpcmethods{1} NO-ERROR.'.format('{0}','{1}','{2}',work_dir)
+            compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.\nCOMPILE {3}/tmsrpc/{0}/pp{1}/{2} SAVE INTO {0}/rpcmethods{1} NO-ERROR.'.format('{0}','{1}','{2}',work_dir)
         else:
-            compilecommand = 'COMPILE {3}{0}{1}/{2} PREPROCESS {4}/pptemp{1}/{2} NO-ERROR.\nCOMPILE {4}/pptemp{1}/{2} SAVE INTO {4}{1} NO-ERROR.'.format('{0}','{1}','{2}',source_dir,compile_dir)
+            compilecommand = 'COMPILE {3}{0}{1}/{2} PREPROCESS {4}/pp{1}/{2} NO-ERROR.\nCOMPILE {4}/pp{1}/{2} SAVE INTO {4}{1} NO-ERROR.'.format('{0}','{1}','{2}',source_dir,compile_dir)
     elif compile_type == 'preprocess':
         compile_dir = '{0}/pp'
         compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.'
@@ -243,9 +243,9 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
                     if compile_type == 'compile':
                         mkdir_p(os.path.join(os.path.join('{0}/doc'.format(compile_dir_to_use), relative_dir)))
                         if rpc:
-                            mkdir_p(os.path.join('{0}/pptemp'.format(rpc), relative_dir))
+                            mkdir_p(os.path.join('{0}/pp'.format(rpc), relative_dir))
                         else:
-                            mkdir_p(os.path.join('{0}/pptemp'.format(compile_dir), relative_dir))
+                            mkdir_p(os.path.join('{0}/pp'.format(compile_dir), relative_dir))
                     seen.append(relative_dir)
 
     args = ['-pf', getpf('../db/progress/store/all')]
@@ -287,9 +287,9 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
         helper_dir = work_dir + '/tools/fcgi_agent/xmlrpc/'
         for rpc, reldir, sourcefile in source_files:
             if rpc:
-                file = '{0}/pptemp{1}/{2}'.format(rpc,reldir,sourcefile)
+                file = '{0}/pp{1}/{2}'.format(rpc,reldir,sourcefile)
             else:
-                file = '{0}/pptemp{1}/{2}'.format(compile_dir,reldir,sourcefile)
+                file = '{0}/pp{1}/{2}'.format(compile_dir,reldir,sourcefile)
             sigandhelpfile = '{0}/doc{1}/{2}'.format(rpc + '/rpcmethods' if rpc else compile_dir, reldir, sourcefile)
             if not sourcefile == 'system__multicall.p':
                 fd = open(sigandhelpfile.replace('.p','.sig'), 'wb')
@@ -299,11 +299,8 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
             call([sys.executable, helper_dir + 'help.py', file], stdout=fd)
             fd.close()
 
-        if rpclist[0] != '':
-            for rpc in rpclist:
-                shutil.rmtree('{0}/pptemp'.format(rpc))
-        else:
-            shutil.rmtree('{0}/pptemp'.format(compile_dir))
+        if rpclist[0] == '':
+            shutil.rmtree('{0}/pp'.format(compile_dir))
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
