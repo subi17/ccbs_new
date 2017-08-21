@@ -201,7 +201,7 @@ FUNCTION fIsFixedOnly RETURNS LOGICAL
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                      bCLIType.Brand      = Syst.Parameters:gcBrand           AND
                      bCLIType.CLIType    = icCLIType                         AND
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN
       RETURN TRUE.
    RETURN FALSE.
 END.
