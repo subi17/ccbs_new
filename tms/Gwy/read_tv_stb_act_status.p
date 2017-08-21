@@ -97,18 +97,19 @@ PROCEDURE pUpdateStatus:
                     FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
                     IF AVAIL DiscountPlan THEN 
                     DO:
-                        FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom >= TODAY AND DPRate.ValidTo <= TODAY NO-LOCK NO-ERROR.
+                        FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom <= TODAY AND DPRate.ValidTo >= TODAY NO-LOCK NO-ERROR.
                         IF AVAIL DPRate THEN    
                             ASSIGN ldeDiscAmt = DPRate.DiscValue.
                     END.
-                        
-                    ASSIGN liDiscReq = fAddDiscountPlanMember(TPService.MsSeq,
-                                                              lcDiscPlan,
-                                                              ldeDiscAmt,
-                                                              TODAY,
-                                                              0,
-                                                              0,
-                                                              OUTPUT lcErrMsg).
+                    
+                    IF ldeDiscAmt > 0 THEN     
+                        ASSIGN liDiscReq = fAddDiscountPlanMember(TPService.MsSeq,
+                                                                  lcDiscPlan,
+                                                                  ldeDiscAmt,
+                                                                  TODAY,
+                                                                  0,
+                                                                  0,
+                                                                  OUTPUT lcErrMsg).
 
                     IF liDiscReq NE 0 THEN 
                         PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + 
