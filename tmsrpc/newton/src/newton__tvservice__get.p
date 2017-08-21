@@ -12,14 +12,16 @@
 katun    = "NewtonAd".
 gcBrand  = "1".
 {Syst/tmsconst.i}
+
+DEFINE BUFFER bf_TPService_Deactivation FOR TPService.
+
+DEF VAR lcDeactStatus AS CHAR NO-UNDO.
+
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
 
 /* Output parameters */
 DEF VAR resp_struct     AS CHAR NO-UNDO.
-DEF VAR top_array       AS CHAR NO-UNDO.
-DEF VAR top_struct      AS CHAR NO-UNDO.
-DEF VAR params_struct   AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN 
     RETURN.
@@ -32,28 +34,31 @@ FIND FIRST MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN
     RETURN appl_err(SUBST("MobSub &1 not found", piMsSeq)).
 
-FIND FIRST TPService WHERE TPService.MsSeq = piMsSeq AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServType = "Television" NO-LOCK NO-ERROR.
+FIND FIRST TPService WHERE TPService.MsSeq     = piMsSeq 			AND 
+						   TPService.Operation = {&TYPE_ACTIVATION} AND 
+						   TPService.ServType  = "Television"       NO-LOCK NO-ERROR.
 IF NOT AVAIL TPService THEN 
     RETURN appl_err("TV Service not found").
 
+FIND FIRST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq 			    AND 
+										   bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
+										   bf_TPService_Deactivation.ServType    = "Television" 		NO-LOCK NO-ERROR.
+IF AVAIL bf_TPService_Deactivation THEN 
+DO:
+	IF NOT (bf_TPService_Deactivation.ServStatus = {&STATUS_ERROR} AND bf_TPService_Deactivation.ResponseCode > "") THEN
+		ASSIGN lcDeactStatus = bf_TPService_Deactivation.ServStatus.
+END.
+
 resp_struct = add_struct(response_toplevel_id, "").
 
-add_int(resp_struct, "MsSeq", Mobsub.MsSeq).
-IF Mobsub.fixednumber NE ? THEN
-   add_string(resp_struct, "fixed_number", Mobsub.FixedNumber).
-ELSE
-   add_string(resp_struct, "fixed_number", "").
-
-add_string   (resp_struct, "product"       , TPService.Product).
-add_string   (resp_struct, "serialnumber"  , TPService.SerialNbr).
-add_string   (resp_struct, "offer"         , TPService.Offer).
-add_string   (resp_struct, "user"          , TPService.UserCode).
-add_string   (resp_struct, "status"        , TPService.ServStatus).
-add_string   (resp_struct, "externalid"    , TPService.MessageId).
-add_string   (resp_struct, "responsecode"  , TPService.ResponseCode).
-add_string   (resp_struct, "additionalinfo", TPService.AdditionalInfo).
-add_timestamp(resp_struct, "created_time"  , TPService.CreatedTS).
-add_timestamp(resp_struct, "updated_time"  , TPService.UpdateTS).
+add_int      (resp_struct, "MsSeq"       , Mobsub.MsSeq).
+add_string   (resp_struct, "product"     , TPService.Product).
+add_string   (resp_struct, "serialnumber", TPService.SerialNbr).
+add_string   (resp_struct, "externalid"  , TPService.MessageId).
+add_string   (resp_struct, "status"      , (IF lcDeactStatus > "" THEN lcDeactStatus ELSE TPService.ServStatus)).
+add_string   (resp_struct, "user"        , TPService.UserCode).
+add_timestamp(resp_struct, "created_time", TPService.CreatedTS).
+add_timestamp(resp_struct, "updated_time", TPService.UpdateTS).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
