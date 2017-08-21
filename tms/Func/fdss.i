@@ -605,9 +605,15 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
                                    {&REQ_INACTIVE_STATUSES}) = 0 AND
                      MsRequest.ActStamp <= ideActStamp) THEN NEXT.
 
-         IF icBundleId = "DSS2" AND
-            LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0 THEN
+         IF icBundleId = "DSS2" THEN DO:
+            IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
+               (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND
+                 CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                                CLIType.Brand      = gcBrand         AND
+                                CLIType.CLIType    = bMobSub.CLIType AND
+                                CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN
             llDSS2PrimaryAvail = TRUE.
+         END.
 
          ldeBundleLimit = 0.
                
