@@ -901,6 +901,7 @@ PROCEDURE pUpdateSubscription:
    IF fIsConvergenceTariff(bOldType.CliType) AND 
       NOT fIsConvergenceTariff(CLIType.CliType) THEN DO:
       fTerminateSVAs(Mobsub.msseq, FALSE).
+      fDeactivateTVService(Mobsub.MsSeq, MsRequest.UserCode).
       FIND MsRequest NO-LOCK WHERE
            MsRequest.MsRequest = iiMSRequest.
    END.

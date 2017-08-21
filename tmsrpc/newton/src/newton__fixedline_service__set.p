@@ -21,6 +21,7 @@ gcBrand = "1".
 {Func/service.i}
 {Func/vasfunc.i}
 {Func/profunc.i}
+{Func/orderfunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -153,56 +154,15 @@ add_boolean(response_toplevel_id, "", TRUE).
 
 PROCEDURE pDeActivateTVService:
     DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE ldeActStamp AS DECIMAL   NO-UNDO.
     DEFINE VARIABLE lcResult    AS CHARACTER NO-UNDO.
     DEFINE VARIABLE liServSeq   AS INTEGER   NO-UNDO.
 
-    ASSIGN ldeActStamp = fMakeTS().
-
-    FIND FIRST TPService WHERE TPService.MsSeq = piMsSeq AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServType = lcBundleType NO-LOCK NO-ERROR.
-    IF AVAIL TPService THEN
+    IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq     = piMsSeq            AND 
+                                      TPService.Operation = {&TYPE_ACTIVATION} AND 
+                                      TPService.ServType  = lcBundleType       NO-LOCK) THEN
     DO:
-        IF LOOKUP(TPService.ServStatus,"HANDLED") > 0 THEN 
-        DO:
-            ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
-                                                   pcServiceId, 
-                                                   "Huawei", 
-                                                   lcBundleType, 
-                                                   {&TYPE_DEACTIVATION}, 
-                                                   {&STATUS_NEW}, 
-                                                   pcParam,   /* OfferId */ 
-                                                   pcParam2). /* UserCode */ 
-
-            IF liServSeq > 0 THEN 
-            DO:
-                fCreateTPServiceMessage(piMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
-
-                fCreateTPServiceMessage(piMsSeq, liServSeq , {&SOURCE_TMS}, {&WAITING_FOR_STB_DEACTIVATION}).
-            END.    
-        END.
-        ELSE
-        DO:
-            IF TPService.ServStatus = {&STATUS_LOGISTICS_INITIATED}              OR
-               TPService.ServStatus = {&WAITING_FOR_STB_ACTIVATION}              OR
-               TPService.ServStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} THEN 
-                RETURN "Setup box logistics/activation process is already initiated. Cancellation not allowed now.". 
-        
-            ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
-                                                   pcServiceId, 
-                                                   "Huawei", 
-                                                   lcBundleType, 
-                                                   {&TYPE_DEACTIVATION}, 
-                                                   {&STATUS_NEW}, 
-                                                   pcParam,    /* OfferId */ 
-                                                   pcParam2).  /* UserCode */ 
-
-            IF liServSeq > 0 THEN 
-            DO:    
-                fCreateTPServiceMessage(piMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
-
-                fCreateTPServiceMessage(piMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_CANCELED}).
-            END.                                  
-        END.
+        IF NOT fDeactivateTVService(piMsSeq, pcParam2) THEN 
+            RETURN "Setup box logistics/activation process is already initiated. Cancellation not allowed now.".  
     END.
     ELSE 
         RETURN appl_err("No tv service active for cancellation").
