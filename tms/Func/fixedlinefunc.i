@@ -681,8 +681,9 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
        IF MobSub.MultiSimID  <> 0                       AND 
           MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
 
-       FIND FIRST Order NO-LOCK WHERE 
-                  Order.MsSeq = MobSub.MsSeq NO-ERROR.
+       FIND LAST Order NO-LOCK WHERE 
+                 Order.MsSeq   = MobSub.MsSeq   AND 
+                 Order.CLIType = MobSub.CLIType NO-ERROR.
 
        liMainLineOrderId = Order.OrderId. 
 
