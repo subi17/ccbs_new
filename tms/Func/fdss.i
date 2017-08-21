@@ -850,12 +850,18 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
                                    {&REQ_INACTIVE_STATUSES}) = 0 AND
                      MsRequest.ActStamp <= ideActStamp) THEN NEXT.
 
-         IF NOT llDSS2PrimaryAvail AND
-            LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0 THEN DO:
-            ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
-                   llDSS2PrimaryAvail = TRUE.
-            LEAVE.
-         END.
+         IF NOT llDSS2PrimaryAvail THEN DO:
+            IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
+               (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
+                CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                               CLIType.Brand      = gcBrand         AND 
+                               CLIType.CLIType    = bMobSub.CLIType AND 
+                               CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN DO:
+               ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
+                      llDSS2PrimaryAvail = TRUE.
+               LEAVE.
+            END.   
+         END.                  
       END. /* FOR EACH bMServiceLimit WHERE */
 
       IF llDSS2PrimaryAvail AND
