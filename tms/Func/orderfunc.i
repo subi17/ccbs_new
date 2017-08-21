@@ -583,7 +583,7 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
    icUser       AS CHAR):
 
   DEFINE VARIABLE liServSeq           AS INTEGER   NO-UNDO.
-  DEFINE VARIABLE liActivationServSeq AS INTGER    NO-UNDO.
+  DEFINE VARIABLE liActivationServSeq AS INTEGER   NO-UNDO.
 
   FIND FIRST TPService WHERE TPService.MsSeq     = iiMsSeq            AND 
                              TPService.Operation = {&TYPE_ACTIVATION} AND 
