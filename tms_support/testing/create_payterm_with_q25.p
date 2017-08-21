@@ -112,6 +112,7 @@ liRequest = fPCActionRequest(mobsub.msseq, /* subscription id */
                              "",
                              ldeResidualFee, /* residual (q25) fee */
                              0,
+                             "", /* SVA code, YPRO-84 */
                              OUTPUT lcResult).
 
 IF liRequest eq 0 then MESSAGE "ERROR:" lcResult VIEW-AS ALERT-BOX.
