@@ -218,10 +218,6 @@ DO:
                     lcReason = "customer already exists with PRO category".
         END.
     END.
-    ELSE /* not allow other channels */
-       ASSIGN
-          llOrderAllowed = FALSE
-          lcReason = "Not allowed orderchannel " + pcChannel.
 END.
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
