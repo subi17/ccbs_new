@@ -136,7 +136,7 @@ PROCEDURE pDumpTPServiceTable:
       IF lhField:DATA-TYPE = "DECIMAL" THEN 
           lcValue = STRING(lhField:BUFFER-VALUE,"99999999.99999").
       ELSE IF lhField:DATA-TYPE EQ "CHARACTER" THEN 
-          lcValue = REPLACE(lcValue,CHR(10)," ").    
+          lcValue = REPLACE(lhField:BUFFER-VALUE, CHR(10)," ").    
       ELSE 
           lcValue = lhField:BUFFER-VALUE.
 
