@@ -5,6 +5,7 @@ import json
 import tempfile
 import fnmatch
 import errno
+from ast import literal_eval
 from subprocess import call, Popen, PIPE
 from socket import gethostname
 from string import Template
@@ -67,13 +68,13 @@ def userandpass():
         return []
 
 def active_cdr_db_pf():
-    if '-S' in open('../../db/progress/store/common.pf').read():
+    if '-S' in open('../db/progress/store/common.pf').read():
         connection_type = "tcp"
     else:
         connection_type = "local"
 
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
-    args.extend(['-pf', getpf('../../db/progress/store/common'), '-h', '1'])
+    args.extend(['-pf', getpf('../db/progress/store/common'), '-h', '1'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(cdr_fetch.communicate()[0])
