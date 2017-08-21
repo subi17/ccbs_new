@@ -238,10 +238,13 @@ def _compile(compilecommand, compiledir):
     if 'parameters' in globals() and len(parameters) > 0:
         source_files = [ filu for filu in parameters if re.search(r'.*\.(p|cls)$', filu) ]
     else:
-        excluded_dirs = set(['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref'])
+        excluded_dirs = set(['lib', 'test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref'])
         seen = []
+        rootlevel = True
         for root, dirs, files in os.walk('.', topdown=True):
-            [dirs.remove(d) for d in list(dirs) if d in excluded_dirs]
+            if rootlevel:
+                [dirs.remove(d) for d in list(dirs) if d in excluded_dirs]
+                rootlevel = False
             for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
                 source_files.append(os.path.join(root, filename)[2:])
                 if compiledir:
