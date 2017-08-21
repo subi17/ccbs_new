@@ -112,7 +112,7 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* 10 */
    FIELD ICCNum        AS CHARACTER FORMAT "X(13)"
    FIELD MSISDN        AS CHARACTER FORMAT "X(10)"
-   FIELD TmpMSISDN     AS CHARACTER FORMAT "X(10)"
+   FIELD TmpMSISDN     AS CHARACTER FORMAT "X(10)" /*YPR-6059: content changed*/
    FIELD MNPState      AS CHARACTER FORMAT "X(10)"
    FIELD VoiceMail     AS CHARACTER FORMAT "X(1)"
    FIELD XFUserID      AS CHARACTER FORMAT "X(10)"
@@ -310,6 +310,43 @@ END FUNCTION.
    
 /* must be global for fDelivSIM */
 DEFINE VARIABLE liRowNum        AS INTEGER   NO-UNDO.
+
+/* YPR-6059: *Function finds if subscription has active voice bundle */
+FUNCTION fGetVoiceBundle RETURNS CHAR
+   (iiMsSeq AS INT):
+   DEF BUFFER bMserviceLimit FOR MserviceLimit.
+   DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
+   DEF VAR lcBundle AS CHAR NO-UNDO.
+   DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR lcRet AS CHAR NO-UNDO.
+   DEF VAR ldeNow AS DECIMAL NO-UNDO.
+
+   ldeNow = fMakeTS().
+
+   lcVoiceBundles = fcParamC("VOICE_BUNDLES").
+   DO liCount = 1 TO NUM-ENTRIES(lcVoiceBundles):
+      lcBundle =  ENTRY(liCount,lcVoiceBundles).
+      FIND FIRST bMservicelimit NO-LOCK WHERE
+                 bMserviceLimit.MsSeq EQ iiMsSeq AND
+                 bMserviceLimit.DialType EQ {&DIAL_TYPE_VOICE} AND
+                 bMserviceLimit.EndTS GE ldeNow AND
+                 bMserviceLimit.FromTS LE ldeNow
+                 NO-ERROR.
+      IF AVAIL bMserviceLimit THEN DO:
+         FIND FIRST ServiceLimit NO-LOCK WHERE
+                    ServiceLimit.SlSeq EQ bMservicelimit.SlSeq AND
+                    ServiceLimit.GroupCode EQ lcBundle
+                    NO-ERROR.
+         IF AVAIL ServiceLimit THEN DO:
+            IF lcRet NE "" THEN lcRet = lcRet + ",".
+            lcRet = lcRet + lcBundle.
+         END.
+      END.
+   END.
+
+RETURN lcRet.
+END.
+
 
 FUNCTION fDelivSIM RETURNS LOG
    (INPUT pcICC AS CHARACTER):
@@ -717,7 +754,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
       ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
-      ttOneDelivery.TmpMSISDN     = Order.TempCLI
+      ttOneDelivery.TmpMSISDN     = fGetVoiceBundle(Order.MsSeq) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
       ttOneDelivery.VoiceMail     = "633633633"
       ttOneDelivery.XFUserID      = lcUID
