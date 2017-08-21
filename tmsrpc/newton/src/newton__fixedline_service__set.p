@@ -104,9 +104,9 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
        ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
 
        CASE pcValue:
-           WHEN "DeActivate" THEN 
+           WHEN "off" THEN 
                RUN pDeActivateTVService.
-           WHEN "Activate" THEN
+           WHEN "on" THEN
                RUN pActivateTVService.
        END CASE.
    END.
