@@ -25,7 +25,6 @@ DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 DEF VAR lcNumeric    AS CHAR     NO-UNDO.
 DEF VAR lcDelimiter  AS CHAR     NO-UNDO.
-DEF VAR lcModFields  AS CHAR     NO-UNDO.
 DEF VAR lcDumpFields AS CHAR     NO-UNDO.
 DEF VAR liCnt        AS INT      NO-UNDO.
 DEF VAR lcValue      AS CHAR     NO-UNDO.

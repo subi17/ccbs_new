@@ -182,7 +182,7 @@ FOR EACH ttOrder NO-LOCK:
          
         IF lcField BEGINS "#" THEN DO:
             CASE lcField:
-             WHEN "#Segment" THEN DO:
+            WHEN "#Segment" THEN DO:
                lcValue = fGetSegment(ttOrder.CustNum).
             END.
             WHEN "#SCStamp" THEN DO:
@@ -195,10 +195,7 @@ FOR EACH ttOrder NO-LOCK:
                   lcValue = REPLACE(ttOrder.orderChannel,"fusion","conv").
                ELSE
                   lcValue = ttOrder.orderChannel.
-            END.
-            WHEN "#Segment" THEN DO:
-               lcValue = fGetSegment(ttOrder.CustNum).
-            END.                
+            END.              
             OTHERWISE lcValue = "".
             END CASE.
         END.
