@@ -383,8 +383,8 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
             LOOKUP(labOrder.CLIType,{&ADDLINE_CLITYPES}) > 0:
 
          CASE labOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
             WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
             OTHERWISE.
          END CASE.
@@ -519,8 +519,8 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
          WHEN "RELEASE" THEN DO:
          
             CASE lbELOrder.OrderType:
-               WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
-               WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+               WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+               WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
                WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
                OTHERWISE.
             END CASE.
@@ -578,6 +578,69 @@ FUNCTION fGetRegionDiscountPlan RETURNS CHARACTER
 
 END FUNCTION.  
 
+FUNCTION fDeactivateTVService RETURNS LOGICAL
+  (iiMsSeq      AS INTE,
+   icUser       AS CHAR):
+
+  DEFINE VARIABLE liServSeq           AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE liActivationServSeq AS INTGER    NO-UNDO.
+
+  FIND FIRST TPService WHERE TPService.MsSeq     = iiMsSeq            AND 
+                             TPService.Operation = {&TYPE_ACTIVATION} AND 
+                             TPService.ServType  = "Television"       NO-LOCK NO-ERROR.
+  IF AVAIL TPService THEN
+  DO:
+      IF LOOKUP(TPService.ServStatus, ({&STATUS_LOGISTICS_INITIATED} + "," + 
+                                       {&WAITING_FOR_STB_ACTIVATION} + "," + 
+                                       {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION})) > 0 THEN 
+          RETURN FALSE. 
+
+      ASSIGN liActivationServSeq = TPService.ServSeq.
+
+      IF LOOKUP(TPService.ServStatus,"HANDLED") > 0 THEN 
+      DO:
+          ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                                 TPService.Product, 
+                                                 "Huawei", 
+                                                 "Television", 
+                                                 {&TYPE_DEACTIVATION}, 
+                                                 {&STATUS_NEW}, 
+                                                 "",      /* OfferId */ 
+                                                 icUser). /* UserCode */ 
+
+          IF liServSeq > 0 THEN 
+          DO:
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&WAITING_FOR_STB_DEACTIVATION}).
+          END.    
+      END.
+      ELSE
+      DO: /* NEW */
+          ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                                 TPService.Product, 
+                                                 "Huawei", 
+                                                 "Television", 
+                                                 {&TYPE_DEACTIVATION}, 
+                                                 {&STATUS_NEW}, 
+                                                 "",       /* OfferId */ 
+                                                 icUser).  /* UserCode */ 
+
+          IF liServSeq > 0 THEN 
+          DO: 
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_HANDLED}).
+
+              /* Cancelling the activation */  
+              fCreateTPServiceMessage(iiMsSeq, liActivationServSeq, {&SOURCE_TMS}, {&STATUS_CANCELED}).
+          END.                                  
+      END.
+  END.
+      
+  RETURN TRUE.
+
+END FUNCTION.  
 &ENDIF.
 
 
