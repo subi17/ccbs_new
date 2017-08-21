@@ -873,6 +873,38 @@ PROCEDURE pUpdateSubscription:
 
    END.
 
+   /* Create extra line discount, if STC is done to main line subscription type */
+   /* Discount is created only when associated extra line is active and not 
+      associated to other main line                                             */
+   IF lcExtraMainLineCLITypes                         NE "" AND 
+      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) GT 0  THEN DO:
+
+      FIND FIRST lELMobSub EXCLUSIVE-LOCK WHERE 
+                 lELMobSub.MsSeq        EQ MobSub.MultiSimId         AND 
+                 lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
+                 lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} AND 
+                (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
+                 lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}) NO-ERROR.
+
+      IF AVAIL lELMobSub THEN DO:
+            
+         CASE lELMobSub.CLIType:
+            WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+         END CASE.
+         
+         IF lcExtraLineDiscRuleId NE "" THEN DO:
+            fCreateExtraLineDiscount(lELMobSub.MsSeq,
+                                     lcExtraLineDiscRuleId,
+                                     TODAY).
+         
+            ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
+                   MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
+         END.
+
+      END.
+
+   END.
+
    /* ADDLINE-324 Additional Line Discounts
       CHANGE: If STC happened on convergent, AND the customer does not have any other fully convergent
       then CLOSE the all addline discounts to (STC Date - 1) */

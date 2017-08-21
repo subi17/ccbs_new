@@ -1089,13 +1089,11 @@ PROCEDURE pTerminate:
    IF (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                       bCLIType.Brand      = Syst.Parameters:gcBrand          AND
                       bCLIType.CLIType    = TermMobSub.CLIType               AND
-                      bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}         AND 
                       bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
                LOOKUP(bCLIType.CLIType,lcExtraMainLineCLITypes) > 0)) OR
       (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                       bCLIType.Brand      = Syst.Parameters:gcBrand          AND
                       bCLIType.CLIType    = TermMobSub.CLIType               AND
-                      bCLIType.LineType   = {&CLITYPE_LINETYPE_EXTRA}        AND 
                       bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
                 LOOKUP(bCLIType.CLIType,lcExtraLineCLITypes) > 0)) THEN
    DO:
