@@ -98,7 +98,7 @@ FOR EACH daycampaign NO-LOCK:
       top_struct = add_struct(top_array, "").
       add_string(top_struct, "service_id", daycampaign.dcevent).    
       add_double(top_struct, "price"   , ldPrice).
-      add_int   (top_struct, "status"  , fGetSVAStatus(piMsSeq, daycampaign.dcevent)).
+      add_string(top_struct, "status"  , STRING(fGetSVAStatus(piMsSeq, daycampaign.dcevent))).
       add_string(top_struct, "category", "pro").
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
@@ -132,7 +132,7 @@ FOR EACH daycampaign NO-LOCK:
       top_struct = add_struct(top_array, "").
       add_string(top_struct, "service_id", Daycampaign.DCEvent).    
       add_double(top_struct, "price"     , ldPrice).
-      add_int   (top_struct, "status"    , (IF lcDeactStatus > "" THEN lcDeactStatus ELSE TPService.ServStatus)).
+      add_string(top_struct, "status"    , (IF lcDeactStatus > "" THEN lcDeactStatus ELSE TPService.ServStatus)).
    END.
 END.
 
