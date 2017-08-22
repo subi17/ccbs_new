@@ -35,7 +35,7 @@ END.
 
 PROCEDURE pProcessRequests:
     DEF VAR lcCustomerId    AS CHAR NO-UNDO.
-    DEF VAR ldeActCreatedTS AS CHAR NO-UNDO.
+    DEF VAR ldeActCreatedTS AS DECI NO-UNDO DECIMALS 5.
     DEF VAR liAgrCust       AS INTE NO-UNDO.
 
     DEFINE BUFFER AgreeCustomer           FOR Customer.
