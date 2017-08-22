@@ -294,6 +294,7 @@ PROCEDURE pTerminate:
    IF (lcTerminationType EQ {&TERMINATION_TYPE_FULL} AND
        fIsConvergenceTariff(Mobsub.CliType)) THEN DO:
       fTerminateSVAs(liMsSeq, FALSE).
+      fDeactivateTVService(liMsSeq, MsRequest.UserCode).
    END.
 
    /* Cancel existing periodical contract activation requests */
