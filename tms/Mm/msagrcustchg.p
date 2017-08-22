@@ -32,6 +32,7 @@
 {Func/fbankdata.i}
 {Mm/fbundle.i}
 {Mc/dpmember.i}
+{Func/orderfunc.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -1345,6 +1346,7 @@ PROCEDURE pMsCustMove:
                                   bOMobSub.CLIType,
                                   TODAY - 1).
       END.
+      fDeactivateTVService(liMsSeq, MsRequest.UserCode).
    END.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobSub).
