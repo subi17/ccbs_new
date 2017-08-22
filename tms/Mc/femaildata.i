@@ -1798,6 +1798,7 @@ PROCEDURE pGetCTNAME:
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
+   DEF VAR lcTVServiceName         AS CHAR NO-UNDO.
 
    DEFINE BUFFER lbELOrder   FOR Order.
    DEFINE BUFFER lbMLOrder   FOR Order.
@@ -1998,13 +1999,15 @@ PROCEDURE pGetCTNAME:
                                    FMItem.PriceList > ""                   AND 
                                    FMItem.FromDate <= TODAY                AND
                                    FMItem.ToDate   >= TODAY                NO-LOCK NO-ERROR. 
-
-           ASSIGN lcMFText = lcMFText + 
-                             (IF liLang EQ 5 THEN "<br/>TV Service," ELSE "<br/>Servicio TV,") + " " + 
-                             (IF AVAIL FMItem THEN 
-                                (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
-                              ELSE 
-                                "").
+                                   
+           ASSIGN 
+              lcTVServiceName = fTranslationName(gcBrand, 14, DayCampaign.DCEvent, liLang, TODAY)
+              lcMFText        = lcMFText + 
+                                "<br/>" + lcTVServiceName + ", " + 
+                                (IF AVAIL FMItem THEN 
+                                   (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
+                                 ELSE 
+                                   "").
        END.                                    
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
