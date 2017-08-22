@@ -52,7 +52,7 @@ DEF VAR result AS LOGICAL.
 
 IF validate_request(param_toplevel_id,"string,struct") = ? THEN RETURN.
 
-pcTenant = get_struct(param_toplevel_id,"0").
+pcTenant = get_string(param_toplevel_id,"0").
 pcStruct = get_struct(param_toplevel_id,"1").
 
 lcstruct = validate_struct(pcStruct, "order_id!,old_operator!,old_icc!,id_type!,customer_id!,username!,company,first_name,surname1,surname2,memo!").

@@ -38,7 +38,7 @@ lcWeekDays = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".
 
 IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
 
-pcTenant = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
 pcStruct = get_struct(param_toplevel_id, "1").
 
 lcStruct = validate_struct(pcStruct,"dumpid").
