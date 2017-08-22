@@ -817,6 +817,17 @@ PROCEDURE pUpdateSubscription:
                               0,
                              "ExtraLine Discount is Closed",
                              "STC done from Extra line associated Main line to other Main line").                        
+            
+            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+   
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+            ASSIGN MobSub.MultiSimId   = 0 
+                   MobSub.MultiSimType = 0. 
+            
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+           
+            FIND CURRENT Mobsub NO-LOCK.
          END.
       END.
 
@@ -896,9 +907,16 @@ PROCEDURE pUpdateSubscription:
             fCreateExtraLineDiscount(lELMobSub.MsSeq,
                                      lcExtraLineDiscRuleId,
                                      TODAY).
-         
+            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+   
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
             ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
                    MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
+            
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+           
+            FIND CURRENT Mobsub NO-LOCK.
          END.
 
       END.
