@@ -582,22 +582,21 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
   (iiMsSeq      AS INTE,
    icUser       AS CHAR):
 
-  DEFINE VARIABLE liServSeq           AS INTEGER   NO-UNDO.
-  DEFINE VARIABLE liActivationServSeq AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE liServSeq              AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE liActivationServSeq    AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE lcActivationServStatus AS CHARACTER NO-UNDO.
 
-  FIND FIRST TPService WHERE TPService.MsSeq     = iiMsSeq            AND 
-                             TPService.Operation = {&TYPE_ACTIVATION} AND 
-                             TPService.ServType  = "Television"       NO-LOCK NO-ERROR.
+  FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq            AND 
+                             TPService.Operation   = {&TYPE_ACTIVATION} AND 
+                             TPService.ServType    = "Television"       AND 
+                             TPService.ServStatus <> {&STATUS_CANCELED} NO-LOCK NO-ERROR.
   IF AVAIL TPService THEN
   DO:
-      IF LOOKUP(TPService.ServStatus, ({&STATUS_LOGISTICS_INITIATED} + "," + 
-                                       {&WAITING_FOR_STB_ACTIVATION} + "," + 
-                                       {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION})) > 0 THEN 
-          RETURN FALSE. 
+      ASSIGN 
+          liActivationServSeq    = TPService.ServSeq
+          lcActivationServStatus = TPService.ServStatus.
 
-      ASSIGN liActivationServSeq = TPService.ServSeq.
-
-      IF LOOKUP(TPService.ServStatus,"HANDLED") > 0 THEN 
+      IF LOOKUP(TPService.ServStatus, {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} + "," + {&STATUS_HANDLED}) > 0 THEN 
       DO:
           ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
                                                  TPService.Product, 
@@ -613,10 +612,14 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
               fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
 
               fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&WAITING_FOR_STB_DEACTIVATION}).
+
+              /* Cancelling the ongoing activation */  
+              IF lcActivationServStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} THEN 
+                  fCreateTPServiceMessage(iiMsSeq, liActivationServSeq, {&SOURCE_TMS}, {&STATUS_CANCELED}).
           END.    
       END.
       ELSE
-      DO: /* NEW */
+      DO: /* NEW, Logistics_initiated, WAITING_FOR_STB_ACTIVATION */
           ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
                                                  TPService.Product, 
                                                  "Huawei", 
@@ -632,7 +635,7 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
 
               fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_HANDLED}).
 
-              /* Cancelling the activation */  
+              /* Cancelling the ongoing activation */  
               fCreateTPServiceMessage(iiMsSeq, liActivationServSeq, {&SOURCE_TMS}, {&STATUS_CANCELED}).
           END.                                  
       END.
