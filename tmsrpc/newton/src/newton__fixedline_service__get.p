@@ -27,7 +27,7 @@ DEF VAR params_struct   AS CHAR NO-UNDO.
 DEF VAR llgSVA        AS LOGICAL NO-UNDO.
 DEF VAR liParams      AS INT     NO-UNDO.
 DEF VAR ldPrice       AS DECIMAL NO-UNDO.
-DEF VAR lcDeactStatus AS CHAR    NO-UNDO.
+DEF VAR liServStatus  AS INT     NO-UNDO.
 
 DEFINE BUFFER bf_TPService_Deactivation FOR TPService.
 
@@ -98,7 +98,7 @@ FOR EACH daycampaign NO-LOCK:
       top_struct = add_struct(top_array, "").
       add_string(top_struct, "service_id", daycampaign.dcevent).    
       add_double(top_struct, "price"   , ldPrice).
-      add_string(top_struct, "status"  , STRING(fGetSVAStatus(piMsSeq, daycampaign.dcevent))).
+      add_int   (top_struct, "status"  , fGetSVAStatus(piMsSeq, daycampaign.dcevent)).
       add_string(top_struct, "category", "pro").
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
@@ -109,13 +109,21 @@ FOR EACH daycampaign NO-LOCK:
        IF NOT AVAIL TPService THEN 
            NEXT.
 
+       IF TPService.ServStatus = {&STATUS_HANDLED} THEN 
+           ASSIGN liServStatus = 1.  /* Activation Done*/ 
+       ELSE     
+           ASSIGN liServStatus = 2.  /*Pending activation*/
+
+
        FIND FIRST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq              AND 
                                                   bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
                                                   bf_TPService_Deactivation.ServType    = "Television"         NO-LOCK NO-ERROR.
        IF AVAIL bf_TPService_Deactivation THEN 
        DO:
            IF NOT (bf_TPService_Deactivation.ServStatus = {&STATUS_ERROR} AND bf_TPService_Deactivation.ResponseCode > "") THEN
-               ASSIGN lcDeactStatus = bf_TPService_Deactivation.ServStatus.
+               ASSIGN liServStatus = 0. /* Inactive */
+           ELSE 
+               ASSIGN liServStatus = 3. /*Pending deactivation*/
        END.
 
       FIND FIRST FMItem WHERE FMItem.Brand     EQ gcBrand              AND 
@@ -132,7 +140,7 @@ FOR EACH daycampaign NO-LOCK:
       top_struct = add_struct(top_array, "").
       add_string(top_struct, "service_id", Daycampaign.DCEvent).    
       add_double(top_struct, "price"     , ldPrice).
-      add_string(top_struct, "status"    , (IF lcDeactStatus > "" THEN lcDeactStatus ELSE TPService.ServStatus)).
+      add_int   (top_struct, "status"    , liServStatus).
    END.
 END.
 
