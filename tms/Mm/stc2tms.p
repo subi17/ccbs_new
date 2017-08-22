@@ -70,6 +70,8 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -234,8 +236,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
 
-   IF MobSub.MultiSIMID    > 0                         AND 
-      MobSub.MultiSimType <> {&MULTISIMTYPE_EXTRALINE} THEN 
+   IF MobSub.MultiSIMID    > 0                            AND 
+      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) = 0 AND 
+      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     = 0 THEN 
       RUN pMultiSimSTC (INPUT ldtActDate).
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
@@ -535,8 +538,6 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liSecs                  AS INT  NO-UNDO. 
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineDiscRuleId   AS CHAR NO-UNDO. 
 
    DEF BUFFER bOwner         FOR MsOwner.
@@ -2310,7 +2311,6 @@ PROCEDURE pMultiSimSTC:
    DEF VAR liSTCCreateTime     AS INT  NO-UNDO.
    DEF VAR ldaSecSIMTermDate   AS DATE NO-UNDO.
    DEF VAR ldeSecSIMTermStamp  AS DEC  NO-UNDO.
-   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
 
    DEF BUFFER lbMobSub    FOR Mobsub.
 
