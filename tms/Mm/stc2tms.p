@@ -892,7 +892,7 @@ PROCEDURE pUpdateSubscription:
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) GT 0  THEN DO:
 
       FIND FIRST lELMobSub EXCLUSIVE-LOCK WHERE 
-                 lELMobSub.MsSeq        EQ MobSub.MultiSimId         AND 
+                 lELMobSub.Brand        EQ gcBrand                   AND 
                  lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
                  lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} AND 
                 (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
