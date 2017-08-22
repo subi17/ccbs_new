@@ -16,6 +16,7 @@
 {Mc/offer.i}
 {Func/dms.i}
 {Func/q25functions.i}
+{Func/profunc.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -326,24 +327,6 @@ FUNCTION fConvertPayType RETURNS CHAR
    (ilgValue AS LOGICAL):
    IF ilgValue EQ TRUE THEN RETURN "TARJ".
    ELSE RETURN "CONT".
-END.   
-
-FUNCTION fGetSegment RETURNS CHAR
-   (iiCustNum AS INT):
-   DEF BUFFER bCust FOR Customer.
-   FIND FIRST bCust NO-LOCK  WHERE
-              bCust.CustNum EQ iiCustNum
-              NO-ERROR.
-   IF AVAIL bCust THEN DO:
-      FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand = gcBrand AND
-                 CustCat.Category = bCust.Category
-                 NO-ERROR.
-      IF AVAIL CustCat THEN
-         RETURN CustCat.Segment.
-      RETURN "Consumer".
-   END.
-   ELSE RETURN "-".
 END.   
 
 /*The value can be Simonly, Handset, Financed Handset.*/
