@@ -346,6 +346,25 @@ FUNCTION fGetVoiceBundle RETURNS CHAR
 
 RETURN lcRet.
 END.
+FUNCTION fVoiceBundle RETURNS CHAR
+   (iiOrderId AS INT):
+   DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
+   DEF VAR lcOut AS CHAR NO-UNDO.
+   lcVoiceBundles = fcParamC("VOICE_BUNDLES").
+   DEF BUFFER bOrderaction FOR Orderaction.
+   FOR EACH bOrderaction NO-LOCK WHERE
+            bOrderaction.Brand EQ gcBrand AND
+            bOrderaction.Orderid EQ iiOrderId AND
+            LOOKUP(bOrderaction.ItemKey, lcVoiceBundles) > 0:
+     IF lcOut NE "" THEN  lcOut = lcOut + ",".
+     lcOut = lcOut + bOrderaction.ItemKey.
+
+
+   END.
+RETURN lcOut.
+END.
+
+
 
 
 FUNCTION fDelivSIM RETURNS LOG
