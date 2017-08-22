@@ -12,6 +12,7 @@
   ----------------------------------------------------------------------*/
 
 {Syst/commali.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER iiDumpID      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icFile        AS CHARACTER NO-UNDO.
@@ -29,20 +30,34 @@ DEFINE VARIABLE llInactivateDump AS LOGICAL   INITIAL NO NO-UNDO.
 
 DEFINE VARIABLE HandlerObj AS CLASS HPD.DumpHandler NO-UNDO.
 
+LOG-MANAGER:LOGFILE-NAME = "../var/log/hpd_filedump_" + STRING(iiDumpID) + 
+                           "_" + fGetTableBrand("DFTimeTable") + ".log".
+
 FIND FIRST DumpFile NO-LOCK WHERE
    DumpFile.DumpID = iiDumpID
 NO-ERROR.
 
 IF NOT AVAILABLE DumpFile
-THEN RETURN "ERROR: DumpFile record doesn't exist". 
+THEN DO:
+   LOG-MANAGER:WRITE-MESSAGE("DumpFile record doesn't exist", "ERROR").
+   RETURN "ERROR: DumpFile record doesn't exist".
+END.
 
 IF NOT DumpFile.FileCategory = "HPD"
-THEN RETURN "ERROR: Only HPD type dumpfile is allowed".
+THEN DO:
+   LOG-MANAGER:WRITE-MESSAGE("Only HPD type dumpfile is allowed", "ERROR").
+   RETURN "ERROR: Only HPD type dumpfile is allowed".
+END.
 
 lcClassName = DumpFile.LinkKey.
 
 IF NOT lcClassName BEGINS "HPD."
-THEN RETURN "ERROR: DumpFile LinkKey field doesn't contain valid HPD class".
+THEN DO:
+   LOG-MANAGER:WRITE-MESSAGE("DumpFile LinkKey field doesn't contain valid HPD class", "ERROR").
+   RETURN "ERROR: DumpFile LinkKey field doesn't contain valid HPD class".
+END.
+
+LOG-MANAGER:WRITE-MESSAGE("Start processing dump " + DumpFile.DumpName, "INFO").
 
 HandlerObj = DYNAMIC-NEW lcClassName(iiDumpID, icFile).
 
@@ -51,23 +66,33 @@ ASSIGN
    olInterrupted = HandlerObj:llInterrupted
    .
 
+IF HandlerObj:llInterrupted
+THEN DO:
+   LOG-MANAGER:WRITE-MESSAGE("Process was interrupted when " + STRING(HandlerObj:liEvents) + " was dumped", "INFO").
+   RETURN.
+END.
+ELSE LOG-MANAGER:WRITE-MESSAGE("Completed the dump. " + STRING(HandlerObj:liEvents) + " rows was dumped.", "INFO").
+
 CATCH apperrorobj AS Progress.Lang.AppError:
    
    IF apperrorobj:ReturnValue <> "" AND apperrorobj:ReturnValue <> ?
-   THEN RETURN "ERROR: " + apperrorobj:ReturnValue. 
+   THEN DO:
+      LOG-MANAGER:WRITE-MESSAGE(apperrorobj:ReturnValue, "ERROR").
+      RETURN "ERROR: " + apperrorobj:ReturnValue.
+   END.
    
-   lcReturnValue = "ERROR: ".
    DO lii = 1 TO apperrorobj:NumMessages:    
         lcReturnValue = lcReturnValue + " " + apperrorObj:GetMessage(lii).
    END.
 
-   RETURN lcReturnValue.   
+   LOG-MANAGER:WRITE-MESSAGE(lcReturnValue, "ERROR").
+
+   RETURN "ERROR: " + lcReturnValue.
 
 END.
 
 CATCH errorobj AS Progress.Lang.ProError:
  
-   lcReturnValue = "ERROR: ".
    DO lii = 1 TO errorobj:NumMessages:  
       
       IF errorObj:GetMessage(lii) BEGINS "DYNAMIC-NEW cannot instantiate class"
@@ -78,7 +103,9 @@ CATCH errorobj AS Progress.Lang.ProError:
       ELSE lcReturnValue = lcReturnValue + " " + errorObj:GetMessage(lii).
    END.
 
-   RETURN lcReturnValue.   
+   LOG-MANAGER:WRITE-MESSAGE(lcReturnValue, "ERROR").
+
+   RETURN "ERROR: " + lcReturnValue.
      
 END.
 
