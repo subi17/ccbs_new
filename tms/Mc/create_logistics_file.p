@@ -312,41 +312,26 @@ END FUNCTION.
 /* must be global for fDelivSIM */
 DEFINE VARIABLE liRowNum        AS INTEGER   NO-UNDO.
 
-/* YPR-6059: *Function finds if subscription has active voice bundle */
-FUNCTION fGetVoiceBundle RETURNS CHAR
-   (iiMsSeq AS INT):
-   DEF BUFFER bMserviceLimit FOR MserviceLimit.
+/* YPR-6059: *Function finds if subscription has orderaction for voice bundle */
+/* Here issupport for multiple bundles but it is important to remember 
+   field length limitations (10 chars) */
+FUNCTION fVoiceBundle RETURNS CHAR
+   (iiOrderId AS INT):
    DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
-   DEF VAR lcBundle AS CHAR NO-UNDO.
-   DEF VAR liCount AS INT NO-UNDO.
-   DEF VAR lcRet AS CHAR NO-UNDO.
-   DEF VAR ldeNow AS DECIMAL NO-UNDO.
-
-   ldeNow = fMakeTS().
-
+   DEF VAR lcOut AS CHAR NO-UNDO.
    lcVoiceBundles = fcParamC("VOICE_BUNDLES").
-   DO liCount = 1 TO NUM-ENTRIES(lcVoiceBundles):
-      lcBundle =  ENTRY(liCount,lcVoiceBundles).
-      FIND FIRST bMservicelimit NO-LOCK WHERE
-                 bMserviceLimit.MsSeq EQ iiMsSeq AND
-                 bMserviceLimit.DialType EQ {&DIAL_TYPE_VOICE} AND
-                 bMserviceLimit.EndTS GE ldeNow AND
-                 bMserviceLimit.FromTS LE ldeNow
-                 NO-ERROR.
-      IF AVAIL bMserviceLimit THEN DO:
-         FIND FIRST ServiceLimit NO-LOCK WHERE
-                    ServiceLimit.SlSeq EQ bMservicelimit.SlSeq AND
-                    ServiceLimit.GroupCode EQ lcBundle
-                    NO-ERROR.
-         IF AVAIL ServiceLimit THEN DO:
-            IF lcRet NE "" THEN lcRet = lcRet + ",".
-            lcRet = lcRet + lcBundle.
-         END.
-      END.
+   DEF BUFFER bOrderaction FOR Orderaction.
+   FOR EACH bOrderaction NO-LOCK WHERE
+            bOrderaction.Brand EQ gcBrand AND
+            bOrderaction.Orderid EQ iiOrderId AND
+            LOOKUP(bOrderaction.ItemKey, lcVoiceBundles) > 0:
+     IF lcOut NE "" THEN  lcOut = lcOut + ",".
+     lcOut = lcOut + bOrderaction.ItemKey.
    END.
-
-RETURN lcRet.
+RETURN lcOut.
 END.
+
+
 
 
 FUNCTION fDelivSIM RETURNS LOG
@@ -755,7 +740,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
       ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
-      ttOneDelivery.TmpMSISDN     = fGetVoiceBundle(Order.MsSeq) /*YPR-6059*/
+      ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.MsSeq) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
       ttOneDelivery.VoiceMail     = "633633633"
       ttOneDelivery.XFUserID      = lcUID
