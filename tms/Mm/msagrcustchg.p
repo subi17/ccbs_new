@@ -1307,7 +1307,7 @@ PROCEDURE pMsCustMove:
                                   bOMobSub.CLIType,
                                   TODAY - 1).
       END.
-      fDeactivateTVService(liMsSeq, MsRequest.UserCode).
+      fDeactivateTVService(MobSub.MsSeq, MsRequest.UserCode).
    END.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobSub).
