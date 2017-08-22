@@ -56,10 +56,10 @@ PROCEDURE pProcessRequests:
        IF NOT AVAIL MobSub THEN 
           RETURN fTPServiceError(BUFFER TPService,"Contract not found").
 
-       FIND FIRST bf_TPService_Activation WHERE bf_TPService_Activation.MsSeq     = TPService.MsSeq    AND 
-                                                bf_TPService_Activation.Operation = {&TYPE_ACTIVATION} AND 
-                                                bf_TPService_Activation.ServType  = "Television"       AND 
-                                                bf_TPService_Activation.ServSttus = {&STATUS_HANDLED}  NO-LOCK NO-ERROR.
+       FIND FIRST bf_TPService_Activation WHERE bf_TPService_Activation.MsSeq      = TPService.MsSeq    AND 
+                                                bf_TPService_Activation.Operation  = {&TYPE_ACTIVATION} AND 
+                                                bf_TPService_Activation.ServType   = "Television"       AND 
+                                                bf_TPService_Activation.ServStatus = {&STATUS_HANDLED}  NO-LOCK NO-ERROR.
        IF AVAIL bf_TPService_Activation THEN                                              
            ASSIGN ldeActCreatedTS = bf_TPService_Activation.CreatedTS.
 
