@@ -590,14 +590,9 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
                              TPService.ServType  = "Television"       NO-LOCK NO-ERROR.
   IF AVAIL TPService THEN
   DO:
-      IF LOOKUP(TPService.ServStatus, ({&STATUS_LOGISTICS_INITIATED} + "," + 
-                                       {&WAITING_FOR_STB_ACTIVATION} + "," + 
-                                       {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION})) > 0 THEN 
-          RETURN FALSE. 
-
       ASSIGN liActivationServSeq = TPService.ServSeq.
 
-      IF LOOKUP(TPService.ServStatus,"HANDLED") > 0 THEN 
+      IF LOOKUP(TPService.ServStatus, {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} + "," + {&STATUS_HANDLED}) > 0 THEN 
       DO:
           ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
                                                  TPService.Product, 
