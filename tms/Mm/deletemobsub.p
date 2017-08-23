@@ -57,6 +57,18 @@ DEF BUFFER bCustomer FOR Customer.
 DEF BUFFER bOrder    FOR Order.
 DEF BUFFER bOrdTemp  FOR Order.
 
+/* Extra line */
+DEFINE VARIABLE lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcExtraLineDiscounts    AS CHAR NO-UNDO.
+DEFINE VARIABLE liExtraLineMsSeq        AS INT  NO-UNDO. 
+
+DEF BUFFER lELOrder       FOR Order.        
+DEF BUFFER lMLMobSub      FOR MobSub.
+DEF BUFFER lbELMobSub     FOR MobSub.
+DEF BUFFER lbMLMobSub     FOR MobSub.
+DEF BUFFER lELOrderAction FOR OrderAction.
+
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
    FIELD PerContID AS INT
@@ -81,6 +93,48 @@ FUNCTION fLocalMemo RETURNS LOGIC
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       
+END FUNCTION.
+
+FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
+   (INPUT iiMsSeq        AS INT,
+    INPUT iiMultiSimId   AS INT,
+    INPUT iiMultiSimType AS INT,
+    INPUT iiMsRequest    AS INT,
+    INPUT ideActStamp    AS DEC, 
+    INPUT lcBundleId     AS CHAR):
+
+   DEFINE BUFFER lbMobSub FOR MobSub.
+
+   DEFINE VARIABLE liELMultiSimType AS INTEGER NO-UNDO.  
+
+   IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
+                                            iiMultiSimId,
+                                            iiMultiSimType) THEN
+   RETURN FALSE.
+
+   CASE iiMultiSimType : 
+      WHEN {&MULTISIMTYPE_PRIMARY}   THEN liELMultiSimType = {&MULTISIMTYPE_EXTRALINE}.  
+      WHEN {&MULTISIMTYPE_EXTRALINE} THEN liELMultiSimType = {&MULTISIMTYPE_PRIMARY}.
+   END CASE.
+   
+   FIND FIRST lbMobSub NO-LOCK WHERE 
+              lbMobSub.MsSeq        = iiMultiSimId     AND 
+              lbMobSub.MultiSimId   = iiMsSeq          AND 
+              lbMobSub.MultiSimType = liELMultiSimType NO-ERROR.
+
+   IF AVAIL lbMobSub THEN 
+      RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                            INPUT lbMobsub.CLI,
+                            INPUT lbMobsub.CustNum,
+                            INPUT "REMOVE",
+                            INPUT "",        /* Optional param list */
+                            INPUT iiMsRequest,
+                            INPUT ideActStamp,
+                            INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                            INPUT lcBundleId).
+
+   RETURN TRUE. 
+
 END FUNCTION.
 
 
@@ -121,6 +175,11 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhIMSI).
    RUN StarEventInitialize(lhSingleFee).
 END.
+
+ASSIGN 
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+   lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes")
+   lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
 
 RUN pTerminate.
 
@@ -294,6 +353,7 @@ PROCEDURE pTerminate:
    IF (lcTerminationType EQ {&TERMINATION_TYPE_FULL} AND
        fIsConvergenceTariff(Mobsub.CliType)) THEN DO:
       fTerminateSVAs(liMsSeq, FALSE).
+      fDeactivateTVService(liMsSeq, MsRequest.UserCode).
    END.
 
    /* Cancel existing periodical contract activation requests */
@@ -358,7 +418,6 @@ PROCEDURE pTerminate:
       /* Nothing if subs. type is not part of DSS2 */
       IF lcBundleId = "DSS2" AND
          LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN .
-
       /* If directly linked to DSS */
       ELSE IF MobSub.MsSeq = liDSSMsSeq THEN DO:
          IF fIsDSSTransferAllowed(INPUT MobSub.CLI,
@@ -404,7 +463,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* If DSS is transferred then remove subs. from DSS group */
-         ELSE
+         ELSE DO:
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -414,6 +473,18 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
+
+            /* If it is Extraline associated subscription */
+            IF lcBundleId = "DSS2"                                  AND
+               (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.MultiSimId,
+                                              MobSub.MultiSimType,
+                                              MsRequest.MsRequest,
+                                              MsRequest.ActStamp,
+                                              lcBundleId).
+         END.
 
       END. /* IF MobSub.MsSeq = liDSSMsSeq THEN DO: */
       /* DSS is not linked directly */
@@ -434,7 +505,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* Otherwise just remove subs. from DSS group */
-         ELSE
+         ELSE DO:
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -444,6 +515,19 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
+
+            /* If it is Extraline associated subscription */
+            IF lcBundleID = "DSS2"                                  AND 
+               (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.MultiSimId,
+                                              MobSub.MultiSimType,
+                                              MsRequest.MsRequest,
+                                              MsRequest.ActStamp,
+                                              lcBundleId).
+         END.
+
       END. /* ELSE DO: */
    END. /* IF llDSSActive THEN DO: */
 
@@ -999,6 +1083,59 @@ PROCEDURE pTerminate:
 
    END.   
    IF AVAIL MSISDN THEN RELEASE MSISDN.
+
+   /* Close Extra line discount, if associated main line is fully OR partially terminated  */
+   /* OR */
+   /* Close Extra line discount, if extra line subscription is terminated */
+   IF (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                      bCLIType.Brand      = Syst.Parameters:gcBrand          AND
+                      bCLIType.CLIType    = TermMobSub.CLIType               AND
+                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+               LOOKUP(bCLIType.CLIType,lcExtraMainLineCLITypes) > 0)) OR
+      (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                      bCLIType.Brand      = Syst.Parameters:gcBrand          AND
+                      bCLIType.CLIType    = TermMobSub.CLIType               AND
+                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
+                LOOKUP(bCLIType.CLIType,lcExtraLineCLITypes) > 0)) THEN
+   DO:
+
+      IF LOOKUP(TermMobSub.CLIType,lcExtraMainLineCLITypes) > 0 THEN 
+         liExtraLineMsSeq = TermMobSub.MultiSimId.
+      ELSE IF  LOOKUP(TermMobSub.CLIType,lcExtraLineCLITypes) > 0 THEN 
+         liExtraLineMsSeq = TermMobSub.MsSeq.
+
+      FIND FIRST lELOrder NO-LOCK WHERE 
+                 lELOrder.MsSeq        EQ liExtraLineMsSeq          AND           
+                 lELOrder.MultiSimId   NE 0                         AND
+                 lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
+          LOOKUP(lELOrder.CLIType,lcExtraLineCLITypes) GT 0         NO-ERROR.
+
+      IF AVAIL lELOrder THEN DO:
+         FIND FIRST lELOrderAction NO-LOCK WHERE
+                    lELOrderAction.Brand    = gcBrand                 AND
+                    lELOrderAction.OrderID  = lELOrder.OrderID        AND
+                    lELOrderAction.ItemType = "ExtraLineDiscount"     AND
+             LOOKUP(lELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+
+        IF AVAIL lELOrderAction THEN     
+           fCloseExtraLineDiscount(lELOrder.MsSeq,
+                                   lELOrderAction.ItemKey,
+                                   TODAY).
+
+        /* Main line hard associated it removed,
+           while extra line hard assocition remains same, because it helps 
+           while reactivating extra line subscription */
+        FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
+                   lMLMobSub.MsSeq        EQ TermMobSub.MultiSimId   AND
+                   lMLMobSub.MultiSimId   EQ TermMobSub.MsSeq        AND 
+                   lMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+ 
+        IF AVAIL lMLMobSub THEN 
+           ASSIGN lMLMobSub.MultiSimId   = 0
+                  lMLMobSub.MultiSimType = 0.
+      END.                              
+
+   END.
 
    /* ADDLine-20 Additional Line 
       ADDLINE-323 fixed bug 
