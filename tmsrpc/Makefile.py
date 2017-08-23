@@ -403,9 +403,8 @@ def build(*a):
 
     if not os.path.exists(build_dir):
         os.mkdir(build_dir)
-    shutil.copy('Makefile.py', build_dir)
 
-    for file in glob('*_config.json'):
+    for file in ['Makefile.py', 'getpf.py'] + glob('*_config.json'):
         shutil.copy(file, build_dir)
 
     if a[0] == 'buildextapi':
