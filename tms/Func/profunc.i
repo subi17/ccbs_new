@@ -25,7 +25,7 @@ FUNCTION fIsPro RETURNS LOGICAL
 
    DEF BUFFER CustCat FOR CustCat.
 
-   FIND FIRST CustCat NO-LOCK where
+   FIND FIRST CustCat NO-LOCK WHERE
               CustCat.Brand EQ Syst.Parameters:gcbrand AND
               CustCat.Category EQ icCategory NO-ERROR.
               
@@ -39,13 +39,32 @@ FUNCTION fIsSelfEmpl RETURNS LOGICAL
 
    DEF BUFFER CustCat FOR CustCat.
 
-   FIND FIRST CustCat NO-LOCK where
+   FIND FIRST CustCat NO-LOCK WHERE
               CustCat.Brand EQ Syst.Parameters:gcbrand AND
               CustCat.Category EQ icCategory NO-ERROR.
 
    IF AVAIL CustCat AND INDEX(custcat.catname, "self") > 0 THEN RETURN TRUE.
    RETURN FALSE.
 END.
+
+FUNCTION fGetSegment RETURNS CHAR
+   (iiCustNum AS INT):
+   DEF BUFFER bCustomer FOR Customer.
+   FIND FIRST bCustomer NO-LOCK  WHERE
+              bCustomer.CustNum EQ iiCustNum
+              NO-ERROR.
+   IF AVAIL bCustomer THEN DO:
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand = gcBrand AND
+                 CustCat.Category = bCustomer.Category
+                 NO-ERROR.
+      IF AVAIL CustCat THEN
+         RETURN CustCat.Segment.
+      RETURN "Consumer".
+   END.
+   ELSE RETURN "-".
+END.
+
 
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
 FUNCTION fMakeProActRequest RETURNS INT(
@@ -103,7 +122,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
    END.
    ELSE IF icAction EQ "on" THEN 
       icAction = "act".
-   ELSE if icAction EQ "off" THEN 
+   ELSE IF icAction EQ "off" THEN 
       icAction = "term".
 
       liRequest = fPCActionRequest(iiMsSeq,
@@ -128,7 +147,7 @@ END.
 
 /*Function returns TRUE if the order exsists and it is done from PRO channel.*/
 FUNCTION fIsProOrder RETURNS LOGICAL
-   (iiOrderID as INT):
+   (iiOrderID AS INT):
 
    DEF BUFFER Order FOR Order.
 

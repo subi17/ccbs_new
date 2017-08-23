@@ -12,7 +12,7 @@
 {Func/fdss.i}
 {Mc/dpmember.i}
 {Func/q25functions.i}
-
+{Func/orderfunc.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -75,7 +75,8 @@ FOR EACH OrderAction NO-LOCK WHERE
        FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK NO-ERROR.
        IF AVAIL DayCampaign THEN 
        DO:
-           IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_FIXED} THEN 
+           IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND 
+              LOOKUP(STRING(Daycampaign.BundleTarget), (STRING({&DC_BUNDLE_TARGET_FIXED}) + "," + STRING({&TELEVISION_BUNDLE}))) = 0 THEN 
                NEXT ORDERACTION_LOOP.
            ELSE IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
                NEXT ORDERACTION_LOOP.
@@ -104,11 +105,12 @@ FOR EACH OrderAction NO-LOCK WHERE
 
          RUN pPeriodicalContract.
       END.
-      WHEN "Service" THEN RUN pService.
-      WHEN "Discount" THEN RUN pDiscountPlan. 
-      WHEN "AddLineDiscount" THEN RUN pAddLineDiscountPlan.
-      WHEN "Q25Discount" THEN RUN pQ25Discount.
-      WHEN "Q25Extension" THEN RUN pQ25Extension.
+      WHEN "Service"           THEN RUN pService.
+      WHEN "Discount"          THEN RUN pDiscountPlan. 
+      WHEN "AddLineDiscount"   THEN RUN pAddLineDiscountPlan.
+      WHEN "ExtraLineDiscount" THEN RUN pExtraLineDiscountPlan.
+      WHEN "Q25Discount"       THEN RUN pQ25Discount.
+      WHEN "Q25Extension"      THEN RUN pQ25Extension.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
@@ -188,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR ldaPMDUBPromoStartDate AS DATE NO-UNDO.
    DEF VAR ldePMDUBPromoActStamp  AS DEC  NO-UNDO.
    DEF VAR lcWaitFor AS CHAR NO-UNDO. 
+   DEF VAR liServSeq AS INT  NO-UNDO.
 
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER bBundleRequest  FOR MsRequest.
@@ -199,7 +202,23 @@ PROCEDURE pPeriodicalContract:
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
       RETURN "ERROR: Unknown periodical contract " + OrderAction.ItemKey.
-      
+   
+   IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+   DO:
+       ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                              OrderAction.ItemKey, 
+                                              "Huawei", 
+                                              "Television", 
+                                              {&TYPE_ACTIVATION}, 
+                                              {&STATUS_NEW}, 
+                                              OrderAction.ItemParam, 
+                                              Order.Salesman).
+
+       IF liServSeq > 0 THEN
+           fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+       
+       RETURN "".
+   END.    
    /* override DayCampaign.Feemodel because of possible reactivation */
    IF Order.OrderType = 2 AND
      LOOKUP(DayCampaign.DCType,"3,5") > 0 THEN llCreateFees = TRUE.
@@ -686,6 +705,21 @@ PROCEDURE pAddLineDiscountPlan:
                           TODAY,
                           OrderAction.ItemKey).
    IF RETURN-VALUE BEGINS "ERROR" THEN
+      RETURN RETURN-VALUE.
+
+END PROCEDURE.
+
+PROCEDURE pExtraLineDiscountPlan:
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE 
+              DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN 
+      RETURN "ERROR: Extra line DiscountPlan id: " + OrderAction.ItemKey + " not found".
+
+   fCreateExtraLineDiscount(MobSub.MsSeq,
+                            DiscountPlan.DPRuleID,
+                            TODAY).
+   IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
 
 END PROCEDURE.
