@@ -106,8 +106,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
          (Mobsub.CliType = "TARJ9"  AND liCurrentServiceClass EQ 309) OR
          (Mobsub.CliType = "TARJ10" AND liCurrentServiceClass EQ 310) OR
          (Mobsub.CliType = "TARJ11" AND liCurrentServiceClass EQ 311) OR
-         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass EQ 312) OR
-         (Mobsub.CliType = "TARJ13" AND liCurrentServiceClass EQ 320) THEN DO:
+         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass EQ 312) THEN DO:
          
          CASE Mobsub.CliType:
             WHEN "TARJ7"  THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 303".
@@ -115,7 +114,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
             WHEN "TARJ10" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 310".
             WHEN "TARJ11" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 311".
             WHEN "TARJ12" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 312".
-            WHEN "TARJ13" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 320".
          END CASE.
 
          PUT STREAM sout UNFORMATTED
@@ -167,7 +165,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
                                ELSE IF Mobsub.CliType = "TARJ10" THEN 310
                                ELSE IF Mobsub.CliType = "TARJ11" THEN 311
                                ELSE IF Mobsub.CliType = "TARJ12" THEN 312
-                               ELSE IF Mobsub.CliType = "TARJ13" THEN 320
                                                                  ELSE 309, /* SC temp */
                                ldaExpDate,
                                OUTPUT lcerror).
