@@ -163,7 +163,7 @@ FORM
  ttCall.DateSt       LABEL "Date........"       AT 51 format "99-99-9999"
   wd format "X(3)" NO-LABEL                                             SKIP
    
- "B-sub Operator :" ttCall.BDest NO-LABEL FORMAT "X(8)" 
+ "B-sub Operator :" ttCall.BDest NO-LABEL FORMAT "X(12)" 
  lcBDName NO-LABEL   FORMAT "x(14)"  
  Time-S          LABEL "Started ...." AT 51                             SKIP
  

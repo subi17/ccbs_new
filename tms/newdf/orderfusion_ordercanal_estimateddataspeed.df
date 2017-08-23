@@ -1,0 +1,8 @@
+ADD FIELD "EstimatedDataSpeed" OF "OrderFusion" AS INTEGER
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "EstDataSpeed"
+  COLUMN-LABEL "EstDataSpeed"
+  HELP "Estimated Data Speed"
+  ORDER 190
+
