@@ -2359,7 +2359,7 @@ PROCEDURE pGetEXTRA_LINE_INFO:
             IF AVAIL lbELOrder THEN
                ASSIGN 
                   lcList   = fTeksti(579,liLang)
-                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbELOrder.OrderId)).
+                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbELOrder.ContractId)).
          END.
          WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
             FIND FIRST lbMLOrder NO-LOCK WHERE
@@ -2371,7 +2371,7 @@ PROCEDURE pGetEXTRA_LINE_INFO:
             IF AVAIL lbMLOrder THEN
                ASSIGN 
                   lcList   = fTeksti(580,liLang)
-                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbMLOrder.OrderId)).
+                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbMLOrder.ContractId)).
          END.
          OTHERWISE .
       END CASE.
