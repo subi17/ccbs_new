@@ -27,6 +27,23 @@ FUNCTION fFusionMessageError RETURNS CHAR
    RETURN icErrorDesc.
 END.
 
+FUNCTION fTPServiceError RETURNS CHAR
+    (BUFFER TPService FOR TPService,
+     icErrorDesc AS CHAR):
+   
+   DEFINE BUFFER bf_TPService FOR TPService.
+
+   FIND FIRST bf_TPService WHERE bf_TPService.MsSeq   = TPService.MsSeq   AND 
+                                 bf_TPService.ServSeq = TPService.ServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   IF AVAIL bf_TPService THEN    
+      ASSIGN 
+          bf_TPService.ServStatus = {&STATUS_ERROR}   
+          bf_TPService.UpdateTS   = fMakeTS().
+   
+   RETURN "".
+
+END FUNCTION.
+
 FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
  (BUFFER ibFusionMessage FOR FusionMessage,
   icError AS CHAR,
@@ -91,7 +108,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       lcOrderType = "xDSL + VOIP".
    ELSE IF CLIType.FixedLineType EQ 2 THEN
       lcOrderType = "FTTH + VOIP".
-
+     
    CREATE FusionMessage.
    ASSIGN
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)

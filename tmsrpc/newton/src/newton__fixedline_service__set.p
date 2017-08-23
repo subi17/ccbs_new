@@ -21,6 +21,7 @@ gcBrand = "1".
 {Func/service.i}
 {Func/vasfunc.i}
 {Func/profunc.i}
+{Func/orderfunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -50,16 +51,17 @@ DEF VAR lcServCom AS CHAR NO-UNDO.
 DEF VAR ocError AS CHAR NO-UNDO.
 DEF VAR lcErr AS CHAR NO-UNDO.
 DEF VAR liValidate AS INT  NO-UNDO.
-DEF VAR pcSetServiceId AS CHAR NO-UNDO.
-DEF VAR pcReqList      AS CHAR NO-UNDO.
-DEF VAR lcFromStat     AS CHAR NO-UNDO.
-DEF VAR lcToStat       AS CHAR NO-UNDO.
-DEF VAR lcBarringCode  AS CHAR NO-UNDO.
+DEF VAR pcSetServiceId AS CHAR  NO-UNDO.
+DEF VAR pcReqList      AS CHAR  NO-UNDO.
+DEF VAR lcFromStat     AS CHAR  NO-UNDO.
+DEF VAR lcToStat       AS CHAR  NO-UNDO.
+DEF VAR lcBarringCode  AS CHAR  NO-UNDO.
 DEF VAR orBarring      AS ROWID NO-UNDO.
-DEF VAR lcOnOff        AS CHAR NO-UNDO.
-DEF VAR llOngoing      AS LOG NO-UNDO.
-DEF VAR liParams       AS INT NO-UNDO.
-DEF VAR liSVARequest   AS INT NO-UNDO.
+DEF VAR lcOnOff        AS CHAR  NO-UNDO.
+DEF VAR llOngoing      AS LOG   NO-UNDO.
+DEF VAR liParams       AS INT   NO-UNDO.
+DEF VAR liSVARequest   AS INT   NO-UNDO.
+DEF VAR lcBundleType   AS CHAR  NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
@@ -70,12 +72,12 @@ IF pcReqList EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 pcInputArray = get_array(param_toplevel_id, "1").
 
-IF NUM-ENTRIES(pcReqList) >= 3 THEN RETURN appl_err("too many parameters").
+IF NUM-ENTRIES(pcReqList) >= 3 THEN 
+    RETURN appl_err("too many parameters").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND Mobsub NO-LOCK
-WHERE Mobsub.MsSeq = piMsSeq NO-ERROR.
+FIND FIRST Mobsub WHERE Mobsub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Mobsub THEN
     RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
@@ -89,6 +91,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
    pcServiceId = get_string(pcStruct, "service_id").
    pcValue = get_string(pcStruct, "value").
+
    IF LOOKUP('param', lcStruct) GT 0 THEN
     pcParam = get_string(pcStruct, "param").
    IF LOOKUP('param2', lcStruct) GT 0 THEN
@@ -96,10 +99,20 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   /*YPRO*/
-   /*SVAs*/
-   /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
-   IF fIsSVA(pcServiceId, OUTPUT liParams) THEN DO:
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
+   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+   DO:
+       ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
+
+       CASE pcValue:
+           WHEN "off" THEN 
+               RUN pDeActivateTVService.
+           WHEN "on" THEN
+               RUN pActivateTVService.
+       END CASE.
+   END.
+   ELSE IF fIsSVA(pcServiceId, OUTPUT liParams) THEN    /*SVAs*/ /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
+   DO:
       IF liParams EQ 2 AND (pcValue BEGINS "activate") THEN DO:
          IF pcParam EQ "" OR pcParam2 EQ "" THEN
             RETURN appl_err("Missing SVA parameter").
@@ -134,13 +147,59 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
           Memo.MemoTitle = "SVA operation"
           Memo.MemoText  = pcValue + " " + pcServiceId
           Memo.CustNum   = mobsub.custnum.
-   END. /*YPRO*/
+   END.
 END.   
 
 add_boolean(response_toplevel_id, "", TRUE).
 
+PROCEDURE pDeActivateTVService:
+    DEFINE VARIABLE liRequest   AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcResult    AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE liServSeq   AS INTEGER   NO-UNDO.
+
+    IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq     = piMsSeq            AND 
+                                      TPService.Operation = {&TYPE_ACTIVATION} AND 
+                                      TPService.ServType  = lcBundleType       NO-LOCK) THEN
+    DO:
+        IF NOT fDeactivateTVService(piMsSeq, pcParam2) THEN 
+            RETURN "Setup box logistics/activation process is already initiated. Cancellation not allowed now.".  
+    END.
+    ELSE 
+        RETURN appl_err("No tv service active for cancellation").
+
+    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pActivateTVService:
+    DEF VAR liServSeq AS INT NO-UNDO.
+
+    FIND FIRST TPService WHERE TPService.MsSeq       = piMsSeq            AND 
+                               TPService.Operation   = {&TYPE_ACTIVATION} AND  
+                               TPService.ServType    = lcBundleType       AND 
+                               TPService.ServStatus <> "HANDLED"          NO-LOCK NO-ERROR.
+    IF AVAIL TPService THEN 
+        RETURN "There exists an ongoing tv service request.".
+
+    ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
+                                           pcServiceId, 
+                                           "Huawei", 
+                                           lcBundleType, 
+                                           {&TYPE_ACTIVATION}, 
+                                           {&STATUS_NEW}, 
+                                           pcParam,   /* OfferId */
+                                           pcParam2). /* UserCode */
+    
+    IF liServSeq > 0 THEN 
+        fCreateTPServiceMessage(piMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+
+    RETURN "".
+
+END PROCEDURE.
+
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+   IF VALID-HANDLE(ghFunc1) THEN 
+      DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
 
 
