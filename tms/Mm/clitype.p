@@ -147,7 +147,7 @@ form
         HELP "0=Inactive, 1=Active, 2=Retired"
         lcStatus NO-LABEL FORMAT "X(15)" SKIP
     "LineType......:"  CLIType.LineType
-        HELP "0=Entry, 1=Main, 2=Additional"
+        HELP "0=Entry, 1=Main, 2=Additional 3=Extra"
         lcLineType NO-LABEL FORMAT "X(15)"
     "Fixed LineType:"  AT 35 CLIType.FixedLineType
         HELP "1=ADSL, 2=FIBER"
