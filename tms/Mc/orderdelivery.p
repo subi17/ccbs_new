@@ -62,7 +62,7 @@ FORM
     "Order ID ..........:" OrderDelivery.OrderId SKIP 
     "TimeStamp .........:" OrderDelivery.LOTimeStamp FORMAT "99-99-9999 hh:mm:ss"
     SKIP
-    "LO Status .........:" liLOStatusId FORMAT ">>>9" lcLOStatus FORMAT "x(30)" SKIP
+    "LO Status .........:" liLOStatusId FORMAT ">>>>9" lcLOStatus FORMAT "x(30)" SKIP
     "Logistic Operator..:" OrderDelivery.LOId lcLO FORMAT "x(30)" SKIP
     "Courier  ..........:" OrderDelivery.CourierId lcCourier FORMAT "x(30)" SKIP
     "Courier Shipping Id:" OrderDelivery.CourierShippingId FORMAT "x(30)" SKIP
@@ -373,10 +373,14 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others.
+
    IF STRING(OrderDelivery.LOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),
-                             LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
-   ELSE liLOStatusId = OrderDelivery.LOStatusId.                          
+      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
+   ELSE IF STRING(OrderDelivery.LOStatusId) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
+      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),LENGTH({&LO_STATUS_TV_STB_PREFIX}) + 1)).
+   ELSE 
+      liLOStatusId = OrderDelivery.LOStatusId.   
+                             
    lcLOStatus = fGetItemName( 
       gcBrand, 
       "LOStatusId", 
