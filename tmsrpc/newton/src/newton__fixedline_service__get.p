@@ -103,44 +103,48 @@ FOR EACH daycampaign NO-LOCK:
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
-       FIND FIRST TPService WHERE TPService.MsSeq     = piMsSeq            AND 
-                                  TPService.Operation = {&TYPE_ACTIVATION} AND 
-                                  TPService.ServType  = "Television"       NO-LOCK NO-ERROR.
+       FIND FIRST TPService WHERE TPService.MsSeq     = piMsSeq             AND 
+                                  TPService.Operation = {&TYPE_ACTIVATION}  AND 
+                                  TPService.ServType  = "Television"        AND 
+                                  TPService.Product   = DayCampaign.DCEvent NO-LOCK NO-ERROR.
        IF NOT AVAIL TPService THEN 
-           NEXT.
+           ASSIGN liServStatus = 0. /* Inactive */
+       ELSE 
+       DO:    
+           IF TPService.ServStatus = {&STATUS_HANDLED} THEN 
+               ASSIGN liServStatus = 1.  /* Activation Done*/ 
+           ELSE IF LOOKUP(TPService.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) > 0 THEN
+              ASSIGN liServStatus = 0. /* Inactive */         
+           ELSE     
+               ASSIGN liServStatus = 2.  /*Pending activation*/
 
-       IF TPService.ServStatus = {&STATUS_HANDLED} THEN 
-           ASSIGN liServStatus = 1.  /* Activation Done*/ 
-       ELSE     
-           ASSIGN liServStatus = 2.  /*Pending activation*/
-
-
-       FIND FIRST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq              AND 
-                                                  bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
-                                                  bf_TPService_Deactivation.ServType    = "Television"         NO-LOCK NO-ERROR.
-       IF AVAIL bf_TPService_Deactivation THEN 
-       DO:
-           IF NOT (bf_TPService_Deactivation.ServStatus = {&STATUS_ERROR} AND bf_TPService_Deactivation.ResponseCode > "") THEN
-               ASSIGN liServStatus = 0. /* Inactive */
-           ELSE 
-               ASSIGN liServStatus = 3. /*Pending deactivation*/
+           FIND FIRST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq              AND 
+                                                      bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
+                                                      bf_TPService_Deactivation.ServType    = "Television"         NO-LOCK NO-ERROR.
+           IF AVAIL bf_TPService_Deactivation THEN 
+           DO:
+               IF NOT (bf_TPService_Deactivation.ServStatus = {&STATUS_ERROR} AND bf_TPService_Deactivation.ResponseCode > "") THEN
+                   ASSIGN liServStatus = 0. /* Inactive */
+               ELSE 
+                   ASSIGN liServStatus = 3. /*Pending deactivation*/
+           END.
        END.
 
-      FIND FIRST FMItem WHERE FMItem.Brand     EQ gcBrand              AND 
-                              FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
-                              FMItem.BillCode  <> ""                   AND 
-                              FMItem.PriceList <> ""                   AND
-                              FMItem.FromDate  <= TODAY                AND 
-                              FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
-      IF AVAIL FMItem THEN 
-          ldPrice = FMItem.Amount.
-      ELSE 
-          ldPrice = 0.
+       FIND FIRST FMItem WHERE FMItem.Brand     EQ gcBrand              AND 
+                               FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
+                               FMItem.BillCode  <> ""                   AND 
+                               FMItem.PriceList <> ""                   AND
+                               FMItem.FromDate  <= TODAY                AND 
+                               FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
+       IF AVAIL FMItem THEN 
+           ldPrice = FMItem.Amount.
+       ELSE 
+           ldPrice = 0.
 
-      top_struct = add_struct(top_array, "").
-      add_string(top_struct, "service_id", Daycampaign.DCEvent).    
-      add_double(top_struct, "price"     , ldPrice).
-      add_string(top_struct, "status"    , STRING(liServStatus)).
+       top_struct = add_struct(top_array, "").
+       add_string(top_struct, "service_id", Daycampaign.DCEvent).    
+       add_double(top_struct, "price"     , ldPrice).
+       add_string(top_struct, "status"    , STRING(liServStatus)).
    END.
 END.
 
