@@ -13,6 +13,7 @@
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
+                   extra_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS
                    segment;string;mandatory;
  */
 
@@ -52,6 +53,10 @@ DEF VAR lcCategory                    AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder             AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder          AS LOGI NO-UNDO.
 DEF VAR liMobsubCount                 AS LOGI NO-UNDO.
+DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
+DEF VAR liMainLineOrderId             AS INT  NO-UNDO. 
+DEF VAR liOngoingOrderId              AS INT  NO-UNDO. 
+DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO. 
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 
@@ -76,6 +81,8 @@ ELSE IF NUM-ENTRIES(top_array) GT 6 THEN
       pcCliType    = get_string(param_toplevel_id, "4")
       pcChannel    = get_string(param_toplevel_id, "5")
       plSTCMigrate = get_bool(param_toplevel_id, "6").
+
+lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -217,6 +224,15 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
 
+/* Check extra lines discount is allowed for customer */
+lcExtraLineAllowed = "".
+
+IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineOrderId) THEN 
+   lcExtraLineAllowed = "OK".
+ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingOrderId) THEN    
+   lcExtraLineAllowed = "OK".
+ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
+
 IF lcAddLineAllowed = "" THEN DO:
       
    FOR EACH OrderCustomer NO-LOCK WHERE   
@@ -252,11 +268,14 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
+IF lcExtraLineAllowed EQ "" THEN lcExtraLineAllowed = "NO_SUBSCRIPTIONS".
+
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
+add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
 IF liSubs >= liSubLimit THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
