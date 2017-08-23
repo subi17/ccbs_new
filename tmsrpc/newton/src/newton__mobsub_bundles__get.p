@@ -188,7 +188,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF AVAIL DayCampaign THEN add_string(lcResultStruct, "name", DayCampaign.DCName).
 
    /* check BONO contracts and customer level bundle status */
-   IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP,VOICE100,VOICE200") > 0 OR
+   IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP,VOICE100,VOICE200,VOICE200B") > 0 OR
       LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
       (LOOKUP(MobSub.CLIType,"CONT9,CONT10") > 0 AND pcBundleId = "FREE100MINUTES") THEN DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
