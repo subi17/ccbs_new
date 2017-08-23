@@ -9,10 +9,12 @@
 
             &IF "{&localvar}" NE "YES" &THEN
                 &GLOBAL-DEFINE localvar YES
-                define variable llOrdStChg   as logical   no-undo.
-                DEF VAR llReserveSimAndMsisdn AS LOG NO-UNDO. 
-                DEFINE VARIABLE lh99Order AS HANDLE NO-UNDO.
-                DEFINE VARIABLE lh76Order AS HANDLE NO-UNDO.
+                DEF VAR llOrdStChg            AS LOG  NO-UNDO. 
+                DEF VAR llReserveSimAndMsisdn AS LOG  NO-UNDO.
+                DEF VAR lcExtraLineDiscounts  AS CHAR NO-UNDO.
+   
+                DEF VAR lh99Order AS HANDLE NO-UNDO.
+                DEF VAR lh76Order AS HANDLE NO-UNDO.
 
             &ENDIF
                 
@@ -118,7 +120,7 @@
 
                IF AVAIL OrderCustomer THEN
                DO:
-               
+                  /* Additional lines Mobile only tariffs */ 
                   IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                      OrderAction.Brand    = gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
@@ -170,6 +172,44 @@
                      END.
 
                      NEXT {1}.
+                  END.
+
+                  /* While processing Extra line mobile only orders, check if its 
+                     associated main line (fixed line) is installed. If it is installed 
+                     THEN don't move extra line order to 76 status */
+                  lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+                  IF lcExtraLineDiscounts <> ""                                AND
+                     Order.MultiSimId     <> 0                                 AND 
+                     Order.MultiSimType   = {&MULTISIMTYPE_EXTRALINE}          AND 
+                     CAN-FIND(FIRST OrderAction NO-LOCK WHERE 
+                                    OrderAction.Brand    = gcBrand             AND 
+                                    OrderAction.OrderID  = Order.OrderID       AND
+                                    OrderAction.ItemType = "ExtraLineDiscount" AND  
+                             LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN 
+                  DO:
+                     
+                     /* Check Mainline Convergent fixedline is installed OR it is still ongoing */
+                     IF fCheckFixedLineInstalledForMainLine(Order.MultiSimId,   /* Mainline Order Id  */
+                                                            Order.OrderId) THEN /* Extraline Order Id */
+                     DO:
+                        IF llDoEvent THEN DO:
+                           lh76Order = BUFFER Order:HANDLE.
+                           RUN StarEventInitialize(lh76Order).
+                           RUN StarEventSetOldBuffer(lh76Order).
+                        END.
+
+                        fSetOrderStatus(Order.OrderID,
+                                        {&ORDER_STATUS_PENDING_MAIN_LINE}).
+
+                        IF llDoEvent THEN DO:
+                           RUN StarEventMakeModifyEvent(lh76Order).
+                           fCleanEventObjects().
+                        END.
+
+                        NEXT {1}.
+                     END.
+
                   END.
                END.
             END.    
