@@ -70,6 +70,8 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -234,8 +236,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
 
-   IF MobSub.MultiSIMID    > 0                         AND 
-      MobSub.MultiSimType <> {&MULTISIMTYPE_EXTRALINE} THEN 
+   IF MobSub.MultiSIMID    > 0                            AND 
+      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) = 0 AND 
+      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     = 0 THEN 
       RUN pMultiSimSTC (INPUT ldtActDate).
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
@@ -535,8 +538,6 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liSecs                  AS INT  NO-UNDO. 
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineDiscRuleId   AS CHAR NO-UNDO. 
 
    DEF BUFFER bOwner         FOR MsOwner.
@@ -817,6 +818,17 @@ PROCEDURE pUpdateSubscription:
                               0,
                              "ExtraLine Discount is Closed",
                              "STC done from Extra line associated Main line to other Main line").                        
+            
+            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+   
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+            ASSIGN MobSub.MultiSimId   = 0 
+                   MobSub.MultiSimType = 0. 
+            
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+           
+            FIND CURRENT Mobsub NO-LOCK.
          END.
       END.
 
@@ -870,6 +882,45 @@ PROCEDURE pUpdateSubscription:
       IF AVAIL lMLMobSub THEN 
          ASSIGN lMLMobSub.MultiSimId   = 0
                 lMLMobSub.MultiSimType = 0.
+
+   END.
+
+   /* Create extra line discount, if STC is done to main line subscription type */
+   /* Discount is created only when associated extra line is active and not 
+      associated to other main line                                             */
+   IF lcExtraMainLineCLITypes                         NE "" AND 
+      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) GT 0  THEN DO:
+
+      FIND FIRST lELMobSub EXCLUSIVE-LOCK WHERE 
+                 lELMobSub.Brand        EQ gcBrand                   AND 
+                 lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
+                 lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} AND 
+                (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
+                 lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}) NO-ERROR.
+
+      IF AVAIL lELMobSub THEN DO:
+            
+         CASE lELMobSub.CLIType:
+            WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+         END CASE.
+         
+         IF lcExtraLineDiscRuleId NE "" THEN DO:
+            fCreateExtraLineDiscount(lELMobSub.MsSeq,
+                                     lcExtraLineDiscRuleId,
+                                     TODAY).
+            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+   
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+            ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
+                   MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
+            
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+           
+            FIND CURRENT Mobsub NO-LOCK.
+         END.
+
+      END.
 
    END.
 
@@ -2261,7 +2312,6 @@ PROCEDURE pMultiSimSTC:
    DEF VAR liSTCCreateTime     AS INT  NO-UNDO.
    DEF VAR ldaSecSIMTermDate   AS DATE NO-UNDO.
    DEF VAR ldeSecSIMTermStamp  AS DEC  NO-UNDO.
-   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
 
    DEF BUFFER lbMobSub    FOR Mobsub.
 

@@ -57,6 +57,7 @@ DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
+DEF VAR lcVoiceBundles     AS CHAR NO-UNDO.
 
 {Func/cparam2.i}
 {Syst/tmsconst.i}
@@ -71,6 +72,7 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcVoIPBaseContracts = fCParamC("BONO_VOIP_BASE_BUNDLES")
        lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+       lcVoiceBundles = fcParamC("VOICE_BUNDLES")
        lcPromotionBundles    = fCParamC("PROMOTION_BUNDLES").
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
@@ -139,6 +141,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) > 0 OR
       DayCampaign.DCEvent = "HSPA_ROAM_EU" THEN
       lcBundleType = "bundle".
+   ELSE IF LOOKUP(DayCampaign.DCEvent,lcVoiceBundles) > 0 THEN 
+      lcBundleType = "voice_bundle".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"
              lcCLIType = "CONTRD".

@@ -450,6 +450,15 @@ DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
 
+/* Extra lines */
+DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
+DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
+DEF VAR liMainLineOrderId      AS INT  NO-UNDO. 
+DEF VAR liOngoingOrderId       AS INT  NO-UNDO. 
+ 
+DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+DEF BUFFER ExtraLineMainOrder    FOR Order.
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 DEF BUFFER lbMobSub FOR MobSub. 
@@ -1083,7 +1092,8 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
       Order.Multiorder = plMultiOrder.               
-      
+   
+
 END.
 
 /* YBP-569 */
@@ -1815,7 +1825,8 @@ IF piMultiSimType NE 0 AND piMultiSimId <= 0 THEN
    RETURN appl_err("Multi SIM type passed but Multi SIM ID is missing").
 
 IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
-   CLIType.LineType > 0 AND
+   CLIType.LineType  > 0 AND
+   CLIType.LineType <> 3 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
                       CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
@@ -1927,6 +1938,54 @@ IF pcQ25Struct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
+/* Extra Lines Validations, 
+   updating multisimid & multisimidtype for hard association */
+ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
+       liMainLineOrderId     = 0
+       liOngoingOrderId      = 0
+       lcExtraLineDiscRuleId = "". 
+
+IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
+
+   IF fCheckExistingConvergentAvailForExtraLine(lcIdtype,
+                                                lcId,
+                                                OUTPUT liMainLineOrderId) THEN 
+      piMultiSimID = liMainLineOrderId.
+   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtype,
+                                                    lcId,
+                                                    OUTPUT liOngoingOrderId) THEN
+      piMultiSimID = liOngoingOrderId. 
+
+   piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+   IF piMultiSimID = 0 THEN  
+      RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
+
+   FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
+              ExtraLineMainOrder.Brand   = gcBrand      AND 
+              ExtraLineMainOrder.OrderId = piMultiSimID NO-ERROR.
+
+   IF NOT AVAIL ExtraLineMainOrder THEN 
+      RETURN appl_err("Extra line associated main line order is not available").
+
+   /* Discount rule id input is not necessary from WEB to TMS, 
+      As it is extra line we have to give default discount */
+   CASE pcSubType:
+      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+   END CASE.
+
+   IF lcExtraLineDiscRuleId NE "" THEN DO:
+      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
+                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+      IF NOT AVAIL ExtraLineDiscountPlan THEN
+         RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId)).      
+   END.
+
+END.
+
 /* YBP-532 */
 /*********************************************************************
  Creation and Update begins (All the validations should be done before)
@@ -1987,6 +2046,20 @@ IF AVAIL AddLineDiscountPlan THEN DO:
                       "AddLineDiscount",
                       AddLineDiscountPlan.DPRuleId,
                       "").
+END.
+
+/* Extra line discount */
+IF lcExtraLineDiscRuleId NE "" THEN DO:
+   
+    /* Update Mainline multisimid and multisimtype values before 
+       extra line discount orderaction record is created */
+    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.OrderId   /* Extraline order id */ 
+           ExtraLineMainOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
+   
+    fCreateOrderAction(Order.Orderid,
+                       "ExtraLineDiscount",
+                       ExtraLineDiscountPlan.DPRuleId,
+                       "").
 END.
 
 /* YBP-548 */

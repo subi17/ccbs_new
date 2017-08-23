@@ -113,7 +113,7 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* 10 */
    FIELD ICCNum        AS CHARACTER FORMAT "X(13)"
    FIELD MSISDN        AS CHARACTER FORMAT "X(10)"
-   FIELD TmpMSISDN     AS CHARACTER FORMAT "X(10)"
+   FIELD TmpMSISDN     AS CHARACTER FORMAT "X(10)" /*YPR-6059: content changed*/
    FIELD MNPState      AS CHARACTER FORMAT "X(10)"
    FIELD VoiceMail     AS CHARACTER FORMAT "X(1)"
    FIELD XFUserID      AS CHARACTER FORMAT "X(10)"
@@ -311,6 +311,28 @@ END FUNCTION.
    
 /* must be global for fDelivSIM */
 DEFINE VARIABLE liRowNum        AS INTEGER   NO-UNDO.
+
+/* YPR-6059: *Function finds if subscription has orderaction for voice bundle */
+/* Here issupport for multiple bundles but it is important to remember 
+   field length limitations (10 chars) */
+FUNCTION fVoiceBundle RETURNS CHAR
+   (iiOrderId AS INT):
+   DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
+   DEF VAR lcOut AS CHAR NO-UNDO.
+   lcVoiceBundles = fcParamC("VOICE_BUNDLES").
+   DEF BUFFER bOrderaction FOR Orderaction.
+   FOR EACH bOrderaction NO-LOCK WHERE
+            bOrderaction.Brand EQ gcBrand AND
+            bOrderaction.Orderid EQ iiOrderId AND
+            LOOKUP(bOrderaction.ItemKey, lcVoiceBundles) > 0:
+     IF lcOut NE "" THEN  lcOut = lcOut + ",".
+     lcOut = lcOut + bOrderaction.ItemKey.
+   END.
+RETURN lcOut.
+END.
+
+
+
 
 FUNCTION fDelivSIM RETURNS LOG
    (INPUT pcICC AS CHARACTER):
@@ -718,7 +740,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
       ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
-      ttOneDelivery.TmpMSISDN     = Order.TempCLI
+      ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.OrderID) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
       ttOneDelivery.VoiceMail     = "633633633"
       ttOneDelivery.XFUserID      = lcUID
