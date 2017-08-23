@@ -1,0 +1,218 @@
+ADD TABLE "TPService"
+  AREA "Sta_Data_32"
+  LABEL "Third Party Service"
+  DESCRIPTION "Third Party Service"
+  DUMP-NAME "tpservice"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-tpservice.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "triggers/rw-tpservice.p" CRC "?"
+
+ADD FIELD "MsSeq" OF "TPService" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ServSeq" OF "TPService" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ServSeq"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ServSeq"
+  HELP "Service Sequence"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "ServType" OF "TPService" AS character 
+  DESCRIPTION "Service Type"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 4
+  MAX-WIDTH 30
+  COLUMN-LABEL "Type"
+  HELP "Service Type"
+  ORDER 40
+
+ADD FIELD "Operation" OF "TPService" AS character
+  DESCRIPTION "Operation"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Operation"
+  POSITION 5
+  MAX-WIDTH 30
+  COLUMN-LABEL "Operation"
+  HELP "Operation"
+  ORDER 50
+
+ADD FIELD "Product" OF "TPService" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Product"
+  POSITION 6
+  MAX-WIDTH 50
+  HELP "Product"
+  ORDER 60
+
+ADD FIELD "Provider" OF "TPService" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Provider"
+  POSITION 7
+  MAX-WIDTH 40
+  COLUMN-LABEL "Provider"
+  HELP "Service Provider"
+  ORDER 70
+
+ADD FIELD "SerialNbr" OF "TPService" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Serial Nbr"
+  POSITION 8
+  MAX-WIDTH 50
+  COLUMN-LABEL "Serial Nbr"
+  HELP "Serial Number"
+  ORDER 80
+
+ADD FIELD "ServStatus" OF "TPService" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 9
+  MAX-WIDTH 30
+  COLUMN-LABEL "Status"
+  HELP "Service Status"
+  ORDER 90
+
+ADD FIELD "Offer" OF "TPService" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer"
+  POSITION 10
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer"
+  ORDER 100
+
+ADD FIELD "UserCode" OF "TPService" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 11
+  MAX-WIDTH 20
+  COLUMN-LABEL "User"
+  HELP "User"
+  ORDER 110
+
+ADD FIELD "TermReason" OF "TPService" AS character
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "TermReason"
+  POSITION 12
+  MAX-WIDTH 70
+  COLUMN-LABEL "TermReason"
+  HELP "Termination Reason"
+  ORDER 120
+
+ADD FIELD "CreatedTS" OF "TPService" AS decimal 
+  FORMAT "99999999.99999"
+  DECIMALS 5
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 13
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  HELP "CreatedTS"
+  ORDER 130
+
+ADD FIELD "UpdateTS" OF "TPService" AS decimal 
+  FORMAT "99999999.99999"
+  DECIMALS 5
+  INITIAL "0"
+  LABEL "UpdatedTS"
+  POSITION 14
+  MAX-WIDTH 20
+  COLUMN-LABEL "UpdateTS"
+  HELP "UpdateTS"
+  ORDER 140
+
+ADD FIELD "MessageID" OF "TPService" AS character
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "MessageId"
+  POSITION 15
+  MAX-WIDTH 70 
+  COLUMN-LABEL "MessageID"
+  DESCRIPTION "Auto-generated"
+  ORDER 150
+	
+ADD FIELD "ResponseCode" OF "TPService" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  POSITION 16
+  COLUMN-LABEL "ResponseCode"
+  DESCRIPTION "Response code from Third party"
+  ORDER 160
+	
+ADD FIELD "AdditionalInfo" OF "TPService" AS character
+  FORMAT "x(40)"
+  INITIAL "" 
+  LABEL "Additional Info"
+  POSITION 17
+  COLUMN-LABEL "AdditionalInfo"
+  DESCRIPTION "Additional status info"
+  ORDER 170
+
+ADD INDEX "MsSeq" ON "TPService" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq"   ASCENDING 
+  INDEX-FIELD "ServSeq" ASCENDING
+
+ADD INDEX "ServSeq" ON "TPService"
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "ServSeq" ASCENDING
+
+ADD INDEX "MsSeqTypeStatus" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq"      ASCENDING
+  INDEX-FIELD "Operation"  ASCENDING
+  INDEX-FIELD "ServType"   ASCENDING
+  INDEX-FIELD "ServStatus" ASCENDING
+
+ADD INDEX "SerialNbr" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "SerialNbr" ASCENDING
+
+ADD INDEX "MessageId" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MessageID" ASCENDING
+
+ADD INDEX "CreatedTS" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CreatedTS"  DECENDING
+  INDEX-FIELD "ServStatus" ASCENDING
+
+ADD INDEX "UpdateTS" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DECENDING
+
+ADD SEQUENCE "TPServiceSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000002052
