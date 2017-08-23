@@ -145,6 +145,7 @@ FOR EACH daycampaign NO-LOCK:
        add_string(top_struct, "service_id", Daycampaign.DCEvent).    
        add_double(top_struct, "price"     , ldPrice).
        add_string(top_struct, "status"    , STRING(liServStatus)).
+       add_string(top_struct, "category"  , "tv").
    END.
 END.
 
