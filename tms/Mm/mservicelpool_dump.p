@@ -169,8 +169,11 @@ PROCEDURE pReadMServiceLPool :
       FIND FIRST EventLog NO-LOCK USE-INDEX TableName WHERE
                  EventLog.TableName = lhMServiceLPool:Name AND
                  EventLog.Key       = lcEventKey NO-ERROR.
-      IF NOT AVAIL EventLog THEN RETURN.
-      ldEventTS = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+
+      IF AVAIL EventLog THEN /* YTS-11322/HLP-24688 */
+         ldEventTS = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+      ELSE
+         ldEventTS = MServiceLPool.FromTS.
 
       FIND FIRST ServiceLimit WHERE
                  ServiceLimit.SLSeq    = MServiceLPool.SLSeq NO-LOCK NO-ERROR.
