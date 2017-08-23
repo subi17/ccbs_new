@@ -20,11 +20,12 @@
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 
-DEF VAR llOk             AS LOG       NO-UNDO.
-DEF VAR lcError          AS CHARACTER NO-UNDO.
-DEF VAR lcQuestion       AS CHARACTER NO-UNDO. 
-DEF VAR lcCreditReason   AS CHARACTER NO-UNDO. 
-DEF VAR lcOldOrderStatus AS CHARACTER NO-UNDO. 
+DEF VAR llOk                    AS LOG  NO-UNDO.
+DEF VAR lcError                 AS CHAR NO-UNDO.
+DEF VAR lcQuestion              AS CHAR NO-UNDO. 
+DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
+DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 
 /* Additional line mobile only ALFMO-5*/
 DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
@@ -218,6 +219,7 @@ IF llDoEvent THEN
    RUN StarEventMakeModifyEvent(lhOrder).
 
 /* ADDLINE-19 AC10 Additional Line */
+/* Extra Line */
 IF lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
    lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_1}               OR
    lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_2}               OR
@@ -296,6 +298,19 @@ DO:
             END.
         END.
       END.
+
+      /* If Main Line onging order is Closed, and if its associated extra line 
+         ongoing order is available then close extra line ongoing order */
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+      
+      IF lcExtraMainLineCLITypes                       NE "" AND
+         LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
+         Order.MultiSimId                              NE 0  AND 
+         Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
+         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                  Order.OrderId,    /* Main line Order Id  */ 
+                                 "CLOSE").          /* Action              */
+   
    END.
 END. 
 
