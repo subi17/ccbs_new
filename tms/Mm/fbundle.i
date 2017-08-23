@@ -74,6 +74,7 @@ FUNCTION fIsBundle RETURNS LOGIC
              bPerContract.Brand = gcBrand AND
              bPerContract.DCEvent = icDCEvent AND
              ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
+              bPerContract.BundleTarget = {&TELEVISION_BUNDLE} OR
               (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
