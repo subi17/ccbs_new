@@ -45,7 +45,7 @@ IF lcCallType EQ ? THEN RETURN.
 
 pcTenant = get_string(param_toplevel_id, "0").
 
-IF ENTRY(1,lcCallType) EQ "int" THEN
+IF ENTRY(2,lcCallType) EQ "int" THEN
     liOwner = get_pos_int(param_toplevel_id, "1").
 ELSE DO:
     pcInput = get_string(param_toplevel_id, "1").
