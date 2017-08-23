@@ -1,0 +1,112 @@
+ADD TABLE "TPServiceMessage"
+  AREA "Sta_Data_64"
+  LABEL "Third Party Message"
+  DESCRIPTION "Third Party Message"
+  DUMP-NAME "tpservicemessage"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-tpservicemessage.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE"  OVERRIDE PROCEDURE "triggers/rw-tpservicemessage.p" CRC "?"
+
+ADD FIELD "MsSeq" OF "TPServiceMessage" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ServSeq" OF "TPServiceMessage" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ServSeq"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ServSeq"
+  HELP "Service Sequence Number"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "MessageSeq" OF "TPServiceMessage" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MessageSeq"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "MessageSeq"
+  HELP "Message Sequence Number"
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "Source" OF "TPServiceMessage" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Source"
+  POSITION 6
+  COLUMN-LABEL "Source"
+  DESCRIPTION "Messsage source (TMS/Masmovil)"
+  ORDER 60
+
+ADD FIELD "MessageStatus" OF "TPServiceMessage" AS character
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Message Status"
+  POSITION 7
+  COLUMN-LABEL "MessageStatus"
+  ORDER 70
+
+ADD FIELD "CreatedTS" OF "TPServiceMessage" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 8
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdateTS"
+  POSITION 9
+  COLUMN-LABEL "UpdateTS"
+  DECIMALS 5
+  ORDER 90
+
+ADD INDEX "MsSeq" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq"        DECENDING
+  INDEX-FIELD "ServSeq"      DECENDING
+  INDEX-FIELD "MessageSeq"   DECENDING
+ADD INDEX "MessageSeq" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "MessageSeq"   DECENDING 
+
+ADD INDEX "MessageStatus" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MessageStatus" ASCENDING
+  INDEX-FIELD "Source" ASCENDING
+
+ADD INDEX "CreatedTS" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CreatedTS" DECENDING
+
+ADD INDEX "UpdateTS" ON "TPServiceMessage"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DECENDING
+
+ADD SEQUENCE "TPServiceMessageSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000002052
