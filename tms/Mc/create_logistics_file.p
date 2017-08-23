@@ -740,7 +740,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
       ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
-      ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.MsSeq) /*YPR-6059*/
+      ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.OrderID) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
       ttOneDelivery.VoiceMail     = "633633633"
       ttOneDelivery.XFUserID      = lcUID
