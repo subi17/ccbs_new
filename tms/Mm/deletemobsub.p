@@ -122,7 +122,7 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
               lbMobSub.MultiSimId   = iiMsSeq          AND 
               lbMobSub.MultiSimType = liELMultiSimType NO-ERROR.
 
-   IF AVAIL lbELMobSub THEN 
+   IF AVAIL lbMobSub THEN 
       RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
                             INPUT lbMobsub.CLI,
                             INPUT lbMobsub.CustNum,
