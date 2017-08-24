@@ -1441,6 +1441,29 @@
 6587 "SchedDate" "1" yes 29/05/15
 6587 "SchedTime" "00.00" no 29/05/15
 6587 "TiePeriod" "1" yes 29/05/15
+6609 "Not allowed" "" no 12/12/16
+6622 "ADDRESS" "F" yes 12/12/16
+6622 "CD" "0" yes 12/12/16
+6622 "DA" "1" yes 12/12/16
+6622 "ED" "1" yes 12/12/16
+6622 "PR" "0" yes 12/12/16
+6622 "SEX" "1" yes 12/12/16
+6643 "BankAccount" "1" yes 12/12/16
+6643 "CIF" "1" yes 12/12/16
+6643 "CreditCheck" "1" yes 12/12/16
+6643 "FailedRequest" "1" yes 12/12/16
+6643 "FreePerYear" "4" no 12/12/16
+6643 "MobsubInDays" "30" yes 12/12/16
+6643 "NIE" "1" yes 12/12/16
+6643 "NIF" "1" yes 12/12/16
+6643 "OngoingMNP" "1" yes 12/12/16
+6643 "OnLastDay" "0" no 12/12/16
+6643 "OperatorBarr" "1" yes 12/12/16
+6643 "PassPort" "1" yes 12/12/16
+6643 "PerMonth" "1" no 12/12/16
+6643 "SchedDate" "1" yes 12/12/16
+6643 "SchedTime" "00.00" no 12/12/16
+6643 "TiePeriod" "1" yes 12/12/16
 10000904 "Invoice Attach" "0" no 01/01/11
 10000904 "ReportCode" "4" no 01/01/11
 10000905 "Not allowed" "" no 01/01/11
