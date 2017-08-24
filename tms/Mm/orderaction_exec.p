@@ -29,6 +29,7 @@ DEF VAR lcCONTSFContracts AS CHAR NO-UNDO.
 DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
+DEF VAR lcBundleId AS CHAR NO-UNDO.
 
 FIND FIRST MSRequest WHERE
            MSRequest.brand EQ gcBrand AND
@@ -89,7 +90,9 @@ FOR EACH OrderAction NO-LOCK WHERE
          /* DSS Order Action will be executed in separate block   */
          /* to ensure that data bundle must be handled before DSS */
          IF OrderAction.ItemKey EQ {&DSS} THEN NEXT.
-
+         /* make flex_upsell / dss_flex_upsell at last */
+         IF OrderAction.ItemKey MATCHES "FLEX*UPSELL" THEN NEXT.
+                  
          /* Don't create bundle request if renewal order */
          /* with IPL/CONTF/GPRS bundles order actions    */
          IF (Order.OrderType EQ 2 OR Order.OrderType EQ 4) AND
@@ -144,6 +147,30 @@ FOR EACH OrderAction NO-LOCK WHERE
                        "OrderAction " + OrderAction.ItemType,
                        "Creation failed. " + RETURN-VALUE).
    END.   
+END.
+
+/* Create flex_upsell* or dss_flex_upsell* based on dss activity 
+   YPPI-1 EXTRAL-108 */
+FOR EACH OrderAction NO-LOCK WHERE
+         OrderAction.Brand     = gcBrand AND
+         OrderAction.OrderId   = iiOrderId AND
+         OrderAction.ItemType = "BundleItem" AND
+         OrderAction.ItemKey MATCHES "FLEX*UPSELL":
+
+   lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
+   IF lcBundleId > "" THEN
+      OrderAction.ItemKey = "DSS_" + OrderAction.ItemKey.
+   RUN pPeriodicalContract.
+
+   /* don't abort if an error occurred */
+   IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
+      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                       "Customer",
+                       STRING(MobSub.CustNum),
+                       MobSub.AgrCust,
+                       "OrderAction " + OrderAction.ItemType,
+                       "Creation failed. " + RETURN-VALUE).
+   END.
 END.
 
 RETURN "".
