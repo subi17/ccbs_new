@@ -12,6 +12,7 @@
 "1" 62 "Contract Target" "List" "Fixed" 2 no "" "CONT24RETDISC" 19/07/17 31/12/49 "CONT24RETDISC" "Discount retention Sinfin 20" "" "List" 0 0 1 0
 "1" 37 "Contract Target" "List" "Percentage" 2 no "" "CONT25DISC" 12/12/16 31/12/49 "CONT25DISC" "Discount Xmas campaign La Sinfín" "" "List" 0 0 0 6
 "1" 40 "Contract Target" "List" "Percentage" 2 no "" "CONT26DISC" 01/02/17 31/12/49 "CONT26DISC" "La Infinita 5GB discount" "" "List" 0 0 0 6
+"1" 64 "Contract Target" "List" "Percentage" 1 no "" "CONT28DISC" 05/04/17 31/12/49 "CONT28DISC" "ExtralineaDISC" "" "List" 0 0 0 0
 "1" 4 "Contract Target" "List" "Fixed" 2 no "" "CONT8DISC" 01/12/12 31/12/49 "CONT8DISC" "Discount MF La del Uno and La del Cero 1.2GB" "" "All " 0 0 0 0
 "1" 25 "Contract Target" "List" "Percentage" 2 no "" "CONT9DISC" 01/03/15 31/12/49 "CONT9DISC" "Discount MF La del Cero 1.2GB" "" "List" 0 0 0 6
 "1" 27 "Contract Target" "List" "Fixed" 2 no "" "CONT9RETDISC" 01/05/15 31/12/49 "CONT9RETDISC" "Retention Discount MF La del Cero 1.2GB" "" "List" 0 0 0 0
@@ -25,6 +26,10 @@
 "1" 18 "Contract Target" "List" "Percentage" 2 no "" "CONTS32DISC" 01/06/14 31/12/49 "CONTS32DISC" "Discount La infinita 4 GB" "" "List" 0 0 0 4
 "1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 30/06/17 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6
 "1" 57 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC20_3" 05/07/17 31/12/49 "CONVDISC20_3" "Convergent New Adds Promotion" "" "List" 0 0 0 3
+"1" 66 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIGIC" 22/08/17 31/12/49 "DISCAGILETVIGIC" "TV Service + SKY" "" "All" 0 0 1 0
+"1" 67 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIPSIC" 22/08/17 31/12/49 "DISCAGILETVIPSIC" "TV Service + SKY" "" "All" 0 0 1 0
+"1" 68 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIPSIM" 22/08/17 31/12/49 "DISCAGILETVIPSIM" "TV Service + SKY" "" "All" 0 0 1 0
+"1" 65 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIVA" 22/08/17 31/12/49 "DISCAGILETVIVA" "TV Service + SKY" "" "All" 0 0 1 0
 "1" 47 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10" 05/04/17 31/12/49 "DISCCONT10" "Additional Line CONT10" "" "List" 0 0 1 0
 "1" 53 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10H" 05/06/17 31/12/49 "DISCCONT10H" "Additional Line CONT10 50%" "" "List" 0 0 1 0
 "1" 58 "Contract Target" "List" "Percentage" 1 no "" "DISCCONT10HM" 05/07/17 31/12/49 "DISCCONT10HM" "Mobile only - Additional Line CONT10 50%" "" "List" 0 0 1 0
