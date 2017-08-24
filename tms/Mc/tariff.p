@@ -152,8 +152,8 @@ form /* ADD */
    "Start / Min.Sec:" AT 48 Tariff.Discount[4] format "Fee/Sec"
       help "Starting fee or minimum charging seconds (Fee/Sec)"    
    SKIP
-   "Billing Item ..:" Tariff.BillCode
-      BillItem.BIName FORMAT "X(12)" NO-LABEL
+   "Billing Item ..:" Tariff.BillCode FORMAT "X(17)" 
+      BillItem.BIName FORMAT "X(11)" NO-LABEL
    "Currency unit .:" AT 48 Tariff.CurrUnit
    SKIP
    "Reporting IDs .:" 
