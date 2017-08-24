@@ -5,6 +5,7 @@
 "CONTD" "Contrato Data" "" "EUR" 6 no yes "" "" no "1"
 "CONTRATO" "Contrato1" "Contrato subscription type specific price list" "EUR" 4 no yes "" "" no "1"
 "CONTRATO2" "Contrato2" "Contrato 2 subcription type specific price list" "EUR" 4 no yes "" "" no "1"
+"CONTRATO28" "Contrato28" "Contrato28 subscription type specific price list" "EUR" 4 no yes "" "" no "1"
 "CONTRATO4" "Contrato4" "Contrato 4 subcription type specific price list" "EUR" 4 no yes "" "" no "1"
 "CONTRATO5" "Contrato5" "Contrato 5 subcription type specific price list" "EUR" 4 no yes "" "" no "1"
 "CONTRATO6" "Contrato6" "Contrato 6 subcription type specific price list" "EUR" 6 no yes "" "" no "1"
