@@ -22,6 +22,7 @@ gcBrand = "1".
 {Func/date.i}
 {Func/email.i}
 {Mc/orderfusion.i}
+{Func/orderfunc.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ";".
@@ -222,8 +223,21 @@ PROCEDURE pUpdateOrderStatus:
          RETURN "ERROR:Secure to POS in allowed only for POS delivery type".
    END.
    
-   IF icOldStatus EQ "76" OR icOldStatus EQ "22" OR 
-      icOldStatus EQ "73" OR icOldStatus EQ "78" THEN DO:
+   IF icOldStatus EQ "76" THEN DO:
+      CASE icNewStatus:
+         WHEN "6" THEN DO:
+            /* Release extra line orders only */
+            IF Order.MultiSimId   NE 0                         AND 
+               Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN  
+            fActionOnExtraLineOrders(Order.MsSeq,
+                                     Order.MultiSimId,
+                                     "RELEASE").
+         END.
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         OTHERWISE RETURN "ERROR:Unsupported new order status value".
+      END.
+   END.
+   ELSE IF LOOKUP(icOldStatus,"22,73,78") > 0 THEN DO:
       CASE icNewStatus:
          WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".

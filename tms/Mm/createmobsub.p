@@ -80,18 +80,25 @@ DEF VAR liReqActTime   AS INT  NO-UNDO.
 DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
+DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
-DEF BUFFER bInvCust    FOR Customer.
-DEF BUFFER bRefCust    FOR Customer.
-DEF BUFFER bRefMobsub  FOR Mobsub.
-DEF BUFFER bRefCLIType FOR CLIType.
-DEF BUFFER bMsRequest  FOR MsRequest.
-DEF BUFFER lbOrder     FOR Order.
-DEF BUFFER lbMobSub    FOR MobSub.
+DEF BUFFER bInvCust        FOR Customer.
+DEF BUFFER bRefCust        FOR Customer.
+DEF BUFFER bRefMobsub      FOR Mobsub.
+DEF BUFFER bRefCLIType     FOR CLIType.
+DEF BUFFER bMsRequest      FOR MsRequest.
+DEF BUFFER lbOrder         FOR Order.
+DEF BUFFER lbMobSub        FOR MobSub.
 DEF BUFFER lbOrderCustomer FOR OrderCustomer.
-DEFINE BUFFER lbMobSubAD1 FOR MobSub.
-DEF BUFFER bTerMsRequest FOR MsRequest.
-DEF BUFFER bMsOwner FOR MsOwner.
+DEF BUFFER lbMobSubAD1     FOR MobSub.
+DEF BUFFER bTerMsRequest   FOR MsRequest.
+DEF BUFFER bMsOwner        FOR MsOwner.
+DEF BUFFER lbMLOrder       FOR Order.
+DEF BUFFER lbMLMobSub      FOR MobSub.
+DEF BUFFER lbMobSubs       FOR MobSub.
+DEF BUFFER lbPriDSSMobSub  FOR MobSub.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -185,7 +192,7 @@ IF lcErrorTxt > "" THEN DO:
       RETURN.
    END.
 END.
-
+VOICE200B
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
 
    FIND orderfusion NO-LOCK WHERE
@@ -243,6 +250,9 @@ ELSE DO:
       END.
    END.
 END.
+
+ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+       lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
@@ -429,6 +439,26 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 
+   /* Extra line */
+   /* In case of extra line discount subcription creation,
+      following fields has to be updated */
+   IF Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+      FIND FIRST lbMLOrder NO-LOCK WHERE 
+                 lbMLOrder.Brand      = gcBrand          AND 
+                 lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
+
+      IF AVAIL lbMLOrder THEN 
+         FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
+                    lbMLMobSub.MsSeq = lbMLOrder.MsSeq NO-ERROR.
+
+      IF AVAIL lbMLMobSub THEN 
+         ASSIGN MobSub.MultiSimID       = lbMLMobSub.MsSeq         /* Mainline Subid  */
+                MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
+                lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
+                lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
+                llgExtraLine            = YES. 
+   END.
+ 
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 
    /* Initial TopUp */
@@ -657,13 +687,19 @@ ELSE DO:
          ROWID(MSOwner) = ROWID(bMsOwner).
    END.
 
+   /* llgExtraLine value has to be set to TRUE when mobile part of 
+      convergent is processed, because of DSS2 activation */
    ASSIGN
       MsRequest.Custnum = Customer.Custnum
-      MsOwner.imsi = IMSI.IMSI WHEN AVAIL IMSI
-      MsOwner.CLIEvent = "C"
-      Mobsub.MsStatus = {&MSSTATUS_ACTIVE}
-      Mobsub.Icc = Order.ICC
-      Mobsub.imsi = IMSI.IMSI WHEN AVAIL IMSI.
+      MsOwner.imsi      = IMSI.IMSI WHEN AVAIL IMSI
+      MsOwner.CLIEvent  = "C"
+      Mobsub.MsStatus   = {&MSSTATUS_ACTIVE}
+      Mobsub.Icc        = Order.ICC
+      Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI.
+
+      IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0 OR 
+         LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0 THEN 
+      llgExtraLine      = YES.
 END.
 
 /* Additional Line with mobile only ALFMO-5  
@@ -853,7 +889,7 @@ RUN Mm/orderaction_exec.p (MobSub.MsSeq,
 IF NOT MobSub.PayType THEN DO:
 
    ASSIGN
-      lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+      lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
 
    lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
 
@@ -866,17 +902,46 @@ IF NOT MobSub.PayType THEN DO:
                      MsRequest.ActStamp <= fMakeTS()    AND
                      LOOKUP(STRING(MsRequest.ReqStatus),"5,6,7,8") > 0)
    THEN DO:
-      IF lcBundleId = {&DSS} OR (lcBundleId = "DSS2" AND
-         LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN
+      IF lcBundleId = {&DSS} OR 
+        (lcBundleId = "DSS2"                                 AND
+         LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType)   GT 0 AND 
+         LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) EQ 0) THEN
          RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                            INPUT Mobsub.CLI,
-                            INPUT MobSub.CustNum,
-                            INPUT "ADD",
-                            INPUT "",           /* Optional param list */
-                            INPUT MsRequest.MsRequest,
-                            INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
-                            INPUT MsRequest.ReqSource,
-                            INPUT lcBundleId).
+                               INPUT Mobsub.CLI,
+                               INPUT MobSub.CustNum,
+                               INPUT "ADD",
+                               INPUT "",           /* Optional param list */
+                               INPUT MsRequest.MsRequest,
+                               INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
+                               INPUT MsRequest.ReqSource,
+                               INPUT lcBundleId).        
+      ELSE IF llgExtraLine        AND 
+              lcBundleId = "DSS2" AND 
+              fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                MobSub.MultiSimId,
+                                                MobSub.MultiSimType) THEN DO:
+        
+         /* If already DSS2 group exists then add extraline subscription 
+            AND its associated main line to DSS2 group */  
+         FOR EACH lbMobSubs NO-LOCK WHERE
+                  lbMobSubs.Brand        = gcBrand        AND
+                  lbMobSubs.CustNum      = MobSub.CustNum AND
+                  lbMobSubs.MultiSimId  <> 0              AND
+                 (lbMobSubs.MultiSimType = {&MULTISIMTYPE_PRIMARY} OR
+                  lbMobSubs.MultiSimType = {&MULTISIMTYPE_EXTRALINE}):
+
+            RUN pUpdateDSSNetwork(INPUT lbMobsubs.MsSeq,
+                                  INPUT lbMobsubs.CLI,
+                                  INPUT lbMobSubs.CustNum,
+                                  INPUT "ADD",
+                                  INPUT "",           /* Optional param list */
+                                  INPUT MsRequest.MsRequest,
+                                  INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
+                                  INPUT MsRequest.ReqSource,
+                                  INPUT lcBundleId).
+         END.
+ 
+      END.
    END.
    ELSE IF Order.MultiSimId > 0 AND
            Order.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO: 

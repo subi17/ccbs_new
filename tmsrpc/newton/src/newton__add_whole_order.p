@@ -40,6 +40,7 @@
                send_sms;boolean;optional;Send SMS
                referee;str;optional;referee's MSISDN
                offer_id;string;optional;
+               extra_offers;string;optional;optional offer 
                price_selection_time;timestamp;optional;time when user accepted order price in web
                order_inspection_result;string;mandatory;
                order_inspection_description;string;optional;
@@ -199,6 +200,7 @@
                  fixed_line_mnp_old_operator_name;string;optional;
                  fixed_line_mnp_old_operator_code;string;optional;
                  fixed_line_serial_number;string;optional;
+                 estimated_data_speed;string;optional;broadband estimated speed
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
                  customer_type;string;mandatory;customer type
@@ -356,6 +358,8 @@ DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
+DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
+DEF VAR pcAdditionalOfferArray  AS CHAR NO-UNDO.
 DEF VAR pcMobsubBundleType      AS CHAR NO-UNDO. 
 DEF VAR plDSSActivate           AS LOG  NO-UNDO. 
 DEF VAR plBonoVoipActivate      AS LOG  NO-UNDO.
@@ -364,6 +368,7 @@ DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
 DEF VAR pcUsageType             AS CHAR NO-UNDO. 
 
 DEF VAR liBundleCnt            AS INT  NO-UNDO.
+DEF VAR liOfferCnt             AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
@@ -412,6 +417,7 @@ DEF VAR lcFixedLineNumber         AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperName AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperCode AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineSerialNbr      AS CHAR    NO-UNDO.
+DEF VAR liEstimatedDataSpeed      AS INTE    NO-UNDO.
 DEF VAR lcFixedLineMNPTime        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineProduct        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineCustomerType   AS CHAR    NO-UNDO. 
@@ -447,6 +453,15 @@ DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
 
 DEF VAR lcItemParam AS CHAR NO-UNDO.
+
+/* Extra lines */
+DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
+DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
+DEF VAR liMainLineOrderId      AS INT  NO-UNDO. 
+DEF VAR liOngoingOrderId       AS INT  NO-UNDO. 
+ 
+DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+DEF BUFFER ExtraLineMainOrder    FOR Order.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -527,6 +542,16 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
   
    IF LOOKUP('offer_id', lcOrderStruct) GT 0 THEN 
       pcOfferId = get_string(pcOrderStruct, "offer_id").
+
+   IF LOOKUP("extra_offers",lcOrderStruct) > 0 THEN
+   DO:
+      pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
+
+      DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
+         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
+      END.
+
+   END.
 
    IF LOOKUP('price_selection_time', lcOrderStruct) GT 0 THEN
        pdePriceSelTime = get_timestamp(pcOrderStruct, "price_selection_time").
@@ -790,7 +815,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
          WHEN "SMS"   THEN liDelType = {&INV_DEL_TYPE_SMS}.
          WHEN "No delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
-         WHEN "no_delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
          WHEN "" THEN .
          OTHERWISE lcFError = "Invalid Invoice Delivery Type " + 
                                lcdelivery_channel.
@@ -1081,7 +1105,8 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
       Order.Multiorder = plMultiOrder.               
-      
+   
+
 END.
 
 /* YBP-569 */
@@ -1221,21 +1246,22 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
    CREATE OrderFusion.
    ASSIGN
-      OrderFusion.Brand             = gcBrand
-      OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
-      OrderFusion.OrderDate         = ldaOrderDate
-      OrderFusion.Salesman          = pcSalesman
-      OrderFusion.FixedNumberType   = lcFixedLineNumberType
-      OrderFusion.FixedNumber       = lcFixedLineNumber
-      OrderFusion.Product           = lcFixedLineProduct
-      OrderFusion.CustomerType      = lcFixedLineCustomerType
-      OrderFusion.FixedMNPTime      = lcFixedLineMNPTime
-      OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName
-      OrderFusion.UpdateTS          = fMakeTS()
-      OrderFusion.FixedCurrOperCode = lcFixedLineMNPOldOperCode
-      OrderFusion.SerialNumber      = lcFixedLineSerialNbr
-      OrderFusion.ADSLLinkState     = lcFixedLineAdslLinkState.
+      OrderFusion.Brand              = gcBrand
+      OrderFusion.OrderId            = liOrderId
+      OrderFusion.FusionStatus       = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
+      OrderFusion.OrderDate          = ldaOrderDate
+      OrderFusion.Salesman           = pcSalesman
+      OrderFusion.FixedNumberType    = lcFixedLineNumberType
+      OrderFusion.FixedNumber        = lcFixedLineNumber
+      OrderFusion.Product            = lcFixedLineProduct
+      OrderFusion.CustomerType       = lcFixedLineCustomerType
+      OrderFusion.FixedMNPTime       = lcFixedLineMNPTime
+      OrderFusion.FixedCurrOper      = lcFixedLineMNPOldOperName
+      OrderFusion.UpdateTS           = fMakeTS()
+      OrderFusion.FixedCurrOperCode  = lcFixedLineMNPOldOperCode
+      OrderFusion.SerialNumber       = lcFixedLineSerialNbr
+      OrderFusion.ADSLLinkState      = lcFixedLineAdslLinkState
+      OrderFusion.EstimatedDataSpeed = liEstimatedDataSpeed.
 
    RETURN TRUE.
 
@@ -1278,6 +1304,7 @@ gcOrderStructFields = "brand!," +
                       "send_sms," +
                       "referee," +
                       "offer_id," +
+                      "extra_offers," +
                       "price_selection_time," +
                       "order_inspection_result!," +
                       "order_inspection_description," +
@@ -1829,7 +1856,8 @@ IF piMultiSimType NE 0 AND piMultiSimId <= 0 THEN
    RETURN appl_err("Multi SIM type passed but Multi SIM ID is missing").
 
 IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
-   CLIType.LineType > 0 AND
+   CLIType.LineType  > 0 AND
+   CLIType.LineType <> 3 AND
    NOT CAN-FIND(FIRST CLIType WHERE
                       CLIType.Brand = gcBrand AND
                       CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
@@ -1853,7 +1881,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1870,6 +1898,8 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
       lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
          WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
+      liEstimatedDataSpeed = get_int(pcFusionStruct, "estimated_data_speed") 
+         WHEN LOOKUP('estimated_data_speed', lcOrderStruct) > 0  
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0.
 
@@ -1939,6 +1969,54 @@ IF pcQ25Struct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
+/* Extra Lines Validations, 
+   updating multisimid & multisimidtype for hard association */
+ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
+       liMainLineOrderId     = 0
+       liOngoingOrderId      = 0
+       lcExtraLineDiscRuleId = "". 
+
+IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
+
+   IF fCheckExistingConvergentAvailForExtraLine(lcIdtype,
+                                                lcId,
+                                                OUTPUT liMainLineOrderId) THEN 
+      piMultiSimID = liMainLineOrderId.
+   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtype,
+                                                    lcId,
+                                                    OUTPUT liOngoingOrderId) THEN
+      piMultiSimID = liOngoingOrderId. 
+
+   piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+   IF piMultiSimID = 0 THEN  
+      RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
+
+   FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
+              ExtraLineMainOrder.Brand   = gcBrand      AND 
+              ExtraLineMainOrder.OrderId = piMultiSimID NO-ERROR.
+
+   IF NOT AVAIL ExtraLineMainOrder THEN 
+      RETURN appl_err("Extra line associated main line order is not available").
+
+   /* Discount rule id input is not necessary from WEB to TMS, 
+      As it is extra line we have to give default discount */
+   CASE pcSubType:
+      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+   END CASE.
+
+   IF lcExtraLineDiscRuleId NE "" THEN DO:
+      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
+                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+      IF NOT AVAIL ExtraLineDiscountPlan THEN
+         RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId)).      
+   END.
+
+END.
+
 /* YBP-532 */
 /*********************************************************************
  Creation and Update begins (All the validations should be done before)
@@ -1999,6 +2077,20 @@ IF AVAIL AddLineDiscountPlan THEN DO:
                       "AddLineDiscount",
                       AddLineDiscountPlan.DPRuleId,
                       "").
+END.
+
+/* Extra line discount */
+IF lcExtraLineDiscRuleId NE "" THEN DO:
+   
+    /* Update Mainline multisimid and multisimtype values before 
+       extra line discount orderaction record is created */
+    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.OrderId   /* Extraline order id */ 
+           ExtraLineMainOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
+   
+    fCreateOrderAction(Order.Orderid,
+                       "ExtraLineDiscount",
+                       ExtraLineDiscountPlan.DPRuleId,
+                       "").
 END.
 
 /* YBP-548 */
@@ -2351,7 +2443,12 @@ END.
 /* add databundle */
 IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
-   fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
+
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
+   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
+   ELSE         
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
 
 IF pcMobSubBundleType > "" THEN DO:

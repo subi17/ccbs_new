@@ -36,7 +36,8 @@ FOR EACH OrderDelivery WHERE
    OrderDelivery.Brand = "1"         AND 
    OrderDelivery.OrderId = piOrderId NO-LOCK:
    
-   IF STRING(OrderDelivery.LOStatusID) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
+   IF STRING(OrderDelivery.LOStatusID) BEGINS {&LO_STATUS_ROUTER_PREFIX} OR 
+      STRING(OrderDelivery.LOStatusID) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
       NEXT.
    od_struct = add_struct(top_array, "").
 
