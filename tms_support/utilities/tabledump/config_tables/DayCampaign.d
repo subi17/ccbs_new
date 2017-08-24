@@ -1,3 +1,5 @@
+"AGILESKYTV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service + SKY" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 2
+"AGILETV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 2
 "BONO_VOIP" 01/04/12 4 31/12/49 "BONO_VOIP" 0 "" "" "Bono VoIP" 93 0 "1" "4" 4 1 0 0 "BONO_VOIPMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "CENTRALITA" 04/07/17 1 31/12/49 "CentralitaPROMF" 0 "" "" "Centralita PRO" 0 0 "1" "7" 1 4 0 0 "CentralitaPROMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 0 0
 "CONT10" 01/02/17 4 31/12/49 "CONT10MF" 0 "" "" "Contrato 10" 93 0 "1" "4" 4 1 0 0 "CONT10MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0 0
@@ -7,6 +9,7 @@
 "CONT25" 12/12/16 1 31/12/49 "CONT25MF" 0 "" "" "Contrato 25" 0 0 "1" "1" 1 1 0 0 "CONT25MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 1 0
 "CONT26" 01/02/17 1 31/12/49 "CONT26MF" 0 "" "" "Contrato 26" 0 0 "1" "1" 1 1 0 0 "CONT26MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0 0
 "CONT27" 18/04/17 1 31/12/49 "CONT27MF" 0 "" "" "LA INFINITA 2 GB DTO." 0 0 "1" "1" 1 1 0 0 "CONT27MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL,DATA6_UPSELL" 0 0 0
+"CONT28" 21/08/17 1 31/12/49 "CONT28MF" 0 "" "" "Línea móvil extra" 0 0 "1" "1" 1 1 0 0 "CONT28MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 1 0
 "CONT9" 01/05/14 4 31/12/49 "CONT9" 0 "" "" "La del Cero 1,2 GB" 93 0 "1" "4" 4 1 0 0 "CONT9MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 53 1 0
 "CONTD2" 01/12/09 4 31/12/54 "CONTDATA2" 0 "" "" "Internet para llevar 35" 93 0 "1" "4" 4 1 0 0 "CONTD2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL,DATA200_UPSELL" 50 1 0
 "CONTD2ACT" 01/12/09 4 17/05/11 "CONTDATA" 0 "" "" "Contrato Datos 2 1st billing period" 93 0 "1" "4" 4 2 1 0 "" "" "TERMCONTD2" 3 1 1 yes 1 0 0 0 "" 0 1 0
@@ -162,9 +165,11 @@
 "TERM24IV" 01/12/10 0 31/12/54 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 24 0 "" "" "TERMPERIOD4" 2 1 2 yes 1 0 0 1 "" 0 1 0
 "TERM24V" 01/12/10 0 31/12/49 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 24 0 "" "" "TERMPERIOD5" 2 1 2 yes 1 0 0 1 "" 0 1 0
 "TERM24VI" 01/12/10 0 31/12/49 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 24 0 "" "" "TERMPERIOD6" 2 1 2 yes 1 0 0 1 "" 0 1 0
+"TVTERM12-72" 22/08/17 0 31/12/49 "" 0 "" "" "TV Permanency Contract" 0 0 "1" "3" 1 3 12 0 "" "" "TVTERMPERIODPF" 2 1 2 yes 1 0 0 1 "" 0 1 0
 "UPGRADE_UPSELL" 23/03/12 4 31/12/49 "UPGRADEDATA" 0 "" "" "Upsell Upgrade" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 1 0 0 2 "" 0 1 0
 "VOICE100" 01/01/15 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "VOICE200" 01/06/17 0 31/12/49 "" 0 "" "" "Promo 200 min/mes gratis" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
+"VOICE200B" 22/08/17 0 31/12/49 "" 0 "" "" "Bono 200 minutos" 0 0 "1" "1" 1 1 0 0 "VOICE200BMF" "" "" 0 1 0 yes 1 1 0 1 "" 0 1 0
 "VOICE3000" 01/12/12 0 31/12/49 "" 0 "" "" "Contrato service package" 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 0 1 0
 "VOICE5000" 05/07/17 0 31/12/49 "" 0 "" "" "National Voice 5000 min." 0 0 "1" "1" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "YOIGOYOIGO" 01/02/08 2 31/12/54 "YOIGOYOIGO" 3600 "1" "" "Yoigo-Yoigo national calls daily limit" 80 3600 "1" "2" 1 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
