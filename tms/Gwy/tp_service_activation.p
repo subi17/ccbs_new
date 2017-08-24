@@ -124,7 +124,7 @@ PROCEDURE pWriteFile:
                         ttCustomer.CustName   + lcSep +
                         ttCustomer.Region     + lcSep +
                         ttCustomer.Email      + lcSep +
-                        "QtelBOSS"            + lcSep +
+                        "MM_QtelBOSS"         + lcSep +
                         lcMessageId           + lcSep +
                         ttCustomer.Product    + lcSep +
                         ttCustomer.SerialNbr  SKIP.
