@@ -866,6 +866,8 @@
 "CONT27_DATA_OUT" "CONT27 DATA OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1075
 "CONT27_VOICE_IN" "CONT27 VOICE IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1076
 "CONT27_VOICE_OUT" "CONT27 VOICE OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1077
+"CONT28_VOICE_IN" "CONT28 VOICE IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/08/17 1094
+"CONT28_VOICE_OUT" "CONT28 VOICE OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/08/17 1095
 "CONTDSL_MIN_IN" "CONTDSL MIN_IN" 81 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 27/10/16 1044
 "CONTDSL_QTY_IN" "CONTDSL QTY_IN" 81 1 0 0 "" "" 0 no 4 no "" 0 0 "1" 31/12/49 27/10/16 1043
 "CONTF11_DATA_IN" "CONTF11 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 14/04/15 989
@@ -1048,6 +1050,7 @@
 "VAS" "VAS" 72 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 635
 "VOICE100" "Voice 100 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/01/15 977
 "VOICE200" "Voice 200 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/17 1081
+"VOICE200B" "Voice 200 minutes B" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 22/08/17 1096
 "VOICE3000" "Cont Voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 893
 "VOICE5000" "Voice 5000 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1085
 "WAPVAS" "Premium WAP" 78 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 636
