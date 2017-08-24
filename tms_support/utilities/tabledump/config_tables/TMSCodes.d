@@ -209,6 +209,7 @@
 "CLIType" "LineType" "MobSub" "0" "Entry" "" "" 1
 "CLIType" "LineType" "MobSub" "1" "Main" "" "" 1
 "CLIType" "LineType" "MobSub" "2" "Additional" "" "" 1
+"CLIType" "LineType" "MobSub" "3" "Extra" "" "" 1
 "CLIType" "PayType" "MobSub" "0" "Not defined" "" "" 1
 "CLIType" "PayType" "MobSub" "1" "Postpaid" "" "" 1
 "CLIType" "PayType" "MobSub" "2" "Prepaid" "" "" 1
