@@ -51,6 +51,7 @@ RUN pAdd_VoiceBundle.
 PROCEDURE pAdd_DataBundle:
     DEF VAR liCount              AS INT  NO-UNDO.
     DEF VAR lcError              AS CHAR NO-UNDO.
+    DEF VAR lcActiveBundle       AS CHAR NO-UNDO.
     DEF VAR lcActiveBundles      AS CHAR NO-UNDO.
     DEF VAR lcBONOContracts      AS CHAR NO-UNDO.
     DEF VAR lcIPLContracts       AS CHAR NO-UNDO.
