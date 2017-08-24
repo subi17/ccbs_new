@@ -165,7 +165,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
    IF (LOOKUP(DayCampaign.DCEvent,lcBONOContracts    ) > 0 OR
-       LOOKUP(DayCampaign.DCEvent,lcVoiceBundles     ) > 0 OR 
        LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
        LOOKUP(DayCampaign.DCEvent,lcDefaultBundles)    > 0 OR 
        DayCampaign.DCEvent = "HSPA_ROAM_EU")               THEN
@@ -175,6 +174,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       ELSE      
          lcBundleType = "bundle".
    END.
+   ELSE IF LOOKUP(DayCampaign.DCEvent,lcVoiceBundles) > 0 THEN 
+      lcBundleType = "voice_bundle".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"
              lcCLIType = "CONTRD".
@@ -194,6 +195,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcPromotionBundles) > 0 THEN 
       lcBundleType = "promotional".   
+   ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+      lcBundleType = "tv_service".
    ELSE 
       lcBundleType = "service".
    
