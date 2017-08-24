@@ -7,6 +7,7 @@
 "1" "CONT25" "Contrato 25" 12/12/16 31/12/49
 "1" "CONT26" "Contrato 26" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
+"1" "CONT28" "Línea móvil extra" 21/08/17 31/12/49
 "1" "CONT9" "Contrato 9" 01/05/14 31/12/49
 "1" "CONTD2" "Contrato Datos 2 continuous per" 01/12/09 31/12/54
 "1" "CONTD2ACT" "Contrato Datos 2 1st period" 01/12/09 31/12/54
@@ -106,5 +107,6 @@
 "1" "UPGRADE_UPSELL" "Upgrade Upsell" 23/03/12 31/12/49
 "1" "VOICE100" "Voice 100 Minutes Package" 01/01/15 31/12/49
 "1" "VOICE200" "Voice 200 Minutes Package" 01/06/17 31/12/49
+"1" "VOICE200B" "Voice 200B" 22/08/17 31/12/49
 "1" "VOICE3000" "Contrato voice" 01/12/12 31/12/49
 "1" "VOICE5000" "Voice 5000" 04/07/17 31/12/49
