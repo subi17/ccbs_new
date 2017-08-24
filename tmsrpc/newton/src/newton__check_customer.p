@@ -186,6 +186,10 @@ DO:
                             lcReason = "PRO migration not possible because, no mobile lines exists".
                 END.
             END.
+            ELSE
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines".
         END.
     END.
     ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
@@ -207,7 +211,11 @@ DO:
                     ASSIGN 
                         llOrderAllowed = FALSE
                         lcReason = "PRO migration not possible because, no mobile lines exists".
-            END.        
+            END.
+            ELSE
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multible mobile lines".
         END.
         ELSE
         DO:
