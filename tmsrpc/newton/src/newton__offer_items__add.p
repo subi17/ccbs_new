@@ -84,6 +84,8 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOfferItem).
 END.
 
+lcRespStruct = add_struct(response_toplevel_id, "").
+
 IF ttOfferItem.ItemType = "Topup" THEN DO:
    
    IF ttOfferItem.Amount NE 0 THEN DO:
@@ -122,7 +124,6 @@ IF llDoEvent THEN DO:
    fCleanEventObjects().
 END.
 
-lcRespStruct = add_struct(response_toplevel_id, "").
 add_string(lcRespStruct, "id", STRING(OfferItem.OfferItemId)). 
 
 FINALLY:
