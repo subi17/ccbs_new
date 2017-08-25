@@ -150,9 +150,9 @@ ELSE DO:
             END.
          END.
          IF AVAIL MsOwner THEN DO: /* now we got a correct MSOwner */
-            fCollect().   
+            fCollect().
          END.
-      END.        
+      END.
       ELSE DO: /* with first search MSOwner not available */
          /* YTS-10342 New MSOwner-search to be able to find MSOwners 
             whose TSEnd is changed after midnight before dump start. */
@@ -160,8 +160,8 @@ ELSE DO:
                     MsOwner.Brand = gcBrand AND
                     MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                     MsOwner.TSBegin >= ldeLastDump NO-ERROR.
-         IF AVAIL MsOwner THEN fCollect().       
-      END.    
+         IF AVAIL MsOwner THEN fCollect().
+      END.
    END. 
 END.
 
