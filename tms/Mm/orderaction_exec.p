@@ -91,8 +91,8 @@ FOR EACH OrderAction NO-LOCK WHERE
          /* to ensure that data bundle must be handled before DSS */
          IF OrderAction.ItemKey EQ {&DSS} THEN NEXT.
          /* make flex_upsell / dss_flex_upsell at last */
-         IF INDEX(OrderAction.ItemKey,"FLEX_") > 0 THEN NEXT.
-
+         IF OrderAction.ItemKey MATCHES "FLEX*UPSELL" THEN NEXT.
+                  
          /* Don't create bundle request if renewal order */
          /* with IPL/CONTF/GPRS bundles order actions    */
          IF (Order.OrderType EQ 2 OR Order.OrderType EQ 4) AND
@@ -149,12 +149,13 @@ FOR EACH OrderAction NO-LOCK WHERE
    END.   
 END.
 
-/* Create flex_upsell* or dss_flex_upsell* based on dss activity */
+/* Create flex_upsell* or dss_flex_upsell* based on dss activity 
+   YPPI-1 EXTRAL-108 */
 FOR EACH OrderAction NO-LOCK WHERE
          OrderAction.Brand     = gcBrand AND
          OrderAction.OrderId   = iiOrderId AND
          OrderAction.ItemType = "BundleItem" AND
-         INDEX(OrderAction.ItemKey,"FLEX_") > 0:
+         OrderAction.ItemKey MATCHES "FLEX*UPSELL":
 
    lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
    IF lcBundleId > "" THEN
