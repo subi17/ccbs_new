@@ -143,7 +143,7 @@ ELSE DO:
                   fCollect().
                RELEASE MSOwner.
                FIND FIRST MsOwner NO-LOCK WHERE
-                          MsOwner.Brand = "1" AND
+                          MsOwner.Brand = gcBrand AND
                           MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                           MsOwner.TSBegin >= ldeLastDump AND  
                           MSOwner.TSBegin < ldeToday NO-ERROR.
@@ -157,7 +157,7 @@ ELSE DO:
          /* YTS-10342 New MSOwner-search to be able to find MSOwners 
             whose TSEnd is changed after midnight before dump start. */
          FIND FIRST MsOwner NO-LOCK WHERE
-                    MsOwner.Brand = "1" AND
+                    MsOwner.Brand = gcBrand AND
                     MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                     MsOwner.TSBegin >= ldeLastDump NO-ERROR.
          IF AVAIL MsOwner THEN fCollect().       
