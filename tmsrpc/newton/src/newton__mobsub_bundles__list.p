@@ -49,19 +49,21 @@ RUN pAdd_DataBundle.
 RUN pAdd_VoiceBundle.
 
 PROCEDURE pAdd_DataBundle:
-    DEF VAR liCount              AS INT  NO-UNDO.
-    DEF VAR lcError              AS CHAR NO-UNDO.
-    DEF VAR lcActiveBundle       AS CHAR NO-UNDO.
-    DEF VAR lcActiveBundles      AS CHAR NO-UNDO.
-    DEF VAR lcBONOContracts      AS CHAR NO-UNDO.
-    DEF VAR lcIPLContracts       AS CHAR NO-UNDO.
-    DEF VAR lcUpsellList         AS CHAR NO-UNDO.
-    DEF VAR liUpsellCount        AS INTE NO-UNDO.
-    DEF VAR llActiveBonoContract AS LOG  NO-UNDO.
+    DEF VAR liCount                AS INT  NO-UNDO.
+    DEF VAR lcError                AS CHAR NO-UNDO.
+    DEF VAR lcActiveBundle         AS CHAR NO-UNDO.
+    DEF VAR lcActiveBundles        AS CHAR NO-UNDO.
+    DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+    DEF VAR lcAllowedBONOContracts AS CHAR NO-UNDO.
+    DEF VAR lcIPLContracts         AS CHAR NO-UNDO.
+    DEF VAR lcUpsellList           AS CHAR NO-UNDO.
+    DEF VAR liUpsellCount          AS INTE NO-UNDO.
+    DEF VAR llActiveBonoContract   AS LOG  NO-UNDO.
 
     ASSIGN 
         lcBONOContracts = fCParamC("BONO_CONTRACTS")
-        lcIPLContracts  = fCParamC("IPL_CONTRACTS").
+        lcIPLContracts  = fCParamC("IPL_CONTRACTS")
+        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS").
 
     ASSIGN lcActiveBundles = fGetActiveDataBundle(Mobsub.MsSeq,ldCurrentDateTime).
 
@@ -120,6 +122,8 @@ PROCEDURE pAdd_DataBundle:
 END PROCEDURE.
 
 PROCEDURE pAdd_VoiceBundle:
+    
+    DEFINE VARIABLE lcVoiceBundle AS CHARACTER NO-UNDO.
     
     lcVoiceBundle = fGetCurrentSpecificBundle(MobSub.MsSeq, "VOICE").
 
