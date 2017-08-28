@@ -6,14 +6,10 @@
   Created ......: 22.08.17
   Version ......: Yoigo
 
-  Input ........: 1) migrationdata;struct;mandatory;contains input data
-                    a) String;mandatory;custid
-                    b) String;mandatory;custidtype
-                    c) String;mandatory;salesman
-                  2) struct;mandatory;memo
-                    a) title;string;mandatory
-                    b) content;string;mandatory
-  Output .......: success;boolean
+  Input ........:  1) migrationdata;struct;mandatory;contains input data
+-                    a) Int;mandatory;msseq
+-                    c) String;mandatory;salesman 
+  Output .......:   success;boolean
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
@@ -26,50 +22,44 @@ gcBrand = "1".
 {Func/freacmobsub.i}
 {Func/profunc.i}
 
-DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
+DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
+DEFINE VARIABLE pcSalesman        AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE ldActStamp        AS DECIMAL     NO-UNDO.
-
-DEFINE VARIABLE lcCustId          AS CHARACTER   NO-UNDO.
-DEFINE VARIABLE lcCustIdType      AS CHARACTER   NO-UNDO.
+DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE lcResult          AS CHARACTER   NO-UNDO.
-DEFINE VARIABLE pcMigrateStruct   AS CHARACTER   NO-UNDO.
-DEFINE VARIABLE pcMemoStruct      AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE lcStruct          AS CHARACTER   NO-UNDO.
-DEFINE VARIABLE lcMemoTitle       AS CHARACTER   NO-UNDO.
-DEFINE VARIABLE lcMemoContent     AS CHARACTER   NO-UNDO.
+DEFINE VARIABLE pcMigrStruct      AS CHARACTER   NO-UNDO.
 
 DEFINE BUFFER lbMobSub            FOR MobSub.
 DEFINE BUFFER bTermMobSub         FOR TermMobSub.
 
-IF validate_request(param_toplevel_id, "struct,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
-pcMigrateStruct = get_struct(param_toplevel_id, "0").
-pcMemoStruct = get_struct(param_toplevel_id, "1").
+pcMigrStruct = get_struct(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcMigrateStruct,"custid!,custidType!,salesman!").
-IF lcStruct EQ ? THEN RETURN.
-
-lcStruct = validate_request(pcMemoStruct,"title!,content!").
+lcStruct = validate_request(pcMigrStruct,"salesman!,msseq!").
 IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
-lcCustId  = get_string(pcMigrateStruct, "custid").
-lcCustIdType = get_string(pcMigrateStruct, "custidtype").
-katun    = "VISTA_" + get_string(pcMigrateStruct, "salesman").
+piMsSeq  = get_pos_int(pcMigrStruct, "msseq").
+katun    = "VISTA_" + get_string(pcMigrStruct, "salesman").
 
-lcMemoTitle = get_string(pcMemoStruct, "title").
-lcMemoContent = get_string(pcMemoStruct, "content").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN
-   RETURN appl_err("username is empty").
+FIND FIRST Mobsub WHERE 
+           Mobsub.msseq EQ piMsseq NO-LOCK NO-ERROR.
+IF NOT AVAIL Mobsub THEN
+   RETURN appl_err("Mobsub not found").
+
 FIND FIRST Customer WHERE
-           Customer.brand EQ "1" AND
-           Customer.orgid EQ lccustid NO-ERROR.
+           Customer.custnum EQ Mobsub.custnum NO-LOCK NO-ERROR.
+IF NOT AVAIL Customer THEN
+   RETURN appl_err("Customer not found").
+
 /* Create Reactivation Request */
-liMsReq = fMigrationRequest(INPUT lcCustID,
-                            INPUT lcCustIDType,
+liMsReq = fMigrationRequest(INPUT Customer.custnum,
                             INPUT katun,
                             INPUT {&REQUEST_SOURCE_NEWTON},
                             OUTPUT lcResult).
@@ -79,19 +69,6 @@ IF liMsReq > 0 THEN
 ELSE
    RETURN appl_err(lcResult).
 
-IF lcMemoTitle > "" AND liMsReq > 0 THEN DO:
-   CREATE Memo.
-   ASSIGN
-       Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
-       Memo.HostTable = "MobSub"
-       Memo.KeyValue  = STRING(lcCustID)
-       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
-       Memo.MemoTitle = lcMemoTitle
-       Memo.MemoText  = lcMemoContent
-       Memo.CustNum   = (IF AVAILABLE Customer THEN Customer.custnum ELSE 0).
-END. /* IF lcMemoTitle > "" THEN DO: */
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

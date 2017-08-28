@@ -1,6 +1,6 @@
 /* YPRO phase 2 setups */
 DEF BUFFER btmscodes for tmscodes.
-
+DEF VAR liactionid AS INT No-UNDO.
 FUNCTION fUpdateTMSParam RETURNS LOGICAL (INPUT icParam AS CHAR,
                                        INPUT icgroup AS CHAR,
                                        INPUT icValue AS CHAR):
@@ -320,3 +320,46 @@ fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "DSS_FLEX_UPSELL_500MB").
+
+FIND FIRST REquestType WHERE 
+           requesttype.reqtype EQ 95 NO-ERROR.
+IF NOT AVAIL requesttype THEN DO:
+   CREATE Requesttype.
+   ASSIGN
+      RequestType.Brand    = "1"
+      RequestType.Queue    = 2
+      RequestType.ReqType  = 95
+      RequestType.InUse    = TRUE
+      RequestType.ReqName  = "Pro migration"
+      RequestType.Program  = ""
+      RequestType.UserCode = "ProMig".
+END.
+
+FUNCTION fcreateRequestAction RETURNS LOG (INPUT iireqtype AS INT,
+                                           INPUT icclitype AS CHAR,
+                                           INPUT iiAction  AS INT,
+                                           INPUT icActType AS CHAR,
+                                           INPUT icKey     AS CHAR):
+   FIND FIRST RequestAction WHERE
+              RequestAction.brand EQ "1" AND
+              RequestAction.reqtype EQ iireqtype AND
+              RequestAction.validto GE TODAY NO-ERROR.
+   IF NOT AVAIL Requestaction THEN DO:
+      FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+      IF AVAILABLE RequestAction THEN
+         liActionID = RequestAction.RequestActionID + 1.
+      ELSE liActionID = 1.      
+      
+      CREATE Requestaction.
+      ASSIGN
+         REQUESTAction.brand = "1" 
+         RequestAction.RequestActionID = liActionID         
+         RequestAction.reqtype = iireqtype
+         RequestAction.validto = 12/31/49
+         RequestAction.action  = iiAction
+         RequestAction.actiontype = icActType
+         RequestAction.clitype = icclitype
+         RequestAction.actionkey     = icKey.
+
+   END.
+END.

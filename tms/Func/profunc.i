@@ -322,8 +322,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 END.
 
 FUNCTION fMigrationRequest RETURNS INTEGER
-   (INPUT  icCustId       AS CHARACTER,    /* cust id                */
-    INPUT  icCustIdType   AS CHARACTER,    /* cust Id type           */
+   (INPUT  icCustNum      AS INT,    /* custnum              */
     INPUT  icUserName     AS CHARACTER,  /* who made the request           */
     INPUT  icReqSource    AS CHARACTER,
     OUTPUT ocResult       AS CHARACTER):
