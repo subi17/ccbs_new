@@ -228,7 +228,7 @@ DO:
                  lcReason = "customer already exists with PRO category".
            ELSE IF (pcChannel EQ "Newton" OR pcChannel EQ "VFR") AND
                    plSTCMigrate THEN DO:
-              fCheckMigrate().
+              fCheckMigration().
            END.
         END.
     END.
