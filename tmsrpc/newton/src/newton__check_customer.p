@@ -111,7 +111,10 @@ FUNCTION fCheckMigration RETURNS LOG ():
             ASSIGN
                llOrderAllowed = FALSE
                lcReason = "PRO migration not possible because of multiple mobile lines".
-
+         IF fHasTVService(Mobsub.msseq) THEN
+            ASSIGN
+               llOrderAllowed = FALSE
+               lcReason = "PRO migration not possible because of multiple mobile lines".
          IF fIsFixedOnly(Mobsub.Clitype) THEN
              ASSIGN
                  llOrderAllowed = FALSE
