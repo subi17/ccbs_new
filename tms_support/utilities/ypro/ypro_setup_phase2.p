@@ -343,8 +343,11 @@ FUNCTION fcreateRequestAction RETURNS LOG (INPUT iireqtype AS INT,
                                            INPUT icKey     AS CHAR):
    FIND FIRST RequestAction WHERE
               RequestAction.brand EQ "1" AND
+              RequestAction.clitype EQ icclitype AND
               RequestAction.reqtype EQ iireqtype AND
-              RequestAction.validto GE TODAY NO-ERROR.
+              RequestAction.validto GE TODAY AND
+              RequestAction.action  EQ iiAction AND
+              RequestAction.actionKey   EQ icKey NO-ERROR.
    IF NOT AVAIL Requestaction THEN DO:
       FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
       IF AVAILABLE RequestAction THEN
@@ -364,3 +367,97 @@ FUNCTION fcreateRequestAction RETURNS LOG (INPUT iireqtype AS INT,
 
    END.
 END.
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL48",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL52",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL59",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH35_50",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH48_50",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH52_50",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH59_50",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH45_300",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH62_300",1,"DayCampaign","FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH69_300",1,"DayCampaign","FIX_VOICE1000").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL48",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL52",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL59",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH35_50",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH48_50",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH52_50",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH59_50",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH45_300",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH62_300",1,"DayCampaign","INT_FIX_VOICE1000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH69_300",1,"DayCampaign","INT_FIX_VOICE1000").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL48",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL52",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL59",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH35_50",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH48_50",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH52_50",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH59_50",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH45_300",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH62_300",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH69_300",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT10",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT15",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT25",1,"DayCampaign","SMS5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT26",1,"DayCampaign","SMS5000").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL48",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL52",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL59",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH35_50",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH48_50",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH52_50",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH59_50",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH45_300",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH62_300",1,"DayCampaign","INT_VOICE100").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH69_300",1,"DayCampaign","INT_VOICE100").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","FLEX_500MB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","FLEX_500MB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH35_50",1,"DayCampaign","FLEX_500MB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","FLEX_500MB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH45_300",1,"DayCampaign","FLEX_500MB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","FLEX_500MB_UPSELL").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL52",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL59",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH52_50",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH59_50",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH62_300",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH69_300",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT25",1,"DayCampaign","FLEX_5GB_UPSELL").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT26",1,"DayCampaign","FLEX_5GB_UPSELL").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","VOICE5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL48",1,"DayCampaign","VOICE5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","VOICE5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH48_50",1,"DayCampaign","VOICE5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","VOICE5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","VOICE5000").
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT15",1,"DayCampaign","VOICE5000").
+
+fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT10",1,"DayCampaign","VOICE200").
