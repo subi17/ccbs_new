@@ -40,7 +40,17 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
       RUN StarEventSetOldBuffer ( lhCustomer ).
       bcustomer.category = lcCategory.
       RUN StarEventMakeModifyEvent(lhCustomer).
-   END.                
+   END.
+
+   RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
+                             bMobSub.CLIType,
+                             0,
+                             0,
+                             0,
+                             TRUE,                   /* create fees */
+                             {&REQUEST_SOURCE_PRO_MIGRATION},
+                             {&REQUEST_ACTIONLIST_ALL}).
+             
 
 END.
 fCleanEventObjects(). 
