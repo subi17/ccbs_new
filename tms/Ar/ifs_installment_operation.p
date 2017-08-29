@@ -389,6 +389,8 @@ PROCEDURE pCollectActivations:
    DEF VAR ldResidual  AS DEC NO-UNDO. 
    DEF VAR ldtOperDate AS DATE NO-UNDO.
    DEF VAR ldtDueDate  AS DATE NO-UNDO.
+   DEF VAR ldaActDate    AS DATE NO-UNDO.
+   DEF BUFFER bDCCLI FOR DCCLI.   
    
    FF_LOOP:
    FOR EACH FixedFee NO-LOCK WHERE
@@ -422,6 +424,23 @@ PROCEDURE pCollectActivations:
                     SingleFee.SourceTable = FixedFee.SourceTable AND
                     SingleFee.CalcObj = "RVTERM" NO-ERROR.
          IF AVAILABLE SingleFee THEN ldResidual = SingleFee.Amt.
+         /* fix for YTS-11246 problems start from here */
+         ELSE DO:
+            IF FixedFee.BegPeriod > FixedFee.EndPeriod THEN DO:
+               fTS2Date(MsRequest.ActStamp, OUTPUT ldaActDate).
+
+               FIND bDCCLI WHERE
+                  bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
+                  bDCCLI.DCEvent       = FixedFee.CalcObj AND
+                  bDCCLI.percontractId = INT(FixedFee.SourceKey) NO-LOCK NO-ERROR.
+
+               IF AVAILABLE bDCCLI THEN DO:
+                  IF bDCCLI.Amount NE ? THEN
+                     ldResidual = bDCCLI.Amount.
+               END.
+            END.
+         END.
+         /* fix for YTS-11246 problems end here */ 
       END.
       
       liBatches = 0.
