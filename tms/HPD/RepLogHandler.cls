@@ -253,6 +253,7 @@ CLASS HPD.RepLogHandler FINAL:
       THEN RETURN mPopulateDumpHandlers("").
       
       DEFINE VARIABLE llOK              AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llRetunValue      AS LOGICAL INITIAL FALSE NO-UNDO.
       DEFINE VARIABLE lii               AS INTEGER               NO-UNDO.
       DEFINE VARIABLE liNumConnectedDBs AS INTEGER               NO-UNDO.
 
@@ -267,6 +268,9 @@ CLASS HPD.RepLogHandler FINAL:
             END.
 
             llOK = mPopulateDumpHandlers(GET-EFFECTIVE-TENANT-NAME(LDBNAME(1))).
+
+            IF llOK
+            THEN llReturnValue = llOK.
          END.
 
       END.
@@ -281,7 +285,7 @@ CLASS HPD.RepLogHandler FINAL:
          LOG-MANAGER:WRITE-MESSAGE("Object: " + STRING(ttDumpHandler.objHandler), "DEBUG").
       END.
 */
-      RETURN llOK.
+      RETURN llReturnValue.
 
    END METHOD.
 
