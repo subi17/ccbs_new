@@ -389,7 +389,6 @@ PROCEDURE pCollectActivations:
    DEF VAR ldResidual  AS DEC NO-UNDO. 
    DEF VAR ldtOperDate AS DATE NO-UNDO.
    DEF VAR ldtDueDate  AS DATE NO-UNDO.
-   DEF VAR ldaActDate    AS DATE NO-UNDO.
    DEF BUFFER bDCCLI FOR DCCLI.   
    
    FF_LOOP:
@@ -427,7 +426,6 @@ PROCEDURE pCollectActivations:
          /* fix for YTS-11246 problems start from here */
          ELSE DO:
             IF FixedFee.BegPeriod > FixedFee.EndPeriod THEN DO:
-               fTS2Date(MsRequest.ActStamp, OUTPUT ldaActDate).
 
                FIND bDCCLI WHERE
                   bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
