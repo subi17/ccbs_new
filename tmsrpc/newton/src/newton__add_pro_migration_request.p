@@ -20,7 +20,7 @@ gcBrand = "1".
 {Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/freacmobsub.i}
-{Func/profunc.i}
+{Func/fpromigrationreq.i}
 
 DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE pcSalesman        AS CHARACTER   NO-UNDO.
@@ -59,10 +59,10 @@ IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
 /* Create Reactivation Request */
-liMsReq = fMigrationRequest(INPUT Customer.custnum,
-                            INPUT katun,
-                            INPUT {&REQUEST_SOURCE_NEWTON},
-                            OUTPUT lcResult).
+liMsReq = fProMigrationRequest(INPUT Customer.custnum,
+                               INPUT katun,
+                               INPUT {&REQUEST_SOURCE_NEWTON},
+                               OUTPUT lcResult).
 
 IF liMsReq > 0 THEN
    add_boolean(response_toplevel_id, "", true).

@@ -1,4 +1,5 @@
 /* YPRO phase 2 setups */
+{Syst/tmsconst.i}
 DEF BUFFER btmscodes for tmscodes.
 DEF VAR liactionid AS INT No-UNDO.
 FUNCTION fUpdateTMSParam RETURNS LOGICAL (INPUT icParam AS CHAR,
@@ -328,7 +329,7 @@ IF NOT AVAIL requesttype THEN DO:
    ASSIGN
       RequestType.Brand    = "1"
       RequestType.Queue    = 2
-      RequestType.ReqType  = 95
+      RequestType.ReqType  = {&REQTYPE_PRO_MIGRATION}
       RequestType.InUse    = TRUE
       RequestType.ReqName  = "Pro migration"
       RequestType.Program  = ""
