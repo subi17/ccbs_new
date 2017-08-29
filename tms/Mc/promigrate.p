@@ -43,5 +43,5 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
    END.                
 
 END.
- 
-fReqStatus(6,"").
+fCleanEventObjects(). 
+fReqStatus(2,"").

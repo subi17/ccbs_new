@@ -359,6 +359,7 @@ FUNCTION fcreateRequestAction RETURNS LOG (INPUT iireqtype AS INT,
          REQUESTAction.brand = "1" 
          RequestAction.RequestActionID = liActionID         
          RequestAction.reqtype = iireqtype
+         RequestAction.validfrom = TODAY
          RequestAction.validto = 12/31/49
          RequestAction.action  = iiAction
          RequestAction.actiontype = icActType
