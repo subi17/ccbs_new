@@ -139,6 +139,7 @@ PROCEDURE pWriteFile:
         PUT UNFORMATTED "2"                   + lcSep +
                         ttCustomer.CustomerId + lcSep +
                         ttCustomer.CustName   + lcSep +
+                        "MM_bossID"           + lcSep +  
                         lcMessageId           + lcSep +
                         ttCustomer.SerialNbr  SKIP.
 
