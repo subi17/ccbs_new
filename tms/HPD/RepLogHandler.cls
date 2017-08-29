@@ -101,7 +101,7 @@ CLASS HPD.RepLogHandler FINAL:
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            Syst.Parameters:seti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface", 10000).
+            Syst.Parameters:seti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface", 5000).
             liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface").
          END CATCH.
 
@@ -207,19 +207,35 @@ CLASS HPD.RepLogHandler FINAL:
       ( icTenant AS CHARACTER ):
       
       DEFINE VARIABLE llFoundHandler AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE lcBrandName    AS CHARACTER             NO-UNDO.
+
+      /* The default tenant is handling also for the shared tables */
+      IF icTenant > "" AND multitenancy.TenantInformation:mIsDefaultTenant(icTenant)
+      THEN icTenant = "".
 
       FOR EACH DumpFile NO-LOCK WHERE
          DumpFile.FileCategory = "HPD" AND
          DumpFile.SideTables = lcQueueName
          ON ERROR UNDO, THROW:
-            
+
+         /* When multitenancy is enabled lets check the brand name.
+            If it is empty then we have a shared table. */
+         IF llMultiTenancy
+         THEN lcBrandName = multitenancy.TenantInformation:mGetBrandForTable(DumpFile.MainTable).
+         ELSE lcBrandName = "".
+
+         /* For shared tables we use only the default tenant */
+         IF lcBrandName = "" AND
+            icTenant > ""
+         THEN NEXT.
+
          CREATE ttDumpHandler.
          ttDumpHandler.objHandler = DYNAMIC-NEW DumpFile.LinkKey(DumpFile.DumpID).
 
          ASSIGN
             ttDumpHandler.TableName     = DumpFile.MainTable
             ttDumpHandler.TenantName    = icTenant
-            ttDumpHandler.BrandName     = multitenancy.TenantInformation:mGetBrandForTable(DumpFile.MainTable)
+            ttDumpHandler.BrandName     = lcBrandName
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
             llFoundHandler = TRUE
@@ -239,7 +255,6 @@ CLASS HPD.RepLogHandler FINAL:
       DEFINE VARIABLE llOK              AS LOGICAL INITIAL FALSE NO-UNDO.
       DEFINE VARIABLE lii               AS INTEGER               NO-UNDO.
       DEFINE VARIABLE liNumConnectedDBs AS INTEGER               NO-UNDO.
-      DEFINE VARIABLE lcTenant          AS CHARACTER             NO-UNDO.
 
       DO ON ERROR UNDO, THROW:
          TENANTLOOP:
@@ -251,17 +266,7 @@ CLASS HPD.RepLogHandler FINAL:
                THEN LEAVE TENANTLOOP.
             END.
 
-            lcTenant = GET-EFFECTIVE-TENANT-NAME(LDBNAME(1)).
-
-            &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-            &THEN
-            IF lcTenant = "Default"
-            THEN lcTenant = "yoigo".
-            ELSE lcTenant = SUBSTRING(lcTenant,2).
-            &ENDIF
-
-            llOK = mPopulateDumpHandlers(lcTenant).
-
+            llOK = mPopulateDumpHandlers(GET-EFFECTIVE-TENANT-NAME(LDBNAME(1))).
          END.
 
       END.
@@ -270,10 +275,10 @@ CLASS HPD.RepLogHandler FINAL:
       FOR EACH ttDumpHandler:
          LOG-MANAGER:WRITE-MESSAGE("Tablename: " + ttDumpHandler.TableName, "DEBUG").
          LOG-MANAGER:WRITE-MESSAGE("TenantName: " + ttDumpHandler.TenantName, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("BrandName: " + ttDumpHandler.BrandName, "DEBUG").
          LOG-MANAGER:WRITE-MESSAGE("VersionNumber: " + ttDumpHandler.VersionNumber, "DEBUG").
          LOG-MANAGER:WRITE-MESSAGE("QuoteKeyValue: " + STRING(ttDumpHandler.QuoteKeyValue), "DEBUG").
          LOG-MANAGER:WRITE-MESSAGE("Object: " + STRING(ttDumpHandler.objHandler), "DEBUG").
-         LOG-MANAGER:WRITE-MESSAGE("lhMainTable: " + STRING(CAST(ttDumpHandler.objHandler, DumpHandler):lhMainTable), "DEBUG").
       END.
 */
       RETURN llOK.
@@ -376,17 +381,22 @@ CLASS HPD.RepLogHandler FINAL:
    METHOD PRIVATE VOID mSetEffectiveTenant
       (icTenantname AS CHARACTER):
 
+      lcTenant = icTenantname.
+
       DEFINE VARIABLE liNumConnectedDBs AS INTEGER NO-UNDO.
 
-      IF icTenantname = "yoigo"
-      THEN icTenantname = "Default".
-      ELSE icTenantname = "t" + icTenantName.
+      IF icTenantname = ""
+      THEN icTenantname = 
+      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+      "Default".
+      &ELSE
+      multitenancy.TenantInformation:DefaultTenantName.
+      &ENDIF
 
       DO liNumConnectedDBs = 1 TO NUM-DBS:
          SET-EFFECTIVE-TENANT(icTenantName, LDBNAME(liNumConnectedDBs)).
       END.
-
-      lcTenant = icTenantname.
 
    END METHOD.
 
