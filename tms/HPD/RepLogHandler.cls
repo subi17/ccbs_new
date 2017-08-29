@@ -366,9 +366,7 @@ CLASS HPD.RepLogHandler FINAL:
             RETURN 3.
          END.
       END.
-/*
-      LOG-MANAGER:WRITE-MESSAGE(SUBSTITUTE("Sending message: &1", SUBSTRING(lcMessage,1,30000)), "DEBUG").
-*/
+
       IF NOT objMsgPublisher:send_message(lcMessage)
       THEN DO:
          mLog(2, "INFO", "Failed to send message: " + lcMessage).

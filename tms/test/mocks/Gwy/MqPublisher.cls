@@ -105,6 +105,7 @@ CLASS test.mocks.Gwy.MqPublisher:
    METHOD PUBLIC LOGICAL send_message
       ( iclMessage AS LONGCHAR ):
 
+      LOG-MANAGER:WRITE-MESSAGE(SUBSTITUTE("Sending message: &1", SUBSTRING(iclMessage,1,30000)), "DEBUG").
       lcMessage = iclMessage.
 
    END METHOD.
