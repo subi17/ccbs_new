@@ -112,6 +112,11 @@ CLASS HPD.RepLogHandler FINAL:
       IF NOT mPopulateDumpHandlers()
       THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcQueueName, 1).
 
+      /* Change effective tenant to default one
+         so that tmsparam records will be fetched
+         from there */
+      IF llMultiTenancy
+      THEN mSetEffectiveTenant("").
 
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
@@ -206,27 +211,34 @@ CLASS HPD.RepLogHandler FINAL:
    METHOD PRIVATE LOGICAL mPopulateDumpHandlers
       ( icTenant AS CHARACTER ):
       
-      DEFINE VARIABLE llFoundHandler AS LOGICAL INITIAL FALSE NO-UNDO.
-      DEFINE VARIABLE lcBrandName    AS CHARACTER             NO-UNDO.
+      DEFINE VARIABLE llFoundHandler          AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llCheckTableMultiTenant AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llTableMultiTenant      AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE lcBrandName             AS CHARACTER             NO-UNDO.
 
-      /* The default tenant is handling also for the shared tables */
-      IF icTenant > "" AND multitenancy.TenantInformation:mIsDefaultTenant(icTenant)
-      THEN icTenant = "".
+      IF icTenant > ""
+      THEN DO:
+         ASSIGN
+            llCheckTableMultiTenant = TRUE
+            lcBrandName = multitenancy.TenantInformation:mConvertTenantToBrand(icTenant).
+
+         /* The default tenant is handling also for the shared tables */
+         IF multitenancy.TenantInformation:mIsDefaultTenant(icTenant)
+         THEN icTenant = "".
+      END.
 
       FOR EACH DumpFile NO-LOCK WHERE
          DumpFile.FileCategory = "HPD" AND
          DumpFile.SideTables = lcQueueName
          ON ERROR UNDO, THROW:
 
-         /* When multitenancy is enabled lets check the brand name.
-            If it is empty then we have a shared table. */
-         IF llMultiTenancy
-         THEN lcBrandName = multitenancy.TenantInformation:mGetBrandForTable(DumpFile.MainTable).
-         ELSE lcBrandName = "".
+         IF llCheckTableMultiTenant
+         THEN llTableMultiTenant = multitenancy.TenantInformation:mIsTableMultiTenant(DumpFile.MainTable).
 
-         /* For shared tables we use only the default tenant */
-         IF lcBrandName = "" AND
-            icTenant > ""
+         /* When we have other than default tenant and multitenancy is enabled
+           (i.e. icTenant > "") and this is a shared table. Then a handler is not needed
+            => only default tenant will process the shared tables */
+         IF icTenant > "" AND NOT llTableMultiTenant
          THEN NEXT.
 
          CREATE ttDumpHandler.
@@ -235,7 +247,7 @@ CLASS HPD.RepLogHandler FINAL:
          ASSIGN
             ttDumpHandler.TableName     = DumpFile.MainTable
             ttDumpHandler.TenantName    = icTenant
-            ttDumpHandler.BrandName     = lcBrandName
+            ttDumpHandler.BrandName     = lcBrandName WHEN llTableMultiTenant
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
             llFoundHandler = TRUE
