@@ -59,7 +59,7 @@ IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
 /* Create Reactivation Request */
-liMsReq = fProMigrationRequest(INPUT Customer.custnum,
+liMsReq = fProMigrationRequest(INPUT piMsseq,
                                INPUT katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                OUTPUT lcResult).
