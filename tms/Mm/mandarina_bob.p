@@ -22,11 +22,11 @@ gcbrand = "1".
 {Func/cparam2.i}
 
 /* Directories */
-DEF VAR lcBaseDirectory     AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/".
-DEF VAR lcSpoolDirectory    AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/spool/". 
-DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/incoming/". 
-DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/outgoing/". 
-DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/logs/". 
+DEF VAR lcBaseDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/".
+DEF VAR lcSpoolDirectory    AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/spool/". 
+DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/incoming/". 
+DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/outgoing/". 
+DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/logs/". 
 
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
