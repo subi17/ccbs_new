@@ -253,7 +253,7 @@ CLASS HPD.RepLogHandler FINAL:
       THEN RETURN mPopulateDumpHandlers("").
       
       DEFINE VARIABLE llOK              AS LOGICAL INITIAL FALSE NO-UNDO.
-      DEFINE VARIABLE llRetunValue      AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llReturnValue     AS LOGICAL INITIAL FALSE NO-UNDO.
       DEFINE VARIABLE lii               AS INTEGER               NO-UNDO.
       DEFINE VARIABLE liNumConnectedDBs AS INTEGER               NO-UNDO.
 
