@@ -58,4 +58,24 @@ FUNCTION fMakeLPCommandRequest RETURNS LOGICAL
    RETURN TRUE.
 END. /* fMakeLPCommandRequest */
 
+/* MANDLP-8:
+   Function returns TRUE if ICC change is done in near history.
+   This can be used in blocking non-needed redirection command.
+  */
+FUNCTION fICCDoneRecently RETURNS LOGICAL
+   (iiMsSeq AS INT):
+
+   DEF VAR ldSeekPeriodStart AS DECIMAL NO-UNDO.
+   ldSeekPeriodStart = fSecOffSet(fMakeTS(),10 * 86400). /*10 days*/
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.MsSeq EQ iiMsSeq AND
+              MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/ AND
+              MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
+              MsRequest.UpdateStamp < ldSeekPeriodStart AND
+              MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
+   IF AVAIL MsRequest THEN RETURN TRUE.
+   RETURN FALSE.
+
+END.
+
 &ENDIF
