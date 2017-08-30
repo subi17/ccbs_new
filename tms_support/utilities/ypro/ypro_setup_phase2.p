@@ -346,7 +346,7 @@ IF NOT AVAIL requeststatus THEN DO:
       RequestStatus.Brand    = "1"
       RequestStatus.ReqType  = {&REQTYPE_PRO_MIGRATION}
       RequestStatus.reqstatus    = 0
-      RequestType.Program  = "Mc/promigrate.p".
+      RequestStatus.Program  = "Mc/promigrate.p".
 END.
 
 /* RequestAction */
