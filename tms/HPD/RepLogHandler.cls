@@ -287,6 +287,11 @@ CLASS HPD.RepLogHandler FINAL:
 
       END.
 
+      /* Change effective tenant to default one
+         (this is needed in order to make sure that lcTenant attribute
+          stays in sync after calling mReload) */
+      mSetEffectiveTenant("").
+
 /*
       FOR EACH ttDumpHandler:
          LOG-MANAGER:WRITE-MESSAGE("Tablename: " + ttDumpHandler.TableName, "DEBUG").
