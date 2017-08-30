@@ -171,15 +171,15 @@ REPEAT:
 
       IF lcAction = "on" THEN DO:
          lcErr = "".
-         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                    /*Subscription identifier*/
+         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                     /*Subscription identifier*/
                                             INPUT (IF LcLP = "Mandarina1" 
                                                    THEN "REDIRECTION_OTAFAILED1" 
-                                                   ELSE "REDIRECTION_OTAFAILED2"), /*LP command to network*/ 
-                                            INPUT mobsub.CustNum,                  /*Customer number for memo*/
-                                            INPUT "MANDARINA",                     /*Memo title. Empty -> no memo writing*/
-                                            INPUT lcLp,                            /*Memo text*/
-                                            INPUT "MANDARINA",                     /*Creator tag for memo*/
-                                            INPUT-OUTPUT lcErr).                   /*Request creation info*/
+                                                   ELSE "REDIRECTION_OTAFAILED2"),  /*LP command to network*/ 
+                                            INPUT mobsub.CustNum,                   /*Customer number for memo*/
+                                            INPUT "Mandarina LP 2017",              /*Memo title. Empty -> no memo writing*/
+                                            INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
+                                            INPUT "LP_BOB",                         /*Creator tag for memo*/
+                                            INPUT-OUTPUT lcErr).                    /*Request creation info*/
          IF NOT llSuccess THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
                lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:COMMAND_REQUEST_" + lcErr SKIP.
