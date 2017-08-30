@@ -2,7 +2,7 @@
   MODULE .......: mandarina_params.p
   TASK .........: BOB / Creating/updating parameters for MANDARINA LP
   APPLICATION ..: TMS
-  AUTHOR .......: jotorres
+  AUTHOR .......: jotorres & ilsavola
   CREATED ......: 08/2017
   Version ......: yoigo
 ---------------------------------------------------------------------- */

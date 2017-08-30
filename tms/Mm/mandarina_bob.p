@@ -37,7 +37,7 @@ DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandar
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
 DEF VAR lcLP     AS CHAR NO-UNDO. /* ["Mandarina1"|"Mandarina2"] */
-DEF VAR lcAction AS CHAR NO-UNDO. /* ["ON"|"OFF"] */
+DEF VAR lcAction AS CHAR NO-UNDO. /* ["on"|"off"] */
 
 /* mandarina_bob status */ 
 DEF VAR lcTableName     AS CHAR NO-UNDO.
@@ -51,7 +51,7 @@ DEF STREAM sCurrentLog.  /* Log file for current processing file */
 DEF STREAM sMandaLog.    /* Log file for mandarina_bob.p executions */
 
 DEF VAR lcFileName       AS CHAR NO-UNDO. /* File in directory */
-DEF VAR lcProcessingFile AS CHAR NO-UNDO. /* Current processing file */
+DEF VAR lcCurrentFile AS CHAR NO-UNDO. /* Current processing file */
 DEF VAR lcLine           AS CHAR NO-UNDO. /* Read line of the current file. */
 
 DEF VAR lcErr     AS CHAR    NO-UNDO.
@@ -105,6 +105,8 @@ DO TRANS:
          ActionLog.UserCode     = katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + pcProcessMode + ";mandarina_bob first run" SKIP.
+      OUTPUT STREAM sMandaLog CLOSE.
       QUIT. /*No reporting in first time.*/
    END.
    ELSE DO:
@@ -123,14 +125,15 @@ REPEAT:
    IMPORT STREAM sFilesInDir UNFORMATTED lcFileName.
    IF NOT (lcFileName BEGINS ("LP" + pcProcessMode)) THEN
      NEXT.
-   lcProcessingFile = lcInComingDirectory + lcFileName.
-   IF SEARCH(lcProcessingFile) NE ? THEN DO:
-      INPUT STREAM sCurrentFile FROM VALUE(lcProcessingFile).
+   lcCurrentFile = lcInComingDirectory + lcFileName.
+   IF SEARCH(lcCurrentFile) NE ? THEN DO:
+      INPUT STREAM sCurrentFile FROM VALUE(lcCurrentFile).
       OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + "LP_" + lcFileName + ".log").
    END.
    ELSE 
       NEXT. 
 
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";STARTED" SKIP.
    REPEAT:
       IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
       IF NUM-ENTRIES(lcLine, ";") <> 3 THEN DO:
@@ -167,6 +170,7 @@ REPEAT:
       END.
 
       IF lcAction = "on" THEN DO:
+         lcErr = "".
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                    /*Subscription identifier*/
                                             INPUT (IF LcLP = "Mandarina1" 
                                                    THEN "REDIRECTION_OTAFAILED1" 
@@ -191,8 +195,8 @@ REPEAT:
    END.
    INPUT STREAM sCurrentFile CLOSE.
    OUTPUT STREAM sCurrentLog CLOSE.
-   fMove2TransDir(lcProcessingFile, "", lcOutgoingDirectory).
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcProcessingFile + ";FINISHED" SKIP.
+   fMove2TransDir(lcCurrentFile, "", lcOutgoingDirectory).
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";FINISHED" SKIP.
 
 END. 
 INPUT STREAM sFilesInDir CLOSE.
