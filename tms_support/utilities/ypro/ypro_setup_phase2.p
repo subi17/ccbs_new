@@ -323,7 +323,7 @@ fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "DSS_FLEX_UPSELL_500MB").
 
 FIND FIRST REquestType WHERE 
-           requesttype.reqtype EQ 95 NO-ERROR.
+           requesttype.reqtype EQ {&REQTYPE_PRO_MIGRATION} NO-ERROR.
 IF NOT AVAIL requesttype THEN DO:
    CREATE Requesttype.
    ASSIGN
@@ -334,6 +334,19 @@ IF NOT AVAIL requesttype THEN DO:
       RequestType.ReqName  = "Pro migration"
       RequestType.Program  = ""
       RequestType.UserCode = "ProMig".
+END.
+
+FIND FIRST REquestStatus WHERE
+           requeststatus.brand EQ "1" AND
+           requestStatus.reqtype EQ {&REQTYPE_PRO_MIGRATION} AND
+           requestStatus.reqstatus EQ 0 NO-ERROR.
+IF NOT AVAIL requeststatus THEN DO:
+   CREATE Requeststatus.
+   ASSIGN
+      RequestStatus.Brand    = "1"
+      RequestStatus.ReqType  = {&REQTYPE_PRO_MIGRATION}
+      RequestStatus.reqstatus    = 0
+      RequestType.Program  = "Mc/promigrate.p".
 END.
 
 /* RequestAction */
