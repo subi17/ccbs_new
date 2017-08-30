@@ -34,7 +34,8 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
    fgetCustSegment(bCustomer.custidtype, fIsSelfEmpl(bcustomer.category),
                    TRUE, OUTPUT lcCategory).
 
-   IF lcCategory NE bCustomer.category THEN DO:
+   IF lcCategory NE bCustomer.category AND
+      lcCategory NE "" THEN DO:
       lhCustomer = BUFFER bCustomer:HANDLE.
       RUN StarEventInitialize(lhCustomer).
       RUN StarEventSetOldBuffer ( lhCustomer ).
