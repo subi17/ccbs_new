@@ -692,10 +692,8 @@ ELSE DO:
       llgExtraLine      = YES.
 END.
 
-/* Additional Line with mobile only ALFMO-5  
-   Release pending additional lines orders, in case of pending 
-   main Moblie only line order is released */
 
+/* If pending additional line orders are available then release them */  
 FIND FIRST OrderCustomer WHERE
            OrderCustomer.Brand   = gcBrand AND
            OrderCustomer.OrderId = Order.OrderId AND
@@ -705,9 +703,10 @@ FIND FIRST OrderCustomer WHERE
 IF AVAIL OrderCustomer THEN
 DO:
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-               CLIType.Brand      = gcBrand  AND
-               CLIType.CLIType    = Order.CliType AND                       
-               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
+                     CLIType.Brand      = gcBrand                          AND
+                     CLIType.CLIType    = Order.CliType                    AND                       
+                    (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} OR 
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})) THEN 
    DO:
       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                       OrderCustomer.CustID). 
