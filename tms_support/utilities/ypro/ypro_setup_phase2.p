@@ -336,18 +336,19 @@ IF NOT AVAIL requesttype THEN DO:
       RequestType.UserCode = "ProMig".
 END.
 
-FUNCTION fcreateRequestAction RETURNS LOG (INPUT iireqtype AS INT,
-                                           INPUT icclitype AS CHAR,
-                                           INPUT iiAction  AS INT,
-                                           INPUT icActType AS CHAR,
-                                           INPUT icKey     AS CHAR):
+/* RequestAction */
+FUNCTION fcreateRequestAction RETURNS LOGICAL (INPUT iireqtype AS INT,
+                                               INPUT icclitype AS CHAR,
+                                               INPUT iiAction  AS INT,
+                                               INPUT icActType AS CHAR,
+                                               INPUT icKey     AS CHAR):
    FIND FIRST RequestAction WHERE
-              RequestAction.brand EQ "1" AND
-              RequestAction.clitype EQ icclitype AND
-              RequestAction.reqtype EQ iireqtype AND
-              RequestAction.validto GE TODAY AND
-              RequestAction.action  EQ iiAction AND
-              RequestAction.actionKey   EQ icKey NO-ERROR.
+              RequestAction.brand      EQ "1" AND
+              RequestAction.clitype    EQ icclitype AND
+              RequestAction.reqtype    EQ iireqtype AND
+              RequestAction.validto    GE TODAY AND
+              RequestAction.action     EQ iiAction AND
+              RequestAction.actionKey  EQ icKey NO-ERROR.
    IF NOT AVAIL Requestaction THEN DO:
       FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
       IF AVAILABLE RequestAction THEN
@@ -356,18 +357,41 @@ FUNCTION fcreateRequestAction RETURNS LOG (INPUT iireqtype AS INT,
       
       CREATE Requestaction.
       ASSIGN
-         REQUESTAction.brand = "1" 
+         RequestAction.brand = "1" 
          RequestAction.RequestActionID = liActionID         
-         RequestAction.reqtype = iireqtype
-         RequestAction.validfrom = TODAY
-         RequestAction.validto = 12/31/49
-         RequestAction.action  = iiAction
-         RequestAction.actiontype = icActType
-         RequestAction.clitype = icclitype
-         RequestAction.actionkey     = icKey.
+         RequestAction.reqtype         = iireqtype
+         RequestAction.validfrom       = TODAY
+         RequestAction.validto         = 12/31/49
+         RequestAction.action          = iiAction
+         RequestAction.actiontype      = icActType
+         RequestAction.clitype         = icclitype
+         RequestAction.actionkey       = icKey.
 
    END.
-END.
+END FUNCTION.
+
+/* RequestActionRule */
+FUNCTION fCreateRequestActionRule RETURNS LOGICAL
+   (iiRequestActionID AS INT,
+    icParamField      AS CHAR,
+    icParamValue      AS CHAR):
+
+   FIND FIRST RequestActionRule EXCLUSIVE-LOCK WHERE
+              RequestActionRule.RequestActionID = iiRequestActionID AND
+              RequestActionRule.ParamField      = icParamField AND
+              RequestActionRule.ToDate          = DATE(12,31,2049) NO-ERROR.
+
+   IF NOT AVAILABLE RequestActionRule THEN 
+      CREATE RequestActionRule.
+
+   ASSIGN
+      RequestActionRule.RequestActionID = iiRequestActionID
+      RequestActionRule.ParamField      = icParamField
+      RequestActionRule.FromDate        = TODAY
+      RequestActionRule.ToDate          = DATE(12,31,2049)
+      RequestActionRule.ParamValue      = icParamValue.
+
+END FUNCTION.
 
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","FIX_VOICE1000").
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","FIX_VOICE1000").
@@ -462,3 +486,123 @@ fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","V
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT15",1,"DayCampaign","VOICE5000").
 
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT10",1,"DayCampaign","VOICE200").
+
+/* STC => 2P */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL35",1,"DayCampaign","FLEX_500MB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH35_50",1,"DayCampaign","FLEX_500MB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH45_300",1,"DayCampaign","FLEX_500MB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+
+/* STC 2P to 3P */
+
+/* Naranja 20 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL39",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL39",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL39",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Verde 20 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL48",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL48",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL48",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Morada 20 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL52",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL52",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL52",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL52",1,"DayCampaign","FLEX_5GB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Azul 20 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL59",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL59",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL59",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL59",1,"DayCampaign","FLEX_5GB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Naranja 50 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH39_50",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH39_50",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH39_50",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Verde 50 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH48_50",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH48_50",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH48_50",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Morada 50 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH52_50",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH52_50",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH52_50",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH52_50",1,"DayCampaign","FLEX_5GB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Azul 50 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH59_50",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH59_50",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH59_50",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH59_50",1,"DayCampaign","FLEX_5GB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Naranja 300 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH49_300",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH49_300",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH49_300",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Verde 300 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH58_300",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH58_300",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH58_300",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Morada 300 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH62_300",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH62_300",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH62_300",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH62_300",1,"DayCampaign","FLEX_5GB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
+/* Azul 300 */
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","VOICE5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","INT_VOICE100").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","SMS5000").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","FLEX_5GB_UPSELL").
+fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
+
