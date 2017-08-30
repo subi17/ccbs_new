@@ -3,23 +3,29 @@
   TASK .........: BOB / Read input file; send commands to Procera to 
                   set or remove a redirection to LP. Create "log" file.
   APPLICATION ..: tms
-  AUTHOR .......: jotorres
+  AUTHOR .......: jotorres & ilsavola
   CREATED ......: 08/2017
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
 /*---------------------------------------------------------------------- 
 https://kethor.qvantel.com/browse/MANDLP-8
-2.1 Yoigo employee can upload a file to bob tool to set or remove 
-     a redirection to a LP
+2.1 Yoigo employee can upload a file to bob tool to set or 
+    remove a redirection to a LP
 ---------------------------------------------------------------------- */
+
+/* Parameters */
+DEF INPUT PARAMETER pcProcessMode AS CHAR NO-UNDO. /* ["massive"|"priority"] */
 
 /* includes */
 {Syst/commpaa.i}
 gcbrand = "1".
+
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Func/cparam2.i}
+{Func/lpfunctions.i}
+{Func/ftransdir.i}
 
 /* Directories */
 DEF VAR lcBaseDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/".
@@ -30,24 +36,27 @@ DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandar
 
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
-DEF VAR lcLP     AS CHAR NO-UNDO. /* [Mandarina1|Mandarina2] */
-DEF VAR lcAction AS CHAR NO-UNDO. /* [ON|OFF] */
+DEF VAR lcLP     AS CHAR NO-UNDO. /* ["Mandarina1"|"Mandarina2"] */
+DEF VAR lcAction AS CHAR NO-UNDO. /* ["ON"|"OFF"] */
 
-/* Mandarina is processing. */
+/* mandarina_bob status */ 
 DEF VAR lcTableName     AS CHAR NO-UNDO.
 DEF VAR lcActionID      AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
  
 /* Streams */
-DEF STREAM sFile.
-DEF STREAM sInputFile.
-DEF STREAM sLog.
+DEF STREAM sFilesInDir.  /* Files in directory */ 
+DEF STREAM sCurrentFile. /* Current processing file */
+DEF STREAM sCurrentLog.  /* Log file for current processing file */
+DEF STREAM sMandaLog.    /* Log file for mandarina_bob.p executions */
 
-DEF VAR lcFileName  AS CHAR NO-UNDO. /* Current file */
-DEF VAR lcInputFile AS CHAR NO-UNDO. 
-DEF VAR lcLine      AS CHAR NO-UNDO. /* Read line of the current file. */
-DEF VAR lcCommand   AS CHAR NO-UNDO. /* Command to send to Procera */
- 
+DEF VAR lcFileName       AS CHAR NO-UNDO. /* File in directory */
+DEF VAR lcProcessingFile AS CHAR NO-UNDO. /* Current processing file */
+DEF VAR lcLine           AS CHAR NO-UNDO. /* Read line of the current file. */
+
+DEF VAR lcErr     AS CHAR    NO-UNDO.
+DEF VAR llSuccess AS LOGICAL NO-UNDO.
+
 /* Getting directories from CParams */
 ASSIGN
    lcBaseDirectory     = fCParam("Mandarina", "MandarinaBaseDir")
@@ -55,11 +64,21 @@ ASSIGN
    lcIncomingDirectory = fCParam("Mandarina", "MandarinaIncomingDir")
    lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
    lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir").
- 
-/* Check if process ir running */
+
+/* File log for mandarina executions */
+OUTPUT STREAM sMandaLog TO VALUE(lcLogsDirectory + "mandarina_bob.log") APPEND.
+
+/* Verify input parameter */
+IF pcProcessMode <> "massive" OR pcProcessMode <> "priority" THEN DO:
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";INCORRECT INPUT PARAMETER: " + pcProcessMode SKIP.
+   OUTPUT STREAM sMandaLog CLOSE.
+   QUIT.
+END.
+  
+/* Check if other mandarina_bob is running */
 ASSIGN 
    lcTableName = "MANDARINA"
-   lcActionID  = "Mandarina file reading"
+   lcActionID  = "file_reading_" + pcProcessMode
    ldCurrentTimeTS = fMakeTS(). 
  
 DO TRANS:
@@ -70,6 +89,8 @@ DO TRANS:
 
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + pcProcessMode + ";mandarina_bob is running" SKIP.
+      OUTPUT STREAM sMandaLog CLOSE.
       QUIT.
    END.
 
@@ -86,7 +107,7 @@ DO TRANS:
       RELEASE ActionLog.
       QUIT. /*No reporting in first time.*/
    END.
-   ELSE /*IF (liHRLPTestLevel EQ {&Q25_HRLP_NO_TEST}) THEN */ DO:
+   ELSE DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
          ActionLog.UserCode     = katun
@@ -95,45 +116,86 @@ DO TRANS:
    END.
 END.
 
-INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcInComingDirectory).
+/* Processing files in incoming directory */
+INPUT STREAM sFilesInDir THROUGH VALUE("ls -1tr " + lcInComingDirectory).
 REPEAT:
 
-   IMPORT STREAM sFile UNFORMATTED lcFileName.
-   lcInputFile = lcInComingDirectory + lcFileName.
-   IF SEARCH(lcInputFile) NE ? THEN DO:
-      INPUT STREAM sInputFile FROM VALUE(lcInputFile).
-      OUTPUT STREAM sLog TO VALUE(lcLogsDirectory + "LP_" + lcFileName + ".log").
+   IMPORT STREAM sFilesInDir UNFORMATTED lcFileName.
+   IF NOT (lcFileName BEGINS ("LP" + pcProcessMode)) THEN
+     NEXT.
+   lcProcessingFile = lcInComingDirectory + lcFileName.
+   IF SEARCH(lcProcessingFile) NE ? THEN DO:
+      INPUT STREAM sCurrentFile FROM VALUE(lcProcessingFile).
+      OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + "LP_" + lcFileName + ".log").
    END.
    ELSE 
       NEXT. 
 
    REPEAT:
-     IMPORT STREAM sInputFile UNFORMATTED lcLine.
-     IF NUM-ENTRIES(lcLine, ";") <> 3 THEN
-        NEXT.
+      IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
+      IF NUM-ENTRIES(lcLine, ";") <> 3 THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:bad_row" SKIP.
+         NEXT.  
+      END.
       ASSIGN
          lcMSISDN = ENTRY(1, lcLine, ";")
          lcLP     = ENTRY(2, lcLine, ";")
          lcAction = ENTRY(3, lcLine, ";"). 
-      IF lcAction = "ON" THEN DO:
-         /* send Procera */
-         lcCommand = "ET:XFPL:TRANSID,431012496:MSISDN," + lcMSISDN + ":" + 
-                     "LP," + (IF lcLP = "Mandarina1" THEN "REDIRECTION_OTAFAILED1" ELSE  "REDIRECTION_OTAFAILED2").
+     
+      /* Checking values */
+      IF LENGTH(lcMSISDN) <> 9
+         OR
+         (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2")
+         OR
+         (lcAction <> "on" AND lcAction <> "off")
+      THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:bad_field" SKIP.
+         NEXT.
+      END.
+
+      /* Check subscription */     
+      FIND FIRST mobsub WHERE
+                 mobsub.Brand = gcBrand AND
+                 mobsub.CLI   = lcMSISDN 
+           USE-INDEX CLI NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE mobsub THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:MSISDN_not_found" SKIP.
+         NEXT.
+      END.
+
+      IF lcAction = "on" THEN DO:
+         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                    /*Subscription identifier*/
+                                            INPUT (IF LcLP = "Mandarina1" 
+                                                   THEN "REDIRECTION_OTAFAILED1" 
+                                                   ELSE "REDIRECTION_OTAFAILED2"), /*LP command to network*/ 
+                                            INPUT mobsub.CustNum,                  /*Customer number for memo*/
+                                            INPUT "MANDARINA",                     /*Memo title. Empty -> no memo writing*/
+                                            INPUT lcLp,                            /*Memo text*/
+                                            INPUT "MANDARINA",                     /*Creator tag for memo*/
+                                            INPUT-OUTPUT lcErr).                   /*Request creation info*/
+         IF NOT llSuccess THEN DO:
+            PUT STREAM sCurrentLog UNFORMATTED
+               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:COMMAND_REQUEST_" + lcErr SKIP.
+            NEXT.
+         END.
       END.  
-      ELSE DO: /* OFF */
-         /* send Procera */
-         lcCommand = "SET:XFPL:TRANSID,431012536:MSISDN," + lcMSISDN + ":LP,remove;".
+      ELSE DO: /* lcAction = "off" */
+        /* Pending */
       END.
       
-      PUT STREAM sLog UNFORMATTED
-        lcLine + ";" + STRING(TIME,"hh:mm:ss") SKIP.
+      PUT STREAM sCurrentLog UNFORMATTED
+        lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";OK" SKIP.
    END.
-   OUTPUT STREAM sLog CLOSE.
-   INPUT STREAM sInputFile CLOSE.
-   /* Pending of moving processed file. I'm sure there's already a function for this. */
+   INPUT STREAM sCurrentFile CLOSE.
+   OUTPUT STREAM sCurrentLog CLOSE.
+   fMove2TransDir(lcProcessingFile, "", lcOutgoingDirectory).
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcProcessingFile + ";FINISHED" SKIP.
 
 END. 
-INPUT STREAM sFile CLOSE.
+INPUT STREAM sFilesInDir CLOSE.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
@@ -149,7 +211,7 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
-
+OUTPUT STREAM sMandaLog CLOSE.
 
 
 
