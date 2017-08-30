@@ -177,6 +177,10 @@ DO:
                             lcReason = "PRO migration not possible because, no mobile lines exists".
                 END.
             END.
+            ELSE
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of multiple mobile lines".            
         END.
     END.
     ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
@@ -198,7 +202,11 @@ DO:
                     ASSIGN 
                         llOrderAllowed = FALSE
                         lcReason = "PRO migration not possible because, no mobile lines exists".
-            END.        
+            END.
+            ELSE
+            ASSIGN
+               llOrderAllowed = FALSE
+               lcReason = "PRO migration not possible because of multiple mobile lines".        
         END.
         ELSE
         DO:
@@ -209,6 +217,40 @@ DO:
         END.
     END.
 END.
+ELSE DO:
+   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
+      FOR EACH OrderCustomer WHERE
+               OrderCustomer.Brand      EQ gcBrand    AND
+               OrderCustomer.CustIdType EQ pcIdType   AND
+               OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
+
+          IF OrderCustomer.PRO EQ FALSE THEN
+          DO:
+             FIND FIRST Order WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
+             IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN
+             DO:
+                 llOrderAllowed = FALSE.
+                 lcReason = "ongoing non PRO order".
+                 LEAVE.
+             END.
+          END.
+          ELSE
+             ASSIGN llPROOngoingOrder = TRUE.
+      END.
+
+      /* Assume, there is no ongoing order for customer selected from PRO channels */
+      IF NOT llPROOngoingOrder AND NOT llCustCatPro THEN
+      DO:
+          FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
+          IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          DO:
+              llOrderAllowed = FALSE.
+              lcReason = "Mobile line for non-pro customer from PRO channel".
+          END.
+      END.
+   END.   
+END.
+
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
 
