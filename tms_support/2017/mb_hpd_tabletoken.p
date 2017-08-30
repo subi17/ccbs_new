@@ -27,7 +27,7 @@ ASSIGN
 FUNCTION fCreateTMSCodes RETURNS LOGICAL
    ( icCodeValue AS CHARACTER ):
 
-   FIND FIRST TMSCodes NO-LOCK WHERE
+   FIND FIRST TMSCodes EXCLUSIVE-LOCK WHERE
      TMSCodes.TableName = "DumpHPD" AND
      TMSCodes.FieldName = "UnitType" AND
      TMSCodes.CodeGroup = "DumpHPD" AND

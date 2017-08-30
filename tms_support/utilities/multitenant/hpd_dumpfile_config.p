@@ -26,7 +26,8 @@ FUNCTION fModifyDumpFile RETURNS LOGICAL
       CREATE DumpHPD.
       ASSIGN
          DumpHPD.UnitsToDump = INTEGER(DumpFile.FullCollModule) 
-         DumpHPD.StartTime   = DumpFile.ModCollModule.
+         DumpHPD.StartTime   = DumpFile.ModCollModule
+         DumpHPD.DumpID      = DumpFile.DumpID.
    END.
 
    IF INDEX(DumpFile.FileName,"#TENANT") = 0
