@@ -50,9 +50,9 @@ DEF STREAM sCurrentFile. /* Current processing file */
 DEF STREAM sCurrentLog.  /* Log file for current processing file */
 DEF STREAM sMandaLog.    /* Log file for mandarina_bob.p executions */
 
-DEF VAR lcFileName       AS CHAR NO-UNDO. /* File in directory */
+DEF VAR lcFileName    AS CHAR NO-UNDO. /* File in directory */
 DEF VAR lcCurrentFile AS CHAR NO-UNDO. /* Current processing file */
-DEF VAR lcLine           AS CHAR NO-UNDO. /* Read line of the current file. */
+DEF VAR lcLine        AS CHAR NO-UNDO. /* Read line of the current file. */
 
 DEF VAR lcErr     AS CHAR    NO-UNDO.
 DEF VAR llSuccess AS LOGICAL NO-UNDO.
@@ -123,6 +123,7 @@ INPUT STREAM sFilesInDir THROUGH VALUE("ls -1tr " + lcInComingDirectory).
 REPEAT:
 
    IMPORT STREAM sFilesInDir UNFORMATTED lcFileName.
+   /* Only process the correct files */
    IF NOT (lcFileName BEGINS ("LP" + pcProcessMode)) THEN
      NEXT.
    lcCurrentFile = lcInComingDirectory + lcFileName.
@@ -169,8 +170,14 @@ REPEAT:
          NEXT.
       END.
 
+      lcErr = "".
       IF lcAction = "on" THEN DO:
-         lcErr = "".
+         /* No activate LP if ICC Changed */
+         IF fICCDoneRecently(mobsub.MsSeq) THEN DO:
+            PUT STREAM sCurrentLog UNFORMATTED
+               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ICC_DONE_RECENTLY" SKIP.
+            NEXT.
+         END.
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                     /*Subscription identifier*/
                                             INPUT (IF LcLP = "Mandarina1" 
                                                    THEN "REDIRECTION_OTAFAILED1" 
@@ -180,14 +187,25 @@ REPEAT:
                                             INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
                                             INPUT "LP_BOB",                         /*Creator tag for memo*/
                                             INPUT-OUTPUT lcErr).                    /*Request creation info*/
-         IF NOT llSuccess THEN DO:
+         IF (NOT llSuccess) THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
                lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:COMMAND_REQUEST_" + lcErr SKIP.
             NEXT.
          END.
       END.  
       ELSE DO: /* lcAction = "off" */
-        /* Pending */
+         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                     /*Subscription identifier*/
+                                            INPUT "REMOVE",                         /*LP command to network*/ 
+                                            INPUT mobsub.CustNum,                   /*Customer number for memo*/
+                                            INPUT "Mandarina LP 2017",              /*Memo title. Empty -> no memo writing*/
+                                            INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
+                                            INPUT "LP_BOB",                         /*Creator tag for memo*/
+                                            INPUT-OUTPUT lcErr).                    /*Request creation info*/
+         IF NOT llSuccess THEN DO:
+            PUT STREAM sCurrentLog UNFORMATTED
+               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:COMMAND_REQUEST_" + lcErr SKIP.
+            NEXT.
+         END. 
       END.
       
       PUT STREAM sCurrentLog UNFORMATTED
@@ -199,6 +217,7 @@ REPEAT:
    PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";FINISHED" SKIP.
 
 END. 
+
 INPUT STREAM sFilesInDir CLOSE.
 
 DO TRANS:
