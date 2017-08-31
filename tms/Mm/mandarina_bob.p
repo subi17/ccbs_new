@@ -128,7 +128,7 @@ REPEAT:
    lcCurrentFile = lcInComingDirectory + lcFileName.
    IF SEARCH(lcCurrentFile) NE ? THEN DO:
       INPUT STREAM sCurrentFile FROM VALUE(lcCurrentFile).
-      OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + "LP_" + lcFileName + ".log").
+      OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + lcFileName + ".log").
    END.
    ELSE 
       NEXT. 
