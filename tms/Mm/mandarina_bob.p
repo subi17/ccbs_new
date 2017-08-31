@@ -17,6 +17,9 @@ https://kethor.qvantel.com/browse/MANDLP-8
 /* Parameters */
 DEF INPUT PARAMETER pcProcessMode AS CHAR NO-UNDO. /* ["massive"|"priority"] */
 
+/* Initial values */
+DEF VAR lcMemoTitle AS CHAR INITIAL "Mandarina LP 2017". /* Mandarina LP 2017 campaign. */
+
 /* includes */
 {Syst/commpaa.i}
 gcbrand = "1".
@@ -65,12 +68,14 @@ ASSIGN
    lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
    lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir").
 
-/* File log for mandarina executions */
+/* Log file for mandarina executions */
 OUTPUT STREAM sMandaLog TO VALUE(lcLogsDirectory + "mandarina_bob.log") APPEND.
+PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_starting (" + pcProcessMode + ")------------------------------------------" SKIP.
 
 /* Verify input parameter */
 IF pcProcessMode <> "massive" AND pcProcessMode <> "priority" THEN DO:
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";INCORRECT INPUT PARAMETER: " + pcProcessMode SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";incorrect_input_parameter" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.
    OUTPUT STREAM sMandaLog CLOSE.
    QUIT.
 END.
@@ -89,7 +94,8 @@ DO TRANS:
 
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
-      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + pcProcessMode + ";mandarina_bob is running" SKIP.
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";another_mandarina_bob_running" SKIP.
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.
       OUTPUT STREAM sMandaLog CLOSE.
       QUIT.
    END.
@@ -105,7 +111,8 @@ DO TRANS:
          ActionLog.UserCode     = katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
-      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + pcProcessMode + ";mandarina_bob first run" SKIP.
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_first_run" SKIP.
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.      
       OUTPUT STREAM sMandaLog CLOSE.
       QUIT. /*No reporting in first time.*/
    END.
@@ -129,12 +136,12 @@ REPEAT:
    lcCurrentFile = lcInComingDirectory + lcFileName.
    IF SEARCH(lcCurrentFile) NE ? THEN DO:
       INPUT STREAM sCurrentFile FROM VALUE(lcCurrentFile).
-      OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + lcFileName + ".log").
+      OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + lcFileName + ".log") APPEND. /* "append" to don't lose previous log if duplicated incommming file name */
    END.
    ELSE 
       NEXT. 
 
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";STARTED" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";started" SKIP.
    REPEAT:
       IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
       IF NUM-ENTRIES(lcLine, ";") <> 3 THEN DO:
@@ -183,13 +190,13 @@ REPEAT:
                                                    THEN "REDIRECTION_OTAFAILED1" 
                                                    ELSE "REDIRECTION_OTAFAILED2"),  /*LP command to network*/ 
                                             INPUT mobsub.CustNum,                   /*Customer number for memo*/
-                                            INPUT "Mandarina LP 2017",              /*Memo title. Empty -> no memo writing*/
+                                            INPUT lcMemoTitle,                      /*Memo title. Empty -> no memo writing*/
                                             INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
                                             INPUT "LP_BOB",                         /*Creator tag for memo*/
                                             INPUT-OUTPUT lcErr).                    /*Request creation info*/
          IF (NOT llSuccess) THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
-               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:COMMAND_REQUEST_" + lcErr SKIP.
+               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
             NEXT.
          END.
       END.  
@@ -197,13 +204,13 @@ REPEAT:
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                     /*Subscription identifier*/
                                             INPUT "REMOVE",                         /*LP command to network*/ 
                                             INPUT mobsub.CustNum,                   /*Customer number for memo*/
-                                            INPUT "Mandarina LP 2017",              /*Memo title. Empty -> no memo writing*/
+                                            INPUT lcMemoTitle,                      /*Memo title. Empty -> no memo writing*/
                                             INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
                                             INPUT "LP_BOB",                         /*Creator tag for memo*/
                                             INPUT-OUTPUT lcErr).                    /*Request creation info*/
          IF NOT llSuccess THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
-               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:COMMAND_REQUEST_" + lcErr SKIP.
+               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
             NEXT.
          END. 
       END.
@@ -214,7 +221,7 @@ REPEAT:
    INPUT STREAM sCurrentFile CLOSE.
    OUTPUT STREAM sCurrentLog CLOSE.
    fMove2TransDir(lcCurrentFile, "", lcOutgoingDirectory).
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";FINISHED" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finished" SKIP.
 
 END. 
 
@@ -234,16 +241,5 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
+PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.
 OUTPUT STREAM sMandaLog CLOSE.
-
-
-
-
-
-
-
-
-
-
-
-
