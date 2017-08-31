@@ -12,7 +12,6 @@
   ----------------------------------------------------------------------*/
 
 {Syst/commali.i}
-{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER iiDumpID      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icFile        AS CHARACTER NO-UNDO.
@@ -31,7 +30,7 @@ DEFINE VARIABLE llInactivateDump AS LOGICAL   INITIAL NO NO-UNDO.
 DEFINE VARIABLE HandlerObj AS CLASS HPD.DumpHandler NO-UNDO.
 
 LOG-MANAGER:LOGFILE-NAME = "../var/log/hpd_filedump_" + STRING(iiDumpID) + 
-                           "_" + fGetTableBrand("DFTimeTable") + ".log".
+                           "_" + multitenancy.TenantInformation:mGetBrandNameForActiveTenant() + ".log".
 
 FIND FIRST DumpFile NO-LOCK WHERE
    DumpFile.DumpID = iiDumpID
