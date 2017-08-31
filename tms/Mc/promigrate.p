@@ -21,8 +21,11 @@ DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
-IF NOT AVAILABLE MsRequest THEN RETURN "ERROR".
+IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 0 THEN RETURN "ERROR".
    
+/* request is under work */
+IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
+
 IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
 
    FIND FIRST bMobSub NO-LOCK WHERE
@@ -51,8 +54,20 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
                              TRUE,                   /* create fees */
                              {&REQUEST_SOURCE_PRO_MIGRATION},
                              {&REQUEST_ACTIONLIST_ALL}).
-             
+   FIND MsRequest WHERE
+        MsRequest.Brand     = gcBrand AND
+        MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
+
+   /* Mark request as handled */
+   IF NOT fReqStatus(7,"") THEN DO:
+      fReqError("ERROR: St. update failed.").
+      RETURN.
+   END.             
 
 END.
+
+/* Check sub-requests */
+IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").
+
 fCleanEventObjects(). 
-fReqStatus(2,"").
+
