@@ -222,7 +222,7 @@ CLASS HPD.RepLogHandler FINAL:
             llCheckTableMultiTenant = TRUE
             lcBrandName = multitenancy.TenantInformation:mConvertTenantToBrand(icTenant).
 
-         /* The default tenant is handling also for the shared tables */
+         /* The default tenant is handling also the shared tables */
          IF multitenancy.TenantInformation:mIsDefaultTenant(icTenant)
          THEN icTenant = "".
       END.
@@ -445,7 +445,7 @@ CLASS HPD.RepLogHandler FINAL:
             IF lhRepLogTable:LOCKED
             THEN NEXT.
 
-            IF lcTenant NE lhRepLogTable::TenantName
+            IF llMultiTenancy AND lcTenant NE lhRepLogTable::TenantName
             THEN mSetEffectiveTenant(lhRepLogTable::TenantName).
 
             CASE mSendRepLog2MQ():
