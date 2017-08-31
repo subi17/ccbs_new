@@ -13,7 +13,6 @@
 {Func/transname.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/multitenantfunc.i}
 {Syst/eventlog.i}
 {Syst/dumpfile_run.i}
 
@@ -404,7 +403,7 @@ PROCEDURE pInitialize:
       lcFile = REPLACE(lcFile,"#CAT",DumpFile.FileCategory)
       lcFile = REPLACE(lcFile,"#RUN",icRunNameTag)
       lcFile = REPLACE(lcFile,"#TENANT",
-                       CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
+                       CAPS(multitenancy.TenantInformation:mGetBrandNameForActiveTenant())).
    
    /* sequential nbr for the same day */
    IF INDEX(lcFile,"#DSEQ") > 0 THEN DO:
