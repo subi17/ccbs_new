@@ -69,7 +69,7 @@ ASSIGN
 OUTPUT STREAM sMandaLog TO VALUE(lcLogsDirectory + "mandarina_bob.log") APPEND.
 
 /* Verify input parameter */
-IF pcProcessMode <> "massive" OR pcProcessMode <> "priority" THEN DO:
+IF pcProcessMode <> "massive" AND pcProcessMode <> "priority" THEN DO:
    PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";INCORRECT INPUT PARAMETER: " + pcProcessMode SKIP.
    OUTPUT STREAM sMandaLog CLOSE.
    QUIT.
