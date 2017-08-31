@@ -21,7 +21,8 @@ DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
-IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 0 THEN RETURN "ERROR".
+IF NOT AVAILABLE MsRequest OR 
+   MsRequest.ReqType NE {&REQTYPE_PRO_MIGRATION} THEN RETURN "ERROR".
    
 /* request is under work */
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
