@@ -28,11 +28,9 @@ gcbrand = "1".
 {Func/ftransdir.i}
 
 /* Directories */
-DEF VAR lcBaseDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/".
-DEF VAR lcSpoolDirectory    AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/spool/". 
-DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/incoming/". 
-DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/outgoing/". 
-DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/logs/". 
+DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* mnt/store/riftp/mandarina/incoming   */ 
+DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* mnt/store/riftp/mandarina/outgoing   */
+DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* mnt/store/riftp/mandarina/log        */
 
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
@@ -59,8 +57,6 @@ DEF VAR llSuccess AS LOGICAL NO-UNDO.
 
 /* Getting directories from CParams */
 ASSIGN
-   lcBaseDirectory     = fCParam("Mandarina", "MandarinaBaseDir")
-   lcSpoolDirectory    = fCParam("Mandarina", "MandarinaSpoolDir")
    lcIncomingDirectory = fCParam("Mandarina", "MandarinaIncomingDir")
    lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
    lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir").
