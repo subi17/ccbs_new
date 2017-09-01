@@ -136,7 +136,7 @@ REPEAT:
    ELSE 
       NEXT. 
 
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";start_processign_file" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";start_processing_file" SKIP.
    REPEAT:
       IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
       IF NUM-ENTRIES(lcLine, ";") <> 3 THEN DO:
