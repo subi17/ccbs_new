@@ -32,7 +32,6 @@ DEF VAR lcValue      AS CHAR     NO-UNDO.
 DEF VAR lhField      AS HANDLE   NO-UNDO.
 DEF VAR lcField      AS CHAR     NO-UNDO.
 
-
 DEF VAR lhTable      AS HANDLE NO-UNDO.
 DEF VAR lhCollect    AS HANDLE NO-UNDO.
 DEF VAR lcTableName  AS CHAR   NO-UNDO.
@@ -114,7 +113,6 @@ fSplitTS(idLastDump,
          OUTPUT liEventTime).
 
 ldeLastDump = fHMS2TS(ldaEventDate, "00:00:00").
-
 
 IF icDumpMode = "Full" THEN DO:
    FOR EACH MsOwner NO-LOCK WHERE
