@@ -32,6 +32,7 @@ DiscountPlan
 DiscPlan
 DPBasis
 DPConf
+DPRate
 DPSubject
 DPTarget
 FATConfig
