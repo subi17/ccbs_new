@@ -270,3 +270,4 @@ END.
 
 PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.
 OUTPUT STREAM sMandaLog CLOSE.
+
