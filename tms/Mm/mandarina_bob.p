@@ -28,9 +28,10 @@ gcbrand = "1".
 {Func/ftransdir.i}
 
 /* Directories */
-DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* mnt/store/riftp/mandarina/incoming   */ 
-DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* mnt/store/riftp/mandarina/outgoing   */
-DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* mnt/store/riftp/mandarina/log        */
+DEF VAR lcSpoolDirectory    AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/spool/    */
+DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/incoming/ */  
+DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/outgoing/ */
+DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/     */
 
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
@@ -57,6 +58,7 @@ DEF VAR llSuccess AS LOGICAL NO-UNDO.
 
 /* Getting directories from CParams */
 ASSIGN
+   lcSpoolDirectory    = fCParam("Mandarina", "MandarinaSpoolDir")
    lcIncomingDirectory = fCParam("Mandarina", "MandarinaIncomingDir")
    lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
    lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir").
@@ -134,12 +136,12 @@ REPEAT:
    ELSE 
       NEXT. 
 
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";started_file" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";start_processign_file" SKIP.
    REPEAT:
       IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
       IF NUM-ENTRIES(lcLine, ";") <> 3 THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
-            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:bad_row" SKIP.
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_number_of_fields" SKIP.
          NEXT.  
       END.
       ASSIGN
@@ -147,17 +149,6 @@ REPEAT:
          lcLP     = ENTRY(2, lcLine, ";")
          lcAction = ENTRY(3, lcLine, ";"). 
      
-      /* Checking values */
-      IF LENGTH(lcMSISDN) <> 9
-         OR
-         (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2")
-         OR
-         (lcAction <> "on" AND lcAction <> "off")
-      THEN DO:
-         PUT STREAM sCurrentLog UNFORMATTED
-            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:bad_field" SKIP.
-         NEXT.
-      END.
 
       /* Check subscription */     
       FIND FIRST mobsub WHERE
@@ -169,6 +160,20 @@ REPEAT:
             lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:MSISDN_not_found" SKIP.
          NEXT.
       END.
+
+      /* Checking values */
+      IF (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2") THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_landing_page(Mandarina1/Mandarina2)" SKIP.
+         NEXT.
+      END.
+      IF (lcAction <> "on" AND lcAction <> "off")
+      THEN DO:
+         PUT STREAM sCurrentLog UNFORMATTED
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_action(on/off)" SKIP.
+         NEXT.
+      END.
+
 
       lcErr = "".
       IF lcAction = "on" THEN DO:
@@ -184,8 +189,8 @@ REPEAT:
                                                    ELSE "REDIRECTION_OTAFAILED2"),         
                                             INPUT mobsub.CustNum,                          /*Customer number for memo*/
                                             INPUT (IF LcLP = "Mandarina1"                  /*Memo title*/ 
-                                                   THEN "LP1 – Migración red - Activada"
-                                                   ELSE "LP2 – Migración red - Activada"),  
+                                                   THEN "LP1 - Migración red - Activada"
+                                                   ELSE "LP2 - Migración red - Activada"),  
                                             INPUT  (IF LcLP = "Mandarina1"                 /*Memo text*/ 
                                                    THEN "Landing Page 1 - Activada"
                                                    ELSE "Landing Page 2 - Activada"),       
@@ -203,8 +208,8 @@ REPEAT:
                                             INPUT "REMOVE",         
                                             INPUT mobsub.CustNum,                              /*Customer number for memo*/
                                             INPUT (IF LcLP = "Mandarina1"                      /*Memo title*/ 
-                                                   THEN "LP1 – Migración red - Desactivada"
-                                                   ELSE "LP2 – Migración red - Desactivada"),  
+                                                   THEN "LP1 - Migración red - Desactivada"
+                                                   ELSE "LP2 - Migración red - Desactivada"),  
                                             INPUT  (IF LcLP = "Mandarina1"                     /*Memo text*/ 
                                                    THEN "Landing Page 1 - Desactivada"
                                                    ELSE "Landing Page 2 - Desactivada"),       
@@ -225,7 +230,7 @@ REPEAT:
    INPUT STREAM sCurrentFile CLOSE.
    OUTPUT STREAM sCurrentLog CLOSE.
    fMove2TransDir(lcCurrentFile, "", lcOutgoingDirectory).
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finished_file" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finis_processing_file" SKIP.
 
 END. 
 
