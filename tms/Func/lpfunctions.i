@@ -22,6 +22,7 @@ FUNCTION fMakeLPCommandRequest RETURNS LOGICAL
     INPUT icMemoTitle AS CHAR,    /*Memo title. Empty -> no memo writing*/
     INPUT icMemoText AS CHAR,     /*Memo text*/
     INPUT icMemoCreator AS CHAR,  /*Creator tag for memo*/
+    INPUT icSource AS CHAR,       /*Source code. "5" -> Automatic; "11"-> Bob tool; "15" -> External API  */
     INPUT-OUTPUT ocErr AS CHAR):  /*Request creation info*/
    DEF VAR liReq AS INT NO-UNDO.
    DEF VAR lcError AS CHAR NO-UNDO.
@@ -35,7 +36,7 @@ FUNCTION fMakeLPCommandRequest RETURNS LOGICAL
                             FALSE,             /* Set fees */
                             FALSE,             /* SMS */
                             "",                /* creator */
-                            "",                /* source */
+                            icSource,          /* source */
                             0,                 /* orig request */
                             FALSE,             /* mandatory */
                             OUTPUT lcError).

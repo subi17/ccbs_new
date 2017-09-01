@@ -101,7 +101,8 @@ FOR EACH MsRequest NO-LOCK WHERE
                                             "Redirection removed",
                                             "Redirection removed, reason: ICC",
                                             "ICC_Checker",
-                                            lcError).
+                                            "5", /* Automatic */ 
+                                            INPUT-OUTPUT lcError).
          /* TODO: Log writing and error handling.*/
          /* TODO: Source setting for DUMP purposes. */
               

@@ -17,9 +17,6 @@ https://kethor.qvantel.com/browse/MANDLP-8
 /* Parameters */
 DEF INPUT PARAMETER pcProcessMode AS CHAR NO-UNDO. /* ["massive"|"priority"] */
 
-/* Initial values */
-DEF VAR lcMemoTitle AS CHAR INITIAL "Mandarina LP 2017". /* Mandarina LP 2017 campaign. */
-
 /* includes */
 {Syst/commpaa.i}
 gcbrand = "1".
@@ -141,7 +138,7 @@ REPEAT:
    ELSE 
       NEXT. 
 
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";started" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";started_file" SKIP.
    REPEAT:
       IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
       IF NUM-ENTRIES(lcLine, ";") <> 3 THEN DO:
@@ -185,15 +182,20 @@ REPEAT:
                lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ICC_DONE_RECENTLY" SKIP.
             NEXT.
          END.
-         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                     /*Subscription identifier*/
-                                            INPUT (IF LcLP = "Mandarina1" 
+         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                            /*Subscription identifier*/
+                                            INPUT (IF LcLP = "Mandarina1"                  /*LP command to network*/
                                                    THEN "REDIRECTION_OTAFAILED1" 
-                                                   ELSE "REDIRECTION_OTAFAILED2"),  /*LP command to network*/ 
-                                            INPUT mobsub.CustNum,                   /*Customer number for memo*/
-                                            INPUT lcMemoTitle,                      /*Memo title. Empty -> no memo writing*/
-                                            INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
-                                            INPUT "LP_BOB",                         /*Creator tag for memo*/
-                                            INPUT-OUTPUT lcErr).                    /*Request creation info*/
+                                                   ELSE "REDIRECTION_OTAFAILED2"),         
+                                            INPUT mobsub.CustNum,                          /*Customer number for memo*/
+                                            INPUT (IF LcLP = "Mandarina1"                  /*Memo title*/ 
+                                                   THEN "LP1 – Migración red - Activada"
+                                                   ELSE "LP2 – Migración red - Activada"),  
+                                            INPUT  (IF LcLP = "Mandarina1"                 /*Memo text*/ 
+                                                   THEN "Landing Page 1 - Activada"
+                                                   ELSE "Landing Page 2 - Activada"),       
+                                            INPUT "Sistema",                               /*Creator tag for memo*/
+                                            INPUT "11",                                    /*Source, 11 -> Bob Tool*/ 
+                                            INPUT-OUTPUT lcErr).                           /*Request creation info*/
          IF (NOT llSuccess) THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
                lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
@@ -201,13 +203,19 @@ REPEAT:
          END.
       END.  
       ELSE DO: /* lcAction = "off" */
-         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                     /*Subscription identifier*/
-                                            INPUT "REMOVE",                         /*LP command to network*/ 
-                                            INPUT mobsub.CustNum,                   /*Customer number for memo*/
-                                            INPUT lcMemoTitle,                      /*Memo title. Empty -> no memo writing*/
-                                            INPUT ("LP: " + lcLp + " " + lcAction), /*Memo text*/
-                                            INPUT "LP_BOB",                         /*Creator tag for memo*/
-                                            INPUT-OUTPUT lcErr).                    /*Request creation info*/
+         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                                /*Subscription identifier*/
+                                            INPUT "REMOVE",         
+                                            INPUT mobsub.CustNum,                              /*Customer number for memo*/
+                                            INPUT (IF LcLP = "Mandarina1"                      /*Memo title*/ 
+                                                   THEN "LP1 – Migración red - Desactivada"
+                                                   ELSE "LP2 – Migración red - Desactivada"),  
+                                            INPUT  (IF LcLP = "Mandarina1"                     /*Memo text*/ 
+                                                   THEN "Landing Page 1 - Desactivada"
+                                                   ELSE "Landing Page 2 - Desactivada"),       
+                                            INPUT "Sistema",                                   /*Creator tag for memo*/
+                                            INPUT "11",                                        /*Source, 11 -> Bob Tool*/ 
+                                            INPUT-OUTPUT lcErr).                               /*Request creation info*/
+
          IF NOT llSuccess THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
                lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
@@ -221,7 +229,7 @@ REPEAT:
    INPUT STREAM sCurrentFile CLOSE.
    OUTPUT STREAM sCurrentLog CLOSE.
    fMove2TransDir(lcCurrentFile, "", lcOutgoingDirectory).
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finished" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finished_file" SKIP.
 
 END. 
 
