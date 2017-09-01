@@ -44,6 +44,11 @@ bulkload: RatePlan
   Brand: "1"
 
 bulkload: RatePlan
+  RatePlan: "CONTRATO28"
+  RPName: "Línea móvil extra"
+  Brand: "1"
+
+bulkload: RatePlan
   RatePlan: "CONTRATO4"
   RPName: "Contrato 4 (Post paid)"
   Brand: "1"
@@ -104,6 +109,11 @@ bulkload: RatePlan
   Brand: "1"
 
 bulkload: RatePlan
+  RatePlan: "CONTRATOFIXEDC"
+  RPName: "La De Casa 20"
+  Brand: "1"
+
+bulkload: RatePlan
   RatePlan: "CONTRATOM"
   RPName: "Contrato M (Post paid)"
   Brand: "1"
@@ -121,6 +131,26 @@ bulkload: RatePlan
 bulkload: RatePlan
   RatePlan: "TARJETA"
   RPName: "Tarjeta (Pre paid)"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "TARJETA10"
+  RPName: "La prepago de 1 GB"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "TARJETA11"
+  RPName: "La prepago de 2 GB"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "TARJETA12"
+  RPName: "La prepago de 4 GB"
+  Brand: "1"
+
+bulkload: RatePlan
+  RatePlan: "TARJETA13"
+  RPName: "La prepago de llamadas ilimitadas"
   Brand: "1"
 
 bulkload: RatePlan

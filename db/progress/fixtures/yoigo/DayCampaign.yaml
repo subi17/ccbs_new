@@ -1,4 +1,36 @@
 bulkload: DayCampaign
+  DCEvent: "AGILESKYTV"
+  ValidFrom: 2017-08-22
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "AGILETV"
+  DCName: "Agile TV Service + SKY"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 1
+  FeeModel: "AGILETVMF"
+  DurUnit: 1
+  Effective: 1
+  PayType: 1
+  BundleTarget: 2
+
+bulkload: DayCampaign
+  DCEvent: "AGILETV"
+  ValidFrom: 2017-08-22
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "AGILETV"
+  DCName: "Agile TV Service"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 1
+  FeeModel: "AGILETVMF"
+  DurUnit: 1
+  Effective: 1
+  PayType: 1
+  BundleTarget: 2
+
+bulkload: DayCampaign
   DCEvent: "BONO_VOIP"
   ValidFrom: 2012-04-01
   InclUnit: 4
@@ -13,6 +45,21 @@ bulkload: DayCampaign
   FeeModel: "BONO_VOIPMF"
   Effective: 1
   PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "CENTRALITA"
+  ValidFrom: 2017-07-04
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "CentralitaPROMF"
+  DCName: "Centralita PRO"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 1
+  DurType: 4
+  FeeModel: "CentralitaPROMF"
+  DurUnit: 1
+  Effective: 1
 
 bulkload: DayCampaign
   DCEvent: "CONT10"
@@ -117,7 +164,7 @@ bulkload: DayCampaign
 
 bulkload: DayCampaign
   DCEvent: "CONT27"
-  ValidFrom: 2017-04-13
+  ValidFrom: 2017-04-18
   InclUnit: 1
   ValidTo: 2049-12-31
   BillCode: "CONT27MF"
@@ -130,6 +177,23 @@ bulkload: DayCampaign
   DurUnit: 1
   Effective: 1
   BundleUpsell: "DATA200_UPSELL,DATA6_UPSELL"
+
+bulkload: DayCampaign
+  DCEvent: "CONT28"
+  ValidFrom: 2017-08-21
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "CONT28MF"
+  DCName: "Línea móvil extra"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "CONT28MF"
+  DurUnit: 1
+  Effective: 1
+  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
 
 bulkload: DayCampaign
   DCEvent: "CONT9"
@@ -997,7 +1061,7 @@ bulkload: DayCampaign
   FeeModel: "DSSMF"
   Effective: 1
   StatusCode: 2
-  BundleUpsell: "DSS_UPSELL,DSS200_UPSELL"
+  BundleUpsell: "DSS_UPSELL,DSS200_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL"
   PayType: 1
 
 bulkload: DayCampaign
@@ -1013,7 +1077,7 @@ bulkload: DayCampaign
   CalcMethod: 4
   DurType: 1
   Effective: 1
-  BundleUpsell: "DSS2_UPSELL,DSS200_UPSELL"
+  BundleUpsell: "DSS2_UPSELL,DSS200_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL"
   PayType: 1
 
 bulkload: DayCampaign
@@ -1048,6 +1112,38 @@ bulkload: DayCampaign
   DurMonths: 1
   FeeModel: "DSS2MFUPS"
   DurUnit: 3
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS_FLEX_500MB_UPSELL"
+  ValidFrom: 2017-07-05
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "500MB Flex upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "DSS_FLEX_5GB_UPSELL"
+  ValidFrom: 2017-07-05
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "DSS 5GB Flex Upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
   Effective: 1
   InstanceLimit: 100
   PayType: 1
@@ -1146,6 +1242,85 @@ bulkload: DayCampaign
   PayType: 1
 
 bulkload: DayCampaign
+  DCEvent: "FAXTOEMAIL"
+  ValidFrom: 2017-07-04
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "FAXTOEMAILMF"
+  DCName: "FAX TO EMAIL"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 1
+  DurType: 4
+  FeeModel: "FAXTOEMAILMF"
+  DurUnit: 1
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "FIX_VOICE1000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DCName: "Fixed national voice"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  PayType: 1
+  BundleTarget: 1
+
+bulkload: DayCampaign
+  DCEvent: "FLEX_500MB_UPSELL"
+  ValidFrom: 2017-07-05
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Flex upsell national GPRS"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "FLEX_500MB_UPSELLMF"
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "FLEX_5GB_UPSELL"
+  ValidFrom: 2017-07-05
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "Flex upsell national GPRS"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "FLEX_5GB_UPSELLMF"
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "FLEX_UPSELL"
+  ValidFrom: 2017-03-01
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  DCName: "FLEX upsell"
+  CCN: 93
+  Brand: "1"
+  DCType: "6"
+  CalcMethod: 1
+  DurType: 2
+  DurMonths: 1
+  FeeModel: "FLEX_MFUPS"
+  Effective: 1
+  InstanceLimit: 100
+  PayType: 1
+
+bulkload: DayCampaign
   DCEvent: "FREE100MINUTES"
   ValidFrom: 2016-06-01
   ValidTo: 2049-12-31
@@ -1205,6 +1380,46 @@ bulkload: DayCampaign
   DCType: "8"
   CalcMethod: 1
   DurType: 2
+  DurUnit: 1
+  Effective: 1
+
+bulkload: DayCampaign
+  DCEvent: "INT_FIX_VOICE1000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DCName: "Fixed international voice"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  PayType: 1
+  BundleTarget: 1
+
+bulkload: DayCampaign
+  DCEvent: "INT_VOICE100"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DCName: "International voice 100 min."
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "IPFIJA"
+  ValidFrom: 2017-07-04
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "IPFIJAMF"
+  DCName: "IP FIJA"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 1
+  DurType: 4
+  FeeModel: "IPFIJAMF"
   DurUnit: 1
   Effective: 1
 
@@ -1459,6 +1674,21 @@ bulkload: DayCampaign
   InstanceLimit: 100
   StatusCode: 2
   PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "OFFICE365"
+  ValidFrom: 2017-07-04
+  InclUnit: 1
+  ValidTo: 2049-12-31
+  BillCode: "OFFICE365MF"
+  DCName: "OFFICE 365 Essentials"
+  Brand: "1"
+  DCType: "7"
+  CalcMethod: 1
+  DurType: 4
+  FeeModel: "OFFICE365MF"
+  DurUnit: 1
+  Effective: 1
 
 bulkload: DayCampaign
   DCEvent: "PAYTERM18_10"
@@ -1991,6 +2221,18 @@ bulkload: DayCampaign
   PayType: 1
 
 bulkload: DayCampaign
+  DCEvent: "SMS5000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DCName: "National SMS"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
   DCEvent: "SMSFREE"
   ValidFrom: 2010-04-01
   InclUnit: 6
@@ -2071,6 +2313,73 @@ bulkload: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "TARJ_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ10"
+  ValidFrom: 2017-05-29
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "PRETARJ10BUNDLE"
+  DCName: "La prepago de 1 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "PRETARJ10BUNDLE"
+  Effective: 1
+  BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ11"
+  ValidFrom: 2017-05-29
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "PRETARJ11BUNDLE"
+  DCName: "La prepago de 2 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "PRETARJ11BUNDLE"
+  Effective: 1
+  BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ12"
+  ValidFrom: 2017-05-29
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "PRETARJ12BUNDLE"
+  DCName: "La prepago de 4 GB"
+  CCN: 93
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "PRETARJ12BUNDLE"
+  Effective: 1
+  BundleUpsell: "TARJ7_UPSELL"
+  PayType: 2
+
+bulkload: DayCampaign
+  DCEvent: "TARJ13"
+  ValidFrom: 2017-06-20
+  InclUnit: 4
+  ValidTo: 2049-12-31
+  BillCode: "PRETARJ13BUNDLE"
+  DCName: "La prepago de llamadas ilimitadas"
+  CCN: 93
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 4
+  DurType: 4
+  FeeModel: "PRETARJ13BUNDLE"
+  Effective: 1
   PayType: 2
 
 bulkload: DayCampaign
@@ -2549,6 +2858,22 @@ bulkload: DayCampaign
   PayType: 1
 
 bulkload: DayCampaign
+  DCEvent: "TVTERM12-72"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  DCName: "TV Permanency Contract"
+  Brand: "1"
+  DCType: "3"
+  CalcMethod: 1
+  DurType: 3
+  DurMonths: 12
+  TermFeeModel: "TVTERMPERIODPF"
+  DurUnit: 2
+  Effective: 1
+  TermFeeCalc: 2
+  PayType: 1
+
+bulkload: DayCampaign
   DCEvent: "UPGRADE_UPSELL"
   ValidFrom: 2012-03-23
   InclUnit: 4
@@ -2576,7 +2901,32 @@ bulkload: DayCampaign
   CalcMethod: 1
   DurType: 1
   Effective: 1
-  BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "VOICE200"
+  ValidFrom: 2017-06-01
+  ValidTo: 2049-12-31
+  DCName: "Promo 200 min/mes gratis"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "VOICE200B"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  DCName: "Bono 200 minutos"
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  FeeModel: "VOICE200BMF"
+  Effective: 1
+  FirstMonthCalc: 1
   PayType: 1
 
 bulkload: DayCampaign
@@ -2591,6 +2941,18 @@ bulkload: DayCampaign
   Effective: 1
   StatusCode: 2
   BundleUpsell: "DATA200_UPSELL"
+  PayType: 1
+
+bulkload: DayCampaign
+  DCEvent: "VOICE5000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DCName: "National Voice 5000 min."
+  Brand: "1"
+  DCType: "1"
+  CalcMethod: 1
+  DurType: 1
+  Effective: 1
   PayType: 1
 
 bulkload: DayCampaign

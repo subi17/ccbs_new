@@ -7,6 +7,13 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "CentralitaPRO"
+  GroupName: "Centralita PRO"
+  ValidFrom: 2017-07-04
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "CONT10"
   GroupName: "Contrato 10"
   ValidFrom: 2017-02-01
@@ -51,7 +58,14 @@ bulkload: ServiceLimitGroup
   Brand: "1"
   GroupCode: "CONT27"
   GroupName: "LA INFINITA 2 GB DTO."
-  ValidFrom: 2017-04-13
+  ValidFrom: 2017-04-18
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "CONT28"
+  GroupName: "Línea móvil extra"
+  ValidFrom: 2017-08-21
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
@@ -420,6 +434,20 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "DSS_FLEX_500MB_UPSELL"
+  GroupName: "DSS 500MB Flex Upsell"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "DSS_FLEX_5GB_UPSELL"
+  GroupName: "DSS 5GB Flex Upsell"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "DSS_UPSELL"
   GroupName: "DSS Bundle Upsel"
   ValidFrom: 2011-11-23
@@ -455,6 +483,41 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "FAXTOEMAIL"
+  GroupName: "FAX TO EMAIL"
+  ValidFrom: 2017-07-04
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "FIX_VOICE1000"
+  GroupName: "National fixed voice 1000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "FLEX_500MB_UPSELL"
+  GroupName: "Flex 500MB Upsell"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "FLEX_5GB_UPSELL"
+  GroupName: "Flex 5GB Upsell"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "FLEX_UPSELL"
+  GroupName: "Mobile Data Usage Flex Upsell"
+  ValidFrom: 2017-03-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "FREE100MINUTES"
   GroupName: "Free 100 Minutes voice package"
   ValidFrom: 2016-06-01
@@ -465,6 +528,27 @@ bulkload: ServiceLimitGroup
   GroupCode: "HSPA_ROAM_EU"
   GroupName: "HSPA Roaming EU"
   ValidFrom: 2012-10-10
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "INT_FIX_VOICE1000"
+  GroupName: "International fixed Voice 1000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "INT_VOICE100"
+  GroupName: "International Voice 100"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "IPFIJA"
+  GroupName: "IP FIJA"
+  ValidFrom: 2017-07-04
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
@@ -560,6 +644,13 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "OFFICE365"
+  GroupName: "OFFICE 365 Essentials"
+  ValidFrom: 2017-07-04
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "PMDUB"
   GroupName: "Prepaid MDUB"
   ValidFrom: 2011-05-01
@@ -570,6 +661,41 @@ bulkload: ServiceLimitGroup
   GroupCode: "PMDUB_UPSELL"
   GroupName: "Pre Mobile Data Usage Bundle"
   ValidFrom: 2011-06-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "SMS5000"
+  GroupName: "SMS 5000"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "TARJ10"
+  GroupName: "La prepago de 1 GB"
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "TARJ11"
+  GroupName: "La prepago de 2 GB"
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "TARJ12"
+  GroupName: "La prepago de 4 GB"
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "TARJ13"
+  GroupName: "La prepago de llamadas ilimitadas"
+  ValidFrom: 2017-06-20
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimitGroup
@@ -630,8 +756,29 @@ bulkload: ServiceLimitGroup
 
 bulkload: ServiceLimitGroup
   Brand: "1"
+  GroupCode: "VOICE200"
+  GroupName: "Voice 200 Minutes Package"
+  ValidFrom: 2017-06-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "VOICE200B"
+  GroupName: "Voice 200B"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
   GroupCode: "VOICE3000"
   GroupName: "Contrato voice"
   ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimitGroup
+  Brand: "1"
+  GroupCode: "VOICE5000"
+  GroupName: "Voice 5000"
+  ValidFrom: 2017-07-04
   ValidTo: 2049-12-31
 

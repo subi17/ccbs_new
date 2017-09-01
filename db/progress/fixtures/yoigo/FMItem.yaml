@@ -19,6 +19,18 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "AGILETVMF"
+  PriceList: "COMMON"
+  BillCode: "AGILETV"
+  Interval: 1
+  Amount: 2.99
+  BillType: "MF"
+  FromDate: 2017-08-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "BALANCE_PREPAID"
   PriceList: "COMMON2"
   BillCode: "BALANCECHARGE"
@@ -231,6 +243,18 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "CentralitaPROMF"
+  PriceList: "COMMON"
+  BillCode: "CentralitaPROMF"
+  Interval: 1
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "Compensa 10"
   PriceList: "COMMON"
   BillCode: "GENERALCOMP"
@@ -363,6 +387,19 @@ bulkload: FMItem
   FirstMonthBR: 2
 
 bulkload: FMItem
+  FeeModel: "CONT10MF"
+  PriceList: "PRO_CONT10"
+  BillCode: "CONT10PRO"
+  Interval: 1
+  Amount: .08
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "CONT15MF"
   PriceList: "CONTRATO8"
   BillCode: "CONT15MF"
@@ -375,6 +412,19 @@ bulkload: FMItem
   Brand: "1"
   BrokenRental: 2
   FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "CONT15MF"
+  PriceList: "PRO_CONT15"
+  BillCode: "CONT15PRO"
+  Interval: 1
+  Amount: 4.3
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
 
 bulkload: FMItem
   FeeModel: "CONT23MF"
@@ -413,6 +463,19 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "CONT25MF"
+  PriceList: "PRO_CONT25"
+  BillCode: "CONT25PRO"
+  Interval: 1
+  Amount: 2.55
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "CONT26MF"
   PriceList: "CONTRATOS"
   BillCode: "CONT26MF"
@@ -425,6 +488,19 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "CONT26MF"
+  PriceList: "PRO_CONT26"
+  BillCode: "CONT26PRO"
+  Interval: 1
+  Amount: 2.34
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "CONT27MF"
   PriceList: "CONTRATOS"
   BillCode: "CONT27MF"
@@ -432,7 +508,19 @@ bulkload: FMItem
   Amount: 13.22
   BillType: "MF"
   BillCycle: 2
-  FromDate: 2017-04-13
+  FromDate: 2017-04-18
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CONT28MF"
+  PriceList: "CONTRATOS"
+  BillCode: "CONT28MF"
+  Interval: 1
+  Amount: 11.57
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-08-21
   ToDate: 2049-12-31
   Brand: "1"
 
@@ -745,7 +833,6 @@ bulkload: FMItem
   FromDate: 2017-02-02
   ToDate: 2049-12-31
   Brand: "1"
-  BrokenRental: 1
 
 bulkload: FMItem
   FeeModel: "CONTDSLMF"
@@ -757,6 +844,70 @@ bulkload: FMItem
   BillCycle: 2
   FromDate: 2016-10-27
   ToDate: 2017-02-01
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTDSLMF"
+  PriceList: "CONTRATOFIXEDONLY"
+  BillCode: "CONTDSLMF"
+  Interval: 1
+  Amount: 28.93
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-08
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CONTDSLMF"
+  PriceList: "PRO_CONTDSL39"
+  BillCode: "CONTDSL39PRO"
+  Interval: 1
+  Amount: 2.77
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTDSLMF"
+  PriceList: "PRO_CONTDSL48"
+  BillCode: "CONTDSL48PRO"
+  Interval: 1
+  Amount: 1.98
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTDSLMF"
+  PriceList: "PRO_CONTDSL52"
+  BillCode: "CONTDSL52PRO"
+  Interval: 1
+  Amount: 7.02
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTDSLMF"
+  PriceList: "PRO_CONTDSL59"
+  BillCode: "CONTDSL59PRO"
+  Interval: 1
+  Amount: 8.24
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
   Brand: "1"
   BrokenRental: 1
 
@@ -903,7 +1054,6 @@ bulkload: FMItem
   FromDate: 2017-02-02
   ToDate: 2049-12-31
   Brand: "1"
-  BrokenRental: 1
 
 bulkload: FMItem
   FeeModel: "CONTFH300MF"
@@ -919,6 +1069,70 @@ bulkload: FMItem
   BrokenRental: 1
 
 bulkload: FMItem
+  FeeModel: "CONTFH300MF"
+  PriceList: "CONTRATOFIXEDONLY"
+  BillCode: "CONTFH300MF"
+  Interval: 1
+  Amount: 37.19
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-08
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CONTFH300MF"
+  PriceList: "PRO_CONTFH49_300"
+  BillCode: "CONTFH49_300PRO"
+  Interval: 1
+  Amount: 3.5
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH300MF"
+  PriceList: "PRO_CONTFH58_300"
+  BillCode: "CONTFH58_300PRO"
+  Interval: 1
+  Amount: 2.72
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH300MF"
+  PriceList: "PRO_CONTFH62_300"
+  BillCode: "CONTFH62_300PRO"
+  Interval: 1
+  Amount: 7.76
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH300MF"
+  PriceList: "PRO_CONTFH69_300"
+  BillCode: "CONTFH69_300PRO"
+  Interval: 1
+  Amount: 8.98
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "CONTFH50MF"
   PriceList: "CONTRATOFIXED"
   BillCode: "CONTFH50MF"
@@ -929,7 +1143,6 @@ bulkload: FMItem
   FromDate: 2017-02-02
   ToDate: 2049-12-31
   Brand: "1"
-  BrokenRental: 1
 
 bulkload: FMItem
   FeeModel: "CONTFH50MF"
@@ -941,6 +1154,70 @@ bulkload: FMItem
   BillCycle: 2
   FromDate: 2016-10-27
   ToDate: 2017-02-01
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH50MF"
+  PriceList: "CONTRATOFIXEDONLY"
+  BillCode: "CONTFH50MF"
+  Interval: 1
+  Amount: 28.93
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-08
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CONTFH50MF"
+  PriceList: "PRO_CONTFH39_50"
+  BillCode: "CONTFH39_50PRO"
+  Interval: 1
+  Amount: 2.77
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH50MF"
+  PriceList: "PRO_CONTFH48_50"
+  BillCode: "CONTFH48_50PRO"
+  Interval: 1
+  Amount: 1.98
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH50MF"
+  PriceList: "PRO_CONTFH52_50"
+  BillCode: "CONTFH52_50PRO"
+  Interval: 1
+  Amount: 7.02
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
+  FeeModel: "CONTFH50MF"
+  PriceList: "PRO_CONTFH59_50"
+  BillCode: "CONTFH59_50PRO"
+  Interval: 1
+  Amount: 8.24
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
   Brand: "1"
   BrokenRental: 1
 
@@ -1099,7 +1376,6 @@ bulkload: FMItem
   FromDate: 2016-10-27
   ToDate: 2049-12-31
   Brand: "1"
-  BrokenRental: 1
 
 bulkload: FMItem
   FeeModel: "CONTS30MF"
@@ -1616,6 +1892,50 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "FAXTOEMAILMF"
+  PriceList: "COMMON"
+  BillCode: "FAXTOEMAILMF"
+  Interval: 1
+  Amount: 9
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "FLEX_500MB_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "FLEX_500MB_UPSELL"
+  BillMethod: TRUE 
+  BillType: "TR"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "FLEX_5GB_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "FLEX_5GB_UPSELL"
+  BillMethod: TRUE 
+  BillType: "TR"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "FLEX_MFUPS"
+  PriceList: "COMMON"
+  BillCode: "FLEX_MFUPS"
+  BillMethod: TRUE 
+  BillType: "TR"
+  FromDate: 2017-03-01
+  ToDate: 2049-12-31
+  Brand: "1"
+
+bulkload: FMItem
   FeeModel: "FTERMPERIOD"
   PriceList: "COMMON"
   BillCode: "FTERMPERIOD"
@@ -1668,6 +1988,20 @@ bulkload: FMItem
   FromDate: 2012-11-27
   ToDate: 2049-12-31
   Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "IPFIJAMF"
+  PriceList: "COMMON"
+  BillCode: "IPFIJAMF"
+  Interval: 1
+  Amount: 12
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
 
 bulkload: FMItem
   FeeModel: "MDUB2MF"
@@ -2679,6 +3013,20 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "OFFICE365MF"
+  PriceList: "COMMON"
+  BillCode: "OFFICE365MF"
+  Interval: 1
+  Amount: 4.2
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
   FeeModel: "PAYDELSIM"
   PriceList: "OrderCh"
   BillCode: "TS0000060"
@@ -3112,17 +3460,6 @@ bulkload: FMItem
   Brand: "1"
   BrokenRental: 1
   FirstMonthBR: 1
-
-bulkload: FMItem
-  FeeModel: "Pos123"
-  PriceList: "COMMON2"
-  BillCode: "ACCCHARGE"
-  BillMethod: TRUE 
-  Amount: 10
-  BillType: "CC"
-  FromDate: 2017-03-21
-  ToDate: 2017-03-22
-  Brand: "1"
 
 bulkload: FMItem
   FeeModel: "POSMNP10"
@@ -27136,6 +27473,58 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "PRETARJ10BUNDLE"
+  BillCode: "PRETARJ10BUNDLE"
+  Interval: 1
+  Amount: 7.02
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 1
+
+bulkload: FMItem
+  FeeModel: "PRETARJ11BUNDLE"
+  BillCode: "PRETARJ11BUNDLE"
+  Interval: 1
+  Amount: 8.26
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 1
+
+bulkload: FMItem
+  FeeModel: "PRETARJ12BUNDLE"
+  BillCode: "PRETARJ12BUNDLE"
+  Interval: 1
+  Amount: 12.4
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 1
+
+bulkload: FMItem
+  FeeModel: "PRETARJ13BUNDLE"
+  BillCode: "PRETARJ13BUNDLE"
+  Interval: 1
+  Amount: 9.92
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-06-20
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 1
+
+bulkload: FMItem
   FeeModel: "RECONNECTION"
   PriceList: "COMMON"
   BillCode: "RECONNECTION"
@@ -27821,17 +28210,6 @@ bulkload: FMItem
   FirstMonthBR: 1
 
 bulkload: FMItem
-  FeeModel: "TESTSK"
-  PriceList: "COMMON2"
-  BillCode: "SIMLOCK"
-  BillMethod: TRUE 
-  Amount: 5
-  BillType: "CC"
-  FromDate: 2017-04-03
-  ToDate: 2017-04-30
-  Brand: "1"
-
-bulkload: FMItem
   FeeModel: "TOPUPCAMP20"
   PriceList: "TopUp"
   BillCode: "TS0000050"
@@ -27920,6 +28298,18 @@ bulkload: FMItem
   Brand: "1"
 
 bulkload: FMItem
+  FeeModel: "TVTERMPERIODPF"
+  PriceList: "COMMON"
+  BillCode: "TVTERMPERIOD"
+  BillMethod: TRUE 
+  Amount: 72
+  BillType: "PF"
+  FromDate: 2017-08-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+
+bulkload: FMItem
   FeeModel: "UPSELL_PMDUBFee"
   PriceList: "COMMON2"
   BillCode: "PREMDUBUPSELL"
@@ -27954,6 +28344,19 @@ bulkload: FMItem
   FromDate: 2012-09-27
   ToDate: 2012-09-30
   Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "VOICE200BMF"
+  PriceList: "COMMON"
+  BillCode: "VOICE200BMF"
+  Interval: 1
+  Amount: 1.65
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-08-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
 
 bulkload: FMItem
   FeeModel: "X9305871W"

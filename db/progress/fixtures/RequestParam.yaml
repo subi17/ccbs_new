@@ -1699,6 +1699,7 @@ bulkload: RequestParam
   Brand: "1"
   ReqType: 13
   ParamField: "ReqIParam4"
+  Usage: "Pro flag"
 
 bulkload: RequestParam
   Brand: "1"
@@ -2219,6 +2220,12 @@ bulkload: RequestParam
   Brand: "1"
   ReqType: 18
   ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 18
+  ParamField: "ReqCParam6"
+  Usage: "Termination Type"
 
 bulkload: RequestParam
   Brand: "1"
@@ -3686,6 +3693,11 @@ bulkload: RequestParam
 bulkload: RequestParam
   Brand: "1"
   ReqType: 35
+  ParamField: "ReqCParam6"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
   ParamField: "ReqDParam1"
 
 bulkload: RequestParam
@@ -4061,6 +4073,11 @@ bulkload: RequestParam
   Brand: "1"
   ReqType: 46
   ParamField: "ReqCParam5"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 46
+  ParamField: "ReqCParam6"
 
 bulkload: RequestParam
   Brand: "1"

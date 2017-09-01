@@ -355,6 +355,22 @@ bulkload: OFItem
   StatusCode: "44"
 
 bulkload: OFItem
+  OFID: 58
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "44"
+
+bulkload: OFItem
   OFID: 59
   StatusCode: "*"
 

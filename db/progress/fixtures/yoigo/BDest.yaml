@@ -198,6 +198,15 @@ bulkload: BDest
   BdestID: 12
 
 bulkload: BDest
+  BDest: "069"
+  BDName: "Fixed voice mail call"
+  CCN: 1098
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-04-01
+  BdestID: 1073
+
+bulkload: BDest
   BDest: "080"
   BDName: "Bomberos"
   CCN: 9
@@ -399,7 +408,7 @@ bulkload: BDest
 
 bulkload: BDest
   BDest: "11810"
-  BDName: " de Información Telefónica número 11812 (AUNA)"
+  BDName: "11810 VOIPED TELECOM, S.L.U.(ORANGE ESPA"
   CCN: 66
   DestType: 11
   Brand: "1"
@@ -479,7 +488,7 @@ bulkload: BDest
 
 bulkload: BDest
   BDest: "11818"
-  BDName: "Servicio  (T>11 seg)"
+  BDName: "11818 de ATENCIÓN CLIENTE TELECOM. S.L.U"
   CCN: 66
   DestType: 11
   Brand: "1"
@@ -639,7 +648,7 @@ bulkload: BDest
 
 bulkload: BDest
   BDest: "11834"
-  BDName: "11834 de Nvia Gestión de Datos"
+  BDName: "11834 de DATA PREMIUM DE VENEZUELA 11,C."
   CCN: 66
   DestType: 11
   Brand: "1"
@@ -679,7 +688,7 @@ bulkload: BDest
 
 bulkload: BDest
   BDest: "11838"
-  BDName: " de Opera"
+  BDName: "11838 de DELIMAX CONCEPT. S.L.U"
   CCN: 66
   DestType: 11
   Brand: "1"
@@ -849,7 +858,7 @@ bulkload: BDest
 
 bulkload: BDest
   BDest: "11855"
-  BDName: " de Vodafone"
+  BDName: "11855 UTOPIA THINKING SYSTEMS (DIALOGA)"
   CCN: 66
   DestType: 11
   Brand: "1"
@@ -1069,7 +1078,7 @@ bulkload: BDest
 
 bulkload: BDest
   BDest: "11877"
-  BDName: "11877 de Remirson Inversora (VODAFONE ON"
+  BDName: "11877 de Remirson Inversora (MASVOZ)"
   CCN: 66
   DestType: 11
   Brand: "1"
@@ -7636,7 +7645,7 @@ bulkload: BDest
   CCN: 63
   DestType: 23
   Brand: "1"
-  ToDate: 2049-12-31
+  ToDate: 2017-03-31
   FromDate: 2016-03-01
   BdestID: 1012
 
@@ -7842,7 +7851,7 @@ bulkload: BDest
   CCN: 63
   DestType: 23
   Brand: "1"
-  ToDate: 2049-12-31
+  ToDate: 2017-03-31
   FromDate: 2016-03-01
   BdestID: 1021
 
@@ -8088,7 +8097,7 @@ bulkload: BDest
   CCN: 63
   DestType: 23
   Brand: "1"
-  ToDate: 2049-12-31
+  ToDate: 2017-03-31
   FromDate: 2016-03-01
   BdestID: 1034
 
@@ -8856,8 +8865,8 @@ bulkload: BDest
   CCN: 93
   Brand: "1"
   ToDate: 2049-12-31
-  FromDate: 2017-04-13
-  BdestID: 1072
+  FromDate: 2017-04-18
+  BdestID: 1074
 
 bulkload: BDest
   BDest: "CONT27_DATA_OUT"
@@ -8865,8 +8874,8 @@ bulkload: BDest
   CCN: 93
   Brand: "1"
   ToDate: 2049-12-31
-  FromDate: 2017-04-13
-  BdestID: 1073
+  FromDate: 2017-04-18
+  BdestID: 1075
 
 bulkload: BDest
   BDest: "CONT27_VOICE_IN"
@@ -8874,8 +8883,8 @@ bulkload: BDest
   CCN: 81
   Brand: "1"
   ToDate: 2049-12-31
-  FromDate: 2017-04-13
-  BdestID: 1074
+  FromDate: 2017-04-18
+  BdestID: 1076
 
 bulkload: BDest
   BDest: "CONT27_VOICE_OUT"
@@ -8883,8 +8892,26 @@ bulkload: BDest
   CCN: 81
   Brand: "1"
   ToDate: 2049-12-31
-  FromDate: 2017-04-13
-  BdestID: 1075
+  FromDate: 2017-04-18
+  BdestID: 1077
+
+bulkload: BDest
+  BDest: "CONT28_VOICE_IN"
+  BDName: "CONT28 VOICE IN"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-08-21
+  BdestID: 1094
+
+bulkload: BDest
+  BDest: "CONT28_VOICE_OUT"
+  BDName: "CONT28 VOICE OUT"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-08-21
+  BdestID: 1095
 
 bulkload: BDest
   BDest: "CONTDSL_MIN_IN"
@@ -9506,6 +9533,15 @@ bulkload: BDest
   BdestID: 597
 
 bulkload: BDest
+  BDest: "FIX_VOICE1000"
+  BDName: "Fixed Voice 1000 Minutes"
+  CCN: 1081
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1088
+
+bulkload: BDest
   BDest: "FLATDATA20D_A"
   BDName: "Flat rate data 20D"
   CCN: 93
@@ -9585,6 +9621,24 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2011-12-01
   BdestID: 738
+
+bulkload: BDest
+  BDest: "FLEX_500MB_UPSELL"
+  BDName: "Flex Upsell"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1090
+
+bulkload: BDest
+  BDest: "FLEX_5GB_UPSELL"
+  BDName: "Flex Upsell"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1091
 
 bulkload: BDest
   BDest: "FREE100MINUTES"
@@ -9993,6 +10047,42 @@ bulkload: BDest
   BdestID: 888
 
 bulkload: BDest
+  BDest: "GPRSDATA_TARJ10"
+  BDName: "GPRS Data TARJ10"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-05-29
+  BdestID: 1078
+
+bulkload: BDest
+  BDest: "GPRSDATA_TARJ11"
+  BDName: "GPRS Data TARJ11"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-05-29
+  BdestID: 1079
+
+bulkload: BDest
+  BDest: "GPRSDATA_TARJ12"
+  BDName: "GPRS Data TARJ12"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-05-29
+  BdestID: 1080
+
+bulkload: BDest
+  BDest: "GPRSDATA_TARJ13"
+  BDName: "GPRS Data TARJ13"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-06-20
+  BdestID: 1082
+
+bulkload: BDest
   BDest: "GPRSDATA_TARJ7"
   BDName: "GPRS data tarj7"
   CCN: 93
@@ -10110,6 +10200,33 @@ bulkload: BDest
   BdestID: 890
 
 bulkload: BDest
+  BDest: "GPRS_DSS_FLEX_500MB_UPSELL"
+  BDName: "GPRS DSS 500MB Flex Upsell"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-19
+  BdestID: 1092
+
+bulkload: BDest
+  BDest: "GPRS_DSS_FLEX_5GB_UPSELL"
+  BDName: "GPRS DSS 5GB Flex Upsell"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-19
+  BdestID: 1093
+
+bulkload: BDest
+  BDest: "GPRS_FLEX_UPSELL"
+  BDName: "GPRS Data"
+  CCN: 93
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-03-01
+  BdestID: 1072
+
+bulkload: BDest
   BDest: "INTERNATIONAL"
   BDName: "International"
   CCN: 2
@@ -10118,6 +10235,24 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2006-12-01
   BdestID: 620
+
+bulkload: BDest
+  BDest: "INT_FIX_VOICE1000"
+  BDName: "International Fixed Voice 1000 Minutes"
+  CCN: 1002
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1089
+
+bulkload: BDest
+  BDest: "INT_VOICE100"
+  BDName: "International voice 100 Minutes"
+  CCN: 2
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1087
 
 bulkload: BDest
   BDest: "OTHER"
@@ -10293,6 +10428,24 @@ bulkload: BDest
   BdestID: 628
 
 bulkload: BDest
+  BDest: "ROAM_EU_FREE"
+  BDName: "Roaming EU Free and Emergency"
+  CCN: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+  BdestID: 1083
+
+bulkload: BDest
+  BDest: "ROAM_EU_HTS"
+  BDName: "Roaming EU HTS"
+  CCN: 5
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+  BdestID: 1084
+
+bulkload: BDest
   BDest: "ROAM_INTEU"
   BDName: "Roaming international destin"
   CCN: 802
@@ -10350,6 +10503,15 @@ bulkload: BDest
   BdestID: 634
 
 bulkload: BDest
+  BDest: "SMS5000"
+  BDName: "SMS 5000 QTY"
+  CCN: 51
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1086
+
+bulkload: BDest
   BDest: "TARJ9_DATA_IN"
   BDName: "TARJ9 DATA_IN"
   CCN: 93
@@ -10405,6 +10567,24 @@ bulkload: BDest
   BdestID: 977
 
 bulkload: BDest
+  BDest: "VOICE200"
+  BDName: "Voice 200 Minutes"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-06-01
+  BdestID: 1081
+
+bulkload: BDest
+  BDest: "VOICE200B"
+  BDName: "Voice 200 minutes B"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-08-22
+  BdestID: 1096
+
+bulkload: BDest
   BDest: "VOICE3000"
   BDName: "Cont Voice"
   CCN: 81
@@ -10412,6 +10592,15 @@ bulkload: BDest
   ToDate: 2049-12-31
   FromDate: 2012-12-01
   BdestID: 893
+
+bulkload: BDest
+  BDest: "VOICE5000"
+  BDName: "Voice 5000 Minutes"
+  CCN: 81
+  Brand: "1"
+  ToDate: 2049-12-31
+  FromDate: 2017-07-05
+  BdestID: 1085
 
 bulkload: BDest
   BDest: "WAPVAS"

@@ -666,6 +666,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "INT_VOICE100"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5564
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 2
+  BillCode: "INT_VOICE100"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Price[1]: .3
   Discount[4]: yes
@@ -1298,6 +1316,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "INT_VOICE100"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5567
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 2
+  BillCode: "INT_VOICE100"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Price[1]: 2.1
   Discount[4]: yes
@@ -1474,7 +1510,7 @@ bulkload: Tariff
   TariffNum: 4759
   ValidFrom: 2016-04-28
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-14
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -1683,6 +1719,44 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "ROAM_EU_FREE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5547
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU_HTS"
+  TZTo[1]: "2400"
+  Price[1]: .45
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .15
+  TariffNum: 5548
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "ROAM_INTEU"
   TZTo[1]: "2400"
   Price[1]: 2.1
@@ -1846,6 +1920,1241 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTD"
+  StartCharge[1]: .15
+  TariffNum: 5171
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  StartCharge[1]: .1653
+  TariffNum: 5174
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "PD002"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO2"
+  StartCharge[1]: .12
+  TariffNum: 5413
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  TariffNum: 5590
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  StartCharge[1]: .15
+  TariffNum: 5591
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  StartCharge[1]: .1653
+  TariffNum: 5177
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .06
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  StartCharge[1]: .1653
+  TariffNum: 5180
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .04
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  StartCharge[1]: .1653
+  TariffNum: 5183
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  StartCharge[1]: .1653
+  TariffNum: 5186
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FREE100MINUTES"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5353
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  StartCharge[1]: .1653
+  TariffNum: 5189
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE100"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5415
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE200"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5417
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE200B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5599
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE3000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  StartCharge[1]: .1653
+  TariffNum: 5419
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5560
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  StartCharge[1]: .1653
+  TariffNum: 5192
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATOD2"
+  StartCharge[1]: .15
+  TariffNum: 5195
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATOD3"
+  StartCharge[1]: .15
+  TariffNum: 5198
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATODATA"
+  StartCharge[1]: .15
+  TariffNum: 5201
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFFVOICE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5259
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATVOICE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5351
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  StartCharge[1]: .1653
+  TariffNum: 5168
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  StartCharge[1]: .1653
+  TariffNum: 5204
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  StartCharge[1]: .1653
+  TariffNum: 5207
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT23_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5225
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT23_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5227
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT24_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5231
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT24_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5233
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT25_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5237
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT25_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5239
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT26_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5243
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT26_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5245
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5249
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5251
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS12_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5263
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS12_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5265
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS2GB_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5269
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS2GB_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5271
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE10_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5295
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE10_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5297
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE14_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5299
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE14_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5301
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE15_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5303
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE15_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5305
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE16_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5307
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE16_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5309
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE20_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5311
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE20_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5313
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE21_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5315
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE21_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5317
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE25_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5319
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE25_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5321
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE26_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5323
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE26_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5325
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE32_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5327
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE32_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5329
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE35_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5331
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE35_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5333
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE39_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5335
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE39_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5337
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5339
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5341
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5210
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5572
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 3
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Price[1]: .9
   Discount[4]: yes
@@ -1892,7 +3201,7 @@ bulkload: Tariff
   TariffNum: 4760
   ValidFrom: 2016-04-28
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-14
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -2062,6 +3371,44 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "ROAM_EU_FREE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5549
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU_HTS"
+  TZTo[1]: "2400"
+  Price[1]: .45
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .15
+  TariffNum: 5550
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON2"
@@ -2092,6 +3439,1241 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 4
   BillCode: "PRE10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTD"
+  StartCharge[1]: .15
+  TariffNum: 5172
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  StartCharge[1]: .1653
+  TariffNum: 5175
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "PD002"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO2"
+  StartCharge[1]: .12
+  TariffNum: 5414
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  TariffNum: 5592
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  StartCharge[1]: .15
+  TariffNum: 5593
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  StartCharge[1]: .1653
+  TariffNum: 5178
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .06
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  StartCharge[1]: .1653
+  TariffNum: 5181
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .04
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  StartCharge[1]: .1653
+  TariffNum: 5184
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  StartCharge[1]: .1653
+  TariffNum: 5187
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FREE100MINUTES"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5354
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  StartCharge[1]: .1653
+  TariffNum: 5190
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE100"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5416
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE200"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5418
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE200B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5600
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE3000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  StartCharge[1]: .1653
+  TariffNum: 5420
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5561
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  StartCharge[1]: .1653
+  TariffNum: 5193
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATOD2"
+  StartCharge[1]: .15
+  TariffNum: 5196
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATOD3"
+  StartCharge[1]: .15
+  TariffNum: 5199
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .08
+  Discount[4]: yes
+  PriceList: "CONTRATODATA"
+  StartCharge[1]: .15
+  TariffNum: 5202
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFFVOICE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5260
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATVOICE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5352
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  StartCharge[1]: .1653
+  TariffNum: 5169
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  StartCharge[1]: .1653
+  TariffNum: 5205
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Price[1]: .02
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  StartCharge[1]: .1653
+  TariffNum: 5208
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT23_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5226
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT23_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5228
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT24_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5232
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT24_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5234
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT25_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5238
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT25_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5240
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT26_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5244
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT26_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5246
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5250
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5252
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS12_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5264
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS12_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5266
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS2GB_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5270
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS2GB_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5272
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE10_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5296
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE10_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5298
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE14_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5300
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFVOICE14_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5302
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE15_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5304
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE15_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5306
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE16_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5308
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE16_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5310
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE20_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5312
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE20_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5314
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE21_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5316
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE21_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5318
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE25_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5320
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE25_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5322
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE26_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5324
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE26_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5326
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE32_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5328
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE32_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5330
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE35_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5332
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE35_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5334
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE39_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5336
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE39_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5338
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5340
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSVOICE_B"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5342
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5211
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5573
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 4
+  BillCode: "10104013B"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -2172,13 +4754,31 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "ROAM_EU"
   TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5214
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 7
+  BillCode: "10104020"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAM_EU"
+  TZTo[1]: "2400"
   Price[1]: .01
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4762
   ValidFrom: 2016-04-28
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-14
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -3135,6 +5735,44 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 30
   BillCode: "CFYOIGO"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  TariffNum: 5594
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "CONT28CF_A"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  StartCharge[1]: .15
+  TariffNum: 5595
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "CONT28CF_B"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -4317,6 +6955,42 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "VOICE200"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5165
+  ValidFrom: 2017-06-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "VOICE200CF"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE200B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5587
+  ValidFrom: 2017-08-22
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "VOICE200B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "VOICE3000"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -4350,6 +7024,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 30
   BillCode: "VOICE3000CF"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5562
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "VOICE5000CF"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -6246,8 +8938,8 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOS"
-  TariffNum: 80625
-  ValidFrom: 2017-04-13
+  TariffNum: 5148
+  ValidFrom: 2017-04-18
   DayType[1]: 1
   ValidTo: 2049-12-31
   TZName[1]: "Off Peak"
@@ -6265,8 +8957,8 @@ bulkload: Tariff
   Discount[4]: yes
   PriceList: "CONTRATOS"
   StartCharge[1]: .15
-  TariffNum: 80626
-  ValidFrom: 2017-04-13
+  TariffNum: 5149
+  ValidFrom: 2017-04-18
   DayType[1]: 1
   ValidTo: 2049-12-31
   TZName[1]: "Off Peak"
@@ -6274,6 +8966,42 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 30
   BillCode: "CONT27CF_B"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5582
+  ValidFrom: 2017-08-21
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "CONT28CF_A"
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .15
+  TariffNum: 5583
+  ValidFrom: 2017-08-21
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "CONT28CF_B"
   DataType: 1
   Brand: "1"
 
@@ -6805,6 +9533,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 30
   BillCode: "CONTS30CF_B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5574
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 30
+  BillCode: "VOICE5000CF"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -12851,6 +15597,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 51
   BillCode: "12100004"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "SMS5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5563
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 51
+  BillCode: "SMS5000"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -19170,6 +21934,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "SMS5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5565
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 51
+  BillCode: "SMS5000"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "YOIGO"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -19249,7 +22031,7 @@ bulkload: Tariff
   TariffNum: 4440
   ValidFrom: 2014-07-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-14
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -19363,6 +22145,291 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 54
   BillCode: "PRE12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTD"
+  StartCharge[1]: .1
+  TariffNum: 5173
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  StartCharge[1]: .1
+  TariffNum: 5176
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  StartCharge[1]: .08
+  TariffNum: 5179
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  StartCharge[1]: .1
+  TariffNum: 5182
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  StartCharge[1]: .1
+  TariffNum: 5185
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  StartCharge[1]: .1
+  TariffNum: 5188
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  StartCharge[1]: .1
+  TariffNum: 5191
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  StartCharge[1]: .08
+  TariffNum: 5194
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD2"
+  StartCharge[1]: .08
+  TariffNum: 5197
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD3"
+  StartCharge[1]: .08
+  TariffNum: 5200
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATODATA"
+  StartCharge[1]: .08
+  TariffNum: 5203
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  StartCharge[1]: .1
+  TariffNum: 5170
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  StartCharge[1]: .1
+  TariffNum: 5206
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  StartCharge[1]: .1
+  TariffNum: 5209
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMSMS_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  StartCharge[1]: .1
+  TariffNum: 5212
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 54
+  BillCode: "12104013"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -21333,10 +24400,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5603
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11810"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   TariffNum: 4717
   ValidFrom: 2015-10-29
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -21868,10 +24954,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5556
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11818"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   TariffNum: 2607
   ValidFrom: 2012-01-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -21925,11 +25030,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  TariffNum: 5154
+  ValidFrom: 2017-05-03
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11819"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   StartCharge[1]: .3
   TariffNum: 2608
   ValidFrom: 2012-01-16
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-05-02
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -22157,11 +25280,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  TariffNum: 5156
+  ValidFrom: 2017-05-03
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11823"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   StartCharge[1]: .3
   TariffNum: 2612
   ValidFrom: 2012-01-16
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-05-02
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -22328,12 +25469,31 @@ bulkload: Tariff
 
 bulkload: Tariff
   BDest: "11826"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5575
+  ValidFrom: 2017-07-13
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11826"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4736
   ValidFrom: 2015-12-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-07-12
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -23129,10 +26289,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5553
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11838"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   TariffNum: 4501
   ValidFrom: 2015-04-24
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -23261,11 +26440,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  TariffNum: 5139
+  ValidFrom: 2017-03-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11840"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   StartCharge[1]: .3
   TariffNum: 2629
   ValidFrom: 2012-01-16
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-02-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -24211,12 +27408,31 @@ bulkload: Tariff
 
 bulkload: Tariff
   BDest: "11855"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5606
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 66
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11855"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4771
   ValidFrom: 2016-06-30
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -26587,12 +29803,32 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11810"
   TZTo[1]: "2400"
+  Price[1]: 1.95
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .61
+  TariffNum: 5604
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11810"
+  TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4718
   ValidFrom: 2015-10-29
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -28092,12 +31328,32 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11818"
   TZTo[1]: "2400"
+  Price[1]: 2.15
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5557
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11818"
+  TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 2504
   ValidFrom: 2012-01-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -28229,6 +31485,24 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11819"
   TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5155
+  ValidFrom: 2017-05-03
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11819"
+  TZTo[1]: "2400"
   Price[1]: 1.96
   Discount[4]: yes
   PriceList: "COMMON"
@@ -28236,7 +31510,7 @@ bulkload: Tariff
   TariffNum: 4743
   ValidFrom: 2016-02-25
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-05-02
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -29124,6 +32398,24 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11823"
   TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5157
+  ValidFrom: 2017-05-03
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11823"
+  TZTo[1]: "2400"
   Price[1]: 2.21
   Discount[4]: yes
   PriceList: "COMMON"
@@ -29131,7 +32423,7 @@ bulkload: Tariff
   TariffNum: 4479
   ValidFrom: 2015-03-26
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-05-02
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -29800,12 +33092,32 @@ bulkload: Tariff
 
 bulkload: Tariff
   BDest: "11826"
+  TZTo[1]: "2400"
+  Price[1]: 3.16
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: 3.46
+  TariffNum: 5576
+  ValidFrom: 2017-07-13
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11826"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4737
   ValidFrom: 2015-12-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-07-12
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -30429,6 +33741,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11830"
   TZTo[1]: "2400"
+  Price[1]: 2.55
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: 2.44
+  TariffNum: 5551
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11830"
+  TZTo[1]: "2400"
   Price[1]: 1.65
   Discount[4]: yes
   PriceList: "COMMON"
@@ -30436,7 +33768,7 @@ bulkload: Tariff
   TariffNum: 4543
   ValidFrom: 2015-08-27
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -31848,12 +35180,32 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11838"
   TZTo[1]: "2400"
+  Price[1]: 2.47
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: 2.07
+  TariffNum: 5554
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11838"
+  TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4503
   ValidFrom: 2015-04-24
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -32104,6 +35456,24 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11840"
   TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5140
+  ValidFrom: 2017-03-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11840"
+  TZTo[1]: "2400"
   Price[1]: .76
   Discount[4]: yes
   PriceList: "COMMON"
@@ -32111,7 +35481,7 @@ bulkload: Tariff
   TariffNum: 2522
   ValidFrom: 2012-01-16
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-02-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -34681,12 +38051,32 @@ bulkload: Tariff
 
 bulkload: Tariff
   BDest: "11855"
+  TZTo[1]: "2400"
+  Price[1]: .2
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5607
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11855"
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 4772
   ValidFrom: 2016-06-30
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -38375,6 +41765,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11877"
   TZTo[1]: "2400"
+  Price[1]: 2.66
+  Discount[4]: yes
+  PriceList: "COMMON"
+  StartCharge[1]: 3.51
+  TariffNum: 5609
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 67
+  BillCode: "15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11877"
+  TZTo[1]: "2400"
   Price[1]: 2.65
   Discount[4]: yes
   PriceList: "COMMON"
@@ -38382,7 +41792,7 @@ bulkload: Tariff
   TariffNum: 4345
   ValidFrom: 2014-02-27
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -56012,6 +59422,44 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "CONT28_VOICE_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  TariffNum: 5596
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "CONT28VOICE_A"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT28_VOICE_OUT"
+  TZTo[1]: "2400"
+  Price[1]: .12
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  StartCharge[1]: .15
+  TariffNum: 5597
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "CONT28VOICE_B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Price[1]: .08
   Discount[4]: yes
@@ -66344,6 +69792,42 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "VOICE200"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5164
+  ValidFrom: 2017-06-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "VOICE200"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE200B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5586
+  ValidFrom: 2017-08-22
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "VOICE200B"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "VOICE3000"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -66377,6 +69861,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 81
   BillCode: "VOICE3000"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5559
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "VOICE5000"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -78194,8 +81696,8 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOS"
-  TariffNum: 80627
-  ValidFrom: 2017-04-13
+  TariffNum: 5150
+  ValidFrom: 2017-04-18
   DayType[1]: 1
   ValidTo: 2049-12-31
   TZName[1]: "Off Peak"
@@ -78213,8 +81715,8 @@ bulkload: Tariff
   Discount[4]: yes
   PriceList: "CONTRATOS"
   StartCharge[1]: .15
-  TariffNum: 80628
-  ValidFrom: 2017-04-13
+  TariffNum: 5151
+  ValidFrom: 2017-04-18
   DayType[1]: 1
   ValidTo: 2049-12-31
   TZName[1]: "Off Peak"
@@ -78758,6 +82260,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "VOICE5000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5571
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 81
+  BillCode: "VOICE5000"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "YOIGO"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -78773,6 +82293,412 @@ bulkload: Tariff
   BillCode: "10100001"
   TariffType: 0
   DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DATA5"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5482
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DATA6"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5483
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DATA7"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5484
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB3"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5500
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB4"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5501
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB5"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5502
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5503
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DATA5"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5507
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DATA6"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5508
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DATA7"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5509
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB3"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5387
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB4"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5388
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB5"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5389
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5528
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_UPGRADE"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5390
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS200_A"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5391
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA200_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5408
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA5_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5409
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA6_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5410
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DATA9_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5411
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DSS_FLEX_500MB_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5581
+  ValidFrom: 2017-07-19
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "DSS200UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DSS_FLEX_5GB_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5579
+  ValidFrom: 2017-07-19
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "DSS200UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_FLEX_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5412
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
   Brand: "1"
 
 bulkload: Tariff
@@ -78797,13 +82723,31 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "ROAMGPRS_EU"
   TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5166
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
   Price[1]: .7
   Discount[4]: yes
   PriceList: "COMMON"
   TariffNum: 3634
   ValidFrom: 2012-07-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-06
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -78841,7 +82785,7 @@ bulkload: Tariff
   TariffNum: 4761
   ValidFrom: 2016-04-28
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-06
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -78916,7 +82860,7 @@ bulkload: Tariff
   TariffNum: 3673
   ValidFrom: 2012-10-10
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-06
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -78977,6 +82921,3359 @@ bulkload: Tariff
   BillCode: "PRE14104019"
   TariffType: 0
   DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD9_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTD"
+  TariffNum: 5429
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD9_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTD"
+  TariffNum: 5430
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTD"
+  TariffNum: 5396
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTD"
+  TariffNum: 5533
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5431
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5359
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5461
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5490
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5377
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5397
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5534
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATO"
+  TariffNum: 5216
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5432
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5360
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5462
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5491
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5378
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5398
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5535
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATO4"
+  TariffNum: 5217
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5433
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5361
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5463
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5492
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5379
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5399
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5536
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATO5"
+  TariffNum: 5218
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5434
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5362
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5464
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5493
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DUB"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5510
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5380
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5400
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO6"
+  TariffNum: 5537
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5435
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5363
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5465
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5485
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5494
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5512
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5381
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5401
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO7"
+  TariffNum: 5538
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLEX_500MB_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5602
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "FLEX_500MB_UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5448
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5436
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5364
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5466
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_CONT10"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5479
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_CONT15"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5480
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_CONT9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5481
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5486
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DUB3"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5489
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5495
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_CONT10"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5504
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_CONT15"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5505
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_CONT9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5506
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5513
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DUB3"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5514
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5382
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5392
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5529
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5402
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5539
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD1_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5355
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD1_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5422
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD2_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5356
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD2_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5424
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD3_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5357
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD3_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5426
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD4_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5358
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSD4_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5428
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5365
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5467
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5403
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD"
+  TariffNum: 5540
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .00683
+  Discount[4]: yes
+  PriceList: "CONTRATOD2"
+  TariffNum: 5437
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD2"
+  TariffNum: 5366
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD2"
+  TariffNum: 5468
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD3"
+  TariffNum: 5367
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOD3"
+  TariffNum: 5469
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .00813
+  Discount[4]: yes
+  PriceList: "CONTRATODATA"
+  TariffNum: 5438
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATODATA"
+  TariffNum: 5368
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATODATA"
+  TariffNum: 5470
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTF11_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5253
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTF11_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5254
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTF8_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5255
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTF8_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5256
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFFDATA2_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5257
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTFFDATA2_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5258
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA20D_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5343
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA20D_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5344
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA30_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5345
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA30_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5346
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA40_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5347
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA40_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5348
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA55_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5349
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLATDATA55_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5350
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5439
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5369
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5471
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5496
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5383
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5404
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5541
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATOF"
+  TariffNum: 5219
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_DUB"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXEDONLY"
+  TariffNum: 5511
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5440
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5370
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5472
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5487
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5497
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5384
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5393
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5530
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5405
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5542
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATOM"
+  TariffNum: 5220
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5441
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5371
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5473
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_DUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5488
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5498
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5385
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5394
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5531
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5406
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5543
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATOM2"
+  TariffNum: 5221
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT23_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5223
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT23_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5224
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT24_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5229
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT24_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5230
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT25_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5235
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT25_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5236
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT26_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5241
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT26_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5242
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5247
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONT27_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5248
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS12_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5261
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS12_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5262
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS2GB_DATA_IN"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5267
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTS2GB_DATA_OUT"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5268
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA16_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5273
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA16_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5274
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA20_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5275
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA20_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5276
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA21_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5277
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA21_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5278
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA25_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5279
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA25_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5280
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA26_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5281
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA26_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5282
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA30_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5283
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA30_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5284
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA32_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5285
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA32_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5286
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA35_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5287
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA35_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5288
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Pea"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA39_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5289
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSDATA39_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5290
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFDATA10_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5291
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFDATA10_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5292
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFDATA14_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5293
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "CONTSFDATA14_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5294
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLEX_5GB_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5601
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "FLEX_5GB_UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1A"
+  TZTo[1]: "2400"
+  Price[1]: .016
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5442
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5372
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5474
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5499
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_MDUB2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5386
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5395
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS2_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5532
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_A"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5407
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDSS_B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5544
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMGPRS_EU"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5222
+  ValidFrom: 2017-06-07
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA"
+  TariffNum: 5373
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA"
+  TariffNum: 5475
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA4"
+  TariffNum: 5374
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA4"
+  TariffNum: 5476
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA5"
+  TariffNum: 5375
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA5"
+  TariffNum: 5477
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA1B"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA8"
+  TariffNum: 5376
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA2"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA8"
+  TariffNum: 5478
+  ValidFrom: 2017-06-07
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 90
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 1
   Brand: "1"
 
 bulkload: Tariff
@@ -79442,6 +86739,56 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "GPRS_DSS_FLEX_500MB_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5580
+  ValidFrom: 2017-07-19
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_DSS_FLEX_5GB_UPSELL"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5578
+  ValidFrom: 2017-07-19
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "14104019"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS_FLEX_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
+  TariffNum: 5141
+  ValidFrom: 2017-03-01
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "FLEX_UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON2"
@@ -79671,6 +87018,25 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 93
   BillCode: "DSS"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRS"
+  TZTo[1]: "2400"
+  Price[1]: 1.653
+  Discount[4]: yes
+  PriceList: "CONTRATO28"
+  TariffNum: 5598
+  ValidFrom: 2017-08-23
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "14100001"
   TariffType: 0
   DataType: 4
   Brand: "1"
@@ -80251,6 +87617,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 93
   BillCode: "DSS"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FLEX_500MB_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATO8"
+  TariffNum: 5570
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "FLEX_500MB_UPSELL"
   TariffType: 0
   DataType: 4
   Brand: "1"
@@ -81449,6 +88833,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "GPRSDATA_DUB"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXEDONLY"
+  TariffNum: 5142
+  ValidFrom: 2017-03-07
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "DUB"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "GPRS"
   TZTo[1]: "2400"
   Price[1]: 1.653
@@ -82033,8 +89435,8 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOS"
-  TariffNum: 80629
-  ValidFrom: 2017-04-13
+  TariffNum: 5152
+  ValidFrom: 2017-04-18
   DayType[1]: 1
   ValidTo: 2049-12-31
   TZName[1]: "Off Peak"
@@ -82050,8 +89452,8 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOS"
-  TariffNum: 80630
-  ValidFrom: 2017-04-13
+  TariffNum: 5153
+  ValidFrom: 2017-04-18
   DayType[1]: 1
   ValidTo: 2049-12-31
   TZName[1]: "Off Peak"
@@ -82531,6 +89933,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "FLEX_5GB_UPSELL"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOS"
+  TariffNum: 5566
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "FLEX_5GB_UPSELL"
+  TariffType: 0
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
   BDest: "GPRS"
   TZTo[1]: "2400"
   Discount[4]: yes
@@ -82741,6 +90161,146 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 93
   BillCode: "PREMDUB"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ10"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA10"
+  TariffNum: 5159
+  ValidFrom: 2017-05-29
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ10DATA"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA10"
+  TariffNum: 5158
+  ValidFrom: 2017-05-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ9DATA"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ11"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA11"
+  TariffNum: 5161
+  ValidFrom: 2017-05-29
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ11DATA"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA11"
+  TariffNum: 5160
+  ValidFrom: 2017-05-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ9DATA"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ12"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA12"
+  TariffNum: 5163
+  ValidFrom: 2017-05-29
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ12DATA"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA12"
+  TariffNum: 5162
+  ValidFrom: 2017-05-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ9DATA"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ13"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA13"
+  TariffNum: 5546
+  ValidFrom: 2017-06-20
+  DayType[1]: 1
+  ValidTo: 2049-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ13DATA"
+  DataType: 4
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "GPRSDATA_TARJ9"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "TARJETA13"
+  TariffNum: 5545
+  ValidFrom: 2017-06-20
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 93
+  BillCode: "TARJ9DATA"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -83015,11 +90575,30 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  StartCharge[1]: .3
+  TariffNum: 5167
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 95
+  BillCode: "13104013"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMMMSMO_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   StartCharge[1]: .2
   TariffNum: 4441
   ValidFrom: 2014-07-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-14
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -83144,11 +90723,29 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "COMMON"
+  TariffNum: 5213
+  ValidFrom: 2017-06-15
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 96
+  BillCode: "13104020"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "ROAMMMSMT_EU"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "COMMON"
   StartCharge[1]: .2
   TariffNum: 4443
   ValidFrom: 2014-07-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-14
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -87548,6 +95145,24 @@ bulkload: Tariff
   Brand: "1"
 
 bulkload: Tariff
+  BDest: "INT_FIX_VOICE1000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5569
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1002
+  BillCode: "INT_FIX_VOICE1000"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -87695,9 +95310,47 @@ bulkload: Tariff
   TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .3
+  TariffNum: 5146
+  ValidFrom: 2017-03-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9051"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
   StartCharge[1]: .75
   TariffNum: 4797
   ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2017-02-28
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9052"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .6
+  TariffNum: 5145
+  ValidFrom: 2017-03-01
   DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"
@@ -87718,6 +95371,25 @@ bulkload: Tariff
   TariffNum: 4798
   ValidFrom: 2016-11-01
   DayType[1]: 1
+  ValidTo: 2017-02-28
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9054"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.2
+  TariffNum: 5144
+  ValidFrom: 2017-03-01
+  DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
@@ -87736,6 +95408,25 @@ bulkload: Tariff
   StartCharge[1]: 1.65
   TariffNum: 4799
   ValidFrom: 2016-11-01
+  DayType[1]: 1
+  ValidTo: 2017-02-28
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1061
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "9055"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.2
+  TariffNum: 5143
+  ValidFrom: 2017-03-01
   DayType[1]: 1
   ValidTo: 2052-12-31
   TZName[1]: "Off Peak"
@@ -87756,7 +95447,7 @@ bulkload: Tariff
   TariffNum: 4800
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-02-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -90565,6 +98256,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11810"
   TZTo[1]: "2400"
+  Price[1]: 1.92
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .48
+  TariffNum: 5605
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11810"
+  TZTo[1]: "2400"
   Price[1]: .0149
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -90572,7 +98283,7 @@ bulkload: Tariff
   TariffNum: 4923
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -90725,12 +98436,32 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11818"
   TZTo[1]: "2400"
+  Price[1]: 2.12
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5558
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11818"
+  TZTo[1]: "2400"
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
   TariffNum: 4931
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -90883,6 +98614,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11826"
   TZTo[1]: "2400"
+  Price[1]: 3.13
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.33
+  TariffNum: 5577
+  ValidFrom: 2017-07-13
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11826"
+  TZTo[1]: "2400"
   Price[1]: 2.3933
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -90890,7 +98641,7 @@ bulkload: Tariff
   TariffNum: 4939
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-07-12
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -90963,6 +98714,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11830"
   TZTo[1]: "2400"
+  Price[1]: 2.52
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 2.31
+  TariffNum: 5552
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11830"
+  TZTo[1]: "2400"
   Price[1]: 1.62
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -90970,7 +98741,7 @@ bulkload: Tariff
   TariffNum: 4943
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -91123,6 +98894,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11838"
   TZTo[1]: "2400"
+  Price[1]: 2.44
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 1.94
+  TariffNum: 5555
+  ValidFrom: 2017-06-27
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11838"
+  TZTo[1]: "2400"
   Price[1]: 1.4333
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -91130,7 +98921,7 @@ bulkload: Tariff
   TariffNum: 4951
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-06-26
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -91463,6 +99254,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11855"
   TZTo[1]: "2400"
+  Price[1]: .17
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: .17
+  TariffNum: 5608
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11855"
+  TZTo[1]: "2400"
   Price[1]: .95
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -91470,7 +99281,7 @@ bulkload: Tariff
   TariffNum: 4968
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -91903,6 +99714,26 @@ bulkload: Tariff
 bulkload: Tariff
   BDest: "11877"
   TZTo[1]: "2400"
+  Price[1]: 2.63
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  StartCharge[1]: 3.38
+  TariffNum: 5610
+  ValidFrom: 2017-08-29
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1067
+  BillCode: "F15100023"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "11877"
+  TZTo[1]: "2400"
   Price[1]: 2.62
   Discount[4]: yes
   PriceList: "CONTRATOFIXED"
@@ -91910,7 +99741,7 @@ bulkload: Tariff
   TariffNum: 4990
   ValidFrom: 2016-11-01
   DayType[1]: 1
-  ValidTo: 2052-12-31
+  ValidTo: 2017-08-28
   TZName[1]: "Off Peak"
   TZName[2]: "Peak"
   TZName[3]: "Off Peak"
@@ -92830,6 +100661,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 1081
   BillCode: "F15100027"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "069"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5147
+  ValidFrom: 2017-04-01
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FVMC"
   TariffType: 0
   DataType: 1
   Brand: "1"
@@ -94050,6 +101899,24 @@ bulkload: Tariff
   TZName[3]: "Off Peak"
   CCN: 1081
   BillCode: "CONTDSL_QTY_IN"
+  TariffType: 0
+  DataType: 1
+  Brand: "1"
+
+bulkload: Tariff
+  BDest: "FIX_VOICE1000"
+  TZTo[1]: "2400"
+  Discount[4]: yes
+  PriceList: "CONTRATOFIXED"
+  TariffNum: 5568
+  ValidFrom: 2017-07-05
+  DayType[1]: 1
+  ValidTo: 2052-12-31
+  TZName[1]: "Off Peak"
+  TZName[2]: "Peak"
+  TZName[3]: "Off Peak"
+  CCN: 1081
+  BillCode: "FIX_VOICE1000"
   TariffType: 0
   DataType: 1
   Brand: "1"

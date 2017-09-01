@@ -45,44 +45,6 @@ bulkload: BarringConf
 
 bulkload: BarringConf
   BarringGroup: "Customer"
-  BarringCode: "C_BPSUB"
-  Mask: "0000000010000"
-  AllowedAppIDs: "650"
-  BarringStatus: "active"
-  NWComponent: "BPSUB"
-  NWActParam: "1"
-  UIPriority: 80
-  IFSPriority: 270
-  OldCode: "C_BPSUB"
-
-bulkload: BarringConf
-  BarringGroup: "Customer"
-  BarringCode: "C_BRAIC"
-  Mask: "1000000100000"
-  AllowedAppIDs: "501,502,601,602"
-  BarringStatus: "active"
-  NWComponent: "BARRING"
-  NWActParam: "1020000"
-  NWDeactParam: "0"
-  UIPriority: 60
-  IFSPriority: 250
-  OldCode: "C_BRAIC"
-
-bulkload: BarringConf
-  BarringGroup: "Customer"
-  BarringCode: "C_BRIAP"
-  Mask: "1001000100000"
-  AllowedAppIDs: "501,502,601,602"
-  BarringStatus: "active"
-  NWComponent: "BARRING"
-  NWActParam: "1021000"
-  NWDeactParam: "0"
-  UIPriority: 70
-  IFSPriority: 260
-  OldCode: "C_BRIAP"
-
-bulkload: BarringConf
-  BarringGroup: "Customer"
   BarringCode: "Cust_International_off"
   Mask: "0000000100000"
   AllowedAppIDs: "501,502,601,602"
@@ -130,6 +92,44 @@ bulkload: BarringConf
   UIPriority: 30
   IFSPriority: 220
   OldCode: "C_BPAC"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "C_BPSUB"
+  Mask: "0000000010000"
+  AllowedAppIDs: "650"
+  BarringStatus: "active"
+  NWComponent: "BPSUB"
+  NWActParam: "1"
+  UIPriority: 80
+  IFSPriority: 270
+  OldCode: "C_BPSUB"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "C_BRAIC"
+  Mask: "1000000100000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1020000"
+  NWDeactParam: "0"
+  UIPriority: 60
+  IFSPriority: 250
+  OldCode: "C_BRAIC"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "C_BRIAP"
+  Mask: "1001000100000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1021000"
+  NWDeactParam: "0"
+  UIPriority: 70
+  IFSPriority: 260
+  OldCode: "C_BRIAP"
 
 bulkload: BarringConf
   BarringGroup: "Collections"

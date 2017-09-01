@@ -606,16 +606,6 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 59
   MXName: "PerContract"
-  MXValue: "DATA6"
-
-bulkload: MXItem
-  MXSeq: 59
-  MXName: "PerContract"
-  MXValue: "DATA7"
-
-bulkload: MXItem
-  MXSeq: 59
-  MXName: "PerContract"
   MXValue: "MDUB"
 
 bulkload: MXItem
@@ -647,6 +637,16 @@ bulkload: MXItem
   MXSeq: 59
   MXName: "PerContract"
   MXValue: "DATA5"
+
+bulkload: MXItem
+  MXSeq: 59
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+bulkload: MXItem
+  MXSeq: 59
+  MXName: "PerContract"
+  MXValue: "DATA7"
 
 bulkload: MXItem
   MXSeq: 59
@@ -809,6 +809,71 @@ bulkload: MXItem
   MXValue: "CONT15"
 
 bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL45"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL52"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH45_50"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH52_50"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH55_300"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH62_300"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL58"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH58_50"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH68_300"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONT28"
+
+bulkload: MXItem
+  MXSeq: 80
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH59_50"
+
+bulkload: MXItem
   MXSeq: 82
   MXName: "PerContract"
   MXValue: "CONTM2"
@@ -926,6 +991,11 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 95
   MXName: "SubsTypeFrom"
+  MXValue: "CONT27"
+
+bulkload: MXItem
+  MXSeq: 95
+  MXName: "SubsTypeFrom"
   MXValue: "CONT23"
 
 bulkload: MXItem
@@ -952,6 +1022,16 @@ bulkload: MXItem
   MXSeq: 95
   MXName: "SubsTypeFrom"
   MXValue: "CONT10"
+
+bulkload: MXItem
+  MXSeq: 97
+  MXName: "PerContract"
+  MXValue: "VOICE5000"
+
+bulkload: MXItem
+  MXSeq: 97
+  MXName: "PerContract"
+  MXValue: "SMS5000"
 
 bulkload: MXItem
   MXSeq: 97
@@ -1145,6 +1225,21 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 111
+  MXName: "PerContract"
+  MXValue: "AGILETV"
+
+bulkload: MXItem
+  MXSeq: 111
+  MXName: "PerContract"
+  MXValue: "AGILESKYTV"
+
+bulkload: MXItem
+  MXSeq: 111
+  MXName: "PerContract"
+  MXValue: "TVTERM12-72"
+
+bulkload: MXItem
+  MXSeq: 111
   MXName: "SubsTypeFrom"
   MXValue: "CONTDSL*"
 
@@ -1246,6 +1341,56 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 115
   MXName: "PerContract"
+  MXValue: "VOICE200"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "VOICE5000"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
+
+bulkload: MXItem
+  MXSeq: 115
+  MXName: "PerContract"
   MXValue: "CONT15"
 
 bulkload: MXItem
@@ -1257,11 +1402,6 @@ bulkload: MXItem
   MXSeq: 115
   MXName: "PerContract"
   MXValue: "DATA7"
-
-bulkload: MXItem
-  MXSeq: 115
-  MXName: "PerContract"
-  MXValue: "VOICE100"
 
 bulkload: MXItem
   MXSeq: 115
@@ -1281,6 +1421,26 @@ bulkload: MXItem
 bulkload: MXItem
   MXSeq: 117
   MXName: "PerContract"
+  MXValue: "FLEX_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 117
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 117
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 117
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 117
+  MXName: "PerContract"
   MXValue: "CONT25"
 
 bulkload: MXItem
@@ -1295,13 +1455,28 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 117
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 117
   MXName: "SubsTypeTo"
   MXValue: "CONT25"
 
 bulkload: MXItem
   MXSeq: 119
   MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 119
+  MXName: "PerContract"
   MXValue: "CONT26"
+
+bulkload: MXItem
+  MXSeq: 119
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
 
 bulkload: MXItem
   MXSeq: 119
@@ -1315,8 +1490,28 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 119
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 119
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 119
   MXName: "SubsTypeTo"
   MXValue: "CONT26"
+
+bulkload: MXItem
+  MXSeq: 120
+  MXName: "PerContract"
+  MXValue: "VOICE200"
+
+bulkload: MXItem
+  MXSeq: 120
+  MXName: "PerContract"
+  MXValue: "SMS5000"
 
 bulkload: MXItem
   MXSeq: 120
@@ -1340,8 +1535,63 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 120
+  MXName: "PerContract"
+  MXValue: "VOICE200B"
+
+bulkload: MXItem
+  MXSeq: 120
   MXName: "SubsTypeTo"
   MXValue: "CONT10"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "FLEX_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 121
@@ -1355,8 +1605,63 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 121
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 121
   MXName: "SubsTypeTo"
   MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "FLEX_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 122
@@ -1375,8 +1680,63 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 122
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 122
   MXName: "SubsTypeTo"
   MXValue: "CONTFH59_50"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "FLEX_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 123
@@ -1395,8 +1755,68 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 123
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 123
   MXName: "SubsTypeTo"
   MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "VOICE200"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "FLEX_500MB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "VOICE5000"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 124
@@ -1415,8 +1835,63 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_500MB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 124
+  MXName: "PerContract"
+  MXValue: "VOICE200B"
+
+bulkload: MXItem
+  MXSeq: 124
   MXName: "SubsTypeTo"
   MXValue: "CONTDSL39"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 125
@@ -1435,8 +1910,68 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 125
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 125
   MXName: "SubsTypeTo"
   MXValue: "CONTDSL52"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "VOICE200"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "FLEX_500MB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "VOICE5000"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 126
@@ -1460,8 +1995,73 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_500MB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 126
+  MXName: "PerContract"
+  MXValue: "VOICE200B"
+
+bulkload: MXItem
+  MXSeq: 126
   MXName: "SubsTypeTo"
   MXValue: "CONTFH39_50"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "VOICE200"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "FLEX_500MB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "VOICE5000"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
 
 bulkload: MXItem
   MXSeq: 127
@@ -1482,6 +2082,16 @@ bulkload: MXItem
   MXSeq: 127
   MXName: "PerContract"
   MXValue: "DATA7"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_500MB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 127
+  MXName: "PerContract"
+  MXValue: "VOICE200B"
 
 bulkload: MXItem
   MXSeq: 127
@@ -1510,6 +2120,56 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
+
+bulkload: MXItem
+  MXSeq: 128
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 128
   MXName: "SubsTypeTo"
   MXValue: "CONTFH52_50"
 
@@ -1535,26 +2195,546 @@ bulkload: MXItem
 
 bulkload: MXItem
   MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "INT_FIX_VOICE1000"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "INT_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "SMS5000"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "OFFICE365"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "FAXTOEMAIL"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "CENTRALITA"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "IPFIJA"
+
+bulkload: MXItem
+  MXSeq: 129
+  MXName: "PerContract"
+  MXValue: "DSS_FLEX_5GB_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 129
   MXName: "SubsTypeTo"
   MXValue: "CONTFH62_300"
 
 bulkload: MXItem
-  MXSeq: 847
+  MXSeq: 130
   MXName: "PerContract"
-  MXValue: "CONT27"
+  MXValue: "DUB"
 
 bulkload: MXItem
-  MXSeq: 847
+  MXSeq: 130
   MXName: "PerContract"
   MXValue: "DATA6"
 
 bulkload: MXItem
-  MXSeq: 847
+  MXSeq: 130
   MXName: "PerContract"
   MXValue: "DATA7"
 
 bulkload: MXItem
-  MXSeq: 847
+  MXSeq: 130
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL35"
+
+bulkload: MXItem
+  MXSeq: 131
+  MXName: "PerContract"
+  MXValue: "DUB"
+
+bulkload: MXItem
+  MXSeq: 131
+  MXName: "PerContract"
+  MXValue: "CONTFH300"
+
+bulkload: MXItem
+  MXSeq: 131
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+bulkload: MXItem
+  MXSeq: 131
+  MXName: "PerContract"
+  MXValue: "DATA7"
+
+bulkload: MXItem
+  MXSeq: 131
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH45_300"
+
+bulkload: MXItem
+  MXSeq: 133
+  MXName: "PerContract"
+  MXValue: "DUB"
+
+bulkload: MXItem
+  MXSeq: 133
+  MXName: "PerContract"
+  MXValue: "CONTFH50"
+
+bulkload: MXItem
+  MXSeq: 133
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+bulkload: MXItem
+  MXSeq: 133
+  MXName: "PerContract"
+  MXValue: "DATA7"
+
+bulkload: MXItem
+  MXSeq: 133
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH35_50"
+
+bulkload: MXItem
+  MXSeq: 134
+  MXName: "PerContract"
+  MXValue: "CONT27"
+
+bulkload: MXItem
+  MXSeq: 134
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+bulkload: MXItem
+  MXSeq: 134
+  MXName: "PerContract"
+  MXValue: "DATA7"
+
+bulkload: MXItem
+  MXSeq: 134
   MXName: "SubsTypeTo"
   MXValue: "CONT27"
+
+bulkload: MXItem
+  MXSeq: 135
+  MXName: "PerContract"
+  MXValue: "TARJ10"
+
+bulkload: MXItem
+  MXSeq: 135
+  MXName: "PerContract"
+  MXValue: "TARJ7_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 135
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ10"
+
+bulkload: MXItem
+  MXSeq: 136
+  MXName: "PerContract"
+  MXValue: "TARJ11"
+
+bulkload: MXItem
+  MXSeq: 136
+  MXName: "PerContract"
+  MXValue: "TARJ7_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 136
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ11"
+
+bulkload: MXItem
+  MXSeq: 137
+  MXName: "PerContract"
+  MXValue: "TARJ12"
+
+bulkload: MXItem
+  MXSeq: 137
+  MXName: "PerContract"
+  MXValue: "TARJ7_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 137
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ12"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL39"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH39_50"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH49_300"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL48"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH48_50"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH58_300"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL52"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH52_50"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH62_300"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH59_50"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 138
+  MXName: "SubsTypeTo"
+  MXValue: "CONT10"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL48"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH48_50"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH58_300"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL52"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH52_50"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH62_300"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH59_50"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 140
+  MXName: "SubsTypeTo"
+  MXValue: "CONT15"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL52"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH52_50"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH62_300"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH59_50"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 142
+  MXName: "SubsTypeTo"
+  MXValue: "CONT26"
+
+bulkload: MXItem
+  MXSeq: 144
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 144
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH59_50"
+
+bulkload: MXItem
+  MXSeq: 144
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 144
+  MXName: "SubsTypeTo"
+  MXValue: "CONT25"
+
+bulkload: MXItem
+  MXSeq: 145
+  MXName: "PerContract"
+  MXValue: "TARJ13"
+
+bulkload: MXItem
+  MXSeq: 145
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ13"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "PerContract"
+  MXValue: "CONT28"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "PerContract"
+  MXValue: "DATA6"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "PerContract"
+  MXValue: "DATA7"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "PerContract"
+  MXValue: "GPRS"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL39"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL58"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL59"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL48"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL45"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTDSL52"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeTo"
+  MXValue: "CONTDSL35"
+
+bulkload: MXItem
+  MXSeq: 146
+  MXName: "SubsTypeTo"
+  MXValue: "CONT28"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH39_50"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH52_50"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH59_50"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH48_50"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH45_50"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH58_50"
+
+bulkload: MXItem
+  MXSeq: 147
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH35_50"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH49_300"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH62_300"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH69_300"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH58_300"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH55_300"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeFrom"
+  MXValue: "CONTFH68_300"
+
+bulkload: MXItem
+  MXSeq: 148
+  MXName: "SubsTypeTo"
+  MXValue: "CONTFH45_300"
+
+bulkload: MXItem
+  MXSeq: 149
+  MXName: "SubsTypeFrom"
+  MXValue: "CONT26"
+
+bulkload: MXItem
+  MXSeq: 149
+  MXName: "SubsTypeTo"
+  MXValue: "CONT10"
+
+bulkload: MXItem
+  MXSeq: 149
+  MXName: "SubsTypeTo"
+  MXValue: "CONT15"
+
+bulkload: MXItem
+  MXSeq: 149
+  MXName: "SubsTypeTo"
+  MXValue: "CONT26"
+
+bulkload: MXItem
+  MXSeq: 150
+  MXName: "SubsTypeFrom"
+  MXValue: "CONT25"
+
+bulkload: MXItem
+  MXSeq: 150
+  MXName: "SubsTypeTo"
+  MXValue: "CONT10"
+
+bulkload: MXItem
+  MXSeq: 150
+  MXName: "SubsTypeTo"
+  MXValue: "CONT15"
+
+bulkload: MXItem
+  MXSeq: 150
+  MXName: "SubsTypeTo"
+  MXValue: "CONT26"
+
+bulkload: MXItem
+  MXSeq: 150
+  MXName: "SubsTypeTo"
+  MXValue: "CONT25"
 

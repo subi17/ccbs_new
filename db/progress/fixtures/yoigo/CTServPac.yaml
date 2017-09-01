@@ -2128,6 +2128,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "*1"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "BB"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "BPSUB"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "D_HOTL"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "HSDPA"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "LP"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "LTE"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "SEC"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "SHAPER"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "TMSService"
+  FromDate: 2016-12-12
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "UNSEC"
+  FromDate: 2016-12-12
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-12-12
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONT28"
+  ServPac: "Y_HURP"
+  FromDate: 2016-12-12
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONT4"
   ServPac: "*1"
   FromDate: 2008-09-01
@@ -4352,6 +4464,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "*1"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "BB"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "LP"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "LTE"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "SEC"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "TMSService"
+  FromDate: 2016-11-23
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTDSL35"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-23
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONTDSL39"
   ServPac: "*1"
   FromDate: 2016-11-10
@@ -5760,6 +5984,118 @@ bulkload: CTServPac
 
 bulkload: CTServPac
   Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "*1"
+  FromDate: 2016-10-27
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "BB"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "BPSUB"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "D_HOTL"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "HSDPA"
+  FromDate: 2016-10-27
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "LP"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "LTE"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-10-27
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "SEC"
+  FromDate: 2016-10-27
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "SHAPER"
+  FromDate: 2016-10-27
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "TMSService"
+  FromDate: 2016-10-27
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "UNSEC"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH35_50"
+  ServPac: "Y_HURP"
+  FromDate: 2016-10-27
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
   CLIType: "CONTFH39_50"
   ServPac: "*1"
   FromDate: 2016-11-10
@@ -5977,6 +6313,118 @@ bulkload: CTServPac
 bulkload: CTServPac
   Brand: "1"
   CLIType: "CONTFH40_50"
+  ServPac: "Y_HURP"
+  FromDate: 2016-11-23
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "*1"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "BB"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "BPSUB"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "D_HOTL"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "HSDPA"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "LP"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "LTE"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "NEWPOSTSUB"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "SEC"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-01
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "SHAPER"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "TMSService"
+  FromDate: 2016-11-23
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "UNSEC"
+  FromDate: 2016-11-23
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2016-11-23
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "CONTFH45_300"
   ServPac: "Y_HURP"
   FromDate: 2016-11-23
   ToDate: 2051-12-31
@@ -10043,6 +10491,966 @@ bulkload: CTServPac
   CLIType: "TARJ"
   ServPac: "Y_SARC"
   FromDate: 2008-01-01
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "*2"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "BB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "BPSUB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "D_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "HSDPA"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "LP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "LTE"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "NEWPRESUB"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "OI_SMSB20"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "PREP_VOICE"
+  FromDate: 2015-06-01
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "SEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "SHAPER"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "TMSService"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNC_BPAC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNC_BRAIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNC_BRIAP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNC_LOS"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UND_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UND_HOTLP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UND_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNSEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_HURG"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_HURP_P"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_HURRIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_PRODINT"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "UNY_SARC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ10"
+  ServPac: "Y_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "*2"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "BB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "BPSUB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "D_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "HSDPA"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "LP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "LTE"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "NEWPRESUB"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "OI_SMSB20"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "PREP_VOICE"
+  FromDate: 2015-06-01
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "SEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "SHAPER"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "TMSService"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNC_BPAC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNC_BRAIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNC_BRIAP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNC_LOS"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UND_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UND_HOTLP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UND_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNSEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_HURG"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_HURP_P"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_HURRIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_PRODINT"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "UNY_SARC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ11"
+  ServPac: "Y_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "*2"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "BB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "BPSUB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "D_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "HSDPA"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "LP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "LTE"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "NEWPRESUB"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "OI_SMSB20"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "PREP_VOICE"
+  FromDate: 2015-06-01
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "SEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "SHAPER"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "TMSService"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNC_BPAC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNC_BRAIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNC_BRIAP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNC_LOS"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UND_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UND_HOTLP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UND_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNSEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_HURG"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_HURP_P"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_HURRIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_PRODINT"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "UNY_SARC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ12"
+  ServPac: "Y_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "*2"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 1
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "BB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "BPSUB"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "D_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "HSDPA"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "LP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "LTE"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "NEWPRESUB"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 2
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "OI_SMSB20"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "PREP_VOICE"
+  FromDate: 2015-06-01
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "SEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "SHAPER"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "TMSService"
+  FromDate: 2015-05-29
+  ToDate: 2050-12-31
+  ServType: 4
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNC_BPAC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNC_BRAIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNC_BRIAP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNC_LOS"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UND_HOTL"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UND_HOTLP"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UND_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNSEC"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_HURG"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_HURP"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_HURP_P"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_HURRIC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_PRODINT"
+  FromDate: 2015-05-29
+  ToDate: 2054-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_REST"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "UNY_SARC"
+  FromDate: 2015-05-29
+  ToDate: 2051-12-31
+  ServType: 8
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "VOIPVIDEO"
+  FromDate: 2015-05-29
+  ToDate: 2049-12-31
+  ServType: 3
+
+bulkload: CTServPac
+  Brand: "1"
+  CLIType: "TARJ13"
+  ServPac: "Y_HURP"
+  FromDate: 2015-05-29
   ToDate: 2051-12-31
   ServType: 8
 

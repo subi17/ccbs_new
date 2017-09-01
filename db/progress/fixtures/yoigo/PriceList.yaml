@@ -61,6 +61,15 @@ bulkload: PriceList
   Brand: "1"
 
 bulkload: PriceList
+  PriceList: "CONTRATO28"
+  PLName: "Contrato28"
+  Memo: "Contrato28 subscription type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
   PriceList: "CONTRATO4"
   PLName: "Contrato4"
   Memo: "Contrato 4 subcription type specific price list"
@@ -159,6 +168,15 @@ bulkload: PriceList
   Brand: "1"
 
 bulkload: PriceList
+  PriceList: "CONTRATOFIXEDONLY"
+  PLName: "Fixed only convergent"
+  Memo: "Contrato fixed only pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
   PriceList: "CONTRATOM"
   PLName: "Contrato M"
   Currency: "EUR"
@@ -224,9 +242,185 @@ bulkload: PriceList
   Brand: "1"
 
 bulkload: PriceList
+  PriceList: "PRO_CONT10"
+  PLName: "PRO fee for PRO_CONT10"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONT15"
+  PLName: "PRO fee for PRO_CONT15"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONT25"
+  PLName: "PRO fee for PRO_CONT25"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONT26"
+  PLName: "PRO fee for PRO_CONT26"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTDSL39"
+  PLName: "PRO fee for PRO_CONTDSL39"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTDSL48"
+  PLName: "PRO fee for PRO_CONTDSL48"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTDSL52"
+  PLName: "PRO fee for PRO_CONTDSL52"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTDSL59"
+  PLName: "PRO fee for PRO_CONTDSL59"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH39_50"
+  PLName: "PRO fee for PRO_CONTFH39_50"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH48_50"
+  PLName: "PRO fee for PRO_CONTFH48_50"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH49_300"
+  PLName: "PRO fee for PRO_CONTFH49_300"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH52_50"
+  PLName: "PRO fee for PRO_CONTFH52_50"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH58_300"
+  PLName: "PRO fee for PRO_CONTFH58_300"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH59_50"
+  PLName: "PRO fee for PRO_CONTFH59_50"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH62_300"
+  PLName: "PRO fee for PRO_CONTFH62_300"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "PRO_CONTFH69_300"
+  PLName: "PRO fee for PRO_CONTFH69_300"
+  Memo: "PRO pricelist"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
   PriceList: "TARJETA"
   PLName: "Tarjeta"
   Memo: "Tarjeta subsciption type specific price list"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA10"
+  PLName: "La prepago de 1 GB"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA11"
+  PLName: "La prepago de 2 GB"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA12"
+  PLName: "La prepago de 4 GB"
+  Currency: "EUR"
+  Rounding: 4
+  InclVAT: FALSE
+  Brand: "1"
+
+bulkload: PriceList
+  PriceList: "TARJETA13"
+  PLName: "La prepago de llamadas ilimitadas"
   Currency: "EUR"
   Rounding: 4
   InclVAT: FALSE

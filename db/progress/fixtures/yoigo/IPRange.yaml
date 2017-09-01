@@ -1,4 +1,18 @@
 bulkload: IPRange
+  NetworkAddress: "103.67.220.16"
+  Netmask: 28
+  FirstIP: 1732500496
+  LastIP: 1732500511
+  PLMN: "LIEMK"
+
+bulkload: IPRange
+  NetworkAddress: "103.67.220.48"
+  Netmask: 28
+  FirstIP: 1732500528
+  LastIP: 1732500543
+  PLMN: "LIEMK"
+
+bulkload: IPRange
   NetworkAddress: "109.166.204.0"
   Netmask: 24
   FirstIP: 1839647744
@@ -293,6 +307,34 @@ bulkload: IPRange
   PLMN: "HRVT2"
 
 bulkload: IPRange
+  NetworkAddress: "138.188.1.112"
+  Netmask: 28
+  FirstIP: 2327576944
+  LastIP: 2327576959
+  PLMN: "LIEMK"
+
+bulkload: IPRange
+  NetworkAddress: "138.188.1.224"
+  Netmask: 28
+  FirstIP: 2327577056
+  LastIP: 2327577071
+  PLMN: "LIEMK"
+
+bulkload: IPRange
+  NetworkAddress: "138.188.1.240"
+  Netmask: 28
+  FirstIP: 2327577072
+  LastIP: 2327577087
+  PLMN: "LIEMK"
+
+bulkload: IPRange
+  NetworkAddress: "138.188.1.96"
+  Netmask: 28
+  FirstIP: 2327576928
+  LastIP: 2327576943
+  PLMN: "LIEMK"
+
+bulkload: IPRange
   NetworkAddress: "139.7.128.0"
   Netmask: 20
   FirstIP: 2332524544
@@ -403,6 +445,13 @@ bulkload: IPRange
   FirstIP: 2433174400
   LastIP: 2433174527
   PLMN: "NLDPT"
+
+bulkload: IPRange
+  NetworkAddress: "146.133.127.32"
+  Netmask: 30
+  FirstIP: 2458222368
+  LastIP: 2458222371
+  PLMN: "ITASI"
 
 bulkload: IPRange
   NetworkAddress: "149.254.0.0"
@@ -633,6 +682,20 @@ bulkload: IPRange
   Netmask: 29
   FirstIP: 2698651936
   LastIP: 2698651943
+  PLMN: "CZEET"
+
+bulkload: IPRange
+  NetworkAddress: "160.218.41.64"
+  Netmask: 28
+  FirstIP: 2698651968
+  LastIP: 2698651983
+  PLMN: "CZEET"
+
+bulkload: IPRange
+  NetworkAddress: "160.218.41.96"
+  Netmask: 28
+  FirstIP: 2698652000
+  LastIP: 2698652015
   PLMN: "CZEET"
 
 bulkload: IPRange
@@ -997,6 +1060,69 @@ bulkload: IPRange
   Netmask: 24
   FirstIP: 3239107328
   LastIP: 3239107583
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.160"
+  Netmask: 29
+  FirstIP: 3239107488
+  LastIP: 3239107495
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.168"
+  Netmask: 29
+  FirstIP: 3239107496
+  LastIP: 3239107503
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.176"
+  Netmask: 29
+  FirstIP: 3239107504
+  LastIP: 3239107511
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.192"
+  Netmask: 27
+  FirstIP: 3239107520
+  LastIP: 3239107551
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.224"
+  Netmask: 28
+  FirstIP: 3239107552
+  LastIP: 3239107567
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.240"
+  Netmask: 28
+  FirstIP: 3239107568
+  LastIP: 3239107583
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.32"
+  Netmask: 29
+  FirstIP: 3239107360
+  LastIP: 3239107367
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.64"
+  Netmask: 27
+  FirstIP: 3239107392
+  LastIP: 3239107423
+  PLMN: "GRCCO"
+
+bulkload: IPRange
+  NetworkAddress: "193.16.219.96"
+  Netmask: 27
+  FirstIP: 3239107424
+  LastIP: 3239107455
   PLMN: "GRCCO"
 
 bulkload: IPRange
@@ -1967,10 +2093,24 @@ bulkload: IPRange
   PLMN: "SWEIQ"
 
 bulkload: IPRange
+  NetworkAddress: "213.102.161.64"
+  Netmask: 26
+  FirstIP: 3580272960
+  LastIP: 3580273023
+  PLMN: "SWEIQ"
+
+bulkload: IPRange
   NetworkAddress: "213.102.162.0"
   Netmask: 24
   FirstIP: 3580273152
   LastIP: 3580273407
+
+bulkload: IPRange
+  NetworkAddress: "213.102.162.144"
+  Netmask: 28
+  FirstIP: 3580273296
+  LastIP: 3580273311
+  PLMN: "HRVT2"
 
 bulkload: IPRange
   NetworkAddress: "213.102.162.16"
@@ -1978,6 +2118,13 @@ bulkload: IPRange
   FirstIP: 3580273168
   LastIP: 3580273175
   PLMN: "HRVT2"
+
+bulkload: IPRange
+  NetworkAddress: "213.102.162.64"
+  Netmask: 26
+  FirstIP: 3580273216
+  LastIP: 3580273279
+  PLMN: "SWEIQ"
 
 bulkload: IPRange
   NetworkAddress: "213.102.49.32"
@@ -2715,6 +2862,20 @@ bulkload: IPRange
   PLMN: "ITASI"
 
 bulkload: IPRange
+  NetworkAddress: "217.213.161.104"
+  Netmask: 31
+  FirstIP: 3654656360
+  LastIP: 3654656361
+  PLMN: "ESTEM"
+
+bulkload: IPRange
+  NetworkAddress: "217.213.161.120"
+  Netmask: 31
+  FirstIP: 3654656376
+  LastIP: 3654656377
+  PLMN: "ESTEM"
+
+bulkload: IPRange
   NetworkAddress: "217.214.135.0"
   Netmask: 24
   FirstIP: 3654715136
@@ -2848,6 +3009,13 @@ bulkload: IPRange
   PLMN: "HUNH1"
 
 bulkload: IPRange
+  NetworkAddress: "31.170.47.0"
+  Netmask: 27
+  FirstIP: 531246848
+  LastIP: 531246879
+  PLMN: "ITASI"
+
+bulkload: IPRange
   NetworkAddress: "4.15.38.105"
   Netmask: 32
   FirstIP: 68101737
@@ -2867,6 +3035,20 @@ bulkload: IPRange
   FirstIP: 780449280
   LastIP: 780449535
   PLMN: "FINTF"
+
+bulkload: IPRange
+  NetworkAddress: "46.44.193.192"
+  Netmask: 28
+  FirstIP: 774685120
+  LastIP: 774685135
+  PLMN: "ITASI"
+
+bulkload: IPRange
+  NetworkAddress: "46.44.193.64"
+  Netmask: 28
+  FirstIP: 774684992
+  LastIP: 774685007
+  PLMN: "ITASI"
 
 bulkload: IPRange
   NetworkAddress: "47.73.161.0"
@@ -3507,9 +3689,9 @@ bulkload: IPRange
 
 bulkload: IPRange
   NetworkAddress: "80.95.226.0"
-  Netmask: 28
+  Netmask: 24
   FirstIP: 1348461056
-  LastIP: 1348461071
+  LastIP: 1348461311
   PLMN: "SVNSM"
 
 bulkload: IPRange
@@ -3559,6 +3741,13 @@ bulkload: IPRange
   Netmask: 29
   FirstIP: 1348461128
   LastIP: 1348461135
+  PLMN: "SVNSM"
+
+bulkload: IPRange
+  NetworkAddress: "80.95.227.0"
+  Netmask: 24
+  FirstIP: 1348461312
+  LastIP: 1348461567
   PLMN: "SVNSM"
 
 bulkload: IPRange
@@ -3902,6 +4091,13 @@ bulkload: IPRange
   Netmask: 26
   FirstIP: 1538907392
   LastIP: 1538907455
+  PLMN: "SVNVG"
+
+bulkload: IPRange
+  NetworkAddress: "91.185.221.64"
+  Netmask: 28
+  FirstIP: 1538907456
+  LastIP: 1538907471
   PLMN: "SVNVG"
 
 bulkload: IPRange

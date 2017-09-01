@@ -120,8 +120,13 @@ bulkload: OrderFunction
 
 bulkload: OrderFunction
   OFID: 57
-  OFName: "Release in control with secure"
+  OFName: "Release in control with secure Correos"
   OFModule: "Mc/orderinctrl.p,iiOrderId,1"
+
+bulkload: OrderFunction
+  OFID: 58
+  OFName: "Release in control with secure POS"
+  OFModule: "Mc/orderinctrl.p,iiOrderId,2"
 
 bulkload: OrderFunction
   OFID: 59

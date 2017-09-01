@@ -23,7 +23,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 3
-  LineType: 0
   BaseBundle: "MM_CERO"
 
 bulkload: CLIType
@@ -38,7 +37,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 13.967
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_CERO_5GB"
 
@@ -54,7 +52,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 13.967
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_MAS_1GB"
 
@@ -70,7 +67,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 16.446
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_MAS_3GB"
 
@@ -86,7 +82,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 22.231
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_MAS_8GB"
 
@@ -102,7 +97,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 24.711
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_NET_10GB"
 
@@ -118,7 +112,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 32.975
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_NET_20GB"
 
@@ -134,7 +127,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 74.298
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_NET_50GB"
 
@@ -150,7 +142,6 @@ bulkload: CLIType
   ArAccNum: 43000000
   PayType: 1
   CommercialFee: 16.446
-  LineType: 0
   UsageType: 2
   BaseBundle: "MM_NET_5GB"
 

@@ -383,7 +383,7 @@ bulkload: FuncRunParam
   ParamType: "date"
   ParamName: "Invoice Date"
   ParamSeq: 1
-  DefaultValue: "?"
+  DefaultValue: ?
 
 bulkload: FuncRunParam
   FRConfigID: 12

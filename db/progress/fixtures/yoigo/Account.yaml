@@ -293,6 +293,11 @@ bulkload: Account
   Brand: "1"
 
 bulkload: Account
+  AccNum: 55390000
+  AccType: 55
+  Brand: "1"
+
+bulkload: Account
   AccNum: 55551111
   AccName: "Own usage"
   AccType: 24
@@ -575,6 +580,12 @@ bulkload: Account
   Brand: "1"
 
 bulkload: Account
+  AccNum: 70518100
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
   AccNum: 70518107
   AccName: "Revenue"
   AccType: 12
@@ -594,6 +605,12 @@ bulkload: Account
 
 bulkload: Account
   AccNum: 70518111
+  AccName: "Revenue"
+  AccType: 12
+  Brand: "1"
+
+bulkload: Account
+  AccNum: 70525000
   AccName: "Revenue"
   AccType: 12
   Brand: "1"

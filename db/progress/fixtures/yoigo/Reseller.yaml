@@ -1,4 +1,25 @@
 bulkload: Reseller
+  Reseller: "AA"
+  RsName: "Advanced Analytics"
+  EMail: "gonzalo.garrido.arsuaga@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "AB"
+  RsName: "B12 CROSS-SELLING"
+  EMail: "lisandro.racedo@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "AE"
+  RsName: "AON CROSS-SELLING OUTBOUND"
+  EMail: "lisandro.racedo@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "AF"
   RsName: "AMPLIFFICA"
   EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
@@ -25,6 +46,7 @@ bulkload: Reseller
   EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
   Brand: "1"
   EntityCode: 99
+  Active: FALSE
 
 bulkload: Reseller
   Reseller: "AN"
@@ -50,6 +72,20 @@ bulkload: Reseller
   FUC2: "332296854"
 
 bulkload: Reseller
+  Reseller: "AT"
+  RsName: "ATAKAM DISTRIBUCION ONLINE"
+  EMail: "teobaldo.gomez@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "AW"
+  RsName: "AON WEB"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "AX"
   RsName: "AXIA"
   EMail: "Ignacio.Larragan.Silva@yoigo.com"
@@ -59,11 +95,20 @@ bulkload: Reseller
   FUC2: "332296599"
 
 bulkload: Reseller
+  Reseller: "B12 WEB"
+  RsName: "BW"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+  Active: FALSE
+
+bulkload: Reseller
   Reseller: "BC"
   RsName: "BackOffice Fusion"
   EMail: "Sonia.Borrega.Bahon@yoigo.com"
   Brand: "1"
   EntityCode: 99
+  Active: FALSE
 
 bulkload: Reseller
   Reseller: "BE"
@@ -96,6 +141,13 @@ bulkload: Reseller
   EntityCode: 99
 
 bulkload: Reseller
+  Reseller: "BN"
+  RsName: "B12 Outbound"
+  EMail: "roberto.beltran@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "BO"
   RsName: "Backoffice Convergencia"
   EMail: "Sonia.Borrega.Bahon@yoigo.com"
@@ -106,6 +158,20 @@ bulkload: Reseller
   Reseller: "BR"
   RsName: "BYMOVIL RECEPCION"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "BT"
+  RsName: "B12 DISTRIBUCION ONLINE"
+  EMail: "teobaldo.gomez@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "BW"
+  RsName: "B12 WEB"
+  EMail: "cristina.munoz@masmovil.com"
   Brand: "1"
   EntityCode: 99
 
@@ -126,6 +192,13 @@ bulkload: Reseller
   Active: FALSE
 
 bulkload: Reseller
+  Reseller: "CE"
+  RsName: "CANAL EXCLUSIVO NEGOCIOS"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "CL"
   RsName: "CASTURTEL LEON"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
@@ -140,6 +213,20 @@ bulkload: Reseller
   Brand: "1"
   EntityCode: 99
   Active: FALSE
+
+bulkload: Reseller
+  Reseller: "CN"
+  RsName: "CANCELACIONES MARKTEL"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "CO"
+  RsName: "EOS Outbound"
+  EMail: "roberto.beltran@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
 
 bulkload: Reseller
   Reseller: "CP"
@@ -164,6 +251,20 @@ bulkload: Reseller
   EntityCode: 99
 
 bulkload: Reseller
+  Reseller: "CW"
+  RsName: "Carrito Web"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "D2"
+  RsName: "DOOR TO DOOR"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "DX"
   RsName: "DEXTRA"
   EMail: "Ignacio.Larragan.Silva@yoigo.com"
@@ -171,6 +272,13 @@ bulkload: Reseller
   EntityCode: 41
   FUC1: "323841577"
   FUC2: "332296698"
+
+bulkload: Reseller
+  Reseller: "EB"
+  RsName: "EMERGIA BACKOFFICE"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
 
 bulkload: Reseller
   Reseller: "EC"
@@ -188,6 +296,13 @@ bulkload: Reseller
   Active: FALSE
 
 bulkload: Reseller
+  Reseller: "EO"
+  RsName: "CELLCOM EMISION"
+  EMail: "luis.estrada@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "FM"
   RsName: "FILMAMADRID"
   EMail: "marta.delarosa@yoigo.es"
@@ -195,9 +310,37 @@ bulkload: Reseller
   Active: FALSE
 
 bulkload: Reseller
+  Reseller: "FR"
+  RsName: "FACTORIA INBOUND OF"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "FW"
+  RsName: "FACTORIA INBOUND ON"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "GC"
+  RsName: "GSS CARTERA"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "GE"
   RsName: "GSS EMISION"
   EMail: "maria.barreiro.sanisidro@ext.yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "GM"
+  RsName: "GSS MADRID OUTBOUND"
+  EMail: "jose.encinas@masmovil.com"
   Brand: "1"
   EntityCode: 99
 
@@ -209,9 +352,23 @@ bulkload: Reseller
   EntityCode: 99
 
 bulkload: Reseller
+  Reseller: "GW"
+  RsName: "GSS WEB"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "HI"
   RsName: "HIPERCOR"
   EMail: "marta.delarosa@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "KC"
+  RsName: "KONECTA CARTERA"
+  EMail: "jose.encinas@masmovil.com"
   Brand: "1"
   EntityCode: 99
 
@@ -225,9 +382,44 @@ bulkload: Reseller
   FUC2: "332296730"
 
 bulkload: Reseller
+  Reseller: "KN"
+  RsName: "KONECTA OUTBOUND"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "KR"
   RsName: "KONECTA RECEPCION"
   EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "KW"
+  RsName: "KONECTA WEB"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MA"
+  RsName: "MADISON OUTBOUND"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MB"
+  RsName: "MARKTEL BO CANCELACIONES"
+  EMail: "sara.massa@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MC"
+  RsName: "MADISON CARTERA"
+  EMail: "jose.encinas@masmovil.com"
   Brand: "1"
   EntityCode: 99
 
@@ -241,12 +433,68 @@ bulkload: Reseller
   FUC2: "332296698"
 
 bulkload: Reseller
+  Reseller: "MI"
+  RsName: "MARKTEL INBOUND"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MK"
+  RsName: "MARKTEL CROSS-SELLING"
+  EMail: "lisandro.racedo@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "MM"
   RsName: "MEDIAMARKT"
   EMail: "Ignacio.Larragan.Silva@yoigo.com"
   Brand: "1"
   EntityCode: 99
   Active: FALSE
+
+bulkload: Reseller
+  Reseller: "MO"
+  RsName: "MARKTEL ONLINE"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MR"
+  RsName: "MARKTEL INBOUND OF"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MT"
+  RsName: "MARKTEL OUTBOUND"
+  EMail: "jose.encinas@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "MW"
+  RsName: "MARKTEL INBOUND ON"
+  EMail: "cristina.munoz@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "N2"
+  RsName: "N2 Averias Convergencia"
+  EMail: "jorge.gil@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "PA"
+  RsName: "PHONE HOUSE CROSS-SELLING"
+  EMail: "lisandro.racedo@mamsmovil.com"
+  Brand: "1"
+  EntityCode: 99
 
 bulkload: Reseller
   Reseller: "PE"
@@ -283,6 +531,13 @@ bulkload: Reseller
   Reseller: "RC"
   RsName: "CASTURTEL RECEPCION"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
+  Reseller: "SE"
+  RsName: "SERVINFORM Outbound"
+  EMail: "roberto.beltran@masmovil.com"
   Brand: "1"
   EntityCode: 99
 
@@ -365,12 +620,26 @@ bulkload: Reseller
   Active: FALSE
 
 bulkload: Reseller
+  Reseller: "VD"
+  RsName: "B2B ULTRATACTICA"
+  EMail: "sergio.garde@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
+
+bulkload: Reseller
   Reseller: "WH"
   RsName: "WHISBI"
   EMail: "maria.barreiro.sanisidro@yoigo.com"
   Brand: "1"
   EntityCode: 99
   Active: FALSE
+
+bulkload: Reseller
+  Reseller: "XA"
+  RsName: "Anexa"
+  EMail: "antonio.guijarro@masmovil.com"
+  Brand: "1"
+  EntityCode: 99
 
 bulkload: Reseller
   Reseller: "YC"

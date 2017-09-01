@@ -1,5 +1,6 @@
-TMSPass3: TMSPass
+bulkload: TMSPass
   UserCode: "yoigo"
   Password: "yoigo"
   CreateTS: 20400101
   Creator: "yoigo"
+

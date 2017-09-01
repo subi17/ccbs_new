@@ -1,4 +1,46 @@
 bulkload: Matrix
+  MXName: "Additional line CONT10"
+  MXKey: "ADDLINE"
+  MXSeq: 138
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Additional line CONT15"
+  MXKey: "ADDLINE"
+  MXSeq: 140
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Additional line CONT26"
+  MXKey: "ADDLINE"
+  MXSeq: 142
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Additional line CONT25"
+  MXKey: "ADDLINE"
+  MXSeq: 144
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Additional line CONT26"
+  MXKey: "ADDLINEHM"
+  MXSeq: 149
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Additional line CONT25"
+  MXKey: "ADDLINEHM"
+  MXSeq: 150
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
   MXName: "Data bundle change"
   MXKey: "BTC-DENY"
   MXSeq: 21
@@ -74,6 +116,27 @@ bulkload: Matrix
   MXSeq: 112
   MXRes: 1
   Prior: 2
+
+bulkload: Matrix
+  MXName: "Convergent to Fixed STC"
+  MXKey: "CONVFIXEDSTC"
+  MXSeq: 146
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Convergent to Fixed STC"
+  MXKey: "CONVFIXEDSTC"
+  MXSeq: 147
+  MXRes: 1
+  Prior: 1
+
+bulkload: Matrix
+  MXName: "Convergent to Fixed STC"
+  MXKey: "CONVFIXEDSTC"
+  MXSeq: 148
+  MXRes: 1
+  Prior: 1
 
 bulkload: Matrix
   MXName: "denied modules"
@@ -419,11 +482,67 @@ bulkload: Matrix
   Prior: 52
 
 bulkload: Matrix
-  MXName: "CONT27"
+  MXName: "CONTDSL35"
   MXKey: "PERCONTR"
-  MXSeq: 847
+  MXSeq: 130
   MXRes: 1
   Prior: 53
+
+bulkload: Matrix
+  MXName: "CONTFH45_300"
+  MXKey: "PERCONTR"
+  MXSeq: 131
+  MXRes: 1
+  Prior: 54
+
+bulkload: Matrix
+  MXName: "CONTFH35_50"
+  MXKey: "PERCONTR"
+  MXSeq: 133
+  MXRes: 1
+  Prior: 55
+
+bulkload: Matrix
+  MXName: "CONT27"
+  MXKey: "PERCONTR"
+  MXSeq: 134
+  MXRes: 1
+  Prior: 56
+
+bulkload: Matrix
+  MXName: "TARJ10"
+  MXKey: "PERCONTR"
+  MXSeq: 135
+  MXRes: 1
+  Prior: 57
+
+bulkload: Matrix
+  MXName: "TARJ11"
+  MXKey: "PERCONTR"
+  MXSeq: 136
+  MXRes: 1
+  Prior: 58
+
+bulkload: Matrix
+  MXName: "TARJ12"
+  MXKey: "PERCONTR"
+  MXSeq: 137
+  MXRes: 1
+  Prior: 59
+
+bulkload: Matrix
+  MXName: "TARJ13"
+  MXKey: "PERCONTR"
+  MXSeq: 145
+  MXRes: 1
+  Prior: 60
+
+bulkload: Matrix
+  MXName: "CONT28"
+  MXKey: "PERCONTR"
+  MXSeq: 146
+  MXRes: 1
+  Prior: 61
 
 bulkload: Matrix
   MXName: "ST CHANGE"

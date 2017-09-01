@@ -11,6 +11,11 @@ bulkload: FeeModel
   FMGroup: 1
 
 bulkload: FeeModel
+  FeeModel: "AGILETVMF"
+  FeeName: "Agile TV Service"
+  Brand: "1"
+
+bulkload: FeeModel
   FeeModel: "BALANCE_PREPAID"
   FeeName: "Balance Query Prepaid"
   Brand: "1"
@@ -61,6 +66,11 @@ bulkload: FeeModel
   FeeName: "Cargo_20euros"
   Brand: "1"
   FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CentralitaPROMF"
+  FeeName: "Centralita Monthly Fee"
+  Brand: "1"
 
 bulkload: FeeModel
   FeeModel: "Compensa 10"
@@ -161,6 +171,11 @@ bulkload: FeeModel
 bulkload: FeeModel
   FeeModel: "CONT27MF"
   FeeName: "LA INFINITA 2 GB DTO."
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "CONT28MF"
+  FeeName: "Línea móvil extra"
   Brand: "1"
 
 bulkload: FeeModel
@@ -476,6 +491,26 @@ bulkload: FeeModel
   FMGroup: 1
 
 bulkload: FeeModel
+  FeeModel: "FAXTOEMAILMF"
+  FeeName: "FAX TO EMAIL"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "FLEX_500MB_UPSELLMF"
+  FeeName: "500MB Flex Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "FLEX_5GB_UPSELLMF"
+  FeeName: "5GB Flex Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "FLEX_MFUPS"
+  FeeName: "Flex upsell monthly fee"
+  Brand: "1"
+
+bulkload: FeeModel
   FeeModel: "FTERMPERIOD"
   FeeName: "Fixed line contract termination"
   Brand: "1"
@@ -503,6 +538,11 @@ bulkload: FeeModel
   FeeName: "Importe descontado"
   Brand: "1"
   FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "IPFIJAMF"
+  FeeName: "IP FIJA"
+  Brand: "1"
 
 bulkload: FeeModel
   FeeModel: "MDUB2MF"
@@ -629,6 +669,11 @@ bulkload: FeeModel
   FeeModel: "MSISDN_PREPAID"
   Brand: "1"
   FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "OFFICE365MF"
+  FeeName: "OFFICE 365 Essentials"
+  Brand: "1"
 
 bulkload: FeeModel
   FeeModel: "PAYDELSIM"
@@ -774,12 +819,6 @@ bulkload: FeeModel
   FeeModel: "PMDUBFee"
   FeeName: "Prepaid BONO8 Fee"
   Brand: "1"
-
-bulkload: FeeModel
-  FeeModel: "Pos123"
-  FeeName: "TestCharge"
-  Brand: "1"
-  FMGroup: 1
 
 bulkload: FeeModel
   FeeModel: "POSMNP10"
@@ -3142,6 +3181,26 @@ bulkload: FeeModel
   Brand: "1"
 
 bulkload: FeeModel
+  FeeModel: "PRETARJ10BUNDLE"
+  FeeName: "La prepago de 1 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRETARJ11BUNDLE"
+  FeeName: "La prepago de 2 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRETARJ12BUNDLE"
+  FeeName: "La prepago de 4 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "PRETARJ13BUNDLE"
+  FeeName: "La prepago de llamadas ilimitadas"
+  Brand: "1"
+
+bulkload: FeeModel
   FeeModel: "RECONNECTION"
   FeeName: "Reconnection Fee"
   Brand: "1"
@@ -3313,12 +3372,6 @@ bulkload: FeeModel
   Brand: "1"
 
 bulkload: FeeModel
-  FeeModel: "TESTSK"
-  FeeName: "TestSK"
-  Brand: "1"
-  FMGroup: 1
-
-bulkload: FeeModel
   FeeModel: "TOPUPCAMP20"
   FeeName: "TopUp Campaign"
   Brand: "1"
@@ -3339,6 +3392,11 @@ bulkload: FeeModel
   Brand: "1"
 
 bulkload: FeeModel
+  FeeModel: "TVTERMPERIODPF"
+  FeeName: "TV Permanency Contract"
+  Brand: "1"
+
+bulkload: FeeModel
   FeeModel: "UPSELL_PMDUBFee"
   FeeName: "PMDUB UPSELL Fee"
   Brand: "1"
@@ -3354,6 +3412,11 @@ bulkload: FeeModel
   FeeName: "UsoNoRazonable"
   Brand: "1"
   FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "VOICE200BMF"
+  FeeName: "Voice 200 package"
+  Brand: "1"
 
 bulkload: FeeModel
   FeeModel: "X9305871W"

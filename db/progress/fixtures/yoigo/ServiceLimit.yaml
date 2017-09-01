@@ -61,10 +61,10 @@ bulkload: ServiceLimit
   SLCode: "CONT23_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONT24"
@@ -94,10 +94,10 @@ bulkload: ServiceLimit
   SLCode: "CONT24_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONT25"
@@ -117,10 +117,10 @@ bulkload: ServiceLimit
   SLCode: "CONT25_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-12-12
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONT25"
@@ -130,7 +130,7 @@ bulkload: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2016-12-12
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-30
 
 bulkload: ServiceLimit
   GroupCode: "CONT26"
@@ -150,10 +150,10 @@ bulkload: ServiceLimit
   SLCode: "CONT26_MIN"
   SLName: "National calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2017-02-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONT26"
@@ -163,42 +163,45 @@ bulkload: ServiceLimit
   InclUnit: 7
   InclAmt: 300
   ValidFrom: 2017-02-01
-  ValidTo: 2049-12-31
+  ValidTo: 2017-04-30
 
 bulkload: ServiceLimit
   GroupCode: "CONT27"
-  SLSeq: 144
+  SLSeq: 145
   WebDisp: 0
   DialType: 7
   SLCode: "CONT27_DATA"
   SLName: "Data"
   InclUnit: 4
   InclAmt: 2048
-  ValidFrom: 2017-04-13
-  ValidTo: 2049-12-31
-
-bulkload: ServiceLimit
-  GroupCode: "CONT27"
-  SLSeq: 145
-  WebDisp: 0
-  DialType: 4
-  SLCode: "CONT27_MIN"
-  SLName: "National calls"
-  InclUnit: 1
-  InclAmt: 5000
-  ValidFrom: 2017-04-13
+  ValidFrom: 2017-04-18
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
   GroupCode: "CONT27"
   SLSeq: 146
   WebDisp: 0
-  SLCode: "CONT27_QTY"
-  SLName: "BDest"
-  InclUnit: 7
-  InclAmt: 300
-  ValidFrom: 2017-04-13
+  DialType: 4
+  SLCode: "CONT27_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 45000
+  ValidFrom: 2017-04-18
   ValidTo: 2049-12-31
+  BDestLimit: 10000
+
+bulkload: ServiceLimit
+  GroupCode: "CONT28"
+  SLSeq: 165
+  WebDisp: 0
+  DialType: 4
+  SLCode: "CONT28_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 45000
+  ValidFrom: 2017-08-21
+  ValidTo: 2049-12-31
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONT9"
@@ -375,7 +378,7 @@ bulkload: ServiceLimit
   SLCode: "CONTDSL_QTY"
   SLName: "BDest"
   InclUnit: 7
-  InclAmt: 120
+  InclAmt: 10000
   ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
 
@@ -600,7 +603,7 @@ bulkload: ServiceLimit
   SLCode: "CONTFH300_QTY"
   SLName: "BDest"
   InclUnit: 7
-  InclAmt: 120
+  InclAmt: 10000
   ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
 
@@ -622,7 +625,7 @@ bulkload: ServiceLimit
   SLCode: "CONTFH50_QTY"
   SLName: "BDest"
   InclUnit: 7
-  InclAmt: 120
+  InclAmt: 10000
   ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
 
@@ -699,10 +702,10 @@ bulkload: ServiceLimit
   SLCode: "CONTS12_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS15"
@@ -721,10 +724,10 @@ bulkload: ServiceLimit
   SLCode: "S15_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS16"
@@ -754,10 +757,10 @@ bulkload: ServiceLimit
   SLCode: "S16_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS20"
@@ -787,10 +790,10 @@ bulkload: ServiceLimit
   SLCode: "S20_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS21"
@@ -820,10 +823,10 @@ bulkload: ServiceLimit
   SLCode: "S21_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS25"
@@ -853,10 +856,10 @@ bulkload: ServiceLimit
   SLCode: "S25_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS26"
@@ -886,10 +889,10 @@ bulkload: ServiceLimit
   SLCode: "S26_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS2GB"
@@ -909,10 +912,10 @@ bulkload: ServiceLimit
   SLCode: "CONTS2GB_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-27
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS30"
@@ -942,10 +945,10 @@ bulkload: ServiceLimit
   SLCode: "S30_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS32"
@@ -975,10 +978,10 @@ bulkload: ServiceLimit
   SLCode: "S32_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS35"
@@ -1008,10 +1011,10 @@ bulkload: ServiceLimit
   SLCode: "S35_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTS39"
@@ -1041,10 +1044,10 @@ bulkload: ServiceLimit
   SLCode: "S39_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTSF10"
@@ -1074,10 +1077,10 @@ bulkload: ServiceLimit
   SLCode: "SF10_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "CONTSF14"
@@ -1107,10 +1110,10 @@ bulkload: ServiceLimit
   SLCode: "SF14_MIN"
   SLName: "National Calls"
   InclUnit: 1
-  InclAmt: 5000
+  InclAmt: 45000
   ValidFrom: 2016-10-01
   ValidTo: 2049-12-31
-  BDestLimit: 300
+  BDestLimit: 10000
 
 bulkload: ServiceLimit
   GroupCode: "DATA200_UPSELL"
@@ -1234,6 +1237,30 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
+  GroupCode: "DSS_FLEX_500MB_UPSELL"
+  SLSeq: 163
+  WebDisp: 0
+  DialType: 7
+  SLCode: "DSS_FLEX_500MB_UPSELL"
+  SLName: "DSS Flex 500MB Upsell"
+  InclUnit: 4
+  InclAmt: 500
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "DSS_FLEX_5GB_UPSELL"
+  SLSeq: 164
+  WebDisp: 0
+  DialType: 7
+  SLCode: "DSS_FLEX_5GB_UPSELL"
+  SLName: "DSS 5GB Flex Upsell"
+  InclUnit: 4
+  InclAmt: 5120
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
   GroupCode: "DSS_UPSELL"
   SLSeq: 29
   WebDisp: 0
@@ -1293,6 +1320,50 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
+  GroupCode: "FIX_VOICE1000"
+  SLSeq: 157
+  DialType: 1
+  SLCode: "FIX_VOICE1000_MIN"
+  SLName: "National fixed calls"
+  InclUnit: 1
+  InclAmt: 1000
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "FLEX_500MB_UPSELL"
+  SLSeq: 161
+  DialType: 7
+  SLCode: "FLEX_500MB_UPSELL"
+  SLName: "500MB Mobile Data Upsell"
+  InclUnit: 4
+  InclAmt: 500
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "FLEX_5GB_UPSELL"
+  SLSeq: 162
+  DialType: 7
+  SLCode: "FLEX_5GB_UPSELL"
+  SLName: "5GB Mobile Data Upsell"
+  InclUnit: 4
+  InclAmt: 5120
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "FLEX_UPSELL"
+  SLSeq: 144
+  DialType: 7
+  SLCode: "FLEX_UPSELL"
+  SLName: "Flex upsell"
+  InclUnit: 4
+  InclAmt: 25600
+  ValidFrom: 2017-03-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
   GroupCode: "FREE100MINUTES"
   SLSeq: 113
   WebDisp: 0
@@ -1315,6 +1386,28 @@ bulkload: ServiceLimit
   InclUnit: 4
   InclAmt: 60
   ValidFrom: 2012-10-10
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "INT_FIX_VOICE1000"
+  SLSeq: 159
+  DialType: 1
+  SLCode: "INT_FIX_VOICE1000_MIN"
+  SLName: "International fixed calls"
+  InclUnit: 1
+  InclAmt: 1000
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "INT_VOICE100"
+  SLSeq: 158
+  DialType: 4
+  SLCode: "INT_VOICE100_MIN"
+  SLName: "International calls"
+  InclUnit: 1
+  InclAmt: 100
+  ValidFrom: 2017-07-05
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
@@ -1497,6 +1590,114 @@ bulkload: ServiceLimit
   ValidTo: 2049-12-31
 
 bulkload: ServiceLimit
+  GroupCode: "SMS5000"
+  SLSeq: 160
+  DialType: 5
+  SLCode: "SMS5000_QTY"
+  SLName: "National sms"
+  InclUnit: 5
+  InclAmt: 5000
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ10"
+  SLSeq: 147
+  WebDisp: 0
+  DialType: 7
+  SLCode: "TARJ10_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 1024
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ10"
+  SLSeq: 148
+  WebDisp: 0
+  DialType: 4
+  SLCode: "TARJ10_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 20
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ11"
+  SLSeq: 149
+  WebDisp: 0
+  DialType: 7
+  SLCode: "TARJ11_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 2048
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ11"
+  SLSeq: 150
+  WebDisp: 0
+  DialType: 4
+  SLCode: "TARJ11_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 50
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ12"
+  SLSeq: 151
+  WebDisp: 0
+  DialType: 7
+  SLCode: "TARJ12_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 4096
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ12"
+  SLSeq: 152
+  WebDisp: 0
+  DialType: 4
+  SLCode: "TARJ12_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 100
+  ValidFrom: 2017-05-29
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ13"
+  SLSeq: 154
+  WebDisp: 0
+  DialType: 7
+  SLCode: "TARJ13_DATA"
+  SLName: "Data"
+  InclUnit: 4
+  InclAmt: 100
+  ValidFrom: 2017-06-20
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "TARJ13"
+  SLSeq: 155
+  WebDisp: 0
+  DialType: 4
+  SLCode: "TARJ13_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 45000
+  ValidFrom: 2017-06-20
+  ValidTo: 2049-12-31
+  BDestLimit: 10000
+
+bulkload: ServiceLimit
   GroupCode: "TARJ6"
   SLSeq: 63
   WebDisp: 0
@@ -1599,6 +1800,32 @@ bulkload: ServiceLimit
   BDestLimit: 100
 
 bulkload: ServiceLimit
+  GroupCode: "VOICE200"
+  SLSeq: 153
+  WebDisp: 0
+  DialType: 4
+  SLCode: "VOICE200_MIN"
+  SLName: "Voice 200 Minutes Package"
+  InclUnit: 1
+  InclAmt: 200
+  ValidFrom: 2017-06-01
+  ValidTo: 2049-12-31
+  BDestLimit: 100
+
+bulkload: ServiceLimit
+  GroupCode: "VOICE200B"
+  SLSeq: 167
+  WebDisp: 0
+  DialType: 4
+  SLCode: "VOICE200B_MIN"
+  SLName: "Voice 200B Minutes Package"
+  InclUnit: 1
+  InclAmt: 200
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  FirstMonthCalc: 1
+
+bulkload: ServiceLimit
   GroupCode: "VOICE3000"
   SLSeq: 62
   WebDisp: 0
@@ -1608,5 +1835,16 @@ bulkload: ServiceLimit
   InclUnit: 1
   InclAmt: 3000
   ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+
+bulkload: ServiceLimit
+  GroupCode: "VOICE5000"
+  SLSeq: 156
+  DialType: 4
+  SLCode: "VOICE5000_MIN"
+  SLName: "National calls"
+  InclUnit: 1
+  InclAmt: 45000
+  ValidFrom: 2017-07-05
   ValidTo: 2049-12-31
 

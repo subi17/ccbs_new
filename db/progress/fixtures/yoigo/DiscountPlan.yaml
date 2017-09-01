@@ -21,10 +21,26 @@ bulkload: DiscountPlan
   Priority: 2
   BillCode: "BONO6WEBDISC"
   ValidFrom: 2015-11-24
-  ValidTo: 2016-12-31
+  ValidTo: 2049-12-31
   DPRuleId: "BONO6WEBDISC"
   DPName: "Bono 1 GB discount web"
   SubjectType: "All "
+  ValidPeriods: 6
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 43
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "BONO7DISC"
+  ValidFrom: 2017-02-27
+  ValidTo: 2049-12-31
+  DPRuleId: "BONO7DISC"
+  DPName: "Bono 3 GB discount"
+  SubjectType: "All"
+  ValidPeriods: 6
 
 bulkload: DiscountPlan
   Brand: "1"
@@ -147,6 +163,21 @@ bulkload: DiscountPlan
 
 bulkload: DiscountPlan
   Brand: "1"
+  DPId: 62
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONT24RETDISC"
+  ValidFrom: 2017-07-19
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT24RETDISC"
+  DPName: "Discount retention Sinfin 20"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
   DPId: 37
   Subject: "Contract Target"
   TargetType: "List"
@@ -174,6 +205,20 @@ bulkload: DiscountPlan
   DPName: "La Infinita 5GB discount"
   SubjectType: "List"
   ValidPeriods: 6
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 64
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "CONT28DISC"
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT28DISC"
+  DPName: "ExtralineaDISC"
+  SubjectType: "List"
 
 bulkload: DiscountPlan
   Brand: "1"
@@ -338,6 +383,277 @@ bulkload: DiscountPlan
 
 bulkload: DiscountPlan
   Brand: "1"
+  DPId: 45
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "CONVDISC"
+  ValidFrom: 2017-04-01
+  ValidTo: 2017-06-30
+  DPRuleId: "CONVDISC"
+  DPName: "Convergent 20% discount"
+  SubjectType: "List"
+  CCDisplay: 1
+  ValidPeriods: 6
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 57
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "CONVDISC20_3"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DPRuleId: "CONVDISC20_3"
+  DPName: "Convergent New Adds Promotion"
+  SubjectType: "List"
+  ValidPeriods: 3
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 66
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "DISCAGILETVIGIC"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCAGILETVIGIC"
+  DPName: "TV Service + SKY"
+  SubjectType: "All"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 67
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "DISCAGILETVIPSIC"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCAGILETVIPSIC"
+  DPName: "TV Service + SKY"
+  SubjectType: "All"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 68
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "DISCAGILETVIPSIM"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCAGILETVIPSIM"
+  DPName: "TV Service + SKY"
+  SubjectType: "All"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 65
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "DISCAGILETVIVA"
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCAGILETVIVA"
+  DPName: "TV Service + SKY"
+  SubjectType: "All"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 47
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT10"
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT10"
+  DPName: "Additional Line CONT10"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 53
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT10H"
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT10H"
+  DPName: "Additional Line CONT10 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 58
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT10HM"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT10HM"
+  DPName: "Mobile only - Additional Line CONT10 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 46
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT15"
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT15"
+  DPName: "Additional Line CONT15"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 54
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT15H"
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT15H"
+  DPName: "Additional Line CONT15 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 59
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT15HM"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT15HM"
+  DPName: "Mobile only - Additional Line CONT15  50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 49
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT25"
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT25"
+  DPName: "Additional Line CONT25"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 55
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT25H"
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT25H"
+  DPName: "Additional Line CONT25 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 60
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT25HM"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT25HM"
+  DPName: "Mobile only - Additional Line CONT25 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 48
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT26"
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT26"
+  DPName: "Additional Line CONT26"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 56
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT26H"
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT26H"
+  DPName: "Additional Line CONT26 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 61
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCCONT26HM"
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCCONT26HM"
+  DPName: "Mobile only - Additional Line CONT26 50%"
+  SubjectType: "List"
+  CCDisplay: 1
+
+bulkload: DiscountPlan
+  Brand: "1"
   DPId: 36
   Subject: "Contract Target"
   TargetType: "List"
@@ -349,7 +665,37 @@ bulkload: DiscountPlan
   DPRuleId: "DISCFH300"
   DPName: "Fixed Fiber 300 MF Discount"
   SubjectType: "List"
-  ValidPeriods: 3
+  ValidPeriods: 12
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 44
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCFH3002P"
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCFH3002P"
+  DPName: "Fixed Fiber 300 MF Discount 2P"
+  SubjectType: "List"
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 50
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCFH3002PDWN"
+  ValidFrom: 2017-05-02
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCFH3002PDWN"
+  DPName: "Fixed Fiber 300 MF Discount 2P Downgrade"
+  SubjectType: "List"
+  MaxAmount: 10
+  CCDisplay: 1
 
 bulkload: DiscountPlan
   Brand: "1"
@@ -366,6 +712,22 @@ bulkload: DiscountPlan
   SubjectType: "List"
   MaxAmount: 10
   ValidPeriods: 3
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 51
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "DISCFH300PDWN"
+  ValidFrom: 2017-05-02
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCFH300PDWN"
+  DPName: "Fixed Fiber 300 MF Discount Downgrade"
+  SubjectType: "List"
+  MaxAmount: 10
+  CCDisplay: 1
 
 bulkload: DiscountPlan
   Brand: "1"
@@ -394,6 +756,22 @@ bulkload: DiscountPlan
   DPRuleId: "DISCWINBACK"
   DPName: "Winback ADSL Discount"
   SubjectType: "List"
+  ValidPeriods: 6
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 63
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 1
+  BillCode: "FIDETVDISC"
+  ValidFrom: 2017-07-01
+  ValidTo: 2049-12-31
+  DPRuleId: "FIDETVDISC"
+  DPName: "Loyalty & retention discount"
+  SubjectType: "List"
+  CCDisplay: 1
   ValidPeriods: 6
 
 bulkload: DiscountPlan
@@ -432,14 +810,27 @@ bulkload: DiscountPlan
   Subject: "Contract Target"
   TargetType: "List"
   DPUnit: "Percentage"
-  Priority: 2
+  Priority: 3
   BillCode: "LRDISC"
   ValidFrom: 2014-02-01
   ValidTo: 2049-12-31
   DPRuleId: "LRDISC"
   DPName: "Loyalty & retention discount"
   SubjectType: "All "
-  ValidPeriods: 6
+
+bulkload: DiscountPlan
+  Brand: "1"
+  DPId: 52
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 3
+  BillCode: "LRDISC2"
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+  DPRuleId: "LRDISC2"
+  DPName: "Loyalty & retention discount2"
+  SubjectType: "All"
 
 bulkload: DiscountPlan
   Brand: "1"
@@ -492,7 +883,7 @@ bulkload: DiscountPlan
   Subject: "Contract Target"
   TargetType: "List"
   DPUnit: "Fixed"
-  Priority: 2
+  Priority: 3
   BillCode: "RETDISC"
   ValidFrom: 2012-10-11
   ValidTo: 2049-12-31

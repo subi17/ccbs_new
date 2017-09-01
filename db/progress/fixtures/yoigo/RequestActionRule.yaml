@@ -1045,14 +1045,14 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 332
   ParamField: "ReqCParam1"
-  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
+  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
 bulkload: RequestActionRule
   RequestActionID: 333
   ParamField: "ReqCParam1"
-  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
+  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2011-08-10
   ToDate: 2049-12-31
 
@@ -1160,7 +1160,7 @@ bulkload: RequestActionRule
   ParamValue: "+"
   FromDate: 2015-06-02
   ToDate: 2049-12-31
-  ExclParamValue: "TARJ7,TARJ9"
+  ExclParamValue: "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
 
 bulkload: RequestActionRule
   RequestActionID: 347
@@ -2096,7 +2096,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 403
   ParamField: "ReqCParam1"
-  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
+  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2011-12-15
   ToDate: 2049-12-31
 
@@ -2148,6 +2148,13 @@ bulkload: RequestActionRule
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTF30,CONTF55,CONTF20D,CONTF40,CONTF8,CONTF11"
   FromDate: 2011-12-15
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 408
+  ParamField: "ReqCParam2"
+  ParamValue: "BUNDLE:CONTF40>CONTF30"
+  FromDate: 2012-02-01
   ToDate: 2049-12-31
 
 bulkload: RequestActionRule
@@ -2238,13 +2245,6 @@ bulkload: RequestActionRule
   RequestActionID: 408
   ParamField: "ReqCParam2"
   ParamValue: "BUNDLE:CONTF40>CONTF20"
-  FromDate: 2012-02-01
-  ToDate: 2049-12-31
-
-bulkload: RequestActionRule
-  RequestActionID: 408
-  ParamField: "ReqCParam2"
-  ParamValue: "BUNDLE:CONTF40>CONTF30"
   FromDate: 2012-02-01
   ToDate: 2049-12-31
 
@@ -3754,7 +3754,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 579
   ParamField: "ReqCParam1"
-  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ,TARJ4,TARJ5,TARJ8,TARJ9"
+  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ,TARJ4,TARJ5,TARJ8,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
@@ -3768,7 +3768,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 581
   ParamField: "ReqCParam1"
-  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9"
+  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
@@ -3782,7 +3782,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 583
   ParamField: "ReqCParam3"
-  ParamValue: "+,TARJ7,TARJ9"
+  ParamValue: "+,TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2013-11-01
   ToDate: 2049-12-31
 
@@ -3859,7 +3859,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 589
   ParamField: "ReqCParam2"
-  ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONT7,CONT8,CONTD,CONTRD,CONTF,CONTS,CONTM,CONTM2,CONT9,CONT15,CONT24,CONT23,CONT25,CONT26,CONT10,CONT27"
+  ParamValue: "+,CONT,CONT4,CONT5,CONT6,CONT7,CONT8,CONTD,CONTRD,CONTF,CONTS,CONTM,CONTM2,CONT9,CONT15,CONT24,CONT23,CONT25,CONT26,CONT10,DUB,CONT27,CONT28"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
@@ -3873,7 +3873,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 590
   ParamField: "ReqCParam2"
-  ParamValue: "+,TARJ,TARJ4,TARJ5,TARJ6,TARJ7,TARJ8,TARJRD1,TARJ9"
+  ParamValue: "+,TARJ,TARJ4,TARJ5,TARJ6,TARJ7,TARJ8,TARJRD1,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2014-02-05
   ToDate: 2049-12-31
 
@@ -4041,7 +4041,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 620
   ParamField: "ReqCParam3"
-  ParamValue: "BONO_VOIP,MDUB4,TARJ9"
+  ParamValue: "BONO_VOIP,MDUB4,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2014-11-26
   ToDate: 2049-12-31
 
@@ -4083,14 +4083,14 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 628
   ParamField: "ReqCParam1"
-  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ,TARJ4,TARJ5,TARJ8,TARJ9"
+  ParamValue: "CONT,CONT4,CONT5,CONT6,CONTRD,CONTF,CONT7,CONTS,CONT8,CONTD,CONTFF,CONTSF,TARJ6,TARJ7,TARJ,TARJ4,TARJ5,TARJ8,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
 bulkload: RequestActionRule
   RequestActionID: 629
   ParamField: "ReqCParam3"
-  ParamValue: "+,TARJ9"
+  ParamValue: "+,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
@@ -4118,7 +4118,7 @@ bulkload: RequestActionRule
 bulkload: RequestActionRule
   RequestActionID: 631
   ParamField: "ReqCParam3"
-  ParamValue: "+,TARJ9"
+  ParamValue: "+,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13"
   FromDate: 2015-05-29
   ToDate: 2049-12-31
 
@@ -4225,5 +4225,421 @@ bulkload: RequestActionRule
   ParamField: "ReqCParam2"
   ParamValue: "+,CONTDSL*,CONTFH*"
   FromDate: 2016-10-27
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 771
+  ParamField: "#MSSTATUS"
+  ParamValue: "+"
+  FromDate: 2017-07-01
+  ToDate: 2049-12-31
+  ExclParamValue: "16,17"
+
+bulkload: RequestActionRule
+  RequestActionID: 776
+  ParamField: "#MSSTATUS"
+  ParamValue: "+"
+  FromDate: 2017-07-01
+  ToDate: 2049-12-31
+  ExclParamValue: "16,17"
+
+bulkload: RequestActionRule
+  RequestActionID: 781
+  ParamField: "#MSSTATUS"
+  ParamValue: "+"
+  FromDate: 2017-07-01
+  ToDate: 2049-12-31
+  ExclParamValue: "16,17"
+
+bulkload: RequestActionRule
+  RequestActionID: 788
+  ParamField: "ReqCParam3"
+  ParamValue: "+,TARJ7_UPSELL"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 788
+  ParamField: "ReqStatus"
+  ParamValue: "+,2"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 790
+  ParamField: "ReqStatus"
+  ParamValue: "2"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 794
+  ParamField: "ReqCParam3"
+  ParamValue: "+,TARJ7_UPSELL"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 794
+  ParamField: "ReqStatus"
+  ParamValue: "+,2"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 796
+  ParamField: "ReqStatus"
+  ParamValue: "2"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 800
+  ParamField: "ReqCParam3"
+  ParamValue: "+,TARJ7_UPSELL"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 800
+  ParamField: "ReqStatus"
+  ParamValue: "+,2"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 802
+  ParamField: "ReqStatus"
+  ParamValue: "2"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 806
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 807
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 808
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 809
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 810
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 811
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 812
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 813
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 814
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 815
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 816
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 817
+  ParamField: "ReqIParam4"
+  ParamValue: "0"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 824
+  ParamField: "ReqCParam3"
+  ParamValue: "+,VOICE200"
+  FromDate: 2017-06-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 824
+  ParamField: "ReqStatus"
+  ParamValue: "+,2"
+  FromDate: 2017-06-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 825
+  ParamField: "ReqCParam3"
+  ParamValue: "+,VOICE100"
+  FromDate: 2017-06-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 825
+  ParamField: "ReqStatus"
+  ParamValue: "+,2"
+  FromDate: 2017-06-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 826
+  ParamField: "ReqCParam3"
+  ParamValue: "+,TARJ7_UPSELL"
+  FromDate: 2017-06-20
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 826
+  ParamField: "ReqStatus"
+  ParamValue: "+,2"
+  FromDate: 2017-06-20
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 828
+  ParamField: "ReqStatus"
+  ParamValue: "2"
+  FromDate: 2017-06-20
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 832
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 833
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 834
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 835
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 836
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 837
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 838
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 839
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 840
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 841
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 842
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 843
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 844
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 845
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 846
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 847
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 848
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 849
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 850
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 851
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 852
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 853
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 854
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 855
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 857
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 858
+  ParamField: "ReqIParam4"
+  ParamValue: "1"
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 862
+  ParamField: "ReqCParam3"
+  ParamValue: "AGILETV,AGILESKYTV"
+  FromDate: 2017-08-23
+  ToDate: 2049-12-31
+
+bulkload: RequestActionRule
+  RequestActionID: 863
+  ParamField: "ReqCParam3"
+  ParamValue: "AGILETV,AGILESKYTV"
+  FromDate: 2017-08-23
   ToDate: 2049-12-31
 

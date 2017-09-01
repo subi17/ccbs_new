@@ -1704,6 +1704,14 @@ bulkload: TMSCodes
 
 bulkload: TMSCodes
   TableName: "CLIType"
+  FieldName: "LineType"
+  CodeGroup: "MobSub"
+  CodeValue: "3"
+  CodeName: "Extra"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CLIType"
   FieldName: "PayType"
   CodeGroup: "MobSub"
   CodeValue: "0"
@@ -1780,6 +1788,38 @@ bulkload: TMSCodes
   CodeGroup: "MobSub"
   CodeValue: "2"
   CodeName: "Retired"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CLIType"
+  FieldName: "TariffType"
+  CodeGroup: "MobSub"
+  CodeValue: "0"
+  CodeName: "MobileOnly"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CLIType"
+  FieldName: "TariffType"
+  CodeGroup: "MobSub"
+  CodeValue: "1"
+  CodeName: "Convergent"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CLIType"
+  FieldName: "TariffType"
+  CodeGroup: "MobSub"
+  CodeValue: "2"
+  CodeName: "FixedOnly"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "CLIType"
+  FieldName: "TariffType"
+  CodeGroup: "MobSub"
+  CodeValue: "3"
+  CodeName: "Fusion"
   InUse: 1
 
 bulkload: TMSCodes
@@ -3226,46 +3266,6 @@ bulkload: TMSCodes
   CodeGroup: "DumpFile"
   CodeValue: "TRACK"
   CodeName: "Track"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "DumpHPD"
-  FieldName: "UnitType"
-  CodeGroup: "DumpHPD"
-  CodeValue: "days"
-  CodeName: "days"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "DumpHPD"
-  FieldName: "UnitType"
-  CodeGroup: "DumpHPD"
-  CodeValue: "hours"
-  CodeName: "hours"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "DumpHPD"
-  FieldName: "UnitType"
-  CodeGroup: "DumpHPD"
-  CodeValue: "months"
-  CodeName: "months"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "DumpHPD"
-  FieldName: "UnitType"
-  CodeGroup: "DumpHPD"
-  CodeValue: "weeks"
-  CodeName: "weeks"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "DumpHPD"
-  FieldName: "UnitType"
-  CodeGroup: "DumpHPD"
-  CodeValue: "years"
-  CodeName: "years"
   InUse: 1
 
 bulkload: TMSCodes
@@ -5241,6 +5241,30 @@ bulkload: TMSCodes
   InUse: 1
 
 bulkload: TMSCodes
+  TableName: "Invtext"
+  FieldName: "KEYVALUE"
+  CodeGroup: "EMAIL"
+  CodeValue: "SVA_Centralita"
+
+bulkload: TMSCodes
+  TableName: "Invtext"
+  FieldName: "KEYVALUE"
+  CodeGroup: "EMAIL"
+  CodeValue: "SVA_FAXTOEMAIL"
+
+bulkload: TMSCodes
+  TableName: "Invtext"
+  FieldName: "KEYVALUE"
+  CodeGroup: "EMAIL"
+  CodeValue: "SVA_IPFIJA"
+
+bulkload: TMSCodes
+  TableName: "Invtext"
+  FieldName: "KEYVALUE"
+  CodeGroup: "EMAIL"
+  CodeValue: "SVA_OFFICE365"
+
+bulkload: TMSCodes
   TableName: "ITSendLog"
   FieldName: "RepType"
   CodeGroup: "Report"
@@ -5604,7 +5628,7 @@ bulkload: TMSCodes
   FieldName: "MEmotype"
   CodeGroup: "MemoType"
   CodeValue: "Customer"
-  CodeName: "Customer Name"
+  CodeName: "Customer"
   InUse: 1
 
 bulkload: TMSCodes
@@ -5828,6 +5852,22 @@ bulkload: TMSCodes
   CodeValue: "FLATMF55"
   CodeName: "MFBillCode To CLIType Conversion"
   ConfigValue: "CONTF55"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "MNPCal"
+  FieldName: "DeliveryType"
+  CodeGroup: "MNP"
+  CodeValue: "0"
+  CodeName: "DEFAULT"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "MNPCal"
+  FieldName: "DeliveryType"
+  CodeGroup: "MNP"
+  CodeValue: "6"
+  CodeName: "Delivery to POS"
   InUse: 1
 
 bulkload: TMSCodes
@@ -7919,6 +7959,14 @@ bulkload: TMSCodes
   InUse: 1
 
 bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "DeliveryType"
+  CodeGroup: "Orders"
+  CodeValue: "5"
+  CodeName: "Delivery to POS secure"
+  InUse: 1
+
+bulkload: TMSCodes
   TableName: "order"
   FieldName: "mnpstatus"
   CodeGroup: "mnp"
@@ -8002,6 +8050,14 @@ bulkload: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
+  CodeValue: "CC_PRO"
+  CodeName: "Customer care PRO"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "OrderChannel"
+  CodeGroup: "Order"
   CodeValue: "Fusion_POS"
   CodeName: "Fusion POS"
   InUse: 1
@@ -8018,16 +8074,8 @@ bulkload: TMSCodes
   TableName: "Order"
   FieldName: "OrderChannel"
   CodeGroup: "Order"
-  CodeValue: "Migration"
-  CodeName: "Migration"
-  InUse: 1
-
-bulkload: TMSCodes
-  TableName: "Order"
-  FieldName: "OrderChannel"
-  CodeGroup: "Order"
-  CodeValue: "Migration_ota"
-  CodeName: "Migration_ota"
+  CodeValue: "Fusion_Telesales_PRO"
+  CodeName: "Fusion Telesales PRO"
   InUse: 1
 
 bulkload: TMSCodes
@@ -8100,6 +8148,14 @@ bulkload: TMSCodes
   CodeGroup: "Order"
   CodeValue: "Telesales"
   CodeName: "Telesales"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Order"
+  FieldName: "OrderChannel"
+  CodeGroup: "Order"
+  CodeValue: "Telesales_PRO"
+  CodeName: "Telesales PRO"
   InUse: 1
 
 bulkload: TMSCodes
@@ -10359,6 +10415,14 @@ bulkload: TMSCodes
   TableName: "RepText"
   FieldName: "TextType"
   CodeGroup: "Report"
+  CodeValue: "26"
+  CodeName: "Barring"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "RepText"
+  FieldName: "TextType"
+  CodeGroup: "Report"
   CodeValue: "3"
   CodeName: "CCN"
   InUse: 1
@@ -11106,6 +11170,33 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "AA"
+  CodeName: "Advance Analytics"
+  ConfigValue: "14"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "AB"
+  CodeName: "B12 CROSS-SELLING"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "AE"
+  CodeName: "AON CROSS-SELLING OUTBOUND"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "AF"
   CodeName: "AMPLIFFICA"
   ConfigValue: "15"
@@ -11168,6 +11259,24 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "AT"
+  CodeName: "ATAKAM DISTRIBUCION ONLINE"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "AW"
+  CodeName: "AON WEB"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "AX"
   CodeName: "Axia"
   ConfigValue: "27"
@@ -11219,8 +11328,35 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "BN"
+  CodeName: "B12 OUTBOUND"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "BR"
   CodeName: "BYMOVIL RECEPCION"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "BT"
+  CodeName: "B12 DISTRIBUCION ONLINE"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "BW"
+  CodeName: "B12 WEB"
   ConfigValue: "15"
   InUse: 1
 
@@ -11244,8 +11380,35 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "CE"
+  CodeName: "CANAL EXCLUSIVO NEGOCIOS"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "CL"
   CodeName: "Casturtel Leon"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "CN"
+  CodeName: "CANCELACIONES MARKTEL"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "CO"
+  CodeName: "EOS OUTBOUND"
   ConfigValue: "15"
   InUse: 1
 
@@ -11279,6 +11442,24 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "CW"
+  CodeName: "CARRITO WEB"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "D2"
+  CodeName: "DOOR TO DOOR"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "DX"
   CodeName: "Dextra"
   ConfigValue: "27"
@@ -11287,7 +11468,25 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "EB"
+  CodeName: "EMERGIA BACKOFFICE"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "EM"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "EO"
+  CodeName: "CELLCOM EMISION"
   ConfigValue: "15"
   InUse: 1
 
@@ -11303,8 +11502,44 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "FR"
+  CodeName: "FACTORIA INBOUND OF"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "FW"
+  CodeName: "FACTORIA INBOUND ON"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "GC"
+  CodeName: "GSS CARTERA"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "GE"
   CodeName: "GSS EMISION"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "GM"
+  CodeName: "GSS MADRID OUTBOUND"
   ConfigValue: "15"
   InUse: 1
 
@@ -11329,6 +11564,24 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "GW"
+  CodeName: "GSS WEB"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "KC"
+  CodeName: "KONECTA CARTERA"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "KH"
   CodeName: "K-HABLS"
   ConfigValue: "27"
@@ -11337,8 +11590,44 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "KN"
+  CodeName: "KONECTA OUTBOUND"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "KR"
   CodeName: "KONECTA RECEPCION"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "KW"
+  CodeName: "KONECTA WEB"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MA"
+  CodeName: "MADISON OUTBOUND"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MC"
+  CodeName: "MADISON CARTERA"
   ConfigValue: "15"
   InUse: 1
 
@@ -11362,9 +11651,72 @@ bulkload: TMSCodes
   TableName: "Salesman"
   FieldName: "SmPrefix"
   CodeGroup: "IFS"
+  CodeValue: "MI"
+  CodeName: "MARKTEL INBOUND"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MK"
+  CodeName: "MARKTEL CROSS-SELL"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
   CodeValue: "MM"
   CodeName: "Media Markt"
   ConfigValue: "18"
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MO"
+  CodeName: "MARKTEL ONLINE"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MR"
+  CodeName: "MARKTEL INBOUND OF"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MT"
+  CodeName: "MARKTEL OUTBOUND"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "MW"
+  CodeName: "MARKTEL INBOUND ON"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "PA"
+  CodeName: "PHONE HOUSE CROSS-SELLING"
+  ConfigValue: "15"
+  InUse: 1
 
 bulkload: TMSCodes
   TableName: "Salesman"
@@ -11415,6 +11767,15 @@ bulkload: TMSCodes
   CodeGroup: "IFS"
   CodeValue: "RC"
   CodeName: "CASTURTEL RECEPCION"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "SE"
+  CodeName: "SERVINFORM OUTBOUND"
   ConfigValue: "15"
   InUse: 1
 
@@ -11507,6 +11868,15 @@ bulkload: TMSCodes
   CodeGroup: "IFS"
   CodeValue: "WH"
   CodeName: "WHISBI"
+  ConfigValue: "15"
+  InUse: 1
+
+bulkload: TMSCodes
+  TableName: "Salesman"
+  FieldName: "SmPrefix"
+  CodeGroup: "IFS"
+  CodeValue: "XA"
+  CodeName: "ANEXA"
   ConfigValue: "15"
   InUse: 1
 

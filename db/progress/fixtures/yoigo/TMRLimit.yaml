@@ -858,8 +858,16 @@ bulkload: TMRLimit
 
 bulkload: TMRLimit
   TMRuleSeq: 34
-  FromDate: 2012-08-01
+  FromDate: 2017-08-01
   ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 10000
+
+bulkload: TMRLimit
+  TMRuleSeq: 34
+  FromDate: 2012-08-01
+  ToDate: 2017-07-31
   LimitID: 1
   ValueType: 1
   LimitAmt: 300
@@ -922,8 +930,16 @@ bulkload: TMRLimit
 
 bulkload: TMRLimit
   TMRuleSeq: 42
-  FromDate: 2016-10-01
+  FromDate: 2017-08-01
   ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 45000
+
+bulkload: TMRLimit
+  TMRuleSeq: 42
+  FromDate: 2016-10-01
+  ToDate: 2017-07-31
   LimitID: 1
   ValueType: 1
   LimitAmt: 4800
@@ -933,7 +949,7 @@ bulkload: TMRLimit
 bulkload: TMRLimit
   TMRuleSeq: 42
   FromDate: 2016-10-01
-  ToDate: 2049-12-31
+  ToDate: 2017-07-31
   LimitID: 2
   ValueType: 1
   LimitAmt: 5000

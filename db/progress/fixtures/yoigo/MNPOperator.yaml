@@ -83,73 +83,18 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
-  OperName: "AIRIS"
-  OperCode: "014"
-  ICCPrefix: "893401"
+  OperName: "AIRENETWORKS"
+  OperCode: "010"
+  ICCPrefix: "89343416"
   Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
-
-bulkload: MNPOperator
-  Brand: "1"
-  OperName: "Best Móvil"
-  OperCode: "014"
-  ICCPrefix: "893401"
-  Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
-
-bulkload: MNPOperator
-  Brand: "1"
-  OperName: "CABLE Movil"
-  OperCode: "014"
-  ICCPrefix: "893401"
-  Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
-
-bulkload: MNPOperator
-  Brand: "1"
-  OperName: "Happy Móvil"
-  OperCode: "014"
-  ICCPrefix: "893401"
-  Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
-
-bulkload: MNPOperator
-  Brand: "1"
-  OperName: "MOVIDATA"
-  OperCode: "014"
-  ICCPrefix: "893401"
-  Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
+  NRN: "916200"
 
 bulkload: MNPOperator
   Brand: "1"
   OperName: "Phone House"
   OperCode: "014"
   ICCPrefix: "893401"
-  Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
-
-bulkload: MNPOperator
-  Brand: "1"
-  OperName: "PIRATA TELECOM"
-  OperCode: "014"
-  ICCPrefix: "893401"
-  Active: TRUE 
-  OperBrand: "TPH"
-  NRN: "735014"
-
-bulkload: MNPOperator
-  Brand: "1"
-  OperName: "QQ MOVIL"
-  OperCode: "014"
-  ICCPrefix: "893401"
-  Active: TRUE 
+  Active: ?
   OperBrand: "TPH"
   NRN: "735014"
 
@@ -158,6 +103,7 @@ bulkload: MNPOperator
   OperName: "REPUBLICA MOVIL TPH"
   OperCode: "014"
   ICCPrefix: "893401"
+  Active: ?
   OperBrand: "TPH"
   NRN: "735014"
 
@@ -166,6 +112,7 @@ bulkload: MNPOperator
   OperName: "TPH"
   OperCode: "014"
   ICCPrefix: "893401"
+  Active: ?
   OperBrand: "TPH"
   NRN: "735014"
 
@@ -210,10 +157,74 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
+  OperName: "AIRIS"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Best Móvil"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "CABLE Movil"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "Happy Móvil"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
   OperName: "Másmóvil"
   OperCode: "044"
   ICCPrefix: "893401"
   Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "MOVIDATA"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "PIRATA TELECOM"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
+  NRN: "735044"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "QQ MOVIL"
+  OperCode: "044"
+  ICCPrefix: "893401"
+  Active: TRUE 
+  OperBrand: "Másmóvil"
   NRN: "735044"
 
 bulkload: MNPOperator
@@ -474,6 +485,14 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
+  OperName: "QUATTRE"
+  OperCode: "102"
+  ICCPrefix: "893490323"
+  Active: TRUE 
+  NRN: "903102"
+
+bulkload: MNPOperator
+  Brand: "1"
   OperName: "Truphone"
   OperCode: "104"
   ICCPrefix: "894450"
@@ -604,11 +623,27 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
+  OperName: "THE TELECOM BOUTIQUE"
+  OperCode: "135"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  NRN: "903135"
+
+bulkload: MNPOperator
+  Brand: "1"
   OperName: "PROCONO (PTV Telecom)"
   OperCode: "144"
   ICCPrefix: "89349030"
   Active: TRUE 
   NRN: "903144"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "VOZELIA TELECOM"
+  OperCode: "145"
+  ICCPrefix: "8934903"
+  Active: TRUE 
+  NRN: "903145"
 
 bulkload: MNPOperator
   Brand: "1"
@@ -631,6 +666,7 @@ bulkload: MNPOperator
   OperName: "BT MOVIL"
   OperCode: "165"
   ICCPrefix: "8934903"
+  Active: TRUE 
   NRN: "903165"
 
 bulkload: MNPOperator
@@ -677,9 +713,19 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
-  OperName: "MasMovilNew"
+  OperName: "MASMOVIL 3.0"
   OperCode: "200"
+  ICCPrefix: "893404"
   Active: TRUE 
+  NRN: "745200"
+
+bulkload: MNPOperator
+  Brand: "1"
+  OperName: "VODAFONE ROAMING SERVICES"
+  OperCode: "201"
+  ICCPrefix: "89345711"
+  Active: TRUE 
+  NRN: "970101"
 
 bulkload: MNPOperator
   Brand: "1"
@@ -706,10 +752,19 @@ bulkload: MNPOperator
 
 bulkload: MNPOperator
   Brand: "1"
+  OperName: "DEION COMUNICACIONES"
+  OperCode: "214"
+  ICCPrefix: "893490326"
+  Active: TRUE 
+  OperBrand: "DEI"
+  NRN: "903214"
+
+bulkload: MNPOperator
+  Brand: "1"
   OperName: "BT"
   OperCode: "223"
   ICCPrefix: "893457"
-  Active: TRUE 
+  Active: ?
   NRN: "970223"
 
 bulkload: MNPOperator
@@ -725,6 +780,7 @@ bulkload: MNPOperator
   OperName: "PTV TELECOM 4G"
   OperCode: "244"
   ICCPrefix: "893412"
+  Active: TRUE 
   NRN: "902244"
 
 bulkload: MNPOperator

@@ -752,9 +752,97 @@ bulkload: DCServicePackage
 
 bulkload: DCServicePackage
   Brand: "1"
-  DCEvent: "CONT27"
+  DCEvent: "FLEX_UPSELL"
   DCServicePackageID: 96
   ServPac: "SHAPER"
-  FromDate: 2017-04-13
+  FromDate: 2017-03-01
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "CONT27"
+  DCServicePackageID: 97
+  ServPac: "SHAPER"
+  FromDate: 2017-04-18
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ10"
+  DCServicePackageID: 98
+  ServPac: "SHAPER"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ10"
+  DCServicePackageID: 99
+  ServPac: "HSDPA"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ11"
+  DCServicePackageID: 100
+  ServPac: "SHAPER"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ11"
+  DCServicePackageID: 101
+  ServPac: "HSDPA"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ12"
+  DCServicePackageID: 102
+  ServPac: "SHAPER"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ12"
+  DCServicePackageID: 103
+  ServPac: "HSDPA"
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ13"
+  DCServicePackageID: 104
+  ServPac: "SHAPER"
+  FromDate: 2017-06-20
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "TARJ13"
+  DCServicePackageID: 105
+  ServPac: "HSDPA"
+  FromDate: 2017-06-20
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "FLEX_500MB_UPSELL"
+  DCServicePackageID: 106
+  ServPac: "SHAPER"
+  FromDate: 2017-07-04
+  ToDate: 2049-12-31
+
+bulkload: DCServicePackage
+  Brand: "1"
+  DCEvent: "FLEX_5GB_UPSELL"
+  DCServicePackageID: 107
+  ServPac: "SHAPER"
+  FromDate: 2017-07-04
   ToDate: 2049-12-31
 

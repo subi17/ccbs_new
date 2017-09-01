@@ -4448,11 +4448,77 @@ bulkload: ShaperConf
 
 bulkload: ShaperConf
   Brand: "1"
+  ShaperConfID: "TARJ10"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "YG_PRE_1G"
+  LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ10_RESET"
+  Template: "HSPA_SET,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ11"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "YG_PRE_2G"
+  LimitUnshaped: 2147483648
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ11_RESET"
+  Template: "HSPA_SET,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ12"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "YG_PRE_4G"
+  LimitUnshaped: 4294967296
+  LimitShaped: 53687091
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ12_RESET"
+  Template: "HSPA_SET,QUOTA=0,GRACE=0"
+  LimitUnshaped: ?
+  LimitShaped: ?
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ13"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "YG_PRE_INF_01"
+  LimitUnshaped: 53687091200
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
   ShaperConfID: "TARJ7"
   Template: "HSPA_DOM"
   TariffType: "BONO_PRE"
   Tariff: "LADEL1_PRE"
   LimitUnshaped: 681574400
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ7_DOUBLE"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE"
+  LimitUnshaped: 1363148800
   LimitShaped: 20971520
 
 bulkload: ShaperConf
@@ -4478,6 +4544,15 @@ bulkload: ShaperConf
   TariffType: "BONO_PRE"
   Tariff: "LADEL1_PRE_PLUS"
   LimitUnshaped: 1073741824
+  LimitShaped: 20971520
+
+bulkload: ShaperConf
+  Brand: "1"
+  ShaperConfID: "TARJ9_DOUBLE"
+  Template: "HSPA_DOM"
+  TariffType: "BONO_PRE"
+  Tariff: "LADEL1_PRE_PLUS"
+  LimitUnshaped: 2147483648
   LimitShaped: 20971520
 
 bulkload: ShaperConf

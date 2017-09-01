@@ -337,6 +337,61 @@ bulkload: InvText
   Brand: "1"
 
 bulkload: InvText
+  ITNum: 560
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+  Target: "EMAIL"
+  KeyValue: "SVA_Centralita"
+  TxtTitle: "Centralita PRO  #STATUS"
+  InvText: "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID"
+  Language: 1
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 557
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+  Target: "EMAIL"
+  KeyValue: "SVA_FAXTOEMAIL"
+  TxtTitle: "SVA_ FAXTOMAIL YOIGO #STATUS"
+  InvText: "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID
+Dirección de correo electrónico: #EMAIL
+Numeración: #NUMBER"
+  Language: 1
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 559
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+  Target: "EMAIL"
+  KeyValue: "SVA_IPFIJA"
+  TxtTitle: "SVA_ IP FIJA YOIGO #STATUS"
+  InvText: "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID"
+  Language: 1
+  Brand: "1"
+
+bulkload: InvText
+  ITNum: 558
+  FromDate: 2017-07-05
+  ToDate: 2049-12-31
+  Target: "EMAIL"
+  KeyValue: "SVA_OFFICE365"
+  TxtTitle: "SVA_ OFFICE 365 YOIGO #STATUS"
+  InvText: "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID
+Dirección de correo electrónico: #EMAIL"
+  Language: 1
+  Brand: "1"
+
+bulkload: InvText
   ITNum: 326
   FromDate: 2012-04-01
   ToDate: 2049-12-31
@@ -1064,75 +1119,6 @@ www.yoigo.com"
   MainTitle: "CONFIRMACIÓN DEL PEDIDO"
 
 bulkload: InvText
-  ITNum: 5004
-  FromDate: 2008-05-19
-  ToDate: 2049-12-31
-  Target: "OrderConf"
-  KeyValue: "EmailConfCIFMNP"
-  TxtTitle: "Hola #FIRSTNAME,"
-  InvText: "
-Ya hemos tramitado tu pedido y pronto lo recibirás en la dirección que nos indicaste.
-
-Si tienes alguna duda o pregunta, llámanos al Departamento de Gestión Comercial al teléfono gratuito 800 622 801.
-
-Puedes acceder a las diferentes Condiciones aplicables en función de los productos y servicios que has contratado en el apartado de nuestra web que tiene toda la información Legal http://www.yoigo.com/preguntas/informacion_legal.php
-
-www.yoigo.com
-
-Teléfono gratuito de información comercial: 800 622 801
-Dirección de correo para información sobre pedidos: info@empresas.yoigo.com
-Puedes ver cómo va tu pedido en
-https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-pedido
-
---------------------------------------------------------------------------
-
-Pedido num.: #OCONTRID
-Tu número de teléfono: #MSISDN
-Fecha de pedido: #ORDER_DATE
-Fecha de inicio del proceso de portabilidad: #MNP_DATE
-
-Datos de la empresa:
-
-Denominación social: #COMPANYNAME
-CIF: #COMPANYCIF     Fecha de constitución: #COMPANYFOUNDDATE
-Dirección social: #CUSTADDR #CUSTPOST #CUSTREGION
-
-Datos de la persona autorizada:
-
-Nombre: #FIRSTNAME #LASTNAME #LASTNAME2
-Documento de identidad: #CIDTYPE #CUSTID
-Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
-e-mail: #EMAIL
-Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
-
-Datos de la persona de contacto:
-
-#CONTACTDATA
-
-Datos de envío:
-
-Persona de contacto en la entrega: #FIRSTNAME #LASTNAME #LASTNAME2
-Documento de identidad: #CIDTYPE #CUSTID
-Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
-e-mail: #EMAIL
-Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
-Fecha estimada de entrega: #DELIVERY_DATE
-     
-DERECHO DE DESISTIMIENTO
- 
-Si te arrepientes de esta compra, puedes cancelarla en el plazo de 14 días desde la entrega, como te indicamos en las Condiciones de Venta de Yoigo (http://www.yoigo.com/pdf/condiciones_venta.pdf). Puedes utilizar el "Modelo de desistimiento" (www.yoigo.com/pdf/desistimiento.pdf) y enviarlo a devuelvomipedido@yoigo.com . O llamarnos gratis desde un número Yoigo al teléfono 622 o desde cualquier otro operador al 622 622 622, diciéndonos que quieres desistir del pedido
-
-#COMPANY_CONTACT
-
-Teléfono gratuito de información comercial: 800 622 801
-Teléfono de Atención al Cliente 336 gratuito desde un Teléfono Yoigo, 633 633 336 desde cualquier teléfono (precios según operador).
-www.yoigo.com"
-  Language: 1
-  Report: 2
-  Brand: "1"
-  MainTitle: "CONFIRMACIÓN DEL PEDIDO"
-
-bulkload: InvText
   ITNum: 5003
   FromDate: 2008-05-19
   ToDate: 2049-12-31
@@ -1201,6 +1187,75 @@ www.yoigo.com"
   Report: 2
   Brand: "1"
   MainTitle: "PURCHASE CONFIRMATION"
+
+bulkload: InvText
+  ITNum: 5004
+  FromDate: 2008-05-19
+  ToDate: 2049-12-31
+  Target: "OrderConf"
+  KeyValue: "EmailConfCIFMNP"
+  TxtTitle: "Hola #FIRSTNAME,"
+  InvText: "
+Ya hemos tramitado tu pedido y pronto lo recibirás en la dirección que nos indicaste.
+
+Si tienes alguna duda o pregunta, llámanos al Departamento de Gestión Comercial al teléfono gratuito 800 622 801.
+
+Puedes acceder a las diferentes Condiciones aplicables en función de los productos y servicios que has contratado en el apartado de nuestra web que tiene toda la información Legal http://www.yoigo.com/preguntas/informacion_legal.php
+
+www.yoigo.com
+
+Teléfono gratuito de información comercial: 800 622 801
+Dirección de correo para información sobre pedidos: info@empresas.yoigo.com
+Puedes ver cómo va tu pedido en
+https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-pedido
+
+--------------------------------------------------------------------------
+
+Pedido num.: #OCONTRID
+Tu número de teléfono: #MSISDN
+Fecha de pedido: #ORDER_DATE
+Fecha de inicio del proceso de portabilidad: #MNP_DATE
+
+Datos de la empresa:
+
+Denominación social: #COMPANYNAME
+CIF: #COMPANYCIF     Fecha de constitución: #COMPANYFOUNDDATE
+Dirección social: #CUSTADDR #CUSTPOST #CUSTREGION
+
+Datos de la persona autorizada:
+
+Nombre: #FIRSTNAME #LASTNAME #LASTNAME2
+Documento de identidad: #CIDTYPE #CUSTID
+Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
+e-mail: #EMAIL
+Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
+
+Datos de la persona de contacto:
+
+#CONTACTDATA
+
+Datos de envío:
+
+Persona de contacto en la entrega: #FIRSTNAME #LASTNAME #LASTNAME2
+Documento de identidad: #CIDTYPE #CUSTID
+Teléfono de contacto: #CONTACTNBR1 #CONTACTNBR2
+e-mail: #EMAIL
+Dirección: #CUSTADDR #CUSTPOST #CUSTREGION
+Fecha estimada de entrega: #DELIVERY_DATE
+     
+DERECHO DE DESISTIMIENTO
+ 
+Si te arrepientes de esta compra, puedes cancelarla en el plazo de 14 días desde la entrega, como te indicamos en las Condiciones de Venta de Yoigo (http://www.yoigo.com/pdf/condiciones_venta.pdf). Puedes utilizar el "Modelo de desistimiento" (www.yoigo.com/pdf/desistimiento.pdf) y enviarlo a devuelvomipedido@yoigo.com . O llamarnos gratis desde un número Yoigo al teléfono 622 o desde cualquier otro operador al 622 622 622, diciéndonos que quieres desistir del pedido
+
+#COMPANY_CONTACT
+
+Teléfono gratuito de información comercial: 800 622 801
+Teléfono de Atención al Cliente 336 gratuito desde un Teléfono Yoigo, 633 633 336 desde cualquier teléfono (precios según operador).
+www.yoigo.com"
+  Language: 1
+  Report: 2
+  Brand: "1"
+  MainTitle: "CONFIRMACIÓN DEL PEDIDO"
 
 bulkload: InvText
   ITNum: 5001
@@ -1797,6 +1852,7 @@ Tu pedido
 -----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1860,6 +1916,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1932,6 +1989,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 Your products
 ---------------
@@ -1996,6 +2054,7 @@ Tu pedido
 ----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 Tus productos
 ---------------
@@ -5278,6 +5337,19 @@ bulkload: InvText
   Category: "Multi_SIM"
 
 bulkload: InvText
+  ITNum: 419
+  FromDate: 2013-03-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "MultiSIMSecondaryTerm"
+  TxtTitle: "When Multi SIM secondary subscription is cancelled"
+  InvText: "Your Segunda SIM associated to this line has been deactivated. Until the end of month you have Internet Multilinea for free, then it will be disabled."
+  Language: 5
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+
+bulkload: InvText
   ITNum: 418
   FromDate: 2013-03-01
   ToDate: 2049-12-31
@@ -5290,19 +5362,6 @@ bulkload: InvText
   Brand: "1"
   SendRule: "R2"
   Category: "Multi_SIM"
-
-bulkload: InvText
-  ITNum: 419
-  FromDate: 2013-03-01
-  ToDate: 2049-12-31
-  Target: "SMS"
-  KeyValue: "MultiSIMSecondaryTerm"
-  TxtTitle: "When Multi SIM secondary subscription is cancelled"
-  InvText: "Your Segunda SIM associated to this line has been deactivated. Until the end of month you have Internet Multilinea for free, then it will be disabled."
-  Language: 5
-  Report: 5
-  Brand: "1"
-  SendRule: "R2"
 
 bulkload: InvText
   ITNum: 420
@@ -6101,6 +6160,20 @@ bulkload: InvText
   InfoType: "I"
   Brand: "1"
   MainTitle: "Pre to Postpaid migration"
+
+bulkload: InvText
+  ITNum: 556
+  FromDate: 2017-06-12
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "Q25ExtensionCetelem"
+  TxtTitle: "Quota 25 extension request created"
+  InvText: "?Ya esta! Te confirmamos que Yoigo y Cetelem hemos aplazado el Pago Final de tu movil en 12 pagos (#AMOUNT/mes) desde #MONTHNAME de #YEAR. TIN y TAE 0%."
+  Language: 1
+  Report: 5
+  InfoType: "i"
+  Brand: "1"
+  SendRule: "R2"
 
 bulkload: InvText
   ITNum: 515
@@ -7212,6 +7285,430 @@ bulkload: InvText
   Report: 5
   Brand: "1"
   SendRule: "R1"
+
+bulkload: InvText
+  ITNum: 535
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10Act"
+  TxtTitle: "Yoigo info:Welcome SMS  - New adds LA PREPAGO 1GB + 20min"
+  InvText: "Yoigo info: Bienvenido a La Prepago de 1 GB: 1GB a alta veloc hasta 4G y 20 min gratis por 8,5 Eur/mes. Despues llamar 3 cent/min + 20 cent establec. IVA incl."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 536
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10DeAct"
+  TxtTitle: "Warning SMS - Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
+minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
+IVA incl."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 537
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10RenewalNOK"
+  TxtTitle: "Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
+minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
+IVA incl."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 538
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10RenewalOk"
+  TxtTitle: "Warning  SMS - 1 GB +20min successful renewal"
+  InvText: "Yoigo info: Ya tienes 1 GB a alta veloc. + 20 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 8 euros de saldo para que se renueve para
+el mes siguiente"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 539
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10RenewalReminder"
+  TxtTitle: "Warning SMS - Reminder the day before renewal"
+  InvText: "Yoigo info: Manana a primera hora se renueva el GB a alta veloc y los 20
+min gratis de tu tarifa. Recuerda tener al menos 7,02 Eur de saldo para que se activen."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 540
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10STC"
+  TxtTitle: "STC to La prepago de 1GB"
+  InvText: "Yoigo info: Tu cambio de tarifa a la Prepago de 1GB se hara el 1 de
+proximo mes. Recuerda tener ese dia al menos 7,02 EUR de saldo para que se
+active la tarifa"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 541
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ10STCScheduled"
+  TxtTitle: "STC SMS - STC already scheduled SMS (La Prepago 1GB)"
+  InvText: "Yoigo info: Tu cambio a la Tarifa de 1GB se hara maÃ±ana por ela maÃ±ana.
+Recuerda tener minimo 8 euros de saldo para renovar la cuota."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 542
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11ACT"
+  TxtTitle: "Welcome SMS  - New adds LA prepago 2GB +50min"
+  InvText: "Yoigo info: Bienvenido a La Prepago de 2 GB: 2GB a alta veloc hasta 4G y 50 min gratis por 10 E/mes. Despues llamar a 3 cen/min + 20 cen de establec. IVA incl."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 543
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11DeAct"
+  TxtTitle: "Warning SMS - Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: Necesitas un saldo minimo de 8,26 E para renovar los GB y
+minutos de tu tarifa. Recarga ahora o navega a baja velocidad a 3,63
+cent/MB IVA incluido"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 544
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11RenewalNOK"
+  TxtTitle: "Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: Necesitas un saldo minimo de 8,26 E para renovar los GB y
+minutos de tu tarifa. Recarga ahora o navega a baja velocidad a 3,63
+cent/MB IVA incluido"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 545
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11RenewalOK"
+  TxtTitle: "Warning  SMS - 2 GB +50min successful renewal"
+  InvText: "Yoigo info: Ya tienes 2 GB a alta veloc. + 50 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 8,26 euros de saldo para que se renueve la
+tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 546
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11RenewalReminder"
+  TxtTitle: "Warning SMS - Reminder the day before renewal"
+  InvText: "Yoigo info: Manana a primera hora se renuevan los GB a alta veloc y los 50
+min gratis de tu tarifa. Recuerda tener minimo 8,26E de saldo para poder
+activarlos"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 547
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11STC"
+  TxtTitle: "STC to La prepago de 2GB"
+  InvText: "Yoigo info: Tu cambio de tarifa a la Prepago 2GB se hara manana a primera
+hora. Recuerda tener como minimo un saldo 8,26 euros para que se active la
+tarifa"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 548
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ11STCScheduled"
+  TxtTitle: "STC SMS - STC already scheduled SMS (La Prepago 2GB)"
+  InvText: "Yoigo info: Tu cambio de tarifa a la Prepago 2GB se hara el 1 del proximo
+mes. Recuerda ese dia tener como minimo un saldo de 8,26 para que se active la tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 549
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12Act"
+  TxtTitle: "Welcome SMS  - New adds LA prepago 4GB + 100min"
+  InvText: "Yoigo info: Bienvenido a La Prepago de 4GB: 4GB a alta veloc hasta 4G y 100 min gratis por 15 E/mes. Despues llamadas a 3 cent/min + 20cent estab. llam IVA incl"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 550
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12DeAct"
+  TxtTitle: "Warning SMS - Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: Necesitas un saldo minimo de 12,40 Eur para renovar los GB y
+los minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63
+cen/MB IVA incl"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_bundle"
+
+bulkload: InvText
+  ITNum: 551
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12RenewalNOK"
+  TxtTitle: "Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: Necesitas un saldo minimo de 12,40 Eur para renovar los GB y
+los minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63
+cen/MB IVA incl"
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 552
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12RenewalOK"
+  TxtTitle: "Warning  SMS - 4 GB + 100min successful renewal"
+  InvText: "Yoigo info: Ya tienes 4 GB a alta veloc. +100 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 12,40 Eur de saldo para que se renueve la
+tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 553
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12RenewalReminder"
+  TxtTitle: "Warning SMS - Reminder the day before renewal"
+  InvText: "Yoigo info: Manana a primera hora se renuevan los GBs y los 100 min gratis
+de tu tarifa. Recuerda tener al menos 12,40 Eur de saldo para poder
+activarlos."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_bundle"
+
+bulkload: InvText
+  ITNum: 554
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12STC"
+  TxtTitle: "STC to La prepago de 4GB"
+  InvText: "Yoigo info: Tu cambio de tarifa az la Prpeago de 4GB se hara maÃ±aina a
+primera hora. Recuerda tener al menos 12,40 Eur de saldo para que se active la tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 555
+  FromDate: 2017-05-29
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ12STCScheduled"
+  TxtTitle: "STC SMS - STC already scheduled SMS (La Prepago 4GB)"
+  InvText: "Yoigo info: Tu cambio de tarifa a la Prepago 4GB se hara el 1 del proximo
+mes. Recuerda ese dia tener al menos 12,40 Eur de saldo para que se active
+la tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_bundle"
+
+bulkload: InvText
+  ITNum: 7059
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13Act"
+  TxtTitle: "Welcome SMS  - New adds LA PREPAGO DE LLAMADAS ILIMITADAS"
+  InvText: "Yoigo info: Ya tienes La Prepago de llamadas ilmitadas + 100MB por 12 E/mes. Si no hay saldo para renovar la cuota, llamar 6 cen/min + 20 cen est. llam IVA inc."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 7060
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13DeAct"
+  TxtTitle: "Warning SMS - Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: No tienes saldo para renovar tu tarifa. Necesitas al menos 9,92 Eur para activar llamadas ilimitadas. Recarga o llama a 6 cen/min + 20 cen establec."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 7062
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13RenewalNOK"
+  TxtTitle: "Not activation or renewal because not enough balance"
+  InvText: "Yoigo info: No tienes saldo para renovar tu tarifa. Necesitas al menos 9,92 Eur para activar llamadas ilimitadas. Recarga o llama a 6 cen/min + 20 cen establec."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 7063
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13RenewalOK"
+  TxtTitle: "Warning  SMS - 4 GB + 100min successful renewal"
+  InvText: "Yoigo info: Ya tienes llamadas ilimitadas +100 MB hasta el dia #DATE. Recuerda ese dia tener al menos 9,92 Eur de saldo para que se renueve la tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 7064
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13RenewalReminder"
+  TxtTitle: "Warning SMS - Reminder the day before renewal"
+  InvText: "Yoigo info: Manana a primera hora se renuevan los 100 MB a alta velocidad de tu tarifa. Recuerda tener al menos 9,92E de saldo para que se pueda renovar."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 7065
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13STC"
+  TxtTitle: "STC to La PREPAGO DE LLAMADAS ILIMITADAS"
+  InvText: "Yoigo info: Tu cambio a la Tarifa de llamadas ilimitadas se hara manana. Recuerda tener al menos 9,92 Eur de saldo para que se active la tarifa."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
+
+bulkload: InvText
+  ITNum: 7066
+  FromDate: 2017-05-01
+  ToDate: 2049-12-31
+  Target: "SMS"
+  KeyValue: "TARJ13STCScheduled"
+  TxtTitle: "STC SMS - STC already scheduled SMS (La PREPAGO DE LLAMADAS ILIMITADAS)"
+  InvText: "Yoigo info: Tu cambio a la Tarifa de Llamadas Ilimitadas se hara el dia 1 del mes que viene. Recuerda tener al menos 9,92 Eur de saldo para que se active."
+  Language: 1
+  Report: 5
+  Brand: "1"
+  SendRule: "R2"
+  Category: "Data_Bundle"
 
 bulkload: InvText
   ITNum: 69
@@ -8487,7 +8984,7 @@ bulkload: InvText
   ToDate: 2049-12-31
   Target: "SMS"
   KeyValue: "VOICE100Limit"
-  TxtTitle: "VOICE100 minutes limit is exceeded"
+  TxtTitle: "VOICE100 or VOICE200 minutes limit is exceeded"
   InvText: "Has usado todos los min. incluidos en tu Tarifa Plana. Desde ahora y hasta fin de mes llamadas a 0 cent/min +20 cent establec. IVA incluido."
   Language: 1
   Report: 5

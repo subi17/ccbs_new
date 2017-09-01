@@ -8,6 +8,7 @@ bulkload: TopupSchemeRow
   BeginStamp: 20090101
   EndStamp: 20491231.86399
   TopupSchemeRowID: 1
+  DisplayAmount: 10
 
 bulkload: TopupSchemeRow
   Brand: "1"
@@ -183,6 +184,7 @@ bulkload: TopupSchemeRow
   BeginStamp: 20090219
   EndStamp: 20491231.86399
   TopupSchemeRowID: 3
+  DisplayAmount: 5
 
 bulkload: TopupSchemeRow
   Brand: "1"

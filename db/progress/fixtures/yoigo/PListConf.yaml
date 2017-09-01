@@ -223,6 +223,38 @@ bulkload: PListConf
   Brand: "1"
 
 bulkload: PListConf
+  dFrom: 2017-08-23
+  dTo: 2049-12-31
+  Prior: 8
+  PriceList: "CONTRATO28"
+  RatePlan: "CONTRATO28"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATO28"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "CONTRATOS"
+  RatePlan: "CONTRATO28"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-12-12
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON"
+  RatePlan: "CONTRATO28"
+  Brand: "1"
+
+bulkload: PListConf
   dFrom: 2014-05-01
   dTo: 2054-12-31
   Prior: 5
@@ -559,6 +591,46 @@ bulkload: PListConf
   Brand: "1"
 
 bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 1
+  PriceList: "CONTRATOFIXEDONLY"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 5
+  PriceList: "COMMON3"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 20
+  PriceList: "CONTRATO8"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 30
+  PriceList: "CONTRATOFIXED"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2016-11-01
+  dTo: 2049-12-31
+  Prior: 60
+  PriceList: "COMMON"
+  RatePlan: "CONTRATOFIXEDC"
+  Brand: "1"
+
+bulkload: PListConf
   dFrom: 2014-05-01
   dTo: 2054-12-31
   Prior: 5
@@ -644,6 +716,70 @@ bulkload: PListConf
   Prior: 50
   PriceList: "COMMON2"
   RatePlan: "TARJETA"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2017-05-29
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "TARJETA10"
+  RatePlan: "TARJETA10"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-05-29
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA10"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2017-05-29
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "TARJETA11"
+  RatePlan: "TARJETA11"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-05-29
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA11"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2017-05-29
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "TARJETA12"
+  RatePlan: "TARJETA12"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-05-29
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA12"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2017-06-20
+  dTo: 2049-12-31
+  Prior: 10
+  PriceList: "TARJETA13"
+  RatePlan: "TARJETA13"
+  Brand: "1"
+
+bulkload: PListConf
+  dFrom: 2015-05-29
+  dTo: 2049-12-31
+  Prior: 50
+  PriceList: "COMMON2"
+  RatePlan: "TARJETA13"
   Brand: "1"
 
 bulkload: PListConf

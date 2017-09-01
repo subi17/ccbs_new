@@ -4643,6 +4643,22 @@ bulkload: MenuText
   MenuText: "AGREEM. CUSTOMER"
 
 bulkload: MenuText
+  MenuNum: 2247
+  MenuText: "USER    CUSTOMER"
+
+bulkload: MenuText
+  MenuNum: 2248
+  MenuText: "MOBILE  DONOR"
+
+bulkload: MenuText
+  MenuNum: 2249
+  MenuText: "FIXED   DONOR"
+
+bulkload: MenuText
+  MenuNum: 2250
+  MenuText: "CUSTOMERMANAGEM."
+
+bulkload: MenuText
   MenuNum: 2349
   MenuText: "BROWSE  INV.CUST"
 
@@ -5601,6 +5617,10 @@ bulkload: MenuText
 bulkload: MenuText
   MenuNum: 9845
   MenuText: "FINANCE DATA    "
+
+bulkload: MenuText
+  MenuNum: 9846
+  MenuText: "SECPOS  ADDRESS "
 
 bulkload: MenuText
   MenuNum: 9850

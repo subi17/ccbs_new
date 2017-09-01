@@ -948,6 +948,11 @@ bulkload: BankIdCode
   BankType: "EBA"
 
 bulkload: BankIdCode
+  BIC: "ETICES21XXX"
+  BankCode: "1550"
+  BankName: "BANCA POPOLARE ETICA"
+
+bulkload: BankIdCode
   BIC: "TRESES2BXXX"
   BankCode: "1613"
 
