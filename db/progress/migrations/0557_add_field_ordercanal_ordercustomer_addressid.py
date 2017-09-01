@@ -1,6 +1,6 @@
 from gearbox.migrations import Migration
 
-class AddFieldPRO(Migration):
+class AddFieldAddressId(Migration):
 
     database = "ordercanal"
 
