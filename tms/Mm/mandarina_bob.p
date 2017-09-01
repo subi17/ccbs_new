@@ -33,6 +33,11 @@ DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/r
 DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/outgoing/ */
 DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/     */
 
+/* Network delay */
+DEF VAR liDelayNW     AS INTEGER NO-UNDO INITIAL 5.  /* Delay for network, in seconds*/
+DEF VAR liNumItemsNW  AS INTEGER NO-UNDO INITIAL 20. /* Items in batch for network */
+DEF VAR liContItems   AS INTEGER NO-UNDO.    
+
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
 DEF VAR lcLP     AS CHAR NO-UNDO. /* ["Mandarina1"|"Mandarina2"] */
@@ -62,6 +67,12 @@ ASSIGN
    lcIncomingDirectory = fCParam("Mandarina", "MandarinaIncomingDir")
    lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
    lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir").
+
+/* Getting NetWorks parameters from CParams */
+ASSIGN
+   liDelayNW    = INTEGER(fCParam("Mandarina", "NetWorkDelay"))
+   liNumItemsNW = INTEGER(fCParam("Mandarina", "NetWorkBatchItems")).   
+
 
 /* Log file for mandarina executions */
 OUTPUT STREAM sMandaLog TO VALUE(lcLogsDirectory + "mandarina_bob.log") APPEND.
@@ -174,7 +185,6 @@ REPEAT:
          NEXT.
       END.
 
-
       lcErr = "".
       IF lcAction = "on" THEN DO:
          /* No activate LP if ICC Changed */
@@ -223,9 +233,17 @@ REPEAT:
             NEXT.
          END. 
       END.
-      
+           
       PUT STREAM sCurrentLog UNFORMATTED
         lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";OK" SKIP.
+
+      /* Network delay */
+      liContItems = liContItems + 1.
+      IF liContItems = liNumItemsNW THEN DO:
+         PAUSE liDelayNW NO-MESSAGE.
+         liContItems = 0.
+      END.
+
    END.
    INPUT STREAM sCurrentFile CLOSE.
    OUTPUT STREAM sCurrentLog CLOSE.
