@@ -5,7 +5,7 @@ class AddTableMemo(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Memo', area="Sta_Data_32", label="Memo pool", dump_name="memo", desc='''This file is a common storage area for all kind of memos
+        t = self.table('Memo', area="Memo32_Data", multitenant="yes", label="Memo pool", dump_name="memo-------1", desc='''This file is a common storage area for all kind of memos
 assigned to different tables/records''')
         t.column('HostTable', 'character', mandatory=True, format="x(12)", initial="", max_width=24, label="HostTable", column_label="HostTable", position=2, order=10, help="Name of table where this memo record is assigned")
         t.column('KeyValue', 'character', mandatory=True, format="x(16)", initial="", help="Unique value of hosting record", max_width=32, label="KeyValue", column_label="KeyValue", position=3, order=20, description="Key value of hosting rec converted into formatted string expression")
@@ -21,11 +21,11 @@ assigned to different tables/records''')
         t.column('MemoType', 'character', format="x(12)", initial="", max_width=24, label="MemoType", column_label="MemoType", position=13, order=120, help="Type of memo")
         t.column('Priority', 'integer', format=">>9", initial="0", max_width=4, label="Priority", column_label="Pri", position=14, order=130, help="Priority")
         t.column('Source', 'character', format="x(8)", initial="", max_width=16, label="Source", column_label="Source", position=15, order=140)
-        t.index('HostTable', [['Brand'], ['HostTable'], ['KeyValue'], ['MemoSeq', 'DESC']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('CustNum', [['Brand'], ['CustNum'], ['HostTable'], ['KeyValue']], area="Sta_Index_2")
-        t.index('CustOrder', [['Brand'], ['CustNum'], ['MemoSeq', 'DESC']], area="Sta_Index_2")
-        t.index('MemoSeq', [['MemoSeq']], area="Sta_Index_2", unique=True)
-        t.index('MemoType', [['Brand'], ['MemoType'], ['CustNum']], area="Sta_Index_2")
+        t.index('HostTable', [['Brand'], ['HostTable'], ['KeyValue'], ['MemoSeq', 'DESC']], area="Sta_Index_6", primary=True, unique=True)
+        t.index('CustNum', [['Brand'], ['CustNum'], ['HostTable'], ['KeyValue']], area="Sta_Index_6")
+        t.index('CustOrder', [['Brand'], ['CustNum'], ['MemoSeq', 'DESC']], area="Sta_Index_7")
+        t.index('MemoSeq', [['MemoSeq']], area="Sta_Index_7", unique=True)
+        t.index('MemoType', [['Brand'], ['MemoType'], ['CustNum']], area="Sta_Index_7")
 
     def down(self):
         self.drop_table('Memo')

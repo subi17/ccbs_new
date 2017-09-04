@@ -5,7 +5,7 @@ class AddTableCompany(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Company', area="Sta_Data_32", label="Company", dump_name="company", desc="Company data")
+        t = self.table('Company', area="Sta_Data_32", multitenant="yes", label="Company", dump_name="company", desc="Company data")
         t.column('CompName', 'character', format="x(30)", initial="", max_width=60, label="CompName", column_label="Comp.Name", position=2, order=10, help="Company's name")
         t.column('Address', 'character', format="x(30)", initial="", max_width=60, label="Address", column_label="Address", position=3, order=20, help="Company's address")
         t.column('PostOffice', 'character', format="x(30)", initial="", max_width=60, label="Postcode", column_label="Postcode", position=4, order=30, help="Company's postal code + city")
@@ -20,7 +20,7 @@ class AddTableCompany(Migration):
         t.column('Address3', 'character', format="x(30)", initial="", max_width=60, label="Address 3", column_label="Addr3", position=14, order=500, help="Additional address")
         t.column('Address4', 'character', format="x(30)", initial="", max_width=60, label="Address 4", column_label="Addr4", position=15, order=510, help="Additional address")
         t.column('Address2', 'character', format="x(30)", initial="", max_width=60, label="Address 2", column_label="Addr2", position=16, order=490, help="Additional address")
-        t.index('unitcode', [['Brand'], ['UnitCode']], area="Sta_Index_2", primary=True, unique=True)
+        t.index('unitcode', [['Brand'], ['UnitCode']], area="Sta_Index_3", primary=True, unique=True)
 
     def down(self):
         self.drop_table('Company')
