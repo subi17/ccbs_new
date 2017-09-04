@@ -17,11 +17,14 @@ IF NOT fCheckHPDStatus(MServiceLimit.MsSeq,
                        MServiceLimit.EndTS)
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.TableName = "MServiceLimit"
-   Common.RepLog.EventType = "DELETE"
-   Common.RepLog.EventTime = NOW
+   Common.RepLog.TableName  = "MServiceLimit"
+   Common.RepLog.EventType  = "DELETE"
+   Common.RepLog.EventTime  = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER MServiceLimit:HANDLE)
    Common.RepLog.KeyValue  = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} MSID}
    .
 
