@@ -5,7 +5,7 @@ class AddTableFuncRunQSParam(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FuncRunQSParam', area="Sta_Data_64", label="Function Queue Parameters", dump_name="FuncRunQSParam", desc="Parameters for scheduled function queue")
+        t = self.table('FuncRunQSParam', area="Sta_Data_64", multitenant="yes", label="Function Queue Parameters", dump_name="FuncRunQSParam", desc="Parameters for scheduled function queue")
         t.column('FRQueueID', 'integer', format=">>>>>>>>>9", initial="0", max_width=4, label="Queue ID", column_label="Queue", position=2, order=10, help="Unique ID for the queue")
         t.column('FRQRowSeq', 'integer', format=">>>>>9", initial="0", max_width=4, label="Row Sequence", column_label="Row", position=3, order=20, help="Row sequence (order)")
         t.column('FRQScheduleID', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Queue Timing ID", column_label="Timing", position=4, order=30, help="Unique ID for scheduling row")
