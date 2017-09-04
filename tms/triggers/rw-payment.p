@@ -21,6 +21,8 @@ THEN llIsOnHPD = ( LOOKUP(STRING(oldPayment.PaymType),"1,8") > 1 AND oldPayment.
 IF llIsOnHPD = FALSE AND llShouldBeOnHPD = FALSE
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "Payment"
@@ -30,6 +32,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER Payment:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -45,6 +48,7 @@ THEN DO:
       Common.RepLog.TableName = "Payment"
       Common.RepLog.EventType = "DELETE"
       Common.RepLog.EventTime = NOW
+      Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldPayment:HANDLE)
       Common.RepLog.KeyValue  = STRING(oldPayment.Voucher)
       .
 END.

@@ -409,4 +409,12 @@ CLASS HPD.DumpBase:
 
    END METHOD.
 
+
+   METHOD PUBLIC VOID mSetBrandValueToHeader():
+
+      IF multitenancy.TenantInformation:IsMultiTenant
+      THEN mUpdateDumpHeader(6,"",multitenancy.TenantInformation:mGetBrandForTable(lbDumpFile.MainTable)).
+
+   END METHOD.
+
 END CLASS.
