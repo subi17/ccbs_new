@@ -5,7 +5,7 @@ class AddTableDumpLog(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DumpLog', area="Sta_Data_64", label="Dump Log", dump_name="DumpLog", desc="Collect all dump file status information")
+        t = self.table('DumpLog', area="Sta_Data_64", multitenant="yes", label="Dump Log", dump_name="DumpLog", desc="Collect all dump file status information")
         t.column('DumpLogId', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Dump Log Id", position=2, order=5, help="Unique ID for Dump Log")
         t.column('DumpId', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Dump Id", position=3, order=10, help="Dump Id")
         t.column('FileName', 'character', format="x(50)", initial="", max_width=100, label="File Name", position=4, order=20, help="Name of dump file")
