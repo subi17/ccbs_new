@@ -5,7 +5,7 @@ class AddTableDFTimeTable(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DFTimeTable', area="Sta_Data_128", label="Dump Time Table", dump_name="dftimetable", desc="Time table for dump files")
+        t = self.table('DFTimeTable', area="Sta_Data_128", multitenant="yes", label="Dump Time Table", dump_name="dftimetable", desc="Time table for dump files")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code of brand")
         t.column('DumpID', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Dump ID", column_label="ID", position=3, order=20, help="Unique ID")
         t.column('DumpMode', 'character', format="x(8)", initial="", max_width=16, label="Dump Mode", column_label="Mode", position=6, order=50, help="Dump mode")
@@ -19,7 +19,7 @@ class AddTableDFTimeTable(Migration):
         t.column('Ongoing', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="Ongoing Run Started", column_label="Ongoing", position=14, order=110, help="Starting time of an ongoing run")
         t.column('UseReplica', 'logical', format="Yes/No", initial="No", max_width=1, label="UseReplica", column_label="UseReplica", position=15, order=120, help="To find Production/Replication")
         t.column('DumpTrigger', 'logical', format="yes/no", initial="no", max_width=1, label="Triggered Dump", column_label="DumpTrigger", position=16, order=130, help="Triggered Dump")
-        t.index('DumpID', [['Brand'], ['DumpID'], ['ToDate', 'DESC']], area="Sta_Index_2", primary=True)
+        t.index('DumpID', [['Brand'], ['DumpID'], ['ToDate', 'DESC']], area="Sta_Index_3", primary=True)
 
     def down(self):
         self.drop_table('DFTimeTable')

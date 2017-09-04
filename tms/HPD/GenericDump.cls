@@ -19,6 +19,10 @@ USING Progress.Lang.*.
 USING HPD.DumpHandlerWithQuery.
 USING HPD.DumpBase.
 USING HPD.DumpFile.
+USING HPD.DumpMQ.
+USING HPD.DumpSomeWhere.
+
+{HPD/HPDConst.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -50,11 +54,13 @@ CLASS HPD.GenericDump INHERITS DumpHandlerWithQuery:
       
       SUPER(iiDumpID).
 
-      objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+      IF icFile = "{&FileIDForMQ}"
+      THEN objDumpBase = NEW DumpMQ(iiDumpID, THIS-OBJECT).
+      ELSE objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
 
       mInitTable().
 
-      mProcessToFile().
+      mProcessToSomeWhere().
       
       /* If there has been problems we won't be here... */ 
       IF llInterrupted = FALSE
@@ -89,14 +95,14 @@ CLASS HPD.GenericDump INHERITS DumpHandlerWithQuery:
    END METHOD.
       
    
-   METHOD PRIVATE VOID mProcessToFile():
+   METHOD PRIVATE VOID mProcessToSomeWhere():
      
-      DEFINE VARIABLE objDumpFile   AS CLASS HPD.DumpFile NO-UNDO.
-      DEFINE VARIABLE liAmount      AS INTEGER            NO-UNDO.
+      DEFINE VARIABLE objDumpSomeWhere AS CLASS DumpSomeWhere NO-UNDO.
+      DEFINE VARIABLE liAmount         AS INTEGER             NO-UNDO.
             
-      objDumpFile = CAST(objDumpBase, HPD.DumpFile).
+      objDumpSomeWhere = CAST(objDumpBase, DumpSomeWhere).
 
-      liAmount = objDumpFile:FullDumpLimit.
+      liAmount = objDumpSomeWhere:FullDumpLimit.
 
       lhQuery:SET-BUFFERS(lhMainTable).
       
@@ -122,7 +128,7 @@ CLASS HPD.GenericDump INHERITS DumpHandlerWithQuery:
 
          liEvents = liEvents + 1.
          
-         objDumpFile:mWriteALine().
+         objDumpSomeWhere:mWriteALine().
 
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
          DO:
