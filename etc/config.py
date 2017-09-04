@@ -19,5 +19,5 @@ wwwrealm       = 'yes'
 client_timezone = 'local'
 server_timezone = 'local'
 rpcversion_filename = 'version.txt'
-tenancies      = { 'yoigo': { 'domain': 'dyoigo', 'username': 'yoigo', 'password': 'yoigo', 'tenanttype': 'Default' } }
+tenancies      = { 'super': { 'domain': 'dsuper', 'username': 'super', 'password': 'super', 'tenanttype': 'Super', 'tenantname': 'Tsuper' }, 'yoigo': { 'domain': 'dyoigo', 'username': 'yoigo', 'password': 'yoigo', 'tenanttype': 'Default', 'tenantname': 'Default' }, 'masmovil': { 'domain': 'dmasmovil', 'username': 'masmovil', 'password': 'masmovil', 'tenanttype': 'Regular', 'tenantname': 'Tmasmovil' } }
 ENV['display_banner'] = 'no'

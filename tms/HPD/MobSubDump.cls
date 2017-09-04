@@ -2,6 +2,10 @@ USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.DumpBase.
 USING HPD.DumpFile.
+USING HPD.DumpMQ.
+USING HPD.DumpSomeWhere.
+
+{HPD/HPDConst.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -24,13 +28,16 @@ CLASS HPD.MobSubDump FINAL INHERITS DumpHandler:
    CONSTRUCTOR PUBLIC MobSubDump
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
-               
-      objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+
+      IF icFile = "{&FileIDForMQ}"
+      THEN objDumpBase = NEW DumpMQ(iiDumpID, THIS-OBJECT).
+      ELSE objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+
       objDumpBase:mUseTable(BUFFER lbMobSub:HANDLE).
       objDumpBase:mUseTable(BUFFER lbMsOwner:HANDLE).
       objDumpBase:mVerifyDumpFileData().
 
-      mProcessFullDump(INPUT CAST(objDumpBase, DumpFile)).
+      mProcessFullDump(INPUT CAST(objDumpBase, DumpSomeWhere)).
       
       /* If there has been problems we won't be here... */ 
       IF llInterrupted = FALSE
@@ -94,7 +101,7 @@ CLASS HPD.MobSubDump FINAL INHERITS DumpHandler:
 
 
    METHOD PRIVATE VOID mProcessFullDump
-      (INPUT objDumpFile AS CLASS DumpFile):
+      (INPUT objDumpSomeWhere AS CLASS DumpSomeWhere):
    
       FOR EACH lbMobSub NO-LOCK
          ON QUIT UNDO, RETRY
@@ -109,7 +116,7 @@ CLASS HPD.MobSubDump FINAL INHERITS DumpHandler:
       
          mFindMsOwner().
 
-         objDumpFile:mWriteALine().
+         objDumpSomeWhere:mWriteALine().
          
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
          DO:

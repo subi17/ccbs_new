@@ -5,7 +5,7 @@ class AddTableFATConfig(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FATConfig', area="Sta_Data_128", label="FAT Configuration", dump_name="fatconfi", desc='''FAT configuration
+        t = self.table('FATConfig', area="Sta_Data_128", multitenant="yes", label="FAT Configuration", dump_name="fatconfi", desc='''FAT configuration
 ''')
         t.column('FtGrp', 'character', format="x(8)", initial="", max_width=16, label="FatGroup", column_label="FtGrp", position=2, order=10, help="Fat group")
         t.column('ConfType', 'integer', format=">9", initial="0", max_width=4, label="Config Type", column_label="Type", position=3, order=20, help="Configuration type")
@@ -17,7 +17,7 @@ class AddTableFATConfig(Migration):
         t.column('ValidFrom', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=9, order=80, help="Valid from")
         t.column('ValidTo', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=10, order=90, help="Valid to")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=11, order=100, help="Code Of Brand")
-        t.index('FTGrp', [['Brand'], ['FtGrp'], ['ConfType'], ['ConfTarget'], ['ValidTo', 'DESC']], area="Sta_Index_2", primary=True)
+        t.index('FTGrp', [['Brand'], ['FtGrp'], ['ConfType'], ['ConfTarget'], ['ValidTo', 'DESC']], area="Sta_Index_3", primary=True)
 
     def down(self):
         self.drop_table('FATConfig')

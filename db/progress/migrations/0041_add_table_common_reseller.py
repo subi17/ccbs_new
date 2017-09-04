@@ -5,7 +5,7 @@ class AddTableReseller(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Reseller', area="Sta_Data_128", label="Resellers", dump_name="reseller", desc="Resellers")
+        t = self.table('Reseller', area="Sta_Data_128", multitenant="yes", label="Resellers", dump_name="reseller", desc="Resellers")
         t.column('Reseller', 'character', format="x(8)", initial="", max_width=16, label="Code", column_label="Code", position=2, order=10, help="\"An unique code for a reseller; maximum 8 characters\"")
         t.column('RsName', 'character', format="x(30)", initial="", max_width=60, label="Name", column_label="Name", position=3, order=20, help="Reseller's name")
         t.column('Salesman', 'character', format="x(8)", initial="", max_width=16, label="Salesman", column_label="Salesman", position=4, order=30, help="Code of that salesman who is responsible of this reseller")
@@ -17,9 +17,9 @@ class AddTableReseller(Migration):
         t.column('Active', 'logical', format="Yes/No", initial="Yes", max_width=1, label="Active", column_label="Active", position=10, order=90)
         t.column('FUC1', 'character', format="x(10)", initial="", max_width=20, label="FUC1", column_label="FUC1", position=11, order=100)
         t.column('FUC2', 'character', format="x(10)", initial="", max_width=20, label="FUC2", column_label="FUC2", position=12, order=110)
-        t.index('Reseller', [['Brand'], ['Reseller']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('RsName', [['Brand'], ['RsName'], ['Reseller']], area="Sta_Index_2", unique=True)
-        t.index('Salesman', [['Brand'], ['Salesman'], ['Reseller']], area="Sta_Index_2", unique=True)
+        t.index('Reseller', [['Brand'], ['Reseller']], area="Sta_Index_3", primary=True, unique=True)
+        t.index('RsName', [['Brand'], ['RsName'], ['Reseller']], area="Sta_Index_3", unique=True)
+        t.index('Salesman', [['Brand'], ['Salesman'], ['Reseller']], area="Sta_Index_3", unique=True)
 
     def down(self):
         self.drop_table('Reseller')

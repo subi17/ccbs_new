@@ -18,6 +18,8 @@ THEN llWasOnHPD = LOOKUP(STRING(oldServiceLCounter.SlSeq),"{&DSS_SLSEQS}") > 0.
 IF llShouldBeOnHPD = FALSE AND llWasOnHPD = FALSE
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "ServiceLCounter"
@@ -27,6 +29,7 @@ ASSIGN
                                THEN "DELETE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER ServiceLCounter:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE"
@@ -46,12 +49,13 @@ THEN DO:
    
    IF NOT llSameValues
    THEN DO:
-      CREATE billing.RepLog.
+      CREATE Common.RepLog.
       ASSIGN
-         billing.RepLog.TableName = "ServiceLCounter"
-         billing.RepLog.EventType = "DELETE"
-         billing.RepLog.EventTime = NOW
-         billing.RepLog.KeyValue  = IF oldServiceLCounter.MsSeq = 0
+         Common.RepLog.TableName = "ServiceLCounter"
+         Common.RepLog.EventType = "DELETE"
+         Common.RepLog.EventTime = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldServiceLCounter:HANDLE)
+         Common.RepLog.KeyValue  = IF oldServiceLCounter.MsSeq = 0
                                     THEN {HPD/keyvalue.i oldServiceLCounter . {&HPDKeyDelimiter} CustNum SlSeq Period}
                                     ELSE {HPD/keyvalue.i oldServiceLCounter . {&HPDKeyDelimiter} MsSeq SlSeq Period}
          .
