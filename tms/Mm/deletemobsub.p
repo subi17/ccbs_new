@@ -353,6 +353,9 @@ PROCEDURE pTerminate:
    IF (lcTerminationType EQ {&TERMINATION_TYPE_FULL} AND
        fIsConvergenceTariff(Mobsub.CliType)) THEN DO:
       fTerminateSVAs(liMsSeq, FALSE).
+      /* Find Original request */
+      FIND FIRST MSRequest WHERE
+                 MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
       fDeactivateTVService(liMsSeq, MsRequest.UserCode).
    END.
 
