@@ -8,11 +8,28 @@ normal zR
 
 execute "set path+=" . ccbspath . "/tms"
 set suffixes+=.r
-
-
+if $TENANT == ""
+    let $TENANT ="super"
+    "set statusline=%f\ -\ Tenant:\ super
+endif
+    
+set statusline=%f\ -\ Tenant:\ %{$TENANT}
+set laststatus=2
+let g:counter = 0
+map <C-a> :call Set_tenant()<ENTER>
 "*******************************+
 " Table description with Shift-K
 "*******************************+
+function! Set_tenant()
+    let tenants = ["super", "yoigo", "masmovil"]
+    if (g:counter + 1) >= len(tenants)
+        let g:counter=0
+    else
+        let g:counter = g:counter + 1
+    endif
+    let $TENANT=tenants[g:counter]
+endfunction
+
 function! Print_tabledesc()
     execute "! pike -C " . g:ccbspath . "/tools/docgen/tbldesc <cWORD>"
 endfunction
@@ -95,7 +112,7 @@ function! Run_4gl()
     silent echo "END."
     silent echo "QUIT."
     redir END
-    execute "silent ! pike -C " . g:ccbspath . "/tms vim " . l:pfile . " current_dir=" . getcwd()
+    execute "silent ! pike -C " . g:ccbspath . "/tms vim " . l:pfile . " current_dir=" . getcwd() . " tenant=" . $TENANT
 
 endfunction
 
@@ -212,7 +229,7 @@ function! Check_syntax() range
     silent echo "COMPILE " . l:tempfile . "."
     redir END
 
-    let l:output = system("pike -C " . g:ccbspath . "/tms vimbatch " . l:pfile . " current_dir=" . getcwd())
+    let l:output = system("pike -C " . g:ccbspath . "/tms vimbatch " . l:pfile . " current_dir=" . getcwd() . " tenant=" . $TENANT)
     let dummy = delete(l:tempfile)
     let dummy = delete(l:pfile)
 

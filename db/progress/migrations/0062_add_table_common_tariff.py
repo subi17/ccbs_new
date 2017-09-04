@@ -5,7 +5,7 @@ class AddTableTariff(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Tariff', area="Sta_Data_32", label="Tariffs", dump_name="tariff", desc="B-number tariffs, either general or customer depended")
+        t = self.table('Tariff', area="Sta_Data_32", multitenant="yes", label="Tariffs", dump_name="tariff", desc="B-number tariffs, either general or customer depended")
         t.column('CustNum', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=2, order=20, help="Customer number")
         t.column('BDest', 'character', mandatory=True, format="x(16)", initial="", max_width=32, label="B-subNo", column_label="B-subNo", position=3, order=30, help="B-subscriber/destination ")
         t.column('Price', 'decimal', format="zz9.99999", decimals=5, initial="0", max_width=120, label="Rate", column_label="Rate", extent=6, position=6, order=60, help="Rate: 1/100 per sec (ENTER)  or 1/1 per min (HOME)")
@@ -37,13 +37,13 @@ class AddTableTariff(Migration):
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=32, order=290, help="Code Of Brand")
         t.column('MpmRid', 'character', format="x(8)", initial="", max_width=16, label="Reporting ID", column_label="MpmRid", position=33, order=300, help="Reporting id")
         t.column('ServRid', 'character', format="x(8)", initial="", max_width=16, label="Service ID", column_label="ServRid", position=34, order=310, help="Service reporting id")
-        t.index('CCN', [['Brand'], ['CCN'], ['PriceList'], ['BDest'], ['ValidFrom', 'DESC'], ['ValidTo', 'DESC']], area="Sta_Index_2", primary=True)
-        t.index('CCNCust', [['Brand'], ['CCN'], ['CustNum'], ['BDest'], ['ValidFrom', 'DESC']], area="Sta_Index_2")
-        t.index('CustNum', [['Brand'], ['CustNum'], ['CCN'], ['ValidFrom', 'DESC'], ['ValidTo', 'DESC'], ['BDest']], area="Sta_Index_2")
-        t.index('CustNum_s', [['CustNum'], ['CCN'], ['ValidFrom', 'DESC'], ['ValidTo', 'DESC'], ['BDest']], area="Sta_Index_2")
-        t.index('PriceList', [['Brand'], ['PriceList'], ['CCN'], ['BDest'], ['ValidFrom', 'DESC']], area="Sta_Index_2")
-        t.index('TariffNum', [['Brand'], ['TariffNum']], area="Sta_Index_2", unique=True)
-        t.index('TariffType', [['Brand'], ['TariffType']], area="Sta_Index_2")
+        t.index('CCN', [['Brand'], ['CCN'], ['PriceList'], ['BDest'], ['ValidFrom', 'DESC'], ['ValidTo', 'DESC']], area="Sta_Index_4", primary=True)
+        t.index('CCNCust', [['Brand'], ['CCN'], ['CustNum'], ['BDest'], ['ValidFrom', 'DESC']], area="Sta_Index_3")
+        t.index('CustNum', [['Brand'], ['CustNum'], ['CCN'], ['ValidFrom', 'DESC'], ['ValidTo', 'DESC'], ['BDest']], area="Sta_Index_3")
+        t.index('CustNum_s', [['CustNum'], ['CCN'], ['ValidFrom', 'DESC'], ['ValidTo', 'DESC'], ['BDest']], area="Sta_Index_3")
+        t.index('PriceList', [['Brand'], ['PriceList'], ['CCN'], ['BDest'], ['ValidFrom', 'DESC']], area="Sta_Index_3")
+        t.index('TariffNum', [['Brand'], ['TariffNum']], area="Sta_Index_3", unique=True)
+        t.index('TariffType', [['Brand'], ['TariffType']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('Tariff')
