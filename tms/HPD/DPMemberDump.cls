@@ -2,7 +2,11 @@ USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.DumpBase.
 USING HPD.DumpFile.
+USING HPD.DumpMQ.
+USING HPD.DumpSomeWhere.
 USING HPD.HPDTime.
+
+{HPD/HPDConst.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -26,11 +30,14 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
 
-      objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+      IF icFile = "{&FileIDForMQ}"
+      THEN objDumpBase = NEW DumpMQ(iiDumpID, THIS-OBJECT).
+      ELSE objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
+
       objDumpBase:mUseTable(BUFFER lbDPMember:HANDLE).
       objDumpBase:mVerifyDumpFileData().
 
-      mProcessFullDump(INPUT CAST(objDumpBase, DumpFile)).
+      mProcessFullDump(INPUT CAST(objDumpBase, DumpSomeWhere)).
       
       /* If there has been problems we won't be here... */
       IF llInterrupted = FALSE
@@ -79,7 +86,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
 
 
    METHOD PRIVATE VOID mProcessFullDump
-      (INPUT objDumpFile AS CLASS DumpFile):
+      (INPUT objDumpSomeWhere AS CLASS DumpSomeWhere):
 
       DEFINE VARIABLE ldaValidTo AS DATE    NO-UNDO.
       DEFINE VARIABLE llSkip     AS LOGICAL NO-UNDO.
@@ -111,7 +118,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
 
          liEvents = liEvents + 1.
 
-         objDumpFile:mWriteALine().
+         objDumpSomeWhere:mWriteALine().
 
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
          DO:

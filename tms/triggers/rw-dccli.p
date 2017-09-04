@@ -6,6 +6,8 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF DCCLI OLD BUFFER oldDCCLI.
 
 {triggers/check_mobsub.i DCCLI MsSeq}
 
+{triggers/replog_tenantname.i}
+
 CREATE Mobile.RepLog.
 ASSIGN
    Mobile.RepLog.TableName = "DCCLI"
@@ -15,6 +17,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
+   Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER DCCLI:HANDLE)
    .
 
 IF Mobile.RepLog.EventType = "DELETE" 
@@ -33,10 +36,11 @@ THEN DO:
    THEN DO:
       CREATE Mobile.RepLog.
       ASSIGN
-         Mobile.RepLog.TableName = "DCCLI"
-         Mobile.RepLog.EventType = "DELETE"
-         Mobile.RepLog.EventTime = NOW
-         Mobile.RepLog.KeyValue  = {HPD/keyvalue.i oldDCCLI . {&HPDKeyDelimiter} PerContractID}
+         Mobile.RepLog.TableName  = "DCCLI"
+         Mobile.RepLog.EventType  = "DELETE"
+         Mobile.RepLog.EventTime  = NOW
+         Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER oldDCCLI:HANDLE)
+         Mobile.RepLog.KeyValue   = {HPD/keyvalue.i oldDCCLI . {&HPDKeyDelimiter} PerContractID}
          .
    END.
 END.
