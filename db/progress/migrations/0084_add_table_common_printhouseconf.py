@@ -5,7 +5,7 @@ class AddTablePrintHouseConf(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('PrintHouseConf', area="Sta_Data_256", label="Printhouse Configuration", dump_name="printhouseconf", desc="Printhouse configuration")
+        t = self.table('PrintHouseConf', area="Sta_Data_2_256", multitenant="yes", label="Printhouse Configuration", dump_name="printhouseconf", desc="Printhouse configuration")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code of brand")
         t.column('TableName', 'character', format="x(16)", initial="", max_width=32, label="Table Name", column_label="Table", position=3, order=20, help="Table name")
         t.column('KeyValue', 'character', format="x(20)", initial="", max_width=40, label="Key Value", column_label="Key", position=4, order=30, help="Key value")
