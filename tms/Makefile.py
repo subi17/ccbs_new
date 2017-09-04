@@ -8,6 +8,7 @@ import time
 import glob
 import errno
 import resource
+import fnmatch
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -237,18 +238,19 @@ def _compile(compilecommand, compiledir):
     if 'parameters' in globals() and len(parameters) > 0:
         source_files = [ filu for filu in parameters if re.search(r'.*\.(p|cls)$', filu) ]
     else:
-        source_files.extend(['applhelp.p'])
-        for source_dir in os.listdir('.'):
-            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref']:
-                continue
-            source_files.extend([ filu for filu in glob('{0}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
-
-    if compiledir:
+        excluded_dirs = set(['lib', 'test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref'])
         seen = []
-        for dir in (os.path.dirname(compiledir +'/' + x) for x in source_files):
-            if dir not in seen:
-               mkdir_p(dir)
-               seen.append(dir)
+        rootlevel = True
+        for root, dirs, files in os.walk('.', topdown=True):
+            if rootlevel:
+                [dirs.remove(d) for d in list(dirs) if d in excluded_dirs]
+                rootlevel = False
+            for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
+                source_files.append(os.path.join(root, filename)[2:])
+                if compiledir:
+                    if root[2:] and root not in seen:
+                        mkdir_p('{0}/{1}'.format(compiledir,root[2:]))
+                        seen.append(root)
 
     args = ['-pf', getpf('../db/progress/store/all')]
     dbcount = len(databases)
@@ -277,7 +279,6 @@ def _compile(compilecommand, compiledir):
         comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
         processes.append(comp)
 
-    comp_error = False
     for comp in processes:
         call('/bin/cat', stdin=comp.stdout)
         comp.wait()
