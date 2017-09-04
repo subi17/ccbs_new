@@ -5,8 +5,8 @@ class AddTableHighUsage(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('HighUsage', area="Sta_Data_64", dump_name="highusag")
-        t.column('InvSeq', 'integer', format=">>>>>>9", initial="0", max_width=4, label="InvSeq", column_label="InvSeq", position=2, order=10, help="High usage Invoice sequence")
+        t = self.table('HighUsage', area="Sta_Data_64", multitenant="yes", dump_name="highusag")
+        t.column('InvSeq', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="InvSeq", column_label="InvSeq", position=2, order=10, help="High usage Invoice sequence")
         t.column('CLI', 'character', format="x(11)", initial="", max_width=22, label="MSISDN", column_label="MSISDN No", position=3, order=20, help="MSISDN Subscriber No")
         t.column('Qty', 'integer', format=">>>>>>9", initial="0", max_width=4, label="QTY", column_label="QTY", position=4, order=30, help="Amount of call to this  Invseq/cli")
         t.column('Duration', 'integer', format=">>>>>>>>9", initial="0.00", max_width=4, label="Duration", column_label="Duration", position=5, order=40, help="duration")
@@ -19,10 +19,10 @@ class AddTableHighUsage(Migration):
         t.column('date%', 'decimal', format=">>>>9.99-", decimals=2, initial="0", max_width=17, label="Date%", column_label="Date%", position=12, order=110)
         t.column('DateGrow', 'decimal', format="->>,>>9.99", decimals=2, initial="0", max_width=17, label="DateGrow", column_label="DateGrow", position=13, order=120)
         t.column('launch', 'character', format="x(8)", initial="", max_width=16, label="Launch", column_label="Launch", position=14, order=130, help="Launch")
-        t.index('InvSeq', [['InvSeq'], ['CLI']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('Amount', [['Amount', 'DESC']], area="Sta_Index_2")
-        t.index('CLI', [['CLI'], ['CrStamp', 'DESC']], area="Sta_Index_2")
-        t.index('HiUsageStatus', [['HiUsageStatus'], ['CrStamp', 'DESC']], area="Sta_Index_2")
+        t.index('InvSeq', [['InvSeq'], ['CLI']], area="Sta_Index_3", primary=True, unique=True)
+        t.index('Amount', [['Amount', 'DESC']], area="Sta_Index_3")
+        t.index('CLI', [['CLI'], ['CrStamp', 'DESC']], area="Sta_Index_3")
+        t.index('HiUsageStatus', [['HiUsageStatus'], ['CrStamp', 'DESC']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('HighUsage')
