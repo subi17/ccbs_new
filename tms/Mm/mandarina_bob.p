@@ -57,6 +57,7 @@ DEF STREAM sMandaLog.    /* Log file for mandarina_bob.p executions */
 
 DEF VAR lcFileName    AS CHAR NO-UNDO. /* File in directory */
 DEF VAR lcCurrentFile AS CHAR NO-UNDO. /* Current processing file */
+DEF VAR lcCurrentLog  AS CHAR NO-UNDO. /* log for current processing file */
 DEF VAR lcLine        AS CHAR NO-UNDO. /* Read line of the current file. */
 
 DEF VAR lcErr     AS CHAR    NO-UNDO.
@@ -64,10 +65,11 @@ DEF VAR llSuccess AS LOGICAL NO-UNDO.
 
 /* Getting directories from CParams */
 ASSIGN
-   lcSpoolDirectory    = fCParam("Mandarina", "MandarinaSpoolDir")
-   lcIncomingDirectory = fCParam("Mandarina", "MandarinaIncomingDir")
-   lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
-   lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir") NO-ERROR.
+   lcSpoolDirectory     = fCParam("Mandarina", "MandarinaSpoolDir")
+   lcIncomingDirectory  = fCParam("Mandarina", "MandarinaIncomingDir")
+   lcOutgoingDirectory  = fCParam("Mandarina", "MandarinaOutgoingDir")
+   lcLogsDirectory      = fCParam("Mandarina", "MandarinaLogsDir")
+   lcProcessedDirectory = fCParam("Mandarina", "MandarinaProcessedDir") NO-ERROR.
 
 /* Getting NetWorks parameters from CParams */
 ASSIGN
@@ -140,9 +142,10 @@ REPEAT:
    IF NOT (lcFileName BEGINS ("LP" + pcProcessMode)) THEN
      NEXT.
    lcCurrentFile = lcInComingDirectory + lcFileName.
+   lcCurrentLog = lcLogsDirectory + lcFileName + ".log". 
    IF SEARCH(lcCurrentFile) NE ? THEN DO:
-      INPUT STREAM sCurrentFile FROM VALUE(lcCurrentFile).
-      OUTPUT STREAM sCurrentLog TO VALUE(lcLogsDirectory + lcFileName + ".log") APPEND. /* "append" to don't lose previous log if duplicated incommming file name */
+      INPUT  STREAM sCurrentFile FROM VALUE(lcCurrentFile).
+      OUTPUT STREAM sCurrentLog TO VALUE(lcCurrentLog) APPEND. /* "append" to don't lose previous log if duplicated incommming file name */
    END.
    ELSE 
       NEXT. 
@@ -247,7 +250,8 @@ REPEAT:
    END.
    INPUT STREAM sCurrentFile CLOSE.
    OUTPUT STREAM sCurrentLog CLOSE.
-   fMove2TransDir(lcCurrentFile, "", lcOutgoingDirectory).
+   fMove2TransDir(lcCurrentFile, "", lcProcessedDirectory).
+   fMove2TransDir(lcCurrentLog, "", lcOutgoingDirectory).
    PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finis_processing_file" SKIP.
 
 END. 
