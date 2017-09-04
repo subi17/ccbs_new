@@ -13,6 +13,8 @@ THEN RETURN.
 
 {triggers/check_mobsub.i FixedFee KeyValue}
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "FixedFee"
@@ -23,6 +25,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER FixedFee:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -41,9 +44,10 @@ THEN DO:
    THEN DO:
       CREATE Common.RepLog.
       ASSIGN
-         Common.RepLog.TableName = "FixedFee"
-         Common.RepLog.EventType = "DELETE"
-         Common.RepLog.EventTime = NOW
+         Common.RepLog.TableName  = "FixedFee"
+         Common.RepLog.EventType  = "DELETE"
+         Common.RepLog.EventTime  = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldFixedFee:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldFixedFee . {&HPDKeyDelimiter} FFNum}
          .
    END.

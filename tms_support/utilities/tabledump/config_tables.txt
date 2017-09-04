@@ -46,6 +46,7 @@ DPBasis
 DPConf
 DPSubject
 DPTarget
+DPRate
 #DumpFile
 EventLogConf
 FATConfig
