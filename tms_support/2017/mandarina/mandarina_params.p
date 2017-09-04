@@ -14,14 +14,15 @@
 /* If they exist, then update with the new values.              */
 
 /* Directories */
-DEF VAR lcBaseDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/".
-DEF VAR lcSpoolDirectory    AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/spool/". 
-DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/incoming/". 
-DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/outgoing/". 
-DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/logs/". 
-
+DEF VAR lcBaseDirectory      AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/".
+DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/spool/". 
+DEF VAR lcIncomingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/incoming/". 
+DEF VAR lcOutgoingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/outgoing/". 
+DEF VAR lcLogsDirectory      AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/logs/".
+DEF VAR lcProcessedDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/processed/".
+ 
 /* Network delay */
-DEF VAR lcDelayNW AS CHAR NO-UNDO INITIAL "5".  /* Delay time in seconds */ 
+DEF VAR lcDelayNW AS CHAR NO-UNDO INITIAL "5".  /* Delay time in seconds    */ 
 DEF VAR lcItemsNW AS CHAR NO-UNDO INITIAL "20". /* Number of Items in batch */
 
 /* Base directory */
@@ -124,19 +125,40 @@ ASSIGN
   ordercanal.TMSParam.CharVal = lcLogsDirectory. 
 RELEASE ordercanal.TMSParam. 
 
-/* NetWorkDelay, in seconds */
+/* Processed directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
            ordercanal.TMSParam.Brand      = "1"         AND
            ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "NetWorkDelay"                
+           ordercanal.TMSParam.ParamCode  = "MandarinaProcessedDir"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
    ASSIGN
       ordercanal.TMSParam.Brand      = "1"                               
       ordercanal.TMSParam.ParamGroup = "Mandarina"                       
-      ordercanal.TMSParam.ParamCode  = "NetWorkDelay"                 
-      ordercanal.TMSParam.ParamName  = "Network delay, in seconds"              
+      ordercanal.TMSParam.ParamCode  = "MandarinaProcessedDir"                 
+      ordercanal.TMSParam.ParamName  = "Processed directory for Mandarina LP"              
+      ordercanal.TMSParam.ParamType  = "C"                               
+      ordercanal.TMSParam.OnLine     = NO.
+END.
+ASSIGN
+  ordercanal.TMSParam.CharVal = lcLogsDirectory. 
+RELEASE ordercanal.TMSParam. 
+
+
+/* NetWorkDelay, in seconds */
+FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
+           ordercanal.TMSParam.Brand      = "1"         AND
+           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  = "MandarinaNetWorkDelay"                
+     USE-INDEX ParamGroup NO-ERROR.
+IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
+   CREATE ordercanal.TMSParam.
+   ASSIGN
+      ordercanal.TMSParam.Brand      = "1"                               
+      ordercanal.TMSParam.ParamGroup = "Mandarina"                       
+      ordercanal.TMSParam.ParamCode  = "MandarinaNetWorkDelay"                 
+      ordercanal.TMSParam.ParamName  = "Network delay for Mandarina LP, in seconds"              
       ordercanal.TMSParam.ParamType  = "C"                               
       ordercanal.TMSParam.OnLine     = NO.
 END.
@@ -148,15 +170,15 @@ RELEASE ordercanal.TMSParam.
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
            ordercanal.TMSParam.Brand      = "1"         AND
            ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "NetWorkBatchItems"                
+           ordercanal.TMSParam.ParamCode  = "MandarinaNetWorkBatchItems"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
    ASSIGN
       ordercanal.TMSParam.Brand      = "1"                               
       ordercanal.TMSParam.ParamGroup = "Mandarina"                       
-      ordercanal.TMSParam.ParamCode  = "NetWorkBatchItems"                 
-      ordercanal.TMSParam.ParamName  = "Network Batch Items"              
+      ordercanal.TMSParam.ParamCode  = "Mandarina NetWorkBatchItems"                 
+      ordercanal.TMSParam.ParamName  = "Network Batch Items for Mandarina"              
       ordercanal.TMSParam.ParamType  = "C"                               
       ordercanal.TMSParam.OnLine     = NO.
 END.

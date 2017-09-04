@@ -28,10 +28,11 @@ gcbrand = "1".
 {Func/ftransdir.i}
 
 /* Directories */
-DEF VAR lcSpoolDirectory    AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/spool/    */
-DEF VAR lcIncomingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/incoming/ */  
-DEF VAR lcOutgoingDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/outgoing/ */
-DEF VAR lcLogsDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/     */
+DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/spool/     */
+DEF VAR lcIncomingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/incoming/  */  
+DEF VAR lcOutgoingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/outgoing/  */
+DEF VAR lcLogsDirectory      AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/      */
+DEF VAR lcProcessedDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/processed/ */
 
 /* Network delay */
 DEF VAR liDelayNW     AS INTEGER NO-UNDO INITIAL 5.  /* Delay for network, in seconds*/
@@ -66,13 +67,12 @@ ASSIGN
    lcSpoolDirectory    = fCParam("Mandarina", "MandarinaSpoolDir")
    lcIncomingDirectory = fCParam("Mandarina", "MandarinaIncomingDir")
    lcOutgoingDirectory = fCParam("Mandarina", "MandarinaOutgoingDir")
-   lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir").
+   lcLogsDirectory     = fCParam("Mandarina", "MandarinaLogsDir") NO-ERROR.
 
 /* Getting NetWorks parameters from CParams */
 ASSIGN
-   liDelayNW    = INTEGER(fCParam("Mandarina", "NetWorkDelay"))
-   liNumItemsNW = INTEGER(fCParam("Mandarina", "NetWorkBatchItems")).   
-
+   liDelayNW    = INT(fCParam("Mandarina", "MandarinaNetWorkDelay"))
+   liNumItemsNW = INT(fCParam("Mandarina", "MandarinaNetWorkBatchItems")) NO-ERROR.   
 
 /* Log file for mandarina executions */
 OUTPUT STREAM sMandaLog TO VALUE(lcLogsDirectory + "mandarina_bob.log") APPEND.
