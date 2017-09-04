@@ -12,14 +12,17 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF {1}.
 
 &IF {&{2}_DELETE_TRIGGER_ACTIVE} &THEN
 
+{triggers/replog_tenantname.i}
+
 IF NEW {1}
 THEN RETURN.
 
 CREATE {3}.RepLog.
 ASSIGN
-   {3}.RepLog.TableName = "{1}"
-   {3}.RepLog.EventType = "DELETE"
-   {3}.RepLog.EventTime = NOW
+   {3}.RepLog.TableName  = "{1}"
+   {3}.RepLog.EventType  = "DELETE"
+   {3}.RepLog.EventTime  = NOW
+   {3}.RepLog.TenantName = fRepLogTenantName(BUFFER {1}:HANDLE)
    {3}.RepLog.KeyValue  = &IF '{4}' NE ''
                           &THEN
                           SUBSTITUTE("&1",{1}.{4})
