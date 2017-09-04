@@ -5,7 +5,7 @@ class AddTableCounter(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Counter', area="Sta_Data_2_256", label="Counter", dump_name="counter", desc="Counter")
+        t = self.table('Counter', area="Sta_Data_2_256", multitenant="yes", label="Counter", dump_name="counter", desc="Counter")
         t.column('Brand', 'character', format="x(40)", initial="", max_width=80, label="Brand", column_label="Brand", position=2, order=10, help="Code Of Brands")
         t.column('HostTable', 'character', format="x(16)", initial="", max_width=32, label="HostTable", column_label="HostTable", position=3, order=20, help="HostTable")
         t.column('KeyValue', 'character', format="x(20)", initial="", max_width=40, label="KeyValue", column_label="KeyValue", position=4, order=30, help="KeyValue")

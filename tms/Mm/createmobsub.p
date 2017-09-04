@@ -192,7 +192,7 @@ IF lcErrorTxt > "" THEN DO:
       RETURN.
    END.
 END.
-VOICE200B
+
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
 
    FIND orderfusion NO-LOCK WHERE

@@ -5,7 +5,7 @@ class AddTableHiUsageKat(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('HiUsageKat', area="Sta_Data_2_256", dump_name="hiusagek")
+        t = self.table('HiUsageKat', area="Sta_Data_2_256", multitenant="yes", dump_name="hiusagek")
         t.column('Category', 'character', format="x(4)", initial="", max_width=8, label="Cat", column_label="Cat", position=2, order=10, help="Category code")
         t.column('AgeFrom', 'integer', format=">>9", initial="0", max_width=4, label="AgeFrom", column_label="Age From", position=3, order=20, help="From Age")
         t.column('AgeTo', 'integer', format=">>9", initial="999", max_width=4, label="AgeTo", column_label="AgeTo", position=4, order=30, help="To Age")
