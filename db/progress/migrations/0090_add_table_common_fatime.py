@@ -5,7 +5,7 @@ class AddTableFATime(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FATime', area="Sta_Data_64", label="Free Air Time", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fatime.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fatime.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatime", desc="Free air time (or free qty or free sum)")
+        t = self.table('FATime', area="Sta_Data_64", multitenant="yes", label="Free Air Time", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fatime.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fatime.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatime", desc="Free air time (or free qty or free sum)")
         t.column('FATNum', 'integer', format=">>>>>>9", initial="0", max_width=4, label="FatId", position=2, order=10, help="Unique id for fat-definition")
         t.column('Period', 'integer', format="999999", initial="0", max_width=4, label="Period", position=3, order=20, help="Period when the free air time is to be used")
         t.column('MsSeq', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="Mobsub", column_label="Msub", position=4, order=30, help="Link to mobsub-table")
@@ -42,17 +42,17 @@ class AddTableFATime(Migration):
         t.column('SubInvNum', 'integer', format=">>9", initial="0", max_width=4, label="SubInvoice Number", column_label="SubInv", position=36, order=360, help="Sequential nbr of the subinvoice within the combined invoice")
         t.column('FATType', 'integer', format="9", initial="0", help="FATime type", max_width=4, label="FATime Type", column_label="Type", position=40, order=290, description="0=calls, 1=fixed fees, 2=all")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=41, order=300, help="Code Of Brand")
-        t.index('FatType', [['CustNum'], ['CLI'], ['FATType'], ['InvNum'], ['Period']], area="Sta_Index_2", primary=True)
-        t.index('CLI', [['Brand'], ['CLI']], area="Sta_Index_2")
-        t.index('CLI_s', [['CLI']], area="Sta_Index_2")
-        t.index('CustNum_s', [['CustNum']], area="Sta_Index_2")
-        t.index('FATId', [['Brand'], ['FATId']], area="Sta_Index_2")
-        t.index('FATNum', [['Brand'], ['FATNum']], area="Sta_Index_2", unique=True)
-        t.index('ftgrd', [['Brand'], ['FTGrp']], area="Sta_Index_2")
-        t.index('HostTable', [['Brand'], ['HostTable'], ['KeyValue']], area="Sta_Index_2")
-        t.index('InvNum', [['InvNum'], ['SubInvNum']], area="Sta_Index_2")
-        t.index('Mobsub', [['Brand'], ['MsSeq'], ['Period']], area="Sta_Index_2")
-        t.index('OrigFat', [['Brand'], ['OrigFat']], area="Sta_Index_2")
+        t.index('FatType', [['CustNum'], ['CLI'], ['FATType'], ['InvNum'], ['Period']], area="Sta_Index_3", primary=True)
+        t.index('CLI', [['Brand'], ['CLI']], area="Sta_Index_3")
+        t.index('CLI_s', [['CLI']], area="Sta_Index_3")
+        t.index('CustNum_s', [['CustNum']], area="Sta_Index_3")
+        t.index('FATId', [['Brand'], ['FATId']], area="Sta_Index_3")
+        t.index('FATNum', [['Brand'], ['FATNum']], area="Sta_Index_3", unique=True)
+        t.index('ftgrd', [['Brand'], ['FTGrp']], area="Sta_Index_3")
+        t.index('HostTable', [['Brand'], ['HostTable'], ['KeyValue']], area="Sta_Index_3")
+        t.index('InvNum', [['InvNum'], ['SubInvNum']], area="Sta_Index_3")
+        t.index('Mobsub', [['Brand'], ['MsSeq'], ['Period']], area="Sta_Index_3")
+        t.index('OrigFat', [['Brand'], ['OrigFat']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('FATime')
