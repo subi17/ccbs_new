@@ -5,7 +5,7 @@ class AddTableFuncRunQSchedule(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FuncRunQSchedule', area="Sta_Data_128", label="Function Queue Timing", dump_name="FuncRunQSchedule", desc="Timetable for function queue")
+        t = self.table('FuncRunQSchedule', area="Sta_Data_128", multitenant="yes", label="Function Queue Timing", dump_name="FuncRunQSchedule", desc="Timetable for function queue")
         t.column('FRQueueID', 'integer', format=">>>>>>>>>9", initial="0", max_width=4, label="Queue ID", column_label="Queue", position=2, order=10, help="Unique ID for the queue")
         t.column('StartTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="Start Time", column_label="Start", position=3, order=20, help="Time when run will be started")
         t.column('DoneTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="Start Time", column_label="Start", position=4, order=30, help="Time when run will be started")
