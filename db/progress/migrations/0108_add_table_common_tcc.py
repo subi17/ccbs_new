@@ -5,7 +5,7 @@ class AddTableTCC(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('TCC', area="Sta_Data_128", label="Technical Call Case", dump_name="tcc", desc="Technical CCN")
+        t = self.table('TCC', area="Sta_Data_128", multitenant="yes", label="Technical Call Case", dump_name="tcc", desc="Technical CCN")
         t.column('BCC', 'integer', mandatory=True, format="zzzz9", initial="0", max_width=5, label="Billing Call Case", column_label="Bill.CC", position=2, order=1000, help="Billing call case number (BCC)")
         t.column('TCCName', 'character', format="x(30)", initial="", max_width=60, label="Name", column_label="Name", position=3, order=30, help="Name")
         t.column('DialType', 'integer', format=">>>9", initial="0", max_width=4, label="Dialling Type", column_label="DT", position=4, order=35, help="Dialling type code")
@@ -25,10 +25,10 @@ class AddTableTCC(Migration):
         t.column('TrafficType', 'integer', format="9", initial="0", max_width=5, label="Traffic Type", column_label="Traffic Type", position=33, order=900, help="Traffic type")
         t.column('BDestPref', 'character', format="x(16)", initial="", max_width=50, label="Prefix For B-Destination", column_label="Prefix For B-dest", position=34, order=82, help="Prefix for B-Destination")
         t.column('TCCPayer', 'integer', format="zz9", initial="0", max_width=5, label="TCC Payer", column_label="Payer", position=35, order=201, help="Payer; Where to find payer/owner information")
-        t.index('TCC', [['Brand'], ['TCC'], ['DurTo'], ['ValidTo', 'DESC']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('BCC', [['Brand'], ['BCC'], ['ValidTo', 'DESC']], area="Sta_Index_2")
-        t.index('DialType', [['Brand'], ['DialType'], ['ErrorCode']], area="Sta_Index_2")
-        t.index('TCCName', [['Brand'], ['TCCName']], area="Sta_Index_2")
+        t.index('TCC', [['Brand'], ['TCC'], ['DurTo'], ['ValidTo', 'DESC']], area="Sta_Index_3", primary=True, unique=True)
+        t.index('BCC', [['Brand'], ['BCC'], ['ValidTo', 'DESC']], area="Sta_Index_3")
+        t.index('DialType', [['Brand'], ['DialType'], ['ErrorCode']], area="Sta_Index_3")
+        t.index('TCCName', [['Brand'], ['TCCName']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('TCC')
