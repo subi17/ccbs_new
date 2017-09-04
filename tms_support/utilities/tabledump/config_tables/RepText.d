@@ -5320,11 +5320,21 @@
 1 "" 3 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
 1 "" 4 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
 1 "" 5 "LG G6 Ice-Platinum" 0 "P030LG6G2" "1" 27/03/17 31/12/49
+1 "" 1 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
+1 "" 2 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
+1 "" 3 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
+1 "" 4 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
+1 "" 5 "LG G6 Silver" 0 "P030LG6GC" "1" 25/08/17 31/12/49
 1 "" 1 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 2 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 3 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 4 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 5 "LG G6 Black" 0 "P030LG6N2" "1" 19/04/17 31/12/49
+1 "" 1 "LG G6 Negro" 0 "P030LG6NC" "1" 25/08/17 31/12/49
+1 "" 2 "LG G6 Negro" 0 "P030LG6NC" "1" 25/08/17 31/12/49
+1 "" 3 "LG G6 Negro" 0 "P030LG6NC" "1" 25/08/17 31/12/49
+1 "" 4 "LG G6 Negro" 0 "P030LG6NC" "1" 25/08/17 31/12/49
+1 "" 5 "LG G6 Black" 0 "P030LG6NC" "1" 25/08/17 31/12/49
 1 "" 1 "LG K8 4G Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 2 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 3 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
@@ -6047,7 +6057,7 @@
 1 "" 3 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
 1 "" 4 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
 1 "" 5 "Samsung Galaxy S8 Orchid grey" 0 "P034GS8G2" "1" 27/03/17 31/12/49
-1 "" 1 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8GC" "1" 04/08/17 31/12/49
+1 "" 1 "Samsung Galaxy S8 Gris orquídea" 0 "P034GS8GC" "1" 04/08/17 31/12/49
 1 "" 2 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8GC" "1" 04/08/17 31/12/49
 1 "" 3 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8GC" "1" 04/08/17 31/12/49
 1 "" 4 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8GC" "1" 04/08/17 31/12/49
@@ -7481,6 +7491,11 @@
 1 "" 3 "Huawei Y7 Dorado" 0 "P043HY7D2" "1" 18/07/17 31/12/49
 1 "" 4 "Huawei Y7 Dorado" 0 "P043HY7D2" "1" 18/07/17 31/12/49
 1 "" 5 "Huawei Y7 Gold" 0 "P043HY7D2" "1" 18/07/17 31/12/49
+1 "" 1 "Huawei Y7 Dorado" 0 "P043HY7DC" "1" 30/08/17 31/12/49
+1 "" 2 "Huawei Y7 Dorado" 0 "P043HY7DC" "1" 30/08/17 31/12/49
+1 "" 3 "Huawei Y7 Dorado" 0 "P043HY7DC" "1" 30/08/17 31/12/49
+1 "" 4 "Huawei Y7 Dorado" 0 "P043HY7DC" "1" 30/08/17 31/12/49
+1 "" 5 "Huawei Y7 Gold" 0 "P043HY7DC" "1" 30/08/17 31/12/49
 1 "" 1 "Huawei Y7 Gris" 0 "P043HY7G2" "1" 26/06/17 31/12/49
 1 "" 2 "Huawei Y7 Gris" 0 "P043HY7G2" "1" 26/06/17 31/12/49
 1 "" 3 "Huawei Y7 Gris" 0 "P043HY7G2" "1" 26/06/17 31/12/49
@@ -7601,6 +7616,11 @@
 1 "" 3 "Huawei P10 Oro" 0 "P043P10D2" "1" 24/03/17 31/12/49
 1 "" 4 "Huawei P10 Oro" 0 "P043P10D2" "1" 24/03/17 31/12/49
 1 "" 5 "Huawei P10 Gold" 0 "P043P10D2" "1" 24/03/17 31/12/49
+1 "" 1 "Huawei P10 Dorado" 0 "P043P10DC" "1" 25/08/17 31/12/49
+1 "" 2 "Huawei P10 Dorado" 0 "P043P10DC" "1" 25/08/17 31/12/49
+1 "" 3 "Huawei P10 Dorado" 0 "P043P10DC" "1" 25/08/17 31/12/49
+1 "" 4 "Huawei P10 Dorado" 0 "P043P10DC" "1" 25/08/17 31/12/49
+1 "" 5 "Huawei P10 Gold" 0 "P043P10DC" "1" 25/08/17 31/12/49
 1 "" 1 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
 1 "" 2 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
 1 "" 3 "Huawei P10 Negro" 0 "P043P10N2" "1" 22/02/17 31/12/49
@@ -9661,6 +9681,11 @@
 1 "" 3 "iPhone SE 32 GB Oro rosa" 0 "P097SE3R2" "1" 27/03/17 31/12/49
 1 "" 4 "iPhone SE 32 GB Oro rosa" 0 "P097SE3R2" "1" 27/03/17 31/12/49
 1 "" 5 "iPhone SE 32 GB Rose gold" 0 "P097SE3R2" "1" 27/03/17 31/12/49
+1 "" 1 "iphone SE 32 GB Oro rosa" 0 "P097SE3RC" "1" 25/08/17 31/12/49
+1 "" 2 "iphone SE 32 GB Oro rosa" 0 "P097SE3RC" "1" 25/08/17 31/12/49
+1 "" 3 "iphone SE 32 GB Oro rosa" 0 "P097SE3RC" "1" 25/08/17 31/12/49
+1 "" 4 "iphone SE 32 GB Oro rosa" 0 "P097SE3RC" "1" 25/08/17 31/12/49
+1 "" 5 "iphone SE 32 GB  Rose Gold" 0 "P097SE3RC" "1" 25/08/17 31/12/49
 1 "" 1 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49
 1 "" 2 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49
 1 "" 3 "iPhone SE 32 GB Plata" 0 "P097SE3S2" "1" 27/03/17 31/12/49

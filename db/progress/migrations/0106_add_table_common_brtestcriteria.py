@@ -5,7 +5,7 @@ class AddTableBRTestCriteria(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('BRTestCriteria', area="Sta_Data_64", label="BR Test Criteria", dump_name="brtestcriteria", desc="Billrun test case criteria")
+        t = self.table('BRTestCriteria', area="Sta_Data_64", multitenant="yes", label="BR Test Criteria", dump_name="brtestcriteria", desc="Billrun test case criteria")
         t.column('BRTestCaseID', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Test Case ID", column_label="Case ID", position=2, order=10, help="Test case ID")
         t.column('BRTestCriteriaID', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Test Criteria ID", column_label="Criteria ID", position=3, order=20, help="Test criteria id")
         t.column('CriteriaTable', 'character', format="x(20)", initial="", max_width=40, label="Criteria Table", column_label="Table", position=4, order=30, help="Criteria table")
