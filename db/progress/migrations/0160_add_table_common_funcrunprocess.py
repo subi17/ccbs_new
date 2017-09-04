@@ -5,7 +5,7 @@ class AddTableFuncRunProcess(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FuncRunProcess', area="Dyn_Data_64", label="Function process", dump_name="FuncRunProcess", desc="Single process of a function")
+        t = self.table('FuncRunProcess', area="Dyn_Data_64", multitenant="yes", label="Function process", dump_name="FuncRunProcess", desc="Single process of a function")
         t.column('FRConfigID', 'integer', format=">>>>>>9", initial="0", max_width=4, label="Configuration ID", column_label="Conf.", position=2, order=20, help="Configuration ID")
         t.column('ProcSeq', 'integer', format=">>>>>>9", initial="0", max_width=4, label="Process Sequence", column_label="Sequence", position=3, order=30, help="Sequence of the process within the execution")
         t.column('ProcessID', 'integer', format=">>>>9", initial="0", max_width=4, label="OS Process ID", column_label="OS PID", position=4, order=40, help="OS process ID")
