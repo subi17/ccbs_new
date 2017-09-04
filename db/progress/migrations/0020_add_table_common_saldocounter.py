@@ -5,7 +5,7 @@ class AddTableSaldoCounter(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('SaldoCounter', area="Sta_Data_128", dump_name="callcoun")
+        t = self.table('SaldoCounter', area="Sta_Data_128", multitenant="yes", dump_name="callcoun")
         t.column('InvSeq', 'integer', format=">>>>>>9", initial="0", max_width=4, label="InvSeq", column_label="InvSeq", position=2, order=10, help="Invoice sequence")
         t.column('CLI', 'character', format="x(12)", initial="", max_width=24, label="A-Sub", column_label="A-Sub", position=3, order=20, help="A-Subscriber number")
         t.column('Amt', 'decimal', format="->>>,>>9.99", decimals=3, initial="0", max_width=18, label="Amount", column_label="Amount", position=4, order=30, help="Unbilled Balance")
