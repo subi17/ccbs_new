@@ -5,7 +5,7 @@ class AddTableFuncRunResult(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FuncRunResult', area="Dyn_Data_128", label="Function feed", dump_name="FuncRunResult", desc="Feed to a function process")
+        t = self.table('FuncRunResult', area="Dyn_Data_128", multitenant="yes", label="Function feed", dump_name="FuncRunResult", desc="Feed to a function process")
         t.column('CharParam', 'character', format="x(8)", initial="", max_width=16, label="Character Parameter", column_label="Char.Param", position=3, order=20, help="Character parameter")
         t.column('IntParam', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Integer Parameter", column_label="Int.Param", position=4, order=30, help="Integer parameter")
         t.column('FRProcessID', 'integer', format=">>>>>>>>>9", initial="0", max_width=4, label="FR Process ID", column_label="Proc.", position=5, order=40, help="Unique ID of the process")
