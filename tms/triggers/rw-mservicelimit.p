@@ -28,6 +28,8 @@ ELSE llWasOnHPD = llShouldBeOnHPD.
 IF llWasOnHPD = FALSE AND llShouldBeOnHPD = FALSE
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "MServiceLimit"
@@ -37,6 +39,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER MServiceLimit:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -58,6 +61,7 @@ THEN DO:
          Common.RepLog.TableName = "MServiceLimit"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldMServiceLimit:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldMServiceLimit . {&HPDKeyDelimiter} MSID}
          .
    END.

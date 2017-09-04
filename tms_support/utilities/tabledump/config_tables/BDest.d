@@ -40,7 +40,7 @@
 "1015" "Información otro operador" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 30
 "10201" "Fixed Voice mail calls" 1098 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/11/16 1061
 "112/911" "Emergencia" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 31
-"11810" " de Información Telefónica número 11812 (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 32
+"11810" "11810 VOIPED TELECOM, S.L.U.(ORANGE ESPA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 32
 "11811" " de NIT SAU" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 33
 "11812" "11812 de Información Telefónica número 1" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 34
 "11813" " B.P.O. (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 35
@@ -85,7 +85,7 @@
 "11852" "11852 de Viajes Bolero (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 73
 "11853" "de Éxito Comunicaciones(Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 74
 "11854" " de Servicios de Información Audiotex Telelínea (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 75
-"11855" " de Vodafone" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 76
+"11855" "11855 UTOPIA THINKING SYSTEMS (DIALOGA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 76
 "11856" "de Emsertex 2002 (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/08/12 870
 "11857" "11857 de MEDIAPUBLILINE (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/09/12 873
 "11858" " de Opera" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 77
@@ -107,7 +107,7 @@
 "11874" " de Audiotex Phone Systems" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 93
 "11875" " de QDQ Media (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 94
 "11876" " de Internet" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 95
-"11877" "11877 de Remirson Inversora (VODAFONE ON" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 96
+"11877" "11877 de Remirson Inversora (MASVOZ)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 96
 "11878" " de Quality Telecom (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 97
 "11879" "11879 de Telefonosdecastellón (VODAFONE" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/04/13 897
 "11880" " de LIFI COMUNICACIONES. S.L." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 98
