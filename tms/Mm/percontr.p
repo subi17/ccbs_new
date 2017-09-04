@@ -1574,7 +1574,12 @@ PROCEDURE pFinalize:
                 MsRequest.ActStamp ELSE fMakeTS())
                 lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
    
-         IF LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) > 0 AND
+         IF (LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) > 0 OR
+            (LOOKUP(MsOwner.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
+             CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                            CLIType.Brand      = gcBrand         AND 
+                            CLIType.CLIType    = MsOwner.CLIType AND 
+                            CLIType.BaseBundle = MsRequest.ReqCParam3))) AND
             NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS) AND
             NOT fOngoingDSSAct(MsOwner.CustNum) AND
             fIsDSS2Allowed(MsOwner.CustNum,0,ldCurrTS,
