@@ -28,6 +28,10 @@ DEF VAR ldCollPeriodStartTS    AS DEC  NO-UNDO.
 DEF VAR ldCollPeriodEndTS      AS DEC  NO-UNDO.
 DEF VAR lcError                AS CHAR NO-UNDO.
 DEF VAR llgReqDone             AS LOGICAL NO-UNDO.
+DEF VAR lcLogDirectory         AS CHARACTER NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/ */
+DEF VAR lcICCLog               AS CHARACTER NO-UNDO.
+
+DEF STREAM sICCLog.    /* Log file for ICC_checker executions */
 
 DEF BUFFER bLP_MsRequest FOR MsRequest.
 
@@ -75,6 +79,16 @@ END.
 
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
 
+
+/* Log file for ICC_checker executions */
+lcLogDirectory = fCParamC("MandarinaLogsDir") NO-ERROR.
+lcICCLog = lcLogDirectory + 
+           STRING(YEAR(TODAY), "9999") + 
+           STRING(MONTH(TODAY), "99" ) +
+           STRING(DAY(TODAY), "99") + 
+           "_ICC_checker.log".                     
+OUTPUT STREAM sICCLog TO VALUE(lcICCLog) APPEND.
+
 /* ICC lookup part */
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
@@ -103,12 +117,16 @@ FOR EACH MsRequest NO-LOCK WHERE
                                             "ICC_Checker",
                                             "5", /* Automatic */ 
                                             INPUT-OUTPUT lcError).
-         /* TODO: Log writing and error handling.*/
-         /* TODO: Source setting for DUMP purposes. */
-              
+         PUT STREAM sICCLog UNFORMATTED 
+            STRING(TIME,"hh:mm:ss") + ";" +  
+            STRING(MsRequest.MsSeq) + ";" +
+            STRING(MsRequest.CustNum) + ";" + 
+            (IF llgReqDone THEN "REMOVE"
+             ELSE "ERROR:" + lcError)
+            SKIP.
+         /* TODO: Source setting for DUMP purposes. */              
       END.
       ELSE NEXT. /*do not remove other commands*/
-
    END.
    ELSE NEXT.
 END.
@@ -132,5 +150,4 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
-
-
+OUTPUT STREAM sICCLog CLOSE.

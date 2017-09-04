@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------
   MODULE .......: mandarina_bob.p
   TASK .........: BOB / Read input file; send commands to Procera to 
-                  set or remove a redirection to LP. Create "log" file.
+                  set or remove a redirection to LP. Create logs files.
   APPLICATION ..: tms
   AUTHOR .......: jotorres & ilsavola
   CREATED ......: 08/2017
@@ -31,11 +31,11 @@ gcbrand = "1".
 DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/spool/     */
 DEF VAR lcIncomingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/incoming/  */  
 DEF VAR lcOutgoingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/outgoing/  */
-DEF VAR lcLogsDirectory      AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/      */
 DEF VAR lcProcessedDirectory AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/processed/ */
+DEF VAR lcLogsDirectory      AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/      */
 
 /* Network delay */
-DEF VAR liDelayNW     AS INTEGER NO-UNDO INITIAL 5.  /* Delay for network, in seconds*/
+DEF VAR liDelayNW     AS INTEGER NO-UNDO INITIAL 5.  /* Delay for network, in seconds */
 DEF VAR liNumItemsNW  AS INTEGER NO-UNDO INITIAL 20. /* Items in batch for network */
 DEF VAR liContItems   AS INTEGER NO-UNDO.    
 
@@ -55,35 +55,42 @@ DEF STREAM sCurrentFile. /* Current processing file */
 DEF STREAM sCurrentLog.  /* Log file for current processing file */
 DEF STREAM sMandaLog.    /* Log file for mandarina_bob.p executions */
 
-DEF VAR lcFileName    AS CHAR NO-UNDO. /* File in directory */
-DEF VAR lcCurrentFile AS CHAR NO-UNDO. /* Current processing file */
-DEF VAR lcCurrentLog  AS CHAR NO-UNDO. /* log for current processing file */
-DEF VAR lcLine        AS CHAR NO-UNDO. /* Read line of the current file. */
+DEF VAR lcFileName        AS CHAR NO-UNDO. /* Files in directory */
+DEF VAR lcCurrentFile     AS CHAR NO-UNDO. /* Current processing file */
+DEF VAR lcCurrentLog      AS CHAR NO-UNDO. /* log for current processing file */
+DEF VAR lcLine            AS CHAR NO-UNDO. /* Read line of the current file. */
+DEF VAR lcMandarinaBobLog AS CHAR NO-UNDO. /* Log file for Mandarina Bob Tool executions */
 
 DEF VAR lcErr     AS CHAR    NO-UNDO.
 DEF VAR llSuccess AS LOGICAL NO-UNDO.
 
 /* Getting directories from CParams */
 ASSIGN
-   lcSpoolDirectory     = fCParam("Mandarina", "MandarinaSpoolDir")
-   lcIncomingDirectory  = fCParam("Mandarina", "MandarinaIncomingDir")
-   lcOutgoingDirectory  = fCParam("Mandarina", "MandarinaOutgoingDir")
-   lcLogsDirectory      = fCParam("Mandarina", "MandarinaLogsDir")
-   lcProcessedDirectory = fCParam("Mandarina", "MandarinaProcessedDir") NO-ERROR.
+   lcSpoolDirectory     = fCParamC("MandarinaSpoolDir")
+   lcIncomingDirectory  = fCParamC("MandarinaIncomingDir")
+   lcOutgoingDirectory  = fCParamC("MandarinaOutgoingDir")
+   lcProcessedDirectory = fCParamC("MandarinaProcessedDir")
+   lcLogsDirectory      = fCParamC("MandarinaLogsDir") NO-ERROR.
 
 /* Getting NetWorks parameters from CParams */
 ASSIGN
-   liDelayNW    = INT(fCParam("Mandarina", "MandarinaNetWorkDelay"))
-   liNumItemsNW = INT(fCParam("Mandarina", "MandarinaNetWorkBatchItems")) NO-ERROR.   
+   liDelayNW    = fCParamI("MandarinaNetWorkDelay")
+   liNumItemsNW = fCParamI("MandarinaNetWorkBatchItems") NO-ERROR.   
 
 /* Log file for mandarina executions */
-OUTPUT STREAM sMandaLog TO VALUE(lcLogsDirectory + "mandarina_bob.log") APPEND.
-PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_starting (" + pcProcessMode + ")------------------------------------------" SKIP.
+lcMandarinaBobLog = lcLogsDirectory + 
+                    STRING(YEAR(TODAY), "9999") + 
+                    STRING(MONTH(TODAY), "99" ) +
+                    STRING(DAY(TODAY), "99") + 
+                    "_mandarina_bob.log".                     
+
+OUTPUT STREAM sMandaLog TO VALUE(lcMandarinaBobLog) APPEND.
+PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_starts (" + pcProcessMode + ")" SKIP.
 
 /* Verify input parameter */
 IF pcProcessMode <> "massive" AND pcProcessMode <> "priority" THEN DO:
    PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";incorrect_input_parameter" SKIP.
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishes" SKIP.
    OUTPUT STREAM sMandaLog CLOSE.
    QUIT.
 END.
@@ -120,7 +127,7 @@ DO TRANS:
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_first_run" SKIP.
-      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.      
+      PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishes" SKIP.      
       OUTPUT STREAM sMandaLog CLOSE.
       QUIT. /*No reporting in first time.*/
    END.
@@ -145,7 +152,7 @@ REPEAT:
    lcCurrentLog = lcLogsDirectory + lcFileName + ".log". 
    IF SEARCH(lcCurrentFile) NE ? THEN DO:
       INPUT  STREAM sCurrentFile FROM VALUE(lcCurrentFile).
-      OUTPUT STREAM sCurrentLog TO VALUE(lcCurrentLog) APPEND. /* "append" to don't lose previous log if duplicated incommming file name */
+      OUTPUT STREAM sCurrentLog TO VALUE(lcCurrentLog).
    END.
    ELSE 
       NEXT. 
@@ -161,8 +168,7 @@ REPEAT:
       ASSIGN
          lcMSISDN = ENTRY(1, lcLine, ";")
          lcLP     = ENTRY(2, lcLine, ";")
-         lcAction = ENTRY(3, lcLine, ";"). 
-     
+         lcAction = ENTRY(3, lcLine, ";").      
 
       /* Check subscription */     
       FIND FIRST mobsub WHERE
@@ -252,10 +258,9 @@ REPEAT:
    OUTPUT STREAM sCurrentLog CLOSE.
    fMove2TransDir(lcCurrentFile, "", lcProcessedDirectory).
    fMove2TransDir(lcCurrentLog, "", lcOutgoingDirectory).
-   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finis_processing_file" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";" + lcCurrentFile + ";finish_processing_file" SKIP.
 
 END. 
-
 INPUT STREAM sFilesInDir CLOSE.
 
 DO TRANS:
@@ -272,6 +277,7 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
-PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishing" SKIP.
+PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishes" SKIP.
+PUT STREAM sMandaLog UNFORMATTED "-------------------------------" SKIP.
 OUTPUT STREAM sMandaLog CLOSE.
 
