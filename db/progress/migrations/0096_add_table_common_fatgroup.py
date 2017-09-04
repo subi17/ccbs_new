@@ -5,7 +5,7 @@ class AddTableFATGroup(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FATGroup', area="Sta_Data_64", label="FAT Group", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatgroup", desc="FAT Group for products")
+        t = self.table('FATGroup', area="Sta_Data_64", multitenant="yes", label="FAT Group", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatgroup", desc="FAT Group for products")
         t.column('FtGrp', 'character', format="x(8)", initial="", max_width=16, label="FatGroup", column_label="FtGrp", position=2, order=10, help="Fat Group (for products)")
         t.column('FtgName', 'character', format="x(30)", initial="", max_width=60, label="Name", position=3, order=20, help="Group name")
         t.column('InvMemo', 'character', format="x(60)", initial="", max_width=610, label="Invoice Text", column_label="Inv.Txt", extent=5, position=4, order=30, help="Text to invoice")
@@ -27,11 +27,11 @@ class AddTableFATGroup(Migration):
         t.column('Interval', 'integer', format=">9", initial="1", max_width=4, label="Interval", position=16, order=150, help="Interval; number of months between events")
         t.column('GroupType', 'integer', format=">>9", initial="0", max_width=4, label="Group Type", column_label="GType", position=17, order=160, help="FATime group type")
         t.column('ValidPeriods', 'integer', format=">>9", initial="0", max_width=4, label="Valid Periods", column_label="Valid", position=18, order=170, help="How many periods is FATime valid for")
-        t.index('FtGrp', [['Brand'], ['FtGrp']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('FatType', [['Brand'], ['FATType'], ['FtGrp']], area="Sta_Index_2")
-        t.index('FtgName', [['Brand'], ['FtgName']], area="Sta_Index_2")
-        t.index('GroupType', [['Brand'], ['GroupType'], ['FtGrp']], area="Sta_Index_2")
-        t.index('Priority', [['Brand'], ['Priority', 'DESC']], area="Sta_Index_2")
+        t.index('FtGrp', [['Brand'], ['FtGrp']], area="Sta_Index_3", primary=True, unique=True)
+        t.index('FatType', [['Brand'], ['FATType'], ['FtGrp']], area="Sta_Index_3")
+        t.index('FtgName', [['Brand'], ['FtgName']], area="Sta_Index_3")
+        t.index('GroupType', [['Brand'], ['GroupType'], ['FtGrp']], area="Sta_Index_3")
+        t.index('Priority', [['Brand'], ['Priority', 'DESC']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('FATGroup')
