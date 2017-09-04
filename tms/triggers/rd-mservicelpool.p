@@ -14,11 +14,14 @@ IF NOT fCheckHPDStatus(MServiceLPool.MsSeq,
                        MServiceLPool.EndTS)
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.TableName = "MServiceLPool"
-   Common.RepLog.EventType = "DELETE"
-   Common.RepLog.EventTime = NOW
+   Common.RepLog.TableName  = "MServiceLPool"
+   Common.RepLog.EventType  = "DELETE"
+   Common.RepLog.EventTime  = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER MServiceLPool:HANDLE)
    Common.RepLog.KeyValue  = {HPD/keyvalue.i MServiceLPool . {&HPDKeyDelimiter} CustNum MsSeq SLSeq EndTS}
    .
 
