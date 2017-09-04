@@ -72,8 +72,10 @@ class AddSequences(Migration):
         self.sequence('DumpLog', initial=1, min_val=1, cycle_on_limit="no", increment=1)
         self.sequence('InvoiceTargetID', initial=0, min_val=0, cycle_on_limit="no", increment=1)
         self.sequence('ITGroupID', initial=0, min_val=0, cycle_on_limit="no", increment=1)
+        self.sequence('DPMemberID', initial=0, min_val=0, cycle_on_limit="no", increment=1)
 
     def down(self):
+        self.drop_sequence('DPMemberID')
         self.drop_sequence('ITGroupID')
         self.drop_sequence('InvoiceTargetID')
         self.drop_sequence('DumpLog')
