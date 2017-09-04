@@ -11,7 +11,7 @@ class AddTablePostCode(Migration):
         t.column('Country', 'character', format="xxx", initial="", max_width=6, label="Country", column_label="CCode", position=4, order=30, help="Country Code (according to ISO Standard)")
         t.column('Region', 'character', format="x(8)", initial="", max_width=16, label="Region", column_label="Region", position=5, order=40, help="Region code")
         t.index('Region', [['Country'], ['Region'], ['ZipCode']], area="Sta_Index_2", primary=True)
-        t.index('PostOffice', [['Country'], ['PostOffice']], area="Sta_Index_2")
+        t.index('PostOffice', [['Country'], ['PostOffice']], area="Sta_Index_3")
         t.index('ZipCode', [['Country'], ['ZipCode']], area="Sta_Index_2")
 
     def down(self):

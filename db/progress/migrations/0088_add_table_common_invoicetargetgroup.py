@@ -5,7 +5,7 @@ class AddTableInvoiceTargetGroup(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('InvoiceTargetGroup', area="Sta_Data_128", label="Invoice Target Group", dump_name="invoicetargetgroup", desc="Invoice target group")
+        t = self.table('InvoiceTargetGroup', area="Sta_Data_128", multitenant="yes", label="Invoice Target Group", dump_name="invoicetargetgroup", desc="Invoice target group")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code of brand")
         t.column('ITGroupID', 'integer', format=">>>>>>>>>>9", initial="0", max_width=4, label="Target Group ID", column_label="IT Group", position=3, order=20, help="Unique ID for target group")
         t.column('AgrCust', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Agreement Customer", column_label="Agr.Cust", position=4, order=30, help="Agreement customer")
