@@ -514,6 +514,7 @@
 146 "PerContract" "CONT28"
 146 "PerContract" "DATA6"
 146 "PerContract" "DATA7"
+146 "PerContract" "GPRS"
 146 "SubsTypeFrom" "CONTDSL39"
 146 "SubsTypeFrom" "CONTDSL58"
 146 "SubsTypeFrom" "CONTDSL59"
