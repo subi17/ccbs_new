@@ -13,7 +13,8 @@ class AddTableRepLog(Migration):
         t.column('EventTime', 'datetime-tz', format="99-99-9999 HH:MM:SS.SSS+HH:MM", initial="?", max_width=12, label="Event time", column_label="EventTime", position=6, order=50)
         t.column('SendTime', 'datetime-tz', format="99-99-9999 HH:MM:SS.SSS+HH:MM", initial="?", max_width=12, label="Send time", column_label="SendTime", position=7, order=60)
         t.column('SendCount', 'integer', format=">>>9", initial="0", max_width=4, label="Send count", column_label="SendCount", position=8, order=70)
-        t.index('SendTime', [['SendTime'], ['EventTime']], area="CDF_Index", primary=True)
+        t.column('TenantName', 'character', format="X(15)", initial="", max_width=30, label="Tenant name", column_label="TenantName", position=9, order=80, help="Tenant name")
+        t.index('SendTime', [['SendTime'], ['TenantName'], ['EventTime']], area="CDF_Index", primary=True)
 
     def down(self):
         self.drop_table('RepLog')
