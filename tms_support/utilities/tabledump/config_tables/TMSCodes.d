@@ -1386,6 +1386,7 @@
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
 "Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "14" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AE" "AON CROSS-SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AL" "Alcampo" "" "13" 0
@@ -1401,6 +1402,7 @@
 "Salesman" "SmPrefix" "IFS" "BG" "Boulanger" "" "99" 0
 "Salesman" "SmPrefix" "IFS" "BL" "Vista internal users" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "BM" "BYMOVIL RETENCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BN" "B12 OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BR" "BYMOVIL RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BT" "B12 DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
@@ -1409,6 +1411,7 @@
 "Salesman" "SmPrefix" "IFS" "CE" "CANAL EXCLUSIVO NEGOCIOS" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CL" "Casturtel Leon" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CN" "CANCELACIONES MARKTEL" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CO" "EOS OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CP" "CASTURTEL PALENCIA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CR" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
@@ -1450,6 +1453,7 @@
 "Salesman" "SmPrefix" "IFS" "PR" "Phone House Televenta Recepcion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "RB" "Recepción Bilbao" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "RC" "CASTURTEL RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "SE" "SERVINFORM OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TA" "Tal Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "TC" "Telecor" "" "25" 0
 "Salesman" "SmPrefix" "IFS" "TL" "TelAndCom" "" "26" 0

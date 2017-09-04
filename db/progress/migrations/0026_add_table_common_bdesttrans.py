@@ -5,7 +5,7 @@ class AddTableBDestTrans(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('BDestTrans', area="Sta_Data_128", label="BDestTrans", dump_name="bdesttrans", desc="B-Destination short number translations")
+        t = self.table('BDestTrans', area="Sta_Data_128", multitenant="yes", label="BDestTrans", dump_name="bdesttrans", desc="B-Destination short number translations")
         t.column('BDest', 'character', format="x(7)", initial="", max_width=14, label="BDest", column_label="BDest", position=2, order=10)
         t.column('RatingZone', 'character', format="x(2)", initial="", max_width=4, label="RatingZone", column_label="RatingZone", position=3, order=30)
         t.column('TranslateNumber', 'character', format="x(12)", initial="", max_width=24, label="TranslateNumber", column_label="TranslateNumber", position=4, order=40)
