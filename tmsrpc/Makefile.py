@@ -2,12 +2,17 @@ from pike import *
 import os
 import shutil
 import json
+import tempfile
+import fnmatch
+import errno
+from ast import literal_eval
 from subprocess import call, Popen, PIPE
 from socket import gethostname
 from string import Template
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
+exec(open('getpf.py').read())
 
 pike = which('pike')
 if pike == None:
@@ -21,6 +26,8 @@ else:
 if not os.path.exists(configfile):
     raise PikeException('Failed, no lighttpd configuration file ' + configfile + ' found')	
 
+show_file = False
+
 state_base = os.path.abspath(os.path.join('..', 'var', 'run')) + '/'
 
 lighttpd_template = Template('''server.document-root = "/var/tmp"
@@ -33,6 +40,60 @@ server.port = $port
 fastcgi_template = Template('''    ("bin-path" => "${pike} -C ${work_dir}/tmsrpc/${fcgi} run_agent ${fcgi}",
      "socket" => "${work_dir}/var/run/${fcgi}-${port}.socket",
 ''')
+
+def recursive_overwrite(src, dest, ignore=None):
+    if os.path.isdir(src):
+        if not os.path.isdir(dest):
+            os.makedirs(dest)
+        files = os.listdir(src)
+        if ignore is not None:
+            ignored = ignore(src, files)
+        else:
+            ignored = set()
+        for f in files:
+            if f not in ignored:
+                recursive_overwrite(os.path.join(src, f),
+                                    os.path.join(dest, f),
+                                    ignore)
+    else:
+        shutil.copyfile(src, dest)
+
+def userandpass():
+    if 'tenancies' in globals():
+        for t, tdict in tenancies.items():
+            if tdict['tenanttype'] == 'Super' or len(tenancies) == 1:
+                return ['-U', '{0}@{1}'.format(tdict['username'], tdict['domain']), '-P', tdict['password'] ]
+        raise ValueError('Cannot identify a super tenant')
+    else:
+        return []
+
+def active_cdr_db_pf():
+    if '-S' in open('../db/progress/store/common.pf').read():
+        connection_type = "tcp"
+    else:
+        connection_type = "local"
+
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args.extend(['-pf', getpf('../db/progress/store/common'), '-h', '1'])
+
+    cdr_fetch = Popen(mpro + args, stdout=PIPE)
+    dict = literal_eval(cdr_fetch.communicate()[0])
+
+    if 'tenancies' in globals():
+        uandp = userandpass()
+        for db in dict:
+            dict[db].extend(uandp)
+
+    return dict
+
+def mkdir_p(directory):
+    try:
+        os.makedirs(directory)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(directory):
+            pass
+        else:
+            raise
 
 def param_gen(a):
    for item in a:
@@ -119,9 +180,176 @@ def lighttpd_gen(a):
 def test(*a): pass
 
 @target
-def compile(*a):
-    for rpc in parameters or rpcs.keys():
-        require('%s>compile' % rpc)
+def compile(match, *a):
+    '''compile$|compilec$|preprocess$|xref$'''
+
+    if parameters:
+        for rpc in parameters:
+            if rpc not in rpcs.keys():
+                raise PikeException('Invalid rpc name')
+
+    systemrpc_compiledir = ''
+
+    if match == 'compile':
+        # First compile systemrpc to temporary directory
+        systemrpc_compiledir = tempfile.mkdtemp()
+        _compile(match, work_dir + '/tools/fcgi_agent/systemrpc', systemrpc_compiledir, [''])
+
+    _compile(match, rpclist=list(set(parameters or rpcs.keys())))
+
+    if systemrpc_compiledir:
+        for rpc in parameters or rpcs.keys():
+            recursive_overwrite(systemrpc_compiledir, '{0}/tmsrpc/{1}/rpcmethods'.format(work_dir, rpc))
+        shutil.rmtree(systemrpc_compiledir)
+
+def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
+
+    source_files = []
+
+    if not source_dir:
+        source_dir = '{0}/src'
+
+    # For the compile command there are following position parameters
+    # (the same information is stored to source_files variable tuple values)
+    # 0 = <rpc>
+    # 1 = relative_dir (if available begins with flash character)
+    # 2 = source_file_name (no path)
+
+    if compile_type == 'compile':
+        compile_dir = compile_dir if compile_dir else '{0}/rpcmethods'
+        if rpclist[0] != '':
+            compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.\nCOMPILE {3}/tmsrpc/{0}/pp{1}/{2} SAVE INTO {0}/rpcmethods{1} NO-ERROR.'.format('{0}','{1}','{2}',work_dir)
+        else:
+            compilecommand = 'COMPILE {3}{0}{1}/{2} PREPROCESS {4}/pp{1}/{2} NO-ERROR.\nCOMPILE {4}/pp{1}/{2} SAVE INTO {4}{1} NO-ERROR.'.format('{0}','{1}','{2}',source_dir,compile_dir)
+    elif compile_type == 'preprocess':
+        compile_dir = '{0}/pp'
+        compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.'
+    elif compile_type == 'xref':
+        compile_dir = '{0}/xref'
+        compilecommand = 'COMPILE {0}/src{1}/{2} XREF {0}/xref{1}/{2} NO-ERROR.'
+
+    for rpc in rpclist:
+        source_dir_to_use = source_dir.format(rpc)
+        compile_dir_to_use = compile_dir.format(rpc)
+        seen = []
+        for root, dirs, files in os.walk(source_dir_to_use):
+            for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
+                relative_dir = root.replace(source_dir_to_use,'')
+                if relative_dir.startswith('/'):
+                    relative_dir = relative_dir[1:]
+                source_files.append(tuple([rpc, '/' + relative_dir if relative_dir else relative_dir, filename]))
+                if compile_dir and relative_dir not in seen:
+                    mkdir_p(os.path.join(compile_dir_to_use, relative_dir))
+                    if compile_type == 'compile':
+                        mkdir_p(os.path.join(os.path.join('{0}/doc'.format(compile_dir_to_use), relative_dir)))
+                        if rpc:
+                            mkdir_p(os.path.join('{0}/pp'.format(rpc), relative_dir))
+                        else:
+                            mkdir_p(os.path.join('{0}/pp'.format(compile_dir), relative_dir))
+                    seen.append(relative_dir)
+
+    args = ['-pf', getpf('../db/progress/store/all')]
+    dbcount = len(databases)
+
+    cdr_dict = {}
+    for cdr_database in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        if cdr_database in cdr_dict:
+            args.extend(cdr_dict[cdr_database])
+            dbcount += 1
+
+    compile_p = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
+
+    if environment == 'safeproduction':
+        os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
+
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
+    args.extend(['-h', str(dbcount)])
+
+    processes = []
+    for file in compile_p:
+        comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
+        processes.append(comp)
+
+    for comp in processes:
+        call('/bin/cat', stdin=comp.stdout)
+        comp.wait()
+
+    for file in compile_p:
+        os.unlink(file)
+
+    print('')
+
+    if compile_type == 'compile':
+        helper_dir = work_dir + '/tools/fcgi_agent/xmlrpc/'
+        for rpc, reldir, sourcefile in source_files:
+            if rpc:
+                file = '{0}/pp{1}/{2}'.format(rpc,reldir,sourcefile)
+            else:
+                file = '{0}/pp{1}/{2}'.format(compile_dir,reldir,sourcefile)
+            sigandhelpfile = '{0}/doc{1}/{2}'.format(rpc + '/rpcmethods' if rpc else compile_dir, reldir, sourcefile)
+            if not sourcefile == 'system__multicall.p':
+                fd = open(sigandhelpfile.replace('.p','.sig'), 'wb')
+                call([sys.executable, helper_dir + 'signature.py', file], stdout=fd)
+                fd.close()
+            fd = open(sigandhelpfile.replace('.p', '.help'), 'wb')
+            call([sys.executable, helper_dir + 'help.py', file], stdout=fd)
+            fd.close()
+
+        if rpclist[0] == '':
+            shutil.rmtree('{0}/pp'.format(compile_dir))
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]
+
+def make_compiler(cline, files, show='.'):
+    if not 'multi' in globals():
+        global multi
+        multi = 1
+    else:
+        try:
+           multi = int(multi)
+        except ValueError as verr:
+          raise PikeException('multi must be integer from 1 to 16')
+        except Exception as ex:
+          raise PikeException('multi must be integer from 1 to 16')
+
+        if int(multi) > 16 or int(multi) < 1:
+            raise PikeException('multi must be integer from 1 to 16')
+
+    compiler_p_list = []
+    for subfiles in chunks(files, (len(files) + multi - 1) // multi):
+        compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+', delete=False)
+        compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n\n')
+        compiler.write('FUNCTION fCheckError RETURNS LOGICAL ():\n')
+        compiler.write('   IF ERROR-STATUS:ERROR = NO\n')
+        compiler.write('   THEN RETURN FALSE.\n\n')
+        compiler.write('   DEFINE VARIABLE liError AS INTEGER   NO-UNDO.\n')
+        compiler.write('   PUT UNFORMATTED SKIP.\n')
+        compiler.write('   DO liError = 1 TO ERROR-STATUS:NUM-MESSAGES:\n')
+        compiler.write('      PUT UNFORMATTED (IF COMPILER:WARNING THEN "Warning: " ELSE "ERROR: ") +\n')
+        compiler.write('         ERROR-STATUS:GET-MESSAGE(liError) SKIP.\n')
+        compiler.write('   END.\n\n')
+        compiler.write('   RETURN TRUE.\n\n')
+        compiler.write('END FUNCTION.\n')
+
+        for rpc, reldir, sourcefile in subfiles:
+            if show == '.':
+                compiler.write('PUT UNFORMATTED \'.\'.\n')
+            elif show == 'name':
+                compiler.write('PUT UNFORMATTED \'{0}~n\'.\n'.format(cline.format(rpc,reldir,sourcefile)))
+            compiler.write(cline.format(rpc,reldir,sourcefile) + '\n')
+            compiler.write('fCheckError().\n')
+
+        compiler.flush()
+        compiler_p_list.append(compiler.name)
+
+    return compiler_p_list
 
 @target
 def start(*a):
@@ -175,12 +403,33 @@ def build(*a):
 
     if not os.path.exists(build_dir):
         os.mkdir(build_dir)
-    shutil.copy('Makefile.py', build_dir)
 
-    for file in glob('*_config.json'):
+    for file in ['Makefile.py', 'getpf.py'] + glob('*_config.json'):
         shutil.copy(file, build_dir)
 
     if a[0] == 'buildextapi':
-        print('Using r-files located on rpcmethods directories. Please make sure that you have executed a command "pike compile" on a tmsrpc directory!')
+        print('Using r-files located on rpcmethods directories.')
+        print('Please make sure that you have executed a command "pike compile" on a tmsrpc directory')
+    else:
+        require('compile', [])
+
+
+    currentdir = os.getcwd()
     for rpc in rpcs.keys():
-        require('{0}>{1}'.format(rpc,a[0]), [os.path.join(build_dir, rpc)])
+        os.chdir(rpc)
+        rpcbuilddir = os.path.join(build_dir, rpc)
+        mkdir_p(rpcbuilddir)
+        shutil.copy2('Makefile.py', rpcbuilddir)
+
+        if os.path.exists('rpcmethods.pl'):
+            os.unlink('/rpcmethods.pl')
+        call([dlc + '/bin/prolib', 'rpcmethods.pl', '-create'])
+        for dir, _dirs, files in os.walk('rpcmethods'):
+            for file in files:
+                if file.endswith('.r') \
+                or file.endswith('.help') \
+                or file.endswith('.sig'):
+                    call([dlc + '/bin/prolib', 'rpcmethods.pl', '-add',
+                          os.path.join(dir, file)])
+        shutil.move('rpcmethods.pl', rpcbuilddir)
+        os.chdir(currentdir)
