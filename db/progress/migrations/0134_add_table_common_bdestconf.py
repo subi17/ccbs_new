@@ -5,7 +5,7 @@ class AddTableBDestConf(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('BDestConf', area="Sta_Data_128", label="BDest Configuration", dump_name="bdestconf", desc="BDest configuration")
+        t = self.table('BDestConf', area="Sta_Data_128", multitenant="yes", label="BDest Configuration", dump_name="bdestconf", desc="BDest configuration")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code of brand")
         t.column('RateBDest', 'character', mandatory=True, format="x(25)", initial="", max_width=50, label="Rating Destination", column_label="Rate BDest", position=3, order=40, help="B-number destination used in rating")
         t.column('RateCCN', 'integer', format=">>9", initial="0", max_width=4, label="Rating CCN", column_label="RateCCN", position=4, order=50, help="Rating CCN")
@@ -18,8 +18,8 @@ class AddTableBDestConf(Migration):
         t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=12, order=120, help="Last effective day")
         t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=13, order=110, help="Valid from")
         t.column('GroupType', 'integer', format=">9", initial="0", max_width=4, label="Group Type", column_label="Type", position=14, order=130, help="Configuration group type")
-        t.index('BDCGroup', [['Brand'], ['BDCGroup']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('GroupType', [['Brand'], ['GroupType'], ['ToDate', 'DESC']], area="Sta_Index_2")
+        t.index('BDCGroup', [['Brand'], ['BDCGroup']], area="Sta_Index_3", primary=True, unique=True)
+        t.index('GroupType', [['Brand'], ['GroupType'], ['ToDate', 'DESC']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('BDestConf')

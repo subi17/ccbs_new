@@ -24,6 +24,8 @@ THEN llWasOnHPD = TRUE.
 IF llWasOnHPD = FALSE AND llShouldBeOnHPD = FALSE
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.RowID     = STRING(ROWID(DPMember))
@@ -34,6 +36,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER DPMember:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE"
@@ -52,9 +55,10 @@ THEN DO:
    THEN DO:
    CREATE Common.RepLog.
       ASSIGN
-         Common.RepLog.TableName = "DPMember"
-         Common.RepLog.EventType = "DELETE"
-         Common.RepLog.EventTime = NOW
+         Common.RepLog.TableName  = "DPMember"
+         Common.RepLog.EventType  = "DELETE"
+         Common.RepLog.EventTime  = NOW
+         Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldDPMember:HANDLE)
          Common.RepLog.KeyValue  = {HPD/keyvalue.i oldDPMember . {&HPDKeyDelimiter} KeyValue DPMemberId}
          .
    END.

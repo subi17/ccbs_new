@@ -12,6 +12,8 @@ THEN RETURN.
 IF NOT NEW(PrepCDR) AND PrepCDR.ErrorCode > 0 AND oldPrepCDR.ErrorCode > 0
 THEN RETURN.
 
+{triggers/replog_tenantname.i}
+
 /* If this is an old cdr which is changed to error status
    will will send it as delete type */
 CREATE mcdr.RepLog.
@@ -23,6 +25,7 @@ ASSIGN
                             THEN "DELETE"
                             ELSE "MODIFY") 
    mcdr.RepLog.EventTime = NOW
+   mcdr.RepLog.TenantName = fRepLogTenantName(BUFFER PrepCDR:HANDLE)
    .
 
 IF mcdr.RepLog.EventType = "DELETE"
@@ -46,6 +49,7 @@ THEN DO:
          mcdr.RepLog.TableName = "PrepCDR"
          mcdr.RepLog.EventType = "DELETE"
          mcdr.RepLog.EventTime = NOW
+         mcdr.RepLog.TenantName = fRepLogTenantName(BUFFER oldPrepCDR:HANDLE)
          mcdr.RepLog.KeyValue  = {HPD/keyvalue.i oldPrepCDR . {&HPDKeyDelimiter} MsSeq DtlSeq DateSt}
          .
    END.
