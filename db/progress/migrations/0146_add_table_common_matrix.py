@@ -5,7 +5,7 @@ class AddTableMatrix(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Matrix', area="Sta_Data_128", dump_name="Matrix")
+        t = self.table('Matrix', area="Sta_Data_128", multitenant="yes", dump_name="Matrix")
         t.column('Brand', 'character', format="X(8)", initial="1", max_width=4, label="Brand", column_label="Brand", position=2, order=10, description="Brand")
         t.column('MXName', 'character', format="x(30)", initial="", max_width=60, label="Name of the Matrix", column_label="Matrix Name", position=3, order=20)
         t.column('Prior', 'integer', format=">>9", initial="0", help="Matrix Prior", max_width=32, label="Prior", column_label="Prior", position=4, order=60, description="Matrix Prior")
