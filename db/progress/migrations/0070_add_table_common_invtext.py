@@ -5,7 +5,7 @@ class AddTableInvText(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('InvText', area="Sta_Data_32", label="Invoice Texts", dump_name="invtext", desc="Texts to be printed to invoices")
+        t = self.table('InvText', area="Sta_Data_32", multitenant="yes", label="Invoice Texts", dump_name="invtext", desc="Texts to be printed to invoices")
         t.column('ITNum', 'integer', format=">>>>>>9", initial="0", max_width=4, label="Seq", column_label="Seq", position=2, order=10, help="Internal sequenco no. of an Invoice Text element")
         t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From Date", column_label="From", position=3, order=20, help="First effective date")
         t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To Date", column_label="To", position=4, order=30, help="Last effective date")
@@ -34,9 +34,9 @@ class AddTableInvText(Migration):
         t.column('Sender', 'character', format="x(16)", initial="", max_width=32, label="Sender", position=24, order=230, help="SMS sender number")
         t.column('Category', 'character', format="x(16)", initial="", max_width=32, label="Category", position=25, order=240, help="Text category")
         t.column('Active', 'logical', format="Yes/No", initial="Yes", max_width=1, label="Active", position=26, order=250, help="Is the configuration active")
-        t.index('target', [['Brand'], ['Target'], ['KeyValue'], ['FromDate']], area="Sta_Index_2", primary=True)
-        t.index('FromDate', [['Brand'], ['FromDate', 'DESC'], ['Target'], ['KeyValue']], area="Sta_Index_2")
-        t.index('ITNum', [['ITNum']], area="Sta_Index_2", unique=True)
+        t.index('target', [['Brand'], ['Target'], ['KeyValue'], ['FromDate']], area="Sta_Index_3", primary=True)
+        t.index('FromDate', [['Brand'], ['FromDate', 'DESC'], ['Target'], ['KeyValue']], area="Sta_Index_3")
+        t.index('ITNum', [['ITNum']], area="Sta_Index_3", unique=True)
 
     def down(self):
         self.drop_table('InvText')

@@ -4,6 +4,8 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF FixedFee.
 
 &IF {&FIXEDFEE_DELETE_TRIGGER_ACTIVE} &THEN
 
+{triggers/replog_tenantname.i}
+
 IF NEW FixedFee
 THEN RETURN.
 
@@ -15,9 +17,10 @@ THEN RETURN.
 
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.TableName = "FixedFee"
-   Common.RepLog.EventType = "DELETE"
-   Common.RepLog.EventTime = NOW
+   Common.RepLog.TableName  = "FixedFee"
+   Common.RepLog.EventType  = "DELETE"
+   Common.RepLog.EventTime  = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER FixedFee:HANDLE)
    Common.RepLog.KeyValue  = {HPD/keyvalue.i FixedFee . {&HPDKeyDelimiter} FFNum}
    .
 

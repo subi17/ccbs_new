@@ -46,6 +46,8 @@ FUNCTION fProcessInvRandSubIn RETURNS LOGICAL
 
 END FUNCTION.
 
+{triggers/replog_tenantname.i}
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "Invoice"
@@ -56,6 +58,7 @@ ASSIGN
                                THEN "DELETE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
+   Common.RepLog.TenantName = fRepLogTenantName(BUFFER Invoice:HANDLE)
    .
 
 IF Common.RepLog.EventType = "DELETE" 
@@ -78,6 +81,7 @@ THEN DO:
       Common.RepLog.TableName = "Invoice"
       Common.RepLog.EventType = "DELETE"
       Common.RepLog.EventTime = NOW
+      Common.RepLog.TenantName = fRepLogTenantName(BUFFER oldInvoice:HANDLE)
       Common.RepLog.KeyValue  = STRING(oldInvoice.InvNum)
       .
 END.
