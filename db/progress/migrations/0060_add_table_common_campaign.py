@@ -5,7 +5,7 @@ class AddTableCampaign(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Campaign', area="Sta_Data_128", label="Campaign", dump_name="campaign", desc='''Campaign header, rows in CampRow
+        t = self.table('Campaign', area="Sta_Data_128", multitenant="yes", label="Campaign", dump_name="campaign", desc='''Campaign header, rows in CampRow
 
 ''')
         t.column('Campaign', 'character', format="x(8)", initial="", max_width=16, label="Campaign ID", column_label="ID", position=2, order=10, help="Campaign ID")
@@ -15,9 +15,9 @@ class AddTableCampaign(Migration):
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=6, order=50, help="Code Of Brand")
         t.column('CampType', 'integer', format="9", initial="0", max_width=4, label="Campaign Type", column_label="Type", position=7, order=60, help="Campaign type")
         t.column('AccessSchemaSeq', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="AccessSchemaSeq", column_label="AccessSchemaSeq", position=8, order=70, description="Link to the Access Schema for this campaign")
-        t.index('Campaign', [['Brand'], ['Campaign']], area="Sta_Index_2", primary=True, unique=True)
-        t.index('CaName', [['Brand'], ['CaName']], area="Sta_Index_2")
-        t.index('ToDate', [['Brand'], ['ToDate', 'DESC']], area="Sta_Index_2")
+        t.index('Campaign', [['Brand'], ['Campaign']], area="Sta_Index_3", primary=True, unique=True)
+        t.index('CaName', [['Brand'], ['CaName']], area="Sta_Index_3")
+        t.index('ToDate', [['Brand'], ['ToDate', 'DESC']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('Campaign')
