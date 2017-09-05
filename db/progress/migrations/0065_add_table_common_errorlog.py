@@ -5,7 +5,7 @@ class AddTableErrorLog(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('ErrorLog', area="Sta_Data_64", label="Error Log", dump_name="errorlog", desc="Error log")
+        t = self.table('ErrorLog', area="Sta_Data_64", multitenant="yes", label="Error Log", dump_name="errorlog", desc="Error log")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('ActionID', 'character', format="x(8)", initial="", max_width=16, label="Action ID", column_label="ID", position=3, order=20, help="Action ID")
         t.column('ActionTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="Action Time Stamp", column_label="Time Stamp", position=4, order=60, help="Action time stamp")

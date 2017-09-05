@@ -26,6 +26,7 @@ IF llWasHPDService = FALSE AND llIsHPDService = FALSE
 THEN RETURN.
 
 {triggers/subser.i}
+{triggers/replog_tenantname.i}
 
 CREATE Mobile.RepLog.
 ASSIGN
@@ -36,6 +37,7 @@ ASSIGN
                               THEN "DELETE"
                               ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
+   Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER SubSer:HANDLE)
    .
 
 IF Mobile.RepLog.EventType = "DELETE" 
@@ -58,6 +60,7 @@ THEN DO:
          Mobile.RepLog.TableName = "SubSer"
          Mobile.RepLog.EventType = "DELETE"
          Mobile.RepLog.EventTime = NOW
+         Mobile.RepLog.TenantName = fRepLogTenantName(BUFFER oldSubSer:HANDLE)
          Mobile.RepLog.KeyValue  = {HPD/keyvalue.i oldSubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}
          .
    END.

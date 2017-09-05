@@ -5,7 +5,7 @@ class AddTableCustIntEvent(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('CustIntEvent', area="Sta_Data_64", label="Customer's Interest Events", dump_name="custinte", desc="Customer's interest events")
+        t = self.table('CustIntEvent', area="Sta_Data_64", multitenant="yes", label="Customer's Interest Events", dump_name="custinte", desc="Customer's interest events")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvoiceNo", column_label="InvoiceNo", position=2, order=8, help="Consecutive Invoicenumber, 1 ... 99999999")
         t.column('InvDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="InvoiceDate", column_label="InvoiceDate", position=4, order=30, help="Invoice's date")
         t.column('DueDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="InvoiDueDate", column_label="InvoiDueDate", position=5, order=40, help="Invoice's dueday")
@@ -25,12 +25,12 @@ class AddTableCustIntEvent(Migration):
         t.column('BilledSubInv', 'integer', format=">>9", initial="0", max_width=4, label="Billed Subinvoice Nbr", column_label="Billed SubInv", position=19, order=190, help="Sequential nbr of the subinvoice within the combined invoice")
         t.column('CLI', 'character', format="x(15)", initial="", max_width=30, position=20, order=200)
         t.column('SubInvNum', 'integer', format=">>9", initial="0", max_width=4, label="SubInvoice Number", column_label="SubInv", position=21, order=180, help="Sequential nbr of the subinvoice within the combined invoice")
-        t.index('CustNum_s', [['CustNum'], ['PaymDate']], area="Sta_Index_2", primary=True)
-        t.index('BilledInvNum', [['BilledInvNum']], area="Sta_Index_2")
-        t.index('CustNum', [['Brand'], ['CustNum'], ['PaymDate', 'DESC']], area="Sta_Index_2")
-        t.index('InvNum', [['Brand'], ['InvNum'], ['PaymDate', 'DESC']], area="Sta_Index_2")
-        t.index('InvNum_s', [['InvNum'], ['PaymDate']], area="Sta_Index_2")
-        t.index('VoucheSta_s', [['Voucher']], area="Sta_Index_2")
+        t.index('CustNum_s', [['CustNum'], ['PaymDate']], area="Sta_Index_3", primary=True)
+        t.index('BilledInvNum', [['BilledInvNum']], area="Sta_Index_3")
+        t.index('CustNum', [['Brand'], ['CustNum'], ['PaymDate', 'DESC']], area="Sta_Index_3")
+        t.index('InvNum', [['Brand'], ['InvNum'], ['PaymDate', 'DESC']], area="Sta_Index_3")
+        t.index('InvNum_s', [['InvNum'], ['PaymDate']], area="Sta_Index_3")
+        t.index('VoucheSta_s', [['Voucher']], area="Sta_Index_3")
 
     def down(self):
         self.drop_table('CustIntEvent')
