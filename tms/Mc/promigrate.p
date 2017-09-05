@@ -24,6 +24,7 @@ DEF BUFFER bClitype FOR Clitype.
 DEF VAR lhCustomer AS HANDLE NO-UNDO.
 DEF VAR lcCharValue AS CHAR NO-UNDO.
 DEF VAR lcContract AS CHAR NO-UNDO.
+DEF VAR lcError AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -37,15 +38,20 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
 
    FIND FIRST bMobSub NO-LOCK WHERE
               bMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
-   IF NOT AVAIL bMobsub THEN RETURN "ERROR: NO Mobsub".
+   IF NOT AVAIL bMobsub THEN lcError = "ERROR: NO Mobsub".
    FIND FIRST bCustomer WHERE
               bCustomer.custnum EQ bmobsub.agrcust NO-ERROR.
-   IF NOT AVAIL bCustomer THEN RETURN "ERROR: NO Customer".
+   IF NOT AVAIL bCustomer THEN lcError = "ERROR: NO Customer".
    FIND FIRST bClitype WHERE 
               bClitype.brand EQ Syst.Parameters:gcBrand AND
               bClitype.clitype EQ bMobsub.clitype NO-ERROR.
-   IF NOT AVAIL bClitype THEN RETURN "ERROR: Unknown Clitype".
-   IF NOT fIsSelfEmpl(bcustomer.category) THEN RETURN "ERROR: Not selfemployed".
+   IF NOT AVAIL bClitype THEN lcError = "ERROR: Unknown Clitype".
+   IF NOT fIsSelfEmpl(bcustomer.category) THEN 
+      lcError = "ERROR: Not selfemployed".
+   IF lcError > "" THEN DO:
+      fReqStatus(3,lcError).
+      RETURN lcError.
+   END.
    fgetCustSegment(bCustomer.custidtype, fIsSelfEmpl(bcustomer.category),
                    TRUE, OUTPUT lcCategory).
    DO TRANSACTION:
