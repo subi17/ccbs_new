@@ -627,6 +627,22 @@ FUNCTION fGetPermanencyAndHandset RETURNS CHAR
    END.
 END.
 
+FUNCTION fGetTVService RETURNS CHARACTER
+  (iiMsSeq AS INTEGER):
+
+  DEFINE BUFFER bf_TPService FOR TPService.
+  
+  FIND FIRST bf_TPService WHERE bf_TPService.MsSeq     = iiMsSeq            AND 
+                                bf_TPService.Operation = {&TYPE_ACTIVATION} AND 
+                                bf_TPService.ServType  = "Television"       AND 
+                         LOOKUP(bf_TPService.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) = 0 NO-LOCK NO-ERROR.
+  IF AVAIL bf_TPService THEN 
+      RETURN bf_TPService.Product.
+
+  RETURN "".
+
+END FUNCTION.
+
 FUNCTION fFixNumberAndDonorInformation RETURNS CHARACTER
    ( iiOrderID AS INTEGER,
      icDelim   AS CHARACTER,
@@ -780,7 +796,8 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    lcQ25Extension                  + lcDelim +
    /* Q25 Extension bank */ 
    lcBank                          + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, FALSE)
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, FALSE) + lcDelim +
+   fGetTVService(Order.MsSeq)
    .
 
    /*Document type,DocStatusCode,RevisionComment*/
@@ -935,7 +952,8 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE) + lcDelim +
+
    .
    
    /*Solve tmsparam value for getting correct matrix row*/
@@ -1105,7 +1123,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE) + lcDelim +
+   fGetTVService(Order.MsSeq)
    .
    
    /*solve needed documents:*/
@@ -1414,7 +1433,8 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
      ELSE IF Order.DeliverySecure EQ 2
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
-   lcKialaCode.
+   lcKialaCode + lcDelim +
+   fGetTVService(Order.MsSeq).
 
    /*Document type,DocStatusCode,RevisionComment*/
 
