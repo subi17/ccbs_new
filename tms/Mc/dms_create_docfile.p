@@ -952,8 +952,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE) + lcDelim +
-
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE) 
    .
    
    /*Solve tmsparam value for getting correct matrix row*/
