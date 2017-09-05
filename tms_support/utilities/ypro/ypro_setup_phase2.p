@@ -348,6 +348,18 @@ IF NOT AVAIL requeststatus THEN DO:
       RequestStatus.reqstatus    = 0
       RequestStatus.Program  = "Mc/promigrate.p".
 END.
+FIND FIRST REquestStatus WHERE
+           requeststatus.brand EQ "1" AND
+           requestStatus.reqtype EQ {&REQTYPE_PRO_MIGRATION} AND
+           requestStatus.reqstatus EQ 8 NO-ERROR.
+IF NOT AVAIL requeststatus THEN DO:
+   CREATE Requeststatus.
+   ASSIGN
+      RequestStatus.Brand    = "1"
+      RequestStatus.ReqType  = {&REQTYPE_PRO_MIGRATION}
+      RequestStatus.reqstatus    = 8
+      RequestStatus.Program  = "Mc/promigrate.p".
+END.
 
 /* RequestAction */
 FUNCTION fcreateRequestAction RETURNS LOGICAL (INPUT iireqtype AS INT,
