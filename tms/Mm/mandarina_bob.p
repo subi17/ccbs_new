@@ -26,6 +26,7 @@ gcbrand = "1".
 {Func/cparam2.i}
 {Func/lpfunctions.i}
 {Func/ftransdir.i}
+{Func/barrfunc.i}
 
 /* Directories */
 DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/spool/     */
@@ -61,8 +62,9 @@ DEF VAR lcCurrentLog      AS CHAR NO-UNDO. /* log for current processing file */
 DEF VAR lcLine            AS CHAR NO-UNDO. /* Read line of the current file. */
 DEF VAR lcMandarinaBobLog AS CHAR NO-UNDO. /* Log file for Mandarina Bob Tool executions */
 
-DEF VAR lcErr     AS CHAR    NO-UNDO.
-DEF VAR llSuccess AS LOGICAL NO-UNDO.
+DEF VAR lcErr      AS CHAR    NO-UNDO.
+DEF VAR llSuccess  AS LOGICAL NO-UNDO.
+DEF VAR lcBarrings AS CHAR    NO-UNDO.
 
 /* Getting directories from CParams */
 ASSIGN
@@ -180,6 +182,16 @@ REPEAT:
             lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:MSISDN_not_found" SKIP.
          NEXT.
       END.
+
+      /* Check barring status */
+      lcBarrings = fGetActiveBarrings (mobsub.MsSeq).
+      IF lcBarrings <> "" THEN DO:
+         IF LOOKUP("DEBT_LP", lcBarrings) <> 0 OR LOOKUP("DEBT_HOTLP", lcBarrings) <> 0 THEN DO:
+            PUT STREAM sCurrentLog UNFORMATTED
+               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:DEBT_barring_active" SKIP.
+            NEXT.
+         END.
+      END. 
 
       /* Checking values */
       IF (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2") THEN DO:

@@ -19,17 +19,19 @@ gcbrand = "1".
 {Func/timestamp.i}
 {Func/cparam2.i}
 {Func/lpfunctions.i}
+{Func/barrfunc.i}
 
 /* Lock and seek time hadling parameters */
-DEF VAR lcTableName            AS CHAR NO-UNDO.
-DEF VAR lcActionID             AS CHAR NO-UNDO.
-DEF VAR ldCurrentTimeTS        AS DEC  NO-UNDO.
-DEF VAR ldCollPeriodStartTS    AS DEC  NO-UNDO.
-DEF VAR ldCollPeriodEndTS      AS DEC  NO-UNDO.
-DEF VAR lcError                AS CHAR NO-UNDO.
+DEF VAR lcTableName            AS CHAR    NO-UNDO.
+DEF VAR lcActionID             AS CHAR    NO-UNDO.
+DEF VAR ldCurrentTimeTS        AS DEC     NO-UNDO.
+DEF VAR ldCollPeriodStartTS    AS DEC     NO-UNDO.
+DEF VAR ldCollPeriodEndTS      AS DEC     NO-UNDO.
+DEF VAR lcError                AS CHAR    NO-UNDO.
 DEF VAR llgReqDone             AS LOGICAL NO-UNDO.
-DEF VAR lcLogDirectory         AS CHARACTER NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/ */
-DEF VAR lcICCLog               AS CHARACTER NO-UNDO.
+DEF VAR lcLogDirectory         AS CHAR    NO-UNDO INITIAL "/tmp/". /* /tmp/mnt/store/riftp/mandarina/logs/ */
+DEF VAR lcICCLog               AS CHAR    NO-UNDO.
+DEF VAR lcBarrings             AS CHAR    NO-UNDO.
 
 DEF STREAM sICCLog.    /* Log file for ICC_checker executions */
 
@@ -76,9 +78,7 @@ DO TRANS:
    END.
 END.
 
-
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-
 
 /* Log file for ICC_checker executions */
 lcLogDirectory = fCParamC("MandarinaLogsDir") NO-ERROR.
@@ -105,6 +105,19 @@ FOR EACH MsRequest NO-LOCK WHERE
               bLP_MsRequest.ReqCparam1 EQ "LP" 
               USE-INDEX MsActStamp NO-ERROR.
    IF AVAIL bLP_MsRequest THEN DO:
+
+      /* Check barring status */
+      lcBarrings = fGetActiveBarrings (MsRequest.MsSeq).
+      IF lcBarrings <> "" THEN DO:
+         IF LOOKUP("DEBT_LP", lcBarrings) <> 0 OR LOOKUP("DEBT_HOTLP", lcBarrings) <> 0 THEN DO:
+            PUT STREAM sICCLog UNFORMATTED
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";WARNING:DEBT_barring_active" SKIP. 
+            NEXT.
+         END.
+      END. 
+
       IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED1" OR
           bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED2") THEN DO:
          /*The last LP command was Mandarina LP redirection setting
