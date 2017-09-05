@@ -45,6 +45,7 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
               bClitype.brand EQ Syst.Parameters:gcBrand AND
               bClitype.clitype EQ bMobsub.clitype NO-ERROR.
    IF NOT AVAIL bClitype THEN RETURN "ERROR: Unknown Clitype".
+   IF NOT fIsSelfEmpl(bcustomer.category) THEN RETURN "ERROR: Not selfemployed".
    fgetCustSegment(bCustomer.custidtype, fIsSelfEmpl(bcustomer.category),
                    TRUE, OUTPUT lcCategory).
    DO TRANSACTION:
