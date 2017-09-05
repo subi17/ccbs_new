@@ -180,6 +180,9 @@ DEFINE TEMP-TABLE ttExtra NO-UNDO
    FIELD DeliveryType AS CHAR FORMAT "X(1)"
    FIELD KialaCode   AS CHAR FORMAT "X(16)"
    FIELD ContractFileName AS CHAR FORMAT "X(14)"
+   FIELD Despachar   AS CHAR FORMAT "X(2)" /* Can delivery be started: 
+                                              01=true, 02=false. */
+   FIELD MainOrderID AS INTEGER /* Main line orderId for additional line cases */
    INDEX RowNum AS PRIMARY RowNum.
 
 DEFINE TEMP-TABLE ttTax NO-UNDO
