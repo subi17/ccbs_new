@@ -253,7 +253,7 @@ PROCEDURE pHandleOfferSMSResponse:
 
          IF AVAIL bOrder THEN LEAVE.
       END.
-/*   
+   
    IF NOT AVAIL bOrder THEN
    /* find order based on contact number */
    FOR EACH SMSMessage NO-LOCK WHERE
@@ -270,7 +270,7 @@ PROCEDURE pHandleOfferSMSResponse:
                  bOrder.OrderId = SMSMessage.OrderID NO-ERROR.
       LEAVE.
    END.
-   
+/*   
    IF LOOKUP(lcCommand,"SI,NO") = 0 OR 
       NUM-ENTRIES(icResponse, " ") > 2 THEN DO:
 
