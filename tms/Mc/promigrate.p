@@ -21,6 +21,7 @@ DEF VAR lcCategory AS CHAR.
 DEF BUFFER bMobsub FOR Mobsub.
 DEF BUFFER bCustomer FOR Customer.
 DEF BUFFER bClitype FOR Clitype.
+DEF BUFFER bDaycampaign FOR Daycampaign. 
 DEF VAR lhCustomer AS HANDLE NO-UNDO.
 DEF VAR lcCharValue AS CHAR NO-UNDO.
 DEF VAR lcContract AS CHAR NO-UNDO.
@@ -50,6 +51,10 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
    IF NOT AVAIL bClitype THEN lcError = "ERROR: Unknown Clitype".
    IF NOT fIsSelfEmpl(bcustomer.category) THEN 
       lcError = "ERROR: Not selfemployed".
+   FIND FIRST bDayCampaign NO-LOCK WHERE 
+              bDaycampaign.brand EQ Syst.Parameters:gcBrand AND
+              bDaycampaign.dcevent EQ bMobsub.clitype NO-ERROR.
+   IF NOT AVAIL bDaycampaign THEN lcError = "ERROR: Unknown DayCampaign".           
    IF lcError > "" THEN DO:
       fReqStatus(3,lcError).
       RETURN lcError.
@@ -71,7 +76,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                        bMobSub.MsSeq,
                        Today,
                        "FeeModel",
-                       daycampaign.feemodel,
+                       bdaycampaign.feemodel,
                        9,
                        ?,
                        "Pro Migrate",    /* memo   */
@@ -100,10 +105,17 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
       END.
    END.
    /* Mark request as handled */
-   IF NOT fReqStatus(7,"") THEN DO:
-      fReqError("ERROR: St. update failed.").
-      RETURN.
-   END.             
+    IF fChkSubRequest(iiRequest) = FALSE THEN DO:
+      IF NOT fReqStatus(7,"") THEN DO:
+         fReqError("ERROR: St. update failed.").
+         RETURN.
+      END.
+   END.
+   ELSE
+      IF NOT fReqStatus(8,"") THEN DO:
+         fReqError("ERROR: St. update failed.").
+         RETURN.
+      END.
 END.
 ELSE IF liOrigStatus EQ {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:
    IF fChkSubRequest(iiRequest) = FALSE THEN DO:
