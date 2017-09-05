@@ -260,8 +260,6 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.ExtInvRef    = OrderCustomer.ExtInvRef
    Customer.FoundationDate = OrderCustomer.FoundationDate
 
-   Customer.DontSharePersData = OrderCustomer.DontSharePersData
-
    /* marketing values */
    Customer.DirMarkSMS   = OrderCustomer.OperSMSMarketing
    Customer.DirMarkEmail = OrderCustomer.OperEMailMarketing
@@ -269,7 +267,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkSMS   = OrderCustomer.OutSMSMarketing
    Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
-   Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
+   Customer.OutMarkBank  = OrderCustomer.OutBankMarketing
+   Customer.DontSharePersData = OrderCustomer.DontSharePersData.
 
    IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
       OrderCustomer.CustIdType = "CIF"
