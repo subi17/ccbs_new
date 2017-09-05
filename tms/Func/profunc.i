@@ -177,6 +177,24 @@ FUNCTION fIs2PTariff RETURNS LOGICAL
    RETURN FALSE.
 END.
 
+/*Function returns True if a tariff can be defined as 2P tariff.
+NOTE: False is returned in real false cases and also in error cases. */
+FUNCTION fIs3PTariff RETURNS LOGICAL
+   (icCliType AS CHAR):
+
+   DEF BUFFER CLIType FOR CLIType.
+
+   FIND FIRST CLIType NO-LOCK WHERE
+              CLIType.Brand EQ Syst.Parameters:gcBrand AND
+              CLIType.CliType EQ icCLIType NO-ERROR.
+   IF AVAIL CliType AND
+            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+END.
+
+
 /*STC is restricted from Prepaid to postpaid and 2P*/
 FUNCTION fValidateProSTC RETURNS CHAR
    (iiCustomer AS INT,
@@ -206,8 +224,8 @@ FUNCTION fValidateProSTC RETURNS CHAR
 
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
-   IF fIs2PTariff(bNew.Clitype) THEN 
-      RETURN "STC to 2P is not allowed for Pro customer".
+   IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN 
+      RETURN "STC to 2P is not allowed for Pro customer".  /* Allowed only from 3P to 2P case YPPI-5 */
       
    RETURN "".
 END.
