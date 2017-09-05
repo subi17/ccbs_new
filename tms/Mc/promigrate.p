@@ -25,16 +25,18 @@ DEF VAR lhCustomer AS HANDLE NO-UNDO.
 DEF VAR lcCharValue AS CHAR NO-UNDO.
 DEF VAR lcContract AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO.
+DEF VAR liOrigStatus AS INT NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE MsRequest OR 
    MsRequest.ReqType NE {&REQTYPE_PRO_MIGRATION} THEN RETURN "ERROR".
-   
+liOrigStatus = MsRequest.reqstatus.
+
 /* request is under work */
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
-IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
+IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
 
    FIND FIRST bMobSub NO-LOCK WHERE
               bMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
@@ -102,7 +104,13 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
       fReqError("ERROR: St. update failed.").
       RETURN.
    END.             
-
+END.
+ELSE IF liOrigStatus EQ {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:
+   IF fChkSubRequest(iiRequest) = FALSE THEN DO:
+      fReqStatus(7,"").
+      RETURN.
+   END.
+   fReqStatus(2,"").
 END.
 
 fCleanEventObjects(). 
