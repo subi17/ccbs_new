@@ -75,7 +75,7 @@ IF MsRequest.ReqType EQ {&REQTYPE_PRO_MIGRATION} THEN DO:
                        "Pro Migrate",    /* memo   */
                        FALSE,           /* no messages to screen */
                        katun,
-                       "ContractChange",
+                       "ProMigrate",
                        0,
                        "",
                        "",
