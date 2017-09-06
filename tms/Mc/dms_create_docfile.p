@@ -625,21 +625,39 @@ FUNCTION fGetPermanencyAndHandset RETURNS CHAR
             ocPrevP = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
       END.
    END.
-END.
+END.  
 
 FUNCTION fGetTVService RETURNS CHARACTER
-  (iiMsSeq AS INTEGER):
+  (iiMsSeq   AS INTEGER, 
+   iiOrderId AS INTEGER):
 
-  DEFINE BUFFER bf_TPService FOR TPService.
-  
+  DEFINE BUFFER bf_TPService   FOR TPService.
+  DEFINE BUFFER bf_OrderAction FOR OrderAction.
+  DEFINE BUFFER bf_DayCampaign FOR DayCampaign.
+
+  DEFINE VARIABLE lcProduct AS CHAR NO-UNDO.
+
   FIND FIRST bf_TPService WHERE bf_TPService.MsSeq     = iiMsSeq            AND 
                                 bf_TPService.Operation = {&TYPE_ACTIVATION} AND 
                                 bf_TPService.ServType  = "Television"       AND 
                          LOOKUP(bf_TPService.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) = 0 NO-LOCK NO-ERROR.
   IF AVAIL bf_TPService THEN 
-      RETURN bf_TPService.Product.
+      ASSIGN lcProduct = bf_TPService.Product.
+  ELSE 
+  DO:
+      FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand = gcBrand AND bf_OrderAction.OrderId = iiOrderId AND bf_OrderAction.ItemType = "BundleItem" NO-LOCK,
+          FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand = gcBrand AND bf_DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK:
 
-  RETURN "".
+          IF LOOKUP(STRING(Daycampaign.BundleTarget), STRING({&TELEVISION_BUNDLE})) = 0 THEN 
+              NEXT.
+
+          ASSIGN lcProduct = OrderAction.ItemKey.
+          
+          LEAVE.
+      END.
+  END.    
+
+  RETURN lcProduct.
 
 END FUNCTION.
 
@@ -952,7 +970,8 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE) 
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)  + lcDelim +
+   fGetTVService(Order.MsSeq)
    .
    
    /*Solve tmsparam value for getting correct matrix row*/
@@ -1122,9 +1141,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE) + lcDelim +
-   fGetTVService(Order.MsSeq)
-   .
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE).
    
    /*solve needed documents:*/
    lcRequiredDocs =  fNeededDocs(BUFFER Order).
