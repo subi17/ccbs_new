@@ -815,7 +815,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /* Q25 Extension bank */ 
    lcBank                          + lcDelim +
    fFixNumberAndDonorInformation(Order.OrderID, lcDelim, FALSE) + lcDelim +
-   fGetTVService(Order.MsSeq)
+   fGetTVService(Order.MsSeq, Order.OrderId)
    .
 
    /*Document type,DocStatusCode,RevisionComment*/
@@ -971,7 +971,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
    fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)  + lcDelim +
-   fGetTVService(Order.MsSeq)
+   fGetTVService(Order.MsSeq, Order.OrderId)
    .
    
    /*Solve tmsparam value for getting correct matrix row*/
@@ -1450,7 +1450,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fGetTVService(Order.MsSeq).
+   fGetTVService(Order.MsSeq, Order.OrderId).
 
    /*Document type,DocStatusCode,RevisionComment*/
 
