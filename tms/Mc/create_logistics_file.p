@@ -398,11 +398,13 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcMainOrderId             AS CHAR NO-UNDO. /* gap018 */
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
    DEFINE BUFFER bufGroup FOR BItemGroup.
    DEFINE BUFFER bufSIM   FOR SIM.
+   DEFINE BUFFER bufOrder FOR Order. /* GAP018 */
 
    RELEASE Invoice.
 
@@ -1280,6 +1282,20 @@ FUNCTION fDelivSIM RETURNS LOG
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
+   /* GAP018 */
+   lcMainOrderId = "".
+   FIND FIRST CliType NO-LOCK WHERE 
+      CliType.CliType = Order.CliType NO-ERROR.
+      IF AVAIL CliType THEN
+         IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} OR
+            CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN
+            FOR EACH bufOrder OF Order NO-LOCK WHERE
+               bufOrder.MultiSimId = Order.OrderId:
+               lcMainOrderId = STRING(BufOrder.OrderId).
+               LEAVE.
+            END.
+   /* GAP018 end */
+
    /* Create Temp-table for DataService (OR extra fields in future) */
    CREATE ttExtra.
    ASSIGN ttExtra.RowNum      = ttOneDelivery.RowNum
@@ -1290,7 +1306,11 @@ FUNCTION fDelivSIM RETURNS LOG
                                     STRING(ldeResidualAmountTotal) ELSE "")
           ttExtra.DeliveryType = STRING(liDelType)
           ttExtra.KialaCode    = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
-          ttExtra.ContractFileName = lcContractFileName.
+          ttExtra.ContractFileName = lcContractFileName
+          /* GAP018 */
+          /* If terminal in order, no delivery */
+          ttExtra.Despachar    = (IF llDextraInvoice THEN "02" ELSE "01") 
+          ttExtra.MainOrderID  = lcMainOrderId.
 
    /* update SimStat when all skipping are checked */
    IF NOT (Order.OrderType eq 2) THEN
@@ -1493,7 +1513,10 @@ FUNCTION fDelivDevice RETURNS LOG
    CREATE ttExtra.
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
-          ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
+          ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER})
+          /* GAP018 */
+          ttExtra.Despachar    = "01" /* Device can be delivred */
+          ttExtra.MainOrderID  = "".
 
    RETURN TRUE.
 
