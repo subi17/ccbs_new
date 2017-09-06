@@ -28,19 +28,6 @@ katun = "cron".
 {Syst/eventlog.i}
 {Func/direct_dbconnect.i}
 
-/* weekday related processes */
-/* MB-734 MB-735 Moved to Dumptool 
-CASE WEEKDAY(TODAY):
-
-   /* Sunday */
-   WHEN 1 THEN DO:
-      
-      fELog("DAILY","PrePaidReportStarted").
-      RUN Gwy/ppcomprep.p.
-      fELog("DAILY","PrePaidReportStopped").
-   END.
-   
-END.
 
 fELog("DAILY","CallDumpStarted").
 
@@ -59,7 +46,7 @@ RUN pCallDump ("MobCDR,ErrorCDR",
 fELog("DAILY","CallDumpStopped").
 
 QUIT.
-*/
+
 
 PROCEDURE pCallDump:
 
