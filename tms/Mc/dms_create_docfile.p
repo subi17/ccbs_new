@@ -643,7 +643,8 @@ FUNCTION fGetTVService RETURNS CHARACTER
                          LOOKUP(bf_TPService.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) = 0 NO-LOCK NO-ERROR.
   IF AVAIL bf_TPService THEN 
       ASSIGN lcProduct = bf_TPService.Product.
-  ELSE 
+  ELSE IF NOT (CAN-FIND(FIRST MobSub     WHERE MobSub.MsSeq     = iiMsSeq NO-LOCK)  OR 
+               CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = iiMsSeq NO-LOCK)) THEN
   DO:
       FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand    = gcBrand      AND 
                                     bf_OrderAction.OrderId  = iiOrderId    AND 
