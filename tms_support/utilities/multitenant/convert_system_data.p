@@ -324,6 +324,8 @@ FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
            TMSParam.paramcode EQ "IMSI_Begin" NO-ERROR.
 IF AVAIL TMSParam THEN tmsparam.charval = "2140401".
 
+/* Antti: I'M PLANNING TO CHANGE THESE TABLES TO TENANT-SPECIFIC */
+/*
 FUNCTION fCreateInvGroup RETURNS LOGICAL
    ( BUFFER ibInvGroup FOR InvGroup,
      icNewInvGroup AS CHARACTER,
@@ -423,7 +425,7 @@ FOR EACH vatcode NO-LOCK WHERE
       bvatcode.accnum = vatcode.accnum. /* change to correct */
    BUFFER-COPY vatcode EXCEPT vatcode taxzone accnum TO bvatcode.
 END.
-
+*/
 IF CURRENT-VALUE(OfferItemSeq) <= 1 THEN DO:
    FOR EACH OfferItem NO-LOCK BY OfferItem.OfferItemId DESC:
       LEAVE.
