@@ -319,7 +319,7 @@ FUNCTION fVoiceBundle RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
    DEF VAR lcOut AS CHAR NO-UNDO.
-   lcVoiceBundles = fcParamC("VOICE_BUNDLES").
+   lcVoiceBundles = fcParamC("VOICE_BONO_CONTRACTS").
    DEF BUFFER bOrderaction FOR Orderaction.
    FOR EACH bOrderaction NO-LOCK WHERE
             bOrderaction.Brand EQ gcBrand AND
