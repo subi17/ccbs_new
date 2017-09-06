@@ -645,13 +645,16 @@ FUNCTION fGetTVService RETURNS CHARACTER
       ASSIGN lcProduct = bf_TPService.Product.
   ELSE 
   DO:
-      FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand = gcBrand AND bf_OrderAction.OrderId = iiOrderId AND bf_OrderAction.ItemType = "BundleItem" NO-LOCK,
-          FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand = gcBrand AND bf_DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK:
+      FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand    = gcBrand      AND 
+                                    bf_OrderAction.OrderId  = iiOrderId    AND 
+                                    bf_OrderAction.ItemType = "BundleItem" NO-LOCK,
+          FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand   = gcBrand AND 
+                                     bf_DayCampaign.DCEvent = bf_OrderAction.ItemKey NO-LOCK:
 
-          IF LOOKUP(STRING(Daycampaign.BundleTarget), STRING({&TELEVISION_BUNDLE})) = 0 THEN 
+          IF LOOKUP(STRING(bf_DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE})) = 0 THEN 
               NEXT.
 
-          ASSIGN lcProduct = OrderAction.ItemKey.
+          ASSIGN lcProduct = bf_OrderAction.ItemKey.
           
           LEAVE.
       END.
