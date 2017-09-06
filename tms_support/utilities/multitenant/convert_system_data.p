@@ -442,3 +442,16 @@ IF CURRENT-VALUE(OfferCriteriaSeq) <= 1 THEN DO:
    IF AVAIL OfferCriteria THEN
       CURRENT-VALUE(OfferCriteriaSeq) = OfferCriteria.OfferCriteriaID + 1.
 END.
+
+FOR EACH CliType EXCLUSIVE-LOCK WHERE CliType.ServicePack = "12":
+
+   CliType.ServicePack = "42".
+
+END.
+
+FOR EACH CliType EXCLUSIVE-LOCK WHERE CliType.ServicePack = "11":
+
+   CliType.ServicePack = "41".
+
+END.
+
