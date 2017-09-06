@@ -178,97 +178,97 @@ fDumpFileConvert(96,"","#CAT","#CAT_#TENANT").
 /* DumpName: ??? */
 fDumpFileConvert(101,"#TENANT_","","").
 /* DumpName: HPD_Barring */
-fDumpFileConvert(200,"",".txt","_#TENANT.txt").
+fDumpFileConvert(200,"#TENANT_","","").
 /* DumpName: HPD_BillItem */
-fDumpFileConvert(202,"",".txt","_#TENANT.txt").
+fDumpFileConvert(202,"#TENANT_","","").
 /* DumpName: HPD_BItemGroup */
-fDumpFileConvert(203,"",".txt","_#TENANT.txt").
+fDumpFileConvert(203,"#TENANT_","","").
 /* DumpName: HPD_Customer */
-fDumpFileConvert(204,"",".txt","_#TENANT.txt").
+fDumpFileConvert(204,"#TENANT_","","").
 /* DumpName: HPD_MServiceLimit */
-fDumpFileConvert(205,"",".txt","_#TENANT.txt").
+fDumpFileConvert(205,"#TENANT_","","").
 /* DumpName: HPD_MServiceLPool */
-fDumpFileConvert(206,"",".txt","_#TENANT.txt").
+fDumpFileConvert(206,"#TENANT_","","").
 /* DumpName: HPD_DayCampaign */
-fDumpFileConvert(207,"",".txt","_#TENANT.txt").
+fDumpFileConvert(207,"#TENANT_","","").
 /* DumpName: HPD_DCCLI */
-fDumpFileConvert(208,"",".txt","_#TENANT.txt").
+fDumpFileConvert(208,"#TENANT_","","").
 /* DumpName: HPD_DiscountPlan */
-fDumpFileConvert(209,"",".txt","_#TENANT.txt").
+fDumpFileConvert(209,"#TENANT_","","").
 /* DumpName: HPD_DMS */
-fDumpFileConvert(210,"",".txt","_#TENANT.txt").
+fDumpFileConvert(210,"#TENANT_","","").
 /* DumpName: HPD_DMSDoc */
-fDumpFileConvert(211,"",".txt","_#TENANT.txt").
+fDumpFileConvert(211,"#TENANT_","","").
 /* DumpName: HPD_DPMember */
-fDumpFileConvert(212,"",".txt","_#TENANT.txt").
+fDumpFileConvert(212,"#TENANT_","","").
 /* DumpName: HPD_DPTarget */
-fDumpFileConvert(213,"",".txt","_#TENANT.txt").
+fDumpFileConvert(213,"#TENANT_","","").
 /* DumpName: HPD_FATGroup */
-fDumpFileConvert(214,"",".txt","_#TENANT.txt").
+fDumpFileConvert(214,"#TENANT_","","").
 /* DumpName: HPD_FATime */
-fDumpFileConvert(215,"",".txt","_#TENANT.txt").
+fDumpFileConvert(215,"#TENANT_","","").
 /* DumpName: HPD_FixedFee */
-fDumpFileConvert(216,"",".txt","_#TENANT.txt").
+fDumpFileConvert(216,"#TENANT_","","").
 /* DumpName: HPD_FMItem */
-fDumpFileConvert(217,"",".txt","_#TENANT.txt").
+fDumpFileConvert(217,"#TENANT_","","").
 /* DumpName: HPD_IMSI */
-fDumpFileConvert(218,"",".txt","_#TENANT.txt").
+fDumpFileConvert(218,"#TENANT_","","").
 /* DumpName: HPD_MobCDR */
-fDumpFileConvert(219,"",".txt","_#TENANT.txt").
+fDumpFileConvert(219,"#TENANT_","","").
 /* DumpName: HPD_MobSub */
-fDumpFileConvert(220,"",".txt","_#TENANT.txt").
+fDumpFileConvert(220,"#TENANT_","","").
 /* DumpName: HPD_MsRequest */
-fDumpFileConvert(221,"",".txt","_#TENANT.txt").
+fDumpFileConvert(221,"#TENANT_","","").
 /* DumpName: HPD_Order */
-fDumpFileConvert(223,"",".txt","_#TENANT.txt").
+fDumpFileConvert(223,"#TENANT_","","").
 /* DumpName: HPD_OrderAction */
-fDumpFileConvert(224,"",".txt","_#TENANT.txt").
+fDumpFileConvert(224,"#TENANT_","","").
 /* DumpName: HPD_OrderCustomer */
-fDumpFileConvert(225,"",".txt","_#TENANT.txt").
+fDumpFileConvert(225,"#TENANT_","","").
 /* DumpName: HPD_OrderDelivery */
-fDumpFileConvert(226,"",".txt","_#TENANT.txt").
+fDumpFileConvert(226,"#TENANT_","","").
 /* DumpName: HPD_OrderFusion */
-fDumpFileConvert(227,"",".txt","_#TENANT.txt").
+fDumpFileConvert(227,"#TENANT_","","").
 /* DumpName: HPD_PrepaidRequest */
-fDumpFileConvert(228,"",".txt","_#TENANT.txt").
+fDumpFileConvert(228,"#TENANT_","","").
 /* DumpName: HPD_PrepCDR */
-fDumpFileConvert(229,"",".txt","_#TENANT.txt").
+fDumpFileConvert(229,"#TENANT_","","").
 /* DumpName: HPD_PrepEDR */
-fDumpFileConvert(230,"",".txt","_#TENANT.txt").
+fDumpFileConvert(230,"#TENANT_","","").
 /* DumpName: HPD_RepText */
-fDumpFileConvert(231,"",".txt","_#TENANT.txt").
+fDumpFileConvert(231,"#TENANT_","","").
 /* DumpName: HPD_ServiceLimit */
-fDumpFileConvert(233,"",".txt","_#TENANT.txt").
+fDumpFileConvert(233,"#TENANT_","","").
 /* DumpName: HPD_ServPac */
-fDumpFileConvert(234,"",".txt","_#TENANT.txt").
+fDumpFileConvert(234,"#TENANT_","","").
 /* DumpName: HPD_SingleFee */
-fDumpFileConvert(235,"",".txt","_#TENANT.txt").
+fDumpFileConvert(235,"#TENANT_","","").
 /* DumpName: HPD_SubSer */
-fDumpFileConvert(236,"",".txt","_#TENANT.txt").
+fDumpFileConvert(236,"#TENANT_","","").
 /* DumpName: HPD_SubsTerminal */
-fDumpFileConvert(237,"",".txt","_#TENANT.txt").
+fDumpFileConvert(237,"#TENANT_","","").
 /* DumpName: HPD_TermReturn */
-fDumpFileConvert(238,"",".txt","_#TENANT.txt").
+fDumpFileConvert(238,"#TENANT_","","").
 /* DumpName: HPD_TopupSchemeRow */
-fDumpFileConvert(239,"",".txt","_#TENANT.txt").
+fDumpFileConvert(239,"#TENANT_","","").
 /* DumpName: HPD_Invoice */
-fDumpFileConvert(240,"",".txt","_#TENANT.txt").
+fDumpFileConvert(240,"#TENANT_","","").
 /* DumpName: HPD_SubInvoice */
-fDumpFileConvert(241,"",".txt","_#TENANT.txt").
+fDumpFileConvert(241,"#TENANT_","","").
 /* DumpName: HPD_InvRow */
-fDumpFileConvert(242,"",".txt","_#TENANT.txt").
+fDumpFileConvert(242,"#TENANT_","","").
 /* DumpName: HPD_EDRHistory */
-fDumpFileConvert(243,"",".txt","_#TENANT.txt").
+fDumpFileConvert(243,"#TENANT_","","").
 /* DumpName: HPD_Payment */
-fDumpFileConvert(244,"",".txt","_#TENANT.txt").
+fDumpFileConvert(244,"#TENANT_","","").
 /* DumpName: HPD_ServiceLCounter */
-fDumpFileConvert(245,"",".txt","_#TENANT.txt").
+fDumpFileConvert(245,"#TENANT_","","").
 /* DumpName: HPD_CustContact */
-fDumpFileConvert(246,"",".txt","_#TENANT.txt").
+fDumpFileConvert(246,"#TENANT_","","").
 /* DumpName: HPD_Limit */
-fDumpFileConvert(247,"",".txt","_#TENANT.txt").
+fDumpFileConvert(247,"#TENANT_","","").
 /* DumpName: HPD_CLIType */
-fDumpFileConvert(248,"",".txt","_#TENANT.txt").
+fDumpFileConvert(248,"#TENANT_","","").
 
 /* Yoigo data */
 
