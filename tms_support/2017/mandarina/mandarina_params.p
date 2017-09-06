@@ -14,12 +14,12 @@
 /* If they exist, then update with the new values.              */
 
 /* Directories */
-DEF VAR lcBaseDirectory      AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/".
-DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/spool/". 
-DEF VAR lcIncomingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/incoming/". 
-DEF VAR lcOutgoingDirectory  AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/outgoing/". 
-DEF VAR lcProcessedDirectory AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/processed/".
-DEF VAR lcLogsDirectory      AS CHAR NO-UNDO INITIAL "/tmp/mnt/store/riftp/mandarina/logs/".
+DEF VAR lcBaseDirectory      AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/".
+DEF VAR lcSpoolDirectory     AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/spool/". 
+DEF VAR lcIncomingDirectory  AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/incoming/". 
+DEF VAR lcOutgoingDirectory  AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/outgoing/". 
+DEF VAR lcProcessedDirectory AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/processed/".
+DEF VAR lcLogsDirectory      AS CHAR NO-UNDO INITIAL "/mnt/store/riftp/mandarina/logs/".
  
 /* Network delay parameters */
 DEF VAR liDelayNW AS INT NO-UNDO INITIAL 5.  /* Delay time in seconds    */ 

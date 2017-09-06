@@ -15,7 +15,9 @@ https://kethor.qvantel.com/browse/MANDLP-8
 ---------------------------------------------------------------------- */
 
 /* Parameters */
-DEF INPUT PARAMETER pcProcessMode AS CHAR NO-UNDO. /* ["massive"|"priority"] */
+DEF VAR lcProcessMode AS CHAR NO-UNDO. /* ["massive"|"priority"] */
+
+lcProcessMode = SESSION:PARAMETER.
 
 /* includes */
 {Syst/commpaa.i}
@@ -87,12 +89,13 @@ lcMandarinaBobLog = lcLogsDirectory +
                     "_mandarina_bob.log".                     
 
 OUTPUT STREAM sMandaLog TO VALUE(lcMandarinaBobLog) APPEND.
-PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_starts (" + pcProcessMode + ")" SKIP.
+PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_starts (" + lcProcessMode + ")" SKIP.
 
 /* Verify input parameter */
-IF pcProcessMode <> "massive" AND pcProcessMode <> "priority" THEN DO:
+IF lcProcessMode <> "massive" AND lcProcessMode <> "priority" THEN DO:
    PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";incorrect_input_parameter" SKIP.
    PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishes" SKIP.
+   PUT STREAM sMandaLog UNFORMATTED "-------------------------------" SKIP.
    OUTPUT STREAM sMandaLog CLOSE.
    QUIT.
 END.
@@ -100,7 +103,7 @@ END.
 /* Check if other mandarina_bob is running */
 ASSIGN 
    lcTableName = "MANDARINA"
-   lcActionID  = "file_reading_" + pcProcessMode
+   lcActionID  = "file_reading_" + lcProcessMode
    ldCurrentTimeTS = fMakeTS(). 
  
 DO TRANS:
@@ -148,7 +151,7 @@ REPEAT:
 
    IMPORT STREAM sFilesInDir UNFORMATTED lcFileName.
    /* Only process the correct files */
-   IF NOT (lcFileName BEGINS ("LP" + pcProcessMode)) THEN
+   IF NOT (lcFileName BEGINS ("LP" + lcProcessMode)) THEN
      NEXT.
    lcCurrentFile = lcInComingDirectory + lcFileName.
    lcCurrentLog = lcLogsDirectory + lcFileName + ".log". 
