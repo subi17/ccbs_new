@@ -50,6 +50,7 @@ DEF VAR must-print   AS LOG                    NO-UNDO.
 DEF VAR must-add     AS LOG                    NO-UNDO.
 DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
+DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 DEF VAR lcField      AS CHAR NO-UNDO. 
