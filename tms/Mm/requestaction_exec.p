@@ -267,6 +267,24 @@ PROCEDURE pPeriodicalContract:
          END.     
       END.
 
+      /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
+      /*TODO remove after FTERM8 campaign period.*/
+      DEF BUFFER bFTERMOrder FOR Order.
+      FIND FIRST bFTERMOrder WHERE 
+                 bFTERMOrder.brand EQ "1" AND
+                 bFTERMOrder.OrderID EQ iiOrderID.
+                 
+      IF AVAIL bFTERMOrder AND
+               ttAction.ActionKey EQ "FTERM12-100" AND 
+               R-INDEX(bFTERMOrder.OrderChannel, "pos") > 0 AND 
+               fIsConvergenceTariff(icCliType) AND
+               idActStamp > 20170911 AND
+               idActStamp < 20171001 
+      THEN DO:
+         ttAction.ActionKey = "FTERM8-100".
+      END.
+      /*End of FLP temporary change*/
+
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
       IF ttAction.ActionKey EQ "VOICE200" AND
