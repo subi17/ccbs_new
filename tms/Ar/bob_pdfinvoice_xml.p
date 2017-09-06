@@ -154,7 +154,7 @@ REPEAT:
    
    ASSIGN lcTenant = fConvertBrandToTenant(lcBrand).
 
-   fsetEffectiveTenantForAllDB(lcTenant).
+   IF NOT fsetEffectiveTenantForAllDB(lcTenant) THEN NEXT.
           
    fBatchLog("START", lcInputFile).    
    
