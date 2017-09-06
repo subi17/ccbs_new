@@ -83,7 +83,9 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
             xxOrder.StatusCode = lcStatus
       TENANT-WHERE BUFFER-TENANT-ID(xxOrder) GE 0:
    
-      fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(xxOrder)).
+      IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(xxOrder))
+      THEN NEXT.
+
       FIND FIRST OrderCustomer OF xxOrder WHERE
                  OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
       IF AVAILABLE OrderCustomer AND 
