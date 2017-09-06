@@ -1986,7 +1986,8 @@ PROCEDURE pGetCTNAME:
        END.
        
        /* TV Service */
-       FOR FIRST OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+       TVSERVICE_DETAILS:
+       FOR EACH OrderAction WHERE OrderAction.Brand     = gcBrand       AND
                                    OrderAction.OrderId  = Order.Orderid AND
                                    OrderAction.ItemType = "BundleItem"  NO-LOCK,
            FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
@@ -2008,6 +2009,7 @@ PROCEDURE pGetCTNAME:
                                    (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
                                  ELSE 
                                    "").
+           LEAVE TVSERVICE_DETAILS.                     
        END.                                    
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
