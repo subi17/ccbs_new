@@ -49,7 +49,6 @@ DEF VAR must-print   AS LOG                    NO-UNDO.
 DEF VAR must-add     AS LOG                    NO-UNDO.
 DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
-DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 DEF VAR lcField      AS CHAR NO-UNDO. 
@@ -164,17 +163,10 @@ REPEAT WITH FRAME sel:
 
            DISPLAY icOffer @ OfferCriteria.Offer.
 
-           i = 1. 
-           FOR EACH OfferCriteria NO-LOCK 
-           BY OfferCriteria.OfferCriteriaId DESC:
-              i = OfferCriteria.OfferCriteriaID + 1.
-              LEAVE.
-           END.
-           
            CREATE OfferCriteria.
            ASSIGN 
               OfferCriteria.Brand = gcBrand 
-              OfferCriteria.OfferCriteriaID = i
+              OfferCriteria.OfferCriteriaID = NEXT-VALUE(OfferCriteriaSeq)
               OfferCriteria.Offer   = icOffer
               OfferCriteria.BeginStamp = ldDefFrom.
               OfferCriteria.EndStamp   = fMake2DT(12/31/2049,86399).
