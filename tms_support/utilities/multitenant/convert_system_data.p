@@ -455,3 +455,61 @@ FOR EACH CliType EXCLUSIVE-LOCK WHERE CliType.ServicePack = "11":
 
 END.
 
+DEF VAR liid AS INT NO-UNDO. 
+/* MB-734 */
+FIND FIRST Dumpfile WHERE dumpfile.dumpname EQ "PrepaidCompReport" NO-ERROR.
+IF NOT AVAIL DumpFile THEN DO:
+   FIND LAST DumpFile USE-INDEX DumpID NO-LOCK NO-ERROR.
+   IF AVAILABLE DumpFile
+   THEN liid = DumpFile.DumpID + 1.
+   ELSE liid = 1.
+   CREATE DumpFile .
+   ASSIGN
+      dumpfile.Active          = TRUE
+      dumpfile.AllowReplica    = NO
+      dumpfile.AveDurFull      = 1770
+      dumpfile.AveDurMod       = 2
+      dumpfile.BatchID         = 1
+      dumpfile.Brand           = "1"
+      dumpfile.ConfigParam     = ""
+      dumpfile.DecimalPoint    = "."
+      dumpfile.Description     = "Prepaid compensation report"
+      dumpfile.DumpCharSet     = ""
+      dumpfile.DumpDelimiter   = "|"
+      dumpfile.DumpFormat      = "ASCII"
+      dumpfile.DumpID          = liid
+      dumpfile.DumpLineFeed    = ""
+      dumpfile.DumpName        = "PrepaidCompReport"
+      dumpfile.EmptyFile       = TRUE
+      dumpfile.EventLogFields  = ""
+      dumpfile.FileCategory    = "DWH"
+      dumpfile.FileName        = "#TENANT_cc_prepaid_comp_#DATE_#TIME.txt"
+      dumpfile.FullCollModule  = ""
+      dumpfile.LinkKey         = ""
+      dumpfile.LogFile         = ""
+      dumpfile.LogicModule     = "Gwy/ppcomprep.p"
+      dumpfile.MainTable       = "PrepaidRequest"
+      dumpfile.ModCollModule   = ""
+      dumpfile.ModFromEventLog = TRUE
+      dumpfile.ModFromField    = "EventTS"
+      dumpfile.QueryClause     = ""
+      dumpfile.SideTables      = ""
+      dumpfile.SpoolDir        = "/store/riftp/dumpfiles/prepaidcomp/spool/"
+      dumpfile.TransDir        = "/store/riftp/dumpfiles/prepaidcomp/outgoing/"
+      dumpfile.UseIndex        = "".
+      
+   CREATE DFTimeTable.
+   ASSIGN
+     dfTimeTable.Brand = "1"     
+     dfTimeTable.DumpDay = ""   
+     dfTimeTable.DumpID = liid    
+     dfTimeTable.DumpMode = "Full"  
+     dfTimeTable.DumpTime = "01:55"  
+     dfTimeTable.DumpTrigger = FALSE 
+     dfTimeTable.DumpWeekday = "1"
+     dfTimeTable.FileNameTag = ""
+     dfTimeTable.FromDate = 9/7/17 
+     dfTimeTable.Ongoing = 0   
+     dfTimeTable.ToDate = 12/31/49   
+     dfTimeTable.UseReplica = FALSE.
+END.
