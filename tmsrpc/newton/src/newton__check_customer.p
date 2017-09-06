@@ -111,6 +111,10 @@ FUNCTION fCheckMigration RETURNS LOG ():
             ASSIGN
                llOrderAllowed = FALSE
                lcReason = "PRO migration not possible because of multiple mobile lines".
+         IF Mobsub.paytype THEN
+            ASSIGN
+               llOrderAllowed = FALSE
+               lcReason = "PRO migration not possible because of multiple mobile lines".
          IF fHasTVService(Mobsub.msseq) THEN
             ASSIGN
                llOrderAllowed = FALSE
@@ -204,12 +208,9 @@ DO:
         DO:
             IF plSTCMigrate THEN 
             DO:
+                fCheckMigration().
                 FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
-                IF AMBIG MobSub THEN 
-                    ASSIGN 
-                        llOrderAllowed = FALSE
-                        lcReason = "PRO migration not possible because of multiple mobile lines".     /* Kept the error messages as same, to avoid enhancing from web */
-                ELSE IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
+                IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
                     ASSIGN 
                         llOrderAllowed = FALSE
                         lcReason = "Mobile line for non-pro customer from PRO channel".
