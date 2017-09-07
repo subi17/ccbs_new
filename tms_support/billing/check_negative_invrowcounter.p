@@ -22,7 +22,8 @@ def frame fNegativeIRC
    liSubsChecked  LABEL "Subs checked" SKIP
    i label "IRCs checked"  skip
    j label "Errors found" 
-with overlay NO-labels 1 column row 4 title " Negative Invoice Row Counter Check ".
+with overlay NO-labels 1 column row 4 title 
+   SUBST(" Negative Invoice Row Counter Check (&1)", Syst.Parameters:Tenant).
 
 ldaPeriod = date(month(today),1,year(today)).
 
@@ -35,7 +36,7 @@ ASSIGN
    ldaTodate = add-interval(ldaPeriod,1,"months")
    liPeriodTo = YEAR(ldaTodate) * 10000 + MONTH(ldaTodate) * 100 + 1
    ldaTodate = DATE(MONTH(ldaTodate),1,YEAR(ldaTodate)) - 1
-   lcFile = "check_negative_irc_" +  STRING(liPeriod) + ".txt".
+   lcFile = Syst.Parameters:Tenant + "_check_negative_irc_" +  STRING(liPeriod) + ".txt".
 
 disp lcFile with frame fNegativeIRC.
 
