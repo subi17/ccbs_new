@@ -19,16 +19,20 @@ DEF VAR resp_struct AS CHARACTER NO-UNDO.
 DEF VAR resp_array AS CHARACTER NO-UNDO. 
 DEF VAR i AS INTEGER NO-UNDO.
 DEF VAR valuecount AS INT NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 
-FOR EACH eventlog NO-LOCK where
-         eventlog.tablename = "MNPRetentionRule" and
-         eventlog.action NE "Delete" use-index tablename
-   by eventdate by eventtime:
+FOR EACH eventlog NO-LOCK WHERE eventlog.tablename = "MNPRetentionRule" and eventlog.action NE "Delete" use-index tablename
+    by eventdate by eventtime:
 
    valuecount = num-entries(Eventlog.DataValues, CHR(255)) / 3.
    

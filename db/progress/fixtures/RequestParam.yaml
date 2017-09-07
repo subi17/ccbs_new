@@ -1699,6 +1699,7 @@ bulkload: RequestParam
   Brand: "1"
   ReqType: 13
   ParamField: "ReqIParam4"
+  Usage: "Pro flag"
 
 bulkload: RequestParam
   Brand: "1"
@@ -3688,6 +3689,11 @@ bulkload: RequestParam
   ReqType: 35
   ParamField: "ReqCParam5"
   Usage: "Barring Mask"
+
+bulkload: RequestParam
+  Brand: "1"
+  ReqType: 35
+  ParamField: "ReqCParam6"
 
 bulkload: RequestParam
   Brand: "1"
