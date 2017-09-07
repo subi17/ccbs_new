@@ -43,12 +43,15 @@ DEF VAR resp_array AS CHAR NO-UNDO.
 DEF VAR dump_struct AS CHAR NO-UNDO.
 DEF VAR llWildSearch AS LOG NO-UNDO.
 DEF VAR liCases AS INT NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
-lcStruct = validate_struct(pcStruct,
-   "starttime,endtime,dumpid,filename").
+
+lcStruct = validate_struct(pcStruct,"brand,starttime,endtime,dumpid,filename").
+
+pcTenant = get_string(pcStruct, "brand").
 
 IF LOOKUP("starttime", lcStruct) > 0 THEN
    ldeStartTime = get_timestamp(pcStruct, "starttime").
@@ -64,6 +67,7 @@ IF LOOKUP("filename", lcStruct) > 0 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 

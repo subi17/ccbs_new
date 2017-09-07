@@ -31,11 +31,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    liId = INT(pcID) NO-ERROR.
-
+   
    FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = liId NO-ERROR.
    IF NOT AVAIL MsRequest THEN 
       RETURN appl_err(SUBST("Request with id &1 was not found", liId)).
-     
+         
    lcResultStruct = add_struct(resp_array, "").
 
    add_int(lcResultStruct, "id", MsRequest.MsRequest).

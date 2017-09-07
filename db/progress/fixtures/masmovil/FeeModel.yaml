@@ -1,0 +1,175 @@
+bulkload: FeeModel
+  FeeModel: "CargoPost_05"
+  FeeName: "Cargo_5euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_10"
+  FeeName: "Cargo_10euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "CargoPost_20"
+  FeeName: "Cargo_20euros"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Compensa 5"
+  FeeName: "Compensa_5eurosMM"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Doa no procede"
+  FeeName: "DOA no procede"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Handset"
+  FeeName: "Cargo_5eurosMM"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Importe_descontado"
+  FeeName: "Importe descontado"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "MM_1024_UPSELLMF"
+  FeeName: "1GB Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_200_UPSELLMF"
+  FeeName: "200 MB Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_500_UPSELLMF"
+  FeeName: "Data 500 Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_512_UPSELLMF"
+  FeeName: "Data 512 Upsell"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_BONO_RELAXMF"
+  FeeName: "Relax Bono"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_CEROMF"
+  FeeName: "Tarifa Cero"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_CERO_5GBMF"
+  FeeName: "Tarifa Mas 0 + 5 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_DATA1024MF"
+  FeeName: "Data Usage Bundle 1GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_DATA2048MF"
+  FeeName: "Data Usage Bundle 2GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_DATA4096MF"
+  FeeName: "Data Usage Bundle 4GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_DATA500MF"
+  FeeName: "Data Usage Bundle 500MB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_DATA512MF"
+  FeeName: "Data Usage Bundle 500MB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_INTVOICE100MF"
+  FeeName: "International Voice bundle"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_MAS_1GBMF"
+  FeeName: "Tarifa Mas 1 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_MAS_3GBMF"
+  FeeName: "Tarifa Mas 3 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_MAS_8GBMF"
+  FeeName: "Tarifa Mas 8 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_10GBMF"
+  FeeName: "Tarifa Internet Total 10 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_20GBMF"
+  FeeName: "Tarifa Internet Total 20 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_50GBMF"
+  FeeName: "Tarifa Internet Total 50 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_NET_5GBMF"
+  FeeName: "Tarifa Internet Total 5 GB"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_VOICE100MF"
+  FeeName: "Voice 100 Min. Package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_VOICE250MF"
+  FeeName: "Voice 250 Min. Package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "MM_VOICE40MF"
+  FeeName: "Voice 40 Min. Package"
+  Brand: "1"
+
+bulkload: FeeModel
+  FeeModel: "RECONNECTION"
+  FeeName: "Reconnection Fee"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "Reparacion"
+  FeeName: "Reparacion"
+  Brand: "1"
+  FMGroup: 1
+
+bulkload: FeeModel
+  FeeModel: "single_fee_charge"
+  FeeName: "Single fee charge"
+  Brand: "1"
+  FMGroup: 1
+

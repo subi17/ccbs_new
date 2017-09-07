@@ -1,7 +1,8 @@
 /**
  * Search fusion orders, at least one search parameter is mandatory
  *
- * @input order_id;int;optional;
+ * @input brand;string;mandatory;tenant information
+          order_id;int;optional;
           fixed_line_order_id;string;optional;
           msisdn;string;optional;
           fixed_line_number;optional;
@@ -32,6 +33,7 @@ gcBrand = "1".
 DEF VAR pcInputStruct AS CHAR NO-UNDO. 
 DEF VAR lcInputFields AS CHAR NO-UNDO. 
 
+DEF VAR pcTenant  AS CHAR NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR lcFixedLineOrderID AS CHAR NO-UNDO. 
 DEF VAR lcMsisdn AS CHAR NO-UNDO. 
@@ -172,10 +174,11 @@ END FUNCTION.
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcInputStruct = get_struct(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-lcInputFields = validate_request(pcInputStruct,"order_id,fixed_line_order_id,msisdn,fixed_line_number,fusion_order_status,customer_id,customer_id_type,salesman,limit,sort_order,offset").
+lcInputFields = validate_request(pcInputStruct,"brand,order_id,fixed_line_order_id,msisdn,fixed_line_number,fusion_order_status,customer_id,customer_id_type,salesman,limit,sort_order,offset").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant  = get_string(pcInputStruct,"brand")
    liOrderId = get_int(pcInputStruct,"order_id")
       WHEN LOOKUP("order_id",lcInputFields) > 0 
    lcFixedLineOrderID = get_string(pcInputStruct,"fixed_line_order_id")
@@ -200,6 +203,8 @@ ASSIGN
       WHEN LOOKUP("offset",lcInputFields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF lcSortOrder > "" AND
    LOOKUP(lcSortOrder,"ascending,descending") = 0 THEN
