@@ -3,7 +3,8 @@
  *
  * @input   orderdata;struct;order data
 
- * @orderdata  msseq;int;mandatory;subscription id
+ * @orderdata  brand:string;mandatory;Tenant
+               msseq;int;mandatory;subscription id
                id_type;string;mandatory;id type
                person_id;string;mandatory;person id
                contract_id;string;mandatory;contract id
@@ -34,6 +35,7 @@ DEF VAR pcArray              AS CHAR  NO-UNDO.
 DEF VAR pcStruct             AS CHAR  NO-UNDO.
 DEF VAR pcSubsStruct         AS CHAR  NO-UNDO.
 DEF VAR lcStruct             AS CHAR  NO-UNDO.
+DEF VAR pcTenant             AS CHAR  NO-UNDO.
 DEF VAR piMsSeq              AS INT   NO-UNDO.
 DEF VAR pcIdType             AS CHAR  NO-UNDO.
 DEF VAR pcPersonId           AS CHAR  NO-UNDO.
@@ -156,10 +158,11 @@ IF validate_request(param_toplevel_id,"struct,array") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 pcArray = get_array(param_toplevel_id, "1").
 
-lcStruct = validate_request(pcStruct,"id_type,person_id,old_operator,salesman,channel,orderer_ip").
+lcStruct = validate_request(pcStruct,"brand,id_type,person_id,old_operator,salesman,channel,orderer_ip").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant      = get_string(pcStruct,"brand")
    pcIdType      = get_string(pcStruct,"id_type")
    pcPersonId    = get_string(pcStruct,"person_id")
    pcOldOperator = get_string(pcStruct,"old_operator").
@@ -181,6 +184,8 @@ IF pcPersonId = "" OR pcPersonId = ? THEN
 
 IF pcOldOperator = "" OR pcOldOperator = ? THEN
    RETURN appl_err("Old operator is blank or unknown").
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST Customer WHERE
            Customer.Brand      = gcBrand    AND
