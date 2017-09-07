@@ -43,8 +43,9 @@ DEF VAR llOk AS LOG NO-UNDO.
 
 
 form
-   skip(4)
+   skip(3)
    Company.CompName     label "Company name .." AT 10 FORMAT "X(40)" SKIP
+   Company.CreditorName label "Creditor name.." AT 10 FORMAT "X(40)" SKIP
    Company.Address      label "Address ......." AT 10 FORMAT "X(40)" SKIP
    Company.PostOffice   label "Post Office ..." AT 10 FORMAT "X(40)" SKIP
    Company.Phone        label "Phone 1 ......." AT 10 FORMAT "X(40)" SKIP
@@ -78,6 +79,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
    DISPLAY 
    Company.CompName 
+   Company.CreditorName 
    Company.Address 
    Company.PostOffice 
    Company.Phone 
@@ -112,6 +114,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
          UPDATE 
             Company.CompName 
+            Company.CreditorName 
             Company.Address 
             Company.PostOffice 
             Company.Phone 

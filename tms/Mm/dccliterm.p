@@ -109,7 +109,7 @@ IF NOT AVAILABLE DayCampaign THEN RETURN.
 ldCurrent = fMakeTS().
 
 /* service package */
-IF DayCampaign.DCType = "1" THEN DO:
+IF DayCampaign.DCType = "1" OR INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN DO:
 
    ldtFirstDate = ?.
     
