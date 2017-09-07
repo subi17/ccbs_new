@@ -75,8 +75,13 @@ FOR EACH msrequest NO-LOCK WHERE
          msrequest.actstamp >= ldeFrom and
          msrequest.actstamp < ldeTo:
 
-   IF msrequest.reqcparam1 BEGINS "TARJ" AND
-      msrequest.reqcparam2 BEGINS "TARJ" THEN NEXT.
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType EQ msrequest.reqcparam1 AND
+                     CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID})
+      AND
+      CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType EQ msrequest.reqcparam2 AND
+                     CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) THEN NEXT.
 
    fTS2Date(msrequest.actstamp, output ldaSTCDate).
    

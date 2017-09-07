@@ -110,7 +110,8 @@ FORM
    ldCounter     COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Events To Counters"
    liActions     COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Limit Actions"
 WITH CENTERED ROW 5 SIDE-LABELS 
-     TITLE " TMQUEUE FOR COUNTERS " FRAME fQty.
+     TITLE SUBST(" TMQUEUE FOR COUNTERS (&1) ", Syst.Parameters:Tenant) 
+     FRAME fQty.
 
 FUNCTION fErrorLog RETURNS LOGIC
   (iiCustNum AS INT,

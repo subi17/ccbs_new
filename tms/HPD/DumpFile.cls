@@ -58,7 +58,7 @@ CLASS HPD.DumpFile INHERITS DumpSomeWhere:
 
       DEFINE VARIABLE lcBrandName AS CHARACTER NO-UNDO.
 
-      lcBrandName = multitenancy.TenantInformation:mGetBrandNameForActiveTenant().
+      lcBrandName = multitenancy.TenantInformation:mGetBrandNameForActualTenant().
 
       IF icFile <> ""
       THEN ASSIGN

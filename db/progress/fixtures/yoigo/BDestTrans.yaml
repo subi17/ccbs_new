@@ -1,0 +1,5832 @@
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "876641141"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-02-13
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "881974675"
+  BdestID: 1
+  ToDate: 2017-07-02
+  FromDate: 2014-06-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "881976475"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-09-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900153742"
+  BdestID: 1
+  ToDate: 2015-08-31
+  FromDate: 2014-11-26
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900153743"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-12-27
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900153783"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-07-06
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900840213"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "900840213"
+  BdestID: 1
+  ToDate: 2016-04-30
+  FromDate: 2015-05-11
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900840253"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-03-24
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900840299"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-03-27
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "900840304"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-06-13
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357620"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357621"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357634"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357637"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357638"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357639"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902357640"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-02-27
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "902540193"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "911119725"
+  BdestID: 1
+  ToDate: 2017-03-16
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912171492"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-02-25
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912353191"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912353714"
+  BdestID: 1
+  ToDate: 2015-02-24
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912483910"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912489010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912938010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "912969088"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-04-03
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "912989580"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-03-17
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "913059011"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "913059483"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "914843199"
+  BdestID: 1
+  ToDate: 2017-04-02
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916169624"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916240300"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916258855"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-12-09
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916349347"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-06-12
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916349350"
+  BdestID: 1
+  ToDate: 2017-06-11
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916471710"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916491020"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916669006"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "916899200"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-09-30
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "918715272"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "918879608"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "920354000"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "921419860"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922010160"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922109082"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-04-24
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922344687"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922500800"
+  BdestID: 1
+  ToDate: 2014-05-26
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922500804"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922603010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922606010"
+  BdestID: 1
+  ToDate: 2015-04-23
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922759900"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922761600"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922842705"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-08-13
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922863127"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "922869600"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "923017090"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "925269700"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "925534401"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "925720105"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "925770801"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "926274814"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "927625313"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "928063210"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "930017665"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "932359010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "932359010"
+  BdestID: 1
+  ToDate: 2017-03-22
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "932359011"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-03-23
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "932359011"
+  BdestID: 1
+  ToDate: 2017-03-22
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "932382201"
+  BdestID: 1
+  ToDate: 2016-12-26
+  FromDate: 2014-12-09
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "935045370"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "935136671"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "935136671"
+  BdestID: 1
+  ToDate: 2016-04-30
+  FromDate: 2015-04-17
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "935469436"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-07-29
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "937021260"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "937366691"
+  BdestID: 1
+  ToDate: 2016-07-28
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "937484340"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "938114804"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "938144461"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "938426610"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "938768111"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "941024272"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "941105077"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "941277810"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "941942001"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "942200851"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943005100"
+  BdestID: 1
+  ToDate: 2016-06-12
+  FromDate: 2016-01-11
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943008000"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943038080"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943252000"
+  BdestID: 1
+  ToDate: 2016-02-29
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943481000"
+  BdestID: 1
+  ToDate: 2015-05-10
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943575803"
+  BdestID: 1
+  ToDate: 2014-06-01
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943644300"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "943708400"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944020220"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944062400"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944286890"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944660000"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944669430"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-09-19
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944789200"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "944890010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-11-04
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "945162699"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "946111109"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "946179100"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "946270200"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-08-24
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "947112636"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "947288886"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "948417149"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "948420399"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "949348032"
+  BdestID: 1
+  ToDate: 2016-06-02
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "949884406"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-06-03
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "950392440"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "950454238"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "950808101"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-08-21
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "951915060"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "951926010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-08-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "952187485"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "952419017"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "952761350"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "952873240"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-01-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "952976261"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "953030526"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "953030546"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "953210011"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-11-24
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "953796170"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "955007190"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "955796000"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "955860808"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "956012650"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "956063198"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-07-10
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "956064221"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-03-06
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "956149370"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "956696236"
+  BdestID: 1
+  ToDate: 2015-07-09
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "956900250"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-04-18
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "957606875"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "958321156"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "958420836"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "958436011"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "958465115"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "958539697"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "959625010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "960703776"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-11-10
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "961110282"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-03-14
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "961310062"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "961501500"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "962288268"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "962459070"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "962959514"
+  BdestID: 1
+  ToDate: 2017-07-05
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "963113415"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-02-20
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "963121581"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "963171129"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "963320010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "963971222"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "964226010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "964355814"
+  BdestID: 1
+  ToDate: 2015-05-19
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "964547100"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "964631152"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-07-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "964631152"
+  BdestID: 1
+  ToDate: 2016-06-30
+  FromDate: 2015-05-20
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "965055447"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-09-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "965740158"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "965855500"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "966140620"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "966286930"
+  BdestID: 1
+  ToDate: 2014-05-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "966293840"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-08-18
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "966658050"
+  BdestID: 1
+  ToDate: 2014-05-22
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "966900886"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-12-19
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "968022556"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-06-26
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "968128884"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "968229540"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "968388500"
+  BdestID: 1
+  ToDate: 2014-06-10
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "968394284"
+  BdestID: 1
+  ToDate: 2014-11-09
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "968427604"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "971072091"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-05-20
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "971704400"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "973350010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "973700683"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "974292100"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "975108005"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-01-09
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "975234100"
+  BdestID: 1
+  ToDate: 2017-01-08
+  FromDate: 2015-02-09
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "976199112"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "976721234"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "977010049"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-06-06
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "977666854"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "B"
+  TranslateNumber: "977778190"
+  BdestID: 1
+  ToDate: 2016-06-05
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "977794554"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "978619920"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "981542300"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-07-03
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "981542340"
+  BdestID: 1
+  ToDate: 2014-06-19
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "981835417"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2016-04-29
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "C"
+  TranslateNumber: "981920010"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "982297350"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "983008361"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2015-09-28
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "983426201"
+  BdestID: 1
+  ToDate: 2015-09-27
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "983540062"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "983800293"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "986810260"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "987844310"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "987844511"
+  BdestID: 1
+  ToDate: 2014-10-21
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "987878239"
+  BdestID: 1
+  ToDate: 2017-07-06
+  FromDate: 2014-10-22
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "987895487"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2017-07-07
+
+bulkload: BDestTrans
+  BDest: "010"
+  RatingZone: "A"
+  TranslateNumber: "988517212"
+  BdestID: 1
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "910508992"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2017-08-24
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "912755401"
+  BdestID: 3
+  ToDate: 2017-08-23
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "A"
+  TranslateNumber: "922239205"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "925239012"
+  BdestID: 3
+  ToDate: 2016-05-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "925274552"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-09-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "A"
+  TranslateNumber: "928219035"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "932359012"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2017-01-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "B"
+  TranslateNumber: "932359012"
+  BdestID: 3
+  ToDate: 2016-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "942209799"
+  BdestID: 3
+  ToDate: 2015-09-13
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "942395562"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2015-09-14
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "943023350"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "944031805"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "945016850"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "948217012"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "963866000"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "968012081"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "971225791"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "981900643"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "983327850"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "012"
+  RatingZone: "C"
+  TranslateNumber: "985279100"
+  BdestID: 3
+  ToDate: 2049-12-31
+  FromDate: 2014-05-01
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "30100"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "30108"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "30112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "30116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "30118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "30166"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "30199"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30806"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30807"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30812"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30825"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30901"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "30909"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "31112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "31116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3114"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "31800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3188"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "31900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "31906"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "31909"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32100"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32101"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32103"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32107"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32110"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "32116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3212"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3213"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3214"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3270"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "32800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3290"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3310"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3311"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "33112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "33116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "33118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3315"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3317"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3318"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3319"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "333"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3380"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "33800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "33801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "33802"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "33803"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "33804"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "33805"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3381"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3382"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3383"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3384"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3386"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3388"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3389"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "351112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "351115"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "351116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "351117"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "351118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "351144"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3516"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3517"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3518"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "351800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "351802"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "352112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "352113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "352116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "352118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35212"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35213"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "352800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "352801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "352900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "352901"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "352905"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "353112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "353116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "353118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3531191"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531512"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531513"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531514"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531515"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531516"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531517"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531518"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531520"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531530"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531540"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531550"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531560"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531570"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531580"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531590"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531598"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531599"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531850"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3531890"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3535"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "353999"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "354112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "354116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "354118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35414"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3541404"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35417"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35418"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354802"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354803"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354804"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354805"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354806"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354807"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354808"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354809"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354901"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354902"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354903"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354904"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354905"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354906"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354907"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "354908"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3561"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "356112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "356115"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "356116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "356118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3565"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35710"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35711"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "357112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "357116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "357118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35712"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35713"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35714"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35715"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35716"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35717"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35718"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "35719"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3577"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "35780"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "357800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "35790"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358100"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "358112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "358116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "358118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358200"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3582020"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3582022"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3582023"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3582098"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3582099"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358300"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358600"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358601"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358602"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358606"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358700"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358707"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358708"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3587099"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358752001"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358752002"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "358800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "359112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "359116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "359118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "359150"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "359160"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "359166"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "359700"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "359800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "35990"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "36104"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "36105"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "36107"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "36112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "36116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3640"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3680"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3690"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3691"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37011"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "370112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "370116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "370117"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "370118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "370119"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37013"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37014"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37015"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37016"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37018"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37019"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370808"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370902"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370903"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370909"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "370910"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37111"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "371110"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "371112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "371113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "371114"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "371116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "371118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3711184"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37114"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37115"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37117"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "37180"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "37181"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37182"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37183"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37184"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37185"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37186"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37187"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37188"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37189"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "37190"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3721"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "37211"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "372110"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "372112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "372116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "372118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "372700"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "372701"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "372702"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "372705"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "372800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "372900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "385112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "385116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "385118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "385192"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "385193"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "385194"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "385195"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3851987"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38560"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38561"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38564"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38565"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38569"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38572"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38574"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38575"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "385800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "385801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "38611"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "386112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "386113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "386116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "38619"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38680"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38688"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38689"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "38690"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39114"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39115"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39117"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "39118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "3912"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391500"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391515"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391518"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391522"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391525"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391530"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391533"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "391544"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "39186"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "3919696"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39455"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39803"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39840"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39841"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39847"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39848"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "3989111"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39892"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39894"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39895"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "39899"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "4011"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "40112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "40116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "40118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4012"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4014"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4015"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "40800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "40801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "40803"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "40805"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "40808"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4083"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4084"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4088"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "409"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4096"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4097"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4098"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4099"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "420112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "420116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "420118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42012"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42013"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42014"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42015"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "42016"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "420199"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420700"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420701"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42081"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42082"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42083"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42084"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420905"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420906"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420908"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "420909"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42111"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "42112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "42113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42115"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "42118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "421800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "421806"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "421807"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "421808"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "421809"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42185"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42186"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42187"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42188"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42189"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "421900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42197"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "42198"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "4231145"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423117"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423143"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423144"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423145"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "423147"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "423150"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4231811"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4231818"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "423800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "43118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43122"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43128"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43133"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43140"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43141"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43142"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43144"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "43147"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43711"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43718"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43780"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43804"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43810"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43820"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43821"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43828"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43901"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43930"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43931"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "43939"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "44100"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "44101"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "44105"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "44111"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "44112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "44116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "44118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "44123"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4480"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44843"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44844"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44845"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44870"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44871"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44872"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "44873"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4490"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4491"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4498"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "44999"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4511"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "45112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "45116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "45118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4512"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4518"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4580"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4590"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "46112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "4611414"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "46116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "46118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4620"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4674"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4675"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4677"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4690"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "46900"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "46939"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "46944"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4699"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "471"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "47110"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "47112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "47113"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "47116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "4718"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47810"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4781007"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "478101"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47812"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47813"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47815"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47820"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47822"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47829"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47850"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47851"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47852"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47853"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47854"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47855"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47878"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47879"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "47880"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "48118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "4870"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "48800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "48801"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48984"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48985"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48986"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48987"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48991"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48992"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48993"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48994"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48995"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48996"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48997"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48998"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "48999"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "49110"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "49112"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "49115"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "SHORT"
+  TranslateNumber: "49116"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "SHORT"
+  TranslateNumber: "49118"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "49180"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "49700"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_FREE"
+  RatingZone: "PREFIX"
+  TranslateNumber: "49800"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "499001"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "499003"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "499005"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+
+bulkload: BDestTrans
+  BDest: "ROAM_EU_HTS"
+  RatingZone: "PREFIX"
+  TranslateNumber: "499009"
+  BdestID: 627
+  ToDate: 2049-12-31
+  FromDate: 2017-06-15
+

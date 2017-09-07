@@ -1,0 +1,14 @@
+bulkload: TMSUser
+  UserCode: "yoigo"
+  Password: "testi"
+  UserGroup: "Vendor"
+  UserNum: 8492
+  UserName: "Yoigo user"
+  Initials: "yoi"
+  RepDir: "/store/print"
+  Email: "yoigo@qvantel.com"
+  Brand: "1"
+  CreditLimit: 200
+  FromDate: 2007-06-10
+  AdminUser: TRUE 
+
