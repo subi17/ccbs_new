@@ -219,7 +219,8 @@ PROCEDURE pChangeToHardCodedErrorFile:
       Hardcoded error file is the last chance file operation
       for error operations. */
 
-   lcErrorFile = "/tmp/icc_msisdn_rep_errorfile" + pcTimeStampPart + ".txt".
+   lcErrorFile = "/tmp/" +  CAPS(Syst.Parameters:Tenant) +
+                 "_icc_msisdn_rep_errorfile" + pcTimeStampPart + ".txt".
    pcNewErrorFile = lcErrorFile.
 
    RUN pReportFileError("Error file ", pcOrigErrorFile, "ErrorFile",

@@ -336,11 +336,16 @@ FUNCTION fValidateOfferItem RETURNS INT
    
    END.
 
+   FIND bOfferItem WHERE bOfferItem.OfferItemId = ttOfferItem.OfferItemId NO-LOCK NO-ERROR.
+
    IF ilNew THEN DO:
+      IF AVAIL bOfferItem THEN DO:
+         ocError = SUBST("Offer item &1 already exists! The reason could be that sequence OfferItemSeq has incorrect value.", bOfferItem.OfferItemId).
+         RETURN 1.
+      END.
    END.
    ELSE DO:
 
-      FIND bOfferItem WHERE bOfferItem.OfferItemId = ttOfferItem.OfferItemId NO-LOCK NO-ERROR.
       IF NOT AVAIL bOfferItem THEN DO:
          ocError = SUBST("Offer item &1 was not found", ttOfferItem.OfferItemId).
          RETURN 1.
@@ -445,7 +450,14 @@ FUNCTION fValidateOfferCriteria RETURNS INT
       END.
    END.
 
+   FIND bOfferCriteria NO-LOCK WHERE
+      bOfferCriteria.OfferCriteriaID = ttOfferCriteria.OfferCriteriaID NO-ERROR.
+
    IF ilNew THEN DO:
+      IF AVAIL bOfferCriteria THEN DO: 
+         ocError = SUBSTITUTE("Offer criteria &1 already exists! The reason could be that sequence OfferCriteriaSeq has incorrect value.", bOfferCriteria.OfferCriteriaID).
+         RETURN 1.
+      END.
       
       IF ttOfferCriteria.includedvalue = "" AND 
          ttOfferCriteria.excludedvalue = "" THEN DO:
@@ -454,10 +466,8 @@ FUNCTION fValidateOfferCriteria RETURNS INT
       END.
    END.
    ELSE DO:
-      FIND bOfferCriteria NO-LOCK WHERE
-         bOfferCriteria.OfferCriteriaID = ttOfferCriteria.OfferCriteriaID NO-ERROR.
-      IF NOT AVAIL bOfferCriteria THEN DO: 
-         ocError = "Offer criteria &1 not found".
+      IF NOT AVAIL bOfferCriteria THEN DO:
+         ocError = SUBST("Offer criteria &1 not found", ttOfferCriteria.OfferCriteriaID).
          RETURN 1.
       END.
 

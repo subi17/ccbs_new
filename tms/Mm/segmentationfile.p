@@ -17,6 +17,7 @@ gcBrand = "1".
 {Syst/eventval.i}
 {Func/email.i}
 {Func/timestamp.i}
+{Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -55,7 +56,8 @@ DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumNotUpd AS INTEGER NO-UNDO.
-
+DEFINE VARIABLE lcBrand AS CHAR NO-UNDO.
+DEFINE VARIABLE lcTenant AS CHAR NO-UNDO.
 
 ASSIGN
    lcIncDir    = fCParam("Segmentation","IncomingDir") 
@@ -95,6 +97,15 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
+   lcBrand = SUBSTRING(lcFileName,1, (INDEX(lcFileName,"_") - 1)).
+   IF LOOKUP(lcBrand, "Yoigo,Masmovil") = 0 THEN
+   DO:
+      fError("Incorrect input filename format").
+      liNumErr = liNumErr + 1 .
+      NEXT.
+   END.
+   /* Check and handle only current brand files */
+   IF lcBrand NE fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))) THEN NEXT.
    
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".
