@@ -32,6 +32,7 @@ DEF VAR xCCN         LIKE Tariff.CCN           NO-UNDO.
 DEF VAR xPriceList   LIKE PriceList.PriceList  NO-UNDO.
 DEF VAR lcBDest      AS   CHAR                 NO-UNDO. 
 DEF VAR xBDest       LIKE Tariff.BDest         NO-UNDO. 
+DEF VAR lcDataType   AS CHAR               NO-UNDO.
 
 fr-header = " PRICE DETAILS ". 
 
@@ -90,12 +91,12 @@ form /* ADD */
    "CCN ........:" Tariff.CCN FORMAT ">>>9"
       help "Call case number"
       CCN.CCNName  format "x(30)" AT 32 SKIP
-   "BDestination:" Tariff.BDest
+   "BDestination:" Tariff.BDest FORMAT "x(20)"
       help "B-Destination"
       BDest.BDName format "x(30)" AT 32 SKIP
-   "Pricelist ..:" Tariff.PriceList
+   "Pricelist ..:" Tariff.PriceList FORMAT "X(16)" 
       help "Pricelist code"
-      PriceList.PLName   format "x(30)" AT 32 SKIP
+      PriceList.PLName   format "x(22)" AT 32 SKIP
    "--------------------------------------------------------------------"
    SKIP
    "Valid during ..:" 
@@ -112,6 +113,7 @@ form /* ADD */
    SKIP         
    "Price unit ....:" Tariff.DataType
       help "Rate data type" 
+      lcDataType NO-LABEL FORMAT "X(20)"
    "Start / Min.Sec:" AT 48 Tariff.Discount[4] format "Fee/Sec"
       help "Starting fee or minimum charging seconds (Fee/Sec)"    
    SKIP
@@ -159,6 +161,7 @@ form /* ADD */
    Tariff.DayType[6]
    Tariff.TZFrom[6] "-" Tariff.TZTo[6] Tariff.Price[6] currency[6]
    Tariff.StartCharge[6] AT 60 SKIP
+   " First Billable Sec:" Tariff.FirstBillableSec  
 
    "OR Minimum sec:" AT 48 Tariff.MinSec
       help "Minimum charging seconds for calls"  
@@ -195,6 +198,17 @@ DO WITH FRAME lis:
       IF AVAILABLE BDest THEN DISPLAY BDest.BDName.
    END.
    ELSE DISPLAY "" @ BDest.BDName.
+   
+   FIND FIRST TMSCodes WHERE
+              TMSCodes.TableName = "Tariff"   AND
+              TMSCodes.FieldName = "DataType" AND
+              TMSCodes.CodeGroup = "Tariff"   AND
+              TMSCodes.CodeValue = STRING(Tariff.DataType)
+   NO-LOCK NO-ERROR.
+
+   IF AVAIL TMSCodes THEN
+      lcDataType = TMSCodes.CodeName.
+   ELSE lcDataType = "".
    
    DISP 
       lcCName          @ CCN.CCNName
@@ -253,7 +267,9 @@ DO WITH FRAME lis:
       Tariff.TZTo[6]
       Tariff.Price[6]
       Tariff.StartCharge[6]
-      Tariff.MinSec.
+      Tariff.MinSec
+      Tariff.FirstBillableSec
+      lcDataType.
 
 END. 
 

@@ -92,6 +92,8 @@ DEF VAR installment_array   AS CHAR    NO-UNDO.
 DEF VAR lderesidualFee      AS DEC     NO-UNDO. 
 DEF VAR liMultiSimTypeValue AS INT     NO-UNDO. 
 DEF VAR lcMultiSimCLI       AS CHAR    NO-UNDO. 
+DEF VAR llYoigoTenant     AS LOG    NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant  AS LOG    NO-UNDO INIT FALSE.
 
 DEF BUFFER lbMobSub    FOR MobSub.
 DEF BUFFER lbELMobSub  FOR MobSub.
@@ -102,12 +104,9 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK WHERE
-     mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
-FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
-           MsOwner.MsSeq = MobSub.MsSeq NO-ERROR.
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+
+FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE MsOwner.MsSeq = MobSub.MsSeq NO-ERROR.
 IF NOT AVAILABLE MsOwner THEN
    RETURN appl_err(SUBST("MsOwner entry &1 not found", piMsSeq)).
 
@@ -121,6 +120,11 @@ gcBrand = "1".
 {Func/fixedfee.i}
 {Func/fctchange.i}
 {Mnp/mnpoutchk.i}
+{Func/multitenantfunc.i}
+
+ASSIGN
+   llYoigoTenant    = (IF vcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+   llMasmovilTenant = (IF vcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 FIND FIRST Segmentation NO-LOCK WHERE
            Segmentation.MsSeq = piMsSeq NO-ERROR.
@@ -130,6 +134,7 @@ IF AVAILABLE Segmentation THEN ASSIGN
 
 resp_struct = add_struct(response_toplevel_id, "").
 
+add_string(resp_struct, "brand",fConvertTenantToBrand(vcTenant)).
 add_string(resp_struct, "cli", mobsub.cli).
 IF Mobsub.fixednumber NE ? THEN
    add_string(resp_struct, "fixed_number", Mobsub.fixednumber).
@@ -273,7 +278,7 @@ IF liMNPStatus NE ? THEN
       STRING(liMNPStatus EQ 0, "new/mnp")).
 ELSE  
    add_string(resp_struct, "number_type",
-      STRING(fISYoigoCLI(MobSub.CLI), "new/mnp")).
+      STRING(((fISYoigoCLI(MobSub.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(MobSub.CLI) AND llMasmovilTenant)), "new/mnp")).
 
 /* subscription terminals  */
 term_array = add_array(resp_struct,"sub_terminals").

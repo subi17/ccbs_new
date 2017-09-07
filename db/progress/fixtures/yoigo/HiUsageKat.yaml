@@ -1,0 +1,440 @@
+bulkload: HiUsageKat
+  Category: "1"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 2
+  CustClass: 1
+
+bulkload: HiUsageKat
+  Category: "2"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 7
+  CustClass: 2
+
+bulkload: HiUsageKat
+  Category: "3"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 30
+  CustClass: 3
+
+bulkload: HiUsageKat
+  Category: "4"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 60
+  CustClass: 4
+
+bulkload: HiUsageKat
+  Category: "5"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 180
+  CustClass: 5
+
+bulkload: HiUsageKat
+  Category: "6"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 365
+  CustClass: 6
+
+bulkload: HiUsageKat
+  Category: "7"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 1095
+  CustClass: 7
+
+bulkload: HiUsageKat
+  Category: "8"
+  AgeFrom: 18
+  AgeTo: 21
+  ActInDays: 20000
+  CustClass: 8
+
+bulkload: HiUsageKat
+  Category: "9"
+  AgeFrom: 18
+  AgeTo: 21
+  CustClass: 9
+
+bulkload: HiUsageKat
+  Category: "10"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 2
+  CustClass: 10
+
+bulkload: HiUsageKat
+  Category: "11"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 7
+  CustClass: 11
+
+bulkload: HiUsageKat
+  Category: "12"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 30
+  CustClass: 12
+
+bulkload: HiUsageKat
+  Category: "13"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 60
+  CustClass: 13
+
+bulkload: HiUsageKat
+  Category: "14"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 180
+  CustClass: 14
+
+bulkload: HiUsageKat
+  Category: "15"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 365
+  CustClass: 15
+
+bulkload: HiUsageKat
+  Category: "16"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 1095
+  CustClass: 16
+
+bulkload: HiUsageKat
+  Category: "17"
+  AgeFrom: 21
+  AgeTo: 26
+  ActInDays: 20000
+  CustClass: 17
+
+bulkload: HiUsageKat
+  Category: "18"
+  AgeFrom: 21
+  AgeTo: 26
+  CustClass: 18
+
+bulkload: HiUsageKat
+  Category: "19"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 2
+  CustClass: 19
+
+bulkload: HiUsageKat
+  Category: "20"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 7
+  CustClass: 20
+
+bulkload: HiUsageKat
+  Category: "21"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 30
+  CustClass: 21
+
+bulkload: HiUsageKat
+  Category: "22"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 60
+  CustClass: 22
+
+bulkload: HiUsageKat
+  Category: "23"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 180
+  CustClass: 23
+
+bulkload: HiUsageKat
+  Category: "24"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 365
+  CustClass: 24
+
+bulkload: HiUsageKat
+  Category: "25"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 1095
+  CustClass: 25
+
+bulkload: HiUsageKat
+  Category: "26"
+  AgeFrom: 26
+  AgeTo: 31
+  ActInDays: 20000
+  CustClass: 26
+
+bulkload: HiUsageKat
+  Category: "27"
+  AgeFrom: 26
+  AgeTo: 31
+  CustClass: 27
+
+bulkload: HiUsageKat
+  Category: "28"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 2
+  CustClass: 28
+
+bulkload: HiUsageKat
+  Category: "29"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 7
+  CustClass: 29
+
+bulkload: HiUsageKat
+  Category: "30"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 30
+  CustClass: 30
+
+bulkload: HiUsageKat
+  Category: "31"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 60
+  CustClass: 31
+
+bulkload: HiUsageKat
+  Category: "32"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 180
+  CustClass: 32
+
+bulkload: HiUsageKat
+  Category: "33"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 365
+  CustClass: 33
+
+bulkload: HiUsageKat
+  Category: "34"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 1095
+  CustClass: 34
+
+bulkload: HiUsageKat
+  Category: "35"
+  AgeFrom: 31
+  AgeTo: 36
+  ActInDays: 20000
+  CustClass: 35
+
+bulkload: HiUsageKat
+  Category: "36"
+  AgeFrom: 31
+  AgeTo: 36
+  CustClass: 36
+
+bulkload: HiUsageKat
+  Category: "37"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 2
+  CustClass: 37
+
+bulkload: HiUsageKat
+  Category: "38"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 7
+  CustClass: 38
+
+bulkload: HiUsageKat
+  Category: "39"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 30
+  CustClass: 39
+
+bulkload: HiUsageKat
+  Category: "40"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 60
+  CustClass: 40
+
+bulkload: HiUsageKat
+  Category: "41"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 180
+  CustClass: 41
+
+bulkload: HiUsageKat
+  Category: "42"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 365
+  CustClass: 42
+
+bulkload: HiUsageKat
+  Category: "43"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 1095
+  CustClass: 43
+
+bulkload: HiUsageKat
+  Category: "44"
+  AgeFrom: 36
+  AgeTo: 46
+  ActInDays: 20000
+  CustClass: 44
+
+bulkload: HiUsageKat
+  Category: "45"
+  AgeFrom: 36
+  AgeTo: 46
+  CustClass: 45
+
+bulkload: HiUsageKat
+  Category: "46"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 2
+  CustClass: 46
+
+bulkload: HiUsageKat
+  Category: "47"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 7
+  CustClass: 47
+
+bulkload: HiUsageKat
+  Category: "48"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 30
+  CustClass: 48
+
+bulkload: HiUsageKat
+  Category: "49"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 60
+  CustClass: 49
+
+bulkload: HiUsageKat
+  Category: "50"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 180
+  CustClass: 50
+
+bulkload: HiUsageKat
+  Category: "51"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 365
+  CustClass: 51
+
+bulkload: HiUsageKat
+  Category: "52"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 1095
+  CustClass: 52
+
+bulkload: HiUsageKat
+  Category: "53"
+  AgeFrom: 46
+  AgeTo: 56
+  ActInDays: 20000
+  CustClass: 53
+
+bulkload: HiUsageKat
+  Category: "54"
+  AgeFrom: 46
+  AgeTo: 56
+  CustClass: 54
+
+bulkload: HiUsageKat
+  Category: "55"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 2
+  CustClass: 55
+
+bulkload: HiUsageKat
+  Category: "56"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 7
+  CustClass: 56
+
+bulkload: HiUsageKat
+  Category: "57"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 30
+  CustClass: 57
+
+bulkload: HiUsageKat
+  Category: "58"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 60
+  CustClass: 58
+
+bulkload: HiUsageKat
+  Category: "59"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 180
+  CustClass: 59
+
+bulkload: HiUsageKat
+  Category: "60"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 365
+  CustClass: 60
+
+bulkload: HiUsageKat
+  Category: "61"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 1095
+  CustClass: 61
+
+bulkload: HiUsageKat
+  Category: "62"
+  AgeFrom: 56
+  AgeTo: 99
+  ActInDays: 20000
+  CustClass: 62
+
+bulkload: HiUsageKat
+  Category: "63"
+  AgeFrom: 56
+  AgeTo: 99
+  CustClass: 63
+
+bulkload: HiUsageKat
+  Category: "99"
+  AgeFrom: 200
+  AgeTo: 200
+  CustClass: 64
+
