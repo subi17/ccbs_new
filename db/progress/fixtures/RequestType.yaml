@@ -2,7 +2,7 @@ bulkload: RequestType
   Brand: "1"
   ReqName: "Subscription type change"
   UserCode: "STC"
-  Queue: 1
+  Queue: 3
 
 bulkload: RequestType
   Brand: "1"
@@ -18,7 +18,6 @@ bulkload: RequestType
   ReqName: "Saldo Payment"
   Program: "Mm/saldopaym.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -26,7 +25,6 @@ bulkload: RequestType
   ReqName: "User Change"
   Program: "Mm/mscustchg.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -34,7 +32,6 @@ bulkload: RequestType
   ReqName: "Invoice Customer Change"
   Program: "Mm/mscustchg.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -42,7 +39,6 @@ bulkload: RequestType
   ReqName: "User Account"
   Program: "Mc/useraccountreq.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -57,14 +53,13 @@ bulkload: RequestType
   ReqName: "Per. Contract PIN"
   Program: "Mm/percontr.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 8
   ReqName: "Per. Contract Activation"
   Program: "Mm/percontr.p"
-  Queue: 1
+  Queue: 4
 
 bulkload: RequestType
   Brand: "1"
@@ -72,14 +67,14 @@ bulkload: RequestType
   ReqName: "Per. Contract Termination"
   Program: "Mm/percontr.p"
   UserCode: "PerCont"
-  Queue: 1
+  Queue: 9
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 10
   ReqName: "Agreement Customer Change"
   Program: "Mm/msagrcustchg.p"
-  Queue: 1
+  Queue: 6
 
 bulkload: RequestType
   Brand: "1"
@@ -87,7 +82,6 @@ bulkload: RequestType
   ReqName: "Payment Plan"
   Program: "Ar/pplanreq.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -95,14 +89,13 @@ bulkload: RequestType
   ReqName: "Marketing Values"
   Program: "Mc/marketingreq.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 13
   ReqName: "Subscription creation"
   UserCode: "CreSub"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
@@ -110,28 +103,28 @@ bulkload: RequestType
   ReqName: "Fixed line creation"
   Program: "Mm/createmobsub.p"
   UserCode: "CreFixed"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 15
   ReqName: "ICC Change"
   UserCode: "ChgICC"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 18
   ReqName: "Subscription termination"
   UserCode: "TermSub"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 19
   ReqName: "MSISDN Change"
   UserCode: "ChgCLI"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
@@ -139,7 +132,6 @@ bulkload: RequestType
   ReqName: "On-demand invoice"
   Program: "Inv/invoicereq.p"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -156,7 +148,7 @@ bulkload: RequestType
   Program: "Ar/refund.p"
   UserCode: "Refund"
   InUse: FALSE
-  Queue: 1
+  Queue: 6
 
 bulkload: RequestType
   Brand: "1"
@@ -164,7 +156,7 @@ bulkload: RequestType
   ReqName: "Bank account change"
   Program: "Mm/bankrequest.p"
   UserCode: "bank"
-  Queue: 1
+  Queue: 3
 
 bulkload: RequestType
   Brand: "1"
@@ -172,7 +164,7 @@ bulkload: RequestType
   ReqName: "Fee model price change"
   Program: "Mc/fmitemprice.p"
   InUse: FALSE
-  Queue: 1
+  Queue: 3
 
 bulkload: RequestType
   Brand: "1"
@@ -180,14 +172,13 @@ bulkload: RequestType
   ReqName: "Price guarantee"
   Program: "pgrequest"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 30
   ReqName: "SMS Creation"
   Program: "Syst/smsrequest.p"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
@@ -205,7 +196,6 @@ bulkload: RequestType
   Program: "Mm/bankrequest.p"
   UserCode: "BankRef"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -229,62 +219,59 @@ bulkload: RequestType
   ReqName: "Barring and suspension"
   Program: "Mm/susprequest.p"
   UserCode: "barr"
-  Queue: 1
+  Queue: 6
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 37
   ReqName: "Balance query"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 39
   ReqName: "Not used"
   InUse: FALSE
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 40
   ReqName: "Limit update or creation"
   Program: "Mc/limitrequest.p"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 46
   ReqName: "After Sales Order"
   Program: "Mc/aftersalesreq.p"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 49
   ReqName: "Revert Renewal Order"
   Program: "Mm/revert_renewal_order.p"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 65
   ReqName: "Rerate"
   Program: "Rate/rerate_request.p"
-  Queue: 1
+  Queue: 7
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 76
   ReqName: "Charge and Compensation"
   Program: "Mm/postpaid_chgcomp.p"
-  Queue: 1
+  Queue: 3
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 77
   ReqName: "Duplicate invoice"
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
@@ -292,7 +279,7 @@ bulkload: RequestType
   ReqName: "Bundle Activation/Termination"
   Program: "bundlereq"
   InUse: FALSE
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
@@ -300,7 +287,6 @@ bulkload: RequestType
   ReqName: "SMS invoice"
   Program: "Inv/smsinvoice.p"
   UserCode: "Cron"
-  Queue: 1
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype79.log"
   LogThreshold: 1048576
@@ -311,34 +297,33 @@ bulkload: RequestType
   Brand: "1"
   ReqType: 80
   ReqName: "IMEI change"
-  Queue: 1
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 81
   ReqName: "Bundle change"
   Program: "Mm/bundle_change_request.p"
-  Queue: 1
+  Queue: 11
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 82
   ReqName: "Subscription Reactivation"
   UserCode: "ReacSub"
-  Queue: 1
+  Queue: 2
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 83
   ReqName: "Data Sharing Service"
-  Queue: 1
+  Queue: 4
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 84
   ReqName: "Activate Email Invoice"
   Program: "Inv/activate_einvoice.p"
-  Queue: 1
+  Queue: 10
 
 bulkload: RequestType
   Brand: "1"
@@ -346,7 +331,6 @@ bulkload: RequestType
   ReqName: "Send Email Invoice"
   Program: "Inv/send_einvoice.p"
   UserCode: "Cron"
-  Queue: 1
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype85.log"
   LogThreshold: 1048576
@@ -358,28 +342,28 @@ bulkload: RequestType
   ReqType: 86
   ReqName: "Email Sending"
   Program: "Mm/email_sending.p"
-  Queue: 1
+  Queue: 10
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 87
   ReqName: "Logistics"
   Program: "Mc/logistics_request.p"
-  Queue: 1
+  Queue: 8
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 88
   ReqName: "Installment Contract Change"
   Program: "Mm/installment_contract_change.p"
-  Queue: 1
+  Queue: 3
 
 bulkload: RequestType
   Brand: "1"
   ReqType: 89
   ReqName: "Terminal Financing Bank File"
   Program: "Ar/terminal_financing_send.p"
-  Queue: 1
+  Queue: 5
 
 bulkload: RequestType
   Brand: "1"
@@ -387,7 +371,6 @@ bulkload: RequestType
   ReqName: "Fusion invoice email"
   Program: "Inv/fusioninvoice_send.p"
   UserCode: "Cron"
-  Queue: 1
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype90.log"
   LogThreshold: 1048576
@@ -399,7 +382,7 @@ bulkload: RequestType
   ReqType: 91
   ReqName: "Terminal Finance CAN TER file"
   Program: "Ar/tf_cancel_send.p"
-  Queue: 1
+  Queue: 5
 
 bulkload: RequestType
   Brand: "1"
@@ -407,7 +390,6 @@ bulkload: RequestType
   ReqName: "Publish Invoices"
   Program: "Inv/publish_invoice.p"
   UserCode: "Cron"
-  Queue: 1
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype92.log"
   LogThreshold: 1048576
@@ -420,7 +402,6 @@ bulkload: RequestType
   ReqName: "Publish IFS file"
   Program: "Inv/publish_ifs.p"
   UserCode: "Cron"
-  Queue: 1
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype93.log"
   LogThreshold: 1048576
@@ -433,7 +414,6 @@ bulkload: RequestType
   ReqName: "Push invoice"
   Program: "Inv/pushinvoice.p"
   UserCode: "Cron"
-  Queue: 1
   LogEntry: "DB.Connects,4GLTrace:1"
   LogFile: "/scratch/log/requester/reqtype94.log"
   LogThreshold: 1048576

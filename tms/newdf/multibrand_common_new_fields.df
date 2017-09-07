@@ -1,0 +1,31 @@
+ADD FIELD "FirstBillableSec" OF "Tariff" AS integer
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "1st Billable Sec"
+  COLUMN-LABEL "1.Sec"
+  HELP "First Billable second"
+  ORDER 320
+
+ADD FIELD "RateBDest" OF "BDest" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Rating Destination"
+  COLUMN-LABEL "RateBDest"
+  HELP "Rating B-destination"
+  ORDER 230
+
+ADD FIELD "PresenterId" OF "BankAccount" AS character
+  FORMAT "X(35)"
+  INITIAL ""
+  LABEL "Presenter Id"
+  COLUMN-LABEL "PresenterId"
+  HELP "Presenter ID for CSB19.14"
+  ORDER 140
+
+ADD FIELD "CreditorName" OF "Company" AS character
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Creditor Name"
+  COLUMN-LABEL "CreditorName"
+  HELP "Creditor Name in DD file"
+  ORDER 520

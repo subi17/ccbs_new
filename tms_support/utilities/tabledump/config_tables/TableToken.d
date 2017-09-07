@@ -109,6 +109,7 @@
 "DPTarget" "BILL"
 "DTypeConf" "BILL"
 "DumpFile" "VENDOR"
+"DumpHPD" "VENDOR"
 "DumpLog" "VENDOR"
 "EDRHistory" "SYST"
 "EPGroup" "MOB"

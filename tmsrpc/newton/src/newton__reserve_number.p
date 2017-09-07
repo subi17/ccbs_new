@@ -6,16 +6,23 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
 /* Input parameters */
-DEF VAR pcCli AS CHAR NO-UNDO.
-DEF VAR pcFor AS CHAR NO-UNDO.
-DEF VAR plReserve AS LOG NO-UNDO.
+DEF VAR pcTenant  AS CHAR NO-UNDO.
+DEF VAR pcCli     AS CHAR NO-UNDO.
+DEF VAR pcFor     AS CHAR NO-UNDO.
+DEF VAR plReserve AS LOG  NO-UNDO.
+
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 
-IF validate_request(param_toplevel_id, "string,boolean") EQ ? THEN RETURN.
-pcCli = get_string(param_toplevel_id, "0").
-plReserve = get_bool(param_toplevel_id, "1"). /* true = really reserved, when called 1st time*/
+IF validate_request(param_toplevel_id, "string,string,boolean") EQ ? THEN RETURN.
+
+pcTenant  = get_string(param_toplevel_id, "0"). 
+pcCli     = get_string(param_toplevel_id, "1").
+plReserve = get_bool  (param_toplevel_id, "2"). /* true = really reserved, when called 1st time*/
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 pcFor = {&MSISDN_STOCK_ONLINE}.
 
