@@ -27,11 +27,14 @@ DEF VAR liCustnum AS INT NO-UNDO.
 DEF VAR plSimChecked AS LOGICAL NO-UNDO. 
 DEF VAr pcIMEI AS CHAR NO-UNDO INITIAL "".
 DEF VAR lcOldIMEI AS CHAR NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
 
-pcId     = get_string(param_toplevel_id, "0").
-pcStruct = get_struct(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0").
+pcId     = get_string(param_toplevel_id, "1").
+pcStruct = get_struct(param_toplevel_id, "2").
+
 lcstruct = validate_struct(pcStruct, "username!,reason,sim_lock_code_viewable,imei").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -57,16 +60,14 @@ piId = INTEGER(pcId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN 
    RETURN appl_err(SUBST("Id &1 is not numerical", pcId)).
 
+{newton/src/settenant.i pcTenant}
 
-FIND SubsTerminal WHERE
-   SubsTerminal.TerminalID = piId NO-LOCK NO-ERROR.
+FIND SubsTerminal WHERE SubsTerminal.TerminalID = piId NO-LOCK NO-ERROR.
+IF NOT AVAIL SubsTerminal then 
+    return appl_err("Subscription terminal was not found").
 
-IF NOT AVAIL SubsTerminal then return appl_err("Subscription terminal was not found").
 
-
-FIND FIRST Order NO-LOCK WHERE
-           Order.Brand EQ gcBrand AND
-           Order.OrderId EQ Substerminal.OrderId NO-ERROR.
+FIND FIRST Order NO-LOCK WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ Substerminal.OrderId NO-ERROR.
 IF NOT AVAIL Order THEN
     appl_err("Order for device was not found").
    
