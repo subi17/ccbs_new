@@ -17,6 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
+DEFINE VARIABLE pcTenant       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcSearchString AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcSearchType   AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcCustIdType   AS CHARACTER NO-UNDO.
@@ -24,14 +25,17 @@ DEFINE VARIABLE piMaxCount     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE top_array      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcError        AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,string,string,int") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,string,string,int") EQ ? THEN RETURN.
 
-pcSearchString = get_string(param_toplevel_id, "0").
-pcSearchType   = get_string(param_toplevel_id, "1").
-pcCustIdType   = get_string(param_toplevel_id, "2").
-piMaxCount     = get_int(   param_toplevel_id, "3").
+pcTenant       = get_string(param_toplevel_id, "0").
+pcSearchString = get_string(param_toplevel_id, "1").
+pcSearchType   = get_string(param_toplevel_id, "2").
+pcCustIdType   = get_string(param_toplevel_id, "3").
+piMaxCount     = get_int(   param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 top_array = add_array(response_toplevel_id, "").
 
