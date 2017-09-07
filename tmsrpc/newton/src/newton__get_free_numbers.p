@@ -8,6 +8,7 @@
 {Syst/tmsconst.i}
 
 /* Input parameters */
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcSearch AS CHAR NO-UNDO.
 DEF VAR pcFor AS CHAR NO-UNDO.
 /* Output parameters */
@@ -22,11 +23,16 @@ DEF VAR liRangeCount AS INT NO-UNDO.
 
 &GLOBAL-DEFINE count 9
 
-top_array = validate_request(param_toplevel_id, "[string]").
+top_array = validate_request(param_toplevel_id, "string,[string]").
 
-IF NUM-ENTRIES(top_array) EQ 1 THEN
-    pcSearch = get_string(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF NUM-ENTRIES(top_array) >= 1 THEN
+    pcSearch = get_string(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 then RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 pcFor = {&MSISDN_STOCK_ONLINE}.
 ldTS = {&nowTS}.
