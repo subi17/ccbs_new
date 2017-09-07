@@ -41,7 +41,7 @@ FUNCTION fMakeLPCommandRequest RETURNS LOGICAL
                             FALSE,             /* mandatory */
                             OUTPUT lcError).
 
-   IF liReq = 0 OR liReq = ? THEN DO:
+   IF liReq EQ 0 OR liReq EQ ? THEN DO:
       ocErr = "LP Req Error: ServiceRequest failure " + lcError.
       RETURN FALSE.
    END.   
