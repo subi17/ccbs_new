@@ -14,17 +14,24 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 
-DEF VAR pcStruct AS CHAR NO-UNDO. 
-DEF VAR pcUsername AS CHAR NO-UNDO.
-DEF VAR lcStruct AS CHAR NO-UNDO. 
-DEF VAR lcRespStruct AS CHAR NO-UNDO. 
-DEF VAR ocError AS CHARACTER NO-UNDO. 
-DEF VAR i AS INTEGER NO-UNDO. 
+DEF VAR pcStruct     AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant     AS CHARACTER NO-UNDO.
+DEF VAR pcUsername   AS CHARACTER NO-UNDO.
+DEF VAR lcStruct     AS CHARACTER NO-UNDO. 
+DEF VAR lcRespStruct AS CHARACTER NO-UNDO. 
+DEF VAR ocError      AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 lcstruct = validate_struct(pcStruct, "offer_id!,valid_from!,valid_to,included_values,excluded_values,criteria_type!,username!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -35,41 +42,22 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{Syst/commpaa.i}
-gcBrand = "1".
 katun = pcUserName.
-{Syst/eventval.i}
-{Syst/tmsconst.i}
-{Mc/offer.i}
+
+{newton/src/settenant.i pcTenant}
 
 CREATE ttOfferCriteria.
-           
-i = 1. 
-FOR EACH OfferCriteria NO-LOCK 
-BY OfferCriteria.OfferCriteriaId DESC:
-  i = OfferCriteria.OfferCriteriaID + 1.
-  LEAVE.
-END.
+ASSIGN 
+    ttOfferCriteria.offercriteriaid = NEXT-VALUE(OfferCriteriaSeq)
+    ttOfferCriteria.brand           = gcBrand
+    ttOfferCriteria.offer           = get_string(pcStruct,"offer_id")
+    ttOfferCriteria.criteriatype    = get_string(pcStruct, "criteria_type")    
+    ttOfferCriteria.BeginStamp      = get_timestamp(pcStruct,"valid_from")
+    ttOfferCriteria.EndStamp        = (IF LOOKUP("valid_to", lcStruct) > 0 THEN get_timestamp(pcStruct,"valid_to") ELSE 20491231.86399)
+    ttOfferCriteria.includedvalue   = get_string(pcStruct, "included_values") WHEN LOOKUP("included_values", lcStruct) > 0
+    ttOfferCriteria.excludedvalue   = get_string(pcStruct, "excluded_values") WHEN LOOKUP("excluded_values", lcStruct) > 0.
 
-ttOfferCriteria.offercriteriaid = i.
-ttOfferCriteria.brand           = gcBrand.
-ttOfferCriteria.offer           = get_string(pcStruct,"offer_id").
-ttOfferCriteria.BeginStamp      = get_timestamp(pcStruct,"valid_from").
-ttOfferCriteria.EndStamp = (
-   IF LOOKUP("valid_to", lcStruct) > 0 THEN get_timestamp(pcStruct,"valid_to")
-   ELSE 20491231.86399 ).
-
-ASSIGN
-   ttOfferCriteria.includedvalue = get_string(pcStruct, "included_values")
-      WHEN LOOKUP("included_values", lcStruct) > 0
-   ttOfferCriteria.excludedvalue = get_string(pcStruct, "excluded_values")
-      WHEN LOOKUP("excluded_values", lcStruct) > 0.
-
-ttOfferCriteria.criteriatype = get_string(pcStruct, "criteria_type").
-
-IF gi_xmlrpc_error NE 0 THEN DO:
-   RETURN.
-END.
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF fValidateOfferCriteria(TABLE ttOfferCriteria, TRUE, OUTPUT ocError) > 0 THEN DO:
    RETURN appl_err(ocError).

@@ -105,7 +105,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 
 form
     "CLIType ......:"  CLIType.CLIType FORMAT "X(12)" SKIP
-    "Name .........:"  CLIType.CLIName              SKIP
+    "Name .........:"  CLIType.CLIName FORMAT "X(30)" SKIP
     "Base bundle...:"  CLIType.BaseBundle SKIP
     "Payment Type .:"  CLIType.PayType
        HELP "1=Postpaid, 2=Prepaid"

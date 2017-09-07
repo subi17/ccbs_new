@@ -21,9 +21,10 @@ def stream sin.
 def stream sout.
 
 pause 0.
-update lcinputfile label "Enter Input File Path:" 
+update lcinputfile label "Enter Input File Path" 
    FORMAT "X(256)" VIEW-AS FILL-IN SIZE 45 BY 1 skip
-   with overlay row 10 centered title " Recalculate COUNTER " 
+   with overlay row 10 centered 
+    title SUBST(" Recalculate COUNTER (&1) ",Syst.Parameters:Tenant)
         side-labels frame fCheck.
 hide frame fCheck no-pause.
 
@@ -33,7 +34,9 @@ IF lcinputfile = "" THEN DO:
 END. /* IF lcinputfile = "" THEN DO: */
 
 liperiod = year(today) * 100 + month(today).
-lcoutputfile = "/apps/yoigo/tms_support/billing/log/recalc_invrowcounter_" + string(fMakeTS()) + ".log".
+lcoutputfile = "/apps/yoigo/tms_support/billing/log/" + 
+                Syst.Parameters:Tenant +
+                "_recalc_invrowcounter_" + string(fMakeTS()) + ".log".
 
 input stream sin from value(lcinputfile).
 output stream sout to value(lcoutputfile).
