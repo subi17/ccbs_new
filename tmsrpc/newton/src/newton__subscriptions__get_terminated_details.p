@@ -180,7 +180,8 @@ IF AVAIL Order THEN DO:
 END.
 ELSE DO: 
    add_string(resp_struct, "number_type",
-      STRING(((fISYoigoCLI(TermMobSub.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(MobSub.CLI) AND llMasmovilTenant)), "new/mnp")).
+      STRING(((fISYoigoCLI(TermMobSub.CLI) AND llYoigoTenant) OR 
+             (fIsMasmovilCLI(TermMobSub.CLI) AND llMasmovilTenant)), "new/mnp")).
 END.
 
 FIND FIRST Msowner WHERE 

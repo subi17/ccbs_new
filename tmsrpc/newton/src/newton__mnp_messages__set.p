@@ -47,6 +47,7 @@ IF ERROR-STATUS:ERROR THEN RETURN
    appl_err("Invalid key: " + pcID).
 
 {newton/src/findtenant.i NO Common MNPOperation MNPOperationID liMNPOperationID}
+FIND CURRENT MNPOperation EXCLUSIVE-LOCK.
 
 IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
    RETURN appl_err("Operation is allowed only for unhandled error").
