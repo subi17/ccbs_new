@@ -157,6 +157,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
 
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
+   DEF BUFFER DayCampaign          FOR DayCampaign.
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 

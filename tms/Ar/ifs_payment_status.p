@@ -13,6 +13,7 @@
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -52,6 +53,7 @@ DEF VAR llFound            AS LOG   NO-UNDO.
 DEF VAR lcClaimStatus      AS CHAR  NO-UNDO.
 DEF VAR liBankAcc          AS INT   NO-UNDO.
 DEF VAR lrActionID         AS RECID NO-UNDO.
+DEF VAR lcCompanyID        AS CHAR  NO-UNDO.
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -166,7 +168,7 @@ PROCEDURE pInitialize:
       RUN StarEventInitialize(lhInvoice).
       RUN StarEventInitialize(lhPayment).
    END.
-
+ 
    ASSIGN
       lcLogFile  = fCParamC("IFSPaymStatusLog")
       lcTransDir = fCParamC("IFSPaymStatusLogTrans")
@@ -230,12 +232,18 @@ PROCEDURE pReadEvents:
          lcPaidAmount   = SUBSTRING(lcReadLine,55,16)            
          lcUnpaidAmount = SUBSTRING(lcReadLine,71,16)            
          lcClaimStatus  = TRIM(SUBSTRING(lcReadLine,87,6))
+         lcCompanyID    = SUBSTRING(lcReadLine,93,4)
          NO-ERROR.
       
       IF ERROR-STATUS:ERROR THEN DO:
          fError("Invalid format").
          NEXT.
       END.
+
+       /* MasMovil tenant External ID is 14 characters long and can
+          start with 0 value. That is why overwritten here. */
+       IF TENANT-NAME(LDBNAME(1)) EQ {&TENANT_MASMOVIL} THEN
+         lcInvID        = SUBSTRING(lcReadLine,25,14).
 
       FIND FIRST Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Customer THEN DO:
