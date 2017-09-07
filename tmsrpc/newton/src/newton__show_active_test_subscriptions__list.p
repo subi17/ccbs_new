@@ -1,7 +1,8 @@
 /**
  * Return all active subscriptions created by testing tool.
 
- * @input  int;mandatory;limit - how many subscriptions to get at one time
+ * @input  string;mandatory;brand - Tenant to check for test subscriptions
+           int;mandatory;limit - how many subscriptions to get at one time
            int;mandatory;offset - how many subscriptions to skip over
  * @output array with structs 
            cust_idtype;string;mandatory;Customer Id Type
@@ -18,6 +19,7 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR piOffSet         AS INT  NO-UNDO.
 DEF VAR piLimit          AS INT  NO-UNDO.
 DEF VAR liSubCount       AS INT  NO-UNDO.
@@ -25,12 +27,15 @@ DEF VAR result_array     AS CHAR NO-UNDO.
 DEF VAR sub_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct       AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "int,int") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,int,int") = ? THEN RETURN.
 
-piLimit  = get_int(param_toplevel_id, "0").
-piOffSet = get_int(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0"). 
+piLimit  = get_int(param_toplevel_id, "1").
+piOffSet = get_int(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
   

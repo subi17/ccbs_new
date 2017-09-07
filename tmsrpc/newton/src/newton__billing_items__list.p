@@ -7,14 +7,20 @@
 
 {newton/src/flistrpc.i}
 
-lcStruct = validate_struct(pcStruct, "billing_group").
+DEF VAR pcTenant AS CHARACTER NO-UNDO.
+
+lcStruct = validate_struct(pcStruct, "brand!,billing_group").
+
+pcTenant = get_string(pcStruct,"brand").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-DEF VAR lcQuery AS CHARACTER NO-UNDO. 
+{newton/src/settenant.i pcTenant}
+
+
+DEF VAR lcQuery  AS CHARACTER NO-UNDO. 
 
 lcQuery = 'FOR EACH BillItem NO-LOCK WHERE BillItem.Brand = "1" '.
-
 
 IF LOOKUP("billing_group",lcStruct) > 0 THEN DO:
     
