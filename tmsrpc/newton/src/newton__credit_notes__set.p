@@ -66,11 +66,7 @@ IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF pcRemark EQ "" THEN RETURN appl_err("remark is empty").
 
-FIND Invoice WHERE
-     Invoice.Brand = "1" AND
-     Invoice.InvNum = piInvNum NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Invoice THEN
-   RETURN appl_err("Invoice not found: " + STRING(piInvNum)).
+{newton/src/findtenant.i NO Common Invoice InvNum piInvNum}
 
 SUB_INVOICES:
 DO liSubInvCount = 0 TO get_paramcount(pcSubInvoiceArray) - 1:

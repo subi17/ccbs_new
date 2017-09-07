@@ -18,6 +18,7 @@ gcBrand = "1".
 {Func/barrfunc.i}
 {Syst/tmsconst.i}
 {Func/tsformat.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
@@ -84,9 +85,14 @@ REPEAT:
    ASSIGN
       liNumErr = 0
       liNumOK = 0.
-   
+  
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
+
    fBatchLog("START", lcInputFile).
-   lcLogFile = lcSpoolDir + "barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
+   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
    PUT STREAM sLog UNFORMATTED

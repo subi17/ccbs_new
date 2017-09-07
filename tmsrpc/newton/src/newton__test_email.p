@@ -35,12 +35,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId  = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST order NO-LOCK where
-           order.brand = "1" and
-           order.orderid = piOrderId NO-ERROR.
-
-IF NOT AVAIL order then return
-   appl_err("Order not Found").
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 RUN Mc/sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFile).
 

@@ -35,6 +35,7 @@ katun = "Newton".
 {Func/orderchk.i}
 
 /* Input parameters */
+DEF VAR pcTenant       AS CHAR NO-UNDO.
 DEF VAR pcCliType      AS CHAR NO-UNDO.
 DEF VAR piSubsLimit    AS INT NO-UNDO.
 DEF VAR piOffset       AS INT NO-UNDO.
@@ -87,9 +88,10 @@ IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type").
+   "brand,subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type").
 
 ASSIGN
+   pcTenant       = get_string(pcStruct, "brand")
    pcCliType      = get_string(pcStruct, "subscription_type")
       WHEN LOOKUP("subscription_type", lcStruct) > 0
    piOffset       = get_int(param_toplevel_id, "1")
@@ -136,6 +138,8 @@ ASSIGN
     /* Paytype, usagetype, startdate and personidtype YDA-895 */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF pdtEndDate > TODAY THEN 
    pdtEndDate = ?.

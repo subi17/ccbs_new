@@ -25,8 +25,9 @@ DEFINE VARIABLE katun AS CHARACTER NO-UNDO.
 &SCOPED-DEFINE BrandVarDefined YES
 {Func/func.p}
 
-DEFINE VARIABLE piOffset AS INTEGER NO-UNDO. 
-DEFINE VARIABLE piLimit AS INTEGER NO-UNDO. 
+DEFINE VARIABLE pcTenant       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE piOffset       AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE piLimit        AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcSearchStruct AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE request_array  AS CHARACTER NO-UNDO. 
@@ -65,10 +66,12 @@ FUNCTION fAddMsRequest RETURN LOGICAL:
    RETURN TRUE.
 END.
 
-IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
-pcSearchStruct = get_struct(param_toplevel_id, "0").
-piOffSet = get_int(param_toplevel_id, "1").
-piLimit = get_int(param_toplevel_id, "2").
+IF validate_request(param_toplevel_id, "string,struct,int,int") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcSearchStruct = get_struct(param_toplevel_id, "1").
+piOffSet = get_int(param_toplevel_id, "2").
+piLimit = get_int(param_toplevel_id, "3").
 IF piLimit > 1000 THEN
 appl_err(SUBST("Given limit &1 is bigger than maximum limit 1000", piLimit)).
 
@@ -77,6 +80,8 @@ lcListOtherParam = "msisdn,customer_number".
 lcSearchStruct = validate_struct(pcSearchStruct, "type!,status," +
                                                  lcListOtherParam).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 /*mandatory parameter for search*/
 lcQuery = "FOR EACH MsRequest NO-LOCK WHERE MsRequest.Brand = '1' AND " +
