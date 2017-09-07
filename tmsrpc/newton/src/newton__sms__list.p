@@ -41,11 +41,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF LOOKUP(lcType,",normal,premium") = 0 THEN RETURN
    appl_err(SUBST("Unknown type: %1", lcType)).
 
-/* find mobsub */
-FIND MobSub WHERE
-     MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR. 
-
-IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
+{newton/src/findtenant.i NO Ordercanal MobSub MsSeq liMsSeq}
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 lcIdStruct = add_array(lcResultStruct, "results").
