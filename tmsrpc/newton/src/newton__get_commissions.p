@@ -53,13 +53,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piCustNum = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND Customer WHERE 
-     Customer.Brand  = gcBrand AND 
-     Customer.CustNum = piCustNum 
-     NO-LOCK NO-ERROR.
-
-IF NOT AVAIL Customer THEN
-   appl_err(SUBST("Customer &1 not found", piCustNum)).
+{newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
 resp_array = add_array(response_toplevel_id, "").
 

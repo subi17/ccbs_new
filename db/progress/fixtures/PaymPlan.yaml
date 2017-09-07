@@ -223,3 +223,12 @@ bulkload: PaymPlan
   PPType: 3
   Brand: "1"
 
+bulkload: PaymPlan
+  PPlanID: 27
+  CustNum: 2748986
+  PPDate: 2017-08-12
+  BankDays: 3
+  PPStatus: 1
+  PPType: 3
+  Brand: "1"
+
