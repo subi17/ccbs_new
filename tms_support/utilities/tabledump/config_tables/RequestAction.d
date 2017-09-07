@@ -788,3 +788,4 @@
 "1" 8 "" 23/08/17 31/12/49 "DayCampaign" "TVTERM12-72" 1 1 862
 "1" 9 "" 23/08/17 31/12/49 "DayCampaign" "TVTERM12-72" 11 1 863
 "1" 13 "CONT28" 21/08/17 31/12/49 "DayCampaign" "GPRS" 1 0 864
+"1" 0 "CONT28" 21/08/17 31/12/49 "DayCampaign" "GPRS" 1 0 865

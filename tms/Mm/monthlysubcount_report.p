@@ -12,6 +12,7 @@
 {Func/date.i}
 {Func/cparam2.i}
 {Func/email.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER idaRunDate AS DATE NO-UNDO.
 
@@ -33,8 +34,9 @@ DEF VAR ldaMonth AS DATE NO-UNDO.
 ldaMonth = idaRunDate.
 ldtDate = DATE(MONTH(ldaMonth), 1, YEAR(ldaMonth)).
 
-lcOutFile = lcOutDir + 
-            "monthlysubcount_" +
+lcOutFile = lcOutDir +
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) + 
+            "_monthlysubcount_" +
             STRING(YEAR(ldaMonth) * 100 + MONTH(ldaMonth)) +
             ".txt".
 
