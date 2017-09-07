@@ -53,16 +53,19 @@ END.
 lcRespStruct = add_struct(response_toplevel_id, "").
 lcRespArray = add_array(lcRespStruct, "codigoReferencia").
 
+/* prevalidation */
+FOR EACH ttInput NO-LOCK:   
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+END.
+
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerSolicitudesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
-   
-   /* check in case of duplicate messages */
-   FIND FIRST MNPProcess NO-LOCK WHERE
-              MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
-   
+
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.

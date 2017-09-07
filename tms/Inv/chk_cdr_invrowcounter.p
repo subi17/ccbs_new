@@ -36,7 +36,8 @@ lcDir = fCParamC("ChkUnbilledIRCounterDir").
 IF lcDir = "" OR lcDir = ? THEN lcDir = "/scratch/log/invrowcounter".
 
 DEF STREAM sLog.
-OUTPUT STREAM sLog TO VALUE(lcDir + "/chk_cdr_invrowcounter_" + 
+OUTPUT STREAM sLog TO VALUE(lcDir + "/" + Syst.Parameters:Tenant + "_" + 
+                            "chk_cdr_invrowcounter_" + 
                             STRING(year(today),"9999") + 
                             STRING(month(today),"99") + 
                             STRING(day(today),"99") + "_" +

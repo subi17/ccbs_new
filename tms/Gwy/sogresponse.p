@@ -16,6 +16,8 @@
 {Syst/commpaa.i}
 {Func/tmsparam4.i}
 {Func/msreqfunc.i}
+{Func/log.i}
+{Func/multitenantfunc.i}
 
 gcBrand = "1".
 
@@ -24,7 +26,6 @@ DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO FORMAT "99.99.9999".
 DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcResponse  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogIn     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liLoop      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llRC        AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lhSocket    AS HANDLE    NO-UNDO.
 DEFINE VARIABLE lcAck       AS CHARACTER NO-UNDO.
@@ -183,6 +184,10 @@ REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
 
          RUN pSoLog(liSoLog,lcResponse).
 
+         IF RETURN-VALUE BEGINS "ERROR" THEN
+            fLogError(RETURN-VALUE).
+      
+
       END.
 
    END.
@@ -294,6 +299,8 @@ PROCEDURE pUpdateQueue:
          RELEASE bufQ.
    
       END.
+      ELSE IF RETURN-VALUE BEGINS "ERROR" THEN
+         fLogError(RETURN-VALUE).
 
    END.
    
@@ -313,7 +320,7 @@ PROCEDURE pSoLog:
    DEFINE VARIABLE ldeSMSTime  AS DEC       NO-UNDO.
    DEFINE VARIABLE liTime      AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liNewTS     AS DECIMAL   NO-UNDO.
-   DEFINE VARIABLE lcReturn    AS CHARACTER NO-UNDO INIT "OK".
+   DEF VAR liLoop AS INT NO-UNDO. 
    DEF VAR lcErrorCode AS CHAR NO-UNDO. 
 
    DEFINE BUFFER bufSoLog FOR SoLog.
@@ -326,17 +333,54 @@ PROCEDURE pSoLog:
       lcInfo    = SUBSTRING(pcResponse,INDEX(pcResponse,
                       ENTRY(4,pcResponse," ")))
    NO-ERROR.
+   
+   IF ERROR-STATUS:ERROR THEN 
+      RETURN SUBST("ERROR:Incorrect response syntax: &1", pcResponse).
 
-   IF liSoLog > 0 THEN DO:
+   IF NOT liSoLog > 0 THEN
+      RETURN SUBST("ERROR:Cannot parse solog id: &1", pcResponse).
 
-      /* YTS-8530, EYOIGO-43 */
-      IF liSoLog <= 1000000 THEN RETURN "SKIPPED".
+   /* YTS-8530, EYOIGO-43 */
+   IF liSoLog <= 1000000 THEN RETURN "SKIPPED".
+   
+   /* super tenant */
+   IF TENANT-ID(LDBNAME(1)) < 0 THEN DO:
+
+      DO liLoop = 1 to NUM-ENTRIES({&TENANTS}):
+         IF fsetEffectiveTenantForAllDB(ENTRY(liLoop,{&TENANTS})) EQ FALSE THEN
+            RETURN SUBST("ERROR:Cannot switch tenant: &1", pcResponse).
+
+         FIND FIRST SoLog NO-LOCK WHERE
+                    SoLog.SoLog = liSoLog NO-ERROR.
+         IF AVAIL SoLog THEN LEAVE.
+      END.
+
+   END.
+   ELSE FIND FIRST SoLog NO-LOCK WHERE
+                   SoLog.SoLog = liSoLog NO-ERROR.
+
+   IF NOT AVAIL SoLog THEN 
+      RETURN SUBST("ERROR:Solog record not found: &1", pcResponse).
+
+   FIND CURRENT SoLog EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+   
+   IF LOCKED(SoLog) THEN DO:
+
+      IF NOT CAN-FIND(FIRST UpdateQueue WHERE
+                            UpdateQueue.Seq1 = iiSoLog) THEN DO:
+
+         CREATE UpdateQueue.
+         ASSIGN
+            UpdateQueue.TSCreate = fMakeTS()
+            UpdateQueue.Seq1     = iiSoLog
+            UpdateQueue.Value1   = pcResponse.
+
+         RELEASE UpdateQueue.         
       
-      FIND FIRST SoLog WHERE
-                 SoLog.SoLog = liSoLog
-      EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-
-      IF NOT LOCKED(SoLog) AND NOT ERROR-STATUS:ERROR THEN DO:
+      END.
+   
+      RETURN "LOCKED".
+   END.
 
          ASSIGN
             Solog.CompletedTS = fMakeTS()
@@ -480,32 +524,11 @@ PROCEDURE pSoLog:
                END.
             END.              
          END.        
-      END.
-      ELSE DO:
 
-         IF NOT CAN-FIND(FIRST UpdateQueue WHERE
-                               UpdateQueue.Seq1 = iiSoLog) THEN DO:
+   RELEASE SOLOG.
+   RELEASE MSREQUEST.
 
-            CREATE UpdateQueue.
-            ASSIGN
-               UpdateQueue.TSCreate = fMakeTS()
-               UpdateQueue.Seq1     = iiSoLog
-               UpdateQueue.Value1   = pcResponse.
-
-            RELEASE UpdateQueue.         
-         
-         END.
-      
-         lcReturn = "LOCKED".
-
-      END.
-
-      RELEASE SOLOG.
-      RELEASE MSREQUEST.
-   
-   END.
-
-   RETURN lcReturn.
+   RETURN "OK".
 
 END PROCEDURE.
 

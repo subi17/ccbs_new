@@ -149,8 +149,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             THEN DO:
                gcHelpParam = "DCType:1,4".
                RUN Help/h-daycamp.p.
-               IF siirto NE ? THEN FRAME-VALUE = siirto.
-  
+               IF siirto NE ? THEN 
+               DO: 
+                   ASSIGN lcDCEvent = siirto.
+                   DISP lcDCEvent.
+               END.    
                ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
