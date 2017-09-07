@@ -20,10 +20,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK WHERE
-     mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO Ordercanal MobSub MsSeq piMsSeq}
 
 IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                   CLIType.Brand = gcBrand AND
