@@ -11,7 +11,8 @@
             fixed_pouser_data;struct:optional
             fusion_data;struct;optional
             q25_data;struct;optional
- * @order_data salesman;string;optional;id of the seller
+ * @order_data brand;string;mandatory;brand to store order
+               salesman;string;optional;id of the seller
                reseller;string;mandatory;reseller id
                channel;string;mandatory;controller name
                orderer_ip;string;mandatory;IP that submits the order
@@ -267,6 +268,8 @@ katun = "NewtonRPC".
 {Func/fixedlinefunc.i}
 {Func/profunc.i}
 
+{Migration/migrationfunc.i}
+
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
 /* Input parameters for order */
@@ -291,6 +294,7 @@ DEF VAR gcCustomerStructFields AS CHARACTER NO-UNDO.
 DEF VAR gcCustomerStructStringFields AS CHARACTER NO-UNDO. 
 DEF VAR gcPoUserStructFields AS CHARACTER NO-UNDO. 
 
+DEF VAR pcTenant        AS CHAR NO-UNDO.
 DEF VAR pcSalesman      AS CHAR INITIAL "selforder" NO-UNDO.
 DEF VAR pcReseller      AS CHAR NO-UNDO.
 DEF VAR pcChannel       AS CHAR NO-UNDO.
@@ -466,8 +470,11 @@ DEF BUFFER lbMobSub FOR MobSub.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
+   pcTenant   = get_string(pcOrderStruct, "brand").
+   
    IF LOOKUP("salesman", lcOrderStruct) GT 0 THEN
        pcSalesman = get_string(pcOrderStruct, "salesman").
+      
    pcReseller = get_string(pcOrderStruct, "reseller").
    pcChannel = get_string(pcOrderStruct, "channel").
    pcChannel = REPLACE(pcChannel, "order", "").
@@ -782,32 +789,35 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
             
-      /* YTS-2453 */
-      IF NOT plBypassRules AND
-         lcFError = "" AND 
-         piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-         LOOKUP(pcNumberType,"new,mnp") > 0 AND
-         NOT plUpdate AND
-         piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
-         NOT fSubscriptionLimitCheck(
-         lcIdOrderCustomer,
-         lcIdTypeOrderCustomer,
-         llSelfEmployed,
-         llIsProCustomer,
-         1,
-         OUTPUT lcFError,
-         OUTPUT liSubLimit,
-         OUTPUT liSubs,
-         OUTPUT liSubLimit,
-         OUTPUT liActs) THEN .
+      IF NOT pcChannel BEGINS "migration" THEN DO: /*MMM-21*/
 
+         /* YTS-2453 */
+         IF NOT plBypassRules AND
+            lcFError = "" AND 
+            piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+            LOOKUP(pcNumberType,"new,mnp") > 0 AND
+            NOT plUpdate AND
+            piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
+            NOT fSubscriptionLimitCheck(
+            lcIdOrderCustomer,
+            lcIdTypeOrderCustomer,
+            llSelfEmployed,
+         llIsProCustomer,
+            1,
+            OUTPUT lcFError,
+            OUTPUT liSubLimit,
+            OUTPUT liSubs,
+            OUTPUT liSubLimit,
+            OUTPUT liActs) THEN .
+      END.
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
          WHEN "EMAIL" THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
          WHEN "SMS"   THEN liDelType = {&INV_DEL_TYPE_SMS}.
          WHEN "No delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
          WHEN "" THEN .
-         OTHERWISE lcFError = "Invalid Invoice Delivery Type".
+         OTHERWISE lcFError = "Invalid Invoice Delivery Type " + 
+                               lcdelivery_channel.
       END CASE. /* CASE lcdelivery_channel: */
 
    END. /* lcFError = "" */
@@ -991,7 +1001,8 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
          lcError = SUBST("Cli &1 not found or not free", pcCLI).
    END.
    /* YDR-491 */
-   ELSE IF pcNumberType EQ "MNP" THEN DO:
+   ELSE IF pcNumberType EQ "MNP" OR 
+           pcNumberType EQ "migration" THEN DO:
       FIND FIRST MobSub WHERE
                  MobSub.Brand = gcBrand AND
                  MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
@@ -1025,7 +1036,8 @@ FUNCTION fCheckSIM RETURNS CHARACTER:
       IF lcSimType > "" AND LOOKUP(lcSimType,"Plug_IN,Micro,Nano,Universal") = 0 THEN
          RETURN "Invalid SIM Type specified".
 
-      IF LOOKUP(pcNumberType,"new,mnp") > 0 AND lcSimType = "" THEN
+      IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
+         lcSimType = "" THEN
          RETURN "sim_type is missing".
    END. /* ELSE DO: */
 
@@ -1088,7 +1100,8 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.ResignationPeriod  = plResignationPeriod 
       Order.RoiLevel = INT(pcRoilevel)
       Order.MultiSimType = piMultiSimType
-      Order.MsSeq = (IF LOOKUP(pcNumberType,"new,mnp") > 0 
+      Order.MsSeq = (IF 
+                     LOOKUP(pcNumberType,"new,mnp,migration") > 0 
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
       Order.Multiorder = plMultiOrder.               
@@ -1256,7 +1269,8 @@ END.
 
 /* Input variables for address data */
 
-gcOrderStructFields = "billing_data," +
+gcOrderStructFields = "brand!," +
+                      "billing_data," +
                       "campaign_code," +
                       "channel!," +
                       "check," +
@@ -1470,6 +1484,8 @@ IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
+
 FIND CLIType NO-LOCK WHERE CLIType.Brand = gcBrand AND CLIType.CliType = pcSubType NO-ERROR.
 IF NOT AVAIL CLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
@@ -1487,6 +1503,21 @@ IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
+
+/*MB_migration related checks*/
+
+/*Customer is not allowed to have active subscription in Yoigo system*/
+IF pcChannel BEGINS "migration" THEN DO:
+   DEF VAR lcMErr AS CHAR NO-UNDO.
+   IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
+      RETURN appl_Err("Migration data validation error:" + lcMErr).
+END.
+
+/*If STC or MNP is not allowed during migration*/
+IF (pcNumberType EQ "mnp" OR pcNumberType EQ "stc") AND
+   fIsNumberInMigration(pcCLI) THEN 
+   RETURN appl_Err("Requested number is in migration").
+
 
 /* YPB-515 */
 IF pcDiscountPlanId > "" THEN DO:
@@ -1824,7 +1855,7 @@ END.
 IF piMultiSimType NE 0 AND piMultiSimId <= 0 THEN 
    RETURN appl_err("Multi SIM type passed but Multi SIM ID is missing").
 
-IF LOOKUP(pcNumberType,"new,mnp") > 0 AND
+IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
    CLIType.LineType  > 0 AND
    CLIType.LineType <> 3 AND
    NOT CAN-FIND(FIRST CLIType WHERE
@@ -2297,7 +2328,11 @@ ELSE IF Order.statuscode NE "4" THEN DO:
       Order.statuscode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
    END.
    ELSE DO:
-      Order.statuscode = STRING(INT(pcNumberType EQ "mnp") * 2 + 1).
+      IF pcNumberType EQ "mnp" THEN 
+         Order.statuscode = {&ORDER_STATUS_MNP}.
+      ELSE IF pcNumberType EQ "migration" THEN 
+         Order.statuscode = {&ORDER_STATUS_MNP}.
+      ELSE Order.statuscode = {&ORDER_STATUS_NEW}.
  
       /* YBP-566 */
       /* note: cif newspaper campaigns are handled normally */
@@ -2331,6 +2366,7 @@ CASE pcNumberType:
    WHEN "mnp" THEN Order.OrderType = {&ORDER_TYPE_MNP}.
    WHEN "renewal" THEN Order.OrderType = {&ORDER_TYPE_RENEWAL}.
    WHEN "stc" THEN Order.OrderType = {&ORDER_TYPE_STC}.
+   WHEN "migration" THEN Order.OrderType = {&ORDER_TYPE_MNP}.
 END.
 
 /* YBP-570 */ 
@@ -2602,9 +2638,11 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
    lcOfferSMSText = fGetOrderOfferSMS(Order.OrderID, 
                                       TRUE).
-
-   IF lcMobileNumber NE "" AND 
-      lcOfferSMSText NE "" AND lcOfferSMSText NE ? THEN
+   
+   
+   IF NOT Order.Orderchannel BEGINS "migration" AND
+      (lcMobileNumber NE "" AND       
+      lcOfferSMSText NE "" AND lcOfferSMSText NE ?) THEN
       fCreateSMS(Order.CustNum,
                  lcMobileNumber,
                  Order.MsSeq, 
@@ -2631,7 +2669,8 @@ fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 
 /*YDR_1637*/
-IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
+IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
+         NOT Order.Orderchannel BEGINS "migration" THEN DO:
    IF (Order.StatusCode EQ {&ORDER_STATUS_MNP_ON_HOLD}        /*22*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
        Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR

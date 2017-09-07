@@ -11,6 +11,7 @@
 {Syst/dumpfile_run.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -136,6 +137,7 @@ PROCEDURE pWriteToFile:
          STRING(ldeFFItemAmt)                 lcDelimiter
          STRING(ldeResidualFee)               lcDelimiter
          STRING(OrderPayment.Method)          lcDelimiter 
+         fgetCompanyId()                      lcDelimiter
          SKIP.
    END.
    ELSE DO:
@@ -150,7 +152,8 @@ PROCEDURE pWriteToFile:
          STRING(liFFItemQty)                  lcDelimiter
          STRING(ldeFFItemAmt)                 lcDelimiter
          STRING(ldeResidualFee)               lcDelimiter
-         STRING(OrderPayment.Method)          lcDelimiter 
+         STRING(OrderPayment.Method)          lcDelimiter
+         fgetCompanyId()                      lcDelimiter 
          SKIP.
 
    END.

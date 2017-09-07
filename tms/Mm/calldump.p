@@ -74,7 +74,8 @@ assign
    lcOdir     =  fCparam("dumpoutgoing","calldump.p")
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idaDate
-   filename   = "calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+   filename   = CAPS(Syst.Parameters:Tenant) +
+                "_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1
@@ -85,8 +86,9 @@ assign
 IF lcLogDir = "" OR lcLogDir = ? THEN llLog = FALSE.
 ELSE DO:
    llLog = TRUE.
-   OUTPUT STREAM sLog TO VALUE(lcLogDir + "/dailycalls_" +
-                               STRING(ldate1,"999999") + ".log") APPEND.
+   OUTPUT STREAM sLog TO VALUE(lcLogDir + "/" +
+       CAPS(Syst.Parameters:Tenant) +
+       "_dailycalls_" + STRING(ldate1,"999999") + ".log") APPEND.
 END.                               
                                
 if iiper ne 0 then ASSIGN
@@ -96,7 +98,7 @@ if iiper ne 0 then ASSIGN
 
 dformat = "yyyy-mm-dd".
 
-DEFINE TEMP-TABLE ttCalls
+DEFINE TEMP-TABLE ttCalls NO-UNDO
    FIELD calldate   AS DATE
    FIELD Mobtype    AS CHARACTER
    FIELD CLI        AS CHARACTER
