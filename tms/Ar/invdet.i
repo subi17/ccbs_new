@@ -59,7 +59,7 @@ ASSIGN
    lcSubLine2 = FILL("=",35).
 
 FORM
-    Invoice.ExtInvID   
+    Invoice.ExtInvID FORMAT "x(14)"
        LABEL "Invoice Number"             
     Invoice.InvType    
        LABEL "Invoice Type " AT 42

@@ -319,7 +319,7 @@ FUNCTION fVoiceBundle RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
    DEF VAR lcOut AS CHAR NO-UNDO.
-   lcVoiceBundles = fcParamC("VOICE_BUNDLES").
+   lcVoiceBundles = fcParamC("VOICE_BONO_CONTRACTS").
    DEF BUFFER bOrderaction FOR Orderaction.
    FOR EACH bOrderaction NO-LOCK WHERE
             bOrderaction.Brand EQ gcBrand AND
@@ -1513,6 +1513,9 @@ FOR EACH Stock NO-LOCK,
    /* handle only NEW or MNP orders */
    IF Order.Ordertype NE 0 AND
       Order.Ordertype NE 1 THEN NEXT.
+   
+   /* Do not create LO file in migration */
+   IF Order.Orderchannel BEGINS "migration" THEN NEXT.
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND

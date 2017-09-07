@@ -46,10 +46,7 @@ liMNPOperationID = INT(pcId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN RETURN
    appl_err("Invalid key: " + pcID).
 
-FIND MNPOperation EXCLUSIVE-LOCK WHERE
-     MNPOperation.MNPOperationID = liMNPOperationID NO-ERROR.
-IF NOT AVAIL MNPOperation THEN RETURN
-   appl_err("MNP message not found: " + pcID).
+{newton/src/findtenant.i NO Common MNPOperation MNPOperationID liMNPOperationID}
 
 IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
    RETURN appl_err("Operation is allowed only for unhandled error").

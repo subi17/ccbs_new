@@ -30,7 +30,7 @@ DEFINE VARIABLE llInactivateDump AS LOGICAL   INITIAL NO NO-UNDO.
 DEFINE VARIABLE HandlerObj AS CLASS HPD.DumpHandler NO-UNDO.
 
 LOG-MANAGER:LOGFILE-NAME = "../var/log/hpd_filedump_" + STRING(iiDumpID) + 
-                           "_" + multitenancy.TenantInformation:mGetBrandNameForActiveTenant() + ".log".
+                           "_" + multitenancy.TenantInformation:mGetBrandNameForActualTenant() + ".log".
 
 FIND FIRST DumpFile NO-LOCK WHERE
    DumpFile.DumpID = iiDumpID
