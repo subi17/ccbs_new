@@ -71,6 +71,20 @@ DEFINE TEMP-TABLE ttOutputText
    FIELD id AS INTEGER
    INDEX idx id.
 
+DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO.
+
+DO ON ERROR UNDO, THROW:
+   lcBrand = CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant()).
+
+   /* Handler code for any error condition. */
+   CATCH anyErrorObject AS Progress.Lang.Error:
+      MESSAGE "create_logistic_file: unable to fetch brand name".    
+      MESSAGE anyErrorObject:GetMessage(1).
+      RETURN.
+   END CATCH.
+END.
+
+
 ASSIGN
    lcSpoolDir         = fCParam("Logistics","OutSpoolDir") 
    lcRiftpDir         = fCParam("Logistics","OutDir")
@@ -80,13 +94,13 @@ ASSIGN
    lcContractsDir     = fCParam("Logistics","ContractsDir")
    lcContractsOutDir  = fCParam("Logistics","ContractsOutDir")
    lcErrorLogDir      = fCParam("Logistics","DextraErrorLogDir")
-   lcFileName         = "ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+   lcFileName         = lcBrand + "_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt"
    lcContractTARFile  = lcTARSpoolDir +
-                        "contracts_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") +
+                        lcBrand + "_contracts_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") +
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".tar"
    lcErrorLogFileName = lcErrorLogDir +
-                        "error_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+                        lcBrand + "_error_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log"
    lcBundleCLITypes   = fCParamC("BUNDLE_BASED_CLITYPES")
    ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
@@ -322,7 +336,7 @@ FUNCTION fVoiceBundle RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
    DEF VAR lcOut AS CHAR NO-UNDO.
-   lcVoiceBundles = fcParamC("VOICE_BUNDLES").
+   lcVoiceBundles = fcParamC("VOICE_BONO_CONTRACTS").
    DEF BUFFER bOrderaction FOR Orderaction.
    FOR EACH bOrderaction NO-LOCK WHERE
             bOrderaction.Brand EQ gcBrand AND
@@ -1539,6 +1553,9 @@ FOR EACH Stock NO-LOCK,
    /* handle only NEW or MNP orders */
    IF Order.Ordertype NE 0 AND
       Order.Ordertype NE 1 THEN NEXT.
+   
+   /* Do not create LO file in migration */
+   IF Order.Orderchannel BEGINS "migration" THEN NEXT.
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND
