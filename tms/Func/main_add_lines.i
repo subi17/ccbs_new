@@ -317,6 +317,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
 
    fInitialiseValues(iiTermReason,
                      fIsYoigoCLI(icCLI),
+                     fIsMasmovilCLI(icCLI),
                      OUTPUT lviMsisdnStat,
                      OUTPUT lviSimStat,
                      OUTPUT lviQuarTime).

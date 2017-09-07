@@ -188,18 +188,15 @@ PROCEDURE pContractActivation:
    DEF VAR ldtActDate             AS DATE NO-UNDO.
    DEF VAR liActTime              AS INT  NO-UNDO.
 
-   FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.MsSeq   = iiMsSeq AND
-            MsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION}
-            USE-INDEX MsSeq:
+   FOR EACH MsRequest NO-LOCK WHERE MsRequest.MsSeq = iiMsSeq AND MsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} USE-INDEX MsSeq:
 
       /* Exclude Request part of STC or BTC */
-      IF MsRequest.ReqSource = {&REQUEST_SOURCE_STC} OR
-         MsRequest.ReqSource = {&REQUEST_SOURCE_BTC} THEN NEXT.
+      IF MsRequest.ReqSource = {&REQUEST_SOURCE_STC} OR MsRequest.ReqSource = {&REQUEST_SOURCE_BTC} THEN 
+          NEXT.
 
       /* Exclude if source is not script and not a new subscription */
-      IF NOT ttInputFileContent.NewSubs AND
-         MsRequest.ReqSource <> {&REQUEST_SOURCE_SCRIPT} THEN NEXT.
+      IF NOT ttInputFileContent.NewSubs AND MsRequest.ReqSource <> {&REQUEST_SOURCE_SCRIPT} THEN 
+          NEXT.
 
       CREATE ttAnalyzerReport.
       ASSIGN ttAnalyzerReport.FileName    = ttInputFileContent.FileName
@@ -243,13 +240,15 @@ PROCEDURE pContractActivation:
       ttAnalyzerReport.Remark = TRIM(ttAnalyzerReport.Remark,lcDel).
    END. /* FOR EACH MsRequest WHERE */
 
-   IF NOT llDefault THEN DO:
+   IF NOT llDefault THEN 
+   DO:
       CREATE ttAnalyzerReport.
       ASSIGN ttAnalyzerReport.FileName    = ttInputFileContent.FileName
              ttAnalyzerReport.ActionType  = "Contract Activation"
              ttAnalyzerReport.CLI         = ttInputFileContent.CLI
              ttAnalyzerReport.Remark      = "No Contract Activation Request".
    END. /* IF NOT llDefault THEN DO: */
+
 END PROCEDURE.
 
 PROCEDURE pContractDeactivation:
