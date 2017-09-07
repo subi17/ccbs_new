@@ -324,7 +324,7 @@ PROCEDURE pTerminate:
    DO:
       fUpdatePartialMSOwner(MobSub.msseq, Mobsub.fixedNumber).
 
-      IF llOutport AND fIsConvergenceTariff(Mobsub.CliType)) THEN  
+      IF llOutport AND fIsConvergenceTariff(Mobsub.CliType) THEN  
           fDeactivateTVService(liMsSeq, MsRequest.UserCode).
    END.
 
