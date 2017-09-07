@@ -15,6 +15,8 @@ if FILE-INFO:FILE-TYPE EQ ? OR not FILE-INFO:FILE-TYPE begins "D" then do:
    RETURN.
 end.
 
+lcFolder = FILE-INFO:FULL-PATHNAME.
+
 FILE-INFO:FILE-NAME = lcInputFile.
 
 if FILE-INFO:FILE-TYPE EQ ? OR not FILE-INFO:FILE-TYPE begins "F" then do:
@@ -22,7 +24,7 @@ if FILE-INFO:FILE-TYPE EQ ? OR not FILE-INFO:FILE-TYPE begins "F" then do:
    RETURN.
 end.
 
-input from value(lcInputFile).
+input from value(FILE-INFO:FULL-PATHNAME).
 
 DEF VAR lcLine AS CHAR NO-UNDO. 
 DEF VAR lcOutputFolder AS CHAR NO-UNDO.

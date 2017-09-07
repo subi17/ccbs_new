@@ -74,12 +74,7 @@ gcbrand = "1".
 {Func/msreqfunc.i}
 {Func/fpcmaintreq.i}
 
-/* check order exist */
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-ERROR.
-IF NOT AVAIL Order THEN
-   RETURN appl_err(SUBST("Unknown Order id &1",STRING(piOrderId))).
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF INDEX(Order.OrderChannel,"pos") = 0 THEN
    RETURN appl_err("Only POS order channels are supported").
