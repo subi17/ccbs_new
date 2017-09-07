@@ -320,9 +320,13 @@ PROCEDURE pTerminate:
       MSOwner.TsEnd = ldCurrTS.   
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
-   ELSE IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} 
-      THEN 
+   ELSE IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN 
+   DO:
       fUpdatePartialMSOwner(MobSub.msseq, Mobsub.fixedNumber).
+
+      IF llOutport AND fIsConvergenceTariff(Mobsub.CliType)) THEN  
+          fDeactivateTVService(liMsSeq, MsRequest.UserCode).
+   END.
 
    IF llOutport THEN DO:
 
