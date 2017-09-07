@@ -2,6 +2,7 @@
  * Validate eInvoice PDF Link
  *
  * @input      struct;mandatory;list of parameters
+               string;mandatory;brand
                int;mandatory;period
                string;mandatory;dni
                string;mandatory;msisdn
@@ -17,6 +18,7 @@ ASSIGN gcBrand = "1"
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 
+DEF VAR pcTenant       AS CHAR  NO-UNDO.
 DEF VAR pcStruct       AS CHAR  NO-UNDO. 
 DEF VAR lcStruct       AS CHAR  NO-UNDO.
 DEF VAR piPeriod       AS INT   NO-UNDO.
@@ -33,15 +35,20 @@ DEF VAR liInvNum       AS INT    NO-UNDO.
 DEF VAR liBillPeriod   AS INT    NO-UNDO.
 DEF VAR ldeEndStamp    AS DEC    NO-UNDO.
 
-IF validate_request(param_toplevel_id,"struct") EQ ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id,"string,struct") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 lcStruct = validate_request(pcStruct,"period,dni,msisdn,hash").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 piPeriod  = get_int(pcStruct,"period").
 pcDNI     = get_string(pcStruct,"dni").
 pcMSISDN  = get_string(pcStruct,"msisdn").
 pcHashKey = get_string(pcStruct,"hash").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pcHashKey = "" OR pcHashKey = ? THEN
@@ -49,6 +56,8 @@ IF pcHashKey = "" OR pcHashKey = ? THEN
 
 IF piPeriod = 0 OR piPeriod = ? THEN
    RETURN appl_err("Invalid Period").
+
+{newton/src/settenant.i pcTenant}
 
 lcSaltKey = fCParam("EI","SaltKey").
 IF lcSaltKey = "" OR lcSaltKey = ? THEN

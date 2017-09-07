@@ -1,0 +1,434 @@
+bulkload: DPRate
+  DPId: 1
+  DiscValue: 3
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 2
+  DiscValue: 8
+  ValidFrom: 2012-10-16
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 3
+  DiscValue: 9
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 4
+  DiscValue: 9
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 5
+  DiscValue: 100
+  ValidFrom: 2013-02-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 6
+  DiscValue: 100
+  ValidFrom: 2013-02-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 7
+  DiscValue: 16.66
+  ValidFrom: 2013-06-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 8
+  DiscValue: 10
+  ValidFrom: 2013-09-19
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 9
+  DiscValue: 5
+  ValidFrom: 2013-12-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 10
+  DiscValue: 5
+  ValidFrom: 2013-12-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 11
+  DiscValue: 15
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 12
+  DiscValue: 100
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 13
+  DiscValue: 100
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 14
+  DiscValue: 3
+  ValidFrom: 2014-04-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 15
+  DiscValue: 100
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 16
+  DiscValue: 50
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 17
+  DiscValue: 50
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 18
+  DiscValue: 50
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 19
+  DiscValue: 10
+  ValidFrom: 2014-07-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 20
+  DiscValue: 4.13
+  ValidFrom: 2014-10-15
+  ValidTo: 2014-12-31
+
+bulkload: DPRate
+  DPId: 20
+  DiscValue: 4.96
+  ValidFrom: 2015-03-11
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 21
+  DiscValue: 25
+  ValidFrom: 2014-12-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 22
+  DiscValue: 20
+  ValidFrom: 2015-03-04
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 23
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 23
+  DiscValue: 50
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: DPRate
+  DPId: 24
+  DiscValue: 20
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 25
+  DiscValue: 20
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 26
+  DiscValue: 2
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 27
+  DiscValue: 4.13
+  ValidFrom: 2015-05-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 28
+  DiscValue: 20
+  ValidFrom: 2015-08-12
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 29
+  DiscValue: 31.2
+  ValidFrom: 2015-09-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 30
+  DiscValue: 1.65
+  ValidFrom: 2015-10-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 31
+  DiscValue: 4.96
+  ValidFrom: 2015-11-24
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 32
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 33
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 34
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 35
+  ValidFrom: 2015-11-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 36
+  DiscValue: 8.26
+  ValidFrom: 2016-11-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 37
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 37
+  DiscValue: 50
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: DPRate
+  DPId: 38
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 38
+  DiscValue: 50
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: DPRate
+  DPId: 39
+  DiscValue: 4.13
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 40
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 40
+  DiscValue: 50
+  ValidFrom: 2017-03-01
+  ValidTo: 2017-04-04
+
+bulkload: DPRate
+  DPId: 41
+  DiscValue: 27.03
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 42
+  DiscValue: 20
+  ValidFrom: 2017-02-22
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 43
+  DiscValue: 5.78
+  ValidFrom: 2017-02-27
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 44
+  DiscValue: 22.22
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 45
+  DiscValue: 20
+  ValidFrom: 2017-04-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 46
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 47
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 48
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 49
+  DiscValue: 20
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 50
+  DiscValue: 22.22
+  ValidFrom: 2017-05-02
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 51
+  DiscValue: 27.03
+  ValidFrom: 2017-05-02
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 52
+  DiscValue: 15
+  ValidFrom: 2017-05-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 53
+  DiscValue: 50
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 54
+  DiscValue: 50
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 55
+  DiscValue: 50
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 56
+  DiscValue: 50
+  ValidFrom: 2017-06-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 57
+  DiscValue: 20
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 58
+  DiscValue: 50
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 59
+  DiscValue: 50
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 60
+  DiscValue: 50
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 61
+  DiscValue: 50
+  ValidFrom: 2017-07-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 62
+  DiscValue: 7.44
+  ValidFrom: 2017-07-19
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 63
+  DiscValue: 8.69
+  ValidFrom: 2017-07-01
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 64
+  DiscValue: 100
+  ValidFrom: 2017-04-05
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 65
+  DiscValue: 2.47
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 66
+  DiscValue: 2.79
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 67
+  DiscValue: 2.72
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+
+bulkload: DPRate
+  DPId: 68
+  DiscValue: 2.88
+  ValidFrom: 2017-08-22
+  ValidTo: 2049-12-31
+

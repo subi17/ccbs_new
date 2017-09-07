@@ -64,6 +64,8 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piCustNum = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO common Customer CustNum piCustNum}
+
 resp_struct = add_struct(response_toplevel_id, "").
 
 /* Check ongoing limit requests */

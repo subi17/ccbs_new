@@ -26,13 +26,15 @@ DEF VAR lcNotificationStatus AS CHAR NO-UNDO. /*struct*/
 
 DEF VAR lcStatusFields AS CHAR NO-UNDO. 
 
-DEF VAR lcOrderType AS CHAR NO-UNDO. 
-DEF VAR lcStatus AS CHAR NO-UNDO. 
+DEF VAR lcTenant            AS CHAR NO-UNDO.
+DEF VAR lcOrderType         AS CHAR NO-UNDO. 
+DEF VAR lcStatus            AS CHAR NO-UNDO. 
 DEF VAR lcStatusDescription AS CHAR NO-UNDO. 
-DEF VAR lcAdditionalInfo AS CHAR NO-UNDO. 
-DEF VAR lcLastDate AS CHAR NO-UNDO. 
-DEF VAR ldeLastDate AS DEC NO-UNDO. 
-DEF VAR lcresultStruct AS CHAR NO-UNDO. 
+DEF VAR lcAdditionalInfo    AS CHAR NO-UNDO. 
+DEF VAR lcLastDate          AS CHAR NO-UNDO. 
+DEF VAR ldeLastDate         AS DEC  NO-UNDO. 
+DEF VAR lcresultStruct      AS CHAR NO-UNDO. 
+DEF VAR liDBCount           AS INTE NO-UNDO.
 
 top_struct = get_struct(param_toplevel_id, "0").
 
@@ -94,14 +96,18 @@ IF ERROR-STATUS:ERROR THEN DO:
    RETURN.
 END.
 
-FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
-           Order.OrderID = liOrderID NO-ERROR.
-IF NOT AVAIL Order THEN DO:
+FOR FIRST Order WHERE Order.Brand = gcBrand AND Order.OrderId = liOrderID TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+END.
+
+IF NOT AVAIL Order OR lcTenant = "" THEN DO:
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_ORDERID}).
-   add_string(lcresultStruct, "resultDescription", 
-              "Order not found").
+   add_string(lcresultStruct, "resultDescription", "Order not found").
    RETURN.
+END.
+
+DO liDBCount = 1 TO NUM-DBS:
+    SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
 END.
 
 FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE

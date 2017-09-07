@@ -299,6 +299,10 @@ bulkload: MobError
   MEName: "Non-billable  SMS received (TAP3)"
 
 bulkload: MobError
+  MobError: 9066
+  MEName: "Non-billable MMS received (TAP3)"
+
+bulkload: MobError
   MobError: 9067
   MEName: "Non-billable GPRS usage (TAP3)"
 

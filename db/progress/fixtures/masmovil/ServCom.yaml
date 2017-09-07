@@ -1,0 +1,138 @@
+bulkload: ServCom
+  Service: "1"
+  ServCom: "BARRING"
+  ScName: "Network barring"
+  ScParameter: TRUE 
+  ScValueRange[1]: 1
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "BB"
+  ScName: "BlackBerry"
+  ScLocalName: "BlackBerry"
+  ScValueRange[2]: 2
+  Brand: "1"
+  FeeModel: "BBMF"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "BPSUB"
+  ScName: "BarPremium subscription"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "9"
+  ServCom: "CALLSPEC"
+  ScName: "Call Specification"
+  ScLocalName: "Call Itemization"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ActType: 1
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "CF"
+  ScName: "Call Forwarding"
+  ScValueRange[2]: 2
+  Brand: "1"
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "HOTLINE"
+  ScName: "Hot lining"
+  ScLocalName: "Hot lining"
+  ScValueRange[2]: 1
+  Brand: "1"
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "HSDPA"
+  ScName: "High speed data"
+  ScLocalName: "High speed data"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "IRDCUTOFF"
+  ScName: "International Roaiming Data Cut Off"
+  ScValueRange[2]: 1
+  Brand: "1"
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "LANG"
+  ScName: "Voicemail language"
+  ScLocalName: "Voicemail language"
+  ScValueRange[2]: 5
+  ScPosition: 10
+  Brand: "1"
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "LP"
+  ScName: "Debtor landing page"
+  ScLocalName: "Debtor landing page"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "LTE"
+  ScName: "LTE (4G)"
+  ScLocalName: "LTE (4G)"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "SHAPER"
+  ScName: "Data shaper"
+  ScLocalName: "Data shaper"
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+
+bulkload: ServCom
+  Service: "9"
+  ServCom: "SHAPER_STP"
+  ScName: "Subscription type specific SHAPER parameter"
+  ScLocalName: "Subscription type specific SHAPER parameter"
+  ScValueRange[2]: 1
+  ScChgable: FALSE
+  Brand: "1"
+  ActType: 1
+  Target: 1
+  ServType: 1
+
+bulkload: ServCom
+  Service: "9"
+  ServCom: "TYPECHG"
+  ScName: "CLIType Change"
+  ScLocalName: "Liittymätyypin vaihto"
+  ScValueRange[2]: 1
+  ScChgable: FALSE
+  Brand: "1"
+  ActType: 1
+  Target: 1
+  ServAttrL: TRUE 
+
+bulkload: ServCom
+  Service: "1"
+  ServCom: "VMS"
+  ScName: "VoiceMail"
+  ScValueRange[1]: 1
+  ScValueRange[2]: 1
+  Brand: "1"
+  ServType: 1
+

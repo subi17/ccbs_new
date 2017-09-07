@@ -96,6 +96,8 @@ DEFINE VARIABLE lcError               AS CHARACTER NO-UNDO.
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_pos_int(param_toplevel_id, "0").
 
+{newton/src/findtenant.i YES OrderCanal Order OrderId piOrderId}
+
 FUNCTION fAddHolderCustomer RETURN LOGICAL
    (INPUT piRowType AS INTEGER):
 
