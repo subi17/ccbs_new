@@ -6381,6 +6381,16 @@
 1 "" 3 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
 1 "" 4 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
 1 "" 5 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
+1 "" 1 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 2 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 3 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 4 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 5 "Samsung Galaxy Note 8 Gold with Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 1 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
+1 "" 2 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
+1 "" 3 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
+1 "" 4 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
+1 "" 5 "Samsung Galaxy Note 8 Black" 0 "P034PT8NC" "1" 31/08/17 31/12/49
 1 "" 1 "Samsung S3370 táctil Rosa" 0 "P034S33P2" "1" 27/07/10 31/12/49
 1 "" 2 "Samsung S3370 táctil Rosa" 0 "P034S33P2" "1" 27/07/10 31/12/49
 1 "" 3 "Samsung S3370 táctil Rosa" 0 "P034S33P2" "1" 27/07/10 31/12/49
@@ -6593,6 +6603,11 @@
 1 "" 3 "Samsung Galaxy Tab A (2016) Blanco" 0 "P034TA6W2" "1" 10/06/16 31/12/49
 1 "" 4 "Samsung Galaxy Tab A (2016) Blanco" 0 "P034TA6W2" "1" 10/06/16 31/12/49
 1 "" 5 "Samsung Galaxy Tab A (2016) White" 0 "P034TA6W2" "1" 10/06/16 31/12/49
+1 "" 1 "Samsung Galaxy Tab A (2016) Blanca" 0 "P034TA6WC" "1" 01/09/17 31/12/49
+1 "" 2 "Samsung Galaxy Tab A (2016) Blanca" 0 "P034TA6WC" "1" 01/09/17 31/12/49
+1 "" 3 "Samsung Galaxy Tab A (2016) Blanca" 0 "P034TA6WC" "1" 01/09/17 31/12/49
+1 "" 4 "Samsung Galaxy Tab A (2016) Blanca" 0 "P034TA6WC" "1" 01/09/17 31/12/49
+1 "" 5 "Samsung Galaxy Tab A (2016) White" 0 "P034TA6WC" "1" 01/09/17 31/12/49
 1 "" 1 "Samsung Galaxy Tab A Blanco" 0 "P034TBAW2" "1" 25/09/15 31/12/49
 1 "" 2 "Samsung Galaxy Tab A Blanco" 0 "P034TBAW2" "1" 25/09/15 31/12/49
 1 "" 3 "Samsung Galaxy Tab A Blanco" 0 "P034TBAW2" "1" 25/09/15 31/12/49
