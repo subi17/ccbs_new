@@ -42,6 +42,7 @@ gcBrand = "1".
 {Inv/fusioninvoice.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR piFusionInvnum AS INT NO-UNDO. 
 DEF VAR pcHash AS CHAR NO-UNDO. 
 
@@ -61,13 +62,16 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-validate_struct(pcStruct,"fusion_invnum!,hash!").
+validate_struct(pcStruct,"brand,fusion_invnum!,hash!").
 
 ASSIGN
+   pcTenant = get_string(pcStruct, "brand")  
    piFusionInvNum = get_int(pcStruct, "fusion_invnum")
    pcHash = get_string(pcStruct, "hash").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST FusionInvoice NO-LOCK WHERE
            FusionInvoice.FuInvNum = piFusionInvNum NO-ERROR.

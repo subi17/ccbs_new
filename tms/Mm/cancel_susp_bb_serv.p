@@ -15,6 +15,7 @@ ASSIGN gcBrand = "1"
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liConfDays       AS INT  NO-UNDO.
 DEF VAR liReq            AS INT  NO-UNDO.
@@ -33,7 +34,9 @@ IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/scratch/log/bb_cancel/".
 
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
 
-lcLogFile = lcLogDir + "cancel_susp_bb_serv_" +
+lcLogFile = lcLogDir + 
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+            "_cancel_susp_bb_serv_" +
             STRING(YEAR(TODAY))       +
             STRING(MONTH(TODAY),"99") +
             STRING(DAY(TODAY),"99") + ".txt".

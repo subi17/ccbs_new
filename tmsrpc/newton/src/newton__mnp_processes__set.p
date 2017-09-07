@@ -70,11 +70,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND MNPProcess NO-LOCK WHERE
-     MNPProcess.MNPSeq = piId NO-ERROR.
-
-IF NOT AVAIL MNPProcess THEN 
-   RETURN appl_err("MNPProcess id not found: " + pcId).
+{newton/src/findtenant.i NO common MNPProcess MNPSeq piId}
 
 ASSIGN
    pcOperation = get_string(pcStruct, "operation_id").

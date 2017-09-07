@@ -24,6 +24,7 @@ At TRACK side data between eventlog dump and singlefee dump is merged to be used
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
@@ -51,7 +52,8 @@ OUTPUT STREAM sout TO VALUE(icFile).
 DEF STREAM sinfee.
 
 ASSIGN
-   lcSinFeeFile = "singlefee_#MODE_#DATE_#TIME.txt"
+   lcSinFeeFile = CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                  "_singlefee_#MODE_#DATE_#TIME.txt"
    lcSinFeeFile = REPLACE(lcSinFeeFile,"#DATE",STRING(YEAR(TODAY),"9999") +
                                                STRING(MONTH(TODAY),"99") +
                                                STRING(DAY(TODAY),"99"))
