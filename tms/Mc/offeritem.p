@@ -291,16 +291,10 @@ REPEAT WITH FRAME sel:
 
            DISPLAY icOffer @ OfferItem.Offer.
 
-           i = 1. 
-           FOR EACH OfferItem NO-LOCK BY OfferItem.OfferItemId DESC:
-              i = OfferItem.OfferItemID + 1.
-              LEAVE.
-           END.
- 
            CREATE OfferItem.
            ASSIGN 
               OfferItem.Brand   = gcBrand 
-              OfferItem.OfferItemID = i
+              OfferItem.OfferItemID = NEXT-VALUE(OfferItemSeq)
               OfferItem.Offer   = icOffer
               OfferItem.BeginStamp = ldDefFrom.
               OfferItem.EndStamp   = fMake2DT(12/31/2049,86399).

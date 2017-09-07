@@ -98,12 +98,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 IF LOOKUP(pcSearchMode,({&NORMAL} + "," + {&DETAILED})) = 0 
    THEN pcSearchMode = {&NORMAL}.
 
-FIND FIRST mobsub WHERE
-           mobsub.msseq = piMsSeq
-NO-LOCK NO-ERROR.
-
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST CliType WHERE
            CliType.CliType = MobSub.CliType
