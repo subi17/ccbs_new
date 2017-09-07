@@ -418,7 +418,7 @@ DO WHILE TRUE:
    /* Third party service */
    ELSE IF FRAME-INDEX = 22 THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "TPService") THEN NEXT.
-      RUN Mm/tpservice_br.p(Mobsub.MsSeq).
+      RUN Mm/tpservice_br.p(msseq).
    END.
 
    /* call specification */
