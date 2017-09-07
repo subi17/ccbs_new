@@ -22,6 +22,7 @@ DEFINE VARIABLE katun AS CHARACTER NO-UNDO.
 &SCOPED-DEFINE BrandVarDefined YES
 {Func/func.p}
 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piType AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piOffset AS INTEGER NO-UNDO. 
@@ -39,10 +40,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 gcParamStruct = get_struct(param_toplevel_id, "").
 
-lcParams = validate_request(gcParamStruct, "type!,status!,offset,limit").
+lcParams = validate_request(gcParamStruct, "brand!,type!,status!,offset,limit").
 IF lcParams EQ ? THEN RETURN.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant = get_string(gcParamStruct, "brand").
 piType = get_int(gcParamStruct, "type").
 piStatus= get_int(gcParamStruct, "status").
 
@@ -53,12 +55,14 @@ IF LOOKUP("limit", lcParams) > 0 THEN DO:
 END.
 IF LOOKUP("offset", lcParams) > 0 THEN
    piOffSet = get_int(gcParamStruct, "offset").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_struct = add_struct(response_toplevel_id, "").
 
-FOR
-   EACH MsReqCounter NO-LOCK WHERE
+FOR EACH MsReqCounter NO-LOCK WHERE
       MsReqCounter.ReqType   = piType AND
       MsReqCounter.ReqStatus = piStatus:
    ACCUMULATE MsReqCounter.ReqStatusCount (TOTAL).

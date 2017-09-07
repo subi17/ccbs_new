@@ -31,7 +31,8 @@ katun = "NewtonRPC".
 gcBrand = "1".
 {Func/timestamp.i}
 {Syst/tmsconst.i}
- 
+
+DEF VAR pcTenant     AS CHAR NO-UNDO. 
 DEF VAR pcMSISDN     AS CHAR NO-UNDO. 
 DEF VAR pcCustIDType AS CHAR NO-UNDO. 
 DEF VAR pcCustID     AS CHAR NO-UNDO. 
@@ -59,17 +60,20 @@ DEFINE TEMP-TABLE ttContractDetails NO-UNDO
 
 DEFINE BUFFER bttContractDetails FOR ttContractDetails.
 
-IF validate_request(param_toplevel_id,"string,string,string,string,datetime") EQ ? THEN
+IF validate_request(param_toplevel_id,"brand,string,string,string,string,datetime") EQ ? THEN
    RETURN.
 
 ASSIGN 
-   pcMSISDN     = get_string(param_toplevel_id,"0")
-   pcCustIDType = get_string(param_toplevel_id,"1")
-   pcCustID     = get_string(param_toplevel_id,"2")   
-   pcSalesID    = get_string(param_toplevel_id,"3")
-   pcDate       = get_date(param_toplevel_id,"4").
+   pcTenant     = get_string(param_toplevel_id,"0")
+   pcMSISDN     = get_string(param_toplevel_id,"1")
+   pcCustIDType = get_string(param_toplevel_id,"2")
+   pcCustID     = get_string(param_toplevel_id,"3")   
+   pcSalesID    = get_string(param_toplevel_id,"4")
+   pcDate       = get_date(param_toplevel_id,"5").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF TRIM(pcSalesID) EQ "" THEN  
    RETURN appl_err("Sales ID is empty").

@@ -1,0 +1,109 @@
+bulkload: ServEl
+  ServPac: "*1"
+  ServCom: "CF"
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "*1"
+  ServCom: "IRDCUTOFF"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "*1"
+  ServCom: "VMS"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "*2"
+  ServCom: "CF"
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "*2"
+  ServCom: "IRDCUTOFF"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "*2"
+  ServCom: "VMS"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BARRING"
+  ServCom: "BARRING"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BARRING"
+  ServCom: "BPSUB"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BARRING"
+  ServCom: "HOTLINE"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "BB"
+  ServCom: "BB"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "HSDPA"
+  ServCom: "HSDPA"
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "LP"
+  ServCom: "LP"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "LTE"
+  ServCom: "LTE"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "NEWPOSTSUB"
+  ServCom: "LANG"
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "NEWPRESUB"
+  ServCom: "LANG"
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "SHAPER"
+  ServCom: "SHAPER"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "TMSSERVICE"
+  ServCom: "CALLSPEC"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "TMSSERVICE"
+  ServCom: "SHAPER_STP"
+  SeValue: 1
+  Brand: "1"
+
+bulkload: ServEl
+  ServPac: "TMSSERVICE"
+  ServCom: "TYPECHG"
+  SeValue: 1
+  Brand: "1"
+

@@ -24,6 +24,7 @@
 {Syst/funcrunprocess_update.i}
 {Func/fbankdata.i}
 {Func/fsepa.i}
+{Func/multitenantfunc.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -342,7 +343,7 @@ PROCEDURE pCustHeader:
       lhXML:START-ELEMENT("Id").
        lhXML:START-ELEMENT("OrgId").
         lhXML:START-ELEMENT("Othr").
-         lhXML:WRITE-DATA-ELEMENT("Id",BankAccount.CreditorId).
+         lhXML:WRITE-DATA-ELEMENT("Id",BankAccount.PresenterId).
         lhXML:END-ELEMENT("Othr").
        lhXML:END-ELEMENT("OrgId").
       lhXML:END-ELEMENT("Id").
@@ -446,7 +447,8 @@ PROCEDURE pCollectData2XML:
 
    /* YOIGO - FACTURA 131D12345678 PERIODO: 01/01/2013 AL 01/01/2013 */
    ASSIGN 
-      lcUstrd = "YOIGO - FACTURA " + Invoice.ExtInvId + 
+      lcUstrd = CAPS(fgetBrandNamebyTenantId(BUFFER-TENANT-ID(Invoice))) +
+                " - FACTURA " + Invoice.ExtInvId + 
                 " PERIODO: " + STRING(Invoice.FromDate,"99/99/99") + 
                 " AL " + STRING(Invoice.ToDate,"99/99/99").
 
@@ -564,7 +566,7 @@ PROCEDURE pCollectData2XML:
          ttDDCreditor.PmtInfId = lcPmtInfId
          ttDDCreditor.SeqTp = lcSeqTp
          ttDDCreditor.ReqdColltnDt = Invoice.DueDate
-         ttDDCreditor.CompNm = SUBSTRING("YOIGO",1,70)
+         ttDDCreditor.CompNm = SUBST(Company.CreditorName,1,70)
          ttDDCreditor.CompAdd = SUBSTRING(Company.Address,1,70)
          ttDDCreditor.CompIBAN = BankAccount.BankAccount
          ttDDCreditor.CompBIC = lcCompBIC
