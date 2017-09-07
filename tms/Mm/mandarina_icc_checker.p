@@ -37,6 +37,17 @@ DEF STREAM sICCLog.    /* Log file for ICC_checker executions */
 
 DEF BUFFER bLP_MsRequest FOR MsRequest.
 
+/* Log file for ICC_checker executions */
+lcLogDirectory = fCParamC("MandarinaLogsDir") NO-ERROR.
+lcICCLog = lcLogDirectory + 
+           STRING(YEAR(TODAY), "9999") + 
+           STRING(MONTH(TODAY), "99" ) +
+           STRING(DAY(TODAY), "99") + 
+           "_ICC_checker.log".          
+           
+OUTPUT STREAM sICCLog TO VALUE(lcICCLog) APPEND.
+PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_starts" SKIP.
+
 /* Check if process ir running */
 ASSIGN
    lcTableName = "MANDARINA"
@@ -51,6 +62,9 @@ DO TRANS:
 
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
+      PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";another_mandarina_icc_checker_running" SKIP.
+      PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_finishing" SKIP.
+      OUTPUT STREAM sICCLog CLOSE.
       QUIT.
    END.
 
@@ -65,6 +79,9 @@ DO TRANS:
          ActionLog.UserCode     = katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
+      PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_first_run" SKIP.
+      PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_finishes" SKIP.
+      OUTPUT STREAM sICCLog CLOSE.
       QUIT. /*No reporting in first time.*/
    END.
    ELSE DO:
@@ -79,15 +96,6 @@ DO TRANS:
 END.
 
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-
-/* Log file for ICC_checker executions */
-lcLogDirectory = fCParamC("MandarinaLogsDir") NO-ERROR.
-lcICCLog = lcLogDirectory + 
-           STRING(YEAR(TODAY), "9999") + 
-           STRING(MONTH(TODAY), "99" ) +
-           STRING(DAY(TODAY), "99") + 
-           "_ICC_checker.log".                     
-OUTPUT STREAM sICCLog TO VALUE(lcICCLog) APPEND.
 
 /* ICC lookup part */
 /* Find ICC requests */
@@ -163,4 +171,5 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
+PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_finishes" SKIP.
 OUTPUT STREAM sICCLog CLOSE.

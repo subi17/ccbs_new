@@ -177,8 +177,8 @@ REPEAT:
 
       /* Check subscription */     
       FIND FIRST mobsub WHERE
-                 mobsub.Brand = gcBrand AND
-                 mobsub.CLI   = lcMSISDN 
+                 mobsub.Brand EQ gcBrand AND
+                 mobsub.CLI   EQ lcMSISDN 
            USE-INDEX CLI NO-LOCK NO-ERROR.
       IF NOT AVAILABLE mobsub THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
@@ -210,7 +210,7 @@ REPEAT:
       END.
 
       lcErr = "".
-      IF lcAction = "on" THEN DO:
+      IF lcAction EQ "on" THEN DO:
          /* No activate LP if ICC Changed */
          IF fICCDoneRecently(mobsub.MsSeq) THEN DO:
             PUT STREAM sCurrentLog UNFORMATTED
@@ -218,14 +218,14 @@ REPEAT:
             NEXT.
          END.
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                            /*Subscription identifier*/
-                                            INPUT (IF LcLP = "Mandarina1"                  /*LP command to network*/
+                                            INPUT (IF LcLP EQ "Mandarina1"                  /*LP command to network*/
                                                    THEN "REDIRECTION_OTAFAILED1" 
                                                    ELSE "REDIRECTION_OTAFAILED2"),         
                                             INPUT mobsub.CustNum,                          /*Customer number for memo*/
-                                            INPUT (IF LcLP = "Mandarina1"                  /*Memo title*/ 
+                                            INPUT (IF LcLP EQ "Mandarina1"                  /*Memo title*/ 
                                                    THEN "LP1 - Migración red - Activada"
                                                    ELSE "LP2 - Migración red - Activada"),  
-                                            INPUT  (IF LcLP = "Mandarina1"                 /*Memo text*/ 
+                                            INPUT  (IF LcLP EQ "Mandarina1"                 /*Memo text*/ 
                                                    THEN "Landing Page 1 - Activada"
                                                    ELSE "Landing Page 2 - Activada"),       
                                             INPUT "Sistema",                               /*Creator tag for memo*/
@@ -237,14 +237,14 @@ REPEAT:
             NEXT.
          END.
       END.  
-      ELSE DO: /* lcAction = "off" */
+      ELSE DO: /* lcAction EQ "off" */
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                                /*Subscription identifier*/
                                             INPUT "REMOVE",         
                                             INPUT mobsub.CustNum,                              /*Customer number for memo*/
-                                            INPUT (IF LcLP = "Mandarina1"                      /*Memo title*/ 
+                                            INPUT (IF LcLP EQ "Mandarina1"                      /*Memo title*/ 
                                                    THEN "LP1 - Migración red - Desactivada"
                                                    ELSE "LP2 - Migración red - Desactivada"),  
-                                            INPUT  (IF LcLP = "Mandarina1"                     /*Memo text*/ 
+                                            INPUT  (IF LcLP EQ "Mandarina1"                     /*Memo text*/ 
                                                    THEN "Landing Page 1 - Desactivada"
                                                    ELSE "Landing Page 2 - Desactivada"),       
                                             INPUT "Sistema",                                   /*Creator tag for memo*/
@@ -263,7 +263,7 @@ REPEAT:
 
       /* Network delay */
       liContItems = liContItems + 1.
-      IF liContItems = liNumItemsNW THEN DO:
+      IF liContItems EQ liNumItemsNW THEN DO:
          PAUSE liDelayNW NO-MESSAGE.
          liContItems = 0.
       END.

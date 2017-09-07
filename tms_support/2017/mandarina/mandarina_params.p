@@ -27,9 +27,9 @@ DEF VAR liItemsNW AS INT NO-UNDO INITIAL 20. /* Number of Items in batch */
 
 /* Base directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaBaseDir"               
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaBaseDir"               
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -47,9 +47,9 @@ RELEASE ordercanal.TMSParam.
 
 /* Spool directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaSpoolDir"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaSpoolDir"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -67,9 +67,9 @@ RELEASE ordercanal.TMSParam.
 
 /* Incoming files directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaIncomingDir"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaIncomingDir"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -87,9 +87,9 @@ RELEASE ordercanal.TMSParam.
 
 /* Outgoing files directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaOutgoingDir"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaOutgoingDir"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -107,9 +107,9 @@ RELEASE ordercanal.TMSParam.
 
 /* Processed directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaProcessedDir"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaProcessedDir"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -127,9 +127,9 @@ RELEASE ordercanal.TMSParam.
 
 /* Logs directory */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaLogsDir"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaLogsDir"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -147,9 +147,9 @@ RELEASE ordercanal.TMSParam.
 
 /* NetWork Delay, in seconds */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaNetWorkDelay"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaNetWorkDelay"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
@@ -167,9 +167,9 @@ RELEASE ordercanal.TMSParam.
 
 /* Number of Network Batch Items */
 FIND FIRST ordercanal.TMSParam EXCLUSIVE-LOCK WHERE
-           ordercanal.TMSParam.Brand      = "1"         AND
-           ordercanal.TMSParam.ParamGroup = "Mandarina" AND
-           ordercanal.TMSParam.ParamCode  = "MandarinaNetWorkBatchItems"                
+           ordercanal.TMSParam.Brand      EQ "1"         AND
+           ordercanal.TMSParam.ParamGroup EQ "Mandarina" AND
+           ordercanal.TMSParam.ParamCode  EQ "MandarinaNetWorkBatchItems"                
      USE-INDEX ParamGroup NO-ERROR.
 IF NOT AVAILABLE ordercanal.TMSParam THEN DO:
    CREATE ordercanal.TMSParam.
