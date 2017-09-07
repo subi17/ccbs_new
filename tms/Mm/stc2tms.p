@@ -32,6 +32,8 @@
 {Func/fsendsms.i}
 {Func/vasfunc.i}
 
+{Migration/migrationfunc.i}
+
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
 {Func/remfees.i}
@@ -110,6 +112,10 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
       fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
       RETURN.
    END.
+   ELSE IF fIsNumberInMigration(Order.CLI) EQ TRUE THEN DO:
+      fReqError(SUBST("Order is in migration phase: &1", MsRequest.ReqIParam2)).
+      RETURN.
+   END.   
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
       IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */

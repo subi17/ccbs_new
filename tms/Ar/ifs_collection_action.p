@@ -36,6 +36,7 @@ DEF VAR lcBarrPacket   AS CHAR NO-UNDO.
 DEF VAR lrActionID     AS RECID NO-UNDO.
 DEF VAR llLogWritten   AS LOG  NO-UNDO.
 DEF VAR lcDebitBarrings AS CHAR NO-UNDO. 
+DEF VAR lcCompanyID    AS CHAR NO-UNDO.
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -224,6 +225,7 @@ PROCEDURE pReadEvents:
          lcActionDate = SUBSTRING(lcReadLine,63,8)           
          lcDebitDate  = SUBSTRING(lcReadLine,71,8)   
          lcAmount     = SUBSTRING(lcReadLine,79,16) 
+         lcCompanyID  = SUBSTRING(lcReadLine,99,4) 
          lcBarrPacket = ""
          NO-ERROR.
       

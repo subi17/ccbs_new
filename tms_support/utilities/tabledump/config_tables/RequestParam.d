@@ -259,6 +259,7 @@
 "1" 10 "ReqCParam3" "" 0 "" yes ""
 "1" 10 "ReqCParam4" "Roles" 0 "" no ""
 "1" 10 "ReqCParam5" "" 0 "" yes ""
+"1" 10 "ReqCParam6" "" 0 "" yes ""
 "1" 10 "ReqDParam1" "Activation" 0 "TimeStamp" yes ""
 "1" 10 "ReqDParam2" "" 0 "" yes ""
 "1" 10 "ReqDtParam1" "" 0 "" yes ""

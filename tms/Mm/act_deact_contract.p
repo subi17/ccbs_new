@@ -35,9 +35,7 @@ DEF VAR lcOutDir         AS CHAR NO-UNDO.
 DEF VAR lcToday          AS CHAR NO-UNDO.
 DEF VAR lcTime           AS CHAR NO-UNDO.
 DEF VAR lcSep            AS CHAR NO-UNDO INIT ";".
-DEF VAR ldEndDate        AS DATE NO-UNDO.
 DEF VAR ldEndStamp       AS DEC  NO-UNDO.
-DEF VAR ldeActStamp      AS DEC  NO-UNDO.
 DEF VAR ldaActDate       AS DATE NO-UNDO.
 DEF VAR ldePMDUBFee      AS DEC  NO-UNDO.
 DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
@@ -78,12 +76,17 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
    DEF VAR llResult      AS LOG  NO-UNDO.
    DEF VAR liReturnValue AS INT  NO-UNDO.
    DEF VAR ldeFirstSecond AS DEC NO-UNDO. 
+   DEF VAR ldEndDate AS DATE NO-UNDO.
+   DEF VAR ldeActStamp      AS DEC  NO-UNDO.
 
    DEF BUFFER bMsRequest FOR MsRequest.
 
    /* Check if subscription type is not compatible with bundle */
    CASE icAction:
       WHEN "1" THEN DO:
+
+         ldeActStamp = fMakeTS().
+
          IF fMatrixAnalyse(gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
@@ -92,7 +95,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
             RETURN "ERROR:Contract is not allowed for this subscription type".
 
          IF LOOKUP(icContract,lcBONOContracts) > 0 AND
-            NOT fAllowMDUBActivation() THEN
+            NOT fAllowMDUBActivation("") THEN
             RETURN "ERROR:Contract activation is not allowed".
 
          IF icContract EQ "BONO_VOIP" AND
@@ -128,7 +131,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
       END. /* WHEN "1" THEN DO: */
       WHEN "0" THEN DO:
          IF LOOKUP(icContract,lcBONOContracts) > 0 THEN DO:
-            IF NOT fAllowMDUBTermination() THEN
+            IF NOT fAllowMDUBTermination("") THEN
                RETURN "ERROR:Contract termination is not allowed".
             /* Ongoing BTC with upgrade upsell */
             ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,
@@ -142,11 +145,12 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                                      ldNextMonthActStamp,
                                      icContract) = "" THEN
             RETURN "ERROR:Contract termination is not allowed".
+   
+         ASSIGN ldEndDate   = fLastDayOfMonth(TODAY)
+                ldeActStamp = fMake2Dt(ldEndDate,86399).
+
       END. /* WHEN "0" THEN DO: */
    END CASE. /* CASE icAction: */
-
-   IF icAction = "0" THEN
-      ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 icContract,
@@ -184,6 +188,9 @@ FUNCTION fHandleService RETURNS CHAR(INPUT icService AS CHAR,
    DEF VAR liReq       AS INT  NO-UNDO.
    DEF VAR lcError     AS CHAR NO-UNDO.
    DEF VAR lcParam     AS CHAR NO-UNDO.
+
+   DEFINE VARIABLE ldeActStamp AS DECIMAL NO-UNDO. 
+   ldeActStamp = fMakeTS().
 
    CASE icAction:
       WHEN "1" THEN DO:
@@ -293,12 +300,6 @@ REPEAT:
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
-
-   ASSIGN ldEndDate   = fLastDayOfMonth(TODAY)
-          ldEndStamp  = fMake2Dt(ldEndDate,86399)
-          ldeActStamp = fMakeTS().
-
-   fSplitTs(ldeActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
    LINE_LOOP:
    REPEAT:
