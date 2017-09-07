@@ -1,8 +1,10 @@
+/* ccreport.p */
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER idaStart         AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaEnd           AS DATE NO-UNDO.
@@ -165,6 +167,8 @@ IF lcTrans = ? THEN lcTrans = "".
 IF icRunMode = "test" THEN lcPenBITotals = lcTrans.
 ELSE lcPenBITotals = fCParamC("PentahoBITotals").
 lcPenSpool = fCParamC("PentahoSpool").
+lcPenSpool = REPLACE(icFileName,"#TENANT",
+                     CAPS(Syst.Parameters:Tenant)).
 
 /* Invoice Grain file */
 lcInvGrainFile  = fCParamC("InvGrainFile").
@@ -174,6 +178,8 @@ lcInvGrainFile = REPLACE(lcInvGrainFile,
                            "#DATE",STRING(YEAR(ldaPeriodEnd),"9999") +
                            STRING(MONTH(ldaPeriodEnd),"99") +
                            STRING(DAY(ldaPeriodEnd),"99")).
+lcInvGrainFile = REPLACE(lcInvGrainFile,"#TENANT",
+                         CAPS(Syst.Parameters:Tenant)).
 
 IF icFileName = "" THEN icFileName = fCParamC("CCNReportFile").
 IF icFileName = "" OR icFileName = ? THEN
@@ -181,7 +187,8 @@ IF icFileName = "" OR icFileName = ? THEN
 icFileName = REPLACE(icFileName,"#DATE",STRING(YEAR(ldaPeriodEnd),"9999") +
                                         STRING(MONTH(ldaPeriodEnd),"99") +
                                         STRING(DAY(ldaPeriodEnd),"99")).
-
+icFileName = REPLACE(icFileName,"#TENANT",
+                     CAPS(Syst.Parameters:Tenant)).
 IF NOT SESSION:BATCH THEN DO:
    PAUSE 0.
    DISP oiInvCount LABEL "Invoices" FORMAT ">>>>>>>>>9" 

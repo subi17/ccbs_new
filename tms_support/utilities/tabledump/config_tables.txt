@@ -48,6 +48,7 @@ DPSubject
 DPTarget
 DPRate
 #DumpFile
+#DumpHPD
 EventLogConf
 FATConfig
 FATGMember

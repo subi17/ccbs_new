@@ -20,7 +20,7 @@ katun = "Qvantel".
 {Func/fbtc.i}
 {Func/ftransdir.i}
 {Func/email.i}
-
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.
 DEFINE VARIABLE lcIncomingDir      AS CHAR NO-UNDO.
@@ -106,6 +106,7 @@ DEFINE TEMP-TABLE ttSubscription
    FIELD CLIType    AS CHAR
    FIELD Handled    AS LOG
    FIELD EmailId    AS CHAR
+   FIELD Brand      AS CHAR 
    INDEX CLI IS PRIMARY UNIQUE CLI.
 
 DEF TEMP-TABLE ttOrder    NO-UNDO LIKE Order.
@@ -311,7 +312,9 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
              ttSubscription.CustIdType = lcCustIdType
              ttSubscription.CustId     = lcCustId
              ttSubscription.FileName   = ttInputFileContent.FileName
-             ttSubscription.EmailId    = ttBatchInputFile.EmailId.
+             ttSubscription.EmailId    = ttBatchInputFile.EmailId
+             ttSubscription.Brand      = fConvertTenantToBrand(BUFFER-TENANT-NAME(Order))
+             .
    END. /* IF NOT CAN-FIND(FIRST ttSubscription WHERE */
 
    RETURN "".
@@ -370,25 +373,24 @@ PROCEDURE pHandleOtherRows:
    FILE_LOOP:
    FOR EACH ttBatchInputFile WHERE ttBatchInputFile.Valid = TRUE:
 
-      lcLogFile = lcOutOngoingDir + "/" + ttBatchInputFile.FileName +
-                  "_POST_" + STRING(ldThisRun) + ".LOG".
+      lcLogFile = lcOutOngoingDir + "/" + ttBatchInputFile.FileName + "_POST_" + STRING(ldThisRun) + ".LOG".
+
       OUTPUT STREAM sOutput TO VALUE(lcLogFile) APPEND.
 
       FILE_CONTENT_LOOP:
-      FOR EACH ttInputFileContent WHERE
-               ttInputFileContent.FileName = ttBatchInputFile.FileName AND
-               ttInputFileContent.LineType <> "SUBSCRIPTION"
-               BY ttInputFileContent.LineNo:
+      FOR EACH ttInputFileContent WHERE ttInputFileContent.FileName = ttBatchInputFile.FileName AND ttInputFileContent.LineType <> "SUBSCRIPTION"
+            BY ttInputFileContent.LineNo:
 
          /* Exclude Bono activation with new subscription
             because it is added by OrderAction */
-         IF llNewSubs AND ttInputFileContent.LineType = "ACT_BONO"
-         THEN NEXT FILE_CONTENT_LOOP.
+         IF llNewSubs AND ttInputFileContent.LineType = "ACT_BONO" THEN 
+             NEXT FILE_CONTENT_LOOP.
 
          /* skip header line and no test case */
-         IF ttInputFileContent.InputLine = "" OR
-            ttInputFileContent.InputLine BEGINS "H" THEN NEXT FILE_CONTENT_LOOP.
-         ELSE IF ttInputFileContent.TestList = "" THEN DO:
+         IF ttInputFileContent.InputLine = "" OR  ttInputFileContent.InputLine BEGINS "H" THEN 
+             NEXT FILE_CONTENT_LOOP.
+         ELSE IF ttInputFileContent.TestList = "" THEN 
+         DO:
             PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
             NEXT FILE_CONTENT_LOOP.
          END.
@@ -415,9 +417,7 @@ PROCEDURE pHandleOtherRows:
                    lcOutProcDir).
 
       /* Delete all handled subscriptions */
-      FOR EACH ttSubscription WHERE
-               ttSubscription.FileName = ttBatchInputFile.FileName AND
-               ttSubscription.Handled = TRUE:
+      FOR EACH ttSubscription WHERE ttSubscription.FileName = ttBatchInputFile.FileName AND ttSubscription.Handled = TRUE:
          DELETE ttSubscription.
       END. /* FOR EACH ttSubscription WHERE */
 
@@ -435,15 +435,21 @@ PROCEDURE pActBono:
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
    DEF VAR liBonoCount        AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest      FOR MsRequest.
 
    liContractEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN 
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              ldActTS  = fMakeTS()
@@ -510,13 +516,19 @@ PROCEDURE pActContract:
    DEF VAR lcError            AS CHAR NO-UNDO.
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest      FOR MsRequest.
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              ldActTS  = fMakeTS()
@@ -589,11 +601,17 @@ PROCEDURE pDeactContract:
    DEF VAR llError            AS LOG  NO-UNDO.
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN 
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
@@ -676,13 +694,19 @@ PROCEDURE pService:
    DEF VAR lcError            AS CHAR NO-UNDO.
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest      FOR MsRequest.
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""
@@ -775,15 +799,21 @@ PROCEDURE pSTC:
    DEF VAR liSTCEntries       AS INT  NO-UNDO.
    DEF VAR lcDataBundleId     AS CHAR NO-UNDO.
    DEF VAR liCreditcheck      AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER NewCLIType      FOR CLIType.
 
    liSTCEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""
@@ -896,13 +926,19 @@ PROCEDURE pBTC:
    DEF VAR lcBundleType       AS CHAR NO-UNDO.
    DEF VAR liBTCCount         AS INT  NO-UNDO.
    DEF VAR liBTCEntries       AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    liBTCEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+      
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN 
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""
@@ -1006,15 +1042,21 @@ PROCEDURE pUpdateSegment:
    DEF VAR lcRemark           AS CHAR NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
    DEF VAR liSegmentCount     AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMobSub FOR MobSub.
 
    liSegmentEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""

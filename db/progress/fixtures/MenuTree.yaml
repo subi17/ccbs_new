@@ -221,6 +221,14 @@ bulkload: MenuTree
 
 bulkload: MenuTree
   Level: "0"
+  Module: "Mc/bdestconf.p"
+  MenuId: "bdconf"
+  MenuTitle: "bdestconf"
+  MenuClass: 9999
+  TokenCode: "VENDOR"
+
+bulkload: MenuTree
+  Level: "0"
   Position: 1
   MenuNum: 1
   MenuType: 2
@@ -1839,6 +1847,7 @@ bulkload: MenuTree
   MenuId: "topten"
   MenuTitle: "DAILYTOPTEN"
   MenuClass: 9999
+  State[1]: yes
   TokenCode: "MOB"
 
 bulkload: MenuTree
