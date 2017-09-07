@@ -1,0 +1,12 @@
+bulkload: BankAccount
+  BankAccount: "ES0701824572400201566648"
+  BankData: "ES0701824572400201566648"
+  Brand: "1"
+  InvForm: "DDALL"
+  BankOffice: "ALL"
+  CreditorId: "ES22000A84633643"
+  BIC: "BBVAESMMXXX"
+  BankCodes: "0182,2040,2074,2059,2017"
+  DDAllocation: 100
+  PresenterId: "ES49002A82528548"
+

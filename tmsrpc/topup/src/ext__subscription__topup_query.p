@@ -27,16 +27,12 @@ DEF VAR top_struct AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 
-pcCLI = get_string(param_toplevel_id, "0").
+pcCLI    = get_string(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   
-FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.CLI = pcCLI NO-ERROR.
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcCLI SpecialMobSubError}
 
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err(SUBST("Subscription with msisdn &1 was not found", pcCli)).
-  
 FIND FIRST customer NO-LOCK WHERE
            customer.custnum = MobSub.Custnum NO-ERROR.
 

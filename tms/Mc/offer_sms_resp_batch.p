@@ -223,7 +223,7 @@ PROCEDURE pHandleOfferSMSResponse:
    DEF VAR ldeCheckBuffer AS DEC NO-UNDO. 
    DEF VAR lcError AS CHAR NO-UNDO. 
    DEF VAR lcContractId AS CHAR NO-UNDO. 
-/*
+
    DEF BUFFER bOrder FOR Order.
 
    RELEASE Order.
@@ -270,7 +270,7 @@ PROCEDURE pHandleOfferSMSResponse:
                  bOrder.OrderId = SMSMessage.OrderID NO-ERROR.
       LEAVE.
    END.
-   
+/*   
    IF LOOKUP(lcCommand,"SI,NO") = 0 OR 
       NUM-ENTRIES(icResponse, " ") > 2 THEN DO:
 
@@ -304,7 +304,7 @@ PROCEDURE pHandleOfferSMSResponse:
         lcError =  "SKIPPED:Incorrect response (order not found)".
       END.
    END.
-
+*/
    IF AVAIL bOrder THEN
    fCreateResponseSMS(bOrder.Custnum,
                       bOrder.MsSeq,
@@ -313,9 +313,9 @@ PROCEDURE pHandleOfferSMSResponse:
                       icContactNumber,
                       {&SMS_TYPE_OFFER},
                       ideSentTs).
-
+/*
    IF lcError > "" THEN RETURN lcError.
-   
+ 
    IF LOOKUP(lcCommand,"SI,NO") = 0
       OR
       (lcCommand EQ "SI" AND NOT AVAIL Order)
