@@ -273,12 +273,10 @@ PROCEDURE pPeriodicalContract:
       FIND FIRST bFTERMOrder WHERE 
                  bFTERMOrder.brand EQ "1" AND
                  bFTERMOrder.OrderID EQ iiOrderID.
-                 
+      /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
       IF AVAIL bFTERMOrder AND
                ttAction.ActionKey EQ "FTERM12-100" AND 
-               R-INDEX(bFTERMOrder.OrderChannel, "pos") > 0 AND 
-               fIsConvergenceTariff(icCliType) AND
-               idActStamp > 20170911 AND
+               /*idActStamp > 20170911 AND*/
                idActStamp < 20171001 
       THEN DO:
          ttAction.ActionKey = "FTERM8-100".
