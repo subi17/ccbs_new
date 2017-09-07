@@ -64,9 +64,7 @@ pcActionValue = get_string(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")
@@ -97,11 +95,11 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should exist MDUB valid to the future */   
-         IF (fGetActiveMDUB(INPUT ldNextMonthActStamp) NE pcBundleId) THEN
+         IF (fGetActiveMDUB(INPUT "",INPUT ldNextMonthActStamp) NE pcBundleId) THEN
             RETURN appl_err("Bundle termination is not allowed").
 
          /* should not exist any pending request for MDUB */
-         IF fPendingMDUBTermReq() THEN
+         IF fPendingMDUBTermReq("") THEN
             RETURN appl_err("Bundle already cancelled").
 
          /* Ongoing BTC with upgrade upsell */
@@ -133,12 +131,12 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should not exist any MDUB valid to the future */
-         IF fGetActiveMDUB(INPUT ldeActStamp) > "" THEN
+         IF fGetActiveMDUB(INPUT "", INPUT ldeActStamp) > "" THEN
             RETURN appl_err("Bundle already active").
 
          /* should not exist any pending request for MDUB */
          IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR
-            fPendingMDUBActReq() THEN
+            fPendingMDUBActReq("") THEN
             RETURN appl_err("Bundle activation is not allowed").
 
          /* check service package definition exist for SHAPER and HSDPA */

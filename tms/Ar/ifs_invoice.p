@@ -13,6 +13,7 @@
 {Func/finvbal.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -166,6 +167,7 @@ FUNCTION fPrintHeader RETURNS LOGIC:
       lcNumberRef                     lcDelimiter  /* 15: number_reference */
       lcOrderId                       lcDelimiter  /* 16: Order Id */
       fDate2String(ldOperationDate)   lcDelimiter  /* 17: Operation Date */
+      fgetCompanyId()                 lcDelimiter  /* 18: Company ID */
       SKIP.
        
 END FUNCTION.
