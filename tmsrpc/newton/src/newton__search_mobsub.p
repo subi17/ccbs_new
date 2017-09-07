@@ -37,6 +37,7 @@ DEF VAR sub_struct   AS CHAR NO-UNDO.
 DEF VAR lcTmp             AS CHAR    NO-UNDO.
 DEF VAR lcCallType        AS CHAR    NO-UNDO.
 DEF VAR liOwner           AS INT     NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR piOffSet          AS INT     NO-UNDO.
 DEF VAR piLimit           AS INT     NO-UNDO.
 DEF VAR liSubCount        AS INT     NO-UNDO.
@@ -47,24 +48,29 @@ DEF VAR pcSearchTypes     AS CHAR    NO-UNDO.
 DEF VAR plFewRecords      AS LOGICAL NO-UNDO INIT FALSE.
 DEF VAR lcSubDiscountType AS CHAR    NO-UNDO.
 
-lcCallType = validate_request(param_toplevel_id, "int|string,int,int,string,[boolean]").
+lcCallType = validate_request(param_toplevel_id, "string,int|string,int,int,string,[boolean]").
 IF lcCallType EQ ? THEN RETURN.
 
-IF ENTRY(1,lcCallType) EQ "int" THEN
-    liOwner = get_pos_int(param_toplevel_id, "0").
-ELSE DO:
-    pcInput = get_string(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF ENTRY(2,lcCallType) EQ "int" THEN
+    liOwner = get_pos_int(param_toplevel_id, "1").
+ELSE 
+DO:
+    pcInput = get_string(param_toplevel_id, "1").
     liOwner = INT(pcInput) NO-ERROR.
 END.
 
-piLimit  = get_pos_int(param_toplevel_id, "1").
-piOffSet = get_int(param_toplevel_id, "2").
-pcSearchTypes = get_string(param_toplevel_id, "3").
+piLimit  = get_pos_int(param_toplevel_id, "2").
+piOffSet = get_int(param_toplevel_id, "3").
+pcSearchTypes = get_string(param_toplevel_id, "4").
 
-IF NUM-ENTRIES(lcCallType) >= 5 THEN
-   plFewRecords = get_bool(param_toplevel_id, "4").
+IF NUM-ENTRIES(lcCallType) >= 6 THEN
+   plFewRecords = get_bool(param_toplevel_id, "5").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fGetDiscountType RETURNS CHARACTER
    (INPUT iiMsSeq   AS INT,
@@ -119,6 +125,7 @@ END FUNCTION.
 FUNCTION fAddSubStruct RETURNS LOGICAL:
 
    sub_struct = add_json_key_struct(result_array, "").
+   add_string(sub_struct, "brand", fConvertTenantToBrand(BUFFER-TENANT-NAME(MobSub))).
    IF NOT plFewRecords THEN DO:
       add_int(sub_struct   , "seq"        , mobsub.msseq).
    END.

@@ -22,6 +22,7 @@ DEF VAR liSeq AS INTEGER NO-UNDO.
 DEF VAR lcFormRequest AS CHARACTER NO-UNDO.
 DEF VAR ldeNow AS DECIMAL NO-UNDO. 
 DEF VAR lcStatuses AS CHARACTER NO-UNDO. 
+DEF VAR lcTenant   AS CHARACTER NO-UNDO.
 
 ldeNow = fMakeTS().
    
@@ -34,9 +35,11 @@ IF NOT AVAIL msisdn THEN DO:
    RETURN "ERROR:MSISDN was not found or it is in wrong status". 
 END.
 
-lcStatuses = SUBST("&1,&2,&3,&4,&5,&6",
-   {&MNP_ST_APOR},{&MNP_ST_AREC},{&MNP_ST_ACAN},
-   {&MNP_ST_AREC_CLOSED},{&MNP_ST_BCAN},{&MNP_ST_BDEF}).
+ASSIGN
+    lcTenant   = BUFFER-TENANT-NAME(MSISDN)
+    lcStatuses = SUBST("&1,&2,&3,&4,&5,&6",
+                       {&MNP_ST_APOR},{&MNP_ST_AREC},{&MNP_ST_ACAN},
+                       {&MNP_ST_AREC_CLOSED},{&MNP_ST_BCAN},{&MNP_ST_BDEF}).
 
 FOR EACH MNPSub WHERE
          MNPSub.CLI = icCLI NO-LOCK:
@@ -52,7 +55,7 @@ END.
 
 ASSIGN
    liSeq         = NEXT-VALUE(M2MSeq)
-   lcFormRequest = "005" + STRING(liSeq,"99999999"). 
+   lcFormRequest = (IF lcTenant = {&TENANT_MASMOVIL} THEN "200" ELSE "005") + STRING(liSeq,"99999999"). 
 
 DO TRANS:
 

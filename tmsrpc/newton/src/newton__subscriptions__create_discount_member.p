@@ -172,11 +172,7 @@ IF liValidPeriods <= 0 THEN RETURN appl_err("ValidPeriod must be one month at mi
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 katun = pcUserName.
 
-/* Check that mobsub is available */
-FIND MobSub WHERE
-     MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN
-   RETURN appl_err("Mobile Subscription not available").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND Customer OF Mobsub NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN
