@@ -30,6 +30,8 @@ piRequestId = get_int(param_toplevel_id,"0").
 pcHashKey   = get_string(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO Mobile MsRequest MsRequest piRequestId}
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    {Func/lib/eventlog.i}
@@ -46,11 +48,6 @@ IF lcSaltKey = "" OR lcSaltKey = ? THEN
 
 liConfDays = fCParamI("WaitingCanceleInvoiceDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
-
-FIND FIRST MsRequest WHERE
-           MsRequest.MsRequest = piRequestId NO-LOCK NO-ERROR.
-IF NOT AVAIL MsRequest THEN
-   RETURN appl_err("Invalid Request Id").
 
 IF MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} THEN
    RETURN appl_err("Customer already activated the link").
