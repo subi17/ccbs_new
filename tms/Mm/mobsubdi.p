@@ -164,7 +164,7 @@ DO WHILE TRUE:
 
  "G) Single Fee                           " WHEN (NOT noMobile OR llPartial)
                                                @ menuc[7]
- "V) Third Party Service(s)      "         WHEN NOT noMobile @ menuc[22] SKIP
+ "V) Third Party Service(s)      "         @ menuc[22] SKIP
 
  "H) Change Data Bundle                   " WHEN NOT noMobile  @ menuc[8]
  "W) Print Itemized List of Calls"          WHEN NOT noMobile  @ menuc[23] SKIP
