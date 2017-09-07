@@ -16,6 +16,8 @@ katun = "Qvantel".
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/email.i}
+{Func/multitenantfunc.i}
+{../tms_support/testing/testing_tool/analyzer_tool.i}
 
 DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.
 DEFINE VARIABLE lcDoneDir          AS CHAR NO-UNDO.
@@ -59,6 +61,7 @@ DEFINE TEMP-TABLE ttInputFileContent
    FIELD InputLine  AS CHAR
    FIELD CLI        AS CHAR
    FIELD NewSubs    AS LOG
+   FIELD Brand      AS CHAR
    INDEX FileNameNo FileName LineNo.
 
 DEFINE TEMP-TABLE ttAnalyzerReport
@@ -81,207 +84,234 @@ FORM
    " Total Files Handled: " liFiles   FORMAT ">>>>>>>>>9" SKIP
    " Last Loop..........: " lcTime    FORMAT "X(20)"
    SKIP(1)
-WITH
-   CENTERED NO-LABELS TITLE " Analyzer Tool " WIDTH 50 ROW 8
-FRAME frmMain.
+   WITH CENTERED NO-LABELS TITLE " Analyzer Tool " WIDTH 50 ROW 8 FRAME frmMain.
 
-ASSIGN
-   lcAnalyzerSpoolDir = fCParam("TestingTool","AnalyzerSpoolDir")
-   lcAnalyzerInDir    = fCParam("TestingTool","AnalyzerInDir")
-   lcAnalyzerProcDir  = fCParam("TestingTool","AnalyzerProcDir")
-   xMailFrom          = fCparam("TestingTool","EmailFromAddress")
-   xMailSubj          = fCparam("TestingTool","AnalyzerEmailSubject")
-   lcLockFile         = fCparam("TestingTool","AnalyzerDaemonLockFile").
+DO ON ERROR UNDO, THROW:
+    
+    /* Get where to read the incoming files from default tenant */
+    fsetEffectiveTenantForAllDB("Default").
 
-/* Include file */
-{/apps/yoigo/tms_support/testing/testing_tool/analyzer_tool.i}
+    ASSIGN
+       lcAnalyzerSpoolDir = fCParam("TestingTool","AnalyzerSpoolDir")
+       lcAnalyzerInDir    = fCParam("TestingTool","AnalyzerInDir")
+       lcAnalyzerProcDir  = fCParam("TestingTool","AnalyzerProcDir")
+       xMailFrom          = fCparam("TestingTool","EmailFromAddress")
+       xMailSubj          = fCparam("TestingTool","AnalyzerEmailSubject")
+       lcLockFile         = fCparam("TestingTool","AnalyzerDaemonLockFile").
 
-/* Main Block */
+    RUN pInitialize.
+     
+    RUN pReadFileAndProcess.
+END.
 
-IF lcLockFile = ? OR lcLockFile = "" THEN
-   lcLockFile = "/tmp/test_analyzer_daemon.lock".
 
-UNIX SILENT VALUE("touch " + lcLockFile).
+PROCEDURE pReadFileAndProcess:
+    
+    DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO.
 
-FOR FIRST InvText NO-LOCK WHERE
-          InvText.Brand     = gcBrand       AND
-          InvText.Target    = "EMAIL"       AND
-          InvText.KeyValue  = "EmailConfAnalyzerTool" AND
-          InvText.Language  = 5             AND 
-          InvText.FromDate <= TODAY         AND
-          InvText.ToDate   >= TODAY:
-   lcEmailContent = InvText.InvText.
-END. /* FOR FIRST InvText NO-LOCK WHERE */
+    IF lcLockFile = ? OR lcLockFile = "" THEN
+       lcLockFile = "/tmp/test_analyzer_daemon.lock".
 
-MAIN_LOOP:
-DO WHILE TRUE
-   ON QUIT UNDO, RETRY
-   ON STOP UNDO, RETRY:
+    UNIX SILENT VALUE("touch " + lcLockFile).
 
-    IF RETRY THEN LEAVE.
+    MAIN_LOOP:
+    DO WHILE TRUE
+       ON QUIT UNDO, RETRY
+       ON STOP UNDO, RETRY:
 
-    /* should I be running */
-    FILE-INFO:FILE-NAME = lcLockFile.
-    IF FILE-INFO:FILE-TYPE = ? THEN LEAVE.
+        IF RETRY THEN LEAVE.
 
-    /* Empty Temp-table */
-    EMPTY TEMP-TABLE ttBatchInputFile.
-    EMPTY TEMP-TABLE ttInputFileContent.
-    EMPTY TEMP-TABLE ttAnalyzerReport.
+        /* should I be running */
+        FILE-INFO:FILE-NAME = lcLockFile.
+        IF FILE-INFO:FILE-TYPE = ? THEN LEAVE.
 
-    ASSIGN liLoop      = liLoop + 1
-           llFileAvail = FALSE
-           ldThisRun   = fMakeTS().
+        /* Empty Temp-table */
+        EMPTY TEMP-TABLE ttBatchInputFile.
+        EMPTY TEMP-TABLE ttInputFileContent.
+        EMPTY TEMP-TABLE ttAnalyzerReport.
 
-    DISP
-       liLoop
-       liFiles
-       STRING(TODAY,"99.99.9999") + " " + STRING(TIME,"HH:MM:SS") @ lcTime
-    WITH FRAME frmMain.
-    PAUSE 0.
+        ASSIGN liLoop      = liLoop + 1
+               llFileAvail = FALSE
+               ldThisRun   = fMakeTS().
 
-    INPUT STREAM sFile THROUGH VALUE("ls -1 " + lcAnalyzerInDir + "/*.LOG").
+        DISP
+           liLoop
+           liFiles
+           STRING(TODAY,"99.99.9999") + " " + STRING(TIME,"HH:MM:SS") @ lcTime
+           WITH FRAME frmMain.
 
-    FILE_LOOP:
-    REPEAT:
-       IMPORT STREAM sFile UNFORMATTED lcResultFile.
+        PAUSE 0.
 
-       IF SEARCH(lcResultFile) NE ? THEN DO:
-          lcInputFile = REPLACE(ENTRY(NUM-ENTRIES(lcResultFile,"/"),
-                                lcResultFile,"/"),".LOG","").
-          ldeFileTimeStamp = DECIMAL(ENTRY(NUM-ENTRIES(lcInputFile,"_"),
-                                     lcInputFile,"_")) NO-ERROR.
-          /* Handle file after 1 hour so that all requests can be handled */
-          IF ldThisRun < fOffSet(ldeFileTimeStamp,1) THEN DO:
-             PAUSE 10 NO-MESSAGE.
-             NEXT MAIN_LOOP.
-          END. /* IF ldThisRun < fOffSet(ldeFileTimeStamp,1) THEN DO: */
+        INPUT STREAM sFile THROUGH VALUE("ls -1 " + lcAnalyzerInDir + "/*.LOG").
 
-          ASSIGN liLine = 0
-                 llFileAvail = TRUE
-                 liFiles = liFiles + 1.
+        FILE_LOOP:
+        REPEAT:
+           IMPORT STREAM sFile UNFORMATTED lcResultFile.
 
-          CREATE ttBatchInputFile.
-          ttBatchInputFile.FileName = lcInputFile.
+           IF SEARCH(lcResultFile) NE ? THEN 
+           DO:
+              lcInputFile      = REPLACE(ENTRY(NUM-ENTRIES(lcResultFile,"/"),lcResultFile,"/"),".LOG","").
+              ldeFileTimeStamp = DECIMAL(ENTRY(NUM-ENTRIES(lcInputFile,"_"),lcInputFile,"_")) NO-ERROR.
 
-          INPUT STREAM sInputFile FROM VALUE(lcResultFile).
+              /* Handle file after 1 hour so that all requests can be handled */
+              IF ldThisRun < fOffSet(ldeFileTimeStamp,1) THEN 
+              DO:
+                 PAUSE 10 NO-MESSAGE.
+                 NEXT MAIN_LOOP.
+              END. /* IF ldThisRun < fOffSet(ldeFileTimeStamp,1) THEN DO: */
 
-          REPEAT:
-             IMPORT STREAM sInputFile UNFORMATTED lcLine.
-             liLine = liLine + 1.
-             IF lcLine = "" OR lcLine BEGINS "CustIdType" OR
-                NUM-ENTRIES(lcLine,"|") < 7 THEN NEXT.
+              ASSIGN liLine = 0
+                     llFileAvail = TRUE
+                     liFiles = liFiles + 1.
 
-             CREATE ttInputFileContent.
-             ASSIGN
-                ttInputFileContent.LineNo    = liLine
-                ttInputFileContent.InputLine = lcLine
-                ttInputFileContent.FileName  = ttBatchInputFile.FileName
-                ttInputFileContent.CLI       = ENTRY(4,lcLine,"|")
-                ttBatchInputFile.EmailId     = ENTRY(7,lcLine,"|").
+              CREATE ttBatchInputFile.
+              ttBatchInputFile.FileName = lcInputFile.
 
-             IF ENTRY(3,lcLine,"|") = "" OR ENTRY(3,lcLine,"|") = "0" THEN
-                ttInputFileContent.NewSubs = FALSE.
-             ELSE
-                ttInputFileContent.NewSubs = TRUE.
+              INPUT STREAM sInputFile FROM VALUE(lcResultFile).
+              REPEAT:
+                 IMPORT STREAM sInputFile UNFORMATTED lcLine.
 
-          END. /* REPEAT: */
-          INPUT STREAM sInputFile CLOSE.
-       END. /* IF SEARCH(lcResultFile) NE ? THEN DO: */
+                 liLine = liLine + 1.
+                 
+                 IF lcLine = "" OR lcLine BEGINS "CustIdType" OR NUM-ENTRIES(lcLine,"|") < 8 THEN 
+                     NEXT.
 
-       /* Moved input analyzer file to processed directory */
-       fTransDir(lcResultFile,
-                 "",
-                 lcAnalyzerProcDir).
-    END. /* REPEAT: */
+                 CREATE ttInputFileContent.
+                 ASSIGN
+                    ttInputFileContent.LineNo    = liLine
+                    ttInputFileContent.InputLine = lcLine
+                    ttInputFileContent.FileName  = ttBatchInputFile.FileName
+                    ttInputFileContent.CLI       = ENTRY(4,lcLine,"|")
+                    ttBatchInputFile.EmailId     = ENTRY(7,lcLine,"|")
+                    ttInputFileContent.Brand     = ENTRY(8,lcLine,"|").
 
-    INPUT STREAM sFile CLOSE.
+                 IF ENTRY(3,lcLine,"|") = "" OR ENTRY(3,lcLine,"|") = "0" THEN
+                    ttInputFileContent.NewSubs = FALSE.
+                 ELSE
+                    ttInputFileContent.NewSubs = TRUE.
 
-    DISP
-       liLoop
-       liFiles
-       STRING(TODAY,"99.99.9999") + " " + STRING(TIME,"HH:MM:SS") @ lcTime
-    WITH FRAME frmMain.
-    PAUSE 0.
+              END. /* REPEAT: */
+              INPUT STREAM sInputFile CLOSE.
+           END. /* IF SEARCH(lcResultFile) NE ? THEN DO: */
 
-    IF NOT llFileAvail THEN DO:
-       PAUSE 10 NO-MESSAGE.
-       NEXT MAIN_LOOP.
-    END. /* IF NOT llFileAvail THEN DO: */
+           /* Moved input analyzer file to processed directory */
+           fTransDir(lcResultFile,
+                     "",
+                     lcAnalyzerProcDir).
+        END. /* REPEAT: */
 
-    /* Now process analyzer file */
-    FILE_LOOP:
-    FOR EACH ttBatchInputFile:
+        INPUT STREAM sFile CLOSE.
 
-       ASSIGN
-          lcLogFile = lcAnalyzerSpoolDir + "/" + ttBatchInputFile.FileName +
-                      "_ANALYZER_" + STRING(ldThisRun) + ".LOG".
+        DISP
+           liLoop
+           liFiles
+           STRING(TODAY,"99.99.9999") + " " + STRING(TIME,"HH:MM:SS") @ lcTime
+           WITH FRAME frmMain.
 
-       OUTPUT STREAM sOutput TO VALUE(lcLogFile).
+        PAUSE 0.
 
-       EMPTY TEMP-TABLE ttAnalyzerReport.
+        IF NOT llFileAvail THEN 
+        DO:
+           PAUSE 10 NO-MESSAGE.
+           NEXT MAIN_LOOP.
+        END. /* IF NOT llFileAvail THEN DO: */
 
-       FILE_CONTENT_LOOP:
-       FOR EACH ttInputFileContent WHERE
-                ttInputFileContent.FileName = ttBatchInputFile.FileName NO-LOCK:
+        /* Now process analyzer file */
+        FILE_LOOP:
+        FOR EACH ttBatchInputFile:
 
-          /* skip header line */
-          IF ttInputFileContent.InputLine = "" THEN NEXT FILE_CONTENT_LOOP.
+           ASSIGN lcLogFile = lcAnalyzerSpoolDir + "/" + ttBatchInputFile.FileName + "_ANALYZER_" + STRING(ldThisRun) + ".LOG".
 
-          PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
+           OUTPUT STREAM sOutput TO VALUE(lcLogFile).
 
-          FIND FIRST MobSub WHERE
-                     MobSub.CLI = ttInputFileContent.CLI NO-LOCK NO-ERROR.
-          IF NOT AVAIL MobSub THEN DO:
-             PUT STREAM sOutput UNFORMATTED "IMPORTANT: Subscription not found" SKIP.
-             NEXT FILE_CONTENT_LOOP.
-          END.
+           EMPTY TEMP-TABLE ttAnalyzerReport.
 
-          /* Add the header */
-          PUT STREAM sOutput UNFORMATTED 
-                     "CLI"          lcDel
-                     "ActionType"   lcDel
-                     "ActionValue"  lcDel
-                     "FromTS"       lcDel
-                     "EndTS"        lcDel
-                     "BundleLimit"  lcDel
-                     "FixedFee"     lcDel
-                     "SingleFee"    lcDel
-                     "Shaper"       lcDel
-                     "Remark"       SKIP.
+           FILE_CONTENT_LOOP:
+           FOR EACH ttInputFileContent WHERE ttInputFileContent.FileName = ttBatchInputFile.FileName NO-LOCK:
 
-          RUN pContractActivation(INPUT MobSub.MsSeq).
-          RUN pContractDeactivation(INPUT MobSub.MsSeq).
-          RUN pServiceActivation(INPUT MobSub.MsSeq).
-          RUN pServiceDeactivation(INPUT MobSub.MsSeq).
-          RUN pSTC(INPUT MobSub.MsSeq).
-          RUN pBTC(INPUT MobSub.MsSeq). 
+              /* skip header line */
+              IF ttInputFileContent.InputLine = "" THEN NEXT FILE_CONTENT_LOOP.
 
-          FOR EACH ttAnalyzerReport WHERE
-                   ttAnalyzerReport.FileName = ttBatchInputFile.FileName AND
-                   ttAnalyzerReport.CLI      = ttInputFileContent.CLI NO-LOCK:
-             fLogEntry().
-          END. /* FOR EACH ttAnalyzerReport WHERE */
-       END. /* FOR EACH ttInputFileContent WHERE */
+              PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
 
-       /* Close Output log file */
-       OUTPUT STREAM sOutput CLOSE.
+              ASSIGN lcTenant = fConvertBrandToTenant(ttInputFileContent.Brand).
+              
+              IF lcTenant = "" THEN
+              DO:
+                  PUT STREAM sOutput UNFORMATTED "IMPORTANT: Invalid Tenant" SKIP.
+                  NEXT FILE_CONTENT_LOOP.
+              END.
+                    
+              fsetEffectiveTenantForAllDB(lcTenant).
+              
+              FIND FIRST MobSub WHERE MobSub.CLI = ttInputFileContent.CLI NO-LOCK NO-ERROR.
+              IF NOT AVAIL MobSub THEN 
+              DO:
+                 PUT STREAM sOutput UNFORMATTED "IMPORTANT: Subscription not found" SKIP.
+                 NEXT FILE_CONTENT_LOOP.
+              END.
 
-       /* Trigger the Email - don't send email to Yoigo domain */
-       IF ttBatchInputFile.EmailId > "" AND
-          lcMailHost = "merak" AND
-          INDEX(ttBatchInputFile.EmailId,"yoigo.com") = 0 THEN DO:
-          xMailAddr = ttBatchInputFile.EmailId.
-          SendMaileInvoice(lcEmailContent,lcLogFile,"").
-       END. /* IF lcMailHost = "merak" THEN DO: */
+              /* Add the header */
+              PUT STREAM sOutput UNFORMATTED 
+                         "CLI"          lcDel
+                         "ActionType"   lcDel
+                         "ActionValue"  lcDel
+                         "FromTS"       lcDel
+                         "EndTS"        lcDel
+                         "BundleLimit"  lcDel
+                         "FixedFee"     lcDel
+                         "SingleFee"    lcDel
+                         "Shaper"       lcDel
+                         "Remark"       SKIP.
 
-       /* Moved debug file to processed directory */
-       fTransDir(lcLogFile,
-                 "",
-                 lcAnalyzerProcDir).
+              RUN pContractActivation(INPUT MobSub.MsSeq).
+              RUN pContractDeactivation(INPUT MobSub.MsSeq).
+              RUN pServiceActivation(INPUT MobSub.MsSeq).
+              RUN pServiceDeactivation(INPUT MobSub.MsSeq).
+              RUN pSTC(INPUT MobSub.MsSeq).
+              RUN pBTC(INPUT MobSub.MsSeq). 
 
-    END. /* FOR EACH ttBatchInputFile NO-LOCK */
+              FOR EACH ttAnalyzerReport WHERE
+                       ttAnalyzerReport.FileName = ttBatchInputFile.FileName AND
+                       ttAnalyzerReport.CLI      = ttInputFileContent.CLI NO-LOCK:
+                 fLogEntry().
+              END. /* FOR EACH ttAnalyzerReport WHERE */
+           END. /* FOR EACH ttInputFileContent WHERE */
 
-    PAUSE 10 NO-MESSAGE.
+           /* Close Output log file */
+           OUTPUT STREAM sOutput CLOSE.
 
-END. /* DO WHILE TRUE: */
+           /* Trigger the Email - don't send email to Yoigo domain */
+           IF ttBatchInputFile.EmailId > "" AND lcMailHost = "merak" AND INDEX(ttBatchInputFile.EmailId,"yoigo.com") = 0 THEN 
+           DO:
+              xMailAddr = ttBatchInputFile.EmailId.
+              SendMaileInvoice(lcEmailContent,lcLogFile,"").
+           END. /* IF lcMailHost = "merak" THEN DO: */
+
+           /* Moved debug file to processed directory */
+           fTransDir(lcLogFile,
+                     "",
+                     lcAnalyzerProcDir).
+
+        END. /* FOR EACH ttBatchInputFile NO-LOCK */
+
+        PAUSE 10 NO-MESSAGE.
+
+    END. /* DO WHILE TRUE: */
+
+END PROCEDURE.
+
+
+PROCEDURE pInitialize:
+
+    FOR FIRST InvText NO-LOCK WHERE
+              InvText.Brand     = gcBrand                 AND
+              InvText.Target    = "EMAIL"                 AND
+              InvText.KeyValue  = "EmailConfAnalyzerTool" AND
+              InvText.Language  = 5                       AND 
+              InvText.FromDate <= TODAY                   AND
+              InvText.ToDate   >= TODAY:
+       lcEmailContent = InvText.InvText.
+    END. /* FOR FIRST InvText NO-LOCK WHERE */
+
+END PROCEDURE.

@@ -151,12 +151,8 @@ IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
 IF (llDeviceStart  = ? AND llDeviceScreen <> ?) OR
    (llDeviceScreen = ? AND llDeviceStart  <> ?) THEN
    RETURN appl_err("Both should be NULL for Basic screening").
-   
-FIND Order NO-LOCK WHERE
-     Order.Brand   = gcBrand AND
-     Order.OrderId = liOrderId NO-ERROR.
-IF NOT AVAILABLE Order THEN
-   RETURN appl_err("Unknown order").
+
+{newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 FIND FIRST TermReturn NO-LOCK WHERE
            TermReturn.OrderId = liOrderId USE-INDEX OrderId NO-ERROR.
