@@ -1,0 +1,54 @@
+bulkload: ServAttr
+  ServAttr: "ChgMonthFee"
+  ServCom: "TYPECHG"
+  SAName: "1 = Charge monthly fees from change month"
+  ScChgable: FALSE
+  Brand: "1"
+  DefValue: "0"
+
+bulkload: ServAttr
+  ServAttr: "CreditCheck"
+  ServCom: "TYPECHG"
+  SAName: "1 = Mandatory external credit check"
+  Brand: "1"
+  DefValue: "1"
+
+bulkload: ServAttr
+  ServAttr: "FreePerYear"
+  ServCom: "TYPECHG"
+  SAName: "Free type changes per year"
+  ScChgable: FALSE
+  Brand: "1"
+  DefValue: "4"
+
+bulkload: ServAttr
+  ServAttr: "OnLastDay"
+  ServCom: "TYPECHG"
+  SAName: "1 = CLI type can be closed only on last day of month"
+  ScChgable: FALSE
+  Brand: "1"
+  DefValue: "0"
+
+bulkload: ServAttr
+  ServAttr: "PerMonth"
+  ServCom: "TYPECHG"
+  SAName: "How many times type can be changed per month"
+  ScChgable: FALSE
+  Brand: "1"
+  DefValue: "1"
+
+bulkload: ServAttr
+  ServAttr: "SchedTime"
+  ServCom: "TYPECHG"
+  SAName: "Latest schedule time for change"
+  ScChgable: FALSE
+  Brand: "1"
+  DefValue: "00.00"
+
+bulkload: ServAttr
+  ServAttr: "TiePeriod"
+  ServCom: "TYPECHG"
+  SAName: "1 = Periodical contract prevent changes"
+  Brand: "1"
+  DefValue: "1"
+

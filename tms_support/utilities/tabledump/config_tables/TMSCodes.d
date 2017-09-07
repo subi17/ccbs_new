@@ -403,6 +403,11 @@
 "DumpFile" "FileCategory" "DumpFile" "TAX" "Tax reports" "Files including data and/or reports considering taxes" "" 1
 "DumpFile" "FileCategory" "DumpFile" "TMS" "TMS" "" "" 1
 "DumpFile" "FileCategory" "DumpFile" "TRACK" "Track" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "days" "days" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "hours" "hours" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "months" "months" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "weeks" "weeks" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "years" "years" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "0" "" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "1" "Pending" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "2" "OK" "" "" 1
@@ -1403,6 +1408,7 @@
 "Salesman" "SmPrefix" "IFS" "BL" "Vista internal users" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "BM" "BYMOVIL RETENCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BN" "B12 OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BO" "Backoffice Convergencia" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BR" "BYMOVIL RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BT" "B12 DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
@@ -1436,6 +1442,7 @@
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MB" "MARKTEL BO CANCELACIONES" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MC" "MADISON CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
