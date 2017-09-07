@@ -62,7 +62,6 @@
                     person_idr;string;
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-
 {Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
@@ -106,7 +105,7 @@ IF NUM-ENTRIES(top_array) >= 2 THEN DO:
    pcCLI = get_string(param_toplevel_id, "1").
 END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
+{newton/src/findtenant.i NO Common Customer CustNum piCustnum}
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}

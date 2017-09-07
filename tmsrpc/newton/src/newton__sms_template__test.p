@@ -11,6 +11,7 @@
 {Syst/commpaa.i}
 {Func/fsendsms.i}
 {Syst/tmsconst.i}
+DEF VAR pcTenant     AS CHARACTER NO-UNDO.
 DEF VAR pcCLI        AS CHARACTER NO-UNDO.
 DEF VAR pcSmsContent AS CHARACTER NO-UNDO.
 DEF VAR pcSender     AS CHARACTER NO-UNDO.
@@ -30,19 +31,19 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /*pcReqList = validate_request(pcStruct,
            "clinmbr!,smscontent!,smsfrom!").*/
-pcReqList = validate_request(pcStruct,
-           "clinmbr!,smscontent!").
+pcReqList = validate_request(pcStruct,"brand!,clinmbr!,smscontent!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
 ASSIGN      
-   pcCLI        = get_string(pcStruct, "clinmbr")
-                  WHEN LOOKUP("clinmbr", pcReqList) > 0
-   pcSmsContent = get_string(pcStruct, "smscontent")
-                  WHEN LOOKUP("smscontent", pcReqList) > 0
+   pcTenant     = get_string(pcStruct, "brand") WHEN LOOKUP("brand", pcReqList) > 0
+   pcCLI        = get_string(pcStruct, "clinmbr") WHEN LOOKUP("clinmbr", pcReqList) > 0
+   pcSmsContent = get_string(pcStruct, "smscontent") WHEN LOOKUP("smscontent", pcReqList) > 0
    /*pcSender     = get_string(pcStruct, "smsfrom")
                   WHEN LOOKUP("smsfrom", pcReqList) > 0*/.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FIND MobSub NO-LOCK WHERE
      MobSub.Brand EQ gcBrand AND
