@@ -38,6 +38,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "top_up_history").
 
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
+
 FOR EACH PrepaidRequest NO-LOCK WHERE
    PrepaidRequest.Brand = lcBrand AND   
    PrepaidRequest.MsSeq = piMsSeq USE-INDEX MsSeq:

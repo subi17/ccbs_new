@@ -1,7 +1,8 @@
 /**
  * Clean test data of given customer person id.
 
- * @input string;mandatory;person id
+ * @input  brand;string;mandatory;tenant
+           person_id;string;mandatory;person id
  * @output boolean;TRUE
  */
 
@@ -10,15 +11,19 @@
 gcBrand = "1".
 {Func/msisdn.i}
 
+DEF VAR pcTenant      AS CHAR NO-UNDO.
 DEF VAR lcDNI         AS CHAR NO-UNDO.
 DEF VAR MSISDN_status AS INT  NO-UNDO FORMAT "Z9".
 
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
-lcDNI = get_string(param_toplevel_id,"0").
+pcTenant = get_string(param_toplevel_id,"0").
+lcDNI    = get_string(param_toplevel_id,"1").
 
 IF lcDNI = "" OR lcDNI = ? THEN
    RETURN appl_err("Customer Person Id is empty").
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
 
