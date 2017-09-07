@@ -66,13 +66,19 @@ END.
 lcRespStruct = add_struct(response_toplevel_id, "").
 lcRespArray = add_array(lcRespStruct, "codigoNotificacion").
 
+/* prevalidation */
+FOR EACH ttInput NO-LOCK:   
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+END.
+
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+   
    fCreateMNPObtenerMessage("obtenerNotificacionesMigracionNumeracionMovilEnviadasFinalizadas").
-         
-   FIND MNPProcess WHERE
-        MNPProcess.PortRequest = ttInput.PortRequest EXCLUSIVE-LOCK NO-ERROR.
+   
+   FIND CURRENT MNPProcess EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAIL MNPProcess THEN DO:
       lcError = {&MNP_ERROR_UNKNOWN_PROCESS}.
       fErrorHandle(lcError).

@@ -61,10 +61,7 @@ ASSIGN ldeCurrentTS = fMakeTS()
        lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES")
        lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
-FIND Customer WHERE
-     Customer.CustNum = piCustNum NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Customer THEN
-   RETURN appl_err("Customer not found: " + STRING(piCustNum)).
+{newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
 /* Return DSS/UPSELL data volume */
 FOR EACH ServiceLimit WHERE
