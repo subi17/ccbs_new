@@ -1,0 +1,28 @@
+bulkload: StoBal
+  Stobal: "CC"
+  SimArt: "Universal"
+  DetBal[1]: 501
+  Balance: 501
+  Brand: "1"
+
+bulkload: StoBal
+  Stobal: "MNP"
+  SimArt: "Universal"
+  DetBal[1]: 5000
+  Balance: 5000
+  Brand: "1"
+
+bulkload: StoBal
+  Stobal: "RETAILER"
+  SimArt: "Universal"
+  DetBal[1]: 1900
+  Balance: 1900
+  Brand: "1"
+
+bulkload: StoBal
+  Stobal: "TESTING"
+  SimArt: "Universal"
+  DetBal[1]: 2760
+  Balance: 2760
+  Brand: "1"
+

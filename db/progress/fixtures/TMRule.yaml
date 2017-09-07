@@ -580,7 +580,7 @@ bulkload: TMRule
 bulkload: TMRule
   Brand: "1"
   TMRuleSeq: 40
-  Name: "VOICE100 Minutes"
+  Name: "VOICE100/200 Minutes"
   FromDate: 2015-01-01
   ToDate: 2049-12-31
   CounterItems: "BDest"
@@ -595,7 +595,7 @@ bulkload: TMRule
 bulkload: TMRule
   Brand: "1"
   TMRuleSeq: 41
-  Name: "VOICE100 BDestination"
+  Name: "VOICE100/200 BDestination"
   FromDate: 2015-01-01
   ToDate: 2049-12-31
   CounterItems: "BDest"

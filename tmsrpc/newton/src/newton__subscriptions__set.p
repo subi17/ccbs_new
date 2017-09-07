@@ -70,12 +70,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND MobSub NO-LOCK WHERE
-   MobSub.MsSeq = piMsSeq NO-ERROR.
-
-IF NOT AVAIL MobSub THEN DO:
-   RETURN appl_err(SUBST("Unknown subscription id &1", piMsSeq)).
-END.
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 IF pcIDCode NE "0000" AND pcIDCode NE "" THEN DO:
    liIDCode = INT(pcIDCode) NO-ERROR.
