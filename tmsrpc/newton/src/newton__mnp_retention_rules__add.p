@@ -12,16 +12,27 @@
 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+gcBrand = "1".
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 
-DEF VAR pcStruct AS CHAR NO-UNDO. 
+DEF VAR pcStruct   AS CHAR NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 DEF VAR pcUsername AS CHAR NO-UNDO. 
-DEF VAR lcStruct AS CHAR NO-UNDO. 
+DEF VAR lcStruct   AS CHAR NO-UNDO. 
+
+DEF VAR liRetentionRuleID AS INT NO-UNDO. 
 
 DEFINE TEMP-TABLE ttMNPRetentionRule NO-UNDO LIKE MNPRetentionRule.
 
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
 lcStruct = validate_struct(pcStruct,"paytype,consumption_average,penalty_left,penalty_months_left,segment_offer,sms_token,username!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -33,14 +44,9 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF NUM-ENTRIES(lcStruct) <= 1 THEN RETURN appl_err("Rule condition is missing").
 
-{Syst/commpaa.i}
-{Syst/eventval.i}
-{Func/create_eventlog.i}
-ASSIGN
-   katun = pcUsername
-   gcBrand = "1".
+katun = pcUsername.
 
-DEF VAR liRetentionRuleID AS INT NO-UNDO. 
+{newton/src/settenant.i pcTenant}
 
 liRetentionRuleID = 1. 
 FOR EACH MNPRetentionRule NO-LOCK BY MNPRetentionRule.RetentionRuleID DESC:
