@@ -413,6 +413,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
    DEFINE VARIABLE lcMainOrderId             AS CHAR NO-UNDO. /* gap018 */
+   DEFINE VARIABLE llDespachar               AS LOGICAL   NO-UNDO. /* gap018 */
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -1297,6 +1298,7 @@ FUNCTION fDelivSIM RETURNS LOG
    ELSE liDelType = Order.DeliveryType.
 
    /* GAP018 */
+   llDespachar = FALSE.
    lcMainOrderId = "".
    FIND FIRST CliType NO-LOCK WHERE 
       CliType.CliType = Order.CliType NO-ERROR.
@@ -1305,9 +1307,29 @@ FUNCTION fDelivSIM RETURNS LOG
             CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN
             FOR EACH bufOrder OF Order NO-LOCK WHERE
                bufOrder.MultiSimId = Order.OrderId:
-               lcMainOrderId = STRING(BufOrder.OrderId).
+               /* AC5: If Main line order is cancelled linking is not needed */
+               IF Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
+                  lcMainOrderId = STRING(BufOrder.OrderId).
+               /* AC6: In case Additional/Extra line order is in fraud queue its
+                 Deptchar value is set FALSE as it is not delivered same time with Main line  */
+               IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
+                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
+                  llDespachar = FALSE.
+               ELSE
+                  llDespachar = TRUE.
                LEAVE.
             END.
+
+   /* Check if router delivered and terminal can be delivered */
+   IF llDextraInvoice THEN DO:
+      FIND FIRST OrderDelivery NO-LOCK WHERE
+         OrderDelivery.OrderId = Order.OrderId NO-ERROR.
+         IF OrderDelivery.LOStatusId = 99998 THEN
+            llDespachar = TRUE.
+         ELSE
+            llDespachar = FALSE.
+   END.
    /* GAP018 end */
 
    /* Create Temp-table for DataService (OR extra fields in future) */
@@ -1322,8 +1344,7 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.KialaCode    = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
           ttExtra.ContractFileName = lcContractFileName
           /* GAP018 */
-          /* If terminal in order, no delivery */
-          ttExtra.Despachar    = (IF llDextraInvoice THEN "02" ELSE "01") 
+          ttExtra.Despachar    = (IF llDespachar THEN "01" ELSE "02")
           ttExtra.MainOrderID  = lcMainOrderId.
 
    /* update SimStat when all skipping are checked */
