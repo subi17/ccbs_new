@@ -254,6 +254,8 @@ END.
 ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
        lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
+FIND FIRST CustTemp NO-LOCK NO-ERROR.
+
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
 AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
@@ -400,19 +402,7 @@ IF NOT AVAIL mobsub THEN DO:
       FIND CURRENT Customer NO-LOCK NO-ERROR.
    END.
 
-   FIND FIRST BillTarget NO-LOCK WHERE 
-              BillTarget.CustNum    = Customer.CustNum AND
-              BillTarget.BillTarget = CliType.BillTarget 
-   NO-ERROR.
-
-   IF NOT AVAIL BillTarget THEN DO:
-      CREATE BillTarget.
-      ASSIGN
-         BillTarget.CustNum    = Customer.CustNum
-         BillTarget.BillTarget = CliType.BillTarget
-         BillTarget.DiscPlan   = CliType.DiscPlan
-         BillTarget.RatePlan   = CliType.PricePlan.
-   END.
+{Mm/cr_bscode.i}
 
    ASSIGN
       MobSub.CLI              = Order.CLI
@@ -714,12 +704,16 @@ IF AVAIL OrderCustomer THEN
 DO:
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
                      CLIType.Brand      = gcBrand                          AND
-                     CLIType.CLIType    = Order.CliType                    AND                       
+                     CLIType.CLIType    = Order.CliType                    AND
+                     CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID}      AND
                     (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} OR 
                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})) THEN 
    DO:
       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                      OrderCustomer.CustID). 
+                                      OrderCustomer.CustID,
+                                      FALSE,
+                                      FALSE,
+                                     "RELEASE"). 
    END.
 END.
 
