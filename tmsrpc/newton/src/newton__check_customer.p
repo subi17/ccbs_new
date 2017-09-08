@@ -48,7 +48,6 @@ DEF VAR lcSegment                     AS CHAR NO-UNDO.
 DEF VAR llProChannel                  AS LOG  NO-UNDO.
 DEF VAR llCustCatPro                  AS LOG  NO-UNDO.
 DEF VAR lcPROChannels                 AS CHAR NO-UNDO.
-DEF VAR lcnonPROChannels              AS CHAR NO-UNDO.
 DEF VAR lcCategory                    AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder             AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder          AS LOGI NO-UNDO.
@@ -170,8 +169,7 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActs).
 
 ASSIGN
-    lcPROChannels    = fCParamC("PRO_CHANNELS")
-    lcnonPROChannels = fCParamC("NON_PRO_CHANNELS").
+    lcPROChannels    = fCParamC("PRO_CHANNELS").
 
 IF AVAIL Customer THEN 
 DO:
@@ -202,7 +200,7 @@ DO:
                   lcReason = "PRO migration not possible because of multiple mobile lines".
         END.
     END.
-    ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
+    ELSE 
     DO:
         IF llCustCatPro THEN 
         DO:

@@ -14,7 +14,7 @@ FUNCTION fUpdateTMSParam RETURNS LOGICAL (INPUT icParam AS CHAR,
    END.
    RETURN TRUE.
 END FUNCTION.
-
+/*
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "cc").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "pos").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Fusion_POS").
@@ -31,7 +31,7 @@ fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "emission").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_telesales").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_emission").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_cc").
-
+*/
 
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "telesalesorder_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "cc_PRO").
