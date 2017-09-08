@@ -32,7 +32,7 @@ fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_telesales").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_emission").
 fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_cc").
 
- 
+
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "telesalesorder_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "cc_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "emission_PRO").
@@ -40,6 +40,7 @@ fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_ccorder_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_emission_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_telesales_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "telesales_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_POS_PRO").
 
 IF NOT CAN-FIND (FIRST Tmscodes WHERE
            tmscodes.codegroup EQ "order" AND
