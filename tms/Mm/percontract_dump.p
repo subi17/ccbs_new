@@ -495,7 +495,7 @@ PROCEDURE pWriteContract:
                                  lcValue = STRING(ttContract.Amount).
                                  ELSE lcValue = "".
             WHEN "#DCName" THEN lcValue = ttContract.DCName.
-            WHEN "#Segment" THEN lcValue = fGetSegment(ttContract.AgrCust).
+            WHEN "#Segment" THEN lcValue = fGetSegment(ttContract.AgrCust,0).
             OTHERWISE lcValue = "".
             END CASE.
          END.

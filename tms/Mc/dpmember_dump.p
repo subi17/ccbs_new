@@ -147,7 +147,7 @@ FUNCTION fMakeDPMemberDump RETURNS LOGIC:
             WHEN "#ValidTo"   THEN lcValue = STRING(ttDPMember.ValidTo).
             WHEN "#DiscValue" THEN lcValue = STRING(ttDPMember.DiscValue).
             WHEN "#Unit"      THEN lcValue = lcUnit.
-            WHEN "#Segment" THEN lcValue = fGetSegment(liCustnum).
+            WHEN "#Segment" THEN lcValue = fGetSegment(liCustnum,0).
             OTHERWISE lcValue = "".
             END CASE.
          END.

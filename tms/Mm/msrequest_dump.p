@@ -130,7 +130,7 @@ PROCEDURE pDumpToFile:
          CASE lcField:
          WHEN "#Segment" THEN DO:
             IF msrequest.CustNum > 0 THEN   
-               lcValue = fGetSegment(msrequest.CustNum).
+               lcValue = fGetSegment(msrequest.CustNum,0).
             ELSE lcvalue = "".
          END.         
          WHEN "#Memo" THEN DO:

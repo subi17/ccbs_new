@@ -178,7 +178,7 @@ FOR EACH ttMsOwner NO-LOCK:
       IF lcField BEGINS "#" THEN DO:
          CASE lcField:
             WHEN "#Segment" THEN DO:
-               lcValue = fGetSegment(ttMSOwner.CustNum).
+               lcValue = fGetSegment(ttMSOwner.CustNum,0).
             END.
             OTHERWISE lcValue = "".
          END CASE.

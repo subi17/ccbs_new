@@ -48,21 +48,32 @@ FUNCTION fIsSelfEmpl RETURNS LOGICAL
 END.
 
 FUNCTION fGetSegment RETURNS CHAR
-   (iiCustNum AS INT):
+   (iiCustNum AS INT,
+    iiorderId AS INT):
    DEF BUFFER bCustomer FOR Customer.
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF VAR lcCategory AS CHAR NO-UNDO.
    FIND FIRST bCustomer NO-LOCK  WHERE
               bCustomer.CustNum EQ iiCustNum
               NO-ERROR.
-   IF AVAIL bCustomer THEN DO:
+   IF NOT AVAIL bCustomer AND iiOrderid > 0 THEN DO:
+      FIND FIRST bOrdercustomer WHERE
+                 bOrdercustomer.brand EQ gcBrand AND
+                 bOrdercustomer.orderid EQ iiorderid AND
+                 bOrdercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+                 NO-LOCK NO-ERROR.
+      IF AVAIL bOrdercustomer THEN lcCategory = bOrdercustomer.category.
+   END.
+   ELSE lcCategory = bCustomer.category.
+   IF lcCategory > "" THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
                  CustCat.Brand = gcBrand AND
-                 CustCat.Category = bCustomer.Category
+                 CustCat.Category = lcCategory
                  NO-ERROR.
       IF AVAIL CustCat THEN
          RETURN CustCat.Segment.
-      RETURN "Consumer".
    END.
-   ELSE RETURN "-".
+   RETURN "Consumer".
 END.
 
 
