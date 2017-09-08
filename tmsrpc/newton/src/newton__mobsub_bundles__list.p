@@ -133,6 +133,7 @@ PROCEDURE pAdd_VoiceBundle:
     IF LOOKUP(MobSub.CliType,"CONT9,CONT10") > 0 AND 
        fGetCurrentSpecificBundle(MobSub.MsSeq, "FREE100MINUTES") > "" THEN
         add_string(lcResultArray,"", "FREE100MINUTES|" + STRING(Mobsub.MsSeq)).
+    
 
 END PROCEDURE.
 
