@@ -89,7 +89,6 @@ DO TRANS:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
          ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = ldCurrentTimeTS
          ldCollPeriodStartTS    = ActionLog.ActionTS.
       RELEASE Actionlog.
    END.
