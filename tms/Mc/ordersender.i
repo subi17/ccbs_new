@@ -105,17 +105,18 @@
 
             ASSIGN llOrdStChg = no.
             
-            /* Move Mobile only tariff order to 76 queue, if customer 
-               has ongoing convergent order */
-            IF Order.StatusCode NE {&ORDER_STATUS_ONGOING} AND
+            /* Move Additional line or Extra line discount Mobile only tariff order to 76 queue, 
+               if associated customer main line considered order is in ongoing status  */
+            IF Order.StatusCode NE {&ORDER_STATUS_ONGOING}                           AND
                CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                              CLIType.Brand      = gcBrand       AND 
-                              CLIType.CLIType    = Order.CLIType AND 
+                              CLIType.Brand      = gcBrand                           AND 
+                              CLIType.CLIType    = Order.CLIType                     AND 
+                              CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID}       AND
                               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
  
                FIND FIRST OrderCustomer NO-LOCK WHERE
-                          OrderCustomer.Brand   = gcBrand       AND
-                          OrderCustomer.OrderId = Order.OrderId AND
+                          OrderCustomer.Brand   = gcBrand                            AND
+                          OrderCustomer.OrderId = Order.OrderId                      AND
                           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
                IF AVAIL OrderCustomer THEN
@@ -125,38 +126,49 @@
                                      OrderAction.Brand    = gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
-                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)    AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)    
+                      AND
                       NOT fCheckExistingConvergent(OrderCustomer.CustIDType,
                                                    OrderCustomer.CustID,
-                                                   Order.CLIType)                       AND
+                                                   Order.CLIType)                       
+                      AND
                       fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
                                                    OrderCustomer.CustId,
-                                                   Order.CLIType))                      OR
+                                                   Order.CLIType) 
+                      AND 
+                      NOT fCheckFixedLineStatusForMainLine(OrderCustomer.CustIdType,
+                                                           OrderCustomer.CustId,
+                                                           Order.CLIType))              OR
                      (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                      OrderAction.Brand    = gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
-                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) 
+                      AND
                       NOT fCheckExisting2PConvergent(OrderCustomer.CustIDType,
                                                      OrderCustomer.CustID,
-                                                     Order.CLIType)                     AND
+                                                     Order.CLIType)                     
+                      AND
                       fCheckOngoing2PConvergentOrder(OrderCustomer.CustIdType,
                                                      OrderCustomer.CustId,
-                                                     Order.CLIType)) OR      
-                      /* Additional Line with mobile only ALFMO-5
-                         Move Mobile only tariff order to 76 queue, 
-                         if customer has ongoing mobile only order */
+                                                     Order.CLIType)
+                      AND 
+                      NOT fCheckFixedLineStatusForMainLine(OrderCustomer.CustIdType,
+                                                           OrderCustomer.CustId,
+                                                           Order.CLIType))              OR      
                      (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                                      OrderAction.Brand    = gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
-                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) AND
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) 
+                      AND
                       NOT fCheckExistingMobileOnly(OrderCustomer.CustIDType,
                                                    OrderCustomer.CustID,
-                                                   Order.CLIType) AND
+                                                   Order.CLIType) 
+                      AND
                       fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
                                               OrderCustomer.CustId,
-                                              Order.CLIType)) THEN DO:
+                                              Order.CLIType))                           THEN DO:
                      IF llDoEvent THEN DO:
                         lh76Order = BUFFER Order:HANDLE.
                         RUN StarEventInitialize(lh76Order).

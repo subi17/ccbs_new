@@ -777,4 +777,43 @@ FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
 
 END FUNCTION.
 
+/* If main line is installed for Main line (Convergent order or Mobile only)
+   then don't move additional line order to 76 */
+FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
+   (INPUT icCustIDType   AS CHAR,
+    INPUT icCustID       AS CHAR,
+    INPUT icCliType      AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bCLIType       FOR CLIType.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.OrderId    EQ bOrderCustomer.OrderId  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand        EQ Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID      EQ bOrder.OrderID          AND 
+            bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}, 
+      FIRST bCLIType WHERE bCLIType.Brand   EQ Syst.Parameters:gcBrand AND 
+                           bCLIType.CliType EQ bOrder.CLIType          NO-LOCK:
+
+      IF NOT fIsConvergenceTariff(bCLIType.CLIType) THEN NEXT. 
+
+      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
+         RETURN TRUE.
+
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
