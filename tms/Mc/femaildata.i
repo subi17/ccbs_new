@@ -1798,7 +1798,6 @@ PROCEDURE pGetCTNAME:
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
-   DEF VAR lcTVServiceName         AS CHAR NO-UNDO.
 
    DEFINE BUFFER lbELOrder   FOR Order.
    DEFINE BUFFER lbMLOrder   FOR Order.
@@ -2002,9 +2001,8 @@ PROCEDURE pGetCTNAME:
                                    FMItem.ToDate   >= TODAY                NO-LOCK NO-ERROR. 
                                    
            ASSIGN 
-              lcTVServiceName = fTranslationName(gcBrand, 14, DayCampaign.DCEvent, liLang, TODAY)
               lcMFText        = lcMFText + 
-                                "<br/>" + lcTVServiceName + ", " + 
+                                "<br/>Agile TV, " + 
                                 (IF AVAIL FMItem THEN 
                                    (REPLACE(STRING(FMItem.Amount,"z9.99"),".",",") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
                                  ELSE 
