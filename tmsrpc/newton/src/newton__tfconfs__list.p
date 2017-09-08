@@ -6,16 +6,37 @@
 */
 {newton/src/flistrpc.i}
 
-lcStruct = validate_struct(pcStruct, "").
+DEF VAR pcTenant        AS CHAR NO-UNDO.
+DEF VAR lcQuery         AS CHAR NO-UNDO. 
+DEF VAR lcRVPercentage  AS CHAR NO-UNDO.
+DEF VAR ldeRVPerc       AS DECI NO-UNDO.
+DEF VAR llError		    AS LOGI NO-UNDO.
+DEF VAR lcPrevNumFormat AS CHAR NO-UNDO.
+
+lcStruct = validate_struct(pcStruct, "brand!,rv_percentage").
+
+ASSIGN lcPrevNumFormat = SESSION:NUMERIC-FORMAT.
+
+SESSION:NUMERIC-FORMAT = "AMERICAN":U.
+
+ASSIGN 
+	pcTenant     = get_string(pcStruct,"brand")
+	lcRVPercentage = get_string(pcStruct,"rv_percentage").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-DEF VAR lcQuery AS CHARACTER NO-UNDO. 
+{newton/src/settenant.i pcTenant}
 
-lcQuery = 'FOR EACH TFConf NO-LOCK'.
+ASSIGN ldeRVPerc = DECIMAL(lcRVPercentage) NO-ERROR.
 
+llError = ERROR-STATUS:ERROR.
+
+lcQuery = 'FOR EACH TFConf ' + (IF NOT llError THEN 
+									'WHERE TFConf.RVPercentage = ' + QUOTER(ldeRVPerc) + ' AND TFConf.ValidTo >= ' + QUOTER(TODAY) 
+								ELSE '') + ' NO-LOCK'.
 fListQuery(
    "TFConf",
    lcQuery,
    "TFConfId").
 
+SESSION:NUMERIC-FORMAT = lcPrevNumFormat.

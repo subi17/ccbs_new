@@ -19,8 +19,17 @@ DEFINE VARIABLE lcResultStruct AS CHAR NO-UNDO.
 DEFINE VARIABLE lcKeyValue AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcmodday AS CHAR NO-UNDO. 
 DEFINE VARIABLE ldeTimeStamp AS DEC NO-UNDO.
+DEFINE VARIABLE pcTenant         AS CHARACTER NO-UNDO.
+
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
+
+{newton/src/settenant.i pcTenant}
 
 FOR EACH InvText NO-LOCK WHERE
          InvText.Brand = gcBrand AND
