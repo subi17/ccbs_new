@@ -96,7 +96,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                                 0,
                                 0,
                                 TRUE, /* create fees */
-                                {&REQUEST_SOURCE_PRO_MIGRATION},
+                                {&REQUEST_SOURCE_MIGRATION},
                                 {&REQUEST_ACTIONLIST_ALL}).
       FOR EACH bSubReq WHERE
                bsubreq.Brand     = gcBrand AND
