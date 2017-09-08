@@ -41,6 +41,7 @@ fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_emission_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_telesales_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "telesales_PRO").
 fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_POS_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "pos_PRO").
 
 IF NOT CAN-FIND (FIRST Tmscodes WHERE
            tmscodes.codegroup EQ "order" AND
