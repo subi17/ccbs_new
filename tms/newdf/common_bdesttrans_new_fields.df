@@ -1,0 +1,13 @@
+ADD FIELD "MinLength" OF "BDestTrans" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Minimum Length"
+  COLUMN-LABEL "MinLength"
+  ORDER 80
+
+ADD FIELD "MaxLength" OF "BDestTrans" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Maximum Length"
+  COLUMN-LABEL "MaxLength"
+  ORDER 90
