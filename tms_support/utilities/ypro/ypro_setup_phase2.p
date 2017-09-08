@@ -15,9 +15,31 @@ FUNCTION fUpdateTMSParam RETURNS LOGICAL (INPUT icParam AS CHAR,
    RETURN TRUE.
 END FUNCTION.
 
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "cc").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "pos").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Fusion_POS").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "renewal").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "renewal_telesales").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Renewal_CTC").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Renewal_POS").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Renewal_POS_STC").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "self").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "telesales").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Retention").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "Retention_STC").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "emission").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_telesales").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_emission").
+fUpdateTMSParam("NON_PRO_CHANNELS", "YPRO", "fusion_cc").
 
-fUpdateTMSParam("PRO_CHANNELS", "YPRO", "POS_PRO").
-fUpdateTMSParam("PRO_CHANNELS", "YPRO", "Fusion_POS_PRO").
+ 
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "telesalesorder_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "cc_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "emission_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_ccorder_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_emission_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "fusion_telesales_PRO").
+fUpdateTMSParam("PRO_CHANNELS", "YPRO", "telesales_PRO").
 
 IF NOT CAN-FIND (FIRST Tmscodes WHERE
            tmscodes.codegroup EQ "order" AND
@@ -307,21 +329,21 @@ END FUNCTION.
 fCreateMatrix("CONTDSL35", "PERCONTR", 1, 53).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+/*fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "DSS_FLEX_UPSELL_500MB").
-
+*/
 fCreateMatrix("CONTFH35_50", "PERCONTR", 1, 55).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+/*fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "DSS_FLEX_UPSELL_500MB").
-
+*/
 fCreateMatrix("CONTFH45_300", "PERCONTR", 1, 54).
 fCreateMXItem(giMXSeq, "PerContract", "FIX_VOICE1000").
 fCreateMXItem(giMXSeq, "PerContract", "INT_FIX_VOICE1000").
-fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
+/*fCreateMXItem(giMXSeq, "PerContract", "FLEX_UPSELL_500MB").
 fCreateMXItem(giMXSeq, "PerContract", "DSS_FLEX_UPSELL_500MB").
-
+*/
 FIND FIRST REquestType WHERE 
            requesttype.reqtype EQ {&REQTYPE_PRO_MIGRATION} NO-ERROR.
 IF NOT AVAIL requesttype THEN DO:
@@ -485,12 +507,17 @@ fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","I
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH58_300",1,"DayCampaign","INT_VOICE100").
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH62_300",1,"DayCampaign","INT_VOICE100").
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH69_300",1,"DayCampaign","INT_VOICE100").
-
+/*
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL35",1,"DayCampaign","FLEX_500MB_UPSELL").
+*/
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL39",1,"DayCampaign","FLEX_500MB_UPSELL").
+/*
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH35_50",1,"DayCampaign","FLEX_500MB_UPSELL").
+*/
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH39_50",1,"DayCampaign","FLEX_500MB_UPSELL").
+/*
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH45_300",1,"DayCampaign","FLEX_500MB_UPSELL").
+*/
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTFH49_300",1,"DayCampaign","FLEX_500MB_UPSELL").
 
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONTDSL52",1,"DayCampaign","FLEX_5GB_UPSELL").
@@ -513,13 +540,13 @@ fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT15",1,"DayCampaign","VOICE50
 fcreateRequestAction({&REQTYPE_PRO_MIGRATION}, "CONT10",1,"DayCampaign","VOICE200").
 
 /* STC => 2P */
-fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL35",1,"DayCampaign","FLEX_500MB_UPSELL").
+/*fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL35",1,"DayCampaign","FLEX_500MB_UPSELL").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH35_50",1,"DayCampaign","FLEX_500MB_UPSELL").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH45_300",1,"DayCampaign","FLEX_500MB_UPSELL").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
-
+*/
 
 /* STC 2P to 3P */
 
@@ -631,3 +658,33 @@ fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","FLEX_5GB_UPSELL").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 
+FUNCTION fAddDFField RETURNS LOGICAL (INPUT icdumpname AS CHAR,
+                                      INPUT icField AS CHAR,
+                                      INPUT icTable AS CHAR,
+                                      INPUT icLabel AS CHAR,
+                                      INPUT iicolumn AS INT):
+   FIND FIRST Dumpfile WHERE
+              Dumpfile.brand EQ "1" AND
+              Dumpfile.dumpname EQ icDumpname NO-ERROR.
+   IF NOT AVAIL Dumpfile THEN RETURN FALSE.
+   FIND FIRST DFField WHERE
+              DFField.dumpid EQ dumpfile.dumpid AND
+              DFField.ordernbr EQ iicolumn NO-ERROR.
+   IF NOT AVAIL DFField THEN DO:
+      CREATE DFField.
+      ASSIGN
+         DFField.brand = "1"
+         DFField.dumpid = dumpfile.dumpid
+         DFField.dffield = icField
+         DFField.dftable = icTable
+         DFField.dflabel = icLabel
+         DFField.ordernbr = iicolumn
+         Dffield.fromdate = TODAY
+         DFField.todate = 12/31/49.
+
+   END.
+END FUNCTION.
+
+fadddffield("DiscountMember","#Segment","DPMember","Segment",9).
+fadddffield("PerContrDump","#Segment","DCCLI","Segment",21).
+fadddffield("RequestDumpTXT","#Segment","MSRequest","Segment",39).

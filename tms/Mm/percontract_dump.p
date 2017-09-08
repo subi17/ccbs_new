@@ -7,6 +7,7 @@
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
 {Func/timestamp.i}
+{Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -493,7 +494,8 @@ PROCEDURE pWriteContract:
             WHEN "#Amount"  THEN IF ttContract.Amount NE ? THEN
                                  lcValue = STRING(ttContract.Amount).
                                  ELSE lcValue = "".
-            WHEN "#DCName" THEN lcValue = ttContract.DCName.                     
+            WHEN "#DCName" THEN lcValue = ttContract.DCName.
+            WHEN "#Segment" THEN lcValue = fGetSegment(ttContract.AgrCust).
             OTHERWISE lcValue = "".
             END CASE.
          END.
