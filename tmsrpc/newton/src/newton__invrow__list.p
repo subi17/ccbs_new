@@ -86,3 +86,6 @@ FOR EACH InvRow OF SubInvoice NO-LOCK:
 
 END. /* FOR EACH InvRow OF SubInvoice NO-LOCK: */
 
+FINALLY:
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END.
