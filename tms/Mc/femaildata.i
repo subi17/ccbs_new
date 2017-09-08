@@ -1987,9 +1987,9 @@ PROCEDURE pGetCTNAME:
        
        /* TV Service */
        TVSERVICE_DETAILS:
-       FOR EACH OrderAction WHERE OrderAction.Brand     = gcBrand       AND
-                                   OrderAction.OrderId  = Order.Orderid AND
-                                   OrderAction.ItemType = "BundleItem"  NO-LOCK,
+       FOR EACH OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+                                  OrderAction.OrderId  = Order.Orderid AND
+                                  OrderAction.ItemType = "BundleItem"  NO-LOCK,
            FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
                                    DayCampaign.DCEvent      = OrderAction.ItemKey  AND 
                                    DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} NO-LOCK:
@@ -2006,7 +2006,7 @@ PROCEDURE pGetCTNAME:
               lcMFText        = lcMFText + 
                                 "<br/>" + lcTVServiceName + ", " + 
                                 (IF AVAIL FMItem THEN 
-                                   (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
+                                   (REPLACE(STRING(FMItem.Amount,"z9.99"),".",",") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
                                  ELSE 
                                    "").
            LEAVE TVSERVICE_DETAILS.                     
