@@ -22,3 +22,7 @@ if gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 add_boolean(response_toplevel_id, "", AVAILABLE order).
+
+FINALLY:
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END.
