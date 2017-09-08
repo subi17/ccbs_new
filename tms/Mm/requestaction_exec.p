@@ -272,12 +272,13 @@ PROCEDURE pPeriodicalContract:
       DEF BUFFER bFTERMOrder FOR Order.
       FIND FIRST bFTERMOrder WHERE 
                  bFTERMOrder.brand EQ "1" AND
-                 bFTERMOrder.OrderID EQ iiOrderID.
+                 bFTERMOrder.OrderID EQ iiOrderID AND
+                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0.
       /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
       IF AVAIL bFTERMOrder AND
                ttAction.ActionKey EQ "FTERM12-100" AND 
                /*idActStamp > 20170911 AND*/
-               idActStamp < 20171001 
+               idActStamp < 20171001
       THEN DO:
          ttAction.ActionKey = "FTERM8-100".
       END.
