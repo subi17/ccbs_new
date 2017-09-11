@@ -29,7 +29,7 @@ DEFINE VARIABLE row_array  AS CHARACTER NO-UNDO.
 
 /* Local variables */
 DEFINE VARIABLE lcBrand       AS CHARACTER NO-UNDO INIT "1".
-DEFINE VARIABLE i             AS INTEGER NO-UNDO. 
+DEFINE VARIABLE lii           AS INTEGER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
@@ -38,7 +38,21 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "top_up_history").
 
-{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
+DO lii = 1 TO 2 ON ERROR UNDO, THROW:
+   multitenancy.TenantInformation:mSetEffectiveTenantBasedOnTableRecord(
+                                       IF lii = 1
+                                       THEN BUFFER MobSub:HANDLE
+                                       ELSE BUFFER TermMobSub:HANDLE,
+                                       NO, "MsSeq", STRING(piMsSeq), NO).
+
+   CATCH errorobj AS Progress.Lang.AppError:
+      IF errorobj:GetMessageNum(1) EQ 2 AND lii EQ 1
+      THEN NEXT.
+      RETURN appl_err(errorobj:GetMessage(1)).
+   END.
+END.
+
+lii = 0.
 
 FOR EACH PrepaidRequest NO-LOCK WHERE
    PrepaidRequest.Brand = lcBrand AND   
@@ -64,8 +78,8 @@ FOR EACH PrepaidRequest NO-LOCK WHERE
       TRIM(REPLACE(STRING(TRUNC(PrepaidRequest.VatAmt / 100, 2),"->>9.99"), ",", "."))).
    add_string(row_array, "", PrepaidRequest.Reference).
    add_string(row_array, "", (IF AVAIL TMSCodes THEN TMSCodes.CodeName ELSE PrepaidRequest.Entidad)).
-   i = i + 1.
-   IF i EQ piCount THEN LEAVE.
+   lii = lii + 1.
+   IF lii EQ piCount THEN LEAVE.
 END.
 
 /* EOF newton__get_top_up_history.p */
