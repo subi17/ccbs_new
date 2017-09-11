@@ -124,15 +124,20 @@ END PROCEDURE.
 PROCEDURE pAdd_VoiceBundle:
     
     DEFINE VARIABLE lcVoiceBundle AS CHARACTER NO-UNDO.
-    
+    DEFINE VARIABLE lcError       AS CHARACTER NO-UNDO.    
     lcVoiceBundle = fGetCurrentSpecificBundle(MobSub.MsSeq, "VOICE").
 
     IF lcVoiceBundle > "" THEN
-        add_string(lcResultArray,"", lcVoiceBundle + "|" + STRING(Mobsub.MsSeq)).
-
+       add_string(lcResultArray,"", lcVoiceBundle + "|" + STRING(Mobsub.MsSeq)).
+    IF fIsBundleAllowed(Mobsub.CLIType,
+                        "VOICE200B",
+                        OUTPUT lcError) THEN
+       add_string(lcResultArray,"", "VOICE200B" + "|" + STRING(Mobsub.MsSeq)).
+    
     IF LOOKUP(MobSub.CliType,"CONT9,CONT10") > 0 AND 
        fGetCurrentSpecificBundle(MobSub.MsSeq, "FREE100MINUTES") > "" THEN
         add_string(lcResultArray,"", "FREE100MINUTES|" + STRING(Mobsub.MsSeq)).
+    
 
 END PROCEDURE.
 

@@ -321,8 +321,7 @@ PROCEDURE pTerminate:
       MSOwner.TsEnd = ldCurrTS.   
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
-   ELSE IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} 
-      THEN 
+   ELSE IF AVAIL MSOwner AND lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} THEN 
       fUpdatePartialMSOwner(MobSub.msseq, Mobsub.fixedNumber).
 
    IF llOutport THEN DO:
