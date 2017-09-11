@@ -282,8 +282,11 @@ FUNCTION fAnalBsub RETURNS LOGICAL
                        BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
             IF NOT AVAIL BDestTrans THEN NEXT.
 
-            IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
-               BDestTrans.TranslateNumber NE ttCall.Gsmbnr THEN NEXT.
+            IF BDestTrans.MinLength > 0 AND
+               LENGTH(ttCall.Gsmbnr) < BDestTrans.MinLength THEN NEXT.
+
+            IF BDestTrans.MaxLength > 0 AND
+               LENGTH(ttCall.Gsmbnr) > BDestTrans.MaxLength THEN NEXT.
 
             mod_bsub = BDestTrans.BDest.
             LEAVE.
