@@ -687,6 +687,6 @@ FUNCTION fAddDFField RETURNS LOGICAL (INPUT icdumpname AS CHAR,
    END.
 END FUNCTION.
 
-fadddffield("DiscountMember","#Segment","DPMember","Segment",9).
+fadddffield("DiscountMember","#Segment","DPMember","Segment",10).
 fadddffield("PerContrDump","#Segment","DCCLI","Segment",21).
 fadddffield("RequestDumpTXT","#Segment","MSRequest","Segment",39).
