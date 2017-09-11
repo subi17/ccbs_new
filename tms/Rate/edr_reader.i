@@ -336,7 +336,8 @@ PROCEDURE pHandleEDR:
                   END.
 
                IF MONTH(ttEDR.DateST) EQ 2 AND
-                  ttEDR.DateST EQ fLastDayOfMonth(ttEDR.DateST) THEN DO:
+                  ttEDR.DateST EQ fLastDayOfMonth(ttEDR.DateST) AND
+                  ttEDR.CLIType NE "TARJ13" THEN DO:
                
                   fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
@@ -369,8 +370,7 @@ PROCEDURE pHandleEDR:
                IF ((ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
                    (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
                    (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
-                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12") OR 
-                   (ttEDR.CLIType EQ "TARJ13" AND ttEDR.ServiceFeeType = "SC20")) THEN 
+                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12")) THEN 
                DO:
                   liRequest = fServiceRequest(MobSub.MsSeq,
                                               "TEMPLATE",
