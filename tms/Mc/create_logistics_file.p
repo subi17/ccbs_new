@@ -1496,7 +1496,7 @@ FUNCTION fDelivDevice RETURNS LOG
       ttOneDelivery.OrderId       = Order.OrderId
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
       ttOneDelivery.ActionID      = (IF icDevice = "Router" THEN "1" ELSE "2")
-      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "TVSTB")
+      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "G050DTVN2")
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -1526,7 +1526,7 @@ FUNCTION fDelivDevice RETURNS LOG
    CREATE ttInvRow.
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "TVSTB") 
+      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "G050DTVN2") 
       ttInvRow.Quantity    = "1"
       liLoop1              = 1.
 
