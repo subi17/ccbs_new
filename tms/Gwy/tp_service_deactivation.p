@@ -37,7 +37,8 @@ PROCEDURE pProcessRequests:
     DEF VAR lcCustomerId    AS CHAR NO-UNDO.
     DEF VAR ldeActCreatedTS AS DECI NO-UNDO DECIMALS 5.
     DEF VAR liAgrCust       AS INTE NO-UNDO.
-
+    DEF VAR liSubscriptionAgrCust AS INTE NO-UNDO.
+    
     DEFINE BUFFER AgreeCustomer           FOR Customer.
     DEFINE BUFFER bf_TPService_Activation FOR TPService.
 
@@ -54,7 +55,15 @@ PROCEDURE pProcessRequests:
           
        FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
        IF NOT AVAIL MobSub THEN 
-          RETURN fTPServiceError(BUFFER TPService,"Contract not found").
+       DO:
+          FIND FIRST TermMobSub WHERE TermMobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
+          IF NOT AVAIL TermMobSub THEN
+              RETURN fTPServiceError(BUFFER TPService,"Contract not found").
+          ELSE 
+              ASSIGN liSubscriptionAgrCust = TermMobSub.AgrCust.        
+       END.
+       ELSE 
+          ASSIGN liSubscriptionAgrCust = MobSub.AgrCust.
 
        FIND FIRST bf_TPService_Activation WHERE bf_TPService_Activation.MsSeq      = TPService.MsSeq    AND 
                                                 bf_TPService_Activation.Operation  = {&TYPE_ACTIVATION} AND 
@@ -65,19 +74,19 @@ PROCEDURE pProcessRequests:
 
        IF ldeActCreatedTS > 0 THEN 
        DO:
-           FIND FIRST MsOwner WHERE MsOwner.MsSeq    = MobSub.MsSeq    AND 
+           FIND FIRST MsOwner WHERE MsOwner.MsSeq    = TPService.MsSeq AND 
                                     MsOwner.TSBegin <= ldeActCreatedTS AND 
                                     MsOwner.TSEnd   >= ldeActCreatedTS NO-LOCK NO-ERROR. 
            IF AVAIL MsOwner THEN 
                ASSIGN liAgrCust = MsOwner.AgrCust.
            ELSE     
-               ASSIGN liAgrCust = MobSub.AgrCust.
+               ASSIGN liAgrCust = liSubscriptionAgrCust.
        END.
        ELSE 
-          ASSIGN liAgrCust = MobSub.AgrCust.    
+          ASSIGN liAgrCust = liSubscriptionAgrCust.
 
-       FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = MobSub.Brand AND 
-                                      AgreeCustomer.CustNum = liAgrCust    NO-LOCK NO-ERROR.
+       FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = gcBrand   AND 
+                                      AgreeCustomer.CustNum = liAgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
            RETURN fTPServiceError(BUFFER TPService,"Agreement customer not found").
 
