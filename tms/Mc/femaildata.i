@@ -1798,7 +1798,6 @@ PROCEDURE pGetCTNAME:
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
-   DEF VAR lcTVServiceName         AS CHAR NO-UNDO.
 
    DEFINE BUFFER lbELOrder   FOR Order.
    DEFINE BUFFER lbMLOrder   FOR Order.
@@ -1986,9 +1985,10 @@ PROCEDURE pGetCTNAME:
        END.
        
        /* TV Service */
-       FOR FIRST OrderAction WHERE OrderAction.Brand    = gcBrand       AND
-                                   OrderAction.OrderId  = Order.Orderid AND
-                                   OrderAction.ItemType = "BundleItem"  NO-LOCK,
+       TVSERVICE_DETAILS:
+       FOR EACH OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+                                  OrderAction.OrderId  = Order.Orderid AND
+                                  OrderAction.ItemType = "BundleItem"  NO-LOCK,
            FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
                                    DayCampaign.DCEvent      = OrderAction.ItemKey  AND 
                                    DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} NO-LOCK:
@@ -2001,13 +2001,13 @@ PROCEDURE pGetCTNAME:
                                    FMItem.ToDate   >= TODAY                NO-LOCK NO-ERROR. 
                                    
            ASSIGN 
-              lcTVServiceName = fTranslationName(gcBrand, 14, DayCampaign.DCEvent, liLang, TODAY)
               lcMFText        = lcMFText + 
-                                "<br/>" + lcTVServiceName + ", " + 
+                                "<br/>Agile TV, " + 
                                 (IF AVAIL FMItem THEN 
-                                   (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
+                                   (REPLACE(STRING(FMItem.Amount,"z9.99"),".",",") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
                                  ELSE 
                                    "").
+           LEAVE TVSERVICE_DETAILS.                     
        END.                                    
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
