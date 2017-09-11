@@ -38,6 +38,7 @@ FUNCTION fTPServiceError RETURNS CHAR
    IF AVAIL bf_TPService THEN    
       ASSIGN 
           bf_TPService.ServStatus = {&STATUS_ERROR}   
+          bf_TPService.TermReason = icErrorDesc
           bf_TPService.UpdateTS   = fMakeTS().
    
    RETURN "".
