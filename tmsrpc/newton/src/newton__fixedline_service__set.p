@@ -109,6 +109,8 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                RUN pDeActivateTVService.
            WHEN "on" THEN
                RUN pActivateTVService.
+           OTHERWISE  
+               RETURN appl_err("Invalid parameter 'value': " + pcValue).
        END CASE.
    END.
    ELSE IF fIsSVA(pcServiceId, OUTPUT liParams) THEN    /*SVAs*/ /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
@@ -157,12 +159,14 @@ PROCEDURE pDeActivateTVService:
     DEFINE VARIABLE lcResult    AS CHARACTER NO-UNDO.
     DEFINE VARIABLE liServSeq   AS INTEGER   NO-UNDO.
 
-    IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq     = piMsSeq            AND 
-                                      TPService.Operation = {&TYPE_ACTIVATION} AND 
-                                      TPService.ServType  = lcBundleType       NO-LOCK) THEN
+    IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq      = piMsSeq             AND 
+                                      TPService.Operation  = {&TYPE_ACTIVATION}  AND 
+                                      TPService.ServType   = lcBundleType        AND
+                                      TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                                      TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK) THEN
     DO:
         IF NOT fDeactivateTVService(piMsSeq, pcParam2) THEN 
-            RETURN "Setup box logistics/activation process is already initiated. Cancellation not allowed now.".  
+            RETURN appl_err("Cancellation failed.").  
     END.
     ELSE 
         RETURN appl_err("No tv service active for cancellation").
@@ -177,9 +181,11 @@ PROCEDURE pActivateTVService:
     FIND FIRST TPService WHERE TPService.MsSeq       = piMsSeq            AND 
                                TPService.Operation   = {&TYPE_ACTIVATION} AND  
                                TPService.ServType    = lcBundleType       AND 
-                               TPService.ServStatus <> "HANDLED"          NO-LOCK NO-ERROR.
+                               TPService.ServStatus <> {&STATUS_HANDLED}  AND 
+                               TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                               TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK NO-ERROR.
     IF AVAIL TPService THEN 
-        RETURN "There exists an ongoing tv service request.".
+        RETURN appl_err("There exists an ongoing tv service request.").
 
     ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
                                            pcServiceId, 
