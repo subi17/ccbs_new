@@ -704,7 +704,8 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
   FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq            AND 
                              TPService.Operation   = {&TYPE_ACTIVATION} AND 
                              TPService.ServType    = "Television"       AND 
-                             TPService.ServStatus <> {&STATUS_CANCELED} NO-LOCK NO-ERROR.
+                             TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                             TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK NO-ERROR.
   IF AVAIL TPService THEN
   DO:
       ASSIGN 
