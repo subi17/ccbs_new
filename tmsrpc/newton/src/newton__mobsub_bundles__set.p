@@ -144,6 +144,14 @@ FUNCTION fSetMDUB RETURNS INT
          /*ILP, YPR-2174*/
          IF LOOKUP(pcBundleId, "DATA200_UPSELL,DSS200_UPSELL") > 0 THEN 
             ocError = pcBundleId + " activation is not allowed".         
+         /**/
+         IF pcBundleID EQ "VOICE200B" THEN DO:
+            IF NOT fIsBundleAllowed(Mobsub.CLIType,
+                                "VOICE200B",
+                                OUTPUT lcError) THEN
+               ocError = pcBundleID + " Actiavtion not allowed".
+         END.
+
          /* Data Bono's */
          ELSE IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN 
          DO:
@@ -369,6 +377,7 @@ ASSIGN lcMemoTitle                 = DayCampaign.DcName
 
 IF LOOKUP(pcBundleId, lcBundleList) > 0 OR 
    pcBundleId = {&DSS}                  OR 
+   pcBundleID = "voice200b"             OR
    pcBundleId = {&TARJ_UPSELL} THEN 
 DO:
    ASSIGN 
