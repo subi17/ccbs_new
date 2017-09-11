@@ -103,7 +103,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.Brand EQ gcBrand AND
          MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
          MsRequest.UpdateStamp > ldCollPeriodStartTS AND
-         MsRequest.UpdateStamp < ldCollPeriodEndTS AND
+         MsRequest.UpdateStamp <= ldCollPeriodEndTS AND
          MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/ AND
          MsRequest.UpdateStamp <= MsRequest.DoneStamp:
    FIND FIRST bLP_MsRequest NO-LOCK WHERE 
