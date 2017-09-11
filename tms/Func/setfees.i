@@ -235,7 +235,7 @@ FUNCTION fMakeSetfees RETURNS INTEGER
       THEN liIFSStatus = {&IFS_STATUS_WAITING_SENDING}.
 
       IF lcRequestSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} OR
-         lcRequestSource EQ {&REQUEST_SOURCE_NEWTON}
+         (lcRequestSource EQ {&REQUEST_SOURCE_NEWTON} AND icCalcObj NE "RVTERM12")
       THEN lcFinancedResult = {&TF_STATUS_YOIGO}.
    END.
 
