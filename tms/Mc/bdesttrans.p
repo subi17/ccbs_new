@@ -49,11 +49,20 @@ DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
+DEF VAR liRoamEUBdestID AS INT NO-UNDO. 
+
+FIND BDest NO-LOCK WHERE
+     BDest.Brand = gcBrand AND
+     BDest.BDest = "ROAM_EU" NO-ERROR.
+IF AVAIL BDest THEN liRoamEUBdestID = BDest.BDestID.
+RELEASE BDest.
 
 form
     bdesttrans.Bdest FORMAT "X(13)"
     bdesttrans.translatenumber      /* COLUMN-LABEL FORMAT */
     bdesttrans.ratingZone FORMAT "X(6)"    /* COLUMN-LABEL FORMAT */
+    bdesttrans.minlength COLUMN-LABEL "Min" /* COLUMN-LABEL FORMAT */
+    bdesttrans.maxlength COLUMN-LABEL "Max" /* COLUMN-LABEL FORMAT */
     bdesttrans.fromdate     /* COLUMN-LABEL FORMAT */
     bdesttrans.todate     /* COLUMN-LABEL FORMAT */
              /* COLUMN-LABEL FORMAT */
@@ -65,9 +74,11 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 form
-    bdesttrans.bdest FORMAT "999"
-    bdesttrans.translatenumber FORMAT "999999999"  /* LABEL FORMAT */
-    bdesttrans.ratingzone FORMAT "!"
+    bdesttrans.bdest FORMAT "X(15)"
+    bdesttrans.translatenumber FORMAT "X(10)"  /* LABEL FORMAT */
+    bdesttrans.ratingzone FORMAT "X(10)"
+    bdesttrans.minlength   /* COLUMN-LABEL FORMAT */
+    bdesttrans.maxlength  /* COLUMN-LABEL FORMAT */
     bdesttrans.Fromdate    /* LABEL FORMAT */
     bdesttrans.ToDate      /* LABEL FORMAT */
 
@@ -399,7 +410,8 @@ BROWSE:
        /* Highlight */
        COLOR DISPLAY VALUE(ctc)       
        bdesttrans.translatenumber bdesttrans.fromDate
-       bdesttrans.toDate bdesttrans.bdest bdesttrans.RatingZone.
+       bdesttrans.toDate bdesttrans.bdest bdesttrans.RatingZone
+       bdesttrans.minlength bdesttrans.maxlength.
 
        RUN local-find-NEXT.
        IF AVAILABLE bdesttrans THEN Memory = recid(bdesttrans).
@@ -422,7 +434,8 @@ BROWSE:
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
        COLOR DISPLAY VALUE(ccc)
        bdesttrans.translatenumber bdesttrans.fromDate
-       bdesttrans.toDate bdesttrans.bdest bdesttrans.RatingZone.
+       bdesttrans.toDate bdesttrans.bdest bdesttrans.RatingZone
+       bdesttrans.minlength bdesttrans.maxlength.
        
        IF ok THEN DO:
 
@@ -535,6 +548,8 @@ PROCEDURE local-disp-row:
        bdesttrans.Bdest
        bdesttrans.translatenumber
        bdesttrans.RatingZone
+       bdesttrans.minlength WHEN bdesttrans.minlength > 0
+       bdesttrans.maxlength WHEN bdesttrans.maxlength > 0
        bdesttrans.FromDate
        bdesttrans.ToDate
        WITH FRAME sel.
@@ -554,6 +569,8 @@ PROCEDURE local-UPDATE-record:
            bdesttrans.bdest
            bdesttrans.ToDate
            bdesttrans.RatingZone
+           bdesttrans.minlength WHEN bdesttrans.bdestid EQ liRoamEUBdestID
+           bdesttrans.maxlength WHEN bdesttrans.bdestid EQ liRoamEUBdestID
            bdesttrans.FromDate
            bdesttrans.TranslateNumber
       WITH FRAME lis.
@@ -585,6 +602,8 @@ PROCEDURE local-UPDATE-record:
                 bdesttrans.bdest
                 bdesttrans.TranslateNumber
                 bdesttrans.RatingZone
+                bdesttrans.minlength WHEN bdesttrans.bdestid EQ liRoamEUBdestID
+                bdesttrans.maxlength WHEN bdesttrans.bdestid EQ liRoamEUBdestID
                 bdesttrans.FromDate
                 bdesttrans.ToDate
             WITH FRAME lis EDITING:
