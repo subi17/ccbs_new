@@ -11,19 +11,22 @@
 {Func/orderfunc.i}
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
+{Func/profunc.i}
 
 DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent       AS LOG NO-UNDO.
 
-DEF VAR llOk            AS LOG  NO-UNDO.
-DEF VAR lcCampaignType  AS CHAR NO-UNDO.
-DEF VAR lcRenoveSMSText AS CHAR NO-UNDO. 
-DEF VAR ldeSMSStamp     AS DEC  NO-UNDO. 
-DEF VAR lcOldStatus     AS CHAR NO-UNDO. 
-DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
-DEF VAR lcError         AS CHAR NO-UNDO.
-DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
+DEF VAR llOk                    AS LOG  NO-UNDO.
+DEF VAR lcCampaignType          AS CHAR NO-UNDO.
+DEF VAR lcRenoveSMSText         AS CHAR NO-UNDO. 
+DEF VAR ldeSMSStamp             AS DEC  NO-UNDO. 
+DEF VAR lcOldStatus             AS CHAR NO-UNDO. 
+DEF VAR lcNewStatus             AS CHAR NO-UNDO. 
+DEF VAR lcError                 AS CHAR NO-UNDO.
+DEF VAR llCompanyScoringNeeded  AS LOG  NO-UNDO. 
+DEF VAR liRequest               AS INT  NO-UNDO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 
 DEF BUFFER lbOrder          FOR Order.
 
@@ -106,7 +109,7 @@ llCompanyScoringNeeded =
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
-IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
+IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO: /* shouldn't never get this value because of YDR-2575 */
    
    IF Order.RoiResult EQ "risk" THEN DO:
 
@@ -154,7 +157,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR 
     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
-    Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
+    Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT})  AND /* shouldn't never get this value because of YDR-2575 */
     Order.OrderType  EQ {&ORDER_TYPE_STC}           AND
     fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
 
@@ -177,7 +180,7 @@ IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
      Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
      Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR
      Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
-     Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
+     Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT})  AND /* shouldn't never get this value because of YDR-2575 */
      Order.OrderChannel BEGINS "fusion" AND
      Order.OrderType NE 2 AND
      NOT llCompanyScoringNeeded THEN DO:
@@ -263,11 +266,10 @@ ELSE IF Order.Ordertype < 2 AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand       = gcBrand                          AND
-                  CLIType.CLIType     = Order.CLIType                    AND
-                  CLIType.LineType    > 0                                AND 
-                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
-                  CLIType.TariffType NE {&CLITYPE_TARIFFTYPE_FIXEDONLY}) AND
+                  CLIType.Brand       = gcBrand       AND
+                  CLIType.CLIType     = Order.CLIType AND
+                  CLIType.LineType    > 0             AND
+                  CLIType.LineType    < 3)            AND
    NOT CAN-FIND(FIRST OrderAction WHERE
                      OrderAction.Brand = gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
@@ -421,20 +423,41 @@ IF llDoEvent THEN DO:
    fCleanEventObjects().
 END.
 
-/* Release pending additional lines orders, in case of pending convergent 
-   mail line order is released */
-/* YTS-10832 FIX */
+/* Release pending additional lines (OR) extra line orders, 
+   in case of pending convergent main line order is released */
+/* YTS-10832 fix, checking correct status of order */
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
-   IF (lcOldStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       OR
-       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
-       lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
-       lcOldStatus EQ {&ORDER_STATUS_OFFER_SENT})               AND
-      (lcNewStatus = {&ORDER_STATUS_NEW}  OR
-       lcNewStatus = {&ORDER_STATUS_MNP}) THEN DO:
+   IF lcNewStatus = {&ORDER_STATUS_NEW} OR
+      lcNewStatus = {&ORDER_STATUS_MNP} OR 
+      lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+     
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+
+      IF lcExtraMainLineCLITypes                       NE "" AND 
+         LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
+         Order.MultiSimId                              NE 0  AND 
+         Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
+         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                  Order.OrderId,    /* Main line Order Id  */
+                                  "RELEASE").       /* Action              */
        
-       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                       OrderCustomer.CustID) . 
-   END.   
+      fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                      OrderCustomer.CustID). 
+   END.
+END.
+
+/* Additional Line with mobile only ALFMO-5  
+   Release pending additional lines orders, in case of pending 
+   main Moblie only line order is released */
+ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                 CLIType.Brand      = gcBrand  AND
+                 CLIType.CLIType    = Order.CliType AND
+                 CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
+                (lcNewStatus = {&ORDER_STATUS_NEW}  OR
+                 lcNewStatus = {&ORDER_STATUS_MNP}) THEN 
+DO:
+   fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                   OrderCustomer.CustID). 
 END.
 
 RETURN "".

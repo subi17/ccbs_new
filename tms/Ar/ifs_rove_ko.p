@@ -10,6 +10,7 @@
 {Syst/dumpfile_run.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 {Mc/shipping_cost.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -188,7 +189,8 @@ PROCEDURE pWriteToFile:
          /* EMPTY */              lcDelimiter
          /* EMPTY */              lcDelimiter
          STRING(ldOperationDate,"99-99-9999") lcDelimiter
-         STRING(OrderPayment.Method) lcDelimiter  SKIP.
+         STRING(OrderPayment.Method) lcDelimiter  
+         fgetCompanyId() lcDelimiter SKIP.
    END.
    ELSE DO:
       PUT STREAM sout UNFORMATTED
@@ -196,7 +198,8 @@ PROCEDURE pWriteToFile:
          OrderPayment.BinNumber lcDelimiter
          OrderPayment.AuthNumber lcDelimiter
          STRING(ldOperationDate,"99-99-9999") lcDelimiter
-         STRING(OrderPayment.Method) lcDelimiter   SKIP.
+         STRING(OrderPayment.Method) lcDelimiter   
+         fgetCompanyId() lcDelimiter SKIP.
    END.
    oiEvents = oiEvents + 1.
    IF NOT SESSION:BATCH THEN DO:

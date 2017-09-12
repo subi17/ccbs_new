@@ -34,9 +34,7 @@ pcUpsellId = get_string(param_toplevel_id,"1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
       
 FIND FIRST Customer WHERE
            Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
@@ -84,6 +82,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcError).
    IF liRequest = 0 THEN RETURN appl_err("Bundle request not created").
 END.

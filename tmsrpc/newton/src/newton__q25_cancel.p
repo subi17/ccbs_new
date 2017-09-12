@@ -107,10 +107,7 @@ END.
 
 katun = "VISTA_" + lcusername.
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq EQ limsseq NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq limsseq}
 
 DO liLoop = 1 TO NUM-ENTRIES({&REQ_ONGOING_STATUSES}):
    liReqStatus = INT(ENTRY(liLoop,{&REQ_ONGOING_STATUSES})).
@@ -208,6 +205,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
       "",
       0, /* payterm residual fee */
       DCCLI.PerContractId,
+      "",
       OUTPUT lcResult).
 
       IF liCreated EQ 0 THEN

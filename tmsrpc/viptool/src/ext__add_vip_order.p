@@ -129,8 +129,6 @@ DEF VAR lccTemp AS CHARACTER NO-UNDO.
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE lcIdType AS CHARACTER NO-UNDO.  
-DEFINE VARIABLE lcContactId AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcContactIdType AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcId AS CHARACTER NO-UNDO. 
 
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -191,6 +189,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEFINE VARIABLE data            AS CHAR EXTENT 19 NO-UNDO.
    DEFINE VARIABLE lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcContactId AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcContactIdType AS CHARACTER NO-UNDO.
 
    lcFError = "".
    
@@ -239,8 +239,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       lcIdtypeOrderCustomer = data[LOOKUP("id_type", gcCustomerStructStringFields)].
       IF data[LOOKUP("person_id", gcCustomerStructStringFields)] ne "" THEN
           lcIdOrderCustomer = data[LOOKUP("person_id", gcCustomerStructStringFields)].
-      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" THEN 
-      DO:
+      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne ""
+      THEN DO:
           lcContactId = lcIdOrderCustomer.
           lcIdOrderCustomer = data[LOOKUP("company_id", gcCustomerStructStringFields)].
           lcContactIdType = lcIdtypeOrderCustomer.
@@ -259,6 +259,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
+         OrderCustomer.AuthCustId      = lcContactId
+         OrderCustomer.AuthCustIdType  = lcContactIdType
          OrderCustomer.RowType         = piRowType
          OrderCustomer.BankCode        = pcAccount
       .
@@ -383,8 +385,6 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.InvCustRole     = 1
       Order.UserRole        = 1
       Order.StatusCode      = "1"
-      Order.OrdererId       = lcContactId
-      Order.OrdererIDType   = lcContactIdType 
       Order.CLI             = pcCLI
       Order.CLIType         = pcSubType
       Order.mnpstatus       = INT(pcNumberType EQ "mnp")
@@ -555,6 +555,9 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
+
+{viptool/src/findtenant.i YES ordercanal CliType CliType pcSubType}
+
 IF pcOfferId NE "" THEN DO:
    FIND Offer WHERE 
         Offer.Brand = gcBrand AND 
@@ -582,12 +585,6 @@ END.
 lcError = fCheckMSISDN().
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-FIND FIRST CLIType NO-LOCK WHERE
-           CLIType.Brand = gcBrand AND
-           CLIType.CliType = pcSubType NO-ERROR.
-IF NOT AVAIL CLIType THEN
-   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
@@ -620,12 +617,12 @@ DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE). 
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF get_paramcount(pcContactStruct) GT 0 THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -641,10 +638,10 @@ liOrderId = NEXT-VALUE(OrderId).
 
 fCreateOrder().
 
-fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE).
+fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, TRUE).
 pcAccount = "".
 IF get_paramcount(pcContactStruct) GT 0 THEN 
-   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
+   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, TRUE).
                                              
 /* mobsub handling */
 IF fOngoingOrders(pcCli,"") THEN DO:

@@ -66,8 +66,12 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
          FIND FIRST Customer WHERE 
                     Customer.custnum = Mobsub.custnum AND
                    (Customer.category = "20" OR
+                    Customer.category = "21" OR
+                    Customer.category = "22" OR
                     Customer.category = "40" OR
-                    Customer.category = "41") NO-LOCK NO-ERROR.
+                    Customer.category = "41" OR
+                    Customer.category = "42" OR
+                    Customer.category = "43") NO-LOCK NO-ERROR.
          IF NOT AVAIL Customer THEN NEXT.
 
          FIND FIRST CallAlarm WHERE

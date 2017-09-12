@@ -109,7 +109,7 @@ IF NOT AVAILABLE DayCampaign THEN RETURN.
 ldCurrent = fMakeTS().
 
 /* service package */
-IF DayCampaign.DCType = "1" THEN DO:
+IF DayCampaign.DCType = "1" OR INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN DO:
 
    ldtFirstDate = ?.
     
@@ -290,6 +290,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                    (IF AVAIL DayCampaign AND
                                      DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                                      THEN iiPerContID ELSE 0),
+                                   "",  
                                    OUTPUT lcError).
 
       IF liCreated > 0 THEN DO:

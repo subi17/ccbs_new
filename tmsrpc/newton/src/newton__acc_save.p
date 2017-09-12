@@ -74,8 +74,11 @@ DEF VAR lcDMSInfo AS CHAR NO-UNDO.
 DEF VAR liActLimit AS INT NO-UNDO.
 DEF VAR liActs AS INT NO-UNDO.
 DEF VAR lcReqSource AS CHAR NO-UNDO.
+DEF VAR llProCust AS LOG NO-UNDO.
+DEF VAR llSelfEmployed AS LOG NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
+DEF BUFFER bDestCustomer FOR Customer.
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
    FIELD cBirthDay AS CHAR
@@ -88,12 +91,12 @@ DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string,string,string") EQ ? THEN RETURN.
 
-pdeChargeLimit = get_double(param_toplevel_id, "5").
-pdeCharge = get_double(param_toplevel_id, "4").
-pcstruct = get_struct(param_toplevel_id, "3").
-pdeChgStamp = get_timestamp(param_toplevel_id, "2").
-pcSalesman = get_string(param_toplevel_id, "1").
 piMsSeq = get_int(param_toplevel_id, "0").
+pcSalesman = get_string(param_toplevel_id, "1").
+pdeChgStamp = get_timestamp(param_toplevel_id, "2").
+pcstruct = get_struct(param_toplevel_id, "3").
+pdeCharge = get_double(param_toplevel_id, "4").
+pdeChargeLimit = get_double(param_toplevel_id, "5").
 pcMemoStruct = get_struct(param_toplevel_id,"6").
 pcMandateId = get_string(param_toplevel_id,"7").
 pcChannel = get_string(param_toplevel_id,"8").
@@ -109,10 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
-FIND MobSub WHERE
-     MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL Mobsub THEN
-   RETURN appl_err("Subscription was not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 FIND FIRST bOriginalCustomer WHERE
            bOriginalCustomer.Custnum = Mobsub.Custnum NO-LOCK NO-ERROR.
@@ -219,6 +219,11 @@ ASSIGN
 {Func/fcharge_comp_loaded.i}
 {Func/orderchk.i}
 
+/*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
+lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
+                               Customer.Custnum).
+IF lcError > "" THEN RETURN appl_err(lcError).                               
+
 lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
 IF lcError > "" THEN RETURN appl_err(lcError).
 
@@ -248,9 +253,18 @@ IF lcError EQ "" AND AVAIL Customer THEN
 IF lcError > "" THEN
    RETURN appl_err(lcError).
 
+FIND bDestCustomer WHERE 
+     bDestCustomer.brand EQ gcBrand AND
+     bDestCustomer.orgId EQ ttCustomer.OrgId NO-ERROR.
+IF AVAIL bDestCustomer THEN DO:
+   llProCust = fIsPro(bDestCustomer.category).
+   llSelfEmployed = fIsSelfEmpl(bDestCustomer.category).
+END.
+
 IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
                                INPUT ttCustomer.CustIdType,
-                               INPUT NO,
+                               llSelfEmployed,
+                               llProCust,
                                1,
                                OUTPUT lcError,
                                OUTPUT liSubLimit,

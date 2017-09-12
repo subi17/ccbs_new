@@ -116,6 +116,7 @@ DEF VAR lcCIFAgrCustIDType AS CHAR NO-UNDO.
 DEF VAR lcCIFAgrCustID AS CHAR NO-UNDO. 
 DEF VAR lcAddressCodM   AS CHAR NO-UNDO. 
 DEF VAR liDelType       AS INT NO-UNDO.
+DEF VAR lcPro           AS CHAR NO-UNDO.
 
 DEF BUFFER bNewCust     FOR Customer.
 DEF BUFFER bCustomer    FOR Customer.
@@ -868,7 +869,12 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          VIEW-AS ALERT-BOX ERROR.
          NEXT.
       END.
-      
+/*
+      /*Pro customer check*/
+      lcProCheck = fCheckACCCompability(bOriginalCustomer.Custnun,
+                                     Customer.Custnum).
+  */    
+
       IF liNewCust1 > 0 THEN DO:
          FIND Customer WHERE Customer.CustNum = liNewCust1 NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Customer OR Customer.Roles = "inactive" THEN DO:
@@ -1096,7 +1102,12 @@ PROCEDURE pInitialize:
 END PROCEDURE. /* pInitialize */
 
 PROCEDURE pUpdateNewOwner:
- 
+   
+   DEF VAR lcErrMsg     AS CHAR NO-UNDO.
+
+   DEFINE BUFFER bf_NewCustomer FOR Customer.
+   DEFINE BUFFER bf_NewCustCat  FOR CustCat.
+   
    llReady = FALSE.
 
    UpdateAgrCust:
@@ -1237,6 +1248,21 @@ PROCEDURE pUpdateNewOwner:
                   MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
                   NEXT.
                END.
+
+               /* Validate, if existing customer*/   
+               FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = gcBrand                 AND 
+                                               bf_NewCustomer.CustIdType = lcNewCustIDType         AND 
+                                               bf_NewCustomer.OrgId      = INPUT lcNewCustId       NO-LOCK NO-ERROR.
+               IF AVAIL bf_NewCustomer THEN
+               DO:
+                   ASSIGN lcErrMsg = fCheckACCCompability(bCurrentCust.CustNum,bf_NewCustomer.CustNum). 
+                   IF lcErrMsg <> "" THEN
+                   DO:
+                       MESSAGE lcErrMsg VIEW-AS ALERT-BOX ERROR.
+                       NEXT.
+                   END.       
+               END.
+
             END.
              
          END.

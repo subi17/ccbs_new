@@ -21,6 +21,7 @@
 {Mnp/mnp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
+{Func/profunc.i}
 {Mc/shipping_cost.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
@@ -1765,39 +1766,54 @@ END.
 /*Tariff: #CTNAME [tariff prices as specified on summary and confirmation page, with customer VAT zone]*/
 PROCEDURE pGetCTNAME:
 
-   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
-   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
-   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
-   DEF VAR lcValue AS CHAR NO-UNDO.   
-   DEF VAR lcList AS CHAR NO-UNDO.
-   DEF VAR lcTagCTName AS CHAR NO-UNDO.
-   DEF VAR liNumEntries AS INT NO-UNDO.
-   DEF VAR llDSSPromotion AS LOG  NO-UNDO.
-   DEF VAR ldtEventDate  AS DATE NO-UNDO.
-   DEF VAR liMsSeq       AS INT NO-UNDO.
-   DEF VAR lcTitle       AS CHAR NO-UNDO.
-   DEF VAR llSmall       AS LOG  NO-UNDO.
-   DEF VAR lcFinTxt      AS CHAR NO-UNDO.
-   DEF VAR lcDivTxt      AS CHAR NO-UNDO.
-   DEF VAR liSmallLength AS INT  NO-UNDO.
-   DEF VAR lcErrTxt      AS CHAR NO-UNDO.
-   DEF VAR ldeTaxPerc    AS DEC NO-UNDO.
-   DEF VAR lcFATGroup    AS CHAR NO-UNDO.
-   DEF VAR lcDCEvent     AS CHAR NO-UNDO.
-   DEF VAR liCount       AS INT  NO-UNDO.
-   DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
-   DEF VAR lcBundle      AS CHAR NO-UNDO.
-   DEF VAR lcBundlesInfo AS CHAR NO-UNDO.
-   DEF VAR lcBundleInfo  AS CHAR NO-UNDO.
-   DEF VAR ldeBundleFee  AS DEC  NO-UNDO.
-   DEF VAR lcBundleBillItem AS CHAR NO-UNDO.
-   DEF VAR liTime        AS INT NO-UNDO.
-   DEF VAR ldtOrder      AS DATE NO-UNDO.
-   DEF VAR lcErr AS CHAR NO-UNDO.
-   lcErr = fGetOrderData (INPUT iiOrderNBR).
-   ldtEventDate = TODAY.
+   DEF INPUT  PARAMETER iiOrderNBR AS INT     NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr     AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult   AS CHAR    NO-UNDO.
 
-   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
+   DEF VAR lcValue                 AS CHAR NO-UNDO.   
+   DEF VAR lcList                  AS CHAR NO-UNDO.
+   DEF VAR lcTagCTName             AS CHAR NO-UNDO.
+   DEF VAR liNumEntries            AS INT  NO-UNDO.
+   DEF VAR llDSSPromotion          AS LOG  NO-UNDO.
+   DEF VAR ldtEventDate            AS DATE NO-UNDO.
+   DEF VAR liMsSeq                 AS INT  NO-UNDO.
+   DEF VAR lcTitle                 AS CHAR NO-UNDO.
+   DEF VAR llSmall                 AS LOG  NO-UNDO.
+   DEF VAR lcFinTxt                AS CHAR NO-UNDO.
+   DEF VAR lcDivTxt                AS CHAR NO-UNDO.
+   DEF VAR liSmallLength           AS INT  NO-UNDO.
+   DEF VAR lcErrTxt                AS CHAR NO-UNDO.
+   DEF VAR ldeTaxPerc              AS DEC  NO-UNDO.
+   DEF VAR lcFATGroup              AS CHAR NO-UNDO.
+   DEF VAR lcDCEvent               AS CHAR NO-UNDO.
+   DEF VAR liCount                 AS INT  NO-UNDO.
+   DEF VAR lcBundleCLITypes        AS CHAR NO-UNDO.
+   DEF VAR lcBundle                AS CHAR NO-UNDO.
+   DEF VAR lcBundlesInfo           AS CHAR NO-UNDO.
+   DEF VAR lcBundleInfo            AS CHAR NO-UNDO.
+   DEF VAR ldeBundleFee            AS DEC  NO-UNDO.
+   DEF VAR lcBundleBillItem        AS CHAR NO-UNDO.
+   DEF VAR liTime                  AS INT  NO-UNDO.
+   DEF VAR ldtOrder                AS DATE NO-UNDO.
+   DEF VAR lcErr                   AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
+   DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
+
+   DEFINE BUFFER lbELOrder   FOR Order.
+   DEFINE BUFFER lbMLOrder   FOR Order.
+   DEFINE BUFFER lbELCLIType FOR CLIType.
+   DEFINE BUFFER lbMLCLIType FOR CLIType.
+
+   ASSIGN 
+      lcErr        = fGetOrderData (INPUT iiOrderNBR)
+      ldtEventDate = TODAY.
+
+   ASSIGN 
+      lcBundleCLITypes        = fCParamC("BUNDLE_BASED_CLITYPES")
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+      lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+
    fSplitTS(Order.CrStamp,
             OUTPUT ldtOrder,
             OUTPUT liTime).
@@ -1826,9 +1842,6 @@ PROCEDURE pGetCTNAME:
          END CASE. /* CASE lcBundle: */
       END. /* IF lcBundleInfo > "" THEN DO: */
    END. /* DO liCount = 1 TO liNumEntries: */
-
-
-
 
    /* clitype and language have now their final values */
    IF  lcCLIType > "" THEN DO:
@@ -1862,6 +1875,8 @@ PROCEDURE pGetCTNAME:
       END.
    END. /* lcCLIType */
 
+   /*YPRO-21*/
+   IF fIsProOrder(iiOrderNBR) EQ TRUE THEN lcTagCTName = lcTagCTName + " PRO".
    IF lcErrTxt NE "" THEN DO:
       olgErr = TRUE.
       lcResult = (lcErrTxt).
@@ -1934,7 +1949,7 @@ PROCEDURE pGetCTNAME:
                        OfferItem.Offer       = Order.Offer         AND
                        OfferItem.ItemType    = "discountplan"      AND
                        LOOKUP(OfferItem.ItemKey,
-                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC,CONVDISC") > 0 AND
+                       "TariffMarchDISC,CONT9DISC,CONT10DISC,CONT15DISC,CONT24DISC,CONT23DISC,CONT25DISC,CONT26DISC,CONVDISC,CONVDISC20_3") > 0 AND
                        OfferItem.BeginStamp <= Order.CrStamp       AND
                        OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
                  FIRST DiscountPlan WHERE
@@ -1969,6 +1984,32 @@ PROCEDURE pGetCTNAME:
                 END.
              END.
        END.
+       
+       /* TV Service */
+       TVSERVICE_DETAILS:
+       FOR EACH OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+                                  OrderAction.OrderId  = Order.Orderid AND
+                                  OrderAction.ItemType = "BundleItem"  NO-LOCK,
+           FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
+                                   DayCampaign.DCEvent      = OrderAction.ItemKey  AND 
+                                   DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} NO-LOCK:
+
+           FIND FIRST FMItem WHERE FMItem.Brand     = gcBrand              AND 
+                                   FMItem.FeeModel  = DayCampaign.FeeModel AND
+                                   FMItem.BillCode  = DayCampaign.BillCode AND
+                                   FMItem.PriceList > ""                   AND 
+                                   FMItem.FromDate <= TODAY                AND
+                                   FMItem.ToDate   >= TODAY                NO-LOCK NO-ERROR. 
+                                   
+           ASSIGN 
+              lcMFText        = lcMFText + 
+                                "<br/>Agile TV, " + 
+                                (IF AVAIL FMItem THEN 
+                                   (REPLACE(STRING(FMItem.Amount,"z9.99"),".",",") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
+                                 ELSE 
+                                   "").
+           LEAVE TVSERVICE_DETAILS.                     
+       END.                                    
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
                   DiscountPlan.DPRuleId = "BONO7DISC" NO-ERROR.
@@ -1997,7 +2038,7 @@ PROCEDURE pGetCTNAME:
           END.
 
           IF llgEmailText THEN DO:
-             lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>3 GB/mes extra free during 6 months"
+             lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>3 GB/mes extra free during 6 months" 
                         ELSE "<br/>3 GB/mes extra gratis durante 6 meses"). 
           
           END.
@@ -2055,6 +2096,56 @@ PROCEDURE pGetCTNAME:
                               ELSE "<br/>25 GB/mes extra gratis durante 6 meses").
        END.
 
+       /* Extra lines text */
+       IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) > 0 AND 
+                 Order.MultiSimId                      <> 0 AND
+                 Order.MultiSimType                     = {&MULTISIMTYPE_PRIMARY} THEN DO:
+      
+          FIND FIRST lbELOrder NO-LOCK WHERE
+                     lbELOrder.Brand        = gcBrand          AND
+                     lbELOrder.OrderId      = Order.MultiSimId AND
+                     lbELOrder.MultiSimId   = Order.OrderId    AND
+                     lbELOrder.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+          
+          IF AVAIL lbELOrder THEN DO:
+             
+             FIND FIRST lbELCLIType NO-LOCK WHERE 
+                        lbELCLIType.Brand   = gcBrand           AND 
+                        lbELCLIType.CLIType = lbELOrder.CLIType NO-ERROR.
+
+             IF AVAIL lbELCLIType THEN 
+                lcTagCTName = lcTagCTName + " con " + lbELCLIType.CLIName. 
+          
+          END.
+
+       END.
+       ELSE IF LOOKUP(Order.CLIType,lcExtraLineCLITypes) > 0 AND 
+                      Order.MultiSimId                  <> 0 AND
+                      Order.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
+          
+          FIND FIRST lbMLOrder NO-LOCK WHERE
+                     lbMLOrder.Brand        = gcBrand          AND
+                     lbMLOrder.OrderId      = Order.MultiSimId AND
+                     lbMLOrder.MultiSimId   = Order.OrderId    AND
+                     lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+ 
+         IF AVAIL lbMLOrder THEN DO:
+
+            FIND FIRST lbMLCLIType NO-LOCK WHERE 
+                       lbMLCLIType.Brand   = gcBrand AND 
+                       lbMLCLIType.CLIType = lbMLOrder.CLIType NO-ERROR.
+
+            IF AVAIL lbMLCLIType THEN 
+               ASSIGN 
+                  lcTagCTName  = lcTagCTNAme + " de " + lbMLCLIType.CLIName
+                  ldeMFWithTax = 0
+                  llgExtraLine = TRUE
+                  lcList       = lcList + " 0 " + "&euro;/mes" + fTeksti(581,liLang).
+                  
+         END.
+
+       END.
+
        IF ldeMFWithTax > 0 THEN DO:
           IF llAddLineDiscount THEN
              lcList = lcList + (IF lcList > "" THEN ",<br/>" ELSE "") + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
@@ -2071,7 +2162,8 @@ PROCEDURE pGetCTNAME:
        END.
 
        IF lcList > "" THEN DO:
-         IF llAddLineDiscount THEN
+         IF llAddLineDiscount OR 
+            llgExtraLine      THEN
             lcTagCTName = lcTagCTName + ",<br/> " + lcList + "<br/>".
          ELSE
             lcTagCTName = lcTagCTName + ",<br/> " + lcList +
@@ -2230,6 +2322,65 @@ PROCEDURE pGetPicture:
    END.
 END.
 
+PROCEDURE pGetEXTRA_LINE_INFO:
+
+   DEF INPUT  PARAMETER iiOrderNBR AS INT  NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr     AS LOG  NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult   AS CHAR NO-UNDO.
+
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
+   DEF VAR lcList                  AS CHAR NO-UNDO. 
+
+   DEFINE BUFFER lbOrder   FOR Order.
+   DEFINE BUFFER lbMLOrder FOR Order.
+   DEFINE BUFFER lbELOrder FOR Order.
+   
+   ASSIGN
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+      lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes")
+      lcList                  = "".
+
+   FIND FIRST lbOrder NO-LOCK WHERE
+              lbOrder.Brand   = gcBrand                     AND
+              lbOrder.OrderId = iiOrderNBR                  AND
+      (LOOKUP(lbOrder.CLIType,lcExtraMainLineCLITypes) > 0  OR
+       LOOKUP(lbOrder.CLIType,lcExtraLineCLITypes)     > 0) NO-ERROR.
+
+   IF AVAIL lbOrder                 AND 
+            lbOrder.MultiSimId <> 0 THEN DO: 
+      CASE lbOrder.MultiSimType:
+         WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
+            FIND FIRST lbELOrder NO-LOCK WHERE
+                       lbELOrder.Brand        = gcBrand            AND
+                       lbELOrder.OrderId      = lbOrder.MultiSimId AND
+                       lbELOrder.MultiSimId   = lbOrder.OrderId    AND
+                       lbELOrder.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+
+            IF AVAIL lbELOrder THEN
+               ASSIGN 
+                  lcList   = fTeksti(579,liLang)
+                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbELOrder.ContractId)).
+         END.
+         WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
+            FIND FIRST lbMLOrder NO-LOCK WHERE
+                       lbMLOrder.Brand        = gcBrand            AND
+                       lbMLOrder.OrderId      = lbOrder.MultiSimId AND
+                       lbMLOrder.MultiSimId   = lbOrder.OrderId    AND
+                       lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+
+            IF AVAIL lbMLOrder THEN
+               ASSIGN 
+                  lcList   = fTeksti(580,liLang)
+                  lcResult = REPLACE(lcList,"#ORDERID", STRING(lbMLOrder.ContractId)).
+         END.
+         OTHERWISE .
+      END CASE.
+   END.
+   ELSE lcResult = "".
+
+END PROCEDURE.
+
 PROCEDURE pGetWELCOMEPROMO:
 
    DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
@@ -2275,3 +2426,4 @@ PROCEDURE pGetWELCOMEPROMO:
       lcResult = REPLACE(lcResult,"#EURO","&euro;") + "<br /><br />"
       .
 END.
+

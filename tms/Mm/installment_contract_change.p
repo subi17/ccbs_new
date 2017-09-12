@@ -156,6 +156,7 @@ PROCEDURE pInstallmentContractChange:
                                 "",
                                 0,
                                 DCCLI.PerContractId,
+                                "",
                                 OUTPUT lcError).
    IF liTermReq = 0 OR liTermReq = ? THEN
       RETURN "ERROR:Current Installment Contract termination request " +
@@ -174,6 +175,7 @@ PROCEDURE pInstallmentContractChange:
                                "",
                                MsRequest.ReqDParam2, /* residual fee */
                                DCCLI.PerContractId,
+                               "",
                                OUTPUT lcError).
    IF liActReq = 0 OR liActReq = ? THEN
        UNDO, RETURN "ERROR:New Installment Contract termination request " +

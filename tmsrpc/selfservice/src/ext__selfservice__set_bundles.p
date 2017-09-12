@@ -75,6 +75,8 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
@@ -84,10 +86,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
-
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
 
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
@@ -147,11 +145,11 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should exist MDUB valid to the future */   
-         IF (fGetActiveMDUB(INPUT ldNextMonthActStamp) NE pcBundleId) THEN
+         IF (fGetActiveMDUB(INPUT "", INPUT ldNextMonthActStamp) NE pcBundleId) THEN
             RETURN appl_err("Bundle termination is not allowed").
 
          /* should not exist any pending request for MDUB */
-         IF fPendingMDUBTermReq() THEN
+         IF fPendingMDUBTermReq("") THEN
             RETURN appl_err("Bundle already cancelled").
 
          /* Ongoing BTC with upgrade upsell */
@@ -188,12 +186,12 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should not exist any MDUB valid to the future */
-         IF fGetActiveMDUB(INPUT ldeActStamp) > "" THEN
+         IF fGetActiveMDUB(INPUT "", INPUT ldeActStamp) > "" THEN
             RETURN appl_err("Bundle already active").
 
          /* should not exist any pending request for MDUB */
          IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR
-            fPendingMDUBActReq() THEN
+            fPendingMDUBActReq("") THEN
             RETURN appl_err("Bundle activation is not allowed").
 
          /* check service package definition exist for SHAPER and HSDPA */
@@ -275,6 +273,7 @@ ELSE
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
 
 IF liRequest = 0 THEN RETURN appl_err("Bundle request not created"). 

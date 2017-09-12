@@ -2,6 +2,8 @@
 "1" "Additional line CONT15" "ADDLINE" 140 1 1
 "1" "Additional line CONT26" "ADDLINE" 142 1 1
 "1" "Additional line CONT25" "ADDLINE" 144 1 1
+"1" "Additional line CONT26" "ADDLINEHM" 149 1 1
+"1" "Additional line CONT25" "ADDLINEHM" 150 1 1
 "1" "Data bundle change" "BTC-DENY" 21 0 1
 "1" "Bundle List" "Bundle" 87 1 1
 "1" "Bundle List" "Bundle" 42 1 1
@@ -13,6 +15,9 @@
 "1" "Bundle List" "Bundle" 56 1 1
 "1" "Bundle list" "Bundle" 91 1 1
 "1" "Convergent Bundle list" "Bundle" 112 1 2
+"1" "Convergent to Fixed STC" "CONVFIXEDSTC" 146 1 1
+"1" "Convergent to Fixed STC" "CONVFIXEDSTC" 147 1 1
+"1" "Convergent to Fixed STC" "CONVFIXEDSTC" 148 1 1
 "1" "denied modules" "DENIED" 18 0 1
 "1" "Per.contract usage" "PERCONTR" 22 1 1
 "1" "Per.contract usage" "PERCONTR" 25 1 3
@@ -70,5 +75,6 @@
 "1" "TARJ11" "PERCONTR" 136 1 58
 "1" "TARJ12" "PERCONTR" 137 1 59
 "1" "TARJ13" "PERCONTR" 145 1 60
+"1" "CONT28" "PERCONTR" 151 1 61
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2

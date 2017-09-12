@@ -11,7 +11,9 @@
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Func/femailinvoice.i}
-      
+{Func/profunc.i}
+{Func/custfunc.i}
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    {Func/lib/eventlog.i}
@@ -201,6 +203,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    DEF BUFFER InvCust  FOR Customer.
    DEF BUFFER UserCust FOR Customer.
 
+   DEF VAR lcCategory AS CHAR NO-UNDO.
+
    FIND Customer WHERE
         Customer.CustNum = iiCustNum EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN FALSE.     
@@ -265,15 +269,12 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
 
-   ASSIGN
-   Customer.AuthCustId      = Order.OrdererID WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+   IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+      OrderCustomer.CustIdType = "CIF"
+   THEN ASSIGN
+           Customer.AuthCustId     = OrderCustomer.AuthCustId
+           Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
+           .
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).
@@ -317,18 +318,14 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       END.
 
       /* category according to id type */
-      Customer.Category = OrderCustomer.Category.      
-      FIND FIRST CustCat NO-LOCK WHERE
-         CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 AND
-         CustCat.SelfEmployed = OrderCustomer.SelfEmployed NO-ERROR.  
-      IF NOT AVAILABLE CustCat THEN    
-      FIND FIRST CustCat NO-LOCK WHERE
-         CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 NO-ERROR.
-      IF AVAIL CustCat THEN
-         Customer.Category = CustCat.Category.
-
+         Customer.Category = OrderCustomer.Category.      
+         fgetCustSegment(OrderCustomer.CustIDType, OrderCustomer.SelfEmployed,
+                         ordercustomer.pro, OUTPUT lcCategory).
+         IF lcCategory > "" THEN DO:
+            Customer.Category = lcCategory.
+            IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
+               Ordercustomer.Category = lcCategory.
+         END.
       IF iiTarget = 1 THEN DO:
          /* new user account */
          create_account(Customer.CustNum,?,?).

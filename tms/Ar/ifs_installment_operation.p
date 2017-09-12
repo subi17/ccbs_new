@@ -13,6 +13,7 @@
 {Func/date.i}
 {Func/cparam2.i}
 {Func/coinv.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
@@ -320,6 +321,7 @@ FOR EACH ttInstallment:
       ttInstallment.ResidualAmount lcDelimiter          /*  11 residual_amount */
       ttInstallment.Channel lcDelimiter                 /*  12 channel */
       ttInstallment.OrderId lcDelimiter                 /*  13 OrderId */
+      fgetCompanyId() lcDelimiter                         /*  14 CompanyId */
       SKIP.
    
    /* mark as transferred only when picking modified ones, full dump 
@@ -355,7 +357,8 @@ FOR EACH ttInstallment:
          ttInstallment.Channel lcDelimiter                 /*  12 channel */
          ttInstallment.OrderId lcDelimiter                 /*  13 OrderId */
          ttInstallment.FFNum lcDelimiter
-         ttInstallment.RowSource lcDelimiter SKIP.
+         ttInstallment.RowSource lcDelimiter 
+         fgetCompanyId() lcDelimiter SKIP.                   /* CompanyId */
       
       IF AVAIL FixedFee THEN RELEASE FixedFee.
    END.
@@ -1097,6 +1100,7 @@ PROCEDURE pCollectReactivations:
    DEF VAR llTerminationSent AS LOG NO-UNDO. 
    DEF VAR ldResidual    AS DEC  NO-UNDO.     
    DEF VAR ldResidualNB  AS DEC  NO-UNDO.
+   DEF VAR lcOrderType AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest     FOR MsRequest.
    DEF BUFFER bMainMsRequest FOR MsRequest.
@@ -1305,6 +1309,7 @@ PROCEDURE pCollectReactivations:
          END.
 
          CREATE ttInstallment.
+         /* YTS-11101 ttInstallment.Channel in Reactivations */
          ASSIGN
             ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM"
                                      THEN "G"
@@ -1318,7 +1323,7 @@ PROCEDURE pCollectReactivations:
             ttInstallment.OperDate = ldaReacDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldResidualNB
-            ttInstallment.Channel = ""
+            ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
             ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN "" 
                                      ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
             ttInstallment.RowSource = "REACTIVATION"

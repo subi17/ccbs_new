@@ -46,6 +46,7 @@ DEF VAR llUpgradeUpsell AS LOG     NO-UNDO INIT FALSE.
 DEF VAR lcUpgradeUpsell AS CHAR    NO-UNDO.
 DEF VAR liUpsellCreated AS INT     NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR    NO-UNDO.
+DEF VAR lcVoiceBundles  AS CHAR    NO-UNDO.
 DEF VAR lcMemoType      AS CHAR    NO-UNDO.
 
 DEF VAR pcContractID     AS CHAR NO-UNDO.
@@ -78,6 +79,10 @@ ASSIGN
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
       WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
 
+ASSIGN
+    pcOldBundle = ENTRY(1,pcOldBundle,"|")  
+    pcNewBundle = ENTRY(1,pcNewBundle,"|").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF plExtendContract AND plExcludeTermPenalty THEN
@@ -92,9 +97,7 @@ END. /* IF LOOKUP("memo", lcstruct) > 0 THEN DO: */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
            DayCampaign.Brand = gcBrand AND
@@ -103,7 +106,9 @@ IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-lcBONOContracts = fCParamC("BONO_CONTRACTS").
+ASSIGN
+    lcBONOContracts = fCParamC("BONO_CONTRACTS")
+    lcVoiceBundles  = fCParamC("VOICE_BONO_CONTRACTS").
 
 IF NOT fValidateBTC
    (MobSub.MsSeq,
@@ -189,6 +194,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          0,
                                          0,
+                                         "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -200,7 +206,7 @@ IF llUpgradeUpsell THEN DO:
    END. /* ELSE DO: */
 END. /* IF ilUpgradeUpsell THEN DO: */
 
-IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 THEN
+IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 OR LOOKUP(pcNewBundle,lcVoiceBundles) > 0 THEN
    lcMemoType  = "Service".
 ELSE
    lcMemoType  = "MobSub".

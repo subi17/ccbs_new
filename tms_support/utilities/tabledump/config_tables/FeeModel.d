@@ -1,5 +1,6 @@
 "ACC_POSTPAID" "Agreement Customer Change Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BALANCE_PREPAID" "Balance Query Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "BBMF" "BlackBerry Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BONO_VOIPMF" "Mobile data usage bundle VoIP" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -9,6 +10,7 @@
 "CargoPrep_05" "Cargo_5euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "CargoPrep_10" "Cargo_10euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "CargoPrep_20" "Cargo_20euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"CentralitaPROMF" "Centralita Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Compensa 10" "Compensa 10euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "Compensa 100" "Compensa 100euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "Compensa 15" "Compensa 15euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
@@ -27,6 +29,7 @@
 "CONT25MF" "Contrato 25 MonthlyFee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT26MF" "Contrato 26" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT27MF" "LA INFINITA 2 GB DTO." "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT28MF" "Línea móvil extra" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -89,12 +92,16 @@
 "DSSMF" "Data Sharing Service Bundle package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMFUPS" "Data Sharing Service Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ERROR_RECARGA" "Compensa 20euros" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"FAXTOEMAILMF" "FAX TO EMAIL" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FLEX_500MB_UPSELLMF" "500MB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FLEX_5GB_UPSELLMF" "5GB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "Importe_descontado" "Importe descontado" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"IPFIJAMF" "IP FIJA" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MDUB2MF" "Mobile Data Usage Bundle Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MDUB2MFUPS" "MDUB2 Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MDUB2TOMDUB3" "Bono 15 to Bono 25 Upgrade Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -120,6 +127,7 @@
 "MDUBTOMDUB9" "Bono 8 to Bono 9 Upgrade Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "MSISDN_POSTPAID" "Change MSISDN Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "MSISDN_PREPAID" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"OFFICE365MF" "OFFICE 365 Essentials" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELSIM" "Payment on deliver cost - SIM only" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYDELTER" "Payment on deliver cost - Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM10" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -662,8 +670,10 @@
 "TOPUPCAMPGIFT" "Initial topup for gift orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPPREACT" "Re-charge of Pre-activated Prepaid (POS)" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPSIM" "Initial topup for only sim orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"TVTERMPERIODPF" "TV Permanency Contract" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "UPSELL_PMDUBFee" "PMDUB UPSELL Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Uso No Razonable" "Uso No Razonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "UsoNoRazonable" "UsoNoRazonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"VOICE200BMF" "Voice 200 package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "X9305871W" "X9305871W" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "XMASGIFT" "Gift 2007" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

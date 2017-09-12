@@ -380,8 +380,8 @@ ASSIGN
 IF lcPassword = ? THEN lcPassword = "".
  
 form
-    Customer.CustNum    format ">>>>>>>9" column-label "CustNbr"
-    lcCustName          format "x(32)"    column-label "Name"
+    Customer.CustNum    format ">>>>>>>>9" column-label "CustNbr"
+    lcCustName          format "x(30)"    column-label "Name"
     Customer.ZipCode    format "x(5)"     column-label "Zip"
     Customer.PostOffice format "x(10)"    column-label "Post.Addr"
     Customer.OrgId      format "x(11)"    column-label "PerID/ComID"
@@ -2446,6 +2446,12 @@ PROCEDURE local-update-fin:
                      Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}
                      llUpdateDelType = FALSE.
                END. /* IF INPUT Customer.DelType = {&INV_DEL_TYPE_EMAIL} */
+               ELSE IF INPUT Customer.DelType = {&INV_DEL_TYPE_SMS} AND
+                    BUFFER-TENANT-NAME(Customer) EQ {&TENANT_MASMOVIL} THEN DO:
+                  MESSAGE "SMS Invoice not allowed for MasMovil"
+                  VIEW-AS ALERT-BOX ERROR.
+                  NEXT.
+               END.
                ELSE DO:
                   /* Cancel Ongoing Email Activation Request */
                   FIND FIRST InvoiceTargetGroup WHERE

@@ -164,7 +164,7 @@ DO WHILE TRUE:
 
  "G) Single Fee                           " WHEN (NOT noMobile OR llPartial)
                                                @ menuc[7]
- "V)                            "          WHEN NOT noMobile   @ menuc[22] SKIP
+ "V) Third Party Service(s)      "         @ menuc[22] SKIP
 
  "H) Change Data Bundle                   " WHEN NOT noMobile  @ menuc[8]
  "W) Print Itemized List of Calls"          WHEN NOT noMobile  @ menuc[23] SKIP
@@ -415,6 +415,12 @@ DO WHILE TRUE:
       ELSE IF lcRight = "RW" THEN RUN Mm/mobsubsms.p(INPUT msseq).
    END.
    
+   /* Third party service */
+   ELSE IF FRAME-INDEX = 22 THEN DO:
+      IF NOT fIsPermittedModule(MobSub.CliType, "TPService") THEN NEXT.
+      RUN Mm/tpservice_br.p(msseq).
+   END.
+
    /* call specification */
    ELSE IF FRAME-INDEX = 23 AND NOT noMobile  THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "mclispec") THEN NEXT.

@@ -401,7 +401,9 @@ PROCEDURE pInitialize:
       lcFile = REPLACE(lcFile,"#YYMM",SUBSTRING(STRING(YEAR(TODAY),"9999"),3,2) + STRING(MONTH(TODAY),"99"))
       lcFile = REPLACE(lcFile,"#MODE",icDumpMode)
       lcFile = REPLACE(lcFile,"#CAT",DumpFile.FileCategory)
-      lcFile = REPLACE(lcFile,"#RUN",icRunNameTag).
+      lcFile = REPLACE(lcFile,"#RUN",icRunNameTag)
+      lcFile = REPLACE(lcFile,"#TENANT",
+                       CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant())).
    
    /* sequential nbr for the same day */
    IF INDEX(lcFile,"#DSEQ") > 0 THEN DO:

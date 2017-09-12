@@ -76,6 +76,8 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          SingleFee.BillCode = "RVTERM1EF".
       else if lcTFBank = "0081" then
          SingleFee.BillCode = "RVTERMBSF".
+      else if lcTFBank = "0225" then
+         SingleFee.BillCode = "RVTERMBCF".
 
    end.
 

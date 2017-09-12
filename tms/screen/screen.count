@@ -4,3 +4,5 @@ screen 1 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yo
 screen 2 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
 screen 3 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
 screen 4 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
+screen 5 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022
+screen 6 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo umask=0022

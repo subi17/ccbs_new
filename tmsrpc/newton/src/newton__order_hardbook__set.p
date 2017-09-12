@@ -37,6 +37,8 @@ ASSIGN
    lcHardBookState = get_string(pcStruct,"hard_book_state").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
+
 FIND FIRST OrderAccessory EXCLUSIVE-LOCK WHERE
            OrderAccessory.Brand = gcBrand AND
            OrderAccessory.OrderId = liOrderId AND

@@ -8,6 +8,7 @@ import time
 import glob
 import errno
 import resource
+import fnmatch
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -24,7 +25,7 @@ if hardlimit == resource.RLIM_INFINITY or hardlimit >= 4096000:
     resource.setrlimit(resource.RLIMIT_CORE,(4096000, hardlimit))
 
 if 'umask' in globals():
-    os.umask(int(umask))
+    os.umask(int(umask, 8))
 
 def userandpass():
     if 'tenancies' in globals():
@@ -94,8 +95,11 @@ def active_cdr_db_pf():
     else:
         connection_type = "local"
 
+    if 'dbstate' in globals():
+        connection_type += ',{0}'.format(dbstate)
+
     args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
-    args.extend(['-pf', getpf('../db/progress/store/common')])
+    args.extend(['-pf', getpf('../db/progress/store/common'), '-h', '1'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
     dict = literal_eval(cdr_fetch.communicate()[0])
@@ -147,7 +151,7 @@ def daemon(*a):
             args.append(pp)
 
     if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
+        args.extend(['-h', str(dbcount + cdr_database_count * 2)])
 
     daemonpf = '../etc/pf/' + daemon + '.pf'
     if os.path.exists(daemonpf):
@@ -234,20 +238,23 @@ def _compile(compilecommand, compiledir):
     if 'parameters' in globals() and len(parameters) > 0:
         source_files = [ filu for filu in parameters if re.search(r'.*\.(p|cls)$', filu) ]
     else:
-        source_files.extend(['applhelp.p'])
-        for source_dir in os.listdir('.'):
-            if not os.path.isdir(source_dir) or source_dir in ['test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref']:
-                continue
-            source_files.extend([ filu for filu in glob('{0}/*'.format(source_dir)) if re.search(r'.*\.(p|cls)$', filu)] )
-
-    if compiledir:
+        excluded_dirs = set(['lib', 'test', 'scripts', 'r', 'newdf', compiledir, 'pp', 'xref'])
         seen = []
-        for dir in (os.path.dirname(compiledir +'/' + x) for x in source_files):
-            if dir not in seen:
-               mkdir_p(dir)
-               seen.append(dir)
+        rootlevel = True
+        for root, dirs, files in os.walk('.', topdown=True):
+            if rootlevel:
+                [dirs.remove(d) for d in list(dirs) if d in excluded_dirs]
+                rootlevel = False
+            for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
+                source_files.append(os.path.join(root, filename)[2:])
+                if compiledir:
+                    if root[2:] and root not in seen:
+                        mkdir_p('{0}/{1}'.format(compiledir,root[2:]))
+                        seen.append(root)
 
     args = ['-pf', getpf('../db/progress/store/all')]
+    dbcount = len(databases)
+
     cdr_dict = {}
 
     for cdr_database in cdr_databases:
@@ -255,6 +262,7 @@ def _compile(compilecommand, compiledir):
             cdr_dict = active_cdr_db_pf()
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
+            dbcount += 1
 
     compile_p = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
 
@@ -264,12 +272,13 @@ def _compile(compilecommand, compiledir):
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
+    args.extend(['-h', str(dbcount)])
+
     processes = []
     for file in compile_p:
         comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
         processes.append(comp)
 
-    comp_error = False
     for comp in processes:
         call('/bin/cat', stdin=comp.stdout)
         comp.wait()
@@ -345,6 +354,7 @@ def cui(*a):
         sys.exit(5)
 
     args = ['-pf', getpf('../db/progress/store/all')]
+    dbcount = len(databases)
 
     if a[0] == 'cui' or a[0] == 'forcecui':
         program = 'Syst/tmslogin.p'
@@ -372,8 +382,9 @@ def cui(*a):
             cdr_dict = active_cdr_db_pf()
         if cdr_database in cdr_dict:
             args.extend(cdr_dict[cdr_database])
+            dbcount += 1
 
-    args.extend(['-p', program])
+    args.extend(['-h', str(dbcount + cdr_database_count * 2), '-p', program])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -423,7 +434,7 @@ def terminal(*a):
     args.extend(['-p', program + '.p'])
 
     if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
+        args.extend(['-h', str(dbcount + cdr_database_count * 2)])
 
     cmd = Popen(mpro + args)
     while cmd.poll() is None:
@@ -482,7 +493,8 @@ def batch(*a):
             dbcount += len(cdr_databases)
             cdr_dict = active_cdr_db_pf()
             for db in cdr_dict:
-                args.extend(cdr_dict[db])
+                if db in cdr_databases:
+                    args.extend(cdr_dict[db])
 
     for pp in [item for item in parameters if item not in remove_from_parameters]:
         if pp in databases:
@@ -506,7 +518,7 @@ def batch(*a):
             args[idx + 1] = 'batchid={0}'.format(args[idx + 1])
 
     if dbcount != 0:
-        args.extend(['-h', str(dbcount + 4)])
+        args.extend(['-h', str(dbcount + cdr_database_count * 2)])
 
     if a[0] == 'batch':
         with open('../var/log/%s.log' % module_base, 'a') as logfile:
@@ -553,6 +565,10 @@ def editor(*a):
     if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
         os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
 
-    args = parameters or (['-pf', getpf('../db/progress/store/all')])
+    args = parameters
+    args.extend(['-pf', getpf('../db/progress/store/all')])
+    dbcount = len(databases) + cdr_database_count * 3
+    args.extend(['-h', str(dbcount)])
+
     args = mpro + args + ['-clientlog', '../var/log/tms_editor.log', '-logginglevel', '4']
     os.execlp(args[0], *args)

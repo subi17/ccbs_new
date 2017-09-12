@@ -80,6 +80,7 @@ IF lcTransDir = ? THEN lcTransDir = "".
 
 /* format file name here, so that both reports get the same name */
 ASSIGN   
+   lcFile = REPLACE(lcFile,"#TENANT",CAPS(Syst.Parameters:Tenant))
    lcFile = REPLACE(lcFile,"#PERIOD",STRING(liPeriod,"999999"))
    lcFile = REPLACE(lcFile,"#INVDATE",STRING(ldaInvDate,"999999"))
    lcFile = REPLACE(lcFile,"#MODE",STRING(llBillDetails,"d/s") +

@@ -57,21 +57,25 @@ END FUNCTION. /* FUNCTION fOngoingContractTerm */
 FUNCTION fIsBundle RETURNS LOGIC
    (icDCEvent AS CHAR):
  
-   DEF VAR llBundle AS LOG  NO-UNDO.
-   DEF VAR liCount  AS INT  NO-UNDO.
-   
+   DEF VAR llBundle            AS LOG  NO-UNDO.
+   DEF VAR liCount             AS INT  NO-UNDO.
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO.
+
    DEF BUFFER bPerContract FOR DayCampaign.
    
    /* DUB is not considered as exchangable bundle */
    IF icDCEvent EQ "DUB" THEN RETURN FALSE.
    
-   llBundle = FALSE.
+   ASSIGN
+      llBundle            = FALSE
+      lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
    
    FOR FIRST bPerContract NO-LOCK WHERE 
              bPerContract.Brand = gcBrand AND
              bPerContract.DCEvent = icDCEvent AND
-             LOOKUP(STRING(bPerContract.DCType),
-                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
+             ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
+              bPerContract.BundleTarget = {&TELEVISION_BUNDLE} OR
+              (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
       
@@ -87,7 +91,7 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    DEF VAR lcResult AS CHAR NO-UNDO. 
    
    IF NOT fIsBundle(icDCEvent) THEN DO:
-      ocInfo = "Not a bundle".
+      ocInfo = "Not a bundle" + icDCEvent.
       RETURN FALSE.
    END.
    
@@ -106,6 +110,54 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    RETURN TRUE.
 
 END FUNCTION.
+
+FUNCTION fGetAllowedBundlesForSubscriptionType RETURNS CHAR
+  (icCliType AS CHAR):
+  
+  DEF VAR liCount             AS INT  NO-UNDO.
+  DEF VAR lcCliType           AS CHAR NO-UNDO.
+  DEF VAR lcSubsTypePrefix    AS CHAR NO-UNDO.
+  DEF VAR lcAllowedBundleList AS CHAR NO-UNDO.
+
+  DEFINE BUFFER bf_MxItem FOR MxItem.
+  DEFINE BUFFER bf_Matrix FOR Matrix.
+
+  ASSIGN 
+    lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN
+                            "CONTDSL*,CONT*"
+                        ELSE IF icCliType BEGINS "CONTFH" THEN
+                            "CONT*"
+                        ELSE IF icCliType BEGINS "CONT" THEN
+                            "CONT*"
+                        ELSE IF icCliType BEGINS "TARJ" THEN
+                            "TARJ*"
+                        ELSE "")
+    lcSubsTypePrefix = lcSubsTypePrefix + (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
+
+  IF lcSubsTypePrefix > "" THEN
+  DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix):
+      FOR EACH bf_Matrix WHERE bf_Matrix.Brand = gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior:
+
+          IF bf_Matrix.MXRes <> 1 THEN
+              NEXT.
+
+          ASSIGN lcCliType = ENTRY(liCount,lcSubsTypePrefix).
+
+          FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = lcCliType NO-LOCK:             
+              FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
+
+                  FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
+                  IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE} + ",6") > 0 AND LOOKUP(DayCampaign.DCEvent, lcAllowedBundleList) = 0 THEN
+                      ASSIGN lcAllowedBundleList = lcAllowedBundleList + (IF lcAllowedBundleList <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
+
+              END.
+          END.
+      END.
+  END.
+
+  RETURN lcAllowedBundleList.
+
+END FUNCTION.  
 
 FUNCTION fGetActiveDataBundle RETURNS CHAR
    (iiMsSeq      AS INT,
@@ -159,9 +211,10 @@ FUNCTION fGetActiveBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     idActiveTime AS DEC):
 
-   DEF VAR lcBundleList AS CHAR NO-UNDO.
-   DEF VAR liLoop       AS INT NO-UNDO.
-   DEF VAR licount      AS INT NO-UNDO.
+   DEF VAR lcBundleList        AS CHAR NO-UNDO.
+   DEF VAR liLoop              AS INT  NO-UNDO.
+   DEF VAR licount             AS INT  NO-UNDO.
+
    licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
 
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
@@ -178,8 +231,8 @@ FUNCTION fGetActiveBundle RETURNS CHAR
       FIRST bDayCampaign NO-LOCK WHERE 
             bDayCampaign.Brand   = gcBrand AND
             bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
-            LOOKUP(STRING(bDayCampaign.DCType),
-                   {&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+            LOOKUP(STRING(bDayCampaign.DCType),{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+            LOOKUP(bDayCampaign.DCEvent,"MM_DATA600") = 0 AND
             STRING(bDayCampaign.DCType) <> {&DCTYPE_CUMULATIVE_RATING}:
 
       /* Should not return DSS in active bundle list */

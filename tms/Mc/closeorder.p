@@ -20,14 +20,25 @@
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 
-DEF VAR llOk             AS LOG       NO-UNDO.
-DEF VAR lcError          AS CHARACTER NO-UNDO.
-DEF VAR lcQuestion       AS CHARACTER NO-UNDO. 
-DEF VAR lcCreditReason   AS CHARACTER NO-UNDO. 
-DEF VAR lcOldOrderStatus AS CHARACTER NO-UNDO. 
+DEF VAR llOk                    AS LOG  NO-UNDO.
+DEF VAR lcError                 AS CHAR NO-UNDO.
+DEF VAR lcQuestion              AS CHAR NO-UNDO. 
+DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
+DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+
+/* Additional line mobile only ALFMO-5*/
+DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
+DEF VAR llDelete                   AS LOGICAL   NO-UNDO. 
+DEF VAR llMainLineMigrationOngoing AS LOGICAL   NO-UNDO.
 
 DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER lbOrder         FOR Order.
+DEFINE BUFFER lbCustomer      FOR Customer.
+DEFINE BUFFER lbCustCat       FOR CustCat.
+/* Additional line mobile only ALFMO-5 */
+DEFINE BUFFER lbOrdCust       FOR OrderCustomer.
+DEFINE BUFFER lbOrd           FOR Order.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -171,7 +182,7 @@ IF llDoEvent THEN DO:
 END.               
 
 IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-  (Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} OR
+  (Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} OR /* shouldn't never get this value because of YDR-2575 */
    Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}) THEN DO:
    
    FIND FIRST MSISDN WHERE
@@ -206,6 +217,7 @@ IF llDoEvent THEN
    RUN StarEventMakeModifyEvent(lhOrder).
 
 /* ADDLINE-19 AC10 Additional Line */
+/* Extra Line */
 IF lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
    lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_1}               OR
    lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_2}               OR
@@ -220,8 +232,19 @@ DO:
               lbOrderCustomer.Brand   = gcBrand       AND
               lbOrderCustomer.OrderId = Order.OrderId AND
               lbOrderCustomer.RowType = 1             NO-ERROR.
-   IF AVAILABLE lbOrderCustomer THEN DO:
-      /* If Main Line is Closed and customer has no other main line then removing the additional line discount */
+   IF AVAILABLE lbOrderCustomer THEN 
+   DO:
+      /* If Convergent main line is Closed then close the additional line(s) waiting for main line completion */
+      FIND FIRST lbCustomer WHERE lbCustomer.CustNum = lbOrderCustomer.CustNum NO-LOCK NO-ERROR.
+      IF AVAIL lbCustomer THEN 
+      DO:
+          FIND FIRST lbCustCat WHERE lbCustCat.Brand = gcBrand AND lbCustCat.Category = lbCustomer.Category NO-LOCK NO-ERROR.
+          IF AVAIL lbCustCat THEN 
+          DO:
+              ASSIGN llMainLineMigrationOngoing = (IF lbCustCat.Pro <> lbOrderCustomer.Pro THEN TRUE ELSE FALSE).
+          END.
+      END.
+
       FOR EACH OrderCustomer NO-LOCK WHERE
                OrderCustomer.Brand      = gcBrand                    AND
                OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
@@ -233,41 +256,162 @@ DO:
                lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} AND
         LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:
 
-         FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
-                    OrderAction.Brand    = gcBrand           AND
-                    OrderAction.OrderID  = lbOrder.OrderID   AND
-                    OrderAction.ItemType = "AddLineDiscount" AND
-             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0 NO-ERROR.
-         IF AVAILABLE OrderAction THEN DO:
-            IF (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0    AND
-                NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
+        IF llMainLineMigrationOngoing THEN 
+            fSetOrderStatus(lbOrder.OrderID,{&ORDER_STATUS_CLOSED}).
+        ELSE
+        DO:
+            FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                       OrderAction.Brand    = gcBrand           AND
+                       OrderAction.OrderID  = lbOrder.OrderID   AND
+                       OrderAction.ItemType = "AddLineDiscount" AND
+                 LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0 NO-ERROR.
+            IF AVAILABLE OrderAction THEN 
+            DO:
+                IF (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0    AND
+                    NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
+                                                     lbOrderCustomer.CustID,
+                                                     lbOrder.CliType)          AND
+                    NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
                                                  lbOrderCustomer.CustID,
-                                                 Order.CliType)          AND
-                NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
-                                             lbOrderCustomer.CustID,
-                                             Order.CliType))             OR
-               (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0 AND
-                NOT fCheckOngoing2PConvergentOrder(lbOrderCustomer.CustIdType,
+                                                 lbOrder.CliType))             OR
+                   (LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0 AND
+                    NOT fCheckOngoing2PConvergentOrder(lbOrderCustomer.CustIdType,
+                                                       lbOrderCustomer.CustID,
+                                                       lbOrder.CliType)        AND
+                    NOT fCheckExisting2PConvergent(lbOrderCustomer.CustIdType,
                                                    lbOrderCustomer.CustID,
-                                                   Order.CliType)        AND
-                NOT fCheckExisting2PConvergent(lbOrderCustomer.CustIdType,
-                                               lbOrderCustomer.CustID,
-                                               Order.CliType))           THEN DO:
+                                                   lbOrder.CliType))           THEN 
+                DO:
+                   DELETE OrderAction.
+                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                    "Order",
+                                    STRING(lbOrder.OrderID),
+                                    0,
+                                    "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                                    "Removed AddLineDiscount Item from OrderAction").
+
+                   fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
+                                                  lbOrderCustomer.CustID).
+                END.
+            END.
+        END.
+      END.
+
+      /* If Main Line onging order is Closed, and if its associated extra line 
+         ongoing order is available then close extra line ongoing order */
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+      
+      IF lcExtraMainLineCLITypes                       NE "" AND
+         LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
+         Order.MultiSimId                              NE 0  AND 
+         Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
+         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                  Order.OrderId,    /* Main line Order Id  */ 
+                                 "CLOSE").          /* Action              */
+   
+   END.
+END. 
+
+/* Additional Line with mobile only ALFMO-5 
+   If Mobile only Main Line is Closed and customer has no other mobile only 
+   main line then remove the mobile only additional line discount */
+
+FIND FIRST lbOrderCustomer NO-LOCK WHERE
+           lbOrderCustomer.Brand   = gcBrand       AND
+           lbOrderCustomer.OrderId = Order.OrderId AND
+           lbOrderCustomer.RowType = 1             NO-ERROR.
+IF AVAILABLE lbOrderCustomer THEN DO:
+
+   /* Just to create the list of 
+     additional line CLITYPES in Ongoing status
+     Additional line mobile only ALFMO-5 */
+
+   FOR EACH lbOrdCust NO-LOCK WHERE
+            lbOrdCust.Brand      = gcBrand                    AND
+            lbOrdCust.CustIDType = lbOrderCustomer.CustIDType AND
+            lbOrdCust.CustID     = lbOrderCustomer.CustID     AND
+            lbOrdCust.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+      FIRST lbOrd NO-LOCK WHERE
+            lbOrd.Brand      = gcBrand                           AND
+            lbOrd.OrderID    = lbOrdCust.OrderID                 AND
+            LOOKUP(lbOrd.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
+            LOOKUP(lbOrd.CLIType, {&ADDLINE_CLITYPES}) > 0:
+
+      /* Buffer not needed in can-find so deleted */
+      IF CAN-FIND( FIRST OrderAction NO-LOCK WHERE
+                  OrderAction.Brand    = gcBrand           AND
+                  OrderAction.OrderID  = lbOrd.OrderID   AND
+                  OrderAction.ItemType = "AddLineDiscount" AND
+           LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+      DO:      
+         IF lcAddlineCliypes = "" THEN
+            ASSIGN lcAddlineCliypes = lbOrd.CLIType.
+         ELSE
+            ASSIGN lcAddlineCliypes = lcAddlineCliypes + "," + lbOrd.CLIType.
+      END.
+   END.
+
+
+   /* If Main Line is Closed and customer has no other mobile only 
+      main line then removing the additional line discount */
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      = gcBrand                    AND
+            OrderCustomer.CustIDType = lbOrderCustomer.CustIDType AND
+            OrderCustomer.CustID     = lbOrderCustomer.CustID     AND
+            OrderCustomer.RowType    = 1,
+      FIRST lbOrder NO-LOCK WHERE
+            lbOrder.Brand      = gcBrand                           AND
+            lbOrder.OrderID    = OrderCustomer.OrderID             AND
+     LOOKUP(lbOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:         
+      FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                 OrderAction.Brand    = gcBrand           AND
+                 OrderAction.OrderID  = lbOrder.OrderID   AND
+                 OrderAction.ItemType = "AddLineDiscount" AND
+          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 NO-ERROR.
+      IF AVAILABLE OrderAction THEN 
+      DO:
+         IF NOT fCheckOngoingMobileOnly(lbOrderCustomer.CustIdType,
+                                        lbOrderCustomer.CustID,
+                                        lbOrder.CliType) AND
+            NOT fCheckExistingMobileOnly(lbOrderCustomer.CustIdType,
+                                         lbOrderCustomer.CustID,
+                                         lbOrder.CliType) THEN 
+         DO:
+            llDelete = TRUE.            
+            IF NUM-ENTRIES(lcAddlineCliypes) > 1 THEN
+            DO:
+               IF LOOKUP(ENTRY(3,{&ADDLINE_CLITYPES}),lcAddlineCliypes) > 0 THEN
+               DO:
+                  IF lbOrder.CLIType <> ENTRY(3,{&ADDLINE_CLITYPES}) THEN
+                     llDelete = FALSE.
+               END.
+               ELSE IF LOOKUP(ENTRY(4,{&ADDLINE_CLITYPES}),lcAddlineCliypes) > 0 THEN
+               DO:
+                  IF lbOrder.CLIType <> ENTRY(4,{&ADDLINE_CLITYPES}) THEN
+                     llDelete = FALSE.
+               END.
+            END.
+
+            IF llDelete THEN
+            DO:            
                DELETE OrderAction.
                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                 "Order",
                                 STRING(lbOrder.OrderID),
                                 0,
                                 "ADDLINE DISCOUNT ORDERACTION REMOVED",
-                                "Removed AddLineDiscount Item from OrderAction").
+                                "Removed AddLineDiscount Item from OrderAction").            
+            END.
 
+            IF lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE} THEN
+            DO:
                fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
                                               lbOrderCustomer.CustID).
-            END.
+            END.                                  
          END.
       END.
    END.
-END. 
+END.
 
 FOR EACH MNPProcess WHERE
    MNPProcess.OrderID = Order.OrderId AND

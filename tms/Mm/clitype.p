@@ -105,7 +105,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 
 form
     "CLIType ......:"  CLIType.CLIType FORMAT "X(12)" SKIP
-    "Name .........:"  CLIType.CLIName              SKIP
+    "Name .........:"  CLIType.CLIName FORMAT "X(30)" SKIP
     "Base bundle...:"  CLIType.BaseBundle SKIP
     "Payment Type .:"  CLIType.PayType
        HELP "1=Postpaid, 2=Prepaid"
@@ -147,7 +147,7 @@ form
         HELP "0=Inactive, 1=Active, 2=Retired"
         lcStatus NO-LABEL FORMAT "X(15)" SKIP
     "LineType......:"  CLIType.LineType
-        HELP "0=Entry, 1=Main, 2=Additional"
+        HELP "0=Entry, 1=Main, 2=Additional 3=Extra"
         lcLineType NO-LABEL FORMAT "X(15)"
     "Fixed LineType:"  AT 35 CLIType.FixedLineType
         HELP "1=ADSL, 2=FIBER"

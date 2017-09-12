@@ -80,18 +80,25 @@ DEF VAR liReqActTime   AS INT  NO-UNDO.
 DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
+DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
-DEF BUFFER bInvCust    FOR Customer.
-DEF BUFFER bRefCust    FOR Customer.
-DEF BUFFER bRefMobsub  FOR Mobsub.
-DEF BUFFER bRefCLIType FOR CLIType.
-DEF BUFFER bMsRequest  FOR MsRequest.
-DEF BUFFER lbOrder     FOR Order.
-DEF BUFFER lbMobSub    FOR MobSub.
+DEF BUFFER bInvCust        FOR Customer.
+DEF BUFFER bRefCust        FOR Customer.
+DEF BUFFER bRefMobsub      FOR Mobsub.
+DEF BUFFER bRefCLIType     FOR CLIType.
+DEF BUFFER bMsRequest      FOR MsRequest.
+DEF BUFFER lbOrder         FOR Order.
+DEF BUFFER lbMobSub        FOR MobSub.
 DEF BUFFER lbOrderCustomer FOR OrderCustomer.
-DEFINE BUFFER lbMobSubAD1 FOR MobSub.
-DEF BUFFER bTerMsRequest FOR MsRequest.
-DEF BUFFER bMsOwner FOR MsOwner.
+DEF BUFFER lbMobSubAD1     FOR MobSub.
+DEF BUFFER bTerMsRequest   FOR MsRequest.
+DEF BUFFER bMsOwner        FOR MsOwner.
+DEF BUFFER lbMLOrder       FOR Order.
+DEF BUFFER lbMLMobSub      FOR MobSub.
+DEF BUFFER lbMobSubs       FOR MobSub.
+DEF BUFFER lbPriDSSMobSub  FOR MobSub.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -102,6 +109,48 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMsOwner).
 END.
 
+FUNCTION fCreatePoUser RETURNS LOGICAL
+   (iiMsSeq AS INTEGER,
+    BUFFER ibOrderCustomer FOR OrderCustomer):
+
+   DEFINE VARIABLE liLineType AS INTEGER NO-UNDO.
+
+   CASE ibOrderCustomer.RowType:
+      WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
+      THEN liLineType = 1.
+      WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+      THEN liLineType = 2.
+      OTHERWISE RETURN TRUE.
+   END CASE.
+
+   FIND FIRST PoUser EXCLUSIVE-LOCK WHERE
+      PoUser.MsSeq    = iiMsSeq AND
+      PoUser.LineType = liLineType
+   NO-ERROR.
+
+   IF NOT AVAILABLE PoUser
+   THEN CREATE PoUser.
+
+   ASSIGN
+      PoUser.MsSeq     = iiMsSeq
+      PoUser.LineType  = liLineType
+      PoUser.Company   = ibOrderCustomer.Company WHEN ibOrderCustomer.CustIdType EQ "CIF"
+      PoUser.CompanyId = ibOrderCustomer.CustId WHEN ibOrderCustomer.CustIdType EQ "CIF"
+      PoUser.CustName  = OrderCustomer.Surname1
+      PoUser.SurName2  = OrderCustomer.Surname2
+      PoUser.FirstName = OrderCustomer.FirstName.
+
+   IF ibOrderCustomer.CustIdType EQ "CIF"
+   THEN ASSIGN
+           PoUser.PersonId     = ibOrderCustomer.AuthCustId
+           PoUser.PersonIdType = ibOrderCustomer.AuthCustIdType.
+   ELSE ASSIGN
+           PoUser.PersonId     = ibOrderCustomer.CustId
+           PoUser.PersonIdType = ibOrderCustomer.CustIdType.
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
@@ -202,7 +251,8 @@ ELSE DO:
    END.
 END.
 
-FIND FIRST CustTemp NO-LOCK NO-ERROR.
+ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+       lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
@@ -296,15 +346,24 @@ IF NOT AVAIL mobsub THEN DO:
             OrderCustomer.OrderID = Order.OrderID:
 
       CASE OrderCustomer.RowType:
-      WHEN 1 THEN MobSub.AgrCust = OrderCustomer.CustNum.
-      WHEN 2 THEN MobSub.InvCust = OrderCustomer.CustNum.
-      WHEN 3 THEN MobSub.CustNum = OrderCustomer.CustNum.
-      WHEN 6 THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+         THEN MobSub.AgrCust = OrderCustomer.CustNum.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE}
+         THEN MobSub.InvCust = OrderCustomer.CustNum.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_USER}
+         THEN MobSub.CustNum = OrderCustomer.CustNum.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+         THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
+         WHEN {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} OR
+         WHEN {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
+         THEN fCreatePoUser(Order.MSSeq, BUFFER OrderCustomer).
       END CASE.
       
       /* Create contact data for corporate customers */
       IF llCorporate AND 
-         (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
+         (OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} OR
+          OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT})
+      THEN DO:
          
          RUN Mm/createcustcontact.p(
              Order.OrderId,
@@ -320,21 +379,6 @@ IF NOT AVAIL mobsub THEN DO:
                              msrequest.custnum,
                              "CUSTOMER CONTACT CREATION FAILED",
                              lcError).
-         END.
-      END.
-      ELSE IF OrderCustomer.Rowtype = 1 AND
-              CliType.PayType = 1 AND
-              NOT CAN-FIND(FIRST lbMobSubAD1 WHERE
-                                 lbMobSubAD1.Brand     = gcBrand AND
-                                 lbMobSubAD1.MsSeq    <> MobSub.MsSeq AND
-                                 lbMobSubAD1.CustNum   = MobSub.CustNum AND
-                                 NOT lbMobSubAD1.PayType) THEN DO:
-         FIND FIRST Customer EXCLUSIVE-LOCK WHERE
-                    Customer.CustNum = MsRequest.Custnum NO-ERROR.
-         IF AVAILABLE Customer THEN DO:      
-            ASSIGN Customer.AuthCustId     = Order.OrdererID
-                   Customer.AuthCustIdType = Order.OrdererIDType.
-            RELEASE Customer.
          END.
       END.
    END.
@@ -356,7 +400,19 @@ IF NOT AVAIL mobsub THEN DO:
       FIND CURRENT Customer NO-LOCK NO-ERROR.
    END.
 
-{Mm/cr_bscode.i}
+   FIND FIRST BillTarget NO-LOCK WHERE 
+              BillTarget.CustNum    = Customer.CustNum AND
+              BillTarget.BillTarget = CliType.BillTarget 
+   NO-ERROR.
+
+   IF NOT AVAIL BillTarget THEN DO:
+      CREATE BillTarget.
+      ASSIGN
+         BillTarget.CustNum    = Customer.CustNum
+         BillTarget.BillTarget = CliType.BillTarget
+         BillTarget.DiscPlan   = CliType.DiscPlan
+         BillTarget.RatePlan   = CliType.PricePlan.
+   END.
 
    ASSIGN
       MobSub.CLI              = Order.CLI
@@ -383,6 +439,26 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 
+   /* Extra line */
+   /* In case of extra line discount subcription creation,
+      following fields has to be updated */
+   IF Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+      FIND FIRST lbMLOrder NO-LOCK WHERE 
+                 lbMLOrder.Brand      = gcBrand          AND 
+                 lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
+
+      IF AVAIL lbMLOrder THEN 
+         FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
+                    lbMLMobSub.MsSeq = lbMLOrder.MsSeq NO-ERROR.
+
+      IF AVAIL lbMLMobSub THEN 
+         ASSIGN MobSub.MultiSimID       = lbMLMobSub.MsSeq         /* Mainline Subid  */
+                MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
+                lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
+                lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
+                llgExtraLine            = YES. 
+   END.
+ 
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 
    /* Initial TopUp */
@@ -410,7 +486,7 @@ IF NOT AVAIL mobsub THEN DO:
                           OrderTopup.Amount * 100,
                           OrderTopup.VatAmount * 100).
    END.
-
+   
    CREATE Segmentation.
    ASSIGN
       Segmentation.MsSeq   = Order.MsSeq
@@ -418,7 +494,7 @@ IF NOT AVAIL mobsub THEN DO:
       Segmentation.SegmentOffer = "OFF"
       Segmentation.SegmentDate  = TODAY
       Segmentation.SegmentCreation = fMakeTS().
-
+   
    CREATE msowner.
    ASSIGN
       MSOwner.CLI       = Mobsub.cli
@@ -493,7 +569,7 @@ IF NOT AVAIL mobsub THEN DO:
                                 {&REQUEST_ACTIONLIST_ALL}).
 
    /* Welcome SMS for all tariffs (Excluding Corporate) */
-   IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO:
+   IF LOOKUP(Customer.category,"20,21,22,40,41,42,43") = 0 THEN DO:
 
       lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
       
@@ -565,6 +641,11 @@ IF NOT AVAIL mobsub THEN DO:
    END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
    IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+      RUN Mm/orderaction_exec.p (MobSub.MsSeq,
+                      Order.OrderID,
+                      ldeActivationTS,
+                      MsRequest.MsRequest,
+                      {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}). 
       fReqStatus(2,"").
       RETURN.
    END.
@@ -606,15 +687,43 @@ ELSE DO:
          ROWID(MSOwner) = ROWID(bMsOwner).
    END.
 
+   /* llgExtraLine value has to be set to TRUE when mobile part of 
+      convergent is processed, because of DSS2 activation */
    ASSIGN
       MsRequest.Custnum = Customer.Custnum
-      MsOwner.imsi = IMSI.IMSI WHEN AVAIL IMSI
-      MsOwner.CLIEvent = "C"
-      Mobsub.MsStatus = {&MSSTATUS_ACTIVE}
-      Mobsub.Icc = Order.ICC
-      Mobsub.imsi = IMSI.IMSI WHEN AVAIL IMSI.
+      MsOwner.imsi      = IMSI.IMSI WHEN AVAIL IMSI
+      MsOwner.CLIEvent  = "C"
+      Mobsub.MsStatus   = {&MSSTATUS_ACTIVE}
+      Mobsub.Icc        = Order.ICC
+      Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI.
+
+      IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0 OR 
+         LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0 THEN 
+      llgExtraLine      = YES.
 END.
-   
+
+/* Additional Line with mobile only ALFMO-5  
+   Release pending additional lines orders, in case of pending 
+   main Moblie only line order is released */
+
+FIND FIRST OrderCustomer WHERE
+           OrderCustomer.Brand   = gcBrand AND
+           OrderCustomer.OrderId = Order.OrderId AND
+           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} 
+           NO-LOCK NO-ERROR.
+
+IF AVAIL OrderCustomer THEN
+DO:
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+               CLIType.Brand      = gcBrand  AND
+               CLIType.CLIType    = Order.CliType AND                       
+               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
+   DO:
+      fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
+                                      OrderCustomer.CustID). 
+   END.
+END.
+
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
                 "Delivery",
@@ -782,7 +891,7 @@ RUN Mm/orderaction_exec.p (MobSub.MsSeq,
 IF NOT MobSub.PayType THEN DO:
 
    ASSIGN
-      lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+      lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
 
    lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
 
@@ -795,17 +904,46 @@ IF NOT MobSub.PayType THEN DO:
                      MsRequest.ActStamp <= fMakeTS()    AND
                      LOOKUP(STRING(MsRequest.ReqStatus),"5,6,7,8") > 0)
    THEN DO:
-      IF lcBundleId = {&DSS} OR (lcBundleId = "DSS2" AND
-         LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN
+      IF lcBundleId = {&DSS} OR 
+        (lcBundleId = "DSS2"                                 AND
+         LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType)   GT 0 AND 
+         LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) EQ 0) THEN
          RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                            INPUT Mobsub.CLI,
-                            INPUT MobSub.CustNum,
-                            INPUT "ADD",
-                            INPUT "",           /* Optional param list */
-                            INPUT MsRequest.MsRequest,
-                            INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
-                            INPUT MsRequest.ReqSource,
-                            INPUT lcBundleId).
+                               INPUT Mobsub.CLI,
+                               INPUT MobSub.CustNum,
+                               INPUT "ADD",
+                               INPUT "",           /* Optional param list */
+                               INPUT MsRequest.MsRequest,
+                               INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
+                               INPUT MsRequest.ReqSource,
+                               INPUT lcBundleId).        
+      ELSE IF llgExtraLine        AND 
+              lcBundleId = "DSS2" AND 
+              fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                MobSub.MultiSimId,
+                                                MobSub.MultiSimType) THEN DO:
+        
+         /* If already DSS2 group exists then add extraline subscription 
+            AND its associated main line to DSS2 group */  
+         FOR EACH lbMobSubs NO-LOCK WHERE
+                  lbMobSubs.Brand        = gcBrand        AND
+                  lbMobSubs.CustNum      = MobSub.CustNum AND
+                  lbMobSubs.MultiSimId  <> 0              AND
+                 (lbMobSubs.MultiSimType = {&MULTISIMTYPE_PRIMARY} OR
+                  lbMobSubs.MultiSimType = {&MULTISIMTYPE_EXTRALINE}):
+
+            RUN pUpdateDSSNetwork(INPUT lbMobsubs.MsSeq,
+                                  INPUT lbMobsubs.CLI,
+                                  INPUT lbMobSubs.CustNum,
+                                  INPUT "ADD",
+                                  INPUT "",           /* Optional param list */
+                                  INPUT MsRequest.MsRequest,
+                                  INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
+                                  INPUT MsRequest.ReqSource,
+                                  INPUT lcBundleId).
+         END.
+ 
+      END.
    END.
    ELSE IF Order.MultiSimId > 0 AND
            Order.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO: 

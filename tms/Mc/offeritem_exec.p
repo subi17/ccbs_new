@@ -300,6 +300,7 @@ PROCEDURE pPeriodicalContract:
                                 "",
                                 ldeResidualFee,
                                 0,
+                                "",
                                 OUTPUT lcResult).
  
    IF liRequest = 0 THEN 
@@ -430,8 +431,10 @@ END PROCEDURE.  /* pServicePackage */
 
 PROCEDURE pDiscountPlanMember:
 
-   DEF VAR lcErrorReason AS CHAR NO-UNDO.
-   DEF VAR lcDiscPlan    AS CHAR NO-UNDO.
+   DEF VAR lcErrorReason           AS CHAR NO-UNDO.
+   DEF VAR lcDiscPlan              AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO. 
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
 
@@ -477,8 +480,33 @@ PROCEDURE pDiscountPlanMember:
                               OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) THEN RETURN "".
          END.
+         /* Additional Line with mobile only ALFMO-5 */
+         IF fCheckExistingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) OR
+            fCheckOngoingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) THEN DO:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                              OrderAction.Brand    = gcBrand           AND
+                              OrderAction.OrderID  = Order.OrderID     AND
+                              OrderAction.ItemType = "AddLineDiscount" AND
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) THEN RETURN "".
+         END.
       END.
    END.
+
+   /* If Extra line discount is defined in OrderAction, prevent creation of usual discount from Offer */
+   ASSIGN lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
+          lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+   IF lcExtraLineCLITypes                       NE ""                        AND
+      LOOKUP(Order.CLIType,lcExtraLineCLITypes) GT 0                         AND 
+      Order.MultiSimId                          NE 0                         AND 
+      Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
+   DO:
+      IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = gcBrand                 AND
+                        OrderAction.OrderID  = Order.OrderID           AND
+                        OrderAction.ItemType = "ExtraLineDiscount"     AND
+                 LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN RETURN "".
+   END.   
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                       lcDiscPlan, /* OfferItem.ItemKey */

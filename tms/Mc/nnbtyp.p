@@ -72,13 +72,14 @@ DEF VAR lcDestType   AS CHAR                NO-UNDO.
 DEF VAR lcClass      AS CHAR                NO-UNDO. 
 DEF VAR copyto       LIKE BDest.BDest       NO-UNDO.
 DEF VAR lcCode       AS CHAR                NO-UNDO.
+DEF VAR lcRateBDest  AS CHAR                NO-UNDO.
 
 FORM
    BDest.Brand     FORMAT "x(2)"     column-LABEL "Br"
    BDest.BDest     FORMAT "x(15)" 
-   BDest.BDName    FORMAT "x(34)"
-   BDest.CCN       FORMAT ">>>9"      COLUMN-LABEL "CCN"
-   lcDestType      FORMAT "x(10)"    COLUMN-LABEL "DestType"
+   BDest.BDName    FORMAT "x(29)"
+   BDest.RateBDest FORMAT "X(15)"    COLUMN-LABEL "Rating B-Dest" 
+   BDest.CCN       FORMAT ">>>9"     COLUMN-LABEL "CCN"
    BDest.ToDate   
 WITH 
    width 80 ROW 1 OVERLAY scroll 1 15 DOWN
@@ -93,7 +94,9 @@ FORM
    BDest.BDest   LABEL "B-Destination" COLON 20 SKIP
    BDest.BDName  LABEL "Name/description" COLON 20 
       FORMAT "X(40)" SKIP
-   BDest.DestType  LABEL "Destination Type" COLON 20
+   BDest.RateBDest LABEL "Rating B-Dest" COLON 20
+      lcRateBDest NO-LABEL FORMAT "X(30)" SKIP 
+   BDest.DestType LABEL "Destination Type" COLON 20
       FORMAT ">>9"
       help "Destination type"   
       lcDestType NO-LABEL FORMAT "X(30)" SKIP
@@ -127,8 +130,15 @@ FORM
    help "Give name of B-Destination"             
 WITH 
    row 4 col 2 title color value(ctc) " FIND NAME "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
 
+FORM 
+   "Brand:" lcBrand skip
+   "Name :" liCCN
+   help "Give CCN"             
+WITH 
+   row 4 col 2 title color value(ctc) " FIND CCN "
+   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM
    " Copy from :" BDest.BDest SKIP
@@ -302,6 +312,9 @@ repeat WITH FRAME sel:
                ELSE IF order = 2 THEN FIND NEXT BDest where
                   BDest.Brand = lcBrand    
                   USE-INDEX BDName NO-LOCK NO-ERROR.
+               ELSE IF order = 3 THEN FIND NEXT BDest where
+                  BDest.Brand = lcBrand    
+                  USE-INDEX CCN NO-LOCK NO-ERROR.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -330,7 +343,7 @@ repeat WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 704 ufk[2]= 717 ufk[3]= 0    ufk[4]= 814
+         ufk[1]= 704 ufk[2]= 717 ufk[3]= 1163    ufk[4]= 814
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
          ufk[7]= 1162 ufk[8]= 8   ufk[9]= 1
@@ -347,6 +360,10 @@ repeat WITH FRAME sel:
       IF order = 2 THEN DO:
          CHOOSE ROW BDest.BDName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) BDest.BDName WITH FRAME sel.
+      END.
+      IF order = 3 THEN DO:
+         CHOOSE ROW BDest.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY value(ccc) BDest.CCN WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -379,6 +396,9 @@ repeat WITH FRAME sel:
             ELSE IF order = 2 THEN FIND prev BDest where
                BDest.Brand = lcBrand 
                USE-INDEX BDName NO-LOCK NO-ERROR.
+            ELSE IF order = 3 THEN FIND prev BDest where
+               BDest.Brand = lcBrand 
+               USE-INDEX CCN NO-LOCK NO-ERROR.
             IF AVAILABLE BDest THEN
                ASSIGN firstline = i memory = recid(BDest).
             ELSE LEAVE.
@@ -473,6 +493,9 @@ repeat WITH FRAME sel:
             ELSE IF order = 2 THEN FIND prev BDest where
                 BDest.Brand = lcBrand 
                 USE-INDEX BDName NO-LOCK NO-ERROR.
+            ELSE IF order = 3 THEN FIND prev BDest where
+                BDest.Brand = lcBrand 
+                USE-INDEX CCN NO-LOCK NO-ERROR.
 
             IF NOT AVAILABLE BDest THEN DO:
                MESSAGE "YOU ARE ON THE FIRST ROW !".
@@ -507,6 +530,9 @@ repeat WITH FRAME sel:
             ELSE IF order = 2 THEN FIND NEXT BDest  where
                BDest.Brand = lcBrand 
                USE-INDEX BDName NO-LOCK NO-ERROR.
+            ELSE IF order = 3 THEN FIND NEXT BDest  where
+               BDest.Brand = lcBrand 
+               USE-INDEX CCN NO-LOCK NO-ERROR.
 
             IF NOT AVAILABLE BDest THEN DO:
                MESSAGE "YOU ARE ON THE LAST ROW !".
@@ -540,6 +566,9 @@ repeat WITH FRAME sel:
          ELSE IF order = 2 THEN FIND prev BDest where
              BDest.Brand = lcBrand 
              USE-INDEX BDName NO-LOCK NO-ERROR.
+         ELSE IF order = 3 THEN FIND prev BDest where
+             BDest.Brand = lcBrand 
+             USE-INDEX CCN NO-LOCK NO-ERROR.
 
          IF AVAILABLE BDest THEN DO:
             memory = recid(BDest).
@@ -552,6 +581,9 @@ repeat WITH FRAME sel:
                ELSE IF order = 2 THEN FIND prev BDest where
                   BDest.Brand = lcBrand 
                   USE-INDEX BDName NO-LOCK NO-ERROR.
+               ELSE IF order = 3 THEN FIND prev BDest where
+                  BDest.Brand = lcBrand 
+                  USE-INDEX CCN NO-LOCK NO-ERROR.
 
                IF AVAILABLE BDest THEN memory = recid(BDest).
                ELSE line = FRAME-DOWN.
@@ -619,10 +651,10 @@ repeat WITH FRAME sel:
          cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
-         DISPLAY lcBrand WITH FRAME hayr3.
+         DISPLAY lcBrand WITH FRAME hayr2.
          UPDATE lcBrand WHEN gcAllBrand
-                hakunimi WITH FRAME hayr3.
-         HIDE FRAME hayr no-pause.
+                hakunimi WITH FRAME hayr2.
+         HIDE FRAME hayr2 no-pause.
 
          if hakunimi <> "" THEN DO:
             FIND FIRST BDest USE-INDEX BDName where
@@ -631,6 +663,26 @@ repeat WITH FRAME sel:
             NO-LOCK NO-ERROR.
 
             IF NOT fRecFound(2) THEN NEXT BROWSE.
+
+            NEXT LOOP.
+         END.
+      END. /* Haku sar. 2 */
+      ELSE IF lookup(nap,"3,f3") > 0 THEN DO:  /* haku nimellA */
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         hakunimi = "".
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         DISPLAY lcBrand WITH FRAME hayr3.
+         UPDATE lcBrand WHEN gcAllBrand
+                liCCN WITH FRAME hayr3.
+         HIDE FRAME hayr3 no-pause.
+
+         if liCCN <> 0 THEN DO:
+            FIND FIRST BDest USE-INDEX CCN where
+                       BDest.Brand      = lcBrand AND
+                       BDest.CCN >= liCCN
+            NO-LOCK NO-ERROR.
+
+            IF NOT fRecFound(3) THEN NEXT BROWSE.
 
             NEXT LOOP.
          END.
@@ -677,6 +729,9 @@ repeat WITH FRAME sel:
         ELSE IF order = 2 THEN FIND NEXT BDest where
            BDest.Brand = lcBrand 
            USE-INDEX BDName NO-LOCK NO-ERROR.
+        ELSE IF order = 3 THEN FIND NEXT BDest where
+           BDest.Brand = lcBrand 
+           USE-INDEX CCN NO-LOCK NO-ERROR.
 
         IF AVAILABLE BDest THEN memory = recid(BDest).
         ELSE DO:
@@ -688,6 +743,9 @@ repeat WITH FRAME sel:
            ELSE IF order = 2 THEN FIND prev BDest where
               BDest.Brand = lcBrand 
               USE-INDEX BDName NO-LOCK NO-ERROR.
+           ELSE IF order = 3 THEN FIND prev BDest where
+              BDest.Brand = lcBrand 
+              USE-INDEX CCN NO-LOCK NO-ERROR.
 
            IF AVAILABLE BDest THEN DO:
               ASSIGN
@@ -765,6 +823,9 @@ repeat WITH FRAME sel:
          ELSE IF order = 2 THEN FIND FIRST BDest where
             BDest.Brand = lcBrand       
             USE-INDEX BDName NO-LOCK NO-ERROR.
+         ELSE IF order = 3 THEN FIND FIRST BDest where
+            BDest.Brand = lcBrand       
+            USE-INDEX CCN NO-LOCK NO-ERROR.
          ASSIGN memory = recid(BDest) must-print = TRUE.
          NEXT LOOP.
       END.
@@ -774,6 +835,9 @@ repeat WITH FRAME sel:
          where BDest.Brand = lcBrand NO-LOCK NO-ERROR.
          ELSE IF order = 2 THEN FIND LAST BDest 
          where BDest.Brand = lcBrand USE-INDEX BDName
+         NO-LOCK NO-ERROR.
+         ELSE IF order = 3 THEN FIND LAST BDest 
+         where BDest.Brand = lcBrand USE-INDEX CCN
          NO-LOCK NO-ERROR.
          ASSIGN memory = recid(BDest) must-print = TRUE.
          NEXT LOOP.
@@ -792,15 +856,13 @@ fCleanEventObjects().
 
 PROCEDURE local-disp-row:
 
-   lcDestType = fDestType(BDest.DestType).
-   
    DISP 
       BDest.Brand
       BDest.BDest 
       BDest.BDName 
+      BDest.RateBDest
       BDest.CCN
       BDest.ToDate
-      lcDestType 
    WITH FRAME sel.
  
 END PROCEDURE.
@@ -808,9 +870,17 @@ END PROCEDURE.
 PROCEDURE local-update-record:
 
    DEF VAR llBDestTrans AS LOG NO-UNDO. 
+   DEF BUFFER bBDest FOR BDest.
 
    llBDestTrans = CAN-FIND(FIRST BDestTrans WHERE
                                  BDestTrans.BDestId = BDest.BDestId).
+
+   lcRateBDest = "".
+   IF BDest.RateBDest > "" THEN
+   FIND FIRST bBDest WHERE
+              bBDest.Brand = gcBrand AND
+              bBDest.BDest = BDest.RateBDest NO-LOCK NO-ERROR.
+   IF AVAILABLE bBDest THEN lcRateBDest = bBdest.BDName.
 
    BDestUpdate:
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
@@ -822,6 +892,7 @@ PROCEDURE local-update-record:
          BDest.BDestID 
          BDest.BDest
          BDest.BDName 
+         BDest.RateBDest lcRateBDest
          BDest.CCN 
          BDest.DestType lcDestType 
          BDest.Class lcClass 
@@ -851,6 +922,7 @@ PROCEDURE local-update-record:
    
          UPDATE
             BDest.BDName WHEN NOT NEW BDest
+            BDest.RateBDest
             BDest.DestType WHEN NOT NEW BDest
             BDest.CCN 
             BDest.Class
@@ -909,6 +981,24 @@ PROCEDURE local-update-record:
                      NEXT.
                   END.
                   DISPLAY CCN.CCNName WITH FRAME lis.
+               END.
+
+               ELSE IF FRAME-FIELD = "RateBDest" THEN DO:
+
+                  lcRateBDest = "".
+                  IF INPUT BDest.RateBDest > "" THEN DO:
+                     FIND FIRST bBDest WHERE
+                                bBDest.Brand = gcBrand AND
+                                bBDest.BDest = INPUT BDest.RateBDest
+                     NO-LOCK NO-ERROR.
+                     IF NOT AVAILABLE bBDest THEN DO:
+                        MESSAGE "Unknown b-destination"
+                        VIEW-AS ALERT-BOX ERROR.
+                        NEXT.
+                     END.
+                     lcRateBdest = bBDest.BDName.
+                  END.
+                  DISPLAY lcRateBDest WITH FRAME lis.
                END.
             END.
          
