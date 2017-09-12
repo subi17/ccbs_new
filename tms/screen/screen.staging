@@ -2,7 +2,7 @@ echo "-- Staging Screens --"
 echo $REQRUNDATE
 sleep 1
 
-screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 1 tenant=yoigo
+screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 1 tenant=super
 screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ5.log -logthreshold 1048576 -logginglevel 1 -param 5,$REQRUNDATE tenant=yoigo
 screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ1.log -logthreshold 1048576 -logginglevel 1 -param 1,$REQRUNDATE tenant=yoigo
 # -logentrytypes DB.Connects,4GLTrace:2
@@ -14,10 +14,10 @@ screen 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercana
 
 screen 5 pike -C /apps/yoigo/tms terminal -- Gwy/topup_queue common ordercanal mobile counter star reratelog tenant=yoigo
 screen 6 pike -C /apps/yoigo/tms terminal -- test/fake/fake_solog_response common ordercanal mobile counter star reratelog -clientlog /scratch/log/sog/sres.log tenant=yoigo
-screen 7 pike -C /apps/yoigo/tms terminal -- Mnp/mnpsendnc common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpsendnc.log tenant=yoigo
-screen 8 pike -C /apps/yoigo/tms terminal -- Mnp/mnpresp common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpresp.log tenant=yoigo
+screen 7 pike -C /apps/yoigo/tms terminal -- Mnp/mnpsendnc common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpsendnc.log tenant=super
+screen 8 pike -C /apps/yoigo/tms terminal -- Mnp/mnpresp common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpresp.log tenant=super
 screen 9 pike -C /apps/yoigo/tms terminal -- Mnp/mnpanalyse common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnpanalyse.log tenant=yoigo
-screen 10 pike -C /apps/yoigo/tms terminal -- Mnp/mnperr_resend common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnperr_resend.log tenant=yoigo
+screen 10 pike -C /apps/yoigo/tms terminal -- Mnp/mnperr_resend common ordercanal mobile counter star reratelog -clientlog /scratch/log/mnp/mnperr_resend.log tenant=super
 
 screen 11 pike -C /apps/yoigo/tms terminal -- Gwy/roi_history_send all tenant=yoigo
 screen 12 pike -C /apps/yoigo/tms terminal -- Rate/tmqueue_analysis all tenant=yoigo
