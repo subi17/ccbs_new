@@ -270,10 +270,11 @@ PROCEDURE pPeriodicalContract:
       /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
       /*TODO remove after FTERM8 campaign period.*/
       DEF BUFFER bFTERMOrder FOR Order.
-      FIND FIRST bFTERMOrder WHERE 
+      FIND FIRST bFTERMOrder NO-LOCK WHERE 
                  bFTERMOrder.brand EQ "1" AND
                  bFTERMOrder.OrderID EQ iiOrderID AND
-                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0.
+                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0 
+                 NO-ERROR.
       /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
       IF AVAIL bFTERMOrder AND
                ttAction.ActionKey EQ "FTERM12-100" AND 
