@@ -95,7 +95,7 @@ DO TRANS:
 END.
 
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-
+PUT STREAM sICCLog UNFORMATTED "Collection period: " + fTS2HMS(ldCollPeriodStartTS) + " TO " fTS2HMS(ldCollPeriodEndTS) SKIP.
 /* ICC lookup part */
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
