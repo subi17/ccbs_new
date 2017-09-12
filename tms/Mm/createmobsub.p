@@ -254,8 +254,6 @@ END.
 ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
        lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
-FIND FIRST CustTemp NO-LOCK NO-ERROR.
-
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
 AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
@@ -401,8 +399,6 @@ IF NOT AVAIL mobsub THEN DO:
       ASSIGN Customer.DataProtected = FALSE.
       FIND CURRENT Customer NO-LOCK NO-ERROR.
    END.
-
-{Mm/cr_bscode.i}
 
    ASSIGN
       MobSub.CLI              = Order.CLI
@@ -711,7 +707,9 @@ DO:
    DO:
       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
                                       OrderCustomer.CustID,
-                                      FALSE,
+                                      IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
+                                         TRUE
+                                      ELSE FALSE,
                                       FALSE,
                                      "RELEASE"). 
    END.
