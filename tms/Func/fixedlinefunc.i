@@ -380,21 +380,24 @@ END FUNCTION.
 FUNCTION fIsAddLineTariff RETURNS LOGICAL
    (INPUT icCli AS CHAR):
    DEFINE BUFFER bMobSub FOR MobSub.
+   DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+   DEFINE BUFFER bDPMember FOR DPMember.
+
    FOR FIRST bMobSub NO-LOCK WHERE
              bMobSub.Brand = Syst.Parameters:gcBrand AND
              bMobSub.CLI   = icCli AND
       LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0, 
-         EACH DiscountPlan NO-LOCK WHERE
-              DiscountPlan.Brand  = Syst.Parameters:gcBrand AND
-       LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," 
+         EACH bDiscountPlan NO-LOCK WHERE
+              bDiscountPlan.Brand  = Syst.Parameters:gcBrand AND
+       LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," 
                                    + {&ADDLINE_DISCOUNTS_20}) > 0 AND
-              DiscountPlan.ValidTo >= TODAY,
-         FIRST DPMember NO-LOCK WHERE
-               DPMember.DPID       = DiscountPlan.DPID AND
-               DPMember.HostTable  = "MobSub" AND
-               DPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
-               DPMember.ValidTo   >= TODAY AND
-               DPMember.ValidFrom <= DPMember.ValidTo:
+              bDiscountPlan.ValidTo >= TODAY,
+         FIRST bDPMember NO-LOCK WHERE
+               bDPMember.DPID       = bDiscountPlan.DPID AND
+               bDPMember.HostTable  = "MobSub" AND
+               bDPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
+               bDPMember.ValidTo   >= TODAY AND
+               bDPMember.ValidFrom <= bDPMember.ValidTo:
          
          RETURN TRUE.
    END.
