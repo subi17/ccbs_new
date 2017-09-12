@@ -118,6 +118,15 @@ FUNCTION fCheckMigration RETURNS LOG ():
             ASSIGN
                llOrderAllowed = FALSE
                lcReason = "PRO migration not possible because of multiple mobile lines".
+         /* Migration not possible for retired or non active convergent */
+         IF fIsConvergenceTariff(Mobsub.clitype) AND
+            CAN-FIND(First CliType WHERE
+                           Clitype.brand EQ gcBrand AND
+                           Clitype.Clitype EQ Mobsub.clitype AND
+                           Clitype.webstatuscode NE {&CLITYPE_WEBSTATUSCODE_ACTIVE}) THEN
+            ASSIGN
+               llOrderAllowed = FALSE
+               lcReason = "PRO migration not possible because of multiple mobile lines".
          IF fIsFixedOnly(Mobsub.Clitype) THEN
              ASSIGN
                  llOrderAllowed = FALSE
