@@ -8,6 +8,7 @@ FUNCTION fFillCDRTempTable RETURNS INTEGER
    DEFINE VARIABLE tthBuf  AS HANDLE    NO-UNDO.
    DEFINE VARIABLE lhQuery AS HANDLE    NO-UNDO.
    DEFINE VARIABLE liFound AS INT       NO-UNDO.
+   DEFINE VARIABLE llOK    AS LOGICAL   NO-UNDO.
    DEF VAR lcTable AS CHAR NO-UNDO.
 
    CREATE BUFFER tthBuf FOR TABLE tthCDR:DEFAULT-BUFFER-HANDLE.
@@ -24,9 +25,11 @@ FUNCTION fFillCDRTempTable RETURNS INTEGER
 
    DO WHILE TRUE:
 
-      lhQuery:GET-NEXT.
-   
-      IF lhQuery:QUERY-OFF-END THEN LEAVE.
+      llOK = lhQuery:GET-NEXT.
+
+      /* If no more records, query is not open or query handle is invalid*/
+      IF llOK NE TRUE
+      THEN LEAVE.
 
       tthBuf:BUFFER-CREATE.
       tthBuf:BUFFER-COPY(lhTMS) NO-ERROR.
