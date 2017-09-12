@@ -487,8 +487,9 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                   IF Order.CliType BEGINS "CONTDSL" THEN lcPayType = "60".
                   ELSE lcPayType = "61". /* Convergent CONTTFH */
                END.
-               ELSE IF fIsAddLineOrder(Order.OrderID) THEN DO: /* Additional */
-                  lcPayType = "68". /* Mobile line */
+               ELSE IF fIsAddLineOrder(Order.OrderID) AND
+                  NOT Order.PayType THEN DO:
+                  lcPayType = "68". /* Additional Postpaid Mobile line */
                END.
                ELSE IF Order.PayType THEN lcPayType = "10".
                ELSE lcPayType = "20".
@@ -537,8 +538,9 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "60".
                ELSE lcPayType = "61".  /* Convergent CONTTFH */
             END.
-            ELSE IF fIsAddLineTariff(SubInvoice.CLI) THEN DO: /* Additional */
-               lcPayType = "68". /* Mobile line */
+            ELSE IF fIsAddLineTariff(SubInvoice.CLI) AND
+               NOT MsOwner.PayType THEN DO:
+               lcPayType = "68". /* Additional Postpaid Mobile line */
             END.
 
          END.      
