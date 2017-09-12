@@ -108,7 +108,7 @@ CLASS HPD.HPDAckHandler:
       CONNECT VALUE(lcPathFieldValue + " -ld " + lcLogicalFieldValue) NO-ERROR.
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-      CONNECT VALUE(lcPathFieldValue + "/" + lcLogicalFieldValue) NO-ERROR.
+      CONNECT VALUE(lcPathFieldValue + "/" + lcLogicalFieldValue + multitenancy.TenantInformation:mGetAuthConnectionParams()) NO-ERROR.
       &ELSE
       RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
       &ENDIF

@@ -203,7 +203,7 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
             ELSE RETURN ERROR NEW Progress.Lang.AppError("Cannot find " + lcDBLogicalName + " database located in " + lcDBPath, 1).
          END.
 
-         CONNECT VALUE(lcDBPath + "/" + lcDBLogicalName) NO-ERROR.
+         CONNECT VALUE(lcDBPath + "/" + lcDBLogicalName + multitenancy.TenantInformation:mGetAuthConnectionParams()) NO-ERROR.
          &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
          &ENDIF

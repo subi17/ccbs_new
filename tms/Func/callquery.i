@@ -220,6 +220,8 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
          DBConfig.DirectConnect > "" THEN
          ttDB.ConnName = DBConfig.DirectConnect + "/" + DBConfig.DBConnName.
       ELSE ttDB.ConnParam = "-H " + DBConfig.Host + " -S " + DBConfig.Service.
+
+      ttDB.ConnName = ttDB.ConnName + multitenancy.TenantInformation:mGetAuthConnectionParams().
    END.
    
 END FUNCTION.
