@@ -684,7 +684,8 @@ FUNCTION fIsAddLineTariff RETURNS LOGICAL
          EACH bDiscountPlan NO-LOCK WHERE
               bDiscountPlan.Brand  = Syst.Parameters:gcBrand AND
        LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + ","
-                                   + {&ADDLINE_DISCOUNTS_20}) > 0 AND
+                                   + {&ADDLINE_DISCOUNTS_20} + ","
+                                   + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
               bDiscountPlan.ValidTo >= TODAY,
          FIRST bDPMember NO-LOCK WHERE
                bDPMember.DPID       = bDiscountPlan.DPID AND
