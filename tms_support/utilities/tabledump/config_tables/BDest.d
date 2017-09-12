@@ -40,7 +40,7 @@
 "1015" "Información otro operador" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 30
 "10201" "Fixed Voice mail calls" 1098 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/11/16 1061
 "112/911" "Emergencia" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 31
-"11810" " de Información Telefónica número 11812 (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 32
+"11810" "11810 VOIPED TELECOM, S.L.U.(ORANGE ESPA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 32
 "11811" " de NIT SAU" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 33
 "11812" "11812 de Información Telefónica número 1" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 34
 "11813" " B.P.O. (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 35
@@ -48,7 +48,7 @@
 "11815" "11815 de Líneas de Red Inteligente (VODA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 37
 "11816" " de Teleatención Mediterránea" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 38
 "11817" "11817 de Andarosa TV (FT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 39
-"11818" "Servicio  (T>11 seg)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 40
+"11818" "11818 de ATENCIÓN CLIENTE TELECOM. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 40
 "11819" "11819 de Nirnet Invest (AVYS TELECOM)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 41
 "11820" " de Operadora de Serv. de Telecom. de RI" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 42
 "11821" " Audiotex Internet Services (France Telecom)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 43
@@ -68,7 +68,7 @@
 "11835" " de Incotel Servicios (Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 57
 "11836" " de Información Telefónica 11836" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 58
 "11837" " de Foreign Information Services (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 59
-"11838" " de Opera" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60
+"11838" "11838 de DELIMAX CONCEPT. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60
 "11839" " de Movilservicio Urgente (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 61
 "11840" " de Euskaltel" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 62
 "11841" "11841 de LINOCIO HAGEN (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 63
@@ -85,7 +85,7 @@
 "11852" "11852 de Viajes Bolero (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 73
 "11853" "de Éxito Comunicaciones(Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 74
 "11854" " de Servicios de Información Audiotex Telelínea (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 75
-"11855" " de Vodafone" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 76
+"11855" "11855 UTOPIA THINKING SYSTEMS (DIALOGA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 76
 "11856" "de Emsertex 2002 (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/08/12 870
 "11857" "11857 de MEDIAPUBLILINE (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/09/12 873
 "11858" " de Opera" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 77
@@ -107,7 +107,7 @@
 "11874" " de Audiotex Phone Systems" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 93
 "11875" " de QDQ Media (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 94
 "11876" " de Internet" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 95
-"11877" "11877 de Remirson Inversora (VODAFONE ON" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 96
+"11877" "11877 de Remirson Inversora (MASVOZ)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 96
 "11878" " de Quality Telecom (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 97
 "11879" "11879 de Telefonosdecastellón (VODAFONE" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/04/13 897
 "11880" " de LIFI COMUNICACIONES. S.L." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 98
@@ -866,6 +866,8 @@
 "CONT27_DATA_OUT" "CONT27 DATA OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1075
 "CONT27_VOICE_IN" "CONT27 VOICE IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1076
 "CONT27_VOICE_OUT" "CONT27 VOICE OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 18/04/17 1077
+"CONT28_VOICE_IN" "CONT28 VOICE IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/08/17 1094
+"CONT28_VOICE_OUT" "CONT28 VOICE OUT" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/08/17 1095
 "CONTDSL_MIN_IN" "CONTDSL MIN_IN" 81 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 27/10/16 1044
 "CONTDSL_QTY_IN" "CONTDSL QTY_IN" 81 1 0 0 "" "" 0 no 4 no "" 0 0 "1" 31/12/49 27/10/16 1043
 "CONTF11_DATA_IN" "CONTF11 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 14/04/15 989
@@ -934,6 +936,7 @@
 "CONTSVOICE_A" "Flat rate voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/07/12 862
 "CONTSVOICE_B" "Flat rate voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/07/12 863
 "EMail" "Email" 104 1 0 0 "" "" 0 no 98 no "" 0 0 "1" 31/12/49 01/12/06 597
+"FIX_VOICE1000" "Fixed Voice 1000 Minutes" 1081 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1088
 "FLATDATA20D_A" "Flat rate data 20D" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/12 764
 "FLATDATA20D_B" "Flat rate data 20D" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/02/12 765
 "FLATDATA30_A" "Flat rate data 30" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 734
@@ -943,6 +946,8 @@
 "FLATDATA55_A" "Flat rate data 55" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 736
 "FLATDATA55_B" "Flat rate data 55" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 737
 "FLATVOICE" "Flat rate voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/11 738
+"FLEX_500MB_UPSELL" "Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1090
+"FLEX_5GB_UPSELL" "Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1091
 "FREE100MINUTES" "Free 100 minutes voice package" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/16 1040
 "GOOGLE" "Google Play" 790 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/06/16 1041
 "GPRS" "GPRS" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 598
@@ -1005,8 +1010,12 @@
 "GPRS_DATA5_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 920
 "GPRS_DATA6_UPSELL" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 953
 "GPRS_DATA9_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 890
+"GPRS_DSS_FLEX_500MB_UPSELL" "GPRS DSS 500MB Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 19/07/17 1092
+"GPRS_DSS_FLEX_5GB_UPSELL" "GPRS DSS 5GB Flex Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 19/07/17 1093
 "GPRS_FLEX_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/03/17 1072
 "INTERNATIONAL" "International" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/12/06 620
+"INT_FIX_VOICE1000" "International Fixed Voice 1000 Minutes" 1002 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1089
+"INT_VOICE100" "International voice 100 Minutes" 2 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1087
 "OTHER" "SMS sent to other operator" 52 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/01/15 991
 "PD001" "Contrato2 SMS Flat rate" 103 1 0 0 "" "" 0 no 90 no "" 0 0 "1" 30/11/11 01/12/06 621
 "PD002" "Contrato2 Voice Flat rate" 102 1 0 0 "" "" 0 no 4 no "" 0 0 "1" 30/11/11 01/12/06 622
@@ -1033,6 +1042,7 @@
 "RT" "Roaming Terminating" 7 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 632
 "RUS" "Russia" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 30/11/11 01/12/06 633
 "SMS" "SMS" 51 1 0 0 "" "" 0 no 90 no "" 0 0 "1" 31/12/49 01/12/06 634
+"SMS5000" "SMS 5000 QTY" 51 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1086
 "TARJ9_DATA_IN" "TARJ9 DATA_IN" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 992
 "TARJ9_DATA_OUT" "TARJ9 DATA_OUT" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 993
 "TARJ9_VOICE_IN" "TARJ9 VOICE_IN" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 29/05/15 994
@@ -1040,7 +1050,9 @@
 "VAS" "VAS" 72 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 635
 "VOICE100" "Voice 100 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/01/15 977
 "VOICE200" "Voice 200 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/17 1081
+"VOICE200B" "Voice 200 minutes B" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 22/08/17 1096
 "VOICE3000" "Cont Voice" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 893
+"VOICE5000" "Voice 5000 Minutes" 81 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 05/07/17 1085
 "WAPVAS" "Premium WAP" 78 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 636
 "YOIGO" "Yoigo" 80 1 0 0 "" "" 0 no 5 no "" 0 0 "1" 31/12/49 01/12/06 637
 "252" "Somalia" 160 1 0 0 "" "" 0 no 1 no "" 0 0 "2" 31/12/49 01/12/06 638

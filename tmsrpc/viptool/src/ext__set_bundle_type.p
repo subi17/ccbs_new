@@ -45,9 +45,7 @@ llUpgradeUpsell = get_bool(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcAllowedBONOContracts  = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcAllowedCONTSContracts = fCParamC("ALLOWED_CONTS_CONTRACTS").
@@ -130,6 +128,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          0,
                                          0,
+                                         "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

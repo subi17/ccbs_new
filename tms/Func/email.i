@@ -12,6 +12,11 @@
             31.05.2007/aam SendMailX,
                            attachments are no longer mandatory with sendatt
 */
+&IF "{&EMAILFUNC}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE EMAILFUNC YES
+
 {Syst/commali.i}
 {Func/ftransdir.i}
 
@@ -395,3 +400,4 @@ FUNCTION fMailNotify RETURN CHARACTER
    ASSIGN xMailSubj = icMailSubj
           xMailFrom = lcMailFrom.
 END FUNCTION.
+&ENDIF

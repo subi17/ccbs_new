@@ -36,7 +36,7 @@ DEF VAR lcStreamMsg           AS CHAR NO-UNDO.
 DEF STREAM sout.
 
 ASSIGN ldaLastDay   = fLastdayofMonth(today)
-       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13".
+       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12".
 
 OUTPUT STREAM sout TO VALUE(icFile) APPEND.
 
@@ -106,8 +106,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
          (Mobsub.CliType = "TARJ9"  AND liCurrentServiceClass EQ 309) OR
          (Mobsub.CliType = "TARJ10" AND liCurrentServiceClass EQ 310) OR
          (Mobsub.CliType = "TARJ11" AND liCurrentServiceClass EQ 311) OR
-         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass EQ 312) OR
-         (Mobsub.CliType = "TARJ13" AND liCurrentServiceClass EQ 320) THEN DO:
+         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass EQ 312) THEN DO:
          
          CASE Mobsub.CliType:
             WHEN "TARJ7"  THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 303".
@@ -115,7 +114,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
             WHEN "TARJ10" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 310".
             WHEN "TARJ11" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 311".
             WHEN "TARJ12" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 312".
-            WHEN "TARJ13" THEN lcStreamMsg = "SKIPPED:Current SC in AIR is already 320".
          END CASE.
 
          PUT STREAM sout UNFORMATTED
@@ -135,8 +133,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
          (Mobsub.CliType = "TARJ9"  AND liCurrentServiceClass NE 9)  OR
          (Mobsub.CliType = "TARJ10" AND liCurrentServiceClass NE 10) OR
          (Mobsub.CliType = "TARJ11" AND liCurrentServiceClass NE 11) OR
-         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass NE 12) OR
-         (Mobsub.CliType = "TARJ13" AND liCurrentServiceClass NE 20) THEN DO:
+         (Mobsub.CliType = "TARJ12" AND liCurrentServiceClass NE 12) THEN DO:
 
          CASE Mobsub.CliType:
             WHEN "TARJ7"  THEN lcStreamMsg = "ERROR:Current SC in AIR is not 3".
@@ -144,7 +141,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
             WHEN "TARJ10" THEN lcStreamMsg = "ERROR:Current SC in AIR is not 10".
             WHEN "TARJ11" THEN lcStreamMsg = "ERROR:Current SC in AIR is not 11".
             WHEN "TARJ12" THEN lcStreamMsg = "ERROR:Current SC in AIR is not 12".
-            WHEN "TARJ13" THEN lcStreamMsg = "ERROR:Current SC in AIR is not 20".
          END CASE.
 
          PUT STREAM sout UNFORMATTED
@@ -167,8 +163,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
                                ELSE IF Mobsub.CliType = "TARJ10" THEN 310
                                ELSE IF Mobsub.CliType = "TARJ11" THEN 311
                                ELSE IF Mobsub.CliType = "TARJ12" THEN 312
-                               ELSE IF Mobsub.CliType = "TARJ13" THEN 320
-                                                                 ELSE 309, /* SC temp */
+                                                                 ELSE 309, /* SC TARJ9 */
                                ldaExpDate,
                                OUTPUT lcerror).
          IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND

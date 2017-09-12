@@ -15,7 +15,7 @@ SESSION:NUMERIC-FORMAT = "European".
 
 {Syst/commali.i}
 {Mc/femaildata.i}
-{Func/email.i}
+/*{Func/email.i}*/
 {Func/ftransdir.i}
 /*{femaildata2.i}*/
 
@@ -192,11 +192,15 @@ ELSE DO:
                                /*"_" + STRING(TIME) +*/ ".txt".
 
    OUTPUT STREAM slog TO VALUE(lcErrFile) APPEND.
-   PUT STREAM slog UNFORMATTED
-       STRING(TODAY) + "_" + STRING(TIME) + "|" +
-       OrderCustomer.Email + "|" +
-       STRING(wError.onbr) + "|" + 
-       wError.ErrMsg.
+
+   FOR EACH wError NO-LOCK:
+    
+      PUT STREAM slog UNFORMATTED
+          STRING(TODAY) + "_" + STRING(TIME) + "|" +
+          OrderCustomer.Email + "|" +
+          STRING(wError.onbr) + "|" + 
+          wError.ErrMsg.
+   END.
 
    OUTPUT STREAM slog CLOSE.
 

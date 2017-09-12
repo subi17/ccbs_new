@@ -1,0 +1,8 @@
+ADD FIELD "BundleTarget" OF "Daycampaign" AS INT
+  FORMAT "9"
+  INITIAL 0
+  LABEL "Bundle Target"
+  COLUMN-LABEL "Bundle Target"
+  HELP "Target of bundle"
+  ORDER 390
+

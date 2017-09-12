@@ -43,6 +43,7 @@
 {Func/matrix.i}
 {Syst/tmsconst.i}
 {Mnp/mnpoutchk.i}
+{Func/profunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -113,8 +114,8 @@ DEF VAR llUpdateBundle    AS LOG                      NO-UNDO.
 DEF VAR llUpdateBankAcc   AS LOG                      NO-UNDO.
 DEF VAR lcBundleCLITypes  AS CHAR                     NO-UNDO.
 DEF VAR lcBONOContracts   AS CHAR                     NO-UNDO.
-
-DEF VAR llAddLineTerm     AS LOG                  NO-UNDO.
+DEF VAR lcProValidation   AS CHAR                     NO-UNDO.
+DEF VAR llAddLineTerm     AS LOG                      NO-UNDO.
 
 DEF BUFFER UserCustomer FOR CUstomer .
 DEF BUFFER NewCliType   FOR CliType.
@@ -616,6 +617,19 @@ REPEAT  WITH FRAME main:
      VIEW-AS ALERT-BOX TITLE " Change Cancelled ".
      RETURN.
   END.
+
+  /*YPRO*/
+  lcProValidation = fValidateProSTC(MobSub.Custnum, 
+                                    MobSub.CliType,
+                                    new-type). 
+  IF lcProValidation NE "" THEN DO: 
+     MESSAGE
+         "Pro customer validation failed: " + lcProValidation
+     VIEW-AS ALERT-BOX TITLE " Change Cancelled ".
+     RETURN. 
+  END.
+
+
   
   if liCreditCheck = 1 THEN DO:
      FIND FIRST NewCliType WHERE

@@ -110,7 +110,8 @@ FORM
    ldCounter     COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Events To Counters"
    liActions     COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Limit Actions"
 WITH CENTERED ROW 5 SIDE-LABELS 
-     TITLE " TMQUEUE FOR COUNTERS " FRAME fQty.
+     TITLE SUBST(" TMQUEUE FOR COUNTERS (&1) ", Syst.Parameters:Tenant) 
+     FRAME fQty.
 
 FUNCTION fErrorLog RETURNS LOGIC
   (iiCustNum AS INT,
@@ -598,7 +599,11 @@ PROCEDURE pAnalyseQueueRow:
                              FraudCDR.dtlseq = TMQueue.EventId 
                      NO-LOCK NO-ERROR.
                         
-                  IF NOT AVAIL FraudCDR THEN DO:
+                  IF NOT AVAIL FraudCDR OR
+                     FraudCDR.BDest EQ "ROAM_EU" OR
+                     FraudCDR.BDest EQ "ROAM_EU_HTS" OR
+                     FraudCDR.BDest EQ "ROAM_EU_FREE" OR
+                     FraudCDR.BDest EQ "633800800" THEN DO:
                      llMatch = FALSE.
                      LEAVE FieldCheck.
                   END.

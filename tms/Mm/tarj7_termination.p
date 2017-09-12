@@ -91,6 +91,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcResult). 
       IF liRequest = 0 THEN
          PUT STREAM Sout UNFORMATTED 

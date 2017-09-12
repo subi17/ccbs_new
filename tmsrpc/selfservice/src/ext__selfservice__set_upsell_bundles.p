@@ -55,6 +55,8 @@ ASSIGN pcTransId  = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
@@ -62,10 +64,6 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
-
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
 
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
@@ -144,6 +142,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcError).
    IF liRequest = 0 THEN RETURN appl_err("Bundle request not created"). 
 END.

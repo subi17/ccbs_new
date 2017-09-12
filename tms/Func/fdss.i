@@ -461,6 +461,55 @@ FUNCTION fGetOtherBundleUsages RETURNS DEC (INPUT iiCustNum   AS INT,
 
 END FUNCTION.
 
+FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
+   (INPUT iiMsSeq        AS INT,
+    INPUT iiMultiSimId   AS INT,
+    INPUT iiMultiSimType AS INT):
+
+   DEFINE BUFFER lbMLMobSub FOR MobSub.
+   DEFINE BUFFER lbELMobSub FOR MobSub.
+
+   CASE iiMultiSimType:
+
+      WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
+         
+         FIND FIRST lbMLMobSub NO-LOCK WHERE 
+                    lbMLMobSub.MsSeq      = iiMsSeq             AND 
+                    lbMLMobSub.MultiSimId = iiMultiSimId        AND
+                   (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
+                    lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
+         IF AVAIL lbMLMobSub THEN
+            FIND FIRST lbELMobSub NO-LOCK WHERE 
+                       lbELMobSub.MsSeq        = lbMLMobSub.MultiSimId     AND 
+                       lbELMobSub.MultiSimId   = lbMLMobSub.MsSeq          AND 
+                       lbELMobSub.MUltiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+         IF AVAIL lbELMobSub THEN 
+            RETURN TRUE.
+
+      END.
+      WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
+         
+         FIND FIRST lbELMobSub NO-LOCK WHERE 
+                    lbELMobSub.MsSeq      = iiMsSeq      AND
+                    lbELMobSub.MultiSimID = iiMultiSimId NO-ERROR.
+         IF AVAIL lbELMobSub THEN 
+            FIND FIRST lbMLMobSub NO-LOCK WHERE 
+                       lbMLMobSub.MsSeq        = lbELMobSub.MultiSimId   AND 
+                       lbMLMobSub.MultiSimId   = lbELMobSub.MsSeq        AND 
+                       lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND 
+                      (lbMLMobSub.MsStatus     = {&MSSTATUS_ACTIVE}  OR 
+                       lbMLMobSub.MsStatus     = {&MSSTATUS_BARRED})     NO-ERROR.
+         IF AVAIL lbMLMobSub THEN 
+            RETURN TRUE.
+      END.
+      OTHERWISE .
+
+   END CASE.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    (INPUT  iiCustnum            AS INT,
     INPUT  ideActStamp          AS DEC,
@@ -483,7 +532,9 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR lcAllowedDSS2SubsType  AS CHAR  NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType  AS CHAR  NO-UNDO.
    DEF VAR llDSS2PrimaryAvail     AS LOG   NO-UNDO.
-   
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMserviceLPool   FOR MserviceLPool.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
@@ -502,8 +553,10 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    END. /* IF fIsDSSActive(INPUT iiCustnum) THEN DO: */
 
    IF icBundleId = "DSS2" THEN
-      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+      ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+             lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+             lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand   AND
@@ -512,10 +565,17 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
 
       IF icBundleId = "DSS2" AND
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
-
+           
+      IF icBundleId = "DSS2" AND
+        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR 
+         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                  bMobSub.MultiSimId,
+                                                  bMobSub.MultiSimType) THEN NEXT.
+      
       ASSIGN liMobSubCount = liMobSubCount + 1
              lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
-
+      
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq   = bMobSub.MsSeq AND
                bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
@@ -545,9 +605,15 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
                                    {&REQ_INACTIVE_STATUSES}) = 0 AND
                      MsRequest.ActStamp <= ideActStamp) THEN NEXT.
 
-         IF icBundleId = "DSS2" AND
-            LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0 THEN
+         IF icBundleId = "DSS2" THEN DO:
+            IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
+               (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND
+                 CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                                CLIType.Brand      = gcBrand         AND
+                                CLIType.CLIType    = bMobSub.CLIType AND
+                                CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN
             llDSS2PrimaryAvail = TRUE.
+         END.
 
          ldeBundleLimit = 0.
                
@@ -668,21 +734,28 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
     OUTPUT oiDSS2PriMsSeq AS INT, 
     OUTPUT ocResult       AS CHAR):
 
-   DEF VAR liMobSubCount         AS INT   NO-UNDO.
-   DEF VAR lcExcludeBundles      AS CHAR  NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR  NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType AS CHAR  NO-UNDO.
-   DEF VAR llDSS2PrimaryAvail    AS LOG   NO-UNDO.
-   
+   DEF VAR liMobSubCount           AS INT  NO-UNDO.
+   DEF VAR lcExcludeBundles        AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
+   DEF VAR llDSS2PrimaryAvail      AS LOG  NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+   DEF VAR llgExtraLine            AS LOG  NO-UNDO.
+   DEF VAR liExtraLineMsSeq        AS INT  NO-UNDO.
+   DEF VAR liMainLineMsSeq         AS INT  NO-UNDO. 
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
 
-   ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-          lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-          lcExcludeBundles      = fCParamC("EXCLUDE_BUNDLES").
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+          lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
+          lcExcludeBundles        = fCParamC("EXCLUDE_BUNDLES")
+          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    IF iiMsSeq > 0 THEN DO:
       FIND FIRST bMobSub WHERE
@@ -700,6 +773,18 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          ocResult = "ERROR:Contract is not allowed for this subscription type".
          RETURN FALSE.
       END. /* IF fMatrixAnalyse(gcBrand */
+
+      IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND 
+        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+         IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                  bMobSub.MultiSimId,
+                                                  bMobSub.MultiSimType) THEN 
+         DO:
+            ocResult = "Primary manline or Extraline is not hard associated".
+            RETURN FALSE.
+         END. 
+
    END. /* IF iiMsSeq > 0 THEN DO: */
 
    MOBSUB_LOOP:
@@ -712,6 +797,13 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       IF bMobSub.MsSeq = iiMsSeq OR
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
+      /* Extraline hard association subscription check */
+      IF (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+          LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                   bMobSub.MultiSimId,
+                                                   bMobSub.MultiSimType) THEN NEXT. 
+      
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
                    MsRequest.MsSeq   = bMobSub.MsSeq AND
@@ -738,7 +830,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
                           {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
 
       liMobSubCount = liMobSubCount + 1.
-
+      
       FOR EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq    = bMobSub.MsSeq AND
                bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
@@ -764,12 +856,18 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
                                    {&REQ_INACTIVE_STATUSES}) = 0 AND
                      MsRequest.ActStamp <= ideActStamp) THEN NEXT.
 
-         IF NOT llDSS2PrimaryAvail AND
-            LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0 THEN DO:
-            ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
-                   llDSS2PrimaryAvail = TRUE.
-            LEAVE.
-         END.
+         IF NOT llDSS2PrimaryAvail THEN DO:
+            IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
+               (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
+                CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                               CLIType.Brand      = gcBrand         AND 
+                               CLIType.CLIType    = bMobSub.CLIType AND 
+                               CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN DO:
+               ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
+                      llDSS2PrimaryAvail = TRUE.
+               LEAVE.
+            END.   
+         END.                  
       END. /* FOR EACH bMServiceLimit WHERE */
 
       IF llDSS2PrimaryAvail AND
@@ -812,6 +910,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
+   DEF BUFFER MsRequest        FOR MsRequest.
 
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
@@ -819,6 +918,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
       ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
              lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
+   MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
@@ -848,14 +948,20 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
                    LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)
       THEN NEXT.
 
-      IF icBundleId = "DSS" AND
-         CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                   MsRequest.ReqCParam2 BEGINS "TARJ") THEN NEXT.
+      IF icBundleId = "DSS" THEN DO:
+         FOR EACH MsRequest NO-LOCK WHERE
+                  MsRequest.MsSeq   = bMobSub.MsSeq AND
+                  MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                  MsRequest.ActStamp <= ideActStamp AND
+                  LOOKUP(STRING(MsRequest.ReqStatus),
+                         {&REQ_INACTIVE_STATUSES} + ",3") = 0:
+
+             IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                               CLIType.CLIType = MsRequest.ReqCparam2 AND
+                               CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID})
+               THEN NEXT MOBSUB_LOOP.
+         END.
+      END.
 
       /* Exclude subs. if ACC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -929,13 +1035,13 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
     OUTPUT oiDSSTransToMsSeq    AS INT,
     OUTPUT ocError              AS CHAR):
 
-   DEF VAR liMobSubCount         AS INT  NO-UNDO.
-   DEF VAR llFirstActBundle      AS LOG  NO-UNDO INIT TRUE.
-   DEF VAR llActOtherBundle      AS LOG  NO-UNDO.
-   DEF VAR lcExcludeBundles      AS CHAR NO-UNDO.
-   DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-   DEF VAR lcDSS2PrimarySubsType AS CHAR NO-UNDO.
-   
+   DEF VAR liMobSubCount           AS INT  NO-UNDO.
+   DEF VAR llFirstActBundle        AS LOG  NO-UNDO INIT TRUE.
+   DEF VAR llActOtherBundle        AS LOG  NO-UNDO.
+   DEF VAR lcExcludeBundles        AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
+
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMobSub          FOR MobSub.
@@ -944,8 +1050,8 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
    IF icBundleId = "DSS2" THEN
-      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
+      ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand      AND

@@ -10,7 +10,7 @@
   -------------------------------------------------------------------------- */
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
-
+{Syst/tmsconst.i}
 {Func/log.i}
 fsetLogFileName("/scratch/print/testinv/testinvui_" + 
    STRING(YEAR(TODAY),"9999") + 
@@ -46,7 +46,7 @@ DEF VAR ciperiod   AS i                          NO-UNDO.
 def var i          as int  format "zzzzzzz9"     NO-UNDO.
 def var atpvm1     as Date format "99-99-99" NO-UNDO.
 def var atpvm2     as Date format "99-99-99" NO-UNDO.
-def var CustNum2      as int  format "zzzzzzz9" NO-UNDO.
+def var CustNum2      as int  format "zzzzzzzz9" NO-UNDO.
 DEF VAR mininv     LIKE InvGroup.MinInvAmt   NO-UNDO.
 DEF VAR upmth      LIKE InvGroup.UnbilledLimit    NO-UNDO.
 DEF VAR kysy_rajat AS LOG                    NO-UNDO.
@@ -118,7 +118,7 @@ form
            help "Invoice run code, 0=ALL"
            FORMAT ">9" SKIP 
    CustNum1   label  " Customer number ........"
-           help "Customers FROM number"
+           help "Customers FROM number" FORMAT "zzzzzzzz9" 
    "-"
    CustNum2   no-label help "Customers TO number"  SKIP
    atpvm1  label " Time Period ............"
@@ -176,7 +176,7 @@ llCreateXML = TRUE.
 IF CustNum1 = 0 THEN 
 ASSIGN
    CustNum1  = unknown + 1
-   CustNum2  = 99999999.
+   CustNum2  = 999999999.
 
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = CustNum1 NO-LOCK NO-ERROR.
@@ -318,7 +318,7 @@ toimi:
 
          IF INPUT atpvm1 = ?  THEN atpvm1 = 01/01/1900.
          IF INPUT atpvm2 = ?  THEN atpvm2 = 12/31/9999.
-         if input CustNum2  = "" THEN CustNum2  = 9999999.
+         if input CustNum2  = "" THEN CustNum2  = 999999999.
 
          kysy_rajat = FALSE.
       END.
@@ -508,6 +508,11 @@ IF NOT AVAIL ttInvCust THEN DO:
    VIEW-AS ALERT-BOX MESSAGE.
    RETURN.
 END.
+
+FIND FIRST Customer where Customer.CustNum = ttInvCust.CustNr NO-LOCK NO-ERROR.
+IF AVAIL Customer AND BUFFER-TENANT-NAME(Customer) = {&TENANT_MASMOVIL} THEN 
+    ASSIGN lcBillRun = "TEST-MM".
+
 RUN pCreateTestInv in pHandle("",
                               invDte,
                               ?,
@@ -518,7 +523,7 @@ RUN pCreateTestInv in pHandle("",
                               llRerate,
                               llDouble,
                               liCustQty,
-                              "").
+                              lcBillRun).
 
 
 HIDE MESSAGE NO-PAUSE.

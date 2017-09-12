@@ -56,13 +56,15 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE delivery_address AS CHAR NO-UNDO. 
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO. 
-DEF VAR lcRegion AS CHAR NO-UNDO. 
-DEF VAR lcStreet AS CHAR NO-UNDO. 
-DEF VAR lcZip AS CHAR NO-UNDO. 
-DEF VAR lcCity AS CHAR NO-UNDO. 
-DEF VAR lcCountry AS CHAR NO-UNDO. 
-DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-DEF VAR lcCityCode AS CHAR NO-UNDO. 
+DEF VAR lcRegion          AS CHAR NO-UNDO. 
+DEF VAR lcStreet          AS CHAR NO-UNDO. 
+DEF VAR lcZip             AS CHAR NO-UNDO. 
+DEF VAR lcCity            AS CHAR NO-UNDO. 
+DEF VAR lcCountry         AS CHAR NO-UNDO. 
+DEF VAR lcStreetCode      AS CHAR NO-UNDO. 
+DEF VAR lcCityCode        AS CHAR NO-UNDO. 
+DEF VAR liDBCount         AS INT  NO-UNDO.
+DEF VAR lcTenant          AS CHAR NO-UNDO.
 
 FUNCTION fCheckIntegrity RETURNS LOGICAL 
    (iiErrCode AS INTEGER):
@@ -179,13 +181,21 @@ gcBrand = "1".
 {Func/dextra.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
+{Func/orderfunc.i}
 
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = liOrderId NO-ERROR.
-IF NOT AVAIL Order THEN DO:
+/* Set access to right tenant */
+FOR FIRST Order WHERE Order.Brand = gcBrand AND Order.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+END.
+
+IF NOT AVAIL Order OR lcTenant = "" THEN DO:
    add_int(response_toplevel_id, "", 20).
    RETURN.
+END.
+ 
+DO liDBCount = 1 TO NUM-DBS
+   ON ERROR UNDO, THROW:
+    SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
 END.
 
 IF llDoEvent THEN DO:
@@ -211,6 +221,24 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
             FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
    END.   
+   ELSE IF liLOStatusId EQ 88888 THEN
+   DO:
+      FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq                   AND 
+                                 TPService.Operation  = {&TYPE_ACTIVATION}            AND    
+                                 TPService.ServType   = "Television"                  AND 
+                                 TPService.ServStatus = {&STATUS_LOGISTICS_INITIATED} EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+      IF AVAIL TPService THEN 
+      DO:
+          ASSIGN TPService.SerialNbr = lcIMEI.
+          
+          fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_LOGISTICS}, {&WAITING_FOR_STB_ACTIVATION}).
+      END.
+      ELSE 
+      DO:
+          add_int(response_toplevel_id, "", 30). 
+          RETURN. 
+      END.                  
+   END.  
    ELSE DO:
       FIND FIRST OrderAccessory WHERE
          OrderAccessory.Brand = gcBrand AND
@@ -257,7 +285,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
       END.
    END.
 END.
-   
+
 IF llDoEvent THEN DO:
    DEFINE VARIABLE lhOrderDelivery AS HANDLE NO-UNDO.
    lhOrderDelivery = BUFFER OrderDelivery:HANDLE.
@@ -275,7 +303,6 @@ ASSIGN
    OrderDelivery.LOStatusId = liLOStatusId
    OrderDelivery.IncidentInfoId = ?
    OrderDelivery.MeasuresInfoId = ?.
-
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
       
@@ -319,25 +346,31 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
    END.
 END.
 
+
 /* Remove router prefix 9999 for SMS sending */
 IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId),
-                      LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
-
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
+ELSE IF STRING(liLOStatusId) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_TV_STB_PREFIX}) + 1)).
+      
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 
 FIND CURRENT OrderDelivery NO-LOCK.
 
-IF LOOKUP(STRING(OrderDelivery.LOStatusId),
-   {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
+IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) > 0 THEN 
+DO:
    IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
       RUN Mc/closeorder.p(Order.OrderId,TRUE).
-   ELSE RUN Mc/cancelorder.p(Order.OrderId,TRUE).
+   ELSE 
+      RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+   IF VALID-HANDLE(ghFunc1) THEN 
+      DELETE OBJECT ghFunc1 NO-ERROR. 
+      
+   IF llDoEvent THEN 
+      fCleanEventObjects().
 END.

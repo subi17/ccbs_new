@@ -60,50 +60,53 @@
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
 /* Output parameters */
-DEF VAR resp_struct AS CHAR NO-UNDO.
-DEF VAR memo_struct AS CHAR NO-UNDO.
-DEF VAR term_array AS  CHAR NO-UNDO.
-DEF VAR laptop_array AS  CHAR NO-UNDO.
-DEF VAR term_struct AS CHAR NO-UNDO.
-DEF VAR order_array AS CHAR NO-UNDO.
-DEF VAR order_struct AS CHAR NO-UNDO.
+DEF VAR resp_struct    AS CHAR NO-UNDO.
+DEF VAR memo_struct    AS CHAR NO-UNDO.
+DEF VAR term_array     AS CHAR NO-UNDO.
+DEF VAR laptop_array   AS CHAR NO-UNDO.
+DEF VAR term_struct    AS CHAR NO-UNDO.
+DEF VAR order_array    AS CHAR NO-UNDO.
+DEF VAR order_struct   AS CHAR NO-UNDO.
 DEF VAR payterm_struct AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcPriceList AS CHARACTER NO-UNDO. 
-DEF VAR liMNPOutExists AS INT NO-UNDO.
-DEF VAR lcOrigCLIType AS CHAR NO-UNDO.
-DEF VAR liCountMobile AS INT NO-UNDO.
-DEF VAR liCountFixed  AS INT NO-UNDO.
-DEF VAR liMultiSimType AS INT NO-UNDO. 
-DEF VAR lcSegmentCode AS CHAR NO-UNDO.
+DEF VAR lcPriceList    AS CHAR NO-UNDO. 
+DEF VAR liMNPOutExists AS INT  NO-UNDO.
+DEF VAR lcOrigCLIType  AS CHAR NO-UNDO.
+DEF VAR liCountMobile  AS INT  NO-UNDO.
+DEF VAR liCountFixed   AS INT  NO-UNDO.
+DEF VAR liMultiSimType AS INT  NO-UNDO. 
+DEF VAR lcSegmentCode  AS CHAR NO-UNDO.
 DEF VAR lcSegmentOffer AS CHAR NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
 
-DEF VAR ldeActStamp AS DEC NO-UNDO.
-DEF VAR ldaActDate AS DATE NO-UNDO.
-DEF VAR ldaRenewalDate AS DATE NO-UNDO. 
-DEF VAR ldePendingFee AS DECIMAL NO-UNDO. 
-DEF VAR liTotalPeriods AS INTEGER NO-UNDO. 
-DEF VAR ldePeriodFee AS DECIMAL NO-UNDO.
-DEF VAR ldeFinalAmt  AS DECIMAL NO-UNDO.
-DEF VAR liMnpStatus AS INT NO-UNDO.
-DEF VAR liOrderId AS INT NO-UNDO. 
-DEF VAR installment_array AS CHAR NO-UNDO.
-DEF VAR lderesidualFee AS DEC NO-UNDO. 
+DEF VAR ldeActStamp         AS DEC     NO-UNDO.
+DEF VAR ldaActDate          AS DATE    NO-UNDO.
+DEF VAR ldaRenewalDate      AS DATE    NO-UNDO. 
+DEF VAR ldePendingFee       AS DECIMAL NO-UNDO. 
+DEF VAR liTotalPeriods      AS INTEGER NO-UNDO. 
+DEF VAR ldePeriodFee        AS DECIMAL NO-UNDO.
+DEF VAR ldeFinalAmt         AS DECIMAL NO-UNDO.
+DEF VAR liMnpStatus         AS INT     NO-UNDO.
+DEF VAR liOrderId           AS INT     NO-UNDO. 
+DEF VAR installment_array   AS CHAR    NO-UNDO.
+DEF VAR lderesidualFee      AS DEC     NO-UNDO. 
+DEF VAR liMultiSimTypeValue AS INT     NO-UNDO. 
+DEF VAR lcMultiSimCLI       AS CHAR    NO-UNDO. 
+DEF VAR llYoigoTenant     AS LOG    NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant  AS LOG    NO-UNDO INIT FALSE.
 
-DEF BUFFER lbMobSub FOR MobSub.
+DEF BUFFER lbMobSub    FOR MobSub.
+DEF BUFFER lbELMobSub  FOR MobSub.
+DEF BUFFER lbMLMobSub  FOR MobSub.
 DEF BUFFER bActRequest FOR MsRequest.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK WHERE
-     mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
-FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
-           MsOwner.MsSeq = MobSub.MsSeq NO-ERROR.
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+
+FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE MsOwner.MsSeq = MobSub.MsSeq NO-ERROR.
 IF NOT AVAILABLE MsOwner THEN
    RETURN appl_err(SUBST("MsOwner entry &1 not found", piMsSeq)).
 
@@ -117,6 +120,11 @@ gcBrand = "1".
 {Func/fixedfee.i}
 {Func/fctchange.i}
 {Mnp/mnpoutchk.i}
+{Func/multitenantfunc.i}
+
+ASSIGN
+   llYoigoTenant    = (IF vcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+   llMasmovilTenant = (IF vcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 FIND FIRST Segmentation NO-LOCK WHERE
            Segmentation.MsSeq = piMsSeq NO-ERROR.
@@ -126,6 +134,7 @@ IF AVAILABLE Segmentation THEN ASSIGN
 
 resp_struct = add_struct(response_toplevel_id, "").
 
+add_string(resp_struct, "brand",fConvertTenantToBrand(vcTenant)).
 add_string(resp_struct, "cli", mobsub.cli).
 IF Mobsub.fixednumber NE ? THEN
    add_string(resp_struct, "fixed_number", Mobsub.fixednumber).
@@ -269,7 +278,7 @@ IF liMNPStatus NE ? THEN
       STRING(liMNPStatus EQ 0, "new/mnp")).
 ELSE  
    add_string(resp_struct, "number_type",
-      STRING(fISYoigoCLI(MobSub.CLI), "new/mnp")).
+      STRING(((fISYoigoCLI(MobSub.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(MobSub.CLI) AND llMasmovilTenant)), "new/mnp")).
 
 /* subscription terminals  */
 term_array = add_array(resp_struct,"sub_terminals").
@@ -418,21 +427,45 @@ IF AVAIL PIndicator THEN
 
 
 IF MobSub.MultiSIMType > 0 AND
-   MobSub.MultiSIMID > 0 THEN DO:
+   MobSub.MultiSIMID   > 0 THEN DO:
 
    liMultiSIMType = (IF MobSub.MultiSIMType EQ {&MULTISIMTYPE_PRIMARY}
                      THEN {&MULTISIMTYPE_SECONDARY} ELSE {&MULTISIMTYPE_PRIMARY}).
+  
+   /* Check if it Extra line hard associated subscription */
+   FIND FIRST lbELMobSub NO-LOCK  WHERE 
+              lbELMobSub.MsSeq        = MobSub.MultiSimId         AND 
+              lbELMobSub.MultiSimId   = MobSub.MsSeq              AND 
+              lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
+              
+   FIND FIRST lbMLMobSub NO-LOCK  WHERE 
+              lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND 
+              lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND 
+              lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR. 
    
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-              lbMobSub.Brand = gcBrand AND
-              lbMobSub.MultiSimID = MobSub.MultiSimID AND
-              lbMobSub.MultiSimType = liMultiSIMType AND
-              lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
+              lbMobSub.Brand        = gcBrand           AND
+              lbMobSub.MultiSimID   = MobSub.MultiSimID AND
+              lbMobSub.MultiSimType = liMultiSIMType    AND
+              lbMobSub.Custnum      = MobSub.Custnum    NO-ERROR.
+   
+   IF AVAIL lbELMobSub THEN
+      ASSIGN 
+         liMultiSimTypeValue = {&MULTISIMTYPE_EXTRALINE}
+         lcMultiSimCLI       = lbELMobSub.CLI. 
+   ELSE IF AVAIL lbMLMobSub THEN
+      ASSIGN
+         liMultiSimTypeValue = {&MULTISIMTYPE_PRIMARY} 
+         lcMultiSimCLI       = lbMLMobSub.FixedNumber + " / " + lbMLMobSub.CLI. 
+   ELSE IF AVAIL lbMobSub THEN 
+      ASSIGN 
+         liMultiSimTypeValue = MobSub.MultiSimType
+         lcMultiSimCLI       = lbMobSub.CLI.
 
+   add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
+   add_string(resp_struct,"multisim_msisdn", lcMultiSimCLI).
+   
    IF AVAIL lbMobSub THEN DO:
-      add_int(resp_struct,"multisim_type",MobSub.MultiSimType) .
-      add_string(resp_struct,"multisim_msisdn",lbMobSub.CLI).
-
       /* Return warning flag for secondary line */
       IF MobSub.MultiSIMType = {&MULTISIMTYPE_PRIMARY} AND
          NOT CAN-FIND (FIRST MsRequest WHERE

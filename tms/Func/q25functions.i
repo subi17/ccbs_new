@@ -8,7 +8,10 @@
   CREATED ......: 19.11.15
   CHANGED ......: 
   ------------------------------------------------------------------------*/
+&IF "{&fQ25FUNCTIONS}" NE "YES"
+&THEN
 
+&GLOBAL-DEFINE fQ25FUNCTIONS YES
 {Syst/commali.i}
 {Func/timestamp.i}
 {Func/cparam2.i}
@@ -746,7 +749,7 @@ FUNCTION fBankByBillCode RETURNS CHAR
    (icBillCode AS CHAR):
    CASE icBillCode:
       WHEN "RVTERM1EF" THEN RETURN "UNO-E".
-      WHEN "RVTERMBSF" THEN RETURN "Yoigo". /* "Sabadell" - YPR-3565 */
+      WHEN "RVTERMBSF" THEN RETURN "Sabadell".
       WHEN "RVTERMF" THEN RETURN "Yoigo".
       WHEN "RVTERMBCF" THEN RETURN "Cetelem".
    END CASE.
@@ -952,3 +955,4 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
    END.
    RETURN TRUE.
 END.
+&ENDIF

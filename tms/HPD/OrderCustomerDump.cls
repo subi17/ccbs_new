@@ -19,7 +19,21 @@ CLASS HPD.OrderCustomerDump FINAL INHERITS GenericDump:
       
       SUPER(iiDumpID, icFile).
       
-   END CONSTRUCTOR.    
+   END CONSTRUCTOR.
+   
+
+   METHOD PRIVATE CHARACTER mGetSegment():
+
+      FOR
+         FIRST CustCat FIELDS (Brand Category Segment) NO-LOCK WHERE
+            CustCat.Brand    = "1" AND
+            CustCat.Category = lhMainTable::Category:
+         RETURN CustCat.Segment.
+      END.
+
+      RETURN "".
+
+   END METHOD.
 
 
    METHOD PUBLIC OVERRIDE CHARACTER mSpecialHandling
@@ -31,6 +45,10 @@ CLASS HPD.OrderCustomerDump FINAL INHERITS GenericDump:
          THEN IF ilCheckOnly
               THEN RETURN "OK".
               ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter OrderId RowType}.
+         WHEN "Segment"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN mGetSegment().
          OTHERWISE RETURN "".         
       END CASE.
 

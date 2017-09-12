@@ -27,19 +27,21 @@ DEF VAR lcOutFolder AS CHAR NO-UNDO.
 DEF VAR lcProFolder AS CHAR NO-UNDO.
 DEF VAR lcSaveFolder AS CHAR NO-UNDO.
 DEF VAR llFile AS LOG NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
 
+IF validate_request(param_toplevel_id, "string,int,string") = ? THEN RETURN.
 
-IF validate_request(param_toplevel_id, "int,string") = ? THEN RETURN.
-
-piID = get_int(param_toplevel_id, "0").
-pcFileName = get_string(param_toplevel_id, "1").
+pcTenant   = get_string(param_toplevel_id, "0").
+piID       = get_int(param_toplevel_id, "1").
+pcFileName = get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
+
 DEF STREAM sFile.
 
-FIND FIRST DumpFile NO-LOCK WHERE
-           DumpFile.DumpID = piID NO-ERROR.
+FIND FIRST DumpFile NO-LOCK WHERE DumpFile.DumpID = piID NO-ERROR.
 IF NOT AVAIL DumpFile THEN 
    RETURN appl_err("DumpFile ID " + STRING(piID) + " cannot be found").
 

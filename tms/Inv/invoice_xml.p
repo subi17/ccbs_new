@@ -10,6 +10,7 @@
 {Syst/funcrunprocess_update.i}
 {Syst/host.i}
 {Syst/tmsconst.i}
+{Func/profunc.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -513,7 +514,15 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("CustomerAddress").
   
       lhXML:WRITE-DATA-ELEMENT("CustomerTaxZone",Invoice.TaxZone).
- 
+     
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand EQ Syst.Parameters:gcbrand AND
+                 CustCat.Category EQ Customer.Category NO-ERROR.
+         IF AVAILABLE CustCat THEN
+            lhXML:WRITE-DATA-ELEMENT("Segment",CustCat.Segment).
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("Segment","").
+             
       lhXML:END-ELEMENT("Customer").
 
       RUN pGetInvoiceRowData.
@@ -719,19 +728,26 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
       ELSE 
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
-      lhXML:START-ELEMENT("ContractType").
-      lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
-      lhXML:WRITE-CHARACTERS(ttSub.CLIType).
+      lhXML:START-ELEMENT("ContractType").      
+      IF fIsPro(Customer.Category) THEN
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " PRO").  
+      ELSE
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName). /* No PRO logic needed */               
+      lhXML:WRITE-CHARACTERS(ttSub.CLIType).      
       lhXML:END-ELEMENT("ContractType").
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
-         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
+         IF fIsPro(Customer.Category) THEN
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /* No PRO logic needed */
+         
          lhXML:WRITE-DATA-ELEMENT("TariffType",ttSub.OldCLIType).
          lhXML:WRITE-DATA-ELEMENT("TariffDate",ttSub.TariffActDate).
-         lhXML:END-ELEMENT("OldContractType").
+         lhXML:END-ELEMENT("OldContractType").         
       END.
-
+      
       lhXML:START-ELEMENT("ContractName").
       lhXML:WRITE-DATA-ELEMENT("FullName",ttSub.UserName).
       lhXML:END-ELEMENT("ContractName").
