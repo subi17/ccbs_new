@@ -55,9 +55,9 @@ ASSIGN
   lcMemoTitle = (IF lcProcessMode EQ "OTA_OK" 
                  THEN "OTA OK" 
                  ELSE "OTA KO")
-  lcMemotText = (IF lcProcessMode EQ "OTA_OK" 
-                 THEN "Migración red - OTA OK"
-                 ELSE "Migración red - OTA KO").
+  lcMemoText = (IF lcProcessMode EQ "OTA_OK" 
+                THEN "Migración red - OTA OK"
+                ELSE "Migración red - OTA KO").
 
 /* Getting directories from CParams */
 ASSIGN
