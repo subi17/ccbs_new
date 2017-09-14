@@ -23,6 +23,17 @@ gcBrand = "1".
 
 DEF STREAM sExclude.
 
+
+/*YDR-2632*/
+/*Function returns operator code part from MNPRetPlatForm.retentionplatform. field*/
+FUNCTION fOperators RETURNS CHAR
+   (icConfig AS CHAR):
+   IF NUM-ENTRIES(icConfig, ";") NE 2 THEN RETURN "".
+   RETURN ENTRY(2,icConfig, ";").
+END.
+
+
+
 FUNCTION fGetPenalty RETURN DECIMAL
    (OUTPUT odaEndDate AS DATE):
 
@@ -156,14 +167,24 @@ END.
 
 DEF STREAM sout.
 
+/*ydr-2632*/
+DEF TEMP-TABLE ttOperCategory
+   FIELD operators AS CHAR /*operator category*/
+   FIELD amount AS INT /*item count for this category*/
+   INDEX operators  IS PRIMARY UNIQUE operators.
+
 DEFINE TEMP-TABLE ttData
    FIELD custnum LIKE MobSub.Custnum 
    FIELD msseq LIKE MobSub.MsSeq 
    FIELD mnpseq LIKE mnpprocess.mnpseq 
    FIELD smstext AS CHAR
-   FIELD RetentionPlatform AS CHAR
+   FIELD RetentionPlatform AS CHAR /*1,2,3*/
+   FIELD operatorcat AS CHAR /*category of operators */
+INDEX operatorcat operatorcat   
 INDEX RetentionPlatform RetentionPlatform 
 INDEX custnum IS PRIMARY UNIQUE custnum mnpseq msseq.
+
+DEF BUFFER bttData FOR ttData.
 
 DEF VAR i AS INT NO-UNDO. 
 DEF VAR liPlatform AS INT NO-UNDO INIT 1. 
@@ -178,15 +199,68 @@ DEF VAR lcStatusCodes AS CHAR NO-UNDO INIT "2,5".
 DEF VAR lcRetentionSMSText AS CHAR NO-UNDO. 
 DEF VAR liLoop AS INTEGER NO-UNDO. 
 DEF VAR lcRootDir AS CHARACTER NO-UNDO. 
-DEF VAR liOldOngoing AS INT NO-UNDO.
 DEF VAR liExcludeOffset AS INT NO-UNDO.
 DEF VAR lcRetExcludeFile AS CHAR NO-UNDO.
+DEF VAR lcOperCat AS CHAR NO-UNDO.
 
 lcRootDir = fCParam("MNP","MNPRetention").
 IF lcRootDir = ? OR lcRootDir EQ "" THEN DO:
    MESSAGE "Missing dump dir configuration".
    RETURN.
 END.
+
+
+/*YDR-2632*/
+/*Function returns retention file handler  part from MNPRetPlatForm.retentionplatform. field*/
+FUNCTION fRetentionFileRecipient RETURNS CHAR
+   (icConfig AS CHAR):
+   RETURN ENTRY(1,icConfig,";").
+END.
+
+FUNCTION fSelectCategory RETURNS CHAR
+   (icOperator AS CHAR):
+   DEF VAR lcOperList AS CHAR NO-UNDO.
+   DEF VAR liEntries AS INT NO-UNDO.
+   DEF VAR j AS INT NO-UNDO.
+   FOR EACH ttOperCategory NO-LOCK:
+      liEntries = NUM-ENTRIES(ttOperCategory.operators).
+      IF liEntries EQ 0 THEN NEXT. /*Empty row.*/
+      DO j = 1 TO liEntries:
+         IF icOperator MATCHES ENTRY(j,ttOperCategory.operators) THEN DO:
+            RETURN ttOperCategory.operators.
+         END.
+      END.
+   END.
+   RETURN "". /*default empty, always returning some reasonable value*/
+END.
+
+/*Function adds found category amout. Category can be for example
+   Movistar
+   VODA*
+   ...*/
+FUNCTION fAddCategoryCount RETURNS INT
+   (icCategory AS CHAR,
+    iiAmt AS INT):
+   FIND FIRST ttOperCategory NO-LOCK WHERE
+              ttOperCategory.operators EQ icCategory NO-ERROR.
+   IF AVAIL ttOperCategory THEN DO:
+      ttOperCategory.Amount = ttOperCategory.Amount + iiAmt.
+      RETURN ttOperCategory.Amount.
+   END.
+   RETURN 0.
+END.   
+
+/*Function returns ho many cases are in given category */
+FUNCTION fGetCaseAmount RETURNS INT
+   (icOperators AS CHAR):
+   FIND FIRST ttOperCategory NO-LOCK WHERE
+              ttOperCategory.operators EQ icOperators NO-ERROR.
+   IF AVAIL ttOperCategory THEN RETURN ttOperCategory.amount.
+
+   RETURN 0.
+END.
+
+
 
 IF NOT CAN-FIND(FIRST MNPRetPlatForm NO-LOCK WHERE
                       MNPRetPlatForm.Brand = gcBrand AND
@@ -200,6 +274,8 @@ END.
 DEF BUFFER bMNPDetails FOR MNPDetails.
 DEF BUFFER bMNPProcess FOR MNPProcess.
 DEF BUFFER bMNPSub FOR MNPSub.
+
+
 
 lcRetExcludeFile = lcRootDir + "/spool/" + "mnp_retention_exclude_" +
                    STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") +
@@ -290,12 +366,33 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             IF AVAIL ttData THEN NEXT MNP_LOOP.
 
             CREATE ttData.
-            ASSIGN
+            ASSIGN 
                ttData.custnum = MobSub.custnum
                ttData.MsSeq = MobSub.msseq
                ttData.mnpseq = mnpprocess.mnpseq
                ttData.smsText = lcRetentionSMSText
                i = i + 1.
+             /*YDR-2632: add operator for making operator based sharing */
+            FIND MNPOperator NO-LOCK WHERE
+                 MNPOperator.Brand = gcBrand AND
+                 MNPOperator.OperCode = MNPProcess.OperCode
+            NO-ERROR.
+
+            IF AVAIL MNPOperator THEN ttData.operatorcat = MNPOperator.OperName.
+            ELSE DO:
+               FIND FIRST MNPOperator WHERE
+                          MNPOperator.Brand = gcBrand AND
+                          MNPOperator.OperCode = MNPProcess.OperCode
+               NO-ERROR.
+               IF AVAIL MNPOperator AND
+                        MNPOperator.OperBrand > ""
+               THEN ttData.operatorcat = MNPOperator.OperBrand.
+               ELSE ttData.operatorcat = STRING(MNPProcess.OperCode).
+            END.
+            /*convert the found operator to match category based sharing*/
+            ttData.operatorcat = fSelectCategory(ttData.Operatorcat).
+            fAddCategoryCount(ttData.operatorcat, 1). /*Items of this category*/
+            /*ydr-2362 ends*/          
 
             MNP_OTHER_LOOP:
             FOR EACH bMNPDetails NO-LOCK WHERE
@@ -316,7 +413,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                                      MNPRetPlatForm.Todate >= TODAY AND
                                      MNPRetPlatForm.FromDate <= TODAY) THEN NEXT.
                ttData.RetentionPlatform = bMNPSub.RetentionPlatform.
-               liOldOngoing = liOldOngoing + 1.
+               fAddCategoryCount(ttData.operatorcat, -1).
                LEAVE MNP_OTHER_LOOP.
             END.
 
@@ -345,15 +442,47 @@ FOR EACH MNPRetPlatForm NO-LOCK WHERE
       lcSMSSender[liPlatForms] = MNPRetPlatForm.SMSSender
       lcRetentionPlatform[liPlatForms] = MNPRetPlatForm.RetentionPlatform
       lcRetentionPlatformName[liPlatForms] = 
-         REPLACE(MNPRetPlatForm.Name, " ", "_")
-      liCasesPerPlatform[liPlatForms] = INT((i - liOldOngoing) * 
-                                        (MNPRetPlatForm.Percentage / 100)).
+         REPLACE(fRetentionFileRecipient(MNPRetPlatForm.Name), " ", "_")
+/*      liCasesPerPlatform[liPlatForms] = INT((i - liOldOngoing) * 
+                                        (MNPRetPlatForm.Percentage / 100)).*/
+      /*amount is base on category*/                                 
+      liCasesPerPlatform[liPlatForms] = 
+         fGetCaseAmount(fOperators(MNPRetPlatForm.Name)) *
+         (MNPRetPlatForm.Percentage / 100).                                   
+      
 END.
+
+/* collect all opreatot categories to be filled.*/
+FOR EACH MNPRetPlatForm NO-LOCK:
+   lcOperCat = fOperators(MNPRetPlatForm.name).
+   FIND FIRST ttOperCategory NO-LOCK WHERE
+              ttOperCategory.operators EQ lcOperCat NO-ERROR.
+   IF NOT AVAIL ttOperCategory THEN DO:
+      CREATE ttOperCategory.
+      ttOperCategory.operators = lcOperCat.
+   END.   
+END.
+
+/*Solve recipient platforms:
+Mainly this goes according to normal calculation rules but there are soecuial cases:
+  -Same customer has already started mnp ongoing 
+*/
+PROCEDURE pSolveRecipients:
+   FOR EACH ttData:
+
+
+   END.
+END. /*pSolveRecipients*/
+
+
+
 
 IF liPlatForms = 0 THEN RETURN.
 
 RUN pFileDump(0).
 
+/* This will force MNP out cases to the same retention platfrom if the
+   same customer had already some other ongoing MNP OUT under retention  */
 DO liPlatform = 1 TO liPlatforms:
    RUN pFileDump(liPlatform).
    IF lcRetentionFile[liPlatform] > "" THEN
@@ -382,12 +511,11 @@ PROCEDURE pFileDump:
             string(month(today),"99") +
             string(day(today),"99").
    
-   i = 0.
-      
    IF iiPlatForm EQ 0 THEN DO:
       liPlatform = 1.
       lcRetentionFile[liPlatForm] = lcRootDir + "/spool/" + 
-         "mnp_retention_" + lcRetentionPlatformName[liPlatform] + "_" + 
+         "mnp_retention_" + 
+         fRetentionFileRecipient(lcRetentionPlatformName[liPlatform]) + "_" + 
          lcDate + "_" + STRING(TIME) + ".txt". 
       lcRetention = "".
       OUTPUT STREAM sout TO VALUE (lcRetentionFile[liPlatform]).
@@ -395,107 +523,125 @@ PROCEDURE pFileDump:
    ELSE DO:
       IF lcRetentionFile[iiPlatForm] = "" THEN ASSIGN
          lcRetentionFile[iiPlatForm] = lcRootDir + "/spool/" + 
-            "mnp_retention_" + lcRetentionPlatformName[iiPlatform] + "_" + 
-            lcDate + "_" + STRING(TIME) + ".txt". 
+            "mnp_retention_" + 
+            fRetentionFileRecipient(lcRetentionPlatformName[iiPlatform]) + 
+            "_" + lcDate + "_" + STRING(TIME) + ".txt". 
       lcRetention = lcRetentionPlatform[iiPlatform].
       OUTPUT STREAM sout TO VALUE (lcRetentionFile[iiPlatform]) APPEND.
       liPlatform = iiPlatform.
    END.
+   FOR EACH ttOperCategory NO-LOCK:
+      i = 0.
+      FOR EACH ttData WHERE
+         ttData.operatorcat EQ ttOperCategory.operators AND
+         ttData.RetentionPlatform = lcRetention NO-LOCK,
+         FIRST Customer NO-LOCK WHERE
+               Customer.Custnum = ttData.Custnum,
+         FIRST MobSub NO-LOCK WHERE
+               MobSub.MsSeq = ttData.MsSeq,
+         FIRST Segmentation NO-LOCK WHERE
+               Segmentation.MsSeq = ttData.MsSeq,
+         FIRST MNPProcess NO-LOCK WHERE
+               MNPProcess.MNPSeq = ttData.MNPSeq
+         BREAK BY ttData.Custnum:
 
-   FOR EACH ttData WHERE
-      ttData.RetentionPlatform = lcRetention NO-LOCK,
-      FIRST Customer NO-LOCK WHERE
-            Customer.Custnum = ttData.Custnum,
-      FIRST MobSub NO-LOCK WHERE
-            MobSub.MsSeq = ttData.MsSeq,
-      FIRST Segmentation NO-LOCK WHERE
-            Segmentation.MsSeq = ttData.MsSeq,
-      FIRST MNPProcess NO-LOCK WHERE
-            MNPProcess.MNPSeq = ttData.MNPSeq
-      BREAK BY ttData.Custnum:
+         /*Ensure that portabilities to same customer are sent to
+           same platform*/
+         IF iiPlatform EQ 0 THEN DO:  
+            FIND FIRST bttData NO-LOCK WHERE
+                       bttData.custnum EQ ttData.custnum AND
+                       bttData.mnpseq NE ttData.mnpseq AND 
+                       bttData.RetentionPlatform > "" NO-ERROR.
+            IF AVAIL bttData THEN DO:
+               ttData.RetentionPlatform = bttData.RetentionPlatform.
+               NEXT.
+            END.
+         END.
 
-      i = i + 1.
+         i = i + 1.
 
-      FIND MNPOperator NO-LOCK WHERE 
-           MNPOperator.Brand = gcBrand AND
-           MNPOperator.OperCode = MNPProcess.OperCode
-      NO-ERROR.
-      
-      IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperName.
-      ELSE DO:
-         FIND FIRST MNPOperator WHERE
-                    MNPOperator.Brand = gcBrand AND
-                    MNPOperator.OperCode = MNPProcess.OperCode
+         FIND MNPOperator NO-LOCK WHERE 
+              MNPOperator.Brand = gcBrand AND
+              MNPOperator.OperCode = MNPProcess.OperCode
          NO-ERROR.
-         IF AVAIL MNPOperator AND
-                  MNPOperator.OperBrand > ""
-         THEN lcOperName = MNPOperator.OperBrand.
-         ELSE lcOperName = STRING(MNPProcess.OperCode).
-      END.
+         
+         IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperName.
+         ELSE DO:
+            FIND FIRST MNPOperator WHERE
+                       MNPOperator.Brand = gcBrand AND
+                       MNPOperator.OperCode = MNPProcess.OperCode
+            NO-ERROR.
+            IF AVAIL MNPOperator AND
+                     MNPOperator.OperBrand > ""
+            THEN lcOperName = MNPOperator.OperBrand.
+            ELSE lcOperName = STRING(MNPProcess.OperCode).
+         END.
 
-      liPeriods = fMNPPeriods  
-         (INPUT MNPProcess.CreatedTS,
-          INPUT MNPProcess.PortingTime,
-          INPUT liMaxPeriods,
-          OUTPUT ldaDueDate).
-      
-      put stream sout unformatted 
-         mobsub.cli "|"
-         fts2hms(mnpprocess.CreatedTS) "|"
-         fts2hms(mnpprocess.portingtime) "|"
-         lcopername "|"
-         mobsub.clitype "|"
-         customer.firstname "|"
-         customer.custname "|"
-         customer.surname2 "|"
-         customer.smsnumber "|"
-         customer.phone "|"
-         Segmentation.SegmentCode "|"
-         (IF liPeriods <= 3 THEN "Y" ELSE "")
-         skip.
+         liPeriods = fMNPPeriods  
+            (INPUT MNPProcess.CreatedTS,
+             INPUT MNPProcess.PortingTime,
+             INPUT liMaxPeriods,
+             OUTPUT ldaDueDate).
+         
+         put stream sout unformatted 
+            mobsub.cli "|"
+            fts2hms(mnpprocess.CreatedTS) "|"
+            fts2hms(mnpprocess.portingtime) "|"
+            lcopername "|"
+            mobsub.clitype "|"
+            customer.firstname "|"
+            customer.custname "|"
+            customer.surname2 "|"
+            customer.smsnumber "|"
+            customer.phone "|"
+            Segmentation.SegmentCode "|"
+            (IF liPeriods <= 3 THEN "Y" ELSE "")
+            skip.
 
-      lcRetentionSMSText = fGetSMSTxt(ttData.SMSText,
-                             TODAY,
-                             Customer.Language,
-                             OUTPUT ldeSMSStamp).
+         lcRetentionSMSText = fGetSMSTxt(ttData.SMSText,
+                                TODAY,
+                                Customer.Language,
+                                OUTPUT ldeSMSStamp).
 
-      IF lcRetentionSMSText > "" THEN DO:
-         lcRetentionSMSText = REPLACE(lcRetentionSMSText,"#SENDER", lcSMSSender[liPlatform]).
+         IF lcRetentionSMSText > "" THEN DO:
+            lcRetentionSMSText = REPLACE(lcRetentionSMSText,"#SENDER", lcSMSSender[liPlatform]).
 
-         fMakeSchedSMS2(MobSub.CustNum,
-                        MobSub.CLI,
-                        {&SMSTYPE_MNP_RETENTION},
-                        lcRetentionSMSText,
-                        ldeSMSStamp,
-                        lcSMSSender[liPlatform],
-                        ""). 
-      END.
-      
-      FIND FIRST mnpsub EXCLUSIVE-LOCK WHERE
-                 mnpsub.mnpseq = mnpprocess.Mnpseq AND
-                 Mnpsub.msseq = mobsub.msseq NO-ERROR.
+            fMakeSchedSMS2(MobSub.CustNum,
+                           MobSub.CLI,
+                           {&SMSTYPE_MNP_RETENTION},
+                           lcRetentionSMSText,
+                           ldeSMSStamp,
+                           lcSMSSender[liPlatform],
+                           ""). 
+         END.
+         
+         /*mnpprocess already ongoing mark to be it as ongoing*/
+         FIND FIRST mnpsub EXCLUSIVE-LOCK WHERE
+                    mnpsub.mnpseq = mnpprocess.Mnpseq AND
+                    Mnpsub.msseq = mobsub.msseq NO-ERROR.
 
-      IF AVAIL mnpsub THEN DO:
-         MNPSub.RetentionPlatform = lcRetentionPlatform[liPlatform].  
-         RELEASE MNPSub.
-      END.
+         IF AVAIL mnpsub THEN DO:
+            MNPSub.RetentionPlatform = lcRetentionPlatform[liPlatform].  
+            RELEASE MNPSub.
+         END.
 
-      IF iiPlatform = 0 THEN DO:
-         IF i >= liCasesPerPlatForm[liPlatform] AND 
-            liPlatform < liPlatForms AND
-            LAST-OF (ttData.Custnum) AND
-            NOT LAST (ttData.Custnum) THEN DO:
-            OUTPUT STREAM sout CLOSE.
-            liPlatform = liPlatform + 1.
-            lcRetentionFile[liPlatform] = lcRootDir + "/spool/" + 
-               "mnp_retention_" + lcRetentionPlatformName[liPlatform] + "_" + 
-               lcDate + "_" + STRING(TIME) + ".txt". 
-            OUTPUT STREAM sout TO VALUE(lcRetentionFile[liPlatform]).
-            i = 0.
+         IF iiPlatform = 0 THEN DO:
+            IF i >= liCasesPerPlatForm[liPlatform] AND 
+               liPlatform < liPlatForms AND
+               LAST-OF (ttData.Custnum) AND
+               NOT LAST (ttData.Custnum) THEN DO:
+               OUTPUT STREAM sout CLOSE.
+               liPlatform = liPlatform + 1.
+               lcRetentionFile[liPlatform] = lcRootDir + "/spool/" + 
+                  "mnp_retention_" + fRetentionFileRecipient(lcRetentionPlatformName[liPlatform]) + "_" + 
+                  lcDate + "_" + STRING(TIME) + ".txt". 
+               OUTPUT STREAM sout TO VALUE(lcRetentionFile[liPlatform]).
+               i = 0.
+            END.
          END.
       END.
-   END.
-   OUTPUT STREAM sout close.
+      OUTPUT STREAM sout close.
+   END. /*Category loop*/
 
 END PROCEDURE. 
 
