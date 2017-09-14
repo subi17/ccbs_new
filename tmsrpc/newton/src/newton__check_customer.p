@@ -193,8 +193,13 @@ DO:
 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
+        IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+           ASSIGN
+              llOrderAllowed = FALSE
+              lcReason = "PRO migration not possible because of multiple mobile lines". 
         IF llCustCatPro THEN 
         DO:
+            
             IF NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType)) THEN
                 ASSIGN 
                     llOrderAllowed = FALSE
