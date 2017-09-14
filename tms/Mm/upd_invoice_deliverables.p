@@ -34,7 +34,8 @@ DEF VAR lcOutDir         AS CHAR NO-UNDO.
 DEF VAR lcToday          AS CHAR NO-UNDO.
 DEF VAR lcTime           AS CHAR NO-UNDO.
 DEF VAR lcSep            AS CHAR NO-UNDO INIT ";".
-DEF VAR lhCustomer      AS HANDLE NO-UNDO.
+DEF VAR lhCustomer       AS HANDLE NO-UNDO.
+DEF VAR lcTenant    AS CHAR NO-UNDO.
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -313,10 +314,12 @@ REPEAT:
 
    /* Set effective tenant based on file name. If not regocniced go next file
    */   
-   IF NOT fsetEffectiveTenantForAllDB(
-         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
 
-   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_invoice_deliverables_" +
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
+
+   lcLogFile = lcSpoolDir + lcTenant + "_invoice_deliverables_" +
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
