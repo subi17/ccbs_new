@@ -131,7 +131,7 @@ REPEAT:
    ASSIGN
       liNumOk  = 0
       liNumErr = 0
-      lcBrand  = ENTRY(1,lcFileName,"-").
+      lcBrand  = ENTRY(1,ENTRY(1,lcFileName,"-"),"_").
 
    IF LOOKUP(lcBrand,"Yoigo,Masmovil") = 0 THEN
    DO:

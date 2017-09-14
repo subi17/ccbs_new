@@ -1,3 +1,5 @@
+syntax on
+
 let s:path = $PWD
 let s:ccbspath = ""
 while s:path != "/"
