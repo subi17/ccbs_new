@@ -197,7 +197,7 @@ DO:
            ASSIGN
               llOrderAllowed = FALSE
               lcReason = "PRO migration not possible because of multiple mobile lines". 
-        IF llCustCatPro THEN 
+        ELSE IF llCustCatPro THEN 
         DO:
             
             IF NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType)) THEN
