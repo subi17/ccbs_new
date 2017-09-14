@@ -193,6 +193,20 @@ FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
 
 END.
 
+/* Check if FixedOnly 2P tariff */
+FUNCTION fIsFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN
+      RETURN TRUE.
+   RETURN FALSE.
+END.
+
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    (icCLITypeConv    AS CHARACTER,

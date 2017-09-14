@@ -17,6 +17,7 @@
 {Syst/tmsconst.i}
 {Func/penaltyfee.i}
 {Func/fcustpl.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -189,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lbolSTCExemptPenalty AS LOGICAL NO-UNDO.
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+   DEF VAR lcBundleId AS CHAR NO-UNDO. 
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -284,6 +286,13 @@ PROCEDURE pPeriodicalContract:
          ttAction.ActionKey = "FTERM8-100".
       END.
       /*End of FLP temporary change*/
+      lcBundleId = ttAction.ActionKey.
+
+      IF lcBundleId MATCHES "FLEX*UPSELL" AND
+         fIsDSSActive(INPUT bOrigRequest.CustNum,
+                      INPUT bOrigRequest.ActStamp) THEN
+         lcBundleId = "DSS_" + lcBundleId.
+
 
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
@@ -292,7 +301,7 @@ PROCEDURE pPeriodicalContract:
            (AVAILABLE Order AND fTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
       THEN liRequest = 1.
       ELSE liRequest = fPCActionRequest(liMsSeq,
-                                   ttAction.ActionKey,
+                                   lcBundleId,
                                    "act" + lcWaitFor,
                                    ldeContrCreStamp,
                                    llCreateFees,
