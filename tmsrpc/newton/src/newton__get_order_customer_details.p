@@ -86,7 +86,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
-{Func/custfunc.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE top_struct            AS CHARACTER NO-UNDO. 
@@ -142,8 +141,7 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
    DEFINE VARIABLE liZipCode      AS INTEGER   NO-UNDO. 
    DEFINE VARIABLE lcLanguage     AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcLanguageList AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcStructName   AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcCategory     AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcStructName   AS CHARACTER NO-UNDO. 
 
    pcError = "".
    
@@ -234,11 +232,6 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
                    INTEGER(OrderCustomer.OutEmailMarketing )).
       add_int(     lcStruct, "post_3rd"   , 
                    INTEGER(OrderCustomer.OutPostMarketing  )).
-      add_string(  lcStruct, "segment"   ,
-                   fgetCustSegment(ordercustomer.CustIdType,
-                                   ordercustomer.selfemployed,
-                                   ordercustomer.pro,
-                                   OUTPUT lcCategory)).
    END.
 
    RETURN TRUE.

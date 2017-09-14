@@ -50,6 +50,7 @@ DEF VAR lcSegment                     AS CHAR NO-UNDO.
 DEF VAR llProChannel                  AS LOG  NO-UNDO.
 DEF VAR llCustCatPro                  AS LOG  NO-UNDO.
 DEF VAR lcPROChannels                 AS CHAR NO-UNDO.
+DEF VAR lcnonPROChannels              AS CHAR NO-UNDO.
 DEF VAR lcCategory                    AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder             AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder          AS LOGI NO-UNDO.
@@ -60,7 +61,6 @@ DEF VAR liOngoingOrderId              AS INT  NO-UNDO.
 DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO. 
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
-DEF VAR lcResult                      AS CHAR NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -94,66 +94,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
-FUNCTION fCheckMigration RETURNS LOG ():
-   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-      ASSIGN
-         llOrderAllowed = FALSE
-         lcReason = "PRO migration not possible because of multiple mobile lines".
-   ELSE DO:
-      FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
-      IF AMBIG MobSub THEN
-          ASSIGN
-             llOrderAllowed = FALSE
-             lcReason = "PRO migration not possible because of multiple mobile lines".
-      ELSE IF AVAIL MobSub THEN
-      DO:
-         IF CAN-FIND(First Order WHERE
-                           Order.brand EQ "1" AND
-                           Order.CustNum EQ mobsub.custnum AND
-                           Order.msseq NE mobsub.msseq AND
-                           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0) THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of multiple mobile lines".
-         IF Mobsub.paytype THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of multiple mobile lines".
-         IF fHasTVService(Mobsub.msseq) THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of multiple mobile lines".
-         /* Migration not possible for retired or non active convergent */
-         IF fIsConvergenceTariff(Mobsub.clitype) AND
-            CAN-FIND(First CliType WHERE
-                           Clitype.brand EQ gcBrand AND
-                           Clitype.Clitype EQ Mobsub.clitype AND
-                           Clitype.webstatuscode NE {&CLITYPE_WEBSTATUSCODE_ACTIVE}) THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of multiple mobile lines".
-         IF fIsFixedOnly(Mobsub.Clitype) THEN
-             ASSIGN
-                 llOrderAllowed = FALSE
-                 lcReason = "PRO migration not possible because of multiple mobile lines".
-         ELSE IF NOT llNonProToProMigrationOngoing THEN
-         DO:
-             /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
-             FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
-             IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-                 ASSIGN
-                     llOrderAllowed = FALSE
-                     lcReason = "Mobile line for non-pro customer from PRO channel".
-         END.
-      END.
-      ELSE IF NOT llNonProToProMigrationOngoing THEN
-         ASSIGN
-             llOrderAllowed = FALSE
-             lcReason = "PRO migration not possible because, no mobile lines exists".
-   END.
-END.
-
-
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Brand      = gcBrand    AND
            Customer.OrgID      = pcPersonId AND
@@ -183,7 +123,8 @@ llOrderAllowed = fSubscriptionLimitCheck(
    OUTPUT liActs).
 
 ASSIGN
-    lcPROChannels    = fCParamC("PRO_CHANNELS").
+    lcPROChannels    = fCParamC("PRO_CHANNELS")
+    lcnonPROChannels = fCParamC("NON_PRO_CHANNELS").
 
 IF AVAIL Customer THEN 
 DO:
@@ -207,22 +148,54 @@ DO:
         ELSE 
         DO: /* NOT llCustCatPro */
             IF plSTCMigrate THEN 
-               fCheckMigration().
-            ELSE
-               ASSIGN
-                  llOrderAllowed = FALSE
-                  lcReason = "PRO migration not possible because of multiple mobile lines".
+            DO:
+                IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+                    ASSIGN 
+                        llOrderAllowed = FALSE
+                        lcReason = "PRO migration not possible because of multible mobile lines".
+                ELSE 
+                DO:
+                    FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+                    IF AMBIG MobSub THEN 
+                        ASSIGN 
+                            llOrderAllowed = FALSE
+                            lcReason = "PRO migration not possible because of multible mobile lines".
+                    ELSE IF AVAIL MobSub THEN 
+                    DO:
+                        IF fIsConvergenceTariff(Mobsub.Clitype) THEN
+                            ASSIGN
+                                llOrderAllowed = FALSE
+                                lcReason = "PRO migration not possible for convergent".
+                        ELSE IF NOT llNonProToProMigrationOngoing THEN 
+                        DO: 
+                            /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
+                            FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
+                            IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+                                ASSIGN 
+                                    llOrderAllowed = FALSE
+                                    lcReason = "Mobile line for non-pro customer from PRO channel".
+                        END.
+                    END.
+                    ELSE IF NOT llNonProToProMigrationOngoing THEN 
+                        ASSIGN 
+                            llOrderAllowed = FALSE
+                            lcReason = "PRO migration not possible because, no mobile lines exists".
+                END.
+            END.
         END.
     END.
-    ELSE 
+    ELSE IF LOOKUP(pcChannel,lcnonPROChannels) > 0 THEN 
     DO:
         IF llCustCatPro THEN 
         DO:
             IF plSTCMigrate THEN 
             DO:
-                fCheckMigration().
                 FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
-                IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
+                IF AMBIG MobSub THEN 
+                    ASSIGN 
+                        llOrderAllowed = FALSE
+                        lcReason = "PRO migration not possible because of multible mobile lines".     /* Kept the error messages as same, to avoid enhancing from web */
+                ELSE IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
                     ASSIGN 
                         llOrderAllowed = FALSE
                         lcReason = "Mobile line for non-pro customer from PRO channel".
@@ -230,60 +203,17 @@ DO:
                     ASSIGN 
                         llOrderAllowed = FALSE
                         lcReason = "PRO migration not possible because, no mobile lines exists".
-            END.
-            ELSE
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of multiple mobile lines".
+            END.        
         END.
         ELSE
         DO:
-           IF llNonProToProMigrationOngoing THEN 
-              ASSIGN
-                 llOrderAllowed = FALSE
-                 lcReason = "customer already exists with PRO category".
-           ELSE IF (pcChannel EQ "Newton" OR pcChannel EQ "VFR") AND
-                   plSTCMigrate THEN DO:
-              fCheckMigration().
-           END.
+            IF llNonProToProMigrationOngoing THEN 
+                ASSIGN
+                    llOrderAllowed = FALSE
+                    lcReason = "customer already exists with PRO category".
         END.
     END.
 END.
-ELSE DO:
-   IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-      FOR EACH OrderCustomer WHERE
-               OrderCustomer.Brand      EQ gcBrand    AND
-               OrderCustomer.CustIdType EQ pcIdType   AND
-               OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
-
-          IF OrderCustomer.PRO EQ FALSE THEN 
-          DO:    
-             FIND FIRST Order WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
-             IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
-             DO:
-                 llOrderAllowed = FALSE.
-                 lcReason = "ongoing non PRO order".
-                 LEAVE.    
-             END.
-          END.
-          ELSE 
-             ASSIGN llPROOngoingOrder = TRUE.
-      END.
-
-      /* Assume, there is no ongoing order for customer selected from PRO channels */
-      IF NOT llPROOngoingOrder AND NOT llCustCatPro THEN 
-      DO:
-          FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
-          IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-          DO:
-              llOrderAllowed = FALSE.
-              lcReason = "Mobile line for non-pro customer from PRO channel".
-          END.
-      END.
-   END.
-END.
-
-
 /* Removed legacy main-additional line code, as it is not 
    required any more to support it */ 
 

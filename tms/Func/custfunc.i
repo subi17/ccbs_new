@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: custfunc.i
-  TASK .........: Functions for handling Yoigo PRO customer functionality
+  MODULE .......: profunc.i
+  TASK .........: Functions for handling Yoigo PRO related functionality
                   Reference: YPRO-project
   APPLICATION ..: tms
   AUTHOR .......:
@@ -12,8 +12,6 @@
 &IF "{&YOIGOCUSTFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE YOIGOCUSTFUNC_I YES
-
-DEF BUFFER bTpService FOR TPService.
 
 /* Find correct customer segment */
 FUNCTION fgetCustSegment RETURNS CHAR
@@ -70,24 +68,6 @@ FUNCTION fgetCustSegment RETURNS CHAR
    END.
    RETURN lcSegment.
 END.
-
-FUNCTION fhasTVService RETURNS LOGICAL (INPUT iiMsseq AS INT):
-   FIND FIRST TPService WHERE TPService.MsSeq EQ iiMsSeq AND
-              TPService.Operation EQ "ACTIVATION" AND
-              TPService.ServType  EQ "Television" AND
-              TPService.servStatus NE "ERROR" NO-LOCK NO-ERROR.
-   IF NOT AVAIL TPService THEN RETURN FALSE. /* No active TV Service */
-
-   FIND LAST bTPService WHERE 
-             bTPService.createdts GT TPService.createdts AND
-             bTPService.ServStatus EQ "HANDLED" AND 
-             TPService.Operation = "DEACTIVATION" AND
-             TPService.ServType  = "Television"
-             NO-LOCK NO-ERROR.
-
-   IF AVAIL bTPService THEN RETURN FALSE. /* Deactivated */
-   ELSE RETURN TRUE. /* Still active */
-END FUNCTION.
 
 &ENDIF
 
