@@ -454,7 +454,8 @@ FOR EACH MNPRetPlatForm NO-LOCK WHERE
 END.
 
 /* collect all opreatot categories to be filled.*/
-FOR EACH MNPRetPlatForm NO-LOCK:
+FOR EACH MNPRetPlatForm WHERE 
+         MNPRetPlatForm.ToDate >= TODAY NO-LOCK:
    lcOperCat = fOperators(MNPRetPlatForm.name).
    FIND FIRST ttOperCategory NO-LOCK WHERE
               ttOperCategory.operators EQ lcOperCat NO-ERROR.
