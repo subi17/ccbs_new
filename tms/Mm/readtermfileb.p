@@ -89,7 +89,8 @@ FOR EACH ttFiles:
 
    /* Set effective tenant based on file name. If not regocniced go next file
    */
-   lcTenant  = ENTRY(1,lcPlainFile,"_").
+   lcTenant = ENTRY(1,ENTRY(1,lcPlainFile,"_"),"-").
+
    IF NOT fsetEffectiveTenantForAllDB(
       fConvertBrandToTenant(lcTenant)) THEN NEXT.
 
