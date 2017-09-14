@@ -164,6 +164,8 @@ ldeMonthlyLimit = get_double(pcStruct, "discount_monthly_limit").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+lcDPRuleID = ENTRY(1,lcDPRuleID,"|").
+
 /* Validations for amount and valid peridos: */
 IF ldeAmount <= 0 THEN RETURN appl_err("Invalid Discount amount").
 
