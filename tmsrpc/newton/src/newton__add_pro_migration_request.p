@@ -8,7 +8,7 @@
 
   Input ........:  1) migrationdata;struct;mandatory;contains input data
 -                    a) Int;mandatory;msseq
--                    c) String;mandatory;salesman 
+-                    c) String;mandatory;salesman_id 
   Output .......:   success;boolean
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -23,7 +23,6 @@ gcBrand = "1".
 {Func/fpromigrationreq.i}
 
 DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
-DEFINE VARIABLE pcSalesman        AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE ldActStamp        AS DECIMAL     NO-UNDO.
 DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE lcResult          AS CHARACTER   NO-UNDO.
@@ -39,12 +38,12 @@ pcMigrStruct = get_struct(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcMigrStruct,"salesman!,msseq!").
+lcStruct = validate_request(pcMigrStruct,"salesman_id!,msseq!").
 IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
 piMsSeq  = get_pos_int(pcMigrStruct, "msseq").
-katun    = "VISTA_" + get_string(pcMigrStruct, "salesman").
+katun    = "VISTA_" + get_string(pcMigrStruct, "salesman_id").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

@@ -114,6 +114,38 @@ FUNCTION fCreatePriceList RETURNS LOGICAL
    END.
 END FUNCTION.
 
+/* BillItem */
+FUNCTION fCreateBillItem RETURNS LOGICAL
+   ( icBillCode AS CHARACTER ):
+
+   FIND FIRST BillItem EXCLUSIVE-LOCK WHERE
+      BillItem.Brand     = "1"       AND
+      BillItem.BillCode = icBillCode
+   NO-ERROR.
+
+   IF NOT AVAILABLE BillItem
+   THEN DO:
+      CREATE BillItem.
+   END.
+
+   ASSIGN
+      BillItem.Brand     = "1"
+      BillItem.BillCode = icBillCode
+      BillItem.BIName = "La De Casa PRO monthly fee"
+      BillItem.AccNum = 70518100
+      BillItem.BIGroup = "46"
+      BillItem.EUAccNum = 70518100
+      BillItem.FSAccNum = 70518100
+      BillItem.Brand = "1"
+      BillItem.EUConAccNum = 70518100
+      BillItem.CostCentre = "SL"
+      BillItem.AltAccNum = 70518100
+      BillItem.TaxClass = "1"
+      BillItem.SAPRid = "070"
+      BillItem.VIPAccNum = 70518100.
+
+END FUNCTION.
+
 FUNCTION fCreateFMItem RETURNS LOGICAL
    ( icItemName AS CHARACTER,
      icFeemodel AS CHARACTER,
@@ -148,6 +180,10 @@ FUNCTION fCreateFMItem RETURNS LOGICAL
    END.
 END FUNCTION.
 
+
+fCreateBillItem("CONTDSL35PRO").
+fCreateBillItem("CONTFH35_50PRO").
+fCreateBillItem("CONTFH45_300PRO").
 
 fCreatePriceList("PRO_CONTDSL35").
 fCreatePriceList("PRO_CONTFH35_50").
@@ -687,6 +723,6 @@ FUNCTION fAddDFField RETURNS LOGICAL (INPUT icdumpname AS CHAR,
    END.
 END FUNCTION.
 
-fadddffield("DiscountMember","#Segment","DPMember","Segment",10).
+fadddffield("DiscountMember","#Segment","DPMember","Segment",9).
 fadddffield("PerContrDump","#Segment","DCCLI","Segment",21).
 fadddffield("RequestDumpTXT","#Segment","MSRequest","Segment",39).
