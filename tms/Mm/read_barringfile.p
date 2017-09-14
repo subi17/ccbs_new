@@ -39,6 +39,7 @@ DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO. 
+DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
 /* field variables */
 DEFINE VARIABLE liMsSeq AS INT NO-UNDO. 
@@ -86,13 +87,14 @@ REPEAT:
       liNumErr = 0
       liNumOK = 0.
   
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
    /* Set effective tenant based on file name. If not regocniced go next file
    */
    IF NOT fsetEffectiveTenantForAllDB(
-         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
 
    fBatchLog("START", lcInputFile).
-   lcLogFile = lcSpoolDir + ENTRY(1,lcFileName,"_") + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
+   lcLogFile = lcSpoolDir + lcTenant + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
    PUT STREAM sLog UNFORMATTED
