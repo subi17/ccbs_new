@@ -138,7 +138,7 @@ REPEAT:
       lcProcessedFile = ""
       lcInvDetails    = ""
       lcInvDate       = ""
-      lcBrand         = SUBSTRING(lcFileName,1, (INDEX(lcFileName,"_") - 1)).
+      lcBrand         = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
 
    IF LOOKUP(lcBrand, "Yoigo,Masmovil") = 0 THEN 
    DO:
