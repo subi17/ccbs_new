@@ -241,10 +241,11 @@ END.
 FUNCTION fAddCategoryCount RETURNS INT
    (icCategory AS CHAR,
     iiAmt AS INT):
-   FIND FIRST ttOperCategory NO-LOCK WHERE
+   FIND FIRST ttOperCategory EXCLUSIVE-LOCK  WHERE
               ttOperCategory.operators EQ icCategory NO-ERROR.
    IF AVAIL ttOperCategory THEN DO:
       ttOperCategory.Amount = ttOperCategory.Amount + iiAmt.
+      RELEASE ttOperCategory.
       RETURN ttOperCategory.Amount.
    END.
    RETURN 0.
@@ -462,20 +463,6 @@ FOR EACH MNPRetPlatForm NO-LOCK:
       ttOperCategory.operators = lcOperCat.
    END.   
 END.
-
-/*Solve recipient platforms:
-Mainly this goes according to normal calculation rules but there are soecuial cases:
-  -Same customer has already started mnp ongoing 
-*/
-PROCEDURE pSolveRecipients:
-   FOR EACH ttData:
-
-
-   END.
-END. /*pSolveRecipients*/
-
-
-
 
 IF liPlatForms = 0 THEN RETURN.
 
