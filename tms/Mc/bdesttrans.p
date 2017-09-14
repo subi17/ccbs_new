@@ -601,7 +601,7 @@ PROCEDURE local-UPDATE-record:
             UPDATE
                 bdesttrans.bdest
                 bdesttrans.TranslateNumber
-                bdesttrans.RatingZone
+                bdesttrans.RatingZone WHEN bdesttrans.bdestid NE liRoamEUBdestID
                 bdesttrans.minlength WHEN bdesttrans.bdestid EQ liRoamEUBdestID
                 bdesttrans.maxlength WHEN bdesttrans.bdestid EQ liRoamEUBdestID
                 bdesttrans.FromDate
