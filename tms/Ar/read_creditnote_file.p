@@ -31,6 +31,7 @@ DEF VAR lcSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcReportFileOut AS CHAR NO-UNDO. 
 DEF VAR lcOutDir AS CHAR NO-UNDO. 
 DEF VAR lcSep AS CHAR NO-UNDO INIT "|".
+DEF VAR lcTenant AS CHARACTER NO-UNDO. 
 
 ASSIGN
    lcIncDir    = fCParam("CreditNote","IncDir") 
@@ -60,9 +61,11 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
+   
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
 
    IF NOT fsetEffectiveTenantForAllDB(
-         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
    /* extract date from filename */
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".
