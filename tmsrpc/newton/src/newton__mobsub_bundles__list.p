@@ -13,29 +13,17 @@ gcBrand = "1".
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
+{Func/timestamp.i}
 {Func/fixedlinefunc.i}
 
-DEF VAR lcResultArray       AS CHAR NO-UNDO. 
-DEF VAR pcStruct            AS CHAR NO-UNDO. 
-DEF VAR lcStruct            AS CHAR NO-UNDO.
-DEF VAR piMsSeq             AS INT  NO-UNDO.
-DEF VAR lcActiveBundle      AS CHAR NO-UNDO. 
-DEF VAR lcActiveBundles     AS CHAR NO-UNDO. 
-DEF VAR lcError             AS CHAR NO-UNDO. 
-DEF VAR liCount             AS INT  NO-UNDO. 
-DEF VAR liUpsellCount       AS INT  NO-UNDO.
-DEF VAR ldeCurrTS           AS DEC  NO-UNDO.
-DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
-DEF VAR llActiveBonoContract AS LOG  NO-UNDO.
-DEF VAR lcAllowedBONOContracts   AS CHAR NO-UNDO.
-DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
-DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
-DEF VAR lcDayCampBundleUpsells   AS CHAR NO-UNDO. 
-DEF VAR lcVoiceBundle            AS CHAR NO-UNDO. 
-DEF VAR lcPRODSSUpsellList       AS CHAR NO-UNDO.
-DEF VAR llProSubscription        AS LOGI NO-UNDO.
-DEF VAR lcMatrixAnalyseResult    AS CHAR NO-UNDO.
+DEF VAR lcResultArray         AS CHAR NO-UNDO. 
+DEF VAR pcStruct              AS CHAR NO-UNDO. 
+DEF VAR lcStruct              AS CHAR NO-UNDO.
+DEF VAR piMsSeq               AS INT  NO-UNDO.
+DEF VAR liCount               AS INT  NO-UNDO.
+DEF VAR lcBundle              AS CHAR NO-UNDO.
+DEF VAR ldCurrentDateTime     AS DECI NO-UNDO.
+DEF VAR llBundleActivated     AS LOGI NO-UNDO INIT FALSE.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -48,140 +36,155 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 piMsSeq = get_int(pcStruct,"id").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR. 
-IF NOT AVAIL MobSub THEN RETURN appl_err("Mobsub not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 lcResultArray = add_array(response_toplevel_id, "").
 
-ASSIGN ldeCurrTS = fMakeTS()
-       llProSubscription      = fIsProSubscription(piMsSeq)
-       lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
-       lcBONOContracts        = fCParamC("BONO_CONTRACTS")
-       lcIPLContracts         = fCParamC("IPL_CONTRACTS")
-       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
-       lcPRODSSUpsellList     = fCParamC("PRO_DSS_FLEX_UPSELL_LIST").
+ASSIGN ldCurrentDateTime = fMakeTS().
 
-IF NOT MobSub.PayType THEN
-   lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,
-                                   INPUT ldeCurrTS).
+RUN pAdd_DSS.
 
-lcActiveBundles = fGetActiveDataBundle(Mobsub.MsSeq,ldeCurrTS).
+RUN pAdd_DataBundle.
 
-DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
-   
-   lcActiveBundle = ENTRY(liCount,lcActiveBundles).
-   
-   IF LOOKUP(lcActiveBundle,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
-      add_string(lcResultArray,"", "TARJ7_UPSELL|" + STRING(Mobsub.MsSeq)).
-   
-   IF LOOKUP(lcActiveBundle, lcBONOContracts + "," + lcIPLContracts + ",BONO_VOIP") = 0 THEN NEXT.
-   
-   IF LOOKUP(lcActiveBundle, lcBONOContracts) > 0 THEN 
-      llActiveBonoContract = TRUE.
-   
-   add_string(lcResultArray,"", lcActiveBundle + "|" + STRING(Mobsub.MsSeq)).
+RUN pAdd_VoiceBundle.
 
-   FIND FIRST DayCampaign NO-LOCK WHERE
-              DayCampaign.Brand = gcBrand AND
-              DayCampaign.DCEvent = lcActiveBundle NO-ERROR.
-   IF NOT AVAIL DayCampaign OR DayCampaign.BundleUpsell EQ "" THEN NEXT.
+PROCEDURE pAdd_DataBundle:
+    DEF VAR liCount                AS INT  NO-UNDO.
+    DEF VAR lcError                AS CHAR NO-UNDO.
+    DEF VAR lcActiveBundle         AS CHAR NO-UNDO.
+    DEF VAR lcActiveBundles        AS CHAR NO-UNDO.
+    DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+    DEF VAR lcAllowedBONOContracts AS CHAR NO-UNDO.
+    DEF VAR lcIPLContracts         AS CHAR NO-UNDO.
+    DEF VAR lcUpsellList           AS CHAR NO-UNDO.
+    DEF VAR liUpsellCount          AS INTE NO-UNDO.
+    DEF VAR llActiveBonoContract   AS LOG  NO-UNDO.
 
-   DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-      add_string(lcResultArray,"",
-                 ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
-                 + "|" + STRING(Mobsub.MsSeq)).
-   END.
-END. /* DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles): */
-/*  before ILP    
-/* Return DSS bundle and upsell if DSS is active */
-IF lcDSSBundleId = {&DSS} OR
-   (lcDSSBundleId = "DSS2" AND
-    LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN DO:
-   add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
-   add_string(lcResultArray,"", lcDSSBundleId + "_UPSELL" + "|" +
-              STRING(Mobsub.MsSeq)).
-END. /* IF lcDSSBundleId = {&DSS} OR */
-  before ILP ends */
-/*ILP 
-read from configuration instead of hard coding _UPSELL*/
-/* Return DSS bundle and upsell if DSS is active */
-IF lcDSSBundleId = {&DSS} OR
-   (lcDSSBundleId = "DSS2" AND
-    LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN DO:
-   add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
-   /*Find upsells and add all to reponse*/
-   FIND FIRST DayCampaign NO-LOCK WHERE
-              DayCampaign.Brand = gcBrand AND
-              DayCampaign.DCEvent = lcDSSBundleId NO-ERROR.
-   IF AVAIL DayCampaign AND NOT DayCampaign.BundleUpsell EQ "" THEN 
-   DO:
-      DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+    ASSIGN 
+        lcBONOContracts = fCParamC("BONO_CONTRACTS")
+        lcIPLContracts  = fCParamC("IPL_CONTRACTS")
+        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS").
 
-         IF llProSubscription THEN
-         DO:
-             IF fMatrixAnalyse(gcBrand,
-                               "PERCONTR",
-                               "PerContract;SubsTypeTo",
-                               ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + ";" + MobSub.CLIType,
-                               OUTPUT lcMatrixAnalyseResult) NE 1 THEN 
-                 NEXT. 
-         END.
-         ELSE 
-         DO:
-             IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcPRODSSUpsellList) > 0 THEN 
-                 NEXT.
-         END.
+    ASSIGN lcActiveBundles = fGetActiveDataBundle(Mobsub.MsSeq,ldCurrentDateTime).
 
-         add_string(lcResultArray,"",ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
-      END.
-   END.
-END.
-/*ILP ENDS*/
-lcVoiceBundle = fGetCurrentSpecificBundle(
-      MobSub.MsSeq,
-      "VOICE").
-IF lcVoiceBundle > "" THEN
-   add_string(lcResultArray,"", lcVoiceBundle + "|" + STRING(Mobsub.MsSeq)).
+    DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
+       
+       lcActiveBundle = ENTRY(liCount,lcActiveBundles).
+       
+       IF LOOKUP(lcActiveBundle,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12") > 0 THEN
+          add_string(lcResultArray,"", "TARJ7_UPSELL|" + STRING(Mobsub.MsSeq)).
+       
+       IF LOOKUP(lcActiveBundle, lcBONOContracts + "," + lcIPLContracts) = 0 THEN NEXT.
+       
+       IF LOOKUP(lcActiveBundle, lcBONOContracts) > 0 THEN 
+          llActiveBonoContract = TRUE.
+       
+       add_string(lcResultArray,"", lcActiveBundle + "|" + STRING(Mobsub.MsSeq)).
 
-IF (MobSub.CliType EQ "CONT9" OR
-    MobSub.CliType EQ "CONT10") AND
-   fGetCurrentSpecificBundle(
-      MobSub.MsSeq,
-      "FREE100MINUTES") > "" THEN
-   add_string(lcResultArray,"", "FREE100MINUTES|" + STRING(Mobsub.MsSeq)).
+       FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = gcBrand        AND
+                                            DayCampaign.DCEvent = lcActiveBundle NO-ERROR.
+       IF NOT AVAIL DayCampaign OR DayCampaign.BundleUpsell EQ "" THEN 
+          NEXT.
 
-/* if subscription doesn't have a BONO bundle then return the list of 
-   bundles that can be activated */
-FOR EACH DayCampaign NO-LOCK WHERE 
-         DayCampaign.Brand = gcBrand AND
-  LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts + ",BONO_VOIP") > 0:
-   
-   IF llActiveBonoContract AND
-      LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts) > 0 THEN NEXT.
+       DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+          add_string(lcResultArray, "", ENTRY(liUpsellCount,DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
+       END.
+       
+    END.
 
-   IF NOT fIsBundleAllowed
-      (Mobsub.CLIType,
-       DayCampaign.DCEvent,
-       OUTPUT lcError) THEN NEXT.
+    IF NOT llActiveBonoContract THEN 
+    DO:
+        FOR EACH DayCampaign NO-LOCK WHERE DayCampaign.Brand = gcBrand AND
+                                    LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts) > 0:
 
-   IF DayCampaign.DCEvent = "BONO_VOIP" AND
-      NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeCurrTS) THEN NEXT.
-   
-   add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
-   DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-      IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcDayCampBundleUpsells) = 0 THEN DO:
-      lcDayCampBundleUpsells = TRIM(lcDayCampBundleUpsells + "," + ENTRY(liUpsellCount,DayCampaign.BundleUpsell),",").
+           IF NOT fIsBundleAllowed(Mobsub.CLIType,
+                                   DayCampaign.DCEvent,
+                                   OUTPUT lcError) THEN 
+               NEXT.
+          
+           add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
 
-         add_string(lcResultArray,"", 
-                    ENTRY(liUpsellCount,DayCampaign.BundleUpsell) 
-                    + "|" + STRING(Mobsub.MsSeq)).
-      END.
-   END.
-END.
+           DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
 
-IF MobSub.CliType = "TARJ6" THEN
-   add_string(lcResultArray,"", "TARJ_UPSELL|" + STRING(Mobsub.MsSeq)).
+              IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell), lcUpsellList) = 0 THEN 
+              DO:
+                  lcUpsellList = lcUpsellList + (IF lcUpsellList <> "" THEN "," ELSE "") + ENTRY(liUpsellCount, DayCampaign.BundleUpsell).
+
+                  add_string(lcResultArray,"", ENTRY(liUpsellCount, DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
+              END.
+           END.
+        END.
+    END.
+
+    IF MobSub.CliType = "TARJ6" THEN
+        add_string(lcResultArray,"", "TARJ_UPSELL|" + STRING(Mobsub.MsSeq)).
+
+END PROCEDURE.
+
+PROCEDURE pAdd_VoiceBundle:
+    
+    DEFINE VARIABLE lcVoiceBundle AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcError       AS CHARACTER NO-UNDO.    
+    lcVoiceBundle = fGetCurrentSpecificBundle(MobSub.MsSeq, "VOICE").
+
+    IF lcVoiceBundle > "" THEN
+       add_string(lcResultArray,"", lcVoiceBundle + "|" + STRING(Mobsub.MsSeq)).
+    IF fIsBundleAllowed(Mobsub.CLIType,
+                        "VOICE200B",
+                        OUTPUT lcError) THEN
+       add_string(lcResultArray,"", "VOICE200B" + "|" + STRING(Mobsub.MsSeq)).
+    
+    IF LOOKUP(MobSub.CliType,"CONT9,CONT10") > 0 AND 
+       fGetCurrentSpecificBundle(MobSub.MsSeq, "FREE100MINUTES") > "" THEN
+        add_string(lcResultArray,"", "FREE100MINUTES|" + STRING(Mobsub.MsSeq)).
+    
+
+END PROCEDURE.
+
+PROCEDURE pAdd_DSS:
+    DEF VAR liUpsellCount         AS INTE NO-UNDO.
+    DEF VAR lcDSSBundleId         AS CHAR NO-UNDO.
+    DEF VAR lcPRODSSUpsellList    AS CHAR NO-UNDO.
+    DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
+    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+    DEF VAR llProSubscription     AS LOGI NO-UNDO.
+    
+    ASSIGN 
+        llProSubscription     = fIsProSubscription(piMsSeq)
+        lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
+        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+
+    IF NOT MobSub.PayType THEN
+        lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT ldCurrentDateTime).
+
+    /* Return DSS bundle and upsell if DSS is active */
+    IF lcDSSBundleId = {&DSS} OR 
+       (lcDSSBundleId = "DSS2" AND LOOKUP(MobSub.CLIType, lcAllowedDSS2SubsType) > 0) THEN 
+    DO:
+        add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
+        /*Find upsells and add all to reponse*/
+        FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = gcBrand       AND
+                                             DayCampaign.DCEvent = lcDSSBundleId NO-ERROR.
+        IF AVAIL DayCampaign AND DayCampaign.BundleUpsell > "" THEN 
+        DO:
+            DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+
+                IF llProSubscription THEN
+                DO:
+                    IF NOT fIsBundleAllowed(Mobsub.CLIType,
+                                            ENTRY(liUpsellCount,DayCampaign.BundleUpsell),
+                                            OUTPUT lcMatrixAnalyseResult) THEN 
+                        NEXT.
+                END.
+                ELSE IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcPRODSSUpsellList) > 0 THEN 
+                    NEXT.
+                
+                add_string(lcResultArray,"",ENTRY(liUpsellCount, DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
+            END.
+        END.
+    END.    
+
+END PROCEDURE.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

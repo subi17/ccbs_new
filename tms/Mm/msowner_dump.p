@@ -32,7 +32,6 @@ DEF VAR lcValue      AS CHAR     NO-UNDO.
 DEF VAR lhField      AS HANDLE   NO-UNDO.
 DEF VAR lcField      AS CHAR     NO-UNDO.
 
-
 DEF VAR lhTable      AS HANDLE NO-UNDO.
 DEF VAR lhCollect    AS HANDLE NO-UNDO.
 DEF VAR lcTableName  AS CHAR   NO-UNDO.
@@ -115,49 +114,54 @@ fSplitTS(idLastDump,
 
 ldeLastDump = fHMS2TS(ldaEventDate, "00:00:00").
 
-FOR EACH Eventlog NO-LOCK WHERE
-         Eventlog.Eventdate >= ldaEventDate AND
-         EventLog.EventDate < TODAY AND
-         Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
+IF icDumpMode = "Full" THEN DO:
+   FOR EACH MsOwner NO-LOCK WHERE
+            MsOwner.Brand = gcBrand:
+      fCollect().
+   END.
+END.
+ELSE DO:
+   FOR EACH Eventlog NO-LOCK WHERE
+            Eventlog.Eventdate >= ldaEventDate AND
+            EventLog.EventDate < TODAY AND
+            Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
-   FIND FIRST MsOwner NO-LOCK WHERE
-              MsOwner.Brand = gcBrand AND
-              MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
-              MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
+      FIND FIRST MsOwner NO-LOCK WHERE
+                 MsOwner.Brand = gcBrand AND
+                 MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
+                 MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
 
-   IF AVAIL MsOwner THEN DO:
-      IF EventLog.Action = "Create" THEN DO: /* YTS-10342 fix. */
-         /* IF create-date is not yesterday, wrong MSOwner was found. Do a new search */
-         IF MsOwner.TSBegin <  ldeLastDump OR 
-            MsOwner.TSBegin >= ldeToday THEN DO: 
-            /* This begin date for create is not yesterday, so continue to search a new one */
-            IF MsOwner.TSBegin >= ldeToday THEN
-               fCollect().
-            RELEASE MSOwner.
-            FIND FIRST MsOwner NO-LOCK WHERE
-                       MsOwner.Brand = "1" AND
-                       MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
-                       MsOwner.TSBegin >= ldeLastDump AND  
-                       MSOwner.TSBegin < ldeToday NO-ERROR.
+      IF AVAIL MsOwner THEN DO:
+         IF EventLog.Action = "Create" THEN DO: /* YTS-10342 fix. */
+            /* IF create-date is not yesterday, wrong MSOwner was found. Do a new search */
+            IF MsOwner.TSBegin <  ldeLastDump OR 
+               MsOwner.TSBegin >= ldeToday THEN DO: 
+               /* This begin date for create is not yesterday, so continue to search a new one */
+               IF MsOwner.TSBegin >= ldeToday THEN
+                  fCollect().
+               RELEASE MSOwner.
+               FIND FIRST MsOwner NO-LOCK WHERE
+                          MsOwner.Brand = gcBrand AND
+                          MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
+                          MsOwner.TSBegin >= ldeLastDump AND  
+                          MSOwner.TSBegin < ldeToday NO-ERROR.
+            END.
+         END.
+         IF AVAIL MsOwner THEN DO: /* now we got a correct MSOwner */
+            fCollect().
          END.
       END.
-      IF AVAIL MsOwner THEN DO: /* now we got a correct MSOwner */
-         fCollect().   
+      ELSE DO: /* with first search MSOwner not available */
+         /* YTS-10342 New MSOwner-search to be able to find MSOwners 
+            whose TSEnd is changed after midnight before dump start. */
+         FIND FIRST MsOwner NO-LOCK WHERE
+                    MsOwner.Brand = gcBrand AND
+                    MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
+                    MsOwner.TSBegin >= ldeLastDump NO-ERROR.
+         IF AVAIL MsOwner THEN fCollect().
       END.
-   END.     
-   
-   ELSE DO: /* with first search MSOwner not available */
-      /* YTS-10342 New MSOwner-search to be able to find MSOwners 
-         whose TSEnd is changed after midnight before dump start. */
-      FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand = "1" AND
-                 MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
-                 MsOwner.TSBegin >= ldeLastDump NO-ERROR.
-      IF AVAIL MsOwner THEN fCollect().       
-   END.    
-
-      
-END. 
+   END. 
+END.
 
 RUN pWriteFile.
 IF NOT SESSION:BATCH THEN HIDE FRAME fColl NO-PAUSE. 
@@ -210,6 +214,3 @@ FOR EACH ttMsOwner NO-LOCK:
 END.
 
 END PROCEDURE.
-
-
-

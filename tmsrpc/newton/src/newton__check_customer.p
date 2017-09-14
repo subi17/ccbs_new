@@ -1,7 +1,8 @@
 /**
  * Check if customer may do an order.
  *
- * @input   person_id;string;mandatory;
+ * @input   brand;string;mandatory
+            person_id;string;mandatory;
             id_type;string;mandatory;
             self_employed;bool;mandatory;
             orders;int;mandatory;
@@ -26,6 +27,7 @@
 gcBrand = "1".
 
 /* Input parameters */
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR pcPersonId       AS CHAR NO-UNDO.
 DEF VAR pcIdType         AS CHAR NO-UNDO.
 DEF VAR plSelfEmployed   AS LOG  NO-UNDO.
@@ -60,31 +62,34 @@ DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,string,boolean,int,[string],[string],[boolean]").
+top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
 ASSIGN
-   pcPersonId     = get_string(param_toplevel_id, "0")
-   pcIdType       = get_string(param_toplevel_id, "1")
-   plSelfEmployed = get_bool(param_toplevel_id, "2")
-   piOrders       = get_int(param_toplevel_id, "3").
+   pcTenant       = get_string(param_toplevel_id, "0")
+   pcPersonId     = get_string(param_toplevel_id, "1")
+   pcIdType       = get_string(param_toplevel_id, "2")
+   plSelfEmployed = get_bool(param_toplevel_id, "3")
+   piOrders       = get_int(param_toplevel_id, "4").
 
-IF NUM-ENTRIES(top_array) EQ 5 THEN
-   pcCliType   = get_string(param_toplevel_id, "4").
-ELSE IF NUM-ENTRIES(top_array) EQ 6 THEN 
+IF NUM-ENTRIES(top_array) EQ 6 THEN
+   pcCliType   = get_string(param_toplevel_id, "5").
+ELSE IF NUM-ENTRIES(top_array) EQ 7 THEN 
    ASSIGN
-      pcCliType   = get_string(param_toplevel_id, "4")
-      pcChannel   = get_string(param_toplevel_id, "5").
+      pcCliType   = get_string(param_toplevel_id, "5")
+      pcChannel   = get_string(param_toplevel_id, "6").
 
-ELSE IF NUM-ENTRIES(top_array) GT 6 THEN
+ELSE IF NUM-ENTRIES(top_array) GT 7 THEN
    ASSIGN
-      pcCliType    = get_string(param_toplevel_id, "4")
-      pcChannel    = get_string(param_toplevel_id, "5")
-      plSTCMigrate = get_bool(param_toplevel_id, "6").
+      pcCliType    = get_string(param_toplevel_id, "5")
+      pcChannel    = get_string(param_toplevel_id, "6")
+      plSTCMigrate = get_bool(param_toplevel_id, "7").
 
 lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.

@@ -276,6 +276,23 @@ PROCEDURE pPeriodicalContract:
                       INPUT bOrigRequest.ActStamp) THEN
          lcBundleId = "DSS_" + lcBundleId.
 
+      /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
+      /*TODO remove after FTERM8 campaign period.*/
+      DEF BUFFER bFTERMOrder FOR Order.
+      FIND FIRST bFTERMOrder NO-LOCK WHERE 
+                 bFTERMOrder.brand EQ "1" AND
+                 bFTERMOrder.OrderID EQ iiOrderID AND
+                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0 
+                 NO-ERROR.
+      /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
+      IF AVAIL bFTERMOrder AND
+               ttAction.ActionKey EQ "FTERM12-100" AND 
+               /*idActStamp > 20170911 AND*/
+               idActStamp < 20171001
+      THEN DO:
+         ttAction.ActionKey = "FTERM8-100".
+      END.
+      /*End of FLP temporary change*/
 
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
@@ -371,7 +388,10 @@ PROCEDURE pPeriodicalContract:
            Don't charge penalty when:
            STC is requested on the same day of the renewal order AND
            New type is POSTPAID */
-         IF bOrigRequest.reqcparam2 BEGINS "CONT" /* POSTPAID */ THEN DO:
+         IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ bOrigRequest.reqcparam2 AND
+                           CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) 
+            THEN DO:
             ORDER_LOOP:
             FOR EACH bOrder NO-LOCK WHERE
                bOrder.MSSeq EQ bOrigRequest.MsSeq AND

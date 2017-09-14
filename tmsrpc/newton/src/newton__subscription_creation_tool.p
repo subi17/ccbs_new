@@ -18,9 +18,13 @@ DEF VAR pcOtherBundles              AS CHAR NO-UNDO.
 DEF VAR pcServices                  AS CHAR NO-UNDO.
 DEF VAR pcSegmentCode               AS CHAR NO-UNDO.
 DEF VAR piSubsQty                   AS INT  NO-UNDO.
+DEF VAR pcBrand                     AS CHAR NO-UNDO.
 DEF VAR pcUserName                  AS CHAR NO-UNDO.
 DEF VAR pcEmailId                   AS CHAR NO-UNDO.
-
+DEF VAR pcOffer                     AS CHAR NO-UNDO.
+DEF VAR pcMSISDN                    AS CHAR NO-UNDO.
+DEF VAR pcICC                       AS CHAR NO-UNDO.
+DEF VAR pcEMA                       AS CHAR NO-UNDO.
 /* Local variables */
 DEF VAR lcstruct                    AS CHAR NO-UNDO.
 DEF VAR lcCLIType                   AS CHAR NO-UNDO.
@@ -32,17 +36,23 @@ DEF VAR liCount                     AS INT  NO-UNDO.
 
 DEF STREAM sInput.
 
-IF validate_request(param_toplevel_id,"string,string,struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id,"string,string,string,struct") EQ ? THEN RETURN.
 
-ASSIGN pcUserName = get_string(param_toplevel_id,"0")
-       pcEmailId  = get_string(param_toplevel_id,"1").
+ASSIGN
+    pcBrand    = get_string(param_toplevel_id,"0") 
+    pcUserName = get_string(param_toplevel_id,"1")
+    pcEmailId  = get_string(param_toplevel_id,"2").
 
-pcStruct = get_struct(param_toplevel_id,"2").
-lcstruct = validate_struct(pcStruct,"custid_type,subs_types,data_bundles,other_bundles,service,segment_code,subs_qty").
+pcStruct = get_struct(param_toplevel_id,"3").
+lcstruct = validate_struct(pcStruct,"msisdn,icc,ema,offer,custid_type,subs_types,data_bundles,other_bundles,service,segment_code,subs_qty").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcOffer      = get_string(pcStruct,"offer")
+   pcMSISDN     = get_string(pcStruct,"msisdn")
+   pcICC        = get_string(pcStruct,"icc")
+   pcEMA        = get_string(pcStruct,"ema")
    pcCustIdType = get_string(pcStruct,"custid_type")
    pcSubsTypes  = get_string(pcStruct,"subs_types").
 
@@ -60,11 +70,8 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF pcUserName = "" THEN
-   RETURN appl_err("User name is empty").
-
-IF pcEmailId = "" THEN
-   RETURN appl_err("Email address is empty").
+IF pcBrand = "" THEN
+   RETURN appl_err("Brand is empty").
 
 IF pcCustIdType = "" THEN
    RETURN appl_err("Customer Id Type is empty").
@@ -85,13 +92,13 @@ lcInputFile = lcInSpoolDir + "/newton_subs_creation_" + pcUserName + "_" + STRIN
 
 OUTPUT STREAM sInput TO VALUE(lcInputFile).
 
-PUT STREAM sInput UNFORMATTED "H|Record_Type|Customer_Type|CLI_Type|Quantity|User_Id|Email_address" SKIP.
+PUT STREAM sInput UNFORMATTED "H|Record_Type|Customer_Type|CLI_Type|Quantity|Offer|UserId|Email|MSISDN|ICC|EMA|Brand" SKIP.
 
 DO liCount = 1 TO NUM-ENTRIES(pcSubsTypes).
    lcCLIType = ENTRY(liCount,pcSubsTypes).
    PUT STREAM sInput UNFORMATTED "P" lcDel "SUBSCRIPTION" lcDel
-       pcCustIdType lcDel lcCLIType lcDel piSubsQty lcDel
-       pcUserName lcDel pcEmailId SKIP.
+       pcCustIdType lcDel lcCLIType lcDel piSubsQty lcDel pcOffer lcDel
+       pcUserName lcDel pcEmailId lcDel pcMSISDN lcDel pcICC lcDel pcEMA lcDel pcBrand SKIP.
 END. /* DO liCount = 1 TO NUM-ENTRIES(pcSubsTypes). */
 
 IF pcDataBundleId > "" OR pcOtherBundles > "" THEN DO:
