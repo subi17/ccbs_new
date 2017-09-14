@@ -15,5 +15,5 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-p=s.newton.service_packages.list({'id_begins':var1})
+p=s.newton.service_packages.list({'brand':'yoigo','id_begins':var1})
 print_results(p)
