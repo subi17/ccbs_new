@@ -117,7 +117,8 @@ ldeLastDump = fHMS2TS(ldaEventDate, "00:00:00").
 IF icDumpMode = "Full" THEN DO:
    FOR EACH MsOwner NO-LOCK WHERE
             MsOwner.Brand = gcBrand:
-      fCollect().
+      lhCollect:BUFFER-CREATE.
+      lhCollect:BUFFER-COPY(lhTable).
    END.
 END.
 ELSE DO:
