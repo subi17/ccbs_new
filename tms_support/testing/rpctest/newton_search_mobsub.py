@@ -18,6 +18,6 @@ else:
    else:
       var2 = sys.argv[2]
 
-p=s.newton.search_mobsub('yoigo',var1,10,0,var2)
+p=s.newton.search_mobsub('yoigo',int(var1),10,0,var2)
 #print_results(p)
 print p

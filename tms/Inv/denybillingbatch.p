@@ -23,6 +23,7 @@ DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE liRead AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liErrors AS INTEGER NO-UNDO. 
@@ -47,8 +48,9 @@ REPEAT:
    IF SEARCH(lcInputFile) = ? THEN NEXT.
    /* Set effective tenant based on file name. If not regocniced go next file
    */
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
    IF NOT fsetEffectiveTenantForAllDB(
-         fConvertBrandToTenant(ENTRY(1,lcFileName,"_"))) THEN NEXT.
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
    fBatchLog("START", lcInputFile).
 
    liRead = 0.
