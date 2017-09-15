@@ -242,7 +242,7 @@ END.
 FUNCTION fAddCategoryCount RETURNS INT
    (icCategory AS CHAR,
     iiAmt AS INT):
-   FIND FIRST ttOperCategory EXCLUSIVE-LOCK  WHERE
+   FIND FIRST ttOperCategory EXCLUSIVE-LOCK WHERE
               ttOperCategory.operators EQ icCategory NO-ERROR.
    IF AVAIL ttOperCategory THEN DO:
       ttOperCategory.Amount = ttOperCategory.Amount + iiAmt.
@@ -480,18 +480,14 @@ FOR EACH MNPRetPlatForm NO-LOCK WHERE
          fGetCaseAmount(fOperators(MNPRetPlatForm.Name)) *
          (MNPRetPlatForm.Percentage / 100).                                   
       
-END.
-
-/* collect all opreatot categories to be filled.*/
-FOR EACH MNPRetPlatForm WHERE 
-         MNPRetPlatForm.ToDate >= TODAY NO-LOCK:
-   lcOperCat = fOperators(MNPRetPlatForm.name).
-   FIND FIRST ttOperCategory NO-LOCK WHERE
-              ttOperCategory.operators EQ lcOperCat NO-ERROR.
-   IF NOT AVAIL ttOperCategory THEN DO:
-      CREATE ttOperCategory.
-      ttOperCategory.operators = lcOperCat.
-   END.   
+      /*Create category entrioes for dividing MNP rows for the platforms*/
+      lcOperCat = fOperators(MNPRetPlatForm.name).
+      FIND FIRST ttOperCategory NO-LOCK WHERE
+                 ttOperCategory.operators EQ lcOperCat NO-ERROR.
+      IF NOT AVAIL ttOperCategory THEN DO:
+         CREATE ttOperCategory.
+         ttOperCategory.operators = lcOperCat.
+      END.   
 END.
 
 IF liPlatForms = 0 THEN RETURN.
@@ -592,7 +588,7 @@ PROCEDURE pFileDump:
          
          IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperName.
          ELSE DO:
-            FIND FIRST MNPOperator WHERE
+            FIND FIRST MNPOperator NO-LOCK WHERE
                        MNPOperator.Brand = gcBrand AND
                        MNPOperator.OperCode = MNPProcess.OperCode
             NO-ERROR.
