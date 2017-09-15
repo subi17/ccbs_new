@@ -20,6 +20,7 @@ gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fmakesms.i}
 {Mnp/mnp.i}
+{Func/email.i}
 
 DEF STREAM sExclude.
 
@@ -265,13 +266,28 @@ END.
 retention_file.email
 
 */
+
 FUNCTION fSendRetentionListEmail RETURNS CHAR
    (icFilename AS CHAR):
    DEF VAR lcEmailConfDir AS CHAR NO-UNDO.
 
    lcEmailConfDir = fCParamC("RepConfDir").
    
-   GetRecipients(lcEmailConfDir + "retention_file.email").
+   GetRecipients(lcEmailConfDir + "/retention_file.email").
+
+   IF xMailAddr EQ "" THEN RETURN "No address".
+
+   xMailAttach = icFileName.
+
+   IF LOOKUP(lcMailHost,{&HOSTNAME_STAGING}) > 0 THEN DO:
+      /*Internal env*/
+      SendMaileInvoice("Retention file email", icFilename, "").      
+   END.
+   ELSE DO:
+      /*production*/
+      SendMail("MNP Retention data", icFilename).
+   END.
+
 
 END.   
 
