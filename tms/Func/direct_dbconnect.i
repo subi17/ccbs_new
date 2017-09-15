@@ -105,11 +105,8 @@ PROCEDURE pDirectConnect2Dbs:
    DEF INPUT PARAMETER idaFromDate AS DATE NO-UNDO.
    DEF INPUT PARAMETER idaToDate   AS DATE NO-UNDO.
    
-   DEF VAR liState       AS INT  NO-UNDO.
-   DEF VAR lcLogicName   AS CHAR NO-UNDO.
-   DEF VAR lcUserAndPass AS CHAR NO-UNDO.
-
-   lcUserAndPass = multitenancy.TenantInformation:mGetAuthConnectionParams().
+   DEF VAR liState     AS INT  NO-UNDO.
+   DEF VAR lcLogicName AS CHAR NO-UNDO.
 
    FOR EACH ttDB WHERE
             ttDB.ConnName = icConnName:
@@ -138,9 +135,9 @@ PROCEDURE pDirectConnect2Dbs:
             IF CONNECTED (lcLogicName) THEN 
                DISCONNECT VALUE(lcLogicName) NO-ERROR.
       
-            CONNECT VALUE(DBConfig.DirectConnect + "/" +
-                          DBConfig.DBConnName + 
-                          " -ld " + lcLogicName + lcUserAndPass) NO-ERROR.
+            multitenancy.TenantInformation:mConnectDBSupressError
+               (DBConfig.DirectConnect + "/" + DBConfig.DBConnName +
+                " -ld " + lcLogicName).
     
             IF ERROR-STATUS:ERROR THEN LEAVE.
          

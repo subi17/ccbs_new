@@ -220,8 +220,6 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
          DBConfig.DirectConnect > "" THEN
          ttDB.ConnName = DBConfig.DirectConnect + "/" + DBConfig.DBConnName.
       ELSE ttDB.ConnParam = "-H " + DBConfig.Host + " -S " + DBConfig.Service.
-
-      ttDB.ConnName = ttDB.ConnName + multitenancy.TenantInformation:mGetAuthConnectionParams().
    END.
    
 END FUNCTION.
@@ -372,8 +370,8 @@ FUNCTION fGetCDRDtl RETURNS LOGICAL
       
       IF ttDB.Connect THEN DO:
          lcDBName = "dtlQuery".
-         CONNECT VALUE (ttDB.ConnName + " " +
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+               (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
