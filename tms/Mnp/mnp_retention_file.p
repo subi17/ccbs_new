@@ -490,6 +490,34 @@ FOR EACH MNPRetPlatForm NO-LOCK WHERE
       END.   
 END.
 
+/* Print configurations to file. ONLY FOR TESTING PURPOSE */
+DEF VAR llPrintTest AS LOGICAL NO-UNDO INIT TRUE. /* <-- Set TRUE When testing */
+
+/* TEST Printout all configs */
+IF llPrintTest THEN DO:
+   DEF STREAM stest.
+   OUTPUT STREAM stest TO VALUE("/tmp/mnp_retention_test.p").
+
+   PUT STREAM stest UNFORMATTED "Brand|FromDate|Name|Percentage|RetentionPlatform|SMSSender|ToDate" SKIP.
+   FOR EACH MNPRetPlatForm NO-LOCK:
+      PUT STREAM stest UNFORMATTED
+         MNPRetPlatForm.Brand
+         MNPRetPlatForm.FromDate
+         MNPRetPlatForm.Name
+         MNPRetPlatForm.Percentage
+         MNPRetPlatForm.RetentionPlatform
+         MNPRetPlatForm.SMSSender
+         MNPRetPlatForm.ToDate SKIP.
+   END.
+
+   PUT STREAM stest UNFORMATTED SKIP "operators|amount" SKIP.
+   FOR EACH ttOperCategory NO-LOCK:
+      PUT STREAM stest UNFORMATTED
+         ttOperCategory.operators
+         ttOperCategory.amount SKIP.
+   END.
+END.
+
 IF liPlatForms = 0 THEN RETURN.
 
 RUN pFileDump(0).
@@ -511,6 +539,21 @@ DO liPlatform = 1 TO liPlatforms:
 END.
 
 OUTPUT STREAM sExclude CLOSE.
+
+/* TEST Printout all data */
+IF llPrintTest THEN DO:
+   PUT STREAM stest UNFORMATTED SKIP "custnum|msseq|mnpseq|smstext|RetentionPlatform|operatorcat" SKIP.
+   FOR EACH ttData NO-LOCK:
+      PUT STREAM stest UNFORMATTED
+         ttData.custnum
+         ttData.msseq
+         ttData.mnpseq
+         ttData.smstext
+         ttData.RetentionPlatform
+         ttData.operatorcat SKIP.
+   END.
+   OUTPUT STREAM stest CLOSE.
+END.
 
 IF lcRetExcludeFile > "" THEN
       fMove2TransDir(lcRetExcludeFile, "", lcRootDir + "/outgoing/").
