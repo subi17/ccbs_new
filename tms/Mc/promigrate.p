@@ -68,7 +68,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
          RUN StarEventMakeModifyEvent(lhCustomer).
       END.
 
-      IF fIsPro(bcustomer.category) THEN DO:
+      IF fIsPro(lccategory) THEN DO:
          RUN Mc/creasfee.p (bMobSub.CustNum,
                        bMobSub.MsSeq,
                        Today,
