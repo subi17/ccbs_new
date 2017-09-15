@@ -502,8 +502,16 @@ RUN pFileDump(0).
    same customer had already some other ongoing MNP OUT under retention  */
 DO liPlatform = 1 TO liPlatforms:
    RUN pFileDump(liPlatform).
-   IF lcRetentionFile[liPlatform] > "" THEN
-      fMove2TransDir(lcRetentionFile[liPlatform], "", lcRootDir + "/outgoing/").
+   IF lcRetentionFile[liPlatform] > "" THEN DO:
+      IF lcRetentionFile[liPlatform] MATCHES "*marktel*" THEN DO:
+         fSendRetentionListEmail(lcRetentionFile[liPlatform]).
+         fMove2TransDir(lcRetentionFile[liPlatform], "",
+                        lcRootDir + "/processed/").
+      END.   
+      ELSE
+         fMove2TransDir(lcRetentionFile[liPlatform], "", 
+                        lcRootDir + "/outgoing/").
+   END.
 END.
 
 OUTPUT STREAM sExclude CLOSE.
