@@ -321,7 +321,11 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    * Thus analyse B-sub from right      *
    * TO left; gradually                 *
    *************************************/
-   IF b_type = 1 AND ttCall.SpoCMT NE 51 AND ttCall.SpoCMT NE 54 THEN DO:
+   IF b_type = 1 AND 
+      ttCall.SpoCMT NE 51 AND
+      ttCall.SpoCMT NE 54 AND
+      ttCall.SpoCMT NE 95 AND
+      ttCall.SpoCMT NE 105 THEN DO:
    
       DO b = LENGTH(b_sub) TO 1 BY -1:
          IF CAN-FIND(FIRST BDest WHERE
