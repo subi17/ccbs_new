@@ -225,6 +225,8 @@ CLASS HPD.RepLogHandler FINAL:
          DumpFile.SideTables = lcQueueName
          ON ERROR UNDO, THROW:
 
+         llFoundHandler = TRUE.
+
          IF llCheckTableMultiTenant
          THEN llTableMultiTenant = multitenancy.TenantInformation:mIsTableMultiTenant(DumpFile.MainTable).
 
@@ -243,7 +245,6 @@ CLASS HPD.RepLogHandler FINAL:
             ttDumpHandler.BrandName     = lcBrandName WHEN llTableMultiTenant
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
-            llFoundHandler = TRUE
             .
       END.
 
