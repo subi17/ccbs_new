@@ -51,10 +51,6 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
    IF NOT AVAIL bClitype THEN lcError = "ERROR: Unknown Clitype".
    IF NOT fIsSelfEmpl(bcustomer.category) THEN 
       lcError = "ERROR: Not selfemployed".
-   FIND FIRST bDayCampaign NO-LOCK WHERE 
-              bDaycampaign.brand EQ Syst.Parameters:gcBrand AND
-              bDaycampaign.dcevent EQ bMobsub.clitype NO-ERROR.
-   IF NOT AVAIL bDaycampaign THEN lcError = "ERROR: Unknown DayCampaign".           
    IF lcError > "" THEN DO:
       fReqStatus(3,lcError).
       RETURN lcError.
@@ -76,7 +72,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                        bMobSub.MsSeq,
                        Today,
                        "FeeModel",
-                       bdaycampaign.feemodel,
+                       "MONTHLYFEE",
                        9,
                        ?,
                        "Pro Migrate",    /* memo   */
