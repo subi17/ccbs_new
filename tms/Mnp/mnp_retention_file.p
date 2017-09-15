@@ -261,6 +261,19 @@ FUNCTION fGetCaseAmount RETURNS INT
    RETURN 0.
 END.
 
+/*Functhin sends email to recipients that are listed in
+retention_file.email
+
+*/
+FUNCTION fSendRetentionListEmail RETURNS CHAR
+   (icFilename AS CHAR):
+   DEF VAR lcEmailConfDir AS CHAR NO-UNDO.
+
+   lcEmailConfDir = fCParamC("RepConfDir").
+   
+   GetRecipients(lcEmailConfDir + "retention_file.email").
+
+END.   
 
 
 IF NOT CAN-FIND(FIRST MNPRetPlatForm NO-LOCK WHERE
