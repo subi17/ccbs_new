@@ -427,7 +427,7 @@ PROCEDURE pCollectActivations:
                     SingleFee.CalcObj = "RVTERM" NO-ERROR.
          IF AVAILABLE SingleFee THEN ldResidual = SingleFee.Amt.
          /* fix for YTS-11246 problems start from here */
-         ELSE DO:
+         ELSE IF FixedFee.SourceTable EQ "DCCLI" THEN DO:
             FIND bDCCLI WHERE
                bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
                bDCCLI.DCEvent       = FixedFee.CalcObj AND
