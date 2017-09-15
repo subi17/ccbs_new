@@ -49,6 +49,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
               bClitype.brand EQ Syst.Parameters:gcBrand AND
               bClitype.clitype EQ bMobsub.clitype NO-ERROR.
    IF NOT AVAIL bClitype THEN lcError = "ERROR: Unknown Clitype".
+
    IF NOT fIsSelfEmpl(bcustomer.category) THEN 
       lcError = "ERROR: Not selfemployed".
    IF lcError > "" THEN DO:
@@ -72,7 +73,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                        bMobSub.MsSeq,
                        Today,
                        "FeeModel",
-                       "MONTHLYFEE",
+                       fGetProFeemodel(Mobsub.clitype),
                        9,
                        ?,
                        "Pro Migrate",    /* memo   */

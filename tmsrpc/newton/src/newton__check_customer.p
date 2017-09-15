@@ -149,7 +149,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
       ELSE IF NOT llNonProToProMigrationOngoing THEN
          ASSIGN
              llOrderAllowed = FALSE
-             lcReason = "PRO migration not possible because, no mobile lines exists".
+             lcReason = "PRO migration not possible because of no mobile lines exists".
    END.
 END.
 

@@ -261,6 +261,11 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
 
    RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
 END.
+FUNCTION fGetProFeemodel RETURNS CHAR (INPUT iiCliType AS CHAR):
+   IF INDEX(iiClitype,"300") > 0 THEN RETURN "CONTFH300MF".
+   ELSE IF INDEX(iiClitype,"50") > 0 THEN RETURN "CONTFH50MF".
+   ELSE RETURN "CONTDSLMF".
+END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
    (iiMsRequest AS INT,
