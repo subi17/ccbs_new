@@ -247,10 +247,11 @@ FUNCTION fAddCategoryCount RETURNS INT
    IF AVAIL ttOperCategory THEN DO:
       ttOperCategory.Amount = ttOperCategory.Amount + iiAmt.
       RELEASE ttOperCategory.
-      RETURN ttOperCategory.Amount.
    END.
    RETURN 0.
-END.   
+END.
+
+   
 
 /*Function returns ho many cases are in given category */
 FUNCTION fGetCaseAmount RETURNS INT
