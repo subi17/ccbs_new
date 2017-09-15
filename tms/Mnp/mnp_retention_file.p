@@ -274,7 +274,7 @@ FUNCTION fSendRetentionListEmail RETURNS CHAR
 
    lcEmailConfDir = fCParamC("RepConfDir").
    
-   GetRecipients(lcEmailConfDir + "/retention_file.email").
+   GetRecipients(lcEmailConfDir + "/mnp_retention_file.email").
 
    IF xMailAddr EQ "" THEN RETURN "No address".
 
@@ -529,9 +529,9 @@ DO liPlatform = 1 TO liPlatforms:
    RUN pFileDump(liPlatform).
    IF lcRetentionFile[liPlatform] > "" THEN DO:
       IF lcRetentionFile[liPlatform] MATCHES "*marktel*" THEN DO:
-         fSendRetentionListEmail(lcRetentionFile[liPlatform]).
          fMove2TransDir(lcRetentionFile[liPlatform], "",
                         lcRootDir + "/processed/").
+         fSendRetentionListEmail(REPLACE(lcRetentionFile[liPlatform],"spool","processed")).
       END.   
       ELSE
          fMove2TransDir(lcRetentionFile[liPlatform], "", 
