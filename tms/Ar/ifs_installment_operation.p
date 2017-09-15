@@ -428,17 +428,14 @@ PROCEDURE pCollectActivations:
          IF AVAILABLE SingleFee THEN ldResidual = SingleFee.Amt.
          /* fix for YTS-11246 problems start from here */
          ELSE DO:
-            IF FixedFee.BegPeriod > FixedFee.EndPeriod THEN DO:
+            FIND bDCCLI WHERE
+               bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
+               bDCCLI.DCEvent       = FixedFee.CalcObj AND
+               bDCCLI.percontractId = INT(FixedFee.SourceKey) NO-LOCK NO-ERROR.
 
-               FIND bDCCLI WHERE
-                  bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
-                  bDCCLI.DCEvent       = FixedFee.CalcObj AND
-                  bDCCLI.percontractId = INT(FixedFee.SourceKey) NO-LOCK NO-ERROR.
-
-               IF AVAILABLE bDCCLI THEN DO:
-                  IF bDCCLI.Amount NE ? THEN
-                     ldResidual = bDCCLI.Amount.
-               END.
+            IF AVAILABLE bDCCLI THEN DO:
+               IF bDCCLI.Amount NE ? THEN
+                  ldResidual = bDCCLI.Amount.
             END.
          END.
          /* fix for YTS-11246 problems end here */ 
@@ -1530,10 +1527,7 @@ PROCEDURE pCollectInstallmentCancellations:
                        SingleFee.SourceTable = FixedFee.SourceTable AND
                        SingleFee.CalcObj = "RVTERM" NO-ERROR.
             IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount > 0 AND 
-               NOT CAN-FIND(ttInstallment WHERE
-                            ttInstallment.FFNum = FixedFee.FFNum AND
-                            ttInstallment.RowSource = "ACTIVATION") THEN
+            ELSE IF bTermDCCLI.Amount > 0 THEN
                ldeResidualAmt = bTermDCCLI.Amount.
          END.
 
