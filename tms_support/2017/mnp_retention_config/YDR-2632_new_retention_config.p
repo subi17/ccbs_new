@@ -23,7 +23,8 @@ END.
 
 /*Close existing configs.*/
 FOR EACH MNPRetPlatForm  WHERE
-         MNPRetPlatForm.brand eq lcBrand:
+         MNPRetPlatForm.brand eq lcBrand and
+         MNPRetPlatForm.Todate >= TODAY:
    MNPRetPlatForm.ToDate = TODAY - 1.
 END.
 
@@ -39,7 +40,8 @@ FUNCTION fMNPRet RETURNS LOGICAL
           MNPRetPlatForm.Percentage = idPer
           MNPRetPlatForm.RetentionPlatform = STRING(liCount)
           MNPRetPlatForm.SMSSender = icSMSNBR
-          MNPRetPlatForm.Name = icConf
+          MNPRetPlatForm.Name = ENTRY(1,icConf,";")
+          MNPRetPlatForm.Operators = ENTRY(2,icConf,";")
           MNPRetPlatForm.ToDate = ToDate. /*constant*/
 END.
 
@@ -137,7 +139,7 @@ fMNPRet(lcConf,
         lcSMSSender).
 
 /*Change this values*/
-lcConf = "Emergia;M*vil,Pepe".
+lcConf = "Emergia;M*vil,Pepe*".
 ldePercentage = 50.
 lcSMSSender = "800622022".
 fMNPRet(lcConf, 
