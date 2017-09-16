@@ -311,7 +311,8 @@ FUNCTION fSendRetentionListEmail RETURNS CHAR
    END.
    ELSE DO:
       /*production*/
-      SendMail("MNP Retention data", icFilename).
+      /*SendMail("MNP Retention data", icFilename).*/
+      SendMail(icFileName,"").
    END.
 
 
