@@ -73,7 +73,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                        bMobSub.MsSeq,
                        Today,
                        "FeeModel",
-                       fGetProFeemodel(Mobsub.clitype),
+                       fGetProFeemodel(bMobsub.clitype),
                        9,
                        ?,
                        "Pro Migrate",    /* memo   */

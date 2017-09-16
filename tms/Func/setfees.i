@@ -339,7 +339,7 @@ FUNCTION fMakeSetfees RETURNS INTEGER
                              OUTPUT lcError).
       END. /* FOR EACH FMItem */
    END.
-   IF fIsPro(Customer.category) THEN DO:
+   IF fIsPro(Customer.category) OR icFeeMemo EQ "ProMigrate" THEN DO:
       FOR EACH FMItem NO-LOCK WHERE
                FMItem.Brand     = gcBrand       AND
                FMItem.FeeModel  = icFeeModel    AND
