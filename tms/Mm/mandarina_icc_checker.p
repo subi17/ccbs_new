@@ -95,7 +95,7 @@ DO TRANS:
 END.
 
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-
+PUT STREAM sICCLog UNFORMATTED "Collection period: " + fTS2HMS(ldCollPeriodStartTS) + " TO " fTS2HMS(ldCollPeriodEndTS) SKIP.
 /* ICC lookup part */
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
@@ -105,7 +105,8 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.UpdateStamp > ldCollPeriodStartTS AND
          MsRequest.UpdateStamp <= ldCollPeriodEndTS AND
          MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/ AND
-         MsRequest.UpdateStamp <= MsRequest.DoneStamp:
+         MsRequest.UpdateStamp <= MsRequest.DoneStamp
+         USE-Index UpdateStamp:
    FIND FIRST bLP_MsRequest NO-LOCK WHERE 
               bLP_MsRequest.MsSeq EQ MsRequest.MsSeq AND
               bLP_MsRequest.ActStamp < MsRequest.DoneStamp AND
