@@ -47,7 +47,32 @@ ADD SEQUENCE "FusionMessageSeq"
   CYCLE-ON-LIMIT no
   MIN-VAL 0
 
+ADD SEQUENCE "TPServiceSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD SEQUENCE "TPServiceMessageSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD SEQUENCE "OfferCriteriaSeq"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 1
+
+ADD SEQUENCE "OfferItemSeq"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 1
+
 ADD TABLE "Barring"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Barring"
   DESCRIPTION "Barring information"
@@ -276,6 +301,7 @@ ADD INDEX "OldCode" ON "BarringConf"
   INDEX-FIELD "OldCode" ASCENDING 
 
 ADD TABLE "CallAlarm"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "callalar"
 
@@ -469,6 +495,7 @@ ADD INDEX "TimeStamp" ON "CallAlarm"
   INDEX-FIELD "ActStamp" DESCENDING 
 
 ADD TABLE "CLIType"
+  MULTITENANT yes
   AREA "Sta_Data_2_128"
   DESCRIPTION "
 
@@ -479,7 +506,7 @@ ADD TABLE "CLIType"
   TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-clitype.p" CRC "?" 
 
 ADD FIELD "Clitype" OF "CLIType" AS character 
-  FORMAT "x(8)"
+  FORMAT "x(13)"
   INITIAL ""
   LABEL "CLI Type"
   POSITION 2
@@ -805,17 +832,18 @@ ADD FIELD "TariffType" OF "CLIType" AS integer
   ORDER 330
 
 ADD INDEX "Clitype" ON "CLIType" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Clitype" ASCENDING 
 
 ADD INDEX "CliType_s" ON "CLIType" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Clitype" ASCENDING 
 
 ADD TABLE "DMS"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Document mgmt case"
   DESCRIPTION "Document management case"
@@ -946,6 +974,7 @@ ADD INDEX "StatusTS" ON "DMS"
   INDEX-FIELD "StatusTS" DESCENDING 
 
 ADD TABLE "DMSDOC"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Document"
   DESCRIPTION "DMS Document"
@@ -1091,6 +1120,7 @@ ADD INDEX "bank" ON "FinBank"
   INDEX-FIELD "paramname" ASCENDING 
 
 ADD TABLE "FusionMessage"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Fusion Message"
   DESCRIPTION "Contains messages between TMS and MasMovil"
@@ -1261,6 +1291,7 @@ ADD INDEX "UpdateTS" ON "FusionMessage"
   INDEX-FIELD "UpdateTS" DESCENDING 
 
 ADD TABLE "MobSub"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Mobile Subscriber"
   DESCRIPTION "Mobile Subscription"
@@ -1507,7 +1538,7 @@ ADD FIELD "TerritoryOwner" OF "MobSub" AS character
   ORDER 900
 
 ADD FIELD "CliType" OF "MobSub" AS character 
-  FORMAT "x(8)"
+  FORMAT "x(13)"
   INITIAL ""
   LABEL "MType"
   POSITION 43
@@ -1517,7 +1548,7 @@ ADD FIELD "CliType" OF "MobSub" AS character
   ORDER 440
 
 ADD FIELD "ActivationTS" OF "MobSub" AS decimal 
-  FORMAT "999999.99999"
+  FORMAT "99999999.99999"
   INITIAL "0"
   LABEL "Activated"
   POSITION 48
@@ -1728,6 +1759,7 @@ ADD INDEX "MultiSimID" ON "MobSub"
   INDEX-FIELD "MultiSimID" DESCENDING 
 
 ADD TABLE "MSISDN"
+  MULTITENANT yes
   AREA "Sta_Data_2_64"
   DESCRIPTION "A Single MSISDN number"
   DUMP-NAME "msisdn-------1"
@@ -1979,6 +2011,7 @@ ADD INDEX "StatusCode" ON "MSISDN"
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD TABLE "MSISDNNumber"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   DESCRIPTION "A Single MSISDN number"
   DUMP-NAME "msisdnnumber"
@@ -2312,6 +2345,7 @@ ADD INDEX "StatusCode" ON "MSISDN_old"
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD TABLE "Offer"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Offer"
   DESCRIPTION "Offer header"
@@ -2433,6 +2467,7 @@ ADD INDEX "ToDate" ON "Offer"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "OfferCriteria"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Offer Criteria"
   DESCRIPTION "Offer criteria"
@@ -2556,6 +2591,7 @@ ADD INDEX "OfferCriteriaType" ON "OfferCriteria"
   INDEX-FIELD "BeginStamp" DESCENDING 
 
 ADD TABLE "OfferItem"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Offer Item"
   DESCRIPTION "Offer item"
@@ -2715,6 +2751,7 @@ ADD INDEX "OfferItemID" ON "OfferItem"
   INDEX-FIELD "OfferItemID" ASCENDING 
 
 ADD TABLE "Order"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "order"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-order.p" CRC "?" 
@@ -2765,7 +2802,7 @@ ADD FIELD "CLI" OF "Order" AS character
 
 ADD FIELD "CLIType" OF "Order" AS character 
   DESCRIPTION "CLI Type"
-  FORMAT "x(8)"
+  FORMAT "x(13)"
   INITIAL ""
   LABEL "CLIType"
   POSITION 11
@@ -2878,7 +2915,7 @@ ADD FIELD "Tupas" OF "Order" AS integer
 
 ADD FIELD "TupasRM" OF "Order" AS character 
   DESCRIPTION "Tupas Return Message"
-  FORMAT "x(200)"
+  FORMAT "x(60)"
   INITIAL ""
   LABEL "TupasRM"
   POSITION 32
@@ -3226,7 +3263,7 @@ ADD FIELD "DeviceID" OF "Order" AS character
   ORDER 860
 
 ADD FIELD "InvNum" OF "Order" AS integer 
-  FORMAT ">>>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Invoice Nbr"
   POSITION 90
@@ -3494,6 +3531,7 @@ ADD INDEX "StOrderID" ON "Order"
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD TABLE "OrderAccessory"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "orderacc"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderaccessory.p" CRC "?" 
@@ -3669,6 +3707,7 @@ ADD INDEX "IMEIStatus" ON "OrderAccessory"
   INDEX-FIELD "IMEIReleased" DESCENDING 
 
 ADD TABLE "OrderAction"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Order Action"
   DESCRIPTION "Order action"
@@ -3727,12 +3766,13 @@ ADD FIELD "ItemParam" OF "OrderAction" AS character
   ORDER 50
 
 ADD INDEX "OrderId" ON "OrderAction" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD TABLE "OrderCustomer"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "ordercus"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-ordercustomer.p" CRC "?" 
@@ -4065,22 +4105,24 @@ ADD FIELD "BankCode" OF "OrderCustomer" AS character
   COLUMN-LABEL "BankCode"
   ORDER 770
 
-ADD FIELD "CustUserId" OF "OrderCustomer" AS character 
-  FORMAT "x(8)"
+ADD FIELD "AuthCustId" OF "OrderCustomer" AS character 
+  FORMAT "x(11)"
   INITIAL ""
-  LABEL "UserId"
+  LABEL "AuthCustId"
   POSITION 36
   MAX-WIDTH 16
-  COLUMN-LABEL "UserId"
+  COLUMN-LABEL "AuthCustId"
+  HELP "Authorization Customer ID"
   ORDER 780
 
-ADD FIELD "CustPWD" OF "OrderCustomer" AS character 
+ADD FIELD "AuthCustIdType" OF "OrderCustomer" AS character 
   FORMAT "x(8)"
   INITIAL ""
-  LABEL "Password"
+  LABEL "AuthCustIdType"
   POSITION 37
   MAX-WIDTH 16
-  COLUMN-LABEL "Password"
+  COLUMN-LABEL "AuthCustIdType"
+  HELP "Authorization Customer ID Type"
   ORDER 790
 
 ADD FIELD "VatPercent" OF "OrderCustomer" AS decimal 
@@ -4423,6 +4465,26 @@ ADD FIELD "CoverageToken" OF "OrderCustomer" AS character
   HELP "Coverage Token"
   ORDER 1140
 
+ADD FIELD "PRO" OF "OrderCustomer" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "PRO"
+  POSITION 76
+  MAX-WIDTH 1
+  COLUMN-LABEL "PRO"
+  HELP "PRO customer"
+  ORDER 1150
+
+ADD FIELD "AddressId" OF "OrderCustomer" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "AddressId"
+  POSITION 77
+  MAX-WIDTH 60
+  COLUMN-LABEL "AddressId"
+  HELP "Address Id"
+  ORDER 1160
+
 ADD INDEX "OrderId" ON "OrderCustomer" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -4443,6 +4505,7 @@ ADD INDEX "CustNum" ON "OrderCustomer"
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD TABLE "OrderDelivery"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "orderdelivery"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderdelivery.p" CRC "?" 
@@ -4549,6 +4612,7 @@ ADD INDEX "OrderID" ON "OrderDelivery"
   INDEX-FIELD "LOTimeStamp" DESCENDING 
 
 ADD TABLE "OrderFusion"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Order Fusion"
   DESCRIPTION "Order Fusion"
@@ -4734,7 +4798,7 @@ ADD FIELD "FixedCurrOperCode" OF "OrderFusion" AS character
   LABEL "FixedCurrOperCode"
   POSITION 20
   MAX-WIDTH 14
-  ORDER 190
+  ORDER 191
 
 ADD FIELD "SerialNumber" OF "OrderFusion" AS character 
   FORMAT "x(15)"
@@ -4800,6 +4864,16 @@ ADD FIELD "FusionStatusDesc" OF "OrderFusion" AS character
   COLUMN-LABEL "FusionStatusDesc"
   ORDER 270
 
+ADD FIELD "EstimatedDataSpeed" OF "OrderFusion" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "EstDataSpeed"
+  POSITION 28
+  MAX-WIDTH 4
+  COLUMN-LABEL "EstDataSpeed"
+  HELP "Estimated Data Speed"
+  ORDER 190
+
 ADD INDEX "OrderId" ON "OrderFusion" 
   AREA "Dyn_Index_1"
   PRIMARY
@@ -4829,6 +4903,7 @@ ADD INDEX "UpdateTS" ON "OrderFusion"
   INDEX-FIELD "UpdateTS" ASCENDING 
 
 ADD TABLE "OrderPayment"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "orderpay"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-orderpayment.p" CRC "?" 
@@ -4986,6 +5061,7 @@ ADD INDEX "OrderId" ON "OrderService"
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD TABLE "OrderTimeStamp"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "ordertim"
 
@@ -5044,6 +5120,7 @@ ADD INDEX "RowType" ON "OrderTimeStamp"
   INDEX-FIELD "TimeStamp" DESCENDING 
 
 ADD TABLE "OrderTopUp"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "ordertop"
 
@@ -5094,7 +5171,113 @@ ADD INDEX "OrderId" ON "OrderTopUp"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrderId" ASCENDING 
 
+ADD TABLE "PoUser"
+  AREA "Sta_Data_32"
+  LABEL "Portability user"
+  DESCRIPTION "Portability user"
+  DUMP-NAME "pouser"
+
+ADD FIELD "MsSeq" OF "PoUser" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "LineType" OF "PoUser" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Line type"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "LineType"
+  HELP "Line type (1=Mobile, 2=Fixed)"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "Company" OF "PoUser" AS character 
+  DESCRIPTION "Company name"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Company"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Company"
+  HELP "Company name"
+  ORDER 30
+
+ADD FIELD "CompanyId" OF "PoUser" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "Comp.ID"
+  POSITION 5
+  MAX-WIDTH 22
+  HELP "Customer's organisation ID (CIF)"
+  ORDER 40
+
+ADD FIELD "PersonIdType" OF "PoUser" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "PersonIdType"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "PersonIdType"
+  HELP "Person ID Type (NIF/NIE/PASSPORT)"
+  ORDER 50
+
+ADD FIELD "PersonId" OF "PoUser" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "PersonId"
+  POSITION 7
+  MAX-WIDTH 22
+  COLUMN-LABEL "PersonId"
+  HELP "Person ID"
+  ORDER 60
+
+ADD FIELD "CustName" OF "PoUser" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Customer's name"
+  POSITION 8
+  MAX-WIDTH 60
+  COLUMN-LABEL "Customer's name"
+  HELP "Customer's name"
+  ORDER 70
+
+ADD FIELD "SurName2" OF "PoUser" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Second Surname"
+  POSITION 9
+  MAX-WIDTH 60
+  COLUMN-LABEL "2.Surname"
+  HELP "Second surname"
+  ORDER 80
+
+ADD FIELD "FirstName" OF "PoUser" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Forename"
+  POSITION 10
+  MAX-WIDTH 40
+  COLUMN-LABEL "Forename"
+  HELP "Customer's forename"
+  ORDER 90
+
+ADD INDEX "MsSeq" ON "PoUser" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "LineType" ASCENDING 
+
 ADD TABLE "PrePaidRequest"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "prepaidr"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-prepaidrequest.p" CRC "?" 
@@ -5435,13 +5618,25 @@ ADD FIELD "SendCount" OF "RepLog" AS integer
   COLUMN-LABEL "SendCount"
   ORDER 70
 
+ADD FIELD "TenantName" OF "RepLog" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Tenant name"
+  POSITION 9
+  MAX-WIDTH 30
+  COLUMN-LABEL "TenantName"
+  HELP "Tenant name"
+  ORDER 80
+
 ADD INDEX "SendTime" ON "RepLog" 
   AREA "CDF_Index"
   PRIMARY
   INDEX-FIELD "SendTime" ASCENDING 
+  INDEX-FIELD "TenantName" ASCENDING 
   INDEX-FIELD "EventTime" ASCENDING 
 
 ADD TABLE "Salesman"
+  MULTITENANT yes
   AREA "Sta_Data_2_64"
   LABEL "Salesman"
   DESCRIPTION "Salesman"
@@ -5594,6 +5789,7 @@ ADD INDEX "SmName" ON "Salesman"
   INDEX-FIELD "SalesOffice" ASCENDING 
 
 ADD TABLE "Segmentation"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DESCRIPTION "Collect segmentation information"
   DUMP-NAME "segmentation"
@@ -5667,6 +5863,7 @@ ADD INDEX "MsSeqDate" ON "Segmentation"
   INDEX-FIELD "SegmentDate" DESCENDING 
 
 ADD TABLE "SMSMessage"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "smsmessage"
 
@@ -5836,6 +6033,7 @@ ADD INDEX "OrderId" ON "SMSMessage"
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD TABLE "SubsTerminal"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Subscription Terminal"
   DESCRIPTION "Terminal of a subscription"
@@ -6046,6 +6244,7 @@ ADD INDEX "BillCode" ON "TerminalStock"
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD TABLE "TermReturn"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Returned terminals"
   DUMP-NAME "TermReturn"
@@ -6175,6 +6374,7 @@ ADD INDEX "ReturnTS" ON "TermReturn"
   INDEX-FIELD "ReturnTS" DESCENDING 
 
 ADD TABLE "TMSParam"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Configuration Parameters"
   DESCRIPTION "Company parameters"
@@ -6296,7 +6496,7 @@ ADD FIELD "Brand" OF "TMSParam" AS character
   ORDER 110
 
 ADD INDEX "ParamGroup" ON "TMSParam" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -6304,18 +6504,19 @@ ADD INDEX "ParamGroup" ON "TMSParam"
   INDEX-FIELD "ParamCode" ASCENDING 
 
 ADD INDEX "ParamCode" ON "TMSParam" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ParamCode" ASCENDING 
   INDEX-FIELD "ParamGroup" ASCENDING 
 
 ADD INDEX "ParamName" ON "TMSParam" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ParamName" ASCENDING 
 
 ADD TABLE "TopupScheme"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Topup Scheme"
   DESCRIPTION "Topup scheme"
@@ -6400,24 +6601,25 @@ ADD FIELD "TopupScheme" OF "TopupScheme" AS character
   ORDER 20
 
 ADD INDEX "ToupScheme" ON "TopupScheme" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TopupScheme" ASCENDING 
 
 ADD INDEX "Source" ON "TopupScheme" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TopupSource" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "ToDate" ON "TopupScheme" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "TopupSchemeRow"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Topup Scheme Row"
   DESCRIPTION "Topup scheme row"
@@ -6529,22 +6731,337 @@ ADD FIELD "DisplayAmount" OF "TopupSchemeRow" AS decimal
   ORDER 100
 
 ADD INDEX "TopupSchemeRow" ON "TopupSchemeRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TopupScheme" ASCENDING 
   INDEX-FIELD "TopupSchemeRowID" ASCENDING 
 
 ADD INDEX "EndStamp" ON "TopupSchemeRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TopupScheme" ASCENDING 
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD INDEX "TopupSchemeRowID" ON "TopupSchemeRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "TopupSchemeRowID" ASCENDING 
+
+ADD TABLE "TPService"
+  AREA "Sta_Data_32"
+  LABEL "Third Party Service"
+  DESCRIPTION "Third Party Service"
+  DUMP-NAME "tpservice"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-tpservice.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-tpservice.p" CRC "?" 
+
+ADD FIELD "MsSeq" OF "TPService" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ServSeq" OF "TPService" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ServSeq"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ServSeq"
+  HELP "Service Sequence"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "ServType" OF "TPService" AS character 
+  DESCRIPTION "Service Type"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 4
+  MAX-WIDTH 30
+  COLUMN-LABEL "Type"
+  HELP "Service Type"
+  ORDER 40
+
+ADD FIELD "Operation" OF "TPService" AS character 
+  DESCRIPTION "Operation"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Operation"
+  POSITION 5
+  MAX-WIDTH 30
+  COLUMN-LABEL "Operation"
+  HELP "Operation"
+  ORDER 50
+
+ADD FIELD "Product" OF "TPService" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Product"
+  POSITION 6
+  MAX-WIDTH 50
+  HELP "Product"
+  ORDER 60
+
+ADD FIELD "Provider" OF "TPService" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Provider"
+  POSITION 7
+  MAX-WIDTH 40
+  COLUMN-LABEL "Provider"
+  HELP "Service Provider"
+  ORDER 70
+
+ADD FIELD "SerialNbr" OF "TPService" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Serial Nbr"
+  POSITION 8
+  MAX-WIDTH 50
+  COLUMN-LABEL "Serial Nbr"
+  HELP "Serial Number"
+  ORDER 80
+
+ADD FIELD "ServStatus" OF "TPService" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 9
+  MAX-WIDTH 30
+  COLUMN-LABEL "Status"
+  HELP "Service Status"
+  ORDER 90
+
+ADD FIELD "Offer" OF "TPService" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer"
+  POSITION 10
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer"
+  ORDER 100
+
+ADD FIELD "UserCode" OF "TPService" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 11
+  MAX-WIDTH 20
+  COLUMN-LABEL "User"
+  HELP "User"
+  ORDER 110
+
+ADD FIELD "TermReason" OF "TPService" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "TermReason"
+  POSITION 12
+  MAX-WIDTH 70
+  COLUMN-LABEL "TermReason"
+  HELP "Termination Reason"
+  ORDER 120
+
+ADD FIELD "CreatedTS" OF "TPService" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 13
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  HELP "CreatedTS"
+  DECIMALS 5
+  ORDER 130
+
+ADD FIELD "UpdateTS" OF "TPService" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdatedTS"
+  POSITION 14
+  MAX-WIDTH 20
+  COLUMN-LABEL "UpdateTS"
+  HELP "UpdateTS"
+  DECIMALS 5
+  ORDER 140
+
+ADD FIELD "MessageID" OF "TPService" AS character 
+  DESCRIPTION "Auto-generated"
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "MessageId"
+  POSITION 15
+  MAX-WIDTH 70
+  COLUMN-LABEL "MessageID"
+  ORDER 150
+
+ADD FIELD "ResponseCode" OF "TPService" AS character 
+  DESCRIPTION "Response code from Third party"
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  POSITION 16
+  MAX-WIDTH 20
+  COLUMN-LABEL "ResponseCode"
+  ORDER 160
+
+ADD FIELD "AdditionalInfo" OF "TPService" AS character 
+  DESCRIPTION "Additional status info"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Additional Info"
+  POSITION 17
+  MAX-WIDTH 80
+  COLUMN-LABEL "AdditionalInfo"
+  ORDER 170
+
+ADD INDEX "MsSeq" ON "TPService" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ServSeq" ASCENDING 
+
+ADD INDEX "CreatedTS" ON "TPService" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CreatedTS" ASCENDING 
+  INDEX-FIELD "ServStatus" ASCENDING 
+
+ADD INDEX "MessageId" ON "TPService" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MessageID" ASCENDING 
+
+ADD INDEX "MsSeqTypeStatus" ON "TPService" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "Operation" ASCENDING 
+  INDEX-FIELD "ServType" ASCENDING 
+  INDEX-FIELD "ServStatus" ASCENDING 
+
+ADD INDEX "SerialNbr" ON "TPService" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "SerialNbr" ASCENDING 
+
+ADD INDEX "ServSeq" ON "TPService" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "ServSeq" ASCENDING 
+
+ADD INDEX "UpdateTS" ON "TPService" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" ASCENDING 
+
+ADD TABLE "TPServiceMessage"
+  AREA "Sta_Data_64"
+  LABEL "Third Party Message"
+  DESCRIPTION "Third Party Message"
+  DUMP-NAME "tpservicemessage"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-tpservicemessage.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-tpservicemessage.p" CRC "?" 
+
+ADD FIELD "MsSeq" OF "TPServiceMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ServSeq" OF "TPServiceMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "ServSeq"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ServSeq"
+  HELP "Service Sequence Number"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "MessageSeq" OF "TPServiceMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MessageSeq"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "MessageSeq"
+  HELP "Message Sequence Number"
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "Source" OF "TPServiceMessage" AS character 
+  DESCRIPTION "Messsage source (TMS/Masmovil)"
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Source"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Source"
+  ORDER 60
+
+ADD FIELD "MessageStatus" OF "TPServiceMessage" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Message Status"
+  POSITION 7
+  MAX-WIDTH 30
+  COLUMN-LABEL "MessageStatus"
+  ORDER 70
+
+ADD FIELD "CreatedTS" OF "TPServiceMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "UpdateTS" OF "TPServiceMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdateTS"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "UpdateTS"
+  DECIMALS 5
+  ORDER 90
+
+ADD INDEX "MsSeq" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ServSeq" ASCENDING 
+  INDEX-FIELD "MessageSeq" ASCENDING 
+
+ADD INDEX "CreatedTS" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CreatedTS" ASCENDING 
+
+ADD INDEX "MessageSeq" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "MessageSeq" ASCENDING 
+
+ADD INDEX "MessageStatus" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MessageStatus" ASCENDING 
+  INDEX-FIELD "Source" ASCENDING 
+
+ADD INDEX "UpdateTS" ON "TPServiceMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" ASCENDING 
 
 ADD TABLE "UserAccess"
   AREA "Sta_Data_256"
@@ -6833,28 +7350,7 @@ ADD INDEX "UserCode" ON "WebSession"
   INDEX-FIELD "usercode" ASCENDING 
   INDEX-FIELD "sessiontype" ASCENDING 
 
-UPDATE INDEX "Delistat" OF "CallAlarm"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "CLI" OF "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "CustNum" OF "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MsSeq" OF "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "POS" OF "MSISDN"
-  BUFFER-POOL "Alternate"
-
 UPDATE INDEX "POS" OF "MSISDN_old"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "OrderID" OF "Order"
   BUFFER-POOL "Alternate"
 
 .
@@ -6862,4 +7358,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000142746
+0000153020
