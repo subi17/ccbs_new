@@ -673,6 +673,7 @@
 "HPD.Interface" "HPD.QueueOrdercanal.timeout" "I" 10 0 "" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HPD.Interface" "HPD.QueueOrdercanal.TransactSize" "I" 10000 0 "" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HPD.Interface" "HPD.QueueOrdercanal.UserName" "C" 0 0 "tms" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
+"HPD.Interface" "HPD.TimeBasedDumps" "C" 0 0 "HPD_EDRHistory,HPD_MobCDR,HPD_PrepCDR,HPD_PrepEDR,HPD_Order,HPD_Invoice,HPD_MsRequest,HPD_Payment,HPD_PrepaidRequest,HPD_ServiceLCounter" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "HRLP" "HRLPInProcDir" "C" 0 0 "/store/riftp/ifs/incoming/processed/" ? "" "" "" "" "" "" "" "" "" "" "Dir for processed HRLP files" no "1"
 "HRLP" "HRLPLandingpage" "C" 0 0 "https://pago-final.yoigo.com/?msisdn=#MSISDN" ? "" "" "" "" "" "" "" "" "" "" "Link to HR landing page" no "1"
 "HRLP" "HRLPListInDir" "C" 0 0 "/store/riftp/ifs/incoming/incoming/" ? "" "" "" "" "" "" "" "" "" "" "Dir for incoming HRLP file" no "1"
