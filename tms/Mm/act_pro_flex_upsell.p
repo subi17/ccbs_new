@@ -106,8 +106,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
            Else -> activate FLEX_.
          */
          message fGetActiveDSSId(mservicelimit.custnum, ldenow) VIEW-AS ALERT-BOX.
-         IF fIsDSSActive(mservicelimit.custnum, 
-                         ldeNow) 
+         IF fGetActiveDSSId(mservicelimit.custnum, ldenow) > "" 
          THEN DO:
             /*Select related DSS upsell*/
             IF servicelimit.groupcode MATCHES "*FLEX_500MB_UPSELL" THEN
@@ -144,7 +143,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                IF lcError EQ "" THEN lcError = "OK".
              END.  
              ELSE DO:
-               lcError = "Not allowed Upsell". 
+               lcError = "Not allowed Upsell " + lcUpsell. 
              END.
              lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
                         servicelimit.groupcode + ";" + /*prev month upsell */
