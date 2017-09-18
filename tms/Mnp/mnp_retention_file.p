@@ -680,7 +680,9 @@ PROCEDURE pFileDump:
                                 Customer.Language,
                                 OUTPUT ldeSMSStamp).
 
-         IF lcRetentionSMSText > "" THEN DO:
+         IF lcRetentionSMSText > "" AND
+            ttMNPRetPlatform.SMSSender > ""     
+         THEN DO:
             lcRetentionSMSText = REPLACE(lcRetentionSMSText,"#SENDER", ttMNPRetPlatform.SMSSender).
 
             fMakeSchedSMS2(MobSub.CustNum,
