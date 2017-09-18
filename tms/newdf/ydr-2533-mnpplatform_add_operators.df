@@ -1,0 +1,7 @@
+ADD FIELD "Operators" OF "MNPRetPlatform" AS character
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Operators"
+  HELP "Operators"
+  ORDER 80
+
