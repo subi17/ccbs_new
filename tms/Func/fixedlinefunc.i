@@ -677,17 +677,22 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
              MobSub.MsStatus = {&MSSTATUS_BARRED})     BY MobSub.ActivationTS:
 
        IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+       
+       IF MobSub.MultiSimID  <> 0                       AND 
+          MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
 
        FIND LAST Order NO-LOCK WHERE 
                  Order.MsSeq      = MobSub.MsSeq              AND 
                  Order.CLIType    = MobSub.CLIType            AND 
                  Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
           LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+          IF NOT AVAIL Order THEN 
+             FIND LAST Order NO-LOCK WHERE 
+                       Order.MsSeq      = MobSub.MsSeq              AND 
+                       Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
+                LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
 
        IF NOT AVAIL Order THEN NEXT.          
-
-       IF MobSub.MultiSimID  <> 0                       AND 
-          MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
 
        liMainLineOrderId = Order.OrderId. 
 
