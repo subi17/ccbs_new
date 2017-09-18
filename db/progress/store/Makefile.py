@@ -46,14 +46,18 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
-    'sadachbia': {'common': '/db1/common/common',
-                  'ordercanal': '/db1/ordercanal/ordercanal',
-                  'mobile': '/db1/mobile/mobile',
-                  'counter': '/db1/counter/counter',
-                  'star': '/db1/star/star',
-                  'prepedr': '/db1/prepedr/prepedr',
-                  'fraudcdr': '/db1/fraudcdr/fraudcdr',
-                  'reratelog': '/db1/reratelog/reratelog'},
+    'sadachbia': {'common': '/apps/yoigo/db/progress/store/common',
+                  'ordercanal': '/apps/yoigo/db/progress/store/ordercanal',
+                  'mobile': '/apps/yoigo/db/progress/store/mobile',
+                  'counter': '/apps/yoigo/db/progress/store/counter',
+                  'star': '/apps/yoigo/db/progress/store/star',
+                  'prepedr': '/apps/yoigo/db/progress/store/prepedr',
+                  'fraudcdr': '/apps/yoigo/db/progress/store/fraudcdr',
+                  'reratelog': '/apps/yoigo/db/progress/store/reratelog',
+                  'mcdr': '/apps/yoigo/db/progress/store/mcdr',
+                  'mcdrdtl': '/apps/yoigo/db/progress/store/mcdrdtl',
+                  'prepcdr': '/apps/yoigo/db/progress/store/prepcdr',
+                  'roamcdr': '/apps/yoigo/db/progress/store/roamcdr'},
     'spica': {'common': 'alpheratz.int.asp.qvantel.net:common',
              'ordercanal': 'alpheratz.int.asp.qvantel.net:ordercanal',
              'mobile': 'alpheratz.int.asp.qvantel.net:mobile',
@@ -527,6 +531,9 @@ def migrate(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
+
     avail_migrations = sorted((x.group(1), int(x.group(2))) \
                        for x in [re.match(r'^((\d+)_.*)\.py$', y) \
                        for y in os.listdir(migrations_dir)] if x)
@@ -559,6 +566,9 @@ def status(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
+
     avail_migrations = sorted((x.group(1), int(x.group(2))) \
                        for x in [re.match(r'^((\d+)_.*)\.py$', y) \
                        for y in os.listdir(migrations_dir)] if x)
@@ -578,6 +588,9 @@ def history(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
 
     data = []
     for file in os.listdir(migcache_dir):
@@ -604,6 +617,9 @@ def upgrade(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
+
     global parameters
     assert len(parameters) == 1, 'which migration to upgrade?'
     mig = parameters[0]
@@ -619,6 +635,9 @@ def downgrade(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
 
     global parameters
     assert len(parameters) == 1, 'which migration to downgrade?'
@@ -661,6 +680,9 @@ def fixtures(*a):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Fixture loading is not allowed.')
+
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Fixture loading is not allowed.')
 
     tenantdict = {}
     tenant = None
