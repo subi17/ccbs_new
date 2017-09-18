@@ -18,7 +18,9 @@ pike = which('pike')
 if pike == None:
     raise PikeException("Cannot figure out pike location")
 
-if environment == 'development':
+if environment == 'slavedevelopment':
+    configfile = 'slavedevelopment_config.json'
+elif environment == 'development' and not os.path.exists(gethostname() + '_config.json'):
     configfile = 'development_config.json'
 else:
     configfile = gethostname() + '_config.json'
