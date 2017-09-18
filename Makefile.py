@@ -74,7 +74,7 @@ def initialize(*a):
 def relink_var(*a):
     if environment == 'safeproduction':
         vardir = '../var'
-    elif environment == 'development':
+    elif environment == 'development' or environment == 'slavedevelopment':
         vardir = 'var'
     else:
         return
