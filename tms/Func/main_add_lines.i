@@ -382,7 +382,8 @@ FUNCTION fAdditionalSimTermination RETURNS LOGICAL
             CLitype.CLIType = (IF lbMobsub.TariffBundle > ""
                                   THEN lbMobsub.TariffBundle
                                ELSE lbMobsub.CLIType)         AND
-            CLIType.LineType > 0:
+            (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+             CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
                
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
          fHasPendingSTCToMainLine(lbMobSub.Msseq)     THEN DO:
@@ -474,7 +475,8 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
             CLIType.CLIType = (IF lbMobSub.TariffBundle > "" 
                                   THEN lbMobSub.TariffBundle
                                ELSE lbMobSub.CLIType) AND
-            CLIType.LineType > 0:
+           (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+            CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
       
       /* check main line existence */
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
@@ -694,7 +696,8 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
                lbCLIType.CLIType = (IF lbMobsub.TariffBundle > ""
                                        THEN lbMobsub.TariffBundle
                                     ELSE lbMobsub.CLIType)         AND
-               lbCLIType.LineType > 0:
+              (lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+               lbCLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
 
          IF lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
             llgMainLine = YES.
