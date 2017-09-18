@@ -129,7 +129,8 @@ ELSE IF Order.Ordertype < 2 AND
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
                   CLIType.Brand       = gcBrand       AND
                   CLIType.CLIType     = Order.CLIType AND
-                  CLIType.LineType    > 0)            AND
+                 (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                  CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
                      OrderAction.Brand = gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
