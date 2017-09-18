@@ -1570,7 +1570,8 @@ PROCEDURE pGetPENALTYFEE:
    IF CAN-FIND(FIRST CLIType WHERE
                      CLIType.Brand = gcBrand AND
                      CLIType.CLItype = Order.CliType AND
-                     ClIType.LineType > 0) THEN DO:
+                    (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                     CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) THEN DO:
 
       IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN
          lcTariffType = fGetDataBundleInOrderAction(Order.OrderId,
