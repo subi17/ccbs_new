@@ -39,7 +39,7 @@ DEF VAR ldeActTime AS DECIMAL.
 DEF VAR ldeCheckMoment AS DECIMAL.
 DEF VAR ldaReadDate  AS DATE NO-UNDO.
 
-llgSimulate = TRUE. /*TRUE-> only log writing, FALSE->make real updates*/
+llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
 
 FUNCTION fPrintClitype RETURNS CHAR
    (iiMsSeq AS INT):
@@ -77,12 +77,7 @@ lcLogFile    = lcLogDir + "UpsellCronLog_" +
                       STRING(DAY(ldaReadDate),"99") +
                       REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
 
-
-/*Harad coding for testing*/
-ldeCheckMoment = ldeNow.
-
 lcUpsellList = "FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
-
 
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
@@ -94,18 +89,11 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
       FOR EACH mservicelimit NO-LOCK WHERE
                mservicelimit.slseq EQ servicelimit.slseq AND
                mservicelimit.dialtype EQ servicelimit.dialtype AND
-/*               mservicelimit.EndTS EQ ldeCheckMoment: /*previous month end*/ */
-/*test condition:*/
-               mservicelimit.EndTS > ldeNow AND
-               (mservicelimit.msseq EQ 70088777 /*OR
-               mservicelimit.msseq EQ 70088804 */ ):
-
-/*end of test*/               
+               mservicelimit.EndTS EQ ldeCheckMoment: /*previous month end*/ 
          /*Decide upsell that must be activated.
            If DSS is active -> activate DSS_FLEX_ 
            Else -> activate FLEX_.
          */
-         message fGetActiveDSSId(mservicelimit.custnum, ldenow) VIEW-AS ALERT-BOX.
          IF fGetActiveDSSId(mservicelimit.custnum, ldenow) > "" 
          THEN DO:
             /*Select related DSS upsell*/
