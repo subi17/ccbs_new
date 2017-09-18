@@ -148,7 +148,8 @@ FOR EACH Order WHERE
    
    liOrdersToday = liOrdersToday + 1.
    CASE Order.OrderChannel: 
-      WHEN "pos" OR WHEN "fusion_pos" then liPosSales = liPosSales + 1.
+      WHEN "pos" OR WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" then 
+         liPosSales = liPosSales + 1.
       WHEN "cc" OR WHEN "fusion_cc" then liCCSales = liCCSales + 1.
       WHEN "telesales" OR WHEN "fusion_telesales" then liTeleSales = liTeleSales + 1.
       WHEN "self" then liSelfSales = liSelfSales + 1.
