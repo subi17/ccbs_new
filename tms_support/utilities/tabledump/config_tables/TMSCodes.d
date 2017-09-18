@@ -1389,7 +1389,7 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
-"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "14" 1
+"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AE" "AON CROSS-SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
@@ -1402,6 +1402,7 @@
 "Salesman" "SmPrefix" "IFS" "AT" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AW" "AON WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "BA" "B12 Cross-Selling Outbound" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BE" "BYMOVIL EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BF" "Backoffice Fusion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BG" "Boulanger" "" "99" 0
@@ -1448,6 +1449,7 @@
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
 "Salesman" "SmPrefix" "IFS" "MI" "MARKTEL INBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "ML" "MARKTEL Retencion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
 "Salesman" "SmPrefix" "IFS" "MO" "MARKTEL ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1

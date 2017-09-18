@@ -5912,6 +5912,11 @@
 1 "" 3 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 4 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 5 "Samsung Galaxy J3 White" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Blanco" 0 "P034GJ3WC" "1" 12/09/17 31/12/49
+1 "" 2 "Samsung Galaxy J3 Blanco" 0 "P034GJ3WC" "1" 12/09/17 31/12/49
+1 "" 3 "Samsung Galaxy J3 Blanco" 0 "P034GJ3WC" "1" 12/09/17 31/12/49
+1 "" 4 "Samsung Galaxy J3 Blanco" 0 "P034GJ3WC" "1" 12/09/17 31/12/49
+1 "" 5 "Samsung Galaxy J3 White" 0 "P034GJ3WC" "1" 12/09/17 31/12/49
 1 "" 1 "Samsung Galaxy J3 Blanco con regalo Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
 1 "" 2 "Samsung Galaxy J3 Blanco con Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
 1 "" 3 "Samsung Galaxy J3 Blanco con Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
@@ -6381,16 +6386,16 @@
 1 "" 3 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
 1 "" 4 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
 1 "" 5 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
-1 "" 1 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 1 "Samsung Galaxy Note 8 Dorado con DeX" 0 "P034PT8DC" "1" 31/08/17 31/12/49
 1 "" 2 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
 1 "" 3 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
 1 "" 4 "Samsung Galaxy Note 8 Dorado + Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
-1 "" 5 "Samsung Galaxy Note 8 Gold with Dex" 0 "P034PT8DC" "1" 31/08/17 31/12/49
-1 "" 1 "Samsung Galaxy Note 8 Negro + Dex" 0 "P034PT8NC" "1" 31/08/17 31/12/49
+1 "" 5 "Samsung Galaxy Note 8 Gold with DeX gift" 0 "P034PT8DC" "1" 31/08/17 31/12/49
+1 "" 1 "Samsung Galaxy Note 8 Negro con DeX" 0 "P034PT8NC" "1" 31/08/17 31/12/49
 1 "" 2 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
 1 "" 3 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
 1 "" 4 "Samsung Galaxy Note 8 Negro" 0 "P034PT8NC" "1" 31/08/17 31/12/49
-1 "" 5 "Samsung Galaxy Note 8 Black with Dex" 0 "P034PT8NC" "1" 31/08/17 31/12/49
+1 "" 5 "Samsung Galaxy Note 8 Black with DeX gift" 0 "P034PT8NC" "1" 31/08/17 31/12/49
 1 "" 1 "Samsung S3370 táctil Rosa" 0 "P034S33P2" "1" 27/07/10 31/12/49
 1 "" 2 "Samsung S3370 táctil Rosa" 0 "P034S33P2" "1" 27/07/10 31/12/49
 1 "" 3 "Samsung S3370 táctil Rosa" 0 "P034S33P2" "1" 27/07/10 31/12/49
@@ -10735,10 +10740,10 @@
 1 "" 2 "TV Set Box" 0 "TVSTB" "1" 22/08/17 31/12/49
 1 "" 3 "TV Set Box" 0 "TVSTB" "1" 22/08/17 31/12/49
 1 "" 5 "TV Set Box" 0 "TVSTB" "1" 22/08/17 31/12/49
-1 "" 1 "" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
-1 "" 2 "" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
-1 "" 3 "" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
-1 "" 5 "" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 1 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 2 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 3 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 5 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
 1 "" 1 "Actualización Internet" 0 "UPGRADEDATA" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "UPGRADEDATA" "1" 01/03/12 31/03/12
 1 "" 2 "Actualització Internet" 0 "UPGRADEDATA" "1" 01/04/12 31/12/49
