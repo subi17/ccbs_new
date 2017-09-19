@@ -260,8 +260,9 @@ PROCEDURE pMakeCashInvoice:
    fSplitTS(INPUT Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
 
    /* not for pos,pre-activated and vip  */
-   IF LOOKUP(Order.OrderChannel,"pos,pre-act,vip,renewal_pos,renewal_pos_stc,fusion_pos
-                                 pos_pro,fusion_pos_pro") > 0
+   IF LOOKUP(Order.OrderChannel,
+             "pos,pre-act,vip,renewal_pos,renewal_pos_stc,fusion_pos," +
+             "pos_pro,fusion_pos_pro") > 0
    THEN DO:
       ocError = Order.OrderChannel + " order".
       RETURN.

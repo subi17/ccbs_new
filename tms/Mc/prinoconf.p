@@ -67,8 +67,9 @@ IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
 IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",4") > 0 THEN 
    RETURN "INFO:Status of order doesn't allow printing".
 
-IF LOOKUP(Order.OrderChannel,"pos,vip,gift,yoigo,renewal_pos,renewal_pos_stc,fusion_pos,
-                              pos_pro,fusion_pos_pro") > 0 THEN 
+IF LOOKUP(Order.OrderChannel,"pos,vip,gift,yoigo,renewal_pos," +
+                             "renewal_pos_stc,fusion_pos," +
+                             "pos_pro,fusion_pos_pro") > 0 THEN 
    RETURN "INFO:" + Order.OrderChannel + " order".
 
 IF Order.CLI = "" THEN RETURN "ERROR:MSISDN not defined".
