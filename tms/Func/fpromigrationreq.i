@@ -5,7 +5,6 @@
 
 &IF "{&FPROMIGRREQ_I}" NE "YES"
 &THEN
-
 &GLOBAL-DEFINE FPROMIGRREQ_I YES
 
 {Syst/commali.i}
@@ -21,7 +20,6 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
 
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF VAR ldActStamp AS DEC NO-UNDO.
-   DEF BUFFER bMsRequest FOR MsRequest.
 
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},

@@ -57,6 +57,7 @@ FUNCTION fGetSegment RETURNS CHAR
 
    DEF VAR lcCategory AS CHAR NO-UNDO.
 
+   IF iiCustNum > 0 THEN
    FIND FIRST bCustomer NO-LOCK  WHERE
               bCustomer.CustNum EQ iiCustNum
               NO-ERROR.
