@@ -288,7 +288,7 @@ PROCEDURE pPeriodicalContract:
       IF AVAIL bFTERMOrder AND
                ttAction.ActionKey EQ "FTERM12-100" AND 
                /*idActStamp > 20170911 AND*/
-               idActStamp < 20171001
+               idActStamp < 20171101
       THEN DO:
          ttAction.ActionKey = "FTERM8-100".
       END.
