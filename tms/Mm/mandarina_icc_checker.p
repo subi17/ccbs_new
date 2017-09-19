@@ -151,8 +151,6 @@ FOR EACH MsRequest NO-LOCK WHERE
    ELSE NEXT.
 END.
 
-
-
 /*End of ICC lookup */
 
 /*Update cunrent collection period end time to actionlog*/
