@@ -48,21 +48,32 @@ FUNCTION fIsSelfEmpl RETURNS LOGICAL
 END.
 
 FUNCTION fGetSegment RETURNS CHAR
-   (iiCustNum AS INT):
+   (iiCustNum AS INT,
+    iiorderId AS INT):
    DEF BUFFER bCustomer FOR Customer.
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF VAR lcCategory AS CHAR NO-UNDO.
    FIND FIRST bCustomer NO-LOCK  WHERE
               bCustomer.CustNum EQ iiCustNum
               NO-ERROR.
-   IF AVAIL bCustomer THEN DO:
+   IF NOT AVAIL bCustomer AND iiOrderid > 0 THEN DO:
+      FIND FIRST bOrdercustomer WHERE
+                 bOrdercustomer.brand EQ gcBrand AND
+                 bOrdercustomer.orderid EQ iiorderid AND
+                 bOrdercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+                 NO-LOCK NO-ERROR.
+      IF AVAIL bOrdercustomer THEN lcCategory = bOrdercustomer.category.
+   END.
+   ELSE lcCategory = bCustomer.category.
+   IF lcCategory > "" THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
                  CustCat.Brand = gcBrand AND
-                 CustCat.Category = bCustomer.Category
+                 CustCat.Category = lcCategory
                  NO-ERROR.
       IF AVAIL CustCat THEN
          RETURN CustCat.Segment.
-      RETURN "Consumer".
    END.
-   ELSE RETURN "-".
+   RETURN "Consumer".
 END.
 
 
@@ -177,6 +188,24 @@ FUNCTION fIs2PTariff RETURNS LOGICAL
    RETURN FALSE.
 END.
 
+/*Function returns True if a tariff can be defined as 2P tariff.
+NOTE: False is returned in real false cases and also in error cases. */
+FUNCTION fIs3PTariff RETURNS LOGICAL
+   (icCliType AS CHAR):
+
+   DEF BUFFER CLIType FOR CLIType.
+
+   FIND FIRST CLIType NO-LOCK WHERE
+              CLIType.Brand EQ Syst.Parameters:gcBrand AND
+              CLIType.CliType EQ icCLIType NO-ERROR.
+   IF AVAIL CliType AND
+            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+END.
+
+
 /*STC is restricted from Prepaid to postpaid and 2P*/
 FUNCTION fValidateProSTC RETURNS CHAR
    (iiCustomer AS INT,
@@ -206,9 +235,14 @@ FUNCTION fValidateProSTC RETURNS CHAR
 
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
-   IF fIs2PTariff(bNew.Clitype) THEN 
-      RETURN "STC to 2P is not allowed for Pro customer".
-      
+   IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
+      FIND FIRST Mobsub WHERE
+                 Mobsub.brand EQ gcbrand AND
+                 Mobsub.custnum EQ iiCustomer AND
+                 fIsConvergenceTariff(MobSub.clitype) NO-ERROR.
+      IF NOT AVAIL Mobsub THEN
+         RETURN "STC to 2P is not allowed for Pro customer".  /* Allowed only from 3P to 2P case YPPI-5 and if there is still convergent left */
+   END.   
    RETURN "".
 END.
 
@@ -226,6 +260,11 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
    END.
 
    RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
+END.
+FUNCTION fGetProFeemodel RETURNS CHAR (INPUT iiCliType AS CHAR):
+   IF INDEX(iiClitype,"300") > 0 THEN RETURN "CONTFH300MF".
+   ELSE IF INDEX(iiClitype,"50") > 0 THEN RETURN "CONTFH50MF".
+   ELSE RETURN "CONTDSLMF".
 END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR

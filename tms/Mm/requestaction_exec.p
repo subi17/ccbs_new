@@ -17,6 +17,7 @@
 {Syst/tmsconst.i}
 {Func/penaltyfee.i}
 {Func/fcustpl.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -189,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lbolSTCExemptPenalty AS LOGICAL NO-UNDO.
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+   DEF VAR lcBundleId AS CHAR NO-UNDO. 
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -267,6 +269,13 @@ PROCEDURE pPeriodicalContract:
          END.     
       END.
 
+      lcBundleId = ttAction.ActionKey.
+
+      IF lcBundleId MATCHES "FLEX*UPSELL" AND
+         fIsDSSActive(INPUT bOrigRequest.CustNum,
+                      INPUT bOrigRequest.ActStamp) THEN
+         lcBundleId = "DSS_" + lcBundleId.
+
       /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
       /*TODO remove after FTERM8 campaign period.*/
       DEF BUFFER bFTERMOrder FOR Order.
@@ -292,7 +301,7 @@ PROCEDURE pPeriodicalContract:
            (AVAILABLE Order AND fTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
       THEN liRequest = 1.
       ELSE liRequest = fPCActionRequest(liMsSeq,
-                                   ttAction.ActionKey,
+                                   lcBundleId,
                                    "act" + lcWaitFor,
                                    ldeContrCreStamp,
                                    llCreateFees,
