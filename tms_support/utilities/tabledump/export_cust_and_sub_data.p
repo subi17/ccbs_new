@@ -28,8 +28,8 @@ ASSIGN
    gcMaleListFile    = "malenamelist.txt" 
    gcFemaleListFile  = "femalenamelist.txt" 
    gcSurNameListFile = "surnamelist.txt" 
-   liCollectMax    = 10
-   llActiveSubs = true.
+   liCollectMax      = 10
+   llActiveSubs      = true.
 
 /* No need to touch lines below... */
 
@@ -535,7 +535,6 @@ PROCEDURE pExportCustomersAndDataRelated:
       fExportQuery(BUFFER SingleFee:HANDLE, lcWhere).
       fExportQuery(BUFFER CustomerReport:HANDLE, lcWhere).
       fExportQuery(BUFFER CustBal:HANDLE, lcWhere).
-      fExportQuery(BUFFER MServicelPool:HANDLE, lcWhere).
 
       lcWhere = SUBSTITUTE("InvCust = &1 AND DateSt >= &2", ttCustomer.CustNum, ldaDateSt).
       fExportQuery(BUFFER MobCDR:HANDLE, lcWhere).
@@ -589,6 +588,7 @@ PROCEDURE pExportCustomersAndDataRelated:
          fExportQuery(BUFFER IMSI:HANDLE, SUBSTITUTE(lcWhere,"IMSI",MobSub.IMSI)).
          lcWhere = SUBSTITUTE("CLI = '&1'", MobSub.CLI).
          fExportQuery(BUFFER MSISDN:HANDLE, lcWhere).
+         fExportQuery(BUFFER MSISDNNumber:HANDLE, lcWhere).
          fExportQuery(BUFFER CallAlarm:HANDLE, lcWhere).
          
          ASSIGN
