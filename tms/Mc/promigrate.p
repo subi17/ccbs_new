@@ -50,7 +50,8 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
               bClitype.clitype EQ bMobsub.clitype NO-ERROR.
    IF NOT AVAIL bClitype THEN lcError = "ERROR: Unknown Clitype".
 
-   IF NOT fIsSelfEmpl(bcustomer.category) THEN 
+   IF LOOKUP(bcustomer.CustIdType,"NIF,NIE") > 0 AND 
+             NOT fIsSelfEmpl(bcustomer.category) THEN 
       lcError = "ERROR: Not selfemployed".
    IF lcError > "" THEN DO:
       fReqStatus(3,lcError).
