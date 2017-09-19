@@ -666,14 +666,12 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST Region WHERE
               Region.Region = AgreeCustomer.Region
    NO-LOCK NO-ERROR.
-   IF AVAIL Region THEN
-      lcCustRegi = Region.RgName.
+   lcCustRegi = Region.RgName.
 
    FIND FIRST Region WHERE
               Region.Region = DelivCustomer.Region
    NO-LOCK NO-ERROR.
-   IF AVAIL Region THEN
-      lcDeliRegi = Region.RgName.
+   lcDeliRegi = Region.RgName.
    
    get_account_data(Order.CustNum, OUTPUT lcUID, OUTPUT lcPWD).
 
@@ -1466,8 +1464,7 @@ FUNCTION fDelivDevice RETURNS LOG
       FIND FIRST Region WHERE
                  Region.Region = AgreeCustomer.Region
       NO-LOCK NO-ERROR.
-      IF AVAIL Region THEN
-         lcCustRegi = Region.RgName.
+      lcCustRegi = Region.RgName.
    END.
 
    IF DelivCustomer.Region > "" THEN DO:
@@ -1480,8 +1477,7 @@ FUNCTION fDelivDevice RETURNS LOG
          FIND FIRST Region WHERE
                     Region.Region = DelivCustomer.Region
          NO-LOCK NO-ERROR.
-         IF AVAIL Region THEN
-            lcDeliRegi = Region.RgName.
+         lcDeliRegi = Region.RgName.
       END.
    END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
@@ -1701,13 +1697,11 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
    FIND FIRST CliType WHERE
               Clitype.brand EQ gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
-   IF AVAIL CliType THEN DO:
-      IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
-         ASSIGN
-            FusionMessage.UpdateTS = fMakeTS()
-            FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
-         NEXT.   
-      END.
+   IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      NEXT.   
    END.
    IF fDelivDevice("Router") THEN ASSIGN
       FusionMessage.UpdateTS = fMakeTS()
