@@ -95,6 +95,10 @@ IF INDEX(pcChannel,"PRO") > 0 THEN
     llProChannel = TRUE.
 
 FUNCTION fCheckMigration RETURNS LOG ():
+
+   DEF BUFFER Order FOR Order.
+   DEF BUFFER OrderCustomer FOR OrderCustomer.
+
    IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
       ASSIGN
          llOrderAllowed = FALSE
@@ -107,15 +111,24 @@ FUNCTION fCheckMigration RETURNS LOG ():
              lcReason = "PRO migration not possible because of multiple mobile lines".
       ELSE IF AVAIL MobSub THEN
       DO:
-         IF CAN-FIND(First Order WHERE
-                           Order.brand EQ "1" AND
-                           Order.CustNum EQ mobsub.custnum AND
-                           Order.msseq NE mobsub.msseq AND
-                           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0) THEN
+        
+         FOR EACH OrderCustomer NO-LOCK WHERE   
+                  OrderCustomer.Brand      EQ gcBrand AND 
+                  OrderCustomer.CustId     EQ Customer.OrgID AND
+                  OrderCustomer.CustIdType EQ Customer.CustIDType AND
+                  OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+            FIRST Order NO-LOCK WHERE
+                  Order.Brand              EQ gcBrand AND
+                  Order.orderid            EQ OrderCustomer.Orderid AND
+                  Order.msseq NE mobsub.msseq AND
+                 LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
             ASSIGN
                llOrderAllowed = FALSE
                lcReason = "PRO migration not possible because of active non pro orders".
-         ELSE IF Mobsub.paytype THEN
+            LEAVE.
+         END.
+         
+         IF Mobsub.paytype THEN
             ASSIGN
                llOrderAllowed = FALSE
                lcReason = "PRO migration not possible because of prepaid subscription".

@@ -151,7 +151,7 @@ END.
 
 /* Create flex_upsell* or dss_flex_upsell* based on dss activity 
    YPPI-1 EXTRAL-108 */
-FOR EACH OrderAction WHERE
+FOR EACH OrderAction EXCLUSIVE-LOCK WHERE
          OrderAction.Brand     = gcBrand AND
          OrderAction.OrderId   = iiOrderId AND
          OrderAction.ItemType = "BundleItem" AND

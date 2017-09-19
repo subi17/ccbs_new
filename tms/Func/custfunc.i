@@ -13,8 +13,6 @@
 &THEN
 &GLOBAL-DEFINE YOIGOCUSTFUNC_I YES
 
-DEF BUFFER bTpService FOR TPService.
-
 /* Find correct customer segment */
 FUNCTION fgetCustSegment RETURNS CHAR
    (INPUT icIdType AS CHAR,
@@ -72,6 +70,10 @@ FUNCTION fgetCustSegment RETURNS CHAR
 END.
 
 FUNCTION fhasTVService RETURNS LOGICAL (INPUT iiMsseq AS INT):
+
+   DEF BUFFER TPService FOR TPService.
+   DEF BUFFER bTpService FOR TPService.
+
    FIND FIRST TPService WHERE TPService.MsSeq EQ iiMsSeq AND
               TPService.Operation EQ "ACTIVATION" AND
               TPService.ServType  EQ "Television" AND

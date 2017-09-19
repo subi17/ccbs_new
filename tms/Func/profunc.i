@@ -50,13 +50,19 @@ END.
 FUNCTION fGetSegment RETURNS CHAR
    (iiCustNum AS INT,
     iiorderId AS INT):
+
    DEF BUFFER bCustomer FOR Customer.
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF BUFFER CustCat FOR CustCat.
+
    DEF VAR lcCategory AS CHAR NO-UNDO.
+
    FIND FIRST bCustomer NO-LOCK  WHERE
               bCustomer.CustNum EQ iiCustNum
               NO-ERROR.
-   IF NOT AVAIL bCustomer AND iiOrderid > 0 THEN DO:
+
+   IF AVAIL bCustomer THEN lcCategory = bCustomer.category.
+   ELSE IF iiOrderid > 0 THEN DO:
       FIND FIRST bOrdercustomer WHERE
                  bOrdercustomer.brand EQ gcBrand AND
                  bOrdercustomer.orderid EQ iiorderid AND
@@ -64,7 +70,7 @@ FUNCTION fGetSegment RETURNS CHAR
                  NO-LOCK NO-ERROR.
       IF AVAIL bOrdercustomer THEN lcCategory = bOrdercustomer.category.
    END.
-   ELSE lcCategory = bCustomer.category.
+
    IF lcCategory > "" THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
                  CustCat.Brand = gcBrand AND
@@ -215,6 +221,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
    DEF BUFFER bCurr FOR CLIType.
    DEF BUFFER bNew FOR CLIType.
    DEF BUFFER Customer FOR Customer.
+   DEF BUFFER mobsub FOR mobsub.
    
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum EQ iiCustomer NO-ERROR.

@@ -617,7 +617,9 @@ fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL52",1,"DayCamp
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 
 /* Azul 20 */
+/*
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL59",1,"DayCampaign","VOICE5000").
+*/
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTDSL59",1,"DayCampaign","INT_VOICE100").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
@@ -655,7 +657,9 @@ fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH52_50",1,"DayCa
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 
 /* Azul 50 */
+/*
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH59_50",1,"DayCampaign","VOICE5000").
+*/
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH59_50",1,"DayCampaign","INT_VOICE100").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
@@ -693,7 +697,8 @@ fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH62_300",1,"DayC
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 
 /* Azul 300 */
-fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","VOICE5000").
+/*fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","VOICE5000").
+*/
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
 fcreateRequestAction({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}, "CONTFH69_300",1,"DayCampaign","INT_VOICE100").
 fCreateRequestActionRule(liActionID, "ReqIParam4", "1").
