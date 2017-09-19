@@ -74,17 +74,19 @@ FUNCTION fhasTVService RETURNS LOGICAL (INPUT iiMsseq AS INT):
    DEF BUFFER TPService FOR TPService.
    DEF BUFFER bTpService FOR TPService.
 
-   FIND FIRST TPService WHERE TPService.MsSeq EQ iiMsSeq AND
+   FIND FIRST TPService WHERE 
+              TPService.MsSeq EQ iiMsSeq AND
               TPService.Operation EQ "ACTIVATION" AND
               TPService.ServType  EQ "Television" AND
               TPService.servStatus NE "ERROR" NO-LOCK NO-ERROR.
    IF NOT AVAIL TPService THEN RETURN FALSE. /* No active TV Service */
 
    FIND LAST bTPService WHERE 
+             bTPService.MsSeq EQ iiMsSeq AND
              bTPService.createdts GT TPService.createdts AND
              bTPService.ServStatus EQ "HANDLED" AND 
-             TPService.Operation = "DEACTIVATION" AND
-             TPService.ServType  = "Television"
+             bTPService.Operation = "DEACTIVATION" AND
+             bTPService.ServType  = "Television"
              NO-LOCK NO-ERROR.
 
    IF AVAIL bTPService THEN RETURN FALSE. /* Deactivated */
