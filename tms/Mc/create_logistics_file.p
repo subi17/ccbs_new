@@ -666,12 +666,14 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST Region WHERE
               Region.Region = AgreeCustomer.Region
    NO-LOCK NO-ERROR.
-   lcCustRegi = Region.RgName.
+   IF AVAIL Region THEN
+      lcCustRegi = Region.RgName.
 
    FIND FIRST Region WHERE
               Region.Region = DelivCustomer.Region
    NO-LOCK NO-ERROR.
-   lcDeliRegi = Region.RgName.
+   IF AVAIL Region THEN
+      lcDeliRegi = Region.RgName.
    
    get_account_data(Order.CustNum, OUTPUT lcUID, OUTPUT lcPWD).
 
@@ -1302,7 +1304,7 @@ FUNCTION fDelivSIM RETURNS LOG
    lcMainOrderId = "".
    FIND FIRST CliType NO-LOCK WHERE 
       CliType.CliType = Order.CliType NO-ERROR.
-      IF AVAIL CliType THEN
+      IF AVAIL CliType THEN DO:
          IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} OR
             CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN
             FOR EACH bufOrder OF Order NO-LOCK WHERE
@@ -1320,15 +1322,18 @@ FUNCTION fDelivSIM RETURNS LOG
                   llDespachar = TRUE.
                LEAVE.
             END.
+      END.
 
    /* Check if router delivered and terminal can be delivered */
    IF llDextraInvoice THEN DO:
       FIND FIRST OrderDelivery NO-LOCK WHERE
          OrderDelivery.OrderId = Order.OrderId NO-ERROR.
-         IF OrderDelivery.LOStatusId = 99998 THEN
-            llDespachar = TRUE.
-         ELSE
-            llDespachar = FALSE.
+         IF AVAIL OrderDelivery THEN DO:
+            IF OrderDelivery.LOStatusId = 99998 THEN
+               llDespachar = TRUE.
+            ELSE
+               llDespachar = FALSE.
+         END.
    END.
    /* GAP018 end */
 
@@ -1461,7 +1466,8 @@ FUNCTION fDelivDevice RETURNS LOG
       FIND FIRST Region WHERE
                  Region.Region = AgreeCustomer.Region
       NO-LOCK NO-ERROR.
-      lcCustRegi = Region.RgName.
+      IF AVAIL Region THEN
+         lcCustRegi = Region.RgName.
    END.
 
    IF DelivCustomer.Region > "" THEN DO:
@@ -1474,7 +1480,8 @@ FUNCTION fDelivDevice RETURNS LOG
          FIND FIRST Region WHERE
                     Region.Region = DelivCustomer.Region
          NO-LOCK NO-ERROR.
-         lcDeliRegi = Region.RgName.
+         IF AVAIL Region THEN
+            lcDeliRegi = Region.RgName.
       END.
    END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
@@ -1694,11 +1701,13 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
    FIND FIRST CliType WHERE
               Clitype.brand EQ gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
-   IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
-      ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
-         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
-      NEXT.   
+   IF AVAIL CliType THEN DO:
+      IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
+         ASSIGN
+            FusionMessage.UpdateTS = fMakeTS()
+            FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+         NEXT.   
+      END.
    END.
    IF fDelivDevice("Router") THEN ASSIGN
       FusionMessage.UpdateTS = fMakeTS()
