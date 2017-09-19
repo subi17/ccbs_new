@@ -145,7 +145,6 @@ FOR EACH MsRequest NO-LOCK WHERE
             (IF llgReqDone THEN "REMOVE"
              ELSE "ERROR:" + lcError)
             SKIP.
-         /* TODO: Source setting for DUMP purposes. */              
       END.
       ELSE NEXT. /*do not remove other commands*/
    END.
