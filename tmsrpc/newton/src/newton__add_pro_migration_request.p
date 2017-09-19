@@ -15,22 +15,16 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/fcreatereq.i}
-{Mnp/mnp.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
-{Func/freacmobsub.i}
 {Func/fpromigrationreq.i}
 
 DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
-DEFINE VARIABLE ldActStamp        AS DECIMAL     NO-UNDO.
 DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE lcResult          AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE lcStruct          AS CHARACTER   NO-UNDO.
 DEFINE VARIABLE pcMigrStruct      AS CHARACTER   NO-UNDO.
-
-DEFINE BUFFER lbMobSub            FOR MobSub.
-DEFINE BUFFER bTermMobSub         FOR TermMobSub.
+DEFINE VARIABLE pcTenant          AS CHAR NO-UNDO INIT "Yoigo".
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -46,6 +40,8 @@ piMsSeq  = get_pos_int(pcMigrStruct, "msseq").
 katun    = "VISTA_" + get_string(pcMigrStruct, "salesman_id").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FIND FIRST Mobsub WHERE 
            Mobsub.msseq EQ piMsseq NO-LOCK NO-ERROR.

@@ -18,13 +18,8 @@ DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 DEF BUFFER bsubReq FOR MSRequest.
 
 DEF VAR lcCategory AS CHAR.
-DEF BUFFER bMobsub FOR Mobsub.
-DEF BUFFER bCustomer FOR Customer.
-DEF BUFFER bClitype FOR Clitype.
-DEF BUFFER bDaycampaign FOR Daycampaign. 
 DEF VAR lhCustomer AS HANDLE NO-UNDO.
 DEF VAR lcCharValue AS CHAR NO-UNDO.
-DEF VAR lcContract AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR liOrigStatus AS INT NO-UNDO.
 
@@ -39,64 +34,76 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
 
-   FIND FIRST bMobSub NO-LOCK WHERE
-              bMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
-   IF NOT AVAIL bMobsub THEN lcError = "ERROR: NO Mobsub".
-   FIND FIRST bCustomer WHERE
-              bCustomer.custnum EQ bmobsub.agrcust NO-ERROR.
-   IF NOT AVAIL bCustomer THEN lcError = "ERROR: NO Customer".
-   FIND FIRST bClitype WHERE 
-              bClitype.brand EQ Syst.Parameters:gcBrand AND
-              bClitype.clitype EQ bMobsub.clitype NO-ERROR.
-   IF NOT AVAIL bClitype THEN lcError = "ERROR: Unknown Clitype".
+   FIND FIRST Mobsub NO-LOCK WHERE
+              Mobsub.MsSeq = MsRequest.MsSeq NO-ERROR.
+   IF NOT AVAIL Mobsub THEN lcError = "ERROR: NO Mobsub".
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.custnum EQ Mobsub.agrcust NO-ERROR.
+   IF NOT AVAIL Customer THEN lcError = "ERROR: NO Customer".
+   FIND FIRST CLIType WHERE 
+              CLIType.brand EQ Syst.Parameters:gcBrand AND
+              CLIType.clitype EQ Mobsub.clitype NO-ERROR.
+   IF NOT AVAIL CLIType THEN lcError = "ERROR: Unknown Clitype".
 
-   IF LOOKUP(bcustomer.CustIdType,"NIF,NIE") > 0 AND 
-             NOT fIsSelfEmpl(bcustomer.category) THEN 
+   IF (LOOKUP(Customer.CustIdType,"NIF,NIE") > 0 AND 
+       NOT fIsSelfEmpl(Customer.category)) OR
+       Customer.CustIdType EQ "passport" THEN 
       lcError = "ERROR: Not selfemployed".
    IF lcError > "" THEN DO:
       fReqStatus(3,lcError).
       RETURN lcError.
    END.
-   fgetCustSegment(bCustomer.custidtype, fIsSelfEmpl(bcustomer.category),
+   fgetCustSegment(Customer.custidtype, fIsSelfEmpl(Customer.category),
                    TRUE, OUTPUT lcCategory).
+
+   IF NOT fIsPro(lccategory) THEN DO:
+      fReqStatus(3,SUBST("New category is not pro &1",lccategory)).
+      RETURN lcError.
+   END.
+
    DO TRANSACTION:
-      IF lcCategory NE bCustomer.category AND
-         lcCategory NE "" THEN DO:
-         lhCustomer = BUFFER bCustomer:HANDLE.
+
+      IF lcCategory NE Customer.category  THEN DO:
+         FIND CURRENT Customer EXCLUSIVE-LOCK.
+         lhCustomer = BUFFER Customer:HANDLE.
          RUN StarEventInitialize(lhCustomer).
          RUN StarEventSetOldBuffer ( lhCustomer ).
-         bcustomer.category = lcCategory.
+         Customer.category = lcCategory.
          RUN StarEventMakeModifyEvent(lhCustomer).
       END.
 
-      IF fIsPro(lccategory) THEN DO:
-         RUN Mc/creasfee.p (bMobSub.CustNum,
-                       bMobSub.MsSeq,
-                       Today,
-                       "FeeModel",
-                       fGetProFeemodel(bMobsub.clitype),
-                       9,
-                       ?,
-                       "Pro Migrate",    /* memo   */
-                       FALSE,           /* no messages to screen */
-                       katun,
-                       "ProMigrate",
-                       0,
-                       "",
-                       "",
-                       OUTPUT lcCharValue).
+      RUN Mc/creasfee.p (Mobsub.CustNum,
+                    Mobsub.MsSeq,
+                    Today,
+                    "FeeModel",
+                    fGetProFeemodel(Mobsub.clitype),
+                    9,
+                    ?,
+                    "Pro Migrate",    /* memo   */
+                    FALSE,           /* no messages to screen */
+                    katun,
+                    "ProMigrate",
+                    0,
+                    "",
+                    "",
+                    OUTPUT lcCharValue).
+
+      IF lcCharValue BEGINS "ERROR:" OR lcCharValue BEGINS "0" THEN DO:
+         fReqStatus(3,SUBST("Pro fee creation failed: &1",lcCharValue)).
+         RETURN lcError.
       END.
+
       /* Make subrequest by orderactions and add mandatory field true for
       getting this main process wait until handled */
       RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
-                                bMobSub.CLIType,
+                                Mobsub.CLIType,
                                 0,
                                 0,
                                 0,
                                 TRUE, /* create fees */
                                 {&REQUEST_SOURCE_MIGRATION},
                                 {&REQUEST_ACTIONLIST_ALL}).
-      FOR EACH bSubReq WHERE
+      FOR EACH bSubReq EXCLUSIVE-LOCK WHERE
                bsubreq.Brand     = gcBrand AND
                bsubreq.origRequest = iiRequest:
          bsubreq.mandatory = 1.
@@ -123,5 +130,7 @@ ELSE IF liOrigStatus EQ {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:
    fReqStatus(2,"").
 END.
 
-fCleanEventObjects(). 
+FINALLY:
+   fCleanEventObjects(). 
+END.
 

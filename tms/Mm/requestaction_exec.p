@@ -279,19 +279,15 @@ PROCEDURE pPeriodicalContract:
       /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
       /*TODO remove after FTERM8 campaign period.*/
       DEF BUFFER bFTERMOrder FOR Order.
-      FIND FIRST bFTERMOrder NO-LOCK WHERE 
-                 bFTERMOrder.brand EQ "1" AND
-                 bFTERMOrder.OrderID EQ iiOrderID AND
-                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0 
-                 NO-ERROR.
-      /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
-      IF AVAIL bFTERMOrder AND
-               ttAction.ActionKey EQ "FTERM12-100" AND 
-               /*idActStamp > 20170911 AND*/
-               idActStamp < 20171001
-      THEN DO:
-         ttAction.ActionKey = "FTERM8-100".
-      END.
+       
+      IF ttAction.ActionKey EQ "FTERM12-100" AND 
+         idActStamp < 20171001 AND
+         CAN-FIND(FIRST bFTERMOrder NO-LOCK WHERE 
+                        bFTERMOrder.brand EQ gcBrand AND
+                        bFTERMOrder.OrderID EQ iiOrderID AND
+                  INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0)
+      THEN lcBundleId = "FTERM8-100".
+
       /*End of FLP temporary change*/
 
       /* Temporary check due to ongoing orders created before 5.6.2017
