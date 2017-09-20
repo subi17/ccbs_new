@@ -322,6 +322,7 @@ ELSE DO:
                Customer.ZipCode         = OrderCustomer.ZipCode
                Customer.PostOffice      = OrderCustomer.PostOffice
                Customer.Region          = OrderCustomer.Region
+               Customer.InvGroup        = fDefInvGroup(OrderCustomer.Region)
                Customer.Country         = OrderCustomer.Country
                Customer.DirMarkEmail    = OrderCustomer.OperEMailMarketing
                Customer.DirMarkPOST     = OrderCustomer.OperPostMarketing
