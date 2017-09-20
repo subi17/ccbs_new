@@ -626,7 +626,8 @@ PROCEDURE pContractActivation:
    END. /* IF lcDCEvent = {&DSS} AND */
    ELSE IF (lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
       lcDCEvent EQ  "DSS200_UPSELL" OR
-      lcDCEvent BEGINS "DSS2_UPSELL") AND
+      lcDCEvent BEGINS "DSS2_UPSELL" OR 
+      lcDCEvent MATCHES "DSS*FLEX*UPSELL") AND
       NOT fIsDSSActive(INPUT MsOwner.CustNum,
                        INPUT MsRequest.ActStamp) THEN DO:
       fReqStatus(3,"DSS bundle is not active").
@@ -1092,6 +1093,7 @@ PROCEDURE pContractActivation:
       RUN Mc/creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
                          lcDCEvent EQ  "DSS200_UPSELL" OR
+                         lcDCEvent MATCHES "DSS*FLEX*UPSELL" OR
                          lcDCEvent = "DSS2_UPSELL") THEN liDSSMsSeq
                      ELSE MsRequest.MsSeq),
                     ldtFromDate,
@@ -1268,7 +1270,8 @@ PROCEDURE pContractActivation:
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
       lcDCEvent EQ  "DSS200_UPSELL" OR
-      lcDCEvent BEGINS "DSS2_UPSELL" THEN
+      lcDCEvent BEGINS "DSS2_UPSELL" OR 
+      lcDCEvent MATCHES "DSS*FLEX*UPSELL" THEN
       RUN pUpdateDSSNetworkLimit(INPUT MsOwner.MsSeq,
                                  INPUT MsOwner.CustNum,
                                  INPUT ldeDSSUpsellLimit,

@@ -1499,8 +1499,6 @@ ELSE IF INDEX(pcChannel,"PRO") > 0 THEN
 DO:
     IF CliType.PayType = {&CLITYPE_PAYTYPE_PREPAID} THEN     
         RETURN appl_err("Prepaid subscriptions are not allowed for PRO customer(s)").
-    ELSE IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN    
-        RETURN appl_err("Fixed only subscription types are not allowed for PRO customer(s)").
 END.
 
 /* Fixed only convergent subscription types */
