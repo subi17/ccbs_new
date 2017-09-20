@@ -193,6 +193,20 @@ FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
 
 END.
 
+/* Check if FixedOnly 2P tariff */
+FUNCTION fIsFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN
+      RETURN TRUE.
+   RETURN FALSE.
+END.
+
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    (icCLITypeConv    AS CHARACTER,
@@ -298,13 +312,15 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
+   DEFINE BUFFER Customer       FOR Customer.
+   DEFINE BUFFER CustCat        FOR CustCat.
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
    lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
-       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
+       EACH CustCat WHERE CustCat.Brand = Syst.Parameters:gcBrand AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
        EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
        EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK,
        FIRST bOrderFusion WHERE bOrderFusion.Brand = Syst.Parameters:gcBrand AND bOrderFusion.OrderID = bOrder.OrderID NO-LOCK,
@@ -331,6 +347,8 @@ FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
+   DEFINE BUFFER Customer       FOR Customer.
+   DEFINE BUFFER CustCat        FOR CustCat.
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 

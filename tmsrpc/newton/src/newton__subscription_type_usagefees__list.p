@@ -10,6 +10,6 @@ DEF VAR lcQuery AS CHARACTER NO-UNDO.
 
 lcQuery = 'FOR EACH CLIType NO-LOCK WHERE
                     CLIType.Brand   = "1" AND
-                    CLIType.WebStatusCode > 0'.
+                    CLIType.WebStatusCode > 0 TENANT-WHERE TENANT-ID() > -1'.
 
 fListQuery("CLIType",lcQuery,"CLIType").
