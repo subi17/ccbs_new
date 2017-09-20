@@ -1,7 +1,7 @@
 /**
  * Get active mnp retention file rules 
  *
- * @input ;empty
+ * @input  brand;string;mandatory
  * @output array or struct;mnp retention collection rules
  * @struct id;int;
            paytype;string;CONT/TARJ
@@ -21,8 +21,15 @@ gcBrand = "1".
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR resp_array AS CHARACTER NO-UNDO.
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string") = ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
       
