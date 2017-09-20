@@ -21,6 +21,39 @@
 {Func/orderfunc.i}
 {Func/orderchk.i}
 
+FUNCTION fcheckSMSsendingtime RETURNS DECIMAL
+(INPUT ideActTS        AS DECIMAL).
+
+DEF VAR ldaButtonDate   AS DATE NO-UNDO.
+DEF VAR liButtonSeconds AS INTEGER  NO-UNDO.
+DEF VAR lIniSeconds     AS INTEGER   NO-UNDO.
+DEF VAR lEndSeconds     AS INTEGER   NO-UNDO.
+DEF VAR ldsendingstamp  AS DECIMAL   NO-UNDO.
+
+   fSplitTS(ideActTS,ldaButtonDate,liButtonSeconds).   
+   ldsendingstamp = ideActTS.
+   
+   /* ie. "41400-63000" Send between 11:30-17:30 YDR-2594 */
+   ASSIGN /* 11:30-17:30 */
+      lIniSeconds = 41400
+      lEndSeconds = 63000.      
+
+   /* If is too late, schedule to start next morning */
+   IF (liButtonSeconds > lEndSeconds) THEN
+   DO:
+      ldaButtonDate = ADD-INTERVAL (ldaButtonDate, 1, "days").
+      ldsendingstamp = fHMS2TS(ldaButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+   END.
+
+   /* If is too early, schedule to start when window opens */
+   IF (liButtonSeconds < lIniSeconds) THEN
+   DO:
+      ldsendingstamp = fHMS2TS(ldaButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+   END.
+   RETURN ldsendingstamp.
+   
+END.
+
 FUNCTION fGetSpecialDelTypes RETURNS CHARACTER:
 
    DEFINE BUFFER TMSCodes FOR TMSCodes.
@@ -93,9 +126,15 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
             lcAlarmMess = REPLACE(lcAlarmMess,"#PORTDATE",lcDate).
       END.
       WHEN "MNPReject" OR WHEN
-           "MNPIdentDirect" OR WHEN
            "MNPIdentPos" THEN ASSIGN
               lcAlarmMess = REPLACE(lcAlarmMess,"#MNPID",pcFormReq).
+
+      WHEN "MNPIdentDirect" THEN ASSIGN
+              lcAlarmMess = REPLACE(lcAlarmMess,"#MNPID",pcFormReq)
+              ldeActStamp = fcheckSMSsendingtime(ldeActStamp).
+
+      WHEN "MNPIccidPos" THEN ASSIGN
+              ldeActStamp = fcheckSMSsendingtime(ldeActStamp).
 
       WHEN "MNPFInRemPos" OR WHEN
            "MNPFinRemDirect" THEN DO:
