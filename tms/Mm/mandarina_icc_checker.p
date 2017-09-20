@@ -131,7 +131,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          /*The last LP command was Mandarina LP redirection setting
            -> this must be cancelled*/
          llgReqDone = fMakeLPCommandRequest(MsRequest.MsSeq,
-                                            "REMOVE",
+                                            "remove",
                                             MsRequest.CustNum,
                                             "Redirection removed",
                                             "Redirection removed, reason: ICC",
@@ -142,7 +142,7 @@ FOR EACH MsRequest NO-LOCK WHERE
             STRING(TIME,"hh:mm:ss") + ";" +  
             STRING(MsRequest.MsSeq) + ";" +
             STRING(MsRequest.CustNum) + ";" + 
-            (IF llgReqDone THEN "REMOVE"
+            (IF llgReqDone THEN "remove"
              ELSE "ERROR:" + lcError)
             SKIP.
          /* TODO: Source setting for DUMP purposes. */              

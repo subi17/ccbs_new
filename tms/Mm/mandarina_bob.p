@@ -239,7 +239,7 @@ REPEAT:
       END.  
       ELSE DO: /* lcAction EQ "off" */
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                                /*Subscription identifier*/
-                                            INPUT "REMOVE",         
+                                            INPUT "remove",         
                                             INPUT mobsub.CustNum,                              /*Customer number for memo*/
                                             INPUT (IF LcLP EQ "Mandarina1"                      /*Memo title*/ 
                                                    THEN "LP1 - Migración red - Desactivada"
