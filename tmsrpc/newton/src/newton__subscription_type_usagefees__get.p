@@ -30,43 +30,6 @@ DEF VAR lcFixed2FixedStruct  AS CHAR NO-UNDO.
 DEF VAR lcFixed2MobileStruct AS CHAR NO-UNDO.
 DEF VAR lcFixedLineBB        AS CHAR NO-UNDO.
 
-DEFINE TEMP-TABLE ttTariff    NO-UNDO LIKE Tariff.
-DEFINE TEMP-TABLE ttPListConf NO-UNDO LIKE PListConf.
-DEFINE TEMP-TABLE ttPriceList NO-UNDO LIKE PriceList.
-
-FUNCTION fFillTariff RETURNS LOGICAL:
-
-   EMPTY TEMP-TABLE ttTariff.
-
-   FOR EACH Tariff NO-LOCK WHERE Tariff.Brand = "1":
-      CREATE ttTariff.
-      BUFFER-COPY Tariff TO ttTariff.
-   END.
-
-END FUNCTION.
-
-FUNCTION fFillPListConf RETURNS LOGICAL:
-
-   EMPTY TEMP-TABLE ttPListConf.
-   
-   FOR EACH PListConf NO-LOCK WHERE PListConf.Brand = "1":
-      CREATE ttPListConf.
-      BUFFER-COPY PListConf TO ttPListConf.
-   END.
-   
-END FUNCTION.
-
-FUNCTION fFillPriceList RETURNS LOGICAL:
-
-   EMPTY TEMP-TABLE ttPriceList.
-   
-   FOR EACH PriceList NO-LOCK WHERE PriceList.Brand = "1":  
-      CREATE ttPriceList.
-      BUFFER-COPY PriceList TO ttPriceList.
-   END.
-   
-END FUNCTION.
-
 FUNCTION fGetFixedLineBaseBundle RETURNS CHARACTER
   (icCliType AS CHARACTER):
 
@@ -199,41 +162,41 @@ FUNCTION fGetTariffAttributes RETURNS LOGICAL
      OUTPUT odSetup     AS DECI):
 
     PLISTCONFLOOP:
-    FOR EACH ttPListConf WHERE
-             ttPListConf.Brand    = "1"         AND
-             ttPListConf.RatePlan = icPricePlan AND
-             ttPListConf.dFrom   <= TODAY       AND
-             ttPListConf.dTo     >= TODAY       NO-LOCK,
-        EACH ttPriceList OF ttPListConf WHERE ttPriceList.DedicList = FALSE NO-LOCK
-        BY ttPListConf.Prior:
+    FOR EACH PListConf WHERE
+             PListConf.Brand    = "1"         AND
+             PListConf.RatePlan = icPricePlan AND
+             PListConf.dFrom   <= TODAY       AND
+             PListConf.dTo     >= TODAY       NO-LOCK,
+        EACH PriceList OF PListConf WHERE PriceList.DedicList = FALSE NO-LOCK
+        BY PListConf.Prior:
          
-        FOR FIRST ttTariff WHERE ttTariff.Brand      = "1"                   AND
-                                 ttTariff.CCN        = iiCCN                 AND 
-                                 ttTariff.PriceList  = ttPListConf.PriceList AND
-                                 ttTariff.BDest      = icBDest               AND
-                                 ttTariff.Custnum    = 0                     AND 
-                                 ttTariff.ValidFrom <= TODAY                 AND
-                                 ttTariff.ValidTo   >= TODAY                 NO-LOCK:
+        FOR FIRST Tariff WHERE Tariff.Brand      = "1"                   AND
+                                 Tariff.CCN        = iiCCN                 AND 
+                                 Tariff.PriceList  = PListConf.PriceList AND
+                                 Tariff.BDest      = icBDest               AND
+                                 Tariff.Custnum    = 0                     AND 
+                                 Tariff.ValidFrom <= TODAY                 AND
+                                 Tariff.ValidTo   >= TODAY                 NO-LOCK:
             ASSIGN
-                odPrice    = ttTariff.Price[1]
-                ocUnit     = fGetTMSCodeName("Tariff","DataType","Tariff",ttTariff.DataType)
-                odSetup    = ttTariff.StartCharge[1].
+                odPrice    = Tariff.Price[1]
+                ocUnit     = fGetTMSCodeName("Tariff","DataType","Tariff",Tariff.DataType)
+                odSetup    = Tariff.StartCharge[1].
 
             LEAVE PLISTCONFLOOP.    
         END.
           
-        FOR FIRST ttTariff WHERE
-                  ttTariff.Brand      = "1"                   AND
-                  ttTariff.CCN        = iiCCN                 AND 
-                  ttTariff.PriceList  = ttPListConf.PriceList AND
-                  ttTariff.BDest      = ""                    AND
-                  ttTariff.CustNum    = 0                     AND 
-                  ttTariff.ValidFrom <= TODAY                 AND
-                  ttTariff.ValidTo   >= TODAY                 NO-LOCK:
+        FOR FIRST Tariff WHERE
+                  Tariff.Brand      = "1"                   AND
+                  Tariff.CCN        = iiCCN                 AND 
+                  Tariff.PriceList  = PListConf.PriceList AND
+                  Tariff.BDest      = ""                    AND
+                  Tariff.CustNum    = 0                     AND 
+                  Tariff.ValidFrom <= TODAY                 AND
+                  Tariff.ValidTo   >= TODAY                 NO-LOCK:
            ASSIGN
-                odPrice    = ttTariff.Price[1]
-                ocUnit     = fGetTMSCodeName("Tariff","DataType","Tariff",ttTariff.DataType)
-                odSetup    = ttTariff.StartCharge[1].
+                odPrice    = Tariff.Price[1]
+                ocUnit     = fGetTMSCodeName("Tariff","DataType","Tariff",Tariff.DataType)
+                odSetup    = Tariff.StartCharge[1].
         END.
 
     END. 
@@ -300,15 +263,17 @@ END FUNCTION.
 /* Main Block */
 DO ON ERROR UNDO, THROW:
     
-    fFillPListConf().
-
-    fFillPriceList().
-
-    fFillTariff().
 
     DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        
        pcID = get_string(pcIDArray, STRING(liCounter)).
+       IF NUM-ENTRIES(pcID,"|") > 1
+       THEN ASSIGN
+                pcTenant = ENTRY(2, pcID, "|")
+                pcID     = ENTRY(1, pcID, "|").
+       ELSE RETURN appl_err("Invalid tenant information").
+
+       {newton/src/settenant.i pcTenant}
        
        FIND FIRST CLIType WHERE CLIType.Brand   = "1" AND CLIType.CLIType = pcID AND CLIType.WebStatusCode > 0 NO-LOCK NO-ERROR.
        IF NOT AVAIL CLIType THEN 
@@ -319,7 +284,8 @@ DO ON ERROR UNDO, THROW:
        ASSIGN lcFixedLineBB = fGetFixedLineBaseBundle(CliType.CliType).
 
        lcResultStruct = add_struct(resp_array, "").
-       add_string(lcResultStruct, "id"         , CliType.CliType).
+       add_string(lcResultStruct, "id", CLIType.CLIType + "|" + fConvertTenantToBrand(pcTenant)).
+       add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
        add_string(lcResultStruct, "rateplan_id", CliType.PricePlan).
 
        lcMobileStruct   = add_struct(lcResultStruct, "mobile").

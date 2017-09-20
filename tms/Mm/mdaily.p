@@ -31,14 +31,14 @@ katun = "cron".
 
 fELog("DAILY","CallDumpStarted").
 
-RUN pCallDump ("MobCDR",
-               "Mm/calldump.p",
-               TODAY - 1).
-
 RUN pCallDump ("PrepCDR",
                "Mm/calldump_prepaid.p",
                TODAY - 1).
                 
+RUN pCallDump ("MobCDR",
+               "Mm/calldump.p",
+               TODAY - 1).
+
 RUN pCallDump ("MobCDR,ErrorCDR",
                "Mm/error_calldump.p",
                TODAY - 1).
