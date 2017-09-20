@@ -15,6 +15,7 @@
 {Func/matrix.i}
 
 gcBrand =  Syst.Parameters:gcBrand.
+katun = "Cron".
 /*
 "FLEX_500MB_UPSELL"
 "FLEX_5GB_UPSELL"
