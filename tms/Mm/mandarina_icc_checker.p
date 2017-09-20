@@ -126,8 +126,8 @@ FOR EACH MsRequest NO-LOCK WHERE
          END.
       END. 
 
-      IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED1" OR
-          bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED2") THEN DO:
+      IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1" OR
+          bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED2") THEN DO:
          /*The last LP command was Mandarina LP redirection setting
            -> this must be cancelled*/
          llgReqDone = fMakeLPCommandRequest(MsRequest.MsSeq,

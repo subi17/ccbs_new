@@ -219,8 +219,8 @@ REPEAT:
          END.
          llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                            /*Subscription identifier*/
                                             INPUT (IF LcLP EQ "Mandarina1"                  /*LP command to network*/
-                                                   THEN "REDIRECTION_OTAFAILED1" 
-                                                   ELSE "REDIRECTION_OTAFAILED2"),         
+                                                   THEN "REDIRECTION_OTFAILED1" 
+                                                   ELSE "REDIRECTION_OTFAILED2"),         
                                             INPUT mobsub.CustNum,                          /*Customer number for memo*/
                                             INPUT (IF LcLP EQ "Mandarina1"                  /*Memo title*/ 
                                                    THEN "LP1 - Migración red - Activada"
