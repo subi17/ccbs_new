@@ -39,6 +39,8 @@ DEF VAR ldeActTime AS DECIMAL.
 DEF VAR ldeCheckMoment AS DECIMAL.
 DEF VAR ldaReadDate  AS DATE NO-UNDO.
 
+DEF BUFFER bmServiceLimit FOR mServicelimit.
+
 llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
 
 FUNCTION fPrintClitype RETURNS CHAR
@@ -94,7 +96,26 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
            If DSS is active -> activate DSS_FLEX_ 
            Else -> activate FLEX_.
          */
-         IF fGetActiveDSSId(mservicelimit.custnum, ldenow) > "" 
+         FIND FIRST bmservicelimit NO-LOCK WHERE
+               bmservicelimit.msseq EQ mservicelimit.msseq AND
+               bmservicelimit.dialtype EQ mservicelimit.dialtype AND
+               bmservicelimit.slseq EQ mservicelimit.slseq AND
+               bmservicelimit.EndTS GT ldeNow NO-ERROR.
+         IF AVAIL bmservicelimit THEN DO:
+            lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
+                       "Error: Upsell already active".
+            PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
+            NEXT.
+         END.
+         FIND FIRST Mobsub NO-LOCK WHERE Mobsub.msseq EQ mservicelimit.MsSeq
+         NO-ERROR.
+         IF NOT AVAIL Mobsub THEN DO:
+            lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
+                       "Error: Subscription not found".
+            PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
+            NEXT.
+         END.
+         IF fGetActiveDSSId(mobsub.custnum, ldenow) > ""
          THEN DO:
             /*Select related DSS upsell*/
             IF servicelimit.groupcode MATCHES "*FLEX_500MB_UPSELL" THEN
@@ -134,6 +155,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                lcError = "Not allowed Upsell " + lcUpsell. 
              END.
              lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
+                        STRING(mobsub.custnum) + ";" +
                         servicelimit.groupcode + ";" + /*prev month upsell */
                         lcUpsell + ";" + /*activated upsell */
                         lcError.
@@ -143,6 +165,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
             lcLogRow = "".
 
             lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
+                       STRING(mobsub.custnum) + ";" +
                        servicelimit.groupcode + ";" + /*previous month upsell */
                        lcUpsell + ";" + /*activatd upsell */
                        "Simulate". 
