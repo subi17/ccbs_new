@@ -221,7 +221,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
             FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
    END.   
-   ELSE IF liLOStatusId EQ 88888 THEN
+   ELSE IF liLOStatusId EQ 88887 THEN
    DO:
       FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq                   AND 
                                  TPService.Operation  = {&TYPE_ACTIVATION}            AND    

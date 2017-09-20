@@ -27,6 +27,7 @@
 {Func/stc_extension.i}
 {Func/istc.i}
 {Func/main_add_lines.i}
+{Func/profunc.i}
 
 /* ount number of requests */
 FUNCTION fCountRequest RETURNS INTEGER
@@ -203,7 +204,8 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       ocError = "Subscription not found".
       RETURN FALSE.
    eND.
-   
+   FIND FIRST Customer WHERE
+              Customer.custnum EQ Mobsub.custnum NO-LOCK NO-ERROR.           
    /* 1 */
    FIND FIRST NewCliType WHERE
               NewCLIType.Brand = gcBrand AND
@@ -220,14 +222,24 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       ocError = "Function not allowed due to business rules!".
       RETURN FALSE.
    END.
-
-   IF fIsConvergenceTariff(NewCLIType.Clitype) AND
-      (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
-       NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
-                                          MobSub.clitype)) AND
-      piOrderID EQ 0 THEN DO:
-      ocError = "Function not allowed due to business rules!".
-      RETURN FALSE.
+ 
+   IF AVAIL Customer AND fIsPro(Customer.category) THEN DO:
+      IF fValidateProSTC(MobSub.Custnum,
+                         MobSub.CliType,
+                         NewCLIType.Clitype) > "" THEN DO:
+         ocError = "Function not allowed due to business rules!".
+         RETURN FALSE.
+      END. 
+   END.
+   ELSE DO:
+      IF fIsConvergenceTariff(NewCLIType.Clitype) AND
+         (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
+          NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
+                                             MobSub.clitype)) AND
+         piOrderID EQ 0 THEN DO:
+         ocError = "Function not allowed due to business rules!".
+         RETURN FALSE.
+      END.
    END.
 
    /* partial convergent to mobile */
