@@ -40,6 +40,11 @@ DEF VAR ldeActTime AS DECIMAL.
 DEF VAR ldeCheckMoment AS DECIMAL.
 DEF VAR ldaReadDate  AS DATE NO-UNDO.
 
+/* DSS related variables */
+DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
+DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
+DEF VAR lcBundle      AS CHAR NO-UNDO.
+
 DEF BUFFER bmServiceLimit FOR mServicelimit.
 
 llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
@@ -50,9 +55,9 @@ FUNCTION fPrintClitype RETURNS CHAR
               mobsub.msseq eq iiMsSeq NO-ERROR.
    IF AVAIL mobsub THEN
       RETURN mobsub.clitype.
-   RETURN "".   
-              
-END.   
+   RETURN "".
+
+END.
 
 FUNCTION fMonthStart RETURNS DECIMAL:
    DEF VAR ldeCurr AS DECIMAL NO-UNDO.
@@ -92,9 +97,9 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
       FOR EACH mservicelimit NO-LOCK WHERE
                mservicelimit.slseq EQ servicelimit.slseq AND
                mservicelimit.dialtype EQ servicelimit.dialtype AND
-               mservicelimit.EndTS EQ ldeCheckMoment: /*previous month end*/ 
+               mservicelimit.EndTS EQ ldeCheckMoment: /*previous month end*/
          /*Decide upsell that must be activated.
-           If DSS is active -> activate DSS_FLEX_ 
+           If DSS is active -> activate DSS_FLEX_
            Else -> activate FLEX_.
          */
          FIND FIRST bmservicelimit NO-LOCK WHERE
@@ -116,44 +121,58 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
             PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
             NEXT.
          END.
-         IF fGetActiveDSSId(mobsub.custnum, ldenow) > ""
-         THEN DO:
+
+         fGetDSSMsSeqLimit(mservicelimit.msseq, fmakets(), liDSSMsSeq,
+                           ldeDSSLimit, lcBundle).
+
+         IF lcBundle > "" THEN DO: /* DSS/DSS2 active, needed DSS_*_UPSELL */
             /*Select related DSS upsell*/
             IF servicelimit.groupcode MATCHES "*FLEX_500MB_UPSELL" THEN
                lcUpsell = "DSS_FLEX_500MB_UPSELL".
             ELSE IF servicelimit.groupcode MATCHES "*FLEX_5GB_UPSELL" THEN
                lcUpsell = "DSS_FLEX_5GB_UPSELL".
-         END.   
+            ELSE DO:
+               lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
+               "Error: Incorrect group " + servicelimit.groupcode.
+               PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
+               NEXT.
+            END.
+         END.
          ELSE DO:
             /*Select related normal upsell*/
             IF servicelimit.groupcode MATCHES "*FLEX_500MB_UPSELL" THEN
                lcUpsell = "FLEX_500MB_UPSELL".
             ELSE IF servicelimit.groupcode MATCHES "*FLEX_5GB_UPSELL" THEN
                lcUpsell = "FLEX_5GB_UPSELL".
-    
+            ELSE DO:
+               lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
+               "Error: Incorrect group " + servicelimit.groupcode.
+               PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
+               NEXT.
+            END.
          END.
-    
+
          IF llgSimulate EQ FALSE THEN DO:
             lcLogRow = "".
-              
+
             lcUpsell = servicelimit.groupcode.
             IF fMatrixAnalyse(gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            lcUpsell + ";" + fPrintCLIType(mservicelimit.msseq),
                            OUTPUT lcTmp) EQ 1 THEN DO:
-                              
+
                fCreateUpsellBundle(mservicelimit.MsSeq,
                                    lcUpsell,
                                    {&REQUEST_SOURCE_YOIGO_TOOL},
                                    ldeActTime,
                                    OUTPUT liRequest,
                                    OUTPUT lcError).
-                                
+
                IF lcError EQ "" THEN lcError = "OK".
-             END.  
+             END.
              ELSE DO:
-               lcError = "Not allowed Upsell " + lcUpsell. 
+               lcError = "Not allowed Upsell " + lcUpsell.
              END.
              lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
                         STRING(mobsub.custnum) + ";" +
@@ -169,14 +188,13 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                        STRING(mobsub.custnum) + ";" +
                        servicelimit.groupcode + ";" + /*previous month upsell */
                        lcUpsell + ";" + /*activatd upsell */
-                       "Simulate". 
+                       "Simulate".
          END.
 
-         
+
          PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
 
       END.
-   END.         
-END.    
+   END.
+END.
 OUTPUT STREAM sLogFile CLOSE.
-

@@ -173,6 +173,8 @@ FUNCTION fGetDSSMsSeqLimit RETURNS LOG (INPUT  iiCustNum   AS INT,
                                         OUTPUT odeDSSLimit AS DEC,
                                         OUTPUT ocBundleId  AS CHAR):
 
+   DEF BUFFER Servicelimit FOR Servicelimit.
+   DEF BUFFER Mservicelimit FOR mServicelimit.
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
