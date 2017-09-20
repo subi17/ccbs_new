@@ -17,6 +17,7 @@
 {Syst/tmsconst.i}
 {Func/penaltyfee.i}
 {Func/fcustpl.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -189,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lbolSTCExemptPenalty AS LOGICAL NO-UNDO.
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+   DEF VAR lcBundleId AS CHAR NO-UNDO. 
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -267,22 +269,30 @@ PROCEDURE pPeriodicalContract:
          END.     
       END.
 
+      lcBundleId = ttAction.ActionKey.
+
+      IF lcBundleId MATCHES "FLEX*UPSELL" AND
+         fIsDSSActive(INPUT bOrigRequest.CustNum,
+                      INPUT bOrigRequest.ActStamp) THEN
+         lcBundleId = "DSS_" + lcBundleId.
+
       /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
       /*TODO remove after FTERM8 campaign period.*/
       DEF BUFFER bFTERMOrder FOR Order.
-      FIND FIRST bFTERMOrder NO-LOCK WHERE 
+      FIND FIRST bFTERMOrder WHERE 
                  bFTERMOrder.brand EQ "1" AND
                  bFTERMOrder.OrderID EQ iiOrderID AND
-                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0 
-                 NO-ERROR.
+                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0 NO-LOCK NO-ERROR.
       /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
-      IF AVAIL bFTERMOrder AND
-               ttAction.ActionKey EQ "FTERM12-100" AND 
-               /*idActStamp > 20170911 AND*/
-               idActStamp < 20171001
-      THEN DO:
-         ttAction.ActionKey = "FTERM8-100".
-      END.
+       
+      IF ttAction.ActionKey EQ "FTERM12-100" AND 
+         idActStamp < 20171101 AND
+         CAN-FIND(FIRST bFTERMOrder NO-LOCK WHERE 
+                        bFTERMOrder.brand EQ gcBrand AND
+                        bFTERMOrder.OrderID EQ iiOrderID AND
+                  INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0)
+      THEN lcBundleId = "FTERM8-100".
+
       /*End of FLP temporary change*/
 
       /* Temporary check due to ongoing orders created before 5.6.2017
@@ -292,7 +302,7 @@ PROCEDURE pPeriodicalContract:
            (AVAILABLE Order AND fTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
       THEN liRequest = 1.
       ELSE liRequest = fPCActionRequest(liMsSeq,
-                                   ttAction.ActionKey,
+                                   lcBundleId,
                                    "act" + lcWaitFor,
                                    ldeContrCreStamp,
                                    llCreateFees,
