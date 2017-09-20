@@ -1300,38 +1300,53 @@ FUNCTION fDelivSIM RETURNS LOG
    /* GAP018 */
    llDespachar = FALSE.
    lcMainOrderId = "".
-   FIND FIRST CliType NO-LOCK WHERE 
-      CliType.CliType = Order.CliType NO-ERROR.
-      IF AVAIL CliType THEN DO:
-         IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} OR
-            CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN
-            FOR EACH bufOrder OF Order NO-LOCK WHERE
-               bufOrder.MultiSimId = Order.OrderId:
-               /* AC5: If Main line order is cancelled linking is not needed */
-               IF Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
-                  lcMainOrderId = STRING(BufOrder.OrderId).
-               /* AC6: In case Additional/Extra line order is in fraud queue its
-                 Deptchar value is set FALSE as it is not delivered same time with Main line  */
-               IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
-                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
-                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
-                  llDespachar = FALSE.
-               ELSE
-                  llDespachar = TRUE.
-               LEAVE.
-            END.
-      END.
 
-   /* Check if router delivered and terminal can be delivered */
-   IF llDextraInvoice THEN DO:
-      FIND FIRST OrderDelivery NO-LOCK WHERE
-         OrderDelivery.OrderId = Order.OrderId NO-ERROR.
+   /* In secure delivery always FALSE */
+   IF(liDelType EQ {&ORDER_DELTYPE_POST_SECURE} OR
+      liDelType EQ {&ORDER_DELTYPE_POS_SECURE}) THEN DO:
+      llDespachar = FALSE. 
+   END.
+   ELSE DO:
+      /* Check if router delivered and terminal can be delivered */
+      IF llDextraInvoice THEN DO:
+         FIND FIRST OrderDelivery NO-LOCK WHERE
+            OrderDelivery.OrderId = Order.OrderId NO-ERROR.
          IF AVAIL OrderDelivery THEN DO:
             IF OrderDelivery.LOStatusId = 99998 THEN
                llDespachar = TRUE.
             ELSE
                llDespachar = FALSE.
          END.
+      END.
+      ELSE DO: /* SIM */
+      
+         FIND FIRST CliType NO-LOCK WHERE 
+            CliType.CliType = Order.CliType NO-ERROR.
+         IF AVAIL CliType THEN DO:
+            IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} OR
+               CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
+               FOR EACH bufOrder OF Order NO-LOCK WHERE
+                  bufOrder.MultiSimId = Order.OrderId:
+                  /* AC5: If Main line order is cancelled linking is not needed */
+                  IF Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
+                     lcMainOrderId = STRING(BufOrder.OrderId).
+                  /* AC6: In case Additional/Extra line order is in fraud queue its
+                    Deptchar value is set FALSE as it is not delivered same time with Main line  */
+                  IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
+                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
+                     llDespachar = FALSE.
+                  ELSE
+                     llDespachar = TRUE.
+                  LEAVE.
+               END.
+            END.
+            ELSE DO: 
+               IF CliType.CliType BEGINS "CONTDSL" THEN
+                  llDespachar = TRUE.
+            END.
+         END.
+      END.
    END.
    /* GAP018 end */
 
