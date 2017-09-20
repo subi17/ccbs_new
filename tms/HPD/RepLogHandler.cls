@@ -216,7 +216,7 @@ CLASS HPD.RepLogHandler FINAL:
             lcBrandName = multitenancy.TenantInformation:mConvertTenantToBrand(icTenant).
 
          /* The default tenant is handling also the shared tables */
-         IF icTenant EQ multitenancy.TenantInformation:DefaultTenantName
+         IF icTenant EQ multitenancy.TenantInformation:DefaultTenant
          THEN icTenant = "".
       END.
 
@@ -270,7 +270,7 @@ CLASS HPD.RepLogHandler FINAL:
       DO lii = 1 TO NUM-ENTRIES(multitenancy.TenantInformation:TenantList)
          ON ERROR UNDO, THROW:
          lcTenant = ENTRY(lii,multitenancy.TenantInformation:TenantList).
-         IF lcTenant EQ multitenancy.TenantInformation:SuperTenantName
+         IF lcTenant EQ multitenancy.TenantInformation:SuperTenant
          THEN NEXT.
          multitenancy.TenantInformation:mSetEffectiveTenant(lcTenant).
          mPopulateDumpHandlers(lcTenant).
@@ -391,7 +391,7 @@ CLASS HPD.RepLogHandler FINAL:
       lcTenant = icTenantname.
 
       IF icTenantName = ""
-      THEN RETURN multitenancy.TenantInformation:DefaultTenantName.
+      THEN RETURN multitenancy.TenantInformation:DefaultTenant.
 
       RETURN icTenantname.
 
