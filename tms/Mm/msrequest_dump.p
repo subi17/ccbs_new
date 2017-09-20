@@ -9,6 +9,7 @@
 
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
+{Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -127,6 +128,11 @@ PROCEDURE pDumpToFile:
    
       IF lcField BEGINS "#" THEN DO:
          CASE lcField:
+         WHEN "#Segment" THEN DO:
+            IF msrequest.CustNum > 0 THEN   
+               lcValue = fGetSegment(msrequest.CustNum,0).
+            ELSE lcvalue = "".
+         END.         
          WHEN "#Memo" THEN DO:
             FOR EACH Memo NO-LOCK WHERE
                      Memo.Brand = gcBrand AND
