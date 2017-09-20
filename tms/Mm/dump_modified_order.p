@@ -183,7 +183,13 @@ FOR EACH ttOrder NO-LOCK:
         IF lcField BEGINS "#" THEN DO:
             CASE lcField:
             WHEN "#Segment" THEN DO:
-               lcValue = fGetSegment(ttOrder.CustNum).
+               FIND FIRST Ordercustomer WHERE
+                          Ordercustomer.brand EQ gcbrand AND
+                          Ordercustomer.orderid EQ ttOrder.orderid AND
+                          Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+               IF AVAIL ordercustomer THEN           
+                  lcValue = fGetSegment(ordercustomer.CustNum, 
+                                        ordercustomer.orderid).
             END.
             WHEN "#SCStamp" THEN DO:
                lcValue = STRING(fGetOrderStamp(ttOrder.OrderID,"1")).
