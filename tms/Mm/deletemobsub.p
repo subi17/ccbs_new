@@ -550,7 +550,10 @@ PROCEDURE pTerminate:
       FIND FIRST DayCampaign NO-LOCK WHERE
                  DayCampaign.Brand = gcBrand AND
                  DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
-   
+      
+      IF AVAIL DayCampaign AND (DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} OR DayCampaign.DCEvent BEGINS "TVTERM") THEN 
+         NEXT.
+
       CREATE ttContract.
       ASSIGN
          ttContract.DCEvent   = DCCLI.DCEvent
