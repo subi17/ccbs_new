@@ -1342,10 +1342,8 @@ FUNCTION fDelivSIM RETURNS LOG
          END.
       END.
    /* In secure delivery always FALSE */
-   IF(liDelType EQ {&ORDER_DELTYPE_POST_SECURE} OR
-      liDelType EQ {&ORDER_DELTYPE_POS_SECURE}) THEN DO:
+   IF Order.DeliverySecure > 0 THEN
       llDespachar = FALSE. 
-   END.
    /* GAP018 end */
 
    /* Create Temp-table for DataService (OR extra fields in future) */
