@@ -893,6 +893,82 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
 END.
 
+FUNCTION fgetFlexUpsellBundle RETURNS CHAR
+     (INPUT  iiCustnum      AS INT,
+      INPUT  iiMsSeq        AS INT,
+      INPUT  icDSSId        AS CHAR,
+      INPUT  icBundle       AS CHAR,
+      INPUT  ideActStamp    AS DEC):
+   /* DSS related variables */
+   DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
+   DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
+   DEF VAR lcBundle      AS CHAR NO-UNDO.
+   DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO.
+   DEF VAR ldeConsumedData AS DEC NO-UNDO.
+   DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
+   DEF VAR lcResult AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
+   DEF VAR llDSSneeded             AS LOG  NO-UNDO.
+
+   DEF BUFFER Mobsub FOR Mobsub.
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+   IF icDSSId BEGINS "DSS" THEN
+      llDSSNeeded = TRUE.
+   IF icDSSId EQ "DSS" AND
+      NOT fIsDSSAllowed(INPUT iiCustNum,
+                    INPUT iiMsSeq,
+                    INPUT fmakets(),
+                    INPUT {&DSS},
+                    "",
+                    OUTPUT ldeCurrMonthLimit,
+                    OUTPUT ldeConsumedData,
+                    OUTPUT ldeOtherMonthLimit,
+                    OUTPUT lcResult) THEN
+      llDSSNeeded = FALSE.
+   ELSE IF icDSSId EQ "DSS2" THEN DO:
+      FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
+      IF AVAIL MobSub THEN DO:
+         IF fMatrixAnalyse(gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           "DSS2" + ";" + MobSub.CLIType,
+                           OUTPUT lcResult) NE 1 THEN
+            llDSSNeeded = FALSE.
+         
+         IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
+           (LOOKUP(Mobsub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+            LOOKUP(Mobsub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+            IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
+                                                     Mobsub.MultiSimId,
+                                                     Mobsub.MultiSimType) THEN
+            llDSSNeeded = FALSE.
+         IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,lcResult) THEN
+            llDSSNeeded = FALSE.
+      END.
+      ELSE
+         llDSSNeeded = FALSE. /* Should not ever come here */
+   END.
+   ELSE 
+      llDSSNeeded = FALSE.
+   IF llDSSNeeded THEN DO: 
+      IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
+         RETURN "DSS_FLEX_500MB_UPSELL".
+      END.
+      ELSE IF servicelimit.groupcode MATCHES "*FLEX_5GB_UPSELL" THEN
+         RETURN "DSS_FLEX_5GB_UPSELL".
+   END.
+   ELSE
+      IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
+         RETURN "FLEX_500MB_UPSELL".
+      END.
+      ELSE IF servicelimit.groupcode MATCHES "*FLEX_5GB_UPSELL" THEN
+         RETURN "FLEX_5GB_UPSELL".
+END.
+
 FUNCTION fCanDSSKeepActive RETURNS LOG
    (INPUT  iiCustnum      AS INT,
     INPUT  iiMsSeq        AS INT,
