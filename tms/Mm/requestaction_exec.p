@@ -272,9 +272,12 @@ PROCEDURE pPeriodicalContract:
       lcBundleId = ttAction.ActionKey.
 
       IF lcBundleId MATCHES "FLEX*UPSELL" AND
-         fIsDSSActive(INPUT bOrigRequest.CustNum,
-                      INPUT bOrigRequest.ActStamp) THEN
-         lcBundleId = "DSS_" + lcBundleId.
+         fGetDSSId(mobsub.custnum, fmakets()) > "" THEN
+         lcBundleId = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
+                                           fGetDSSId(mobsub.custnum,
+                                           fmakets()),
+                                           lcBundleId,
+                                           fmakets()). 
 
       /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
       /*TODO remove after FTERM8 campaign period.*/

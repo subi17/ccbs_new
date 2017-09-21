@@ -902,7 +902,6 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
    /* DSS related variables */
    DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
    DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
-   DEF VAR lcBundle      AS CHAR NO-UNDO.
    DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO.
    DEF VAR ldeConsumedData AS DEC NO-UNDO.
    DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
@@ -952,7 +951,7 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
       ELSE
          llDSSNeeded = FALSE. /* Should not ever come here */
    END.
-   ELSE 
+   ELSE /* not known/supported DSS */
       llDSSNeeded = FALSE.
    IF llDSSNeeded THEN DO: 
       IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
