@@ -122,7 +122,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
             NEXT.
          END.
 
-         fGetDSSMsSeqLimit(mservicelimit.msseq, fmakets(), liDSSMsSeq,
+         fGetDSSMsSeqLimit(mobsub.custnum, fmakets(), liDSSMsSeq,
                            ldeDSSLimit, lcBundle).
 
          IF lcBundle > "" THEN DO: /* DSS/DSS2 active, needed DSS_*_UPSELL */
