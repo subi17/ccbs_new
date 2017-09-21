@@ -39,11 +39,14 @@ DEF VAR ldeNow AS DECIMAL.
 DEF VAR ldeActTime AS DECIMAL.
 DEF VAR ldeCheckMoment AS DECIMAL.
 DEF VAR ldaReadDate  AS DATE NO-UNDO.
+DEF VAR lcDSSId AS CHAR NO-UNDO.
 
 /* DSS related variables */
-DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
-DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
-DEF VAR lcBundle      AS CHAR NO-UNDO.
+DEF VAR ldeCurrMonthLimit   AS DEC  NO-UNDO.
+DEF VAR ldeOtherMonthLimit  AS DEC  NO-UNDO.
+DEF VAR ldeConsumedData     AS DEC  NO-UNDO.
+DEF VAR liDSSMsSeq AS INT  NO-UNDO.
+DEF VAR lcResult      AS CHAR NO-UNDO.
 
 DEF BUFFER bmServiceLimit FOR mServicelimit.
 
@@ -121,11 +124,25 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
             PUT STREAM sLogFile UNFORMATTED lcLogRow SKIP.
             NEXT.
          END.
-
-         fGetDSSMsSeqLimit(mobsub.custnum, fmakets(), liDSSMsSeq,
-                           ldeDSSLimit, lcBundle).
-
-         IF lcBundle > "" THEN DO: /* DSS/DSS2 active, needed DSS_*_UPSELL */
+         lcDSSId = fGetDSSId(mobsub.custnum, fmakets()).
+         IF (lcDSSId EQ "DSS" AND
+            fIsDSSAllowed(INPUT mobsub.custnum,
+                              INPUT mobsub.MsSeq,
+                              INPUT fmakets(),
+                              INPUT {&DSS},
+                              "",
+                              OUTPUT ldeCurrMonthLimit,
+                              OUTPUT ldeConsumedData,
+                              OUTPUT ldeOtherMonthLimit,
+                              OUTPUT lcResult)) OR
+            (lcDSSId EQ "DSS2" AND
+             fIsDSS2Allowed(INPUT mobsub.custnum,
+                            INPUT mobsub.MsSeq,
+                            INPUT fmakets(),
+                            OUTPUT liDSSMsseq,
+                            OUTPUT lcResult )) 
+         THEN DO: 
+            /* DSS/DSS2 active, needed DSS_*_UPSELL */
             /*Select related DSS upsell*/
             IF servicelimit.groupcode MATCHES "*FLEX_500MB_UPSELL" THEN
                lcUpsell = "DSS_FLEX_500MB_UPSELL".
