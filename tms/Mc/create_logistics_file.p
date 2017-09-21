@@ -291,7 +291,7 @@ FUNCTION fIsInstallmentConsumerOrder RETURNS LOG:
    IF LOOKUP(AgreeCustomer.CustIdType,"NIF,NIE") = 0 THEN RETURN FALSE.
 
    /* Make sure orders before deployment should be financed by Yoigo */
-   IF AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ? AND
+   IF (AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ?) AND
       NOT fIsDirectChannelCetelemOrder(BUFFER Order) THEN RETURN FALSE.
 
    /* Check Installment contract */
