@@ -109,7 +109,7 @@ FUNCTION fOffsetMonthsToPeriod RETURNS INT
    ELSE DO:
       IF iOffsetMonths > 12 THEN
          ASSIGN liOffsetYear   = (iOffsetMonths - (iOffsetMonths MOD 12)) / 12
-                iOffsetMonths  = (iOffsetMonths MOD 12).
+                liOffsetMonths  = (iOffsetMonths MOD 12).
       ELSE
          liOffsetMonths = iOffsetMonths.
 

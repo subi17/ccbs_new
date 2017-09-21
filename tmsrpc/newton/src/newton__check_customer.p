@@ -213,7 +213,9 @@ DO:
         ELSE IF llCustCatPro THEN 
         DO:
             
-            IF NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType)) THEN
+            IF NOT fIsConvergent3POnly(pcCliType) AND 
+               (NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR 
+                     fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType))) THEN
                 ASSIGN 
                     llOrderAllowed = FALSE
                     lcReason       = "Additional mobile line is not compatible with respective to main convergent line".
