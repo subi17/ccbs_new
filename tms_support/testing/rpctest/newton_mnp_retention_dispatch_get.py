@@ -12,5 +12,5 @@ def instruction():
 
 if len(sys.argv) > 1: instruction()
 
-p=s.newton.mnp_retention_dispatch.get()
+p=s.newton.mnp_retention_dispatch.get("yoigo")
 print_results(p)
