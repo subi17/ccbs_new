@@ -1301,12 +1301,6 @@ FUNCTION fDelivSIM RETURNS LOG
    llDespachar = FALSE.
    lcMainOrderId = "".
 
-   /* In secure delivery always FALSE */
-   IF(liDelType EQ {&ORDER_DELTYPE_POST_SECURE} OR
-      liDelType EQ {&ORDER_DELTYPE_POS_SECURE}) THEN DO:
-      llDespachar = FALSE. 
-   END.
-   ELSE DO:
       /* Check if router delivered and terminal can be delivered */
       IF llDextraInvoice THEN DO:
          FIND FIRST OrderDelivery NO-LOCK WHERE
@@ -1347,6 +1341,10 @@ FUNCTION fDelivSIM RETURNS LOG
             END.
          END.
       END.
+   /* In secure delivery always FALSE */
+   IF(liDelType EQ {&ORDER_DELTYPE_POST_SECURE} OR
+      liDelType EQ {&ORDER_DELTYPE_POS_SECURE}) THEN DO:
+      llDespachar = FALSE. 
    END.
    /* GAP018 end */
 
