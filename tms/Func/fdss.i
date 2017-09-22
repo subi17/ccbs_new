@@ -938,14 +938,15 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
                            OUTPUT lcResult) NE 1 THEN
             llDSSNeeded = FALSE.
          
-         IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
+         ELSE IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
            (LOOKUP(Mobsub.CLIType,lcExtraMainLineCLITypes) > 0  OR
             LOOKUP(Mobsub.CLIType,lcExtraLineCLITypes)     > 0) THEN
             IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
                                                      Mobsub.MultiSimId,
                                                      Mobsub.MultiSimType) THEN
             llDSSNeeded = FALSE.
-         IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,lcResult) THEN
+         ELSE IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,
+                                    lcResult) THEN
             llDSSNeeded = FALSE.
       END.
       ELSE
