@@ -26,7 +26,7 @@ DEF VAR pcTenant           AS CHAR      NO-UNDO.
 
 DEFINE TEMP-TABLE ttMNPRetPlatform NO-UNDO LIKE mnpretplatform.
 
-IF validate_request(param_toplevel_id, "string,string,array") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,array") EQ ? THEN RETURN.
 
 pcTenant   = get_string(param_toplevel_id, "0").
 pcUsername = "VISTA_" + get_string(param_toplevel_id, "1").
@@ -41,7 +41,7 @@ katun = pcUsername.
 {newton/src/settenant.i pcTenant}
 
 FOR EACH mnpretplatform NO-LOCK WHERE
-         mnpretplatform.brand = gcBrand AND
+         mnpretplatform.brand EQ gcBrand AND
          mnpretplatform.Todate >= TODAY AND
          mnpretplatform.FromDate <= TODAY:
    CREATE ttMNPRetPlatform.
@@ -65,13 +65,31 @@ DO liLoop = 0 TO get_paramcount(pcArray) - 1:
      ttMNPRetPlatform.percentage = pdePercentage.
 END.
 
+
+/*-----------------------------------
 FOR EACH ttMNPRetPlatform NO-LOCK:
    ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.
 END.
 
 IF ABS(ldePercentageTotal - 100) > 0.001 THEN RETURN 
    appl_err("percentage_error").
-         
+-----------------------------------*/
+
+/* begin YDR-2644 */
+FOR EACH ttMNPRetPlatform NO-LOCK BREAK BY ttMNPRetPlatform.Operators:
+   IF FIRST-OF(ttMNPRetPlatform.Operators) THEN 
+     ldePercentageTotal = 0.
+
+   ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.
+   
+   IF LAST-OF(ttMNPRetPlatform.Operators) THEN DO:
+      IF ABS(ldePercentageTotal - 100) > 0.001 THEN RETURN 
+         appl_err("percentage_error " + ttMNPRetPlatform.Operators).
+   END.    
+END.
+/* end YDR-2644*/
+
+
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
    {Func/lib/eventlog.i}
