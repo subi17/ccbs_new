@@ -83,7 +83,7 @@ FOR EACH ttMNPRetPlatform NO-LOCK BREAK BY ttMNPRetPlatform.Operators:
    ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.
    
    IF LAST-OF(ttMNPRetPlatform.Operators) THEN DO:
-      IF ABS(ldePercentageTotal - 100) > 0.001 THEN RETURN 
+      IF ldePercentageTotal > 100 THEN RETURN 
          appl_err("percentage_error " + ttMNPRetPlatform.Operators).
    END.    
 END.
