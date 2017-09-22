@@ -11,8 +11,19 @@
 
 &GLOBAL-DEFINE FINANCED_TERMINAL_I YES
 
-{Syst/commali.i}
 {Syst/tmsconst.i}
+
+FUNCTION fIsDirectChannelCetelemOrder RETURNS LOG
+   (BUFFER Order FOR Order):
+   
+   IF INDEX(Order.OrderChannel,"POS") > 0 THEN RETURN FALSE.
+
+   RETURN CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                         OrderAction.Brand = Syst.Parameters:gcBrand AND
+                         OrderAction.OrderID = Order.OrderID AND
+                         OrderAction.ItemType = "TerminalFinancing" AND
+                         OrderAction.ItemKey = "0225").
+END.
 
 FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    (INPUT iiOrderId  AS INT,
@@ -22,7 +33,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    DEF BUFFER OrderCustomer FOR OrderCustomer.
       
    FIND Order NO-LOCK WHERE
-        Order.Brand  = gcBrand AND
+        Order.Brand  = Syst.Parameters:gcBrand AND
         Order.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN {&TF_STATUS_YOIGO}.
@@ -30,7 +41,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    IF icDCEvent = "RVTERM12" THEN DO:
 
       IF CAN-FIND(FIRST SingleFee WHERE
-                        SingleFee.Brand       = gcBrand AND
+                        SingleFee.Brand       = Syst.Parameters:gcBrand AND
                         SingleFee.Custnum     = Order.CustNum AND
                         SingleFee.HostTable   = "MobSub" AND
                         SingleFee.KeyValue    = STRING(Order.MsSeq) AND
@@ -41,16 +52,21 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    ELSE IF icDCEvent BEGINS "PAYTERM" THEN DO:
    
       FOR FIRST OrderCustomer NO-LOCK WHERE
-                OrderCustomer.Brand = gcBrand AND
+                OrderCustomer.Brand = Syst.Parameters:gcBrand AND
                 OrderCustomer.Order = iiOrderId AND
                 OrderCustomer.RowType = 1:
-      
-         IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
+
+         /* profession is not mandatory with Cetelem direct channel orders
+            (YDR-2527) */     
+         IF NOT OrderCustomer.Profession > "" AND
+            NOT fIsDirectChannelCetelemOrder(BUFFER Order) THEN
+            RETURN {&TF_STATUS_YOIGO}.
+
          IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
             RETURN {&TF_STATUS_YOIGO}.
 
          IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                           OfferItem.Brand       = gcBrand        AND
+                           OfferItem.Brand       = Syst.Parameters:gcBrand AND
                            OfferItem.Offer       = Order.Offer    AND
                            OfferItem.ItemType    = "PerContract"  AND
                            OfferItem.ItemKey BEGINS "PAYTERM"     AND
