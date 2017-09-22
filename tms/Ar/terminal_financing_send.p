@@ -14,6 +14,7 @@
 {Func/forderstamp.i}
 {Func/msreqfunc.i}
 {Func/ftransdir.i}
+{Func/financed_terminal.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -54,7 +55,6 @@ DEF VAR lcRootDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcSpoolDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcOutDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcLogDirCetelem AS CHAR NO-UNDO.
-DEF VAR llCetelemOrder AS LOG NO-UNDO.
 
 FOR EACH Reseller NO-LOCK WHERE
          Reseller.Brand = gcBrand:
@@ -233,13 +233,11 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    /* direct channels */
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN DO:
 
-      llCetelemOrder = CAN-FIND(FIRST OrderAction WHERE
-                           OrderAction.Brand    = gcBrand AND
-                           OrderAction.OrderId  = Order.OrderId AND
-                           OrderAction.ItemType = "TerminalFinancing" AND
-                           OrderAction.ItemKey  = "0225").
-
-      IF llCetelemOrder THEN DO:
+      IF CAN-FIND(FIRST OrderAction WHERE
+                        OrderAction.Brand    = gcBrand AND
+                        OrderAction.OrderId  = Order.OrderId AND
+                        OrderAction.ItemType = "TerminalFinancing" AND
+                        OrderAction.ItemKey  = "0225") THEN DO:
          IF lcTFBank NE {&TF_BANK_CETELEM} AND
             FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
       END.
@@ -372,7 +370,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    FIND FIRST ttProfession NO-LOCK WHERE
               ttProfession.Profession = ttOrderCustomer.Profession NO-ERROR.
 
-   IF NOT AVAIL ttProfession THEN DO:
+   IF NOT AVAIL ttProfession AND NOT fIsDirectChannelCetelemOrder(BUFFER Order) THEN DO:
       fErrorLog(Order.OrderID,SUBST("ERROR:Unknown profession: &1",
                 ttOrderCustomer.profession)).
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
@@ -597,7 +595,8 @@ PROCEDURE pPrintLine:
    /*COSEXO */       lcGender FORMAT "X(2)"
    /*COESTCIV*/      "01" FORMAT "X(2)"
    /*FALTACLI*/      FILL("0",8) FORMAT "X(8)"
-   /*COACTPROF*/     ttProfession.activityCode FORMAT "X(4)"
+   /*COACTPROF*/     (IF AVAIL ttProfession
+                      THEN ttProfession.activityCode ELSE "") FORMAT "X(4)"
    /*INGBRU*/        "0000000060101" FORMAT "X(13)"
    /*DEMPTRAB*/      UPPER(ttOrderCustomer.Company) FORMAT "X(30)"
    /*TDIREMP*/       STRING(Order.MsSeq) FORMAT "X(10)"
@@ -610,7 +609,8 @@ PROCEDURE pPrintLine:
    /*CPOEMP*/        "28000" FORMAT "X(5)"
    /*TELEFEMP*/      STRING(ttOrderCustomer.Custnum) FORMAT "X(10)"
    /*TELEFEMP2*/     " " FORMAT "X(10)"
-   /*TIPOCONTR*/     ttProfession.contractType FORMAT "X(4)"
+   /*TIPOCONTR*/     (IF AVAIL ttProfession 
+                      THEN ttProfession.contractType ELSE "") FORMAT "X(4)"
    /*ANTEMPRES*/     "01" FORMAT "X(2)"
    /*TIPVIVIE*/      "01" FORMAT "X(2)"
    /*CRGVIVIE*/      "00" FORMAT "X(2)"
