@@ -957,14 +957,14 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
       IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
          RETURN "DSS_FLEX_500MB_UPSELL".
       END.
-      ELSE IF servicelimit.groupcode MATCHES "*FLEX_5GB_UPSELL" THEN
+      ELSE IF icBundle MATCHES "*FLEX_5GB_UPSELL" THEN
          RETURN "DSS_FLEX_5GB_UPSELL".
    END.
    ELSE
       IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
          RETURN "FLEX_500MB_UPSELL".
       END.
-      ELSE IF servicelimit.groupcode MATCHES "*FLEX_5GB_UPSELL" THEN
+      ELSE IF icBundle MATCHES "*FLEX_5GB_UPSELL" THEN
          RETURN "FLEX_5GB_UPSELL".
 END.
 
