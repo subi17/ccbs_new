@@ -65,30 +65,17 @@ DO liLoop = 0 TO get_paramcount(pcArray) - 1:
      ttMNPRetPlatform.percentage = pdePercentage.
 END.
 
-
-/*-----------------------------------
-FOR EACH ttMNPRetPlatform NO-LOCK:
-   ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.
-END.
-
-IF ABS(ldePercentageTotal - 100) > 0.001 THEN RETURN 
-   appl_err("percentage_error").
------------------------------------*/
-
-/* begin YDR-2644 */
+/* Begin YDR-2644. The sum of percentages for each operator can't be more than 100. */
 FOR EACH ttMNPRetPlatform NO-LOCK BREAK BY ttMNPRetPlatform.Operators:
    IF FIRST-OF(ttMNPRetPlatform.Operators) THEN 
-     ldePercentageTotal = 0.
-
-   ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.
-   
+      ldePercentageTotal = 0.
+   ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.   
    IF LAST-OF(ttMNPRetPlatform.Operators) THEN DO:
       IF ldePercentageTotal > 100 THEN RETURN 
          appl_err("percentage_error " + ttMNPRetPlatform.Operators).
    END.    
 END.
-/* end YDR-2644*/
-
+/* End YDR-2644. */
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
