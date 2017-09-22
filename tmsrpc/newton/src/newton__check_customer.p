@@ -159,7 +159,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                      lcReason = "Mobile line for non-pro customer from PRO channel".
          END.
       END.
-      ELSE IF NOT llNonProToProMigrationOngoing OR
+      ELSE IF NOT llNonProToProMigrationOngoing AND
               NOT fIsConvergent3POnly(pcCliType) THEN
          ASSIGN
              llOrderAllowed = FALSE
