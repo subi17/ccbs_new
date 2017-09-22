@@ -270,8 +270,8 @@ PROCEDURE pPeriodicalContract:
       END.
 
       lcBundleId = ttAction.ActionKey.
-
-      IF lcBundleId MATCHES "FLEX*UPSELL" AND
+      FIND MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
+      IF AVAIL Mobsub AND lcBundleId MATCHES "FLEX*UPSELL" AND
          fGetDSSId(mobsub.custnum, fmakets()) > "" THEN
          lcBundleId = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
                                            fGetDSSId(mobsub.custnum,
