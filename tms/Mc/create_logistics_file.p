@@ -30,6 +30,7 @@ gcBrand = "1".
 {Mnp/mnp.i}
 {Func/email.i}
 {Mc/orderfusion.i}
+{Func/financed_terminal.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -290,8 +291,8 @@ FUNCTION fIsInstallmentConsumerOrder RETURNS LOG:
    IF LOOKUP(AgreeCustomer.CustIdType,"NIF,NIE") = 0 THEN RETURN FALSE.
 
    /* Make sure orders before deployment should be financed by Yoigo */
-   IF AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ? THEN
-      RETURN FALSE.
+   IF (AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ?) AND
+      NOT fIsDirectChannelCetelemOrder(BUFFER Order) THEN RETURN FALSE.
 
    /* Check Installment contract */
    FOR EACH OfferItem NO-LOCK WHERE
