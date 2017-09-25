@@ -197,9 +197,9 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    END.
  
    /* YTS-11600 */
-   IF ttCall.SpocCmt EQ 104 OR /* 94+b-type=98=>104 */
-     (ttCall.SpocCmt EQ 95 AND ttCall.Btype EQ 98) OR
-     (ttCall.SpocCmt EQ 105 AND ttCall.Btype EQ 98) THEN DO:
+   IF ttCall.SpoCmt EQ 104 OR /* 94+b-type=98=>104 */
+     (ttCall.SpoCmt EQ 95 AND ttCall.Btype EQ 98) OR
+     (ttCall.SpoCmt EQ 105 AND ttCall.Btype EQ 98) THEN DO:
       IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
       ASSIGN
          ttCall.Gsmbnr = "-"
