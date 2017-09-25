@@ -185,25 +185,25 @@ FUNCTION fAnalBsub RETURNS LOGICAL
          ELSE IF ttCall.Btype = 1 THEN mod_bsub = ttcall.gsmbnr.
       
       END.      
-      WHEN 94 THEN DO:
-         IF ttCall.Btype = 98 THEN mod_bsub = "EMAIL".
-      END.
 
       WHEN 95 THEN mod_bsub = "ROAMMMSMO_EU".
       WHEN 96 THEN mod_bsub = "ROAMMMSMT_EU".
       WHEN 105 THEN mod_bsub = "ROAMMMSMO".
       WHEN 106 THEN mod_bsub = "ROAMMMSMT".
-
-      WHEN 104 THEN DO:
-         IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
-         ASSIGN
-            ttCall.Gsmbnr = "-"
-            mod_bsub      = "EMAIL".
-      END.
                            
       WHEN 97 THEN DO:
          mod_bsub  = "INTERNATIONAL".
       END. 
+   END.
+ 
+   /* YTS-11600 */
+   IF ttCall.SpocCmt EQ 104 OR /* 94+b-type=98=>104 */
+     (ttCall.SpocCmt EQ 95 AND ttCall.Btype EQ 98) OR
+     (ttCall.SpocCmt EQ 105 AND ttCall.Btype EQ 98) THEN DO:
+      IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
+      ASSIGN
+         ttCall.Gsmbnr = "-"
+         mod_bsub      = "EMAIL".
    END.
    
    IF ttCall.SpoCMT  = 3 OR 
