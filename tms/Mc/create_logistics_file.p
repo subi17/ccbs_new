@@ -1317,29 +1317,38 @@ FUNCTION fDelivSIM RETURNS LOG
       
          FIND FIRST CliType NO-LOCK WHERE 
             CliType.CliType = Order.CliType NO-ERROR.
-         IF AVAIL CliType AND 
-            Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN DO: /* AC5: If Main line order is cancelled linking is not needed */
-            IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
-               lcMainOrderId = STRING(Order.MultiSimId).
-               /* AC6: In case Additional/Extra line order is in fraud queue its
-                 Deptchar value is set FALSE as it is not delivered same time with Main line  */
-               IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
-                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
-                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
-                  llDespachar = FALSE.
-               ELSE
-                  llDespachar = TRUE.
+         IF AVAIL CliType THEN DO:        
+            FIND FIRST bufOrder NO-LOCK WHERE
+               Order.MultiSimId NE 0 AND
+               bufOrder.OrderId = Order.MultiSimId. /* bufOrder for main line */
+            IF AVAIL bufOrder THEN DO: /* MultiSim case */
+               /* AC5: If Main line order is cancelled linking is not needed */
+               IF bufOrder.StatusCode NE {&ORDER_STATUS_CLOSED} THEN DO:
+                  IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
+                     lcMainOrderId = STRING(Order.MultiSimId).
+                  END.
+                  ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+                     /* ToDo... */
+                  END.
+                  /* AC6: In case Additional/Extra line order is in fraud queue its
+                     Deptchar value is set FALSE as it is not delivered same time with Main line  */
+                  IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
+                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
+                     llDespachar = FALSE.
+                   ELSE
+                      llDespachar = TRUE.
+               END.
             END.
-            ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-               /* ToDo... */
-            END. 
-            ELSE DO:
-               IF CliType.CliType BEGINS "CONTDSL" OR
-                  CliType.CliType BEGINS "CONTFH" THEN
+            ELSE DO: /* Main line */
+               IF(CliType.CliType BEGINS "CONTDSL" OR 
+                  CliType.CliType BEGINS "CONTFH") AND
+                  Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
                   llDespachar = TRUE.
             END.
          END.
       END.
+
    /* In secure delivery always FALSE */
    IF Order.DeliverySecure > 0 THEN
       llDespachar = FALSE. 
