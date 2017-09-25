@@ -121,8 +121,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                                          servicelimit.groupcode, ldeNow).
 
          IF llgSimulate EQ FALSE THEN DO:
-            lcLogRow = "".
-
             IF fMatrixAnalyse(gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
@@ -149,8 +147,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
 
          END. /*Simulate == false */
          ELSE DO:
-            lcLogRow = "".
-
             lcLogRow = STRING(mservicelimit.MsSeq) + ";" +
                        STRING(mobsub.custnum) + ";" +
                        servicelimit.groupcode + ";" + /*previous month upsell */
