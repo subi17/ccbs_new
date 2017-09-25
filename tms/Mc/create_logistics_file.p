@@ -1317,27 +1317,25 @@ FUNCTION fDelivSIM RETURNS LOG
       
          FIND FIRST CliType NO-LOCK WHERE 
             CliType.CliType = Order.CliType NO-ERROR.
-         IF AVAIL CliType THEN DO:
-            IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} OR
-               CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
-               FOR EACH bufOrder OF Order NO-LOCK WHERE
-                  bufOrder.MultiSimId = Order.OrderId:
-                  /* AC5: If Main line order is cancelled linking is not needed */
-                  IF Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
-                     lcMainOrderId = STRING(BufOrder.OrderId).
-                  /* AC6: In case Additional/Extra line order is in fraud queue its
-                    Deptchar value is set FALSE as it is not delivered same time with Main line  */
-                  IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
-                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
-                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
-                     llDespachar = FALSE.
-                  ELSE
-                     llDespachar = TRUE.
-                  LEAVE.
-               END.
+         IF AVAIL CliType AND 
+            Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN DO: /* AC5: If Main line order is cancelled linking is not needed */
+            IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
+               lcMainOrderId = STRING(Order.MultiSimId).
+               /* AC6: In case Additional/Extra line order is in fraud queue its
+                 Deptchar value is set FALSE as it is not delivered same time with Main line  */
+               IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
+                  Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
+                  llDespachar = FALSE.
+               ELSE
+                  llDespachar = TRUE.
             END.
-            ELSE DO: 
-               IF CliType.CliType BEGINS "CONTDSL" THEN
+            ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+               /* ToDo... */
+            END. 
+            ELSE DO:
+               IF CliType.CliType BEGINS "CONTDSL" OR
+                  CliType.CliType BEGINS "CONTFH" THEN
                   llDespachar = TRUE.
             END.
          END.
