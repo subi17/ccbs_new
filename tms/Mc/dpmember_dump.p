@@ -10,6 +10,7 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
+{Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -48,6 +49,7 @@ DEF VAR liTM AS INT NO-UNDO.
 DEF VAR liTY AS INT NO-UNDO.
 DEF VAR ldaValidFrom AS DATE NO-UNDO.
 DEF VAR ldaValidTo AS DATE NO-UNDO.
+DEF VAR licustnum AS INT NO-UNDO. 
 
 DEF STREAM sFile.
 
@@ -120,7 +122,9 @@ FUNCTION fMakeDPMemberDump RETURNS LOGIC:
       
       IF ttDPMember.HostTable = "MobSub" THEN DO:
          FIND FIRST MsOwner WHERE MsOwner.MsSeq = liKeyValue NO-LOCK NO-ERROR.
-         IF AVAILABLE MsOwner THEN lcMSISDN = MsOwner.CLI.
+         IF AVAILABLE MsOwner THEN 
+            ASSIGN lcMSISDN = MsOwner.CLI
+                   liCustnum = MsOwner.custnum.
          ELSE NEXT.
       END.   
 
@@ -143,7 +147,8 @@ FUNCTION fMakeDPMemberDump RETURNS LOGIC:
             WHEN "#ValidFrom" THEN lcValue = STRING(ttDPMember.ValidFrom).
             WHEN "#ValidTo"   THEN lcValue = STRING(ttDPMember.ValidTo).
             WHEN "#DiscValue" THEN lcValue = STRING(ttDPMember.DiscValue).
-            WHEN "#Unit"      THEN lcValue = lcUnit.   
+            WHEN "#Unit"      THEN lcValue = lcUnit.
+            WHEN "#Segment" THEN lcValue = fGetSegment(liCustnum,0).
             OTHERWISE lcValue = "".
             END CASE.
          END.
