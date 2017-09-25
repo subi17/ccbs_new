@@ -148,9 +148,11 @@ FOR EACH Order WHERE
    
    liOrdersToday = liOrdersToday + 1.
    CASE Order.OrderChannel: 
-      WHEN "pos" OR WHEN "fusion_pos" then liPosSales = liPosSales + 1.
+      WHEN "pos" OR WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" then 
+         liPosSales = liPosSales + 1.
       WHEN "cc" OR WHEN "fusion_cc" then liCCSales = liCCSales + 1.
-      WHEN "telesales" OR WHEN "fusion_telesales" then liTeleSales = liTeleSales + 1.
+      WHEN "telesales" OR WHEN "fusion_telesales" OR 
+          WHEN "telesales_pro" OR WHEN "fusion_telesales_pro" then liTeleSales = liTeleSales + 1.
       WHEN "self" then liSelfSales = liSelfSales + 1.
       WHEN "renewal" then liRenewal = liRenewal + 1.
       WHEN "renewal_telesales" or
@@ -218,9 +220,11 @@ FOR EACH Order NO-LOCK WHERE
    liPostpaids = liPostpaids + 1.
    
    CASE Order.OrderChannel: 
-      WHEN "pos" OR WHEN "fusion_pos" then liPosSalesCum = liPosSalesCum + 1.
+      WHEN "pos" OR WHEN "fusion_pos" OR WHEN "pos_pro" 
+         OR WHEN "fusion_pos_pro" then liPosSalesCum = liPosSalesCum + 1.
       WHEN "cc" OR WHEN "fusion_cc" then liCCSalesCum = liCCSalesCum + 1.
-      WHEN "telesales" OR WHEN "fusion_telesales" then liTeleSalesCum = liTeleSalesCum + 1.
+      WHEN "telesales" OR WHEN "fusion_telesales"
+         OR WHEN "telesales_pro" OR WHEN "fusion_telesales_pro" then liTeleSalesCum = liTeleSalesCum + 1.
       WHEN "self" then liSelfSalesCum = liSelfSalesCum + 1.
    END.
    

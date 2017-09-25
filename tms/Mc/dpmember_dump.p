@@ -112,7 +112,8 @@ FUNCTION fMakeDPMemberDump RETURNS LOGIC:
          
       ASSIGN
          lcMSISDN   = ""
-         liKeyValue = 0.
+         liKeyValue = 0
+         licustnum = 0.
          
       liKeyValue = INT(ttDPMember.KeyValue) NO-ERROR.
       IF liKeyValue = 0 THEN NEXT. 
