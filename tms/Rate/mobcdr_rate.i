@@ -131,7 +131,6 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 3  THEN ASSIGN Mod_bsub  = "ROAMINT"   b_type = 0.
       WHEN 4  THEN ASSIGN Mod_bsub  = "ROAMLOCAL" b_type = 1.
       WHEN 7  THEN ASSIGN Mod_bsub  = "RT" b_type = 0.
-      WHEN 17 THEN ASSIGN Mod_bsub  = "RT" b_type = 0 .
       WHEN 51 THEN DO:     
          IF b_type = 1 THEN DO:
             IF TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN
@@ -208,8 +207,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    
    IF ttCall.SpoCMT  = 3 OR 
       ttCall.SpoCMT  = 4 OR
-      ttCall.SpoCMT  = 7 OR 
-      ttCall.SPOCMT  = 17 THEN DO:
+      ttCall.SpoCMT  = 7 THEN DO:
 
       lcARoamZone = "".
       
