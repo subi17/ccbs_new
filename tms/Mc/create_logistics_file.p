@@ -1304,82 +1304,83 @@ FUNCTION fDelivSIM RETURNS LOG
    llDespachar = FALSE.
    lcMainOrderId = "".
 
-      /* Check if router delivered and terminal can be delivered */
-      IF llDextraInvoice THEN DO:
-         FIND FIRST OrderDelivery NO-LOCK WHERE
-            OrderDelivery.Brand = gcBrand AND
-            OrderDelivery.OrderId = Order.OrderId NO-ERROR.
-         IF AVAIL OrderDelivery THEN DO:
-            IF OrderDelivery.LOStatusId = 99998 THEN
+   /* Check if router delivered and terminal can be delivered */
+   IF llDextraInvoice THEN DO:
+      FIND FIRST OrderDelivery NO-LOCK WHERE
+         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.OrderId = Order.OrderId NO-ERROR.
+      IF AVAIL OrderDelivery THEN DO:
+         IF OrderDelivery.LOStatusId = 99998 THEN
+            llDespachar = TRUE.
+         ELSE
+            llDespachar = FALSE.
+      END.
+   END.
+   ELSE DO: /* SIM */
+
+      FIND FIRST CliType NO-LOCK WHERE
+                 CliType.Brand = gcBrand AND
+                 CliType.CliType = Order.CliType NO-ERROR.
+      IF AVAIL CliType THEN DO:
+         IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
+            FIND FIRST bufOrder NO-LOCK WHERE
+                       bufOrder.Brand = gcBrand AND
+                       bufOrder.OrderId = Order.MultiSimId NO-ERROR. /* bufOrder for main line */
+            IF AVAIL bufOrder THEN DO: /* MultiSim case */
+               /* AC5: If Main line order is cancelled linking is not needed */
+               IF bufOrder.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
+                  lcMainOrderId = STRING(Order.MultiSimId).
+               ELSE
+                  lcMainOrderId = "".
+            END.
+         END.
+         ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+            FOR FIRST OrderCustomer NO-LOCK WHERE
+                      OrderCustomer.Brand   = gcBrand AND
+                      OrderCustomer.OrderId = Order.OrderId AND
+                      OrderCustomer.RowType = 1,
+               EACH bufOrderCustomer NO-LOCK WHERE
+                    bufOrderCustomer.Brand      EQ gcBrand AND
+                    bufOrderCustomer.CustId     EQ OrderCustomer.CustId AND
+                    bufOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
+                    bufOrderCustomer.RowType    EQ 1,
+               EACH bufOrder NO-LOCK WHERE
+                    bufOrder.Brand   EQ gcBrand AND
+                    bufOrder.orderid EQ bufOrderCustomer.Orderid,
+               FIRST bufCLIType NO-LOCK WHERE
+                     bufCLIType.Brand    = gcBrand AND
+                     bufCLIType.CLIType  = bufOrder.CliType AND
+                     bufCLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
+                     /* bufOrder.orderid should be main line of the addidtional line */
+                     /* AC5: If Main line order is cancelled linking is not needed */
+               IF bufOrder.StatusCode ne {&ORDER_STATUS_CLOSED} THEN
+                  lcMainOrderId = STRING(bufOrder.OrderId).
+               ELSE
+                  lcMainOrderId = "".
+            END.
+         END.
+
+         IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
+            CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+            /* AC6: In case Additional/Extra line order is in fraud queue its
+               Deptchar value is set FALSE as it is not delivered same time with Main line  */
+            IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
+               Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
+               Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
+               llDespachar = FALSE.
+             ELSE
+                llDespachar = TRUE.
+         END.
+         ELSE DO: /* Main line */
+            IF(CliType.CliType BEGINS "CONTDSL" OR
+               CliType.CliType BEGINS "CONTFH") AND
+               Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
                llDespachar = TRUE.
             ELSE
                llDespachar = FALSE.
          END.
       END.
-      ELSE DO: /* SIM */
-      
-         FIND FIRST CliType NO-LOCK WHERE 
-            CliType.Brand = gcBrand AND
-            CliType.CliType = Order.CliType NO-ERROR.
-         IF AVAIL CliType THEN DO:        
-               IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
-                  FIND FIRST bufOrder NO-LOCK WHERE
-                        bufOrder.Brand = gcBrand AND
-                        bufOrder.OrderId = Order.MultiSimId NO-ERROR. /* bufOrder for main line */
-                  IF AVAIL bufOrder THEN DO: /* MultiSim case */
-                     /* AC5: If Main line order is cancelled linking is not needed */
-                     IF bufOrder.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
-                        lcMainOrderId = STRING(Order.MultiSimId).
-                     ELSE
-                        lcMainOrderId = "".
-                  END.
-               END.
-               ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-                  FIND FIRST OrderCustomer NO-LOCK WHERE
-                     OrderCustomer.Brand = gcBrand AND
-                     OrderCustomer.OrderId = Order.OrderId AND
-                     OrderCustomer.RowType = 1 NO-ERROR.
-                     FOR EACH bufOrderCustomer NO-LOCK WHERE   
-                        bufOrderCustomer.Brand      EQ gcBrand AND 
-                        bufOrderCustomer.CustId     EQ OrderCustomer.CustId AND
-                        bufOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
-                        bufOrderCustomer.RowType    EQ 1,
-                        EACH bufOrder NO-LOCK WHERE
-                           bufOrder.Brand   EQ gcBrand AND
-                           bufOrder.orderid EQ bufOrderCustomer.Orderid,
-                        FIRST bufCLIType NO-LOCK WHERE
-                           bufCLIType.Brand = gcBrand AND
-                           bufCLIType.CLIType = bufOrder.CliType AND
-                           bufCLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
-                           /* bufOrder.orderid should be main line of the addidtional line */
-                           /* AC5: If Main line order is cancelled linking is not needed */
-                           IF bufOrder.StatusCode ne {&ORDER_STATUS_CLOSED} THEN
-                              lcMainOrderId = STRING(bufOrder.OrderId).
-                           ELSE
-                              lcMainOrderId = "".
-                     END.
-               END.
-               IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
-                  CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:                
-                  /* AC6: In case Additional/Extra line order is in fraud queue its
-                     Deptchar value is set FALSE as it is not delivered same time with Main line  */
-                  IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
-                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
-                     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
-                     llDespachar = FALSE.
-                   ELSE
-                      llDespachar = TRUE.
-               END.
-               ELSE DO: /* Main line */
-                  IF(CliType.CliType BEGINS "CONTDSL" OR 
-                     CliType.CliType BEGINS "CONTFH") AND
-                     Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
-                     llDespachar = TRUE.
-                  ELSE
-                     llDespachar = FALSE.
-               END.
-         END.
-      END.
+   END.
 
    /* In secure delivery always FALSE */
    IF Order.DeliverySecure > 0 THEN
@@ -1807,7 +1808,8 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
               Order.CustNum = 0 NO-LOCK NO-ERROR.
    IF AVAILABLE Order THEN
    DO:
-      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
+      /* YTS-10537 Update Customer information only when order is finished */
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,FALSE,OUTPUT oiCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
                              OrderCustomer.Brand      = gcBrand               AND
@@ -1835,7 +1837,8 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
          END.
       END.
 
-      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
+      /* YTS-10537 Update Customer information only when order is finished */
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,3,FALSE,FALSE,OUTPUT oiCustomer).
    END.
 
    DO liLoop1 = 1 TO lhTable:NUM-FIELDS:
