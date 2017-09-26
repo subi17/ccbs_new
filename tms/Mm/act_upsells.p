@@ -174,7 +174,7 @@ PROCEDURE pBobCheckUpsell:
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL".
+      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
@@ -201,6 +201,10 @@ PROCEDURE pBobCheckUpsell:
          lcUpsell = "DSS_UPSELL".
       ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
          lcUpsell = "DSS200_UPSELL".
+      ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
+         lcUpsell = "DSS_FLEX_500MB_UPSELL".
+      ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
+         lcUpsell = "DSS_FLEX_5GB_UPSELL".
       ELSE IF lcUpsell NE "DSS_UPSELL" AND lcUpsell NE "DSS200_UPSELL" THEN
          RETURN "ERROR:Upsell is not DSS compatible".
    END.
@@ -220,6 +224,10 @@ PROCEDURE pBobCheckUpsell:
             lcUpsell = "DSS2_UPSELL".
          ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
             lcUpsell = "DSS200_UPSELL".
+         ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
+            lcUpsell = "DSS_FLEX_500MB_UPSELL".
+         ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
+            lcUpsell = "DSS_FLEX_5GB_UPSELL".
       END.
       ELSE IF lcUpsell NE "DATA6_UPSELL"   AND 
               lcUpsell NE "FLEX_UPSELL"    AND 
@@ -252,7 +260,11 @@ PROCEDURE pBobCheckUpsell:
       WHEN "DATA200_UPSELL" THEN 
          lcMemoTitle = "DATA 200 MB upsell". 
       WHEN "FLEX_UPSELL" THEN 
-         lcMemoTitle = "FLEX upsell".    
+         lcMemoTitle = "FLEX upsell".
+      WHEN "FLEX_500MB_UPSELL" THEN
+         lcMemoTitle = "FLEX 500MB upsell".
+      WHEN "FLEX_5GB_UPSELL" THEN
+         lcMemoTitle = "FLEX 5GB upsell".    
    END CASE.
       
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
