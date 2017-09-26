@@ -388,6 +388,7 @@ FUNCTION fMakeServLPool RETURN LOGICAL
 
       IF icServiceLimitGroup BEGINS {&DSS} + "_UPSELL" OR
          icServiceLimitGroup = "DSS200_UPSELL" OR
+         icServiceLimitGroup MATCHES "DSS*FLEX*UPSELL" OR
          icServiceLimitGroup = "DSS2_UPSELL" THEN
          ldeDSSUpsellLimit = ldeLimitAmt.
 
