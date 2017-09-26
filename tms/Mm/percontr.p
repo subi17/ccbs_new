@@ -419,6 +419,8 @@ PROCEDURE pContractActivation:
    DEF VAR lcReqSource       AS CHAR NO-UNDO.
    DEF VAR lcBundleId        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
    DEF VAR ldtPrepActDate             AS DATE NO-UNDO.
    DEF VAR liPrepActTime              AS INT  NO-UNDO.
@@ -438,7 +440,8 @@ PROCEDURE pContractActivation:
    
    DEF BUFFER bOrigReq   FOR MsRequest.
    DEF BUFFER bQ25SingleFee FOR SingleFee.
-   
+   DEF BUFFER bMobSub    FOR Mobsub.
+
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
     
@@ -636,13 +639,42 @@ PROCEDURE pContractActivation:
    ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 THEN DO:
       lcBundleId = fGetActiveDSSId(INPUT MsOwner.CustNum,
                                    INPUT MsRequest.ActStamp).
-      lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
-      IF lcBundleId = {&DSS} OR
-         (lcBundleId = "DSS2" AND
-          LOOKUP(MsOwner.CLIType,lcAllowedDSS2SubsType) > 0) THEN DO:
+      
+      IF lcBundleId = {&DSS} THEN DO:
          fReqStatus(3,"Bundle Upsell can not be activated because " +
                     "DSS bundle is already active").
          RETURN.
+      END.
+      ELSE IF lcBundleId EQ "DSS2" THEN DO:
+         ASSIGN
+         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+         lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+         lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+         FIND FIRST bMobsub WHERE bMobsub.msseq EQ MsRequest.msseq 
+         NO-LOCK NO-ERROR.
+         IF fMatrixAnalyse(gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           "DSS2" + ";" + bMobSub.CLIType,
+                           OUTPUT lcResult) EQ 1 THEN DO:
+            fReqStatus(3,"Bundle Upsell can not be activated because " +
+                         "DSS2 matrix analyse").
+            RETURN.
+         END.
+   
+         ELSE IF AVAIL bMobSub AND
+            (LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
+            (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+             LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0)) THEN
+            IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                 bMobSub.MultiSimId,
+                                                 bMobSub.MultiSimType) 
+             THEN DO:
+                fReqStatus(3,"Bundle Upsell can not be activated because " +
+                           "DSS2 extra line matrix analyse").
+                RETURN.
+             END.         
+
       END.
    END. /* ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 */
 
