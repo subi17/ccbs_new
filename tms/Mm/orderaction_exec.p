@@ -157,9 +157,12 @@ FOR EACH OrderAction EXCLUSIVE-LOCK WHERE
          OrderAction.ItemType = "BundleItem" AND
          OrderAction.ItemKey MATCHES "FLEX*UPSELL":
 
-   lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
-   IF lcBundleId > "" THEN
-      OrderAction.ItemKey = "DSS_" + OrderAction.ItemKey.
+   IF fGetDSSId(mobsub.custnum, fmakets()) > "" THEN
+      OrderAction.ItemKey = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
+                                                 fGetDSSId(mobsub.custnum, 
+                                                 fmakets()),
+                                                 OrderAction.ItemKey, 
+                                                 fmakets()).
    RUN pPeriodicalContract.
 
    /* don't abort if an error occurred */
