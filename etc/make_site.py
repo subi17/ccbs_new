@@ -80,7 +80,7 @@ if not os.path.exists(relpath + '/etc/site.py'):
     fd.write("%-14s = '%s'\n" % ('lighttpd_location', lighttpd_location))
     fd.write("ENV%-11s = '%s'\n" % ("['TERM']", 'xterm'))
     fd.write("ENV%-11s = '%s%s'\n" % ("['DBUTIL']", dlc, '/bin/_dbutil'))
-    if environment == 'development' or environment == 'slavedevelopment' and os.environ.get('PROCFG'):
+    if ( environment == 'development' or environment == 'slavedevelopment' ) and os.environ.get('PROCFG'):
         fd.write("ENV%-11s = '%s'\n" % ("['PROCFG']", os.environ['PROCFG']))
     fd.write("\nexec(open(work_dir + '/etc/config.py').read())\n")
     fd.close()
