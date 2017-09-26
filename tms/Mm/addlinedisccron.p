@@ -8,505 +8,268 @@
 {Mm/fbundle.i}
 {Mc/dpmember.i}
 {Func/ftransdir.i}
+{Mm/addlinedisccron.i}  
 
-DEFINE VARIABLE ldtDate   AS DATE NO-UNDO.
-DEFINE VARIABLE liTime    AS INT  NO-UNDO.
-DEFINE VARIABLE ldtCronDate  AS DATE NO-UNDO.
-DEFINE VARIABLE liCronTime   AS INT  NO-UNDO.
-DEFINE VARIABLE liHours      AS INT  NO-UNDO.
-DEFINE VARIABLE lcResult     AS CHAR NO-UNDO.
-DEFINE VARIABLE lcMainLine   AS CHAR NO-UNDO.
-DEFINE VARIABLE lcFile       AS CHAR NO-UNDO.
-DEFINE VARIABLE lcSpoolDir   AS CHAR NO-UNDO.
-DEFINE VARIABLE lcOutDir     AS CHAR NO-UNDO.
-DEFINE VARIABLE lcCurrTimeStamp LIKE Order.CrStamp NO-UNDO.
-DEFINE VARIABLE lcYestTimeStamp AS CHAR NO-UNDO.
+DEF VAR liIntervalHours  AS INT      NO-UNDO. 
+DEF VAR ldeBegTimeStamp  AS DEC      NO-UNDO. 
+DEF VAR ldeEndTimeStamp  AS DEC      NO-UNDO. 
+DEF VAR ldtEndDateTime   AS DATETIME NO-UNDO.
+DEF VAR lcBeginDateStamp AS CHAR     NO-UNDO. 
+DEF VAR lcSpoolDir       AS CHAR     NO-UNDO. 
+DEF VAR lcOutDir         AS CHAR     NO-UNDO. 
+DEF VAR lcAddLineDisc    AS CHAR     NO-UNDO. 
+DEF VAR lcFileName       AS CHAR     NO-UNDO. 
 
-DEFINE TEMP-TABLE tt-data
-    FIELD addlinemsisdn     AS CHAR
-    FIELD addlineclitype    AS CHAR
-    FIELD addlinesaleschnl  AS CHAR
-    FIELD addlineordcrstamp AS DECIMAL
-    FIELD mainmsisdn        AS CHAR
-    FIELD mainclitype       AS CHAR
-    FIELD mainsaleschnl     AS CHAR
-    FIELD mainordcrstamp    AS DECIMAL.
+DEFINE TEMP-TABLE ttCollectOrderData NO-UNDO 
+   FIELD OrderID    AS INT
+   FIELD CLIType    AS CHAR
+   FIELD MsSeq      AS INT
+   FIELD CustID     AS CHAR
+   FIELD CustIDType AS CHAR
+   FIELD Discount   AS CHAR
+   FIELD TariffType AS INT.
+
+DEFINE TEMP-TABLE ttOutputData NO-UNDO
+    FIELD AddlineCLI           AS CHAR
+    FIELD AddlineCLIType       AS CHAR
+    FIELD AddlineSaleschannel  AS CHAR
+    FIELD AddlineOrdercrstamp  AS DEC
+    FIELD MainCLI              AS CHAR
+    FIELD MainCLIType          AS CHAR
+    FIELD MainlineSaleschannel AS CHAR
+    FIELD MainlineOrdcrstamp   AS DEC.
 
 DEFINE STREAM strout.
 
-DEFINE BUFFER bOrder FOR Order.
-DEFINE BUFFER bOrdCust FOR OrderCustomer.
-DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
-DEFINE BUFFER bDiscountPlanMob FOR DiscountPlan.
-DEFINE BUFFER lbOrderMain  FOR Order.
+ASSIGN liIntervalHours = INT(fCParam("AddLineCron","OrdCreateHours"))
+       lcSpoolDir      = fCParam("AddLineCron","OutSpoolDir")
+       lcOutDir        = fCParam("AddLineCron","OutDir")
+       lcAddLineDisc   = {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_HM}
+       lcFileName      = lcSpoolDir + "addlinedisc_" + STRING(TODAY,"99999999") + "_" + REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
+       
+IF liIntervalHours = ? OR
+   liIntervalHours = 0 THEN
+   ASSIGN liIntervalHours = 1.
 
-liHours = fCParamI("OrdCreateHours").
-IF liHours = ? OR 
-   liHours = 0 THEN
-   ASSIGN liHours = 1.
+ASSIGN ldeEndTimeStamp  = fMakeTS()
+       ldtEndDateTime   = fTimeStamp2DateTime(ldeEndTimeStamp)
+       lcBeginDateStamp = STRING(ADD-INTERVAL(ldtEndDateTime,-(liIntervalHours),"hours"))
+       ldeBegTimeStamp  = fHMS2TS(DATE(ENTRY(1,lcBeginDateStamp," ")),
+                                       ENTRY(2,lcBeginDateStamp," ")).
 
-ASSIGN lcSpoolDir   = fCParam("AddLineCron","OutSpoolDir")
-       lcOutDir     = fCParam("AddLineCron","OutDir").
+/* Collect orders delieverd within time Interval Hours 
+   with additional line orderaction */
+RUN pCollectOrderData.
 
-ASSIGN
-   lcFile = lcSpoolDir + "addlinedisc_" + STRING(TODAY,"99999999") + "_" + REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
+/* Validate and Create eligible additional line discount for delivered order */
+RUN pEligibleDiscountForSubscription.
 
-lcCurrTimeStamp = fMakeTS().
-lcYestTimeStamp = STRING(fDate2TS(TODAY - 1)).
+IF CAN-FIND(FIRST ttOutputData NO-LOCK) THEN
+DO:
+   OUTPUT STREAM strout TO VALUE(lcFileName).
 
-fSplitTS(lcCurrTimeStamp, OUTPUT ldtCronDate, OUTPUT liCronTime).
+   PUT STREAM strout UNFORMATTED 
+      "AddlineMSISDN"        "|"
+      "AddlineCLIType"       "|"
+      "AddlineSaleschannel"  "|"
+      "AddlineOrdercrstamp"  "|"
+      "MainMSISDN"           "|"
+      "MainCLIType"          "|"
+      "MainlineSaleschannel" "|"
+      "MainlineOrdcrstamp"   SKIP.
 
-ord-blk:
-FOR EACH Order NO-LOCK WHERE 
-         Order.Brand = gcBrand AND 
-         INT(ENTRY(1,STRING(Order.CrStamp),".")) >= INT(ENTRY(1,STRING(lcYestTimeStamp),".")) AND         
-         LOOKUP(STRING(Order.OrderType),"0,1,4") > 0 :
-
-   IF Order.StatusCode <> {&ORDER_STATUS_DELIVERED} OR
-      Order.PayType     = TRUE THEN NEXT ord-blk.
-
-   fSplitTS(Order.crstamp, OUTPUT ldtDate, OUTPUT liTime).
-
-   RUN pOrderCheck(INPUT ldtDate, INPUT liCronTime, INPUT liTime, OUTPUT lcResult).
-   IF lcResult = "Next" THEN
-      NEXT ord-blk.   
-
-   RUN pCheckCliType(INPUT Order.CliType, OUTPUT lcResult).
-   IF lcResult = "Next" THEN
-      NEXT ord-blk.
-
-   RUN pCheckAddlineDisc(INPUT Order.StatusCode, 
-                         INPUT Order.OrderID, 
-                         INPUT Order.CliType, 
-                         INPUT Order.MsSeq,
-                         OUTPUT lcResult).
-
-   IF lcResult = "Next" THEN
-      NEXT ord-blk.
-
-   /* This find is just to find the custidtype and custid
-      for that order */
-   FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand       AND
-              OrderCustomer.OrderId = Order.OrderId AND
-              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
-         
-   IF AVAIL OrderCustomer THEN
-   DO:
-      OrdCust-blk:
-      FOR EACH bOrdCust NO-LOCK WHERE
-               bOrdCust.Brand      = gcBrand                  AND
-               bOrdCust.CustIDType = OrderCustomer.CustIDType AND
-               bOrdCust.CustID     = OrderCustomer.CustID     AND
-               bOrdCust.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}: 
-
-         FOR FIRST bOrder NO-LOCK WHERE
-                   bOrder.Brand      EQ gcBrand AND
-                   bOrder.Orderid    EQ bOrdCust.Orderid:                  
-
-            IF bOrder.StatusCode <> {&ORDER_STATUS_DELIVERED} OR
-               LOOKUP(STRING(bOrder.OrderType),"0,1,4") = 0 OR
-               bOrder.PayType     = TRUE THEN NEXT OrdCust-blk.
-
-            fSplitTS(bOrder.crstamp, OUTPUT ldtDate, OUTPUT liTime).
-
-            /* To check if the order is created within the hours configured in TMS */
-            RUN pOrderCheck(INPUT ldtDate, INPUT liCronTime, INPUT liTime, OUTPUT lcResult).
-            IF lcResult = "Next" THEN
-               NEXT OrdCust-blk.
-
-            /* To check if clitype available */
-            RUN pCheckCliType(INPUT bOrder.CliType, OUTPUT lcResult).
-            IF lcResult = "Next" THEN
-               NEXT OrdCust-blk.
-
-            /* To skip the order that does have any additional line disc */
-            RUN pCheckAddlineDisc(INPUT bOrder.StatusCode, 
-                                  INPUT bOrder.OrderID, 
-                                  INPUT bOrder.CliType, 
-                                  INPUT bOrder.MsSeq,
-                                  OUTPUT lcResult).
-
-            IF lcResult = "Next" THEN
-               NEXT OrdCust-blk.
-
-            FIND FIRST bDiscountPlan WHERE
-                       bDiscountPlan.Brand = gcBrand AND
-                       bDiscountPlan.DPRuleID = ENTRY(LOOKUP(bOrder.CliType, {&ADDLINE_CLITYPES}), 
-                                                      {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
-
-            FIND FIRST bDiscountPlanMob WHERE
-                       bDiscountPlanMob.Brand = gcBrand AND
-                       bDiscountPlanMob.DPRuleID = ENTRY(LOOKUP(bOrder.CliType, {&ADDLINE_CLITYPES}), 
-                                                      {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
-
-            /* Now to check the policy of "Additional line 50% discount 
-             with Convergent" and "Additional line 50% discount with Mobile Only" 
-             and if customer is eligible to get the additional line discount */
-                                           
-            IF AVAIL bDiscountPlan THEN
-            DO:                  
-               RUN pFinalConvProcess(OUTPUT lcMainLine,
-                                     OUTPUT lcResult). 
-               IF lcResult = "Next" THEN
-                  NEXT OrdCust-blk.
-            END.
-
-            IF AVAIL bDiscountPlanMob THEN
-            DO:                  
-               RUN pFinalMobOnlyProcess(OUTPUT lcMainLine,
-                                        OUTPUT lcResult). 
-               IF lcResult = "Next" THEN
-                  NEXT OrdCust-blk.
-            END.                                          
-         END.
-      END.   
-   END.
-END.
-
-IF CAN-FIND(FIRST tt-data NO-LOCK) THEN
-DO:   
-   OUTPUT STREAM strout TO VALUE(lcFile).
-
-   FOR EACH tt-data NO-LOCK:
-      EXPORT STREAM strout DELIMITER "|" tt-data.
+   FOR EACH ttOutputData NO-LOCK:
+      EXPORT STREAM strout DELIMITER "|" ttOutputData.
    END.
 
    OUTPUT STREAM strout CLOSE.
 
-   fMove2TransDir(lcFile, "", lcOutDir).
+   fMove2TransDir(lcFileName, "", lcOutDir).
 END.
 
-PROCEDURE pOrderCheck:   
-   DEFINE INPUT PARAMETER ildOrdCrDate AS DATE NO-UNDO.
-   DEFINE INPUT PARAMETER iliCronTime  AS INT  NO-UNDO.
-   DEFINE INPUT PARAMETER iliOrdCrTime AS INT  NO-UNDO.
-   DEFINE OUTPUT PARAMETER olcResult   AS CHAR NO-UNDO.
+PROCEDURE pCollectOrderData:
 
-   IF ildOrdCrDate = TODAY THEN
-   DO:
-      IF iliCronTime - iliOrdCrTime > (liHours * 60 * 60)  THEN
-         olcResult = "Next".
-   END.
-   ELSE IF ildOrdCrDate = TODAY - 1 THEN
-   DO:
-      IF (86399 - iliOrdCrTime) + iliCronTime > (liHours * 60 * 60) THEN
-         olcResult = "Next".
-   END.
+   FOR EACH Order NO-LOCK WHERE 
+            Order.Brand      = Syst.Parameters:gcBrand   AND 
+            Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+            Order.CrStamp   >= ldeBegTimeStamp           AND 
+            Order.CrStamp   <= ldeEndTimeStamp           AND
+            Order.PayType    = FALSE:
 
-END PROCEDURE.
+      IF LOOKUP(STRING(Order.OrderType),"0,1,4") = 0 THEN NEXT.
 
-PROCEDURE pCheckCliType:
-   DEFINE INPUT PARAMETER ilcCliType AS CHAR NO-UNDO.
-   DEFINE OUTPUT PARAMETER olcResult AS CHAR NO-UNDO.
+      FIND FIRST CLIType NO-LOCK WHERE
+                 CLIType.Brand      EQ Syst.Parameters:gcBrand          AND
+                 CLIType.CLIType    EQ Order.CLIType                    AND
+                 CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT} NO-ERROR.
+         IF NOT AVAIL CLIType THEN 
+            FIND FIRST CLIType NO-LOCK WHERE 
+                       CLIType.Brand      EQ Syst.Parameters:gcBrand          AND
+                       CLIType.CLIType    EQ Order.CLIType                    AND 
+                       CLIType.TariffType EQ {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
+                       CLIType.PayType    EQ {&CLITYPE_PAYTYPE_POSTPAID}      AND
+                LOOKUP(CLIType.CLIType,{&ADDLINE_CLITYPES}) GT 0              NO-ERROR.
 
-   FIND FIRST CliType WHERE 
-              CliType.Brand      = gcBrand AND
-              CliType.CliTYpe    = ilcCliTYpe NO-LOCK NO-ERROR.
+      IF NOT AVAIL CLIType THEN NEXT.           
 
-   IF NOT AVAIL CliType OR
-      (CliType.TariffType <> {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
-       CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
-       CliType.PayType    <> 1) THEN
-      olcResult = "Next".
+      FIND FIRST OrderCustomer NO-LOCK WHERE
+                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.OrderId = Order.OrderId AND
+                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
-END PROCEDURE.
+      IF NOT AVAIL OrderCustomer THEN NEXT.
 
-PROCEDURE pCheckAddlineDisc:
-   DEFINE INPUT PARAMETER  ilcOrdStatus AS CHAR NO-UNDO.
-   DEFINE INPUT PARAMETER  iliOrdId     AS INT  NO-UNDO.
-   DEFINE INPUT PARAMETER  ilcCliType   AS CHAR NO-UNDO.
-   DEFINE INPUT PARAMETER  iliMsSeq     AS INT  NO-UNDO.   
-   DEFINE OUTPUT PARAMETER olcResult    AS CHAR NO-UNDO.
+      CREATE ttCollectOrderData.
+      ASSIGN ttCollectOrderData.OrderId    = Order.OrderId
+             ttCollectOrderData.CLIType    = Order.CLIType
+             ttCollectOrderData.MsSeq      = Order.MsSeq
+             ttCollectOrderData.CustID     = OrderCustomer.CustId
+             ttCollectOrderData.CustIDType = OrderCustomer.CustIdType 
+             ttCollectOrderData.TariffType = CLIType.TariffType.
 
-   DEFINE BUFFER lbMobSub FOR MobSub.
-   
-   
-   FIND FIRST lbMobSub NO-LOCK WHERE 
-              lbMobSub.Brand = gcBrand AND
-              lbMobSub.MsSeq = iliMsSeq NO-ERROR.
-   IF AVAIL lbMobSub THEN
-   DO:
-      FIND FIRST DiscountPlan WHERE
-                 DiscountPlan.Brand = gcBrand AND
-                 DiscountPlan.DPRuleID = ENTRY(LOOKUP(lbMobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) NO-LOCK NO-ERROR.
-      IF AVAIL DiscountPlan THEN 
-      DO: 
-         IF CAN-FIND(FIRST DPMember WHERE
-                           DPMember.DPId      = DiscountPlan.DPId AND
-                           DPMember.HostTable = "MobSub" AND
-                           DPMember.KeyValue  = STRING(lbMobSub.MsSeq) AND
-                           DPMember.ValidTo   >= TODAY) THEN
-         DO:            
-            olcResult = "Next".
-            RETURN.
-         END.
-      END.
-
-      FIND FIRST DiscountPlan WHERE
-                 DiscountPlan.Brand = gcBrand AND
-                 DiscountPlan.DPRuleID = ENTRY(LOOKUP(lbMobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
-
-      IF AVAIL DiscountPlan THEN 
-      DO: 
-         IF CAN-FIND(FIRST DPMember WHERE
-                           DPMember.DPId      = DiscountPlan.DPId AND
-                           DPMember.HostTable = "MobSub" AND
-                           DPMember.KeyValue  = STRING(lbMobSub.MsSeq) AND
-                           DPMember.ValidTo   >= TODAY) THEN
-         DO:
-            olcResult = "Next".
-            RETURN.
-         END.
-      END.
-      
-      FIND FIRST DiscountPlan WHERE
-                 DiscountPlan.Brand = gcBrand AND
-                 DiscountPlan.DPRuleID = ENTRY(LOOKUP(lbMobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
-
-      IF AVAIL DiscountPlan THEN 
-      DO:             
-         IF CAN-FIND(FIRST DPMember WHERE
-                           DPMember.DPId      = DiscountPlan.DPId AND
-                           DPMember.HostTable = "MobSub" AND
-                           DPMember.KeyValue  = STRING(lbMobSub.MsSeq) AND
-                           DPMember.ValidTo   >= TODAY) THEN
-         DO:
-            olcResult = "Next".
-            RETURN.
-         END.
-      END.
-   END.   
-END PROCEDURE.
-
-PROCEDURE pConvCheck :
-   DEFINE INPUT  PARAMETER icCustIDType  AS CHAR NO-UNDO.
-   DEFINE INPUT  PARAMETER icCustID      AS CHAR NO-UNDO.
-   DEFINE INPUT  PARAMETER icCliType     AS CHAR NO-UNDO.
-   DEFINE OUTPUT PARAMETER ocMainLineCli AS CHAR NO-UNDO.   
-
-   DEFINE BUFFER bCustomer FOR Customer.
-   DEFINE BUFFER bMobSub   FOR MobSub.
-   DEFINE BUFFER bClitype  FOR Clitype.
-
-   for-blk:
-   FOR FIRST bCustomer WHERE
-             bCustomer.Brand      = Syst.Parameters:gcBrand AND
-             bCustomer.OrgId      = icCustID                AND
-             bCustomer.CustidType = icCustIDType            AND
-             bCustomer.ROLES     NE "inactive"              NO-LOCK,
-       EACH  bMobSub NO-LOCK WHERE
-             bMobSub.Brand   = Syst.Parameters:gcBrand AND
-             bMobSub.InvCust = bCustomer.CustNum       AND
-             bMobSub.PayType = FALSE                   AND
-            (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
-             bMobSub.MsStatus = {&MSSTATUS_BARRED}),
-       FIRST bCliType WHERE bCliType.Brand = gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
-      
-       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
-          NEXT.
-
-       IF fIsConvergentAddLineOK(bMobSub.CLIType,icCliType) THEN 
-       DO:
-          ASSIGN ocMainLineCli = bMobSub.cli.
-          LEAVE for-blk.
-       END.
-   END.   
-END PROCEDURE.
-
-PROCEDURE pMobOnlyCheck :
-   DEFINE INPUT  PARAMETER icCustIDType  AS CHAR NO-UNDO.
-   DEFINE INPUT  PARAMETER icCustID      AS CHAR NO-UNDO.
-   DEFINE INPUT  PARAMETER icCliType     AS CHAR NO-UNDO.
-   DEFINE OUTPUT PARAMETER ocMainLineCli AS CHAR NO-UNDO.
-
-   DEFINE BUFFER bCustomer FOR Customer.
-   DEFINE BUFFER bMobSub   FOR MobSub.
-   
-   FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
-              DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCliType, {&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
-
-   for-blk:
-   FOR FIRST bCustomer WHERE
-             bCustomer.Brand      = gcBrand AND
-             bCustomer.OrgId      = icCustID                AND
-             bCustomer.CustidType = icCustIDType            AND
-             bCustomer.Roles     NE "inactive"              NO-LOCK,
-       EACH  bMobSub NO-LOCK WHERE
-             bMobSub.Brand   = gcBrand AND
-             bMobSub.InvCust = bCustomer.CustNum       AND
-             bMobSub.MsSeq  <> bOrder.MsSeq            AND
-             bMobSub.PayType = FALSE:
-
-       /* To handle the scenario where more than
-          one sim only order for La sinfin or la infinita 5GB */
-
-       IF (icCliType = ENTRY(3,{&ADDLINE_CLITYPES} ) OR 
-           icCliType = ENTRY(4,{&ADDLINE_CLITYPES} )) AND 
-          CAN-FIND(FIRST DPMember WHERE
-                         DPMember.DPId = DiscountPlan.DPId AND
-                         DPMember.HostTable = "MobSub" AND
-                         DPMember.KeyValue  = STRING(bMobSub.MsSeq) AND
-                         DPMember.ValidTo   >= TODAY) THEN NEXT.
-
-       IF fIsMobileOnlyAddLineOK(bMobSub.CLIType,icCliType) THEN
-       DO:
-          ASSIGN ocMainLineCli = bMobSub.cli.
-          LEAVE for-blk.
-       END.          
-   END.
-
-END PROCEDURE.
-
-PROCEDURE pFinalConvProcess:   
-   DEFINE OUTPUT PARAMETER ocMainline    AS CHAR NO-UNDO.
-   DEFINE OUTPUT PARAMETER ocNext        AS CHAR NO-UNDO.
-
-   DEFINE BUFFER lbMobSubMain FOR MobSub.     
-
-   RUN pConvCheck(OrderCustomer.CustIDType,OrderCustomer.CustID,bOrder.CliType, OUTPUT ocMainline).   
-                  
-   /* If there is existing convergent main line */   
-   IF ocMainline <> "" THEN
-   DO:      
-      /* To Create dpmember */
-      
-      FOR EACH DCCLI NO-LOCK WHERE
-            DCCLI.MsSeq = bOrder.MsSeq AND
-            DCCLI.DCEvent BEGINS "TERM" AND
-            DCCLI.ValidTo >= TODAY AND
-            DCCLI.ValidFrom <= TODAY AND
-            DCCLI.CreateFees = TRUE,
-         FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
-            DayCampaign.DCEvent = DCCLI.DCEvent AND
-            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
-            DayCampaign.TermFeeModel NE "" AND
-            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
-         ASSIGN ocNext = "Next".
-         RETURN.
-      END.
-
-      FOR EACH DPMember WHERE
-          DPMember.HostTable = "MobSub" AND
-          DPMember.KeyValue  = STRING(bOrder.MsSeq) AND
-          DPMember.ValidTo   > TODAY AND
-          DPMember.ValidTo  >= DPMember.ValidFrom EXCLUSIVE-LOCK:
-
-          ASSIGN DPMember.ValidTo = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1.
-      END.
-      fCreateAddLineDiscount(bOrder.MsSeq,
-                             bOrder.CliType,
-                             TODAY,
-                             bDiscountPlan.DPRuleID).
-      FIND FIRST lbMobSubMain WHERE
-                 lbMobSubMain.Brand = gcBrand AND
-                 lbMobSubMain.Cli   = ocMainline NO-LOCK NO-ERROR.
-      IF AVAIL lbMobSubMain THEN
-      DO:
-         FIND FIRST lbOrderMain WHERE 
-                    lbOrderMain.MsSeq   = lbMobSubMain.MsSeq AND
-                    lbOrderMain.CustNum = lbMobSubMain.AgrCust AND
-                    lbOrderMain.Cli     = lbMobSubMain.Cli AND
-                    lbOrderMain.CliType = lbMobSubMain.CliTYpe NO-LOCK NO-ERROR.
-         IF AVAIL lbOrderMain THEN
-         DO:            
-            RUN pFillTempData.
-         END.
-      END.                        
-         /* Go to next record */
-      ASSIGN ocNext = "Next".                     
    END. 
-   ELSE 
-   DO: 
-      /* This code is required for the scenario like
-         addline is delivered, convergent mainline is ongoing,
-         cont25 is also delivered so it should give convergent
-         discount when convergent main line is delivered but not
-         give Additional line mobile only discount*/
-      IF fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,
-                                      OrderCustomer.CustID,
-                                      bOrder.CliType) THEN
-         ASSIGN ocNext = "Next".
+
+END PROCEDURE.
+   
+PROCEDURE pEligibleDiscountForSubscription:
+
+   DEFINE BUFFER bMobSub  FOR MobSub.
+   DEFINE BUFFER bALOrder FOR Order.
+
+   DEF VAR lcMainLineCLI           AS CHAR NO-UNDO. 
+   DEF VAR lcMainLineCLIType       AS CHAR NO-UNDO. 
+   DEF VAR lcMainLineOrderChannel  AS CHAR NO-UNDO. 
+   DEF VAR ldeMainLineOrderCrStamp AS DEC  NO-UNDO.
+   DEF VAR lcReturnValue           AS CHAR NO-UNDO. 
+
+   FOR EACH ttCollectOrderData EXCLUSIVE-LOCK:
+
+      FIND FIRST MobSub NO-LOCK WHERE 
+                 MobSub.MsSeq   = ttCollectOrderData.MsSeq   AND 
+                 MobSub.CLIType = ttCollectOrderData.CLIType NO-ERROR.
+
+      IF NOT AVAIL MobSub THEN DO:
+         DELETE ttCollectOrderData.
+         NEXT.
+      END.
+
+      ADD-LINE:
+      FOR EACH bMobSub NO-LOCK WHERE 
+               bMobSub.Brand   = Syst.Parameters:gcBrand AND 
+               bMobSub.CustNum = MobSub.CustNum          AND 
+               bMobSub.PayType = FALSE:
+
+         IF LOOKUP(bMobSub.CLIType,{&ADDLINE_CLITYPES}) EQ 0 THEN
+            NEXT ADD-LINE.
+
+         ASSIGN lcMainLineCLI           = ""
+                lcMainLineCLIType       = ""
+                lcMainLineOrderChannel  = ""
+                ldeMainLineOrderCrStamp = 0 
+                lcReturnValue           = "".
+
+         CASE ttCollectOrderData.TariffType:
+            WHEN {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN DO:
+               IF NOT fCheckExistingConvergentForAddLine(ttCollectOrderData.CustIDType,
+                                                         ttCollectOrderData.CustID,
+                                                         bMobSub.CliType, 
+                                                         OUTPUT lcMainLineCLI,
+                                                         OUTPUT lcMainLineCLIType,
+                                                         OUTPUT lcMainLineOrderChannel,
+                                                         OUTPUT ldeMainLineOrderCrStamp) THEN 
+                  NEXT ADD-LINE. 
+
+               CASE bMobSub.CLIType:
+                  WHEN "CONT10" THEN ttCollectOrderData.Discount = "DISCCONT10H".
+                  WHEN "CONT15" THEN ttCollectOrderData.Discount = "DISCCONT15H".
+                  WHEN "CONT25" THEN ttCollectOrderData.Discount = "DISCCONT25H".
+                  WHEN "CONT26" THEN ttCollectOrderData.Discount = "DISCCONT26H".
+               END CASE.
+            END.
+            WHEN {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN DO:
+               IF NOT fCheckExistingMobileOnlyForAddLine (ttCollectOrderData.CustIDType,
+                                                          ttCollectOrderData.CustID,
+                                                          bMobSub.CliType, 
+                                                          OUTPUT lcMainLineCLI,
+                                                          OUTPUT lcMainLineCLIType,
+                                                          OUTPUT lcMainLineOrderChannel,
+                                                          OUTPUT ldeMainLineOrderCrStamp) THEN
+                  NEXT ADD-LINE. 
+
+               CASE bMobSub.CLIType:
+                  WHEN "CONT10" THEN ttCollectOrderData.Discount = "DISCCONT10HM".
+                  WHEN "CONT15" THEN ttCollectOrderData.Discount = "DISCCONT15HM".
+                  WHEN "CONT25" THEN ttCollectOrderData.Discount = "DISCCONT25HM".
+                  WHEN "CONT26" THEN ttCollectOrderData.Discount = "DISCCONT26HM".
+               END CASE.    
+            END.
+         END CASE.
+
+         /* If there are any existing additional line discounts (50% Convergent or Mobile only) 
+            are available then don't create new discount. */ 
+         IF fCheckAvailDiscount(STRING(bMobSub.MsSeq),bMobSub.CLIType) THEN 
+            NEXT ADD-LINE.                       
+
+         FOR EACH DCCLI NO-LOCK WHERE
+                  DCCLI.MsSeq      = bMobSub.MsSeq AND
+                  DCCLI.DCEvent   BEGINS "TERM"    AND
+                  DCCLI.ValidTo   >= TODAY         AND
+                  DCCLI.ValidFrom <= DCCLI.ValidTo AND
+                  DCCLI.CreateFees = TRUE,
+            FIRST DayCampaign NO-LOCK WHERE
+                  DayCampaign.Brand        = Syst.Parameters:gcBrand AND
+                  DayCampaign.DCEvent      = DCCLI.DCEvent           AND
+                  DayCampaign.DCType       = {&DCTYPE_DISCOUNT}      AND
+                  DayCampaign.TermFeeModel <> ""                     AND
+                  DayCampaign.TermFeeCalc  > 0                       BY DCCLI.ValidFrom DESC:
+            NEXT ADD-LINE.  
+         END.
+
+         /* Close discounts other than additional line disocunts which are available 
+            to last date of previous month*/
+         FOR EACH DPMember EXCLUSIVE-LOCK WHERE   
+                  DPMember.HostTable  = "MobSub" AND
+                  DPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
+                  DPMember.ValidTo   >= TODAY                 AND
+                  DPMember.ValidFrom <= DPMember.ValidTo:
+            
+            ASSIGN DPMember.ValidTo = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1.
+         END. 
+
+         lcReturnValue = fCreateAddLineDiscount(bMobSub.MsSeq,
+                                                bMobSub.CliType,
+                                                TODAY,
+                                                ttCollectOrderData.Discount).
+
+         IF NOT lcReturnValue BEGINS "ERROR" THEN DO: 
+            
+            FIND LAST bALOrder NO-LOCK WHERE
+                      bALOrder.MsSeq      = bMobSub.MsSeq             AND
+                      bALOrder.CLIType    = bMobSub.CLIType           AND
+                      bALOrder.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+               LOOKUP(STRING(bALOrder.OrderType),"0,1,4") > 0         NO-ERROR.
+            IF NOT AVAIL bALOrder THEN
+                FIND LAST bALOrder NO-LOCK WHERE
+                          bALOrder.MsSeq      = bMobSub.MsSeq             AND
+                          bALOrder.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+                   LOOKUP(STRING(bALOrder.OrderType),"0,1,4") > 0         NO-ERROR.
+    
+            IF AVAIL bALOrder THEN DO:
+               CREATE ttOutputData.
+               ASSIGN ttOutputData.AddlineCLI           = bMobSub.CLI
+                      ttOutputData.AddlineCLIType       = bMobSub.CLIType
+                      ttOutputData.AddlineSaleschannel  = bALOrder.OrderChannel
+                      ttOutputData.AddlineOrdercrstamp  = bALOrder.CrStamp
+                      ttOutputData.MainCLI              = lcMainLineCLI
+                      ttOutputData.MainCLIType          = lcMainLineCLIType
+                      ttOutputData.MainlineSaleschannel = lcMainLineOrderChannel
+                      ttOutputData.MainlineOrdcrstamp   = ldeMainLineOrderCrStamp NO-ERROR.
+            END.
+         END.
+
+      END.        
+      
    END.
 
 END PROCEDURE.
-
-PROCEDURE pFinalMobOnlyProcess:   
-   DEFINE OUTPUT PARAMETER ocMainline    AS CHAR NO-UNDO.
-   DEFINE OUTPUT PARAMETER ocNext        AS CHAR NO-UNDO.
-
-   DEFINE BUFFER lbMobSubMain FOR MobSub.   
-
-   RUN pMobOnlyCheck(OrderCustomer.CustIDType,OrderCustomer.CustID,bOrder.CliType, OUTPUT ocMainline).
-   
-   /* If there is existing mob only main line */                     
-   IF ocMainline <> "" THEN
-   DO:         
-      FOR EACH DCCLI NO-LOCK WHERE
-            DCCLI.MsSeq = bOrder.MsSeq AND
-            DCCLI.DCEvent BEGINS "TERM" AND
-            DCCLI.ValidTo >= TODAY AND
-            DCCLI.ValidFrom <= TODAY AND
-            DCCLI.CreateFees = TRUE,
-         FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
-            DayCampaign.DCEvent = DCCLI.DCEvent AND
-            DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
-            DayCampaign.TermFeeModel NE "" AND
-            DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
-         ASSIGN ocNext = "Next".
-         RETURN.
-      END.
-      /* To delete any other discount */
-      FOR EACH DPMember WHERE
-          DPMember.HostTable = "MobSub" AND
-          DPMember.KeyValue  = STRING(bOrder.MsSeq) AND
-          DPMember.ValidTo   > TODAY AND
-          DPMember.ValidTo  >= DPMember.ValidFrom EXCLUSIVE-LOCK:
-
-          ASSIGN DPMember.ValidTo = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1.
-      END.
-      
-      fCreateAddLineDiscount(bOrder.MsSeq,
-                             bOrder.CliType,
-                             TODAY,
-                             bDiscountPlanMob.DPRuleID).
-
-      FIND FIRST lbMobSubMain WHERE
-                 lbMobSubMain.Brand = gcBrand AND
-                 lbMobSubMain.Cli   = ocMainline NO-LOCK NO-ERROR.
-      IF AVAIL lbMobSubMain THEN
-      DO:
-         FIND FIRST lbOrderMain WHERE 
-                    lbOrderMain.MsSeq   = lbMobSubMain.MsSeq AND
-                    lbOrderMain.CustNum = lbMobSubMain.AgrCust AND
-                    lbOrderMain.Cli     = lbMobSubMain.Cli AND
-                    lbOrderMain.CliType = lbMobSubMain.CliTYpe NO-LOCK NO-ERROR.
-         IF AVAIL lbOrderMain THEN
-         DO:            
-            RUN pFillTempData.
-         END.
-      END.            
-         
-      /* Go to next record */
-      ASSIGN ocNext = "Next".                     
-   END.                      
-END PROCEDURE.
-
-PROCEDURE pFillTempData:        
-
-    CREATE tt-data.
-    ASSIGN tt-data.addlinemsisdn     = bOrder.Cli
-           tt-data.addlineclitype    = bOrder.CliType
-           tt-data.addlinesaleschnl  = bOrder.OrderChannel
-           tt-data.addlineordcrstamp = bOrder.CrStamp
-           tt-data.mainmsisdn        = lbOrderMain.Cli
-           tt-data.mainclitype       = lbOrderMain.CliType
-           tt-data.mainsaleschnl     = lbOrderMain.OrderChannel
-           tt-data.mainordcrstamp    = lbOrderMain.CrStamp.
-
-END PROCEDURE.
-
 
