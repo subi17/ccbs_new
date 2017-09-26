@@ -1322,20 +1322,23 @@ FUNCTION fDelivSIM RETURNS LOG
             CliType.Brand = gcBrand AND
             CliType.CliType = Order.CliType NO-ERROR.
          IF AVAIL CliType THEN DO:        
-            FIND FIRST bufOrder NO-LOCK WHERE
-               bufOrder.Brand = gcBrand AND
-               bufOrder.OrderId = Order.MultiSimId NO-ERROR. /* bufOrder for main line */
-            IF AVAIL bufOrder THEN DO: /* MultiSim case */
-               /* AC5: If Main line order is cancelled linking is not needed */
-               IF bufOrder.StatusCode NE {&ORDER_STATUS_CLOSED} THEN DO:
-                  IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
-                     lcMainOrderId = STRING(Order.MultiSimId).
+               IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
+                  FIND FIRST bufOrder NO-LOCK WHERE
+                        bufOrder.Brand = gcBrand AND
+                        bufOrder.OrderId = Order.MultiSimId NO-ERROR. /* bufOrder for main line */
+                  IF AVAIL bufOrder THEN DO: /* MultiSim case */
+                     /* AC5: If Main line order is cancelled linking is not needed */
+                     IF bufOrder.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
+                        lcMainOrderId = STRING(Order.MultiSimId).
+                     ELSE
+                        lcMainOrderId = "".
                   END.
-                  ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-                     FIND FIRST OrderCustomer NO-LOCK WHERE
-                        OrderCustomer.Brand = gcBrand AND
-                        OrderCustomer.OrderId = Order.OrderId AND
-                        OrderCustomer.RowType = 1 NO-ERROR.
+               END.
+               ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+                  FIND FIRST OrderCustomer NO-LOCK WHERE
+                     OrderCustomer.Brand = gcBrand AND
+                     OrderCustomer.OrderId = Order.OrderId AND
+                     OrderCustomer.RowType = 1 NO-ERROR.
                      FOR EACH bufOrderCustomer NO-LOCK WHERE   
                         bufOrderCustomer.Brand      EQ gcBrand AND 
                         bufOrderCustomer.CustId     EQ OrderCustomer.CustId AND
@@ -1349,9 +1352,15 @@ FUNCTION fDelivSIM RETURNS LOG
                            bufCLIType.CLIType = bufOrder.CliType AND
                            bufCLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
                            /* bufOrder.orderid should be main line of the addidtional line */
+                           /* AC5: If Main line order is cancelled linking is not needed */
+                           IF bufOrder.StatusCode ne {&ORDER_STATUS_CLOSED} THEN
+                              lcMainOrderId = STRING(bufOrder.OrderId).
+                           ELSE
+                              lcMainOrderId = "".
                      END.
-                     lcMainOrderId = STRING(bufOrder.OrderId).                     
-                  END.
+               END.
+               IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
+                  CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:                
                   /* AC6: In case Additional/Extra line order is in fraud queue its
                      Deptchar value is set FALSE as it is not delivered same time with Main line  */
                   IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
@@ -1361,13 +1370,14 @@ FUNCTION fDelivSIM RETURNS LOG
                    ELSE
                       llDespachar = TRUE.
                END.
-            END.
-            ELSE DO: /* Main line */
-               IF(CliType.CliType BEGINS "CONTDSL" OR 
-                  CliType.CliType BEGINS "CONTFH") AND
-                  Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
-                  llDespachar = TRUE.
-            END.
+               ELSE DO: /* Main line */
+                  IF(CliType.CliType BEGINS "CONTDSL" OR 
+                     CliType.CliType BEGINS "CONTFH") AND
+                     Order.StatusCode NE {&ORDER_STATUS_CLOSED} THEN
+                     llDespachar = TRUE.
+                  ELSE
+                     llDespachar = FALSE.
+               END.
          END.
       END.
 
