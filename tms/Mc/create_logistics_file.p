@@ -75,7 +75,7 @@ DEFINE TEMP-TABLE ttOutputText
 DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO, THROW:
-   lcBrand = CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant()).
+   lcBrand = CAPS(multitenancy.TenantInformation:mGetEffectiveBrand()).
 
    /* Handler code for any error condition. */
    CATCH anyErrorObject AS Progress.Lang.Error:
@@ -421,6 +421,8 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE BUFFER bufGroup FOR BItemGroup.
    DEFINE BUFFER bufSIM   FOR SIM.
    DEFINE BUFFER bufOrder FOR Order. /* GAP018 */
+   DEFINE BUFFER bufOrderCustomer FOR OrderCustomer. /* GAP018 */
+   DEFINE BUFFER bufCLIType FOR CliType. /* GAP018 */
 
    RELEASE Invoice.
 
@@ -1305,6 +1307,7 @@ FUNCTION fDelivSIM RETURNS LOG
       /* Check if router delivered and terminal can be delivered */
       IF llDextraInvoice THEN DO:
          FIND FIRST OrderDelivery NO-LOCK WHERE
+            OrderDelivery.Brand = gcBrand AND
             OrderDelivery.OrderId = Order.OrderId NO-ERROR.
          IF AVAIL OrderDelivery THEN DO:
             IF OrderDelivery.LOStatusId = 99998 THEN
@@ -1316,11 +1319,12 @@ FUNCTION fDelivSIM RETURNS LOG
       ELSE DO: /* SIM */
       
          FIND FIRST CliType NO-LOCK WHERE 
+            CliType.Brand = gcBrand AND
             CliType.CliType = Order.CliType NO-ERROR.
          IF AVAIL CliType THEN DO:        
             FIND FIRST bufOrder NO-LOCK WHERE
-               Order.MultiSimId NE 0 AND
-               bufOrder.OrderId = Order.MultiSimId. /* bufOrder for main line */
+               bufOrder.Brand = gcBrand AND
+               bufOrder.OrderId = Order.MultiSimId NO-ERROR. /* bufOrder for main line */
             IF AVAIL bufOrder THEN DO: /* MultiSim case */
                /* AC5: If Main line order is cancelled linking is not needed */
                IF bufOrder.StatusCode NE {&ORDER_STATUS_CLOSED} THEN DO:
@@ -1328,7 +1332,25 @@ FUNCTION fDelivSIM RETURNS LOG
                      lcMainOrderId = STRING(Order.MultiSimId).
                   END.
                   ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-                     /* ToDo... */
+                     FIND FIRST OrderCustomer NO-LOCK WHERE
+                        OrderCustomer.Brand = gcBrand AND
+                        OrderCustomer.OrderId = Order.OrderId AND
+                        OrderCustomer.RowType = 1 NO-ERROR.
+                     FOR EACH bufOrderCustomer NO-LOCK WHERE   
+                        bufOrderCustomer.Brand      EQ gcBrand AND 
+                        bufOrderCustomer.CustId     EQ OrderCustomer.CustId AND
+                        bufOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
+                        bufOrderCustomer.RowType    EQ 1,
+                        EACH bufOrder NO-LOCK WHERE
+                           bufOrder.Brand   EQ gcBrand AND
+                           bufOrder.orderid EQ bufOrderCustomer.Orderid,
+                        FIRST bufCLIType NO-LOCK WHERE
+                           bufCLIType.Brand = gcBrand AND
+                           bufCLIType.CLIType = bufOrder.CliType AND
+                           bufCLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
+                           /* bufOrder.orderid should be main line of the addidtional line */
+                     END.
+                     lcMainOrderId = STRING(bufOrder.OrderId).                     
                   END.
                   /* AC6: In case Additional/Extra line order is in fraud queue its
                      Deptchar value is set FALSE as it is not delivered same time with Main line  */
