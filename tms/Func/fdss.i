@@ -919,15 +919,7 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
    IF icDSSId BEGINS "DSS" THEN
       llDSSNeeded = TRUE.
    IF icDSSId EQ "DSS" AND
-      NOT fIsDSSAllowed(INPUT iiCustNum,
-                    INPUT iiMsSeq,
-                    INPUT fmakets(),
-                    INPUT {&DSS},
-                    "",
-                    OUTPUT ldeCurrMonthLimit,
-                    OUTPUT ldeConsumedData,
-                    OUTPUT ldeOtherMonthLimit,
-                    OUTPUT lcResult) THEN
+      NOT fIsDSSActive(INPUT iiCustnum,INPUT fmakets()) THEN
       llDSSNeeded = FALSE.
    ELSE IF icDSSId EQ "DSS2" THEN DO:
       FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
