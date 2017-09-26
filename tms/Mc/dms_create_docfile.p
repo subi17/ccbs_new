@@ -811,7 +811,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    STRING(Order.OrderType)         + lcDelim +
    /**/
-   fGetSegment(Order.Custnum)      + lcDelim +
+   fGetSegment(Order.Custnum, order.orderid)      + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    /*q25Extension YPR-3269*/
@@ -1445,7 +1445,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    /*Order type*/
    STRING(Order.OrderType)        + lcDelim +
    /*Segment*/
-   fGetSegment(Order.CustNum)     + lcDelim +
+   fGetSegment(Order.CustNum, order.orderid)     + lcDelim +
    /*Terminal type*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    ( IF Order.DeliverySecure EQ 1

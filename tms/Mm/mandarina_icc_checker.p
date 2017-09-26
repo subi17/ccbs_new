@@ -95,7 +95,7 @@ DO TRANS:
 END.
 
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-
+PUT STREAM sICCLog UNFORMATTED "Collection period: " + fTS2HMS(ldCollPeriodStartTS) + " TO " fTS2HMS(ldCollPeriodEndTS) SKIP.
 /* ICC lookup part */
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
@@ -105,7 +105,8 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.UpdateStamp > ldCollPeriodStartTS AND
          MsRequest.UpdateStamp <= ldCollPeriodEndTS AND
          MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/ AND
-         MsRequest.UpdateStamp <= MsRequest.DoneStamp:
+         MsRequest.UpdateStamp <= MsRequest.DoneStamp
+         USE-Index UpdateStamp:
    FIND FIRST bLP_MsRequest NO-LOCK WHERE 
               bLP_MsRequest.MsSeq EQ MsRequest.MsSeq AND
               bLP_MsRequest.ActStamp < MsRequest.DoneStamp AND
@@ -125,12 +126,12 @@ FOR EACH MsRequest NO-LOCK WHERE
          END.
       END. 
 
-      IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED1" OR
-          bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED2") THEN DO:
+      IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1" OR
+          bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED2") THEN DO:
          /*The last LP command was Mandarina LP redirection setting
            -> this must be cancelled*/
          llgReqDone = fMakeLPCommandRequest(MsRequest.MsSeq,
-                                            "REMOVE",
+                                            "remove",
                                             MsRequest.CustNum,
                                             "Redirection removed",
                                             "Redirection removed, reason: ICC",
@@ -141,7 +142,7 @@ FOR EACH MsRequest NO-LOCK WHERE
             STRING(TIME,"hh:mm:ss") + ";" +  
             STRING(MsRequest.MsSeq) + ";" +
             STRING(MsRequest.CustNum) + ";" + 
-            (IF llgReqDone THEN "REMOVE"
+            (IF llgReqDone THEN "remove"
              ELSE "ERROR:" + lcError)
             SKIP.
          /* TODO: Source setting for DUMP purposes. */              

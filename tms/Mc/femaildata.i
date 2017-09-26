@@ -1569,7 +1569,8 @@ PROCEDURE pGetPENALTYFEE:
    IF CAN-FIND(FIRST CLIType WHERE
                      CLIType.Brand = gcBrand AND
                      CLIType.CLItype = Order.CliType AND
-                     ClIType.LineType > 0) THEN DO:
+                    (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                     CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) THEN DO:
 
       IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN
          lcTariffType = fGetDataBundleInOrderAction(Order.OrderId,
@@ -1912,7 +1913,7 @@ PROCEDURE pGetCTNAME:
          WHEN "TARJ10" THEN lcList = "20 min/mes gratis,".
          WHEN "TARJ11" THEN lcList = "50 min/mes gratis,".
          WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
-         WHEN "TARJ13" THEN lcList = "5000 min/mes gratis,".
+         WHEN "TARJ13" THEN lcList = "Llamadas Ilimitadas,".
          OTHERWISE lcList = "".
        END.
 

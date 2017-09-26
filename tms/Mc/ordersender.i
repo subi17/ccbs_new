@@ -557,7 +557,8 @@
                    NEXT {1}.                  
                 END.
                 
-                IF LOOKUP(Order.OrderChannel,"fusion_pos,pos,vip") = 0 AND
+                IF LOOKUP(Order.OrderChannel,"fusion_pos,pos,vip," +
+                                             "fusion_pos_pro,pos_pro") = 0 AND
                    llReserveSimAndMsisdn AND
                    Sim.SimStat NE 1 AND
                    Order.OrderType <> 3 AND
@@ -661,7 +662,9 @@
                 
                 IF Order.SalesMan EQ "order_correction_mnp" AND
                    LOOKUP(Order.OrderChannel,
-                          "telesales,fusion_telesales,pos,fusion_pos") > 0 THEN
+                          "telesales,fusion_telesales,pos,fusion_pos," +
+                          "telesales_pro,fusion_telesales_pro,pos_pro," +
+                          "fusion_pos_pro") > 0 THEN
                    /* YBP-620 */
                    Order.MNPStatus = 6. /* fake mnp process (ACON) */
                 /*MB_Migration has special MNP/Migration handler*/
@@ -775,7 +778,8 @@
                         OrderTimeStamp.OrderID = Order.OrderID AND
                         OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
                 IF (LOOKUP(Order.OrderChannel,
-                    "pos,cc,pre-act,vip,fusion_pos,fusion_cc") > 0 AND
+                    "pos,cc,pre-act,vip,fusion_pos,fusion_cc," +
+                    "pos_pro,fusion_pos_pro") > 0 AND
                     Order.ICC > "") OR Order.OrderType = 3 
                 THEN SIM.SimStat = 4.
                 ELSE SIM.SimStat = 20.
@@ -785,14 +789,17 @@
                 Order.MNPStatus = 6 AND
                 Order.SalesMan EQ "order_correction_mnp" AND
                 LOOKUP(Order.OrderChannel,
-                       "telesales,fusion_telesales,pos,fusion_pos") > 0 THEN
+                       "telesales,fusion_telesales,pos,fusion_pos," +
+                       "telesales_pro,fusion_telesales_pro,pos_pro," +
+                       "fusion_pos_pro") > 0 THEN
                 SIM.SimStat = 21.
 
              IF Order.ICC = "" THEN Order.ICC = Sim.ICC.
              
              SIM.MsSeq = Order.MsSeq.
                 
-             IF LOOKUP(Order.OrderChannel,"pos,cc,vip,fusion_pos,fusion_cc") = 0 AND
+             IF LOOKUP(Order.OrderChannel,"pos,cc,vip,fusion_pos,fusion_cc," +
+                                          "pos_pro,fusion_pos_pro") = 0 AND
                 Order.OrderType <> 3 THEN DO:
                 CREATE SimDeliveryhist.
            
