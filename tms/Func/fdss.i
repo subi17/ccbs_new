@@ -918,9 +918,10 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
           lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
    IF icDSSId BEGINS "DSS" THEN
       llDSSNeeded = TRUE.
-   IF icDSSId EQ "DSS" THEN 
+   IF icDSSId EQ "DSS" THEN DO: 
       IF NOT fIsDSSActive(INPUT iiCustnum,INPUT fmakets()) THEN
          llDSSNeeded = FALSE.
+   END.
    ELSE IF icDSSId EQ "DSS2" THEN DO:
       FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
       IF AVAIL MobSub THEN DO:
