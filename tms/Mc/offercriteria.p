@@ -82,7 +82,7 @@ FORM
     OfferCriteria.OfferCriteriaID COLON 15 SKIP(1)
     OfferCriteria.CriteriaType  COLON 15 
        lcType FORMAT "X(30)" NO-LABEL SKIP
-    OfferCriteria.IncludedValue COLON 15
+    OfferCriteria.IncludedValue  FORMAT "X(50)" COLON 15
     OfferCriteria.ExcludedValue COLON 15
     OfferCriteria.BeginStamp    COLON 15
        lcBegin FORMAT "X(20)" NO-LABEL SKIP
