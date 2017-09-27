@@ -24,7 +24,7 @@
 "1" 17 "Contract Target" "List" "Percentage" 2 no "" "CONTS26DISC" 01/06/14 31/12/49 "CONTS26DISC" "Discount La Infinita 2GB" "" "List" 0 0 0 4
 "1" 7 "Contract Target" "List" "Percentage" 2 no "" "CONTS30DISC" 01/06/13 31/12/49 "CONTS30DISC" "Infinita 30 Discount" "" "List" 5 0 0 180
 "1" 18 "Contract Target" "List" "Percentage" 2 no "" "CONTS32DISC" 01/06/14 31/12/49 "CONTS32DISC" "Discount La infinita 4 GB" "" "List" 0 0 0 4
-"1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 30/06/17 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6
+"1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 31/12/49 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6
 "1" 57 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC20_3" 05/07/17 31/12/49 "CONVDISC20_3" "Convergent New Adds Promotion" "" "List" 0 0 0 3
 "1" 66 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIGIC" 22/08/17 31/12/49 "DISCAGILETVIGIC" "TV Service + SKY" "" "All" 0 0 1 0
 "1" 67 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIPSIC" 22/08/17 31/12/49 "DISCAGILETVIPSIC" "TV Service + SKY" "" "All" 0 0 1 0
@@ -50,12 +50,14 @@
 "1" 8 "Contract Target" "All " "Percentage" 2 no "" "DISCOUNT10" 01/09/13 31/12/49 "DISCOUNT10" "Discount 10 percent" "" "All " 0 0 0 0
 "1" 42 "Contract Target" "List" "Percentage" 1 no "" "DISCWINBACK" 22/02/17 31/12/49 "DISCWINBACK" "Winback ADSL Discount" "" "List" 0 0 0 6
 "1" 63 "Contract Target" "List" "Fixed" 1 no "" "FIDETVDISC" 01/07/17 31/12/49 "FIDETVDISC" "Loyalty & retention discount" "" "List" 0 0 1 6
+"1" 69 "Contract Target" "List" "Fixed" 2 no "" "GMMDISC" 01/09/17 31/12/49 "GMMDISC" "Descuento Grupo MasMovil" "" "List" 0 0 0 0
 "1" 21 "Contract Target" "List" "Percentage" 3 no "" "INC_DISC" 01/12/14 31/12/49 "INC_DISC" "Descuento Incidencia red" "" "All " 0 0 1 1
 "1" 19 "Contract Target" "List" "Percentage" 2 no "" "INTLCALLDISC" 01/07/14 31/12/49 "INTLCALLDISC" "Discount international Calls" "" "All " 0 0 0 0
 "1" 11 "Contract Target" "List" "Percentage" 3 no "" "LRDISC" 01/02/14 31/12/49 "LRDISC" "Loyalty & retention discount" "" "All " 0 0 0 0
 "1" 52 "Contract Target" "List" "Percentage" 3 no "" "LRDISC2" 01/05/17 31/12/49 "LRDISC2" "Loyalty & retention discount2" "" "All" 0 0 0 0
 "1" 5 "Contract Target" "List" "Percentage" 2 no "" "DISCPAYTERMDIR" 01/02/13 31/12/49 "PAYTERMDISCDIR" "Payterm discount direct channel" "" "All " 0 0 0 1
 "1" 6 "Contract Target" "List" "Percentage" 2 no "" "DISCPAYTERMINDIR" 01/02/13 31/12/49 "PAYTERMDISCINDIR" "Payterm discount indirect channel" "" "All " 0 0 0 1
+"1" 70 "Contract Target" "List" "Fixed" 3 no "" "PENALDISC" 01/09/17 31/12/49 "PENALDISC" "Cross Selling Discount" "" "List" 0 0 1 15
 "1" 26 "Contract Target" "List" "Fixed" 2 no "" "REJECT_FEE_DISC" 01/03/15 31/12/49 "REJECT_FEE_DISC" "Rejection fee discount" "" "All " 0 0 0 1
 "1" 1 "Contract Target" "List" "Fixed" 3 no "" "RETDISC" 11/10/12 31/12/49 "RETDISC" "Gift Discount" "" "All " 0 0 0 6
 "1" 12 "Contract Target" "List" "Percentage" 2 no "" "RVTERM1EFD" 01/03/14 31/12/49 "RVTERM1EFD" "Residual Value Uno-e Discount" "" "All " 0 0 0 1
