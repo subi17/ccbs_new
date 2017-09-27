@@ -652,20 +652,20 @@ PROCEDURE pContractActivation:
          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
          FIND FIRST bMobsub WHERE bMobsub.msseq EQ MsRequest.msseq 
          NO-LOCK NO-ERROR.
-         IF AVAIL bMobSub THEN DO:
-            IF (LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
-               (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-                LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0)) THEN
+         IF AVAIL bMobSub AND LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) > 0
+         THEN DO:
+            IF (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN DO:
                IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
                                                     bMobSub.MultiSimId,
                                                     bMobSub.MultiSimType) 
                THEN DO:
                   fReqStatus(3,"Bundle Upsell can not be activated because " +
-                             "DSS2 extra line matrix analyse").
+                             "DSS2 extra line analyse").
                   RETURN.
-                END.
-            ELSE IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) > 0 
-            THEN DO:
+               END.
+            END.    
+            ELSE DO:
                fReqStatus(3,"Bundle Upsell can not be activated because " +
                           "DSS2 already active").
                RETURN.
