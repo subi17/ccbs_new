@@ -1317,7 +1317,7 @@
 "XML" "XMLHeaderLogo" "c" 0 0 "/apps/tms/print/images/telef3_head.gif" ? "" "" "" "" "" "" "" "" "" "" "Position of header logo" no "1"
 "xtupas" "TupasValid" "I" 1 0 "" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
 "YPRO" "NON_PRO_CHANNELS" "C" 0 0 "Self,POS,Fusion_POS,ccorder,fusion_telesales,selforder,posorder,Fusion_POSorder,tienda" ? "" "" "" "" "" "" "" "" "" "" "PRO contracts" no "1"
-"YPRO" "PRO_CHANNELS" "C" 0 0 "Telesales_PRO,Fusion_Telesales_PRO" ? "" "" "" "" "" "" "" "" "" "" "PRO contracts" no "1"
+"YPRO" "PRO_CHANNELS" "C" 0 0 "Telesales_PRO,Fusion_Telesales_PRO,telesalesorder_PRO,cc_PRO,emission_PRO,fusion_ccorder_PRO,fusion_emission_PRO,fusion_POS_PRO,pos_PRO" ? "" "" "" "" "" "" "" "" "" "" "PRO contracts" no "1"
 "YPRO" "PRO_DSS_FLEX_UPSELL_LIST" "C" 0 0 "DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL" ? "" "" "" "" "" "" "" "" "" "" "DSS Flex Upsell List" no "1"
 "YPRO" "PRO_FLEX_UPSELL_LIST" "C" 0 0 "FLEX_5GB_UPSELL,FLEX_500MB_UPSELL" ? "" "" "" "" "" "" "" "" "" "" "PRO contracts" no "1"
 "YPRO" "SVA_BO_EMAIL_ADDRESS" "C" 0 0 "soporte.negocios@yoigo.com" ? "" "" "" "" "" "" "" "" "" "" "PRO contracts" no "1"
