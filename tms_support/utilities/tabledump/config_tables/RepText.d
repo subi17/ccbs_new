@@ -3730,6 +3730,51 @@
 1 "" 3 "Samsung Galaxy Note 8" 0 "G0000355" "1" 18/08/17 31/12/49
 1 "" 4 "Samsung Galaxy Note 8" 0 "G0000355" "1" 18/08/17 31/12/49
 1 "" 5 "Samsung Galaxy Note 8" 0 "G0000355" "1" 18/08/17 31/12/49
+1 "" 1 "BQ Aquaris X32" 0 "G0000356" "1" 20/09/17 31/12/49
+1 "" 2 "BQ Aquaris X32" 0 "G0000356" "1" 20/09/17 31/12/49
+1 "" 3 "BQ Aquaris X32" 0 "G0000356" "1" 20/09/17 31/12/49
+1 "" 4 "BQ Aquaris X32" 0 "G0000356" "1" 20/09/17 31/12/49
+1 "" 5 "BQ Aquaris X32" 0 "G0000356" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8" 0 "G0000357" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8" 0 "G0000357" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8" 0 "G0000357" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8" 0 "G0000357" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8" 0 "G0000357" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 64 GB" 0 "G0000358" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 64GB" 0 "G0000358" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 64GB" 0 "G0000358" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 64GB" 0 "G0000358" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 64 GB" 0 "G0000358" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 256 GB" 0 "G0000359" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 256GB" 0 "G0000359" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 256GB" 0 "G0000359" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 256GB" 0 "G0000359" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 256 GB" 0 "G0000359" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus" 0 "G0000360" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus" 0 "G0000360" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus" 0 "G0000360" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus" 0 "G0000360" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus" 0 "G0000360" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 64 GB" 0 "G0000361" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 64GB" 0 "G0000361" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 64GB" 0 "G0000361" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 64GB" 0 "G0000361" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 64 GB" 0 "G0000361" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 256 GB" 0 "G0000362" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 256GB" 0 "G0000362" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 256GB" 0 "G0000362" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 256GB" 0 "G0000362" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 256 GB" 0 "G0000362" "1" 20/09/17 31/12/49
+1 "" 1 "Bq Aquaris U2" 0 "G0000363" "1" 27/09/17 31/12/49
+1 "" 2 "Bq Aquaris U2" 0 "G0000363" "1" 27/09/17 31/12/49
+1 "" 3 "Bq Aquaris U2" 0 "G0000363" "1" 27/09/17 31/12/49
+1 "" 4 "Bq Aquaris U2" 0 "G0000363" "1" 27/09/17 31/12/49
+1 "" 5 "Bq Aquaris U2" 0 "G0000363" "1" 27/09/17 31/12/49
+1 "" 1 "Sony Xperia XZ Premium" 0 "G0000364" "1" 27/09/17 31/12/49
+1 "" 2 "Sony Xperia XZ Premium" 0 "G0000364" "1" 27/09/17 31/12/49
+1 "" 3 "Sony Xperia XZ Premium" 0 "G0000364" "1" 27/09/17 31/12/49
+1 "" 4 "Sony Xperia XZ Premium" 0 "G0000364" "1" 27/09/17 31/12/49
+1 "" 5 "Sony Xperia XZ Premium" 0 "G0000364" "1" 27/09/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -3755,6 +3800,10 @@
 1 "" 5 "Discount" 0 "GENERALCOMP" "1" 01/04/12 31/12/49
 1 "" 5 "General compensation" 0 "GENERALCOMP" "1" 01/06/10 31/03/12
 1 "" 5 "Compensation General" 0 "GENERALCOMP" "1" 24/06/09 31/05/10
+1 "" 1 "Descuento Grupo MasMovil" 0 "GMMDISC" "1" 01/09/17 31/12/49
+1 "" 2 "Descompte grup MasMovi" 0 "GMMDISC" "1" 01/09/17 31/12/49
+1 "" 3 "Deskontua Masmovil taldea" 0 "GMMDISC" "1" 01/09/17 31/12/49
+1 "" 5 "MasMovil Group discount" 0 "GMMDISC" "1" 01/09/17 31/12/49
 1 "" 1 "Modem USB" 0 "GMODEMUSB" "1" 15/07/11 31/12/49
 1 "" 2 "Modems USB" 0 "GMODEMUSB" "1" 15/07/11 31/12/49
 1 "" 3 "Modems USB" 0 "GMODEMUSB" "1" 15/07/11 31/12/49
@@ -4972,11 +5021,11 @@
 1 "" 3 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 4 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 5 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
-1 "" 1 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 2 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 3 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 4 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 5 "LG K10 2017 Titan with Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 1 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 2 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 3 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 4 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 5 "LG K10 2017 Titan with Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
 1 "" 1 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
 1 "" 2 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
 1 "" 3 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
@@ -6906,34 +6955,34 @@
 1 "" 4 "Sony Xperia Z Ultra Blanco" 0 "P037XPUW2" "1" 26/09/13 31/12/49
 1 "" 5 "Sony Xperia Z Ultra White" 0 "P037XPUW2" "1" 26/09/13 31/12/49
 1 "" 1 "Sony Xperia V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Pink" 0 "P037XPVF1" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Pink" 0 "P037XPVF2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Black" 0 "P037XPVN1" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Black" 0 "P037XPVN2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
 1 "" 4 " Sony XperiaÖ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V White" 0 "P037XPVW1" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V White" 0 "P037XPVW2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia Z1 Morado" 0 "P037XPYM2" "1" 12/12/13 31/12/49
 1 "" 2 "Sony Xperia Z1 Morado" 0 "P037XPYM2" "1" 12/12/13 31/12/49
@@ -6966,9 +7015,9 @@
 1 "" 4 "Sony Xperia T" 0 "P037XTTN2" "1" 28/11/12 31/12/49
 1 "" 5 "Sony Xperia T" 0 "P037XTTN2" "1" 28/11/12 31/12/49
 1 "" 1 "Sony Xperia Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia Tablet Z Black" 0 "P037XTZN2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
 1 "" 2 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
@@ -7060,6 +7109,11 @@
 1 "" 3 "Sony Xperia Z1 Compact Lima" 0 "P037XZCY2" "1" 21/02/14 31/12/49
 1 "" 4 "Sony Xperia Z1 Compact Lima" 0 "P037XZCY2" "1" 21/02/14 31/12/49
 1 "" 5 "Sony Xperia Z1 Compact Lime" 0 "P037XZCY2" "1" 21/02/14 31/12/49
+1 "" 1 "Sony Xperia XZ Premium Negro" 0 "P037XZPNC" "1" 25/09/17 31/12/49
+1 "" 2 "Sony Xperia XZ Premium Negro" 0 "P037XZPNC" "1" 25/09/17 31/12/49
+1 "" 3 "Sony Xperia XZ Premium Negro" 0 "P037XZPNC" "1" 25/09/17 31/12/49
+1 "" 4 "Sony Xperia XZ Premium Negro" 0 "P037XZPNC" "1" 25/09/17 31/12/49
+1 "" 5 "Sony Xperia XZ Premium Black" 0 "P037XZPNC" "1" 25/09/17 31/12/49
 1 "" 1 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
 1 "" 2 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
 1 "" 3 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
@@ -8356,31 +8410,31 @@
 1 "" 3 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 5 "Wolder Wiam 23 Black" 0 "P047W23N2" "1" 10/06/16 31/12/49
-1 "" 1 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 2 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 3 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 4 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 5 "Wolder Wiam 23 Black with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 1 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 2 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 3 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 4 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 5 "Wolder Wiam 23 Black with Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
 1 "" 1 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 2 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 3 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 5 "Wolder Wiam 23 White" 0 "P047W23W2" "1" 03/10/16 31/12/49
-1 "" 1 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 2 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 3 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 4 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 5 "Wolder Wiam 23 White with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 1 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 2 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 3 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 4 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 5 "Wolder Wiam 23 White with Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
 1 "" 1 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 2 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 3 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 4 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 5 "Wolder Wiam 27 Black" 0 "P047W27N2" "1" 24/05/17 31/12/49
-1 "" 1 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 2 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 3 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 4 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 5 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 1 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 2 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 3 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 4 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 5 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
 1 "" 1 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
 1 "" 2 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
 1 "" 3 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
@@ -9016,6 +9070,21 @@
 1 "" 3 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
 1 "" 4 "BQ Aquaris X Blanco" 0 "P088AQXW2" "1" 29/05/17 31/12/49
 1 "" 5 "BQ Aquaris X White" 0 "P088AQXW2" "1" 29/05/17 31/12/49
+1 "" 1 "BQ Aquaris X  Blanco" 0 "P088AQXWC" "1" 22/09/17 31/12/49
+1 "" 2 "BQ Aquaris X  Blanco" 0 "P088AQXWC" "1" 22/09/17 31/12/49
+1 "" 3 "BQ Aquaris X  Blanco" 0 "P088AQXWC" "1" 22/09/17 31/12/49
+1 "" 4 "BQ Aquaris X  Blanco" 0 "P088AQXWC" "1" 22/09/17 31/12/49
+1 "" 5 "BQ Aquaris X  White" 0 "P088AQXWC" "1" 22/09/17 31/12/49
+1 "" 1 "Bq Aquaris U2 Negro" 0 "P088AU2N2" "1" 25/09/17 31/12/49
+1 "" 2 "Bq Aquaris U2 Negro" 0 "P088AU2N2" "1" 25/09/17 31/12/49
+1 "" 3 "Bq Aquaris U2 Negro" 0 "P088AU2N2" "1" 25/09/17 31/12/49
+1 "" 4 "Bq Aquaris U2 Negro" 0 "P088AU2N2" "1" 25/09/17 31/12/49
+1 "" 5 "Bq Aquaris U2 Black" 0 "P088AU2N2" "1" 25/09/17 31/12/49
+1 "" 1 "BQ Aquaris X32 Blanco" 0 "P088AX3WC" "1" 20/09/17 31/12/49
+1 "" 2 "BQ Aquaris X32 Blanco" 0 "P088AX3WC" "1" 20/09/17 31/12/49
+1 "" 3 "BQ Aquaris X32 Blanco" 0 "P088AX3WC" "1" 20/09/17 31/12/49
+1 "" 4 "BQ Aquaris X32 Blanco" 0 "P088AX3WC" "1" 20/09/17 31/12/49
+1 "" 5 "BQ Aquaris X32 White" 0 "P088AX3WC" "1" 20/09/17 31/12/49
 1 "" 1 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 2 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 3 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
@@ -9696,6 +9765,81 @@
 1 "" 3 "iPhone 7 Plus 32 GB Plata" 0 "P0977P3SC" "1" 03/08/17 31/12/49
 1 "" 4 "iPhone 7 Plus 32 GB Plata" 0 "P0977P3SC" "1" 03/08/17 31/12/49
 1 "" 5 "iPhone 7 Plus 32 GB Silver" 0 "P0977P3SC" "1" 03/08/17 31/12/49
+1 "" 1 "iPhone 8 256 GB Oro" 0 "P097825DC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 256 GB Oro" 0 "P097825DC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 256 GB Oro" 0 "P097825DC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 256 GB Oro" 0 "P097825DC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 256 GB Gold" 0 "P097825DC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 256 GB Gris" 0 "P097825GC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 256 GB Gris" 0 "P097825GC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 256 GB Gris" 0 "P097825GC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 256 GB Gris" 0 "P097825GC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 256 GB Space Grey" 0 "P097825GC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 256GB  Negro" 0 "P097825NC" "1" 27/09/17 31/12/49
+1 "" 2 "iPhone 8 256GB  Negro" 0 "P097825NC" "1" 27/09/17 31/12/49
+1 "" 3 "iPhone 8 256GB  Negro" 0 "P097825NC" "1" 27/09/17 31/12/49
+1 "" 4 "iPhone 8 256GB  Negro" 0 "P097825NC" "1" 27/09/17 31/12/49
+1 "" 5 "iPhone 8 256GB Black" 0 "P097825NC" "1" 27/09/17 31/12/49
+1 "" 1 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 256 GB Plata" 0 "P097825SC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 256 GB Silver" 0 "P097825SC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 64 GB Oro" 0 "P097864DC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 64 GB Oro" 0 "P097864DC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 64 GB Oro" 0 "P097864DC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 64 GB Oro" 0 "P097864DC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 64 GB Gold" 0 "P097864DC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 64 GB Gris" 0 "P097864GC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 64 GB Gris" 0 "P097864GC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 64 GB Gris" 0 "P097864GC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 64 GB Gris" 0 "P097864GC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 64 GB Space Grey" 0 "P097864GC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 64GB Negro" 0 "P097864NC" "1" 26/09/17 31/12/49
+1 "" 2 "iPhone 8 64GB Negro" 0 "P097864NC" "1" 26/09/17 31/12/49
+1 "" 3 "iPhone 8 64GB Negro" 0 "P097864NC" "1" 26/09/17 31/12/49
+1 "" 4 "iPhone 8 64GB Negro" 0 "P097864NC" "1" 26/09/17 31/12/49
+1 "" 5 "iPhone 8 64GB Black" 0 "P097864NC" "1" 26/09/17 31/12/49
+1 "" 1 "iPhone 8 64 GB Plata" 0 "P097864SC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 64 GB Plata" 0 "P097864SC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 64 GB Plata" 0 "P097864SC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 64 GB Plata" 0 "P097864SC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 64 GB Silver" 0 "P097864SC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 256 GB Oro" 0 "P0978P2DC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 256 GB Oro" 0 "P0978P2DC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 256 GB Oro" 0 "P0978P2DC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 256 GB Oro" 0 "P0978P2DC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 256 GB Gold" 0 "P0978P2DC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 256 GB Gris" 0 "P0978P2GC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 256 GB Gris" 0 "P0978P2GC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 256 GB Gris" 0 "P0978P2GC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 256 GB Gris" 0 "P0978P2GC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 256 GB Space Grey" 0 "P0978P2GC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 256GB Negro" 0 "P0978P2NC" "1" 26/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 256GB Negro" 0 "P0978P2NC" "1" 26/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 256GB Negro" 0 "P0978P2NC" "1" 26/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 256GB Negro" 0 "P0978P2NC" "1" 26/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 256GB Black" 0 "P0978P2NC" "1" 26/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 256 GB Plata" 0 "P0978P2SC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 256 GB Plata" 0 "P0978P2SC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 256 GB Plata" 0 "P0978P2SC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 256 GB Plata" 0 "P0978P2SC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 256 GB Silver" 0 "P0978P2SC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 64 GB Oro" 0 "P0978P6DC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 64 GB Oro" 0 "P0978P6DC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 64 GB Oro" 0 "P0978P6DC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 64 GB Oro" 0 "P0978P6DC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 64 GB Gold" 0 "P0978P6DC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 64 GB Gris" 0 "P0978P6GC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 64 GB Gris" 0 "P0978P6GC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 64 GB Gris" 0 "P0978P6GC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 64 GB Gris" 0 "P0978P6GC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 64 GB Space Grey" 0 "P0978P6GC" "1" 20/09/17 31/12/49
+1 "" 1 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
+1 "" 2 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
+1 "" 3 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
+1 "" 4 "iPhone 8 Plus 64 GB Plata" 0 "P0978P6SC" "1" 20/09/17 31/12/49
+1 "" 5 "iPhone 8 Plus 64 GB Silver" 0 "P0978P6SC" "1" 20/09/17 31/12/49
 1 "" 1 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
 1 "" 2 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
 1 "" 3 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
@@ -9980,6 +10124,10 @@
 1 "" 2 "Tarifa plana" 0 "PD002" "1" 01/01/06 31/12/49
 1 "" 3 "Tarifa finkoa" 0 "PD002" "1" 01/01/06 31/12/49
 1 "" 5 "Flat rate" 0 "PD002" "1" 01/01/06 31/12/49
+1 "" 1 "Descuento para pago penalizaciones" 0 "PENALDISC" "1" 01/09/17 31/12/49
+1 "" 2 "Descompte per pagament penalitzacions" 0 "PENALDISC" "1" 01/09/17 31/12/49
+1 "" 3 "Ordainketa zigorrak deskontuak" 0 "PENALDISC" "1" 01/09/17 31/12/49
+1 "" 5 "Discount payment of penalties" 0 "PENALDISC" "1" 01/09/17 31/12/49
 1 "" 1 "Nokia N70 Blanco" 0 "PO23N70B2" "1" 01/01/06 31/12/49
 1 "" 5 "Nokia N70 White" 0 "PO23N70B2" "1" 01/01/06 31/12/49
 1 "" 1 "Descuento" 0 "POSADCOM" "1" 01/04/12 31/12/49
