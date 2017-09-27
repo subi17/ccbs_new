@@ -37,7 +37,7 @@ FORM
    "Floor............:" OrderCustomer.Floor SKIP
    "Hand.............:" OrderCustomer.Hand SKIP
    "Km...............:" OrderCustomer.Km SKIP
-   "Zip..............:" OrderCustomer.ZipCode FORMAT "X(40)" SKIP(2)
+   "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " Installation Address "
