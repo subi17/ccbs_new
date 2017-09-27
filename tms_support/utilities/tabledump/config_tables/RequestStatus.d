@@ -73,3 +73,5 @@
 "1" 92 0 "Inv/publish_invoice.p" yes "" "" 0 no no
 "1" 93 0 "Inv/publish_ifs.p" yes "" "" 0 no no
 "1" 94 0 "" yes "" "" 0 no no
+"1" 95 0 "Mc/promigrate.p" yes "" "" 0 no no
+"1" 95 8 "Mc/promigrate.p" yes "" "" 0 no no
