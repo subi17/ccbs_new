@@ -159,7 +159,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
                      lcReason = "Mobile line for non-pro customer from PRO channel".
          END.
       END.
-      ELSE IF NOT llNonProToProMigrationOngoing THEN
+      ELSE IF NOT llNonProToProMigrationOngoing AND
+              NOT fIsConvergent3POnly(pcCliType) THEN
          ASSIGN
              llOrderAllowed = FALSE
              lcReason = "PRO migration not possible because of no mobile lines exists".
@@ -172,7 +173,11 @@ FIND FIRST Customer NO-LOCK WHERE
            Customer.OrgID      = pcPersonId AND
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
-IF AVAIL Customer THEN 
+
+/* If customer does not have subscriptions it is handled as new */
+IF AVAIL Customer AND
+   CAN-FIND(FIRST MobSub WHERE Mobsub.Brand EQ gcBrand AND 
+                  Mobsub.InvCust EQ Customer.CustNum) THEN 
 DO:
    FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN
@@ -226,7 +231,7 @@ DO:
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
-            IF plSTCMigrate THEN 
+            IF plSTCMigrate OR fIsConvergent3POnly(pcCliType) THEN 
                fCheckMigration().
             ELSE
                ASSIGN
