@@ -17,11 +17,7 @@
 {Syst/eventval.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
-{Func/finvtxt.i}
-{Func/fcustdata.i}
-{Func/fctchange.i}
 {Func/fmakemsreq.i}
-{Func/msisdn.i}
 {Func/heartbeat.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
