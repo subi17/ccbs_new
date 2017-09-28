@@ -452,8 +452,8 @@ def connect_confluence(host):
         pass
 
     while True:
-        print('Connecting to {}'.format(host))
-        print('Please enter username and password. Leave username empty to skip this host')
+        print('Connecting to host {}'.format(host))
+        print('Please enter username and password (leave username empty to skip this host)')
 
         username = input('Username: ')
 
@@ -495,6 +495,10 @@ def documentation(*a):
 
     if not os.path.exists(confluencefile):
         raise PikeException("Cannot find {0} file".format(confluencefile))
+
+    print('NOTE: Before running this command please make sure that you')
+    print('      have updated the documentation files using')
+    print('      the "pike compile" command in this directory!\n')
 
     rpclist = list(set(parameters or rpcs.keys()))
 
