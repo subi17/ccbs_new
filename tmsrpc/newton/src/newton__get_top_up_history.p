@@ -45,6 +45,8 @@ DO lii = 1 TO 2 ON ERROR UNDO, THROW:
                                        ELSE BUFFER TermMobSub:HANDLE,
                                        NO, "MsSeq", STRING(piMsSeq), NO).
 
+   LEAVE.
+
    CATCH errorobj AS Progress.Lang.AppError:
       IF errorobj:GetMessageNum(1) EQ 2 AND lii EQ 1
       THEN NEXT.
