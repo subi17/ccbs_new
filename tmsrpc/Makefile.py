@@ -546,12 +546,21 @@ def documentation(*a):
 
                 newtext = '\n'.join(data)
 
-                if page['content'] != newtext:
-                    page['content'] = newtext
-                    server.confluence1.storePage(session, page)
-                    print "The page has been updated"
-                else:
-                    print "The page was already up to date"
+                # It is not possible to do the comparison as confluence2.getPage
+                # confluence2.getPage returns data in xml format and the newtext
+                # data is Wiki formatted.
+                # TODO: Implement xml format support to help.py
+                #       i.e. new version of to_confluence() method.
+
+                #if page['content'] != newtext:
+                #    page['content'] = newtext
+                #    server.confluence2.storePage(session, page)
+                #    print "The page has been updated"
+                #else:
+                #    print "The page was already up to date"
+
+                server.confluence1.storePage(session, page)
+                print "The page has been updated"
 
                 print('--')
 
