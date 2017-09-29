@@ -218,77 +218,44 @@ fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 IF llDoEvent THEN
    RUN StarEventMakeModifyEvent(lhOrder).
 
-/* ADDLINE-19 AC10 Additional Line */
+/* Convergent and Mobile only Additional Line */
 /* Extra Line */
-IF lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE}        OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_1}               OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_2}               OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_ROI_LEVEL_3}               OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_IN_CONTROL}                OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_MNP_REJECTED}              OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED}           OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} OR
-   lcOldOrderStatus EQ {&ORDER_STATUS_PENDING_MOBILE_LINE}       THEN
-DO:
-   FIND FIRST lbOrderCustomer NO-LOCK WHERE
-              lbOrderCustomer.Brand   = gcBrand       AND
-              lbOrderCustomer.OrderId = Order.OrderId AND
-              lbOrderCustomer.RowType = 1             NO-ERROR.
-   IF AVAILABLE lbOrderCustomer THEN 
-   DO:
-      /* If Convergent main line is Closed then close the additional line(s) waiting for main line completion */
-      FIND FIRST lbCustomer WHERE lbCustomer.CustNum = lbOrderCustomer.CustNum NO-LOCK NO-ERROR.
-      IF AVAIL lbCustomer THEN 
-      DO:
-          FIND FIRST lbCustCat WHERE lbCustCat.Brand = gcBrand AND lbCustCat.Category = lbCustomer.Category NO-LOCK NO-ERROR.
-          IF AVAIL lbCustCat THEN 
-          DO:
-              ASSIGN llMainLineMigrationOngoing = (IF lbCustCat.Pro <> lbOrderCustomer.Pro THEN TRUE ELSE FALSE).
-          END.
-      END.
-
-      /* If Main Line ongoing order is Closed, and if customer has any
-         ongoing additional line then it has to be closed */
-      IF fIsConvergenceTariff(Order.CLIType) THEN  
-          fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
-                                         lbOrderCustomer.CustID,
-                                         TRUE,                       /* Convergent Order */
-                                         llMainLineMigrationOngoing,
-                                         "CLOSE").         
-
-      /* If Main Line onging order is Closed, and if its associated extra line 
-         ongoing order is available then close extra line ongoing order */
-      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
-      
-      IF lcExtraMainLineCLITypes                       NE "" AND
-         LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
-         Order.MultiSimId                              NE 0  AND 
-         Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
-         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                                  Order.OrderId,    /* Main line Order Id  */ 
-                                 "CLOSE").          /* Action              */
-   
-   END.
-END. 
-
-/* Mobile only Additional Line discount orders - (ALFMO-5) */    
 FIND FIRST lbOrderCustomer NO-LOCK WHERE
            lbOrderCustomer.Brand   = gcBrand       AND
            lbOrderCustomer.OrderId = Order.OrderId AND
            lbOrderCustomer.RowType = 1             NO-ERROR.
+IF AVAILABLE lbOrderCustomer THEN 
+DO:
+   /* If Convergent main line is Closed then close the additional line(s) waiting for main line completion */
+   FIND FIRST lbCustomer WHERE lbCustomer.CustNum = lbOrderCustomer.CustNum NO-LOCK NO-ERROR.
+   IF AVAIL lbCustomer THEN 
+   DO:
+       FIND FIRST lbCustCat WHERE lbCustCat.Brand = gcBrand AND lbCustCat.Category = lbCustomer.Category NO-LOCK NO-ERROR.
+       IF AVAIL lbCustCat THEN 
+       DO:
+           ASSIGN llMainLineMigrationOngoing = (IF lbCustCat.Pro <> lbOrderCustomer.Pro THEN TRUE ELSE FALSE).
+       END.
+   END.
 
-IF AVAILABLE lbOrderCustomer AND 
-   CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                  CLIType.Brand      = gcBrand                          AND
-                  CLIType.CLIType    = Order.CliType                    AND                       
-                  CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
-                  CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID})     THEN DO:
+   /* If Main Line ongoing order is Closed, and if customer has any
+      ongoing additional line then it has to be closed */
+   fActionOnAdditionalLines(lbOrderCustomer.CustIdType,
+                            lbOrderCustomer.CustID,
+                            Order.CLIType,
+                            llMainLineMigrationOngoing,
+                            "CLOSE").         
 
-   fReleaseORCloseAdditionalLines(lbOrderCustomer.CustIdType,
-                                  lbOrderCustomer.CustID,
-                                  FALSE,      
-                                  FALSE,
-                                  "CLOSE").
+   /* If Main Line onging order is Closed, and if its associated extra line 
+      ongoing order is available then close extra line ongoing order */
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+   
+   IF lcExtraMainLineCLITypes                       NE "" AND
+      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
+      Order.MultiSimId                              NE 0  AND 
+      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
+      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                               Order.OrderId,    /* Main line Order Id  */ 
+                              "CLOSE").          /* Action              */
 
 END.
 

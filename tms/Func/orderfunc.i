@@ -397,10 +397,10 @@ FUNCTION fCheckMainLineForMobileOnly RETURNS INTEGER
 END.    
 
 /* Function releases OR CLOSE Additional lines */
-FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
+FUNCTION fActionOnAdditionalLines RETURN LOGICAL
    (INPUT icCustIDType     AS CHAR,
     INPUT icCustID         AS CHAR,
-    INPUT illgConvOrder    AS LOG,
+    INPUT icCLIType        AS CHAR,
     INPUT illgProMigration AS LOG,
     INPUT icAction         AS CHAR):
 
@@ -411,17 +411,25 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
    DEF VAR lcNewOrderStatus AS CHAR NO-UNDO INITIAL "".
    DEF VAR lcDiscList       AS CHAR NO-UNDO INITIAL "". 
    DEF VAR llgDeleteAction  AS LOG  NO-UNDO INITIAL FALSE.  
-   DEF VAR liMOOrderId      AS INT  NO-UNDO INITIAL 0. 
+   DEF VAR liMOOrderId      AS INT  NO-UNDO INITIAL 0.
+   DEF VAR llgMainLineAvail AS LOG  NO-UNDO INITIAL FALSE.   
+   DEF VAR illgConvOrder    AS LOG  NO-UNDO INITIAL FALSE. 
 
-   IF illgConvOrder THEN 
-      lcDiscList = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}.
-   ELSE DO: 
-      lcDiscList  = {&ADDLINE_DISCOUNTS_HM}.
+   IF fIsConvergenceTariff(Order.CLIType) THEN 
+      ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
+             llgMainLineAvail = TRUE
+             illgConvOrder    = TRUE.
+   ELSE IF LOOKUP(icCLIType,"CONT25,CONT26") > 0 THEN DO: 
+      ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_HM}
+             llgMainLineAvail = TRUE.
              
       IF icAction EQ "CLOSE" THEN        
          liMOOrderId = fCheckMainLineForMobileOnly(icCustIDType,
                                                    icCustID). 
    END.
+
+   IF NOT llgMainLineAvail THEN
+      RETURN FALSE.
 
    FOR EACH labOrderCustomer NO-LOCK WHERE
             labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -429,15 +437,16 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
             labOrderCustomer.CustIdType EQ icCustIDType            AND
             labOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
        EACH labOrder NO-LOCK WHERE
-            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
-            labOrder.orderid    EQ labOrderCustomer.Orderid AND
-            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            labOrder.Brand      EQ Syst.Parameters:gcBrand           AND
+            labOrder.OrderId    EQ labOrderCustomer.OrderId          AND
+            labOrder.Statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
             LOOKUP(labOrder.CLIType,{&ADDLINE_CLITYPES}) > 0:
 
       IF illgProMigration THEN
          lcNewOrderStatus = {&ORDER_STATUS_CLOSED}.
       ELSE DO:
-
+         /* This record has to be found, to check orderaction has any additional 
+            line related discount available - and - this record is used if action is CLOSE */ 
          FIND FIRST labOrderAction NO-LOCK WHERE
                     labOrderAction.Brand    = gcBrand           AND
                     labOrderAction.OrderID  = labOrder.OrderId  AND
@@ -449,36 +458,55 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
          CASE icAction:
             WHEN "CLOSE" THEN DO:
 
-               IF illgConvOrder                                                    AND
+               IF illgConvOrder                                                         AND
                   (NOT fCheckOngoingConvergentOrder(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
                                                     labOrder.CliType)
                    AND
                    NOT fCheckExistingConvergent(labOrderCustomer.CustIdType,
                                                 labOrderCustomer.CustID,
-                                                labOrder.CliType))                  OR
+                                                labOrder.CliType)                  
+                   AND 
+                   (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
+                                   labOrderAction.Brand    = gcBrand           AND
+                                   labOrderAction.OrderID  = labOrder.OrderId  AND
+                                   labOrderAction.ItemType = "AddLineDiscount" AND
+                            LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)))  OR 
                   (NOT fCheckOngoing2PConvergentOrder(labOrderCustomer.CustIdType,
                                                       labOrderCustomer.CustID,
                                                       labOrder.CliType)
                    AND
                    NOT fCheckExisting2PConvergent(labOrderCustomer.CustIdType,
                                                   labOrderCustomer.CustID,
-                                                  labOrder.CliType))                THEN   
+                                                  labOrder.CliType)
+                   AND
+                   (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
+                                   labOrderAction.Brand    = gcBrand           AND
+                                   labOrderAction.OrderID  = labOrder.OrderId  AND
+                                   labOrderAction.ItemType = "AddLineDiscount" AND
+                            LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0))) THEN   
                   llgDeleteAction = TRUE.               
                ELSE DO: 
-                  
                   /* If Mainline is available then delete its particular additional discount 
                      orderaction record, if available any other additional orderaction 
                      records then it will be ignored */
                   IF labOrder.OrderId = liMOOrderId THEN 
                      llgDeleteAction = TRUE.   
-                  ELSE IF liMOOrderId EQ 0                                       AND
+                  ELSE IF liMOOrderId EQ 0                                       
+                       AND
                        NOT fCheckOngoingMobileOnly(labOrderCustomer.CustIdType,
                                                    labOrderCustomer.CustID,
-                                                   labOrder.CliType)             AND
+                                                   labOrder.CliType)             
+                       AND
                        NOT fCheckExistingMobileOnly(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
-                                                    labOrder.CliType)            THEN
+                                                    labOrder.CliType) 
+                       AND 
+                       (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
+                                       labOrderAction.Brand    = gcBrand           AND
+                                       labOrderAction.OrderID  = labOrder.OrderId  AND
+                                       labOrderAction.ItemType = "AddLineDiscount" AND
+                                       LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)) THEN
                        llgDeleteAction = TRUE.
                END.   
 

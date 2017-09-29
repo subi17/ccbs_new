@@ -400,6 +400,20 @@ IF NOT AVAIL mobsub THEN DO:
       FIND CURRENT Customer NO-LOCK NO-ERROR.
    END.
 
+   FIND FIRST BillTarget NO-LOCK WHERE 
+              BillTarget.CustNum    = Customer.CustNum AND
+              BillTarget.BillTarget = CliType.BillTarget 
+   NO-ERROR.
+
+   IF NOT AVAIL BillTarget THEN DO:
+      CREATE BillTarget.
+      ASSIGN
+         BillTarget.CustNum    = Customer.CustNum
+         BillTarget.BillTarget = CliType.BillTarget
+         BillTarget.DiscPlan   = CliType.DiscPlan
+         BillTarget.RatePlan   = CliType.PricePlan.
+   END.
+
    ASSIGN
       MobSub.CLI              = Order.CLI
       MobSub.FixedNumber      = orderfusion.FixedNumber WHEN AVAIL orderfusion
@@ -690,30 +704,17 @@ END.
 
 
 /* If pending additional line orders are available then release them */  
-FIND FIRST OrderCustomer WHERE
-           OrderCustomer.Brand   = gcBrand AND
-           OrderCustomer.OrderId = Order.OrderId AND
-           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} 
-           NO-LOCK NO-ERROR.
+FIND FIRST OrderCustomer NO-LOCK WHERE
+           OrderCustomer.Brand   = gcBrand                            AND
+           OrderCustomer.OrderId = Order.OrderId                      AND
+           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
 IF AVAIL OrderCustomer THEN
-DO:
-   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand      = gcBrand                          AND
-                     CLIType.CLIType    = Order.CliType                    AND
-                     CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID}      AND
-                    (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} OR 
-                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})) THEN 
-   DO:
-      fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                      OrderCustomer.CustID,
-                                      IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
-                                         TRUE
-                                      ELSE FALSE,
-                                      FALSE,
-                                     "RELEASE"). 
-   END.
-END.
+   fActionOnAdditionalLines (OrderCustomer.CustIdType,
+                             OrderCustomer.CustID,
+                             Order.CLIType,
+                             FALSE,
+                             "RELEASE"). 
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
