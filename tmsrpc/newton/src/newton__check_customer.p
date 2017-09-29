@@ -231,7 +231,7 @@ DO:
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
-            IF plSTCMigrate OR fIsConvergent3POnly(pcCliType) THEN 
+            IF plSTCMigrate THEN
                fCheckMigration().
             ELSE
                ASSIGN
