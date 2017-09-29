@@ -167,7 +167,10 @@ PROCEDURE pCheckSubscriptionForACC:
          RETURN "ERROR".
       END.
 
-   FIND FIRST MsOwner WHERE MsOwner.MsSeq = MobSub.MsSeq NO-LOCK NO-ERROR.
+   FIND FIRST MsOwner NO-LOCK WHERE
+              MsOwner.MsSeq = MobSub.MsSeq AND
+              MsOwner.TsEnd > MsOwner.TsBegin
+      USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAILABLE MsOwner    OR 
       MsOwner.TsEnd < 99999999 OR
       MsOwner.CustNum NE MobSub.CustNum OR
