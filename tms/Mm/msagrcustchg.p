@@ -132,7 +132,9 @@ PROCEDURE pFinalize:
    ELSE ldaToDate = DATE(MONTH(ldaFromDate) + 1,1,YEAR(ldaFromDate)) - 1.
 
    liPayType = 1. 
-   FIND FIRST MsOwner WHERE MsOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+   FIND FIRST MsOwner WHERE 
+              MsOwner.MsSeq = iiMsSeq AND
+              MsOwner.TSEnd >= 99999999 NO-LOCK NO-ERROR.
    IF AVAILABLE MsOwner AND MsOwner.PayType THEN liPayType = 2.
    
    IF liPayType = 2 THEN 
@@ -262,7 +264,8 @@ PROCEDURE pOwnerChange:
    END.
 
    FIND FIRST MsOwner WHERE
-              MsOwner.MsSeq = MobSub.MsSeq NO-LOCK.
+              MsOwner.MsSeq = MobSub.MsSeq AND
+              MsOwner.TSEnd >= 99999999 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner OR MsOwner.CustNum NE MobSub.CustNum OR
       MsOwner.AgrCust NE MobSub.AgrCust OR MsOwner.TSEnd < MsRequest.ActStamp
    THEN DO:
