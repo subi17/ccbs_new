@@ -1,0 +1,5 @@
+Type;Language Type;Language;Translation Name
+CONTFH1000MF;1;Spanish;FIJO + INTERNET
+CONTFH1000MF;2;Catalan;Fix + Internet
+CONTFH1000MF;3;Basque;Finkoa + Internet
+CONTFH1000MF;5;English;Landline + Internet

@@ -1,0 +1,5 @@
+Code;Type;Spanish (LangCode = 1);Catalan (LangCode = 2);Basque (LangCode = 3)
+CONTFH84_1000;9;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps
+CONTFH84_1000;9;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps
+CONTFH84_1000;9;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps
+CONTFH84_1000;9;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps;La Combinada Azul 1Gbps

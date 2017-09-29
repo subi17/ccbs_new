@@ -1,0 +1,53 @@
+Tariff Fields;Combinada Azul 1000
+CLIType;CONTFH84_1000
+TariffName;La Combinada Azul 1Gbps
+TariffBundle; 
+WebStatus;Active
+STCStatus;Inactive
+PaymentType;Postpaid
+UsageType;Voice
+RatePlanAction;UseExisting
+RatePlan;CONTRATOCONVS
+ReferenceRatePlan;CONTRATOCONVS
+LineType;Entry
+FixedLineType;Fiber
+FixedLineDownload;1GB
+FixedLineUpload;300M
+ServiceClass; 
+CommercialFee;73.554
+ComparisonFee;73.554
+OptionalBundlesAndBONOs;DATA6
+BundlesForActivateOnSTC;CONT25
+ServicesForReCreateOnSTC;BB
+CopyServicesFromCliType;CONTFH68_300
+MobileBaseBundle;CONT25
+MobileBaseBundleType;ServicePackage
+UpsellForMobile;DATA200_UPSELL
+BonoSupportForMobile;Yes
+MonthlyFeeBillCodeForMobile;CONT25MF
+CommercialFeeForMobile;26.45
+FirstMonthFeeCalcForMobile;Relative
+LastMonthFeeCalcForMobile;Relative
+DataLimitForMobile;25600
+VoiceLimitForMobile;45000
+BDestinationLimitForMobile;10000
+FirstMonthDataLimitForMobile;Full
+LastMonthDataLimitForMobile;Full
+FirstMonthVoiceLimitForMobile;Full
+LastMonthVoiceLimitForMobile ;Full
+FirstMonthBDestLimitForMobile;Full
+LastMonthBDestLimitForMobile;Full
+FixedLineBaseBundle;CONTFH1000
+FixedLineBaseBundleType;ServicePackage
+UpsellForFixedLine; 
+BonoSupportForFixedLine;No
+MonthlyFeeBillCodeForFixedLine;CONTFH1000MF
+CommercialFeeForFixedLine;47.104
+FirstMonthFeeCalcForFixedLine;Relative
+LastMonthFeeCalcForFixedLine ;Full
+VoiceLimitForFixedLine;60
+BDestinationLimitForFixedLine ;10000
+FirstMonthVoiceLimitForFixedLine;Full
+LastMonthVoiceLimitForFixedLine;Full
+FirstMonthBDestLimitForFixedLine;Full
+LastMonthBDestLimitForFixedLine;Full
