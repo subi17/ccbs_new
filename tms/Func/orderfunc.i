@@ -463,10 +463,14 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                                                     labOrderCustomer.CustID,
                                                     labOrder.CliType)
                    AND
+                   NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
+                                                        labOrderCustomer.CustId,
+                                                        labOrder.CLIType)
+                   AND
                    NOT fCheckExistingConvergent(labOrderCustomer.CustIdType,
                                                 labOrderCustomer.CustID,
                                                 labOrder.CliType)                  
-                   AND 
+                   AND                                     
                    (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
                                    labOrderAction.Brand    = gcBrand           AND
                                    labOrderAction.OrderID  = labOrder.OrderId  AND
@@ -475,6 +479,10 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                   (NOT fCheckOngoing2PConvergentOrder(labOrderCustomer.CustIdType,
                                                       labOrderCustomer.CustID,
                                                       labOrder.CliType)
+                   AND                               
+                   NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
+                                                        labOrderCustomer.CustId,
+                                                        labOrder.CLIType)
                    AND
                    NOT fCheckExisting2PConvergent(labOrderCustomer.CustIdType,
                                                   labOrderCustomer.CustID,
@@ -525,9 +533,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
          END CASE.
 
          CASE labOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW}     THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP}     THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
+            WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
             OTHERWISE.
          END CASE.
 
