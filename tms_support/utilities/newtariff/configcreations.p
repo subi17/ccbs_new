@@ -498,7 +498,7 @@ PROCEDURE pSLGAnalyse:
     DEFINE BUFFER bf_CliTypeCF  FOR CliType.
 
     ASSIGN
-        lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO" 
+        lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO,14104019,10104013" 
         lcConvergentBillCodeList = "F10100003,F10100005"
         lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN 
                                 "CONTDSL*,CONT*" 
