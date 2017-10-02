@@ -6,7 +6,7 @@ USING HPD.DumpMQ.
 USING HPD.DumpSomeWhere.
 
 {Syst/tmsconst.i}
-{HPD/HPDConst.i}
+{HPD/HPDGeneric.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 

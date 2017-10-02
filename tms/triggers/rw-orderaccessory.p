@@ -1,6 +1,6 @@
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF OrderAccessory OLD BUFFER oldOrderAccessory.
 
-{HPD/HPDConst.i}
+{HPD/HPDTrigger.i}
 {Syst/tmsconst.i}
 
 &IF {&ORDERACCESSORY_WRITE_TRIGGER_ACTIVE} &THEN

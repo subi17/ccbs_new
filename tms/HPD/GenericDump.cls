@@ -22,7 +22,7 @@ USING HPD.DumpFile.
 USING HPD.DumpMQ.
 USING HPD.DumpSomeWhere.
 
-{HPD/HPDConst.i}
+{HPD/HPDGeneric.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 

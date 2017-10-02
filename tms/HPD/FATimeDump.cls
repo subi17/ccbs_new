@@ -6,7 +6,7 @@ USING HPD.DumpMQ.
 USING HPD.DumpSomeWhere.
 USING HPD.HPDTime.
 
-{HPD/HPDConst.i}
+{HPD/HPDGeneric.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 

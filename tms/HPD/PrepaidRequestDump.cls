@@ -3,8 +3,6 @@ USING HPD.DumpHandler.
 USING HPD.DumpBase.
 USING HPD.DumpTimeBased.
 
-{HPD/HPDConst.i}
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.PrepaidRequestDump FINAL INHERITS DumpHandler:

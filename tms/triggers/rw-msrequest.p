@@ -1,7 +1,7 @@
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER oldMsRequest.
 
 {Syst/tmsconst.i}
-{HPD/HPDConst.i}
+{HPD/HPDTrigger.i}
 {triggers/msreqcounter.i}
 
 DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.

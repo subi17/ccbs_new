@@ -1,6 +1,6 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MNPProcess.
 
-{HPD/HPDConst.i}
+{HPD/HPDTrigger.i}
 {Syst/tmsconst.i}
 
 

@@ -1,6 +1,6 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MsRequest.
 
-{HPD/HPDConst.i}
+{HPD/HPDTrigger.i}
 {Syst/tmsconst.i}
 
 IF NEW MsRequest

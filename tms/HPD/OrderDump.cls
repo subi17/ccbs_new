@@ -3,7 +3,6 @@ USING HPD.DumpHandler.
 USING HPD.DumpBase.
 USING HPD.DumpTimeBased.
 
-{HPD/HPDConst.i}
 {Syst/tmsconst.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.

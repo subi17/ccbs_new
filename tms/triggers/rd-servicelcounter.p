@@ -1,6 +1,7 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF ServiceLCounter.
 
 {HPD/HPDConst.i}
+{HPD/HPDTrigger.i}
 
 &IF {&ServiceLCounter_DELETE_TRIGGER_ACTIVE} &THEN
 
