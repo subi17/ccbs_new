@@ -1,5 +1,5 @@
 Tariff Fields;Combinada Azul 1000
-CLIType;CONTFH84_1000
+CLIType;CONTFH89_1000
 TariffName;La Combinada Azul 1Gbps
 TariffBundle; 
 WebStatus;Active
@@ -19,7 +19,7 @@ ComparisonFee;73.554
 OptionalBundlesAndBONOs;DATA6
 BundlesForActivateOnSTC;CONT25
 ServicesForReCreateOnSTC;BB
-CopyServicesFromCliType;CONTFH68_300
+CopyServicesFromCliType;CONTFH69_300
 MobileBaseBundle;CONT25
 MobileBaseBundleType;ServicePackage
 UpsellForMobile;DATA200_UPSELL
