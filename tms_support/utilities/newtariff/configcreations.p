@@ -464,6 +464,7 @@ PROCEDURE pCTServPac:
              FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
                  ON ERROR UNDO, THROW:
                 CREATE CTServAttr.
+
                 BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
                    ASSIGN CTServAttr.CTServEl = CTServEl.CTServEl.
              END.
