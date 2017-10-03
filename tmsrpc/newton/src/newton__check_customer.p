@@ -174,20 +174,6 @@ FIND FIRST Customer NO-LOCK WHERE
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
 
-/* If customer does not have subscriptions it is handled as new */
-IF AVAIL Customer AND
-   CAN-FIND(FIRST MobSub WHERE Mobsub.Brand EQ gcBrand AND 
-                  Mobsub.InvCust EQ Customer.CustNum) THEN 
-DO:
-   FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
-   IF AVAIL CustCat THEN
-      ASSIGN 
-          llCustCatPro = CustCat.pro
-          lcSegment    = CustCat.Segment. 
-END.
-ELSE
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
-
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
@@ -203,8 +189,17 @@ llOrderAllowed = fSubscriptionLimitCheck(
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
-IF AVAIL Customer THEN 
-DO:
+/* If customer does not have subscriptions it is handled as new */
+IF AVAIL Customer AND
+   CAN-FIND(FIRST MobSub WHERE 
+                  Mobsub.Brand EQ gcBrand AND
+                  Mobsub.InvCust EQ Customer.CustNum) THEN DO:
+   FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
+   IF AVAIL CustCat THEN
+      ASSIGN
+          llCustCatPro = CustCat.pro
+          lcSegment    = CustCat.Segment.
+ 
     ASSIGN 
        llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
        llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum). 
@@ -233,7 +228,8 @@ DO:
             IF plSTCMigrate OR (fIsConvergent3POnly(pcCliType) AND
                                 NOT CAN-FIND(FIRST MobSub WHERE 
                                    Mobsub.Brand EQ gcBrand AND 
-                                   Mobsub.InvCust EQ Customer.CustNum)) THEN
+                                   Mobsub.InvCust EQ Customer.CustNum)) OR
+                                   llNonProToProMigrationOngoing THEN
                fCheckMigration().
             ELSE
                ASSIGN
@@ -277,6 +273,7 @@ DO:
     END.
 END.
 ELSE DO:
+   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
            ASSIGN
