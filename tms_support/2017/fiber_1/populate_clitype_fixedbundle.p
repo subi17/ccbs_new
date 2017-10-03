@@ -8,7 +8,7 @@ FOR EACH CLIType EXCLUSIVE-LOCK WHERE
 
    lcFixedBundle = "".
 
-   IF INDEX(CLIType.CLIType,"1000") > 0 THEN lcFixedBundle = "CONTFH100".
+   IF INDEX(CLIType.CLIType,"1000") > 0 THEN lcFixedBundle = "CONTFH1000".
    ELSE IF INDEX(CLIType.CLIType,"300") > 0 THEN lcFixedBundle = "CONTFH300".
    ELSE IF INDEX(CLIType.CliType,"50") > 0 THEN lcFixedBundle = "CONTFH50".
    ELSE lcFixedBundle = "CONTDSL".
