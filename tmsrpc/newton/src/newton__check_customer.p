@@ -225,11 +225,7 @@ IF AVAIL Customer AND
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
-            IF plSTCMigrate OR (fIsConvergent3POnly(pcCliType) AND
-                                NOT CAN-FIND(FIRST MobSub WHERE 
-                                   Mobsub.Brand EQ gcBrand AND 
-                                   Mobsub.InvCust EQ Customer.CustNum)) OR
-                                   llNonProToProMigrationOngoing THEN
+            IF plSTCMigrate OR llNonProToProMigrationOngoing THEN
                fCheckMigration().
             ELSE
                ASSIGN
