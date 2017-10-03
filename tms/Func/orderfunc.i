@@ -415,7 +415,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
    DEF VAR llgMainLineAvail AS LOG  NO-UNDO INITIAL FALSE.   
    DEF VAR illgConvOrder    AS LOG  NO-UNDO INITIAL FALSE. 
 
-   IF fIsConvergenceTariff(Order.CLIType) THEN 
+   IF fIsConvergenceTariff(icCLIType) THEN 
       ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
              llgMainLineAvail = TRUE
              illgConvOrder    = TRUE.
@@ -453,7 +453,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                     labOrderAction.ItemType = "AddLineDiscount" AND
              LOOKUP(labOrderAction.ItemKey, lcDiscList) > 0     NO-ERROR.
 
-         IF NOT AVAIL OrderAction THEN NEXT.
+         IF NOT AVAIL labOrderAction THEN NEXT.
 
          CASE icAction:
             WHEN "CLOSE" THEN DO:
