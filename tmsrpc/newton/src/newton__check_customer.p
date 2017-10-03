@@ -216,8 +216,7 @@ DO:
               llOrderAllowed = FALSE
               lcReason = "PRO migration not possible because of not company or selfemployed". 
         ELSE IF llCustCatPro THEN 
-        DO:
-            
+        DO:            
             IF NOT fIsConvergent3POnly(pcCliType) AND 
                (NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR 
                      fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType))) THEN
@@ -231,7 +230,10 @@ DO:
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
-            IF plSTCMigrate OR fIsConvergent3POnly(pcCliType) THEN 
+            IF plSTCMigrate OR (fIsConvergent3POnly(pcCliType) AND
+                                NOT CAN-FIND(FIRST MobSub WHERE 
+                                   Mobsub.Brand EQ gcBrand AND 
+                                   Mobsub.InvCust EQ Customer.CustNum)) THEN
                fCheckMigration().
             ELSE
                ASSIGN
