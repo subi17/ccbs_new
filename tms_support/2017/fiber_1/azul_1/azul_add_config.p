@@ -33,6 +33,7 @@ FUNCTION fcreateRequestAction RETURNS LOGICAL (INPUT iireqtype AS INT,
               RequestAction.clitype    EQ icclitype AND
               RequestAction.reqtype    EQ iireqtype AND
               RequestAction.validto    GE TODAY AND
+              RequestAction.actiontype EQ icActType AND
               RequestAction.action     EQ iiAction AND
               RequestAction.actionKey  EQ icKey NO-ERROR.
    IF NOT AVAIL Requestaction THEN DO:
@@ -183,7 +184,7 @@ END FUNCTION.
 /*DATA FIXING PART STARTS */
 /*mxitem*/
 /*Manual copying for matrix*/
-FOR EACH mxitem NO-LOCK WHERE
+FOR EACH mxitem EXCLUSIVE-LOCK  WHERE
          mxitem.mxvalue matches "*contfh69_300*":
 
    IF mxitem.mxvalue MATCHES  "*,contfh69_300*" THEN DO:
@@ -200,12 +201,13 @@ END.
 /*requestaction*/
 DEF BUFFER brequestaction FOR requestaction.
 FOR EACH brequestaction NO-LOCK WHERE
-         brequestaction.actionkey eq "contfh69_300":
+         brequestaction.clitype eq "contfh69_300":
    fCreateRequestAction(brequestaction.reqtype,
-                        brequestaction.clitype,
+                        "CONTFH89_1000",
                         brequestaction.action,
                         brequestaction.actiontype,
-                        "CONTFH89_1000").
+                        REPLACE(brequestaction.actionkey,
+                                "CONTFH300","CONTFH1000")).
 END.
 
 
