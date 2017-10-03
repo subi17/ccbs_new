@@ -90,8 +90,97 @@ FUNCTION fCreateFMItem RETURNS LOGICAL
    END.
 END FUNCTION.
 
+FUNCTION fCreatePriceList RETURNS LOGICAL
+   ( icPricelist AS CHARACTER ):
+
+   FIND FIRST Pricelist EXCLUSIVE-LOCK WHERE
+      pricelist.Brand     = "1"       AND
+      pricelist.pricelist = icpricelist
+   NO-ERROR.
+
+   IF NOT AVAILABLE pricelist
+   THEN DO:
+      CREATE pricelist.
+
+   ASSIGN
+      Pricelist.AutoCreate = ""
+      Pricelist.Brand      = "1"
+      Pricelist.Currency   = "EUR"
+      Pricelist.CurrUnit   = TRUE
+      Pricelist.DedicList  = FALSE
+      Pricelist.InclVAT    = FALSE
+      Pricelist.Memo       = "PRO pricelist"
+      Pricelist.PLName     = "PRO fee for " + icPricelist
+      Pricelist.Prefix     = ""
+      Pricelist.PriceList  = icPriceList
+      Pricelist.Rounding   = 4.
+   END.
+END FUNCTION.
+
+FUNCTION fCreateRepText RETURNS LOGICAL
+   (INPUT iiTextType AS INT,
+    INPUT icLinkCode AS CHAR,
+    INPUT iiLanguage AS INT,
+    INPUT icRepText  AS CHAR):
+
+   FIND FIRST RepText WHERE RepText.Brand      = "1"        AND
+                      RepText.TextType = iiTextType AND
+                      RepText.LinkCode = icLinkCode AND
+                      RepText.Language = iiLanguage AND
+                      RepText.ToDate   > TODAY      NO-LOCK NO-ERROR.
+   IF NOT AVAIL RepText THEN
+   DO:
+      CREATE RepText.
+      ASSIGN
+          RepText.Brand    = "1"
+          RepText.TextType = iiTextType
+          RepText.LinkCode = icLinkCode
+          RepText.Language = iiLanguage
+          RepText.FromDate = TODAY
+          RepText.ToDate   = DATE(12,31,2049)
+          RepText.RepText  = icRepText.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
 
 
+FUNCTION fCopySLG RETURNS LOGICAL
+   (INPUT icFromType AS CHAR,
+    INPUT icToType AS CHAR):
+   DEF BUFFER slganalyse for slganalyse.
+   DEF BUFFER bnew_slganalyse for slganalyse.
+
+   FOR EACH slganalyse NO-LOCK WHERE
+            slganalyse.brand EQ "1" AND
+            slganalyse.clitype EQ icFromType AND
+            SLGAnalyse.ValidTo GE TODAY:
+
+      FIND FIRST bnew_slganalyse WHERE
+                 bnew_SLGAnalyse.Brand    EQ SLGAnalyse.Brand         AND
+                 bnew_SLGAnalyse.BelongTo EQ SLGAnalyse.BelongTo      AND
+                 bnew_SLGAnalyse.Clitype  EQ icToType                 AND
+                 bnew_SLGAnalyse.BillCode EQ SLGAnalyse.BillCode      AND
+                 bnew_SLGAnalyse.CCN      EQ SLGAnalyse.CCN           AND
+                 bnew_SLGAnalyse.BDest    EQ SLGAnalyse.BDest         AND
+                 bnew_SLGAnalyse.ValidTo  GE TODAY                    AND
+                 bnew_SLGAnalyse.ServiceLimitGroup EQ SLGAnalyse.ServiceLimitGroup AND
+                 bnew_SLGAnalyse.SLGAType EQ SLGAnalyse.SLGAType NO-ERROR.
+      IF NOT AVAIL bnew_SLGAnalyse THEN DO:
+         CREATE bnew_SLGAnalyse.
+         BUFFER-COPY slganalyse EXCEPT  clitype validfrom TO bnew_SLGAnalyse.
+
+      END.
+      
+
+
+   END.
+
+END FUNCTION.
+
+
+/*DATA FIXING PART STARTS */
 /*mxitem*/
 /*Manual copying for matrix*/
 FOR EACH mxitem NO-LOCK WHERE
@@ -120,21 +209,36 @@ FOR EACH brequestaction NO-LOCK WHERE
 END.
 
 
-
-
-
 /*FMItem*/
+fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH89_1000",10.29). /*value valvulated 12.45 / 1.21*/
+
+/*pro pricelist*/
+fCreatePriceList("PRO_CONTFH89_1000").
+
+
+/*pro reptext*/
+fCreateRepText(1, /*text type */
+               "CONTFH89_1000PRO", /*LinkCode*/
+               1, /*Language */
+               "Ventajas PRO"). /* text */
+fCreateRepText(1, /*text type */
+               "CONTFH89_1000PRO", /*LinkCode*/
+               2, /*Language */
+               "Avantatges PRO"). /* text */
+fCreateRepText(1, /*text type */
+               "CONTFH89_1000PRO", /*LinkCode*/
+               3, /*Language */
+               "Abantaila PRO"). /* text */
+fCreateRepText(1, /*text type */
+               "CONTFH89_1000PRO", /*LinkCode*/
+               5, /*Language */
+               "PRO benefits"). /* text */
+
+
+/*slganalyse*/
+fCopySLG("CONTFH69_300","CONTFH89_1000").
 
 /*
-pro pricelist
-
-pro reptext
-
-
-slganalyse
-
-reptext
-
 DPSubject 
 
 DPTarget 
