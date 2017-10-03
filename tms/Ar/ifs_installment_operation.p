@@ -439,11 +439,10 @@ PROCEDURE pCollectActivations:
                bDCCLI.DCEvent       = FixedFee.CalcObj AND
                bDCCLI.percontractId = INT(FixedFee.SourceKey) NO-LOCK NO-ERROR.
 
-            IF AVAILABLE bDCCLI THEN DO:
-               IF bDCCLI.Amount NE ? THEN DO:
-                  ldResidual = bDCCLI.Amount.
-                  lcMemo = " DCCLI.AMOUNT".
-               END.
+            IF AVAILABLE bDCCLI AND
+               bDCCLI.Amount NE ? THEN DO:
+               ldResidual = bDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
             END.
          END.
          /* fix for YTS-11246 problems end here */ 
@@ -645,10 +644,6 @@ PROCEDURE pCollectACC:
                           SingleFee.SourceTable = FixedFee.SourceTable AND
                           SingleFee.CalcObj = "RVTERM" NO-ERROR.
                IF AVAILABLE SingleFee THEN ldResidual = SingleFee.Amt.
-               ELSE IF DCCLI.Amount NE ? THEN DO:
-                  ldResidual = DCCLI.Amount.
-                  lcMemo = " DCCLI.AMOUNT".
-               END.
             END.
 
             ASSIGN
