@@ -24,6 +24,8 @@
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
+{Func/profunc.i}
+
 gcBrand = "1".
 
 /* Input parameters */
@@ -190,7 +192,17 @@ ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
 /* If customer does not have subscriptions it is handled as new */
+
 IF AVAIL Customer AND
+   NOT llProChannel AND
+   NOT plSelfEmployed AND
+   (fGetSegment(Customer.custnum, 0) EQ "AUTONOMO" OR
+    fGetSegment(Customer.custnum, 0) EQ "SOHO-AUTONOMO") THEN DO:
+   ASSIGN
+      llOrderAllowed = FALSE
+      lcReason = "The customer must have self employed set to true".
+END.
+ELSE IF AVAIL Customer AND
    CAN-FIND(FIRST MobSub WHERE 
                   Mobsub.Brand EQ gcBrand AND
                   Mobsub.InvCust EQ Customer.CustNum) THEN DO:
