@@ -135,7 +135,7 @@ FORM
    SKIP
    bCurrentCust.CustNum AT 2
          LABEL "Cust. Number"
-         FORMAT ">>>>>>>9"
+         FORMAT ">>>>>>>>9"
          SKIP 
    bCurrentCust.CustIdType AT 2 
          LABEL "Customer ID "
@@ -252,7 +252,7 @@ FORM
    
    liNewCust1 AT 2
       NO-LABEL 
-      FORMAT ">>>>>>>>"
+      FORMAT ">>>>>>>>9"
       HELP "Customer nbr, 0=create a new one"
    SKIP
       lcNewCustIdType AT 2 
