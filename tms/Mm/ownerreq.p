@@ -92,15 +92,15 @@ DEF VAR lcNote       AS CHAR                   NO-UNDO.
 
 
 form
-    MsRequest.MsRequest   FORMAT ">>>>>>>9"
-    MsRequest.CLI         COLUMN-LABEL "MSISDN"    FORMAT "X(11)"   
-    MsRequest.CustNum     COLUMN-LABEL "Old Agr."
-    lcCustName            COLUMN-LABEL "Old Name"  FORMAT "X(14)" 
+    MsRequest.MsRequest   FORMAT ">>>>>>>>9"
+    MsRequest.CLI         COLUMN-LABEL "MSISDN"    FORMAT "X(10)"   
+    MsRequest.CustNum FORMAT ">>>>>>>>9" COLUMN-LABEL "Old Agr."
+    lcCustName            COLUMN-LABEL "Old Name"  FORMAT "X(12)" 
     ldtActivate           COLUMN-LABEL "Activate"  FORMAT "99-99-99"
     SPACE(0)
     lcNote                NO-LABEL FORMAT "X"
     SPACE(0)
-    MsRequest.ReqIParam1  COLUMN-LABEL "New Agr."  FORMAT ">>>>>>>9"
+    MsRequest.ReqIParam1  COLUMN-LABEL "New Agr."  FORMAT ">>>>>>>>9"
     lcNewName             COLUMN-LABEL "New Name"  FORMAT "X(12)"
     MsRequest.ReqStatus   COLUMN-LABEL "S"         FORMAT ">9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
@@ -112,10 +112,10 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 {Func/brand.i}
 
 form
-    MsRequest.MsRequest  COLON 18  FORMAT ">>>>>>>9"
+    MsRequest.MsRequest  COLON 18  FORMAT ">>>>>>>>9"
     MsRequest.MSSeq      COLON 18 LABEL "Subscription ID"  
     MsRequest.CLI        COLON 18
-    MsRequest.CustNum    COLON 18  LABEL "Old Agr.Customer"
+    MsRequest.CustNum  FORMAT ">>>>>>>>9" COLON 18  LABEL "Old Agr.Customer"
        lcCustName NO-LABEL FORMAT "X(30)" SKIP
     MsRequest.CreStamp   COLON 18
        lcCreated NO-LABEL FORMAT "X(20)" SKIP
