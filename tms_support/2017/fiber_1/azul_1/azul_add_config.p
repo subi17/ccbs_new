@@ -171,6 +171,9 @@ FUNCTION fCopySLG RETURNS LOGICAL
       IF NOT AVAIL bnew_SLGAnalyse THEN DO:
          CREATE bnew_SLGAnalyse.
          BUFFER-COPY slganalyse EXCEPT  clitype validfrom TO bnew_SLGAnalyse.
+         ASSIGN
+            bnew_slganalyse.clitype = icToType
+            bnew_slganalyse.validfrom = today.
 
       END.
       
