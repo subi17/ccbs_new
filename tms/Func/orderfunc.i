@@ -447,7 +447,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
       ELSE DO:
          /* This record has to be found, to check orderaction has any additional 
             line related discount available - and - this record is used if action is CLOSE */ 
-         FIND FIRST labOrderAction NO-LOCK WHERE
+         FIND FIRST labOrderAction EXCLUSIVE-LOCK WHERE
                     labOrderAction.Brand    = gcBrand           AND
                     labOrderAction.OrderID  = labOrder.OrderId  AND
                     labOrderAction.ItemType = "AddLineDiscount" AND
