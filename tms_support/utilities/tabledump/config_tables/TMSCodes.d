@@ -1443,6 +1443,7 @@
 "Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
