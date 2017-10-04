@@ -173,6 +173,9 @@ FUNCTION fCopySLG RETURNS LOGICAL
          BUFFER-COPY slganalyse EXCEPT  clitype validfrom TO bnew_SLGAnalyse.
          ASSIGN
             bnew_slganalyse.clitype = icToType
+            bnew_slganalyse.servicelimitgroup = 
+               REPLACE(bnew_slganalyse.servicelimitgroup,
+                       "CONTFH_300","CONTFH_1000")
             bnew_slganalyse.validfrom = today.
 
       END.
@@ -189,7 +192,6 @@ FUNCTION fCreateDPTarget RETURNS LOGICAL
    def buffer bDPTarget FOR dptarget.
    def var liId AS INT NO-UNDO INIT 1.
 
-
    FIND last dptarget USE-INDEX dpid  NO-LOCK NO-ERROR.
    if avail dptarget then liId = dptarget.dpid + 1.
 /*TODO: needs for each */
@@ -203,40 +205,38 @@ FUNCTION fCreateDPTarget RETURNS LOGICAL
       bdptarget.validfrom = TODAY.
       bdptarget.dpid = liId.
       bdptarget.targetkey = icNew.
+      
 
+/* TODO : Create DPSubject */
    END.
 
 END.
-
 
 FUNCTION fCreateDPsubjects RETURNS LOGICAL
    (icBase AS CHAR,
     icNew AS CHAR):
+
    def buffer bDPSubject FOR dpsubject.
-   def var liId AS INT NO-UNDO INIT 1.
 
-   /*finding target where new ones must be related*/
-   FIND FIRST dptarget where
-              dptarget.targetkey eq icNew AND
-              dptarget.validto ge TODAY NO-ERROR.
-   IF AVAIL dptarget THEN liId = dptarget.dpid.
+   FOR EACH dpsubject NO-LOCK WHERE
+            dpsubject.dpsubject EQ icBase AND
+            dpsubject.validto GE TODAY:
 
-   FIND FIRST  dptarget where
-               dptarget.targetkey eq icBase AND
-               dptarget.validto ge TODAY NO-ERROR.
-   IF AVAIL dptarget THEN DO:
-      FOR EACH dpsubject NO-LOCK WHERE
-               dpsubject.dpid EQ dptarget.dpid AND
-               dpsubject.validto GE TODAY:
-         CREATE bDPSubject.
-          BUFFER-COPY dpsubject EXCEPT validfrom  dpsubject dpid TO bDPSubject.
-          bDPSubject.validfrom = TODAY.
-          bDPSubject.dpid = liId.
-           bDPSubject.dpsubject = icNew.
-      END.
+      FIND FIRST bDPSubject NO-LOCK where
+                 bDPSubject.dpid = dpsubject.dpid and
+                 bDPSubject.dpsubject = icNew and
+                 bDPSubject.validto GE TODAY NO-ERROR.
+      IF AVAIL bDPSubject THEN NEXT.
+
+      CREATE bDPSubject.
+      BUFFER-COPY dpsubject EXCEPT validfrom dpsubject TO bDPSubject.
+
+      assign
+        bDPSubject.validfrom = TODAY
+        bDPSubject.dpsubject = icNew. 
+
    END.
 END.
-
 
 /*DATA FIXING PART STARTS */
 /*mxitem*/
@@ -298,10 +298,18 @@ fCreateRepText(1, /*text type */
 fCopySLG("CONTFH69_300","CONTFH89_1000").
 
 /*DPTarget */
+/* TODO: check CONTH1000 DPTargets*/
 fCreateDPTarget("CONTFH69_300PRO","CONTFH89_1000PRO").
 
 /*DPSubject */
 fCreateDPSubjects("CONTFH69_300","CONTFH89_1000").
 
+FOR EACH tmsparam EXCLUSIVE-LOCK  WHERE
+         tmsparam.charval matches "*contfh69_300*":
 
+   if tmsparam.charval eq "contfh69_300" then next.
+
+   if not tmsparam.charval MATCHES  "*,contfh89_1000*" then
+      tmsparam.charval =  tmsparam.charval + ",CONTFH89_1000". 
+END.
 
