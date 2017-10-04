@@ -1,7 +1,8 @@
 /**
  * Cancel acc, icc, request type change or dupliacte invoice request
  *
- * @input   seqval;int;mandatory;Msseq
+ * @input   brand;string;mandatory
+            seqval;int;mandatory;Msseq
             salesman;string;mandatory;login id
             reqtype;string;mandatory;For options see below
             bundle_id;string;optional;if type=bundle_terminationss
@@ -62,7 +63,7 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
 /* Output parameters */
 DEF VAR liReqCount AS INT INITIAL 0 NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,int,string,string,[string],[boolean]").
+top_array = validate_request(param_toplevel_id, "string!,int,string,string,[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
 pcTenant = get_string(param_toplevel_id, "0").

@@ -1,7 +1,8 @@
 /** Get a list of 9 still free numbers from 622, 633 or 722 MSISDN range.
  * Optional search: If a non-empty parameter is provided, the first matching
    numbers will be returned. No random choice here.
- * @input search_key;string;optional;
+ * @input  brand;string;mandatory
+           search_key;string;optional
  * @output numbers;array of strings
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
@@ -23,7 +24,7 @@ DEF VAR liRangeCount AS INT NO-UNDO.
 
 &GLOBAL-DEFINE count 9
 
-top_array = validate_request(param_toplevel_id, "string,[string]").
+top_array = validate_request(param_toplevel_id, "string!,[string]").
 
 pcTenant = get_string(param_toplevel_id, "0").
 

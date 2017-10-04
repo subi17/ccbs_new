@@ -1,6 +1,7 @@
 /** Reserve a single number for 60 minutes.
- * @input msisdn;string;mandatory;number to be reserved
-          reserve;bool;should be true when called 1st time false otherwise 
+ * @input brand;string;mandatory
+          msisdn;string;mandatory;number to be reserved
+          reserve;bool;mandatory;should be true when called 1st time false otherwise 
  * @output success;boolean;true or error
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
@@ -14,7 +15,7 @@ DEF VAR plReserve AS LOG  NO-UNDO.
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 
-IF validate_request(param_toplevel_id, "string,string,boolean") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string!,string!,boolean!") EQ ? THEN RETURN.
 
 pcTenant  = get_string(param_toplevel_id, "0"). 
 pcCli     = get_string(param_toplevel_id, "1").

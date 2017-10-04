@@ -1,7 +1,8 @@
 /**
  * Check that MGM (Member Gets Member) referee is not same as orderer
  *
- * @input  msisdn;string;mandatory;referee's msisdn     
+ * @input  brand;string;mandatory
+           msisdn;string;mandatory;referee's msisdn     
            person_id;string;mandatory;orderer's person id
            person_id_type;string;mandatory;orderer's person id type
  * @output allow;boolean;referring is allowed
@@ -17,7 +18,7 @@ DEF VAR pcOrgId      AS CHAR NO-UNDO.
 /* Local variable */
 DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
 
-IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string!,string!,string!,string!") EQ ? THEN RETURN.
 pcTenant     = get_string(param_toplevel_id, "0").
 pcMsisdn     = get_string(param_toplevel_id, "1").
 pcCustIdType = get_string(param_toplevel_id, "2").

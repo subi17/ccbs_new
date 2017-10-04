@@ -1,7 +1,9 @@
 /** 
  * Return terminal financing fee configuration values 
  *
- * @input conditions;struct;mandatory;empty
+ * @input    conditions;struct;mandatory
+   @conditions  brand;string;mandatory
+                rv_percentage;string;mandatory
  * @output struct;array of tfconf ids
 */
 {newton/src/flistrpc.i}
@@ -13,7 +15,7 @@ DEF VAR ldeRVPerc       AS DECI NO-UNDO.
 DEF VAR llError		    AS LOGI NO-UNDO.
 DEF VAR lcPrevNumFormat AS CHAR NO-UNDO.
 
-lcStruct = validate_struct(pcStruct, "brand!,rv_percentage").
+lcStruct = validate_struct(pcStruct, "brand!,rv_percentage!").
 
 ASSIGN lcPrevNumFormat = SESSION:NUMERIC-FORMAT.
 

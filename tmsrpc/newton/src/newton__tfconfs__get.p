@@ -2,14 +2,14 @@
  * Get terminal financing configuration row.
  *
  * @input  id;array of string;mandatory;id list
- * @output array;array of config;list of active configurations
+ * @output config;struct;list of active configurations
  * @config id;string;Unique Id
-            rv_percentage;double;RV percentage
-            commission_fee_percentage;double;
-            tae;double;TAE
-            tin;int;TIN (always 0)
-            valid_from;date;
-            valid_to;date;
+           rv_percentage;double;RV percentage
+           commission_fee_percentage;double;
+           tae;double;TAE
+           tin;int;TIN (always 0)
+           valid_from;date;
+           valid_to;date;
  */
 
 {newton/src/header_get.i}

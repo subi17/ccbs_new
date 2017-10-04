@@ -8,6 +8,7 @@
             orders;int;mandatory;
             clitype;string;optional;
             order_channel;string;optional;
+            stcmigrate;boolean;optional
  *          
  * @output   check_customer;struct;mandatory; response structure
  * @check_customer order_allowed;boolean;mandatory;
@@ -62,7 +63,7 @@ DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
+top_array = validate_request(param_toplevel_id, "string!,string!,string!,boolean!,int!,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
 ASSIGN

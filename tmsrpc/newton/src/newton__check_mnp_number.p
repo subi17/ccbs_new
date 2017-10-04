@@ -1,6 +1,9 @@
 /** Check if MNP number is used already in different order/subscription.
- * @input cli;string;mandatory;
- * @output success;boolean;true or error
+ * @input  brand;string;mandatory
+           cli;string;mandatory;
+ * @output orderstatus;string;Order's statuscode
+           error;string;Error text 
+           success;boolean;true or error
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
@@ -13,7 +16,7 @@ DEF VAR top_struct    AS CHAR NO-UNDO.
 DEF VAR lcOrderStatus AS CHAR NO-UNDO.
 DEF VAR llResult      AS LOG  NO-UNDO INIT TRUE.
 
-IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string!,string!") EQ ? THEN RETURN.
 pcTenant = get_string(param_toplevel_id, "0").
 pcCli = get_string(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
