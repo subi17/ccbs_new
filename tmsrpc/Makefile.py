@@ -5,13 +5,16 @@ import json
 import tempfile
 import fnmatch
 import errno
+import getpass
+import xmlrpclib
 from ast import literal_eval
 from subprocess import call, Popen, PIPE
-from socket import gethostname
+from socket import gethostname, error
 from string import Template
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
+exec(open(relpath + '/tools/fcgi_agent/xmlrpc/help.py').read())
 exec(open('getpf.py').read())
 
 pike = which('pike')
@@ -297,9 +300,13 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
                 fd = open(sigandhelpfile.replace('.p','.sig'), 'wb')
                 call([sys.executable, helper_dir + 'signature.py', file], stdout=fd)
                 fd.close()
-            fd = open(sigandhelpfile.replace('.p', '.help'), 'wb')
-            call([sys.executable, helper_dir + 'help.py', file], stdout=fd)
-            fd.close()
+
+            helpobj = DocFile(file)
+            with open(sigandhelpfile.replace('.p', '.help'), 'wb') as fd:
+                fd.write(helpobj.to_helpfile())
+
+            with open(sigandhelpfile.replace('.p', '.confluence'), 'wb') as fd:
+                fd.write(helpobj.to_confluence())
 
         if rpclist[0] == '':
             shutil.rmtree('{0}/pp'.format(compile_dir))
@@ -435,3 +442,132 @@ def build(*a):
                           os.path.join(dir, file)])
         shutil.move('rpcmethods.pl', rpcbuilddir)
         os.chdir(currentdir)
+
+def connect_confluence(host):
+
+    # Python 3 doesn't have raw_input but it has input
+    try:
+        input = raw_input
+    except NameError:
+        pass
+
+    while True:
+        print('Connecting to host {}'.format(host))
+        print('Please enter username and password (leave username empty to skip this host)')
+
+        username = input('Username: ')
+
+        if username == '':
+            return False, None, None
+
+        password = getpass.getpass('Password: ')
+
+        server = xmlrpclib.ServerProxy(host + '/rpc/xmlrpc')
+
+        try:
+            session = server.confluence2.login(username, password)
+            break
+        except xmlrpclib.Fault as err:
+            print "A fault occurred"
+            print "Fault code: %d" % err.faultCode
+            print "Fault string: %s" % err.faultString
+        except xmlrpclib.ProtocolError as err:
+            print "A protocol error occurred"
+            print "URL: %s" % err.url
+            print "HTTP/HTTPS headers: %s" % err.headers
+            print "Error code: %d" % err.errcode
+            print "Error message: %s" % err.errmsg
+        except error:
+            # Not connected ; socket error mean that the service is unreachable.
+            print "Cannot connect to host: %s" % host
+            return False, None, None
+
+    return True, server, session
+
+@target
+def documentation(*a):
+    if parameters:
+        for rpc in parameters:
+            if rpc not in rpcs.keys():
+                raise PikeException('Invalid rpc name')
+
+    confluencefile = 'confluence.json'
+
+    if not os.path.exists(confluencefile):
+        raise PikeException("Cannot find {0} file".format(confluencefile))
+
+    print('NOTE: Before running this command please make sure that you')
+    print('      have updated the documentation files using')
+    print('      the "pike compile" command in this directory!\n')
+
+    rpclist = list(set(parameters or rpcs.keys()))
+
+    with open(confluencefile, 'r') as jsonfile:
+        jsondata = json.load(jsonfile)
+        for host in jsondata:
+
+            hostandparamrpc = [item for item in jsondata[host] if item in rpclist]
+
+            if not hostandparamrpc:
+                continue
+
+            connected, server, session = connect_confluence(host)
+
+            if not connected:
+                continue
+
+            for rpc in [item for item in jsondata[host] if item in rpclist]:
+                docdir = '{0}/rpcmethods/doc'.format(rpc)
+
+                space = ''
+                title = ''
+                try:
+                    space = jsondata[host][rpc]['Space']
+                    title = jsondata[host][rpc]['Title']
+                except KeyError, e:
+                    raise PikeException("{0}: Missing Space and/or Title element. host={1}, rpc={2}".format(confluencefile, host, rpc))
+
+                print('Trying to access space {0} having title {1}'.format(space, title))
+
+                try:
+                    page = server.confluence2.getPage(session, space, title)
+                    print('The access was successful')
+                except xmlrpclib.Fault, err:
+                    print "A fault occurred"
+                    print "Fault code: %d" % err.faultCode
+                    print "Fault string: %s" % err.faultString
+                    print "--"
+                    continue
+
+                newtext = ''
+                data = []
+
+                for root, dirs, files in os.walk(docdir):
+                    for filename in fnmatch.filter(files, '*.confluence'):
+                        with open(os.path.join(root, filename), "r") as myfile:
+                            data.append(myfile.read())
+                            myfile.close()
+
+                newtext = '\n'.join(data)
+
+                # It is not possible to do the comparison as confluence2.getPage
+                # confluence2.getPage returns data in xml format and the newtext
+                # data is Wiki formatted.
+                # TODO: Implement xml format support to help.py
+                #       i.e. new version of to_confluence() method.
+
+                #if page['content'] != newtext:
+                #    page['content'] = newtext
+                #    server.confluence2.storePage(session, page)
+                #    print "The page has been updated"
+                #else:
+                #    print "The page was already up to date"
+
+                server.confluence1.storePage(session, page)
+                print "The page has been updated"
+
+                print('--')
+
+            server.confluence2.logout(session)
+
+        jsonfile.close()
