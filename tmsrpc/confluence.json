@@ -1,0 +1,16 @@
+{
+    "https://intra.qvantel.com": {
+        "newton": {
+            "Space": "Yoigo",
+            "Title": "XML-RPC documentation"
+        },
+        "viptool": {
+            "Space": "Yoigo",
+            "Title": "VIP and IVR TOOL External API Documentation"
+        },
+        "selfservice": {
+            "Space": "Yoigo",
+            "Title": "Selfservice External API Documentation"
+        }
+    }
+}
