@@ -1,4 +1,4 @@
-/* stc2tms.p
+/* stc2tms.p SUBSCRIPTION TYPE CHANGE STC Request handling
    changes:
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
@@ -87,6 +87,9 @@ DEF TEMP-TABLE ttContract NO-UNDO
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest = iiMSrequest NO-LOCK NO-ERROR.
+
+IF MsRequest.ReqType NE {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
+   RETURN "ERROR".
 
 liOrigStatus = MsRequest.ReqStatus.
 IF LOOKUP(STRING(liOrigStatus),"6,8") = 0 THEN RETURN "ERROR".
@@ -251,6 +254,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
                         "STC_FINAL").
+
+   /* Remove additional line termination request when correct STC done */
+   IF bNewTariff.LineType NE {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+      fRemoveAdditionalLineTerminationReq(MobSub.MsSeq).
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,
