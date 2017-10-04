@@ -180,6 +180,60 @@ FUNCTION fCopySLG RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCreateDPTarget RETURNS LOGICAL
+   (icBase AS CHAR,
+    icNew AS CHAR):
+   def buffer bDPTarget FOR dptarget.
+   def var liId AS INT NO-UNDO INIT 1.
+
+
+   FIND last dptarget USE-INDEX dpid  NO-LOCK NO-ERROR.
+   if avail dptarget then liId = dptarget.dpid + 1.
+/*TODO: needs for each */
+   FIND FIRST dptarget where
+              dptarget.targetkey eq icBase AND
+              dptarget.validto ge TODAY NO-ERROR.
+   IF AVAIL dptarget THEN DO:
+
+      CREATE bdptarget.
+      BUFFER-COPY dptarget EXCEPT dpid validfrom targetkey TO bdptarget.
+      bdptarget.validfrom = TODAY.
+      bdptarget.dpid = liId.
+      bdptarget.targetkey = icNew.
+
+   END.
+
+END.
+
+
+FUNCTION fCreateDPsubjects RETURNS LOGICAL
+   (icBase AS CHAR,
+    icNew AS CHAR):
+   def buffer bDPSubject FOR dpsubject.
+   def var liId AS INT NO-UNDO INIT 1.
+
+   /*finding target where new ones must be related*/
+   FIND FIRST dptarget where
+              dptarget.targetkey eq icNew AND
+              dptarget.validto ge TODAY NO-ERROR.
+   IF AVAIL dptarget THEN liId = dptarget.dpid.
+
+   FIND FIRST  dptarget where
+               dptarget.targetkey eq icBase AND
+               dptarget.validto ge TODAY NO-ERROR.
+   IF AVAIL dptarget THEN DO:
+      FOR EACH dpsubject NO-LOCK WHERE
+               dpsubject.dpid EQ dptarget.dpid AND
+               dpsubject.validto GE TODAY:
+         CREATE bDPSubject.
+          BUFFER-COPY dpsubject EXCEPT validfrom  dpsubject dpid TO bDPSubject.
+          bDPSubject.validfrom = TODAY.
+          bDPSubject.dpid = liId.
+           bDPSubject.dpsubject = icNew.
+      END.
+   END.
+END.
+
 
 /*DATA FIXING PART STARTS */
 /*mxitem*/
@@ -240,9 +294,11 @@ fCreateRepText(1, /*text type */
 /*slganalyse*/
 fCopySLG("CONTFH69_300","CONTFH89_1000").
 
-/*
-DPSubject 
+/*DPTarget */
+fCreateDPTarget("CONTFH69_300","CONTFH89_1000").
 
-DPTarget 
-*/
+/*DPSubject */
+fCreateDPSubjects("CONTFH69_300","CONTFH89_1000").
+
+
 
