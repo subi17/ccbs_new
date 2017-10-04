@@ -298,7 +298,7 @@ fCreateRepText(1, /*text type */
 fCopySLG("CONTFH69_300","CONTFH89_1000").
 
 /*DPTarget */
-fCreateDPTarget("CONTFH69_300","CONTFH89_1000").
+fCreateDPTarget("CONTFH69_300PRO","CONTFH89_1000PRO").
 
 /*DPSubject */
 fCreateDPSubjects("CONTFH69_300","CONTFH89_1000").
