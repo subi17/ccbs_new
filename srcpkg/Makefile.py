@@ -4,6 +4,7 @@ import os
 import tarfile
 import shutil
 import subprocess
+from contextlib import closing
 
 skip_srcpkg_check = True
 relpath = '..'
@@ -41,7 +42,7 @@ def deprecursion(basepackage, package, packagelist):
 
         elif not deppackage in packagelist:
             packagelist.append(deppackage)
-            recur(basepackage, deppackage)
+            deprecursion(basepackage, deppackage, packagelist)
     return
 
 
@@ -58,23 +59,23 @@ def default(*a):
         if not os.path.exists(version_file) \
         or open(version_file).read().strip() < version:
             depcount[package] = 1
-            tar = tarfile.open('{0}-{1}.tar'.format(package,version))
             deplist = []
 
             try:
-                with tar.extractfile(".depedencies") as f:
-                    for line in f:
-                        if not line.beginswith('#'):
-                            try:
-                                deplist.append(tuple(line.strip(",").split(",")))
-                            except:
-                                error.append('"{0}": Unable to parse .depedencies line "{1}"'.format(package, line))
-                                continue
+                with tarfile.open('{0}-{1}.tar'.format(package,version)) as tf:
+                    with closing(tf.extractfile('{0}/.depedencies'.format(package))) as f:
+                        for line in f:
+                            if not line.startswith('#'):
+                                try:
+                                    deplist.append(tuple(line.strip(",\n").split(",")))
+                                except:
+                                    error.append('"{0}": Unable to parse .depedencies line "{1}"'.format(package, line))
+                                    continue
             except KeyError:
                 pass
 
             for deppackage, depversion in deplist:
-                if not deppackage in packages:
+                if not deppackage in [x[0] for x in packages]:
                     error.append('"{0}": Depends package {1} which is not available'.format(package, deppackage))
                     continue
                 availver = next(x for x in packages if x[0] == deppackage)[1]
@@ -99,7 +100,8 @@ def default(*a):
                 error.append(crosserror)
             else:
                 for pkg in packagelist:
-                    depcount[pkg] += 1
+                    if pkg in depcount:
+                        depcount[pkg] += 1
 
     if error:
         for item in error:
