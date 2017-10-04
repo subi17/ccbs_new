@@ -63,13 +63,13 @@ def default(*a):
 
             try:
                 with tarfile.open('{0}-{1}.tar'.format(package,version)) as tf:
-                    with closing(tf.extractfile('{0}/.depedencies'.format(package))) as f:
+                    with closing(tf.extractfile('{0}/.dependencies'.format(package))) as f:
                         for line in f:
                             if not line.startswith('#'):
                                 try:
                                     deplist.append(tuple(line.strip(",\n").split(",")))
                                 except:
-                                    error.append('"{0}": Unable to parse .depedencies line "{1}"'.format(package, line))
+                                    error.append('"{0}": Unable to parse .dependencies line "{1}"'.format(package, line))
                                     continue
             except KeyError:
                 pass
