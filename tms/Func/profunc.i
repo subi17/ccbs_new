@@ -178,22 +178,6 @@ FUNCTION fIsProOrder RETURNS LOGICAL
    ELSE RETURN FALSE.
    
 END.
-/*Function returns True if a tariff can be defined as 2P tariff.
-NOTE: False is returned in real false cases and also in error cases. */
-FUNCTION fIs2PTariff RETURNS LOGICAL
-   (icCliType AS CHAR):
-
-   DEF BUFFER CLIType FOR CLIType.
-
-   FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.Parameters:gcBrand AND
-              CLIType.CliType EQ icCLIType NO-ERROR.
-   IF AVAIL CliType AND
-            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN 
-      RETURN TRUE.
-
-   RETURN FALSE.
-END.
 
 /*Function returns True if a tariff can be defined as 2P tariff.
 NOTE: False is returned in real false cases and also in error cases. */
@@ -243,7 +227,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
 
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
-   IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
+   IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
       FIND FIRST Mobsub WHERE
                  Mobsub.brand EQ gcbrand AND
                  Mobsub.custnum EQ iiCustomer AND
