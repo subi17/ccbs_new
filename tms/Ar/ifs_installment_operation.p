@@ -330,7 +330,7 @@ FOR EACH ttInstallment:
    IF icDumpMode = "modified" THEN DO:
      
       IF ttInstallment.FFNum NE 0 AND
-         ttInstallment.RowSource EQ "ACTIVATION" THEN DO:
+         ttInstallment.RowSource BEGINS "ACTIVATION" THEN DO:
 
          FIND FixedFee EXCLUSIVE-LOCK WHERE 
               FixedFee.FFNum = ttInstallment.FFNum NO-ERROR.
@@ -391,11 +391,15 @@ PROCEDURE pCollectActivations:
    DEF VAR lgMsRequest AS LOG NO-UNDO.
    DEF VAR ldResidual  AS DEC NO-UNDO. 
    DEF VAR ldtOperDate AS DATE NO-UNDO.
-   DEF VAR ldtDueDate  AS DATE NO-UNDO.
+   DEF VAR ldtDueDate  AS DATE NO-UNDO. 
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
+   DEF BUFFER bDCCLI FOR DCCLI.   
    
    FF_LOOP:
    FOR EACH FixedFee NO-LOCK WHERE
             FixedFee.IFSStatus = {&IFS_STATUS_WAITING_SENDING}:
+
+      lcMemo = "".
 
       IF RETRY THEN DO:
          olInterrupted = TRUE.
@@ -405,7 +409,10 @@ PROCEDURE pCollectActivations:
       IF NOT FixedFee.BillCode BEGINS "PAYTERM" AND
          NOT FixedFee.BillCode BEGINS "RVTERM" THEN NEXT.
 
-      IF FixedFee.BegDate >= TODAY THEN NEXT.
+      IF icDumpMode = "modified" THEN DO:
+         IF FixedFee.BegDate > ldaDataTo THEN NEXT.
+      END.
+      ELSE IF FixedFee.BegDate >= TODAY THEN NEXT.
 
       IF FixedFee.FinancedResult EQ {&TF_STATUS_HOLD_SENDING} OR
          FixedFee.FinancedResult EQ {&TF_STATUS_WAITING_SENDING} OR
@@ -425,6 +432,20 @@ PROCEDURE pCollectActivations:
                     SingleFee.SourceTable = FixedFee.SourceTable AND
                     SingleFee.CalcObj = "RVTERM" NO-ERROR.
          IF AVAILABLE SingleFee THEN ldResidual = SingleFee.Amt.
+         /* fix for YTS-11246 problems start from here */
+         ELSE IF FixedFee.SourceTable EQ "DCCLI" THEN DO:
+            FIND bDCCLI WHERE
+               bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
+               bDCCLI.DCEvent       = FixedFee.CalcObj AND
+               bDCCLI.percontractId = INT(FixedFee.SourceKey) NO-LOCK NO-ERROR.
+
+            IF AVAILABLE bDCCLI AND
+               bDCCLI.Amount NE ? THEN DO:
+               ldResidual = bDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
+            END.
+         END.
+         /* fix for YTS-11246 problems end here */ 
       END.
       
       liBatches = 0.
@@ -470,7 +491,8 @@ PROCEDURE pCollectActivations:
          ttInstallment.Channel = lcChannel
          ttInstallment.FFNum = FixedFee.FFNum
          ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-         ttInstallment.RowSource = "ACTIVATION"
+         ttInstallment.RowSource = "ACTIVATION" + 
+                      (IF lcMemo > "" THEN lcMemo ELSE "").
          oiEvents = oiEvents + 1.
 
       IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
@@ -509,6 +531,7 @@ PROCEDURE pCollectACC:
    DEF VAR lcOperCode       AS CHAR NO-UNDO.
    DEF VAR ldtOperDate      AS DATE NO-UNDO.
    DEF VAR ldtDueDate       AS DATE NO-UNDO.
+   DEF VAR lcMemo           AS CHAR NO-UNDO. 
 
    /* check from last 20 days if there are ones that have been completed
       yesterday */
@@ -539,6 +562,7 @@ PROCEDURE pCollectACC:
       END.
       
       ldeendtime = fSecOffset(msrequest.actstamp,-1).
+      lcMemo = "".
 
       fSplitTs(msrequest.actstamp, output ldaACCDate, output liTime).
       
@@ -680,7 +704,8 @@ PROCEDURE pCollectACC:
               ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN ""
                                        ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
               lcOrderIdVal          = ttInstallment.OrderId
-              ttInstallment.RowSource = "ACC_OLD"
+              ttInstallment.RowSource = "ACC_OLD" + 
+                  (IF lcMemo > "" THEN lcMemo ELSE "")
               ttInstallment.FFNum = FixedFee.FFNum
               oiEvents = oiEvents + 1.
 
@@ -801,6 +826,7 @@ PROCEDURE pCollectInstallmentContractChanges:
    DEF VAR ldeResidualFee AS DEC NO-UNDO. 
    DEF VAR ldtOperDate AS DATE NO-UNDO.
    DEF VAR ldtDueDate AS DATE NO-UNDO.
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
 
    DEF BUFFER bTermRequest FOR MSRequest.
    DEF BUFFER bActRequest FOR MSRequest.
@@ -921,6 +947,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          END.
             
          ASSIGN
+            lcMemo = ""
             liBatches = 0
             ldeAmount = 0
             liFFItemQty = 0.
@@ -973,8 +1000,10 @@ PROCEDURE pCollectInstallmentContractChanges:
 
             IF AVAIL SingleFee THEN 
                ldeResidualFee = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount NE ? THEN
+            ELSE IF bTermDCCLI.Amount NE ? THEN DO:
                ldeResidualFee = bTermDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
+            END.
             ELSE ldeResidualFee = 0.
          END.
          ELSE ldeResidualFee = 0.
@@ -992,7 +1021,8 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.ResidualAmount = ldeResidualFee
             ttInstallment.Channel = ""
             ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-            ttInstallment.RowSource = "INSTALLMENT_CHANGE_OLD"
+            ttInstallment.RowSource = "INSTALLMENT_CHANGE_OLD" + 
+                                      (IF lcMemo > "" THEN lcMemo ELSE "")
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
       END.
@@ -1354,6 +1384,7 @@ PROCEDURE pCollectInstallmentCancellations:
    DEF VAR ldeAmount AS DEC NO-UNDO. 
    DEF VAR ldeResidualAmt AS DEC NO-UNDO. 
    DEF VAR lcCancelType AS CHAR NO-UNDO. 
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
 
    DEF BUFFER bTermDCCLI FOR DCCLI.
    DEF BUFFER bMainRequest FOR MSRequest.
@@ -1384,6 +1415,8 @@ PROCEDURE pCollectInstallmentCancellations:
             MsRequest.ReqCParam2 = "canc")
       ON QUIT UNDO, RETRY
       ON STOP UNDO, RETRY:
+
+      lcMemo = "".
       
       IF RETRY THEN DO:
          olInterrupted = TRUE.
@@ -1479,7 +1512,7 @@ PROCEDURE pCollectInstallmentCancellations:
 
             FIND FIRST bttInstallment WHERE
                        bttInstallment.FFNum = FixedFee.FFNum AND
-                       bttInstallment.RowSource = "ACTIVATION" NO-ERROR.
+                       bttInstallment.RowSource BEGINS "ACTIVATION" NO-ERROR.
             IF AVAIL bttInstallment THEN DO:
 
                IF (bttInstallment.Amount * bttInstallment.Items) EQ ldeAmount THEN DO:
@@ -1513,11 +1546,10 @@ PROCEDURE pCollectInstallmentCancellations:
                        SingleFee.SourceTable = FixedFee.SourceTable AND
                        SingleFee.CalcObj = "RVTERM" NO-ERROR.
             IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount > 0 AND 
-               NOT CAN-FIND(ttInstallment WHERE
-                            ttInstallment.FFNum = FixedFee.FFNum AND
-                            ttInstallment.RowSource = "ACTIVATION") THEN
+            ELSE IF bTermDCCLI.Amount > 0 THEN DO:
                ldeResidualAmt = bTermDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
+            END.
          END.
 
          ASSIGN
@@ -1544,7 +1576,8 @@ PROCEDURE pCollectInstallmentCancellations:
             ttInstallment.ResidualAmount = ldeResidualAmt
             ttInstallment.Channel = ""
             ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-            ttInstallment.RowSource = lcCancelType 
+            ttInstallment.RowSource = lcCancelType + 
+                                     (IF lcMemo > "" THEN lcMemo ELSE "")
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
       END.
