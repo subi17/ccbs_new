@@ -563,6 +563,7 @@ def documentation(*a):
                 #else:
                 #    print "The page was already up to date"
 
+                page['content'] = newtext
                 server.confluence1.storePage(session, page)
                 print "The page has been updated"
 
