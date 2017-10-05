@@ -21,6 +21,7 @@
 {Func/dextra.i}
 {Func/cparam2.i}
 {Func/main_add_lines.i}
+{Func/msisdn.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -115,6 +116,22 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                 MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
                                 NO-ERROR.
                      IF AVAIL MobSub THEN DO:
+
+                        FIND FIRST MSISDN WHERE
+                                   MSISDN.Brand = gcBrand AND
+                                   MSISDN.CLI   = MobSub.CLI
+                        EXCLUSIVE-LOCK NO-ERROR.
+                        /* No mobile created. Release MSISDN */
+                        IF AVAIL MSISDN AND MSISDN.StatusCode EQ 3 THEN DO:
+                           fMakeMsidnHistory(INPUT RECID(MSISDN)).
+
+                           IF fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN
+                              MSISDN.StatusCode = {&MSISDN_ST_MNP_OUT_YOIGO}.
+                           ELSE MSISDN.StatusCode = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
+                           MSISDN.CustNum = 0.
+                           MSISDN.ValidTo = fMakeTS().
+                        END.
+
                         ASSIGN
                            MobSub.CLI = MobSub.FixedNumber
                            MobSub.ICC = ""
