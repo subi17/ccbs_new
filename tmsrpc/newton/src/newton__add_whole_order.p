@@ -99,6 +99,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -135,6 +136,7 @@
                   mark_post_3rd;boolean;optional;
                   mark_sms_3rd;boolean;optional;
                   mark_email_3rd;boolean;optional;
+                  mark_dont_share_personal_data;boolean;optional;
                   mark_bank_3rd;boolean;optional;
                   language;string;optional;
                   latitude;string;optional;
@@ -175,6 +177,7 @@
                  mark_post_3rd;boolean;optional;
                  mark_sms_3rd;boolean;optional;
                  mark_email_3rd;boolean;optional;
+                 mark_dont_share_personal_data;boolean;optional;
                  mark_bank_3rd;boolean;optional;
                  language;string;optional;
                  lantitude;string;optional;
@@ -882,6 +885,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
          OrderCustomer.Language           = STRING(liLanguage)
+         OrderCustomer.DontSharePersData   = (LOOKUP("dont_share_personal_data",
+                                              lcMarketing, "|") NE 0)
          OrderCustomer.OperSMSMarketing   = (LOOKUP("SMS", lcMarketing, "|") NE 0)
          OrderCustomer.OperEmailMarketing = (LOOKUP("Email", lcMarketing, "|") NE 0)
          OrderCustomer.OperPostMarketing  = (LOOKUP("Post", lcMarketing, "|") NE 0)
@@ -1356,6 +1361,7 @@ gcCustomerStructFields = "birthday," +
                          "lname2," +
                          "mark_email," +
                          "mark_email_3rd," +
+                         "mark_dont_share_personal_data," +
                          "mark_post," +
                          "mark_post_3rd," +
                          "mark_sms," +
@@ -1493,8 +1499,6 @@ ELSE IF INDEX(pcChannel,"PRO") > 0 THEN
 DO:
     IF CliType.PayType = {&CLITYPE_PAYTYPE_PREPAID} THEN     
         RETURN appl_err("Prepaid subscriptions are not allowed for PRO customer(s)").
-    ELSE IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN    
-        RETURN appl_err("Fixed only subscription types are not allowed for PRO customer(s)").
 END.
 
 /* Fixed only convergent subscription types */

@@ -226,12 +226,13 @@ ELSE DO:
       
    /* YDR-1207, Always update marketing fields */
    ASSIGN
-      Customer.DirMarkSMS   = OrderCustomer.OperSMSMarketing
-      Customer.DirMarkEmail = OrderCustomer.OperEMailMarketing
-      Customer.DirMarkPOST  = OrderCustomer.OperPostMarketing
-      Customer.OutMarkSMS   = OrderCustomer.OutSMSMarketing
-      Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
-      Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing.
+      Customer.DirMarkSMS        = OrderCustomer.OperSMSMarketing
+      Customer.DirMarkEmail      = OrderCustomer.OperEMailMarketing
+      Customer.DirMarkPOST       = OrderCustomer.OperPostMarketing
+      Customer.OutMarkSMS        = OrderCustomer.OutSMSMarketing
+      Customer.OutMarkEmail      = OrderCustomer.OutEMailMarketing
+      Customer.OutMarkPOST       = OrderCustomer.OutPostMarketing
+      Customer.DontSharePersData = OrderCustomer.DontSharePersData.
       
    /* Renove order handling */
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
@@ -322,6 +323,7 @@ ELSE DO:
                Customer.ZipCode         = OrderCustomer.ZipCode
                Customer.PostOffice      = OrderCustomer.PostOffice
                Customer.Region          = OrderCustomer.Region
+               Customer.InvGroup        = fDefInvGroup(OrderCustomer.Region)
                Customer.Country         = OrderCustomer.Country
                Customer.DirMarkEmail    = OrderCustomer.OperEMailMarketing
                Customer.DirMarkPOST     = OrderCustomer.OperPostMarketing

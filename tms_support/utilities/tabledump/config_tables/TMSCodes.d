@@ -1002,9 +1002,11 @@
 "Order" "OrderChannel" "Order" "CC" "Customer care" "" "" 1
 "Order" "OrderChannel" "Order" "CC_PRO" "Customer care PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_POS" "Fusion POS" "" "" 1
+"Order" "OrderChannel" "Order" "Fusion_POS_PRO" "Fusion POS PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales" "Fusion Telesales" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales_PRO" "Fusion Telesales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "POS" "Point of sales" "" "" 1
+"Order" "OrderChannel" "Order" "POS_PRO" "Point of sales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal" "Renewals" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_CTC" "Renewal CTC" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_POS" "Renewal through POS" "" "" 1
@@ -1360,6 +1362,7 @@
 "requem" "92,0,1,2,3" "SubsLMenu" "1" "Publish invoices to Newton AND HPD" "" "" 1
 "requem" "93,0,1,2,3" "SubsLMenu" "1" "Publish invoices to IFS" "" "" 1
 "requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
+"requem" "95,0,1,2,3,7,8,9" "SubsLMenu" "1" "Pro Migration" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
@@ -1440,6 +1443,7 @@
 "Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
