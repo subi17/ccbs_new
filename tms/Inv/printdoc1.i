@@ -199,7 +199,6 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
    DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liGroupType  AS INTEGER   NO-UNDO.
-   
    FOR EACH BillItem NO-LOCK WHERE
       BillItem.Brand = gcBrand
       BREAK BY BillItem.BIGroup:
