@@ -814,4 +814,133 @@ FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Function checks for ongoing 3P convergent for a customer
+   and returns convergent orderId  */
+FUNCTION fCheckOngoingConvergentOrderID RETURNS LOGICAL
+   (INPUT icCustIDType   AS CHAR,
+    INPUT icCustID       AS CHAR,
+    INPUT icCliType      AS CHAR,
+    OUTPUT liConvOrderId AS INT):
+ 
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bClitype       FOR Clitype.
+ 
+   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO.
+ 
+   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
+ 
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID,
+      FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:gcBrand AND bCliType.CliType = bOrder.CliType NO-LOCK:
+ 
+      IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+          NEXT.
+ 
+      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
+ 
+      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN DO:
+         liConvOrderId = bOrder.OrderId.
+         RETURN TRUE.
+      END.
+ 
+   END.
+ 
+   RETURN FALSE.
+ 
+END FUNCTION.
+
+/* Function checks for ongoing 2P convergent for a customer
+   and returns convergent orderId */
+FUNCTION fCheckOngoing2PConvergentOrderID RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR,
+    OUTPUT liConvOrderId AS INT):
+ 
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+ 
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID = bOrder.OrderID:
+ 
+      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN DO:
+         liConvOrderId = bOrder.OrderId.
+ 
+         RETURN TRUE.
+ 
+      END.
+ 
+   END.
+ 
+   RETURN FALSE.
+ 
+END FUNCTION.
+
+/* Function checks for ongoing mobile only for a customer
+   Additional Line with mobile only ALFMO-5
+   and returns convergent orderId  */
+FUNCTION fCheckOngoingMobileOnlyOrderID RETURNS LOGICAL
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR,
+    INPUT icCliType    AS CHAR,
+    OUTPUT liConvOrderId AS INT):
+ 
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+ 
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.orderid    EQ bOrderCustomer.Orderid  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}   AND
+            LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+ 
+       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                   OrderAction.Brand    = Syst.Parameters:gcBrand AND
+                   OrderAction.OrderID  = bOrder.OrderID   AND
+                   OrderAction.ItemType = "AddLineDiscount" AND
+          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
+             NEXT.
+ 
+      IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN DO:
+         liConvOrderId = bOrder.OrderId.
+ 
+         RETURN TRUE.
+ 
+      END.
+   END.
+ 
+   RETURN FALSE.
+ 
+END FUNCTION.
+
 &ENDIF

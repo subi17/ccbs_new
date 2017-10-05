@@ -415,6 +415,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
    DEFINE VARIABLE lcMainOrderId             AS CHAR NO-UNDO. /* gap018 */
    DEFINE VARIABLE llDespachar               AS LOGICAL   NO-UNDO. /* gap018 */
+   DEFINE VARIABLE liConvOrderId             AS INT NO-UNDO. /* gap018 */
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -1303,6 +1304,7 @@ FUNCTION fDelivSIM RETURNS LOG
    /* GAP018 */
    llDespachar = FALSE.
    lcMainOrderId = "".
+   liConvOrderId = 0.
 
    /* Check if router delivered and terminal can be delivered */
    IF llDextraInvoice THEN DO:
@@ -1335,7 +1337,63 @@ FUNCTION fDelivSIM RETURNS LOG
             END.
          END.
          ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-            FOR FIRST OrderCustomer NO-LOCK WHERE
+            FIND FIRST bufOrderCustomer NO-LOCK WHERE
+                       bufOrderCustomer.Brand   = gcBrand AND
+                       bufOrderCustomer.OrderId = Order.OrderId AND
+                       bufOrderCustomer.RowType = 1 NO-ERROR.
+            
+            /* Additional lines Mobile only tariffs */ 
+            IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                               OrderAction.Brand    = gcBrand           AND
+                               OrderAction.OrderID  = Order.OrderId     AND
+                               OrderAction.ItemType = "AddLineDiscount" AND
+                         /* DISCCONT10,DISCCONT15, .. */
+                         LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0)) THEN
+               IF fCheckOngoingConvergentOrderID(bufOrderCustomer.CustIdType,
+                                                 bufOrderCustomer.CustId,
+                                                 Order.CLIType,
+                                                 liConvOrderId) THEN 
+                  /* MainOrderID found */
+                  lcMainOrderId = STRING(liConvOrderId).
+               ELSE
+                  IF fCheckOngoing2PConvergentOrderID(bufOrderCustomer.CustIdType,
+                                                      bufOrderCustomer.CustId,
+                                                      Order.CLIType,
+                                                      liConvOrderId) THEN 
+                     /* MainOrderID found */
+                     lcMainOrderId = STRING(liConvOrderId).
+               
+            ELSE IF(CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                   OrderAction.Brand    = gcBrand           AND
+                                   OrderAction.OrderID  = Order.OrderId     AND
+                                   OrderAction.ItemType = "AddLineDiscount" AND
+                             /* DISCCONT10H,DISCCONT15H, .. */
+                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)) THEN
+               IF fCheckOngoingConvergentOrderID(bufOrderCustomer.CustIdType,
+                                                 bufOrderCustomer.CustId,
+                                                 Order.CLIType,
+                                                 liConvOrderId) THEN 
+                  /* MainOrderID found */
+                  lcMainOrderId = STRING(liConvOrderId).
+
+            ELSE IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                    OrderAction.Brand    = gcBrand           AND
+                                    OrderAction.OrderID  = Order.OrderId     AND
+                                    OrderAction.ItemType = "AddLineDiscount" AND
+                              /* DISCCONT10HM,DISCCONT15HM, .. */
+                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)) THEN
+               IF fCheckOngoingMobileOnlyOrderID(bufOrderCustomer.CustIdType,
+                                                 bufOrderCustomer.CustId,
+                                                 Order.CLIType,
+                                                 liConvOrderId) THEN
+                  /* MainOrderID found */
+                  lcMainOrderId = STRING(bufOrder.OrderId).
+         END.
+         ELSE DO:
+            lcMainOrderId = "".
+         END.
+
+            /* FOR FIRST OrderCustomer NO-LOCK WHERE
                       OrderCustomer.Brand   = gcBrand AND
                       OrderCustomer.OrderId = Order.OrderId AND
                       OrderCustomer.RowType = 1,
@@ -1358,7 +1416,7 @@ FUNCTION fDelivSIM RETURNS LOG
                ELSE
                   lcMainOrderId = "".
             END.
-         END.
+         END.*/
 
          IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
             CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
