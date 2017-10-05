@@ -253,10 +253,25 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
 
    RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
 END.
-FUNCTION fGetProFeemodel RETURNS CHAR (INPUT iiCliType AS CHAR):
-   IF INDEX(iiClitype,"300") > 0 THEN RETURN "CONTFH300MF".
-   ELSE IF INDEX(iiClitype,"50") > 0 THEN RETURN "CONTFH50MF".
-   ELSE RETURN "CONTDSLMF".
+
+FUNCTION fGetProFeemodel RETURNS CHAR
+   (INPUT icCliType AS CHAR):
+
+   DEF BUFFER CLIType FOR CLIType.
+   DEF BUFFER DayCampaign FOR DayCampaign.
+
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Parameters:gcBrand AND
+             CLIType.CLIType = icCliType AND
+             CLIType.FixedBundle > "",
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Parameters:gcBrand AND
+             DayCampaign.DCEvent = CLIType.FixedBundle:
+      RETURN DayCampaign.FeeModel.
+   END.
+
+   RETURN "".
+
 END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
