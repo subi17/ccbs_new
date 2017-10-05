@@ -30,7 +30,8 @@
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
-DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
+DEFINE VARIABLE ldCurrTS            AS DECIMAL NO-UNDO.
+DEFINE VARIABLE lcExtraLineCLITypes AS CHAR    NO-UNDO. 
 
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
 DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
@@ -45,7 +46,9 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
    FIELD PerContID AS INT.
 
-ldCurrTS = fMakeTS().
+ASSIGN 
+  lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes")
+  ldCurrTS            = fMakeTS().
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -110,6 +113,7 @@ DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
 DEFINE BUFFER bMobSub        FOR MobSub.
+DEFINE BUFFER bMLMobSub      FOR MobSub.
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
 
@@ -131,6 +135,18 @@ DO TRANSACTION:
       fReqError("Invalid Subscription Id").
       RETURN.
    END. /* IF NOT AVAILABLE termMobSub THEN DO: */
+
+   /* Before updating any values, check if it extra line clitype reactivation. 
+      If yes, then check associated main line is not associated to any other 
+      extra line. If associated then reactivation is not allowed */ 
+   IF LOOKUP(TermMobSub.CLIType,lcExtraLineCLITypes) GT 0  AND
+      NOT CAN-FIND(FIRST bMLMobSub NO-LOCK WHERE 
+                         bMLMobSub.MsSeq        EQ TermMobSub.MultiSimId AND 
+                         bMLMobSub.MultiSimId   EQ 0                     AND 
+                         bMLMobSub.MultiSimType EQ 0)                    THEN DO:
+      fReqError("Mainline is already associated to other extra line").
+      RETURN.
+   END.                      
 
    FIND FIRST MSISDN WHERE
               MSISDN.Brand    = gcBrand        AND
@@ -737,7 +753,16 @@ DO TRANSACTION:
    END.
 
    fReqStatus(2,"").
-   
+  
+   /* Reactive Extra line discount, if associated Mainline is not 
+      assigned to other Extra line */
+   IF lcExtraLineCLITypes                        NE "" AND 
+      LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) GT 0  AND 
+      MobSub.MultiSimId                          NE 0  AND
+      MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
+   RUN pReacExtraLineDiscount(MobSub.MultiSimId, /* Mainline SubId    */ 
+                              MobSub.MsSeq,      /* Extaline SubId    */
+                              MobSub.CLIType).   /* Extraline clitype */ 
 
    /* ADDLINE-20 Additional Line 
       IF the Customer reactivates the below additional line tariff's then,
@@ -996,9 +1021,13 @@ PROCEDURE pRecoverSTC PRIVATE:
    /* Calculate new STC/BTC activation time */
    IF bMSRequestSTC.ActStamp > fMakeTS() THEN
       ldeSTCStamp = bMSRequestSTC.ActStamp.
-   ELSE IF (bMSRequestSTC.ReqCparam1 BEGINS "CONT" AND
-      bMSRequestSTC.ReqCparam2 BEGINS "CONT") OR
-      DAY(TODAY) EQ 1 THEN DO:
+   ELSE IF (CAN-FIND(FIRST CLIType WHERE   
+                          CLIType.CLIType EQ bMSRequestSTC.ReqCparam1 AND
+                          CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID})
+       AND CAN-FIND(FIRST CLIType WHERE   
+                          CLIType.CLIType EQ bMSRequestSTC.ReqCparam2 AND
+                          CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}))
+      OR DAY(TODAY) EQ 1 THEN DO:
       ldeSTCStamp = fMake2Dt(TODAY,0).
    END.
    ELSE ldeSTCStamp = fMake2Dt(fLastDayOfMonth(TODAY) + 1,0).
@@ -1143,3 +1172,44 @@ PROCEDURE pReacAddLineDisc:
 
 END PROCEDURE.
 
+PROCEDURE pReacExtraLineDiscount:
+
+   DEF INPUT PARAM liMainLineMsSeq    AS INT  NO-UNDO.
+   DEF INPUT PARAM liExtraLineMsSeq   AS INT  NO-UNDO.    
+   DEF INPUT PARAM lcExtraLineCLIType AS CHAR NO-UNDO. 
+   
+   DEF VAR lcExtraLineDiscRuleId AS CHAR NO-UNDO. 
+
+   DEFINE BUFFER bMLMobSub             FOR MobSub.
+   DEFINE BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+
+   CASE lcExtraLineCLIType:
+      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
+   END CASE.
+
+   FIND FIRST bMLMobSub EXCLUSIVE-LOCK WHERE
+              bMLMobSub.MsSeq        EQ liMainLineMsSeq AND
+              bMLMobSub.MultiSimId   EQ 0               AND
+              bMLMobSub.MultiSimType EQ 0               NO-ERROR.
+
+   IF AVAIL bMLMobSub             AND
+      lcExtraLineDiscRuleId NE "" THEN DO:
+      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
+                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+      IF NOT AVAIL ExtraLineDiscountPlan THEN
+         RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId).
+
+      fCreateExtraLineDiscount(liExtraLineMsSeq,
+                               ExtraLineDiscountPlan.DPRuleID,
+                               TODAY).
+      IF RETURN-VALUE BEGINS "ERROR" THEN
+         RETURN RETURN-VALUE.
+
+      ASSIGN bMLMobSub.MultiSimId   = liExtraLineMsSeq
+             bMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
+   END.   
+
+END.

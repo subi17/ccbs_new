@@ -82,7 +82,7 @@ FORM
     OfferCriteria.OfferCriteriaID COLON 15 SKIP(1)
     OfferCriteria.CriteriaType  COLON 15 
        lcType FORMAT "X(30)" NO-LABEL SKIP
-    OfferCriteria.IncludedValue COLON 15
+    OfferCriteria.IncludedValue  FORMAT "X(50)" COLON 15
     OfferCriteria.ExcludedValue COLON 15
     OfferCriteria.BeginStamp    COLON 15
        lcBegin FORMAT "X(20)" NO-LABEL SKIP
@@ -164,17 +164,10 @@ REPEAT WITH FRAME sel:
 
            DISPLAY icOffer @ OfferCriteria.Offer.
 
-           i = 1. 
-           FOR EACH OfferCriteria NO-LOCK 
-           BY OfferCriteria.OfferCriteriaId DESC:
-              i = OfferCriteria.OfferCriteriaID + 1.
-              LEAVE.
-           END.
-           
            CREATE OfferCriteria.
            ASSIGN 
               OfferCriteria.Brand = gcBrand 
-              OfferCriteria.OfferCriteriaID = i
+              OfferCriteria.OfferCriteriaID = NEXT-VALUE(OfferCriteriaSeq)
               OfferCriteria.Offer   = icOffer
               OfferCriteria.BeginStamp = ldDefFrom.
               OfferCriteria.EndStamp   = fMake2DT(12/31/2049,86399).

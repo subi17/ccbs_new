@@ -32,6 +32,8 @@
 {Func/fbankdata.i}
 {Mm/fbundle.i}
 {Mc/dpmember.i}
+{Func/orderfunc.i}
+{Func/custfunc.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -130,7 +132,9 @@ PROCEDURE pFinalize:
    ELSE ldaToDate = DATE(MONTH(ldaFromDate) + 1,1,YEAR(ldaFromDate)) - 1.
 
    liPayType = 1. 
-   FIND FIRST MsOwner WHERE MsOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+   FIND FIRST MsOwner WHERE 
+              MsOwner.MsSeq = iiMsSeq AND
+              MsOwner.TSEnd >= 99999999 NO-LOCK NO-ERROR.
    IF AVAILABLE MsOwner AND MsOwner.PayType THEN liPayType = 2.
    
    IF liPayType = 2 THEN 
@@ -179,15 +183,36 @@ PROCEDURE pOwnerChange:
    DEF VAR lcCode        AS CHAR NO-UNDO. 
    DEF VAR lcMemo        AS CHAR NO-UNDO. 
    DEF VAR lcChannel     AS CHAR NO-UNDO.
+   DEF VAR lcCategory    AS CHAR NO-UNDO. 
 
    DEF BUFFER bSubRequest   FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bMsRequest    FOR MsRequest.
+   DEF BUFFER bOldCustCat   FOR CustCat.
    
    liOrigStat = MsRequest.ReqStat.
       
    /* Set request under work status */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
+   
+   ASSIGN liNewOwner = MsRequest.ReqIParam1.
+   /* Double check existing customer */
+   IF liNewOwner = 0 THEN DO: 
+      
+      FIND FIRST bNewCust WHERE
+         bNewCust.Brand      = gcBrand AND
+         bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
+         bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
+         bNewCust.Roles NE "inactive"
+      NO-LOCK NO-ERROR.
+      
+      IF AVAIL bNewCust THEN DO:
+         liNewOwner = bNewCust.Custnum.
+         FIND CURRENT MSRequest EXCLUSIVE-LOCK NO-ERROR.
+         MsRequest.ReqIParam1 = bNewCust.Custnum.
+         FIND CURRENT MSRequest NO-LOCK NO-ERROR.
+      END.
+   END.
 
    RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
                                  MsRequest.MsRequest,
@@ -239,7 +264,8 @@ PROCEDURE pOwnerChange:
    END.
 
    FIND FIRST MsOwner WHERE
-              MsOwner.MsSeq = MobSub.MsSeq NO-LOCK.
+              MsOwner.MsSeq = MobSub.MsSeq AND
+              MsOwner.TSEnd >= 99999999 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner OR MsOwner.CustNum NE MobSub.CustNum OR
       MsOwner.AgrCust NE MobSub.AgrCust OR MsOwner.TSEnd < MsRequest.ActStamp
    THEN DO:
@@ -252,6 +278,16 @@ PROCEDURE pOwnerChange:
       fReqError("Nothing to do").
       RETURN. 
    END.
+   
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.custnum = MsRequest.Custnum NO-ERROR.
+   IF NOT AVAIL Customer THEN DO:
+      fReqError("Old customer not found").
+   END.
+
+   FIND bOldCustCat NO-LOCK WHERE
+        bOldCustCat.Brand = gcBrand AND
+        bOldCustCat.Category = Customer.Category NO-ERROR.
 
    fSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
@@ -331,28 +367,10 @@ PROCEDURE pOwnerChange:
       END.
    END.
    
-   ASSIGN liNewOwner   = MsRequest.ReqIParam1
-          liOldOwner   = MobSub.AgrCust
+   ASSIGN liOldOwner   = MobSub.AgrCust
           liCreated    = 0
           lhRequest    = BUFFER MsRequest:HANDLE.
 
-   /* Double check existing customer */
-   IF liNewOwner = 0 THEN DO: 
-      
-      FIND FIRST bNewCust WHERE
-         bNewCust.Brand      = gcBrand AND
-         bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
-         bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
-         bNewCust.Roles NE "inactive"
-      NO-LOCK NO-ERROR.
-      
-      IF AVAIL bNewCust THEN DO:
-         liNewOwner = bNewCust.Custnum.
-         FIND CURRENT MSRequest EXCLUSIVE-LOCK NO-ERROR.
-         MsRequest.ReqIParam1 = bNewCust.Custnum.
-         FIND CURRENT MSRequest NO-LOCK NO-ERROR.
-      END.
-   END.
 
    /* a new customer will be created */
    DO liReqCnt = 1 TO 3:
@@ -646,6 +664,16 @@ PROCEDURE pOwnerChange:
                END.
             END.
             
+            /* Preserve Pro customer category in case the old customer was pro  */
+            IF AVAIL bOldCustCat AND bOldCustCat.Pro EQ TRUE THEN DO:
+               fgetCustSegment(bNewCust.CustIDType, 
+                               (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
+                                ELSE bOldCustCat.SelfEmployed),
+                               bOldCustCat.pro,
+                               OUTPUT lcCategory).
+               IF lcCategory > "" THEN bNewCust.Category = lcCategory.
+            END.
+            
             /* default counter limits; for all, also prepaids */
             fTMRLimit2Customer(bNewCust.CustNum).
          END.  
@@ -886,6 +914,8 @@ PROCEDURE pMsCustMove:
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
    DEF VAR liOldAgrCust AS INT  NO-UNDO.
+   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDisc     AS CHAR NO-UNDO. 
 
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -896,6 +926,7 @@ PROCEDURE pMsCustMove:
    DEF BUFFER bFatime     FOR Fatime.
    DEF BUFFER bLimit      FOR Limit. 
    DEF BUFFER bCounter    FOR TMCounter.
+   DEF BUFFER lbMLMobSub  FOR MobSub.
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK.
    
@@ -1246,7 +1277,10 @@ PROCEDURE pMsCustMove:
           bOwner.AgrCust = iiNewOwner
           bOwner.CLIEvent = "ACC".
 
-   IF MobSub.CLIType BEGINS "CONT" THEN DO:
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType = MobSub.CLIType AND
+                     CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN DO:
+
       /* Create Mandate for Subscription and store it into MsOwner */
       fSplitTS(MsRequest.CreStamp, OUTPUT ldaDate, OUTPUT liManTime).
    
@@ -1288,6 +1322,42 @@ PROCEDURE pMsCustMove:
       Mobsub.Salesman = ENTRY(11,MsRequest.ReqCParam1,";").
    END.   
 
+   /* Extraline discount will be closed WITH last date of previous month 
+      if ACC is done on Extraline subscription */
+   ASSIGN lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
+
+   IF lcExtraLineCLITypes                        NE "" AND 
+      LOOKUP(MobSub.CliType,lcExtraLineCLITypes) GT 0  AND 
+      MobSub.MultiSimId                          GT 0  AND 
+      MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+
+      FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
+                 lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND
+                 lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND
+                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+      
+      IF AVAIL lbMLMobSub THEN DO:
+         
+         CASE MobSub.CliType:
+            WHEN "CONT28" THEN lcExtraLineDisc = "CONT28DISC". 
+         END CASE.
+
+         /* Discount has to be closed with last date of previous month */ 
+         /* ACC request will be procesed on 1st day of every month     */
+         fCloseExtraLineDiscount(MobSub.MsSeq,
+                                 lcExtraLineDisc,
+                                 TODAY).
+         
+         /* Hard association is also removed because ACC was done to extraline */
+         ASSIGN lbMLMobSub.MultiSimId   = 0
+                lbMLMobSub.MultiSimType = 0
+                MobSub.MultiSimId       = 0
+                MobSub.MultiSimType     = 0.
+
+      END.           
+                              
+   END.
+
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       fCloseAddLineDiscount(MobSub.AgrCust,
@@ -1306,6 +1376,7 @@ PROCEDURE pMsCustMove:
                                   bOMobSub.CLIType,
                                   TODAY - 1).
       END.
+      fDeactivateTVService(MobSub.MsSeq, MsRequest.UserCode).
    END.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobSub).

@@ -5,7 +5,7 @@ class AddTableDialType(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DialType', area="Sta_Data_256", label="Dialling Type", dump_name="dialtype", desc='''Dialling Type
+        t = self.table('DialType', area="Sta_Data_2_256", label="Dialling Type", dump_name="dialtype", desc='''Dialling Type
 Dialling Type
 
 ''')

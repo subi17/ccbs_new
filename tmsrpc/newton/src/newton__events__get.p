@@ -21,17 +21,26 @@ DEFINE VARIABLE piID AS INTEGER NO-UNDO.
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+
    piID = INT(pcId) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN RETURN appl_err("Incorrect ID").
 
-   FIND MsRequest NO-LOCK WHERE 
-        MsRequest.MsRequest = piID NO-ERROR.
-
-   IF NOT AVAIL MsRequest THEN RETURN appl_err("Event not found: "+ pcId).
+   FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = piID NO-ERROR.
+   IF NOT AVAIL MsRequest THEN 
+      RETURN appl_err("Event not found: "+ pcId).
       
    lcResultStruct = add_struct(resp_array, "").
    
-   add_string(lcResultStruct, "id", STRING(MsRequest.MsRequest)). 
+   add_string(lcResultStruct, "id", (STRING(MsRequest.MsRequest) + "|" + fConvertTenantToBrand(BUFFER-TENANT-NAME(MsRequest)))). 
    add_string(lcResultStruct, "msisdn", MsRequest.CLI).
    add_int(lcResultStruct, "customer_number", MsRequest.Custnum).
    add_string(lcResultStruct, "username", MsRequest.UserCode).

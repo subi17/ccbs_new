@@ -1,0 +1,433 @@
+bulkload: FMItem
+  FeeModel: "CargoPost_05"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 5
+  BillType: "CC"
+  FromDate: 2017-04-20
+  ToDate: 2017-07-28
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CargoPost_10"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-21
+  ToDate: 2017-10-12
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "CargoPost_20"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 20
+  BillType: "CC"
+  FromDate: 2017-04-21
+  ToDate: 2018-02-02
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Compensa 5"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: -5
+  BillType: "CC"
+  FromDate: 2017-04-03
+  ToDate: 2017-04-30
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Doa no procede"
+  PriceList: "COMMON"
+  BillCode: "DOA"
+  BillMethod: TRUE 
+  Amount: 150
+  BillType: "CC"
+  FromDate: 2017-04-20
+  ToDate: 2017-09-15
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Handset"
+  PriceList: "COMMON2"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 5
+  BillType: "CC"
+  FromDate: 2017-04-03
+  ToDate: 2017-04-24
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Importe_descontado"
+  PriceList: "COMMON"
+  BillCode: "ACCCHARGE"
+  BillMethod: TRUE 
+  Amount: 200
+  BillType: "CC"
+  FromDate: 2017-04-21
+  ToDate: 2017-05-24
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "MM_1024_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_1024_UPSELLMF"
+  Interval: 1
+  Amount: 7.02
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_200_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_200_UPSELLMF"
+  Interval: 1
+  Amount: 1.65
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_500_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_500_UPSELLMF"
+  Interval: 1
+  Amount: 4.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-04-15
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_512_UPSELLMF"
+  PriceList: "COMMON"
+  BillCode: "MM_512_UPSELLMF"
+  Interval: 1
+  Amount: 4.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_BONO_RELAXMF"
+  PriceList: "COMMON"
+  BillCode: "MM_BONO_RELAXMF"
+  Interval: 1
+  Amount: 1.65
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_CEROMF"
+  PriceList: "COMMON"
+  BillCode: "MM_CEROMF"
+  Interval: 1
+  Amount: 3
+  BillType: "MF"
+  BillCycle: 2
+  FFItemQty: 24
+  FromDate: 2017-02-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_CERO_5GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_CERO_5GBMF"
+  Interval: 1
+  Amount: 13.97
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA1024MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA1024MF"
+  Interval: 1
+  Amount: 1.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA2048MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA2048MF"
+  Interval: 1
+  Amount: 5.18
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA4096MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA4096MF"
+  Interval: 1
+  Amount: 9.31
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA500MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA500MF"
+  Interval: 1
+  Amount: .06
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-04-15
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_DATA512MF"
+  PriceList: "COMMON"
+  BillCode: "MM_DATA512MF"
+  Interval: 1
+  Amount: .06
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_INTVOICE100MF"
+  PriceList: "COMMON"
+  BillCode: "MM_INTVOICE100MF"
+  Interval: 1
+  Amount: 4.13
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-27
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_MAS_1GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_MAS_1GBMF"
+  Interval: 1
+  Amount: 13.97
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_MAS_3GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_MAS_3GBMF"
+  Interval: 1
+  Amount: 16.45
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_MAS_8GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_MAS_8GBMF"
+  Interval: 1
+  Amount: 22.23
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-24
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_10GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_10GBMF"
+  Interval: 1
+  Amount: 24.71
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_20GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_20GBMF"
+  Interval: 1
+  Amount: 32.98
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_50GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_50GBMF"
+  Interval: 1
+  Amount: 74.3
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_NET_5GBMF"
+  PriceList: "COMMON"
+  BillCode: "MM_NET_5GBMF"
+  Interval: 1
+  Amount: 16.45
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-23
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 1
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_VOICE100MF"
+  PriceList: "COMMON"
+  BillCode: "MM_VOICE100MF"
+  Interval: 1
+  Amount: 3.3
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-03-16
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_VOICE250MF"
+  PriceList: "COMMON"
+  BillCode: "MM_VOICE250MF"
+  Interval: 1
+  Amount: 6.61
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "MM_VOICE40MF"
+  PriceList: "COMMON"
+  BillCode: "MM_VOICE40MF"
+  Interval: 1
+  Amount: 1.9
+  BillType: "MF"
+  BillCycle: 2
+  FromDate: 2017-02-22
+  ToDate: 2049-12-31
+  Brand: "1"
+  BrokenRental: 2
+  FirstMonthBR: 2
+
+bulkload: FMItem
+  FeeModel: "RECONNECTION"
+  PriceList: "COMMON"
+  BillCode: "RECONNECTION"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-20
+  ToDate: 2018-01-17
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "Reparacion"
+  PriceList: "COMMON"
+  BillCode: "REPAIRCHARGE"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-27
+  ToDate: 2017-12-21
+  Brand: "1"
+
+bulkload: FMItem
+  FeeModel: "single_fee_charge"
+  PriceList: "COMMON"
+  BillCode: "GENERALCARGO"
+  BillMethod: TRUE 
+  Amount: 10
+  BillType: "CC"
+  FromDate: 2017-04-13
+  ToDate: 2018-03-31
+  Brand: "1"
+

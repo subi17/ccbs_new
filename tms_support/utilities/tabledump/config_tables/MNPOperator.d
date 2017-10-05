@@ -87,6 +87,7 @@
 "1" "Lebara" "203" "893456" ? no "" ""
 "1" "REPUBLICA MOVIL" "204" "893401" yes no "" "735204"
 "1" "Lebara Movil" "213" "893457" yes no "" "970213"
+"1" "DEION COMUNICACIONES" "214" "893490326" yes no "DEI" "903214"
 "1" "BT" "223" "893457" ? no "" "970223"
 "1" "Ibercom" "224" "8934904" yes no "" "904224"
 "1" "PTV TELECOM 4G" "244" "893412" yes no "" "902244"

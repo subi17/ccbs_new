@@ -61,7 +61,7 @@ DEF TEMP-TABLE ttBarringList NO-UNDO
    FIELD BarringStatus AS CHAR
    INDEX UIPriority UIPriority ASC.
 
-DEF TEMP-TABLE ttServices
+DEF TEMP-TABLE ttServices NO-UNDO
    FIELD digit AS INT
    FIELD service_es AS INT
    FIELD service_en AS INT
@@ -119,7 +119,7 @@ FUNCTION fGetGroupOrder RETURNS LOGICAL.
    DEF VAR liPriority AS INT NO-UNDO.
 
    EMPTY TEMP-TABLE ttBGroup.
-   FOR EACH Tmscodes WHERE
+   FOR EACH Tmscodes NO-LOCK WHERE
             Tmscodes.TableName EQ "Barring" AND
             Tmscodes.FieldName EQ "BarringGroup":
 
@@ -142,7 +142,7 @@ FUNCTION fGetServiceName RETURN CHARACTER
    DEF BUFFER TMSCodes FOR TMSCodes.
    DEF VAR lcTransKey AS CHAR NO-UNDO.
 
-   FIND FIRST Tmscodes WHERE
+   FIND FIRST Tmscodes NO-LOCK WHERE
               Tmscodes.TableName EQ "BarringConf" AND
               Tmscodes.FieldName EQ "ServiceMask" AND
               Tmscodes.CodeValue EQ pcDigit NO-ERROR.
@@ -175,7 +175,7 @@ FUNCTION fGetBarringGroupName RETURN CHARACTER
 
    DEF BUFFER TMSCodes FOR TMSCodes.
 
-   FIND FIRST Tmscodes WHERE
+   FIND FIRST Tmscodes NO-LOCK WHERE
               Tmscodes.TableName EQ "Barring" AND
               Tmscodes.FieldName EQ "BarringGroup" AND
               Tmscodes.CodeValue EQ pcBarringGroup NO-ERROR.
@@ -197,11 +197,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_pos_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = piMsSeq AND
-           MobSub.Brand = gcBrand NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO Ordercanal MobSub MsSeq piMsSeq}
 
 top_struct = add_struct(response_toplevel_id, "").
 barr_groups = add_struct(top_struct, "barrings").
@@ -273,7 +269,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcServices):
 
    mask_struct = add_struct(mask_array,"").
    add_string(mask_struct, "service_en", lcEnSer).
-    add_string(mask_struct, "service_es", lcSpSer ).
+   add_string(mask_struct, "service_es", lcSpSer ).
 END.
 
 FINALLY:

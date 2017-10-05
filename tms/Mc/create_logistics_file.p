@@ -29,6 +29,8 @@ gcBrand = "1".
 {Mm/active_bundle.i}
 {Mnp/mnp.i}
 {Func/email.i}
+{Mc/orderfusion.i}
+{Func/financed_terminal.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -70,6 +72,20 @@ DEFINE TEMP-TABLE ttOutputText
    FIELD id AS INTEGER
    INDEX idx id.
 
+DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO.
+
+DO ON ERROR UNDO, THROW:
+   lcBrand = CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant()).
+
+   /* Handler code for any error condition. */
+   CATCH anyErrorObject AS Progress.Lang.Error:
+      MESSAGE "create_logistic_file: unable to fetch brand name".    
+      MESSAGE anyErrorObject:GetMessage(1).
+      RETURN.
+   END CATCH.
+END.
+
+
 ASSIGN
    lcSpoolDir         = fCParam("Logistics","OutSpoolDir") 
    lcRiftpDir         = fCParam("Logistics","OutDir")
@@ -79,13 +95,13 @@ ASSIGN
    lcContractsDir     = fCParam("Logistics","ContractsDir")
    lcContractsOutDir  = fCParam("Logistics","ContractsOutDir")
    lcErrorLogDir      = fCParam("Logistics","DextraErrorLogDir")
-   lcFileName         = "ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+   lcFileName         = lcBrand + "_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt"
    lcContractTARFile  = lcTARSpoolDir +
-                        "contracts_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") +
+                        lcBrand + "_contracts_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") +
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".tar"
    lcErrorLogFileName = lcErrorLogDir +
-                        "error_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+                        lcBrand + "_error_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log"
    lcBundleCLITypes   = fCParamC("BUNDLE_BASED_CLITYPES")
    ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
@@ -112,7 +128,7 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* 10 */
    FIELD ICCNum        AS CHARACTER FORMAT "X(13)"
    FIELD MSISDN        AS CHARACTER FORMAT "X(10)"
-   FIELD TmpMSISDN     AS CHARACTER FORMAT "X(10)"
+   FIELD TmpMSISDN     AS CHARACTER FORMAT "X(10)" /*YPR-6059: content changed*/
    FIELD MNPState      AS CHARACTER FORMAT "X(10)"
    FIELD VoiceMail     AS CHARACTER FORMAT "X(1)"
    FIELD XFUserID      AS CHARACTER FORMAT "X(10)"
@@ -275,8 +291,8 @@ FUNCTION fIsInstallmentConsumerOrder RETURNS LOG:
    IF LOOKUP(AgreeCustomer.CustIdType,"NIF,NIE") = 0 THEN RETURN FALSE.
 
    /* Make sure orders before deployment should be financed by Yoigo */
-   IF AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ? THEN
-      RETURN FALSE.
+   IF (AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ?) AND
+      NOT fIsDirectChannelCetelemOrder(BUFFER Order) THEN RETURN FALSE.
 
    /* Check Installment contract */
    FOR EACH OfferItem NO-LOCK WHERE
@@ -310,6 +326,28 @@ END FUNCTION.
    
 /* must be global for fDelivSIM */
 DEFINE VARIABLE liRowNum        AS INTEGER   NO-UNDO.
+
+/* YPR-6059: *Function finds if subscription has orderaction for voice bundle */
+/* Here issupport for multiple bundles but it is important to remember 
+   field length limitations (10 chars) */
+FUNCTION fVoiceBundle RETURNS CHAR
+   (iiOrderId AS INT):
+   DEF VAR lcVoiceBundles AS CHAR NO-UNDO.
+   DEF VAR lcOut AS CHAR NO-UNDO.
+   lcVoiceBundles = fcParamC("VOICE_BONO_CONTRACTS").
+   DEF BUFFER bOrderaction FOR Orderaction.
+   FOR EACH bOrderaction NO-LOCK WHERE
+            bOrderaction.Brand EQ gcBrand AND
+            bOrderaction.Orderid EQ iiOrderId AND
+            LOOKUP(bOrderaction.ItemKey, lcVoiceBundles) > 0:
+     IF lcOut NE "" THEN  lcOut = lcOut + ",".
+     lcOut = lcOut + bOrderaction.ItemKey.
+   END.
+RETURN lcOut.
+END.
+
+
+
 
 FUNCTION fDelivSIM RETURNS LOG
    (INPUT pcICC AS CHARACTER):
@@ -518,7 +556,7 @@ FUNCTION fDelivSIM RETURNS LOG
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
       WHEN "fusion_telesales" THEN lcOrderChannel = "02".
-      WHEN "fusion_pos" THEN lcOrderChannel = "03".
+      WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
       WHEN "Telesales_PRO" OR 
@@ -717,7 +755,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
       ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
-      ttOneDelivery.TmpMSISDN     = Order.TempCLI
+      ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.OrderID) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
       ttOneDelivery.VoiceMail     = "633633633"
       ttOneDelivery.XFUserID      = lcUID
@@ -1294,8 +1332,9 @@ FUNCTION pLog RETURNS LOG (INPUT pcLogContent AS CHARACTER):
       fLog(pcLogContent, "DEXTRA-INFO").
 END.
 
-FUNCTION fDelivRouter RETURNS LOG
-   (INPUT piOrderId AS int):
+FUNCTION fDelivDevice RETURNS LOG
+   (INPUT icDevice  AS CHAR):
+
    DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcCustRegi      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcOrderChannel  AS CHARACTER NO-UNDO.
@@ -1399,8 +1438,8 @@ FUNCTION fDelivRouter RETURNS LOG
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
-      WHEN "fusion_telesales" THEN lcOrderChannel = "02".
-      WHEN "fusion_pos" THEN lcOrderChannel = "03".
+      WHEN "fusion_telesales" OR WHEN "Fusion_Telesales_PRO" THEN lcOrderChannel = "02".
+      WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
    END CASE.
@@ -1413,8 +1452,8 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.RowNum        = liRowNum
       ttOneDelivery.OrderId       = Order.OrderId
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
-      ttOneDelivery.ActionID      = "1" /* Router */
-      ttOneDelivery.ProductID     = "R075A67W2"
+      ttOneDelivery.ActionID      = (IF icDevice = "Router" THEN "1" ELSE "2")
+      ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "G050DTVN2")
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
       ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
@@ -1444,7 +1483,7 @@ FUNCTION fDelivRouter RETURNS LOG
    CREATE ttInvRow.
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = "R075A67W2"
+      ttInvRow.ProductId   = (IF icDevice = "Router" THEN "R075A67W2" ELSE "G050DTVN2") 
       ttInvRow.Quantity    = "1"
       liLoop1              = 1.
 
@@ -1463,14 +1502,14 @@ FUNCTION fDelivRouter RETURNS LOG
 
    END.
 
-CREATE ttExtra.
+   CREATE ttExtra.
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
           ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
+
    RETURN TRUE.
-END.
 
-
+END FUNCTION.
 
 fBatchLog("START",lcSpoolDir + lcFileName).
 
@@ -1489,6 +1528,9 @@ FOR EACH Stock NO-LOCK,
    /* handle only NEW or MNP orders */
    IF Order.Ordertype NE 0 AND
       Order.Ordertype NE 1 THEN NEXT.
+   
+   /* Do not create LO file in migration */
+   IF Order.Orderchannel BEGINS "migration" THEN NEXT.
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND
@@ -1612,9 +1654,30 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
-   IF fDelivRouter(FusionMessage.orderId) THEN ASSIGN
+   IF fDelivDevice("Router") THEN ASSIGN
       FusionMessage.UpdateTS = fMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
+END.
+
+/* Third Party Device Logistics */
+FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServStatus = {&STATUS_NEW} NO-LOCK:
+      
+   FIND FIRST MobSub WHERE MobSub.MsSeq = TPService.MsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL MobSub THEN
+   DO: 
+       fTPServiceError(BUFFER TPService,"Contract not found").
+       NEXT.
+   END.
+
+   FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL Order THEN 
+   DO:
+      fTPServiceError(BUFFER TPService,"Failed to identify associated order during logistics initiation").
+      NEXT.
+   END.
+   
+   IF fDelivDevice(TPService.ServType) THEN 
+       fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TMS}, {&STATUS_LOGISTICS_INITIATED}).
 END.
 
 iLargestId = 1.

@@ -71,6 +71,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
    ELSE DO:
       IF icCaller EQ {&REQUEST_SOURCE_YOIGO_TOOL} OR
          icUpsellId EQ "DATA200_UPSELL" OR 
+         icUpsellId MATCHES "DSS*FLEX*UPSELL" OR
          icUpsellId EQ "DSS200_UPSELL"  THEN DO:
          FOR EACH bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq   = iiMsSeq AND
@@ -157,6 +158,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
 
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
+   DEF BUFFER DayCampaign          FOR DayCampaign.
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 

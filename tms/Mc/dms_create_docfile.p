@@ -16,6 +16,7 @@
 {Mc/offer.i}
 {Func/dms.i}
 {Func/q25functions.i}
+{Func/profunc.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -328,24 +329,6 @@ FUNCTION fConvertPayType RETURNS CHAR
    ELSE RETURN "CONT".
 END.   
 
-FUNCTION fGetSegment RETURNS CHAR
-   (iiCustNum AS INT):
-   DEF BUFFER bCust FOR Customer.
-   FIND FIRST bCust NO-LOCK  WHERE
-              bCust.CustNum EQ iiCustNum
-              NO-ERROR.
-   IF AVAIL bCust THEN DO:
-      FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand = gcBrand AND
-                 CustCat.Category = bCust.Category
-                 NO-ERROR.
-      IF AVAIL CustCat THEN
-         RETURN CustCat.Segment.
-      RETURN "Consumer".
-   END.
-   ELSE RETURN "-".
-END.   
-
 /*The value can be Simonly, Handset, Financed Handset.*/
 FUNCTION fGetTerminalFinanceType RETURNS CHAR
    (iiOrderID AS INT):
@@ -642,7 +625,45 @@ FUNCTION fGetPermanencyAndHandset RETURNS CHAR
             ocPrevP = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
       END.
    END.
-END.
+END.  
+
+FUNCTION fGetTVService RETURNS CHARACTER
+  (iiMsSeq   AS INTEGER, 
+   iiOrderId AS INTEGER):
+
+  DEFINE BUFFER bf_TPService   FOR TPService.
+  DEFINE BUFFER bf_OrderAction FOR OrderAction.
+  DEFINE BUFFER bf_DayCampaign FOR DayCampaign.
+
+  DEFINE VARIABLE lcProduct AS CHAR NO-UNDO.
+
+  FIND FIRST bf_TPService WHERE bf_TPService.MsSeq     = iiMsSeq            AND 
+                                bf_TPService.Operation = {&TYPE_ACTIVATION} AND 
+                                bf_TPService.ServType  = "Television"       AND 
+                         LOOKUP(bf_TPService.ServStatus, {&STATUS_CANCELED} + "," + {&STATUS_ERROR}) = 0 NO-LOCK NO-ERROR.
+  IF AVAIL bf_TPService THEN 
+      ASSIGN lcProduct = bf_TPService.Product.
+  ELSE IF NOT (CAN-FIND(FIRST MobSub     WHERE MobSub.MsSeq     = iiMsSeq NO-LOCK)  OR 
+               CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = iiMsSeq NO-LOCK)) THEN
+  DO:
+      FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand    = gcBrand      AND 
+                                    bf_OrderAction.OrderId  = iiOrderId    AND 
+                                    bf_OrderAction.ItemType = "BundleItem" NO-LOCK,
+          FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand   = gcBrand AND 
+                                     bf_DayCampaign.DCEvent = bf_OrderAction.ItemKey NO-LOCK:
+
+          IF LOOKUP(STRING(bf_DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE})) = 0 THEN 
+              NEXT.
+
+          ASSIGN lcProduct = bf_OrderAction.ItemKey.
+          
+          LEAVE.
+      END.
+  END.    
+
+  RETURN lcProduct.
+
+END FUNCTION.
 
 FUNCTION fFixNumberAndDonorInformation RETURNS CHARACTER
    ( iiOrderID AS INTEGER,
@@ -790,14 +811,15 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    STRING(Order.OrderType)         + lcDelim +
    /**/
-   fGetSegment(Order.Custnum)      + lcDelim +
+   fGetSegment(Order.Custnum, order.orderid)      + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    /*q25Extension YPR-3269*/
    lcQ25Extension                  + lcDelim +
    /* Q25 Extension bank */ 
    lcBank                          + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, FALSE)
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, FALSE) + lcDelim +
+   fGetTVService(Order.MsSeq, Order.OrderId)
    .
 
    /*Document type,DocStatusCode,RevisionComment*/
@@ -952,7 +974,8 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)  + lcDelim +
+   fGetTVService(Order.MsSeq, Order.OrderId)
    .
    
    /*Solve tmsparam value for getting correct matrix row*/
@@ -1122,8 +1145,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
    lcKialaCode + lcDelim +
-   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE)
-   .
+   fFixNumberAndDonorInformation(Order.OrderID, lcDelim, TRUE).
    
    /*solve needed documents:*/
    lcRequiredDocs =  fNeededDocs(BUFFER Order).
@@ -1423,7 +1445,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    /*Order type*/
    STRING(Order.OrderType)        + lcDelim +
    /*Segment*/
-   fGetSegment(Order.CustNum)     + lcDelim +
+   fGetSegment(Order.CustNum, order.orderid)     + lcDelim +
    /*Terminal type*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    ( IF Order.DeliverySecure EQ 1
@@ -1431,7 +1453,8 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
      ELSE IF Order.DeliverySecure EQ 2
      THEN STRING({&ORDER_DELTYPE_POS_SECURE})
      ELSE STRING(Order.DeliveryType) ) + lcDelim +
-   lcKialaCode.
+   lcKialaCode + lcDelim +
+   fGetTVService(Order.MsSeq, Order.OrderId).
 
    /*Document type,DocStatusCode,RevisionComment*/
 

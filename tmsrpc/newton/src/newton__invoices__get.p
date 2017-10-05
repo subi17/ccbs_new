@@ -224,14 +224,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
-   FIND Invoice WHERE
-        Invoice.Brand = "1" AND
-        Invoice.InvNum = INT(pcId) NO-LOCK NO-ERROR.
-
-   IF NOT AVAILABLE Invoice THEN DO:  
-      RETURN appl_err("Invoice not found: " + pcId).
-   END.
- 
+   {newton/src/findtenant.i YES Common Invoice InvNum INT(pcID)}
+  
    FIND Customer WHERE 
         Customer.CustNum = Invoice.CustNum NO-LOCK NO-ERROR.
 

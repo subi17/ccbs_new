@@ -152,8 +152,8 @@ form /* ADD */
    "Start / Min.Sec:" AT 48 Tariff.Discount[4] format "Fee/Sec"
       help "Starting fee or minimum charging seconds (Fee/Sec)"    
    SKIP
-   "Billing Item ..:" Tariff.BillCode
-      BillItem.BIName FORMAT "X(12)" NO-LABEL
+   "Billing Item ..:" Tariff.BillCode FORMAT "X(17)" 
+      BillItem.BIName FORMAT "X(11)" NO-LABEL
    "Currency unit .:" AT 48 Tariff.CurrUnit
    SKIP
    "Reporting IDs .:" 
@@ -206,6 +206,11 @@ form /* ADD */
    Tariff.TZFrom[6] "-" Tariff.TZTo[6] Tariff.Price[6] currency[6]
    Tariff.StartCharge[6] AT 60 
       FORMAT "zzz9.9999" SKIP
+
+   " First Billable Sec " Tariff.FirstBillableSec  
+      VALIDATE(INPUT Tariff.FirstBillableSec EQ 0 OR 
+               (INPUT Tariff.DataType EQ 1 OR INPUT Tariff.DataType EQ 2),
+               "Incompatible price unit")
 
    "OR Minimum sec:" AT 48 Tariff.MinSec
       help "Minimum charging seconds for calls"  
@@ -2010,6 +2015,7 @@ PROCEDURE pUpdate.
          Tariff.Price[6]
          Tariff.StartCharge[6]
 
+         Tariff.FirstBillableSec
          Tariff.MinSec
 
       WITH FRAME lis.
@@ -2078,6 +2084,7 @@ PROCEDURE pUpdate.
          Tariff.Price[6]
          Tariff.StartCharge[6]
 
+         Tariff.FirstBillableSec
          Tariff.MinSec
 
       WITH FRAME lis EDITING:

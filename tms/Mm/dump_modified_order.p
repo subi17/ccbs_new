@@ -15,6 +15,7 @@
 {Func/cparam2.i}
 {Func/forderstamp.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -181,6 +182,15 @@ FOR EACH ttOrder NO-LOCK:
          
         IF lcField BEGINS "#" THEN DO:
             CASE lcField:
+            WHEN "#Segment" THEN DO:
+               FIND FIRST Ordercustomer WHERE
+                          Ordercustomer.brand EQ gcbrand AND
+                          Ordercustomer.orderid EQ ttOrder.orderid AND
+                          Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+               IF AVAIL ordercustomer THEN           
+                  lcValue = fGetSegment(ordercustomer.CustNum, 
+                                        ordercustomer.orderid).
+            END.
             WHEN "#SCStamp" THEN DO:
                lcValue = STRING(fGetOrderStamp(ttOrder.OrderID,"1")).
                IF icDumpMode = "Full" AND
@@ -191,7 +201,7 @@ FOR EACH ttOrder NO-LOCK:
                   lcValue = REPLACE(ttOrder.orderChannel,"fusion","conv").
                ELSE
                   lcValue = ttOrder.orderChannel.
-            END.   
+            END.              
             OTHERWISE lcValue = "".
             END CASE.
         END.

@@ -11,6 +11,7 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
+{Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Syst/eventval.i}
@@ -192,6 +193,34 @@ FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
 
 END.
 
+/* Check if FixedOnly 2P tariff */
+FUNCTION fIsFixedOnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN
+      RETURN TRUE.
+   RETURN FALSE.
+END.
+
+/* Check if Convergent 3P tariff */
+FUNCTION fIsConvergent3POnly RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   DEFINE BUFFER bCLIType FOR CLIType.
+
+   IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
+                     bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                     bCLIType.CLIType    = icCLIType                         AND
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})  THEN
+      RETURN TRUE.
+   RETURN FALSE.
+END.
+
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    (icCLITypeConv    AS CHARACTER,
@@ -297,13 +326,15 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
+   DEFINE BUFFER Customer       FOR Customer.
+   DEFINE BUFFER CustCat        FOR CustCat.
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
    lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
 
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
-       EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
+       EACH CustCat WHERE CustCat.Brand = Syst.Parameters:gcBrand AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
        EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
        EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK,
        FIRST bOrderFusion WHERE bOrderFusion.Brand = Syst.Parameters:gcBrand AND bOrderFusion.OrderID = bOrder.OrderID NO-LOCK,
@@ -330,6 +361,8 @@ FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
+   DEFINE BUFFER Customer       FOR Customer.
+   DEFINE BUFFER CustCat        FOR CustCat.
 
    DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
 
@@ -645,6 +678,137 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
       IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
          RETURN TRUE.
    END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
+   (INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR,
+    OUTPUT liMainLineOrderId AS INT):
+
+   DEFINE BUFFER Customer FOR Customer.
+   DEFINE BUFFER MobSub   FOR MobSub.
+   DEFINE BUFFER Order    FOR Order.
+
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+
+   FOR FIRST Customer WHERE
+             Customer.Brand      = Syst.Parameters:gcBrand AND
+             Customer.OrgId      = icCustID                AND
+             Customer.CustidType = icCustIDType            AND
+             Customer.Roles     NE "inactive"              NO-LOCK,
+       EACH  MobSub NO-LOCK WHERE
+             MobSub.Brand    = Syst.Parameters:gcBrand AND
+             MobSub.CustNum  = Customer.CustNum        AND
+             MobSub.PayType  = FALSE                   AND
+            (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
+             MobSub.MsStatus = {&MSSTATUS_BARRED})     BY MobSub.ActivationTS:
+
+       IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+       
+       IF MobSub.MultiSimID  <> 0                       AND 
+          MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
+
+       FIND LAST Order NO-LOCK WHERE 
+                 Order.MsSeq      = MobSub.MsSeq              AND 
+                 Order.CLIType    = MobSub.CLIType            AND 
+                 Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
+          LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+          IF NOT AVAIL Order THEN 
+             FIND LAST Order NO-LOCK WHERE 
+                       Order.MsSeq      = MobSub.MsSeq              AND 
+                       Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND 
+                LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+
+       IF NOT AVAIL Order THEN NEXT.          
+
+       liMainLineOrderId = Order.OrderId. 
+
+       RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
+   (INPUT icCustIDType      AS CHAR,
+    INPUT icCustID          AS CHAR,
+    OUTPUT liOngoingOrderId AS INT):
+   
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER OrderFusion   FOR OrderFusion.
+
+   DEF VAR lcConvOngoingStatus     AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+
+   ASSIGN 
+      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+      lcConvOngoingStatus     = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
+
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            OrderCustomer.CustId     EQ icCustID                AND
+            OrderCustomer.CustIdType EQ icCustIDType            AND
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH Order NO-LOCK WHERE
+            Order.Brand        EQ Syst.Parameters:gcBrand AND
+            Order.orderid      EQ OrderCustomer.Orderid   AND
+            Order.OrderType    NE {&ORDER_TYPE_RENEWAL}   AND
+            Order.MultiSimId   EQ 0                       AND 
+            Order.MultiSimType EQ 0,
+      FIRST OrderFusion NO-LOCK WHERE
+            OrderFusion.Brand   = Syst.Parameters:gcBrand AND
+            OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
+
+      IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+
+      IF LOOKUP(Order.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
+ 
+      liOngoingOrderId = Order.OrderId.
+
+      RETURN TRUE.
+ 
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
+   (INPUT liMainLineOrderId  AS INT,
+    INPUT liExtraLineOrderId AS INT):
+
+   DEFINE BUFFER Order FOR Order. 
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand        EQ Syst.Parameters:gcBrand    AND
+              Order.OrderId      EQ liMainLineOrderId          AND
+       LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
+              Order.MultiSimId   EQ liExtraLineOrderId         AND
+              Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND 
+              Order.OrderType    NE {&ORDER_TYPE_RENEWAL}      NO-ERROR.
+
+   IF AVAIL Order THEN DO: 
+     
+      /* If Fixed line is installed for Main line Convergent Order 
+         THEN dont move extra line order to 76 */
+      FIND FIRST OrderFusion NO-LOCK WHERE
+                 OrderFusion.Brand        = Syst.Parameters:gcBrand          AND
+                 OrderFusion.OrderID      = Order.OrderID                    AND 
+                 OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+                 
+      IF AVAIL OrderFusion THEN 
+         RETURN FALSE.
+
+      RETURN TRUE.
+
+   END.   
 
    RETURN FALSE.
 

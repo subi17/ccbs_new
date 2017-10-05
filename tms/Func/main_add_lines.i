@@ -317,6 +317,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
 
    fInitialiseValues(iiTermReason,
                      fIsYoigoCLI(icCLI),
+                     fIsMasmovilCLI(icCLI),
                      OUTPUT lviMsisdnStat,
                      OUTPUT lviSimStat,
                      OUTPUT lviQuarTime).
@@ -381,7 +382,8 @@ FUNCTION fAdditionalSimTermination RETURNS LOGICAL
             CLitype.CLIType = (IF lbMobsub.TariffBundle > ""
                                   THEN lbMobsub.TariffBundle
                                ELSE lbMobsub.CLIType)         AND
-            CLIType.LineType > 0:
+            (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+             CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
                
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
          fHasPendingSTCToMainLine(lbMobSub.Msseq)     THEN DO:
@@ -473,7 +475,8 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
             CLIType.CLIType = (IF lbMobSub.TariffBundle > "" 
                                   THEN lbMobSub.TariffBundle
                                ELSE lbMobSub.CLIType) AND
-            CLIType.LineType > 0:
+           (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+            CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
       
       /* check main line existence */
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
@@ -693,7 +696,8 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
                lbCLIType.CLIType = (IF lbMobsub.TariffBundle > ""
                                        THEN lbMobsub.TariffBundle
                                     ELSE lbMobsub.CLIType)         AND
-               lbCLIType.LineType > 0:
+              (lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+               lbCLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
 
          IF lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
             llgMainLine = YES.
@@ -729,5 +733,30 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
    RETURN TRUE.
 
 END FUNCTION.   
+
+/* Main line termination makes additional line termination request in future.
+   Remove additional line termination when STC done. */
+FUNCTION fRemoveAdditionalLineTerminationReq RETURNS LOGICAL
+   (INPUT iiMsSeq AS INT):
+
+   DEF BUFFER MsRequest FOR MsRequest.
+      
+   FIND FIRST MsRequest WHERE
+              MsRequest.MsSeq      EQ iiMsseq AND
+              MsRequest.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+              MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW} AND
+              MsRequest.ReqCParam3 EQ 
+              STRING({&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM}) 
+              NO-LOCK NO-ERROR.
+   IF AVAIL MsRequest THEN DO:
+      fChangeReqStatus(MsRequest.Msrequest,
+                       4,
+                       "Additional line termination cancelled by STC").
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 &ENDIF
