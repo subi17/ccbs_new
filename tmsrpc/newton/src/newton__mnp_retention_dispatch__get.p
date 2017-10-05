@@ -7,6 +7,7 @@
            percentage;decimal;allocation percentage
            sms_sender;string;SMS sender number
            name;string;Platform name
+           operators;string;retention operators for the given platform id
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -30,7 +31,7 @@ resp_array = add_array(response_toplevel_id, "").
 {newton/src/settenant.i pcTenant}
       
 FOR EACH mnpretplatform NO-LOCK WHERE
-         mnpretplatform.brand = gcBrand AND
+         mnpretplatform.brand EQ gcBrand AND
          mnpretplatform.Todate >= TODAY AND
          mnpretplatform.FromDate <= TODAY:
    
@@ -40,6 +41,8 @@ FOR EACH mnpretplatform NO-LOCK WHERE
    add_string(lcResultStruct, "name", mnpretplatform.Name).
    add_double(lcResultStruct, "percentage", mnpretplatform.Percentage).
    add_string(lcResultStruct, "sms_sender" ,mnpretplatform.SMSSender).
+   add_string(lcResultStruct, "operators", mnpretplatform.Operators).   /* YDR-2644 21/09/17 DP */
+
 END.
  
 FINALLY:
