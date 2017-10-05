@@ -28,6 +28,7 @@
 {Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
+{Mc/cash_revert_order.i}
 {Mc/dpmember.i}
 {Func/multitenantfunc.i}
 {Func/vasfunc.i}
@@ -1032,6 +1033,17 @@ PROCEDURE pTerminate:
       IF llCallProc THEN   
          RUN pChangeDelType(MobSub.CustNum).
    END. 
+
+   /* YOT-4438 Revert renewal when LO status 12. Remove related fees */
+   FOR EACH Order NO-LOCK WHERE
+            Order.MsSeq EQ MobSub.MsSeq AND
+            Order.OrderType EQ {&ORDER_TYPE_RENEWAL},
+      FIRST OrderDelivery NO-LOCK WHERE
+            OrderDelivery.Brand EQ "1" AND
+            OrderDelivery.OrderID EQ Order.OrderID:
+      IF OrderDelivery.LOStatusId = 12 THEN
+         fCashRevertOrder(Order.OrderId).
+   END.
 
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
