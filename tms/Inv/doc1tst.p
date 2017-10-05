@@ -7,7 +7,6 @@
   CHANGED ......: 25.04.07/aam own trans dir for test invoices
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-
 {Syst/commali.i}
 {Func/cparam2.i}
 
