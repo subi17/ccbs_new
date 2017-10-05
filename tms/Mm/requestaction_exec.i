@@ -10,6 +10,7 @@
 {Func/cparam2.i}
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
+{Func/fixedlinefunc.i}
 
 DEF TEMP-TABLE ttAction NO-UNDO
    FIELD ActionType AS CHAR
@@ -743,6 +744,14 @@ PROCEDURE pFeeComparison:
             LOOKUP(icDCEvent,"TERM18,TERM18-50,TERM24,TERM24-50") > 0
          THEN olMatch = FALSE.
          
+         /* When mobile line is terminated, convergent is automatedly STCed to Fixed only. 
+            When executed STC, request action rule configured for request type = 0 is terminating 
+            all permanancy contracts. Below is to avoid terminating fixedline/tv permanency contract(s) */
+         IF ihRequest::ReqType = 0                 AND 
+            fIsConvergentORFixedOnly(lcNewCLIType) AND 
+            (icDCEvent BEGINS "FTERM" OR icDCEvent BEGINS "TVTERM") THEN
+            olMatch = FALSE.
+
          /* YDR-1137 - Exclude termination/extension if request is originating 
             from Fusion order (STC) fallback */
          IF ihRequest::ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER_FALLBACK} 

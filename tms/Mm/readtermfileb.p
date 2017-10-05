@@ -19,6 +19,7 @@ ASSIGN gcBrand = "1"
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/timestamp.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcTermFile AS CHAR NO-UNDO.
@@ -30,6 +31,9 @@ DEF VAR lcTransDir  AS CHAR NO-UNDO.
 DEF VAR lcReadDir   AS CHAR NO-UNDO.
 DEF VAR lcLogFile   AS CHAR NO-UNDO. 
 DEF VAR lcLogTrans  AS CHAR NO-UNDO.
+DEF VAR lcFoundTenants AS CHAR NO-UNDO.
+DEF VAR liCounter   AS INT NO-UNDO.
+DEF VAR lcTenant    AS CHAR NO-UNDO.
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD TermFile AS CHAR
@@ -49,11 +53,6 @@ FUNCTION fCollTemp RETURNS LOGIC
    ASSIGN ttFiles.TermFile = icTermFile.
    
 END FUNCTION.
-
-
-FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
 
 ASSIGN
    lcReadDir  = fCParamC("SubsTermFiles")
@@ -88,6 +87,13 @@ FOR EACH ttFiles:
    IF NUM-ENTRIES(lcPlainFile,"/") > 1 THEN
       lcPlainFile = ENTRY(NUM-ENTRIES(lcPlainFile,"/"),lcPlainFile,"/").
 
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   lcTenant = ENTRY(1,ENTRY(1,lcPlainFile,"_"),"-").
+
+   IF NOT fsetEffectiveTenantForAllDB(
+      fConvertBrandToTenant(lcTenant)) THEN NEXT.
+
    IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
                       ActionLog.Brand = gcBrand AND
                       ActionLog.TableName = "Cron" AND
@@ -109,10 +115,14 @@ FOR EACH ttFiles:
    END.
    
    RUN Mm/readtermfile.p (ttFiles.TermFile,
-                     lcLogFile,
+                     REPLACE(lcLogFile,"#TENANT",lcTenant),
                      OUTPUT liRead,
                      OUTPUT liError).
-   
+   IF lcFoundTenants EQ "" THEN
+      lcFoundTenants = lcTenant.
+   ELSE IF INDEX(lcFoundTenants,lcTenant) EQ 0 THEN
+      lcFoundTenants = lcFoundTenants + "," + lcTenant.
+     
    DO TRANS:
       ASSIGN 
          ActionLog.ActionDec    = liRead
@@ -131,9 +141,13 @@ END.
 
 fELog("READTERM","stopped,Files:" + STRING(liFiles)).
 
-/* move the log file to transfer directory */
-RUN pTransferFile(lcLogFile,
-                  lcLogTrans).
+DO liCounter = 1 TO NUM-ENTRIES(lcFoundTenants):
+
+   /* move the log file to transfer directory */
+   RUN pTransferFile(REPLACE(lcLogFile,"#TENANT",
+                             ENTRY(liCounter,lcFoundTenants)),
+                     lcLogTrans).
+END.
 
 PROCEDURE pFindFiles:
 

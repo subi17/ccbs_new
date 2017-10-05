@@ -101,7 +101,7 @@
                                   {&ORDER_STATUS_MNP_ON_HOLD}).
                   NEXT {1}.
                END.
-            END.
+            END. /* fIsConvergenceTariff AND ...*/
 
             ASSIGN llOrdStChg = no.
             
@@ -316,7 +316,8 @@
                         SIM.SimStat = 20
                         SIM.MsSeq = Order.MsSeq.
                   NEXT {1}.
-            END.
+            END. /*MNP SIM ONLY Orders from direct channel*/
+
                
             /* Renove handling */ 
             IF Order.OrderType = 2 THEN DO:
@@ -435,7 +436,7 @@
                  
                RELEASE Order.
                NEXT {1}.
-            END. /* IF Order.OrderType = 2 THEN DO: */
+            END. /* renewal / IF Order.OrderType = 2 THEN DO: */
 
             IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
  
@@ -461,7 +462,7 @@
             END.
              
              /* YBP-594 */ 
-             IF Order.OrderType <> 3 AND
+             IF Order.OrderType NE {&ORDER_TYPE_ROLLBACK} AND
                 CAN-FIND(FIRST MsRequest WHERE
                                MsRequest.MsSeq   = Order.MSSeq  AND
                                MsRequest.ReqType = 13 AND
@@ -544,7 +545,8 @@
                    NEXT {1}.                  
                 END.
                 
-                IF LOOKUP(Order.OrderChannel,"fusion_pos,pos,vip") = 0 AND
+                IF LOOKUP(Order.OrderChannel,"fusion_pos,pos,vip," +
+                                             "fusion_pos_pro,pos_pro") = 0 AND
                    llReserveSimAndMsisdn AND
                    Sim.SimStat NE 1 AND
                    Order.OrderType <> 3 AND
@@ -626,7 +628,7 @@
              /* print order confirmation, this is done also for mnp orders
                 but not for gift or preactivated or vip orders
              */  
-             IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act,vip") = 0 AND
+             IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act,vip,migration,migration_ore") = 0 AND
                 OrderCustomer.Email NE "" AND
                 Order.OrderType <> 3 AND Order.OrderType <> 4 AND
                 (Order.MnpStatus = 0 OR Order.StatusCode = "3") THEN DO:  
@@ -644,13 +646,19 @@
                 END.
              END.
   
-             IF Order.StatusCode = "3" THEN DO:
+             IF Order.StatusCode EQ {&ORDER_STATUS_MNP} /*3*/ THEN DO:
                 
                 IF Order.SalesMan EQ "order_correction_mnp" AND
                    LOOKUP(Order.OrderChannel,
-                          "telesales,fusion_telesales,pos,fusion_pos") > 0 THEN
+                          "telesales,fusion_telesales,pos,fusion_pos," +
+                          "telesales_pro,fusion_telesales_pro,pos_pro," +
+                          "fusion_pos_pro") > 0 THEN
                    /* YBP-620 */
                    Order.MNPStatus = 6. /* fake mnp process (ACON) */
+                /*MB_Migration has special MNP/Migration handler*/
+                ELSE IF Order.Orderchannel BEGINS "migration" THEN DO:
+                   Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
+                END.
                 ELSE DO:
                    /* YBP-621 */
                    RUN Mnp/mnprequestnc.p(order.orderid).
@@ -748,13 +756,18 @@
                    MSISDN.MSSeq      = Order.MSSeq
                    MSISDN.Brand      = gcBrand.
              END.          
-      
+
+             /*MM Migration: Subscription creation will be done after NC
+               response. */
+             IF Order.Orderchannel BEGINS "migration" THEN NEXT {1}.
+
              IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
                         OrderTimeStamp.Brand   = gcBrand   AND
                         OrderTimeStamp.OrderID = Order.OrderID AND
                         OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
                 IF (LOOKUP(Order.OrderChannel,
-                    "pos,cc,pre-act,vip,fusion_pos,fusion_cc") > 0 AND
+                    "pos,cc,pre-act,vip,fusion_pos,fusion_cc," +
+                    "pos_pro,fusion_pos_pro") > 0 AND
                     Order.ICC > "") OR Order.OrderType = 3 
                 THEN SIM.SimStat = 4.
                 ELSE SIM.SimStat = 20.
@@ -764,14 +777,17 @@
                 Order.MNPStatus = 6 AND
                 Order.SalesMan EQ "order_correction_mnp" AND
                 LOOKUP(Order.OrderChannel,
-                       "telesales,fusion_telesales,pos,fusion_pos") > 0 THEN
+                       "telesales,fusion_telesales,pos,fusion_pos," +
+                       "telesales_pro,fusion_telesales_pro,pos_pro," +
+                       "fusion_pos_pro") > 0 THEN
                 SIM.SimStat = 21.
 
              IF Order.ICC = "" THEN Order.ICC = Sim.ICC.
              
              SIM.MsSeq = Order.MsSeq.
                 
-             IF LOOKUP(Order.OrderChannel,"pos,cc,vip,fusion_pos,fusion_cc") = 0 AND
+             IF LOOKUP(Order.OrderChannel,"pos,cc,vip,fusion_pos,fusion_cc," +
+                                          "pos_pro,fusion_pos_pro") = 0 AND
                 Order.OrderType <> 3 THEN DO:
                 CREATE SimDeliveryhist.
            
@@ -805,6 +821,7 @@
                 END.
              END.
              ELSE ldeSwitchTS = fMakeTS().
+
              
              IF Order.OrderType = 3 THEN
                 fReactivationRequest(INPUT Order.MsSeq,

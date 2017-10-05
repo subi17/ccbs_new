@@ -273,7 +273,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                       FIRST CLIType NO-LOCK WHERE
                             CLIType.Brand = gcBrand AND
                             CLIType.CLIType = bfOrder2.CLIType AND
-                            CLIType.LineType > 0:
+                           (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                            CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
 
                      IF CAN-FIND(FIRST OrderAction WHERE
                                        OrderAction.Brand = gcBrand AND
@@ -606,7 +607,8 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
   FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq            AND 
                              TPService.Operation   = {&TYPE_ACTIVATION} AND 
                              TPService.ServType    = "Television"       AND 
-                             TPService.ServStatus <> {&STATUS_CANCELED} NO-LOCK NO-ERROR.
+                             TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                             TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK NO-ERROR.
   IF AVAIL TPService THEN
   DO:
       ASSIGN 

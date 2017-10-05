@@ -173,6 +173,8 @@ FUNCTION fGetDSSMsSeqLimit RETURNS LOG (INPUT  iiCustNum   AS INT,
                                         OUTPUT odeDSSLimit AS DEC,
                                         OUTPUT ocBundleId  AS CHAR):
 
+   DEF BUFFER Servicelimit FOR Servicelimit.
+   DEF BUFFER Mservicelimit FOR mServicelimit.
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
@@ -350,6 +352,7 @@ FUNCTION fGetTotalDSSUsage RETURNS LOG (INPUT iiCustNum    AS INT,
 
       FOR EACH bServiceLimit NO-LOCK WHERE
                 bServiceLimit.GroupCode = "DSS200_UPSELL" OR
+                bServiceLimit.GroupCode MATCHES "DSS*FLEX*UPSELL" OR 
                 bServiceLimit.GroupCode = ServiceLimit.Groupcode + "_UPSELL",
           FIRST bMServiceLimit NO-LOCK WHERE
                 bMServiceLimit.CustNum  = iiCustNum          AND
@@ -891,6 +894,75 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
 END.
 
+FUNCTION fgetFlexUpsellBundle RETURNS CHAR
+     (INPUT  iiCustnum      AS INT,
+      INPUT  iiMsSeq        AS INT,
+      INPUT  icDSSId        AS CHAR,
+      INPUT  icBundle       AS CHAR,
+      INPUT  ideActStamp    AS DEC):
+   /* DSS related variables */
+   DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
+   DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
+   DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO.
+   DEF VAR ldeConsumedData AS DEC NO-UNDO.
+   DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
+   DEF VAR lcResult AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
+   DEF VAR llDSSneeded             AS LOG  NO-UNDO.
+
+   DEF BUFFER Mobsub FOR Mobsub.
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+   IF icDSSId BEGINS "DSS" THEN
+      llDSSNeeded = TRUE.
+   IF icDSSId EQ "DSS" THEN DO: 
+      IF NOT fIsDSSActive(INPUT iiCustnum,INPUT fmakets()) THEN
+         llDSSNeeded = FALSE.
+   END.
+   ELSE IF icDSSId EQ "DSS2" THEN DO:
+      FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
+      IF AVAIL MobSub THEN DO:
+         IF fMatrixAnalyse(gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           "DSS2" + ";" + MobSub.CLIType,
+                           OUTPUT lcResult) NE 1 THEN
+            llDSSNeeded = FALSE.
+         
+         ELSE IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
+           (LOOKUP(Mobsub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+            LOOKUP(Mobsub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+            IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
+                                                     Mobsub.MultiSimId,
+                                                     Mobsub.MultiSimType) THEN
+            llDSSNeeded = FALSE.
+         ELSE IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,
+                                    lcResult) THEN
+            llDSSNeeded = FALSE.
+      END.
+      ELSE
+         llDSSNeeded = FALSE. /* Should not ever come here */
+   END.
+   ELSE /* not known/supported DSS */
+      llDSSNeeded = FALSE.
+   IF llDSSNeeded THEN DO: 
+      IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
+         RETURN "DSS_FLEX_500MB_UPSELL".
+      END.
+      ELSE IF icBundle MATCHES "*FLEX_5GB_UPSELL" THEN
+         RETURN "DSS_FLEX_5GB_UPSELL".
+   END.
+   ELSE
+      IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
+         RETURN "FLEX_500MB_UPSELL".
+      END.
+      ELSE IF icBundle MATCHES "*FLEX_5GB_UPSELL" THEN
+         RETURN "FLEX_5GB_UPSELL".
+END.
+
 FUNCTION fCanDSSKeepActive RETURNS LOG
    (INPUT  iiCustnum      AS INT,
     INPUT  iiMsSeq        AS INT,
@@ -910,6 +982,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
+   DEF BUFFER MsRequest        FOR MsRequest.
 
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
@@ -917,6 +990,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
       ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
              lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
+   MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
@@ -946,14 +1020,20 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
                    LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)
       THEN NEXT.
 
-      IF icBundleId = "DSS" AND
-         CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                   MsRequest.ReqCParam2 BEGINS "TARJ") THEN NEXT.
+      IF icBundleId = "DSS" THEN DO:
+         FOR EACH MsRequest NO-LOCK WHERE
+                  MsRequest.MsSeq   = bMobSub.MsSeq AND
+                  MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                  MsRequest.ActStamp <= ideActStamp AND
+                  LOOKUP(STRING(MsRequest.ReqStatus),
+                         {&REQ_INACTIVE_STATUSES} + ",3") = 0:
+
+             IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                               CLIType.CLIType = MsRequest.ReqCparam2 AND
+                               CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID})
+               THEN NEXT MOBSUB_LOOP.
+         END.
+      END.
 
       /* Exclude subs. if ACC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE

@@ -313,7 +313,79 @@ FINALLY:
 END.
 
 /********* Main end ********/
+PROCEDURE pIsBundleActivationAllowed:
+   DEF INPUT PARAMETER iiMsSeq   AS INTE NO-UNDO.
+   DEF INPUT PARAMETER icDCEvent AS CHAR NO-UNDO.
 
+   DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
+   DEF VAR lcVoiceBundles           AS CHAR NO-UNDO.
+   DEF VAR lcSupplementDataBundles  AS CHAR NO-UNDO.
+   DEF VAR lcSupplementVoiceBundles AS CHAR NO-UNDO.
+
+   ASSIGN 
+       lcBONOContracts          = fCParamC("BONO_CONTRACTS")
+       lcVoiceBundles           = fCParamC("VOICE_BONO_CONTRACTS")
+       lcSupplementDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
+       lcSupplementVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS").
+       
+    /* Make sure subscription should not have active multiple bundles at the same time */
+   IF LOOKUP(icDCEvent,lcBONOContracts) > 0 THEN
+   DO:
+      FOR EACH ServiceLimit WHERE LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0 NO-LOCK,
+          FIRST MServiceLimit WHERE 
+                MServiceLimit.MsSeq    = iiMsSeq               AND
+                MServiceLimit.DialType = ServiceLimit.DialType AND
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
+
+         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementDataBundles) > 0 THEN 
+            NEXT.
+
+         RETURN ERROR "Subscription already has active Data bundle".
+      END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END.
+   ELSE IF LOOKUP(icDCEvent,lcVoiceBundles) > 0 THEN 
+   DO:
+      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcVoiceBundles) > 0,
+          FIRST MServiceLimit WHERE
+                MServiceLimit.MsSeq    = iiMsSeq               AND
+                MServiceLimit.DialType = ServiceLimit.DialType AND
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
+
+         IF LOOKUP(ServiceLimit.GroupCode, lcSupplementVoiceBundles) > 0 THEN 
+            NEXT.
+
+         RETURN ERROR "Subscription already has active Voice bundle".
+      END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END. 
+   ELSE IF LOOKUP(icDCEvent,lcSupplementDataBundles) > 0 THEN 
+   DO:
+      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcSupplementDataBundles) > 0,
+          FIRST MServiceLimit WHERE
+                MServiceLimit.MsSeq    = iiMsSeq               AND
+                MServiceLimit.DialType = ServiceLimit.DialType AND
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
+
+         RETURN ERROR "Subscription already has active supplementary data bundle".
+      END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END. 
+   ELSE IF LOOKUP(icDCEvent,lcSupplementVoiceBundles) > 0 THEN 
+   DO:
+      FOR EACH ServiceLimit NO-LOCK WHERE LOOKUP(ServiceLimit.GroupCode,lcSupplementVoiceBundles) > 0,
+          FIRST MServiceLimit WHERE
+                MServiceLimit.MsSeq    = iiMSSeq               AND
+                MServiceLimit.DialType = ServiceLimit.DialType AND
+                MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                MServiceLimit.EndTS   >= MsRequest.ActStamp    NO-LOCK:
+         RETURN ERROR "Subscription already has active supplementary voice bundle".
+      END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   END.   
+
+   RETURN "".
+
+END PROCEDURE.
 
 /* activate a periodical contract */
 PROCEDURE pContractActivation:
@@ -347,26 +419,29 @@ PROCEDURE pContractActivation:
    DEF VAR lcReqSource       AS CHAR NO-UNDO.
    DEF VAR lcBundleId        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
-   DEF VAR ldtPrepActDate    AS DATE NO-UNDO.
-   DEF VAR liPrepActTime     AS INT  NO-UNDO.
-   DEF VAR liRequest         AS INT  NO-UNDO.
-   DEF VAR liConCount        AS INT  NO-UNDO.
-   DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
-   DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
-   DEF VAR ldaResidualFee AS DATE NO-UNDO.
-   DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
-   DEF VAR lcSubInvNums    AS CHAR NO-UNDO.
-   DEF VAR lcInvRowDetails AS CHAR NO-UNDO.
-   DEF VAR ldeTotalRowAmt  AS DEC NO-UNDO.
-                    
+   DEF VAR ldtPrepActDate             AS DATE NO-UNDO.
+   DEF VAR liPrepActTime              AS INT  NO-UNDO.
+   DEF VAR liRequest                  AS INT  NO-UNDO.
+   DEF VAR liConCount                 AS INT  NO-UNDO.
+   DEF VAR ldeFeeAmount               AS DEC  NO-UNDO INIT ?.
+   DEF VAR ldeResidualFeeDisc         AS DEC  NO-UNDO. 
+   DEF VAR ldaResidualFee             AS DATE NO-UNDO.
+   DEF VAR llQ25CreditNote            AS LOG  NO-UNDO. 
+   DEF VAR lcSubInvNums               AS CHAR NO-UNDO.
+   DEF VAR lcInvRowDetails            AS CHAR NO-UNDO.
+   DEF VAR ldeTotalRowAmt             AS DEC  NO-UNDO.
+   DEF VAR liCount                    AS CHAR NO-UNDO.
+   
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
    DEF BUFFER bOrigReq   FOR MsRequest.
    DEF BUFFER bQ25SingleFee FOR SingleFee.
-   
+   DEF BUFFER bMobSub    FOR Mobsub.
+
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
     
@@ -437,24 +512,12 @@ PROCEDURE pContractActivation:
       RETURN.
    END.
 
-   IF DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
-      lcBONOContracts = fCParamC("BONO_CONTRACTS").
-   ELSE IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN
-      lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
-
-   /* Make sure subscription should not have active multiple
-      bundles at the same time */
-   IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
-      FOR EACH ServiceLimit NO-LOCK WHERE
-               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
-          FIRST MServiceLimit WHERE
-                MServiceLimit.MsSeq = MsOwner.MsSeq      AND
-                MServiceLimit.DialType = ServiceLimit.DialType AND
-                MServiceLimit.SlSeq = ServiceLimit.SlSeq AND
-                MServiceLimit.EndTS >= MsRequest.ActStamp NO-LOCK:
-         fReqStatus(3,"Subscription already has active BONO bundle").
-         RETURN.
-      END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
+   RUN pIsBundleActivationAllowed(MsOwner.MsSeq,lcDCEvent) NO-ERROR.
+   IF ERROR-STATUS:ERROR AND RETURN-VALUE <> "" THEN
+   DO: 
+       fReqStatus(3, RETURN-VALUE).
+       RETURN. 
+   END.
 
    /* Fetch TARJ7 and TARJ9 contract start date */
    IF lcDCEvent = "TARJ7_UPSELL" THEN
@@ -554,6 +617,9 @@ PROCEDURE pContractActivation:
       END.
    END.
 
+   IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN
+      lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
+      
    /* Check whether DSS is already active or not */
    IF LOOKUP(lcDCEvent,{&DSS_BUNDLES}) > 0 AND
       fIsDSSActive(INPUT MsOwner.CustNum,
@@ -563,7 +629,8 @@ PROCEDURE pContractActivation:
    END. /* IF lcDCEvent = {&DSS} AND */
    ELSE IF (lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
       lcDCEvent EQ  "DSS200_UPSELL" OR
-      lcDCEvent BEGINS "DSS2_UPSELL") AND
+      lcDCEvent BEGINS "DSS2_UPSELL" OR 
+      lcDCEvent MATCHES "DSS*FLEX*UPSELL") AND
       NOT fIsDSSActive(INPUT MsOwner.CustNum,
                        INPUT MsRequest.ActStamp) THEN DO:
       fReqStatus(3,"DSS bundle is not active").
@@ -572,13 +639,39 @@ PROCEDURE pContractActivation:
    ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 THEN DO:
       lcBundleId = fGetActiveDSSId(INPUT MsOwner.CustNum,
                                    INPUT MsRequest.ActStamp).
-      lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
-      IF lcBundleId = {&DSS} OR
-         (lcBundleId = "DSS2" AND
-          LOOKUP(MsOwner.CLIType,lcAllowedDSS2SubsType) > 0) THEN DO:
+      
+      IF lcBundleId = {&DSS} THEN DO:
          fReqStatus(3,"Bundle Upsell can not be activated because " +
                     "DSS bundle is already active").
          RETURN.
+      END.
+      ELSE IF lcBundleId EQ "DSS2" THEN DO:
+         ASSIGN
+         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+         lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+         lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+         FIND FIRST bMobsub WHERE bMobsub.msseq EQ MsRequest.msseq 
+         NO-LOCK NO-ERROR.
+         IF AVAIL bMobSub AND LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) > 0
+         THEN DO:
+            IF (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN DO:
+               IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                                    bMobSub.MultiSimId,
+                                                    bMobSub.MultiSimType) 
+               THEN DO:
+                  fReqStatus(3,"Bundle Upsell can not be activated because " +
+                             "DSS2 extra line analyse").
+                  RETURN.
+               END.
+            END.    
+            ELSE DO:
+               fReqStatus(3,"Bundle Upsell can not be activated because " +
+                          "DSS2 already active").
+               RETURN.
+            END.
+         END.    
+
       END.
    END. /* ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 */
 
@@ -1027,6 +1120,7 @@ PROCEDURE pContractActivation:
       RUN Mc/creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
                          lcDCEvent EQ  "DSS200_UPSELL" OR
+                         lcDCEvent MATCHES "DSS*FLEX*UPSELL" OR
                          lcDCEvent = "DSS2_UPSELL") THEN liDSSMsSeq
                      ELSE MsRequest.MsSeq),
                     ldtFromDate,
@@ -1201,7 +1295,8 @@ PROCEDURE pContractActivation:
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
       lcDCEvent EQ  "DSS200_UPSELL" OR
-      lcDCEvent BEGINS "DSS2_UPSELL" THEN
+      lcDCEvent BEGINS "DSS2_UPSELL" OR 
+      lcDCEvent MATCHES "DSS*FLEX*UPSELL" THEN
       RUN pUpdateDSSNetworkLimit(INPUT MsOwner.MsSeq,
                                  INPUT MsOwner.CustNum,
                                  INPUT ldeDSSUpsellLimit,

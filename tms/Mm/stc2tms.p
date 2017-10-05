@@ -1,4 +1,4 @@
-/* stc2tms.p
+/* stc2tms.p SUBSCRIPTION TYPE CHANGE STC Request handling
    changes:
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
@@ -31,6 +31,8 @@
 {Func/fixedlinefunc.i}
 {Func/fsendsms.i}
 {Func/vasfunc.i}
+
+{Migration/migrationfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -86,6 +88,9 @@ DEF TEMP-TABLE ttContract NO-UNDO
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest = iiMSrequest NO-LOCK NO-ERROR.
 
+IF MsRequest.ReqType NE {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
+   RETURN "ERROR".
+
 liOrigStatus = MsRequest.ReqStatus.
 IF LOOKUP(STRING(liOrigStatus),"6,8") = 0 THEN RETURN "ERROR".
 
@@ -110,6 +115,10 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
       fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
       RETURN.
    END.
+   ELSE IF fIsNumberInMigration(Order.CLI) EQ TRUE THEN DO:
+      fReqError(SUBST("Order is in migration phase: &1", MsRequest.ReqIParam2)).
+      RETURN.
+   END.   
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
       IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */
@@ -245,6 +254,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
                         "STC_FINAL").
+
+   /* Remove additional line termination request when correct STC done */
+   IF bNewTariff.LineType NE {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+      fRemoveAdditionalLineTerminationReq(MobSub.MsSeq).
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,

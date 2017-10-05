@@ -403,6 +403,11 @@
 "DumpFile" "FileCategory" "DumpFile" "TAX" "Tax reports" "Files including data and/or reports considering taxes" "" 1
 "DumpFile" "FileCategory" "DumpFile" "TMS" "TMS" "" "" 1
 "DumpFile" "FileCategory" "DumpFile" "TRACK" "Track" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "days" "days" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "hours" "hours" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "months" "months" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "weeks" "weeks" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "years" "years" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "0" "" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "1" "Pending" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "2" "OK" "" "" 1
@@ -997,9 +1002,11 @@
 "Order" "OrderChannel" "Order" "CC" "Customer care" "" "" 1
 "Order" "OrderChannel" "Order" "CC_PRO" "Customer care PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_POS" "Fusion POS" "" "" 1
+"Order" "OrderChannel" "Order" "Fusion_POS_PRO" "Fusion POS PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales" "Fusion Telesales" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales_PRO" "Fusion Telesales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "POS" "Point of sales" "" "" 1
+"Order" "OrderChannel" "Order" "POS_PRO" "Point of sales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal" "Renewals" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_CTC" "Renewal CTC" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_POS" "Renewal through POS" "" "" 1
@@ -1355,6 +1362,7 @@
 "requem" "92,0,1,2,3" "SubsLMenu" "1" "Publish invoices to Newton AND HPD" "" "" 1
 "requem" "93,0,1,2,3" "SubsLMenu" "1" "Publish invoices to IFS" "" "" 1
 "requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
+"requem" "95,0,1,2,3,7,8,9" "SubsLMenu" "1" "Pro Migration" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
@@ -1384,7 +1392,7 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
-"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "14" 1
+"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AE" "AON CROSS-SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
@@ -1397,12 +1405,14 @@
 "Salesman" "SmPrefix" "IFS" "AT" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AW" "AON WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "BA" "B12 Cross-Selling Outbound" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BE" "BYMOVIL EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BF" "Backoffice Fusion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BG" "Boulanger" "" "99" 0
 "Salesman" "SmPrefix" "IFS" "BL" "Vista internal users" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "BM" "BYMOVIL RETENCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BN" "B12 OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BO" "Backoffice Convergencia" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BR" "BYMOVIL RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BT" "B12 DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
@@ -1433,14 +1443,17 @@
 "Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MB" "MARKTEL BO CANCELACIONES" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MC" "MADISON CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
 "Salesman" "SmPrefix" "IFS" "MI" "MARKTEL INBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "ML" "MARKTEL Retencion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
 "Salesman" "SmPrefix" "IFS" "MO" "MARKTEL ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1

@@ -1,0 +1,595 @@
+bulkload: MXItem
+  MXSeq: 1
+  MXName: "ID"
+  MXValue: "PassPort"
+
+bulkload: MXItem
+  MXSeq: 1
+  MXName: "SubsTypeFrom"
+  MXValue: "TARJ*"
+
+bulkload: MXItem
+  MXSeq: 1
+  MXName: "SubsTypeTo"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "ID"
+  MXValue: "PassPort"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "SubsTypeFrom"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ*"
+
+bulkload: MXItem
+  MXSeq: 3
+  MXName: "SubsTypeTo"
+  MXValue: "CONT*"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobtypech"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "simch"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsubsms"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "msisdnch"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "fatime"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "creafatui"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "campaign"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "addcampaign"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "msodirequest"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "countermenu"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "ppreqbr"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "dccli"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "reratesub"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsubsms"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "prininfo"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mclispec"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsubsudo"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "adminactions"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "mobsub_update"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "subser"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "Module"
+  MXValue: "balances"
+
+bulkload: MXItem
+  MXSeq: 18
+  MXName: "SubsTypeFrom"
+  MXValue: "TARJ3"
+
+bulkload: MXItem
+  MXSeq: 51
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 51
+  MXName: "SubsTypeTo"
+  MXValue: "TARJ*"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_CERO"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA500"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA1024"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA2048"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA4096"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_VOICE40"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_VOICE100"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_VOICE250"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 837
+  MXName: "SubsTypeTo"
+  MXValue: "MM_CERO"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_NET_5GB"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 839
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_5GB"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_NET_10GB"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 840
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_10GB"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_NET_20GB"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 841
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_20GB"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_NET_50GB"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 842
+  MXName: "SubsTypeTo"
+  MXValue: "MM_NET_50GB"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_CERO_5GB"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 843
+  MXName: "SubsTypeTo"
+  MXValue: "MM_CERO_5GB"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_MAS_1GB"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 844
+  MXName: "SubsTypeTo"
+  MXValue: "MM_MAS_1GB"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_MAS_3GB"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 845
+  MXName: "SubsTypeTo"
+  MXValue: "MM_MAS_3GB"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_MAS_8GB"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_DATA600"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_BONO_RELAX"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_INTVOICE100"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_1024_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_500_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "MM_200_UPSELL"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "PerContract"
+  MXValue: "HSPA_ROAM_EU"
+
+bulkload: MXItem
+  MXSeq: 846
+  MXName: "SubsTypeTo"
+  MXValue: "MM_MAS_8GB"
+

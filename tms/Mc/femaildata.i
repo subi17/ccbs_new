@@ -1569,7 +1569,8 @@ PROCEDURE pGetPENALTYFEE:
    IF CAN-FIND(FIRST CLIType WHERE
                      CLIType.Brand = gcBrand AND
                      CLIType.CLItype = Order.CliType AND
-                     ClIType.LineType > 0) THEN DO:
+                    (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                     CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) THEN DO:
 
       IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN
          lcTariffType = fGetDataBundleInOrderAction(Order.OrderId,
@@ -1798,7 +1799,6 @@ PROCEDURE pGetCTNAME:
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
-   DEF VAR lcTVServiceName         AS CHAR NO-UNDO.
 
    DEFINE BUFFER lbELOrder   FOR Order.
    DEFINE BUFFER lbMLOrder   FOR Order.
@@ -1913,7 +1913,7 @@ PROCEDURE pGetCTNAME:
          WHEN "TARJ10" THEN lcList = "20 min/mes gratis,".
          WHEN "TARJ11" THEN lcList = "50 min/mes gratis,".
          WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
-         WHEN "TARJ13" THEN lcList = "5000 min/mes gratis,".
+         WHEN "TARJ13" THEN lcList = "Llamadas Ilimitadas,".
          OTHERWISE lcList = "".
        END.
 
@@ -1986,9 +1986,10 @@ PROCEDURE pGetCTNAME:
        END.
        
        /* TV Service */
-       FOR FIRST OrderAction WHERE OrderAction.Brand    = gcBrand       AND
-                                   OrderAction.OrderId  = Order.Orderid AND
-                                   OrderAction.ItemType = "BundleItem"  NO-LOCK,
+       TVSERVICE_DETAILS:
+       FOR EACH OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+                                  OrderAction.OrderId  = Order.Orderid AND
+                                  OrderAction.ItemType = "BundleItem"  NO-LOCK,
            FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
                                    DayCampaign.DCEvent      = OrderAction.ItemKey  AND 
                                    DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} NO-LOCK:
@@ -2001,13 +2002,13 @@ PROCEDURE pGetCTNAME:
                                    FMItem.ToDate   >= TODAY                NO-LOCK NO-ERROR. 
                                    
            ASSIGN 
-              lcTVServiceName = fTranslationName(gcBrand, 14, DayCampaign.DCEvent, liLang, TODAY)
               lcMFText        = lcMFText + 
-                                "<br/>" + lcTVServiceName + ", " + 
+                                "<br/>Agile TV, " + 
                                 (IF AVAIL FMItem THEN 
-                                   (STRING(FMItem.Amount,"99,99") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
+                                   (REPLACE(STRING(FMItem.Amount,"z9.99"),".",",") + " &euro;/" + (IF liLang EQ 5 THEN "month" ELSE "mes")) 
                                  ELSE 
                                    "").
+           LEAVE TVSERVICE_DETAILS.                     
        END.                                    
 
        FIND FIRST DiscountPlan NO-LOCK WHERE
