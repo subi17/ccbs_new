@@ -362,7 +362,7 @@ PROCEDURE pCLIType:
                                           ttCliType.RatePlan 
                                       ELSE 
                                           REPLACE(ttCliType.CliType,"CONT","CONTRATO")) 
-         CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "11" ELSE "12")
+         CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "41" ELSE "42")
          ClIType.ServiceClass      = ttCliType.ServiceClass
          CLIType.BillTarget        = (liFinalBT + 1) 
          CLIType.ContrType         = (IF CLIType.PayType EQ 1 THEN (liFinalCR + 1) ELSE 1)
