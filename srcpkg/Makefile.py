@@ -13,6 +13,7 @@ exec(open(relpath + '/etc/make_site.py').read())
 tools_dir =  os.path.abspath('../tools/')
 
 depdict = {}
+error = []
 
 def versiontuple(v):
     filled = []
@@ -53,7 +54,6 @@ def default(*a):
     packages = getpackages()
 
     depcount = {}
-    error = []
     for package, version in packages:
         version_file = os.path.join(tools_dir, package, '.version')
         if not os.path.exists(version_file) \
@@ -63,15 +63,16 @@ def default(*a):
 
             try:
                 with tarfile.open('{0}-{1}.tar'.format(package,version)) as tf:
-                    with closing(tf.extractfile('{0}/.dependencies'.format(package))) as f:
+                    dependencyfile = next((x for x in tf.getnames() if x in ['{0}/.dependencies'.format(package), '{0}-{1}/.dependencies'.format(package, version)]))
+                    with closing(tf.extractfile(dependencyfile)) as f:
                         for line in f:
                             if not line.startswith('#'):
                                 try:
-                                    deplist.append(tuple(line.strip(",\n").split(",")))
+                                    deplist.append(tuple(line.strip(",\n").split("-")))
                                 except:
                                     error.append('"{0}": Unable to parse .dependencies line "{1}"'.format(package, line))
                                     continue
-            except KeyError:
+            except (KeyError, StopIteration):
                 pass
 
             for deppackage, depversion in deplist:
