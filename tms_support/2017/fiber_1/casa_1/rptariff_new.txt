@@ -1,1 +1,0 @@
-CCN;BDest;Billing Item;Price;Setup Fee

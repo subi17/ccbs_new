@@ -1,4 +1,14 @@
 /*Additional configs to Azul 1GB*/
+DEF VAR lcFromType AS CHAR NO-UNDO. 
+DEF VAR lcToType AS CHAR NO-UNDO. 
+DEF VAR lcFromBundle AS CHAR NO-UNDO. 
+DEF VAR lcToBundle AS CHAR NO-UNDO. 
+
+ASSIGN
+   lcFromType = "CONTFH45_300"
+   lcToType   = "CONTFH65_1000"
+   lcFromBundle = "CONTFH300"
+   lcToBundle  = "CONTFH1000".   
 
 FUNCTION fCreateMXItem RETURNS LOGICAL
    ( iiMXSeq   AS INTEGER,
@@ -150,6 +160,7 @@ END FUNCTION.
 FUNCTION fCopySLG RETURNS LOGICAL
    (INPUT icFromType AS CHAR,
     INPUT icToType AS CHAR):
+
    DEF BUFFER slganalyse for slganalyse.
    DEF BUFFER bnew_slganalyse for slganalyse.
 
@@ -166,83 +177,147 @@ FUNCTION fCopySLG RETURNS LOGICAL
                  bnew_SLGAnalyse.CCN      EQ SLGAnalyse.CCN           AND
                  bnew_SLGAnalyse.BDest    EQ SLGAnalyse.BDest         AND
                  bnew_SLGAnalyse.ValidTo  GE TODAY                    AND
-                 bnew_SLGAnalyse.ServiceLimitGroup EQ SLGAnalyse.ServiceLimitGroup AND
+                 bnew_SLGAnalyse.ServiceLimitGroup EQ 
+                     REPLACE(slganalyse.servicelimitgroup,
+                             lcFromBundle,lcToBundle) AND
                  bnew_SLGAnalyse.SLGAType EQ SLGAnalyse.SLGAType NO-ERROR.
       IF NOT AVAIL bnew_SLGAnalyse THEN DO:
          CREATE bnew_SLGAnalyse.
          BUFFER-COPY slganalyse EXCEPT  clitype validfrom TO bnew_SLGAnalyse.
-
+         ASSIGN
+            bnew_slganalyse.clitype = icToType
+            bnew_slganalyse.servicelimitgroup = 
+               REPLACE(bnew_slganalyse.servicelimitgroup,
+                       lcFromBundle,lcToBundle)
+            bnew_slganalyse.validfrom = today.
       END.
-      
-
 
    END.
 
 END FUNCTION.
 
+FUNCTION fCreateDPTarget RETURNS LOGICAL
+   (icBase AS CHAR,
+    icNew AS CHAR):
+   def buffer bDPTarget FOR dptarget.
+   def var liId AS INT NO-UNDO INIT 1.
+
+   FIND last dptarget USE-INDEX dpid  NO-LOCK NO-ERROR.
+   if avail dptarget then liId = dptarget.dpid + 1.
+/*TODO: needs for each */
+   FIND FIRST dptarget where
+              dptarget.targetkey eq icBase AND
+              dptarget.validto ge TODAY NO-ERROR.
+   IF AVAIL dptarget THEN DO:
+
+      CREATE bdptarget.
+      BUFFER-COPY dptarget EXCEPT dpid validfrom targetkey TO bdptarget.
+      bdptarget.validfrom = TODAY.
+      bdptarget.dpid = liId.
+      bdptarget.targetkey = icNew.
+      
+
+/* TODO : Create DPSubject */
+   END.
+
+END.
+
+FUNCTION fCreateDPsubjects RETURNS LOGICAL
+   (icBase AS CHAR,
+    icNew AS CHAR):
+
+   def buffer bDPSubject FOR dpsubject.
+
+   FOR EACH dpsubject NO-LOCK WHERE
+            dpsubject.dpsubject EQ icBase AND
+            dpsubject.validto GE TODAY:
+
+      FIND FIRST bDPSubject NO-LOCK where
+                 bDPSubject.dpid = dpsubject.dpid and
+                 bDPSubject.dpsubject = icNew and
+                 bDPSubject.validto GE TODAY NO-ERROR.
+      IF AVAIL bDPSubject THEN NEXT.
+
+      CREATE bDPSubject.
+      BUFFER-COPY dpsubject EXCEPT validfrom dpsubject TO bDPSubject.
+
+      assign
+        bDPSubject.validfrom = TODAY
+        bDPSubject.dpsubject = icNew. 
+
+   END.
+END.
 
 /*DATA FIXING PART STARTS */
 /*mxitem*/
 /*Manual copying for matrix*/
 FOR EACH mxitem EXCLUSIVE-LOCK  WHERE
-         mxitem.mxvalue matches "*contfh69_300*":
+         mxitem.mxvalue matches SUBST("*&1*",lcFromType):
 
-   IF mxitem.mxvalue MATCHES  "*,contfh69_300*" THEN DO:
-       mxitem.mxvalue =  mxitem.mxvalue + ",CONTFH89_1000".
+   IF mxitem.mxvalue MATCHES  SUBST("*,&1*",lcFromType) THEN DO:
+       mxitem.mxvalue =  mxitem.mxvalue + "," + lcToType.
    END.
    ELSE DO:
        FIND FIRST matrix where
                   matrix.mxseq = mxitem.mxseq no-error.
-       IF AVAIL matrix and matrix.mxname eq "CONTFH69_300" then next.
-       fCreateMXItem(mxitem.mxseq, mxitem.mxname, "CONTFH89_1000").
+       IF AVAIL matrix and matrix.mxname eq lcFromType then next.
+       fCreateMXItem(mxitem.mxseq, mxitem.mxname, lcToType).
    END.
 END.
 
 /*requestaction*/
 DEF BUFFER brequestaction FOR requestaction.
 FOR EACH brequestaction NO-LOCK WHERE
-         brequestaction.clitype eq "contfh69_300":
+         brequestaction.clitype eq lcFromType:
    fCreateRequestAction(brequestaction.reqtype,
-                        "CONTFH89_1000",
+                        lcToType,
                         brequestaction.action,
                         brequestaction.actiontype,
                         REPLACE(brequestaction.actionkey,
-                                "CONTFH300","CONTFH1000")).
+                                lcFromBundle,lcToBundle)).
 END.
 
 
 /*FMItem*/
-fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH89_1000",10.29). /*value valvulated 12.45 / 1.21*/
+/* fCreateFMItem("CONTPROMF","CONTFHMF","PRO_CONTFH89_1000",10.29). /*value valvulated 12.45 / 1.21*/  */
 
 /*pro pricelist*/
-fCreatePriceList("PRO_CONTFH89_1000").
-
+fCreatePriceList("PRO_" + lcToType).
 
 /*pro reptext*/
 fCreateRepText(1, /*text type */
-               "CONTFH89_1000PRO", /*LinkCode*/
+               lcToType + "PRO", /*LinkCode*/
                1, /*Language */
                "Ventajas PRO"). /* text */
 fCreateRepText(1, /*text type */
-               "CONTFH89_1000PRO", /*LinkCode*/
+               lcToType + "PRO", /*LinkCode*/
                2, /*Language */
-               "Avantatges PRO"). /* text */
+               lcToType + "PRO"). /* text */
 fCreateRepText(1, /*text type */
-               "CONTFH89_1000PRO", /*LinkCode*/
+               lcToType + "PRO", /*LinkCode*/
                3, /*Language */
                "Abantaila PRO"). /* text */
 fCreateRepText(1, /*text type */
-               "CONTFH89_1000PRO", /*LinkCode*/
+               lcToType + "PRO", /*LinkCode*/
                5, /*Language */
                "PRO benefits"). /* text */
 
-
 /*slganalyse*/
-fCopySLG("CONTFH69_300","CONTFH89_1000").
+fCopySLG(lcFromType,lcToType).
 
-/*
-DPSubject 
+/*DPTarget */
+/* TODO: check CONTH1000 DPTargets*/
+fCreateDPTarget(lcFromType + "PRO",lcToType + "PRO").
 
-DPTarget 
-*/
+/*DPSubject */
+fCreateDPSubjects(lcFromType,lcToType).
 
+FOR EACH tmsparam EXCLUSIVE-LOCK  WHERE
+         tmsparam.charval matches SUBST("*&1",lcFromType):
+
+   if tmsparam.charval eq lcFromType then next.
+
+   if not tmsparam.charval MATCHES SUBST("*,&1",lcToType) then
+      tmsparam.charval =  tmsparam.charval + "," + lcToType. 
+END.
+ 
