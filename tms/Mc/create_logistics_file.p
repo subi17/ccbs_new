@@ -1349,17 +1349,17 @@ FUNCTION fDelivSIM RETURNS LOG
                                OrderAction.ItemType = "AddLineDiscount" AND
                          /* DISCCONT10,DISCCONT15, .. */
                          LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0)) THEN
-               IF fCheckOngoingConvergentOrderID(bufOrderCustomer.CustIdType,
-                                                 bufOrderCustomer.CustId,
-                                                 Order.CLIType,
-                                                 liConvOrderId) THEN 
+               IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
+                                               bufOrderCustomer.CustId,
+                                               Order.CLIType,
+                                               liConvOrderId) THEN 
                   /* MainOrderID found */
                   lcMainOrderId = STRING(liConvOrderId).
                ELSE
-                  IF fCheckOngoing2PConvergentOrderID(bufOrderCustomer.CustIdType,
-                                                      bufOrderCustomer.CustId,
-                                                      Order.CLIType,
-                                                      liConvOrderId) THEN 
+                  IF fCheckOngoing2PConvergentOrder(bufOrderCustomer.CustIdType,
+                                                    bufOrderCustomer.CustId,
+                                                    Order.CLIType,
+                                                    liConvOrderId) THEN 
                      /* MainOrderID found */
                      lcMainOrderId = STRING(liConvOrderId).
                
@@ -1369,10 +1369,10 @@ FUNCTION fDelivSIM RETURNS LOG
                                    OrderAction.ItemType = "AddLineDiscount" AND
                              /* DISCCONT10H,DISCCONT15H, .. */
                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)) THEN
-               IF fCheckOngoingConvergentOrderID(bufOrderCustomer.CustIdType,
-                                                 bufOrderCustomer.CustId,
-                                                 Order.CLIType,
-                                                 liConvOrderId) THEN 
+               IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
+                                               bufOrderCustomer.CustId,
+                                               Order.CLIType,
+                                               liConvOrderId) THEN 
                   /* MainOrderID found */
                   lcMainOrderId = STRING(liConvOrderId).
 
@@ -1382,10 +1382,10 @@ FUNCTION fDelivSIM RETURNS LOG
                                     OrderAction.ItemType = "AddLineDiscount" AND
                               /* DISCCONT10HM,DISCCONT15HM, .. */
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)) THEN
-               IF fCheckOngoingMobileOnlyOrderID(bufOrderCustomer.CustIdType,
-                                                 bufOrderCustomer.CustId,
-                                                 Order.CLIType,
-                                                 liConvOrderId) THEN
+               IF fCheckOngoingMobileOnly(bufOrderCustomer.CustIdType,
+                                          bufOrderCustomer.CustId,
+                                          Order.CLIType,
+                                          liConvOrderId) THEN
                   /* MainOrderID found */
                   lcMainOrderId = STRING(bufOrder.OrderId).
          END.
