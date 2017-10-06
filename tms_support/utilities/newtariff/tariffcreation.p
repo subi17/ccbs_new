@@ -685,71 +685,109 @@ PROCEDURE pCreateServiceLimit_BDest:
        ttServiceLimit.LastMonthCalc  = iiBDLLastMonthCalc.
 
     IF ilPostpaid THEN 
-    DO:   
-        DO liCount = 1 TO NUM-ENTRIES(lcBCList):                
-             CREATE ttServiceLimitTarget.
-             ASSIGN
+    DO: 
+        IF icMobileFixedLine = "FixedLine" THEN 
+        DO:
+            CREATE ttServiceLimitTarget.
+            ASSIGN
                 ttServiceLimitTarget.GroupCode      = ttServiceLimit.GroupCode
                 ttServiceLimitTarget.SLCode         = ttServiceLimit.SLCode
-                ttServiceLimitTarget.ServiceLMember = ENTRY(liCount, lcBCList) 
-                ttServiceLimitTarget.InSideRate     = icDCEvemt + "_VOICE_IN" 
-                ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_VOICE_OUT".
-         END.
+                ttServiceLimitTarget.ServiceLMember = "F10100005"
+                ttServiceLimitTarget.InSideRate     = icDCEvemt + "_QTY_IN" 
+                ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_QTY_OUT".
 
-         FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode  AND 
-                                  ttBDest.SLCode    = ttServiceLimitTarget.SLCode     AND 
-                                  ttBDest.BDest     = ttServiceLimitTarget.InSideRate NO-LOCK NO-ERROR.
-         IF NOT AVAIL ttBDest THEN 
-         DO:                         
-             CREATE ttBDest.
-             ASSIGN
-                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode       
-                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode           
-                 ttBDest.BDest     = ttServiceLimitTarget.InSideRate
-                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE IN"                 
-                 ttBDest.CCN       = 81.
-         END.    
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode  AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode     AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.InSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:                         
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode       
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode           
+                    ttBDest.BDest     = ttServiceLimitTarget.InSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "QTY IN"                 
+                    ttBDest.CCN       = 81.
+            END.    
 
-         FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode   AND 
-                                  ttBDest.SLCode    = ttServiceLimitTarget.SLCode      AND 
-                                  ttBDest.BDest     = ttServiceLimitTarget.OutSideRate NO-LOCK NO-ERROR.
-         IF NOT AVAIL ttBDest THEN 
-         DO:
-             CREATE ttBDest.
-             ASSIGN
-                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode    
-                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode              
-                 ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
-                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
-                 ttBDest.CCN       = 81.   
-         END.    
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode   AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode      AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.OutSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode    
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode              
+                    ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "QTY OUT"                 
+                    ttBDest.CCN       = 81.   
+            END.
+        END.
+        ELSE
+        DO:
+            DO liCount = 1 TO NUM-ENTRIES(lcBCList):                
+                 CREATE ttServiceLimitTarget.
+                 ASSIGN
+                    ttServiceLimitTarget.GroupCode      = ttServiceLimit.GroupCode
+                    ttServiceLimitTarget.SLCode         = ttServiceLimit.SLCode
+                    ttServiceLimitTarget.ServiceLMember = ENTRY(liCount, lcBCList) 
+                    ttServiceLimitTarget.InSideRate     = icDCEvemt + "_VOICE_IN" 
+                    ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_VOICE_OUT".
+            END.
 
-         IF icMobileFixedLine = "Mobile" THEN 
-         DO:
-             FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 34        AND 
-                                             ttTMRItemValue.CliType   = icCliType AND 
-                                             ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
-             IF NOT AVAIL ttTMRItemValue THEN 
-             DO:
-                 CREATE ttTMRItemValue.
-                 ASSIGN 
-                     ttTMRItemValue.TMRuleSeq = 34
-                     ttTMRItemValue.CliType = icCliType    
-                     ttTMRItemValue.BDest   = icDCEvemt + "_VOICE_IN".
-             END.
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode  AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode     AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.InSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:                         
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode       
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode           
+                    ttBDest.BDest     = ttServiceLimitTarget.InSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE IN"                 
+                    ttBDest.CCN       = 81.
+            END.    
+
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode   AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode      AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.OutSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode    
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode              
+                    ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
+                    ttBDest.CCN       = 81.   
+            END.
+
+            FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 34        AND 
+                                            ttTMRItemValue.CliType   = icCliType AND 
+                                            ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttTMRItemValue THEN 
+            DO:
+                CREATE ttTMRItemValue.
+                ASSIGN 
+                    ttTMRItemValue.TMRuleSeq = 34
+                    ttTMRItemValue.CliType = icCliType    
+                    ttTMRItemValue.BDest   = icDCEvemt + "_VOICE_IN".
+            END.
              
-             FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 42        AND 
-                                             ttTMRItemValue.CliType   = lcCliType AND 
-                                             ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
-             IF NOT AVAIL ttTMRItemValue THEN 
-             DO:    
-                 CREATE ttTMRItemValue.
-                 ASSIGN 
-                     ttTMRItemValue.TMRuleSeq = 42
-                     ttTMRItemValue.CliType   = icCliType    
-                     ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN".
-             END.       
-         END.
+            FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 42        AND 
+                                            ttTMRItemValue.CliType   = lcCliType AND 
+                                            ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttTMRItemValue THEN 
+            DO:    
+                CREATE ttTMRItemValue.
+                ASSIGN 
+                    ttTMRItemValue.TMRuleSeq = 42
+                    ttTMRItemValue.CliType   = icCliType    
+                    ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN".
+            END.
+        END.
      END.
          
      RETURN "".

@@ -322,6 +322,7 @@ PROCEDURE pCLIType:
 
    DEFINE BUFFER bf_RequestAction     FOR RequestAction.
    DEFINE BUFFER bf_RequestActionRule FOR RequestActionRule.
+   DEFINE BUFFER bf_MxItem            FOR MxItem.
 
    IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttCliType.CliType) THEN 
    DO:     
@@ -774,7 +775,7 @@ PROCEDURE pSLGAnalyse:
             FOR EACH bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                         AND 
                                          bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
                                          bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom               AND
-                                         bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.            
+                                         bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK:
 
                 IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = gcBrand                         AND
                                                        SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo          AND
