@@ -178,22 +178,6 @@ FUNCTION fIsProOrder RETURNS LOGICAL
    ELSE RETURN FALSE.
    
 END.
-/*Function returns True if a tariff can be defined as 2P tariff.
-NOTE: False is returned in real false cases and also in error cases. */
-FUNCTION fIs2PTariff RETURNS LOGICAL
-   (icCliType AS CHAR):
-
-   DEF BUFFER CLIType FOR CLIType.
-
-   FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.Parameters:gcBrand AND
-              CLIType.CliType EQ icCLIType NO-ERROR.
-   IF AVAIL CliType AND
-            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN 
-      RETURN TRUE.
-
-   RETURN FALSE.
-END.
 
 /*Function returns True if a tariff can be defined as 2P tariff.
 NOTE: False is returned in real false cases and also in error cases. */
@@ -243,7 +227,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
 
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
-   IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
+   IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
       FIND FIRST Mobsub WHERE
                  Mobsub.brand EQ gcbrand AND
                  Mobsub.custnum EQ iiCustomer AND
@@ -269,10 +253,25 @@ FUNCTION fFindCOFFOrder RETURNS CHAR
 
    RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
 END.
-FUNCTION fGetProFeemodel RETURNS CHAR (INPUT iiCliType AS CHAR):
-   IF INDEX(iiClitype,"300") > 0 THEN RETURN "CONTFH300MF".
-   ELSE IF INDEX(iiClitype,"50") > 0 THEN RETURN "CONTFH50MF".
-   ELSE RETURN "CONTDSLMF".
+
+FUNCTION fGetProFeemodel RETURNS CHAR
+   (INPUT icCliType AS CHAR):
+
+   DEF BUFFER CLIType FOR CLIType.
+   DEF BUFFER DayCampaign FOR DayCampaign.
+
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Parameters:gcBrand AND
+             CLIType.CLIType = icCliType AND
+             CLIType.FixedBundle > "",
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Parameters:gcBrand AND
+             DayCampaign.DCEvent = CLIType.FixedBundle:
+      RETURN DayCampaign.FeeModel.
+   END.
+
+   RETURN "".
+
 END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR

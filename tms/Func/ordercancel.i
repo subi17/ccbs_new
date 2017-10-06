@@ -352,6 +352,7 @@ PROCEDURE pCreateRenewalCreditNote:
 
    DEF VAR lcError AS CHAR NO-UNDO. 
    DEF VAR liReq AS INT NO-UNDO. 
+   DEF VAR liCustnum AS INT NO-UNDO. 
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER FixedFee FOR FixedFEe.
@@ -368,23 +369,6 @@ PROCEDURE pCreateRenewalCreditNote:
               Order.Brand = gcBrand AND
               Order.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN.
-
-   FIND FIRST MobSub NO-LOCK WHERE
-              Mobsub.MsSeq = Order.MsSeq NO-ERROR.
-
-   IF NOT AVAIL Mobsub THEN RETURN.
-
-   IF Order.Custnum NE MobSub.Custnum THEN DO:
-
-      CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
-             ErrorLog.ActionID  = "ORDERCANCEL"
-             ErrorLog.TableName = "Order"
-             ErrorLog.KeyValue  = STRING(Order.OrderId) 
-             ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
-             ErrorLog.UserCode  = katun
-             ErrorLog.ActionTS  = fMakeTS().
-   END.
 
    FIND FIRST FixedFee NO-LOCK WHERE
               FixedFee.Brand = gcBrand AND
@@ -475,6 +459,31 @@ PROCEDURE pCreateRenewalCreditNote:
       
    END.
 
+   IF AVAIL ttInvoice THEN DO:
+      FIND FIRST MobSub NO-LOCK WHERE
+                 Mobsub.MsSeq = Order.MsSeq NO-ERROR.
+
+      IF NOT AVAIL Mobsub THEN DO:
+         FIND FIRST TermMobSub NO-LOCK WHERE
+                    TermMobSub.MsSeq = Order.MsSeq NO-ERROR.
+         IF NOT AVAIL TermMobSub THEN RETURN.
+         liCustnum = TermMobSub.Custnum.
+      END.
+      ELSE liCustnum = MobSub.Custnum.
+
+      IF Order.Custnum NE liCustnum THEN DO:
+
+         CREATE ErrorLog.
+         ASSIGN ErrorLog.Brand     = gcBrand
+                ErrorLog.ActionID  = "ORDERCANCEL"
+                ErrorLog.TableName = "Order"
+                ErrorLog.KeyValue  = STRING(Order.OrderId) 
+                ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
+                ErrorLog.UserCode  = katun
+                ErrorLog.ActionTS  = fMakeTS().
+      END.
+   END.
+
    /* Create credit note */
    FOR EACH ttInvoice:
 
@@ -490,8 +499,8 @@ PROCEDURE pCreateRenewalCreditNote:
       IF liReq = 0 THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                           "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.Custnum,
+                          STRING(Order.MsSeq),
+                          Order.Custnum,
                           "CREDIT NOTE CREATION FAILED",
                           "ERROR:" + lcError). 
    END. /* FOR EACH ttInvoice NO-LOCK: */

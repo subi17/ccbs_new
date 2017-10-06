@@ -464,6 +464,7 @@ PROCEDURE pCTServPac:
              FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
                  ON ERROR UNDO, THROW:
                 CREATE CTServAttr.
+
                 BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
                    ASSIGN CTServAttr.CTServEl = CTServEl.CTServEl.
              END.
@@ -497,7 +498,7 @@ PROCEDURE pSLGAnalyse:
     DEFINE BUFFER bf_CliTypeCF  FOR CliType.
 
     ASSIGN
-        lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO" 
+        lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO,14104019,10104013" 
         lcConvergentBillCodeList = "F10100003,F10100005"
         lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN 
                                 "CONTDSL*,CONT*" 

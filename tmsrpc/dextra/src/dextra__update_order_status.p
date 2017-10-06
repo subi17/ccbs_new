@@ -181,6 +181,7 @@ gcBrand = "1".
 {Func/dextra.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
+{Mc/cash_revert_order.i}
 {Func/orderfunc.i}
 
 /* Set access to right tenant */
@@ -364,6 +365,10 @@ DO:
    ELSE 
       RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
+
+IF OrderDelivery.LOStatusId = 12 AND
+   NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE Mobsub.MsSeq = Order.MsSeq)
+THEN fCashRevertOrder(Order.OrderId).
 
 add_int(response_toplevel_id, "", liResult).
 
