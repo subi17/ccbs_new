@@ -316,9 +316,10 @@ END PROCEDURE.
 PROCEDURE pCLIType:
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
    
-   DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liFinalBT   AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liFinalCR   AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcRatePlan  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionKey AS CHARACTER NO-UNDO.
 
    DEFINE BUFFER bf_RequestAction     FOR RequestAction.
    DEFINE BUFFER bf_RequestActionRule FOR RequestActionRule.
@@ -424,13 +425,17 @@ PROCEDURE pCLIType:
          /* Copy request action rules */
          FOR EACH Requestaction NO-LOCK WHERE Requestaction.Clitype = ttCliType.CopyServicesFromCliType:
 
+             ASSIGN lcActionKey = Requestaction.ActionKey. 
+             IF Requestaction.ActionType = "DayCampaign" AND Requestaction.ActionKey BEGINS "CONTFH" THEN 
+                 ASSIGN lcActionKey = ttCliType.FixedLineBaseBundle.
+
              IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = gcBrand                  AND
                                                           bf_RequestAction.CliType    = Requestaction.CliType    AND
                                                           bf_RequestAction.ReqType    = Requestaction.ReqType    AND
                                                           bf_RequestAction.ValidTo   >= TODAY                    AND 
                                                           bf_RequestAction.PayType    = Requestaction.PayType    AND
                                                           bf_RequestAction.ActionType = Requestaction.ActionType AND
-                                                          bf_RequestAction.ActionKey  = Requestaction.ActionKey  AND
+                                                          bf_RequestAction.ActionKey  = lcActionKey              AND
                                                           bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
              DO:
                  CREATE bf_RequestAction.
@@ -441,7 +446,7 @@ PROCEDURE pCLIType:
                     bf_RequestAction.CLIType         = ttCliType.CliType
                     bf_RequestAction.PayType         = Requestaction.PayType
                     bf_RequestAction.Action          = Requestaction.Action
-                    bf_RequestAction.ActionKey       = Requestaction.ActionKey
+                    bf_RequestAction.ActionKey       = lcActionKey
                     bf_RequestAction.ActionType      = Requestaction.ActionType           
                     bf_RequestAction.ValidFrom       = TODAY
                     bf_RequestAction.ValidTo         = DATE(12,31,2049). 
