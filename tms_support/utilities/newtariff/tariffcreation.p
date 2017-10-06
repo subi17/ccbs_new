@@ -930,23 +930,28 @@ PROCEDURE pBundle:
 
     IF icMobileFixedLine = "FixedLine" THEN 
     DO:
-        CREATE ttFMItem.
-        ASSIGN 
-            ttFMItem.FeeModel     = ttDayCampaign.BillCode
-            ttFMItem.BillCode     = ttDayCampaign.BillCode
-            ttFMItem.PriceList    = "CONTRATOFIXED"
-            ttFMItem.Amount       = ideCommercialFee
-            ttFMItem.FirstMonthBR = iiFirstMonthBR
-            ttFMItem.BrokenRental = iiLastMonthBR.
-
-        CREATE ttFMItem.
-        ASSIGN 
-            ttFMItem.FeeModel     = ttDayCampaign.BillCode
-            ttFMItem.BillCode     = ttDayCampaign.BillCode
-            ttFMItem.PriceList    = "CONTRATOFIXEDONLY"
-            ttFMItem.Amount       = ideCommercialFee
-            ttFMItem.FirstMonthBR = iiFirstMonthBR
-            ttFMItem.BrokenRental = iiLastMonthBR.    
+        IF INDEX(icBundleName, "Casa") = 0 THEN 
+        DO:
+            CREATE ttFMItem.
+            ASSIGN 
+                ttFMItem.FeeModel     = ttDayCampaign.BillCode
+                ttFMItem.BillCode     = ttDayCampaign.BillCode
+                ttFMItem.PriceList    = "CONTRATOFIXED"
+                ttFMItem.Amount       = ideCommercialFee
+                ttFMItem.FirstMonthBR = iiFirstMonthBR
+                ttFMItem.BrokenRental = iiLastMonthBR.
+        END.
+        ELSE
+        DO:      
+            CREATE ttFMItem.
+            ASSIGN 
+                ttFMItem.FeeModel     = ttDayCampaign.BillCode
+                ttFMItem.BillCode     = ttDayCampaign.BillCode
+                ttFMItem.PriceList    = "CONTRATOFIXEDONLY"
+                ttFMItem.Amount       = ideCommercialFee
+                ttFMItem.FirstMonthBR = iiFirstMonthBR
+                ttFMItem.BrokenRental = iiLastMonthBR.    
+        END.    
     END.
     ELSE 
     DO:    
