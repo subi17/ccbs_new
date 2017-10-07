@@ -413,9 +413,9 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
-   DEFINE VARIABLE lcMainOrderId             AS CHAR NO-UNDO. /* gap018 */
+   DEFINE VARIABLE lcMainOrderId             AS CHAR NO-UNDO INIT "". /* gap018 */
    DEFINE VARIABLE llDespachar               AS LOGICAL   NO-UNDO. /* gap018 */
-   DEFINE VARIABLE liConvOrderId             AS INT NO-UNDO. /* gap018 */
+   DEFINE VARIABLE liConvOrderId             AS INT NO-UNDO INIT 0. /* gap018 */
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -1341,83 +1341,41 @@ FUNCTION fDelivSIM RETURNS LOG
                        bufOrderCustomer.Brand   = gcBrand AND
                        bufOrderCustomer.OrderId = Order.OrderId AND
                        bufOrderCustomer.RowType = 1 NO-ERROR.
-            
-            /* Additional lines Mobile only tariffs */ 
-            IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                               OrderAction.Brand    = gcBrand           AND
-                               OrderAction.OrderID  = Order.OrderId     AND
-                               OrderAction.ItemType = "AddLineDiscount" AND
-                         /* DISCCONT10,DISCCONT15, .. */
-                         LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0)) THEN
-               IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
-                                               bufOrderCustomer.CustId,
-                                               Order.CLIType,
-                                               liConvOrderId) THEN 
-                  /* MainOrderID found */
-                  lcMainOrderId = STRING(liConvOrderId).
-               ELSE
-                  IF fCheckOngoing2PConvergentOrder(bufOrderCustomer.CustIdType,
-                                                    bufOrderCustomer.CustId,
-                                                    Order.CLIType,
-                                                    liConvOrderId) THEN 
-                     /* MainOrderID found */
-                     lcMainOrderId = STRING(liConvOrderId).
-               
-            ELSE IF(CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                   OrderAction.Brand    = gcBrand           AND
-                                   OrderAction.OrderID  = Order.OrderId     AND
-                                   OrderAction.ItemType = "AddLineDiscount" AND
-                             /* DISCCONT10H,DISCCONT15H, .. */
-                             LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)) THEN
-               IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
-                                               bufOrderCustomer.CustId,
-                                               Order.CLIType,
-                                               liConvOrderId) THEN 
-                  /* MainOrderID found */
-                  lcMainOrderId = STRING(liConvOrderId).
+            IF AVAIL bufOrderCustomer THEN DO: 
+               /* Additional lines Mobile only tariffs */
+               IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                 OrderAction.Brand    = gcBrand            AND
+                                 OrderAction.OrderID  = Order.OrderId      AND
+                                 OrderAction.ItemType = "AddLineDiscount") THEN DO:
 
-            ELSE IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                    OrderAction.Brand    = gcBrand           AND
-                                    OrderAction.OrderID  = Order.OrderId     AND
-                                    OrderAction.ItemType = "AddLineDiscount" AND
-                              /* DISCCONT10HM,DISCCONT15HM, .. */
-                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)) THEN
-               IF fCheckOngoingMobileOnly(bufOrderCustomer.CustIdType,
-                                          bufOrderCustomer.CustId,
-                                          Order.CLIType,
-                                          liConvOrderId) THEN
-                  /* MainOrderID found */
-                  lcMainOrderId = STRING(bufOrder.OrderId).
+                  IF LOOKUP(OrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0) THEN
+                     IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
+                                                     bufOrderCustomer.CustId,
+                                                     Order.CLIType,
+                                                     OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(liConvOrderId).
+                     ELSE IF fCheckOngoing2PConvergentOrder(bufOrderCustomer.CustIdType,
+                                                            bufOrderCustomer.CustId,
+                                                            Order.CLIType,
+                                                            OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(liConvOrderId).
+                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN
+                     IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
+                                                     bufOrderCustomer.CustId,
+                                                     Order.CLIType,
+                                                     OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(liConvOrderId).
+                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) THEN
+                     IF fCheckOngoingMobileOnly(bufOrderCustomer.CustIdType,
+                                                bufOrderCustomer.CustId,
+                                                Order.CLIType,
+                                                OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(bufOrder.OrderId).
+                  END.
+               ELSE lcMainOrderId = "".
+            END. /* if avail bufOrderCustomer */
+            ELSE lcMainOrderId = "". 
          END.
-         ELSE DO:
-            lcMainOrderId = "".
-         END.
-
-            /* FOR FIRST OrderCustomer NO-LOCK WHERE
-                      OrderCustomer.Brand   = gcBrand AND
-                      OrderCustomer.OrderId = Order.OrderId AND
-                      OrderCustomer.RowType = 1,
-               EACH bufOrderCustomer NO-LOCK WHERE
-                    bufOrderCustomer.Brand      EQ gcBrand AND
-                    bufOrderCustomer.CustId     EQ OrderCustomer.CustId AND
-                    bufOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
-                    bufOrderCustomer.RowType    EQ 1,
-               EACH bufOrder NO-LOCK WHERE
-                    bufOrder.Brand   EQ gcBrand AND
-                    bufOrder.orderid EQ bufOrderCustomer.Orderid,
-               FIRST bufCLIType NO-LOCK WHERE
-                     bufCLIType.Brand    = gcBrand AND
-                     bufCLIType.CLIType  = bufOrder.CliType AND
-                     bufCLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
-                     /* bufOrder.orderid should be main line of the addidtional line */
-                     /* AC5: If Main line order is cancelled linking is not needed */
-               IF bufOrder.StatusCode ne {&ORDER_STATUS_CLOSED} THEN
-                  lcMainOrderId = STRING(bufOrder.OrderId).
-               ELSE
-                  lcMainOrderId = "".
-            END.
-         END.*/
-
          IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
             CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
             /* AC6: In case Additional/Extra line order is in fraud queue its
@@ -1426,7 +1384,7 @@ FUNCTION fDelivSIM RETURNS LOG
                Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
                Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
                llDespachar = FALSE.
-             ELSE
+             ELSE /* Todo some logic, cannot be true always */
                 llDespachar = TRUE.
          END.
          ELSE DO: /* Main line */

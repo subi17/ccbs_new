@@ -26,7 +26,7 @@ DEF VAR lcQuestion              AS CHAR NO-UNDO.
 DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
 DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
 DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-DEF VAR liConvOrderId           AS INT NO-UNDO.
+DEF VAR liConvOrderId           AS INT NO-UNDO INIT 0.
 
 /* Additional line mobile only ALFMO-5*/
 DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
@@ -274,7 +274,7 @@ DO:
                     NOT fCheckOngoingConvergentOrder(lbOrderCustomer.CustIdType,
                                                      lbOrderCustomer.CustID,
                                                      lbOrder.CliType,
-                                                     liConvOrderId)          AND
+                                                     OUTPUT liConvOrderId)   AND
                     NOT fCheckExistingConvergent(lbOrderCustomer.CustIdType,
                                                  lbOrderCustomer.CustID,
                                                  lbOrder.CliType))             OR
@@ -282,7 +282,7 @@ DO:
                     NOT fCheckOngoing2PConvergentOrder(lbOrderCustomer.CustIdType,
                                                        lbOrderCustomer.CustID,
                                                        lbOrder.CliType,
-                                                       liConvOrderId)        AND
+                                                       OUTPUT liConvOrderId) AND
                     NOT fCheckExisting2PConvergent(lbOrderCustomer.CustIdType,
                                                    lbOrderCustomer.CustID,
                                                    lbOrder.CliType))           THEN 
@@ -378,7 +378,7 @@ IF AVAILABLE lbOrderCustomer THEN DO:
          IF NOT fCheckOngoingMobileOnly(lbOrderCustomer.CustIdType,
                                         lbOrderCustomer.CustID,
                                         lbOrder.CliType,
-                                        liConvOrderId) AND
+                                        OUTPUT liConvOrderId) AND
             NOT fCheckExistingMobileOnly(lbOrderCustomer.CustIdType,
                                          lbOrderCustomer.CustID,
                                          lbOrder.CliType) THEN 
