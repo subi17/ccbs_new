@@ -1,22 +1,22 @@
 Tariff Fields;La de Casa 1Gbps
 CLIType;CONTFH65_1000
 TariffName;La de Casa 1Gbps
-TariffBundle;N/A
+TariffBundle;
 WebStatus;Active
 STCStatus;Active
 PaymentType;Postpaid
 UsageType;Voice
-RatePlanAction;New
+RatePlanAction;UseExisting
 RatePlan;CONTRATOFIXEDC
 ReferenceRatePlan;CONTRATOFIXEDC
 LineType;Entry
 FixedLineType;Fiber
 FixedLineDownload;1GB
 FixedLineUpload;300M
-ServiceClass;N/A
+ServiceClass;
 CommercialFee;53.72
 ComparisonFee;53.72
-OptionalBundlesAndBONOs;DUB,CONTFH1000,DATA6
+OptionalBundlesAndBONOs;DATA6
 BundlesForActivateOnSTC;DUB,CONTFH1000
 ServicesForReCreateOnSTC;BB
 CopyServicesFromCliType;CONTFH45_300
@@ -24,19 +24,19 @@ MobileBaseBundle;DUB
 MobileBaseBundleType;ServicePackage
 UpsellForMobile;DATA200_UPSELL
 BonoSupportForMobile;YES
-MonthlyFeeBillCodeForMobile;N/A
+MonthlyFeeBillCodeForMobile;
 CommercialFeeForMobile;0
 FirstMonthFeeCalcForMobile;Relative
 LastMonthFeeCalcForMobile;Relative
 DataLimitForMobile;0
 VoiceLimitForMobile;0
 BDestinationLimitForMobile;0
-FirstMonthDataLimitForMobile;N/A
-LastMonthDataLimitForMobile;N/A
-FirstMonthVoiceLimitForMobile;N/A
-LastMonthVoiceLimitForMobile ;N/A
-FirstMonthBDestLimitForMobile;N/A
-LastMonthBDestLimitForMobile;N/A
+FirstMonthDataLimitForMobile;
+LastMonthDataLimitForMobile;
+FirstMonthVoiceLimitForMobile;
+LastMonthVoiceLimitForMobile;
+FirstMonthBDestLimitForMobile;
+LastMonthBDestLimitForMobile;
 FixedLineBaseBundle;CONTFH1000
 FixedLineBaseBundleType;ServicePackage
 UpsellForFixedLine; 
@@ -44,9 +44,9 @@ BonoSupportForFixedLine;No
 MonthlyFeeBillCodeForFixedLine;CONTFH1000MF
 CommercialFeeForFixedLine;53.72
 FirstMonthFeeCalcForFixedLine;Relative
-LastMonthFeeCalcForFixedLine ;Full
+LastMonthFeeCalcForFixedLine;Full
 VoiceLimitForFixedLine;60
-BDestinationLimitForFixedLine ;10000
+BDestinationLimitForFixedLine;10000
 FirstMonthVoiceLimitForFixedLine;Full
 LastMonthVoiceLimitForFixedLine;Full
 FirstMonthBDestLimitForFixedLine;Full
