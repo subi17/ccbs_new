@@ -7,8 +7,8 @@ STCStatus;Active
 PaymentType;Postpaid
 UsageType;Voice
 RatePlanAction;UseExisting
-RatePlan;CONTRATOCONVC
-ReferenceRatePlan;CONTRATOCONVC
+RatePlan;CONTRATOFIXEDC
+ReferenceRatePlan;CONTRATOFIXEDC
 LineType;Entry
 FixedLineType;Fiber
 FixedLineDownload;1GB
@@ -24,7 +24,7 @@ MobileBaseBundle;DUB
 MobileBaseBundleType;ServicePackage
 UpsellForMobile;DATA200_UPSELL
 BonoSupportForMobile;YES
-MonthlyFeeBillCodeForMobile;N/A
+MonthlyFeeBillCodeForMobile;
 CommercialFeeForMobile;0
 FirstMonthFeeCalcForMobile;Relative
 LastMonthFeeCalcForMobile;Relative
