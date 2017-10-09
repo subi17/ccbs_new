@@ -12,6 +12,7 @@
                 DEF VAR llOrdStChg            AS LOG  NO-UNDO. 
                 DEF VAR llReserveSimAndMsisdn AS LOG  NO-UNDO.
                 DEF VAR lcExtraLineDiscounts  AS CHAR NO-UNDO.
+                DEF VAR liConvOrderId         AS INT  NO-UNDO INIT 0.
    
                 DEF VAR lh99Order AS HANDLE NO-UNDO.
                 DEF VAR lh76Order AS HANDLE NO-UNDO.
@@ -134,7 +135,8 @@
                       AND
                       fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
                                                    OrderCustomer.CustId,
-                                                   Order.CLIType) 
+                                                   Order.CLIType,
+                                                   OUTPUT liConvOrderId)               
                       AND 
                       NOT fCheckFixedLineStatusForMainLine(OrderCustomer.CustIdType,
                                                            OrderCustomer.CustId,
@@ -151,7 +153,8 @@
                       AND
                       fCheckOngoing2PConvergentOrder(OrderCustomer.CustIdType,
                                                      OrderCustomer.CustId,
-                                                     Order.CLIType)
+                                                     Order.CLIType,
+                                                     OUTPUT liConvOrderId)                       
                       AND 
                       NOT fCheckFixedLineStatusForMainLine(OrderCustomer.CustIdType,
                                                            OrderCustomer.CustId,
@@ -168,7 +171,8 @@
                       AND
                       fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
                                               OrderCustomer.CustId,
-                                              Order.CLIType))                           THEN DO:
+                                              Order.CLIType,
+                                              OUTPUT liConvOrderId)) THEN DO:
                      IF llDoEvent THEN DO:
                         lh76Order = BUFFER Order:HANDLE.
                         RUN StarEventInitialize(lh76Order).

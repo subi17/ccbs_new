@@ -217,7 +217,8 @@ PROCEDURE pTerminate:
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
 
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
-   DEF VAR llCallProc          AS LOG  NO-UNDO.   
+   DEF VAR llCallProc          AS LOG  NO-UNDO.  
+   DEF VAR liConvOrderId       AS INT  NO-UNDO INIT 0.
    
    DEF VAR lcTerminationType AS CHAR NO-UNDO INIT {&TERMINATION_TYPE_FULL}.
    /* Additional line mobile only ALFMO */
@@ -1259,7 +1260,8 @@ PROCEDURE pTerminate:
             DO:
                IF NOT fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
                                               OrderCustomer.CustID,
-                                              bOrder.CliType) AND
+                                              bOrder.CliType,
+                                              OUTPUT liConvOrderId) AND
                   NOT fCheckExistingMobileOnly(OrderCustomer.CustIdType,
                                                OrderCustomer.CustID,
                                                bOrder.CliType) THEN 

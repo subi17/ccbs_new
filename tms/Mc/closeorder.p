@@ -25,7 +25,7 @@ DEF VAR lcError                 AS CHAR NO-UNDO.
 DEF VAR lcQuestion              AS CHAR NO-UNDO. 
 DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
 DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
-DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
 
 /* Additional line mobile only ALFMO-5*/
 DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
@@ -256,7 +256,6 @@ DO:
       fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
                                Order.OrderId,    /* Main line Order Id  */ 
                               "CLOSE").          /* Action              */
-
 END.
 
 FOR EACH MNPProcess WHERE

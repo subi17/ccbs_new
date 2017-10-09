@@ -33,6 +33,7 @@ DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
 DEF VAR lcPrePaidDataBundles  AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 DEF VAR lcIPhoneDiscountRuleIds AS CHAR NO-UNDO.
+DEF VAR liConvOrderId           AS INT NO-UNDO INIT 0.
 
 DEF BUFFER bOfferItem FOR OfferItem.
 
@@ -462,7 +463,7 @@ PROCEDURE pDiscountPlanMember:
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
       IF AVAILABLE OrderCustomer THEN DO:
          IF fCheckExistingConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) OR
-            fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) THEN DO:
+            fCheckOngoingConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType,OUTPUT liConvOrderId) THEN DO:
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                               OrderAction.Brand    = gcBrand           AND
                               OrderAction.OrderID  = Order.OrderID     AND
@@ -471,7 +472,7 @@ PROCEDURE pDiscountPlanMember:
          END.
          /* ADDLINE-330 bug fix */
          IF fCheckExisting2PConvergent(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) OR
-            fCheckOngoing2PConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) THEN DO:
+            fCheckOngoing2PConvergentOrder(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType,OUTPUT liConvOrderId) THEN DO:
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                               OrderAction.Brand    = gcBrand           AND
                               OrderAction.OrderID  = Order.OrderID     AND
@@ -480,7 +481,7 @@ PROCEDURE pDiscountPlanMember:
          END.
          /* Additional Line with mobile only ALFMO-5 */
          IF fCheckExistingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) OR
-            fCheckOngoingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType) THEN DO:
+            fCheckOngoingMobileOnly(OrderCustomer.CustIDType,OrderCustomer.CustID,Order.CLIType,OUTPUT liConvOrderId) THEN DO:
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                               OrderAction.Brand    = gcBrand           AND
                               OrderAction.OrderID  = Order.OrderID     AND
