@@ -489,12 +489,13 @@ PROCEDURE pCLIType:
       
       IF ttCLIType.PayType = 1 THEN 
       DO:
-          IF LOOKUP(ttCliType.AllowedBundles,"DSS2") > 0 THEN 
+          IF LOOKUP("DSS2",ttCliType.AllowedBundles) > 0 THEN 
           DO:
               RUN pUpdateTMSParam("DSS2_PRIMARY_SUBS_TYPE", ttCliType.CliType).
               RUN pUpdateTMSParam("DSS2_SUBS_TYPE"        , ttCliType.CliType).
           END.    
-          ELSE IF (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
+
+          IF (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
               RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
       END.
          
@@ -628,7 +629,10 @@ PROCEDURE pSLGAnalyse:
 
         END.
     END.    
-    
+  
+    IF LOOKUP(icFixedLineBaseBundle, icAllowedBundles) = 0 THEN 
+        ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + icFixedLineBaseBundle.
+
     IF icAllowedBundles > "" THEN 
     DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
        ON ERROR UNDO, THROW:
