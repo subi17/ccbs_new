@@ -26,7 +26,6 @@ DEF VAR lcQuestion              AS CHAR NO-UNDO.
 DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
 DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
 DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-DEF VAR liConvOrderId           AS INT NO-UNDO INIT 0.
 
 /* Additional line mobile only ALFMO-5*/
 DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
