@@ -1008,6 +1008,10 @@
 1 "" 3 "Eguneratzea: Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/03/12
 1 "" 4 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/12/49
 1 "" 5 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/04/12 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTDSL35PRO" "1" 20/09/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTDSL35PRO" "1" 20/09/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTDSL35PRO" "1" 20/09/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTDSL35PRO" "1" 20/09/17 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONTDSL39PRO" "1" 04/07/17 31/12/49
 1 "" 2 "Avantatges PRO" 0 "CONTDSL39PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTDSL39PRO" "1" 04/07/17 31/12/49
@@ -1068,10 +1072,18 @@
 1 "" 2 "Nacionals" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
 1 "" 5 "National" 0 "CONTFH300_QTY_IN" "1" 01/11/16 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTFH35_50PRO" "1" 20/09/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH35_50PRO" "1" 20/09/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTFH35_50PRO" "1" 20/09/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTFH35_50PRO" "1" 20/09/17 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONTFH39_50PRO" "1" 04/07/17 31/12/49
 1 "" 2 "Avantatges PRO" 0 "CONTFH39_50PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTFH39_50PRO" "1" 04/07/17 31/12/49
 1 "" 5 "PRO benefits" 0 "CONTFH39_50PRO" "1" 04/07/17 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTFH45_300PRO" "1" 20/09/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH45_300PRO" "1" 20/09/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTFH45_300PRO" "1" 20/09/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTFH45_300PRO" "1" 20/09/17 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONTFH48_50PRO" "1" 04/07/17 31/12/49
 1 "" 2 "Avantatges PRO" 0 "CONTFH48_50PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTFH48_50PRO" "1" 04/07/17 31/12/49
