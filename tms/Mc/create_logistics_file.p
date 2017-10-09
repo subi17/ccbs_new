@@ -1348,7 +1348,7 @@ FUNCTION fDelivSIM RETURNS LOG
                                  OrderAction.OrderID  = Order.OrderId      AND
                                  OrderAction.ItemType = "AddLineDiscount") THEN DO:
 
-                  IF LOOKUP(OrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0) THEN
+                  IF LOOKUP(OrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
                      IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
                                                      bufOrderCustomer.CustId,
                                                      Order.CLIType,
@@ -1359,13 +1359,13 @@ FUNCTION fDelivSIM RETURNS LOG
                                                             Order.CLIType,
                                                             OUTPUT liConvOrderId) THEN
                         lcMainOrderId = STRING(liConvOrderId).
-                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN
+                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 THEN
                      IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
                                                      bufOrderCustomer.CustId,
                                                      Order.CLIType,
                                                      OUTPUT liConvOrderId) THEN
                         lcMainOrderId = STRING(liConvOrderId).
-                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) THEN
+                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN
                      IF fCheckOngoingMobileOnly(bufOrderCustomer.CustIdType,
                                                 bufOrderCustomer.CustId,
                                                 Order.CLIType,
