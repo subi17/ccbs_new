@@ -150,6 +150,7 @@ END FUNCTION.
 FUNCTION fCopySLG RETURNS LOGICAL
    (INPUT icFromType AS CHAR,
     INPUT icToType AS CHAR):
+
    DEF BUFFER slganalyse for slganalyse.
    DEF BUFFER bnew_slganalyse for slganalyse.
 
@@ -166,7 +167,8 @@ FUNCTION fCopySLG RETURNS LOGICAL
                  bnew_SLGAnalyse.CCN      EQ SLGAnalyse.CCN           AND
                  bnew_SLGAnalyse.BDest    EQ SLGAnalyse.BDest         AND
                  bnew_SLGAnalyse.ValidTo  GE TODAY                    AND
-                 bnew_SLGAnalyse.ServiceLimitGroup EQ SLGAnalyse.ServiceLimitGroup AND
+                 bnew_SLGAnalyse.ServiceLimitGroup EQ 
+                     REPLACE(slganalyse.servicelimitgroup,"CONTFH300","CONTFH1000") AND
                  bnew_SLGAnalyse.SLGAType EQ SLGAnalyse.SLGAType NO-ERROR.
       IF NOT AVAIL bnew_SLGAnalyse THEN DO:
          CREATE bnew_SLGAnalyse.
@@ -175,12 +177,9 @@ FUNCTION fCopySLG RETURNS LOGICAL
             bnew_slganalyse.clitype = icToType
             bnew_slganalyse.servicelimitgroup = 
                REPLACE(bnew_slganalyse.servicelimitgroup,
-                       "CONTFH_300","CONTFH_1000")
+                       "CONTFH300","CONTFH1000")
             bnew_slganalyse.validfrom = today.
-
       END.
-      
-
 
    END.
 

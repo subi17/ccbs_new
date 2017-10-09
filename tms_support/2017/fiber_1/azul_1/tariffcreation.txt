@@ -7,8 +7,8 @@ STCStatus;Inactive
 PaymentType;Postpaid
 UsageType;Voice
 RatePlanAction;UseExisting
-RatePlan;CONTRATOCONVS
-ReferenceRatePlan;CONTRATOCONVS
+RatePlan;CONTRATOCONVC
+ReferenceRatePlan;CONTRATOCONVC
 LineType;Entry
 FixedLineType;Fiber
 FixedLineDownload;1GB
@@ -16,7 +16,7 @@ FixedLineUpload;300M
 ServiceClass; 
 CommercialFee;73.554
 ComparisonFee;73.554
-OptionalBundlesAndBONOs;DATA6,DATA7,SMS5000,INT_VOICE100,FLEX_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_5GB_UPSELL,FIX_VOICE1000,INT_FIX_VOICE1000,OFFICE365,FAXTOEMAIL,CENTRALITA,IPFIJA
+OptionalBundlesAndBONOs;DATA6,DATA7,SMS5000,INT_VOICE100,FLEX_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_5GB_UPSELL,FIX_VOICE1000,INT_FIX_VOICE1000,OFFICE365,FAXTOEMAIL,CENTRALITA,IPFIJA,DSS2
 BundlesForActivateOnSTC;CONT25,CONTFH1000
 ServicesForReCreateOnSTC;BB
 CopyServicesFromCliType;CONTFH69_300
@@ -44,9 +44,9 @@ BonoSupportForFixedLine;No
 MonthlyFeeBillCodeForFixedLine;CONTFH1000MF
 CommercialFeeForFixedLine;47.104
 FirstMonthFeeCalcForFixedLine;Relative
-LastMonthFeeCalcForFixedLine ;Full
+LastMonthFeeCalcForFixedLine;Full
 VoiceLimitForFixedLine;60
-BDestinationLimitForFixedLine ;10000
+BDestinationLimitForFixedLine;10000
 FirstMonthVoiceLimitForFixedLine;Full
 LastMonthVoiceLimitForFixedLine;Full
 FirstMonthBDestLimitForFixedLine;Full

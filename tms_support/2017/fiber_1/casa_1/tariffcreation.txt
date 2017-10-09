@@ -16,7 +16,7 @@ FixedLineUpload;300M
 ServiceClass;
 CommercialFee;53.72
 ComparisonFee;53.72
-OptionalBundlesAndBONOs;DATA6
+OptionalBundlesAndBONOs;CONTFH1000,DATA6,DATA7
 BundlesForActivateOnSTC;DUB,CONTFH1000
 ServicesForReCreateOnSTC;BB
 CopyServicesFromCliType;CONTFH45_300
@@ -31,12 +31,12 @@ LastMonthFeeCalcForMobile;Relative
 DataLimitForMobile;0
 VoiceLimitForMobile;0
 BDestinationLimitForMobile;0
-FirstMonthDataLimitForMobile;
-LastMonthDataLimitForMobile;
-FirstMonthVoiceLimitForMobile;
-LastMonthVoiceLimitForMobile;
-FirstMonthBDestLimitForMobile;
-LastMonthBDestLimitForMobile;
+FirstMonthDataLimitForMobile;Full
+LastMonthDataLimitForMobile;Full
+FirstMonthVoiceLimitForMobile;Full
+LastMonthVoiceLimitForMobileFull;Full
+FirstMonthBDestLimitForMobile;Full
+LastMonthBDestLimitForMobile;Full
 FixedLineBaseBundle;CONTFH1000
 FixedLineBaseBundleType;ServicePackage
 UpsellForFixedLine; 
