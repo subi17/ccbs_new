@@ -287,10 +287,6 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
 
-   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
-
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
- 
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
             bOrderCustomer.CustId     EQ icCustID                AND
@@ -308,7 +304,7 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
 
-      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
+      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
           
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN DO:
          liConvOrderId = bOrder.OrderId.
@@ -332,10 +328,6 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
    DEFINE BUFFER Customer       FOR Customer.
    DEFINE BUFFER CustCat        FOR CustCat.
 
-   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
-
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
-
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
        EACH CustCat WHERE CustCat.Brand = Syst.Parameters:gcBrand AND CustCat.Category = Customer.Category AND CustCat.Pro = False NO-LOCK, 
        EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = TRUE NO-LOCK,
@@ -346,7 +338,7 @@ FUNCTION fCheckOngoingProMigration RETURNS LOGICAL
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
           NEXT.
 
-      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN 
+      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
          NEXT.    
 
       RETURN TRUE.
@@ -367,16 +359,12 @@ FUNCTION fCheckOngoingNonProMigration RETURNS LOGICAL
    DEFINE BUFFER Customer       FOR Customer.
    DEFINE BUFFER CustCat        FOR CustCat.
 
-   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
-
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
-
    FOR FIRST Customer WHERE Customer.CustNum = iiCustNum NO-LOCK,
        EACH CustCat WHERE CustCat.Brand = "1" AND CustCat.Category = Customer.Category AND CustCat.Pro = True NO-LOCK, 
        EACH bOrderCustomer WHERE bOrderCustomer.CustNum = iiCustNum AND bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND bOrderCustomer.Pro = False NO-LOCK,
        EACH bOrder WHERE bOrder.Brand EQ Syst.Parameters:gcBrand AND bOrder.orderid EQ bOrderCustomer.Orderid AND bOrder.OrderType NE {&ORDER_TYPE_RENEWAL} NO-LOCK:
 
-      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN 
+      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN 
          NEXT.    
 
       RETURN TRUE.
@@ -398,10 +386,6 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
 
-   DEF VAR lcConvOngoingStatus AS CHAR NO-UNDO. 
-
-   lcConvOngoingStatus = Syst.Parameters:getc("ConvOrderOngoing","Order").
-
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
             bOrderCustomer.CustId     EQ icCustID                AND
@@ -419,7 +403,7 @@ FUNCTION fCheckOngoingConvergentOrderWithoutALCheck RETURNS LOGICAL
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
           NEXT.
 
-      IF LOOKUP(bOrder.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.    
+      IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.    
 
       RETURN TRUE.
 
@@ -753,12 +737,9 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
    DEFINE BUFFER Order         FOR Order.
    DEFINE BUFFER OrderFusion   FOR OrderFusion.
 
-   DEF VAR lcConvOngoingStatus     AS CHAR NO-UNDO.
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
 
-   ASSIGN 
-      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-      lcConvOngoingStatus     = Syst.Parameters:getc("ConvOrderOngoing","Order"). 
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -777,7 +758,7 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
 
       IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
 
-      IF LOOKUP(Order.StatusCode,lcConvOngoingStatus) = 0 THEN NEXT.
+      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
  
       liOngoingOrderId = Order.OrderId.
 
@@ -818,6 +799,45 @@ FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
       RETURN TRUE.
 
    END.   
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* If main line is installed for Main line (Convergent order or Mobile only)
+   then don't move additional line order to 76 */
+FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
+   (INPUT icCustIDType   AS CHAR,
+    INPUT icCustID       AS CHAR,
+    INPUT icCliType      AS CHAR):
+
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrder         FOR Order.
+   DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+   DEFINE BUFFER bCLIType       FOR CLIType.
+
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrderCustomer.CustId     EQ icCustID                AND
+            bOrderCustomer.CustIdType EQ icCustIDType            AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Parameters:gcBrand AND
+            bOrder.OrderId    EQ bOrderCustomer.OrderId  AND
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
+      FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.Brand        EQ Syst.Parameters:gcBrand AND
+            bOrderFusion.OrderID      EQ bOrder.OrderID          AND 
+            bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}, 
+      FIRST bCLIType WHERE bCLIType.Brand   EQ Syst.Parameters:gcBrand AND 
+                           bCLIType.CliType EQ bOrder.CLIType          NO-LOCK:
+
+      IF NOT fIsConvergenceTariff(bCLIType.CLIType) THEN NEXT. 
+
+      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
+         RETURN TRUE.
+
+   END.
 
    RETURN FALSE.
 
