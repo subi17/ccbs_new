@@ -21,10 +21,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
+gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
-gcBrand = "1".
 
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
