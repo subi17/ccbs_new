@@ -31,6 +31,7 @@ gcBrand = "1".
 {Func/email.i}
 {Mc/orderfusion.i}
 {Func/financed_terminal.i}
+{Func/fixedlinefunc.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -1335,7 +1336,8 @@ FUNCTION fDelivSIM RETURNS LOG
                   lcMainOrderId = "".
             END.
          END.
-         ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+                 /* Check if convergent additional line */
+         ELSE IF fIsAddLineTariff(Order.CLI) THEN DO:
             FIND FIRST bufOrderCustomer NO-LOCK WHERE
                        bufOrderCustomer.Brand   = gcBrand AND
                        bufOrderCustomer.OrderId = Order.OrderId AND
@@ -1376,7 +1378,7 @@ FUNCTION fDelivSIM RETURNS LOG
             ELSE lcMainOrderId = "". 
          END.
          IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
-            CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+            fIsAddLineTariff(Order.CLI) THEN DO:
             /* AC6: In case Additional/Extra line order is in fraud queue its
                Deptchar value is set FALSE as it is not delivered same time with Main line  */
             IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
