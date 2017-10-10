@@ -2034,8 +2034,7 @@ PROCEDURE pGetCTNAME:
                            "<br/>" +
                            (IF liLang EQ 5 THEN "After " ELSE "Después ")    +
                            TRIM(STRING(ldeMF,"->>>>>>>9.99"))             + " &euro;/" +
-                           (IF liLang EQ 5 THEN "month" ELSE "mes")          +
-                           (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
+                           (IF liLang EQ 5 THEN "month" ELSE "mes") + lcVat.
                 /*Offeritem values must be used if such is available.
                   Otherwise the value is taken from discountplan settings.*/
                 IF Offeritem.Amount > 0 THEN DO:
@@ -2246,9 +2245,7 @@ PROCEDURE pGetCTNAME:
             llgExtraLine      THEN
             lcTagCTName = lcTagCTName + ",<br/> " + lcList + "<br/>".
          ELSE
-            lcTagCTName = lcTagCTName + ",<br/> " + lcList +
-                          (IF liLang EQ 5 THEN " VAT. incl<br/>"
-                           ELSE " imp. incl.<br/>").
+            lcTagCTName = lcTagCTName + ",<br/> " + lcList + lcVat.
        END.
 
         IF lcMFText NE ""  THEN
