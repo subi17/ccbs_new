@@ -1126,6 +1126,52 @@ PROCEDURE pGetORDER_DATE:
    lcResult = lcDate.
 END. /*GetORDER_DATA*/
 
+PROCEDURE pGetCONTACT:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
+      fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
+   RETURN REPLACE(fTeksti(577, liLang),"1707","1726").
+   ELSE RETURN fTeksti(577, liLang).
+
+END. /*GetCONTACT*/
+
+PROCEDURE pGetRETURN_RIGHT:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
+      fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
+   RETURN "".
+   ELSE RETURN fTeksti(578, liLang).
+
+END. /*getRETURN_RIGHT*/
+
+PROCEDURE pGetBOTTOM_BAR:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
+      fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
+   RETURN fTeksti(580, liLang).
+   ELSE RETURN fTeksti(579, liLang).
+
+END. /*GetBOTTOM_BAR*/
+
+
 PROCEDURE pGetDELIVERY_DATE:
 
    DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
