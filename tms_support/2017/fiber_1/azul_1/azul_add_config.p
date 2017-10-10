@@ -67,7 +67,8 @@ FUNCTION fCreateFMItem RETURNS LOGICAL
       fmitem.Brand     = "1"       AND
       fmitem.feemodel = icfeemodel AND
       fmitem.billcode = icItemName AND
-      fmitem.pricelist = icPricelist
+      fmitem.pricelist = icPricelist and
+      fmitem.todate >= today
    NO-ERROR.
 
    IF NOT AVAILABLE fmitem
@@ -198,6 +199,8 @@ FUNCTION fCreateDPTarget RETURNS LOGICAL
               dptarget.targetkey eq icBase AND
               dptarget.validto ge TODAY NO-ERROR.
    IF AVAIL dptarget THEN DO:
+      
+      if lookup(string(dptarget.dpid),"36,41,44,50,51") > 0 then next.
 
       CREATE bdptarget.
       BUFFER-COPY dptarget EXCEPT dpid validfrom targetkey TO bdptarget.
@@ -220,6 +223,8 @@ FUNCTION fCreateDPsubjects RETURNS LOGICAL
    FOR EACH dpsubject NO-LOCK WHERE
             dpsubject.dpsubject EQ icBase AND
             dpsubject.validto GE TODAY:
+
+      if lookup(string(dpsubject.dpid),"36,41,44,50,51") > 0 then next.
 
       FIND FIRST bDPSubject NO-LOCK where
                  bDPSubject.dpid = dpsubject.dpid and
@@ -299,6 +304,7 @@ fCopySLG("CONTFH69_300","CONTFH89_1000").
 /*DPTarget */
 /* TODO: check CONTH1000 DPTargets*/
 fCreateDPTarget("CONTFH69_300PRO","CONTFH89_1000PRO").
+fCreateDPTarget("CONTFH300MF","CONTFH1000MF").
 
 /*DPSubject */
 fCreateDPSubjects("CONTFH69_300","CONTFH89_1000").
