@@ -1136,8 +1136,8 @@ PROCEDURE pGetCONTACT:
 
    IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
       fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
-   RETURN REPLACE(fTeksti(577, liLang),"1707","1726").
-   ELSE RETURN fTeksti(577, liLang).
+      lcResult = REPLACE(fTeksti(577, liLang),"1707","1726").
+   ELSE lcResult = fTeksti(577, liLang).
 
 END. /*GetCONTACT*/
 
@@ -1151,8 +1151,8 @@ PROCEDURE pGetRETURN_RIGHTS:
 
    IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
       fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
-   RETURN "".
-   ELSE RETURN fTeksti(578, liLang).
+      lcResult = "".
+   ELSE lcResult = fTeksti(578, liLang).
 
 END. /*getRETURN_RIGHT*/
 
@@ -1166,8 +1166,8 @@ PROCEDURE pGetBOTTOM_BAR:
 
    IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
       fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
-   RETURN fTeksti(580, liLang).
-   ELSE RETURN fTeksti(579, liLang).
+      lcResult = fTeksti(580, liLang).
+   ELSE lcResult = fTeksti(579, liLang).
 
 END. /*GetBOTTOM_BAR*/
 
