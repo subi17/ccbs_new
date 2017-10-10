@@ -1846,6 +1846,9 @@ PROCEDURE pGetCTNAME:
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
    DEF VAR lcSegment               AS CHAR NO-UNDO.
+   DEF VAR lcVAT                   AS CHAR NO-UNDO.
+   DEF VAR ldeProFee               AS DEC  NO-UNDO.
+   DEF VAR lcProFeeModel           AS CHAR NO-UNDO.
 
    DEFINE BUFFER lbELOrder   FOR Order.
    DEFINE BUFFER lbMLOrder   FOR Order.
@@ -1924,7 +1927,16 @@ PROCEDURE pGetCTNAME:
    END. /* lcCLIType */
 
    /*YPRO-21*/
-   IF fIsProOrder(iiOrderNBR) EQ TRUE THEN lcTagCTName = lcTagCTName + " PRO".
+   IF fIsProOrder(iiOrderNBR) EQ TRUE THEN DO:
+      lcTagCTName = lcTagCTName + " PRO".
+      lcProFeemodel = fgetPROFeemodel(lcClitype).
+      FIND FIRST FMItem no-lock WHERE
+                 FMItem.brand EQ "1" AND
+                 FMItem.feemodel EQ lcProFeemodel AND
+                 FMItem.pricelist EQ "PRO_" + lcClitype NO-ERROR.
+      IF AVAIL FMItem THEN           
+         ldeProFee = fmitem.Amount.
+   END.
    IF lcErrTxt NE "" THEN DO:
       olgErr = TRUE.
       lcResult = (lcErrTxt).
@@ -1952,12 +1964,17 @@ PROCEDURE pGetCTNAME:
                               OUTPUT ldiOrderDate).
       
       /*YDR-2347 removed the hard coded values AND now fetching the values from Commercial Fee itself*/
-      IF lcSegment BEGINS "PRO-SOHO" THEN
-         ldeMF = CLIType.CommercialFee.
-      ELSE   
-         ldeMF = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
-
-       CASE CLIType.CLIType:
+      IF lcSegment BEGINS "PRO-SOHO" THEN DO:
+         ASSIGN
+            ldeMF = CLIType.CommercialFee + ldeProFee.
+            lcVat = IF liLang EQ 5 THEN " VAT. excl" ELSE " imp. no incl.".
+      END.
+      ELSE DO:
+         ASSIGN
+            ldeMF = (1 + ldeTaxPerc / 100) * (CLIType.CommercialFee + ldeProFee).
+            lcVat = IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.".
+      END.
+      CASE CLIType.CLIType:
          WHEN "CONT9" OR WHEN "CONT10" OR WHEN "CONT15" THEN lcList = "0 cent/min".
          WHEN "TARJ7" THEN lcList = "1 cent/min".
          WHEN "TARJ8" THEN lcList = "6,05 cent/min".
@@ -1967,7 +1984,7 @@ PROCEDURE pGetCTNAME:
          WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
          WHEN "TARJ13" THEN lcList = "Llamadas Ilimitadas,".
          OTHERWISE lcList = "".
-       END.
+      END.
 
        IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
 
