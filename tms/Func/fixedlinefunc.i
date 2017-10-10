@@ -730,7 +730,6 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
 
 END FUNCTION.
 
-
 FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
    (INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR,
