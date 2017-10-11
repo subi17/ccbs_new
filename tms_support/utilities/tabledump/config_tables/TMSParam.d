@@ -256,7 +256,7 @@
 "Bundles" "DSS2_SUBS_TYPE" "C" 0 0 "CONTS,CONTM2,CONTM,CONTSF,CONT15,CONTDSL45,CONTDSL52,CONTFH45_50,CONTFH52_50,CONTFH55_300,CONTFH62_300,CONTDSL58,CONTDSL59,CONTFH58_50,CONTFH59_50,CONTFH68_300,CONTFH69_300,CONT28,CONTFH89_1000" ? "" "" "" "" "" "" "" "" "" "" "Allowed DSS2 Subs. Types" no "1"
 "Bundles" "EXCLUDE_BUNDLES" "C" 0 0 "PMDUB,TARJD1,HSPA_ROAM_EU,TARJ_UPSELL,TARJ7,TARJ7_UPSELL,TARJ9,TARJ10,TARJ11,TARJ12" ? "" "" "" "" "" "" "" "" "" "" "Exclude bundle list from DSS and first month calculation" no "1"
 "Bundles" "FIRST_MONTH_USAGE_BASED_BUNDLES" "C" 0 0 "DUB2,DUB3,CONTD9,CONT9,CONT15,CONT10" ? "" "" "" "" "" "" "" "" "" "" "First month fee usage based bundles" no "1"
-"Bundles" "FIXED_ONLY_CONVERGENT_CLITYPES" "C" 0 0 "CONTDSL35,CONTFH35_50,CONTFH45_300" ? "" "" "" "" "" "" "" "" "" "" "Clitype list for restricting renewal and istc" no "1"
+"Bundles" "FIXED_ONLY_CONVERGENT_CLITYPES" "C" 0 0 "CONTDSL35,CONTFH35_50,CONTFH45_300,CONTFH65_1000" ? "" "" "" "" "" "" "" "" "" "" "Clitype list for restricting renewal and istc" no "1"
 "Bundles" "FLAT_CONTRACTS" "C" 0 0 "CONTF20,CONTF30,CONTF55,CONTF10,CONTF20D,CONTF40,CONTF8,CONTF11" ? "" "" "" "" "" "" "" "" "" "" "FLAT Contracts" no "1"
 "Bundles" "FUSION_SUBS_TYPE" "C" 0 0 "CONTFF,CONTSF" ? "" "" "" "" "" "" "" "" "" "" "Fusion Subs. Types" no "1"
 "Bundles" "IPL_CONTRACTS" "C" 0 0 "CONTDATA,CONTD2,CONTD3,CONTD4" ? "" "" "" "" "" "" "" "" "" "" "IPL Contracts" no "1"
