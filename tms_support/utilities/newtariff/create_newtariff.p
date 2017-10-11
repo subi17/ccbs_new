@@ -124,6 +124,7 @@ DO TRANSACTION:
 
       IF ERROR-STATUS:ERROR   OR
          RETURN-VALUE <> "OK" THEN DO:
+         MESSAGE RETURN-VALUE error-status:get-message(1) view-as ALERT-BOX.
          UNDO NEW-TARIFF, LEAVE.
       END.
    END.
