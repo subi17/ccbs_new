@@ -169,8 +169,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
    END.
 END.
 
-
-IF NOT fSubscriptionLimitCheck(
+llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
@@ -179,13 +178,13 @@ IF NOT fSubscriptionLimitCheck(
    OUTPUT liSubLimit,
    OUTPUT lisubs,
    OUTPUT liActLimit,
-   OUTPUT liActs) THEN DO:
-
-   /* do not raise error with STC orders */
-   IF NOT plSTCMigrate THEN ASSIGN
-      llOrderAllowed = FALSE
-      lcReason = "subscription limit".
+   OUTPUT liActs).
    
+/* do not raise error with STC orders */
+IF NOT llOrderAllowed THEN DO:
+   IF plSTCMigrate THEN
+      llOrderAllowed = TRUE.
+   ELSE lcReason = "subscription limit".
 END.
 
 FIND FIRST Customer NO-LOCK WHERE
