@@ -125,7 +125,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                         IF AVAIL MSISDN AND MSISDN.StatusCode EQ 3 THEN DO:
                            fMakeMsidnHistory(INPUT RECID(MSISDN)).
 
-                           IF fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN
+                           IF fIsYoigoCLI(MobSub.CLI) EQ TRUE THEN
                               MSISDN.StatusCode = {&MSISDN_ST_MNP_OUT_YOIGO}.
                            ELSE MSISDN.StatusCode = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
                            MSISDN.CustNum = 0.
