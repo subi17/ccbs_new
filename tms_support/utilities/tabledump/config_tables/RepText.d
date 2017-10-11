@@ -1060,6 +1060,18 @@
 1 "" 2 "Nacionals" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 5 "National" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTFH1000MF" "1" 11/10/17 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTFH1000MF" "1" 11/10/17 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTFH1000MF" "1" 11/10/17 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTFH1000MF" "1" 11/10/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH1000_MIN_IN" "1" 11/10/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH1000_MIN_IN" "1" 11/10/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH1000_MIN_IN" "1" 11/10/17 31/12/49
+1 "" 5 "National" 0 "CONTFH1000_MIN_IN" "1" 11/10/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
+1 "" 5 "National" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
 1 "" 1 "FIJO + INTERNET" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 2 "Fix + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
@@ -13356,6 +13368,10 @@
 9 "" 2 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
 9 "" 3 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
 9 "" 5 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 1 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 2 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 3 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 5 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
