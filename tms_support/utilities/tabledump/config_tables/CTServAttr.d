@@ -1464,6 +1464,52 @@
 6643 "SchedDate" "1" yes 12/12/16
 6643 "SchedTime" "00.00" no 12/12/16
 6643 "TiePeriod" "1" yes 12/12/16
+6651 "Not allowed" "" no 10/11/16
+6664 "ADDRESS" "F" yes 10/11/16
+6664 "CD" "0" yes 10/11/16
+6664 "DA" "1" yes 10/11/16
+6664 "ED" "1" yes 10/11/16
+6664 "PR" "0" yes 10/11/16
+6664 "SEX" "1" yes 10/11/16
+6686 "BankAccount" "1" yes 10/11/16
+6686 "CIF" "1" yes 10/11/16
+6686 "CreditCheck" "1" yes 10/11/16
+6686 "FailedRequest" "1" yes 10/11/16
+6686 "FreePerYear" "4" no 10/11/16
+6686 "MobsubInDays" "30" yes 10/11/16
+6686 "NIE" "1" yes 10/11/16
+6686 "NIF" "1" yes 10/11/16
+6686 "OngoingMNP" "1" yes 10/11/16
+6686 "OnLastDay" "0" no 10/11/16
+6686 "OperatorBarr" "1" yes 10/11/16
+6686 "PassPort" "1" yes 10/11/16
+6686 "PerMonth" "1" no 10/11/16
+6686 "SchedDate" "1" yes 10/11/16
+6686 "SchedTime" "00.00" no 10/11/16
+6686 "TiePeriod" "1" yes 10/11/16
+6694 "Not allowed" "" no 23/11/16
+6707 "ADDRESS" "F" yes 23/11/16
+6707 "CD" "0" yes 23/11/16
+6707 "DA" "1" yes 23/11/16
+6707 "ED" "1" yes 23/11/16
+6707 "PR" "0" yes 23/11/16
+6707 "SEX" "1" yes 23/11/16
+6729 "BankAccount" "1" yes 23/11/16
+6729 "CIF" "1" yes 23/11/16
+6729 "CreditCheck" "1" yes 23/11/16
+6729 "FailedRequest" "1" yes 23/11/16
+6729 "FreePerYear" "4" no 23/11/16
+6729 "MobsubInDays" "30" yes 23/11/16
+6729 "NIE" "1" yes 23/11/16
+6729 "NIF" "1" yes 23/11/16
+6729 "OngoingMNP" "1" yes 23/11/16
+6729 "OnLastDay" "0" no 23/11/16
+6729 "OperatorBarr" "1" yes 23/11/16
+6729 "PassPort" "1" yes 23/11/16
+6729 "PerMonth" "1" no 23/11/16
+6729 "SchedDate" "1" yes 23/11/16
+6729 "SchedTime" "00.00" no 23/11/16
+6729 "TiePeriod" "1" yes 23/11/16
 10000904 "Invoice Attach" "0" no 01/01/11
 10000904 "ReportCode" "4" no 01/01/11
 10000905 "Not allowed" "" no 01/01/11
