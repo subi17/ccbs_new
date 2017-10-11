@@ -87,11 +87,11 @@ DEF VAR lcTariffType     AS CHAR NO-UNDO.
 
 form
     CliType.Brand      FORMAT "X(2)" COLUMN-LABEL "Br"
-    CLIType.CLIType    FORMAT "X(12)"    
-    CLIType.CLIName    format "x(18)"
-    CLIType.PricePlan  COLUMN-LABEL "RatePlan" FORMAT "X(13)"
-    CLIType.DiscPlan   COLUMN-LABEL "Disc.Plan" FORMAT "X(9)"
-    lcPayType          FORMAT "X(10)" COLUMN-LABEL "PayType"
+    CLIType.CLIType    FORMAT "X(13)"    
+    CLIType.CLIName    format "x(26)"
+    CLIType.PricePlan  COLUMN-LABEL "RatePlan" FORMAT "X(14)"
+/*    CLIType.DiscPlan   COLUMN-LABEL "D.Plan" FORMAT "X(6)" */
+    lcPayType          FORMAT "X(9)" COLUMN-LABEL "PayType"
     CliType.BillTarget COLUMN-LABEL "B.Target"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
@@ -104,9 +104,10 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 {Func/brand.i}
 
 form
-    "CLIType ......:"  CLIType.CLIType FORMAT "X(12)" SKIP
+    "CLIType ......:"  CLIType.CLIType FORMAT "X(15)" SKIP
     "Name .........:"  CLIType.CLIName FORMAT "X(30)" SKIP
-    "Base bundle...:"  CLIType.BaseBundle SKIP
+    "Base bundle...:"  CLIType.BaseBundle 
+    "Fixed bundle..:" AT 35 CLIType.FixedBundle FORMAT "x(15)" SKIP
     "Payment Type .:"  CLIType.PayType
        HELP "1=Postpaid, 2=Prepaid"
        lcPayType NO-LABEL FORMAT "X(15)"
@@ -154,7 +155,7 @@ form
         lcFixedLineType NO-LABEL FORMAT "X(15)" SKIP
     "Tariff Type...:" CLIType.TariffType  
         HELP "0=MobileOnly, 1=Convergent, 2=FixedOnly, 3=Fusion"
-        lcTariffType NO-LABEL FORMAT "X(15)" 
+        lcTariffType NO-LABEL FORMAT "X(15)" SKIP
 
 WITH OVERLAY ROW 2 centered
    COLOR value(cfc)
@@ -703,7 +704,6 @@ PROCEDURE local-disp-row:
           CLIType.CLIName
           CLIType.BillTarget
           CLIType.PricePlan
-          CLIType.DiscPlan
           lcPayType
        WITH FRAME sel.
 END PROCEDURE.
@@ -781,6 +781,7 @@ PROCEDURE local-UPDATE-record:
           CLIType.LineType lcLineType
           CLIType.FixedLineType lcFixedLineType
           CLIType.TariffType  lcTariffType
+          CLIType.FixedBundle
       WITH FRAME lis.
 
       ASSIGN lcAccName = fAccName(CLIType.ARAccNum)
@@ -806,6 +807,7 @@ PROCEDURE local-UPDATE-record:
          PROMPT-FOR
             CLIType.CLIName
             CLIType.BaseBundle
+            CLIType.FixedBundle
             CLIType.PayType
             CLIType.UsageType
             CLIType.PricePlan
@@ -1017,6 +1019,7 @@ PROCEDURE local-UPDATE-record:
             ASSIGN FRAME lis 
                CLIType.CLIName
                CLIType.BaseBundle
+               CLIType.FixedBundle
                CLIType.PayType
                CLIType.UsageType
                CLIType.PricePlan
