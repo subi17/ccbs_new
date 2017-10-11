@@ -1133,7 +1133,7 @@
 1 "" 3 "Abantaila PRO" 0 "CONTFH62_300PRO" "1" 04/07/17 31/12/49
 1 "" 5 "PRO benefits" 0 "CONTFH62_300PRO" "1" 04/07/17 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONTFH65_1000PRO" "1" 11/10/17 31/12/49
-1 "" 2 "CONTFH65_1000PRO" 0 "CONTFH65_1000PRO" "1" 11/10/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH65_1000PRO" "1" 11/10/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTFH65_1000PRO" "1" 11/10/17 31/12/49
 1 "" 5 "PRO benefits" 0 "CONTFH65_1000PRO" "1" 11/10/17 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONTFH69_300PRO" "1" 04/07/17 31/12/49
@@ -13502,10 +13502,10 @@
 9 "" 2 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
 9 "" 3 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
 9 "" 5 "La prepago de 4 GB" 0 "TARJ12" "1" 29/05/17 31/12/49
-9 "" 1 "La prepago de llamadas ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
-9 "" 2 "La prepago de llamadas ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
-9 "" 3 "La prepago de llamadas ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
-9 "" 5 "La prepago de llamadas ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
+9 "" 1 "La Prepago de Llamadas Ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
+9 "" 2 "La Prepago de Llamadas Ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
+9 "" 3 "La Prepago de Llamadas Ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
+9 "" 5 "La Prepago de Llamadas Ilimitadas" 0 "TARJ13" "1" 20/06/17 31/12/49
 9 "" 1 "Tarjeta 2" 0 "TARJ2" "1" 01/09/08 31/12/54
 9 "" 2 "Tarjeta 2" 0 "TARJ2" "1" 01/09/08 31/12/54
 9 "" 3 "Tarjeta 2" 0 "TARJ2" "1" 01/09/08 31/12/54

@@ -213,10 +213,10 @@
 "CLIType" "PayType" "MobSub" "0" "Not defined" "" "" 1
 "CLIType" "PayType" "MobSub" "1" "Postpaid" "" "" 1
 "CLIType" "PayType" "MobSub" "2" "Prepaid" "" "" 1
-"CliType" "ServicePack" "Profile" "11" "Post paid" "" "" 1
-"CliType" "ServicePack" "Profile" "12" "Pre paid" "" "" 1
 "CliType" "ServicePack" "Profile" "3" "Pre paid (no calls yet)" "" "" 1
 "CliType" "ServicePack" "Profile" "4" "Data postpaid" "" "" 1
+"CliType" "ServicePack" "Profile" "41" "Post paid" "" "" 1
+"CliType" "ServicePack" "Profile" "42" "Pre paid" "" "" 1
 "CLIType" "StatusCode" "MobSub" "0" "Inactive" "" "" 1
 "CLIType" "StatusCode" "MobSub" "1" "Active" "" "" 1
 "CLIType" "StatusCode" "MobSub" "2" "Retired" "" "" 1

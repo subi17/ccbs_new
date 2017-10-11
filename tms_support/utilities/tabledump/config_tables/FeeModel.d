@@ -1,4 +1,3 @@
-"" "La de Casa 1Gbps" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "ACC_POSTPAID" "Agreement Customer Change Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
