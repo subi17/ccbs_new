@@ -58,6 +58,7 @@
 "CONTF55" "CONTRATOF 55 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF8MF" "Contrato Flat 8 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFF2MF" "CONTRATOFF 2 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTFH1000MF" "La Combinada Azul 1Gbps" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFH300MF" "Convergent FIBER 300MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFH50MF" "Convergent FIBER 50MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTM2MF" "CONTRATOM2 monthly fe" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
