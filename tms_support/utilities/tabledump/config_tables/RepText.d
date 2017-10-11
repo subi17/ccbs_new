@@ -1136,6 +1136,10 @@
 1 "" 2 "Avantatges PRO" 0 "CONTFH69_300PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTFH69_300PRO" "1" 04/07/17 31/12/49
 1 "" 5 "PRO benefits" 0 "CONTFH69_300PRO" "1" 04/07/17 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -13360,6 +13364,10 @@
 9 "" 2 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
 9 "" 5 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 1 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 2 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 3 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 5 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
 9 "" 1 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
