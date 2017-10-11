@@ -98,9 +98,9 @@ WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     FRAME sel.
 
 form
-    FMItem.PriceList   FORMAT "X(16)" COLON 20                          
+    FMItem.PriceList   FORMAT "X(18)" COLON 20                          
        PriceList.PLName NO-LABEL SKIP                              
-    FMItem.BillCode     COLON 20 FORMAT "x(16)"                           
+    FMItem.BillCode     COLON 20 FORMAT "x(18)"                           
        BillItem.BIName  NO-LABEL SKIP                             
     FMItem.FromDate     COLON 20 LABEL "Valid" FORMAT "99-99-9999" 
        "-"  
