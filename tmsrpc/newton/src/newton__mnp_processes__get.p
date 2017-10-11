@@ -52,12 +52,11 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-{Syst/tmsconst.i}
-{Mnp/mnp.i}
-
 ASSIGN
    katun = "Newton"
-   gcBrand = "1".
+      gcBrand = "1".
+{Syst/tmsconst.i}
+{Mnp/mnp.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
