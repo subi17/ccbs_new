@@ -213,7 +213,8 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       /* allow upsell to any data contract by bob tool */
       ELSE IF icSource NE {&REQUEST_SOURCE_YOIGO_TOOL} THEN
          ocError = "Incorrect upsell type".
-      ELSE IF ocError <> "" THEN
+      
+      IF ocError <> "" THEN
          RETURN FALSE.
    END. /* IF lcCustBaseContract = {&DSS} AND */
   
