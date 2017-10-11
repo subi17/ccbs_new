@@ -32,6 +32,7 @@
 "1" "CONTF55" "Contrato 55 flat rate" 01/12/11 31/12/49
 "1" "CONTF8" "Contrato Flat 8" 14/04/15 31/12/49
 "1" "CONTFF2" "Fusion 2 Flat service package" 01/10/13 31/12/49
+"1" "CONTFH1000" "La Combinada Azul 1Gbps" 11/10/17 31/12/49
 "1" "CONTFH300" "Contrato FH300" 27/10/16 31/12/49
 "1" "CONTFH50" "Contrato FH50" 27/10/16 31/12/49
 "1" "CONTRATO2" "Contrato2 Flat rates" 01/01/07 31/12/50

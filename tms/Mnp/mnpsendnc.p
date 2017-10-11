@@ -9,14 +9,14 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
+ASSIGN
+   katun = "MNP"
+   gcBrand = "1".
 {Func/timestamp.i}
 {Func/log.i}
 {Func/cparam2.i}
 {Mnp/mnp.i}
 {Syst/tmsconst.i}
-
-katun = "MNP".
-gcBrand = "1".
 {Func/heartbeat.i}
 {Func/multitenantfunc.i}
 
