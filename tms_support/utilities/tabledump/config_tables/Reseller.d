@@ -68,6 +68,7 @@
 "MT" "MARKTEL OUTBOUND" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "MW" "MARKTEL INBOUND ON" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
 "N2" "N2 Averias Convergencia" "" 0 "" "" "" "jorge.gil@masmovil.com" "1" 99 yes "" ""
+"NX" "ANEXA INBOUND" "" 0 "" "" "" "luis.estrada@masmovil.com" "1" 99 yes "" ""
 "PA" "PHONE HOUSE CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@mamsmovil.com" "1" 99 yes "" ""
 "PE" "PhoneHouse Emision Televenta" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 no "" ""
 "PH" "PHONE HOUSE" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 43 yes "323841551" "332296607"

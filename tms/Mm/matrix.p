@@ -65,8 +65,9 @@ DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 DEF VAR lcResponse   AS CHAR                   NO-UNDO.
 
 form
-    Matrix.Brand     COLUMN-LABEL "Brand"
-    Matrix.MXName    COLUMN-LABEL "NAME" FORMAT "X(25)"
+    Matrix.Brand     COLUMN-LABEL "Brand" FORMAT "x(5)"
+    Matrix.MxSeq     FORMAT ">>>9"
+    Matrix.MXName    COLUMN-LABEL "NAME" FORMAT "X(26)"
     Matrix.MXKey     COLUMN-LABEL "KEY"  FORMAT "X(15)"
     Matrix.MXRes     COLUMN-LABEL ""
     lcResponse       COLUMN-LABEL "Response"
@@ -82,6 +83,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 
 form
     Matrix.Brand
+    Matrix.MxSeq
     MAtrix.MXNAme
     MAtrix.MXSeq
     Matrix.MXKey   FORMAT "X(20)"
@@ -517,6 +519,7 @@ PROCEDURE local-disp-row:
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        Matrix.Brand 
+       Matrix.MxSeq 
        MAtrix.MXname
        Matrix.MXKey
        Matrix.MXRes
@@ -548,6 +551,7 @@ PROCEDURE local-UPDATE-record:
           Matrix.MXRes
           MAtrix.MXseq
           Matrix.MXname 
+          Matrix.MXSeq 
           lcREsponse
       WITH FRAME lis.
       IF lcRight = "RW" THEN DO:
