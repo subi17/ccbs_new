@@ -1,0 +1,13 @@
+Type;Language Type;Language;Translation Name
+CONTFH1000MF;1;Spanish;FIJO + INTERNET
+CONTFH1000MF;2;Catalan;Fix + Internet
+CONTFH1000MF;3;Basque;Finkoa + Internet
+CONTFH1000MF;5;English;Landline + Internet
+CONTFH1000_MIN_IN;1;Spanish;Nacionales
+CONTFH1000_MIN_IN;2;Spanish;Nacionals
+CONTFH1000_MIN_IN;3;Spanish;Nazionalak
+CONTFH1000_MIN_IN;5;Spanish;National
+CONTFH1000_QTY_IN;1;Spanish;Nacionales
+CONTFH1000_QTY_IN;2;Spanish;Nacionals
+CONTFH1000_QTY_IN;3;Spanish;Nazionalak
+CONTFH1000_QTY_IN;5;Spanish;National
