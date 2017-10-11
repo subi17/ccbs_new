@@ -8,6 +8,7 @@
 {Syst/eventval.i}
 {Func/ffeecont.i}
 {Func/setfees.i}
+{Func/fpromigrationreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -16,12 +17,15 @@ END.
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 DEF BUFFER bsubReq FOR MSRequest.
+DEF BUFFER bMobsub FOR Mobsub.
 
 DEF VAR lcCategory AS CHAR.
 DEF VAR lhCustomer AS HANDLE NO-UNDO.
 DEF VAR lcCharValue AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR liOrigStatus AS INT NO-UNDO.
+DEF VAR liMsreq AS INT NO-UNDO.
+DEF VAR lcResult AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -110,17 +114,47 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
       END.
    END.
    /* Mark request as handled */
-    IF fChkSubRequest(iiRequest) = FALSE THEN DO:
+   IF fChkSubRequest(iiRequest) = FALSE THEN DO:
       IF NOT fReqStatus(7,"") THEN DO:
          fReqError("ERROR: St. update failed.").
          RETURN.
       END.
    END.
-   ELSE
+   ELSE DO:
       IF NOT fReqStatus(8,"") THEN DO:
          fReqError("ERROR: St. update failed.").
          RETURN.
       END.
+   END.
+   IF MSRequest.origRequest EQ 0 THEN DO:
+      /* Main request, check if other subscription to migrate */
+      FOR EACH bMobsub WHERE
+               bMobsub.brand EQ gcBrand AND
+               bMobsub.agrCust EQ Mobsub.agrCust AND
+               bMobsub.msseq NE Mobsub.msseq:
+         FIND FIRST Clitype WHERE 
+                    Clitype.brand EQ gcBrand AND 
+                    Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
+         IF AVAIL Clitype AND 
+                  Clitype.webstatuscode EQ {&CLITYPE_WEBSTATUSCODE_ACTIVE} 
+         THEN DO:
+            liMsReq = fProMigrationRequest(INPUT Mobsub.Msseq,
+                                           INPUT MSRequest.salesman,
+                                           INPUT {&REQUEST_SOURCE_MIGRATION},
+                                           INPUT MSRequest.msrequest,
+                                           OUTPUT lcResult).
+         END.
+         ELSE IF AVAIL Clitype AND
+                 fgetActiveReplacement(Mobsub.clitype) GT "" THEN DO:
+            /* Make iSTC according to mapping */
+         END.
+         ELSE DO:
+            fReqStatus(3,"").
+            fReqError("ERROR: Migration failed.").
+         END.
+           
+      END.
+   END.
 END.
 ELSE IF liOrigStatus EQ {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:
    IF fChkSubRequest(iiRequest) = FALSE THEN DO:
