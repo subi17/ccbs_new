@@ -671,12 +671,14 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST Region WHERE
               Region.Region = AgreeCustomer.Region
    NO-LOCK NO-ERROR.
-   lcCustRegi = Region.RgName.
+   IF AVAIL Region THEN
+      lcCustRegi = Region.RgName.
 
    FIND FIRST Region WHERE
               Region.Region = DelivCustomer.Region
    NO-LOCK NO-ERROR.
-   lcDeliRegi = Region.RgName.
+   IF AVAIL Region THEN
+      lcDeliRegi = Region.RgName.
    
    get_account_data(Order.CustNum, OUTPUT lcUID, OUTPUT lcPWD).
 
@@ -1344,10 +1346,11 @@ FUNCTION fDelivSIM RETURNS LOG
                        bufOrderCustomer.RowType = 1 NO-ERROR.
             IF AVAIL bufOrderCustomer THEN DO: 
                /* Additional lines Mobile only tariffs */
-               IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                 OrderAction.Brand    = gcBrand            AND
-                                 OrderAction.OrderID  = Order.OrderId      AND
-                                 OrderAction.ItemType = "AddLineDiscount") THEN DO:
+               FIND FIRST OrderAction NO-LOCK WHERE
+                          OrderAction.Brand    = gcBrand            AND
+                          OrderAction.OrderID  = Order.OrderId      AND
+                          OrderAction.ItemType EQ "AddLineDiscount" NO-ERROR.
+               IF AVAIL OrderAction THEN DO:
 
                   IF LOOKUP(OrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
                      IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
@@ -1533,7 +1536,8 @@ FUNCTION fDelivDevice RETURNS LOG
       FIND FIRST Region WHERE
                  Region.Region = AgreeCustomer.Region
       NO-LOCK NO-ERROR.
-      lcCustRegi = Region.RgName.
+      IF AVAIL Region THEN
+         lcCustRegi = Region.RgName.
    END.
 
    IF DelivCustomer.Region > "" THEN DO:
@@ -1546,7 +1550,8 @@ FUNCTION fDelivDevice RETURNS LOG
          FIND FIRST Region WHERE
                     Region.Region = DelivCustomer.Region
          NO-LOCK NO-ERROR.
-         lcDeliRegi = Region.RgName.
+         IF AVAIL Region THEN
+            lcDeliRegi = Region.RgName.
       END.
    END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
