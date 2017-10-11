@@ -6791,6 +6791,11 @@
 1 "" 3 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
 1 "" 4 "Sony Xperia XA1 Dorado" 0 "P037XA1D2" "1" 26/05/17 31/12/49
 1 "" 5 "Sony Xperia XA1 Gold" 0 "P037XA1D2" "1" 26/05/17 31/12/49
+1 "" 1 "Sony Xperia XA1 Oro" 0 "P037XA1DC" "1" 10/10/17 31/12/49
+1 "" 2 "Sony Xperia XA1 Oro" 0 "P037XA1DC" "1" 10/10/17 31/12/49
+1 "" 3 "Sony Xperia XA1 Oro" 0 "P037XA1DC" "1" 10/10/17 31/12/49
+1 "" 4 "Sony Xperia XA1 Oro" 0 "P037XA1DC" "1" 10/10/17 31/12/49
+1 "" 5 "Sony Xperia XA1 Gold" 0 "P037XA1DC" "1" 10/10/17 31/12/49
 1 "" 1 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
 1 "" 2 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
 1 "" 3 "Sony Xperia XA1 Negro" 0 "P037XA1N2" "1" 26/04/17 31/12/49
@@ -7056,6 +7061,11 @@
 1 "" 3 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
 1 "" 4 "Sony Xperia XZ Platino" 0 "P037XXZS2" "1" 28/09/16 31/12/49
 1 "" 5 "Sony Xperia XZ Platinum" 0 "P037XXZS2" "1" 28/09/16 31/12/49
+1 "" 1 "Sony Xperia XZ Platino" 0 "P037XXZSC" "1" 10/10/17 31/12/49
+1 "" 2 "Sony Xperia XZ Platino" 0 "P037XXZSC" "1" 10/10/17 31/12/49
+1 "" 3 "Sony Xperia XZ Platino" 0 "P037XXZSC" "1" 10/10/17 31/12/49
+1 "" 4 "Sony Xperia XZ Platino" 0 "P037XXZSC" "1" 10/10/17 31/12/49
+1 "" 5 "Sony Xperia XZ Platinum" 0 "P037XXZSC" "1" 10/10/17 31/12/49
 1 "" 1 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 2 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 3 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49

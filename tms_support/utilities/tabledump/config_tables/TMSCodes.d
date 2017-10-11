@@ -1459,6 +1459,7 @@
 "Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MT" "MARKTEL OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MW" "MARKTEL INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "NX" "ANEXA INBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PA" "PHONE HOUSE CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
