@@ -34,6 +34,7 @@
 "CONTF55" 01/12/11 0 31/12/49 "" 0 "" "" "La Mega Plana 100" 0 0 "1" "1" 1 1 0 0 "CONTF55" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0
 "CONTF8" 14/04/15 1 31/12/49 "FLATMF8" 0 "" "" "La Plana 1,2 GB" 0 0 "1" "1" 1 1 0 0 "CONTF8MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1 0
 "CONTFF2" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN PLANA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTFF2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0
+"CONTFH1000" 11/10/17 0 31/12/49 "CONTFH1000MF" 0 "" "" "La Combinada Azul 1Gbps" 0 0 "1" "1" 1 1 0 0 "CONTFH1000MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "CONTFH300" 27/10/16 0 31/12/49 "CONTFH300MF" 0 "" "" "La Combinada 300" 0 0 "1" "1" 1 1 0 0 "CONTFH300MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
 "CONTFH50" 27/10/16 0 31/12/49 "CONTFH50" 0 "" "" "La Combinada 50" 0 0 "1" "1" 1 1 0 0 "CONTFH50MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
 "CONTM" 01/12/12 0 31/12/49 "CONTMMF" 0 "" "" "Contrato M" 0 0 "1" "7" 4 4 0 0 "CONTMMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
