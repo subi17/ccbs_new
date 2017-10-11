@@ -1,0 +1,1 @@
+Billing item;Billing item name;Billing item group;Posting account;Tax class;IFS product code;Cost Center

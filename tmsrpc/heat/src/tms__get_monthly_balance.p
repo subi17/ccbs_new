@@ -25,7 +25,7 @@ pcCLI = get_string(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
 
 FOR FIRST MobSub WHERE MobSub.Brand = gcBrand AND MobSub.Cli = pcCLI TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
-    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(MobSub).                
 END.
 
 IF NOT AVAIL MobSub OR lcTenant = "" THEN DO:
