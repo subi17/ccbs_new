@@ -1,0 +1,7 @@
+ADD FIELD "FixedBundle" OF "CLIType" AS character
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Fixed Bundle"
+  COLUMN-LABEL "FixedBundle"
+  HELP "Fixed Bundle for Convergent tariffs"
+  ORDER 340
