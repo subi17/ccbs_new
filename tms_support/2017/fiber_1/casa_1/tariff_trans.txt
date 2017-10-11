@@ -1,0 +1,5 @@
+Code;Type;Spanish (LangCode = 1);Catalan (LangCode = 2);Basque (LangCode = 3)
+CONTFH65_1000;9;1;Spanish;La de Casa 1Gbps
+CONTFH65_1000;9;2;Catalan;La de Casa 1Gbps
+CONTFH65_1000;9;3;Basque;La de Casa 1Gbps
+CONTFH65_1000;9;5;English;La de Casa 1Gbps
