@@ -263,7 +263,7 @@ PROCEDURE pCreatePortabilityMessageXML:
    add_string(lcReqStruct, "MSISDN", Order.CLI).
 
    /*BMNP-21*/
-   add_string(lcReqStruct, "SourceApplication", "MNP").
+   add_string(lcReqStruct, "sourceApplication", "MNP").
 
    xmlrpc_initialize(FALSE).
    ocRequest = serialize_rpc_call("mnp.crearSolicitudIndividualAltaPortabilidadMovil").
