@@ -36,7 +36,7 @@ DEF VAR FIRSTrow      AS INT                    NO-UNDO  init 0.
 DEF VAR FrmRow        AS INT                    NO-UNDO  init 1.
 DEF VAR FrmDown       AS INT                    NO-UNDO  init 15.
 DEF VAR order         AS INT                    NO-UNDO  init 1.
-DEF VAR maxOrder      AS INT                    NO-UNDO  init 1.
+DEF VAR maxOrder      AS INT                    NO-UNDO  init 2.
 DEF VAR ufkey         AS LOG                    NO-UNDO  init TRUE.
 DEF VAR delrow        AS INT                    NO-UNDO  init 0.
 DEF VAR pr-order      AS INT                    NO-UNDO.
@@ -59,9 +59,9 @@ DEF VAR llTargetType    AS LOG  NO-UNDO.
 DEF VAR llCCDisplay     AS LOG  NO-UNDO.
 
 FORM
-    DiscountPlan.DPRuleID    FORMAT "X(16)"
-    DiscountPlan.DPId        FORMAT ">>>>>>>9" COLUMN-LABEL "ID"
-    DiscountPlan.DPName      FORMAT "X(31)"
+    DiscountPlan.DPRuleID    FORMAT "X(17)"
+    DiscountPlan.DPId        FORMAT ">>>>9" COLUMN-LABEL "ID"
+    DiscountPlan.DPName      FORMAT "X(33)"
     DiscountPlan.Priority    FORMAT ">>>>9" 
     DiscountPlan.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
@@ -338,6 +338,11 @@ REPEAT WITH FRAME sel:
         CHOOSE ROW DiscountPlan.DPRuleID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DiscountPlan.DPRuleID WITH FRAME sel.
+      END.
+      ELSE IF order = 2 THEN DO:
+        CHOOSE ROW DiscountPlan.DPID {Syst/uchoose.i} NO-ERROR 
+           WITH FRAME sel.
+        COLOR DISPLAY VALUE(ccc) DiscountPlan.DPID WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -664,6 +669,11 @@ PROCEDURE local-find-FIRST:
       FIND FIRST DiscountPlan USE-INDEX DPRuleID WHERE 
                  DiscountPlan.Brand = lcBrand 
       NO-LOCK NO-ERROR.
+   ELSE IF order = 2 THEN 
+      FIND FIRST DiscountPlan USE-INDEX DPID WHERE 
+                 DiscountPlan.Brand = lcBrand 
+      NO-LOCK NO-ERROR.
+
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
@@ -671,6 +681,10 @@ PROCEDURE local-find-LAST:
    IF order = 1 THEN 
       FIND LAST DiscountPlan USE-INDEX DPRuleID WHERE 
                 DiscountPlan.Brand = lcBrand NO-LOCK NO-ERROR.
+   ELSE IF order = 2 THEN 
+      FIND LAST DiscountPlan USE-INDEX DPID WHERE 
+                 DiscountPlan.Brand = lcBrand 
+      NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -678,12 +692,20 @@ PROCEDURE local-find-NEXT:
    IF order = 1 THEN 
       FIND NEXT DiscountPlan USE-INDEX DPRuleID WHERE 
                 DiscountPlan.Brand = lcBrand NO-LOCK NO-ERROR.
+   ELSE IF order = 2 THEN 
+      FIND NEXT DiscountPlan USE-INDEX DPID WHERE 
+                 DiscountPlan.Brand = lcBrand 
+      NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN 
       FIND PREV DiscountPlan USE-INDEX DPRuleID WHERE 
                 DiscountPlan.Brand = lcBrand NO-LOCK NO-ERROR.
+   ELSE IF order = 2 THEN 
+      FIND PREV DiscountPlan USE-INDEX DPID WHERE 
+                 DiscountPlan.Brand = lcBrand 
+      NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
