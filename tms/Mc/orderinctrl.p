@@ -424,40 +424,27 @@ IF llDoEvent THEN DO:
 END.
 
 /* Release pending additional lines (OR) extra line orders, 
-   in case of pending convergent main line order is released */
+   in case of pending convergent or mobile main line order is released */
 /* YTS-10832 fix, checking correct status of order */
-IF fIsConvergenceTariff(Order.CLIType) THEN DO:
-   IF lcNewStatus = {&ORDER_STATUS_NEW} OR
-      lcNewStatus = {&ORDER_STATUS_MNP} OR 
-      lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
-     
-      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
+IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
+   lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
+   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+  
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
-      IF lcExtraMainLineCLITypes                       NE "" AND 
-         LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
-         Order.MultiSimId                              NE 0  AND 
-         Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
-         fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                                  Order.OrderId,    /* Main line Order Id  */
-                                  "RELEASE").       /* Action              */
-       
-      fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                      OrderCustomer.CustID). 
-   END.
-END.
-
-/* Additional Line with mobile only ALFMO-5  
-   Release pending additional lines orders, in case of pending 
-   main Moblie only line order is released */
-ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                 CLIType.Brand      = gcBrand  AND
-                 CLIType.CLIType    = Order.CliType AND
-                 CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
-                (lcNewStatus = {&ORDER_STATUS_NEW}  OR
-                 lcNewStatus = {&ORDER_STATUS_MNP}) THEN 
-DO:
-   fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                   OrderCustomer.CustID). 
+   IF lcExtraMainLineCLITypes                       NE "" AND 
+      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
+      Order.MultiSimId                              NE 0  AND 
+      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
+      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                               Order.OrderId,    /* Main line Order Id  */
+                               "RELEASE").       /* Action              */
+    
+   fActionOnAdditionalLines (OrderCustomer.CustIdType,
+                             OrderCustomer.CustID,
+                             Order.CLIType,      
+                             FALSE,
+                            "RELEASE"). 
 END.
 
 RETURN "".
