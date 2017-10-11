@@ -259,6 +259,7 @@ PROCEDURE pCreTranslations:
          
          IF CAN-FIND(FIRST RepText WHERE 
                            RepText.Brand    = gcBrand                    AND
+                           RepText.TextType = 1 AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
             NEXT.
