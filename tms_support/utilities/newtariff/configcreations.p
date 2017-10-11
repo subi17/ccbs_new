@@ -362,7 +362,7 @@ PROCEDURE pCLIType:
                                           ttCliType.RatePlan 
                                       ELSE 
                                           REPLACE(ttCliType.CliType,"CONT","CONTRATO")) 
-         CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "11" ELSE "12")
+         CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "41" ELSE "42")
          ClIType.ServiceClass      = ttCliType.ServiceClass
          CLIType.BillTarget        = (liFinalBT + 1) 
          CLIType.ContrType         = (IF CLIType.PayType EQ 1 THEN (liFinalCR + 1) ELSE 1)
@@ -430,7 +430,7 @@ PROCEDURE pCLIType:
                  ASSIGN lcActionKey = ttCliType.FixedLineBaseBundle.
 
              IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = gcBrand                  AND
-                                                          bf_RequestAction.CliType    = Requestaction.CliType    AND
+                                                          bf_RequestAction.CliType    = ttCliType.CliType        AND
                                                           bf_RequestAction.ReqType    = Requestaction.ReqType    AND
                                                           bf_RequestAction.ValidTo   >= TODAY                    AND 
                                                           bf_RequestAction.PayType    = Requestaction.PayType    AND
@@ -484,10 +484,21 @@ PROCEDURE pCLIType:
          /*TODO: Parent of Tariff bundle needs to be excluded */
          RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).
       END.
+      ELSE IF INDEX(ttCliType.CliName,"Azul") > 0 OR INDEX(ttCliType.CliName,"Morada") > 0 THEN 
+         RUN pUpdateTMSParam("Extra_MainLine_CLITypes",ttCliType.CliType). 
       
-      IF ttCLIType.PayType = 1 AND (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
-         RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
+      IF ttCLIType.PayType = 1 THEN 
+      DO:
+          IF LOOKUP("DSS2",ttCliType.AllowedBundles) > 0 THEN 
+          DO:
+              RUN pUpdateTMSParam("DSS2_PRIMARY_SUBS_TYPE", ttCliType.CliType).
+              RUN pUpdateTMSParam("DSS2_SUBS_TYPE"        , ttCliType.CliType).
+          END.    
 
+          IF (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
+              RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
+      END.
+         
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
          RUN pUpdateTMSParam("POSTPAID_VOICE_TARIFFS", ttCliType.CliType).
       ELSE IF ttCLIType.PayType = 2 AND ttCLIType.UsageType = 1 THEN 
@@ -618,7 +629,10 @@ PROCEDURE pSLGAnalyse:
 
         END.
     END.    
-    
+  
+    IF LOOKUP(icFixedLineBaseBundle, icAllowedBundles) = 0 THEN 
+        ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + icFixedLineBaseBundle.
+
     IF icAllowedBundles > "" THEN 
     DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
        ON ERROR UNDO, THROW:
@@ -665,7 +679,7 @@ PROCEDURE pSLGAnalyse:
                                                        SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType NO-LOCK) THEN 
                 DO:
                     CREATE SLGAnalyse.
-                    BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
+                    BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
                         ASSIGN
                             SLGAnalyse.CliType              = icCliType
                             SLGAnalyse.ServiceLimitGroup    = icFixedLineBaseBundle 

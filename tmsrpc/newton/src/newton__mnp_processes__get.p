@@ -54,7 +54,9 @@
 {Syst/commpaa.i}
 ASSIGN
    katun = "Newton"
-   gcBrand = "1".
+      gcBrand = "1".
+{Syst/tmsconst.i}
+{Mnp/mnp.i}
 
 {Syst/tmsconst.i}
 {Mnp/mnp.i}
