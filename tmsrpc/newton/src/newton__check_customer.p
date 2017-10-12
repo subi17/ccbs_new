@@ -150,8 +150,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    active webstatus */
                 FOR EACH Mobsub NO-LOCK WHERE 
                          Mobsub.Brand EQ gcBrand AND 
-                         Mobsub.InvCust EQ Customer.CustNum AND
-                         fIsConvergent3POnly(Mobsub.clitype):
+                         Mobsub.InvCust EQ Customer.CustNum:
+                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
                    FIND FIRST Clitype WHERE
                               Clitype.brand EQ "1" AND
                               Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
@@ -175,8 +175,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       mapping */
                    FOR EACH Mobsub NO-LOCK WHERE
                             Mobsub.Brand EQ gcBrand AND
-                            Mobsub.InvCust EQ Customer.CustNum AND
-                            NOT fIsConvergent3POnly(Mobsub.clitype):
+                            Mobsub.InvCust EQ Customer.CustNum:
+                      IF fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
                       FIND FIRST Clitype WHERE
                                  Clitype.brand EQ "1" AND
                                  Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
