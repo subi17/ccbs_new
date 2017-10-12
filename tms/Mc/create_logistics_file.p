@@ -1388,8 +1388,19 @@ FUNCTION fDelivSIM RETURNS LOG
                Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
                Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
                llDespachar = FALSE.
-             ELSE /* Todo some logic, cannot be true always */
-                llDespachar = TRUE.
+             ELSE
+                IF lcMainOrderId NE "" THEN DO:
+                   FIND FIRST ttExtra NO-LOCK WHERE
+                      ttExtra.MainOrderID EQ lcMainOrderId NO-ERROR.
+                   IF AVAIL ttExtra THEN DO:
+                      IF ttExtra.Despachar = "01" THEN
+                         llDespachar = TRUE.
+                      ELSE
+                         llDespachar = FALSE.
+                   END.
+                END.
+                ELSE
+                   llDespachar = TRUE.
          END.
          ELSE DO: /* Main line */
             IF(CliType.CliType BEGINS "CONTDSL" OR
