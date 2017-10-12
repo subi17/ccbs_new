@@ -147,6 +147,29 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
          ELSE IF AVAIL Clitype AND
                  fgetActiveReplacement(Mobsub.clitype) GT "" THEN DO:
             /* Make iSTC according to mapping */
+            liMsReq = fCTChangeRequest(MobSub.msseq,
+                           fgetActiveReplacement(Mobsub.clitype),
+                           "", /* lcBundleID */
+                           "", /*bank code validation is already done */
+                           MSRequest.ActStamp,
+                           0,  /* 0 = Credit check ok */
+                           0, /* extend contract */
+                           "" /* pcSalesman */,
+                           FALSE, /* charge */
+                           TRUE, /* send sms */
+                           "",
+                           0,
+                           {&REQUEST_SOURCE_MIGRATION},
+                           0,
+                           MSRequest.msrequest,
+                           "", /*contract id*/
+                           OUTPUT lcError).
+
+            IF liMsReq = 0 THEN DO:
+               fReqStatus(3,"").
+               fReqError("ERROR: Migration STC request creation failed.").
+            END.
+         
          END.
          ELSE DO:
             fReqStatus(3,"").
