@@ -238,6 +238,7 @@ FUNCTION fTaxCode RETURNS CHAR
     IPSI Ceuta 10%                     |C1
     IPSI Rep. exento Melilla 0%        |MC
     IPSI repercutido  Melilla 4%       |MR
+    IPSI repercutido  Melilla 8%       |MU
     IVA repercutido exento 0%          |FC
     IVA repercutido 4%                 |R1
     IVA repercutido 7%                 |R2
@@ -286,6 +287,7 @@ FUNCTION fTaxCode RETURNS CHAR
       CASE idPercent:
       WHEN 0.0 THEN RETURN "MC".
       WHEN 4.0 THEN RETURN "MR".
+      WHEN 8.0 THEN RETURN "MU".
       END CASE.
    END.
    
