@@ -18,8 +18,10 @@ else:
 # This is now hard coded value, but can be easily changed parameter
 var3 = 'yoigo'
 
+# Added bypass to print older than 1 year invoices as default
+# To print only one year, turn bypass = False
 p=s.newton.invoices.list({'brand':var3,'customer_id':var1,
-                          'invoice_date_start':var2})
+                          'invoice_date_start':var2,'bypass':True})
 
 # print for robotframework
 print p
