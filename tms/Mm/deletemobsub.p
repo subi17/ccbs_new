@@ -16,7 +16,6 @@
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
-{Func/msisdn.i}
 {Func/fcreditreq.i}
 {Func/flimitreq.i}
 {Func/fdss.i}
@@ -28,6 +27,7 @@
 {Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 {Func/orderfunc.i}
+{Mc/cash_revert_order.i}
 {Mc/dpmember.i}
 {Func/multitenantfunc.i}
 {Func/vasfunc.i}
@@ -217,7 +217,8 @@ PROCEDURE pTerminate:
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
 
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
-   DEF VAR llCallProc          AS LOG  NO-UNDO.   
+   DEF VAR llCallProc          AS LOG  NO-UNDO.  
+   DEF VAR liConvOrderId       AS INT  NO-UNDO INIT 0.
    
    DEF VAR lcTerminationType AS CHAR NO-UNDO INIT {&TERMINATION_TYPE_FULL}.
    /* Additional line mobile only ALFMO */
@@ -274,23 +275,35 @@ PROCEDURE pTerminate:
                  SIM.ICC = MobSub.ICC
       EXCLUSIVE-LOCK NO-ERROR.
 
-      fMakeMsidnHistory(INPUT RECID(MSISDN)).
+      IF AVAIL MSISDN THEN DO:
+         /* Mobile not been activated. No need to return MSISDN. */
+         IF liMsisdnStat     EQ {&MSISDN_ST_WAITING_RETURN} AND
+            (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+             MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+            IF fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN
+                 liMsisdnStat = {&MSISDN_ST_MNP_OUT_YOIGO}.
+            ELSE liMsisdnStat = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
+            liQuarTime = 0.
+         END.
 
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
-      
-      MSISDN.StatusCode = liMsisdnStat.
-      MSISDN.CustNum    = 0.
-      ASSIGN
-         MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
-                             WHEN liQuarTime >= 0
-         MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
+         fMakeMsidnHistory(INPUT RECID(MSISDN)).
 
-      IF llOutPort THEN ASSIGN
-         MSISDN.PortingDate = ldaKillDate  /* Date ported out  */
-         MSISDN.OutOperator = lcOutOper.   /*Name of receiving op.*/
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDN).
+         
+         MSISDN.StatusCode = liMsisdnStat.
+         MSISDN.CustNum    = 0.
+         ASSIGN
+            MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
+                                WHEN liQuarTime >= 0
+            MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
 
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
-      
+         IF llOutPort THEN ASSIGN
+            MSISDN.PortingDate = ldaKillDate  /* Date ported out  */
+            MSISDN.OutOperator = lcOutOper.   /*Name of receiving op.*/
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
+      END.
+   
       /* SIM card is (TO be) destroyed */
       IF AVAIL SIM THEN DO:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSIM).
@@ -841,9 +854,11 @@ PROCEDURE pTerminate:
       IF (BUFFER-TENANT-NAME(MobSub) = {&TENANT_YOIGO}    AND fIsYoigoCLI(MobSub.CLI)    EQ FALSE) OR 
          (BUFFER-TENANT-NAME(MobSub) = {&TENANT_MASMOVIL} AND fIsMasmovilCLI(MobSub.CLI) EQ FALSE) THEN
       DO:
-          RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
+         IF NOT (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} OR
+                 MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN
+            RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
           
-          IF RETURN-VALUE BEGINS "ERROR" THEN
+         IF RETURN-VALUE BEGINS "ERROR" THEN
              fLocalMemo("TermMobsub",
                         STRING(MobSub.MsSeq),
                         "BAJA",
@@ -1032,6 +1047,17 @@ PROCEDURE pTerminate:
       IF llCallProc THEN   
          RUN pChangeDelType(MobSub.CustNum).
    END. 
+
+   /* YOT-4438 Revert renewal when LO status 12. Remove related fees */
+   FOR EACH Order NO-LOCK WHERE
+            Order.MsSeq EQ MobSub.MsSeq AND
+            Order.OrderType EQ {&ORDER_TYPE_RENEWAL},
+      FIRST OrderDelivery NO-LOCK WHERE
+            OrderDelivery.Brand EQ "1" AND
+            OrderDelivery.OrderID EQ Order.OrderID:
+      IF OrderDelivery.LOStatusId = 12 THEN
+         fCashRevertOrder(Order.OrderId).
+   END.
 
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
@@ -1234,7 +1260,8 @@ PROCEDURE pTerminate:
             DO:
                IF NOT fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
                                               OrderCustomer.CustID,
-                                              bOrder.CliType) AND
+                                              bOrder.CliType,
+                                              OUTPUT liConvOrderId) AND
                   NOT fCheckExistingMobileOnly(OrderCustomer.CustIdType,
                                                OrderCustomer.CustID,
                                                bOrder.CliType) THEN 

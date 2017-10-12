@@ -166,7 +166,7 @@ PROCEDURE pPrintReport:
    ASSIGN 
       ttCriter.InvGroup    = icInvGroup
       ttCriter.CustNum1    = 0
-      ttCriter.CustNum2    = 99999999
+      ttCriter.CustNum2    = 999999999
       ttCriter.InvDate1    = idtDate1
       ttCriter.InvDate2    = idtDate2
       ttCriter.ExtInvID1   = ""

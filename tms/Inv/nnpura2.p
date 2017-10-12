@@ -73,8 +73,8 @@
 {Inv/xmlpura2.i}
 {Func/fpdfrun.i}
 
-def input  parameter CustNum1  as int format "zzzzzz9"    NO-UNDO.
-def input  parameter CustNum2  as int format "zzzzzz9"    NO-UNDO.
+def input  parameter CustNum1  as int format "zzzzzzzz9"    NO-UNDO.
+def input  parameter CustNum2  as int format "zzzzzzzz9"    NO-UNDO.
 def input  parameter pvm1      as date format "99-99-99"  NO-UNDO.
 def input  parameter pvm2      as date format "99-99-99"  NO-UNDO.
 def input  parameter tilak     as int format "9"          NO-UNDO.

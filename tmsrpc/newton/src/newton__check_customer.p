@@ -21,10 +21,11 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
+gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
-gcBrand = "1".
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
@@ -61,6 +62,7 @@ DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO.
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
+DEF VAR liConvOrderId                 AS INT NO-UNDO INIT 0.
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -167,30 +169,51 @@ FUNCTION fCheckMigration RETURNS LOG ():
    END.
 END.
 
-
-FIND FIRST Customer NO-LOCK WHERE
-           Customer.Brand      = gcBrand    AND
-           Customer.OrgID      = pcPersonId AND
-           Customer.CustIDType = pcIdType   AND
-           Customer.Roles     NE "inactive" NO-ERROR.
-
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
    llProChannel,
    piOrders,
-   OUTPUT lcReason, 
    OUTPUT liSubLimit,
    OUTPUT lisubs,
    OUTPUT liActLimit,
    OUTPUT liActs).
+   
+/* do not raise error with STC orders */
+IF NOT llOrderAllowed THEN DO:
+   IF plSTCMigrate THEN
+      llOrderAllowed = TRUE.
+   ELSE lcReason = "subscription limit".
+END.
+
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Brand      = gcBrand    AND
+           Customer.OrgID      = pcPersonId AND
+           Customer.CustIDType = pcIdType   AND
+           Customer.Roles     NE "inactive" NO-ERROR.
+       
+/* check barring subscriptions */
+IF AVAIL Customer AND
+   fExistBarredSubForCustomer(Customer.CustNum) THEN ASSIGN
+   lcReason = "barring"
+   llOrderAllowed = FALSE.
 
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
 /* If customer does not have subscriptions it is handled as new */
+
 IF AVAIL Customer AND
+   NOT llProChannel AND
+   NOT plSelfEmployed AND
+   (fGetSegment(Customer.custnum, 0) EQ "AUTONOMO" OR
+    fGetSegment(Customer.custnum, 0) EQ "SOHO-AUTONOMO") THEN DO:
+   ASSIGN
+      llOrderAllowed = FALSE
+      lcReason = "The customer must have self employed set to true".
+END.
+ELSE IF AVAIL Customer AND
    CAN-FIND(FIRST MobSub WHERE 
                   Mobsub.Brand EQ gcBrand AND
                   Mobsub.InvCust EQ Customer.CustNum) THEN DO:
@@ -316,11 +339,11 @@ END.
 IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    IF fCheckExistingConvergent(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "OK".
-   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType) THEN 
+   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType,OUTPUT liConvOrderId) THEN 
       lcAddLineAllowed = "OK".
    ELSE IF fCheckExistingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
-   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType,OUTPUT liConvOrderId) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
@@ -378,11 +401,11 @@ IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
 add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
-IF liSubs >= liSubLimit THEN
+IF liSubs >= liSubLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
 ELSE
    add_boolean(lcReturnStruct,"subscription_limit_reached",FALSE).
-IF liActs >= liActLimit THEN
+IF liActs >= liActLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"activation_limit_reached",TRUE).
 ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).

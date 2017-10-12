@@ -1,6 +1,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 gcBrand = "1".
+katun = "MasMovil".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
 {fcgi_agent/xmlrpc/xmlrpc_access.i}

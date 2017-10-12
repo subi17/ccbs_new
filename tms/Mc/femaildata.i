@@ -1126,6 +1126,52 @@ PROCEDURE pGetORDER_DATE:
    lcResult = lcDate.
 END. /*GetORDER_DATA*/
 
+PROCEDURE pGetCONTACT:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
+      fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
+      lcResult = REPLACE(fTeksti(577, liLang),"1707","1726").
+   ELSE lcResult = fTeksti(577, liLang).
+
+END. /*GetCONTACT*/
+
+PROCEDURE pGetRETURN_RIGHTS:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
+      fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
+      lcResult = "".
+   ELSE lcResult = fTeksti(578, liLang).
+
+END. /*getRETURN_RIGHT*/
+
+PROCEDURE pGetBOTTOM_BAR:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   IF fGetSegment(liCustNum, Order.OrderID) BEGINS "SOHO" OR
+      fGetSegment(liCustNum, Order.OrderID) BEGINS "PRO-SOHO" THEN
+      lcResult = fTeksti(580, liLang).
+   ELSE lcResult = fTeksti(579, liLang).
+
+END. /*GetBOTTOM_BAR*/
+
+
 PROCEDURE pGetDELIVERY_DATE:
 
    DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
@@ -1799,6 +1845,10 @@ PROCEDURE pGetCTNAME:
    DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
+   DEF VAR lcSegment               AS CHAR NO-UNDO.
+   DEF VAR lcVAT                   AS CHAR NO-UNDO.
+   DEF VAR ldeProFee               AS DEC  NO-UNDO.
+   DEF VAR lcProFeeModel           AS CHAR NO-UNDO.
 
    DEFINE BUFFER lbELOrder   FOR Order.
    DEFINE BUFFER lbMLOrder   FOR Order.
@@ -1822,6 +1872,7 @@ PROCEDURE pGetCTNAME:
                                ldtOrder).
    /* Bundle Information in product list */
    RUN pGetBundleInfo(INPUT Order.OrderID, OUTPUT lcBundlesInfo).
+   lcSegment = fGetSegment(liCustNum, Order.OrderID).
 
    liNumEntries = NUM-ENTRIES(lcBundlesInfo).
    DO liCount = 1 TO liNumEntries:
@@ -1876,7 +1927,16 @@ PROCEDURE pGetCTNAME:
    END. /* lcCLIType */
 
    /*YPRO-21*/
-   IF fIsProOrder(iiOrderNBR) EQ TRUE THEN lcTagCTName = lcTagCTName + " PRO".
+   IF fIsProOrder(iiOrderNBR) EQ TRUE THEN DO:
+      lcTagCTName = lcTagCTName + " PRO".
+      lcProFeemodel = fgetPROFeemodel(lcClitype).
+      FIND FIRST FMItem no-lock WHERE
+                 FMItem.brand EQ "1" AND
+                 FMItem.feemodel EQ lcProFeemodel AND
+                 FMItem.pricelist EQ "PRO_" + lcClitype NO-ERROR.
+      IF AVAIL FMItem THEN           
+         ldeProFee = fmitem.Amount.
+   END.
    IF lcErrTxt NE "" THEN DO:
       olgErr = TRUE.
       lcResult = (lcErrTxt).
@@ -1887,8 +1947,9 @@ PROCEDURE pGetCTNAME:
              CLIType.CLIType = (IF lcBundle > "" THEN lcBundle ELSE lcCLIType):
 
       DEF VAR ldeCallPrice AS DEC NO-UNDO.
-      DEF VAR ldeMFWithTax AS DEC NO-UNDO.
+      DEF VAR ldeMF AS DEC NO-UNDO.
       DEF VAR ldeMFNoDisc  AS DEC NO-UNDO.
+      DEF VAR ldeDiscount  AS DEC NO-UNDO.
 
       DEFINE VARIABLE ldtOrderDate AS DATE NO-UNDO.
       DEFINE VARIABLE ldiOrderDate AS INT  NO-UNDO.
@@ -1903,9 +1964,17 @@ PROCEDURE pGetCTNAME:
                               OUTPUT ldiOrderDate).
       
       /*YDR-2347 removed the hard coded values AND now fetching the values from Commercial Fee itself*/
-      ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
-
-       CASE CLIType.CLIType:
+      IF lcSegment BEGINS "PRO-SOHO" THEN DO:
+         ASSIGN
+            ldeMF = CLIType.CommercialFee + ldeProFee.
+            lcVat = IF liLang EQ 5 THEN " VAT. excl" ELSE " imp. no incl.".
+      END.
+      ELSE DO:
+         ASSIGN
+            ldeMF = (1 + ldeTaxPerc / 100) * (CLIType.CommercialFee + ldeProFee).
+            lcVat = IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.".
+      END.
+      CASE CLIType.CLIType:
          WHEN "CONT9" OR WHEN "CONT10" OR WHEN "CONT15" THEN lcList = "0 cent/min".
          WHEN "TARJ7" THEN lcList = "1 cent/min".
          WHEN "TARJ8" THEN lcList = "6,05 cent/min".
@@ -1915,7 +1984,7 @@ PROCEDURE pGetCTNAME:
          WHEN "TARJ12" THEN lcList = "100 min/mes gratis,".
          WHEN "TARJ13" THEN lcList = "Llamadas Ilimitadas,".
          OTHERWISE lcList = "".
-       END.
+      END.
 
        IF LOOKUP(Order.CLIType, "CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") > 0 OR fIsConvergenceTariff(Order.CLIType) THEN DO:
 
@@ -1935,9 +2004,9 @@ PROCEDURE pGetCTNAME:
                        DPRate.ValidTo   >= ldtOrderDate      NO-LOCK:
              
                  llAddLineDiscount = TRUE.
-                 ldeMFNoDisc       = ldeMFWithTax.
+                 ldeMFNoDisc       = ldeMF.
                  ldDiscValue       = DPRate.DiscValue.
-                 ldeMFWithTax      = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                 ldeMF             = ldeMF - ((DPRate.DiscValue / 100) * ldeMF).
 
              END.
 
@@ -1964,23 +2033,33 @@ PROCEDURE pGetCTNAME:
                            (IF liLang EQ 5 THEN " months. " ELSE " meses. ") +
                            "<br/>" +
                            (IF liLang EQ 5 THEN "After " ELSE "Después ")    +
-                           TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99"))             + " &euro;/" +
-                           (IF liLang EQ 5 THEN "month" ELSE "mes")          +
-                           (IF liLang EQ 5 THEN " VAT. incl" ELSE " imp. incl.").
+                           TRIM(STRING(ldeMF,"->>>>>>>9.99"))             + " &euro;/" +
+                           (IF liLang EQ 5 THEN "month" ELSE "mes") + lcVat.
                 /*Offeritem values must be used if such is available.
                   Otherwise the value is taken from discountplan settings.*/
                 IF Offeritem.Amount > 0 THEN DO:
                    IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                      ldeMFWithTax = ldeMFWithTax - ((Offeritem.amount / 100) * ldeMFWithTax).
-                   ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                      ldeMFWithTax = ldeMFWithTax - Offeritem.amount.
+                      ldeMF = ldeMF - ((Offeritem.amount / 100) * ldeMF).
+                   ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN DO:
+                      IF lcSegment BEGINS "PRO-SOHO" THEN
+                         ldeDiscount = Offeritem.amount / (1 + ldeTaxPerc / 100).
+                      ELSE
+                         ldeDiscount = Offeritem.amount.
+
+                      ldeMF = ldeMF - ldeDiscount.
+                   END.   
  
                 END.
                 ELSE DO:
                    IF DiscountPlan.DPUnit EQ "Percentage" THEN
-                      ldeMFWithTax = ldeMFWithTax - ((DPRate.DiscValue / 100) * ldeMFWithTax).
+                      ldeMF = ldeMF - ((DPRate.DiscValue / 100) * ldeMF).
                    ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
-                      ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
+                      IF lcSegment BEGINS "PRO-SOHO" THEN
+                         ldeDiscount = DPRate.DiscValue / (1 + ldeTaxPerc / 100).
+                      ELSE
+                         ldeDiscount = DPRate.DiscValue.
+
+                      ldeMF = ldeMF - ldeDiscount. 
                 END.
              END.
        END.
@@ -2138,7 +2217,7 @@ PROCEDURE pGetCTNAME:
             IF AVAIL lbMLCLIType THEN 
                ASSIGN 
                   lcTagCTName  = lcTagCTNAme + " de " + lbMLCLIType.CLIName
-                  ldeMFWithTax = 0
+                  ldeMF        = 0
                   llgExtraLine = TRUE
                   lcList       = lcList + " 0 " + "&euro;/mes" + fTeksti(581,liLang).
                   
@@ -2146,18 +2225,18 @@ PROCEDURE pGetCTNAME:
 
        END.
 
-       IF ldeMFWithTax > 0 THEN DO:
+       IF ldeMF > 0 THEN DO:
           IF llAddLineDiscount THEN
              lcList = lcList + (IF lcList > "" THEN ",<br/>" ELSE "") + "<del>" + TRIM(STRING(ldeMFNoDisc,"->>>>>>>9.99")) + " &euro;</del>" + " " +
-                      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                      TRIM(STRING(ldeMF,"->>>>>>>9.99")) + " &euro;/" +
                       (IF liLang EQ 5 THEN "month" ELSE "mes") + " IVA incl.<br/>" + TRIM(STRING(ldDiscValue,"99"))+ "% DTO. para siempre".
           ELSE
              /* YBU-4648 LENGTH check added for fitting one line */
-             lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
+             lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMF,
                                    "->>>>>>>9.99")) + " &euro;/" + (IF liLang 
                                    EQ 5 THEN "month" ELSE "mes")) > 36 THEN 
                                    ",<br/>" ELSE " ") +
-                      TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                      TRIM(STRING(ldeMF,"->>>>>>>9.99")) + " &euro;/" +
                       (IF liLang EQ 5 THEN "month" ELSE "mes").
        END.
 
@@ -2166,9 +2245,7 @@ PROCEDURE pGetCTNAME:
             llgExtraLine      THEN
             lcTagCTName = lcTagCTName + ",<br/> " + lcList + "<br/>".
          ELSE
-            lcTagCTName = lcTagCTName + ",<br/> " + lcList +
-                          (IF liLang EQ 5 THEN " VAT. incl<br/>"
-                           ELSE " imp. incl.<br/>").
+            lcTagCTName = lcTagCTName + ",<br/> " + lcList + lcVat.
        END.
 
         IF lcMFText NE ""  THEN

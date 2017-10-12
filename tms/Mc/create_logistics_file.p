@@ -31,6 +31,7 @@ gcBrand = "1".
 {Func/email.i}
 {Mc/orderfusion.i}
 {Func/financed_terminal.i}
+{Func/fixedlinefunc.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -410,19 +411,20 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeOfferItemAmt           AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE llConsumerWithInstallment AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE llDextraInvoice           AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
-   DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
-   DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
-   DEFINE VARIABLE lcMainOrderId             AS CHAR NO-UNDO. /* gap018 */
-   DEFINE VARIABLE llDespachar               AS LOGICAL   NO-UNDO. /* gap018 */
+   DEFINE VARIABLE ldeCurrAmt                AS DEC       NO-UNDO. 
+   DEFINE VARIABLE ldtermdiscamt             AS DEC       NO-UNDO. 
+   DEFINE VARIABLE lcTermDiscItem            AS CHAR      NO-UNDO.
+   DEFINE VARIABLE lcMainOrderId             AS CHAR      NO-UNDO INIT "". 
+   DEFINE VARIABLE llDespachar               AS LOGICAL   NO-UNDO.         
+   DEFINE VARIABLE liConvOrderId             AS INT       NO-UNDO INIT 0. 
 
-   DEFINE BUFFER bufRow   FOR InvRow.
-   DEFINE BUFFER bufItem  FOR BillItem.
-   DEFINE BUFFER bufGroup FOR BItemGroup.
-   DEFINE BUFFER bufSIM   FOR SIM.
-   DEFINE BUFFER bufOrder FOR Order. /* GAP018 */
-   DEFINE BUFFER bufOrderCustomer FOR OrderCustomer. /* GAP018 */
-   DEFINE BUFFER bufCLIType FOR CliType. /* GAP018 */
+   DEFINE BUFFER bufRow           FOR InvRow.
+   DEFINE BUFFER bufItem          FOR BillItem.
+   DEFINE BUFFER bufGroup         FOR BItemGroup.
+   DEFINE BUFFER bufSIM           FOR SIM.
+   DEFINE BUFFER bufOrder         FOR Order. 
+   DEFINE BUFFER bufOrderCustomer FOR OrderCustomer. 
+   DEFINE BUFFER bufCLIType       FOR CliType. 
 
    RELEASE Invoice.
 
@@ -1300,15 +1302,15 @@ FUNCTION fDelivSIM RETURNS LOG
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
-   /* GAP018 */
-   llDespachar = FALSE.
-   lcMainOrderId = "".
+   ASSIGN llDespachar   = FALSE
+          lcMainOrderId = ""
+          liConvOrderId = 0.
 
    /* Check if router delivered and terminal can be delivered */
    IF llDextraInvoice THEN DO:
       FIND FIRST OrderDelivery NO-LOCK WHERE
-         OrderDelivery.Brand = gcBrand AND
-         OrderDelivery.OrderId = Order.OrderId NO-ERROR.
+                 OrderDelivery.Brand   = gcBrand       AND
+                 OrderDelivery.OrderId = Order.OrderId NO-ERROR.
       IF AVAIL OrderDelivery THEN DO:
          IF OrderDelivery.LOStatusId = 99998 THEN
             llDespachar = TRUE.
@@ -1319,12 +1321,12 @@ FUNCTION fDelivSIM RETURNS LOG
    ELSE DO: /* SIM */
 
       FIND FIRST CliType NO-LOCK WHERE
-                 CliType.Brand = gcBrand AND
+                 CliType.Brand   = gcBrand       AND
                  CliType.CliType = Order.CliType NO-ERROR.
       IF AVAIL CliType THEN DO:
          IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} THEN DO:
             FIND FIRST bufOrder NO-LOCK WHERE
-                       bufOrder.Brand = gcBrand AND
+                       bufOrder.Brand   = gcBrand          AND
                        bufOrder.OrderId = Order.MultiSimId NO-ERROR. /* bufOrder for main line */
             IF AVAIL bufOrder THEN DO: /* MultiSim case */
                /* AC5: If Main line order is cancelled linking is not needed */
@@ -1334,41 +1336,56 @@ FUNCTION fDelivSIM RETURNS LOG
                   lcMainOrderId = "".
             END.
          END.
-         ELSE IF CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-            FOR FIRST OrderCustomer NO-LOCK WHERE
-                      OrderCustomer.Brand   = gcBrand AND
-                      OrderCustomer.OrderId = Order.OrderId AND
-                      OrderCustomer.RowType = 1,
-               EACH bufOrderCustomer NO-LOCK WHERE
-                    bufOrderCustomer.Brand      EQ gcBrand AND
-                    bufOrderCustomer.CustId     EQ OrderCustomer.CustId AND
-                    bufOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
-                    bufOrderCustomer.RowType    EQ 1,
-               EACH bufOrder NO-LOCK WHERE
-                    bufOrder.Brand   EQ gcBrand AND
-                    bufOrder.orderid EQ bufOrderCustomer.Orderid,
-               FIRST bufCLIType NO-LOCK WHERE
-                     bufCLIType.Brand    = gcBrand AND
-                     bufCLIType.CLIType  = bufOrder.CliType AND
-                     bufCLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
-                     /* bufOrder.orderid should be main line of the addidtional line */
-                     /* AC5: If Main line order is cancelled linking is not needed */
-               IF bufOrder.StatusCode ne {&ORDER_STATUS_CLOSED} THEN
-                  lcMainOrderId = STRING(bufOrder.OrderId).
-               ELSE
-                  lcMainOrderId = "".
-            END.
-         END.
+                 /* Check if convergent additional line */
+         ELSE IF fIsAddLineTariff(Order.CLI) THEN DO:
+            FIND FIRST bufOrderCustomer NO-LOCK WHERE
+                       bufOrderCustomer.Brand   = gcBrand AND
+                       bufOrderCustomer.OrderId = Order.OrderId AND
+                       bufOrderCustomer.RowType = 1 NO-ERROR.
+            IF AVAIL bufOrderCustomer THEN DO: 
+               /* Additional lines Mobile only tariffs */
+               IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                                 OrderAction.Brand    = gcBrand            AND
+                                 OrderAction.OrderID  = Order.OrderId      AND
+                                 OrderAction.ItemType = "AddLineDiscount") THEN DO:
 
+                  IF LOOKUP(OrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
+                     IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
+                                                     bufOrderCustomer.CustId,
+                                                     Order.CLIType,
+                                                     OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(liConvOrderId).
+                     ELSE IF fCheckOngoing2PConvergentOrder(bufOrderCustomer.CustIdType,
+                                                            bufOrderCustomer.CustId,
+                                                            Order.CLIType,
+                                                            OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(liConvOrderId).
+                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 THEN
+                     IF fCheckOngoingConvergentOrder(bufOrderCustomer.CustIdType,
+                                                     bufOrderCustomer.CustId,
+                                                     Order.CLIType,
+                                                     OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(liConvOrderId).
+                  ELSE IF LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN
+                     IF fCheckOngoingMobileOnly(bufOrderCustomer.CustIdType,
+                                                bufOrderCustomer.CustId,
+                                                Order.CLIType,
+                                                OUTPUT liConvOrderId) THEN
+                        lcMainOrderId = STRING(bufOrder.OrderId).
+                  END.
+               ELSE lcMainOrderId = "".
+            END. /* if avail bufOrderCustomer */
+            ELSE lcMainOrderId = "". 
+         END.
          IF CliType.LineType EQ {&CLITYPE_LINETYPE_EXTRA} OR
-            CliType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+            fIsAddLineTariff(Order.CLI) THEN DO:
             /* AC6: In case Additional/Extra line order is in fraud queue its
                Deptchar value is set FALSE as it is not delivered same time with Main line  */
             IF(Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
                Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
                Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}) THEN
                llDespachar = FALSE.
-             ELSE
+             ELSE /* Todo some logic, cannot be true always */
                 llDespachar = TRUE.
          END.
          ELSE DO: /* Main line */
@@ -1389,18 +1406,18 @@ FUNCTION fDelivSIM RETURNS LOG
 
    /* Create Temp-table for DataService (OR extra fields in future) */
    CREATE ttExtra.
-   ASSIGN ttExtra.RowNum      = ttOneDelivery.RowNum
-          ttExtra.DataService = lcDataService
-          ttExtra.PayTerm     = lcPayTermContract
-          ttExtra.OrderDate   = lcOrderDate
-          ttExtra.ResidualAmount = (IF ldeResidualAmountTotal > 0 THEN
-                                    STRING(ldeResidualAmountTotal) ELSE "")
-          ttExtra.DeliveryType = STRING(liDelType)
-          ttExtra.KialaCode    = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
+   ASSIGN ttExtra.RowNum          = ttOneDelivery.RowNum
+          ttExtra.DataService     = lcDataService
+          ttExtra.PayTerm         = lcPayTermContract
+          ttExtra.OrderDate       = lcOrderDate
+          ttExtra.ResidualAmount  = (IF ldeResidualAmountTotal > 0 THEN
+                                        STRING(ldeResidualAmountTotal) 
+                                     ELSE "")
+          ttExtra.DeliveryType     = STRING(liDelType)
+          ttExtra.KialaCode        = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
           ttExtra.ContractFileName = lcContractFileName
-          /* GAP018 */
-          ttExtra.Despachar    = (IF llDespachar THEN "01" ELSE "02")
-          ttExtra.MainOrderID  = lcMainOrderId.
+          ttExtra.Despachar        = (IF llDespachar THEN "01" ELSE "02")
+          ttExtra.MainOrderID      = lcMainOrderId.
 
    /* update SimStat when all skipping are checked */
    IF NOT (Order.OrderType eq 2) THEN
@@ -1604,7 +1621,6 @@ FUNCTION fDelivDevice RETURNS LOG
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
           ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER})
-          /* GAP018 */
           ttExtra.Despachar    = "01" /* Device can be delivred */
           ttExtra.MainOrderID  = "".
 

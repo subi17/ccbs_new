@@ -13,6 +13,7 @@ hell MODULE .......: cancelorder.p
 {Func/ordercancel.i}
 {Func/fmakemsreq.i}
 {Func/main_add_lines.i}
+{Mc/cash_revert_order.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.
@@ -33,8 +34,6 @@ DEF VAR ldtLOTS        AS DATETIME  NO-UNDO.
 DEF VAR liError        AS INT       NO-UNDO. 
 DEF VAR lcTermType     AS CHARACTER NO-UNDO. 
 
-DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
-
 FIND Order NO-LOCK WHERE
      Order.Brand = gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
@@ -46,30 +45,18 @@ IF ilCheckLOStatus THEN DO:
 
    FIND FIRST OrderDelivery OF Order NO-LOCK USE-INDEX OrderId NO-ERROR.
 
-   IF AVAIL OrderDelivery THEN DO:
+   IF NOT AVAILABLE OrderDelivery
+   THEN RETURN "".
 
-      FOR EACH bOrderDelivery NO-LOCK WHERE
-               bOrderDelivery.Brand   = gcBrand AND
-               bOrderDelivery.OrderId = OrderDelivery.OrderId AND
-               bOrderDelivery.LOTimeStamp = OrderDelivery.LOTimeStamp:
-         liCount = liCount + 1.
-      END.
+   ldtLOTS = OrderDelivery.LOTimeStamp.
 
-      IF liCount > 1 THEN DO:
-      
-         ldtLOTS = OrderDelivery.LOTimeStamp.
-
-         FIND FIRST OrderDelivery OF Order NO-LOCK WHERE
-                    OrderDelivery.LOTimeStamp = ldtLOTS AND
-            LOOKUP(STRING(OrderDelivery.LOStatusId),
-            {&DEXTRA_CANCELLED_STATUSES}) > 0
-         NO-ERROR.
-      END.
-   END. /* IF AVAIL OrderDelivery THEN DO: */
-
-   IF NOT AVAIL OrderDelivery OR
-      LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) = 0
+   FOR EACH OrderDelivery NO-LOCK WHERE
+            OrderDelivery.Brand   = gcBrand AND
+            OrderDelivery.OrderId = Order.OrderId AND
+            OrderDelivery.LOTimeStamp = ldtLOTS:
+      IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) = 0
       THEN RETURN "".
+   END.
 
 END.
 
@@ -91,10 +78,10 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
               lcCreditReason = "1010".
          ELSE lcCreditReason = "1011".
       END.
-      
+
       lcResult = fCashInvoiceCreditnote(Order.Invnum, lcCreditReason).
-      
-      IF lcResult > "" THEN 
+
+      IF lcResult > "" THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                            "Order",
                            STRING(Order.OrderId),
@@ -133,6 +120,7 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
 
    fReleaseImei(Order.OrderId).
 END.
+/* Subscription is not changed according to Orders */
 ELSE IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
 
    FIND MobSub WHERE
@@ -152,55 +140,16 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
                        12/31/2049).
 END.
 ELSE DO:
+   lcResult = fCashRevertOrder(Order.OrderId).
 
-   FIND MobSub WHERE
-        MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+   IF lcResult > ""
+   THEN RETURN lcResult.
 
-   IF NOT AVAIL MobSub THEN RETURN "".
-      
-   IF Order.InvNum > 0 THEN DO:
+   IF Order.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
+      FIND MobSub WHERE
+           MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
 
-      lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
-
-      IF lcResult > "" THEN
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
-                            STRING(MobSub.MsSeq),
-                            MobSub.Custnum,
-                            "CREDIT NOTE CREATION FAILED",
-                            lcResult). 
-   END.
-
-   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
-   
-      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq = Order.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
-                   MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
-                   MsRequest.ReqIParam1 = Order.OrderId AND
-                   MsRequest.ReqSource = {&REQUEST_SOURCE_ORDER_CANCELLATION})
-         THEN RETURN "".
-
-      liReq = fRevertRenewalOrderRequest(
-                  Order.MsSeq,
-                  Order.OrderId,
-                  katun,
-                  fMakeTS(),
-                  {&REQUEST_SOURCE_ORDER_CANCELLATION},
-                  OUTPUT lcResult).
-
-      IF liReq = 0 THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.Custnum,
-                          "RENEWAL REVERTION FAILED",
-                          lcResult).
-         RETURN "ERROR:Revert renewal failed:" + lcResult.
-      END.
-   END.
-   ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
-            Order.OrderType EQ {&ORDER_TYPE_MNP}) THEN DO:
+      IF NOT AVAIL MobSub THEN RETURN "". /* subscription already terminated */
 
       ASSIGN
          liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}

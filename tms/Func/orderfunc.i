@@ -21,6 +21,7 @@
 {Func/dextra.i}
 {Func/cparam2.i}
 {Func/main_add_lines.i}
+{Func/msisdn.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -115,6 +116,22 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                 MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
                                 NO-ERROR.
                      IF AVAIL MobSub THEN DO:
+
+                        FIND FIRST MSISDN WHERE
+                                   MSISDN.Brand = gcBrand AND
+                                   MSISDN.CLI   = MobSub.CLI
+                        EXCLUSIVE-LOCK NO-ERROR.
+                        /* No mobile created. Release MSISDN */
+                        IF AVAIL MSISDN AND MSISDN.StatusCode EQ 3 THEN DO:
+                           fMakeMsidnHistory(INPUT RECID(MSISDN)).
+
+                           IF fIsYoigoCLI(MobSub.CLI) EQ TRUE THEN
+                              MSISDN.StatusCode = {&MSISDN_ST_MNP_OUT_YOIGO}.
+                           ELSE MSISDN.StatusCode = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
+                           MSISDN.CustNum = 0.
+                           MSISDN.ValidTo = fMakeTS().
+                        END.
+
                         ASSIGN
                            MobSub.CLI = MobSub.FixedNumber
                            MobSub.ICC = ""
@@ -414,6 +431,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
    DEF VAR liMOOrderId      AS INT  NO-UNDO INITIAL 0.
    DEF VAR llgMainLineAvail AS LOG  NO-UNDO INITIAL FALSE.   
    DEF VAR illgConvOrder    AS LOG  NO-UNDO INITIAL FALSE. 
+   DEF VAR liConvOrderId    AS INT  NO-UNDO.
 
    IF fIsConvergenceTariff(icCLIType) THEN 
       ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
@@ -447,7 +465,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
       ELSE DO:
          /* This record has to be found, to check orderaction has any additional 
             line related discount available - and - this record is used if action is CLOSE */ 
-         FIND FIRST labOrderAction NO-LOCK WHERE
+         FIND FIRST labOrderAction EXCLUSIVE-LOCK WHERE
                     labOrderAction.Brand    = gcBrand           AND
                     labOrderAction.OrderID  = labOrder.OrderId  AND
                     labOrderAction.ItemType = "AddLineDiscount" AND
@@ -461,7 +479,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                IF illgConvOrder                                                         AND
                   (NOT fCheckOngoingConvergentOrder(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
-                                                    labOrder.CliType)
+                                                    labOrder.CliType,
+                                                    OUTPUT liConvOrderId)
                    AND
                    NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
                                                         labOrderCustomer.CustId,
@@ -478,7 +497,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                             LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)))  OR 
                   (NOT fCheckOngoing2PConvergentOrder(labOrderCustomer.CustIdType,
                                                       labOrderCustomer.CustID,
-                                                      labOrder.CliType)
+                                                      labOrder.CliType,
+                                                      OUTPUT liConvOrderId)
                    AND                               
                    NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
                                                         labOrderCustomer.CustId,
@@ -504,7 +524,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                        AND
                        NOT fCheckOngoingMobileOnly(labOrderCustomer.CustIdType,
                                                    labOrderCustomer.CustID,
-                                                   labOrder.CliType)             
+                                                   labOrder.CliType,
+                                                   OUTPUT liConvOrderId)             
                        AND
                        NOT fCheckExistingMobileOnly(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
