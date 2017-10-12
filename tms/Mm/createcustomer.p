@@ -285,23 +285,32 @@ ELSE DO:
                     MobSub.MsSeq   = Order.MsSeq AND
                     MobSub.CustNum = Customer.CustNum NO-ERROR.
 
-         IF AVAILABLE MobSub THEN DO:
-            IF MobSub.PayType = FALSE AND
-               NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
-                                  bMobSub.MsSeq    <> MobSub.MsSeq AND
+         IF AVAILABLE MobSub THEN 
+         DO:
+            IF MobSub.PayType = FALSE
+            DO:
+                IF CAN-FIND(FIRST bMobSub WHERE
+                                  bMobSub.Brand     = gcBrand          AND
+                                  bMobSub.MsSeq    <> MobSub.MsSeq     AND
                                   bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE) THEN
-               llUpdateCust = TRUE.
+                                  bMobSub.PayType   = FALSE)           THEN
+                    ASSIGN Customer.Category = OrderCustomer.Category.
+                ELSE 
+                    ASSIGN llUpdateCust = TRUE.
+            END.
          END.
          ELSE DO:
-            IF Order.PayType = FALSE AND
-               NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
-                                  bMobSub.MsSeq    <> Order.MsSeq AND
+            IF Order.PayType = FALSE THEN 
+            DO:
+                IF CAN-FIND(FIRST bMobSub WHERE
+                                  bMobSub.Brand     = gcBrand          AND
+                                  bMobSub.MsSeq    <> Order.MsSeq      AND
                                   bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE) THEN
-               llUpdateCust = TRUE.
+                                  bMobSub.PayType   = FALSE)           THEN
+                    ASSIGN Customer.Category = OrderCustomer.Category.
+                ELSE 
+                    ASSIGN llUpdateCust = TRUE.
+            END.
          END.
 
          IF llUpdateCust THEN DO:
