@@ -26,6 +26,7 @@ DEF VAR lcQuestion              AS CHAR NO-UNDO.
 DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
 DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
 DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
 /* Additional line mobile only ALFMO-5*/
 DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
@@ -39,6 +40,7 @@ DEFINE BUFFER lbCustCat       FOR CustCat.
 /* Additional line mobile only ALFMO-5 */
 DEFINE BUFFER lbOrdCust       FOR OrderCustomer.
 DEFINE BUFFER lbOrd           FOR Order.
+DEFINE BUFFER lbMLOrder       FOR Order.
 
 FIND Order WHERE 
      Order.Brand   = gcBrand AND 
@@ -246,9 +248,12 @@ DO:
                             "CLOSE").         
 
    /* If Main Line onging order is Closed, and if its associated extra line 
-      ongoing order is available then close extra line ongoing order */
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
-   
+      ongoing order is available then close extra line ongoing order. 
+                                     (OR)
+      If ongoing extra line is Closed, and if its associated main line is in 
+      ongoing state then reset multisimid and multisimtype values. */
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
    IF lcExtraMainLineCLITypes                       NE "" AND
       LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
       Order.MultiSimId                              NE 0  AND 
@@ -256,7 +261,22 @@ DO:
       fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
                                Order.OrderId,    /* Main line Order Id  */ 
                               "CLOSE").          /* Action              */
+   ELSE IF lcExtraLineCLITypes                    NE "" AND 
+        LOOKUP(Order.CLIType,lcExtraLineCLITypes) GT 0  AND
+        Order.MultiSimId                          NE 0  AND
+        Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN
+   DO:
+      FIND FIRST lbMLOrder NO-LOCK WHERE
+                 lbMLOrder.Brand        EQ Syst.Parameters:gcBrand    AND
+                 lbMLOrder.OrderId      EQ Order.MultiSimId           AND
+                 lbMLOrder.MultiSimId   EQ Order.OrderId              AND
+                 lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND
+          LOOKUP(lbMLOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-ERROR.
 
+      IF AVAIL lbMLOrder THEN 
+         ASSIGN lbMLOrder.MultiSimId   = 0 
+                lbMLOrder.MultiSimType = 0.
+   END.
 END.
 
 FOR EACH MNPProcess WHERE
