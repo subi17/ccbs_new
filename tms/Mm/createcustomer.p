@@ -203,7 +203,7 @@ END.
 ELSE DO:
 
    oiCustnum = liOldCustnum.
-   IF ilUpdateExisting EQ FALSE THEN RETURN "".
+   IF ilUpdateExisting EQ FALSE THEN RETURN "not updated existing customer".
 
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.

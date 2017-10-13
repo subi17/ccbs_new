@@ -1710,30 +1710,37 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
       /* YTS-10537 Update Customer information only when order is finished */
       RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,FALSE,OUTPUT oiCustomer).
 
-      llCorporate = CAN-FIND(OrderCustomer WHERE
-                             OrderCustomer.Brand      = gcBrand               AND
-                             OrderCustomer.OrderID    = ttOneDelivery.OrderID AND
-                             OrderCustomer.RowType    = 1                     AND
-                             OrderCustomer.CustIdType = "CIF").
+      IF RETURN-VALUE "not updated existing customer" THEN DO:
+         Order.CustNum = oiCustomer.
+         /* do not call createcustcontact */         
+      END.
+      ELSE DO:	  
+	  
+		 llCorporate = CAN-FIND(OrderCustomer WHERE
+							    OrderCustomer.Brand      = gcBrand               AND
+								OrderCustomer.OrderID    = ttOneDelivery.OrderID AND
+								OrderCustomer.RowType    = 1                     AND
+								OrderCustomer.CustIdType = "CIF").
 
-      FOR EACH OrderCustomer NO-LOCK WHERE
-               OrderCustomer.Brand   = gcBrand AND
-               OrderCustomer.OrderID = ttOneDelivery.OrderID:
-         IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
-         DO:
-            RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
-                                    oiCustomer,
-                                    OrderCustomer.RowType,
-                                    OUTPUT lcError).
-            IF lcError > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
-                                STRING(OrderCustomer.OrderID),
-                                oiCustomer,
-                                "CUSTOMER CONTACT CREATION FAILED",
-                                lcError).
-            END.
-         END.
+	     FOR EACH OrderCustomer NO-LOCK WHERE
+				  OrderCustomer.Brand   = gcBrand AND
+				  OrderCustomer.OrderID = ttOneDelivery.OrderID:
+			IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
+			DO:
+			   RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
+										  oiCustomer,
+										  OrderCustomer.RowType,
+										  OUTPUT lcError).
+			   IF lcError > "" THEN DO:
+				   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+									"Order",
+									STRING(OrderCustomer.OrderID),
+									oiCustomer,
+									"CUSTOMER CONTACT CREATION FAILED",
+									lcError).
+			   END.
+		    END.
+	     END.
       END.
 
       /* YTS-10537 Update Customer information only when order is finished */
