@@ -291,7 +291,7 @@ FUNCTION fGetProFeemodel RETURNS CHAR
              CLIType.CLIType = icCliType,
        FIRST DayCampaign NO-LOCK WHERE
              DayCampaign.Brand = Syst.Parameters:gcBrand AND
-             DayCampaign.DCEvent = CLIType.FixedBundle:
+             DayCampaign.DCEvent = CLIType.clitype:
       RETURN DayCampaign.FeeModel.
    END.
    RETURN "".
