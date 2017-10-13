@@ -266,7 +266,7 @@ DO:
         Order.MultiSimId                          NE 0  AND
         Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN
    DO:
-      FIND FIRST lbMLOrder NO-LOCK WHERE
+      FIND FIRST lbMLOrder EXCLUSIVE-LOCK WHERE
                  lbMLOrder.Brand        EQ Syst.Parameters:gcBrand    AND
                  lbMLOrder.OrderId      EQ Order.MultiSimId           AND
                  lbMLOrder.MultiSimId   EQ Order.OrderId              AND
