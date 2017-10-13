@@ -545,14 +545,14 @@ PROCEDURE pTerminate:
       IF (lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} AND
          fIsConvergentFixedContract(DCCLI.DCEvent)) THEN NEXT.
 
-      DCCLI.TermDate = ?.
-
       FIND FIRST DayCampaign NO-LOCK WHERE
                  DayCampaign.Brand = gcBrand AND
                  DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
       
       IF AVAIL DayCampaign AND (DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} OR DayCampaign.DCEvent BEGINS "TVTERM") THEN 
          NEXT.
+
+      DCCLI.TermDate = ?.
 
       CREATE ttContract.
       ASSIGN
