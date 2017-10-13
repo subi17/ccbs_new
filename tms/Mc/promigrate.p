@@ -138,17 +138,17 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
          IF AVAIL Clitype AND 
                   Clitype.webstatuscode EQ {&CLITYPE_WEBSTATUSCODE_ACTIVE} 
          THEN DO:
-            liMsReq = fProMigrationRequest(INPUT Mobsub.Msseq,
+            liMsReq = fProMigrationRequest(INPUT bMobsub.Msseq,
                                            INPUT MSRequest.salesman,
                                            INPUT {&REQUEST_SOURCE_MIGRATION},
                                            INPUT MSRequest.msrequest,
                                            OUTPUT lcResult).
          END.
          ELSE IF AVAIL Clitype AND
-                 fgetActiveReplacement(Mobsub.clitype) GT "" THEN DO:
+                 fgetActiveReplacement(bMobsub.clitype) GT "" THEN DO:
             /* Make iSTC according to mapping */
-            liMsReq = fCTChangeRequest(MobSub.msseq,
-                           fgetActiveReplacement(Mobsub.clitype),
+            liMsReq = fCTChangeRequest(bMobSub.msseq,
+                           fgetActiveReplacement(bMobsub.clitype),
                            "", /* lcBundleID */
                            "", /*bank code validation is already done */
                            MSRequest.ActStamp,
