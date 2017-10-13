@@ -137,7 +137,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                   lcReason = "PRO migration not possible because of prepaid subscription".
              END.
              /* Check any ongoing orders */
-             IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                     0) THEN DO:
              ASSIGN
                 llOrderAllowed = FALSE
@@ -201,6 +201,59 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
                 END.
              END.
+          END.
+          ELSE IF (pcChannel EQ "Telesales" OR pcChannel EQ "Fusion_pos") 
+          THEN DO:
+             IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
+                               Mobsub.Brand EQ gcBrand AND
+                               Mobsub.InvCust EQ Customer.CustNum AND
+                               Mobsub.paytype) THEN DO:
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of prepaid subscription".
+             END.
+             /* Check any ongoing orders */
+             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+                                    0) THEN DO:
+             ASSIGN
+                llOrderAllowed = FALSE
+                lcReason = "PRO migration not possible because of active non pro orders".
+             END.
+             ELSE DO:
+                IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
+                                  Mobsub.Brand EQ gcBrand AND
+                                  Mobsub.InvCust EQ Customer.CustNum AND
+                                  fIsConvergent3POnly(Mobsub.clitype)) THEN DO:
+
+                   ASSIGN
+                      llOrderAllowed = FALSE
+                      lcReason = "This migration is not allowed. Please make a previous STC to an open active tariff.".
+                END.
+                FOR EACH Mobsub NO-LOCK WHERE
+                         Mobsub.Brand EQ gcBrand AND
+                         Mobsub.InvCust EQ Customer.CustNum:
+                   FIND FIRST Clitype WHERE
+                              Clitype.brand EQ "1" AND
+                              Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
+                   IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
+                      fgetActiveReplacement(Mobsub.clitype) > "") AND
+                      NOT fHasTVService(Mobsub.msseq) THEN DO:
+                      llOnlyActiveFound = TRUE.
+                   END.
+                   ELSE DO:
+                      /* found subscription that rejects migration
+                         commercially non active that does not have
+                         migration mapping or tv service activated */
+                      llOnlyActiveFound = FALSE.
+                      LEAVE.
+                   END.
+                END.
+                IF NOT llOnlyActiveFound THEN DO:
+                   ASSIGN
+                      llOrderAllowed = FALSE
+                      lcReason = "This migration is not allowed. Please make a previous STC to an open active tariff.".
+                END.                
+             END.             
           END.
           ELSE
           ASSIGN
