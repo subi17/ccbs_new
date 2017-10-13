@@ -541,11 +541,11 @@ PROCEDURE pTerminate:
             DCCLI.MsSeq   = MobSub.MsSeq  AND
             DCCLI.ValidTo >= TODAY:
          
-      DCCLI.TermDate = ?.
-
       /* COFF Partial termination */
       IF (lcTerminationType EQ {&TERMINATION_TYPE_PARTIAL} AND
          fIsConvergentFixedContract(DCCLI.DCEvent)) THEN NEXT.
+
+      DCCLI.TermDate = ?.
 
       FIND FIRST DayCampaign NO-LOCK WHERE
                  DayCampaign.Brand = gcBrand AND
