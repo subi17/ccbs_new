@@ -286,9 +286,15 @@ FUNCTION fGetProFeemodel RETURNS CHAR
              DayCampaign.DCEvent = CLIType.FixedBundle:
       RETURN DayCampaign.FeeModel.
    END.
-
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Parameters:gcBrand AND
+             CLIType.CLIType = icCliType,
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Parameters:gcBrand AND
+             DayCampaign.DCEvent = CLIType.FixedBundle:
+      RETURN DayCampaign.FeeModel.
+   END.
    RETURN "".
-
 END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
