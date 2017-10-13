@@ -287,7 +287,7 @@ ELSE DO:
 
          IF AVAILABLE MobSub THEN 
          DO:
-            IF MobSub.PayType = FALSE
+            IF MobSub.PayType = FALSE THEN
             DO:
                 IF CAN-FIND(FIRST bMobSub WHERE
                                   bMobSub.Brand     = gcBrand          AND
