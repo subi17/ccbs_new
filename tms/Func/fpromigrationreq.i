@@ -16,6 +16,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INT,        /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */
     INPUT  icSource       AS CHARACTER,
+    INPUT  iiOrig         AS INTEGER,
     OUTPUT ocResult       AS CHARACTER):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
@@ -40,6 +41,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    ASSIGN
       bCreaReq.ReqCParam1  = "MIGRATE"
       bCreaReq.ReqSource   = icSource
+      bCreaReq.origrequest = iiOrig
       liReqCreated         = bCreaReq.MsRequest.
 
    RELEASE bCreaReq.

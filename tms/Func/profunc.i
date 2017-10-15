@@ -18,6 +18,7 @@
 {Func/femailinvoice.i}
 {Func/email.i}
 {Func/fixedlinefunc.i}
+{Func/cparam2.i}
 
 /* check pro */
 FUNCTION fIsPro RETURNS LOGICAL
@@ -269,9 +270,15 @@ FUNCTION fGetProFeemodel RETURNS CHAR
              DayCampaign.DCEvent = CLIType.FixedBundle:
       RETURN DayCampaign.FeeModel.
    END.
-
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Parameters:gcBrand AND
+             CLIType.CLIType = icCliType,
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Parameters:gcBrand AND
+             DayCampaign.DCEvent = CLIType.clitype:
+      RETURN DayCampaign.FeeModel.
+   END.
    RETURN "".
-
 END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
@@ -365,6 +372,25 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 
    RETURN "".
 
+END.
+
+FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
+   DEF VAR lcSubsMappings AS CHAR NO-UNDO.
+   DEF VAR lcMappedSubs AS CHAR NO-UNDO.
+   DEF VAR lcSubsFrom AS CHAR NO-UNDO.
+   DEF VAR lcSubsTo AS CHAR NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO.
+
+   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
+
+   DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
+      ASSIGN
+         lcMappedSubs = ENTRY(liloop, lcSubsMappings,"|")
+         lcSubsFrom = ENTRY(1,lcMappedSubs,"=")
+         lcSubsTo = ENTRY(2,lcMappedSubs,"=").
+      IF LOOKUP(icClitype,lcSubsFrom) GE 1 THEN RETURN lcSubsTo.
+   END.
+   RETURN "".
 END.
 
 &ENDIF
