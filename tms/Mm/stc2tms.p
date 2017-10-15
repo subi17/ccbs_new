@@ -1030,7 +1030,6 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
-   DEF BUFFER bMobsub FOR Mobsub.
 
    /* now when billtarget has been updated new fees can be created */
 
@@ -1420,7 +1419,7 @@ PROCEDURE pFinalize:
 END PROCEDURE.
 
 PROCEDURE pUpdateCustomer:
-    
+    DEF BUFFER bMobsub FOR Mobsub.    
     IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY}                                                                 AND
       NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
