@@ -65,13 +65,13 @@ DO liLoop = 0 TO get_paramcount(pcArray) - 1:
      ttMNPRetPlatform.percentage = pdePercentage.
 END.
 
-/* Begin YDR-2644. The sum of percentages for each operator can't be more than 100. */
+/* Begin YDR-2644. The sum of percentages for each operator can't be other than 100. */
 FOR EACH ttMNPRetPlatform NO-LOCK BREAK BY ttMNPRetPlatform.Operators:
    IF FIRST-OF(ttMNPRetPlatform.Operators) THEN 
       ldePercentageTotal = 0.
    ldePercentageTotal = ldePercentageTotal + ttMNPRetPlatform.Percentage.   
    IF LAST-OF(ttMNPRetPlatform.Operators) THEN DO:
-      IF ldePercentageTotal > 100 THEN RETURN 
+      IF ldePercentageTotal <> 100 THEN RETURN 
          appl_err("percentage_error " + ttMNPRetPlatform.Operators).
    END.    
 END.
