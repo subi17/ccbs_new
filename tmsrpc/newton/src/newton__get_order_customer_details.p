@@ -239,6 +239,9 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
                                    ordercustomer.selfemployed,
                                    ordercustomer.pro,
                                    OUTPUT lcCategory)).
+
+      add_boolean(lcStruct, 'mark_dont_share_personal_data', OrderCustomer.DontSharePersData).
+                                   
    END.
 
    RETURN TRUE.
