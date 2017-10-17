@@ -149,7 +149,7 @@ FUNCTION fErrorMulti RETURNS LOGICAL
    THEN DO:
       IF icTime      = "0800" AND
          icNCStatus  = "APOR" AND
-         fCharToDate(lcNCTime) EQ TODAY
+         fCharToDate(icNCTime) EQ TODAY
       THEN fLog(lhsLog[2], lcLine + "|" + icMessage).
 
       ELSE IF LOOKUP(icTime, "0800,1400") > 0 AND
