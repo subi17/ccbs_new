@@ -10,7 +10,7 @@ ASSIGN
    lcToType   = "CONTFH82_1000"
    lcFromBundle = "CONTFH300"
    lcToBundle  = "CONTFH1000"
-   ldeProFee = 11.23.   
+   ldeProFee = 8.23.   
 
 FUNCTION fCreateMXItem RETURNS LOGICAL
    ( iiMXSeq   AS INTEGER,

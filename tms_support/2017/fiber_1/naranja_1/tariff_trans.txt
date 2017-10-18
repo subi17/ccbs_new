@@ -1,5 +1,5 @@
 Code;Type;Spanish (LangCode = 1);Catalan (LangCode = 2);Basque (LangCode = 3)
-CONTFH69_1000;9;1;Spanish;La Combinada Verde 1Gbps
-CONTFH69_1000;9;2;Catalan;La Combinada Verde 1Gbps
-CONTFH69_1000;9;3;Basque;La Combinada Verde 1Gbps
-CONTFH69_1000;9;5;English;La Combinada Verde 1Gbps
+CONTFH69_1000;9;1;Spanish;La Combinada Naranja 1Gbps
+CONTFH69_1000;9;2;Catalan;La Combinada Naranja 1Gbps
+CONTFH69_1000;9;3;Basque;La Combinada Naranja 1Gbps
+CONTFH69_1000;9;5;English;La Combinada Naranja 1Gbps
