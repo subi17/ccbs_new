@@ -240,7 +240,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                         bf_MsRequest.DoneStamp   = fMakeTS()
                         bf_MsRequest.Memo        = bf_MsRequest.Memo + 
                                                    (IF bf_MsRequest.Memo > "" THEN ", " ELSE "") + 
-                                                   "Non-pro order#" + iiOrder + " for ACCed customer is handled. That means ACCed customer " + 
+                                                   "Non-pro order#" + STRING(iiOrder) + " for ACCed customer is handled. That means ACCed customer " + 
                                                    "has been added as Non-pro too system, so this pending ACC request is not valid anymore".
                 END.
             END.    
