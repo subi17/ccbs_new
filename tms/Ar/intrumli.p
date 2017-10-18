@@ -70,7 +70,7 @@ skip(1)
 xCustNum1  AT 10 LABEL "Customers .." FORMAT "zzzzzzz9" 
     HELP "Agreement customers"
 "-"
-xCustNum2    NO-LABEL FORMAT "zzzzzzz9" 
+xCustNum2    NO-LABEL FORMAT "zzzzzzzz9" 
     HELP "Agreement customers"
     VALIDATE(INPUT xCustNum2 GE INPUT xCustNum1,
              "Check customer definition") SKIP
@@ -93,7 +93,7 @@ SKIP(8)
 
 ASSIGN xDate2    = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        xDate1    = DATE(MONTH(xDate2),1,YEAR(xDate2) - 1)
-       xCustNum2 = 99999999
+       xCustNum2 = 999999999
        xDue      = liLateDays
        xFromRem  = FALSE
        xClaimed  = liClaimPoint - 1.
