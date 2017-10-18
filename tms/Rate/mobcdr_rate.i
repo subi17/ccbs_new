@@ -131,7 +131,6 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 3  THEN ASSIGN Mod_bsub  = "ROAMINT"   b_type = 0.
       WHEN 4  THEN ASSIGN Mod_bsub  = "ROAMLOCAL" b_type = 1.
       WHEN 7  THEN ASSIGN Mod_bsub  = "RT" b_type = 0.
-      WHEN 17 THEN ASSIGN Mod_bsub  = "RT" b_type = 0 .
       WHEN 51 THEN DO:     
          IF b_type = 1 THEN DO:
             IF TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN
@@ -185,31 +184,30 @@ FUNCTION fAnalBsub RETURNS LOGICAL
          ELSE IF ttCall.Btype = 1 THEN mod_bsub = ttcall.gsmbnr.
       
       END.      
-      WHEN 94 THEN DO:
-         IF ttCall.Btype = 98 THEN mod_bsub = "EMAIL".
-      END.
 
       WHEN 95 THEN mod_bsub = "ROAMMMSMO_EU".
       WHEN 96 THEN mod_bsub = "ROAMMMSMT_EU".
       WHEN 105 THEN mod_bsub = "ROAMMMSMO".
       WHEN 106 THEN mod_bsub = "ROAMMMSMT".
-
-      WHEN 104 THEN DO:
-         IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
-         ASSIGN
-            ttCall.Gsmbnr = "-"
-            mod_bsub      = "EMAIL".
-      END.
                            
       WHEN 97 THEN DO:
          mod_bsub  = "INTERNATIONAL".
       END. 
    END.
+ 
+   /* YTS-11600 */
+   IF ttCall.SpoCmt EQ 104 OR /* 94+b-type=98=>104 */
+     (ttCall.SpoCmt EQ 95 AND ttCall.Btype EQ 98) OR
+     (ttCall.SpoCmt EQ 105 AND ttCall.Btype EQ 98) THEN DO:
+      IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
+      ASSIGN
+         ttCall.Gsmbnr = "-"
+         mod_bsub      = "EMAIL".
+   END.
    
    IF ttCall.SpoCMT  = 3 OR 
       ttCall.SpoCMT  = 4 OR
-      ttCall.SpoCMT  = 7 OR 
-      ttCall.SPOCMT  = 17 THEN DO:
+      ttCall.SpoCMT  = 7 THEN DO:
 
       lcARoamZone = "".
       
@@ -321,7 +319,11 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    * Thus analyse B-sub from right      *
    * TO left; gradually                 *
    *************************************/
-   IF b_type = 1 AND ttCall.SpoCMT NE 51 AND ttCall.SpoCMT NE 54 THEN DO:
+   IF b_type = 1 AND 
+      ttCall.SpoCMT NE 51 AND
+      ttCall.SpoCMT NE 54 AND
+      ttCall.SpoCMT NE 95 AND
+      ttCall.SpoCMT NE 105 THEN DO:
    
       DO b = LENGTH(b_sub) TO 1 BY -1:
          IF CAN-FIND(FIRST BDest WHERE

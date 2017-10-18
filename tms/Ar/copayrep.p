@@ -135,7 +135,7 @@ FUNCTION fCollect RETURNS LOGICAL.
       IF AVAILABLE Salesman THEN 
          ttEvent.Reseller = Salesman.Reseller.
    END.         
-   ELSE ttEvent.Target = STRING(CoEvent.CustNum,"99999999").
+   ELSE ttEvent.Target = STRING(CoEvent.CustNum,"999999999").
    
    IF ttEvent.Reseller < icReseller1 OR
       ttEvent.Reseller > icReseller2 
