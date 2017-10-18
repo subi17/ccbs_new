@@ -409,6 +409,44 @@ FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
    RETURN "".
 END.
 
+FUNCTION fProMigrationRequest RETURNS INTEGER
+   (INPUT  iiMsseq        AS INT,        /* msseq                */
+    INPUT  icCreator      AS CHARACTER,  /* who made the request */
+    INPUT  icSource       AS CHARACTER,
+    INPUT  iiOrig         AS INTEGER,
+    OUTPUT ocResult       AS CHARACTER):
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR ldActStamp AS DEC NO-UNDO.
+
+   ocResult = fChkRequest(iiMsSeq,
+                          {&REQTYPE_PRO_MIGRATION},
+                          "",
+                          icCreator).
+
+   IF ocResult > "" THEN RETURN 0.
+
+   /* set activation time */
+   ldActStamp = fMakeTS().
+
+   fCreateRequest({&REQTYPE_PRO_MIGRATION},
+                  ldActStamp,
+                  icCreator,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+
+   ASSIGN
+      bCreaReq.ReqCParam1  = "MIGRATE"
+      bCreaReq.ReqSource   = icSource
+      bCreaReq.origrequest = iiOrig
+      liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+
+   RETURN liReqCreated.
+
+END FUNCTION.
+
 &ENDIF
 
 

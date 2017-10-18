@@ -8,7 +8,6 @@
 {Syst/eventval.i}
 {Func/ffeecont.i}
 {Func/setfees.i}
-{Func/fpromigrationreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

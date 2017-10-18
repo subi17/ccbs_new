@@ -17,7 +17,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
-{Func/fpromigrationreq.i}
+{Func/profunc.i}
 
 DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
