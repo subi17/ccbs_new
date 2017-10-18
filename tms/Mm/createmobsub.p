@@ -434,8 +434,6 @@ IF NOT AVAIL mobsub THEN DO:
       Mobsub.SimDelStatus     = 2
       Mobsub.Activationdate   = TODAY
       Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
-      MobSub.MultiSimID       = Order.MultiSimID
-      MobSub.MultiSimType     = Order.MultiSimType
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 

@@ -236,42 +236,43 @@ IF pdeCharge > 0 THEN
       Mobsub.PayType,
       pdeCharge,
       pdeChargeLimit).
+IF lcError > "" THEN RETURN appl_err(lcError).
 
 ASSIGN lcReqSource = (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
                       ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
                       ELSE {&REQUEST_SOURCE_MANUAL_TMS}).
 
-IF lcError EQ "" THEN 
-   RUN pCheckSubscriptionForACC (
-      MobSub.MsSeq,
-      0,
-      lcReqSource,
-      OUTPUT lcError).
+RUN pCheckSubscriptionForACC (
+   MobSub.MsSeq,
+   0,
+   lcReqSource,
+   OUTPUT lcError).
+IF lcError > "" THEN RETURN appl_err(lcError).
 
-IF lcError EQ "" AND AVAIL Customer THEN DO:
+IF AVAIL Customer THEN DO:
    RUN pCheckTargetCustomerForACC (
       Customer.Custnum,
       OUTPUT lcError).
-   
-   llProCust = fIsPro(Customer.category).
-   llSelfEmployed = fIsSelfEmpl(customer.category).
+   IF lcError > "" THEN
+      RETURN appl_err(lcError).
 END.
+ELSE DO:
 
-IF lcError > "" THEN
-   RETURN appl_err(lcError).
+   llProCust = fIsPro(bOriginalCustomer.category).
+   IF llProCust THEN 
+      llSelfEmployed = fIsSelfEmpl(bOriginalCustomer.category).
 
-
-IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
-                               INPUT ttCustomer.CustIdType,
-                               llSelfEmployed,
-                               llProCust,
-                               1,
-                               OUTPUT lcError,
-                               OUTPUT liSubLimit,
-                               OUTPUT liSubs,
-                               OUTPUT liActLimit,
-                               OUTPUT liActs) THEN
+   IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
+                                  INPUT ttCustomer.CustIdType,
+                                  llProCust,
+                                  llSelfEmployed, 
+                                  1,
+                                  OUTPUT liSubLimit,
+                                  OUTPUT liSubs,
+                                  OUTPUT liActLimit,
+                                  OUTPUT liActs) THEN
    RETURN appl_err("Subscription limit exceeded").
+END.
 
 lcCode = fCreateAccDataParam(
           (BUFFER ttCustomer:HANDLE),
