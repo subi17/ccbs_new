@@ -246,7 +246,6 @@ PROCEDURE pCheckTargetCustomerForACC:
                                   INPUT fIsSelfEmpl(bACCNewCust.Category),
                                   INPUT fIsPro(bACCNewCust.Category),
                                   1,
-                                  OUTPUT ocMessage,
                                   OUTPUT liSubLimit,
                                   OUTPUT liSubs,
                                   OUTPUT liActLimit,
