@@ -133,13 +133,13 @@ ELSE DO:
                  MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
 
       IF AVAIL MsOwner THEN DO:
-         IF EventLog.Action = "Create" THEN DO: /* YTS-10342 fix. */
-            /* IF create-date is not yesterday, wrong MSOwner was found. Do a new search */
+         IF EventLog.Action = "Create" THEN DO:
+         /* Always dump the latest ongoing msowner with create. YTS-11639 */
+         fCollect().
+            /* IF create-date is not yesterday, other MSOwner can be found. YTS-10342 */
             IF MsOwner.TSBegin <  ldeLastDump OR 
                MsOwner.TSBegin >= ldeToday THEN DO: 
                /* This begin date for create is not yesterday, so continue to search a new one */
-               IF MsOwner.TSBegin >= ldeToday THEN
-                  fCollect().
                RELEASE MSOwner.
                FIND FIRST MsOwner NO-LOCK WHERE
                           MsOwner.Brand = gcBrand AND
