@@ -199,7 +199,7 @@ IF NOT extcustgrp THEN DO:
 END.
 
 ELSE DO:
-   ASSIGN cgcustno1 = 99999999
+   ASSIGN cgcustno1 = 999999999
           cgcustno2 = 1. 
 
    FOR EACH TCustGroup,
@@ -283,7 +283,7 @@ FOR EACH ttInvGroup,
           ELSE CAN-FIND(FIRST tcgmember  where
                               tcgmember.custno = Customer.CustNum))
 BY (if ttCriter.SortBy = 1 
-    then string(CustNum,"99999999") 
+    then string(CustNum,"999999999") 
     else Customer.CustName):
 
    assign
