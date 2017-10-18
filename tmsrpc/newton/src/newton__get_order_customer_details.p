@@ -240,8 +240,8 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
                                    ordercustomer.pro,
                                    OUTPUT lcCategory)).
 
-      add_boolean(lcStruct, 'mark_dont_share_personal_data', OrderCustomer.DontSharePersData).
-                                   
+      add_int(     lcStruct, "mark_dont_share_personal_data", 
+                   INTEGER(OrderCustomer.DontSharePersData  )).                                                                      
    END.
 
    RETURN TRUE.
