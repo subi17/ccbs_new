@@ -24,7 +24,7 @@ DEF VAR lcReseller   AS CHAR  FORMAT "X(10)"    NO-UNDO EXTENT 2.
 DEF VAR lcSalesman   AS CHAR  FORMAT "X(10)"    NO-UNDO EXTENT 2. 
 DEF VAR ldtCalcDate  AS DATE  FORMAT "99-99-99" NO-UNDO EXTENT 2.
 DEF VAR ldtOldPDate  AS DATE  FORMAT "99-99-99" NO-UNDO EXTENT 2.
-DEF VAR liCustNum    AS INT   FORMAT ">>>>>>>9" NO-UNDO EXTENT 2.
+DEF VAR liCustNum    AS INT   FORMAT ">>>>>>>>9" NO-UNDO EXTENT 2.
 DEF VAR llMark       AS LOGIC FORMAT "Yes/No"   NO-UNDO. 
 DEF VAR liCount      AS INT                     NO-UNDO. 
 DEF VAR ldtPaymDate  AS DATE  FORMAT "99-99-99" NO-UNDO. 
@@ -148,7 +148,7 @@ BY Reseller.Reseller:
     lcSalesman[2] = MAX(lcSalesman[2],Salesman.Salesman).
 END.
          
-ASSIGN liCustNum[2]   = 99999999          
+ASSIGN liCustNum[2]   = 999999999          
        ldtCalcDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))
        ldtCalcDate[2] = IF MONTH(TODAY) = 12 
                         THEN DATE(12,31,YEAR(TODAY))
