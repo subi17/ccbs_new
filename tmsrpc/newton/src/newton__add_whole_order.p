@@ -792,26 +792,36 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} THEN
          pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
             
-      IF NOT pcChannel BEGINS "migration" THEN DO: /*MMM-21*/
-
+      IF NOT pcChannel BEGINS "migration" AND /*MMM-21*/
          /* YTS-2453 */
-         IF NOT plBypassRules AND
+         NOT plBypassRules AND
             lcFError = "" AND 
             piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
             LOOKUP(pcNumberType,"new,mnp") > 0 AND
             NOT plUpdate AND
-            piMultiSimType NE {&MULTISIMTYPE_SECONDARY} AND
-            NOT fSubscriptionLimitCheck(
-            lcIdOrderCustomer,
-            lcIdTypeOrderCustomer,
-            llSelfEmployed,
-         llIsProCustomer,
-            1,
-            OUTPUT lcFError,
-            OUTPUT liSubLimit,
-            OUTPUT liSubs,
-            OUTPUT liSubLimit,
-            OUTPUT liActs) THEN .
+            piMultiSimType NE {&MULTISIMTYPE_SECONDARY} THEN DO:
+
+            IF NOT fSubscriptionLimitCheck(
+               lcIdOrderCustomer,
+               lcIdTypeOrderCustomer,
+               llSelfEmployed,
+               llIsProCustomer,
+               1,
+               OUTPUT liSubLimit,
+               OUTPUT liSubs,
+               OUTPUT liSubLimit,
+               OUTPUT liActs) THEN lcFError = "subscription limit".
+            
+            IF lcFError EQ "" THEN
+               FOR FIRST Customer WHERE
+                         Customer.Brand      = gcBrand  AND
+                         Customer.OrgId      = lcIdOrderCustomer AND
+                         Customer.CustIdType = lcIdtypeOrderCustomer AND
+                         Customer.Roles NE "inactive" NO-LOCK:
+                  IF fExistBarredSubForCustomer(Customer.Custnum) THEN
+                     lcFError = "barring".
+               END.
+               
       END.
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.

@@ -42,7 +42,7 @@ ASSIGN
   ErrorCode1 = 0
   bbatch =  session:batch
   cust-no1 = 0 
-  cust-no2 = 99999999
+  cust-no2 = 999999999
   cdate2 = DATE(MONTH(TODAY),1,YEAR(TODAY)) .
   cdate1 = DATE(MONTH(cdate2),1,YEAR(CDATE2)).
   cdate2 =  DATE(MONTH(cdate1 + 45 ),1,
