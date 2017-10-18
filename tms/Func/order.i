@@ -192,6 +192,65 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
 
 END. /* FUNCTION fUpdEmailDelType */
 
+FUNCTION fClosePendingACC RETURNS LOGICAL
+    (INPUT icCloseType      AS CHARACTER,
+     INPUT icCustomerIdType AS CHARACTER,
+     INPUT icCustomerId     AS CHARACTER,
+     INPUT ilProCustomer    AS LOGICAL  ,
+     INPUT iiOrder          AS INTEGER):
+
+    DEFINE BUFFER bf_MsRequest FOR MsRequest.
+    DEFINE BUFFER bf_Customer  FOR Customer.
+    DEFINE BUFFER bf_CustCat   FOR CustCat.
+
+    DEF VARIABLE ldeCurrentTime AS DECIMAL NO-UNDO.
+
+    ASSIGN ldeCurrentTime = fMakeTS().
+
+    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                              AND 
+                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND 
+                                bf_MsRequest.ReqStatus = {&REQUEST_STATUS_NEW}                AND
+                                bf_MsRequest.ActStamp >= ldeCurrentTime                       NO-LOCK:
+
+        IF ENTRY(12,bf_MsRequest.ReqCParam1) = "" OR ENTRY(13,bf_MsRequest.ReqCParam1) = "" THEN
+           NEXT.
+
+        IF ENTRY(12,bf_MsRequest.ReqCParam1) = icCustomerIdType AND ENTRY(13,bf_MsRequest.ReqCParam1) = icCustomerId THEN
+        DO:
+            FIND FIRST bf_Customer WHERE bf_Customer.CustNum = bf_MsRequest.CustNum NO-LOCK NO-ERROR.
+            IF AVAIL bf_Customer THEN
+            DO:
+                FIND FIRST bf_CustCat WHERE bf_CustCat.Brand = gcBrand AND bf_CustCat.Category = bf_Customer.Category NO-LOCK NO-ERROR.
+                IF AVAIL bf_CustCat THEN 
+                DO:
+                    IF icCloseType = "Pro" THEN 
+                    DO:
+                        IF bf_CustCat.Pro = FALSE THEN 
+                            NEXT.
+                    END.
+                    ELSE /* Non-pro */ 
+                    DO:
+                        IF bf_CustCat.Pro = TRUE THEN 
+                            NEXT.
+                    END.
+
+                    ASSIGN 
+                        bf_MsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
+                        bf_MsRequest.UpdateStamp = fMakeTS()
+                        bf_MsRequest.DoneStamp   = fMakeTS()
+                        bf_MsRequest.Memo        = bf_MsRequest.Memo + 
+                                                   (IF bf_MsRequest.Memo > "" THEN ", " ELSE "") + 
+                                                   "Non-pro order#" + iiOrder + " for ACCed customer is handled. That means ACCed customer " + 
+                                                   "has been added as Non-pro too system, so this pending ACC request is not valid anymore".
+                END.
+            END.    
+        END.   
+           
+    END.
+
+    RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fMakeCustomer RETURNS LOGICAL
   (INPUT iiOrder   AS INT,
@@ -369,66 +428,6 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    RETURN TRUE.
 
 END.
-
-FUNCTION fClosePendingACC RETURNS LOGICAL
-    (INPUT icCloseType      AS CHARACTER,
-     INPUT icCustomerIdType AS CHARACTER,
-     INPUT icCustomerId     AS CHARACTER,
-     INPUT ilProCustomer    AS LOGICAL  ,
-     INPUT iiOrder          AS INTEGER):
-
-    DEFINE BUFFER bf_MsRequest FOR MsRequest.
-    DEFINE BUFFER bf_Customer  FOR Customer.
-    DEFINE BUFFER bf_CustCat   FOR CustCat.
-
-    DEF VARIABLE ldeCurrentTime AS DECIMAL NO-UNDO.
-
-    ASSIGN ldeCurrentTime = fMakeTS().
-
-    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                              AND 
-                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND 
-                                bf_MsRequest.ReqStatus = {&REQUEST_STATUS_NEW}                AND
-                                bf_MsRequest.ActStamp >= ldeCurrentTime                       NO-LOCK:
-
-        IF ENTRY(12,bf_MsRequest.ReqCParam1) = "" OR ENTRY(13,bf_MsRequest.ReqCParam1) = "" THEN
-           NEXT.
-
-        IF ENTRY(12,bf_MsRequest.ReqCParam1) = icCustomerIdType AND ENTRY(13,bf_MsRequest.ReqCParam1) = icCustomerId THEN
-        DO:
-            FIND FIRST bf_Customer WHERE bf_Customer.CustNum = bf_MsRequest.CustNum NO-LOCK NO-ERROR.
-            IF AVAIL bf_Customer THEN
-            DO:
-                FIND FIRST bf_CustCat WHERE bf_CustCat.Brand = gcBrand AND bf_CustCat.Category = bf_Customer.Category NO-LOCK NO-ERROR.
-                IF AVAIL bf_CustCat THEN 
-                DO:
-                    IF icCloseType = "Pro" THEN 
-                    DO:
-                        IF bf_CustCat.Pro = FALSE THEN 
-                            NEXT.
-                    END.
-                    ELSE /* Non-pro */ 
-                    DO:
-                        IF bf_CustCat.Pro = TRUE THEN 
-                            NEXT.
-                    END.
-
-                    ASSIGN 
-                        bf_MsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
-                        bf_MsRequest.UpdateStamp = fMakeTS()
-                        bf_MsRequest.DoneStamp   = fMakeTS()
-                        bf_MsRequest.Memo        = bf_MsRequest.Memo + 
-                                                   (IF bf_MsRequest.Memo > "" THEN ", " ELSE "") + 
-                                                   "Non-pro order#" + iiOrder + " for ACCed customer is handled. That means ACCed customer " + 
-                                                   "has been added as Non-pro too system, so this pending ACC request is not valid anymore".
-                END.
-            END.    
-        END.   
-           
-    END.
-
-    RETURN TRUE.
-
-END FUNCTION.
 
 FUNCTION fGetTerminalOfferItemId RETURN INTEGER
   (INPUT pcOffer AS CHARACTER, 
