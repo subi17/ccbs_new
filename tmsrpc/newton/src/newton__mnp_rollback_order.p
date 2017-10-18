@@ -29,7 +29,6 @@ katun = "NewtonRPC".
 {Func/timestamp.i}
 {Func/create_eventlog.i}
 {Mm/fbundle.i}
-{Func/profunc.i}
 
 DEF VAR pcArray              AS CHAR  NO-UNDO.
 DEF VAR pcStruct             AS CHAR  NO-UNDO.
@@ -51,11 +50,6 @@ DEF VAR pcOldOperatorICC     AS CHAR  NO-UNDO.
 
 DEF VAR liOrderId            AS INT   NO-UNDO.
 DEF VAR liCounter            AS INT   NO-UNDO.
-DEF VAR llSubLimitChecked    AS LOG   NO-UNDO.
-DEF VAR lcError              AS CHAR  NO-UNDO.
-DEF VAR lisubs               AS INT   NO-UNDO.
-DEF VAR liActs               AS INT   NO-UNDO.
-DEF VAR liActLimit           AS INT   NO-UNDO.
 
 DEF TEMP-TABLE ttMNPRollback NO-UNDO
    FIELD MsSeq            AS INT
@@ -195,25 +189,8 @@ FIND FIRST Customer WHERE
 IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
-/* Addition because of MultiSim project */
-liCounter = get_paramcount(pcArray).
-IF liCounter > 1 THEN liCounter = liCounter + 1.
-ELSE liCounter = 1.
-
-IF NOT fSubscriptionLimitCheck(pcPersonId,
-                               pcIdType,
-                               FALSE,
-                               fisPro(Customer.category),
-                               liCounter,
-                               OUTPUT lcError,
-                               OUTPUT liCounter,
-                               OUTPUT liSubs,
-                               OUTPUT liActLimit,
-                               OUTPUT liActs)
-   AND lcError NE "subscription limit" THEN
-   RETURN appl_err(lcError).
-
-liCounter = 0.
+IF fExistBarredSubForCustomer(Customer.CustNum) THEN
+   RETURN appl_err("barring").
 
 DO liCounter = 0 TO get_paramcount(pcArray) - 1:
    pcSubsStruct = get_struct(pcArray, STRING(liCounter)).

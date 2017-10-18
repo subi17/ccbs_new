@@ -241,6 +241,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+
    RUN pInitialize.
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
@@ -794,9 +797,6 @@ PROCEDURE pUpdateSubscription:
 
    /* Close extra line subscription discount, if Main line is moved away 
       from available extra lines related main lines */
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
-
    IF lcExtraMainLineCLITypes                          NE "" AND 
       LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
@@ -2008,6 +2008,12 @@ PROCEDURE pUpdateDSSAccount:
                /* If both postpaid subs. types compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) > 0 AND
                   LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN RETURN.
+
+               IF (LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                   LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+                  IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                           MobSub.MultiSimId,
+                                                           MobSub.MultiSimType) THEN RETURN.  
 
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND
