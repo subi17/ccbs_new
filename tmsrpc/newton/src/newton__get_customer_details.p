@@ -89,10 +89,8 @@ DEF VAR llSelfEmployed AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lcInvoiceTarget AS CHAR NO-UNDO. 
 DEF VAR liSubCount AS INT NO-UNDO. 
 DEF VAR liGroupCount AS INT NO-UNDO. 
-DEF VAR lcReason AS CHAR NO-UNDO.
 DEF VAR liSubLimit AS INTEGER NO-UNDO.
 DEF VAR lisubs AS INTEGER NO-UNDO.
-DEF VAR llLimitNotReached AS LOGICAL NO-UNDO.
 DEF VAR liActLimit AS INTEGER NO-UNDO.
 DEF VAR liacts AS INTEGER NO-UNDO.
 
@@ -275,19 +273,18 @@ add_boolean(top_struct,"self_employed",llSelfEmployed).
 add_string(top_struct, "profession", Customer.Profession).
 add_string(top_struct, "site_name", Customer.CompanyName).
 
-FIND FIRST CustCat WHERE 
+FIND FIRST CustCat NO-LOCK WHERE 
            CustCat.brand EQ gcBrand AND
            CustCat.category EQ Customer.category NO-ERROR.
 IF AVAIL custcat THEN           
    add_string(top_struct, "segment", CustCat.Segment).
 
-llLimitNotReached = fSubscriptionLimitCheck(
+fSubscriptionLimitCheck(
    Customer.orgId,
    Customer.custidType,
    llSelfEmployed,
    fispro(Customer.category),
    1,
-   OUTPUT lcReason,
    OUTPUT liSubLimit,
    OUTPUT lisubs,
    OUTPUT liActLimit,

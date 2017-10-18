@@ -192,7 +192,7 @@ PROCEDURE pRemoveFees:
       liCustNum1 = iiInvCust
       liCustNum2 = iiInvCust.
    ELSE ASSIGN
-      liCustNum2 = 99999999.
+      liCustNum2 = 999999999.
     
    liBillPeriod = YEAR(idaEventDate) * 100 + MONTH(idaEventDate).
    
