@@ -1,4 +1,4 @@
-/* stc2tms.p
+/* stc2tms.p SUBSCRIPTION TYPE CHANGE STC Request handling
    changes:
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
@@ -87,6 +87,9 @@ DEF TEMP-TABLE ttContract NO-UNDO
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest = iiMSrequest NO-LOCK NO-ERROR.
+
+IF MsRequest.ReqType NE {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
+   RETURN "ERROR".
 
 liOrigStatus = MsRequest.ReqStatus.
 IF LOOKUP(STRING(liOrigStatus),"6,8") = 0 THEN RETURN "ERROR".
@@ -238,6 +241,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+
    RUN pInitialize.
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
@@ -251,6 +257,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
                         "STC_FINAL").
+
+   /* Remove additional line termination request when correct STC done */
+   IF bNewTariff.LineType NE {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+      fRemoveAdditionalLineTerminationReq(MobSub.MsSeq).
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,
@@ -787,9 +797,6 @@ PROCEDURE pUpdateSubscription:
 
    /* Close extra line subscription discount, if Main line is moved away 
       from available extra lines related main lines */
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
-
    IF lcExtraMainLineCLITypes                          NE "" AND 
       LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
@@ -939,7 +946,7 @@ PROCEDURE pUpdateSubscription:
               DiscountPlan.Brand = gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
 
-   IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
+   IF fIsConvergenceTariff(bOldType.CliType) AND 
       NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand          AND
@@ -2001,6 +2008,12 @@ PROCEDURE pUpdateDSSAccount:
                /* If both postpaid subs. types compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) > 0 AND
                   LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN RETURN.
+
+               IF (LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                   LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+                  IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                           MobSub.MultiSimId,
+                                                           MobSub.MultiSimType) THEN RETURN.  
 
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND

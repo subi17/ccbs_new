@@ -79,7 +79,6 @@ DEF VAR llProCust AS LOG NO-UNDO.
 DEF VAR llSelfEmployed AS LOG NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
-DEF BUFFER bDestCustomer FOR Customer.
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
    FIELD cBirthDay AS CHAR
@@ -223,8 +222,9 @@ ASSIGN
 {Func/orderchk.i}
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
-lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
-                               Customer.Custnum).
+IF AVAIL Customer THEN
+   lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
+                                  Customer.Custnum).
 IF lcError > "" THEN RETURN appl_err(lcError).                               
 
 lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
@@ -236,45 +236,43 @@ IF pdeCharge > 0 THEN
       Mobsub.PayType,
       pdeCharge,
       pdeChargeLimit).
+IF lcError > "" THEN RETURN appl_err(lcError).
 
 ASSIGN lcReqSource = (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
                       ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
                       ELSE {&REQUEST_SOURCE_MANUAL_TMS}).
 
-IF lcError EQ "" THEN 
-   RUN pCheckSubscriptionForACC (
-      MobSub.MsSeq,
-      0,
-      lcReqSource,
-      OUTPUT lcError).
+RUN pCheckSubscriptionForACC (
+   MobSub.MsSeq,
+   0,
+   lcReqSource,
+   OUTPUT lcError).
+IF lcError > "" THEN RETURN appl_err(lcError).
 
-IF lcError EQ "" AND AVAIL Customer THEN 
+IF AVAIL Customer THEN DO:
    RUN pCheckTargetCustomerForACC (
       Customer.Custnum,
       OUTPUT lcError).
-
-IF lcError > "" THEN
-   RETURN appl_err(lcError).
-
-FIND bDestCustomer WHERE 
-     bDestCustomer.brand EQ gcBrand AND
-     bDestCustomer.orgId EQ ttCustomer.OrgId NO-ERROR.
-IF AVAIL bDestCustomer THEN DO:
-   llProCust = fIsPro(bDestCustomer.category).
-   llSelfEmployed = fIsSelfEmpl(bDestCustomer.category).
+   IF lcError > "" THEN
+      RETURN appl_err(lcError).
 END.
+ELSE DO:
 
-IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
-                               INPUT ttCustomer.CustIdType,
-                               llSelfEmployed,
-                               llProCust,
-                               1,
-                               OUTPUT lcError,
-                               OUTPUT liSubLimit,
-                               OUTPUT liSubs,
-                               OUTPUT liActLimit,
-                               OUTPUT liActs) THEN
+   llProCust = fIsPro(bOriginalCustomer.category).
+   IF llProCust THEN 
+      llSelfEmployed = fIsSelfEmpl(bOriginalCustomer.category).
+
+   IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
+                                  INPUT ttCustomer.CustIdType,
+                                  llProCust,
+                                  llSelfEmployed, 
+                                  1,
+                                  OUTPUT liSubLimit,
+                                  OUTPUT liSubs,
+                                  OUTPUT liActLimit,
+                                  OUTPUT liActs) THEN
    RETURN appl_err("Subscription limit exceeded").
+END.
 
 lcCode = fCreateAccDataParam(
           (BUFFER ttCustomer:HANDLE),

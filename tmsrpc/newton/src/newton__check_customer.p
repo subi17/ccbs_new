@@ -21,10 +21,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
+gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
-gcBrand = "1".
 
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.
@@ -167,44 +167,50 @@ FUNCTION fCheckMigration RETURNS LOG ():
    END.
 END.
 
-
-FIND FIRST Customer NO-LOCK WHERE
-           Customer.Brand      = gcBrand    AND
-           Customer.OrgID      = pcPersonId AND
-           Customer.CustIDType = pcIdType   AND
-           Customer.Roles     NE "inactive" NO-ERROR.
-
-/* If customer does not have subscriptions it is handled as new */
-IF AVAIL Customer AND
-   CAN-FIND(FIRST MobSub WHERE Mobsub.Brand EQ gcBrand AND 
-                  Mobsub.InvCust EQ Customer.CustNum) THEN 
-DO:
-   FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
-   IF AVAIL CustCat THEN
-      ASSIGN 
-          llCustCatPro = CustCat.pro
-          lcSegment    = CustCat.Segment. 
-END.
-ELSE
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
-
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
    llProChannel,
    piOrders,
-   OUTPUT lcReason, 
    OUTPUT liSubLimit,
    OUTPUT lisubs,
    OUTPUT liActLimit,
    OUTPUT liActs).
+   
+/* do not raise error with STC orders */
+IF NOT llOrderAllowed THEN DO:
+   IF plSTCMigrate THEN
+      llOrderAllowed = TRUE.
+   ELSE lcReason = "subscription limit".
+END.
+
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Brand      = gcBrand    AND
+           Customer.OrgID      = pcPersonId AND
+           Customer.CustIDType = pcIdType   AND
+           Customer.Roles     NE "inactive" NO-ERROR.
+       
+/* check barring subscriptions */
+IF AVAIL Customer AND
+   fExistBarredSubForCustomer(Customer.CustNum) THEN ASSIGN
+   lcReason = "barring"
+   llOrderAllowed = FALSE.
 
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
-IF AVAIL Customer THEN 
-DO:
+/* If customer does not have subscriptions it is handled as new */
+IF AVAIL Customer AND
+   CAN-FIND(FIRST MobSub WHERE 
+                  Mobsub.Brand EQ gcBrand AND
+                  Mobsub.InvCust EQ Customer.CustNum) THEN DO:
+   FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
+   IF AVAIL CustCat THEN
+      ASSIGN
+          llCustCatPro = CustCat.pro
+          lcSegment    = CustCat.Segment.
+ 
     ASSIGN 
        llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
        llProToNonProMigrationOngoing = fCheckOngoingNonProMigration(Customer.CustNum). 
@@ -216,8 +222,7 @@ DO:
               llOrderAllowed = FALSE
               lcReason = "PRO migration not possible because of not company or selfemployed". 
         ELSE IF llCustCatPro THEN 
-        DO:
-            
+        DO:            
             IF NOT fIsConvergent3POnly(pcCliType) AND 
                (NOT (fCheckExistingConvergentWithoutALCheck (pcIdType, pcPersonId, pcCliType) OR 
                      fCheckOngoingConvergentOrderWithoutALCheck(pcIdType, pcPersonId, pcCliType))) THEN
@@ -231,7 +236,7 @@ DO:
         END.
         ELSE 
         DO: /* NOT llCustCatPro */
-            IF plSTCMigrate OR fIsConvergent3POnly(pcCliType) THEN 
+            IF plSTCMigrate OR llNonProToProMigrationOngoing THEN
                fCheckMigration().
             ELSE
                ASSIGN
@@ -275,6 +280,7 @@ DO:
     END.
 END.
 ELSE DO:
+   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
            ASSIGN
@@ -383,11 +389,11 @@ IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
 add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
-IF liSubs >= liSubLimit THEN
+IF liSubs >= liSubLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
 ELSE
    add_boolean(lcReturnStruct,"subscription_limit_reached",FALSE).
-IF liActs >= liActLimit THEN
+IF liActs >= liActLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"activation_limit_reached",TRUE).
 ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).

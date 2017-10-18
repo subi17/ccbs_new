@@ -213,10 +213,10 @@
 "CLIType" "PayType" "MobSub" "0" "Not defined" "" "" 1
 "CLIType" "PayType" "MobSub" "1" "Postpaid" "" "" 1
 "CLIType" "PayType" "MobSub" "2" "Prepaid" "" "" 1
-"CliType" "ServicePack" "Profile" "11" "Post paid" "" "" 1
-"CliType" "ServicePack" "Profile" "12" "Pre paid" "" "" 1
 "CliType" "ServicePack" "Profile" "3" "Pre paid (no calls yet)" "" "" 1
 "CliType" "ServicePack" "Profile" "4" "Data postpaid" "" "" 1
+"CliType" "ServicePack" "Profile" "41" "Post paid" "" "" 1
+"CliType" "ServicePack" "Profile" "42" "Pre paid" "" "" 1
 "CLIType" "StatusCode" "MobSub" "0" "Inactive" "" "" 1
 "CLIType" "StatusCode" "MobSub" "1" "Active" "" "" 1
 "CLIType" "StatusCode" "MobSub" "2" "Retired" "" "" 1
@@ -1443,6 +1443,7 @@
 "Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
@@ -1458,6 +1459,7 @@
 "Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MT" "MARKTEL OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MW" "MARKTEL INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "NX" "ANEXA INBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PA" "PHONE HOUSE CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
