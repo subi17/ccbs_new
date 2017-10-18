@@ -5,6 +5,10 @@
 
 */
 
+&IF "{&MSISDN_I}" NE "YES" 
+&THEN
+&GLOBAL-DEFINE MSISDN_I YES
+
 {Syst/commali.i}
 {Func/timestamp.i}
 
@@ -212,4 +216,4 @@ FUNCTION fMakeMsidnHistory RETURNS CHAR
                        fMakeTS()). 
 END FUNCTION.
 
-
+&ENDIF
