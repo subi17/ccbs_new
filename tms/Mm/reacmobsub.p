@@ -917,6 +917,26 @@ DO TRANSACTION:
       END. /* IF NOT AVAIL lbMobSub THEN DO: */
    END. /* IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND */
 
+   /* YTS-11419 */
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.Brand = gcBrand AND
+                     CLIType.CLIType = MobSub.CLIType AND
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN DO:
+
+      FOR FIRST MsRequest NO-LOCK WHERE
+                MsRequest.MsSeq = MobSub.MsSeq AND
+                MsRequest.ActStamp > fMakeTS() AND
+                MsRequest.Reqtype = 0 AND
+                MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
+         LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0:
+         fReqStatus(4,"Cancelled by reactivation").
+      END.
+   
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
+         
+   END.
+
    /* HPD - Trigger some extra events to Cassandra */
    RUN pTriggerEvents(INPUT MobSub.MsSeq).
 
