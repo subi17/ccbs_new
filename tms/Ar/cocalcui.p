@@ -61,7 +61,7 @@ FORM
    liCustNum2 
       NO-LABEL 
       HELP  "Maximum limit for rule customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       VALIDATE(INPUT liCustNum2 >= INPUT liCustNum1,
                "Upper limit cannot be less than lower limit")
       SKIP
@@ -69,12 +69,12 @@ FORM
    liCustNum3 AT 10
       LABEL "Event Customers"
       HELP  "Minimum limit for event customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    "-" AT 38
    liCustNum4 
       NO-LABEL 
       HELP  "Maximum limit for event customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       VALIDATE(INPUT liCustNum4 >= INPUT liCustNum3,
                "Upper limit cannot be less than lower limit")
       SKIP
@@ -186,8 +186,8 @@ END FUNCTION.
 VIEW FRAME fCriter.
 PAUSE 0 NO-MESSAGE.
 
-ASSIGN liCustNum2    = 99999999
-       liCustNum4    = 99999999
+ASSIGN liCustNum2    = 999999999
+       liCustNum4    = 999999999
        ldtDate2      = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        ldtDate1      = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2))
 
