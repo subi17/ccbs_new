@@ -70,7 +70,7 @@ def var i          as int  format "zzzzzzz9"     NO-UNDO.
 
 def var atpvm1        as Date format "99-99-99"   NO-UNDO.
 def var atpvm2        as Date format "99-99-99"   NO-UNDO.
-def var CustNum2      as int  format "zzzzzzz9"   NO-UNDO.
+def var CustNum2      as int  format "zzzzzzzz9"   NO-UNDO.
 DEF VAR mininv        LIKE InvGroup.MinInvAmt     NO-UNDO.
 DEF VAR upmth         LIKE InvGroup.UnbilledLimit NO-UNDO.
 DEF VAR kysy_rajat    AS LOG                      NO-UNDO.
@@ -215,7 +215,7 @@ ciperiod = IF MONTH(TODAY) = 1
 IF CustNum1 = 0 THEN 
 ASSIGN
    CustNum1  = unknown + 1
-   CustNum2  = 99999999.
+   CustNum2  = 999999999.
 
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = CustNum1 NO-LOCK NO-ERROR.
@@ -368,7 +368,7 @@ IF NOT ilSilent THEN DO:
             APPLY LASTKEY.
          END.
 
-         if input CustNum2  = "" THEN CustNum2  = 9999999.
+         if input CustNum2  = "" THEN CustNum2  = 999999999.
 
          kysy_rajat = FALSE.
       END.
