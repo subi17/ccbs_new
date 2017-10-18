@@ -1925,7 +1925,6 @@ PROCEDURE pHandleAdditionalLines:
                                           fIsSelfEmpl(Customer.Category),
                                           fIsPro(Customer.Category),
                                           1,
-                                          OUTPUT lcInfo,
                                           OUTPUT liSubLimit,
                                           OUTPUT liSubs,
                                           OUTPUT liActLimit,
