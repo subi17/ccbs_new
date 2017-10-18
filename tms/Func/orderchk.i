@@ -24,6 +24,9 @@ FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
 
    DEF VAR liLimit AS INT NO-UNDO.
 
+   DEF BUFFER Limit FOR Limit.
+   DEF BUFFER CustCat FOR CustCat.
+
    FIND FIRST Limit WHERE 
               Limit.CustNum = iiCustnum     AND
               Limit.LimitType = iiLimitType AND
@@ -83,7 +86,6 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
     plSelfEmployed AS LOG,
     plpro AS LOG, 
     piOrders AS INT,
-    OUTPUT ocReason AS CHAR,
     OUTPUT oiSubLimit AS INT,
     OUTPUT oiSubCount AS INT,
     OUTPUT oiSubActLimit AS INT,
@@ -165,11 +167,6 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
                                        INPUT pcIdType,
                                        INPUT plSelfEmployed,
                                        INPUT plpro).
-       /* check barring subscriptions */
-       IF fExistBarredSubForCustomer(Customer.CustNum) THEN DO: 
-          ocReason = "barring".
-          RETURN FALSE.
-       END.
        /* check subscription limit and subscription activation limit */
    END. /* IF AVAIL Customer THEN DO: */
    ELSE DO:
@@ -182,10 +179,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
                 oiSubActLimit = CustCat.ActivationLimit.
    END.
    
-   IF oiSubCount >= oiSubLimit OR oiActOrderCount >= oiSubActLimit THEN DO:
-      ocReason = "subscription limit". 
+   IF oiSubCount >= oiSubLimit OR oiActOrderCount >= oiSubActLimit THEN
       RETURN FALSE.
-   END.
 
    RETURN TRUE.
 END.

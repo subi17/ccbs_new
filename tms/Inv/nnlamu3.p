@@ -67,7 +67,7 @@ def var i          as int  format "zzzzzzz9"     NO-UNDO.
 
 def var atpvm1     as Date format "99-99-99" NO-UNDO.
 def var atpvm2     as Date format "99-99-99" NO-UNDO.
-def var CustNum2      as int  format "zzzzzzzz9" NO-UNDO.
+def var CustNum2   as int  format "zzzzzzzz9" NO-UNDO.
 DEF VAR mininv     LIKE InvGroup.MinInvAmt   NO-UNDO.
 DEF VAR upmth      LIKE InvGroup.UnbilledLimit    NO-UNDO.
 DEF VAR kysy_rajat AS LOG                    NO-UNDO.
