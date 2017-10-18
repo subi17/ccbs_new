@@ -80,12 +80,12 @@ form
 
    liCustNum[1] at 2
       label "Customer numbers ......."
-      format ">>>>>>>9"
+      format ">>>>>>>>9"
       help "Customers"
    "-"
    liCustNum[2]   
       no-label
-      format ">>>>>>>9"
+      format ">>>>>>>>9"
       help "Customers"
       SKIP
       
@@ -146,7 +146,7 @@ assign pvm2         = date(month(today),01,year(today)) - 1
        llInvoices   = TRUE
        latil        = true 
        tikoo        = true 
-       liCustNum[2] = 99999999
+       liCustNum[2] = 999999999
        liInvType2   = 98
        liPaymState2 = 9
        lcExtInvID2  = FILL("Z",12)

@@ -19,8 +19,8 @@ assign tuni1 = "nnpura5"
 DEF NEW SHARED VAR lcMacros AS CHAR                  NO-UNDO.
 
 DEF VAR ufkey AS LOG NO-UNDO.
-def var CustNum1 as int format "zzzzzzz9" init "0" NO-UNDO.
-def var CustNum2 as int format "zzzzzzz9" init "99999999" NO-UNDO.
+def var CustNum1 as int format "zzzzzzzz9" init "0" NO-UNDO.
+def var CustNum2 as int format "zzzzzzzz9" init "999999999" NO-UNDO.
 def var pvm1  as date format "99-99-99" init ? NO-UNDO.
 def var pvm2  as date format "99-99-99" init TODAY NO-UNDO.
 def var tilak as int format "9" NO-UNDO.
@@ -88,7 +88,7 @@ toimi:
                 tilak validate(INPUT tilak >= 0 AND INPUT tilak < 3,
                                "State has to be 0 .. 2 !")
          WITH FRAME rajat.
-         IF CustNum2 = 0 THEN CustNum2 = 999999.
+         IF CustNum2 = 0 THEN CustNum2 = 999999999.
          FIND FIRST Customer where 
             Customer.CustNum >= CustNum1 AND 
             Customer.CustNum <= CustNum2
