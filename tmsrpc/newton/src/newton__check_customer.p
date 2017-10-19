@@ -155,9 +155,18 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    FIND FIRST Clitype WHERE
                               Clitype.brand EQ "1" AND
                               Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                   IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1) AND
-                      NOT fHasTVService(Mobsub.msseq) THEN DO:
-                      llOnlyActiveFound = TRUE.
+                   IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1) THEN DO:
+                      IF fHasTVService(Mobsub.msseq) THEN DO:
+                         /* TV service not allowed for PRO */
+                         ASSIGN
+                            llOrderAllowed = FALSE
+                            lcReason = "PRO migration not possible because of TV service".
+                         LEAVE.
+                      END.
+                      ELSE
+                         /* at least one found */
+                         IF llOnlyActiveFound EQ FALSE THEN
+                            llOnlyActiveFound = TRUE.
                    END.
                    ELSE DO:
                       llOnlyActiveFound = FALSE.
@@ -167,7 +176,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 IF NOT llOnlyActiveFound THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please make a previous STC to an open active tariff.".
+                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
                 END.
                 ELSE DO:
                    /* Check that mobile subscriptions are commercially active
@@ -181,9 +190,14 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                  Clitype.brand EQ "1" AND
                                  Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
                       IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") AND
-                         NOT fHasTVService(Mobsub.msseq) THEN DO:
-                         llOnlyActiveFound = TRUE.
+                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
+                         IF fHasTVService(Mobsub.msseq) THEN DO:
+                         /* TV service not allowed for PRO */
+                            ASSIGN
+                               llOrderAllowed = FALSE
+                               lcReason = "PRO migration not possible because of TV service".
+                            LEAVE.
+                         END.
                       END.
                       ELSE DO:
                          /* found subscription that rejects migration 
@@ -196,7 +210,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    IF NOT llOnlyActiveFound THEN DO:
                       ASSIGN
                          llOrderAllowed = FALSE
-                         lcReason = "This migration is not allowed. Please make a previous STC to an open active tariff.".
+                         lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
                    END.
 
                 END.
@@ -227,8 +241,9 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
                    ASSIGN
                       llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please make a previous STC to an open active tariff.".
+                      lcReason = "This migration is not allowed because of active 3P convergent".
                 END.
+                llOnlyActiveFound = FALSE.
                 FOR EACH Mobsub NO-LOCK WHERE
                          Mobsub.Brand EQ gcBrand AND
                          Mobsub.InvCust EQ Customer.CustNum:
@@ -238,7 +253,16 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
                       fgetActiveReplacement(Mobsub.clitype) > "") AND
                       NOT fHasTVService(Mobsub.msseq) THEN DO:
-                      llOnlyActiveFound = TRUE.
+                      IF fHasTVService(Mobsub.msseq) THEN DO:
+                      /* TV service not allowed for PRO */
+                         ASSIGN
+                            llOrderAllowed = FALSE
+                            lcReason = "PRO migration not possible because of TV service".
+                         LEAVE.
+                      END.
+                      ELSE
+                         IF llOnlyActiveFound EQ FALSE THEN
+                            llOnlyActiveFound = TRUE.
                    END.
                    ELSE DO:
                       /* found subscription that rejects migration
@@ -251,7 +275,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 IF NOT llOnlyActiveFound THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please make a previous STC to an open active tariff.".
+                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
                 END.                
              END.             
           END.
