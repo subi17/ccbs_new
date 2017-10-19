@@ -15,6 +15,7 @@ gcBrand = "1".
 {Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
+{Func/fdss.i}
 
 /* Input parameters */
 DEF VAR piCustNum           AS INT  NO-UNDO.
@@ -37,13 +38,16 @@ DEF VAR lcBundleCLITypes    AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles    AS CHAR NO-UNDO.
 DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
 
-DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
 DEF BUFFER bMServiceLimit   FOR MServiceLimit.
 DEF BUFFER bMserviceLPool   FOR MserviceLPool.
 DEF BUFFER bServiceLimit    FOR ServiceLimit.
 DEF BUFFER bMsOwner         FOR MsOwner.
 DEF BUFFER bDayCampaign     FOR DayCampaign.
+DEF BUFFER bMobSub          FOR MobSub.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piCustNum = get_int(param_toplevel_id, "0").
@@ -98,7 +102,9 @@ END. /* FOR EACH ServiceLimit WHERE */
 top_array = add_array(response_toplevel_id, "").
 
 IF lcDSSBundleId = "DSS2" THEN
-   lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE") 
+          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")   
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
 FOR EACH bMsOwner NO-LOCK WHERE
          bMsOwner.InvCust  = Customer.CustNum AND
@@ -112,7 +118,20 @@ FOR EACH bMsOwner NO-LOCK WHERE
 
    IF lcDSSBundleId = "DSS2" AND
       LOOKUP(bMsOwner.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
-   
+  
+   IF (LOOKUP(bMsOwner.CLIType,lcExtraMainLineCLITypes) > 0  OR
+       LOOKUP(bMsOwner.CLIType,lcExtraLineCLITypes)     > 0) THEN DO:
+      
+      FIND FIRST bMobSub NO-LOCK WHERE 
+                 bMobSub.MsSeq = bMsOwner.MsSeq NO-ERROR.
+
+      IF NOT AVAIL bMobSub THEN NEXT.           
+
+      IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
+                                               bMobSub.MultiSimId,
+                                               bMobSub.MultiSimType) THEN NEXT. 
+   END.
+
    dss_struct = add_struct(top_array, "").
    ASSIGN ldeDataBundleLimit = 0
           lcDataBundle       = "".
