@@ -213,10 +213,12 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                                 bf_MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE})  AND
                                 bf_MsRequest.ActStamp >= ldeCurrentTime                       NO-LOCK:
 
-        IF ENTRY(12,bf_MsRequest.ReqCParam1) = "" OR ENTRY(13,bf_MsRequest.ReqCParam1) = "" THEN
+        IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
+           ENTRY(13,bf_MsRequest.ReqCParam1,";") = "" THEN
            NEXT.
 
-        IF ENTRY(12,bf_MsRequest.ReqCParam1) = icCustomerIdType AND ENTRY(13,bf_MsRequest.ReqCParam1) = icCustomerId THEN
+        IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = icCustomerIdType AND 
+           ENTRY(13,bf_MsRequest.ReqCParam1,";") = icCustomerId     THEN
         DO:
             FIND FIRST bf_Customer WHERE bf_Customer.CustNum = bf_MsRequest.CustNum NO-LOCK NO-ERROR.
             IF AVAIL bf_Customer THEN

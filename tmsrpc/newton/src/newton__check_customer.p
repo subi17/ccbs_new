@@ -330,24 +330,35 @@ FUNCTION fCheckMigration RETURNS LOG ():
    END.
 END.
 
-
-FIND FIRST Customer NO-LOCK WHERE
-           Customer.Brand      = gcBrand    AND
-           Customer.OrgID      = pcPersonId AND
-           Customer.CustIDType = pcIdType   AND
-           Customer.Roles     NE "inactive" NO-ERROR.
-
 llOrderAllowed = fSubscriptionLimitCheck(
    pcPersonId,
    pcIdType,
    plSelfEmployed,
    llProChannel,
    piOrders,
-   OUTPUT lcReason, 
    OUTPUT liSubLimit,
    OUTPUT lisubs,
    OUTPUT liActLimit,
    OUTPUT liActs).
+   
+/* do not raise error with STC orders */
+IF NOT llOrderAllowed THEN DO:
+   IF plSTCMigrate THEN
+      llOrderAllowed = TRUE.
+   ELSE lcReason = "subscription limit".
+END.
+
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Brand      = gcBrand    AND
+           Customer.OrgID      = pcPersonId AND
+           Customer.CustIDType = pcIdType   AND
+           Customer.Roles     NE "inactive" NO-ERROR.
+       
+/* check barring subscriptions */
+IF AVAIL Customer AND
+   fExistBarredSubForCustomer(Customer.CustNum) THEN ASSIGN
+   lcReason = "barring"
+   llOrderAllowed = FALSE.
 
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
@@ -551,11 +562,11 @@ IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
 add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
-IF liSubs >= liSubLimit THEN
+IF liSubs >= liSubLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
 ELSE
    add_boolean(lcReturnStruct,"subscription_limit_reached",FALSE).
-IF liActs >= liActLimit THEN
+IF liActs >= liActLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"activation_limit_reached",TRUE).
 ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).

@@ -240,7 +240,7 @@ ErrorCode2 = {&CDR_ERROR_NOT_ANALYSED_YET}
 cdate1   = today - 50
 cdate2   = today 
 cust-no1 = 1
-cust-no2 = 99999999.
+cust-no2 = 999999999.
 
 ASSIGN
 xdate1 = STRING(YEAR (cdate1),"9999") +
