@@ -28,9 +28,13 @@ def getpackages():
     for src in os.listdir('.'):
         if not src.endswith('.tar'): continue
         name, version = src[:-4].split('-', 1)
-        ver = next((p for p, v in packages if p == name), None)
-        if not (ver and versiontuple(ver) > versiontuple(version)):
+        # Find package from the tuple list and get position and version number if available
+        # if not available pos and ver are both in value None
+        pos, ver = next(((p, l[1]) for p, l in enumerate(packages) if l[0] == name), (None, None))
+        if not ver:
             packages.append((name, version))
+        elif versiontuple(version) > versiontuple(ver):
+            packages[pos] = (name, version)
     return packages
 
 def deprecursion(basepackage, package, packagelist):
