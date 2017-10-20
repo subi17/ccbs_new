@@ -263,7 +263,7 @@ REPEAT:
             IF LOOKUP("Internet", lcBarrings) = 0 OR 
                NOT CAN-FIND(FIRST Memo WHERE
                                   Memo.Brand EQ gcBrand AND
-                                  Memo.CustNum EQ MsRequest.CustNum AND
+                                  Memo.CustNum EQ MobSub.CustNum AND
                                   Memo.HostTable EQ "MobSub" AND
                                   Memo.MemoTitle EQ "OTA Barring activado"
                                  USE-INDEX CustNum)
@@ -379,4 +379,5 @@ PROCEDURE pSetInternetBarring:
    ELSE RETURN "ERROR:" + lcResult.
 
 END PROCEDURE.
+
 
