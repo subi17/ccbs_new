@@ -127,7 +127,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       END. 
       
       /* begin YDR-2668. IF Internet barring active because of Mandarina, then remove. */
-      IF LOOKUP("INTERNET", lcBarrings) <> 0 AND
+      IF LOOKUP("Internet", lcBarrings) <> 0 AND
          CAN-FIND(FIRST Memo WHERE
                         Memo.Brand EQ gcBrand AND
                         Memo.CustNum EQ MsRequest.CustNum AND
@@ -221,7 +221,7 @@ PROCEDURE pRemoveInternetBarring:
       RETURN "ERROR:MSISDN_not_found".
 
    RUN Mm/barrengine.p(mobsub.MsSeq,
-                       "INTERNET=0",        /* Barring */
+                       "Internet=0",        /* Barring */
                        "11",                /* source   */
                        "Sistema",           /* creator  */
                        fMakeTS(),           /* activate */

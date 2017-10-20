@@ -222,7 +222,7 @@ REPEAT:
          END.
          /* Begin YDR-2668 */
          IF LcLP EQ "InternetBarring" THEN DO:
-            IF LOOKUP("INTERNET", lcBarrings) <> 0 THEN DO:
+            IF LOOKUP("Internet", lcBarrings) <> 0 THEN DO:
                PUT STREAM sCurrentLog UNFORMATTED
                   lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:Previous_Internet_barring_active" SKIP.
                NEXT.
@@ -260,7 +260,7 @@ REPEAT:
       ELSE DO: /* lcAction EQ "off" */
          /* Begin YDR-2668 */
          IF LcLP EQ "InternetBarring" THEN DO:
-            IF LOOKUP("INTERNET", lcBarrings) = 0 OR 
+            IF LOOKUP("Internet", lcBarrings) = 0 OR 
                NOT CAN-FIND(FIRST Memo WHERE
                                   Memo.Brand EQ gcBrand AND
                                   Memo.CustNum EQ MsRequest.CustNum AND
@@ -352,8 +352,8 @@ PROCEDURE pSetInternetBarring:
    DEF VAR lcResult  AS CHAR NO-UNDO.   
 
    RUN Mm/barrengine.p(mobsub.MsSeq,
-                       (IF lcMode EQ "ON" THEN "INTERNET=1" 
-                                          ELSE "INTERNET=0"), /* Barring */
+                       (IF lcMode EQ "ON" THEN "Internet=1" 
+                                          ELSE "Internet=0"), /* Barring */
                        "11",                /* source   */
                        "Sistema",           /* creator  */
                        fMakeTS(),           /* activate */
@@ -379,16 +379,4 @@ PROCEDURE pSetInternetBarring:
    ELSE RETURN "ERROR:" + lcResult.
 
 END PROCEDURE.
-
-
-
-
-
-
-
-
-
-
-
-
 
