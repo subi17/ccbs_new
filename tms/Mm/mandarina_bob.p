@@ -260,9 +260,16 @@ REPEAT:
       ELSE DO: /* lcAction EQ "off" */
          /* Begin YDR-2668 */
          IF LcLP EQ "InternetBarring" THEN DO:
-            IF LOOKUP("INTERNET", lcBarrings) = 0 THEN DO:
+            IF LOOKUP("INTERNET", lcBarrings) = 0 OR 
+               NOT CAN-FIND(FIRST Memo WHERE
+                                  Memo.Brand EQ gcBrand AND
+                                  Memo.CustNum EQ MsRequest.CustNum AND
+                                  Memo.HostTable EQ "MobSub" AND
+                                  Memo.MemoTitle EQ "OTA Barring activado"
+                                 USE-INDEX CustNum)
+            THEN DO:
                PUT STREAM sCurrentLog UNFORMATTED
-                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:No_previous_internet_barring" SKIP.
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:No_previous_internet_barring_by_Mandarina" SKIP.
                NEXT.
             END.  
             RUN pSetInternetBarring("OFF").
