@@ -107,7 +107,8 @@ FOR EACH daycampaign NO-LOCK:
                                   TPService.Operation  = {&TYPE_ACTIVATION}  AND 
                                   TPService.ServType   = "Television"        AND 
                                   TPService.ServStatus > ""                  AND 
-                                  TPService.Product    = DayCampaign.DCEvent NO-LOCK NO-ERROR.
+                                  TPService.Product    = DayCampaign.DCEvent NO-LOCK
+                                  USE-INDEX MsSeqTypeStatus NO-ERROR.
        IF NOT AVAIL TPService THEN 
            ASSIGN liServStatus = 0. /* Inactive */
        ELSE 
@@ -124,7 +125,8 @@ FOR EACH daycampaign NO-LOCK:
                                                       bf_TPService_Deactivation.ServType    = "Television"         AND 
                                                       bf_TPService_Deactivation.ServStatus  > ""                   AND 
                                                       bf_TPService_Deactivation.CreatedTS   > TPService.CreatedTS  AND 
-                                                      bf_TPService_Deactivation.Product     = DayCampaign.DCEvent  NO-LOCK NO-ERROR.
+                                                      bf_TPService_Deactivation.Product     = DayCampaign.DCEvent  NO-LOCK
+                                                      USE-INDEX MsSeqTypeStatus NO-ERROR.
            IF AVAIL bf_TPService_Deactivation THEN 
            DO:
                IF bf_TPService_Deactivation.ServStatus = {&STATUS_HANDLED} THEN 
