@@ -1,0 +1,9 @@
+DELETE INDEX "MsSeqTypeStatus" ON "TPService"
+
+ADD INDEX "MsSeqTypeStatus" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq"      ASCENDING
+  INDEX-FIELD "Operation"  ASCENDING
+  INDEX-FIELD "ServType"   ASCENDING
+  INDEX-FIELD "ServStatus" ASCENDING
+  INDEX-FIELD "UpdateTS"   DECENDING 

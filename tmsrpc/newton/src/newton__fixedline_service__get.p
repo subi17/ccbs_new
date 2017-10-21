@@ -103,10 +103,11 @@ FOR EACH daycampaign NO-LOCK:
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
-       FIND FIRST TPService WHERE TPService.MsSeq     = piMsSeq             AND 
-                                  TPService.Operation = {&TYPE_ACTIVATION}  AND 
-                                  TPService.ServType  = "Television"        AND 
-                                  TPService.Product   = DayCampaign.DCEvent NO-LOCK NO-ERROR.
+       FIND FIRST TPService WHERE TPService.MsSeq      = piMsSeq             AND 
+                                  TPService.Operation  = {&TYPE_ACTIVATION}  AND 
+                                  TPService.ServType   = "Television"        AND 
+                                  TPService.ServStatus > ""                  AND 
+                                  TPService.Product    = DayCampaign.DCEvent NO-LOCK NO-ERROR.
        IF NOT AVAIL TPService THEN 
            ASSIGN liServStatus = 0. /* Inactive */
        ELSE 
@@ -120,11 +121,16 @@ FOR EACH daycampaign NO-LOCK:
 
            FIND FIRST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq              AND 
                                                       bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
-                                                      bf_TPService_Deactivation.ServType    = "Television"         NO-LOCK NO-ERROR.
+                                                      bf_TPService_Deactivation.ServType    = "Television"         AND 
+                                                      bf_TPService_Deactivation.ServStatus  > ""                   AND 
+                                                      bf_TPService_Deactivation.CreatedTS   > TPService.CreatedTS  AND 
+                                                      bf_TPService_Deactivation.Product     = DayCampaign.DCEvent  NO-LOCK NO-ERROR.
            IF AVAIL bf_TPService_Deactivation THEN 
            DO:
-               IF NOT (bf_TPService_Deactivation.ServStatus = {&STATUS_ERROR} AND bf_TPService_Deactivation.ResponseCode > "") THEN
-                   ASSIGN liServStatus = 0. /* Inactive */
+               IF bf_TPService_Deactivation.ServStatus = {&STATUS_HANDLED} THEN 
+                   ASSIGN liServStatus = 0. /* 'InActive' */
+               ELSE IF bf_TPService_Deactivation.ServStatus = {&STATUS_ERROR} THEN
+                   ASSIGN liServStatus = 1. /* Deactivation cancelled, so service is still 'Active' */
                ELSE 
                    ASSIGN liServStatus = 3. /*Pending deactivation*/
            END.
