@@ -9102,6 +9102,11 @@
 1 "" 3 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
 1 "" 4 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
 1 "" 5 "BQ Aquaris U Dark grey" 0 "P088AQUG2" "1" 21/09/16 31/12/49
+1 "" 1 "BQ Aquaris U Dark gris" 0 "P088AQUGC" "1" 16/10/17 31/12/49
+1 "" 2 "BQ Aquaris U Dark gris" 0 "P088AQUGC" "1" 16/10/17 31/12/49
+1 "" 3 "BQ Aquaris U Dark gris" 0 "P088AQUGC" "1" 16/10/17 31/12/49
+1 "" 4 "BQ Aquaris U Dark gris" 0 "P088AQUGC" "1" 16/10/17 31/12/49
+1 "" 5 "BQ Aquaris U Dark grey" 0 "P088AQUGC" "1" 16/10/17 31/12/49
 1 "" 1 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
 1 "" 2 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
 1 "" 3 "BQ Aquaris X Negro" 0 "P088AQXN2" "1" 26/04/17 31/12/49
