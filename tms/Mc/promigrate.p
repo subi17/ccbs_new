@@ -126,56 +126,15 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
       END.
    END.
    IF MSRequest.origRequest EQ 0 THEN DO:
-      /* Main request, check if other subscription to migrate */
-      FOR EACH bMobsub WHERE
-               bMobsub.brand EQ gcBrand AND
-               bMobsub.agrCust EQ Mobsub.agrCust AND
-               bMobsub.msseq NE Mobsub.msseq:
-         FIND FIRST Clitype WHERE 
-                    Clitype.brand EQ gcBrand AND 
-                    Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
-         IF AVAIL Clitype AND 
-                  Clitype.webstatuscode EQ {&CLITYPE_WEBSTATUSCODE_ACTIVE} 
-         THEN DO:
-            liMsReq = fProMigrationRequest(INPUT bMobsub.Msseq,
-                                           INPUT MSRequest.salesman,
-                                           INPUT {&REQUEST_SOURCE_MIGRATION},
-                                           INPUT MSRequest.msrequest,
-                                           OUTPUT lcResult).
-         END.
-         ELSE IF AVAIL Clitype AND
-                 fgetActiveReplacement(bMobsub.clitype) GT "" THEN DO:
-            /* Make iSTC according to mapping */
-            liMsReq = fCTChangeRequest(bMobSub.msseq,
-                           fgetActiveReplacement(bMobsub.clitype),
-                           "", /* lcBundleID */
-                           "", /*bank code validation is already done */
-                           MSRequest.ActStamp,
-                           0,  /* 0 = Credit check ok */
-                           0, /* extend contract */
-                           "" /* pcSalesman */,
-                           FALSE, /* charge */
-                           TRUE, /* send sms */
-                           "",
-                           0,
-                           {&REQUEST_SOURCE_MIGRATION},
-                           0,
-                           MSRequest.msrequest,
-                           "", /*contract id*/
-                           OUTPUT lcError).
-
-            IF liMsReq = 0 THEN DO:
-               fReqStatus(3,"").
-               fReqError("ERROR: Migration STC request creation failed.").
-            END.
-         
-         END.
-         ELSE DO:
-            fReqStatus(3,"").
-            fReqError("ERROR: Migration failed.").
-         END.
-           
-      END.
+      /* Main request, check if other subscription to migrate and 
+         do migration or iSTC for all */
+      lcResult =  fProMigrateOtherSubs (Mobsub.agrCust, Mobsub.msseq, 
+                                        MSRequest.msrequest, 
+                                        MSRequest.salesman).
+      IF lcResult > "" THEN DO:
+        fReqStatus(3,"").
+        fReqError(lcResult).
+     END.
    END.
 END.
 ELSE IF liOrigStatus EQ {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:

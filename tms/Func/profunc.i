@@ -447,6 +447,62 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
 
 END FUNCTION.
 
+FUNCTION fProMigrateOtherSubs RETURNS CHAR
+(INPUT iiagrcust AS INT,
+ INPUT iimsseq AS INT,
+ INPUT iimsrequest AS INT,
+ INPUT icsalesman AS CHAR):
+   DEF BUFFER bMobSub FOR Mobsub.
+   DEF VAR lcResult AS CHAR NO-UNDO.
+   DEF VAR liMsReq AS INT NO-UNDO.
+
+   FOR EACH bMobsub WHERE
+            bMobsub.brand EQ gcBrand AND
+            bMobsub.agrCust EQ iiagrCust AND
+            bMobsub.msseq NE iimsseq:
+      FIND FIRST Clitype WHERE
+                 Clitype.brand EQ gcBrand AND
+                 Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
+      IF AVAIL Clitype AND
+               Clitype.webstatuscode EQ {&CLITYPE_WEBSTATUSCODE_ACTIVE}
+      THEN DO:
+         liMsReq = fProMigrationRequest(INPUT bMobsub.Msseq,
+                                        INPUT icsalesman,
+                                        INPUT {&REQUEST_SOURCE_MIGRATION},
+                                        INPUT iimsrequest,
+                                        OUTPUT lcResult).
+      END.
+      ELSE IF AVAIL Clitype AND
+              fgetActiveReplacement(bMobsub.clitype) GT "" THEN DO:
+         /* Make iSTC according to mapping */
+         liMsReq = fCTChangeRequest(bMobSub.msseq,
+                        fgetActiveReplacement(bMobsub.clitype),
+                        "", /* lcBundleID */
+                        "", /*bank code validation is already done */
+                        fmakets(),
+                        0,  /* 0 = Credit check ok */
+                        0, /* extend contract */
+                        "" /* pcSalesman */,
+                        FALSE, /* charge */
+                        TRUE, /* send sms */
+                        "",
+                        0,
+                        {&REQUEST_SOURCE_MIGRATION},
+                        0,
+                        iimsrequest,
+                        "", /*contract id*/
+                        OUTPUT lcResult).
+
+         IF liMsReq = 0 THEN
+            RETURN "ERROR: Migration STC request creation failed. " + lcResult.
+
+      END.
+      ELSE
+         RETURN "ERROR: Migration failed. " + lcResult.
+     
+   END.
+END FUNCTION.
+
 &ENDIF
 
 
