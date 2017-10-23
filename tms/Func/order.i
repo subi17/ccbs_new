@@ -381,24 +381,23 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          IF ilCleanLogs THEN fCleanEventObjects(). 
       END.
 
-      /* category according to id type */
-         ASSIGN Customer.Category = OrderCustomer.Category.      
+      fgetCustSegment(OrderCustomer.CustIDType, 
+                      OrderCustomer.SelfEmployed,
+                      OrderCustomer.pro, 
+                      OUTPUT lcCategory).
 
-         fgetCustSegment(OrderCustomer.CustIDType, 
-                         OrderCustomer.SelfEmployed,
-                         ordercustomer.pro, 
-                         OUTPUT lcCategory).
+      IF lcCategory > "" THEN 
+      DO:
+         ASSIGN Customer.Category = lcCategory.
 
-         IF lcCategory > "" THEN 
-         DO:
-            ASSIGN Customer.Category = lcCategory.
+         IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
+            Ordercustomer.Category = lcCategory.
+      END.
+      ELSE  /* category according to id type */
+         ASSIGN Customer.Category = OrderCustomer.Category.         
 
-            IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
-               Ordercustomer.Category = lcCategory.
-         END.
-
-         IF NOT OrderCustomer.Pro THEN
-             fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, FALSE, iiOrder).
+      IF NOT OrderCustomer.Pro THEN
+         fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, FALSE, iiOrder).
 
       IF iiTarget = 1 THEN DO:
          /* new user account */
