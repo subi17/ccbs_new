@@ -303,7 +303,7 @@ PROCEDURE StarEventMakeDeleteEventWithMemo :
     DEFINE VARIABLE lcDelValues AS CHARACTER  NO-UNDO.
 
     /*Ensure that the object exists beofre operations*/
-    StarEventInitialize(ihBuffer).
+    RUN StarEventInitialize(ihBuffer).
 
     ASSIGN
         lii         = LOOKUP(ihBuffer:TABLE,gcEventTableNames)
@@ -559,7 +559,7 @@ PROCEDURE StarEventSetOldBuffer :
     DEFINE VARIABLE lii AS INTEGER    NO-UNDO.
     
     /*Ensure that the object exists beofre operations*/
-    StarEventInitialize(ihBuffer).
+    RUN StarEventInitialize(ihBuffer).
 
     ASSIGN
         lii = LOOKUP(ihBuffer:TABLE,gcEventTableNames)
