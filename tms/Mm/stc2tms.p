@@ -1028,7 +1028,6 @@ PROCEDURE pFinalize:
    DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
-   DEF VAR llMigrationNeeded     AS LOG  NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
 
@@ -1315,21 +1314,6 @@ PROCEDURE pFinalize:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
          
-            FOR FIRST OrderCustomer WHERE
-                       OrderCustomer.brand EQ gcBrand AND
-                       Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
-                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-                       Ordercustomer.pro,
-                FIRST Customer WHERE
-                      Customer.brand EQ gcbrand AND
-                      Customer.orgid EQ Ordercustomer.custid AND
-                      customer.category NE Ordercustomer.category,
-                FIRST Mobsub WHERE
-                      Mobsub.brand EQ gcbrand AND
-                      Mobsub.custnum EQ customer.custnum AND
-                      Mobsub.msseq ne MsRequest.msseq NO-LOCK:
-               llmigrationNeeded = TRUE.
-            END. 
             /* update customer data */
             RUN Mm/createcustomer.p(Order.OrderId,1,FALSE,TRUE,output liCustnum).
 
@@ -1345,11 +1329,6 @@ PROCEDURE pFinalize:
                             "Delivery",
                             fMakeTS()).
 
-            IF llMigrationNeeded THEN DO:
-               lcResult =  fProMigrateOtherSubs (order.Custnum, order.msseq,
-                                                 MSRequest.msrequest,
-                                                 MSRequest.salesman).
-            END.
          END.
          ELSE DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
               "MobSub",
