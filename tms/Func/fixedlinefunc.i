@@ -676,37 +676,6 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
 
 END FUNCTION.
 
-/* Return true if tarif belongs to convergent additional line */
-FUNCTION fIsAddLineTariff RETURNS LOGICAL
-   (INPUT icCli AS CHAR):
-   DEFINE BUFFER bMobSub FOR MobSub.
-   DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
-   DEFINE BUFFER bDPMember FOR DPMember.
-
-   FOR FIRST bMobSub NO-LOCK WHERE
-             bMobSub.Brand = Syst.Parameters:gcBrand AND
-             bMobSub.CLI   = icCli AND
-      LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0,
-         EACH bDiscountPlan NO-LOCK WHERE
-              bDiscountPlan.Brand  = Syst.Parameters:gcBrand AND
-       LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + ","
-                                   + {&ADDLINE_DISCOUNTS_20} + ","
-                                   + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
-              bDiscountPlan.ValidTo >= TODAY,
-         FIRST bDPMember NO-LOCK WHERE
-               bDPMember.DPID       = bDiscountPlan.DPID AND
-               bDPMember.HostTable  = "MobSub" AND
-               bDPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
-               bDPMember.ValidTo   >= TODAY AND
-               bDPMember.ValidFrom <= bDPMember.ValidTo:
-
-         RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END FUNCTION.
-
 FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
    (INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR,
