@@ -1597,6 +1597,7 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF VAR lcTariffType AS CHAR NO-UNDO.
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcText AS CHAR NO-UNDO. 
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
    
    RUN Mc/offer_penaltyfee.p(Order.OrderID,
@@ -1632,13 +1633,19 @@ PROCEDURE pGetPENALTYFEE:
          
    IF fIsConvergenceTariff(Order.CLIType) AND
      (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
-      Order.OrderType EQ {&ORDER_TYPE_MNP} OR
-     (Order.OrderType EQ {&ORDER_TYPE_STC} AND
-      AVAIL Mobsub AND
-      NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
-       LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
-   THEN lcList = lclist + CHR(10) + fTeksti(532,liLang).
-   
+      Order.OrderType EQ {&ORDER_TYPE_MNP})
+   THEN DO: 
+
+      lcText = fTeksti(532,liLang).
+            
+      IF INDEX(Order.Orderchannel, "pro") EQ 0 AND
+         Order.CrStamp < 20171101 THEN liMonths = 8.
+      ELSE liMonths = 12.
+      lcText = REPLACE(lcText,"#MONTHS",STRING(liMonths)).
+
+      lcList = lclist + CHR(10) + lcText.
+   END.
+                  
    lcList = REPLACE(lcList,"euros","&euro;"). 
    lcResult = lcList.
 
