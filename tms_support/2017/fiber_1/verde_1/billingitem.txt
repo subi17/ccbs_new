@@ -1,2 +1,2 @@
 Billing item;Billing item name;Billing item group;Posting account;Tax class;IFS product code;Cost Center
-CONTFH76_1000PRO;COMBINADA VERDE 1000 PRO;46;70518100;1;070;SL
+CONTFH76_1000PRO;COMBINADA VERDE 1GBPs PRO;46;70518100;1;070;SL
