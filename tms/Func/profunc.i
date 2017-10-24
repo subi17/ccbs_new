@@ -503,6 +503,25 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
    END.
 END FUNCTION.
 
+FUNCTION fCheckOngoingOrders RETURNS LOGICAL (INPUT icCustId AS CHAR,
+                                              INPUT icCustIdType AS CHAR,
+                                              INPUT iimsseq AS INT):
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      EQ gcBrand AND
+            OrderCustomer.CustId     EQ icCustId AND
+            OrderCustomer.CustIdType EQ icCustIDType AND
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+      FIRST Order NO-LOCK WHERE
+            Order.Brand              EQ gcBrand AND
+            Order.orderid            EQ Ordercustomer.Orderid AND
+            Order.msseq              NE iimsseq AND
+           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
+      RETURN TRUE.
+   END.
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
 
 
