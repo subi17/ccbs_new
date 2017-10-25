@@ -14,6 +14,7 @@
 {Func/profunc.i}
 {Func/custfunc.i}
 {Func/timestamp.i}
+{Func/log.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
