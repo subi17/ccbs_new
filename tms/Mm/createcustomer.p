@@ -376,9 +376,9 @@ ELSE DO:
          END. /* IF llUpdateCust THEN DO: */
 
          IF NOT OrderCustomer.Pro THEN /* Order is with non-pro, so closing all ACC requests for pro */
-            fClosePendingACC("Pro", OrderCustomer.CustIdType, OrderCustomer.CustId, FALSE, Order.OrderId).
+            fClosePendingACC("Pro", OrderCustomer.CustIdType, OrderCustomer.CustId, Order.OrderId).
          ELSE                          /* Order is with non-pro, so closing all ACC requests for pro */   
-            fClosePendingACC("Non-pro", OrderCustomer.CustIdType, OrderCustomer.CustId, FALSE, Order.OrderId).
+            fClosePendingACC("Non-pro", OrderCustomer.CustIdType, OrderCustomer.CustId, Order.OrderId).
 
          fUpdEmailDelType(Order.OrderId).
 
