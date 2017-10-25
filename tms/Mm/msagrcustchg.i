@@ -39,11 +39,13 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
 
    IF bCustCatSRC.PRO NE bCustCatDST.PRO THEN
    DO:
+      IF NOT bCustCatSRC.PRO AND bCustCatDST.PRO THEN
+         RETURN "ACC is not allowed between PRO-NON PRO customers".
       /* Check for any active/ongoing subscriptions. If there is any, no migration possible. */
-      IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = gcBrand              AND 
-                                      MobSub.AgrCust = bCustomerDST.CustNum AND 
-                                      MobSub.Cli     > ""                   NO-LOCK)) OR 
-         fCheckOngoingOrders(bCustomerDST.CustIdType, bCustomerDST.OrgId, 0) THEN 
+      ELSE IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = gcBrand              AND 
+                                           MobSub.AgrCust = bCustomerDST.CustNum AND 
+                                           MobSub.Cli     > ""                   NO-LOCK)) OR 
+              fCheckOngoingOrders(bCustomerDST.CustIdType, bCustomerDST.OrgId, 0) THEN 
          RETURN "ACC is not allowed between PRO-NON PRO customers".
    END.   
    
