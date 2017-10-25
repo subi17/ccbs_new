@@ -255,7 +255,8 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
         END.   
            
     END.
-
+    RELEASE bf_MsRequest.
+    
     RETURN TRUE.
 
 END FUNCTION.
