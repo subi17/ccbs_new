@@ -173,7 +173,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       LEAVE.
                    END.                  
                 END.
-                IF NOT llOnlyActiveFound THEN DO:
+                IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
                       lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
@@ -207,7 +207,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                          LEAVE.
                       END.                   
                    END.
-                   IF NOT llOnlyActiveFound THEN DO:
+                   IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
                       ASSIGN
                          llOrderAllowed = FALSE
                          lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
