@@ -206,11 +206,10 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
     ASSIGN ldeCurrentTime = fMakeTS().
 
-    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                              AND 
-                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND 
-                               (bf_MsRequest.ReqStatus = {&REQUEST_STATUS_NEW} OR 
-                                bf_MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE})  AND
-                                bf_MsRequest.ActStamp >= ldeCurrentTime                       NO-LOCK:
+    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                                      AND 
+                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
+                                LOOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
 
         IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
            ENTRY(13,bf_MsRequest.ReqCParam1,";") = "" THEN
@@ -234,6 +233,13 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                     DO:
                         IF bf_CustCat.Pro = TRUE THEN 
                             NEXT.
+                    END.
+
+                    BUFFER bf_MsRequest:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+                    IF NOT AVAIL bf_MsRequest THEN 
+                    DO:
+                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" ,katun).
+                        NEXT.
                     END.
 
                     ASSIGN 
