@@ -208,7 +208,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
     FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                                      AND 
                                 bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
-                                LOOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                LOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
                                 bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
 
         IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
