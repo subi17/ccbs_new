@@ -196,7 +196,6 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
     (INPUT icCloseType      AS CHARACTER,
      INPUT icCustomerIdType AS CHARACTER,
      INPUT icCustomerId     AS CHARACTER,
-     INPUT ilProCustomer    AS LOGICAL  ,
      INPUT iiOrder          AS INTEGER):
 
     DEFINE BUFFER bf_MsRequest FOR MsRequest.
@@ -397,7 +396,9 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          ASSIGN Customer.Category = OrderCustomer.Category.         
 
       IF NOT OrderCustomer.Pro THEN
-         fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, FALSE, iiOrder).
+         fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, iiOrder).
+      ELSE 
+         fClosePendingACC("Non-Pro", Customer.CustIdType, Customer.OrgId, iiOrder).   
 
       IF iiTarget = 1 THEN DO:
          /* new user account */
