@@ -58,6 +58,10 @@ ASSIGN
 {Syst/tmsconst.i}
 {Mnp/mnp.i}
 
+{Syst/tmsconst.i}
+{Mnp/mnp.i}
+{Func/profunc.i}
+
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
@@ -140,6 +144,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
          add_string(lcResultStruct, "contract_id", Order.ContractID).
          add_string(lcResultStruct, "salesman_id", Order.Salesman).
          add_string(lcResultStruct, "order_channel", Order.OrderChannel).
+         add_string(lcResultStruct, "segment", fGetSegment(0,order.orderid)).
       END.
    
       IF MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED} THEN DO:
@@ -314,7 +319,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
 
    add_boolean(lcResultStruct, "ongoing_messages", llOngoingMessages).
- 
+
 END.
  
 FINALLY:
