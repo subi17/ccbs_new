@@ -15,6 +15,7 @@
           eligible_renewal          boolean - optional
           any_barring               boolean - optional
           debt                      boolean - optional
+          customer_segment          string  - optional
           pay_type                  boolean 
           usage_type                integer
           order_start_date          date
@@ -33,6 +34,7 @@ katun = "Newton".
 {Func/fdss.i}
 {Func/timestamp.i}
 {Func/orderchk.i}
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR pcTenant       AS CHAR NO-UNDO.
@@ -56,6 +58,7 @@ DEF VAR plPayType      AS LOG  NO-UNDO. /* YDA-895 */
 DEF VAR piUsageType    AS INT  NO-UNDO. /* YDA-895 */
 DEF VAR pdtStartDate   AS DATE NO-UNDO. /* YDA-895 */ 
 DEF VAR piPersonIdType AS INT  NO-UNDO. /* YDA-895 */
+DEF VAR pcSegment      AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcDataBundles  AS CHAR NO-UNDO.
@@ -88,7 +91,7 @@ IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "brand,subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type").
+   "brand,subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type,customer_segment").
 
 ASSIGN
    pcTenant       = get_string(pcStruct, "brand")
@@ -134,7 +137,10 @@ ASSIGN
    pdtStartDate   = get_date(pcStruct, "order_start_date")
       WHEN LOOKUP("order_start_date", lcStruct) > 0
    piPersonIdType = get_int(pcStruct, "person_id_type")
-      WHEN LOOKUP("person_id_type", lcStruct) > 0. 
+      WHEN LOOKUP("person_id_type", lcStruct) > 0 
+   pcSegment      = get_string(pcStruct, "customer_segment")
+      WHEN LOOKUP("customer_segment", lcStruct) > 0.
+
     /* Paytype, usagetype, startdate and personidtype YDA-895 */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -556,6 +562,10 @@ FOR EACH MobSub NO-LOCK WHERE
          OTHERWISE NEXT EACH_MOBSUB.
       END CASE.
    END.
+
+   IF pcSegment > "" AND fGetSegment(Mobsub.custnum, 0) NE pcSegment THEN
+      NEXT EACH_MOBSUB.
+ 
 
    /* Subscription type */
    IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND

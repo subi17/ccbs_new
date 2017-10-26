@@ -1,0 +1,5 @@
+Type;Language Type;Language;Translation Name
+CONTFH69_1000PRO;1;Spanish;Ventajas PRO
+CONTFH69_1000PRO;2;Catalan;Avantatges PRO
+CONTFH69_1000PRO;3;Basque;Abantaila PRO
+CONTFH69_1000PRO;5;English;PRO benefits
