@@ -75,7 +75,7 @@ DEFINE TEMP-TABLE ttOutputText
 DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO, THROW:
-   lcBrand = CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant()).
+   lcBrand = CAPS(multitenancy.TenantInformation:mGetEffectiveBrand()).
 
    /* Handler code for any error condition. */
    CATCH anyErrorObject AS Progress.Lang.Error:
