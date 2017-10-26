@@ -168,7 +168,8 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
       icContract EQ "OFFICE365" OR
       icContract EQ "SAGEONE" OR
       icContract EQ "IPFIJA" OR
-      icContract EQ "Centralita" THEN
+      icContract EQ "Centralita" OR
+      icContract BEGINS "FTERM" THEN
       RETURN TRUE.
    IF INDEX(icContract,"FIX") > 0 THEN
       RETURN TRUE.

@@ -18,6 +18,7 @@
 {Func/femailinvoice.i}
 {Func/email.i}
 {Func/fixedlinefunc.i}
+{Func/cparam2.i}
 
 /* check pro */
 FUNCTION fIsPro RETURNS LOGICAL
@@ -269,9 +270,15 @@ FUNCTION fGetProFeemodel RETURNS CHAR
              DayCampaign.DCEvent = CLIType.FixedBundle:
       RETURN DayCampaign.FeeModel.
    END.
-
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Parameters:gcBrand AND
+             CLIType.CLIType = icCliType,
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Parameters:gcBrand AND
+             DayCampaign.DCEvent = CLIType.clitype:
+      RETURN DayCampaign.FeeModel.
+   END.
    RETURN "".
-
 END.
 
 FUNCTION fSendEmailByRequest RETURNS CHAR
@@ -366,6 +373,138 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    RETURN "".
 
 END.
+
+FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
+   DEF VAR lcSubsMappings AS CHAR NO-UNDO.
+   DEF VAR lcMappedSubs AS CHAR NO-UNDO.
+   DEF VAR lcSubsFrom AS CHAR NO-UNDO.
+   DEF VAR lcSubsTo AS CHAR NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO.
+
+   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
+
+   DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
+      ASSIGN
+         lcMappedSubs = ENTRY(liloop, lcSubsMappings,"|")
+         lcSubsFrom = ENTRY(1,lcMappedSubs,"=")
+         lcSubsTo = ENTRY(2,lcMappedSubs,"=").
+      IF LOOKUP(icClitype,lcSubsFrom) GE 1 THEN RETURN lcSubsTo.
+   END.
+   RETURN "".
+END.
+
+FUNCTION fProMigrationRequest RETURNS INTEGER
+   (INPUT  iiMsseq        AS INT,        /* msseq                */
+    INPUT  icCreator      AS CHARACTER,  /* who made the request */
+    INPUT  icSource       AS CHARACTER,
+    INPUT  iiOrig         AS INTEGER,
+    OUTPUT ocResult       AS CHARACTER):
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR ldActStamp AS DEC NO-UNDO.
+
+   ocResult = fChkRequest(iiMsSeq,
+                          {&REQTYPE_PRO_MIGRATION},
+                          "",
+                          icCreator).
+
+   IF ocResult > "" THEN RETURN 0.
+
+   /* set activation time */
+   ldActStamp = fMakeTS().
+
+   fCreateRequest({&REQTYPE_PRO_MIGRATION},
+                  ldActStamp,
+                  icCreator,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+
+   ASSIGN
+      bCreaReq.ReqCParam1  = "MIGRATE"
+      bCreaReq.ReqSource   = icSource
+      bCreaReq.origrequest = iiOrig
+      liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+
+   RETURN liReqCreated.
+
+END FUNCTION.
+
+FUNCTION fProMigrateOtherSubs RETURNS CHAR
+(INPUT iiagrcust AS INT,
+ INPUT iimsseq AS INT,
+ INPUT iimsrequest AS INT,
+ INPUT icsalesman AS CHAR):
+   DEF BUFFER bMobSub FOR Mobsub.
+   DEF VAR lcResult AS CHAR NO-UNDO.
+   DEF VAR liMsReq AS INT NO-UNDO.
+
+   FOR EACH bMobsub WHERE
+            bMobsub.brand EQ gcBrand AND
+            bMobsub.agrCust EQ iiagrCust AND
+            bMobsub.msseq NE iimsseq:
+      FIND FIRST Clitype WHERE
+                 Clitype.brand EQ gcBrand AND
+                 Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
+      IF AVAIL Clitype AND
+               Clitype.webstatuscode EQ {&CLITYPE_WEBSTATUSCODE_ACTIVE}
+      THEN DO:
+         liMsReq = fProMigrationRequest(INPUT bMobsub.Msseq,
+                                        INPUT icsalesman,
+                                        INPUT {&REQUEST_SOURCE_MIGRATION},
+                                        INPUT iimsrequest,
+                                        OUTPUT lcResult).
+      END.
+      ELSE IF AVAIL Clitype AND
+              fgetActiveReplacement(bMobsub.clitype) GT "" THEN DO:
+         /* Make iSTC according to mapping */
+         liMsReq = fCTChangeRequest(bMobSub.msseq,
+                        fgetActiveReplacement(bMobsub.clitype),
+                        "", /* lcBundleID */
+                        "", /*bank code validation is already done */
+                        fmakets(),
+                        0,  /* 0 = Credit check ok */
+                        0, /* extend contract */
+                        "" /* pcSalesman */,
+                        FALSE, /* charge */
+                        TRUE, /* send sms */
+                        "",
+                        0,
+                        {&REQUEST_SOURCE_MIGRATION},
+                        0,
+                        iimsrequest,
+                        "", /*contract id*/
+                        OUTPUT lcResult).
+
+         IF liMsReq = 0 THEN
+            RETURN "ERROR: Migration STC request creation failed. " + lcResult.
+
+      END.
+      ELSE
+         RETURN "ERROR: Migration failed. " + lcResult.
+     
+   END.
+END FUNCTION.
+
+FUNCTION fCheckOngoingOrders RETURNS LOGICAL (INPUT icCustId AS CHAR,
+                                              INPUT icCustIdType AS CHAR,
+                                              INPUT iimsseq AS INT):
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      EQ gcBrand AND
+            OrderCustomer.CustId     EQ icCustId AND
+            OrderCustomer.CustIdType EQ icCustIDType AND
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+      FIRST Order NO-LOCK WHERE
+            Order.Brand              EQ gcBrand AND
+            Order.orderid            EQ Ordercustomer.Orderid AND
+            Order.msseq              NE iimsseq AND
+           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
+      RETURN TRUE.
+   END.
+   RETURN FALSE.
+
+END FUNCTION.
 
 &ENDIF
 
