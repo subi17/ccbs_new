@@ -95,24 +95,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
-FUNCTION fCheckOngoingOrders RETURNS LOGICAL (INPUT icCustId AS CHAR,
-                                              INPUT icCustIdType AS CHAR,
-                                              INPUT iimsseq AS INT):
-   FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand      EQ gcBrand AND
-            OrderCustomer.CustId     EQ icCustId AND
-            OrderCustomer.CustIdType EQ icCustIDType AND
-            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-      FIRST Order NO-LOCK WHERE
-            Order.Brand              EQ gcBrand AND
-            Order.orderid            EQ Ordercustomer.Orderid AND
-            Order.msseq NE iimsseq AND
-           LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:
-      RETURN TRUE.
-   END.
-   RETURN FALSE.
-END.
-
 FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF BUFFER Order FOR Order.
@@ -173,7 +155,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       LEAVE.
                    END.                  
                 END.
-                IF NOT llOnlyActiveFound THEN DO:
+                IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
                       lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
@@ -207,7 +189,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                          LEAVE.
                       END.                   
                    END.
-                   IF NOT llOnlyActiveFound THEN DO:
+                   IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
                       ASSIGN
                          llOrderAllowed = FALSE
                          lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".

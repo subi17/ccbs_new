@@ -14,6 +14,7 @@
 {Func/profunc.i}
 {Func/custfunc.i}
 {Func/timestamp.i}
+{Func/log.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -196,7 +197,6 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
     (INPUT icCloseType      AS CHARACTER,
      INPUT icCustomerIdType AS CHARACTER,
      INPUT icCustomerId     AS CHARACTER,
-     INPUT ilProCustomer    AS LOGICAL  ,
      INPUT iiOrder          AS INTEGER):
 
     DEFINE BUFFER bf_MsRequest FOR MsRequest.
@@ -207,11 +207,10 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
     ASSIGN ldeCurrentTime = fMakeTS().
 
-    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                              AND 
-                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} AND 
-                               (bf_MsRequest.ReqStatus = {&REQUEST_STATUS_NEW} OR 
-                                bf_MsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE})  AND
-                                bf_MsRequest.ActStamp >= ldeCurrentTime                       NO-LOCK:
+    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                                      AND 
+                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
+                                LOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
 
         IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
            ENTRY(13,bf_MsRequest.ReqCParam1,";") = "" THEN
@@ -237,6 +236,13 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                             NEXT.
                     END.
 
+                    BUFFER bf_MsRequest:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+                    IF NOT AVAIL bf_MsRequest THEN 
+                    DO:
+                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" ,katun).
+                        NEXT.
+                    END.
+
                     ASSIGN 
                         bf_MsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
                         bf_MsRequest.UpdateStamp = fMakeTS()
@@ -250,7 +256,8 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
         END.   
            
     END.
-
+    RELEASE bf_MsRequest.
+    
     RETURN TRUE.
 
 END FUNCTION.
@@ -397,7 +404,9 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          ASSIGN Customer.Category = OrderCustomer.Category.         
 
       IF NOT OrderCustomer.Pro THEN
-         fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, FALSE, iiOrder).
+         fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, iiOrder).
+      ELSE 
+         fClosePendingACC("Non-Pro", Customer.CustIdType, Customer.OrgId, iiOrder).   
 
       IF iiTarget = 1 THEN DO:
          /* new user account */
