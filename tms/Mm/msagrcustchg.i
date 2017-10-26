@@ -38,11 +38,20 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
    IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect new customer category".
 
    IF bCustCatSRC.PRO NE bCustCatDST.PRO THEN
-      RETURN "ACC is not allowed between PRO-NON PRO customers".
+   DO:
+      IF NOT bCustCatSRC.PRO AND bCustCatDST.PRO THEN
+         RETURN "ACC is not allowed between PRO-NON PRO customers".
+      /* Check for any active/ongoing subscriptions. If there is any, no migration possible. */
+      ELSE IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = gcBrand              AND 
+                                           MobSub.AgrCust = bCustomerDST.CustNum AND 
+                                           MobSub.Cli     > ""                   NO-LOCK)) OR 
+              fCheckOngoingOrders(bCustomerDST.CustIdType, bCustomerDST.OrgId, 0) THEN 
+         RETURN "ACC is not allowed between PRO-NON PRO customers".
+   END.   
    
    RETURN "".
 
-END.
+END FUNCTION.
 
 FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
    (INPUT iiMsSeq AS INT):
