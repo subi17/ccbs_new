@@ -99,7 +99,7 @@ FORM
        RequestType.ReqName NO-LABEL SKIP
     RequestAction.PayType      COLON 20 FORMAT ">>9"
        lcPayType NO-LABEL FORMAT "X(30)" SKIP
-    RequestAction.CLIType      COLON 20 
+    RequestAction.CLIType FORMAT "X(14)" COLON 20 
        CLIType.CLIName NO-LABEL SKIP
     RequestAction.ActionType   COLON 20
        lcActionType NO-LABEL FORMAT "X(30)" SKIP
