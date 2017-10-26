@@ -911,7 +911,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          VIEW-AS ALERT-BOX ERROR.
          NEXT.
       END.
-         
+
       RUN Mc/charge_dialog.p(
        MobSub.MsSeq,
        (IF MobSub.PayType THEN "ACC_PREPAID" ELSE "ACC_POSTPAID"),
