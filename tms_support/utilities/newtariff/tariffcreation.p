@@ -1007,7 +1007,8 @@ PROCEDURE pBundle:
                                          icMobileFixedLine).
         END.
 
-        IF ideBDestLimit > 0 THEN 
+        IF ideBDestLimit > 0 AND 
+           (icMobileFixedLine NE "mobile" OR ideVoiceLimit EQ 0) THEN 
         DO:
            RUN pCreateServiceLimit_BDest(lcCliType,
                                          ttDayCampaign.DCEvent,

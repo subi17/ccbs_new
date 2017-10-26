@@ -1425,6 +1425,7 @@
 "Salesman" "SmPrefix" "IFS" "CP" "CASTURTEL PALENCIA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CR" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CV" "EOS ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CW" "CARRITO WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "D2" "DOOR TO DOOR" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
