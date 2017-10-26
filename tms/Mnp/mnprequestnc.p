@@ -261,6 +261,7 @@ PROCEDURE pCreatePortabilityMessageXML:
       add_string(lcReqStruct, "ICCID", substr(Order.OldICC,1,19)).
    
    add_string(lcReqStruct, "MSISDN", Order.CLI).
+   add_string(lcReqStruct, "sourceApplication", "MNP").
 
    /*BMNP-21*/
    add_string(lcReqStruct, "sourceApplication", "MNP").
