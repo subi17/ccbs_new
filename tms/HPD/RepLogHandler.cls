@@ -47,7 +47,7 @@ CLASS HPD.RepLogHandler FINAL:
       (icDB        AS CHARACTER,
        icQueueName AS CHARACTER):
 
-      llMultiTenancy = IS-DB-MULTI-TENANT(icDB).
+      llMultiTenancy = multitenancy.TenantInformation:IsMultiTenant.
       mInitialize(icDB + ".RepLog", icQueueName).
 
    END CONSTRUCTOR.
@@ -56,7 +56,7 @@ CLASS HPD.RepLogHandler FINAL:
    CONSTRUCTOR PUBLIC RepLogHandler
       (icDB AS CHARACTER):
 
-      llMultiTenancy = IS-DB-MULTI-TENANT(icDB).
+      llMultiTenancy = multitenancy.TenantInformation:IsMultiTenant.
       mInitialize(icDB + ".RepLog", icDB).
 
    END CONSTRUCTOR.
@@ -109,14 +109,7 @@ CLASS HPD.RepLogHandler FINAL:
 
       CREATE BUFFER lhRepLogTable FOR TABLE lcRepLogTable.
 
-      IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcQueueName, 1).
-
-      /* Change effective tenant to default one
-         so that tmsparam records will be fetched
-         from there */
-      IF llMultiTenancy
-      THEN mSetEffectiveTenant("").
+      mPopulateDumpHandlers().
 
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
@@ -208,7 +201,7 @@ CLASS HPD.RepLogHandler FINAL:
    END METHOD.
 
 
-   METHOD PRIVATE LOGICAL mPopulateDumpHandlers
+   METHOD PRIVATE VOID mPopulateDumpHandlers
       ( icTenant AS CHARACTER ):
       
       DEFINE VARIABLE llFoundHandler          AS LOGICAL INITIAL FALSE NO-UNDO.
@@ -217,13 +210,13 @@ CLASS HPD.RepLogHandler FINAL:
       DEFINE VARIABLE lcBrandName             AS CHARACTER             NO-UNDO.
 
       IF icTenant > ""
-      THEN DO:
+      THEN DO ON ERROR UNDO, THROW:
          ASSIGN
             llCheckTableMultiTenant = TRUE
             lcBrandName = multitenancy.TenantInformation:mConvertTenantToBrand(icTenant).
 
          /* The default tenant is handling also the shared tables */
-         IF multitenancy.TenantInformation:mIsDefaultTenant(icTenant)
+         IF icTenant EQ multitenancy.TenantInformation:DefaultTenant
          THEN icTenant = "".
       END.
 
@@ -231,6 +224,8 @@ CLASS HPD.RepLogHandler FINAL:
          DumpFile.FileCategory = "HPD" AND
          DumpFile.SideTables = lcQueueName
          ON ERROR UNDO, THROW:
+
+         llFoundHandler = TRUE.
 
          IF llCheckTableMultiTenant
          THEN llTableMultiTenant = multitenancy.TenantInformation:mIsTableMultiTenant(DumpFile.MainTable).
@@ -250,47 +245,39 @@ CLASS HPD.RepLogHandler FINAL:
             ttDumpHandler.BrandName     = lcBrandName WHEN llTableMultiTenant
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
-            llFoundHandler = TRUE
             .
       END.
 
-      RETURN llFoundHandler.
+      IF NOT llFoundHandler
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+                     ("No tables defined to online HPD interface " +
+                      "for database " + lcQueueName, 1).
 
    END METHOD.     
 
-
-   METHOD PRIVATE LOGICAL mPopulateDumpHandlers( ):
+   METHOD PRIVATE VOID mPopulateDumpHandlers():
 
       IF NOT llMultiTenancy
-      THEN RETURN mPopulateDumpHandlers("").
-      
-      DEFINE VARIABLE llOK              AS LOGICAL INITIAL FALSE NO-UNDO.
-      DEFINE VARIABLE llReturnValue     AS LOGICAL INITIAL FALSE NO-UNDO.
-      DEFINE VARIABLE lii               AS INTEGER               NO-UNDO.
-      DEFINE VARIABLE liNumConnectedDBs AS INTEGER               NO-UNDO.
-
-      DO ON ERROR UNDO, THROW:
-         TENANTLOOP:
-         DO lii = 0 TO 100 ON ERROR UNDO, THROW:
-
-            DO liNumConnectedDBs = 1 TO NUM-DBS:
-               SET-EFFECTIVE-TENANT(lii, LDBNAME(liNumConnectedDBs)) NO-ERROR.
-               IF ERROR-STATUS:ERROR
-               THEN LEAVE TENANTLOOP.
-            END.
-
-            llOK = mPopulateDumpHandlers(GET-EFFECTIVE-TENANT-NAME(LDBNAME(1))).
-
-            IF llOK
-            THEN llReturnValue = llOK.
-         END.
-
+      THEN DO ON ERROR UNDO, THROW:
+         mPopulateDumpHandlers("").
+         RETURN.
       END.
 
-      /* Change effective tenant to default one
-         (this is needed in order to make sure that lcTenant attribute
-          stays in sync after calling mReload) */
-      mSetEffectiveTenant("").
+      DEFINE VARIABLE lii      AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO.
+
+      /* Go through every tenant and set the dump handlers */
+      DO lii = 1 TO NUM-ENTRIES(multitenancy.TenantInformation:TenantList)
+         ON ERROR UNDO, THROW:
+         lcTenant = ENTRY(lii,multitenancy.TenantInformation:TenantList).
+         IF lcTenant EQ multitenancy.TenantInformation:SuperTenant
+         THEN NEXT.
+         multitenancy.TenantInformation:mSetEffectiveTenant(lcTenant).
+         mPopulateDumpHandlers(lcTenant).
+      END.
+
+      /* Change effective tenant to default and set lcTenant to correct value */
+      multitenancy.TenantInformation:mSetEffectiveTenant(mTenantNameConversion("")).
 
 /*
       FOR EACH ttDumpHandler:
@@ -302,7 +289,6 @@ CLASS HPD.RepLogHandler FINAL:
          LOG-MANAGER:WRITE-MESSAGE("Object: " + STRING(ttDumpHandler.objHandler), "DEBUG").
       END.
 */
-      RETURN llReturnValue.
 
    END METHOD.
 
@@ -396,26 +382,18 @@ CLASS HPD.RepLogHandler FINAL:
 
    END METHOD.
 
-
-   METHOD PRIVATE VOID mSetEffectiveTenant
+   /* Method keeps the lcTenant attribute in sync and
+      convert the tenant name to the format which
+      replog table uses */
+   METHOD PRIVATE CHARACTER mTenantNameConversion
       (icTenantname AS CHARACTER):
 
       lcTenant = icTenantname.
 
-      DEFINE VARIABLE liNumConnectedDBs AS INTEGER NO-UNDO.
+      IF icTenantName = ""
+      THEN RETURN multitenancy.TenantInformation:DefaultTenant.
 
-      IF icTenantname = ""
-      THEN icTenantname = 
-      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-      "Default".
-      &ELSE
-      multitenancy.TenantInformation:DefaultTenantName.
-      &ENDIF
-
-      DO liNumConnectedDBs = 1 TO NUM-DBS:
-         SET-EFFECTIVE-TENANT(icTenantName, LDBNAME(liNumConnectedDBs)).
-      END.
+      RETURN icTenantname.
 
    END METHOD.
 
@@ -446,7 +424,7 @@ CLASS HPD.RepLogHandler FINAL:
             THEN NEXT.
 
             IF llMultiTenancy AND lcTenant NE lhRepLogTable::TenantName
-            THEN mSetEffectiveTenant(lhRepLogTable::TenantName).
+            THEN multitenancy.TenantInformation:mSetEffectiveTenant(mTenantNameConversion(lhRepLogTable::TenantName)).
 
             CASE mSendRepLog2MQ():
 
@@ -495,9 +473,7 @@ CLASS HPD.RepLogHandler FINAL:
    METHOD PUBLIC VOID mReload():
 
       mPurgeDumpHandlers().
-
-      IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for queue " + lcQueueName, 1).
+      mPopulateDumpHandlers().
 
    END METHOD.
 
