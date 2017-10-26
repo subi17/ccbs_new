@@ -42,7 +42,7 @@ FixedLineBaseBundleType;ServicePackage
 UpsellForFixedLine; 
 BonoSupportForFixedLine;No
 MonthlyFeeBillCodeForFixedLine;CONTFH1000MF
-CommercialFeeForFixedLine;47.104
+CommercialFeeForFixedLine;47.10
 FirstMonthFeeCalcForFixedLine;Relative
 LastMonthFeeCalcForFixedLine;Relative
 VoiceLimitForFixedLine;60
