@@ -52,6 +52,18 @@ FUNCTION fTMSCValue RETURNS CHARACTER
 
 END FUNCTION.  
 
+FUNCTION fGetNextMXSeq RETURNS INTEGER ():
+
+   DEFINE BUFFER Matrix FOR Matrix.
+
+   FOR EACH Matrix NO-LOCK BY Matrix.MXSeq DESCENDING:
+     RETURN Matrix.MXSeq + 1.
+   END.
+
+   RETURN 1.
+
+END FUNCTION.
+
 FUNCTION fGetNextMatrixPriority RETURNS INTEGER 
    (icKey AS CHARACTER):
 
@@ -1523,7 +1535,7 @@ PROCEDURE pMatrix:
        CREATE Matrix.
        ASSIGN
           Matrix.Brand  = gcBrand
-          Matrix.MXSeq  = NEXT-VALUE(imsi)
+          Matrix.MXSeq  = fGetNextMXSeq()
           Matrix.mxkey  = "PERCONTR"
           Matrix.mxname = icCLIType
           Matrix.prior  = fGetNextMatrixPriority("PERCONTR")

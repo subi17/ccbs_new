@@ -153,10 +153,8 @@ CLASS Syst.CDRConnect:
       DEFINE VARIABLE lhQuery  AS HANDLE NO-UNDO.
 
       IF NOT CONNECTED(icDBName)
-      THEN DO:
-         CONNECT VALUE(icDBPath + "/" + icDBName) NO-ERROR.
-         IF ERROR-STATUS:ERROR = TRUE
-         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to database " + icDBName + " located on directory " + icDBPath, 1).
+      THEN DO ON ERROR UNDO, THROW:
+         multitenancy.TenantInformation:mConnectDB(icDBPath + "/" + icDBName).
       END.
       
       CREATE BUFFER lhBuffer FOR TABLE icDBName + "." + lcCDRTableName.
