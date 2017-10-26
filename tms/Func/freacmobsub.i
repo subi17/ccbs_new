@@ -109,6 +109,13 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF CAN-FIND (FIRST mobsub where mobsub.cli = bTermMobSub.cli) THEN
       RETURN "Subscription is already active with same MSISDN".
 
+   IF CAN-FIND (FIRST order where
+                      order.brand = gcBrand AND
+                      order.cli = bTermMobSub.cli and
+                      order.ordertype < 2 AND
+               lookup(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0) THEN
+      RETURN "Ongoing active order with same MSISDN".
+
    IF NOT CAN-FIND (FIRST MSISDN where 
                           MSISDN.Brand = gcBrand AND
                           MSISDN.CLI   = bTermMobSub.CLI) THEN
