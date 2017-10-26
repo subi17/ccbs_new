@@ -403,7 +403,7 @@ PROCEDURE pInitialize:
       lcFile = REPLACE(lcFile,"#CAT",DumpFile.FileCategory)
       lcFile = REPLACE(lcFile,"#RUN",icRunNameTag)
       lcFile = REPLACE(lcFile,"#TENANT",
-                       CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant())).
+                       CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
    
    /* sequential nbr for the same day */
    IF INDEX(lcFile,"#DSEQ") > 0 THEN DO:
