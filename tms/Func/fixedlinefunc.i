@@ -280,7 +280,8 @@ END.
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
-    INPUT icCliType    AS CHAR): 
+    INPUT icCliType    AS CHAR,
+    OUTPUT liConvOrderId AS INT): 
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
@@ -306,8 +307,10 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
 
       IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
           
-      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN 
+      IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN DO:
+         liConvOrderId = bOrder.OrderId.
          RETURN TRUE.
+      END.
 
    END.
 
@@ -415,7 +418,8 @@ END FUNCTION.
 FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
-    INPUT icCliType    AS CHAR):
+    INPUT icCliType    AS CHAR,
+    OUTPUT liConvOrderId AS INT):
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
@@ -435,8 +439,10 @@ FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
             bOrderFusion.Brand   = Syst.Parameters:gcBrand AND
             bOrderFusion.OrderID = bOrder.OrderID:
 
-      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN
+      IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN DO:
+         liConvOrderId = bOrder.OrderId.
          RETURN TRUE.
+      END.
    END.
 
    RETURN FALSE.
@@ -636,7 +642,8 @@ END FUNCTION.
 FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
    (INPUT icCustIDType AS CHAR,
     INPUT icCustID     AS CHAR,
-    INPUT icCliType    AS CHAR):
+    INPUT icCliType    AS CHAR,
+    OUTPUT liConvOrderId AS INT):
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
@@ -660,8 +667,10 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
           LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
              NEXT.
 
-      IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN
+      IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN DO:
+         liConvOrderId = bOrder.OrderId.
          RETURN TRUE.
+      END.
    END.
 
    RETURN FALSE.

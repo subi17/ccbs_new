@@ -62,6 +62,7 @@ DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO.
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
+DEF VAR liConvOrderId                 AS INT NO-UNDO INIT 0.
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -419,11 +420,11 @@ END.
 IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    IF fCheckExistingConvergent(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "OK".
-   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType) THEN 
+   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType,OUTPUT liConvOrderId) THEN 
       lcAddLineAllowed = "OK".
    ELSE IF fCheckExistingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
-   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType,OUTPUT liConvOrderId) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
