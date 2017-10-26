@@ -58,7 +58,7 @@ CLASS HPD.DumpFile INHERITS DumpSomeWhere:
 
       DEFINE VARIABLE lcBrandName AS CHARACTER NO-UNDO.
 
-      lcBrandName = multitenancy.TenantInformation:mGetBrandNameForActualTenant().
+      lcBrandName = multitenancy.TenantInformation:mGetEffectiveBrand().
 
       IF icFile <> ""
       THEN ASSIGN
@@ -67,7 +67,7 @@ CLASS HPD.DumpFile INHERITS DumpSomeWhere:
               .
       ELSE ASSIGN
               lcFile = REPLACE(lbDumpFile.FileName,"#DATE_#TIME",objHPDTime:FileTime)
-              lcFile = REPLACE(lcFile,"#TENANT",lcBrandName) WHEN lcBrandName > ""
+              lcFile = REPLACE(lcFile,"#TENANT",lcBrandName)
               lcFile = lbDumpFile.SpoolDir + "/" + lcFile.
               
       IF lbDumpFile.DumpCharSet > ""

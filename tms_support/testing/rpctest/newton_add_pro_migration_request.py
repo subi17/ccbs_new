@@ -16,6 +16,6 @@ else:
    var1 = int(sys.argv[1])
 
 p=s.newton.add_pro_migration_request({'msseq':var1,
-                        'salesman':'rpctest'}
+                        'salesman_id':'rpctest'}
                         )
 print_results(p)

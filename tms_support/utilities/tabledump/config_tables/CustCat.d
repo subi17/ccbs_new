@@ -12,6 +12,6 @@
 "41" "Self Employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 no "AUTONOMO"
 "42" "PRO Self-employee NIF" 0 0 0 0 1 "1" 0 "NIF" yes 5 7 yes "PRO-SOHO-AUTONOMO"
 "43" "PRO Self-employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 yes "PRO-SOHO-AUTONOMO"
-"44" "Self-employee NIF" 0 0 0 0 1 "1" 0 "NIF" yes 5 7 no "SOHO-AUTONOMO"
-"45" "Self-employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 no "SOHO-AUTONOMO"
+"44" "SOHO Self-employee NIF" 0 0 0 0 1 "1" 0 "NIF" yes 5 7 no "SOHO-AUTONOMO"
+"45" "SOHO Self-employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 no "SOHO-AUTONOMO"
 "99" "Default customers" 0 77777777 77777777 77777777 1 "1" 0 "" no 3 5 no ""

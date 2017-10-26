@@ -107,7 +107,6 @@ PROCEDURE pDirectConnect2Dbs:
    
    DEF VAR liState     AS INT  NO-UNDO.
    DEF VAR lcLogicName AS CHAR NO-UNDO.
-   
 
    FOR EACH ttDB WHERE
             ttDB.ConnName = icConnName:
@@ -136,9 +135,9 @@ PROCEDURE pDirectConnect2Dbs:
             IF CONNECTED (lcLogicName) THEN 
                DISCONNECT VALUE(lcLogicName) NO-ERROR.
       
-            CONNECT VALUE(DBConfig.DirectConnect + "/" +
-                          DBConfig.DBConnName + 
-                          " -ld " + lcLogicName) NO-ERROR.
+            multitenancy.TenantInformation:mConnectDBSupressError
+               (DBConfig.DirectConnect + "/" + DBConfig.DBConnName +
+                " -ld " + lcLogicName).
     
             IF ERROR-STATUS:ERROR THEN LEAVE.
          
