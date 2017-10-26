@@ -280,6 +280,7 @@
 115 "PerContract" "CONT15"
 115 "PerContract" "DATA6"
 115 "PerContract" "DATA7"
+115 "PerContract" "VOICE100"
 115 "SubsTypeTo" "CONTDSL48"
 115 "SubsTypeTo" "CONTFH48_50"
 115 "SubsTypeTo" "CONTFH58_300"
