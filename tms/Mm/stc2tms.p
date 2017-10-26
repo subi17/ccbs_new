@@ -59,6 +59,7 @@ IF llDoEvent THEN DO:
    lhSingleFee = BUFFER SingleFee:HANDLE.
    
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
 END.
 
 DEF VAR lcAttrValue        AS CHAR NO-UNDO. 
@@ -299,6 +300,7 @@ PROCEDURE pInitialize:
       RUN StarEventInitialize(lhSubSer).
       RUN StarEventInitialize(lhSubSerPara).
       RUN StarEventInitialize(lhSingleFee).
+      RUN StarEventInitialize(lhCustomer).
    END.
    
 END PROCEDURE.
@@ -1028,7 +1030,6 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
-   DEF BUFFER bMobsub FOR Mobsub.
 
    /* now when billtarget has been updated new fees can be created */
 
@@ -1327,6 +1328,7 @@ PROCEDURE pFinalize:
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
                             fMakeTS()).
+
          END.
          ELSE DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
               "MobSub",
@@ -1413,27 +1415,69 @@ PROCEDURE pFinalize:
          END. /* FOR EACH InvRowCounter WHERE */
    END. /* IF DAY(ldtActDate) <> 1 THEN DO: */
    
-  
-   IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR 
-       Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
-      Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY} AND
+   RUN pUpdateCustomer.
+
+END PROCEDURE.
+
+PROCEDURE pUpdateCustomer:
+    DEF BUFFER bMobsub FOR Mobsub.    
+    IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
+      Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY}                                                                 AND
       NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
                          bMobsub.Brand    = gcBrand        AND
                          bMobSub.CustNum  = MobSub.CustNum AND
                          bMobSub.MsSeq   <> MobSub.MsSeq   AND 
                          bMobSub.PayType  = FALSE AND
-                         bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+                         bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN 
+        RUN pUpdateCustomerDelType.
 
-      FIND CURRENT Customer EXCLUSIVE-LOCK.
-      IF llDoEvent THEN DO:
-         lhCustomer = BUFFER Customer:HANDLE.
-         RUN StarEventInitialize(lhCustomer).
-         RUN StarEventSetOldBuffer(lhCustomer).       
-      END.
-      Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
-      FIND CURRENT Customer NO-LOCK.
-   END.
+    IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC}                                                AND 
+       (bOldType.Paytype = {&CLITYPE_PAYTYPE_PREPAID}  AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) OR 
+       (bOldType.Paytype = {&CLITYPE_PAYTYPE_POSTPAID} AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN 
+    DO:
+        FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = gcBrand                            AND
+                                       OrderCustomer.OrderID = Order.OrderId                      AND
+                                       OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+        IF AVAIL OrderCustomer AND OrderCustomer.Category > "" THEN                                        
+            RUN pUpdateCustomerCategory(INPUT OrderCustomer.Category).
+    END.
+
+    FIND CURRENT Customer NO-LOCK.
+
+    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pUpdateCustomerDelType:
+
+    BUFFER Customer:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+    IF AVAIL Customer THEN 
+    DO:
+        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+        
+        ASSIGN Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
+        
+        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+    END.
+
+    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pUpdateCustomerCategory:
+    DEFINE INPUT PARAMETER icCategory AS CHARACTER NO-UNDO.
+
+    BUFFER Customer:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+    IF AVAIL Customer THEN 
+    DO:
+        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+        
+        ASSIGN Customer.Category = icCategory.
+        
+        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+    END.
+
+    RETURN "".
 
 END PROCEDURE.
 
