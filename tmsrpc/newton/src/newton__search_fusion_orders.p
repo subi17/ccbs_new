@@ -33,6 +33,7 @@
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
 gcBrand = "1".
+{Func/profunc.i}
 
 DEF VAR pcInputStruct AS CHAR NO-UNDO. 
 DEF VAR lcInputFields AS CHAR NO-UNDO. 
@@ -155,6 +156,10 @@ FUNCTION fListQuery RETURNS CHAR
 
       add_string(lcResultStruct, "fixed_line_order_status",
           lhOrderFusion:BUFFER-FIELD("FixedStatus"):BUFFER-VALUE).
+      
+      add_string(lcResultStruct, "segment",
+                fGetSegment(0,
+                lhOrderFusion:BUFFER-FIELD("OrderId"):BUFFER-VALUE)).
 
       FIND FIRST MobSub NO-LOCK WHERE
                  MobSub.MsSeq EQ  

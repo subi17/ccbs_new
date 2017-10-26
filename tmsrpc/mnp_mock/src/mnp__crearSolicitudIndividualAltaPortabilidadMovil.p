@@ -24,7 +24,7 @@ IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 lcXMLStruct = get_struct(param_toplevel_id, "0").
 lcValidateFields = validate_struct(lcXMLStruct,"fechaSolicitudPorAbonado,codigoO
 peradorDonante,codigoOperadorReceptor,abonado,codigoContrato,NRNReceptor,fechaVe
-ntanaCambio,MSISDN,ICCID").
+ntanaCambio,MSISDN,ICCID,sourceApplication").
 
 IF LOOKUP("fechaVentanaCambio", lcValidateFields) > 0 THEN
    ldePortingTime = get_timestamp(lcXMLStruct, "fechaVentanaCambio").
