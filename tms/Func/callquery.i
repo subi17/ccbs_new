@@ -370,8 +370,8 @@ FUNCTION fGetCDRDtl RETURNS LOGICAL
       
       IF ttDB.Connect THEN DO:
          lcDBName = "dtlQuery".
-         CONNECT VALUE (ttDB.ConnName + " " +
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+               (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
@@ -536,8 +536,8 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
         
       IF ttDB.Connect THEN DO:
          lcDBName = "mcdrQuery".
-         CONNECT VALUE (ttDB.ConnName + " " + 
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+                  (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
