@@ -301,7 +301,10 @@ PROCEDURE StarEventMakeDeleteEventWithMemo :
     DEFINE VARIABLE lhDelBuffer AS HANDLE     NO-UNDO.
     DEFINE VARIABLE lhDelField  AS HANDLE     NO-UNDO.
     DEFINE VARIABLE lcDelValues AS CHARACTER  NO-UNDO.
- 
+
+    /*Ensure that the object exists beofre operations*/
+    RUN StarEventInitialize(ihBuffer).
+
     ASSIGN
         lii         = LOOKUP(ihBuffer:TABLE,gcEventTableNames)
         lhDelBuffer = ihBuffer
@@ -433,7 +436,7 @@ PROCEDURE StarEventMakeModifyEventWithMemo :
     DEFINE VARIABLE lcDataValues        AS CHARACTER  NO-UNDO.
     DEFINE VARIABLE liCaseCheck         AS INT        NO-UNDO.
     DEFINE VARIABLE lcCaseFields        AS CHAR       NO-UNDO.
-    
+
     ASSIGN
         lii         = LOOKUP(ihBuffer:TABLE,gcEventTableNames)
         lhOldBuffer = ghBEventSource[lii]
@@ -554,6 +557,9 @@ PROCEDURE StarEventSetOldBuffer :
     
     DEFINE VARIABLE lhB AS HANDLE     NO-UNDO.
     DEFINE VARIABLE lii AS INTEGER    NO-UNDO.
+    
+    /*Ensure that the object exists beofre operations*/
+    RUN StarEventInitialize(ihBuffer).
 
     ASSIGN
         lii = LOOKUP(ihBuffer:TABLE,gcEventTableNames)
@@ -679,7 +685,7 @@ END FUNCTION.
 FUNCTION fCleanEventObjects RETURNS LOGIC:
 
    DEF VAR liCleanCnt AS INT NO-UNDO.
-   
+ 
    DO liCleanCnt = 1 TO {&NUM_BUFFERS}:
    
       IF VALID-HANDLE(ghEventSource[liCleanCnt]) 
