@@ -33,6 +33,7 @@
 "CP" "CASTURTEL PALENCIA" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 no "" ""
 "CR" "CASTILIAN RETENCION" "" 0 "" "" "" "gonzalo.garrido.arsuaga@yoigo.com" "1" 99 no "" ""
 "CT" "CASTURTEL EMISION" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
+"CV" "EOS ONLINE" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "CW" "Carrito Web" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
 "D2" "DOOR TO DOOR" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "DX" "DEXTRA" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 41 yes "323841577" "332296698"
