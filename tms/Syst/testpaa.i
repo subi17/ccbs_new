@@ -31,12 +31,10 @@ def new shared var katun   as char format "x(8)".
 def new shared var toimi   as int  format "z".
 def new shared var ehto    as int  format "z".
 def new shared var sel_t   as char format "x(8)"  EXTENT 16.
-def new shared var menu    as char format "x(16)" EXTENT 180.
 def new shared var ufk     as int  format "z"     EXTENT 9.
 
 /* formien otsikot */
 def new shared var ots     as char format "x(78)".
-DEF NEW shared VAR ots2    LIKE ots.
 
 DEF NEW shared VAR nap     AS CHAR.    /* selauksissa KEYLABEL:in arvo */
 def new shared var vast as char format "x".  /* messagen yhteydessä kysytt. */

@@ -34,11 +34,9 @@ def shared var katun   as char format "x(8)".
 def shared var toimi   as int  format "z".
 def shared var ehto    as int  format "z".
 def shared var sel_t   as char format "x(8)"  EXTENT 16.
-def shared var menu    as char format "x(16)" EXTENT 180.
 def shared var ufk     as int  format "z"     EXTENT 9.
 
 def shared var ots     as char format "x(78)".
-DEF shared VAR ots2    LIKE ots.
 
 DEF shared VAR nap     AS CHAR.
 def shared var vast as char format "x".

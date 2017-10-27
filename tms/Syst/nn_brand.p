@@ -42,7 +42,6 @@ def var mlevel   as int                           no-undo.
 def var i        as int                           no-undo.
 def var x        as int                           no-undo.
 def var empty    as char                          no-undo.
-def var qcode    as char format"x(8)"             no-undo.
 
 def var info     as lo                            no-undo.
 def var OK       as log format "Yes/No".
@@ -322,7 +321,6 @@ ACTION: repeat:
          /* shall a module be run ? */
          if MenuType = 1 then do:
             assign
-               qcode  = MenuTree.MenuId
                qupd   = TRUE.
 
                run value(MenuTree.Module).
@@ -411,7 +409,6 @@ ACTION: repeat:
          BELL.
       else do: /* run a program module */
          assign
-            qcode  =  f_id   [toimi]
             qupd   =  TRUE . 
 
          run value(f_name[toimi]).
