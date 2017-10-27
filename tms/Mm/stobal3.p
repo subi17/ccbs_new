@@ -375,8 +375,6 @@ BROWSE:
        ufkey = TRUE.
        RUN local-find-this(FALSE).                                        
 
-       rt_param[1] = StoBal.StoBal.
-       rt_param[2] = "0".              /* ALL SIM batches */
        RUN Mm/simall.p.
 
        NEXT LOOP.

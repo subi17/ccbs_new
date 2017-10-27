@@ -465,9 +465,6 @@ BROWSE:
        ufkey = TRUE.
        RUN local-find-this(FALSE). 
 
-       ASSIGN                                 
-       rt_param[2] = string(SimBatch.SimBatch)
-       rt_param[1] = "". /* ALL Stocks */
        RUN Mm/sim.p(SimBatch.simBatch).
 
        NEXT LOOP.

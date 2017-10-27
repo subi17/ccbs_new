@@ -46,12 +46,7 @@ DEF NEW shared VAR si-recid AS RECID NO-UNDO.
 DEF NEW shared VAR si-recid2 AS RECID NO-UNDO.
 DEF NEW shared VAR helpkey AS CHAR NO-UNDO.
 
-DEF NEW SHARED VAR rt_param AS C format "x(50)" EXTENT 20 NO-UNDO.
-
 DEF NEW SHARED VAR ergo-kbd AS LO NO-UNDO.
-
-
-DEF VAR Passwd AS c NO-UNDO.
 
 on f1 go.
 on f2 BELL.

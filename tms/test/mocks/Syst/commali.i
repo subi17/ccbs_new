@@ -24,11 +24,6 @@ def new shared var ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99".
 def new shared var qupd    AS lo.
 
-
-/* runtime parameters */
-def new shared var rt_param AS C format "x(50)" EXTENT 20 NO-UNDO.
-
-
 def new shared var katun   as char format "x(8)".
 
 def new shared var toimi   as int  format "z".
@@ -46,7 +41,6 @@ def new shared var si-pvm      AS Date NO-UNDO.
 def new shared var si-recid    AS RECID NO-UNDO.
 def new shared var si-recid2   AS RECID NO-UNDO.
 def new shared var gcHelpParam as char NO-UNDO.
-DEF VAR Passwd AS c NO-UNDO.
 
 def new shared var helpkey AS CHAR NO-UNDO.
 
@@ -56,8 +50,6 @@ def new shared var gcBrand       like customer.brand NO-UNDO.
 def new shared var gcAllBrand    AS LOG    NO-UNDO.
 
 def new shared var ergo-kbd AS LO NO-UNDO.
-
-DEF VAR ldEurKerr AS DE init 5.94573.
 
 on f1 go.
 on f2 go.

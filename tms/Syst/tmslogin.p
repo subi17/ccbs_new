@@ -28,7 +28,8 @@ DEFINE VARIABLE liPassNotifyDays AS INTEGER NO-UNDO.
 DEFINE VARIABLE liTempDate AS DATE NO-UNDO.
 DEFINE VARIABLE liTempTime AS INTEGER NO-UNDO.
 DEFINE VARIABLE olPasswordChanged AS LOGICAL NO-UNDO.
-DEFINE VARIABLE llChangePasswordNow AS LOGICAL NO-UNDO. 
+DEFINE VARIABLE llChangePasswordNow AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lcPassWd  AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liLoop AS INTEGER NO-UNDO. 
 
 /* use brand 1 to get tmsparams, will be selected later */
@@ -41,7 +42,7 @@ form
    katun  label   "  User Id ....." 
    help "Enter a valid TMS User ID  (EMPTY ID: QUIT)" TmsUser.UserName no-label 
    skip
-   passwd FORMAT "X(16)" label   "  Password ... " blank
+   lcPassWd FORMAT "X(16)" label   "  Password ... " blank
    skip(1)
    with 
      row 8 
@@ -119,9 +120,9 @@ do with frame login:
             END.
 
             if tmspass.password <> "" then do:
-               update passwd.
+               update lcPasswd.
                
-               if passwd <> TMSPass.PassWord then do:
+               if lcPasswd <> TMSPass.PassWord then do:
                   message "INVALID ID !".
                   bell. 
                   clear frame login. 
@@ -130,7 +131,7 @@ do with frame login:
             end. /* passwd */
            
             /* compare password lenghts (EQ test ignores trailing blanks) */   
-            IF LENGTH(passwd) NE LENGTH(tmspass.password) THEN DO:
+            IF LENGTH(lcPasswd) NE LENGTH(tmspass.password) THEN DO:
                MESSAGE "INVALID ID !".
                BELL.
                CLEAR FRAME login.
@@ -138,8 +139,8 @@ do with frame login:
             END.
             
             /* go thru char by char, otherwise not case sensitive */
-            DO liLoop = 1 TO LENGTH(passwd):
-               IF ASC(SUBSTRING(passwd,liLoop,1)) NE 
+            DO liLoop = 1 TO LENGTH(lcPasswd):
+               IF ASC(SUBSTRING(lcPasswd,liLoop,1)) NE 
                   ASC(SUBSTRING(tmspass.password,liLoop,1)) THEN DO:
                      MESSAGE "INVALID ID !".
                      BELL.

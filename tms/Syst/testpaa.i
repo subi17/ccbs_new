@@ -51,9 +51,6 @@ DEF NEW shared VAR ginvno  AS i NO-UNDO.
 DEF NEW SHARED VAR gcAllBrand    AS LOG NO-UNDO.
 DEF NEW SHARED VAR ergo-kbd AS LO NO-UNDO.
 
-DEF NEW SHARED VAR rt_param AS C format "x(50)" EXTENT 20 NO-UNDO.
-DEF VAR Passwd AS c NO-UNDO.
-
 on f1 go.
 on f2 BELL.
 on f4 BELL.
