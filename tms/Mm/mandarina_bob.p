@@ -278,6 +278,35 @@ REPEAT:
                   lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
                NEXT.
             END.    
+            /* begin mandarina_improvement_1. When removing Internet barring, removing also active Mandarina LPs  */ 
+            FOR EACH MsRequest NO-LOCK WHERE 
+                     MsRequest.Brand   EQ "1"        AND
+                     MSRequest.Reqtype EQ 1          AND 
+                     MsRequest.CLI     EQ mobsub.CLI AND
+                     (
+                     MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1" OR
+                     MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED2"
+                     ) 
+                     USE-INDEX CLI: 
+               llSuccess = fMakeLPCommandRequest(INPUT MsRequest.MsSeq,                                     
+                                                 INPUT "remove",
+                                                 INPUT MsRequest.CustNum,
+                                                 INPUT (IF MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1"    
+                                                        THEN "LP1 - Migración red - Desactivada"             /*Memo title*/
+                                                        ELSE "LP2 - Migración red - Desactivada"),
+                                                 INPUT (IF MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1"     
+                                                        THEN "Landing Page 1 - Desactivada"                  /*Memo text*/
+                                                        ELSE "Landing Page 2 - Desactivada"),
+                                                 INPUT "Sistema", /*Creator tag for memo*/
+                                                 INPUT "11",      /*Source, 11 -> Bob Tool*/                                           
+                                                 INPUT-OUTPUT lcErr).
+               IF NOT llSuccess THEN DO:
+                  PUT STREAM sCurrentLog UNFORMATTED
+                     lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
+                  NEXT.
+               END. 
+            END.          
+            /* end mandarina_improvement_1 */              
          END.
          /* end YDR-2668 */         
          ELSE DO:
