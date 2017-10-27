@@ -1367,11 +1367,8 @@ PROCEDURE pFinalize:
       END.
    END.
    
-   IF lcResult EQ "" THEN
-      /* request handled succesfully */
-      fReqStatus(2,"").
-   ELSE
-      fReqStatus(3,"Migration failed").
+   /* request handled succesfully */
+   fReqStatus(2,"").
    
    IF bOldType.CLIType EQ "CONTM2" OR
       CLIType.CLIType EQ "CONTM2" THEN DO:

@@ -198,7 +198,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 END.
              END.
           END.
-          ELSE IF (pcChannel EQ "Telesales" OR pcChannel EQ "Fusion_pos") 
+          ELSE IF (pcChannel EQ "Telesales_pro" OR 
+                   pcChannel EQ "Fusion_pos_pro") 
           THEN DO:
              IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
                                Mobsub.Brand EQ gcBrand AND
