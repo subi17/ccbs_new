@@ -112,8 +112,6 @@ ASSIGN
 
 
 /* start from main level */
-if not ymoni then multiuser = true.
-else multiuser = false.
 f_level = s_level.
 
 

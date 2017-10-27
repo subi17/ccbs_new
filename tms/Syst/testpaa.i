@@ -33,31 +33,17 @@ def new shared var ehto    as int  format "z".
 def new shared var sel_t   as char format "x(8)"  EXTENT 16.
 def new shared var ufk     as int  format "z"     EXTENT 9.
 
-/* formien otsikot */
-def new shared var ots     as char format "x(78)".
-
 DEF NEW shared VAR nap     AS CHAR.    /* selauksissa KEYLABEL:in arvo */
-def new shared var vast as char format "x".  /* messagen yhteydessä kysytt. */
-def new shared var vali as int format "9".   /* ilmoittaa mitä valikoita */
 DEF NEW shared VAR poisnap AS CHAR init
 "tab,back-tab,f1,enter,return,cursor-up,cursor-down". 
 
 DEF NEW shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
-DEF NEW shared VAR Modem AS CHAR NO-UNDO.
-DEF NEW shared VAR soitto AS CHAR NO-UNDO. /* ohjauskomento modemille */
 DEF NEW shared VAR yvari AS LOG NO-UNDO.
-DEF NEW shared VAR ymoni AS LOG NO-UNDO.
-DEF NEW shared VAR ykirje AS INT NO-UNDO.
 
 def new shared var gcHelpParam as char NO-UNDO.
-def new shared var si-hlo      as char format "x(50)".
-def new shared var si-nro as char format "x(16)".
 DEF NEW shared VAR si-pvm AS Date NO-UNDO.
 DEF NEW shared VAR si-recid AS RECID NO-UNDO.
 DEF NEW shared VAR si-recid2 AS RECID NO-UNDO.
-def new shared var si-tunnus as char format "x(6)".
-def new shared var si-ryno   as char format "x(16)".
-DEF NEW shared VAR multiuser AS LOG NO-UNDO.
 DEF NEW shared VAR helpkey AS CHAR NO-UNDO.
 DEF NEW shared VAR ginvno  AS i NO-UNDO.
 

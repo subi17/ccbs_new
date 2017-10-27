@@ -36,28 +36,18 @@ def shared var ehto    as int  format "z".
 def shared var sel_t   as char format "x(8)"  EXTENT 16.
 def shared var ufk     as int  format "z"     EXTENT 9.
 
-def shared var ots     as char format "x(78)".
-
 DEF shared VAR nap     AS CHAR.
-def shared var vast as char format "x".
-def shared var vali    as int format "9".
 DEF shared VAR poisnap AS CHAR.
 
 DEF shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
-DEF shared VAR Modem AS CHAR NO-UNDO.
-DEF shared VAR soitto AS CHAR NO-UNDO. /* ohjauskomento modemille */
 DEF shared VAR yvari AS LOG NO-UNDO.
-DEF shared VAR ymoni AS LOG NO-UNDO.
-DEF shared VAR ykirje AS INT NO-UNDO.
 
 DEF shared VAR si-pvm      AS Date NO-UNDO.
 DEF shared VAR si-recid    AS RECID NO-UNDO.
 DEF shared VAR si-recid2   AS RECID NO-UNDO.
 def shared var gcHelpParam as char NO-UNDO.
-DEF shared VAR vava AS LOG NO-UNDO.
 DEF VAR Passwd AS c NO-UNDO.
 
-DEF shared VAR multiuser AS LOG NO-UNDO.
 DEF shared VAR helpkey AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrandVarDefined YES
