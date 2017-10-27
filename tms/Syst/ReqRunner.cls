@@ -33,23 +33,6 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
       THEN RETURN ERROR NEW Progress.Lang.AppError
             ("This daemon must be run using the super tenant", 1). 
 
-      liQueue = INTEGER(REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "")).
-
-      FIND RequestQueue NO-LOCK WHERE 
-           RequestQueue.Brand = "1" AND
-           RequestQueue.Queue = liQueue
-      NO-ERROR.
-      
-      IF NOT AVAILABLE RequestQueue
-      THEN RETURN ERROR NEW Progress.Lang.AppError
-            (SUBSTRING("Cannot find RequestQueue where Queue = &1",liQueue), 1).
-
-      IF NOT RequestQueue.InUse
-      THEN RETURN ERROR NEW Progress.Lang.AppError
-            (SUBSTRING("RequestQueue where Queue = &1 is not in use",liQueue), 1).
-       
-      liInterval = RequestQueue.Interval.
-
       IF LOG-MANAGER:LOGGING-LEVEL < 2 AND LOG-MANAGER:LOGFILE-NAME <> ?
       THEN LOG-MANAGER:WRITE-MESSAGE("Daemon started", "INFO").
 		
@@ -68,8 +51,24 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
 
    METHOD OVERRIDE PUBLIC VOID setUp ():
 
+      liQueue = INTEGER(REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "")).
+
+      FIND RequestQueue NO-LOCK WHERE 
+           RequestQueue.Brand = "1" AND
+           RequestQueue.Queue = liQueue
+      NO-ERROR.
+      
+      IF NOT AVAILABLE RequestQueue
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+            (SUBSTRING("Cannot find RequestQueue where Queue = &1",liQueue), 1).
+
+      IF NOT RequestQueue.InUse
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+            (SUBSTRING("RequestQueue where Queue = &1 is not in use",liQueue), 1).
+       
       objReqHandler = NEW Syst.ReqHandler(liQueue).
       ASSIGN
+         liInterval   = RequestQueue.Interval
          liWaitTime   = 0
          liPauseTotal = 0
          llWait       = FALSE.     
