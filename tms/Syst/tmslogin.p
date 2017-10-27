@@ -105,8 +105,6 @@ do with frame login:
 
             /* copy user id into the common variables */
             assign
-              kanro       = TmsUser.userNum
-              karyhma     = TmsUser.UserGroup
               ergo-kbd    = TmsUser.ErgoKeyb
               gcAllBrand  = (IF INDEX("*",TMSUser.brand) > 0 THEN TRUE 
                              ELSE FALSE).

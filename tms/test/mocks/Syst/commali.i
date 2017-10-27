@@ -16,16 +16,12 @@
 &ENDIF
 
 
-def new shared var jno as int format "ZZZZZZZ9".
-DEF NEW shared VAR jnotyyp AS INT.
 def new shared var cfc as char format "x(24)".
 def new shared var ctc as char format "x(24)".
 def        var ccc as char format "x(24)".
 
 def new shared var ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99".
-def new shared var qcode   as c format "x(8)".
-def new shared var qtitle  as c format "x(40)".
 def new shared var qupd    AS lo.
 
 
@@ -34,14 +30,10 @@ def new shared var rt_param AS C format "x(50)" EXTENT 20 NO-UNDO.
 
 
 def new shared var katun   as char format "x(8)".
-def new shared var kanro   as int  format "999".
-def new shared var kanro2  as int  format "999".
-def new shared var karyhma as char format "x(10)".
 
 def new shared var toimi   as int  format "z".
 def new shared var ehto    as int  format "z".
 def new shared var sel_t   as char format "x(8)"  EXTENT 16.
-def new shared var uft     as char format "x(16)" EXTENT 8.
 def new shared var menu    as char format "x(16)" EXTENT 180.
 def new shared var ufk     as int  format "z"     EXTENT 9.
 
@@ -64,7 +56,6 @@ def new shared var si-pvm      AS Date NO-UNDO.
 def new shared var si-recid    AS RECID NO-UNDO.
 def new shared var si-recid2   AS RECID NO-UNDO.
 def new shared var gcHelpParam as char NO-UNDO.
-def new shared var pankki AS LOG NO-UNDO.
 def new shared var vava AS LOG NO-UNDO.
 DEF VAR Passwd AS c NO-UNDO.
 

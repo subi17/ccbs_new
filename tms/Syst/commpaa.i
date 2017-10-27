@@ -16,9 +16,6 @@ def new shared var ghFunc1 as handle.
 if not valid-handle(ghFunc1) then RUN Func/func.p persistent set ghFunc1.
 &ENDIF
 
-/* yleinen järj.nro */
-def new shared var jno as int format "ZZZZZZZ9".
-DEF NEW shared VAR jnotyyp AS INT.
 def new shared var cfc as char format "x(24)".
 def new shared var ctc as char format "x(24)".
 def            var ccc as char format "x(24)".
@@ -26,20 +23,14 @@ def            var ccc as char format "x(24)".
 /* otsikoissa näkyvät */
 def new shared var ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99" init TODAY.
-def new shared var qcode   as c format "x(8)".
-def new shared var qtitle  as c format "x(40)".
 DEF NEW shared VAR qupd    AS lo.
 
 def new shared var katun   as char format "x(8)".
-def new shared var kanro   as int format "999".
-def new shared var kanro2  as int format "999".
-def new shared var karyhma as char format "x(10)".
 
 /* ufkey.p:n tarvitsemat */
 def new shared var toimi   as int  format "z".
 def new shared var ehto    as int  format "z".
 def new shared var sel_t   as char format "x(8)"  EXTENT 16.
-def new shared var uft     as char format "x(16)" EXTENT 8.
 def new shared var menu    as char format "x(16)" EXTENT 180.
 def new shared var ufk     as int  format "z"     EXTENT 9.
 

@@ -61,7 +61,7 @@ form
    skip(10)
 with
    row 1 width 80 overlay color value(cfc) title color value(ctc)
-   " " + ynimi + " " + qtitle + " " + string(pvm,"99-99-9999") +
+   " " + ynimi + " Payments into a/r, input from OCR file " + string(pvm,"99-99-9999") +
    " " frame main.
 
 
