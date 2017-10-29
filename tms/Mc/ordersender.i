@@ -12,7 +12,7 @@
                 DEF VAR llOrdStChg            AS LOG  NO-UNDO. 
                 DEF VAR llReserveSimAndMsisdn AS LOG  NO-UNDO.
                 DEF VAR lcExtraLineDiscounts  AS CHAR NO-UNDO.
-                DEF VAR liConvOrderId         AS INT  NO-UNDO INIT 0.
+                DEF VAR lcConvOrders          AS CHAR NO-UNDO INIT "".
    
                 DEF VAR lh99Order AS HANDLE NO-UNDO.
                 DEF VAR lh76Order AS HANDLE NO-UNDO.
@@ -136,7 +136,8 @@
                       fCheckOngoingConvergentOrder(OrderCustomer.CustIdType,
                                                    OrderCustomer.CustId,
                                                    Order.CLIType,
-                                                   OUTPUT liConvOrderId)               
+                                                   {&ONGOING_ORDER_AVAIL},
+                                                   OUTPUT lcConvOrders)               
                       AND 
                       NOT fCheckFixedLineStatusForMainLine(OrderCustomer.CustIdType,
                                                            OrderCustomer.CustId,
@@ -154,7 +155,8 @@
                       fCheckOngoing2PConvergentOrder(OrderCustomer.CustIdType,
                                                      OrderCustomer.CustId,
                                                      Order.CLIType,
-                                                     OUTPUT liConvOrderId)                       
+                                                     {&ONGOING_ORDER_AVAIL},
+                                                     OUTPUT lcConvOrders)                       
                       AND 
                       NOT fCheckFixedLineStatusForMainLine(OrderCustomer.CustIdType,
                                                            OrderCustomer.CustId,
@@ -172,7 +174,8 @@
                       fCheckOngoingMobileOnly(OrderCustomer.CustIdType,
                                               OrderCustomer.CustId,
                                               Order.CLIType,
-                                              OUTPUT liConvOrderId)) THEN DO:
+                                              {&ONGOING_ORDER_AVAIL},  
+                                              OUTPUT lcConvOrders)) THEN DO:
                      IF llDoEvent THEN DO:
                         lh76Order = BUFFER Order:HANDLE.
                         RUN StarEventInitialize(lh76Order).
