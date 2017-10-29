@@ -431,7 +431,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
    DEF VAR liMOOrderId      AS INT  NO-UNDO INITIAL 0.
    DEF VAR llgMainLineAvail AS LOG  NO-UNDO INITIAL FALSE.   
    DEF VAR illgConvOrder    AS LOG  NO-UNDO INITIAL FALSE. 
-   DEF VAR liConvOrderId    AS INT  NO-UNDO.
+   DEF VAR lcConvOrders     AS CHAR NO-UNDO.
 
    IF fIsConvergenceTariff(icCLIType) THEN 
       ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
@@ -480,7 +480,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                   (NOT fCheckOngoingConvergentOrder(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
                                                     labOrder.CliType,
-                                                    OUTPUT liConvOrderId)
+                                                    {&ONGOING_ORDER_AVAIL},
+                                                    OUTPUT lcConvOrders)
                    AND
                    NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
                                                         labOrderCustomer.CustId,
@@ -498,7 +499,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                   (NOT fCheckOngoing2PConvergentOrder(labOrderCustomer.CustIdType,
                                                       labOrderCustomer.CustID,
                                                       labOrder.CliType,
-                                                      OUTPUT liConvOrderId)
+                                                      {&ONGOING_ORDER_AVAIL},
+                                                      OUTPUT lcConvOrders)
                    AND                               
                    NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
                                                         labOrderCustomer.CustId,
@@ -525,7 +527,8 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                        NOT fCheckOngoingMobileOnly(labOrderCustomer.CustIdType,
                                                    labOrderCustomer.CustID,
                                                    labOrder.CliType,
-                                                   OUTPUT liConvOrderId)             
+                                                   {&ONGOING_ORDER_AVAIL},
+                                                   OUTPUT lcConvOrders)             
                        AND
                        NOT fCheckExistingMobileOnly(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,

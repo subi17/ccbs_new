@@ -39,7 +39,7 @@ DEFINE VARIABLE ldeMonthlyLimit  AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE liConvOrderId    AS INT NO-UNDO INIT 0.
+DEFINE VARIABLE lcConvOrders     AS CHARACTER NO-UNDO INIT "".
 /* ALFMO-14 for web memo creation */
 DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
@@ -231,7 +231,8 @@ DO:
    IF fCheckOngoingConvergentOrder(Customer.CustIDType,
                                    Customer.OrgID,
                                    MobSub.CliType,
-                                   OUTPUT liConvOrderId) THEN      
+                                   {&ONGOING_ORDER_AVAIL}, 
+                                   OUTPUT lcConvOrders) THEN      
       RETURN appl_err("Discount Plan not allowed").      
 END.
 

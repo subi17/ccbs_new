@@ -281,15 +281,18 @@ END FUNCTION.
 
 /* Function checks for ongoing 3P convergent for a customer  */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
-   (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR,
-    INPUT icCliType    AS CHAR,
-    OUTPUT liConvOrderId AS INT): 
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR,
+    INPUT icCliType     AS CHAR,
+    INPUT icAction      AS CHAR,
+    OUTPUT lcConvOrders AS CHAR): 
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
    DEFINE BUFFER bClitype       FOR Clitype.
+
+   DEF VAR lcOngoingOrdersList AS CHAR NO-UNDO INITIAL "". 
 
    FOR EACH bOrderCustomer NO-LOCK WHERE   
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND 
@@ -309,13 +312,30 @@ FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
           NEXT.
 
       IF LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
-          
+      
       IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN DO:
-         liConvOrderId = bOrder.OrderId.
-         RETURN TRUE.
+         
+         CASE icAction:
+            WHEN {&ONGOING_ORDER_AVAIL} THEN RETURN TRUE. 
+            WHEN {&ONGOING_ORDER_LIST} THEN DO:
+               IF lcOngoingOrdersList EQ "" THEN 
+                  lcOngoingOrdersList =  STRING(bOrder.OrderId).
+               ELSE    
+                  lcOngoingOrdersList = lcOngoingOrdersList + "," + STRING(bOrder.OrderId). 
+            END.
+         END CASE.
+      
       END.
-
    END.
+
+   CASE icAction:
+      WHEN {&ONGOING_ORDER_LIST} THEN DO: 
+         IF lcOngoingOrdersList NE "" THEN DO: 
+            lcConvOrders = lcOngoingOrdersList.   
+            RETURN TRUE.
+         END. 
+      END.   
+   END. 
 
    RETURN FALSE.
 
@@ -419,14 +439,17 @@ END FUNCTION.
 
 /* Function checks for ongoing 2P convergent for a customer */
 FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
-   (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR,
-    INPUT icCliType    AS CHAR,
-    OUTPUT liConvOrderId AS INT):
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR,
+    INPUT icCliType     AS CHAR,
+    INPUT icAction      AS CHAR,
+    OUTPUT lcConvOrders AS CHAR):
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   DEF VAR lcOngoingOrdersList AS CHAR NO-UNDO INITIAL "".
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -443,8 +466,26 @@ FUNCTION fCheckOngoing2PConvergentOrder RETURNS LOGICAL
             bOrderFusion.OrderID = bOrder.OrderID:
 
       IF fIsConvergentORFixedOnly(bOrder.CLIType) THEN DO:
-         liConvOrderId = bOrder.OrderId.
-         RETURN TRUE.
+         
+         CASE icAction:
+            WHEN {&ONGOING_ORDER_AVAIL} THEN RETURN TRUE.
+            WHEN {&ONGOING_ORDER_LIST} THEN DO:
+               IF lcOngoingOrdersList EQ "" THEN
+                  lcOngoingOrdersList =  STRING(bOrder.OrderId).
+               ELSE
+                  lcOngoingOrdersList = lcOngoingOrdersList + "," + STRING(bOrder.OrderId).
+            END.
+         END CASE.
+ 
+      END.
+   END.
+
+   CASE icAction:
+      WHEN {&ONGOING_ORDER_LIST} THEN DO:
+         IF lcOngoingOrdersList NE "" THEN DO:
+            lcConvOrders = lcOngoingOrdersList.
+            RETURN TRUE.
+         END.
       END.
    END.
 
@@ -645,14 +686,17 @@ END FUNCTION.
 /* Function checks for ongoing mobile only for a customer 
    Additional Line with mobile only ALFMO-5  */
 FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
-   (INPUT icCustIDType AS CHAR,
-    INPUT icCustID     AS CHAR,
-    INPUT icCliType    AS CHAR,
-    OUTPUT liConvOrderId AS INT):
+   (INPUT icCustIDType  AS CHAR,
+    INPUT icCustID      AS CHAR,
+    INPUT icCliType     AS CHAR,
+    INPUT icAction      AS CHAR,
+    OUTPUT lcConvOrders AS CHAR):
 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrder         FOR Order.
    DEFINE BUFFER bOrderFusion   FOR OrderFusion.
+
+   DEF VAR lcOngoingOrdersList AS CHAR NO-UNDO INITIAL "". 
 
    FOR EACH bOrderCustomer NO-LOCK WHERE
             bOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
@@ -673,8 +717,26 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
              NEXT.
 
       IF fIsMobileOnlyAddLineOK(bOrder.CLIType,icCliType) THEN DO:
-         liConvOrderId = bOrder.OrderId.
-         RETURN TRUE.
+         
+         CASE icAction:
+            WHEN {&ONGOING_ORDER_AVAIL} THEN RETURN TRUE.
+            WHEN {&ONGOING_ORDER_LIST} THEN DO:
+               IF lcOngoingOrdersList EQ "" THEN
+                  lcOngoingOrdersList =  STRING(bOrder.OrderId).
+               ELSE
+                  lcOngoingOrdersList = lcOngoingOrdersList + "," + STRING(bOrder.OrderId).
+            END.
+         END CASE.
+      
+      END.
+   END.
+
+   CASE icAction:
+      WHEN {&ONGOING_ORDER_LIST} THEN DO:
+         IF lcOngoingOrdersList NE "" THEN DO:
+            lcConvOrders = lcOngoingOrdersList.
+            RETURN TRUE.
+         END.
       END.
    END.
 
