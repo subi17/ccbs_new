@@ -64,6 +64,7 @@ DEFINE VARIABLE lcError            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCustID           AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liMainlineOrderId  AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE llDespacharValue   AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE liCustLoop         AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -1875,41 +1876,40 @@ END.
 ELSE
   lcLogFile = ?.
 
+DO liCustLoop = 1 TO 3: 
+   /* link Extra/Additional line mainline order to orders if available */
+   FOR EACH bttOneDelivery NO-LOCK:
 
-/* link Extra/Additional line mainline order to orders if available */
-FOR EACH ttOneDelivery NO-LOCK WHERE BREAK BY ttOneDelivery.NIE 
-                                           BY ttOneDelivery.NIF
-                                           BY ttOneDelivery.CIF:
-   IF ttOneDelivery.NIE > "" AND 
-      LAST-OF(ttOneDelivery.NIE) THEN DO:
+      IF liCustLoop = 1 AND bttOneDelivery.NIE EQ "" THEN NEXT.
+      IF liCustLoop = 2 AND bttOneDelivery.NIF EQ "" THEN NEXT.
+      IF liCustLoop = 3 AND bttOneDelivery.CIF EQ "" THEN NEXT.
 
-      ASSIGN lcCustID          = ttOneDelivery.NIE
-             liMainlineOrderId = 0
+      ASSIGN liMainlineOrderId = 0
              llDespacharValue  = FALSE. 
 
-      FOR EACH bttOneDelivery NO-LOCK WHERE
-               bttOneDelivery.NIE = lcCustID:
-  
-         fCheckForAdditionalORExtraMainLine(bttOneDelivery.OrderID,
-                                            OUTPUT liMainlineOrderId,
-                                            OUTPUT llDespacharValue).
+      fCheckForAdditionalORExtraMainLine(bttOneDelivery.OrderID,
+                                         OUTPUT liMainlineOrderId,
+                                         OUTPUT llDespacharValue).
 
-         /* Check Mainline is also included in current logistics file */
-         IF liMainlineOrderId NE 0 THEN 
-            FIND FIRST bMLttOneDelivery NO-LOCK WHERE 
-                       bMLttOneDelivery.OrderId = liMainlineOrderId NO-ERROR.
+      FIND FIRST ttExtra EXCLUSIVE-LOCK WHERE 
+                 ttExtra.RowNum = bttOneDelivery.RowNum NO-ERROR.
+     
+      IF NOT AVAIL ttExtra THEN NEXT.
 
-         IF AVAIL bMLttOneDelivery THEN DO: 
-            FIND FIRST ttExtra EXCLUSIVE-LOCK WHERE 
-                       ttExtra.RowNum = bttOneDelivery.RowNum NO-ERROR.
+      /* Check Mainline is also included in current logistics file */
+      IF liMainlineOrderId NE 0 THEN 
+         FIND FIRST bMLttOneDelivery NO-LOCK WHERE 
+                    bMLttOneDelivery.OrderId = liMainlineOrderId NO-ERROR.
 
-            ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
-                   ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
-         END.              
-
-     END.
+      IF AVAIL bMLttOneDelivery THEN DO: 
+         ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
+                ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
+      END.              
+      ELSE
+         ttExtra.Despachar = (IF llDespacharValue THEN "01" ELSE "02").
    
    END.
+
 END.
 
 FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
