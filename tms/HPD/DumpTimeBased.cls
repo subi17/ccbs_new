@@ -77,7 +77,7 @@ CLASS HPD.DumpTimeBased INHERITS DumpFile:
       /* Lets assume first that we can process to the final time
          or if not given to the current time. */
       IF lbDumpHPD.FinalTime = ""
-      THEN ldeToTS = HPDTime:mSecOffSet(ldeCurrentTS, lhDumpHPD::CoolTime * (-1)).
+      THEN ldeToTS = HPDTime:mSecOffSet(ldeCurrentTS, lbDumpHPD.CoolTime * (-1)).
       ELSE DO:
          LOG-MANAGER:WRITE-MESSAGE("Final time is set to " + lbDumpHPD.FinalTime + ".", "INFO").
          ldeToTS = HPDTime:mDateHMS2TS(lbDumpHPD.FinalTime).
