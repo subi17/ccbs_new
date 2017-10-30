@@ -16,9 +16,15 @@ USING HPD.HPDTime.
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.DumpTimeBased INHERITS DumpFile:
-   
-   DEFINE PUBLIC  VARIABLE ldeFromTS        AS DECIMAL  NO-UNDO.
-   DEFINE PUBLIC  VARIABLE ldeToTS          AS DECIMAL  NO-UNDO.
+
+   DEFINE PUBLIC PROPERTY ldeFromTS AS DECIMAL NO-UNDO
+      GET.
+      PRIVATE SET.
+
+   DEFINE PUBLIC PROPERTY ldeToTS AS DECIMAL NO-UNDO
+      GET.
+      PRIVATE SET.
+
    DEFINE PRIVATE VARIABLE ldeNewStartTS    AS DECIMAL  NO-UNDO.
    DEFINE PRIVATE VARIABLE ldeCurrentTS     AS DECIMAL  NO-UNDO.
    DEFINE PRIVATE VARIABLE llInactivateDump AS LOGICAL  INITIAL FALSE NO-UNDO.
@@ -71,7 +77,7 @@ CLASS HPD.DumpTimeBased INHERITS DumpFile:
       /* Lets assume first that we can process to the final time
          or if not given to the current time. */
       IF lbDumpHPD.FinalTime = ""
-      THEN ldeToTS = ldeCurrentTS.
+      THEN ldeToTS = HPDTime:mSecOffSet(ldeCurrentTS, lhDumpHPD::CoolTime * (-1)).
       ELSE DO:
          LOG-MANAGER:WRITE-MESSAGE("Final time is set to " + lbDumpHPD.FinalTime + ".", "INFO").
          ldeToTS = HPDTime:mDateHMS2TS(lbDumpHPD.FinalTime).
