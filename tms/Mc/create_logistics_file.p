@@ -1893,15 +1893,9 @@ DO liCustLoop = 1 TO 3:
      
       IF NOT AVAIL ttExtra THEN NEXT.
 
-      /* Check Mainline is also included in current logistics file */
       IF liMainlineOrderId NE 0 THEN 
-         FIND FIRST bMLttOneDelivery NO-LOCK WHERE 
-                    bMLttOneDelivery.OrderId = liMainlineOrderId NO-ERROR.
-
-      IF AVAIL bMLttOneDelivery THEN DO: 
          ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
                 ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
-      END.              
       ELSE
          ttExtra.Despachar = (IF llDespacharValue THEN "01" ELSE "02").
    
