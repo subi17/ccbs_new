@@ -60,6 +60,10 @@ DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO.
 DEFINE VARIABLE oiCustomer         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llCorporate        AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcError            AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCustID           AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liMainlineOrderId  AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE llDespacharValue   AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE liCustLoop         AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -116,6 +120,7 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* Skip this OrderId field when generating dextra file: 
       important for internal reason: logging, etc.   */
    FIELD OrderId       AS INTEGER                   
+   FIELD OrderType     AS INTEGER
    FIELD RequestID     AS CHARACTER FORMAT "X(8)"
    FIELD ActionID      AS CHARACTER FORMAT "X(2)"
    FIELD ProductID     AS CHARACTER FORMAT "X(9)"
@@ -195,6 +200,9 @@ DEFINE TEMP-TABLE ttExtra NO-UNDO
    FIELD DeliveryType AS CHAR FORMAT "X(1)"
    FIELD KialaCode   AS CHAR FORMAT "X(16)"
    FIELD ContractFileName AS CHAR FORMAT "X(14)"
+   FIELD Despachar   AS CHAR FORMAT "X(2)" /* Can delivery be started: 
+                                              01=true, 02=false. */
+   FIELD MainOrderID AS CHAR FORMAT "X(8)" /* Main line orderId for additional line cases */
    INDEX RowNum AS PRIMARY RowNum.
 
 DEFINE TEMP-TABLE ttTax NO-UNDO
@@ -202,6 +210,9 @@ DEFINE TEMP-TABLE ttTax NO-UNDO
    FIELD NetAmount  AS DECIMAL
    FIELD VatAmount  AS DECIMAL
    FIELD TaxClass   AS CHARACTER.
+
+DEFINE BUFFER bttOneDelivery   FOR ttOneDelivery. 
+DEFINE BUFFER bMLttOneDelivery FOR ttOneDelivery.
 
 FUNCTION fRowVat RETURNS DECIMAL
   (INPUT llInvVat   AS LOGICAL,
@@ -249,21 +260,31 @@ FUNCTION fTaxAmount RETURNS LOG
 
 END FUNCTION.
 
-FUNCTION fIsTerminalOrder RETURNS LOG (OUTPUT ocTerminalCode AS CHAR):
+FUNCTION fIsTerminalOrder RETURNS LOG 
+   (INPUT liOrderId       AS INT,
+    OUTPUT ocTerminalCode AS CHAR):
+
+   DEFINE BUFFER bTermOrder FOR Order.
+
+   FIND FIRST bTermOrder NO-LOCK WHERE 
+              bTermOrder.Brand   = gcBrand   AND 
+              bTermOrder.OrderId = liOrderId NO-ERROR.
+
+   IF NOT AVAIL bTermOrder THEN RETURN FALSE.
 
    /* Prepaid Order */
-   IF Order.PayType = TRUE THEN RETURN FALSE.
+   IF bTermOrder.PayType = TRUE THEN RETURN FALSE.
 
    /* Terminal Financing in direct channel deployment on 09.07.2014 8:00 CET */
-   IF Order.CrStamp < 20140709.28800 THEN RETURN FALSE.
+   IF bTermOrder.CrStamp < 20140709.28800 THEN RETURN FALSE.
 
    /* Check Terminal billcode */
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand = gcBrand AND
-            OfferItem.Offer = Order.Offer AND
-            OfferItem.BeginStamp <= Order.CrStamp AND
-            OfferItem.EndStamp >= Order.CrStamp AND
-            OfferItem.ItemType = "BillItem",
+            OfferItem.Brand       = gcBrand            AND
+            OfferItem.Offer       = bTermOrder.Offer   AND
+            OfferItem.BeginStamp <= bTermOrder.CrStamp AND
+            OfferItem.EndStamp   >= bTermOrder.CrStamp AND
+            OfferItem.ItemType    = "BillItem",
       FIRST BillItem NO-LOCK WHERE
             BillItem.Brand    = gcBrand AND
             BillItem.BillCode = OfferItem.ItemKey,
@@ -346,8 +367,145 @@ FUNCTION fVoiceBundle RETURNS CHAR
 RETURN lcOut.
 END.
 
+FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
+   (INPUT liOrderId      AS INT,
+    INPUT lcActionId     AS CHAR,
+    OUTPUT liMainOrderId AS INT,
+    OUTPUT llDespachar   AS LOG):
 
+   DEFINE BUFFER bOrder         FOR Order. 
+   DEFINE BUFFER bMLOrder       FOR Order. 
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrderAction   FOR OrderAction.
+   DEFINE BUFFER bufCLIType     FOR CliType. 
+   DEFINE BUFFER bOffer         FOR Offer.
+   DEFINE BUFFER bOfferItem     FOR OfferItem.
 
+   DEF VAR lcConvOrders        AS CHAR NO-UNDO INITIAL "".
+   DEF VAR llgExtraLine        AS LOG  NO-UNDO INITIAL FALSE.
+   DEF VAR llgAdditionalLine   AS LOG  NO-UNDO INITIAL FALSE. 
+   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
+   DEF VAR liOrderLoop         AS INT  NO-UNDO.
+   DEF VAR lcTerminalBillCode  AS CHAR NO-UNDO INITIAL "". 
+
+   ASSIGN llDespachar         = FALSE
+          liMainOrderId       = 0
+          lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
+   
+   FIND FIRST bOrder NO-LOCK WHERE 
+              bOrder.Brand   = gcBrand   AND 
+              bOrder.OrderId = liOrderId NO-ERROR.
+
+   IF NOT AVAIL bOrder THEN 
+      RETURN FALSE.
+
+   IF bOrder.OrderType = {&ORDER_TYPE_NEW}                  AND
+   LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 THEN DO:
+
+      IF fIsConvergenceTariff(bOrder.CLIType) THEN DO: 
+         
+         /* fetch convergent mobile row, to update despachar value */
+         IF lcActionId = "0" THEN DO: 
+            
+            IF fIsTerminalOrder(bOrder.OrderId,
+                                OUTPUT lcTerminalBillCode) THEN 
+               llDespachar = FALSE.
+            ELSE llDespachar = TRUE.   
+
+         END.
+         ELSE llDespachar = TRUE.
+      
+         liMainOrderId = bOrder.OrderId.                  
+      END.    
+      ELSE IF LOOKUP(bOrder.CliType,lcExtraLineCLITypes) > 0                         AND 
+                     bOrder.MultiSimId                  <> 0                         AND 
+                     bOrder.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
+        
+         /* Check extraline associated mainline orderid is also included in the 
+            current logistics file */
+         IF CAN-FIND(FIRST bMLttOneDelivery NO-LOCK WHERE 
+                           bMLttOneDelivery.OrderId   = bOrder.MultiSimId  AND 
+                           bMLttOneDelivery.OrderType = {&ORDER_TYPE_NEW}) THEN 
+            liMainOrderId = bOrder.MultiSimId.
+
+         llgExtraLine = TRUE.   
+      
+      END.
+      ELSE IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+
+         FIND FIRST bOrderCustomer NO-LOCK WHERE
+                    bOrderCustomer.Brand   = gcBrand        AND
+                    bOrderCustomer.OrderId = bOrder.OrderId AND
+                    bOrderCustomer.RowType = 1              NO-ERROR.
+         
+         FIND FIRST bOrderAction NO-LOCK WHERE
+                    bOrderAction.Brand    = gcBrand            AND
+                    bOrderAction.OrderID  = bOrder.OrderId     AND
+                    bOrderAction.ItemType EQ "AddLineDiscount" NO-ERROR.
+         
+         IF AVAIL bOrderCustomer AND 
+            AVAIL bOrderAction   THEN DO:
+
+            liMainOrderId = 0.
+
+            MAINORDER:
+            FOR EACH bMLttOneDelivery NO-LOCK WHERE 
+                     bMLttOneDelivery.OrderType = {&ORDER_TYPE_NEW}:
+         
+               CASE bOrderCustomer.CustIdType:
+                  WHEN "NIE" THEN 
+                     IF bMLttOneDelivery.NIE NE bOrderCustomer.CustId THEN NEXT.
+                  WHEN "NIF" THEN 
+                     IF bMLttOneDelivery.NIF NE bOrderCustomer.CustId THEN NEXT.
+                  WHEN "CIF" THEN
+                     IF bMLttOneDelivery.CIF NE bOrderCustomer.CustId THEN NEXT.
+                  OTHERWISE .
+               END.
+
+               IF LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
+                  LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS})   > 0 THEN DO:
+
+                  IF NOT fIsConvergenceTariff(bMLttOneDelivery.SubsType) THEN 
+                     NEXT MAINORDER.
+
+                  IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 THEN 
+                     IF fIsConvergentAddLineOK(bMLttOneDelivery.SubsType,bOrder.CLIType) THEN
+                        liMainOrderId = INT(bMLttOneDelivery.OrderId).
+                  ELSE 
+                      liMainOrderId = INT(bMLttOneDelivery.OrderId).
+
+               END.
+               ELSE DO:
+                  IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN
+                     IF fIsMobileOnlyAddLineOK(bMLttOneDelivery.SubsType,bOrder.CLIType) THEN 
+                        liMainOrderId = INT(bMLttOneDelivery.OrderId).
+               END.         
+
+               IF liMainOrderId NE 0 THEN 
+                  LEAVE MAINORDER.
+            
+            END.
+
+         END.
+
+         llgAdditionalLine = TRUE.
+
+      END. /* Additional line */
+
+      IF llgExtraLine      OR 
+         llgAdditionalLine THEN DO:
+         
+         IF LOOKUP(bOrder.StatusCode,{&ORDER_ROI_STATUSES}) > 0 THEN 
+            llDespachar = FALSE.
+         ELSE llDespachar = TRUE.
+
+      END.   
+
+   END.   
+
+   RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fDelivSIM RETURNS LOG
    (INPUT pcICC AS CHARACTER):
@@ -407,14 +565,20 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeOfferItemAmt           AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE llConsumerWithInstallment AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE llDextraInvoice           AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
-   DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
-   DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
+   DEFINE VARIABLE ldeCurrAmt                AS DEC       NO-UNDO. 
+   DEFINE VARIABLE ldtermdiscamt             AS DEC       NO-UNDO. 
+   DEFINE VARIABLE lcTermDiscItem            AS CHAR      NO-UNDO.
+   DEFINE VARIABLE lcMainOrderId             AS CHAR      NO-UNDO INIT "". 
+   DEFINE VARIABLE llDespachar               AS LOGICAL   NO-UNDO.         
 
-   DEFINE BUFFER bufRow   FOR InvRow.
-   DEFINE BUFFER bufItem  FOR BillItem.
-   DEFINE BUFFER bufGroup FOR BItemGroup.
-   DEFINE BUFFER bufSIM   FOR SIM.
+   DEFINE BUFFER bufRow         FOR InvRow.
+   DEFINE BUFFER bufItem        FOR BillItem.
+   DEFINE BUFFER bufGroup       FOR BItemGroup.
+   DEFINE BUFFER bufSIM         FOR SIM.
+   DEFINE BUFFER bMLOrder       FOR Order. 
+   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bOrderAction   FOR OrderAction.
+   DEFINE BUFFER bufCLIType     FOR CliType. 
 
    RELEASE Invoice.
 
@@ -466,7 +630,7 @@ FUNCTION fDelivSIM RETURNS LOG
    IF NOT AVAIL AgreeCustomer THEN RETURN FALSE.
 
    /* Dextra will generate the Sales Invoice for Postpaid Terminal Orders */
-   llDextraInvoice = fIsTerminalOrder(OUTPUT lcTerminalBillCode).
+   llDextraInvoice = fIsTerminalOrder(Order.OrderId,OUTPUT lcTerminalBillCode).
 
    IF NOT llDextraInvoice THEN DO:
 
@@ -661,12 +825,14 @@ FUNCTION fDelivSIM RETURNS LOG
    FIND FIRST Region WHERE
               Region.Region = AgreeCustomer.Region
    NO-LOCK NO-ERROR.
-   lcCustRegi = Region.RgName.
+   IF AVAIL Region THEN
+      lcCustRegi = Region.RgName.
 
    FIND FIRST Region WHERE
               Region.Region = DelivCustomer.Region
    NO-LOCK NO-ERROR.
-   lcDeliRegi = Region.RgName.
+   IF AVAIL Region THEN
+      lcDeliRegi = Region.RgName.
    
    get_account_data(Order.CustNum, OUTPUT lcUID, OUTPUT lcPWD).
 
@@ -742,6 +908,7 @@ FUNCTION fDelivSIM RETURNS LOG
    ASSIGN
       ttOneDelivery.RowNum        = liRowNum
       ttOneDelivery.OrderId       = Order.OrderId
+      ttOneDelivery.OrderType     = Order.OrderType
       ttOneDelivery.RequestID     = IF Order.CrStamp > 20080910.21600
                                     THEN STRING(Order.OrderID)
                                     ELSE STRING(Order.MsSeq)
@@ -1292,17 +1459,24 @@ FUNCTION fDelivSIM RETURNS LOG
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
+   /* In secure delivery always FALSE */
+   IF Order.DeliverySecure > 0 THEN
+      llDespachar = FALSE. 
+
    /* Create Temp-table for DataService (OR extra fields in future) */
    CREATE ttExtra.
-   ASSIGN ttExtra.RowNum      = ttOneDelivery.RowNum
-          ttExtra.DataService = lcDataService
-          ttExtra.PayTerm     = lcPayTermContract
-          ttExtra.OrderDate   = lcOrderDate
-          ttExtra.ResidualAmount = (IF ldeResidualAmountTotal > 0 THEN
-                                    STRING(ldeResidualAmountTotal) ELSE "")
-          ttExtra.DeliveryType = STRING(liDelType)
-          ttExtra.KialaCode    = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
-          ttExtra.ContractFileName = lcContractFileName.
+   ASSIGN ttExtra.RowNum          = ttOneDelivery.RowNum
+          ttExtra.DataService     = lcDataService
+          ttExtra.PayTerm         = lcPayTermContract
+          ttExtra.OrderDate       = lcOrderDate
+          ttExtra.ResidualAmount  = (IF ldeResidualAmountTotal > 0 THEN
+                                        STRING(ldeResidualAmountTotal) 
+                                     ELSE "")
+          ttExtra.DeliveryType     = STRING(liDelType)
+          ttExtra.KialaCode        = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
+          ttExtra.ContractFileName = lcContractFileName
+          ttExtra.Despachar        = (IF llDespachar THEN "01" ELSE "02")
+          ttExtra.MainOrderID      = "".
 
    /* update SimStat when all skipping are checked */
    IF NOT (Order.OrderType eq 2) THEN
@@ -1418,7 +1592,8 @@ FUNCTION fDelivDevice RETURNS LOG
       FIND FIRST Region WHERE
                  Region.Region = AgreeCustomer.Region
       NO-LOCK NO-ERROR.
-      lcCustRegi = Region.RgName.
+      IF AVAIL Region THEN
+         lcCustRegi = Region.RgName.
    END.
 
    IF DelivCustomer.Region > "" THEN DO:
@@ -1431,7 +1606,8 @@ FUNCTION fDelivDevice RETURNS LOG
          FIND FIRST Region WHERE
                     Region.Region = DelivCustomer.Region
          NO-LOCK NO-ERROR.
-         lcDeliRegi = Region.RgName.
+         IF AVAIL Region THEN
+            lcDeliRegi = Region.RgName.
       END.
    END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
@@ -1451,6 +1627,7 @@ FUNCTION fDelivDevice RETURNS LOG
    ASSIGN
       ttOneDelivery.RowNum        = liRowNum
       ttOneDelivery.OrderId       = Order.OrderId
+      ttOneDelivery.OrderType     = Order.OrderType
       ttOneDelivery.RequestID     = STRING(Order.OrderId)
       ttOneDelivery.ActionID      = (IF icDevice = "Router" THEN "1" ELSE "2")
       ttOneDelivery.ProductID     = (IF icDevice = "Router" THEN "R075A67W2" ELSE "G050DTVN2")
@@ -1505,7 +1682,9 @@ FUNCTION fDelivDevice RETURNS LOG
    CREATE ttExtra.
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
-          ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
+          ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER})
+          ttExtra.Despachar    = "01" /* Device can be delivred */
+          ttExtra.MainOrderID  = "".
 
    RETURN TRUE.
 
@@ -1693,6 +1872,43 @@ END.
 ELSE
   lcLogFile = ?.
 
+DO liCustLoop = 1 TO 3: 
+   /* link Extra/Additional line mainline order to orders if available */
+   FOR EACH bttOneDelivery NO-LOCK:
+
+      IF liCustLoop = 1 AND bttOneDelivery.NIE EQ "" THEN NEXT.
+      IF liCustLoop = 2 AND bttOneDelivery.NIF EQ "" THEN NEXT.
+      IF liCustLoop = 3 AND bttOneDelivery.CIF EQ "" THEN NEXT. 
+
+      ASSIGN liMainlineOrderId = 0
+             llDespacharValue  = FALSE. 
+
+      fCheckForAdditionalORExtraMainLine(bttOneDelivery.OrderID,
+                                         bttOneDelivery.ActionID, 
+                                         OUTPUT liMainlineOrderId,
+                                         OUTPUT llDespacharValue).
+
+      FIND FIRST ttExtra EXCLUSIVE-LOCK WHERE 
+                 ttExtra.RowNum = bttOneDelivery.RowNum NO-ERROR.
+     
+      IF NOT AVAIL ttExtra THEN NEXT.
+
+      /* Check Mainline is also included in current logistics file */
+      IF liMainlineOrderId NE 0 THEN 
+         FIND FIRST bMLttOneDelivery NO-LOCK WHERE 
+                    bMLttOneDelivery.OrderId = liMainlineOrderId NO-ERROR.
+
+      IF AVAIL bMLttOneDelivery THEN DO: 
+         ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
+                ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
+      END.              
+      ELSE
+         ttExtra.Despachar = (IF llDespacharValue THEN "01" ELSE "02").
+   
+   END.
+
+END.
+
 FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
 
    lhTable = BUFFER ttOneDelivery:HANDLE.
@@ -1742,7 +1958,9 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
 
       lhField = lhTable:BUFFER-FIELD(liLoop1).
 
-      IF lhField:NAME NE "RowNum" AND lhField:NAME NE "OrderId" THEN
+      IF lhField:NAME NE "RowNum"    AND 
+         lhField:NAME NE "OrderId"   AND 
+         lhField:NAME NE "OrderType" THEN
          lcLine  = lcLine + STRING(lhField:BUFFER-VALUE,lhField:FORMAT).
       IF lhField:NAME EQ "OrderId" THEN
           pLog("OrderId : " + STRING(lhField:BUFFER-VALUE)).
