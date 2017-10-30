@@ -290,9 +290,9 @@ ELSE IF lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
    Order.OrderType NE {&ORDER_TYPE_STC} AND
    Order.ICC EQ "" AND
-   NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                      MsRequest.MsSeq = Order.MsSeq AND
-                      MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN DO:
+   CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                  MsRequest.MsSeq = Order.MsSeq AND
+                  MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN DO:
    lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}.
 END.
 ELSE IF Order.OrderType = {&ORDER_TYPE_MNP} AND
