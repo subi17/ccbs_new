@@ -636,8 +636,7 @@ PROCEDURE pContractActivation:
       fReqStatus(3,"DSS bundle is not active").
       RETURN.
    END. /* IF lcDCEvent BEGINS {&DSS} + "_UPSELL" AND */
-   ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
-      lcDCEvent NE "FLEX_UPSELL" THEN DO: /* avoid business rule for FLEX_UPSELL - YTS-10911 */
+   ELSE IF LOOKUP(lcDCEvent,lcALLPostpaidUPSELLBundles) > 0 THEN DO:
       lcBundleId = fGetActiveDSSId(INPUT MsOwner.CustNum,
                                    INPUT MsRequest.ActStamp).
       
@@ -1095,13 +1094,9 @@ PROCEDURE pContractActivation:
    END.  /* dctype ne 1/4 */
 
    /* Send Shaper if VOIP is added manually or by subs. creation */
-   IF (lcDCEvent NE "HSPA_ROAM_EU" AND
+   IF lcDCEvent NE "HSPA_ROAM_EU" AND
       (lcDCEvent <> "BONO_VOIP" OR MsRequest.OrigRequest = 0 OR
-       LOOKUP(MsRequest.ReqSource,"1,19") > 0) AND
-       lcDCEvent NE "FLEX_UPSELL") OR
-      (lcDCEvent EQ "FLEX_UPSELL" AND
-       NOT fIsDSSActive(INPUT MsOwner.CustNum,
-                        INPUT MsRequest.ActStamp)) THEN
+       LOOKUP(MsRequest.ReqSource,"1,19") > 0) THEN
    RUN pActivateServicePackage(lcDCEvent,
                                MsOwner.MsSeq,
                                lcUseCLIType,
@@ -1300,11 +1295,8 @@ PROCEDURE pContractActivation:
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
       lcDCEvent EQ  "DSS200_UPSELL" OR
-      lcDCEvent BEGINS "DSS2_UPSELL" OR
-      lcDCEvent MATCHES "DSS*FLEX*UPSELL" OR
-     (lcDCEvent EQ "FLEX_UPSELL" AND
-      fIsDSSActive(INPUT MsOwner.CustNum,
-                   INPUT MsRequest.ActStamp)) THEN
+      lcDCEvent BEGINS "DSS2_UPSELL" OR 
+      lcDCEvent MATCHES "DSS*FLEX*UPSELL" THEN
       RUN pUpdateDSSNetworkLimit(INPUT MsOwner.MsSeq,
                                  INPUT MsOwner.CustNum,
                                  INPUT ldeDSSUpsellLimit,
