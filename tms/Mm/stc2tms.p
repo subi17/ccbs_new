@@ -1,4 +1,4 @@
-/* stc2tms.p
+/* stc2tms.p SUBSCRIPTION TYPE CHANGE STC Request handling
    changes:
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
@@ -59,6 +59,7 @@ IF llDoEvent THEN DO:
    lhSingleFee = BUFFER SingleFee:HANDLE.
    
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
 END.
 
 DEF VAR lcAttrValue        AS CHAR NO-UNDO. 
@@ -87,6 +88,9 @@ DEF TEMP-TABLE ttContract NO-UNDO
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest = iiMSrequest NO-LOCK NO-ERROR.
+
+IF MsRequest.ReqType NE {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
+   RETURN "ERROR".
 
 liOrigStatus = MsRequest.ReqStatus.
 IF LOOKUP(STRING(liOrigStatus),"6,8") = 0 THEN RETURN "ERROR".
@@ -238,6 +242,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+
    RUN pInitialize.
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
@@ -251,6 +258,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fAdditionalLineSTC(MsRequest.Msrequest,
                         fMake2Dt(ldtActDate + 1,0),
                         "STC_FINAL").
+
+   /* Remove additional line termination request when correct STC done */
+   IF bNewTariff.LineType NE {&CLITYPE_LINETYPE_ADDITIONAL} THEN
+      fRemoveAdditionalLineTerminationReq(MobSub.MsSeq).
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,
@@ -289,6 +300,7 @@ PROCEDURE pInitialize:
       RUN StarEventInitialize(lhSubSer).
       RUN StarEventInitialize(lhSubSerPara).
       RUN StarEventInitialize(lhSingleFee).
+      RUN StarEventInitialize(lhCustomer).
    END.
    
 END PROCEDURE.
@@ -787,9 +799,6 @@ PROCEDURE pUpdateSubscription:
 
    /* Close extra line subscription discount, if Main line is moved away 
       from available extra lines related main lines */
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
-
    IF lcExtraMainLineCLITypes                          NE "" AND 
       LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
@@ -939,7 +948,7 @@ PROCEDURE pUpdateSubscription:
               DiscountPlan.Brand = gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
 
-   IF fIsConvergenceTariff(bOldType.CliType) AND NOT fIsConvergenceTariff(CLIType.CliType) AND
+   IF fIsConvergenceTariff(bOldType.CliType) AND 
       NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
                bMobSub.Brand   = gcBrand          AND
@@ -1021,7 +1030,6 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
-   DEF BUFFER bMobsub FOR Mobsub.
 
    /* now when billtarget has been updated new fees can be created */
 
@@ -1320,6 +1328,7 @@ PROCEDURE pFinalize:
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
                             fMakeTS()).
+
          END.
          ELSE DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
               "MobSub",
@@ -1406,27 +1415,69 @@ PROCEDURE pFinalize:
          END. /* FOR EACH InvRowCounter WHERE */
    END. /* IF DAY(ldtActDate) <> 1 THEN DO: */
    
-  
-   IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR 
-       Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
-      Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY} AND
+   RUN pUpdateCustomer.
+
+END PROCEDURE.
+
+PROCEDURE pUpdateCustomer:
+    DEF BUFFER bMobsub FOR Mobsub.    
+    IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
+      Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY}                                                                 AND
       NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
                          bMobsub.Brand    = gcBrand        AND
                          bMobSub.CustNum  = MobSub.CustNum AND
                          bMobSub.MsSeq   <> MobSub.MsSeq   AND 
                          bMobSub.PayType  = FALSE AND
-                         bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO:
+                         bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN 
+        RUN pUpdateCustomerDelType.
 
-      FIND CURRENT Customer EXCLUSIVE-LOCK.
-      IF llDoEvent THEN DO:
-         lhCustomer = BUFFER Customer:HANDLE.
-         RUN StarEventInitialize(lhCustomer).
-         RUN StarEventSetOldBuffer(lhCustomer).       
-      END.
-      Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
-      FIND CURRENT Customer NO-LOCK.
-   END.
+    IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC}                                                AND 
+       (bOldType.Paytype = {&CLITYPE_PAYTYPE_PREPAID}  AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) OR 
+       (bOldType.Paytype = {&CLITYPE_PAYTYPE_POSTPAID} AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN 
+    DO:
+        FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = gcBrand                            AND
+                                       OrderCustomer.OrderID = Order.OrderId                      AND
+                                       OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+        IF AVAIL OrderCustomer AND OrderCustomer.Category > "" THEN                                        
+            RUN pUpdateCustomerCategory(INPUT OrderCustomer.Category).
+    END.
+
+    FIND CURRENT Customer NO-LOCK.
+
+    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pUpdateCustomerDelType:
+
+    BUFFER Customer:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+    IF AVAIL Customer THEN 
+    DO:
+        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+        
+        ASSIGN Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
+        
+        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+    END.
+
+    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pUpdateCustomerCategory:
+    DEFINE INPUT PARAMETER icCategory AS CHARACTER NO-UNDO.
+
+    BUFFER Customer:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+    IF AVAIL Customer THEN 
+    DO:
+        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+        
+        ASSIGN Customer.Category = icCategory.
+        
+        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+    END.
+
+    RETURN "".
 
 END PROCEDURE.
 
@@ -2001,6 +2052,12 @@ PROCEDURE pUpdateDSSAccount:
                /* If both postpaid subs. types compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) > 0 AND
                   LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN RETURN.
+
+               IF (LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) > 0  OR
+                   LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+                  IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
+                                                           MobSub.MultiSimId,
+                                                           MobSub.MultiSimType) THEN RETURN.  
 
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND

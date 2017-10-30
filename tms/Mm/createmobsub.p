@@ -434,8 +434,6 @@ IF NOT AVAIL mobsub THEN DO:
       Mobsub.SimDelStatus     = 2
       Mobsub.Activationdate   = TODAY
       Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
-      MobSub.MultiSimID       = Order.MultiSimID
-      MobSub.MultiSimType     = Order.MultiSimType
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 
@@ -702,27 +700,19 @@ ELSE DO:
       llgExtraLine      = YES.
 END.
 
-/* Additional Line with mobile only ALFMO-5  
-   Release pending additional lines orders, in case of pending 
-   main Moblie only line order is released */
 
-FIND FIRST OrderCustomer WHERE
-           OrderCustomer.Brand   = gcBrand AND
-           OrderCustomer.OrderId = Order.OrderId AND
-           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} 
-           NO-LOCK NO-ERROR.
+/* If pending additional line orders are available then release them */  
+FIND FIRST OrderCustomer NO-LOCK WHERE
+           OrderCustomer.Brand   = gcBrand                            AND
+           OrderCustomer.OrderId = Order.OrderId                      AND
+           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
 IF AVAIL OrderCustomer THEN
-DO:
-   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-               CLIType.Brand      = gcBrand  AND
-               CLIType.CLIType    = Order.CliType AND                       
-               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN 
-   DO:
-      fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                      OrderCustomer.CustID). 
-   END.
-END.
+   fActionOnAdditionalLines (OrderCustomer.CustIdType,
+                             OrderCustomer.CustID,
+                             Order.CLIType,
+                             FALSE,
+                             "RELEASE"). 
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,

@@ -125,13 +125,42 @@ FOR EACH MsRequest NO-LOCK WHERE
             NEXT.
          END.
       END. 
+      
+      /* begin YDR-2668. IF Internet barring active because of Mandarina, then remove. */
+      IF LOOKUP("Internet", lcBarrings) <> 0 AND
+         CAN-FIND(FIRST Memo WHERE
+                        Memo.Brand EQ gcBrand AND
+                        Memo.CustNum EQ MsRequest.CustNum AND
+                        Memo.HostTable EQ "MobSub" AND
+                        Memo.MemoTitle EQ "OTA Barring activado"
+                        USE-INDEX CustNum)
+      THEN DO:
+         RUN pRemoveInternetBarring.
+         IF RETURN-VALUE = "OK" THEN DO:
+            PUT STREAM sICCLog UNFORMATTED 
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";" + 
+               "Internet_barring_deactivate"
+               SKIP.
+         END.  
+         ELSE DO:
+            PUT STREAM sICCLog UNFORMATTED 
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";" +
+               RETURN-VALUE
+               SKIP.        
+         END.
+      END.  
+      /* end YDR-2668 */
 
-      IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED1" OR
-          bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTAFAILED2") THEN DO:
+      IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1" OR
+          bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED2") THEN DO:
          /*The last LP command was Mandarina LP redirection setting
            -> this must be cancelled*/
          llgReqDone = fMakeLPCommandRequest(MsRequest.MsSeq,
-                                            "REMOVE",
+                                            "remove",
                                             MsRequest.CustNum,
                                             "Redirection removed",
                                             "Redirection removed, reason: ICC",
@@ -142,7 +171,7 @@ FOR EACH MsRequest NO-LOCK WHERE
             STRING(TIME,"hh:mm:ss") + ";" +  
             STRING(MsRequest.MsSeq) + ";" +
             STRING(MsRequest.CustNum) + ";" + 
-            (IF llgReqDone THEN "REMOVE"
+            (IF llgReqDone THEN "remove"
              ELSE "ERROR:" + lcError)
             SKIP.
          /* TODO: Source setting for DUMP purposes. */              
@@ -173,3 +202,45 @@ END.
 
 PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_finishes" SKIP.
 OUTPUT STREAM sICCLog CLOSE.
+
+/*-------------------------------------------------
+ Internal Procedures
+-------------------------------------------------*/
+
+PROCEDURE pRemoveInternetBarring:
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.   
+
+   FIND FIRST MobSub WHERE
+              MobSub.Brand EQ gcBrand AND
+              Mobsub.CLI EQ MsRequest.CLI
+        USE-INDEX CLI NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE MobSub THEN
+      RETURN "ERROR:MSISDN_not_found".
+
+   RUN Mm/barrengine.p(mobsub.MsSeq,
+                       "Internet=0",        /* Barring */
+                       "11",                /* source   */
+                       "Sistema",           /* creator  */
+                       fMakeTS(),           /* activate */
+                       "",                  /* SMS      */
+                       OUTPUT lcResult).
+
+   liRequest = INTEGER(lcResult) NO-ERROR.                             
+   IF liRequest > 0 THEN DO:   
+      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                       "Mobsub",
+                       mobsub.MsSeq,
+                       mobsub.CustNum,
+                       "OTA Barring desactivado",          /* memo title */
+                       "Redirection removed, reason: ICC", /* memo text  */
+                       "Service",                          /* memo type  */   
+                       "Sistema").                         /* memo creator    */
+      RETURN "OK". 
+   END.
+   ELSE 
+      RETURN "ERROR:" + lcResult.
+END PROCEDURE.
+

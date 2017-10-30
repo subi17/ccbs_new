@@ -18,5 +18,5 @@ else:
    var3 = sys.argv[3]
    var4 = sys.argv[4]
 
-p=s.newton.check_customer(var1,var2,var3,False,1,var4)
+p=s.newton.check_customer(var1,var2,var3,True,1,var4,"VFR",True)
 print_results(p)

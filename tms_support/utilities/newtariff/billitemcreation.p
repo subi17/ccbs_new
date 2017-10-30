@@ -25,6 +25,7 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD PostAcct   AS CHARACTER 
    FIELD TaxClass   AS CHARACTER 
    FIELD IFSCode    AS CHARACTER 
+   FIELD ItemType   AS INT
    FIELD CostCenter AS CHARACTER. 
 
 DEFINE INPUT  PARAMETER icIncDir   AS CHARACTER NO-UNDO. 
@@ -55,7 +56,7 @@ END FUNCTION.
 
 /* ***************************  Main Block  *************************** */
 
-ASSIGN lcLogFile   = icSpoolDir + "billing.log"
+ASSIGN lcLogFile   = icSpoolDir + "billingitem.log"
        lcInputFile = icIncDir + "billingitem.txt".   
 
 INPUT STREAM BIIn FROM VALUE(lcInputFile).
@@ -78,7 +79,9 @@ REPEAT:
           ttBillItem.PostAcct   = TRIM(ENTRY(4,lcLine,";"))
           ttBillItem.TaxClass   = TRIM(ENTRY(5,lcLine,";"))
           ttBillItem.IFSCode    = TRIM(ENTRY(6,lcLine,";"))
-          ttBillItem.CostCenter = TRIM(ENTRY(7,lcLine,";")) NO-ERROR.
+          ttBillItem.CostCenter = TRIM(ENTRY(7,lcLine,";"))
+          ttBillItem.ItemType   = INT(ENTRY(8,lcLine,";")) 
+          WHEN NUM-ENTRIES(lcLine,";") > 0 NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input data").
@@ -104,6 +107,8 @@ REPEAT:
       liFirstLine = liFirstLine + 1.
       NEXT.
    END.
+   
+   IF TRIM(lcLine) eq "" THEN NEXT.
     
    CREATE ttTrans.
    ASSIGN 
@@ -232,7 +237,8 @@ PROCEDURE pCreateBillingItem:
              BillItem.FSAccNum    = INTEGER(ttBillItem.PostAcct)
              BillItem.TaxClass    = ttBillItem.TaxClass
              BillItem.SAPRid      = ttBillItem.IFSCode
-             BillItem.CostCentre  = ttBillItem.CostCenter NO-ERROR.
+             BillItem.CostCentre  = ttBillItem.CostCenter
+             BillItem.ItemType    = ttBillItem.ItemType NO-ERROR.
              
       IF ERROR-STATUS:ERROR THEN DO: 
          fError("Error in creating BillingItem").
@@ -259,6 +265,7 @@ PROCEDURE pCreTranslations:
          
          IF CAN-FIND(FIRST RepText WHERE 
                            RepText.Brand    = gcBrand                    AND
+                           RepText.TextType = 1 AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
             NEXT.

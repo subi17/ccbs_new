@@ -30,6 +30,7 @@ gcBrand = "1".
 {Mnp/mnp.i}
 {Func/email.i}
 {Mc/orderfusion.i}
+{Func/financed_terminal.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -74,7 +75,7 @@ DEFINE TEMP-TABLE ttOutputText
 DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO, THROW:
-   lcBrand = CAPS(multitenancy.TenantInformation:mGetBrandNameForActualTenant()).
+   lcBrand = CAPS(multitenancy.TenantInformation:mGetEffectiveBrand()).
 
    /* Handler code for any error condition. */
    CATCH anyErrorObject AS Progress.Lang.Error:
@@ -290,8 +291,8 @@ FUNCTION fIsInstallmentConsumerOrder RETURNS LOG:
    IF LOOKUP(AgreeCustomer.CustIdType,"NIF,NIE") = 0 THEN RETURN FALSE.
 
    /* Make sure orders before deployment should be financed by Yoigo */
-   IF AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ? THEN
-      RETURN FALSE.
+   IF (AgreeCustomer.Profession = "" OR AgreeCustomer.Profession = ?) AND
+      NOT fIsDirectChannelCetelemOrder(BUFFER Order) THEN RETURN FALSE.
 
    /* Check Installment contract */
    FOR EACH OfferItem NO-LOCK WHERE
@@ -555,7 +556,7 @@ FUNCTION fDelivSIM RETURNS LOG
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
       WHEN "fusion_telesales" THEN lcOrderChannel = "02".
-      WHEN "fusion_pos" THEN lcOrderChannel = "03".
+      WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
       WHEN "Telesales_PRO" OR 
@@ -1438,7 +1439,7 @@ FUNCTION fDelivDevice RETURNS LOG
    CASE Order.OrderChannel:
       WHEN "fusion_self" THEN lcOrderChannel = "01".
       WHEN "fusion_telesales" OR WHEN "Fusion_Telesales_PRO" THEN lcOrderChannel = "02".
-      WHEN "fusion_pos" THEN lcOrderChannel = "03".
+      WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" THEN lcOrderChannel = "03".
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
    END CASE.

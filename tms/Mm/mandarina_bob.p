@@ -14,6 +14,11 @@ https://kethor.qvantel.com/browse/MANDLP-8
     remove a redirection to a LP
 ---------------------------------------------------------------------- */
 
+/*---------------------------------------------------------------------- 
+Modificated on 10/2017. New requeriments in YDR-2668 to
+activate/deacivate Internet barring.
+---------------------------------------------------------------------- */
+
 /* Parameters */
 DEF VAR lcProcessMode AS CHAR NO-UNDO. /* ["massive"|"priority"] */
 
@@ -44,7 +49,7 @@ DEF VAR liContItems   AS INTEGER NO-UNDO.
 
 /* Input file fields */
 DEF VAR lcMSISDN AS CHAR NO-UNDO. /* MSISDN */
-DEF VAR lcLP     AS CHAR NO-UNDO. /* ["Mandarina1"|"Mandarina2"] */
+DEF VAR lcLP     AS CHAR NO-UNDO. /* ["Mandarina1"|"Mandarina2"|"InternetBarring"] */
 DEF VAR lcAction AS CHAR NO-UNDO. /* ["on"|"off"] */
 
 /* mandarina_bob status */ 
@@ -186,7 +191,7 @@ REPEAT:
          NEXT.
       END.
 
-      /* Check barring status */
+      /* Check DEBT barring status */
       lcBarrings = fGetActiveBarrings (mobsub.MsSeq).
       IF lcBarrings <> "" THEN DO:
          IF LOOKUP("DEBT_LP", lcBarrings) <> 0 OR LOOKUP("DEBT_HOTLP", lcBarrings) <> 0 THEN DO:
@@ -197,18 +202,16 @@ REPEAT:
       END. 
 
       /* Checking values */
-      IF (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2") THEN DO:
+      IF (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2" AND lcLP <> "InternetBarring") THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
-            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_landing_page(Mandarina1/Mandarina2)" SKIP.
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_command(Mandarina1/Mandarina2/InternetBarring)" SKIP.
          NEXT.
       END.
-      IF (lcAction <> "on" AND lcAction <> "off")
-      THEN DO:
+      IF (lcAction <> "on" AND lcAction <> "off") THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
             lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_action(on/off)" SKIP.
          NEXT.
       END.
-
       lcErr = "".
       IF lcAction EQ "on" THEN DO:
          /* No activate LP if ICC Changed */
@@ -217,45 +220,86 @@ REPEAT:
                lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ICC_DONE_RECENTLY" SKIP.
             NEXT.
          END.
-         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                            /*Subscription identifier*/
-                                            INPUT (IF LcLP EQ "Mandarina1"                  /*LP command to network*/
-                                                   THEN "REDIRECTION_OTAFAILED1" 
-                                                   ELSE "REDIRECTION_OTAFAILED2"),         
-                                            INPUT mobsub.CustNum,                          /*Customer number for memo*/
-                                            INPUT (IF LcLP EQ "Mandarina1"                  /*Memo title*/ 
-                                                   THEN "LP1 - Migración red - Activada"
-                                                   ELSE "LP2 - Migración red - Activada"),  
-                                            INPUT  (IF LcLP EQ "Mandarina1"                 /*Memo text*/ 
-                                                   THEN "Landing Page 1 - Activada"
-                                                   ELSE "Landing Page 2 - Activada"),       
-                                            INPUT "Sistema",                               /*Creator tag for memo*/
-                                            INPUT "11",                                    /*Source, 11 -> Bob Tool*/ 
-                                            INPUT-OUTPUT lcErr).                           /*Request creation info*/
-         IF (NOT llSuccess) THEN DO:
-            PUT STREAM sCurrentLog UNFORMATTED
-               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
-            NEXT.
+         /* Begin YDR-2668 */
+         IF LcLP EQ "InternetBarring" THEN DO:
+            IF LOOKUP("Internet", lcBarrings) <> 0 THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:Previous_Internet_barring_active" SKIP.
+               NEXT.
+            END.    
+            RUN pSetInternetBarring("ON").
+            IF RETURN-VALUE <> "OK" THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
+               NEXT.
+            END.
+         END.
+         /* end YDR-2668 */
+         ELSE DO:
+            llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                            /*Subscription identifier*/
+                                               INPUT (IF LcLP EQ "Mandarina1"                  /*LP command to network*/
+                                                      THEN "REDIRECTION_OTFAILED1" 
+                                                      ELSE "REDIRECTION_OTFAILED2"),         
+                                               INPUT mobsub.CustNum,                          /*Customer number for memo*/
+                                               INPUT (IF LcLP EQ "Mandarina1"                  /*Memo title*/ 
+                                                      THEN "LP1 - Migración red - Activada"
+                                                      ELSE "LP2 - Migración red - Activada"),  
+                                               INPUT  (IF LcLP EQ "Mandarina1"                 /*Memo text*/ 
+                                                     THEN "Landing Page 1 - Activada"
+                                                      ELSE "Landing Page 2 - Activada"),       
+                                               INPUT "Sistema",                               /*Creator tag for memo*/
+                                               INPUT "11",                                    /*Source, 11 -> Bob Tool*/ 
+                                               INPUT-OUTPUT lcErr).                           /*Request creation info*/
+            IF (NOT llSuccess) THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
+               NEXT.
+            END.
          END.
       END.  
       ELSE DO: /* lcAction EQ "off" */
-         llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                                /*Subscription identifier*/
-                                            INPUT "REMOVE",         
-                                            INPUT mobsub.CustNum,                              /*Customer number for memo*/
-                                            INPUT (IF LcLP EQ "Mandarina1"                      /*Memo title*/ 
-                                                   THEN "LP1 - Migración red - Desactivada"
-                                                   ELSE "LP2 - Migración red - Desactivada"),  
-                                            INPUT  (IF LcLP EQ "Mandarina1"                     /*Memo text*/ 
-                                                   THEN "Landing Page 1 - Desactivada"
-                                                   ELSE "Landing Page 2 - Desactivada"),       
-                                            INPUT "Sistema",                                   /*Creator tag for memo*/
-                                            INPUT "11",                                        /*Source, 11 -> Bob Tool*/ 
-                                            INPUT-OUTPUT lcErr).                               /*Request creation info*/
-
-         IF NOT llSuccess THEN DO:
-            PUT STREAM sCurrentLog UNFORMATTED
-               lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
-            NEXT.
-         END. 
+         /* Begin YDR-2668 */
+         IF LcLP EQ "InternetBarring" THEN DO:
+            IF LOOKUP("Internet", lcBarrings) = 0 OR 
+               NOT CAN-FIND(FIRST Memo WHERE
+                                  Memo.Brand EQ gcBrand AND
+                                  Memo.CustNum EQ MobSub.CustNum AND
+                                  Memo.HostTable EQ "MobSub" AND
+                                  Memo.MemoTitle EQ "OTA Barring activado"
+                                 USE-INDEX CustNum)
+            THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:No_previous_internet_barring_by_Mandarina" SKIP.
+               NEXT.
+            END.  
+            RUN pSetInternetBarring("OFF").
+            IF RETURN-VALUE <> "OK" THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
+               NEXT.
+            END.    
+         END.
+         /* end YDR-2668 */         
+         ELSE DO:
+            llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                                /*Subscription identifier*/
+                                               INPUT "remove",         
+                                               INPUT mobsub.CustNum,                              /*Customer number for memo*/
+                                               INPUT (IF LcLP EQ "Mandarina1"                      /*Memo title*/ 
+                                                      THEN "LP1 - Migración red - Desactivada"
+                                                      ELSE "LP2 - Migración red - Desactivada"),  
+                                               INPUT  (IF LcLP EQ "Mandarina1"                     /*Memo text*/ 
+                                                      THEN "Landing Page 1 - Desactivada"
+                                                      ELSE "Landing Page 2 - Desactivada"),       
+                                               INPUT "Sistema",                                   /*Creator tag for memo*/
+                                               INPUT "11",                                        /*Source, 11 -> Bob Tool*/ 
+                                               INPUT-OUTPUT lcErr).                               /*Request creation info*/
+   
+            IF NOT llSuccess THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:" + STRING(mobsub.MsSeq) + "_COMMAND_REQUEST_" + lcErr SKIP.
+               NEXT.
+            END. 
+         END.
       END.
            
       PUT STREAM sCurrentLog UNFORMATTED
@@ -295,4 +339,45 @@ END.
 PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_finishes" SKIP.
 PUT STREAM sMandaLog UNFORMATTED "-------------------------------" SKIP.
 OUTPUT STREAM sMandaLog CLOSE.
+
+/*-------------------------------------------------
+ Internal Procedures
+-------------------------------------------------*/
+
+PROCEDURE pSetInternetBarring:
+
+   DEF INPUT PARAMETER lcMode AS CHAR NO-UNDO. /* "ON" to active barring ; "OFF" to remove barring. */
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.   
+
+   RUN Mm/barrengine.p(mobsub.MsSeq,
+                       (IF lcMode EQ "ON" THEN "Internet=1" 
+                                          ELSE "Internet=0"), /* Barring */
+                       "11",                /* source   */
+                       "Sistema",           /* creator  */
+                       fMakeTS(),           /* activate */
+                       "",                  /* SMS      */
+                       OUTPUT lcResult).
+
+   liRequest = INTEGER(lcResult) NO-ERROR. 
+                               
+   IF liRequest > 0 THEN DO:     
+
+   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                    "Mobsub",
+                     mobsub.MsSeq,
+                     mobsub.CustNum,
+                     (IF lcMode EQ "ON" THEN "OTA Barring activado" 
+                                        ELSE "OTA Barring desactivado"),                       /* memo title */
+                     (IF lcMode EQ "ON" THEN "Internet barring activado por fallo campaña OTA" 
+                                        ELSE "Internet barring por fallo OTA desactivado"),    /* memo text  */
+                     "Service",                                                                /* memo type  */   
+                     "Sistema").                                                               /* memo creator    */        
+      RETURN "OK".
+   END.                      
+   ELSE RETURN "ERROR:" + lcResult.
+
+END PROCEDURE.
+
 

@@ -135,7 +135,7 @@ FORM
    SKIP
    bCurrentCust.CustNum AT 2
          LABEL "Cust. Number"
-         FORMAT ">>>>>>>9"
+         FORMAT ">>>>>>>>9"
          SKIP 
    bCurrentCust.CustIdType AT 2 
          LABEL "Customer ID "
@@ -252,7 +252,7 @@ FORM
    
    liNewCust1 AT 2
       NO-LABEL 
-      FORMAT ">>>>>>>>"
+      FORMAT ">>>>>>>>9"
       HELP "Customer nbr, 0=create a new one"
    SKIP
       lcNewCustIdType AT 2 
@@ -911,7 +911,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          VIEW-AS ALERT-BOX ERROR.
          NEXT.
       END.
-         
+
       RUN Mc/charge_dialog.p(
        MobSub.MsSeq,
        (IF MobSub.PayType THEN "ACC_PREPAID" ELSE "ACC_POSTPAID"),

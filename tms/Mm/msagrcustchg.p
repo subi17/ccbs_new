@@ -33,6 +33,7 @@
 {Mm/fbundle.i}
 {Mc/dpmember.i}
 {Func/orderfunc.i}
+{Func/custfunc.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -131,7 +132,9 @@ PROCEDURE pFinalize:
    ELSE ldaToDate = DATE(MONTH(ldaFromDate) + 1,1,YEAR(ldaFromDate)) - 1.
 
    liPayType = 1. 
-   FIND FIRST MsOwner WHERE MsOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+   FIND FIRST MsOwner WHERE 
+              MsOwner.MsSeq = iiMsSeq AND
+              MsOwner.TSEnd >= 99999999 NO-LOCK NO-ERROR.
    IF AVAILABLE MsOwner AND MsOwner.PayType THEN liPayType = 2.
    
    IF liPayType = 2 THEN 
@@ -180,15 +183,36 @@ PROCEDURE pOwnerChange:
    DEF VAR lcCode        AS CHAR NO-UNDO. 
    DEF VAR lcMemo        AS CHAR NO-UNDO. 
    DEF VAR lcChannel     AS CHAR NO-UNDO.
+   DEF VAR lcCategory    AS CHAR NO-UNDO. 
 
    DEF BUFFER bSubRequest   FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bMsRequest    FOR MsRequest.
+   DEF BUFFER bOldCustCat   FOR CustCat.
    
    liOrigStat = MsRequest.ReqStat.
       
    /* Set request under work status */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
+   
+   ASSIGN liNewOwner = MsRequest.ReqIParam1.
+   /* Double check existing customer */
+   IF liNewOwner = 0 THEN DO: 
+      
+      FIND FIRST bNewCust WHERE
+         bNewCust.Brand      = gcBrand AND
+         bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
+         bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
+         bNewCust.Roles NE "inactive"
+      NO-LOCK NO-ERROR.
+      
+      IF AVAIL bNewCust THEN DO:
+         liNewOwner = bNewCust.Custnum.
+         FIND CURRENT MSRequest EXCLUSIVE-LOCK NO-ERROR.
+         MsRequest.ReqIParam1 = bNewCust.Custnum.
+         FIND CURRENT MSRequest NO-LOCK NO-ERROR.
+      END.
+   END.
 
    RUN pCheckSubscriptionForACC (MsRequest.MsSeq,
                                  MsRequest.MsRequest,
@@ -240,7 +264,8 @@ PROCEDURE pOwnerChange:
    END.
 
    FIND FIRST MsOwner WHERE
-              MsOwner.MsSeq = MobSub.MsSeq NO-LOCK.
+              MsOwner.MsSeq = MobSub.MsSeq AND
+              MsOwner.TSEnd >= 99999999 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner OR MsOwner.CustNum NE MobSub.CustNum OR
       MsOwner.AgrCust NE MobSub.AgrCust OR MsOwner.TSEnd < MsRequest.ActStamp
    THEN DO:
@@ -253,6 +278,16 @@ PROCEDURE pOwnerChange:
       fReqError("Nothing to do").
       RETURN. 
    END.
+   
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.custnum = MsRequest.Custnum NO-ERROR.
+   IF NOT AVAIL Customer THEN DO:
+      fReqError("Old customer not found").
+   END.
+
+   FIND bOldCustCat NO-LOCK WHERE
+        bOldCustCat.Brand = gcBrand AND
+        bOldCustCat.Category = Customer.Category NO-ERROR.
 
    fSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
@@ -332,28 +367,10 @@ PROCEDURE pOwnerChange:
       END.
    END.
    
-   ASSIGN liNewOwner   = MsRequest.ReqIParam1
-          liOldOwner   = MobSub.AgrCust
+   ASSIGN liOldOwner   = MobSub.AgrCust
           liCreated    = 0
           lhRequest    = BUFFER MsRequest:HANDLE.
 
-   /* Double check existing customer */
-   IF liNewOwner = 0 THEN DO: 
-      
-      FIND FIRST bNewCust WHERE
-         bNewCust.Brand      = gcBrand AND
-         bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
-         bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
-         bNewCust.Roles NE "inactive"
-      NO-LOCK NO-ERROR.
-      
-      IF AVAIL bNewCust THEN DO:
-         liNewOwner = bNewCust.Custnum.
-         FIND CURRENT MSRequest EXCLUSIVE-LOCK NO-ERROR.
-         MsRequest.ReqIParam1 = bNewCust.Custnum.
-         FIND CURRENT MSRequest NO-LOCK NO-ERROR.
-      END.
-   END.
 
    /* a new customer will be created */
    DO liReqCnt = 1 TO 3:
@@ -645,6 +662,16 @@ PROCEDURE pOwnerChange:
                   bNewCust.PaymTerm = CustCat.PaymTerm.
                   LEAVE.
                END.
+            END.
+            
+            /* Preserve Pro customer category in case the old customer was pro  */
+            IF AVAIL bOldCustCat AND bOldCustCat.Pro EQ TRUE THEN DO:
+               fgetCustSegment(bNewCust.CustIDType, 
+                               (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
+                                ELSE bOldCustCat.SelfEmployed),
+                               bOldCustCat.pro,
+                               OUTPUT lcCategory).
+               IF lcCategory > "" THEN bNewCust.Category = lcCategory.
             END.
             
             /* default counter limits; for all, also prepaids */
@@ -1898,7 +1925,6 @@ PROCEDURE pHandleAdditionalLines:
                                           fIsSelfEmpl(Customer.Category),
                                           fIsPro(Customer.Category),
                                           1,
-                                          OUTPUT lcInfo,
                                           OUTPUT liSubLimit,
                                           OUTPUT liSubs,
                                           OUTPUT liActLimit,
