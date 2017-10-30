@@ -46,6 +46,7 @@ FORM
     DumpHPD.FinalTime         COLON 20
     DumpHPD.UnitsToDump       COLON 20
     DumpHPD.UnitType          COLON 20
+    DumpHPD.CoolTime          COLON 20
 WITH  OVERLAY ROW 2 centered COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
 
@@ -84,7 +85,8 @@ REPEAT WITH FRAME fHPD:
        DumpHPD.StartTime
        DumpHPD.FinalTime
        DumpHPD.UnitsToDump 
-       DumpHPD.UnitType 
+       DumpHPD.UnitType
+       DumpHPD.CoolTime
    WITH FRAME fHPD.
    
    ASSIGN 
@@ -109,7 +111,8 @@ REPEAT WITH FRAME fHPD:
          DumpHPD.StartTime
          DumpHPD.FinalTime
          DumpHPD.UnitsToDump 
-         DumpHPD.UnitType 
+         DumpHPD.UnitType
+         DumpHPD.CoolTime
       WITH FRAME fHPD EDITING:
  
          READKEY.
