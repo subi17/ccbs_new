@@ -53,7 +53,7 @@
                bono_voip;boolean;optional;activate bono voip
                delivery_channel;string;optional;paper/email/sms/no delivery
                bypass_rules;boolean;optional;skips subscription/actinvation limit check
-               discount_plan_ids;array of struct;optional;discounts
+               discounts;array of struct;optional;discounts
                sim_type;string;optional;sim types (eg: regular/micro/nano/universal)
                multisim_id;int;optional;order group id
                multisim_type;int;optional;group member (1,2,..), mandatory if multisim_id is passed
@@ -70,7 +70,7 @@
                multiorder;boolean;optional;
                terminal_financing_bank;string;optional
                additional_line_discount;string;optional
- * @discount_plan_ids discount_plan_id;string;optional;
+ * @discounts discount_plan_id;string;optional;
                discount_plan_amount;double;optional;
                discount_valid_periods;int;optional;
  * @customer_data fname;string;optional;
@@ -651,8 +651,8 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('additional_line_discount', lcOrderStruct) GT 0 THEN
       pcAdditionaLineDiscount = get_string(pcOrderStruct,"additional_line_discount").
    
-   IF LOOKUP('discount_plan_ids', lcOrderStruct) GT 0 THEN
-      pcDiscountArray = get_array(pcOrderStruct,"discount_plan_ids").
+   IF LOOKUP('discounts', lcOrderStruct) GT 0 THEN
+      pcDiscountArray = get_array(pcOrderStruct,"discounts").
 
    IF pcDiscountArray > "" THEN
    DO liCounter = 0 TO get_paramcount(pcDiscountArray) - 1:
@@ -1355,7 +1355,7 @@ gcOrderStructFields = "brand!," +
                       "bono_voip," +
                       "bypass_rules," +
                       "delivery_channel," +
-                      "discount_plan_ids," +
+                      "discounts," +
                       "sim_type," + 
                       "multisim_id," +
                       "multisim_type," +
