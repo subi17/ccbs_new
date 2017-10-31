@@ -598,7 +598,7 @@ ELSE DO: /* Tila = sulje */
       PUT STREAM report UNFORMATTED 
          "Report : " mailsubj SKIP
          "Sender : " katun SKIP
-         "Day ...: " STRING(pvm,"99.99.9999") SKIP.
+         "Day ...: " STRING(TODAY,"99.99.9999") SKIP.
        OUTPUT STREAM report CLOSE.
 
        SendMail(TRIM(cfile),xmailattach).

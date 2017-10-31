@@ -67,7 +67,7 @@ form
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " National Areacodes " +
-     string(pvm,"99-99-99") + " " FRAME sel.
+     string(TODAY,"99-99-99") + " " FRAME sel.
 
 form
     AreaCode.TrafficArea   label "Traffic Area"  

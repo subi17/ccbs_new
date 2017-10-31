@@ -230,7 +230,7 @@ HELP "Do you want re-analyse Rating CCN using Calltype and Destination"
    COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " " + Syst.CUICommon:ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
-    string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
+    string(TODAY,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
 

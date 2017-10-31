@@ -38,7 +38,7 @@ form
    skip(13)
    WITH ROW 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " FREEPHONECALL REPORT " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 form

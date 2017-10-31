@@ -210,7 +210,7 @@ FORM
       SKIP
          
 WITH ROW 1 OVERLAY SIDE-LABELS CENTERED 
-     TITLE " " + lcMainHeader + " " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + lcMainHeader + " " + STRING(TODAY,"99-99-99") + " "
      FRAME fCriter.
 
 

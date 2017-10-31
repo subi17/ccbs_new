@@ -36,7 +36,7 @@ form
    skip(11)
    WITH ROW 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " A-SUBCRIBER NUMBERS TO File " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 view FRAME valinta.

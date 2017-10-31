@@ -71,7 +71,7 @@ SKIP(1)
 WITH 
    WIDTH 80 ROW 2 
      TITLE " " + Syst.CUICommon:ynimi + " PASSWORD CHANGE "  +
-           STRING(pvm,"99-99-99") + " "
+           STRING(TODAY,"99-99-99") + " "
    NO-LABELS
 FRAME passFrame.
 

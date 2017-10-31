@@ -63,7 +63,7 @@ form
     Salesoffice.CostCentre /* column-label "Cct" help "Cost center" */
 WITH width 80 OVERLAY scroll 1 15 DOWN
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-    " Maintain sales offices " + string(pvm,"99-99-99") + " "
+    " Maintain sales offices " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

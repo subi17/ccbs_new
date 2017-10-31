@@ -31,7 +31,7 @@ form
    skip(9)
    WITH ROW 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " OVERPAYMENT BALANCE REPORT " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 view FRAME valinta.

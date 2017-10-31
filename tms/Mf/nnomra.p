@@ -33,7 +33,7 @@ form
    skip(14)
    WITH ROW 1 side-labels width 80
    title " " + Syst.CUICommon:ynimi + " OPERATOR/LAND RAPPORT " +
-   string(pvm,"99-99-99") + " "
+   string(TODAY,"99-99-99") + " "
    FRAME valinta.
 
 form

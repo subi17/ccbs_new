@@ -58,7 +58,7 @@ FORM
    
    with row 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " DD STATUS REPORT " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         frame fCrit.
 
 

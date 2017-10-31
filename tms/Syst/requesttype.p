@@ -74,7 +74,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
       (IF iiQueue > 0 
        THEN "IN QUEUE " + STRING(iiQueue)
        ELSE "") + "  " +
-       string(pvm,"99-99-99") + " "
+       string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

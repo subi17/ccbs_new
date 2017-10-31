@@ -61,7 +61,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MSISDN Status Codes "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

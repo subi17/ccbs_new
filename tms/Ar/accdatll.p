@@ -153,7 +153,7 @@ form
    SKIP(1)
    WITH ROW 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " REVENUE REPORT " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME rajat.
 
 view FRAME rajat.

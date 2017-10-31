@@ -125,7 +125,7 @@ form header
       ttCriter.InvDate2 FORMAT "99-99-9999"
    ttCriter.DenyPrint FORMAT "DENIED/" at 80  
    ttCriter.OnlyUnpaid FORMAT "UNPAID/" at 90
-   STRING(pvm,"99-99-99") at 107 SKIP
+   STRING(TODAY,"99-99-99") at 107 SKIP
    viiva2 at 1 SKIP(1)
 
    "Invoice"     at 1
@@ -157,7 +157,7 @@ form header
       lcInvGroup FORMAT "x(25)"
      ttCriter.InvDate1 at 42 FORMAT "99-99-9999" "-" 
      ttCriter.InvDate2 FORMAT "99-99-9999"
-     STRING(pvm,"99-99-99") at 107 SKIP
+     STRING(TODAY,"99-99-99") at 107 SKIP
    viiva2 at 1 SKIP(1)
    "Account" at 1 "Amt Debit" at 22 "Amt Credit" at 38 SKIP
    viiva3 at 1 SKIP

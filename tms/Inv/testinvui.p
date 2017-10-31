@@ -105,7 +105,7 @@ form
    skip(17)
 WITH
    OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " TEST INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " TEST INVOICING, PHASE 1 " + string(TODAY,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
 

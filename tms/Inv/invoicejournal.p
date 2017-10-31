@@ -162,7 +162,7 @@ form header
    ilConnType format "Dir/Indir"
      idaPvm1 at 47 format "99-99-9999" "-" idaPvm2 format "99-99-9999"
    ilDeny format "DENIED/" at 80  unpaid format "UNPAID/" at 90
-   string(pvm,"99-99-99") at 108 skip
+   string(TODAY,"99-99-99") at 108 skip
    viiva2 at 2 skip(1)
 
    "Invoice"     at 2
@@ -194,7 +194,7 @@ form header
      "Page" at 106 sl format "ZZZZ9" skip
    "Inv.group" at 2 icInvGroup IGName format "x(20)"
      idaPvm1 at 43 format "99-99-9999" "-" idaPvm2 format "99-99-9999"
-     string(pvm,"99-99-99") at 108 skip
+     string(TODAY,"99-99-99") at 108 skip
    viiva2 at 2 skip(1)
    "Acct" at 2 "Amt Debit" at 22 "Amt Credit" at 38 skip
    viiva3 at 2 skip

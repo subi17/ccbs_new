@@ -34,7 +34,7 @@ WITH width 55 OVERLAY centered ROW 3 scroll 1 12 DOWN
    COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " FTAM sections "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME tlse.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.

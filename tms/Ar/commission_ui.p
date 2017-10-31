@@ -22,7 +22,7 @@ FORM
    "in commission rule definitions." AT 10 
    SKIP(13)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  COMMISSIONS  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  COMMISSIONS  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 

@@ -77,7 +77,7 @@ form
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       " Customer Groups " + string(pvm,"99-99-99") + " "
+       " Customer Groups " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

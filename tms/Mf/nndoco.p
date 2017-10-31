@@ -85,7 +85,7 @@ form
    "                Display double calls ........:" bDisp  skip(4)
 with
    width 80 overlay color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " ERASE DOUBLE RETAIL CALLS " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " ERASE DOUBLE RETAIL CALLS " + string(TODAY,"99-99-99") + " "
    no-labels frame start.
 
 assign

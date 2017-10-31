@@ -49,7 +49,7 @@ VALIDATE(INPUT cdate1 <= INPUT cdate2,"Invalid order of dates !")
    COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " " + Syst.CUICommon:ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
-    string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
+    string(TODAY,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
 

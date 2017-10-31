@@ -154,7 +154,7 @@ lcSMSMessage = fGetTxt("SMS",
 IF cur = "EUR" THEN cur = "1".             /*        1 = euro             */
 ELSE                cur = " ".             /* " " ja 0 = markka           */
 
-ots-pvm = string(pvm,"99.99.99").                   
+ots-pvm = string(TODAY,"99.99.99").                   
 
 lcBankAcc = fCParamC("DDebitBankAccount").
 

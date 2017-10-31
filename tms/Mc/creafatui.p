@@ -70,7 +70,7 @@ FORM
       SKIP
    SKIP(1)
    WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
-        TITLE " " + Syst.CUICommon:ynimi + "  GRANT FAT  " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.CUICommon:ynimi + "  GRANT FAT  " + STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.

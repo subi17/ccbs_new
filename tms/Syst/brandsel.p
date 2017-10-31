@@ -42,7 +42,7 @@ form
     Brand.BRName     column-label "Name"
 WITH ROW FrmRow width 80 overlay FrmDown  down
     TITLE " " + " CHOOSE A BRAND "
-         + string(pvm,"99-99-99") + " "
+         + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

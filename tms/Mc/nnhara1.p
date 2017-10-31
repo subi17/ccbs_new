@@ -63,7 +63,7 @@ form header
    viiva1 AT 2 SKIP
    ynimi at 2 "ALARMLIST" AT 55
    "page" at 106 sl format "ZZZZ9" SKIP
-   string(pvm,"99-99-99") AT 108 SKIP
+   string(TODAY,"99-99-99") AT 108 SKIP
    viiva2 AT 2 skip(1)
    "Cust nr"    AT 2
    "Cust name"  AT 10

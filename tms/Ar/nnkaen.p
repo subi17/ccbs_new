@@ -110,7 +110,7 @@ form
    skip(11)
    WITH ROW 1 side-labels width 80
    title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT FORECAST " +
-   string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
+   string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
 
 form header
    viiva1 AT 2 SKIP
@@ -118,7 +118,7 @@ form header
    sl format "ZZ9" SKIP
    "Inv.group" at 2 InvGroup IGName format "x(22)"
    jar + ", " + pytx at 44 format "x(60)"
-   string(pvm,"99-99-99") AT 108 SKIP
+   string(TODAY,"99-99-99") AT 108 SKIP
    viiva2 AT 2 skip(1)
 
    "Cust."      AT 2         /* Customer.CustNum */

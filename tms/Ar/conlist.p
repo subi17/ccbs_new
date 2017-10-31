@@ -84,7 +84,7 @@ form
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       " CONTACT LIST "  + string(pvm,"99-99-99") + " "
+       " CONTACT LIST "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM

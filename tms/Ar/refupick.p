@@ -53,7 +53,7 @@ form
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       " REFUND PAYMENTS "  + string(pvm,"99-99-99") + " "
+       " REFUND PAYMENTS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM

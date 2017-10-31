@@ -72,7 +72,7 @@ form
    skip(17)
 with
    overlay title color value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " BILLING CLEANING RUN " + string(TODAY,"99-99-99") + " "
    color value(Syst.CUICommon:cfc) width 80
    frame taka.
 

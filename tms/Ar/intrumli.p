@@ -86,7 +86,7 @@ SKIP(8)
     COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " " + Syst.CUICommon:ynimi + " SEND INVOICES TO COLLECTION " + 
-       STRING(pvm,"99-99-99") + " " 
+       STRING(TODAY,"99-99-99") + " " 
     SIDE-LABELS 
     /*1 columns*/
     FRAME main.

@@ -47,7 +47,7 @@ SKIP (2)
 SKIP(5)
 WITH
    OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " DELETE TEST INVOICES " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " DELETE TEST INVOICES " + string(TODAY,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1 NO-LABELS
    FRAME mainFrame.
 

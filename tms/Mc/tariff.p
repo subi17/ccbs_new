@@ -99,7 +99,7 @@ DEF VAR lBrHdr     AS CHAR               NO-UNDO.
 DEF VAR lcDataType AS CHAR               NO-UNDO.
 DEF VAR llShowHistory AS LOG NO-UNDO INIT FALSE. 
 
-lBrHdr = " TARIFF MAINTENANCE " + string(pvm,"99-99-99") + " " .
+lBrHdr = " TARIFF MAINTENANCE " + string(TODAY,"99-99-99") + " " .
 
 form
    Tariff.Brand       column-label "Bra"      format "x(3)"

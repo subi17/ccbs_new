@@ -29,7 +29,7 @@ form
    help "Total sum or Specification"
    SKIP
 with title " " + Syst.CUICommon:ynimi + " UNREGISTERED PAYMENTS " +
-           STRING(pvm,"99-99-99") + " "
+           STRING(TODAY,"99-99-99") + " "
    ROW 1 centered Size 80 by 19 FRAME valinta.
 
 view frame valinta.

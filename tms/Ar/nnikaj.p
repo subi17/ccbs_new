@@ -75,7 +75,7 @@ form
    skip(15)
    with row 1 side-labels width 80
         title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " AGE ANALYSIS " +
-        string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
+        string(TODAY,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame valinta.
 
 form

@@ -129,7 +129,7 @@ FORM
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
      TITLE " " + Syst.CUICommon:ynimi + "  INVOICES AS XML " + 
-        STRING(pvm,"99-99-99") + " " FRAME fCrit.
+        STRING(TODAY,"99-99-99") + " " FRAME fCrit.
 
 
 FUNCTION fIGName RETURNS LOGIC

@@ -107,7 +107,7 @@ form header
    ynimi "LARGE CUSTOMER LIST" at 33 "Page" at 83 sl format "ZZZ9" TO 90 SKIP
 
    "SORTED BY " + entry(order1,jar1) + entry(order2,jar2)  at 33 format "x(36)"
-   string(pvm,"99-99-99") TO 90 SKIP
+   string(TODAY,"99-99-99") TO 90 SKIP
    fill("-",90) format "x(90)" SKIP
    hdr0 AT 2 SKIP
    hdr1 AT 2 SKIP

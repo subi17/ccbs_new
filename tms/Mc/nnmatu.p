@@ -69,7 +69,7 @@ skip(4)
                     AT 37                                             skip(4)
 WITH
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
-    " " + ynimi + " Country number report " + string(pvm,"99-99-99") + " "
+    " " + ynimi + " Country number report " + string(TODAY,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 

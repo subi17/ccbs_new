@@ -98,7 +98,7 @@ form
 WITH OVERLAY ROW 1 WIDTH 80 COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
       " " + Syst.CUICommon:ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
-      string(pvm,"99.99.99") + " "  
+      string(TODAY,"99.99.99") + " "  
    NO-LABELS FRAME main.
    
 PAUSE 0.

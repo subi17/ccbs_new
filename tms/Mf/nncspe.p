@@ -46,7 +46,7 @@ help "Earliest call date"
 "                Directory for output .:" exdir format "x(30)" skip(7)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " SUMMARY calls SMAN/PROD " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " SUMMARY calls SMAN/PROD " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 

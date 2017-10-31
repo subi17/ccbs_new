@@ -67,7 +67,7 @@ form
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     Syst.CUICommon:ynimi + " PRINTOUTS "
-    + string(pvm,"99-99-99")
+    + string(TODAY,"99-99-99")
     FRAME sel.
 
 form

@@ -84,7 +84,7 @@ form
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " ACCOUNTS "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

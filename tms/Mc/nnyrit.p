@@ -60,7 +60,7 @@ form
    SKIP(1)
    
 with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " COMPANY INFORMATION "
-     + string(pvm,"99-99-99") + " "
+     + string(TODAY,"99-99-99") + " "
      COLOR value(Syst.CUICommon:cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.
 

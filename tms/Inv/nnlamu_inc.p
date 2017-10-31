@@ -90,7 +90,7 @@ form
    skip(17)
 WITH
    OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " INVOICING " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " INVOICING " + string(TODAY,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80
    FRAME taka.
 

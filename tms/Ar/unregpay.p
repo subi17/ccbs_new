@@ -199,7 +199,7 @@ FORM
     UnregPaym.BankAcc   FORMAT "x(14)"
 WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-    " UNREGISTERED PAYMENTS " + STRING(pvm,"99-99-99") + " "     
+    " UNREGISTERED PAYMENTS " + STRING(TODAY,"99-99-99") + " "     
     FRAME sel.
 
 FORM                                               

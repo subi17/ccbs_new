@@ -390,7 +390,7 @@ form
 WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) 
        " " + Syst.CUICommon:ynimi + " " + lcFrmTitle + " " +
-       string(pvm,"99-99-99") + " " FRAME sel.
+       string(TODAY,"99-99-99") + " " FRAME sel.
 
 form 
    {Mc/nnasse.frm}

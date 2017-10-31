@@ -83,7 +83,7 @@ FORM
    RepText.RepText         FORMAT "x(29)"
 WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-      "  TRANSLATIONS  " + STRING(pvm,"99-99-99") + " "     
+      "  TRANSLATIONS  " + STRING(TODAY,"99-99-99") + " "     
    FRAME sel.
 
 FORM

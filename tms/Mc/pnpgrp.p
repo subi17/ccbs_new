@@ -64,7 +64,7 @@ WITH width 75 OVERLAY CENTERED scroll 1 13 DOWN
    + " maintain Customer " 
    + STRING(iCustnum) 
    + " PnPGroups "
-   + string(pvm,"99-99-99") 
+   + string(TODAY,"99-99-99") 
    + " "
    FRAME sel.
 

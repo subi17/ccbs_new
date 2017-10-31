@@ -125,7 +125,7 @@ FORM
    SKIP(1)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  CSB19 SPLIT TEST " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  CSB19 SPLIT TEST " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 

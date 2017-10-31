@@ -105,7 +105,7 @@ form header
       "Page" at 125 sl format "ZZ9" skip
    "Inv.Group:" at 2 lcGrpHeader format "x(24)"
       jar at 55 
-      string(pvm,"99-99-99") at 125 skip
+      string(TODAY,"99-99-99") at 125 skip
    viiva2 at 1 skip(1)
 
    "Cust."      to 8

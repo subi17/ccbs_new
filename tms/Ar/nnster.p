@@ -70,7 +70,7 @@ help "Only (T)otal amount by Account or (D)etailed printout ?"
 skip(8)
 WITH
    width 80 overlay 
-   title " " + Syst.CUICommon:ynimi + " Account Summary " + STRING(pvm,"99-99-99") + " "
+   title " " + Syst.CUICommon:ynimi + " Account Summary " + STRING(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
@@ -83,7 +83,7 @@ form header /* header FOR printout */
       "Page" to 70 sl format "zzz9" TO 78
    "Acct " at 1 acct format "zzzzz9" AccName format "x(18)"
       "DURING " at 34 pvm1 format "99.99.99"  "-" pvm2 format "99.99.99"
-      string(pvm,"99.99.99") TO 78    SKIP
+      string(TODAY,"99.99.99") TO 78    SKIP
    fill("=",78) format "x(78)"
    skip(1)
    "Invoice"    TO  8

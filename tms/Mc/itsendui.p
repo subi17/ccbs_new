@@ -92,7 +92,7 @@ FORM
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
         TITLE " " + Syst.CUICommon:ynimi + " SENDING OF INFORMATION TEXTS " +
-              STRING(pvm,"99-99-99") + " "
+              STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.

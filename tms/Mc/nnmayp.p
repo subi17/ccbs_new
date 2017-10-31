@@ -79,7 +79,7 @@ form
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " CALL CASE NUMBERS (CCN) "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 {Func/brand.i}
 

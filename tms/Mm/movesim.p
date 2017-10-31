@@ -77,7 +77,7 @@ WITH
    TITLE 
    " " + Syst.CUICommon:ynimi + 
    " MOVE SIM CARDS " +
-   string(pvm,"99.99.9999") + " "
+   string(TODAY,"99.99.9999") + " "
    NO-LABELS
    FRAME MAIN.
 

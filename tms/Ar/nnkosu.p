@@ -61,7 +61,7 @@ form
    skip(10)
 with
    row 1 width 80 overlay color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " Payments into a/r, input from OCR file " + string(pvm,"99-99-9999") +
+   " " + Syst.CUICommon:ynimi + " Payments into a/r, input from OCR file " + string(TODAY,"99-99-9999") +
    " " frame main.
 
 

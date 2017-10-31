@@ -226,7 +226,7 @@ ELSE lcMacros = "".
 form
    skip(17)
    WITH TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " INVOICE PRINTOUT " + STRING(TODAY,"99-99-99") + " "
 COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
 form

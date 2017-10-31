@@ -83,7 +83,7 @@ form
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN 
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " " + Syst.CUICommon:ynimi + " ALL INVOICES "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 {Func/brand.i}
 

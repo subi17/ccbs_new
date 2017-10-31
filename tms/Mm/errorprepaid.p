@@ -61,7 +61,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  ERROR ITEMS MENU  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM

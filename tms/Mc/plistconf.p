@@ -86,7 +86,7 @@ form
    llActive          column-label "Act."
 with width 80 overlay scroll 1 15 down ROW 1
    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-   " Pricelist history " + string(pvm,"99-99-99") + " "
+   " Pricelist history " + string(TODAY,"99-99-99") + " "
    frame sel.
 
 form

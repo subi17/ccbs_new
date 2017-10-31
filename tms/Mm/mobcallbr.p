@@ -139,7 +139,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     (IF icCDRType EQ "fraud"
      THEN " Fraud CDRs "
      ELSE " Mobile Calls ")
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

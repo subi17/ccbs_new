@@ -70,7 +70,7 @@ with width 80 overlay scroll 1 15 down
     color value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Resellers "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     frame sel.
 
 {Func/brand.i}

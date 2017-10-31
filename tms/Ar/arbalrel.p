@@ -41,7 +41,7 @@ form
       SPACE(2)
    SKIP(4)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + Syst.CUICommon:ynimi + " BALANCE REPORT " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.CUICommon:ynimi + " BALANCE REPORT " + STRING(TODAY,"99-99-99") + " "
 FRAME valinta.
 
 VIEW FRAME valinta.

@@ -47,7 +47,7 @@ IF NOT bBatch THEN DO:
    WITH  OVERLAY  ROW 1 WIDTH 80
    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-    " " + Syst.CUICommon:ynimi + "    EXPORT PRESELECTIONS " + STRING(pvm,"99.99.9999") + " "
+    " " + Syst.CUICommon:ynimi + "    EXPORT PRESELECTIONS " + STRING(TODAY,"99.99.9999") + " "
     NO-LABELS 
     /*1 columns*/
     FRAME main.

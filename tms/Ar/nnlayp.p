@@ -140,7 +140,7 @@ form
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " INVOICE File "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 form
    skip(1)

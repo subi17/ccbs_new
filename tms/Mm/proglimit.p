@@ -75,7 +75,7 @@ form
 WITH width 74 OVERLAY CENTERED scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + lcTitle + " "  
-   + string(pvm,"99-99-99") + " "  FRAME sel.
+   + string(TODAY,"99-99-99") + " "  FRAME sel.
 
 form          
    ProgLimit.GroupCode       COLON 23               SKIP

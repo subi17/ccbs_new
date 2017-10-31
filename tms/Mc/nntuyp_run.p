@@ -119,7 +119,7 @@ form
     BillItem.TaxClass   COLUMN-LABEL "TaxClass"
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-    " Billing Items " + string(pvm,"99-99-99") + " "
+    " Billing Items " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

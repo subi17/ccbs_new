@@ -68,7 +68,7 @@ WITH ROW FrmRow centered overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " USER'S SALESMAN DEFINITIONS  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

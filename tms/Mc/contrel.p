@@ -123,7 +123,7 @@ form
 
    with row 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " CONTRACT REPORT " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         frame valinta.
 
 

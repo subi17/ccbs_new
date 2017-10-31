@@ -160,7 +160,7 @@ form
 skip(13)
    WITH ROW 1 side-labels width 80
         title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT JOURNAL " +
-        string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc)
+        string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc)
         FRAME MAIN.
 
 form header
@@ -169,7 +169,7 @@ form header
      format "99.99.9999" "-" pvm2 format "99.99.9999" "Page" AT 103
      sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(20)"
-     Jar at 42 format "x(40)" string(pvm,"99-99-99") AT 105 SKIP
+     Jar at 42 format "x(40)" string(TODAY,"99-99-99") AT 105 SKIP
    viiva2 AT 1 skip(1)
 
    "Invoice"     TO  8
@@ -204,7 +204,7 @@ form header
    format "99.99.9999" "-" pvm2 format "99.99.9999"
    "Page" at 103 sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(24)"  AT 37
-   string(pvm,"99-99-99") AT 105 SKIP
+   string(TODAY,"99-99-99") AT 105 SKIP
    viiva2 AT 1 skip(1)
    "Account" at 1 
    "Debit"   TO 32 

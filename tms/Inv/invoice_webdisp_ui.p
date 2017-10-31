@@ -78,7 +78,7 @@ FORM
    SKIP(7)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  WEB DISPLAY  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  WEB DISPLAY  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fIGName RETURNS LOGIC

@@ -85,7 +85,7 @@ WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT/CUSTOMER "
-   + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 DO FOR TMSUser.
    FIND TMSUser where TMSUser.UserCode = katun no-lock.

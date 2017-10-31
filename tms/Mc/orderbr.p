@@ -64,7 +64,7 @@ form
 WITH ROW 4 width 80 OVERLAY 8 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       " Customers orders "  + string(pvm,"99-99-99") + " "
+       " Customers orders "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 /* Create orders for browsing */ 

@@ -129,7 +129,7 @@ repeat with frame menu_frame:
    if available MenuTree then do:
       assign
       ftitle[1] = " " + Syst.CUICommon:ynimi + " (" + Syst.CUICommon:gcBrand + 
-                       ") " + MenuTitle + " " + string(pvm,"99-99-99")
+                       ") " + MenuTitle + " " + string(TODAY,"99-99-99")
       substring(ftitle[1],59) = string("(" + MenuId + ")","x(10)")
       title_width = length(ftitle[1]).
 

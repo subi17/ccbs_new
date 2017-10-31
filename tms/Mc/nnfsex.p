@@ -90,7 +90,7 @@ help "(D)irect, (I)ndirect  (?)=ALL" SKIP
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + Syst.CUICommon:ynimi + " EXCEL-SUMMARY OF ACCOUNTS " +
-   string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).

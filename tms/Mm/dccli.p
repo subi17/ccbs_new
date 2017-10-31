@@ -83,7 +83,7 @@ WITH ROW FrmRow width 78 CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " PERIODICAL CONTRACT ROWS "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

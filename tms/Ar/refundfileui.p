@@ -71,7 +71,7 @@ FORM
    SKIP(4)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  PAYMENTS TO CSB34  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  PAYMENTS TO CSB34  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 

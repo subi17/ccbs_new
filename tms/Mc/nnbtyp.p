@@ -85,7 +85,7 @@ WITH
    COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
       " B-DESTINATIONS " + 
-      string(pvm,"99-99-99") + " " FRAME sel.
+      string(TODAY,"99-99-99") + " " FRAME sel.
 
 FORM
    BDest.Brand   LABEL "Brand" COLON 20 SKIP

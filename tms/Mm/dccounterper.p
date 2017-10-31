@@ -49,7 +49,7 @@ WITH OVERLAY CENTERED  scroll 3 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " +
    " COUNTERS for " + icEvent + " " 
-   + string(pvm,"99-99-99") 
+   + string(TODAY,"99-99-99") 
    FRAME sel.
 
 

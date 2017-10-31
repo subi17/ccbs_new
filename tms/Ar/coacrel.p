@@ -115,7 +115,7 @@ FORM
 
    WITH ROW 1 SIDE-LABELS WIDTH 80
         TITLE " " + Syst.CUICommon:ynimi + " COMMISSION REPORT " +
-        STRING(pvm,"99-99-99") + " "
+        STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 VIEW FRAME valinta.

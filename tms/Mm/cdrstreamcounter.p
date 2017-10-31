@@ -64,7 +64,7 @@ FORM
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       "  CDR STREAM COUNTERS  "  + string(pvm,"99-99-99") + " "
+       "  CDR STREAM COUNTERS  "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

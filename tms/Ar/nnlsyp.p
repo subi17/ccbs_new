@@ -169,7 +169,7 @@ suoritettu       label "Total payments ..." AT 2
 skip
 
 with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " UPDATE AN INVOICE "
-+ string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
++ string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
 width 80 side-LABELs
 FRAME Invoice.
 

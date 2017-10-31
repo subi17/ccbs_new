@@ -42,7 +42,7 @@ form
    SKIP(6)
 with title color value(Syst.CUICommon:ctc) 
   " " + Syst.CUICommon:ynimi + " COPY A NEW BRAND  " + 
-  STRING(pvm,"99-99-99")  + " "
+  STRING(TODAY,"99-99-99")  + " "
   side-labels color value(Syst.CUICommon:cfc) 
   OVERLAY row 1 width 80 frame main.
 

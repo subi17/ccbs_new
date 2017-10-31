@@ -191,7 +191,7 @@ form
                                    skip
 WITH
    OVERLAY width 80 ROW 1 side-labels COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + "   CREDIT NOTES        " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + "   CREDIT NOTES        " + string(TODAY,"99-99-99") + " "
    FRAME rajat.
 
 form

@@ -111,7 +111,7 @@ form
 WITH CENTERED  ROW FrmRow FrmDown DOWN WIDTH 80
     COLOR VALUE(Syst.CUICommon:cfc) OVERLAY
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Information Texts " 
-        + string(pvm,"99-99-99") + " "
+        + string(TODAY,"99-99-99") + " "
         FRAME sel.
 
 form

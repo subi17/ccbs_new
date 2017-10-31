@@ -52,7 +52,7 @@ help "Name of File where summary PaymFile is to be written"
 skip(4)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " CALL SUMMARY BY BillCode " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " CALL SUMMARY BY BillCode " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 

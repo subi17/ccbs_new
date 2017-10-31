@@ -73,7 +73,7 @@ FORM
 
    WITH ROW 1 side-labels width 80
         title " " + Syst.CUICommon:ynimi + " FAT FROM COMMISSION " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 

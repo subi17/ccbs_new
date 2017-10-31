@@ -129,7 +129,7 @@ help "Invoicing group's code, empty for all"  SKIP
 WITH
    width 73 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) 
    " " + Syst.CUICommon:ynimi + " XOR-SUMMARY OF ACCOUNTS " +
-   string(pvm,"99-99-99") + " " centered NO-LABELS FRAME start.
+   string(TODAY,"99-99-99") + " " centered NO-LABELS FRAME start.
 
 ASSIGN
    exdate2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -222,7 +222,7 @@ task:
    "%FILE ID "
    string(TransFile,"99999999")
    " EXTERNAL, CREATED "
-   string(pvm,"99.99.9999")
+   string(TODAY,"99.99.9999")
    " AT "
    string(time,"hh:mm:ss").
 
@@ -495,7 +495,7 @@ task:
    "%FILE ID "
    string(TransFile,"99999999")
    " INTERNAL, CREATED "
-   string(pvm,"99.99.9999")
+   string(TODAY,"99.99.9999")
    " AT "
    string(time,"hh:mm:ss")
    dos-skip

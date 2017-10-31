@@ -166,7 +166,7 @@ WITH ROW FrmRow width 70 OVERLAY CENTERED FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  MATRIX  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FOR EACH ttName 

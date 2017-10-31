@@ -61,7 +61,7 @@ form
     COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SIM Card Vendors/Manufacturers "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

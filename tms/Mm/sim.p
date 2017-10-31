@@ -103,7 +103,7 @@ WITH width 80 OVERLAY FrmDown DOWN ROW FrmRow
     COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc)  
      " " + Syst.CUICommon:ynimi +
-     " Sim Cards " + string(pvm,"99-99-99") + " "
+     " Sim Cards " + string(TODAY,"99-99-99") + " "
      FRAME sel.
 
 {Func/brand.i}

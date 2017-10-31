@@ -91,7 +91,7 @@ form header
    SKIP
    "By " + entry(order1,jar1) + entry(order2,jar2)
    at 64 format "x(36)"
-   string(pvm,"99-99-99") TO 170 SKIP
+   string(TODAY,"99-99-99") TO 170 SKIP
 
    /* show criterias */
    "External Customer Group:" AT 6 x-cg-code SKIP

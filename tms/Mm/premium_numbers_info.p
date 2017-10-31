@@ -64,7 +64,7 @@ FORM
 WITH ROW FrmRow width 80 centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
-       " Premium Numbers Information "  + string(pvm,"99-99-99") + " "
+       " Premium Numbers Information "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

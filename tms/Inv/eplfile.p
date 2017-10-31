@@ -300,7 +300,7 @@ FUNCTION fPrintInvoTxt RETURNS LOGICAL
             MY-NL
             "0I"
             lcDateHead " " 
-            STRING(pvm,"99.99.9999")
+            STRING(TODAY,"99.99.9999")
             MY-NL
             "37"
             SPACE(4)

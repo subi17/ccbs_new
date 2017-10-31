@@ -58,7 +58,7 @@ form
    rsoper.Reseller rscode.RsName
 WITH width 80 OVERLAY scroll 1 15 DOWN
    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + 
-   " Maintain reseller operators " + string(pvm,"99-99-99") + " "
+   " Maintain reseller operators " + string(TODAY,"99-99-99") + " "
 FRAME sel.
 
 form

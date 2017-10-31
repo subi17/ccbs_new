@@ -69,7 +69,7 @@ FORM
 
    WITH ROW 1 SIDE-LABELS WIDTH 80 OVERLAY
         TITLE " " + Syst.CUICommon:ynimi + " CONTACT REPORT " +
-        STRING(pvm,"99-99-99") + " "
+        STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 PAUSE 0.

@@ -80,7 +80,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Service Packages "
     + (IF icCLIType > "" THEN "of '" + icCLIType + "'  " ELSE "")
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i} 

@@ -86,7 +86,7 @@ with
     width 80 overlay scroll 1 15 down row 1
     color value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Maintain salesmen "
-    + string(pvm,"99-99-99") + " " frame sel.
+    + string(TODAY,"99-99-99") + " " frame sel.
 
 form
     "Salesman's code ...:" Salesman.Salesman                        skip

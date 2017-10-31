@@ -160,7 +160,7 @@ FORM HEADER
    "RANKING LIST OF CUSTOMERS"  AT 45 
    "page"       AT 106 sl FORMAT "ZZZZ9" SKIP
    "Billed values are ex vat amt and calls only, contract fees are omitted" AT 2
-    STRING(pvm,"99-99-99") AT 108 SKIP 
+    STRING(TODAY,"99-99-99") AT 108 SKIP 
    "According to invoices written during " AT 2
    string(period1) " - " string(period2) SKIP
    "External C-Group..:" AT 2 CGName  SKIP

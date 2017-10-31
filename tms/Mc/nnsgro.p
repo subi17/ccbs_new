@@ -66,7 +66,7 @@ WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Salesman Groups "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
 FRAME sel.
 
 

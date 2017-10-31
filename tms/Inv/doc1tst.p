@@ -113,7 +113,7 @@ FORM
    SKIP(1)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  INVOICES TO DOC1  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  INVOICES TO DOC1  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 

@@ -69,7 +69,7 @@ WITH ROW FrmRow WIDTH 76 CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  RZItem MENU " 
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

@@ -82,7 +82,7 @@ form
     BItemGroup.InvoiceOrder
 WITH width 80 OVERLAY /* scroll 1 */ 15 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-    " Billing Item Groups " + string(pvm,"99-99-99") + " "
+    " Billing Item Groups " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

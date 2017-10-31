@@ -59,7 +59,7 @@ form
 WITH OVERLAY ROW 3 SCROLL 1 12 DOWN CENTERED
    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
    " Customer " + STRING(liCustNum) + " Maintain A-Sub details " 
-   + STRING(pvm,"99-99-99") + " " 
+   + STRING(TODAY,"99-99-99") + " " 
 FRAME sel.
 
 form

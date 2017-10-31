@@ -51,7 +51,7 @@ lcInvGroup HELP "Invoicing Group" InvGroup.IGName skip(11)
 WITH
    width 80 overlay title 
    " " + ynimi + " Summary Of AdvPayments and Deposits " + 
-   STRING(pvm,"99-99-99") + " "
+   STRING(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 form header /* header FOR printout */                
@@ -61,7 +61,7 @@ form header /* header FOR printout */
       "Page" to 70 sl format "zz9" TO 78
 
    "AND ADVANCE PAYMENTS"  AT 34
-      string(pvm,"99.99.99") TO 78    SKIP
+      string(TODAY,"99.99.99") TO 78    SKIP
    fill("=",78) format "x(78)"
    skip(1)
 

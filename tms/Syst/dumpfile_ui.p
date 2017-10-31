@@ -41,7 +41,7 @@ FORM
    DumpFile.TransDir COLON 20 
    SKIP(6)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  DUMP FILE  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  DUMP FILE  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDispDumpFile RETURNS LOGIC

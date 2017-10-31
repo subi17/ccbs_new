@@ -100,7 +100,7 @@ FORM
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
      TITLE " " + Syst.CUICommon:ynimi + " INVOICE ROW COUNTER REPORT " + 
-           STRING(pvm,"99-99-99") + " "
+           STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 

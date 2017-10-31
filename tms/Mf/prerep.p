@@ -56,7 +56,7 @@ skip(6)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " " + Syst.CUICommon:ynimi + "   " + 
     " REPORT OF PRESELECT CUSTOMERS    "
-    + STRING(pvm,"99-99-99") + " "
+    + STRING(TODAY,"99-99-99") + " "
 
     NO-LABELS 
     FRAME main.

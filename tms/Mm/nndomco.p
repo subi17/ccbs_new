@@ -89,7 +89,7 @@ form
    "                Display double calls ........:" bDisp  skip(3)
 WITH
    width 80 ROW 1 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " MARK DOUBLE MOBILE calls " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " MARK DOUBLE MOBILE calls " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME start.
 
 IF NOT bbatch THEN DO:

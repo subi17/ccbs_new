@@ -97,7 +97,7 @@ form
     CustIntEvent.Amt        column-label "Int tot"  
 WITH width 80 ROW liRow OVERLAY scroll 1 liDown DOWN
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-    " OVERTIME INTERESTS " + string(pvm,"99-99-99") + " "
+    " OVERTIME INTERESTS " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

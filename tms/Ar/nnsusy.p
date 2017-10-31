@@ -223,7 +223,7 @@ form
  pVouch             label "Voucher"
  help "Voucher #, F9: Previous vouchers" SKIP
 with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENTS TO INVOICES "
- + string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
+ + string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
   width 80 side-labels FRAME INV-NO.
 
 form

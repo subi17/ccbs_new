@@ -443,7 +443,7 @@ PROCEDURE PrintAccLines:
          lcAddtHead             MY-NL
          xDateHeader            MY-NL
          lcVatHeader            MY-NL
-         "Printed on " + STRING(pvm,"99.99.9999") 
+         "Printed on " + STRING(TODAY,"99.99.9999") 
          MY-NL
          MY-NL.
 

@@ -67,7 +67,7 @@ form
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       " CAMPAIGNS "  + string(pvm,"99-99-99") + " "
+       " CAMPAIGNS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

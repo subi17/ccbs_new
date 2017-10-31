@@ -44,7 +44,7 @@ form
     xx-name          /* column-label "AngrAnsande!ort/stad" */
 WITH width 80 OVERLAY scroll 1 14 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Bordering areacode "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

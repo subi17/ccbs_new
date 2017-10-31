@@ -47,7 +47,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Fusion Invoices "
-    + string(pvm,"99-99-9999") + " "
+    + string(TODAY,"99-99-9999") + " "
     FRAME sel.
 
 form

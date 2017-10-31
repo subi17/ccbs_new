@@ -35,7 +35,7 @@ form
  "         CLI .............:" CLI                                  
  skip(6)
 with row 1 width 80 NO-LABELS
-   title " " + Syst.CUICommon:ynimi + " CREATE RESELLER " + string(pvm,"99-99-99") + " "
+   title " " + Syst.CUICommon:ynimi + " CREATE RESELLER " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 ASSIGN

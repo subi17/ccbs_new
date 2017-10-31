@@ -74,7 +74,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Service Components "
     + (IF icServPac > "" THEN "of '" + icServPac + "'  " ELSE "") 
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}

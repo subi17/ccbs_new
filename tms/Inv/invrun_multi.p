@@ -84,7 +84,7 @@ FORM
       SKIP(3)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + " BILLING RUN " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + " BILLING RUN " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDefaultPeriod RETURNS LOGIC

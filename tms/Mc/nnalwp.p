@@ -95,7 +95,7 @@ skip(1)
 
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " CUSTOMER MAILING LIST " + string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   " " + Syst.CUICommon:ynimi + " CUSTOMER MAILING LIST " + string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 cdate2 = TODAY.
 cdate1 = 1/1/1995.       

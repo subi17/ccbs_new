@@ -63,7 +63,7 @@ FORM
    SKIP(6) 
    WITH WIDTH 80 ROW 1 SIDE-LABELS
     COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-       " IMPORT DD AUTHORIZATIONS "  + string(pvm,"99-99-99") + " "
+       " IMPORT DD AUTHORIZATIONS "  + string(TODAY,"99-99-99") + " "
     FRAME fStart.
 
 

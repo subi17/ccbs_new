@@ -41,7 +41,7 @@ HELP "Subscription Status, 0 for all" StatName SKIP
 SKIP(5)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " SUBSCRIPTION REPORT " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " SUBSCRIPTION REPORT " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME start.
 
 ASSIGN 

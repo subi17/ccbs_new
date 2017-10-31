@@ -293,7 +293,7 @@ form header
    ynimi "SUMMARY OF RETURN FILE" at 45 "Page" at 113
       sl format "ZZZZ9" skip
    icPaymFile AT 1 FORMAT "X(100)" 
-      string(pvm,"99-99-99") to 122 skip
+      string(TODAY,"99-99-99") to 122 skip
    fill ("=",122) format "x(122)" skip(1)
 
    "Date"           AT 1

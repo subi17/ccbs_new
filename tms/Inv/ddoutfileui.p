@@ -116,7 +116,7 @@ FORM
    SKIP
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + "  INVOICES TO CSB19  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  INVOICES TO CSB19  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 

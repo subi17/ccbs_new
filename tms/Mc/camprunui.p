@@ -74,7 +74,7 @@ FORM
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
         TITLE " " + Syst.CUICommon:ynimi + " CAMPAIGN RUN " +
-              STRING(pvm,"99-99-99") + " "
+              STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.

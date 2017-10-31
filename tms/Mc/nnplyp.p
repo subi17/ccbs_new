@@ -111,7 +111,7 @@ form
     PriceList.Memo     format "x(9)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
-    " PRICE LISTS " + string(pvm,"99-99-99") + " "
+    " PRICE LISTS " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form

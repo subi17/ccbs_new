@@ -52,14 +52,14 @@ help "Code of an External Customer Group (EMPTY = none)" SKIP
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
-   + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
    ynimi at 2 format "x(25)" "SALES STATISTICS" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
-   "SALESMAN / RESELLER"  at 40 string(pvm,"99-99-99") AT 107 SKIP
+   "SALESMAN / RESELLER"  at 40 string(TODAY,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)
    "SmCode"           AT 3
    "Salesman's name"  AT 11

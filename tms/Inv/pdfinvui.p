@@ -83,7 +83,7 @@ form
       FORMAT "Customer/User"
 
 WITH TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " PDF INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " PDF INVOICE PRINTOUT " + STRING(TODAY,"99-99-99") + " "
 side-labels COLOR value(Syst.CUICommon:cfc) ROW 1 centered OVERLAY FRAME rajat.
 
 form

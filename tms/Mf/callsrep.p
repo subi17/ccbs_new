@@ -27,7 +27,7 @@ WITH
   ROW 7 WIDTH 65
   NO-LABELS CENTERED OVERLAY COLOR VALUE(Syst.CUICommon:cfc)
   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "  Call specification for invoice or unbilled calls. " 
-  + STRING(pvm,"99-99-99") + " " FRAME main.
+  + STRING(TODAY,"99-99-99") + " " FRAME main.
 
 rajat:
 REPEAT WITH FRAME rajat:

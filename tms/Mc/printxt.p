@@ -263,7 +263,7 @@ FUNCTION fEPLPage RETURNS LOGICAL
           "0I"
           lcDateHead
           " "
-          STRING(pvm,"99.99.9999")
+          STRING(TODAY,"99.99.9999")
           MY-NL.
 
     END.
@@ -331,7 +331,7 @@ FUNCTION fLocalPage RETURNS LOGICAL
        (IF lcDateHead > ""
         THEN lcDateHead + "  "
         ELSE "") +
-       STRING(pvm,"99.99.9999") AT 45 FORMAT "X(25)"
+       STRING(TODAY,"99.99.9999") AT 45 FORMAT "X(25)"
        SKIP(1).
 
     liLine = 6.
@@ -2088,7 +2088,7 @@ IF NOT llErrors AND llEPLPrint THEN DO:
       "0I"
       lcDateHead
       " "
-      STRING(pvm,"99.99.9999")
+      STRING(TODAY,"99.99.9999")
       MY-NL.
 
    PUT STREAM eKirje UNFORMATTED

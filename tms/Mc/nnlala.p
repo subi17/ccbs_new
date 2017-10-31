@@ -40,7 +40,7 @@ form
    skip(8)
 WITH ROW 1 side-labels width 80
    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " SUMMARY OF UNPAID INVOICES " +
-   string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME frm.
+   string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME frm.
 
 form
    skip(1)

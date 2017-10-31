@@ -57,7 +57,7 @@ form
       FORMAT "Yes/No"
    SKIP
 WITH TITLE " " + Syst.CUICommon:ynimi +  " A/R CUSTOMER REPORT " + 
-           STRING(pvm,"99-99-99") + " "
+           STRING(TODAY,"99-99-99") + " "
    ROW 1 centered Size 80 by 19 NO-LABELS OVERLAY FRAME valinta.
 
 PAUSE 0.

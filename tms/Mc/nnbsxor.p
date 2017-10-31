@@ -79,7 +79,7 @@ help "Invoicing group's code, empty for all"  SKIP
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + Syst.CUICommon:ynimi + " XOR-SUMMARY OF PAYMENTS WITH ACCOUNTS " +
-   string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
@@ -139,7 +139,7 @@ task:
    "%FILE ID " 
    string(TransFile,"99999999")
    " CREATED "
-   string(pvm,"99.99.9999")
+   string(TODAY,"99.99.9999")
    " AT "
    string(time,"hh:mm:ss").
 
