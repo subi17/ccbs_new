@@ -71,7 +71,7 @@ DEF VAR krmin             AS DE NO-UNDO.
 def var aslanimi          as char format "x(22)" NO-UNDO.
 def var asranimi          as char format "x(22)" NO-UNDO.
 def var asrenimi          as char format "x(22)" NO-UNDO.
-def var mSyst.CUICommon:ynimi            as char format "x(12)" NO-UNDO.
+def var mynimi            as char format "x(12)" NO-UNDO.
 def var rsname            as char format "x(12)" NO-UNDO.
 def var plname            as char format "x(22)" NO-UNDO.
 def var igname            as char format "x(22)" NO-UNDO.
@@ -181,8 +181,8 @@ FOR
    FIND FIRST Salesman where
               Salesman.Brand    = Syst.CUICommon:gcBrand AND
               Salesman.Salesman = Customer.Salesman no-lock no-error.
-   IF AVAIL Salesman THEN mSyst.CUICommon:ynimi = Salesman.SmName.
-   else                   mSyst.CUICommon:ynimi = "! UNKNOWN !".
+   IF AVAIL Salesman THEN mynimi = Salesman.SmName.
+   else                   mynimi = "! UNKNOWN !".
 
    FIND FIRST Reseller where
               Reseller.Brand    = Syst.CUICommon:gcBrand AND
@@ -254,7 +254,7 @@ FOR
 
    /* basic data of a customer */
    DISPLAY STREAM tul
-     aslanimi asrenimi asranimi mSyst.CUICommon:ynimi rsname tot1 tot2
+     aslanimi asrenimi asranimi mynimi rsname tot1 tot2
      dkatnimi kaytalv plname igname Customer.Size Customer.ConnType
      Customer.CustNum Customer.OrgId
      Customer.SearchName Customer.CustName Customer.COName Customer.Contact

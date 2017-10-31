@@ -5,15 +5,9 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-def new shared var cfc as char format "x(24)".
-def new shared var ctc as char format "x(24)".
-def            var ccc as char format "x(24)".
-
 /* otsikoissa näkyvät */
-def new shared var Syst.CUICommon:ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99" init TODAY.
 DEF NEW shared VAR qupd    AS lo init TRUE.
-
 
 def new shared var katun   as char format "x(8)".
 
@@ -38,7 +32,6 @@ DEF NEW shared VAR helpkey AS CHAR NO-UNDO.
 DEF NEW shared VAR ginvno  AS i NO-UNDO.
 
 
-DEF NEW SHARED VAR Syst.CUICommon:gcAllBrand    AS LOG NO-UNDO.
 DEF NEW SHARED VAR ergo-kbd AS LO NO-UNDO.
 
 on f1 go.
@@ -57,14 +50,18 @@ status INPUT off.
 
 
 katun = "admin".  yvari = true. Syst.CUICommon:ynimi = "!!! TESTI !!!".
-Syst.CUICommon:gcAllBrand = TRUE .
+Syst.CUICommon:gcAllBrand = TRUE.
 Syst.CUICommon:gcBrand    = "1".
 
-
-update Syst.CUICommon:gcBrand label "Brand"
+DEFINE VARIABLE gcTempBrand AS CHARACTER NO-UNDO.
+gcTempBrand = Syst.CUICommon:gcBrand.
+update gcTempBrand label "Brand"
 with side-labels row 10 centered title " Default brand " frame tstfram.
 
 hide frame tstfram.
+
+Syst.CUICommon:gcBrand = gcTempBrand.
+
 /* set propath etc. */
 RUN Syst/testbr.p.
 

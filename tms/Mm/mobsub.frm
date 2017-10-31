@@ -58,7 +58,7 @@ lcInPortTime FORMAT "x(40)"
 "Salesman......:" AT 46 Mobsub.SalesMan FORMAT "x(15)"
 SKIP(1)
 WITH  OVERLAY ROW 1 centered SIDE-LABELS
-TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
  "  MOBILE SUBSCRIPTION  "
  + string(pvm,"99-99-99") + " "
  NO-LABELS 

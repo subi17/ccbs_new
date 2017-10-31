@@ -30,7 +30,7 @@ DEF INPUT PARAMETER exPaymFile  AS c                      NO-UNDO.
 DEF NEW shared STREAM excel.
 
 DEF VAR tab     AS c                                 NO-UNDO.
-DEF VAR mSyst.CUICommon:ynimi  AS c   NO-UNDO.
+DEF VAR mynimi  AS c   NO-UNDO.
 DEF VAR rsname  AS c   NO-UNDO.
 DEF VAR fake    AS DA  NO-UNDO EXTENT 4.
 DEF VAR pr-code AS c   NO-UNDO.

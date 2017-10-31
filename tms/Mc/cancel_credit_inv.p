@@ -19,7 +19,6 @@
 
 {Syst/commpaa.i}
 katun = "snet".
-Syst.CUICommon:gcBrand = "1".
 
 {Func/coinv.i}
 {Syst/eventval.i} 
@@ -60,10 +59,7 @@ def var xOk       as log  no-undo.
 /* ask both original invoice and credit invoice -> one way to be sure 
    that user knows what is going on */
 pause 0.
-update Syst.CUICommon:gcBrand 
-          label "Brand"
-          colon 15 skip
-       xDebInv 
+update xDebInv 
           label "Debit invoice" 
           format ">>>>>>>9"
           colon 15 skip
