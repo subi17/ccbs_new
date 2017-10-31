@@ -6,9 +6,6 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-
-DEF NEW SHARED VAR Syst.CUICommon:gcAllBrand    AS LOG NO-UNDO.
-
 /* otsikoissa näkyvät */
 def new shared var pvm     as Date format "99-99-99" init TODAY.
 DEF NEW shared VAR qupd    AS lo.

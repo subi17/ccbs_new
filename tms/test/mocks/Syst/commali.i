@@ -33,9 +33,6 @@ def new shared var helpkey AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrandVarDefined YES
 
-def new shared var Syst.CUICommon:gcBrand       like customer.brand NO-UNDO.
-def new shared var Syst.CUICommon:gcAllBrand    AS LOG    NO-UNDO.
-
 def new shared var ergo-kbd AS LO NO-UNDO.
 
 on f1 go.

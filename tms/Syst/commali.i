@@ -34,9 +34,6 @@ DEF shared VAR helpkey AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrandVarDefined YES
 
-DEF SHARED VAR Syst.CUICommon:gcBrand       like customer.brand NO-UNDO.
-DEF SHARED VAR Syst.CUICommon:gcAllBrand    AS LOG    NO-UNDO.
-
 DEF SHARED VAR ergo-kbd AS LO NO-UNDO.
 
 on f1 go.
