@@ -5,7 +5,7 @@
    Report error cases that were not changed after the run */
 
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 
 {Syst/eventval.i}

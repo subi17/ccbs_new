@@ -86,7 +86,7 @@ form /* seek  target */
 
 IF icType = "rule" THEN DO:
 FIND CoRule WHERE 
-     CoRule.Brand = gcBrand AND
+     CoRule.Brand = Syst.CUICommon:gcBrand AND
      CoRule.CoRuleId = iiKey NO-LOCK.
 ASSIGN 
    lcTitle = " COMM. TARGETS FOR: " +
@@ -382,11 +382,11 @@ PROCEDURE local-find-FIRST:
        CASE icType:
           WHEN "Rule" THEN
               FIND FIRST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND FIRST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -399,11 +399,11 @@ PROCEDURE local-find-LAST:
        CASE icType:
           WHEN "Rule" THEN
               FIND LAST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND LAST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -416,11 +416,11 @@ PROCEDURE local-find-NEXT:
        CASE icType:
           WHEN "Rule" THEN
               FIND NEXT CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND NEXT CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -433,11 +433,11 @@ PROCEDURE local-find-PREV:
        CASE icType:
           WHEN "Rule" THEN
               FIND PREV CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND PREV CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.CUICommon:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -468,13 +468,13 @@ PROCEDURE local-find-others.
    END. 
    WHEN "R" THEN DO:
       FIND FIRST Reseller WHERE 
-                 Reseller.Brand    = gcBrand AND
+                 Reseller.Brand    = Syst.CUICommon:gcBrand AND
                  Reseller.Reseller = CoTarg.CoTarg NO-LOCK NO-ERROR.
       IF AVAILABLE Reseller THEN lcTargName = Reseller.RsName.
    END.
    WHEN "S" THEN DO:
       FIND FIRST Salesman WHERE 
-                 Salesman.Brand    = gcBrand AND
+                 Salesman.Brand    = Syst.CUICommon:gcBrand AND
                  Salesman.Salesman = CoTarg.CoTarg 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN lcTargName = Salesman.SmName.
@@ -501,7 +501,7 @@ PROCEDURE local-find-others.
    lcHandled = Func.Common:mTS2HMS(COTarg.HandledTS).
       
    FIND CORule WHERE
-      CORule.Brand = gcBrand AND
+      CORule.Brand = Syst.CUICommon:gcBrand AND
       CORule.CORuleID = COTarg.CORuleId NO-LOCK NO-ERROR.
 
 END PROCEDURE.

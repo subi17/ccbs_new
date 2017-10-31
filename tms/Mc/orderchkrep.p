@@ -8,7 +8,7 @@ jl
 
 ASSIGN
    katun   = "cron"
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 DEF STREAM sLog.
 DEF VAR lcNPStatName AS CHAR NO-UNDO. 

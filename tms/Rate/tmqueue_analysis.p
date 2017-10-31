@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "Cron".
    
 {Func/cparam2.i}
@@ -119,7 +119,7 @@ FUNCTION fErrorLog RETURNS LOGIC
  
    /* save to db for reporting */
    CREATE ErrorLog.
-   ASSIGN ErrorLog.Brand     = gcBrand
+   ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
           ErrorLog.ActionID  = "TMQUEUE"
           ErrorLog.TableName = "Customer"
           ErrorLog.KeyValue  = STRING(iiCustnum)
@@ -606,7 +606,7 @@ PROCEDURE pAnalyseQueueRow:
                      LEAVE FieldCheck.
                   END.
 
-                  lcCountry = fDestCountry(gcBrand,
+                  lcCountry = fDestCountry(Syst.CUICommon:gcBrand,
                                            TMQueue.SpoCMT,
                                            TMQueue.DateSt,
                                            TMQueue.EventId,
@@ -895,7 +895,7 @@ PROCEDURE pUpdateTempTables:
  
    GetRules:
    FOR EACH TMRule NO-LOCK WHERE
-            TMRule.Brand     = gcBrand AND
+            TMRule.Brand     = Syst.CUICommon:gcBrand AND
             TMRule.FromDate <= TODAY   AND
             TMRule.ToDate   >= TODAY:
             
@@ -1031,7 +1031,7 @@ PROCEDURE pUpdateTempTables:
    IF ldDone > 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Analysis"  
          ActionLog.KeyValue     = STRING(TODAY,"99.99.99") 
          ActionLog.ActionID     = "TMQUEUE"

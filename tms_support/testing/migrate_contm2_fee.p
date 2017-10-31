@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
@@ -15,10 +15,10 @@ OUTPUT TO "/apps/yoigo/tms_support/testing/contm2_fee_change.txt" append.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = gcBrand AND
+          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
           DayCampaign.DCEvent = "CONTM2" NO-LOCK,
     EACH DCCLI WHERE
-         DCCLI.Brand = gcBrand AND
+         DCCLI.Brand = Syst.CUICommon:gcBrand AND
          DCCLI.DCEvent = "CONTM2" AND
          DCCLI.ValidTo >= ldaDate NO-LOCK,
    FIRST MobSub WHERE
@@ -30,7 +30,7 @@ FOR FIRST DayCampaign WHERE
    STATUS DEFAULT STRING(licount).
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand   AND 
+            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
             FixedFee.CalcObj   = DCCLI.DCEvent:

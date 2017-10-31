@@ -74,7 +74,7 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
 katun = pcUserName.
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fixedfee.i}
 {Func/fcounter.i}
 
@@ -82,7 +82,7 @@ gcbrand = "1".
 
  /* check FATGroup */
  FIND FatGroup WHERE
-      FatGroup.Brand = gcBrand AND
+      FatGroup.Brand = Syst.CUICommon:gcBrand AND
       FatGroup.FtGrp = lcFatGroup  NO-LOCK NO-ERROR.
  IF NOT AVAIL FatGroup THEN DO:
     RETURN appl_err("Unknown FAT Group").
@@ -97,7 +97,7 @@ END.
                 ldTS1,
                 ldTS2). 
  FOR EACH Counter NO-LOCK WHERE 
-          Counter.Brand = gcBrand AND
+          Counter.Brand = Syst.CUICommon:gcBrand AND
           Counter.HostTable = "MobSub" AND
           Counter.KeyValue = STRING(MobSub.MsSeq) AND
           Counter.CounterType = liCounterType AND

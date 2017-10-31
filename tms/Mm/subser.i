@@ -12,7 +12,7 @@ INPUT iiNewSSStat AS INTEGER,
 OUTPUT ocError AS CHARACTER):
   
    FIND FIRST ServCom where 
-      ServCom.Brand   = gcBrand    AND 
+      ServCom.Brand   = Syst.CUICommon:gcBrand    AND 
       ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
    
    /* 1 */

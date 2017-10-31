@@ -39,7 +39,7 @@ FORM
       FORMAT "Production/Test"
    SKIP(7)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  RUN FUNCTION QUEUE " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  RUN FUNCTION QUEUE " + STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDispFuncRunQueue RETURNS LOGIC

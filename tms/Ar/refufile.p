@@ -103,7 +103,7 @@ END.
 FOR EACH ttPaym:
 
    FIND Payment WHERE Payment.Voucher = ttPaym.Voucher EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAILABLE Payment OR Payment.Brand NE gcBrand THEN DO:
+   IF NOT AVAILABLE Payment OR Payment.Brand NE Syst.CUICommon:gcBrand THEN DO:
       ocInfo = "Payment " + STRING(ttPaym.Voucher) + " missing".
       RETURN.
    END.

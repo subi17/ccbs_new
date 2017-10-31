@@ -35,7 +35,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  COLLECTION ACTIONS  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  COLLECTION ACTIONS  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

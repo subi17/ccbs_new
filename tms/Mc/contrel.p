@@ -122,7 +122,7 @@ form
    skip(5)                              
 
    with row 1 side-labels width 80
-        title " " + ynimi + " CONTRACT REPORT " +
+        title " " + Syst.CUICommon:ynimi + " CONTRACT REPORT " +
         string(pvm,"99-99-99") + " "
         frame valinta.
 
@@ -138,19 +138,19 @@ ASSIGN ldtToDate[1]   = DATE(MONTH(TODAY),1,YEAR(TODAY))
        liContrType[2] = 2.
 
 FIND LAST InvGroup NO-LOCK WHERE
-          InvGroup.Brand = gcBrand NO-ERROR.
+          InvGroup.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
 
 FIND LAST Customer NO-LOCK USE-INDEX CustNum WHERE
-          Customer.Brand = gcBrand NO-ERROR.
+          Customer.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE Customer THEN ASSIGN liCustNum[2] = Customer.CustNum.
 
 FIND LAST Salesman NO-LOCK WHERE
-          Salesman.Brand = gcBrand NO-ERROR.
+          Salesman.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE Salesman THEN lcSalesman[2] = Salesman.Salesman.
 
 FIND LAST Reseller NO-LOCK WHERE
-          Reseller.Brand = gcBrand NO-ERROR.
+          Reseller.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE Reseller THEN lcReseller[2] = Reseller.Reseller.
 
 assign ufkey = false

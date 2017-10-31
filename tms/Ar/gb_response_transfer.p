@@ -8,7 +8,7 @@ DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF STREAM sFile.
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 fInitGBParameters().
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcGBSpoolDir).

@@ -74,7 +74,7 @@ form
    "         unpaid invoices according to given criteria:"    skip
    skip(15)
    with row 1 side-labels width 80
-        title color value(Syst.CUICommon:ctc) " " + ynimi + " AGE ANALYSIS " +
+        title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " AGE ANALYSIS " +
         string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame valinta.
 
@@ -171,7 +171,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                   end.
                   else do:
                      find invgroup where 
-                          InvGroup.Brand    = gcBrand AND
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                           invgroup.InvGroup = InvGroup
                      no-lock no-error.
                      if not avail invgroup then do:

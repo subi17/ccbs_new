@@ -95,7 +95,7 @@ skip(1)
 
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " CUSTOMER MAILING LIST " + string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   " " + Syst.CUICommon:ynimi + " CUSTOMER MAILING LIST " + string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 cdate2 = TODAY.
 cdate1 = 1/1/1995.       
@@ -136,7 +136,7 @@ repeat WITH FRAME start:
             if input frame start CustGroup = "" then disp "ALL" @ CGName.
             ELSE DO:
                FIND CustGroup where 
-                    CustGroup.Brand     = gcBrand AND
+                    CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                     CustGroup.CustGroup = INPUT CustGroup
                no-lock no-error.
                IF NOT AVAIL CustGroup THEN DO:
@@ -152,7 +152,7 @@ repeat WITH FRAME start:
             if input frame start InvGroup = "" then disp "ALL" @ IGName.
             ELSE DO:
                FIND InvGroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup = INPUT InvGroup
                no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -169,7 +169,7 @@ repeat WITH FRAME start:
             if input frame start Salesman = "" then disp "ALL" @ IGName.
             ELSE DO:
                FIND Salesman where 
-                    Salesman.Brand    = gcBrand AND
+                    Salesman.Brand    = Syst.CUICommon:gcBrand AND
                     Salesman.Salesman = INPUT Salesman
                no-lock no-error.
                IF NOT AVAIL Salesman THEN DO:
@@ -185,7 +185,7 @@ repeat WITH FRAME start:
             if input frame start Category = "" then disp "ALL" @ CatName.
             ELSE DO:
                FIND CustCat where 
-                    CustCat.Brand    = gcBrand AND
+                    CustCat.Brand    = Syst.CUICommon:gcBrand AND
                     CustCat.Category = INPUT FRAME start Category
                no-lock no-error.
                IF NOT AVAIL CustCat THEN DO:
@@ -250,7 +250,7 @@ task:
    END.
 
    FOR EACH Customer no-lock where 
-            Customer.Brand = gcBrand AND 
+            Customer.Brand = Syst.CUICommon:gcBrand AND 
             lookup(Customer.Size,szlist) 
             > 0   AND 
            (if Salesman ne "" THEN Customer.Salesman = Salesman ELSE TRUE)  AND

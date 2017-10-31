@@ -46,7 +46,7 @@ DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
    assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
    RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
-   FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
+   FIND FIRST CustLetter WHERE CustLetter.Brand = Syst.CUICommon:gcBrand
       exclusive-lock no-error.
    IF NOT AVAIL CustLetter THEN 
    DO:
@@ -56,7 +56,7 @@ DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
       END.
       new_custlet = TRUE.
       CREATE CustLetter.
-      CustLetter.Brand = gcBrand.
+      CustLetter.Brand = Syst.CUICommon:gcBrand.
    END.
 
    IF NOT new_custlet AND

@@ -164,7 +164,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  MOBILE SUBSCRIPTION  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -690,10 +690,10 @@ BROWSE:
            IF MsSeq > 0 THEN 
               FIND SearchMobsub WHERE 
                    SearchMobsub.MsSeq = liMsSeq AND
-                   SearchMobsub.brand = gcBrand NO-LOCK NO-ERROR.
+                   SearchMobsub.brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
            ELSE DO:
               FIND FIRST SearchMobsub WHERE 
-                         SearchMobsub.Brand   = gcBrand AND
+                         SearchMobsub.Brand   = Syst.CUICommon:gcBrand AND
                          SearchMobsub.CustNum = liCustNum NO-LOCK NO-ERROR.
 
               IF NOT AVAIL SearchMobsub THEN DO:
@@ -724,7 +724,7 @@ BROWSE:
 
        IF lcFixedNumber  > ""  THEN DO:
           FOR FIRST SearchMobsub WHERE
-                    SearchMobsub.Brand = gcBrand AND
+                    SearchMobsub.Brand = Syst.CUICommon:gcBrand AND
                     SearchMobsub.FixedNumber = lcFixedNumber NO-LOCK.
           END.
 
@@ -1034,7 +1034,7 @@ PROCEDURE local-find-others.
    DEF BUFFER bDSSTermMobSub FOR TermMobSub.
       
    IF CAN-FIND(FIRST memo WHERE 
-                     Memo.Brand     = gcBrand                AND
+                     Memo.Brand     = Syst.CUICommon:gcBrand                AND
                      Memo.HostTable = "MobSub"               AND
                      Memo.KeyValue  = STRING(MobSub.MsSeq)   AND
                     (Memo.MemoText NE "" OR 
@@ -1079,7 +1079,7 @@ PROCEDURE local-find-others.
          lcBillTarget = STRING(Mobsub.Billtarget).
       
       FIND FIRST sim WHERE 
-                 SIM.Brand  = gcBrand AND 
+                 SIM.Brand  = Syst.CUICommon:gcBrand AND 
                  Sim.Icc = Mobsub.ICC
       NO-LOCK NO-ERROR.
               
@@ -1092,11 +1092,11 @@ PROCEDURE local-find-others.
       /* SalesMan */ 
 
       FIND FIRST Salesman WHERE 
-                 SalesMan.Brand    = gcBrand AND 
+                 SalesMan.Brand    = Syst.CUICommon:gcBrand AND 
                  Salesman.Salesman = Mobsub.Salesman NO-LOCK NO-ERROR.
 
       FIND FIRST Reseller WHERE 
-                 Reseller.Brand    = gcBrand AND 
+                 Reseller.Brand    = Syst.CUICommon:gcBrand AND 
                  Reseller.Reseller = Mobsub.Reseller NO-LOCK NO-ERROR.
 
       /* Status */ 
@@ -1185,7 +1185,7 @@ PROCEDURE local-find-others.
       liMultiSIMType = (IF Mobsub.MultiSimType = 1 THEN 2 ELSE 1).
 
       FIND FIRST SearchMobsub NO-LOCK WHERE
-                 SearchMobsub.Brand = gcBrand AND
+                 SearchMobsub.Brand = Syst.CUICommon:gcBrand AND
                  SearchMobsub.MultiSimID = MobSub.MultiSimID AND
                  SearchMobsub.MultiSimType = liMultiSIMType NO-ERROR.
 
@@ -1307,7 +1307,7 @@ PROCEDURE local-UPDATE-record.
                IF INPUT Mobsub.Reseller NE "" THEN DO:
                
                   FIND FIRST Reseller WHERE
-                     Reseller.Brand = gcBrand AND
+                     Reseller.Brand = Syst.CUICommon:gcBrand AND
                      Reseller.Reseller = INPUT Mobsub.Reseller 
                   NO-LOCK NO-ERROR.
 
@@ -1326,7 +1326,7 @@ PROCEDURE local-UPDATE-record.
                IF LOOKUP(INPUT Mobsub.Salesman,"WEB,YOIGO,GIFT") = 0 THEN DO:
                   
                   FIND FIRST Salesman WHERE
-                     Salesman.Brand = gcBrand AND
+                     Salesman.Brand = Syst.CUICommon:gcBrand AND
                      Salesman.Salesman = INPUT Mobsub.Salesman
                   NO-LOCK NO-ERROR.
 

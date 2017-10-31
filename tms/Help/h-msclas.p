@@ -39,7 +39,7 @@ MAIN:
 repeat:
 
    find first MSClass WHERE 
-              MSClass.Brand = gcBrand no-lock no-error.
+              MSClass.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available MSClass then do:
       must-print = false.
       must-add = true.
@@ -71,7 +71,7 @@ print-line:
             rtab[frame-line] = recid(MSClass).
             down with frame sel.
             find next MSClass WHERE 
-             MSClass.Brand = gcBrand  no-lock no-error.
+             MSClass.Brand = Syst.CUICommon:gcBrand  no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -102,7 +102,7 @@ BROWSE:
             if frame-line = 1 then do:
                find MSClass where recid(MSClass) = rtab[frame-line] no-lock.
                find prev MSClass WHERE 
-                MSClass.Brand = gcBrand  no-lock no-error.
+                MSClass.Brand = Syst.CUICommon:gcBrand  no-lock no-error.
                if not available MSClass then do:
                   bell.
                   message "You are on 1st row !".              
@@ -128,7 +128,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find MSClass where recid(MSClass) = rtab[frame-line] no-lock .
                find next MSClass WHERE 
-                MSClass.Brand = gcBrand no-lock no-error.
+                MSClass.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available MSClass then do:
                   bell.
                   message "You are on last row !".
@@ -154,12 +154,12 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find MSClass where recid(MSClass) = memory no-lock no-error.
             find prev MSClass WHERE 
-             MSClass.Brand = gcBrand  no-lock no-error.
+             MSClass.Brand = Syst.CUICommon:gcBrand  no-lock no-error.
             if available MSClass then do:
 
                do i = 1 to (frame-down - 1):
                   find prev MSClass WHERE 
-                   MSClass.Brand = gcBrand  no-lock no-error.
+                   MSClass.Brand = Syst.CUICommon:gcBrand  no-lock no-error.
                   if available MSClass then memory = recid(MSClass).
                   else i = frame-down.
                end.
@@ -221,7 +221,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first MSClass WHERE 
-            MSClass.Brand = gcBrand  no-lock.
+            MSClass.Brand = Syst.CUICommon:gcBrand  no-lock.
            memory = recid(MSClass).
            must-print = true.
            next LOOP.
@@ -230,7 +230,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last MSClass WHERE 
-            MSClass.Brand = gcBrand  no-lock.
+            MSClass.Brand = Syst.CUICommon:gcBrand  no-lock.
            memory = recid(MSClass).
            must-print = true.
            next LOOP.

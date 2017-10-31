@@ -6,7 +6,7 @@ def stream sout.
 output stream sout to contrd1_rerate.log.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "anttis".
 
 DEFINE VARIABLE lcline AS CHARACTER NO-UNDO. 

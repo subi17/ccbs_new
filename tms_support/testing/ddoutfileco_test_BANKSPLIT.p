@@ -127,7 +127,7 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
        /* Check bank code available in BankAccount data, AND assign
        parent bank code value to Invoice bank code field */
        FIND FIRST BankAccount NO-LOCK WHERE
-                  BankAccount.Brand EQ gcBrand AND
+                  BankAccount.Brand EQ Syst.CUICommon:gcBrand AND
            LOOKUP(ttInvoice.BankCode,BankAccount.BankCodes) > 0 NO-ERROR.
 
        IF AVAIL BankAccount THEN DO:
@@ -164,7 +164,7 @@ END.
 
 IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.CUICommon:gcBrand AND
           Invoice.ExtInvID = icInvID1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -176,7 +176,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
@@ -200,7 +200,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand      AND
+         Invoice.Brand  = Syst.CUICommon:gcBrand      AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
          Invoice.CustNum >= iiCustNum1 AND
@@ -376,7 +376,7 @@ DO TRANS:
 
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 

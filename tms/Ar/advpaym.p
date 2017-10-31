@@ -42,7 +42,7 @@ DEF VAR lcTitle       AS CHAR NO-UNDO.
 
 liAPAccNum = fCParamI("AdvPaymAcc").
 FIND Account WHERE 
-     Account.Brand  = gcBrand AND
+     Account.Brand  = Syst.CUICommon:gcBrand AND
      Account.AccNum = liAPAccNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Account THEN DO:
    RETURN "Unknown AP account".
@@ -53,7 +53,7 @@ IF Account.AccType NE 19 THEN DO:
 END.
 
 IF NOT CAN-FIND(Account WHERE 
-                Account.Brand  = gcBrand AND
+                Account.Brand  = Syst.CUICommon:gcBrand AND
                 Account.AccNum = iiFromAcc)
 THEN DO:
    RETURN "Unknown transfer account".
@@ -78,7 +78,7 @@ DO TRANS:
 
    CREATE Payment.
    /* payment */
-   ASSIGN  Payment.Brand       = gcBrand
+   ASSIGN  Payment.Brand       = Syst.CUICommon:gcBrand
            Payment.Voucher     = oiVoucher
            Payment.CustNum     = Customer.CustNum
            Payment.InvNum      = 0
@@ -113,7 +113,7 @@ DO TRANS:
    DO liCount = 1 TO 4:
       IF Payment.AccNum[liCount] = 0 THEN NEXT. 
       FIND Account where 
-           Account.Brand  = gcBrand AND 
+           Account.Brand  = Syst.CUICommon:gcBrand AND 
            Account.AccNum = Payment.AccNum[liCount]
       NO-LOCK NO-ERROR.
       IF AVAILABLE Account THEN 
@@ -129,7 +129,7 @@ DO TRANS:
 
       /* separate Memo */
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
              Memo.HostTable = "Payment"
              Memo.KeyValue  = STRING(Payment.Voucher)
              Memo.CustNum   = Payment.CustNum

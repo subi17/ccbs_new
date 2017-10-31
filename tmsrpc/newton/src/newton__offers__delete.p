@@ -9,7 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
@@ -49,13 +49,13 @@ IF Offer.FromDate <= TODAY THEN
 DO TRANSACTION:
 
    FOR EACH OfferItem WHERE
-            OfferItem.Brand = gcBrand AND
+            OfferItem.Brand = Syst.CUICommon:gcBrand AND
             OfferItem.Offer = Offer.Offer EXCLUSIVE-LOCK:
       DELETE OfferItem.
    END.
    
    FOR EACH OfferCriteria WHERE
-            OfferCriteria.Brand = gcBrand AND
+            OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
             OfferCriteria.Offer = Offer.Offer EXCLUSIVE-LOCK:
       DELETE OfferCriteria.
    END.

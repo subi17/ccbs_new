@@ -83,7 +83,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
          TMSCodes.TableName = "PrepaidRequest" AND
          TMSCodes.FieldName = "Source",
     EACH PrepaidRequest NO-LOCK WHERE
-         PrepaidRequest.Brand   = gcBrand AND
+         PrepaidRequest.Brand   = Syst.CUICommon:gcBrand AND
          PrepaidRequest.Source  = TMSCodes.CodeValue AND
          PrePaidRequest.TSRequest > ldFromStamp AND
          PrePaidRequest.TSRequest <= ldCurrent

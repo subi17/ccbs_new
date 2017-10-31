@@ -44,7 +44,7 @@ FORM
         HELP "Events of one rule, or all = 0 (empty)"
         VALIDATE(INPUT liCoRuleID = 0 OR 
                  CAN-FIND(CoRule WHERE 
-                          CoRule.Brand    = gcBrand AND
+                          CoRule.Brand    = Syst.CUICommon:gcBrand AND
                           CORule.CoRuleID = INPUT liCoRuleID),
                  "Unknown rule")
         FORMAT ">>>>>>>>"
@@ -114,7 +114,7 @@ FORM
    SKIP(2)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " COMMISSION REPORT " +
+        TITLE " " + Syst.CUICommon:ynimi + " COMMISSION REPORT " +
         STRING(pvm,"99-99-99") + " "
         FRAME valinta.
 
@@ -122,7 +122,7 @@ VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
 FOR EACH Reseller NO-LOCK WHERE 
-         Reseller.Brand = gcBrand AND
+         Reseller.Brand = Syst.CUICommon:gcBrand AND
          Reseller.Reseller BEGINS "AC"
 BY Reseller.Reseller:
 
@@ -130,7 +130,7 @@ BY Reseller.Reseller:
     lcReseller[2] = Reseller.Reseller.
     
     FIND FIRST Salesman NO-LOCK WHERE
-               Salesman.Brand    = gcBrand AND
+               Salesman.Brand    = Syst.CUICommon:gcBrand AND
                Salesman.Reseller = Reseller.Reseller AND
                Salesman.RsLevel  = 1 NO-ERROR.
     IF AVAILABLE Salesman THEN DO:
@@ -141,7 +141,7 @@ BY Reseller.Reseller:
     END. 
        
     FIND LAST Salesman NO-LOCK WHERE
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.CUICommon:gcBrand AND
               Salesman.Reseller = Reseller.Reseller AND
               Salesman.RsLevel  = 1 NO-ERROR.
     IF AVAILABLE Salesman THEN 

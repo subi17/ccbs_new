@@ -233,7 +233,7 @@ BY FATime.FATNum DESC:
 
    /* transferred rows */
    FOR EACH bFatime USE-INDEX OrigFat WHERE
-            bFatime.Brand   = gcBrand        AND
+            bFatime.Brand   = Syst.CUICommon:gcBrand        AND
             bFatime.OrigFat = FATime.FatNum  AND
             bFATime.TransQty = 0             AND 
             (bFATime.InvNum = 0 OR
@@ -285,7 +285,7 @@ FOR EACH SubInvoice OF Invoice NO-LOCK:
    END.
  
    FOR FIRST ActionLog EXCLUSIVE-LOCK WHERE
-             ActionLog.Brand        = gcBrand               AND
+             ActionLog.Brand        = Syst.CUICommon:gcBrand               AND
              ActionLog.TableName    = "MobSub"              AND
              ActionLog.KeyValue     = STRING(SubInvoice.MsSeq) AND
              ActionLog.ActionID     = "MINCONS"             AND

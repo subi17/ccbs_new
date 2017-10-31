@@ -22,7 +22,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
@@ -87,7 +87,7 @@ FUNCTION fDumpArecRejections RETURNS LOGICAL
                     MNPProcess.CreatedTS <= ldeEventTS     NO-ERROR.
 
          FIND FIRST Order NO-LOCK WHERE 
-                    Order.Brand   = gcBrand   AND 
+                    Order.Brand   = Syst.CUICommon:gcBrand   AND 
                     Order.OrderID = liOrderID NO-ERROR.
 
          IF NOT AVAIL MNPProcess OR 

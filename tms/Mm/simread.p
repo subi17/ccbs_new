@@ -118,14 +118,14 @@ END.
 
 /* read the description record from default */
 FIND IFiSpx where 
-     IFiSpx.Brand   = gcBrand   AND
+     IFiSpx.Brand   = Syst.CUICommon:gcBrand   AND
      IFiSpx.ManCode = "GEMALTO" AND
      IFiSpx.Version = "00001" NO-LOCK.
 
 PAUSE 0.
 
 FIND Stock WHERE 
-     Stock.Brand = gcBrand AND 
+     Stock.Brand = Syst.CUICommon:gcBrand AND 
      Stock.Stock = Stock
 no-lock no-error.
 
@@ -229,7 +229,7 @@ DO i = 1 TO IFiSpx.Hrowd:
                                          SUBSTRING(sTPValue,7,2)).
          /* Find actual record */
          FIND FIRST IFiSpx WHERE
-                    IFiSpx.Brand   = gcBrand   AND
+                    IFiSpx.Brand   = Syst.CUICommon:gcBrand   AND
                     IFiSpx.ManCode = lcManCode AND
                     IFiSpx.SimArt  = lcSimArt NO-LOCK NO-ERROR.
          IF NOT AVAIL IFiSpx THEN llSerNbFound = FALSE.
@@ -275,7 +275,7 @@ REPEAT WITH FRAME Main:
             IF FRAME-FIELD = "Stock" THEN 
             DO:
                FIND Stock WHERE 
-                    Stock.Brand = gcBrand AND 
+                    Stock.Brand = Syst.CUICommon:gcBrand AND 
                     Stock.Stock =
                INPUT FRAME main Stock NO-LOCK NO-ERROR.
                IF NOT AVAIL Stock THEN 
@@ -547,7 +547,7 @@ REPEAT WITH FRAME Main:
          *************************************/
          tot = tot + 1.
          FIND SIM where 
-            Sim.Brand = gcBrand AND 
+            Sim.Brand = Syst.CUICommon:gcBrand AND 
             SIM.ICC   = ICC
             no-lock no-error.
          
@@ -574,7 +574,7 @@ REPEAT WITH FRAME Main:
             ASSIGN
             SimBatch.SimBatch = NEXT-VALUE(simbatch)
             SimBatch.ManCode = IFiSpx.ManCode
-            SimBatch.Brand  = gcBrand 
+            SimBatch.Brand  = Syst.CUICommon:gcBrand 
             SimBatch.SimArt = IFiSpx.SimArt
             SimBatch.DelDate = TODAY
             SimBatch.TpKey  = TpKey
@@ -589,7 +589,7 @@ REPEAT WITH FRAME Main:
 
          CREATE SIM.
          ASSIGN
-            SIM.Brand       = gcBrand 
+            SIM.Brand       = Syst.CUICommon:gcBrand 
             SIM.SimBatch    = isimbatch
             SIM.ManCode     = IFiSpx.ManCode
             SIM.ICC         = icc
@@ -622,7 +622,7 @@ REPEAT WITH FRAME Main:
          ****************************/
 
          FIND StoBal WHERE 
-            Stobal.Brand  = gcBrand AND 
+            Stobal.Brand  = Syst.CUICommon:gcBrand AND 
             StoBal.SimArt = IFiSpx.SimArt  AND
             StoBal.StoBal = Stock
             Exclusive-lock No-error.
@@ -630,7 +630,7 @@ REPEAT WITH FRAME Main:
          DO:
             CREATE StoBal.
             ASSIGN
-               Stobal.Brand  = gcBrand 
+               Stobal.Brand  = Syst.CUICommon:gcBrand 
                StoBal.SimArt = IFiSpx.SimArt
                StoBal.StoBal = Stock.
          END.
@@ -644,7 +644,7 @@ REPEAT WITH FRAME Main:
          ***********************************/
 
          FIND SimArt WHERE 
-            SimArt.Brand  = gcBrand AND 
+            SimArt.Brand  = Syst.CUICommon:gcBrand AND 
             SimArt.SimArt = IFiSpx.SimArt
             EXCLUSIVE-LOCK.
          ASSIGN SimArt.Balance   = SimArt.Balance +  1
@@ -665,7 +665,7 @@ REPEAT WITH FRAME Main:
 
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.CUICommon:gcBrand   
             ActionLog.TableName    = "SIMBatch"  
             ActionLog.KeyValue     = STRING(isimBatch)
             ActionLog.UserCode     = katun
@@ -766,7 +766,7 @@ PROCEDURE HandleUniqueSIMFileName:
    FindUniqueFileName:
    REPEAT:
       IF NOT CAN-FIND(SimBatch WHERE 
-                  SimBatch.Brand = gcBrand AND 
+                  SimBatch.Brand = Syst.CUICommon:gcBrand AND 
                   SimBatch.ManCode = IFiSpx.ManCode AND
                   SimBatch.FileName = pcSIMFileNamePart) 
          AND SEARCH(cFullFilePath) = ? 

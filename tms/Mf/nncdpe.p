@@ -52,7 +52,7 @@ help "Name of File where summary PaymFile is to be written"
 skip(4)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " CALL SUMMARY BY BillCode " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " CALL SUMMARY BY BillCode " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 
@@ -96,7 +96,7 @@ toimi:
    exPaymFile = exdir + "/" + exName.
    OUTPUT STREAM excel TO value(exPaymFile).
 
-   PUT STREAM excel UNFORMATTED ynimi.  RUN Syst/uexskip.p(2).
+   PUT STREAM excel UNFORMATTED Syst.CUICommon:ynimi.  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED 
      "SUMMARY OF ALL Calls BY DATE/PRODUCT GROUP/PRODUCT".  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
@@ -111,7 +111,7 @@ toimi:
             FixCDR.Date <= exdate2,
 
        FIRST BillItem no-lock where
-             BillItem.Brand    = gcBrand AND
+             BillItem.Brand    = Syst.CUICommon:gcBrand AND
              BillItem.BillCode = FixCDR.BillCode
 
    BREAK

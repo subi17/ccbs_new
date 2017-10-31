@@ -125,7 +125,7 @@ FUNCTION fGetRequestID RETURNS INTEGER:
       liNextID = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liNextID)
       THEN LEAVE.
    END.
@@ -631,7 +631,7 @@ PROCEDURE pMinusAdjustment:
    llPending = FALSE.
    
    FOR EACH PrepaidRequest NO-LOCK WHERE
-            PrepaidRequest.Brand    = gcBrand AND
+            PrepaidRequest.Brand    = Syst.CUICommon:gcBrand AND
             PrepaidRequest.MsSeq    = MsBalance.MsSeq AND
             PrepaidRequest.PPStatus = 0:
       llPending = TRUE.

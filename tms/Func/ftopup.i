@@ -34,14 +34,14 @@ FUNCTION fCreateTopUpRequest RETURNS INTEGER
       liReturn = NEXT-VALUE(PrePaidReq).
       
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liReturn)
       THEN LEAVE.
    END.
    
    CREATE PrepaidRequest.
    ASSIGN
-      PrepaidRequest.Brand       = gcBrand
+      PrepaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrepaidRequest.UserCode    = katun
       PrepaidRequest.PPRequest   = liReturn
       PrePaidRequest.PPReqPrefix = icPrefix

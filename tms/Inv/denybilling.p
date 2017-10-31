@@ -237,7 +237,7 @@ REPEAT:
       
       CREATE Limit.
       ASSIGN 
-         Limit.Brand     = gcBrand
+         Limit.Brand     = Syst.CUICommon:gcBrand
          Limit.MsSeq     = MobSub.MsSeq   
          Limit.LimitType = 3               
          Limit.TMRuleSeq = 0               

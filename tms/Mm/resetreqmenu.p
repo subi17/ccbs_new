@@ -266,7 +266,7 @@ DO WHILE TRUE:
             DEFINE VARIABLE msisdn-recid AS RECID NO-UNDO.
             
             FIND FIRST MSISDN-back NO-LOCK WHERE
-               MSISDN-back.Brand = gcBrand AND
+               MSISDN-back.Brand = Syst.CUICommon:gcBrand AND
                MSISDN-back.CLI   = MsRequest.ReqCParam2 USE-INDEX CLI.
             IF MSISDN-back.StatusCode = 27 THEN DO:
                msisdn-recid = recid(msisdn-back).

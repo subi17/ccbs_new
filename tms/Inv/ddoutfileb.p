@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
+ASSIGN Syst.CUICommon:gcBrand = "1" 
        katun   = "csb19b".
        
 {Func/cparam2.i}

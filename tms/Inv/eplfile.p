@@ -443,12 +443,12 @@ THEN iLetterClass = 2.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN.
 
 /* header texts to temp-table */
 FOR EACH HdrText NO-LOCK WHERE
-         HdrText.Brand = gcBrand:
+         HdrText.Brand = Syst.CUICommon:gcBrand:
       CREATE ttHead.
       ASSIGN ttHead.Lang = HdrText.te-kie
              ttHead.Nbr  = HdrText.te-nro
@@ -1052,7 +1052,7 @@ BY wInvoice.InvNum:
       /* log from print */
       DO FOR ITSendLog TRANS:
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                 ITSendLog.TxtType    = IF iPrintType = 1 THEN 4 ELSE 3
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = Invoice.CustNum

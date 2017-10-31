@@ -139,7 +139,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE File "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " INVOICE File "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -480,7 +480,7 @@ repeat WITH FRAME sel:
            lcExtInvID = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   lcExtInvID WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
 
@@ -509,7 +509,7 @@ repeat WITH FRAME sel:
            InvDate = ?.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr3.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   InvDate WITH FRAME hayr3.
            HIDE FRAME hayr3 no-pause.
 
@@ -536,7 +536,7 @@ repeat WITH FRAME sel:
            hakuCustNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hakie.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   hakuCustNum WITH FRAME hakie.
            HIDE FRAME hakie no-pause.
 
@@ -561,7 +561,7 @@ repeat WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            liPaymState = 0.
            DISPLAY lcBrand WITH FRAME hayr2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liPaymState
                   hakunetto 
                   WITH FRAME hayr2.

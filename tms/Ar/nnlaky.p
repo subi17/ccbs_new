@@ -82,7 +82,7 @@ form
 
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN 
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-    " " + ynimi + " ALL INVOICES "
+    " " + Syst.CUICommon:ynimi + " ALL INVOICES "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 {Func/brand.i}
@@ -373,7 +373,7 @@ BROWSE:
            liInvNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liInvNum WITH FRAME F1.
            HIDE FRAME F1 no-pause.
 
@@ -401,7 +401,7 @@ BROWSE:
            liCustNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liCustNum WITH FRAME F2.
            HIDE FRAME F2 no-pause.
 

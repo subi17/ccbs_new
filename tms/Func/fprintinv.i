@@ -145,7 +145,7 @@ ASSIGN lcRemFee      = TRIM(STRING(fCParamDE("DefRemindFee"),">9.99")) + " EUR"
 
 /* get bankaccounts for sheets into temp-table */
 FOR EACH BankAccount NO-LOCK WHERE
-         BankAccount.Brand = gcBrand:
+         BankAccount.Brand = Syst.CUICommon:gcBrand:
 
    DO liCount = 1 TO NUM-ENTRIES(BankAccount.InvForm):
       CREATE ttBankAcc.
@@ -190,7 +190,7 @@ FUNCTION fSetHeaders RETURNS LOGICAL
                 Order.OrderID = INTEGER(SingleFee.KeyValue):
                 
          FOR FIRST OrderCustomer NO-LOCK WHERE
-                   OrderCustomer.Brand   = gcBrand AND
+                   OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                    OrderCustomer.OrderID = Order.OrderID AND
                    OrderCustomer.RowType = 1:
 
@@ -209,7 +209,7 @@ FUNCTION fSetHeaders RETURNS LOGICAL
          /* is there a separate user */
          IF Order.UserRole NE 1 THEN
          FOR FIRST OrderCustomer NO-LOCK WHERE
-                   OrderCustomer.Brand   = gcBrand AND
+                   OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                    OrderCustomer.OrderID = Order.OrderID AND
                    OrderCustomer.RowType = Order.UserRole:
 
@@ -450,7 +450,7 @@ FUNCTION fProdName RETURNS CHARACTER.
 
    DEF VAR lcName AS CHAR NO-UNDO. 
 
-   lcName = fTranslationName(gcBrand,
+   lcName = fTranslationName(Syst.CUICommon:gcBrand,
                              1,
                              InvRow.BillCode,
                              liKieli,
@@ -461,7 +461,7 @@ FUNCTION fProdName RETURNS CHARACTER.
    IF lcName = "" OR lcName = ? THEN DO:
 
       FIND FIRST BillItem WHERE 
-                 BillItem.Brand = gcBrand AND
+                 BillItem.Brand = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = InvRow.BillCode 
       NO-LOCK NO-ERROR.
       lcName = IF AVAILABLE BillItem 

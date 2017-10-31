@@ -59,7 +59,7 @@ form
    Company.Address4     label "Addit. Address3" AT 10 FORMAT "X(40)" SKIP
    SKIP(1)
    
-with title color value(Syst.CUICommon:ctc) " " + ynimi + " COMPANY INFORMATION "
+with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " COMPANY INFORMATION "
      + string(pvm,"99-99-99") + " "
      COLOR value(Syst.CUICommon:cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.
@@ -71,10 +71,10 @@ PAUSE 0 no-message.
 OLRefresh:
 repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
-   FIND FIRST Company WHERE Company.Brand = gcBrand exclusive-lock no-error.
+   FIND FIRST Company WHERE Company.Brand = Syst.CUICommon:gcBrand exclusive-lock no-error.
    IF NOT AVAILABLE Company THEN DO:
       CREATE Company.
-      Company.Brand = gcBrand.
+      Company.Brand = Syst.CUICommon:gcBrand.
    END.
 
    DISPLAY 
@@ -145,7 +145,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
       ELSE IF toimi = 5 AND lcRight = "RW" THEN DO:
          ASSIGN
-         ynimi = CompName. /* common-alueelle */
+         Syst.CUICommon:ynimi = CompName. /* common-alueelle */
          LEAVE OLRefresh.
       END.
 

@@ -10,7 +10,7 @@
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 
@@ -60,7 +60,7 @@ IF FusionInvoice.Custnum > 0 THEN DO:
    IF NOT AVAIL Customer THEN RETURN appl_err("Customer not found").
 
    IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.Brand = gcBrand AND
+                     MsRequest.Brand = Syst.CUICommon:gcBrand AND
                      MsRequest.ReqType = {&REQTYPE_EMAIL_SENDING} AND
                      MsRequest.Custnum = FusionInvoice.Custnum AND
                      MsRequest.ReqCParam1 = "FusionEmail" AND

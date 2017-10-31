@@ -229,7 +229,7 @@ for each ttProd:
      else assign xProd = ttProd.prod.
 
      FIND BillItem no-lock where 
-          BillItem.Brand    = gcBrand AND
+          BillItem.Brand    = Syst.CUICommon:gcBrand AND
           BillItem.BillCode = xProd no-error.
 
      put stream excel unformatted 

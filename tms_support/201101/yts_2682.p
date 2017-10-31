@@ -5,7 +5,7 @@ def stream sout.
 output stream sout to yts_2682.log.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "anttis".
 
 put stream sout unformatted "MSISDN|old clitype|new clitype|Request creation time|request handling time|contract" skip.

@@ -77,7 +77,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(30)" 
+   Syst.CUICommon:ynimi at 1 format "x(30)" 
       "AVERAGE REVENUE PER USER" at 40
       "Page" at 102  
       sl format "ZZZZ9" skip
@@ -171,7 +171,7 @@ ASSIGN lcPeriod1 = STRING(YEAR(idtDate1),"9999") +
 
 /* invoiced data from desired period, fixed calls and mobile calls */
 FOR EACH Customer NO-LOCK WHERE
-    Customer.Brand     = gcBrand    AND
+    Customer.Brand     = Syst.CUICommon:gcBrand    AND
     Customer.InvGroup >= icInvGrp1  AND
     Customer.InvGroup <= icInvGrp2,
 EACH InvSeq NO-LOCK WHERE
@@ -289,13 +289,13 @@ BREAK BY ttBal.SubType
       ASSIGN lcSubType = "".
       IF LOOKUP(ttBal.SubType,"fixed,unknown") = 0 THEN DO:
          FIND CLIType WHERE 
-              CLIType.Brand   = gcBrand AND
+              CLIType.Brand   = Syst.CUICommon:gcBrand AND
               CLIType.CliType = ttBal.SubType NO-LOCK NO-ERROR.
          IF AVAILABLE CLIType THEN lcSubType = CLIType.CliName.
       END. 
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.CUICommon:gcBrand AND
            BillItem.BillCode = ttBal.prod NO-LOCK NO-ERROR.
 
       PUT STREAM tul

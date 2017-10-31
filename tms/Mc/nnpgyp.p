@@ -81,7 +81,7 @@ form
     lcGraph             FORMAT "X(8)" COLUMN-LABEL "Graph"
     BItemGroup.InvoiceOrder
 WITH width 80 OVERLAY /* scroll 1 */ 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Billing Item Groups " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -154,7 +154,7 @@ FUNCTION fDispGraph RETURNS LOGIC
    lcGraphName = "".
    IF icGraph > "" THEN DO:
       FIND FIRST bGroup WHERE
-                 bGroup.Brand = gcBrand AND
+                 bGroup.Brand = Syst.CUICommon:gcBrand AND
                  bGroup.BIGroup = icGraph NO-LOCK NO-ERROR.
       IF AVAILABLE bGroup THEN lcGraphName = bGroup.BIGName.
    END.
@@ -470,7 +470,7 @@ BROWSE:
         haku = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if haku <> "" THEN DO:
@@ -490,7 +490,7 @@ BROWSE:
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:

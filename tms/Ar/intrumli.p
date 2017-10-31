@@ -85,7 +85,7 @@ SKIP(8)
  WITH  OVERLAY ROW 1 WIDTH 80
     COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-       " " + ynimi + " SEND INVOICES TO COLLECTION " + 
+       " " + Syst.CUICommon:ynimi + " SEND INVOICES TO COLLECTION " + 
        STRING(pvm,"99-99-99") + " " 
     SIDE-LABELS 
     /*1 columns*/
@@ -160,7 +160,7 @@ REPEAT WITH FRAME main:
    /* UPDATE Seq nbr */
    IF xBatch = 0 AND xCount NE 0 THEN DO FOR bTMSParam TRANS:
       FIND bTMSParam WHERE 
-           bTMSParam.Brand     = gcBrand AND
+           bTMSParam.Brand     = Syst.CUICommon:gcBrand AND
            bTMSParam.ParamCode = "IntrumFileSeqNbr" NO-ERROR.
       ASSIGN  btmsparam.intVal = yBatch.
       RELEASE bTMSParam.

@@ -108,7 +108,7 @@ END FUNCTION.
 CREATE WIDGET-POOL "PrintHouse".
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN.
 
 objDBConn = NEW Syst.CDRConnect("MobCDR").
@@ -278,7 +278,7 @@ PROCEDURE pInitialize:
 
    /* header texts to temp-table */
    FOR EACH HdrText NO-LOCK WHERE
-            HdrText.Brand = gcBrand:
+            HdrText.Brand = Syst.CUICommon:gcBrand:
       CREATE ttHead.
       ASSIGN ttHead.Lang = HdrText.te-kie
              ttHead.Nbr  = HdrText.te-nro
@@ -322,7 +322,7 @@ PROCEDURE pInitXML:
    lhXML:INSERT-ATTRIBUTE("Version",lcXMLVersion). 
 
    lhXML:START-ELEMENT("Batch").
-   lhXML:WRITE-DATA-ELEMENT("Company",ynimi).
+   lhXML:WRITE-DATA-ELEMENT("Company",Syst.CUICommon:ynimi).
    lhXML:WRITE-DATA-ELEMENT("Orderer",lcTMSUser).
    lhXML:WRITE-DATA-ELEMENT("Created",Func.Common:mISOTimeZone(TODAY,TIME)).
    lhXML:END-ELEMENT("Batch").
@@ -513,7 +513,7 @@ PROCEDURE pInvoice2XML:
       lhXML:WRITE-DATA-ELEMENT("CustomerTaxZone",Invoice.TaxZone).
      
       FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand EQ Syst.Parameters:gcbrand AND
+                 CustCat.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
                  CustCat.Category EQ Customer.Category NO-ERROR.
          IF AVAILABLE CustCat THEN
             lhXML:WRITE-DATA-ELEMENT("Segment",CustCat.Segment).

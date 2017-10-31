@@ -88,7 +88,7 @@ form
     solog.response    format "x(5)" column-label "Resp"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Service ORDER LOG "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -400,7 +400,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand with frame f1.
-       SET  lcBrand WHEN gcallbrand = TRUE Solog WITH FRAME f1.
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE Solog WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Solog ENTERED THEN DO:
 
@@ -427,7 +427,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP lcBrand With Frame f2.
-       SET lcBrand WHEN gcallbrand = TRUE CLI WITH FRAME f2.
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF CLI ENTERED THEN DO:
           IF lcBrand ne "*" THEN 

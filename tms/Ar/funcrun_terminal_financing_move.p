@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "Cron".
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
@@ -127,7 +127,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.FinancedResult = {&TF_STATUS_WAITING_SENDING} OR
          FixedFee.FinancedResult = {&TF_STATUS_SENT_TO_BANK},
    FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.OrderId = FixedFee.OrderID:
 
    IF FixedFee.BegDate > ldaToDate THEN NEXT.
@@ -170,13 +170,13 @@ FOR EACH FixedFee NO-LOCK WHERE
 
    /* check if fixedfee item amount does not match with original confs. */
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = FixedFee.CalcObj,
        FIRST FeeModel NO-LOCK WHERE
-             FeeModel.Brand = gcBrand AND
+             FeeModel.Brand = Syst.CUICommon:gcBrand AND
              FeeModel.FeeModel = DayCampaign.FeeModel,
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand = gcBrand AND
+             FMItem.Brand = Syst.CUICommon:gcBrand AND
              FMItem.FeeModel = FeeModel.FeeModel:
    
       ASSIGN
@@ -208,7 +208,7 @@ FOR EACH FixedFee NO-LOCK WHERE
    END.
       
    FIND FIRST DCCLI EXCLUSIVE-LOCK WHERE
-              DCCLI.Brand   = gcBrand AND
+              DCCLI.Brand   = Syst.CUICommon:gcBrand AND
               DCCLI.MsSeq   = INT(FixedFee.KeyValue) AND
               DCCLI.DCEvent = FixedFee.CalcObj AND
               DCCLI.percontractId = int(FixedFee.SourceKey) NO-ERROR.
@@ -220,7 +220,7 @@ FOR EACH FixedFee NO-LOCK WHERE
    
    IF FixedFee.BillCode BEGINS "PAYTERM" THEN
       FIND FIRST SingleFee EXCLUSIVE-LOCK WHERE
-                 SingleFee.Brand = gcBrand AND
+                 SingleFee.Brand = Syst.CUICommon:gcBrand AND
                  SingleFee.Custnum = FixedFee.Custnum AND
                  SingleFee.HostTable = FixedFee.HostTable AND
                  SingleFee.KeyValue = Fixedfee.KeyValue AND

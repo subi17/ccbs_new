@@ -70,12 +70,12 @@ help "Only (T)otal amount by Account or (D)etailed printout ?"
 skip(8)
 WITH
    width 80 overlay 
-   title " " + ynimi + " Account Summary " + STRING(pvm,"99-99-99") + " "
+   title " " + Syst.CUICommon:ynimi + " Account Summary " + STRING(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 form header /* header FOR printout */                
    fill("=",78) format "x(78)" SKIP
-   ynimi AT 1
+   Syst.CUICommon:ynimi AT 1
       "ACCOUNT SUMMARY" AT 34
       "Page" to 70 sl format "zzz9" TO 78
    "Acct " at 1 acct format "zzzzz9" AccName format "x(18)"
@@ -141,7 +141,7 @@ repeat WITH FRAME rajat:
          if frame-field = "acct" THEN DO:
             IF INPUT acct NE 0 THEN DO:
                FIND Account where
-                    Account.Brand  = gcBrand AND
+                    Account.Brand  = Syst.CUICommon:gcBrand AND
                     Account.AccNum = INPUT acct no-lock no-error.
                IF NOT AVAIL Account THEN DO:
                   BELL.
@@ -183,7 +183,7 @@ toimi:
    view STREAM tul FRAME sivuots.
 
    FOR EACH Payment no-lock where
-           Payment.Brand    = gcBrand   AND
+           Payment.Brand    = Syst.CUICommon:gcBrand   AND
            Payment.AccDate >= pvm1      AND
            Payment.AccDate <= pvm2      AND
 

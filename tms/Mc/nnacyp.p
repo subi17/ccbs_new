@@ -82,7 +82,7 @@ form
     ac-type-name        column-label "TypeName" format "x(25)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " ACCOUNTS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -166,7 +166,7 @@ add-new:
            PROMPT-FOR Account.AccNum
            VALIDATE
               (Account.AccNum = 0 OR
-              NOT can-find(Account WHERE Account.brand = gcBrand
+              NOT can-find(Account WHERE Account.brand = Syst.CUICommon:gcBrand
                            using  Account.AccNum),
               "BROWSE " + string(INPUT Account.AccNum) +
               " already exists !").
@@ -438,7 +438,7 @@ BROWSE:
        haku-ac-nr = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f1.
-       UPDATE lcBrand WHEN gcAllBrand 
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand 
               haku-ac-nr WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        IF haku-ac-nr <> 0 THEN DO:
@@ -460,7 +460,7 @@ BROWSE:
        haku-ac-name = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f2.
-       UPDATE lcBrand WHEN gcAllBrand 
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand 
               haku-ac-name WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        if haku-ac-name <> "" THEN DO:

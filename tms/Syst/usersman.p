@@ -66,7 +66,7 @@ form
     Salesman.SMName 
 WITH ROW FrmRow centered overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " USER'S SALESMAN DEFINITIONS  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "ari".
 {Syst/eventval.i}
 

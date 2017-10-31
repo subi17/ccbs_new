@@ -110,7 +110,7 @@ form
 
 WITH CENTERED  ROW FrmRow FrmDown DOWN WIDTH 80
     COLOR VALUE(Syst.CUICommon:cfc) OVERLAY
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi + " Information Texts " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Information Texts " 
         + string(pvm,"99-99-99") + " "
         FRAME sel.
 
@@ -545,7 +545,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
-       SET lcBrand WHEN gcAllBrand AND icTarget = ""
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand AND icTarget = ""
            FromDate WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF FromDate ENTERED THEN DO:
@@ -581,7 +581,7 @@ BROWSE:
 
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME f2.
-       UPDATE lcBrand WHEN gcAllBrand AND icTarget = ""
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND icTarget = ""
            lcTarget validate(lctarget > "", "Enter Target!")  
            lckeyvalue WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -1052,7 +1052,7 @@ PROCEDURE local-find-others.
                      ELSE InvText.TxtTitle.
 
    llMemo = CAN-FIND(FIRST Memo WHERE
-                           Memo.Brand     = gcBrand   AND
+                           Memo.Brand     = Syst.CUICommon:gcBrand   AND
                            Memo.HostTable = "InvText" AND
                            Memo.KeyValue  = STRING(InvText.ITNum)).
 END PROCEDURE.

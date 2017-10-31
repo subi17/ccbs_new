@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -73,7 +73,7 @@ FUNCTION fLocalMemo RETURNS LOG(icHostTable AS CHAR,
                                 icUserId    AS CHAR):
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
@@ -378,7 +378,7 @@ PROCEDURE pInvoiceDeliverables:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.CUICommon:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Invalid MSISDN".
    ELSE IF MobSub.PayType THEN RETURN "ERROR:Not a postpaid subscription".

@@ -427,7 +427,7 @@ PROCEDURE pFullCreditNote:
  
       /* check IF invoice number is already in use */
       IF NOT can-find(FIRST Invoice where
-                            Invoice.Brand    = gcBrand AND 
+                            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
                             Invoice.ExtInvID = lcExtInvID AND
                             RECID(Invoice) NE liInvRecid) 
       THEN LEAVE ExtInvNum.
@@ -719,7 +719,7 @@ PROCEDURE pFullCreditNote:
          
       /* in yoigo newest accounts are always used */
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.CUICommon:gcBrand AND
                 BillItem.BillCode = bCreditRow.BillCode:
          bCreditRow.SlsAcc = fInvRowAccount(Customer.Category,
                                             bCreditInv.VatUsage).
@@ -731,7 +731,7 @@ PROCEDURE pFullCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = lcUserId
       Memo.HostTable = "Invoice"
@@ -778,7 +778,7 @@ PROCEDURE pFullCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = lcUserId
       Memo.HostTable = "Invoice"
@@ -861,7 +861,7 @@ PROCEDURE pFullCreditNote:
 
    /* customer's invoicing Period */
    FIND FIRST Invoice WHERE
-              Invoice.Brand    = gcBrand          AND
+              Invoice.Brand    = Syst.CUICommon:gcBrand          AND
               Invoice.CustNum  = Customer.CustNum AND
               Invoice.CrInvNum = 0                AND
               Invoice.InvAmt > 0 NO-LOCK NO-ERROR.

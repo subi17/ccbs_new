@@ -20,7 +20,7 @@ INPUT STREAM sMSISDN FROM VALUE(lcInputFile).
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
@@ -39,7 +39,7 @@ REPEAT:
       NEXT.
    END.
       
-   FIND FIRST msisdn where msisdn.brand = gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.CUICommon:gcBrand and 
       msisdn.cli = msisdnnumber.cli NO-LOCK NO-ERROR.
    IF NOT AVAIL msisdn THEN DO:
       put stream sLog unformatted msisdnnumber.cli "|ERROR:MSISDN not found" skip.

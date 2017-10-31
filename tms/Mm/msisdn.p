@@ -109,7 +109,7 @@ DEF BUFFER bttMSISDN FOR ttMSISDN.
 
 IF iiCustNum > 0 THEN 
 FOR EACH MSISDN WHERE 
-         MSISDN.Brand   = gcBrand AND 
+         MSISDN.Brand   = Syst.CUICommon:gcBrand AND 
          MSISDN.CustNum = iiCustNum NO-LOCK.
    
    CREATE ttMSISDN.
@@ -117,7 +117,7 @@ FOR EACH MSISDN WHERE
 END.         
 ELSE IF icCli > "" THEN
 FOR EACH MSISDN WHERE
-         MSISDN.Brand = gcBrand AND 
+         MSISDN.Brand = Syst.CUICommon:gcBrand AND 
          MSISDN.CLI = icCLI NO-LOCK.
          
    CREATE ttMSISDN.
@@ -129,7 +129,7 @@ ELSE IF iiStatusCode > 0 THEN DO:
    
    ldeNow = Func.Common:mMakeTS().
    FOR EACH msisdn where
-      msisdn.brand = gcBrand and
+      msisdn.brand = Syst.CUICommon:gcBrand and
       msisdn.statuscode = iiStatusCode and
       msisdn.validto > ldeNow NO-LOCK use-index statuscode:
       CREATE ttMSISDN.
@@ -152,7 +152,7 @@ form
     
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MSISDN Numbers "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -285,7 +285,7 @@ ADD-ROW:
            CLEAR FRAME lis NO-PAUSE.
            
            FIND FIRST bttMSISDN NO-LOCK WHERE
-                      bttMSISDN.Brand = gcBrand AND
+                      bttMSISDN.Brand = Syst.CUICommon:gcBrand AND
                       bttMSISDN.CLI = bttMSISDN.CLI USE-INDEX CLI.
            
            FIND FIRST MobSub WHERE
@@ -307,7 +307,7 @@ ADD-ROW:
 
            /* Do real update to database */
            FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                      MSISDN.Brand = gcBrand AND
+                      MSISDN.Brand = Syst.CUICommon:gcBrand AND
                       MSISDN.CLI = ttMSISDN.CLI USE-INDEX CLI NO-WAIT NO-ERROR.
            IF NOT AVAIL MSISDN THEN DO:
               MESSAGE "MSISDN not found or record is locked"
@@ -556,7 +556,7 @@ BROWSE:
           Disp lcBrand With FRAME f1.
           CLI = m_pref.             
           ok = FALSE.
-          UPDATE lcBrand WHEN gcAllBrand = TRUE  
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
                  CLI WITH FRAME f1 EDITING:
              IF NOT ok and frame-field = "cli" THEN DO:
                 ok = TRUE.
@@ -589,7 +589,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           Disp lcBrand With FRAME f2.
-          SET  lcBrand WHEN gcAllBrand = TRUE 
+          SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                CustNum WITH FRAME f2.
           HIDE FRAME f2 NO-PAUSE.
           IF CustNum ENTERED THEN DO:
@@ -608,7 +608,7 @@ BROWSE:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           DISP lcBrand WITH FRAME f3.
-          SET  lcBrand WHEN gcAllBrand = TRUE
+          SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
                StatusCode WITH FRAME f3.
           HIDE FRAME f3 NO-PAUSE.
           IF StatusCode ENTERED THEN DO:
@@ -626,7 +626,7 @@ BROWSE:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            Disp lcBrand With FRAME f4.
-          SET   lcBrand WHEN gcAllBrand = TRUE  
+          SET   lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
                orderid WITH FRAME f4.
           HIDE FRAME f4 NO-PAUSE.
           IF orderid ENTERED THEN DO:
@@ -720,7 +720,7 @@ CU-ACTION:
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO: 
         RUN local-find-this (false).
         RUN Mc/eventsel.p("MSISDN",
-                        "#BEGIN" + CHR(255) + gcBrand + CHR(255) +
+                        "#BEGIN" + CHR(255) + Syst.CUICommon:gcBrand + CHR(255) +
                         STRING(ttMSISDN.CLI)).
         ufkey = true.
      END.   
@@ -906,7 +906,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    find msclass where 
-        MSClass.Brand = gcBrand AND 
+        MSClass.Brand = Syst.CUICommon:gcBrand AND 
         msclass.MCCode = ttMSISDN.MCCode no-lock no-error.
    
    find Customer of ttMSISDN no-lock no-error.

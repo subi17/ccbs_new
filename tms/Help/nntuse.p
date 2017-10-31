@@ -43,7 +43,7 @@ form
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) 
-       " FIND BillItem (" + gcBrand + ") " + tuhaku + " " FRAME sel.
+       " FIND BillItem (" + Syst.CUICommon:gcBrand + ") " + tuhaku + " " FRAME sel.
 
 
 form
@@ -58,7 +58,7 @@ with row 1 centered overlay title " SEEK BillItem " FRAME alku.
 
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
-   FIND FIRST BillItem WHERE BillItem.Brand = gcBrand 
+   FIND FIRST BillItem WHERE BillItem.Brand = Syst.CUICommon:gcBrand 
       USE-INDEX BillCode no-lock no-error.
    IF NOT AVAIL BillItem THEN DO:
       BELL.
@@ -98,14 +98,14 @@ alku:  repeat WITH FRAME alku:
 
           IF NOT nrohaku THEN DO:
              FIND FIRST BillItem where 
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.CUICommon:gcBrand AND
                 BillItem.BIName >= tuhaku
              no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST BillItem where 
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.CUICommon:gcBrand AND
                 BillItem.BillCode >= tuhaku
              no-lock no-error.
              order = 2.
@@ -146,10 +146,10 @@ print-line:
                rtab[FRAME-LINE] = recid(BillItem).
 
                IF order = 2 THEN FIND NEXT BillItem
-                  WHERE BillItem.Brand = gcBrand
+                  WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                   USE-INDEX BillCode no-lock no-error.
                ELSE IF order = 1 THEN FIND NEXT BillItem
-                  WHERE BillItem.Brand = gcBrand
+                  WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                   USE-INDEX BIName no-lock no-error.
             END.
             ELSE DO:
@@ -211,10 +211,10 @@ BROWSE:
          FIND BillItem where recid(BillItem) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND prev BillItem
-               WHERE BillItem.Brand = gcBrand
+               WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                USE-INDEX BillCode no-lock no-error.
             ELSE IF order = 1 THEN FIND prev BillItem
-               WHERE BillItem.Brand = gcBrand
+               WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                USE-INDEX BIName no-lock no-error.
             IF AVAILABLE BillItem THEN
                ASSIGN firstline = i memory = recid(BillItem).
@@ -238,10 +238,10 @@ BROWSE:
          IF FRAME-LINE = 1 THEN DO:
             FIND BillItem where recid(BillItem) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev BillItem
-               WHERE BillItem.Brand = gcBrand
+               WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                USE-INDEX BillCode no-lock no-error.
             ELSE IF order = 1 THEN FIND prev BillItem
-               WHERE BillItem.Brand = gcBrand
+               WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                USE-INDEX BIName no-lock no-error.
             IF NOT AVAILABLE BillItem THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
@@ -270,10 +270,10 @@ BROWSE:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BillItem where recid(BillItem) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT BillItem
-               WHERE BillItem.Brand = gcBrand 
+               WHERE BillItem.Brand = Syst.CUICommon:gcBrand 
                USE-INDEX BillCode no-lock no-error.
             ELSE IF order = 1 THEN FIND NEXT BillItem
-               WHERE BillItem.Brand = gcBrand
+               WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                USE-INDEX BIName no-lock no-error.
             IF NOT AVAILABLE BillItem THEN DO:
                message "YOU ARE ON THE LAST ROW !".
@@ -301,10 +301,10 @@ BROWSE:
          memory = rtab[1].
          FIND BillItem where recid(BillItem) = memory no-lock no-error.
          IF order = 2 THEN FIND prev BillItem
-            WHERE BillItem.Brand = gcBrand
+            WHERE BillItem.Brand = Syst.CUICommon:gcBrand
             USE-INDEX BillCode no-lock no-error.
          ELSE IF order = 1 THEN FIND prev BillItem
-            WHERE BillItem.Brand = gcBrand
+            WHERE BillItem.Brand = Syst.CUICommon:gcBrand
             USE-INDEX BIName no-lock no-error.
          IF AVAILABLE BillItem THEN DO:
             memory = recid(BillItem).
@@ -312,10 +312,10 @@ BROWSE:
             /* go back one page */
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND prev BillItem
-                  WHERE BillItem.Brand = gcBrand
+                  WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                   USE-INDEX BillCode no-lock no-error.
                ELSE IF order = 1 THEN FIND prev BillItem
-                  WHERE BillItem.Brand = gcBrand
+                  WHERE BillItem.Brand = Syst.CUICommon:gcBrand
                   USE-INDEX BIName no-lock no-error.
                IF AVAILABLE BillItem THEN memory = recid(BillItem).
                ELSE line = FRAME-DOWN.
@@ -356,10 +356,10 @@ BROWSE:
 
      else if lookup(nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST BillItem
-           WHERE BillItem.Brand = gcBrand
+           WHERE BillItem.Brand = Syst.CUICommon:gcBrand
            USE-INDEX BillCode no-lock no-error.
         ELSE IF order = 1 THEN FIND FIRST BillItem
-           WHERE BillItem.Brand = gcBrand
+           WHERE BillItem.Brand = Syst.CUICommon:gcBrand
            USE-INDEX BIName no-lock no-error.
         ASSIGN memory = recid(BillItem) must-print = TRUE.
         NEXT LOOP.
@@ -367,10 +367,10 @@ BROWSE:
 
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST BillItem
-           WHERE BillItem.Brand = gcBrand
+           WHERE BillItem.Brand = Syst.CUICommon:gcBrand
            USE-INDEX BillCode no-lock no-error.
         ELSE IF order = 1 THEN FIND LAST BillItem
-           WHERE BillItem.Brand = gcBrand
+           WHERE BillItem.Brand = Syst.CUICommon:gcBrand
            USE-INDEX BIName no-lock no-error.
         ASSIGN memory = recid(BillItem) must-print = TRUE.
         NEXT LOOP.

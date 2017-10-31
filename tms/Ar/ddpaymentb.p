@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
+ASSIGN Syst.CUICommon:gcBrand = "1" 
        katun   = "ddpaym".
        
 {Func/cparam2.i}
@@ -40,7 +40,7 @@ RUN Ar/ddpaymentco.p ("",                   /* InvGroup  */
 IF NOT (liCount = 0 AND lcError BEGINS "INFO") THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Cron"  
       ActionLog.KeyValue     = "" 
       ActionLog.ActionID     = "DDPayment"

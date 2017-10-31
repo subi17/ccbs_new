@@ -42,7 +42,7 @@ form
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(Syst.CUICommon:ctc) 
-       " Account FINDING FROM (" + gcBrand + ") '" + pgseek + "' " FRAME sel.
+       " Account FINDING FROM (" + Syst.CUICommon:gcBrand + ") '" + pgseek + "' " FRAME sel.
 
 
 form
@@ -57,7 +57,7 @@ with row 1 centered overlay title " Account FINDING " FRAME alku.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Account USE-INDEX AccNum WHERE 
-      Account.Brand = gcBrand NO-LOCK no-error.
+      Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAIL Account THEN DO:
       BELL.
       message "No accounts - press ENTER !".
@@ -90,14 +90,14 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO LOOP, LEAVE LOOP:
 
           IF NOT nrohaku THEN DO:
              FIND FIRST Account where 
-                Account.Bran     = gcBrand AND
+                Account.Bran     = Syst.CUICommon:gcBrand AND
                 Account.AccName >= pgseek
              no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST Account where 
-                Account.Bran    = gcBrand AND
+                Account.Bran    = Syst.CUICommon:gcBrand AND
                 Account.AccNum >= integer(pgseek)
              no-lock no-error.
              order = 2.
@@ -138,10 +138,10 @@ print-line:
                rtab[FRAME-LINE] = recid(Account).
                IF order = 2 THEN FIND NEXT Account
                USE-INDEX AccNum WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND NEXT Account
                USE-INDEX AccName WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -203,10 +203,10 @@ BROWSE:
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND PREV Account
             USE-INDEX AccNum WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND PREV Account
             USE-INDEX AccName WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE Account THEN
                ASSIGN firstline = i memory = recid(Account).
             ELSE LEAVE.
@@ -230,10 +230,10 @@ BROWSE:
             FIND FIRST Account where recid(Account) = rtab[1] no-lock.
             IF order = 2 THEN FIND PREV Account
             USE-INDEX AccNum WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND PREV Account
             USE-INDEX AccName WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Account THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
                BELL.
@@ -262,10 +262,10 @@ BROWSE:
             FIND FIRST Account where recid(Account) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT Account
             USE-INDEX AccNum WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND NEXT Account
             USE-INDEX AccName WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Account THEN DO:
                message "YOU ARE ON THE LAST ROW !".
                BELL.
@@ -293,10 +293,10 @@ BROWSE:
          FIND FIRST Account where recid(Account) = memory no-lock no-error.
          IF order = 2 THEN FIND PREV Account
          USE-INDEX AccNum WHERE 
-            Account.Brand = gcBrand NO-LOCK no-error.
+            Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 1 THEN FIND PREV Account
          USE-INDEX AccName WHERE 
-            Account.Brand = gcBrand NO-LOCK no-error.
+            Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          IF AVAILABLE Account THEN DO:
             memory = recid(Account).
 
@@ -304,10 +304,10 @@ BROWSE:
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND PREV Account
                USE-INDEX AccNum WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND PREV Account
                USE-INDEX AccName WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF AVAILABLE Account THEN memory = recid(Account).
                ELSE line = FRAME-DOWN.
             END.
@@ -348,10 +348,10 @@ BROWSE:
      else if lookup(nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST Account
         USE-INDEX AccNum WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND FIRST Account
         USE-INDEX AccName WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Account) must-print = TRUE.
         NEXT LOOP.
      END.
@@ -359,10 +359,10 @@ BROWSE:
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST Account
         USE-INDEX AccNum WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND LAST Account
         USE-INDEX AccName WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Account) must-print = TRUE.
         NEXT LOOP.
      END.

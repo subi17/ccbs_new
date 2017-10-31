@@ -18,7 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {newton/src/json_key.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -80,11 +80,11 @@ END FUNCTION.
 IF pcMSISDN BEGINS "8" OR
    pcMSISDN BEGINS "9" THEN   /* Fixed line number */
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.CUICommon:gcBrand AND
         mobsub.fixednumber = pcMSISDN NO-ERROR.
 ELSE 
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.CUICommon:gcBrand AND
         mobsub.cli = pcMSISDN NO-ERROR.
 
 IF NOT AVAILABLE mobsub THEN
@@ -104,7 +104,7 @@ IF Customer.CustIdType NE pcDNIType THEN
 
 /* there's no salesman record for WEB,MGM,GIFT,YOIGO,VIP */
 FIND Salesman WHERE
-     Salesman.Brand = gcBrand AND
+     Salesman.Brand = Syst.CUICommon:gcBrand AND
      Salesman.Salesman = MobSub.Salesman NO-LOCK NO-ERROR.
 
 /* YDR-149
@@ -120,7 +120,7 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
    /* YOT-5180, User Exclusive could find ANY subscription created from 
       direct channel without restriction of the reseller that made the activation*/
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand = gcBrand      AND 
+              Order.Brand = Syst.CUICommon:gcBrand      AND 
               Order.MsSeq = MobSub.MsSeq AND 
               Order.CLI   = MobSub.CLI   NO-ERROR. 
    

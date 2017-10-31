@@ -307,7 +307,7 @@ REPEAT WITH FRAME sel:
 
         IF liCustNum > 0 THEN DO:
            FIND FIRST Customer USE-INDEX CustNum WHERE 
-                      Customer.Brand    = gcBrand   AND
+                      Customer.Brand    = Syst.CUICommon:gcBrand   AND
                       Customer.CustNum >= liCustNum AND
                       Customer.CustNum  = Customer.AgrCust
            NO-LOCK NO-ERROR.
@@ -343,7 +343,7 @@ REPEAT WITH FRAME sel:
 
             IF lcFirstName = "" THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand    = gcBrand     AND
+                          Customer.Brand    = Syst.CUICommon:gcBrand     AND
                           Customer.CustName >= lcLastName AND
                           Customer.CustNum  = Customer.AgrCust
                NO-LOCK NO-ERROR.
@@ -351,7 +351,7 @@ REPEAT WITH FRAME sel:
             ELSE DO:
                
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = gcBrand     AND
+                          Customer.Brand     = Syst.CUICommon:gcBrand     AND
                           Customer.CustName  = lcLastName  AND
                           Customer.FirstName = lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -359,7 +359,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT AVAILABLE Customer THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = gcBrand          AND
+                          Customer.Brand     = Syst.CUICommon:gcBrand          AND
                           Customer.CustName  = lcLastName       AND
                           Customer.FirstName BEGINS lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -367,7 +367,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT AVAILABLE Customer THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = gcBrand      AND
+                          Customer.Brand     = Syst.CUICommon:gcBrand      AND
                           Customer.CustName  = lcLastName   AND
                           Customer.FirstName >= lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -375,7 +375,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT AVAILABLE Customer THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = gcBrand      AND
+                          Customer.Brand     = Syst.CUICommon:gcBrand      AND
                           Customer.CustName  >= lcLastName  AND
                           Customer.FirstName >= lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -409,7 +409,7 @@ REPEAT WITH FRAME sel:
 
         IF lcOrgID > "" THEN DO:
            FIND FIRST Customer USE-INDEX OrgID WHERE 
-                      Customer.Brand  = gcBrand AND
+                      Customer.Brand  = Syst.CUICommon:gcBrand AND
                       Customer.OrgID >= lcOrgID AND
                       Customer.CustNum = Customer.AgrCust
            NO-LOCK NO-ERROR.
@@ -475,21 +475,21 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST Customer USE-INDEX CustNum WHERE
-                 Customer.Brand   = gcBrand AND
+                 Customer.Brand   = Syst.CUICommon:gcBrand AND
                  Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST Customer USE-INDEX CustName WHERE
-                 Customer.Brand   = gcBrand AND
+                 Customer.Brand   = Syst.CUICommon:gcBrand AND
                  Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND FIRST Customer USE-INDEX OrgID WHERE
-                 Customer.Brand   = gcBrand AND
+                 Customer.Brand   = Syst.CUICommon:gcBrand AND
                  Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND FIRST Customer USE-INDEX OrgID WHERE
-                 Customer.Brand   = gcBrand AND
+                 Customer.Brand   = Syst.CUICommon:gcBrand AND
                  Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
    
@@ -498,21 +498,21 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF order = 1 THEN 
       FIND LAST Customer USE-INDEX CustNum WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND LAST Customer USE-INDEX CustName WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND LAST Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND LAST Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
  
@@ -521,21 +521,21 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN 
       FIND NEXT Customer USE-INDEX CustNum WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND NEXT Customer USE-INDEX CustName WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND NEXT Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND NEXT Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -543,21 +543,21 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    IF order = 1 THEN 
       FIND PREV Customer USE-INDEX CustNum WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND PREV Customer USE-INDEX CustName WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND PREV Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND PREV Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = gcBrand AND
+                Customer.Brand   = Syst.CUICommon:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
  

@@ -74,7 +74,7 @@ form
 
 WITH width 74 OVERLAY CENTERED scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi + lcTitle + " "  
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + lcTitle + " "  
    + string(pvm,"99-99-99") + " "  FRAME sel.
 
 form          
@@ -614,7 +614,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    
 
    FIND FIRST Bdest WHERE 
-              Bdest.Brand = gcBrand AND 
+              Bdest.Brand = Syst.CUICommon:gcBrand AND 
               BDest.BDest = ProgLimit.BDest AND
               BDest.ToDate >= ProgLimit.ValidFrom AND
               BDest.FromDate <= ProgLimit.ValidTo NO-LOCK NO-ERROR.
@@ -669,7 +669,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
 
          IF FRAME-FIELD = "Bdest" THEN DO:
             FIND FIRST Bdest WHERE 
-                       Bdest.Brand = gcBrand AND
+                       Bdest.Brand = Syst.CUICommon:gcBrand AND
                        Bdest.Bdest = input frame lis ProgLimit.Bdest AND
                        BDest.ToDate >= INPUT FRAME lis ProgLimit.ValidFrom AND
                        BDest.FromDate <= INPUT FRAME lis ProgLimit.ValidTo

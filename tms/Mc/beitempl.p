@@ -72,7 +72,7 @@ form /* seek Billing Event Item  BY BillCode */
 
 
 FIND FIRST FeeModel WHERE 
-           FeeModel.Brand    = gcBrand AND
+           FeeModel.Brand    = Syst.CUICommon:gcBrand AND
            FeeModel.FeeModel = FeeModel NO-LOCK.
 
 
@@ -125,7 +125,7 @@ ADD-ROW:
                     UNDO add-row, LEAVE add-row.
 
                     FIND PriceList WHERE 
-                         PriceList.Brand     = gcBrand AND
+                         PriceList.Brand     = Syst.CUICommon:gcBrand AND
                          PriceList.PriceList = INPUT FMItem.PriceList
                     NO-LOCK NO-ERROR.
                     IF NOT AVAIL PriceList THEN DO:
@@ -142,7 +142,7 @@ ADD-ROW:
                        NEXT.
                     END.
                     FIND BillItem WHERE 
-                         BillItem.Brand    = gcBrand AND
+                         BillItem.Brand    = Syst.CUICommon:gcBrand AND
                          BillItem.BillCode = INPUT FMItem.BillCode                                 NO-LOCK NO-ERROR.
                     IF NOT AVAIL BillItem THEN DO:
                        BELL.
@@ -155,7 +155,7 @@ ADD-ROW:
            END.   
 
            IF CAN-FIND(FIRST FMItem WHERE
-                       FMITem.Brand     = gcBrand AND
+                       FMITem.Brand     = Syst.CUICommon:gcBrand AND
                        FMItem.FeeModel  = FeeModel        AND
                        FMItem.PriceList = PriceList.PriceList  AND
                        FMItem.BillCode  = BillItem.BillCode)
@@ -171,7 +171,7 @@ ADD-ROW:
 
            CREATE FMItem.
            ASSIGN
-           FMItem.Brand     = gcBrand 
+           FMItem.Brand     = Syst.CUICommon:gcBrand 
            FMItem.FeeModel  = FeeModel
            FMItem.PriceList = INPUT FRAME lis FMItem.PriceList
            FMItem.BillCode  = INPUT FRAME lis FMItem.BillCode.
@@ -391,7 +391,7 @@ BROWSE:
        HIDE FRAME f1 NO-PAUSE.
        IF BillCode ENTERED THEN DO:
           FIND FIRST FMItem WHERE 
-                     FMItem.Brand     = gcBrand   AND
+                     FMItem.Brand     = Syst.CUICommon:gcBrand   AND
                      FMItem.PriceList = PriceList AND 
                      FMItem.BillCode >= BillCode  AND
                      FMItem.FeeModel = FeeModel.FeeModel  
@@ -443,12 +443,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST FMItem WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND FIRST FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -456,12 +456,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST FMItem WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND LAST FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -469,12 +469,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT FMItem WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND NEXT FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -482,12 +482,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV FMItem WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND PREV FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = gcBrand   AND
+          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -508,7 +508,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
        FIND BillItem WHERE 
-            BillItem.Brand     = gcBrand AND
+            BillItem.Brand     = Syst.CUICommon:gcBrand AND
             BillItem.BillCode  = FMItem.BillCode  NO-LOCK NO-ERROR.
 END PROCEDURE.
 

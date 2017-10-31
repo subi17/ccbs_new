@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "CRON".
 {Func/cparam2.i}
 {Func/fmakesms.i}
@@ -51,7 +51,7 @@ ASSIGN
    ldeCurrStamp = Func.Common:mMakeTS().
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
          Order.Crstamp <= ldePickTo,
    FIRST OrderCustomer NO-LOCK WHERE

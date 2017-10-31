@@ -63,7 +63,7 @@ FORM
     ActivityCounter.IntValue        COLUMN-LABEL "Value"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  ACTIVITY COUNTERS  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -314,7 +314,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            ldaACDate WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        

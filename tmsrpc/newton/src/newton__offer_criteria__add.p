@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -49,7 +49,7 @@ katun = pcUserName.
 CREATE ttOfferCriteria.
 ASSIGN 
     ttOfferCriteria.offercriteriaid = NEXT-VALUE(OfferCriteriaSeq)
-    ttOfferCriteria.brand           = gcBrand
+    ttOfferCriteria.brand           = Syst.CUICommon:gcBrand
     ttOfferCriteria.offer           = get_string(pcStruct,"offer_id")
     ttOfferCriteria.criteriatype    = get_string(pcStruct, "criteria_type")    
     ttOfferCriteria.BeginStamp      = get_timestamp(pcStruct,"valid_from")

@@ -9,7 +9,7 @@ Version ......: xfera
 
 {Syst/commpaa.i}
 katun = "MNPResend".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}

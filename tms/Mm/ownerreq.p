@@ -104,7 +104,7 @@ form
     MsRequest.ReqStatus   COLUMN-LABEL "S"         FORMAT ">9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  OWNER CHANGES  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -533,7 +533,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liRequest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -543,10 +543,10 @@ REPEAT WITH FRAME sel:
                MsRequest.MsRequest = liRequest
           NO-LOCK NO-ERROR.
 
-          IF NOT AVAILABLE MsRequest OR MsRequest.Brand NE gcBrand OR
+          IF NOT AVAILABLE MsRequest OR MsRequest.Brand NE Syst.CUICommon:gcBrand OR
              MsRequest.ReqType NE liReqType           
           THEN FIND LAST MsRequest WHERE
-                         MsRequest.Brand     = gcBrand   AND
+                         MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
                          MsRequest.ReqType   = liReqType AND
                          MsRequest.MsRequest > liRequest NO-LOCK NO-ERROR.
                     
@@ -564,7 +564,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -602,7 +602,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -627,7 +627,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liStatus WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
@@ -1029,7 +1029,7 @@ PROCEDURE local-find-others.
               liAdvDays  = 0.
               
        FOR EACH Invoice NO-LOCK WHERE
-                Invoice.Brand   = gcBrand              AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand              AND
                 Invoice.CustNum = MsRequest.ReqIParam1 AND
                 Invoice.InvType = 4,
           FIRST SingleFee NO-LOCK WHERE

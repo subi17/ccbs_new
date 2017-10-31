@@ -15,7 +15,7 @@
  */
 {Syst/commpaa.i}
 katun = "Newton RPC".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam2.i}
 {Func/fdestcountry.i}
@@ -234,7 +234,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
 
    /* country name for roaming */
    IF LOOKUP(STRING(ihCDR::SpoCMT),{&ROAMING_CALLCASE}) > 0 THEN
-      lcCCNName = fDestCountryName(gcBrand,
+      lcCCNName = fDestCountryName(Syst.CUICommon:gcBrand,
                                   1,
                                   ihCDR::SpoCMT,
                                   ihCDR::DateSt,
@@ -246,7 +246,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
    /* ServiceName for Premium Number */
    ELSE DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
          lcCCNName = ttCall.ServiceName.
@@ -438,7 +438,7 @@ FUNCTION fCollectCdrs RETURNS LOGICAL
 EMPTY TEMP-TABLE ttCall.
    
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT katun,
                INPUT pdStartDate,
                INPUT pdEndDate,

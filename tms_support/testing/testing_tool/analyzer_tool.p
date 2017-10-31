@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -303,7 +303,7 @@ END PROCEDURE.
 PROCEDURE pInitialize:
 
     FOR FIRST InvText NO-LOCK WHERE
-              InvText.Brand     = gcBrand                 AND
+              InvText.Brand     = Syst.CUICommon:gcBrand                 AND
               InvText.Target    = "EMAIL"                 AND
               InvText.KeyValue  = "EmailConfAnalyzerTool" AND
               InvText.Language  = 5                       AND 

@@ -14,7 +14,7 @@ output stream sout to /apps/snet/200901/as_yts1248_3.log append.
 
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 DEFINE VARIABLE liReq AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcInfo AS CHAR NO-UNDO. 

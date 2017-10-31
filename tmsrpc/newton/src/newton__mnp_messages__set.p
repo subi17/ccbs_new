@@ -55,7 +55,7 @@ IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = pcUserName.
 {Syst/eventval.i}
 {Syst/tmsconst.i}
@@ -94,7 +94,7 @@ END.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.CUICommon:gcBrand
     Memo.HostTable = "MNPProcess"
     Memo.KeyValue  = STRING(MNPOperation.MNPSeq)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

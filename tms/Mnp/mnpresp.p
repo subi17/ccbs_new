@@ -10,7 +10,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "MNP".
 
 {Func/heartbeat.i}
@@ -216,7 +216,7 @@ PROCEDURE pHandleQueue:
    /* order should always exist with MNP IN processes */
    IF MNPProcess.MNPType = {&MNP_TYPE_IN} THEN 
    DO:
-      FIND Order WHERE Order.Brand = gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      FIND Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       IF LOCKED Order THEN 
          RETURN.
 
@@ -391,19 +391,19 @@ PROCEDURE pHandleQueue:
                         lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
                     
                      FIND MNPOperator NO-LOCK WHERE
-                          MNPOperator.Brand    = gcBrand         AND
+                          MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
                           MNPOperator.OperCode = TRIM(lcNewOper) AND
                           MNPOperator.Active   = TRUE NO-ERROR.
                      
                      IF NOT AVAIL MNPOperator THEN 
                         FIND MNPOperator NO-LOCK WHERE
-                             MNPOperator.Brand    = gcBrand         AND
+                             MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
                              MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
 
                      IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
                      ELSE DO:
                         FIND FIRST MNPOperator NO-LOCK WHERE
-                                   MNPOperator.Brand    = gcBrand         AND
+                                   MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
                                    MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
                         IF AVAIL MNPOperator AND 
                                  MNPOperator.OperBrand > "" THEN 
@@ -620,7 +620,7 @@ PROCEDURE pHandleQueue:
             MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
          
          FIND msisdn where
-            msisdn.brand = gcBrand and
+            msisdn.brand = Syst.CUICommon:gcBrand and
             msisdn.cli = MNPSub.CLI AND
             msisdn.statuscode = {&MSISDN_ST_WAITING_RETURN} and
             msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
@@ -653,7 +653,7 @@ PROCEDURE pHandleQueue:
          IF AVAIL MNPSub THEN DO:
 
             FIND FIRST MSISDN WHERE
-                       MSISDN.Brand = gcBrand AND
+                       MSISDN.Brand = Syst.CUICommon:gcBrand AND
                        MSISDN.CLI = MNPSub.CLI
             USE-INDEX CLI NO-LOCK NO-ERROR.
 
@@ -852,7 +852,7 @@ PROCEDURE pHandleQueue:
         
          /* Cancel pending SMS messages */
          FOR EACH CallAlarm WHERE
-                  CallAlarm.Brand = gcBrand AND
+                  CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                   CallAlarm.CLI = Order.CLI AND
                   CallAlarm.DeliStat = 1 AND
                   CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -931,7 +931,7 @@ PROCEDURE pHandleQueue:
          IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:
             
             FIND OrderAccessory WHERE
-                 OrderAccessory.Brand = gcBrand AND
+                 OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
                  OrderAccessory.OrderId = Order.OrderId AND
                  OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
             EXCLUSIVE-LOCK NO-ERROR.

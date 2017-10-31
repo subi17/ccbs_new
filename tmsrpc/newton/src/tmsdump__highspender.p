@@ -23,7 +23,7 @@
 
 {Syst/commpaa.i}
 katun = "NewtonAd".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/highusage_report.i}
 {newton/src/json_key.i}
 {Func/barrfunc.i}

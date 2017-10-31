@@ -210,7 +210,7 @@ ELSE DO:
    /* DCLI periodical contracts ------------------------------------*/
    DCCLI_loop:
    FOR EACH DCCLI NO-LOCK WHERE
-            DCCLI.Brand = gcBrand AND
+            DCCLI.Brand = Syst.CUICommon:gcBrand AND
             DCCLI.ValidTo > TODAY - 90
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -262,7 +262,7 @@ SESSION:NUMERIC-FORMAT = lcNumeric.
 PROCEDURE pFillTempTables:
 
    FOR EACH DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand:
+            DayCampaign.Brand = Syst.CUICommon:gcBrand:
       CREATE ttDayCampaign.
       BUFFER-COPY DayCampaign TO ttDayCampaign.
    END.
@@ -370,7 +370,7 @@ PROCEDURE pReadDCCLI :
       ELSE ldEventTS = 0.
 
       FIND FIRST ttDayCampaign NO-LOCK WHERE
-                 ttDayCampaign.Brand   = gcBrand AND
+                 ttDayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  ttDayCampaign.DCEvent = DCCLI.DCEvent  NO-ERROR.
       IF NOT AVAIL ttDayCampaign THEN RETURN. 
 
@@ -422,7 +422,7 @@ PROCEDURE pReadMServiceLimit :
       NO-LOCK NO-ERROR.
       
       FIND FIRST ttDayCampaign NO-LOCK WHERE
-                 ttDayCampaign.Brand   = gcBrand AND
+                 ttDayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  ttDayCampaign.DCEvent = ttServiceLimit.GroupCode  NO-ERROR.
       IF NOT AVAIL ttDayCampaign THEN RETURN. 
 

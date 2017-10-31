@@ -62,7 +62,7 @@ form
     Salesoffice.SOName
     Salesoffice.CostCentre /* column-label "Cct" help "Cost center" */
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Maintain sales offices " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -370,7 +370,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand with frame haku-f1.
        UPDATE 
-         lcBrand WHEN gcAllBrand
+         lcBrand WHEN Syst.CUICommon:gcAllBrand
          haku-so-code WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-so-code <> "" THEN DO:
@@ -393,7 +393,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand WITH frame haku-f2.
        UPDATE 
-         lcBrand WHEN gcAllBrand
+         lcBrand WHEN Syst.CUICommon:gcAllBrand
          haku-so-name WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        if haku-so-name <> "" THEN DO:

@@ -395,7 +395,7 @@ repeat WITH FRAME sel:
                   ASSIGN FRAME lis FixedFee.BillCode.
                   if FixedFee.BillCode = "" THEN UNDO add-new, LEAVE add-new.
                   FIND FIRST BillItem where 
-                             BillItem.Brand    = gcBrand AND
+                             BillItem.Brand    = Syst.CUICommon:gcBrand AND
                              BillItem.BillCode = FixedFee.BillCode 
                   no-lock no-error.
                   IF NOT AVAIL BillItem THEN DO:
@@ -418,7 +418,7 @@ repeat WITH FRAME sel:
 
                   IF INPUT FRAME lis lBelongTo = FALSE THEN DO:
                      FIND FIRST MobSub WHERE
-                                Mobsub.Brand = gcBrand AND 
+                                Mobsub.Brand = Syst.CUICommon:gcBrand AND 
                                 MobSub.msseq = INT(INPUT FRAME lis 
                                                    FixedFee.KeyValue) AND
                                 MobSub.CustNum = FixedFee.CustNum
@@ -784,7 +784,7 @@ repeat WITH FRAME sel:
           ELSE lcHostTable = "Customer".
                 
           FIND FIRST FixedFee USE-INDEX CustNum WHERE 
-                     FixedFee.Brand     = gcBrand     AND 
+                     FixedFee.Brand     = Syst.CUICommon:gcBrand     AND 
                      FixedFee.CustNum   = CustNum     AND
                      FixedFee.HostTable = lcHostTable AND
                      FixedFee.KeyValue  = lcKeyValue 
@@ -792,7 +792,7 @@ repeat WITH FRAME sel:
 
           IF NOT AVAILABLE FixedFee THEN 
           FIND FIRST FixedFee USE-INDEX CustNum WHERE 
-                     FixedFee.Brand     = gcBrand     AND 
+                     FixedFee.Brand     = Syst.CUICommon:gcBrand     AND 
                      FixedFee.CustNum   = CustNum     AND
                      FixedFee.HostTable = lcHostTable AND
                      FixedFee.KeyValue >= lcKeyValue 
@@ -1390,7 +1390,7 @@ PROCEDURE local-find-next:
 
    IF icMsSeq > "" THEN DO:
       FIND NEXT FixedFee USE-INDEX CustNum WHERE 
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum AND 
                 FIxedFee.HostTable = "Mobsub" AND
                 FixedFee.KeyValue  = icMsseq
@@ -1400,7 +1400,7 @@ PROCEDURE local-find-next:
    ELSE DO:
       IF order = 1 THEN 
       FIND NEXT FixedFee USE-INDEX CustNum WHERE
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    
@@ -1410,7 +1410,7 @@ PROCEDURE local-find-prev:
 
    IF icMsSeq > "" THEN DO:
       FIND PREV FixedFee USE-INDEX CustNum WHERE 
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum AND 
                 FIxedFee.HostTable = "Mobsub" AND
                 FixedFee.KeyValue  = icMsseq
@@ -1420,7 +1420,7 @@ PROCEDURE local-find-prev:
    ELSE DO:
       IF order = 1 THEN 
       FIND PREV FixedFee USE-INDEX CustNum WHERE
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    
@@ -1430,7 +1430,7 @@ PROCEDURE local-find-first:
 
    IF icMsSeq > "" THEN DO:
       FIND FIRST FixedFee USE-INDEX CustNum WHERE 
-                 FixedFee.Brand   = gcBrand AND
+                 FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                  FixedFee.CustNum = CustNum AND 
                  FIxedFee.HostTable = "Mobsub" AND
                  FixedFee.KeyValue  = icMsseq
@@ -1440,7 +1440,7 @@ PROCEDURE local-find-first:
    ELSE DO:
       IF order = 1 THEN 
       FIND FIRST FixedFee USE-INDEX CustNum WHERE
-                 FixedFee.Brand   = gcBrand AND
+                 FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                  FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    
@@ -1450,7 +1450,7 @@ PROCEDURE local-find-last:
 
    IF icMsSeq > "" THEN DO:
       FIND LAST FixedFee USE-INDEX CustNum WHERE 
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum AND 
                 FIxedFee.HostTable = "Mobsub" AND
                 FixedFee.KeyValue  = icMsseq
@@ -1460,7 +1460,7 @@ PROCEDURE local-find-last:
    ELSE DO:
       IF order = 1 THEN 
       FIND LAST FixedFee USE-INDEX CustNum WHERE
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    

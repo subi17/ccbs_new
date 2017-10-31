@@ -32,7 +32,7 @@ form
 "                rapport' med valda kriterier. (Ej kriterier = ALLT)."
    skip(14)
    WITH ROW 1 side-labels width 80
-   title " " + ynimi + " OPERATOR/LAND RAPPORT " +
+   title " " + Syst.CUICommon:ynimi + " OPERATOR/LAND RAPPORT " +
    string(pvm,"99-99-99") + " "
    FRAME valinta.
 

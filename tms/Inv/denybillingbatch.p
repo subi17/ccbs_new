@@ -5,7 +5,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}

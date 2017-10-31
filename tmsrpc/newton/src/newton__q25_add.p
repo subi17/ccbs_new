@@ -20,7 +20,7 @@ newton__q25_add.p
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -116,7 +116,7 @@ IF NOT AVAILABLE Customer THEN
 
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
-           DCCLI.Brand   = gcBrand AND
+           DCCLI.Brand   = Syst.CUICommon:gcBrand AND
            DCCLI.DCEvent BEGINS "PAYTERM" AND
            DCCLI.MsSeq   = MobSub.MsSeq AND 
            DCCLI.PerContractId = liper_contract_id NO-ERROR.
@@ -128,7 +128,7 @@ IF DCCLI.TermDate NE ? THEN
    RETURN appl_err("Installment contract terminated").
    
 FIND SingleFee USE-INDEX Custnum WHERE
-     SingleFee.Brand       = gcBrand AND
+     SingleFee.Brand       = Syst.CUICommon:gcBrand AND
      SingleFee.Custnum     = MobSub.CustNum AND
      SingleFee.HostTable   = "Mobsub" AND
      SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -173,7 +173,7 @@ ELSE
       llNewExtension = YES . /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                  DCCLI.Brand   EQ gcBrand AND
+                  DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ MobSub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN
@@ -259,7 +259,7 @@ IF lcSMSTxt > "" THEN DO:
    ldeFeeAmount = SingleFee.Amt.
    
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = gcBrand AND
+            DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
             DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
        EACH DPMember NO-LOCK WHERE
@@ -307,7 +307,7 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

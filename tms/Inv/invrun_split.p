@@ -164,7 +164,7 @@ PROCEDURE pCustomersWithCounters:
    /* first get pending STCs -> handle those last in billing run */
    IF icRunMode NE "test" THEN 
    FOR EACH MsRequest NO-LOCK USE-INDEX ReqType WHERE
-            MsRequest.Brand    = gcBrand AND
+            MsRequest.Brand    = Syst.CUICommon:gcBrand AND
             MsRequest.ReqType  = 0       AND
             MsRequest.ReqStat  = 8,
       FIRST MobSub NO-LOCK WHERE
@@ -185,10 +185,10 @@ PROCEDURE pCustomersWithCounters:
 
    GetCounterCustomers:
    FOR EACH InvGroup NO-LOCK WHERE
-            InvGroup.Brand    = gcBrand AND
+            InvGroup.Brand    = Syst.CUICommon:gcBrand AND
             InvGroup.BillPerm = TRUE,
        EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand AND
+            Customer.Brand    = Syst.CUICommon:gcBrand AND
             Customer.InvGroup = InvGroup.InvGroup:
             
       FOR EACH MsOwner NO-LOCK USE-INDEX InvCust WHERE
@@ -281,7 +281,7 @@ PROCEDURE pCustomersWithoutCounters:
    END.
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand = gcBrand AND
+            Customer.Brand = Syst.CUICommon:gcBrand AND
             NOT CAN-FIND(FIRST ttInvCust WHERE
                                ttInvCust.CustNum = Customer.CustNum),
       FIRST InvGroup OF Customer NO-LOCK WHERE
@@ -365,7 +365,7 @@ PROCEDURE pCustomersFromFile:
       FIRST Customer NO-LOCK WHERE
             Customer.CustNum = ttCustNum.CustNum,
       FIRST InvGroup NO-LOCK WHERE
-            InvGroup.Brand    = gcBrand AND
+            InvGroup.Brand    = Syst.CUICommon:gcBrand AND
             InvGroup.InvGroup = Customer.InvGroup AND
             InvGroup.BillPerm = TRUE:
             

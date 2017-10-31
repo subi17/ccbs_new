@@ -94,7 +94,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
    DEF VAR lcOrderType AS CHAR NO-UNDO. 
 
    FIND Order NO-LOCK WHERE
-        Order.Brand = Syst.Parameters:gcBrand AND
+        Order.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
         Order.OrderID = iiOrderID.
 
    FIND CLIType NO-LOCK WHERE
@@ -129,7 +129,7 @@ FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
    DEF BUFFER OrderFusion FOR OrderFusion.
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = Syst.Parameters:gcBrand AND
+        OrderFusion.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
         OrderFusion.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".
@@ -163,7 +163,7 @@ FUNCTION fCreateFusionCreateOrderMessage RETURNS LOGICAL
    DEF BUFFER OrderFusion FOR OrderFusion.
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = Syst.Parameters:gcBrand AND
+        OrderFusion.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
         OrderFusion.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".
@@ -203,7 +203,7 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    DEF BUFFER OrderFusion FOR OrderFusion.
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = Syst.Parameters:gcBrand AND
+        OrderFusion.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
         OrderFusion.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".

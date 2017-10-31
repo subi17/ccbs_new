@@ -185,7 +185,7 @@ REPEAT WITH FRAME sel:
            END.
 
            IF CAN-FIND(FIRST RequestStatus WHERE
-                             RequestStatus.Brand   = gcBrand AND
+                             RequestStatus.Brand   = Syst.CUICommon:gcBrand AND
                              RequestStatus.ReqType = iiReqType 
                              USING FRAME lis RequestStatus.ReqStat)
            THEN DO:
@@ -197,7 +197,7 @@ REPEAT WITH FRAME sel:
 
            CREATE RequestStatus.
            ASSIGN 
-              RequestStatus.Brand    = gcBrand
+              RequestStatus.Brand    = Syst.CUICommon:gcBrand
               RequestStatus.ReqType  = iiReqType
               RequestStatus.ReqStat  = INPUT FRAME lis RequestStatus.ReqStat
               RequestStatus.InUse    = TRUE.
@@ -428,7 +428,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            liReqStat WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -643,7 +643,7 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND RequestType WHERE 
-           RequestType.Brand   = gcBrand AND
+           RequestType.Brand   = Syst.CUICommon:gcBrand AND
            RequestType.ReqType = RequestStatus.ReqType NO-LOCK NO-ERROR.
       DISP 
          RequestStatus.Brand          

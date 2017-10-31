@@ -145,7 +145,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           DISPLAY gcBrand @ DCServicePackage.Brand
+           DISPLAY Syst.CUICommon:gcBrand @ DCServicePackage.Brand
                    icDCEvent @ DCServicePackage.DCEvent.
 
            PROMPT-FOR 
@@ -166,7 +166,7 @@ REPEAT WITH FRAME sel:
            IF INPUT DCServicePackage.ServPac = "" THEN UNDO, LEAVE ADD-ROW.
 
            IF  NOT CAN-FIND(FIRST ServPac WHERE
-                      ServPac.Brand = gcBrand AND
+                      ServPac.Brand = Syst.CUICommon:gcBrand AND
                       ServPac.ServPac = INPUT DCServicePackage.ServPac) 
            THEN DO:
                MESSAGE "Unknown service package"
@@ -182,7 +182,7 @@ REPEAT WITH FRAME sel:
            
            CREATE DCServicePackage.
            ASSIGN 
-              DCServicePackage.Brand   = gcBrand
+              DCServicePackage.Brand   = Syst.CUICommon:gcBrand
               DCServicePackage.DCServicePackageID = liPackageID
               DCServicePackage.DCEvent = icDCEvent
               DCServicePackage.ServPac = INPUT FRAME lis 
@@ -678,7 +678,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
     FIND FIRST ServPac WHERE 
-               ServPac.Brand = gcBrand AND
+               ServPac.Brand = Syst.CUICommon:gcBrand AND
                ServPac.ServPac = DCServicePackage.ServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -692,7 +692,7 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND FIRST DayCampaign WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = DCServicePackage.DCEvent NO-LOCK NO-ERROR.
            
       DISP 
@@ -743,7 +743,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       IF CAN-FIND(FIRST bDCPackage WHERE
-                        bDCPackage.Brand      = gcBrand AND
+                        bDCPackage.Brand      = Syst.CUICommon:gcBrand AND
                         bDCPackage.DCEvent    = DCServicePackage.DCEvent  AND
                         bDCPackage.ServPac    = DCServicePackage.ServPac  AND
                         bDCPackage.FromDate <= DCServicePackage.ToDate    AND
@@ -767,7 +767,7 @@ PROCEDURE pInitTempTable:
    EMPTY TEMP-TABLE ttPackage.
    
    FOR EACH DCServicePackage NO-LOCK WHERE
-            DCServicePackage.Brand   = gcBrand AND
+            DCServicePackage.Brand   = Syst.CUICommon:gcBrand AND
             DCServicePackage.DCEvent = icDCEvent:
 
       IF llActive AND DCServicePackage.ToDate < TODAY THEN NEXT.

@@ -91,7 +91,7 @@ FUNCTION fRateCCN RETURNS LOGIC
    lcRateCCN = "".
    IF iiRateCCN > 0 THEN DO:
       FIND FIRST CCN WHERE 
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.CUICommon:gcBrand AND
                  CCN.CCN   = iiRateCCN NO-LOCK NO-ERROR.
       IF AVAILABLE CCN THEN lcRateCCN = CCN.CCNName.
    END.
@@ -108,7 +108,7 @@ FUNCTION fBDest RETURNS LOGIC
    lcBDest = "".
    IF icBDest > "" THEN DO:
       FIND FIRST BDest WHERE 
-                 BDest.Brand = gcBrand AND
+                 BDest.Brand = Syst.CUICommon:gcBrand AND
                  BDest.BDest = icBDest AND
                  BDest.ToDate >= idaFrom AND
                  BDest.FromDate <= idaTo NO-LOCK NO-ERROR.
@@ -125,7 +125,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST BDestConf WHERE 
-           BDestConf.Brand = gcBrand AND
+           BDestConf.Brand = Syst.CUICommon:gcBrand AND
            BDestConf.BDCGroup = icBDCGroup NO-LOCK NO-ERROR.
 IF NOT AVAILABLE BDestConf THEN DO:
    MESSAGE "Report not available"
@@ -171,7 +171,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANS WITH FRAME lis:
 
-           DISPLAY gcBrand @ BDestConfItem.Brand
+           DISPLAY Syst.CUICommon:gcBrand @ BDestConfItem.Brand
                    icBDCGroup @ BDestConfItem.BDCGroup.
 
            FIND LAST BDestConfItem USE-INDEX BDCItemID NO-LOCK NO-ERROR.
@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
            
            CREATE BDestConfItem.
            ASSIGN 
-              BDestConfItem.Brand     = gcBrand 
+              BDestConfItem.Brand     = Syst.CUICommon:gcBrand 
               BDestConfItem.BDCGroup  = icBDCGroup
               BDestConfItem.BDCItemID = i.
 
@@ -540,25 +540,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST BDestConfItem WHERE 
-      BDestConfItem.Brand = gcBrand AND
+      BDestConfItem.Brand = Syst.CUICommon:gcBrand AND
       BDestConfItem.BDCGroup = icBDCGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST BDestConfItem WHERE 
-      BDestConfItem.Brand = gcBrand AND
+      BDestConfItem.Brand = Syst.CUICommon:gcBrand AND
       BDestConfItem.BDCGroup = icBDCGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT BDestConfItem WHERE 
-      BDestConfItem.Brand = gcBrand AND
+      BDestConfItem.Brand = Syst.CUICommon:gcBrand AND
       BDestConfItem.BDCGroup = icBDCGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV BDestConfItem WHERE 
-      BDestConfItem.Brand = gcBrand AND
+      BDestConfItem.Brand = Syst.CUICommon:gcBrand AND
       BDestConfItem.BDCGroup = icBDCGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 

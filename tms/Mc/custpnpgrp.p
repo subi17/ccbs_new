@@ -62,7 +62,7 @@ form
    CustPNPGroup.PnPPrior
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " maintain Customer PNP Groups "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -108,7 +108,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 view FRAME sel.
 
 FIND FIRST CustPNPGroup
-WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF AVAILABLE CustPNPGroup THEN ASSIGN
    memory     = recid(CustPNPGroup)
    must-print = TRUE
@@ -173,7 +173,7 @@ add-new:
 
       /* any records AVAILABLE ? */
       FIND FIRST CustPNPGroup
-      WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE CustPNPGroup THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -199,7 +199,7 @@ print-line:
                  CustPNPGroup.PnPPrior.
               rtab[FRAME-LINE] = recid(CustPNPGroup).
               IF order = 1 THEN FIND NEXT CustPNPGroup
-              WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+              WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
            END.
            ELSE DO:
@@ -258,7 +258,7 @@ BROWSE:
         FIND CustPNPGroup where recid(CustPNPGroup) = memory.
         DO i = 1 TO FRAME-LINE - 1:
            IF order = 1 THEN FIND prev CustPNPGroup
-           WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+           WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
            IF AVAILABLE CustPNPGroup THEN
               ASSIGN firstline = i memory = recid(CustPNPGroup).
@@ -282,7 +282,7 @@ BROWSE:
         IF FRAME-LINE = 1 THEN DO:
            FIND CustPNPGroup where recid(CustPNPGroup) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev CustPNPGroup
-           WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+           WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
            IF NOT AVAILABLE CustPNPGroup THEN DO:
               message "YOU ARE ON THE FIRST ROW !".
@@ -314,7 +314,7 @@ BROWSE:
            FIND CustPNPGroup where recid(CustPNPGroup) = rtab[FRAME-DOWN] 
            no-lock .
            IF order = 1 THEN FIND NEXT CustPNPGroup
-           WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+           WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
            IF NOT AVAILABLE CustPNPGroup THEN DO:
               message "YOU ARE ON THE LAST ROW !".
@@ -344,7 +344,7 @@ BROWSE:
         memory = rtab[1].
         FIND CustPNPGroup where recid(CustPNPGroup) = memory no-lock no-error.
         IF order = 1 THEN FIND prev CustPNPGroup
-        WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+        WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
         IF AVAILABLE CustPNPGroup THEN DO:
            memory = recid(CustPNPGroup).
@@ -352,7 +352,7 @@ BROWSE:
            /* go back one page */
            DO line = 1 TO (FRAME-DOWN - 1):
               IF order = 1 THEN FIND prev CustPNPGroup
-              WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+              WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
               IF AVAILABLE CustPNPGroup THEN memory = recid(CustPNPGroup).
               ELSE line = FRAME-DOWN.
@@ -388,13 +388,13 @@ BROWSE:
        CustNum = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
-       UPDATE lcBrand WHEN gcAllBrand = TRUE 
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
               CustNum WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if CustNum <> 0 THEN DO:
           FIND FIRST CustPNPGroup where 
                      CustPNPGroup.CustNum >= CustNum AND 
-                     CustPNPGroup.Brand    = gcBrand 
+                     CustPNPGroup.Brand    = Syst.CUICommon:gcBrand 
           no-lock no-error.
 
            IF NOT  fRecFound(1) THEN NEXT Browse.
@@ -439,7 +439,7 @@ BROWSE:
           CustPNPGroup.PnPPrior.
 
        IF order = 1 THEN FIND NEXT CustPNPGroup
-       WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
        IF AVAILABLE CustPNPGroup THEN memory = recid(CustPNPGroup).
        ELSE DO:
@@ -447,7 +447,7 @@ BROWSE:
           FIND CustPNPGroup where recid(CustPNPGroup) = rtab[FRAME-LINE] no-lock.
           /* AND THEN the previous one */
           IF order = 1 THEN FIND prev CustPNPGroup
-          WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+          WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
           IF AVAILABLE CustPNPGroup THEN DO:
              ASSIGN
@@ -475,7 +475,7 @@ BROWSE:
 
            /* in the LAST record was deleted ? */
            IF NOT can-find(FIRST CustPNPGroup
-           WHERE CustPNPGroup.Brand = gcBrand) THEN DO:
+           WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel no-pause.
               PAUSE 0 no-message.
               LEAVE LOOP.
@@ -525,7 +525,7 @@ BROWSE:
 
      else if lookup(nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST CustPNPGroup
-       WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
        ASSIGN memory = recid(CustPNPGroup) must-print = TRUE.
        NEXT LOOP.
@@ -533,7 +533,7 @@ BROWSE:
 
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST CustPNPGroup
-       WHERE CustPNPGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustPNPGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
        ASSIGN memory = recid(CustPNPGroup) must-print = TRUE.
        NEXT LOOP.

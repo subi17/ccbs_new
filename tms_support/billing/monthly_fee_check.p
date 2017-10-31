@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 
@@ -74,10 +74,10 @@ put STREAM strout unformatted
 
 looppi:
 FOR EACH daycampaign where
-         daycampaign.brand = gcBrand AND
+         daycampaign.brand = Syst.CUICommon:gcBrand AND
          daycampaign.dcevent begins "PAYTERM" NO-LOCK,
     EACH dccli where
-         dccli.brand    = gcBrand             and
+         dccli.brand    = Syst.CUICommon:gcBrand             and
          dccli.dcevent  = daycampaign.dcevent and
          dccli.validto >= ldaFromDate NO-LOCK:
    
@@ -112,7 +112,7 @@ FOR EACH daycampaign where
    ELSE liCustnum = mobsub.custnum.
          
    FIND FIRST fixedfee where
-              fixedfee.brand     = gcBrand             and
+              fixedfee.brand     = Syst.CUICommon:gcBrand             and
               fixedfee.custnum   = liCustnum           and
               fixedfee.hosttable = "mobsub"            and
               fixedfee.keyvalue  = string(dccli.msseq) and
@@ -153,7 +153,7 @@ FOR EACH daycampaign where
    
       if dccli.amount > 0 then do:
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand       = gcBrand                     AND
+                    SingleFee.Brand       = Syst.CUICommon:gcBrand                     AND
                     SingleFee.Custnum     = liCustnum                   AND
                     SingleFee.HostTable   = "mobsub"                    AND
                     SingleFee.KeyValue    = string(dccli.msseq)         AND
@@ -333,7 +333,7 @@ FOR EACH servicelimit NO-LOCK,
       END.
 
       FIND FIRST fixedfee NO-LOCK WHERE
-                 fixedfee.brand      = gcBrand                     and
+                 fixedfee.brand      = Syst.CUICommon:gcBrand                     and
                  fixedfee.hosttable  = "mobsub"                    and
                  fixedfee.custnum    = liCustnum                   and
                  fixedfee.keyvalue   = string(mservicelimit.msseq) and
@@ -423,12 +423,12 @@ ASSIGN liBundleCount = 0
        lcBundleBasedCLITypes = fCParam("Bundles","BUNDLE_BASED_CLITYPES").
 
 FOR EACH MobSub NO-LOCK WHERE 
-         MobSub.Brand = gcBrand:             
+         MobSub.Brand = Syst.CUICommon:gcBrand:             
     RUN pCheckSubscription((BUFFER Mobsub:HANDLE)).
 END.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = gcBrand AND 
+         MsRequest.Brand     = Syst.CUICommon:gcBrand AND 
          MsRequest.ReqType   = 18      AND 
          MsRequest.ReqStatus = 2       AND 
          MsRequest.ActStamp >= ldeFromStamp:
@@ -453,7 +453,7 @@ PROCEDURE pCheckSubscription:
    IF CLIType.FixedLineDownLoad > "" THEN DO:
 
       FIND RequestAction NO-LOCK WHERE
-           RequestAction.Brand = gcBrand AND
+           RequestAction.Brand = Syst.CUICommon:gcBrand AND
            RequestAction.CLIType = ihSub::CLIType AND
            RequestAction.ReqType = 14 AND
            RequestAction.ValidTo >= TODAY AND

@@ -8,7 +8,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun   = "Qvantel".
 
 DEF VAR lcInputFile     AS CHAR NO-UNDO FORMAT "x(45)".
@@ -70,7 +70,7 @@ REPEAT TRANSACTION:
       ldValidFrom = TODAY.
 
    IF CAN-FIND(FIRST PremiumNumber WHERE
-                     PremiumNumber.Brand = gcBrand AND
+                     PremiumNumber.Brand = Syst.CUICommon:gcBrand AND
                      PremiumNumber.BNumberPreFix = lcBNumberPreFix) THEN DO:
       PUT STREAM sout UNFORMATTED
           lcRead CHR(9)
@@ -79,7 +79,7 @@ REPEAT TRANSACTION:
    END. /* IF CAN-FIND(FIRST PremiumNumber WHERE */
 
    CREATE PremiumNumber.
-   ASSIGN PremiumNumber.Brand = gcBrand
+   ASSIGN PremiumNumber.Brand = Syst.CUICommon:gcBrand
           PremiumNumber.BNumberPreFix = lcBNumberPreFix
           PremiumNumber.OperatorName  = ENTRY(3,lcRead,"#")
           PremiumNumber.ValidFrom     = ldValidFrom

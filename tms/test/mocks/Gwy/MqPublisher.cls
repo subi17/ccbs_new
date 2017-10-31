@@ -5,7 +5,7 @@ USING Syst.Parameters.
 
 CLASS test.mocks.Gwy.MqPublisher:
 
-   DEFINE PUBLIC VARIABLE gcBrand          AS CHARACTER   NO-UNDO INITIAL "1".
+   DEFINE PUBLIC VARIABLE Syst.CUICommon:gcBrand          AS CHARACTER   NO-UNDO INITIAL "1".
    DEFINE PUBLIC VARIABLE lcHostName       AS CHARACTER   NO-UNDO.
    DEFINE PUBLIC VARIABLE liPort           AS INTEGER     NO-UNDO.
    DEFINE PUBLIC VARIABLE liTimeOut        AS INTEGER     NO-UNDO.

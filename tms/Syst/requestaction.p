@@ -194,7 +194,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           DISPLAY gcBrand @ RequestAction.Brand
+           DISPLAY Syst.CUICommon:gcBrand @ RequestAction.Brand
                    iiReqType @ RequestAction.ReqType.
 
            PROMPT-FOR 
@@ -236,7 +236,7 @@ REPEAT WITH FRAME sel:
            IF INPUT RequestAction.CLIType NE "*" AND 
               INPUT RequestAction.CLIType > "" AND 
                                  NOT CAN-FIND(FIRST CLIType WHERE
-                                 CLIType.Brand = gcBrand AND
+                                 CLIType.Brand = Syst.CUICommon:gcBrand AND
                                  CLIType.CLIType = INPUT RequestAction.CLIType) 
            THEN DO:
                MESSAGE "Unknown CLI type"
@@ -251,7 +251,7 @@ REPEAT WITH FRAME sel:
            
            CREATE RequestAction.
            ASSIGN 
-              RequestAction.Brand   = gcBrand
+              RequestAction.Brand   = Syst.CUICommon:gcBrand
               RequestAction.RequestActionID = liActionID
               RequestAction.ReqType = iiReqType
               RequestAction.PayType = INPUT FRAME lis RequestAction.PayType
@@ -755,11 +755,11 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND RequestType WHERE 
-           RequestType.Brand   = gcBrand AND
+           RequestType.Brand   = Syst.CUICommon:gcBrand AND
            RequestType.ReqType = RequestAction.ReqType NO-LOCK NO-ERROR.
       
       FIND CLIType WHERE 
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.CUICommon:gcBrand AND
            CLIType.CLIType = RequestAction.CLIType NO-LOCK NO-ERROR.
            
       lcActionType = fActionTypeDesc(RequestAction.ActionType).
@@ -877,7 +877,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       FIND FIRST bAction NO-LOCK WHERE
-                 bAction.Brand      = gcBrand AND
+                 bAction.Brand      = Syst.CUICommon:gcBrand AND
                  bAction.ReqType    = RequestAction.ReqType    AND
                  bAction.CLIType    = RequestAction.CLIType    AND
                  bAction.PayType    = RequestAction.PayType    AND
@@ -913,7 +913,7 @@ PROCEDURE pInitTempTable:
    EMPTY TEMP-TABLE ttAction.
    
    FOR EACH RequestAction NO-LOCK WHERE
-            RequestAction.Brand   = gcBrand AND
+            RequestAction.Brand   = Syst.CUICommon:gcBrand AND
             RequestAction.ReqType = iiReqType:
 
       IF llActive AND RequestAction.ValidTo < TODAY THEN NEXT.

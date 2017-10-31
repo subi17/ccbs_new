@@ -11,7 +11,7 @@ IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
 END.
 ELSE DO:
    FOR EACH CallAlarm WHERE
-            CallAlarm.brand EQ Syst.Parameters:gcBrand AND
+            CallAlarm.brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
             CallAlarm.delistat EQ {&CA_DELISTAT_NEW} AND
             CallAlarm.delitype EQ 1 /* SMS */:
       ASSIGN

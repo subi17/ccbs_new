@@ -1181,7 +1181,7 @@ PROCEDURE pUpdateNewOwner:
             ELSE IF FRAME-FIELD = "lcSalesman" THEN DO:
                 
                FIND FIRST Salesman WHERE 
-                    Salesman.Brand = gcBrand AND
+                    Salesman.Brand = Syst.CUICommon:gcBrand AND
                     Salesman.Salesman = INPUT lcSalesman 
                   NO-LOCK NO-ERROR.
                IF NOT AVAIL Salesman OR
@@ -1248,7 +1248,7 @@ PROCEDURE pUpdateNewOwner:
                END.
 
                /* Validate, if existing customer*/   
-               FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = gcBrand                 AND 
+               FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = Syst.CUICommon:gcBrand                 AND 
                                                bf_NewCustomer.CustIdType = lcNewCustIDType         AND 
                                                bf_NewCustomer.OrgId      = INPUT lcNewCustId       NO-LOCK NO-ERROR.
                IF AVAIL bf_NewCustomer THEN
@@ -1313,14 +1313,14 @@ PROCEDURE pUpdateNewOwner:
         lcNewTitle lcNewTitleLabel WITH FRAME fNewCriter.
          
       FIND FIRST bNewCust WHERE 
-                 bNewCust.Brand = gcBrand AND
+                 bNewCust.Brand = Syst.CUICommon:gcBrand AND
                  bNewCust.CustIdType = lcNewCustIdType AND
                  bNewCust.OrgId = lcNewCustId AND
                  bNewCust.Roles NE "inactive" NO-LOCK NO-ERROR.
                     
       IF AVAIL bNewCust AND bNewCust.CustNum NE liNewCust1 THEN DO: 
          IF CAN-FIND(FIRST bMobSub WHERE
-                           bMobSub.Brand     = gcBrand AND
+                           bMobSub.Brand     = Syst.CUICommon:gcBrand AND
                            bMobSub.MsSeq    <> MobSub.MsSeq AND
                            bMobSub.CustNum   = bNewCust.CustNum AND
                            bMobSub.PayType   = FALSE) THEN

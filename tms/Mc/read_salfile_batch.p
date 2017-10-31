@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -116,7 +116,7 @@ REPEAT:
          NEXT.
       END.
       FIND FIRST Order WHERE
-                 Order.brand EQ gcBrand AND
+                 Order.brand EQ Syst.CUICommon:gcBrand AND
                  Order.orderid EQ INT(lcYoigoOrderId) AND
                  LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 
                  NO-LOCK NO-ERROR.
@@ -126,7 +126,7 @@ REPEAT:
          NEXT.
       END.
       FIND FIRST CliType WHERE
-                 Clitype.brand EQ gcBrand AND
+                 Clitype.brand EQ Syst.CUICommon:gcBrand AND
                  Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
      IF NOT AVAIL Clitype THEN DO:
          fLogLine("ERROR:Order " + lcTempOrderId + " with incorrect clitype " + 

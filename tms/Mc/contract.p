@@ -85,7 +85,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " CONTRACTS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -94,14 +94,14 @@ form
     Contract.CustNum     COLON 20   
        VALIDATE(INPUT Contract.CustNum = 0 OR 
                 CAN-FIND(FIRST Customer WHERE 
-                               Customer.Brand   = gcBrand AND
+                               Customer.Brand   = Syst.CUICommon:gcBrand AND
                                Customer.CustNum = INPUT Contract.CustNum),
                 "Unknown customer")
        lcCustName FORMAT "X(30)" NO-LABEL SKIP
     Contract.Salesman     COLON 20   LABEL "Salesman"
        VALIDATE(INPUT Contract.Salesman = "" OR
                 CAN-FIND(Salesman WHERE 
-                         Salesman.Brand   = gcBrand AND
+                         Salesman.Brand   = Syst.CUICommon:gcBrand AND
                          Salesman.Salesman = 
                          INPUT Contract.Salesman),
                 "Unknown Salesman")
@@ -114,7 +114,7 @@ form
     Contract.FeeModel    COLON 20
        VALIDATE(INPUT Contract.FeeModel = "" OR
                 CAN-FIND(FeeModel WHERE 
-                         FeeModel.Brand = gcBrand AND
+                         FeeModel.Brand = Syst.CUICommon:gcBrand AND
                          FeeModel.FeeModel = INPUT Contract.FeeModel),
                 "Unknown fee model")
        FeeModel.FeeName NO-LABEL SKIP
@@ -277,7 +277,7 @@ REPEAT WITH FRAME sel:
       ASSIGN must-print = TRUE.
 
       /* is there ANY record ? */
-      FIND FIRST Contract WHERE Contract.Brand = gcBrand 
+      FIND FIRST Contract WHERE Contract.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Contract THEN LEAVE LOOP.
       NEXT LOOP.
@@ -506,7 +506,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  lcContract WITH FRAME f1.
           HIDE FRAME f1 NO-PAUSE.
 
@@ -528,7 +528,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  liCustNum WITH FRAME f2.
           HIDE FRAME f2 NO-PAUSE.
 
@@ -559,7 +559,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F3.
           DISPLAY lcBrand WITH FRAME F3.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  xSalesman WITH FRAME f3.
           HIDE FRAME f3 NO-PAUSE.
 
@@ -582,7 +582,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F4.
           DISPLAY lcBrand WITH FRAME F4.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  ldtFrom WITH FRAME f4.
           HIDE FRAME f4 NO-PAUSE.
 
@@ -613,7 +613,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F5.
           DISPLAY lcBrand WITH FRAME F5.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  liContrType
                  ldtTo WITH FRAME f5.
           HIDE FRAME f5 NO-PAUSE.

@@ -18,7 +18,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
+       Syst.CUICommon:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fexternalapi.i}
 {Func/fmakesms.i}

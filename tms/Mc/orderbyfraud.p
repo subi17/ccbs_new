@@ -19,7 +19,7 @@ DEF VAR lcMessage AS CHAR NO-UNDO.
 DEF VAR lcError   AS CHAR NO-UNDO.
 
 FIND Order WHERE 
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.CUICommon:gcBrand AND 
      Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -60,7 +60,7 @@ END.
 FUNCTION fReleaseMSISDN RETURNS LOGICAL :
 
    FIND FIRST MSISDN USE-INDEX OrderID WHERE
-              MSISDN.Brand = gcBrand AND
+              MSISDN.Brand = Syst.CUICommon:gcBrand AND
               MSISDN.OrderId   = Order.OrderId AND 
               MSISDN.StatusCode = 2 EXCLUSIVE-LOCK NO-ERROR.   
 

@@ -52,7 +52,7 @@ DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 DEF VAR liRoamEUBdestID AS INT NO-UNDO. 
 
 FIND BDest NO-LOCK WHERE
-     BDest.Brand = gcBrand AND
+     BDest.Brand = Syst.CUICommon:gcBrand AND
      BDest.BDest = "ROAM_EU" NO-ERROR.
 IF AVAIL BDest THEN liRoamEUBdestID = BDest.BDestID.
 RELEASE BDest.
@@ -68,7 +68,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " BDest mappings "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

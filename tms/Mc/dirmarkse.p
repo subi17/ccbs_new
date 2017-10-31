@@ -41,7 +41,7 @@ FORM
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " Direct Marketing " FRAME sel.
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST DMarketing USE-INDEX DirMarkName WHERE 
-              DMArketing.Brand = gcBrand 
+              DMArketing.Brand = Syst.CUICommon:gcBrand 
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DMarketing THEN DO:
       BELL.
@@ -95,10 +95,10 @@ print-line:
                DISPLAY DMarketing.DirMark DMarketing.DirMarkName.
                rtab[FRAME-LINE] = RECID(DMarketing).
                IF order = 2 THEN FIND NEXT DMarketing
-               USE-INDEX DirMark WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMark WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK NO-ERROR.
                ELSE IF order = 1 THEN FIND NEXT DMarketing
-               USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK NO-ERROR.
             END.
             ELSE DO:
@@ -160,10 +160,10 @@ BROWSE:
          FIND DMarketing WHERE RECID(DMarketing) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND PREV DMarketing
-            USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+            USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK NO-ERROR.
             ELSE IF order = 1 THEN FIND PREV DMarketing
-            USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+            USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK NO-ERROR.
             IF AVAILABLE DMarketing THEN
                ASSIGN firstline = i memory = RECID(DMarketing).
@@ -187,10 +187,10 @@ BROWSE:
          IF FRAME-LINE = 1 THEN DO:
             FIND DMarketing WHERE RECID(DMarketing) = rtab[1] NO-LOCK.
             IF order = 2 THEN FIND PREV DMarketing
-            USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+            USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK NO-ERROR.
             ELSE IF order = 1 THEN FIND PREV DMarketing WHERE 
-                                             DMarketing.Brand = gcBrand 
+                                             DMarketing.Brand = Syst.CUICommon:gcBrand 
              USE-INDEX DirMarkName NO-LOCK NO-ERROR.
             IF NOT AVAILABLE DMarketing THEN DO:
                MESSAGE "YOU ARE ON THE FIRST ROW !".
@@ -219,10 +219,10 @@ BROWSE:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND DMarketing WHERE RECID(DMarketing) = rtab[FRAME-DOWN] NO-LOCK .
             IF order = 2 THEN FIND NEXT DMarketing
-            USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand
+            USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand
             NO-LOCK NO-ERROR.
             ELSE IF order = 1 THEN FIND NEXT DMarketing
-            USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand
+            USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand
             NO-LOCK NO-ERROR.
             IF NOT AVAILABLE DMarketing THEN DO:
                MESSAGE "YOU ARE ON THE LAST ROW !".
@@ -250,10 +250,10 @@ BROWSE:
          memory = rtab[1].
          FIND DMarketing WHERE RECID(DMarketing) = memory NO-LOCK NO-ERROR.
          IF order = 2 THEN FIND PREV DMarketing
-         USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+         USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
          NO-LOCK NO-ERROR.
          ELSE IF order = 1 THEN FIND PREV DMarketing
-         USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+         USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
          NO-LOCK NO-ERROR.
          IF AVAILABLE DMarketing THEN DO:
             memory = RECID(DMarketing).
@@ -261,10 +261,10 @@ BROWSE:
             /* go back one page */
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND PREV DMarketing
-               USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK NO-ERROR.
                ELSE IF order = 1 THEN FIND PREV DMarketing
-               USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK NO-ERROR.
                IF AVAILABLE DMarketing THEN memory = RECID(DMarketing).
                ELSE line = FRAME-DOWN.
@@ -305,9 +305,9 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST DMarketing
-        USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand NO-LOCK NO-ERROR.
+        USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 1 THEN FIND FIRST DMarketing
-        USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+        USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand 
         NO-LOCK NO-ERROR.
         ASSIGN memory = RECID(DMarketing) must-print = TRUE.
         NEXT LOOP.
@@ -315,10 +315,10 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST DMarketing
-        USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand
+        USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
         ELSE IF order = 1 THEN FIND LAST DMarketing
-        USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand
+        USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
         ASSIGN memory = RECID(DMarketing) must-print = TRUE.
         NEXT LOOP.

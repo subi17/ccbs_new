@@ -10,7 +10,7 @@
 /*
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 qupd = True.
 */
 {Syst/eventval.i}
@@ -61,7 +61,7 @@ form
     iprange.Opername COLUMN-LABEL "OperName" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " IP Ranges "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

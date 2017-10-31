@@ -61,7 +61,7 @@ FORM
     ReportConf.ReportName 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " REPORT CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -132,7 +132,7 @@ REPEAT WITH FRAME sel:
            PROMPT-FOR ReportConf.ReportID WITH FRAME lis.
            IF INPUT ReportConf.ReportID = "" THEN UNDO, LEAVE ADD-ROW.
            IF CAN-FIND(FIRST ReportConf WHERE 
-                             ReportConf.Brand = gcBrand
+                             ReportConf.Brand = Syst.CUICommon:gcBrand
                              USING INPUT ReportConf.ReportID)
            THEN DO:
               MESSAGE "Given report ID is already in use"
@@ -370,7 +370,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcReport WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        

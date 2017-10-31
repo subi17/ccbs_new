@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -56,14 +56,14 @@ OUTPUT STREAM sLog TO VALUE(lcLogFile).
 fBatchLog("START", lcLogFile).
 
 FOR EACH ActionLog WHERE
-   ActionLog.Brand = gcBrand AND
+   ActionLog.Brand = Syst.CUICommon:gcBrand AND
    ActionLog.ActionID = "SIMRELEASE" AND
    ActionLog.ActionTS >= ldeTimeFrom AND
    ActionLog.ActionTS < ldeTimeTo AND
    ActionLog.ActionStatus = 2 NO-LOCK:
 
    FIND Order WHERE
-      Order.Brand = gcBrand AND
+      Order.Brand = Syst.CUICommon:gcBrand AND
       Order.OrderId = INT(ActionLog.KeyValue) NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN NEXT.
 

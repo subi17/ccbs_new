@@ -28,7 +28,7 @@ resp_array = add_array(response_toplevel_id, "").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "NewtonRPC".
 {Func/smsmessage.i}
 

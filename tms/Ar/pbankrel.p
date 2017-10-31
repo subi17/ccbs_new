@@ -63,7 +63,7 @@ FORM
    SKIP(6)
 
    with row 1 side-labels width 80
-        title " " + ynimi + " PAYMENTS' BANK ACCOUNT REPORT " +
+        title " " + Syst.CUICommon:ynimi + " PAYMENTS' BANK ACCOUNT REPORT " +
         string(pvm,"99-99-99") + " "
         frame fCrit.
 
@@ -116,7 +116,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
                   IF INPUT InvGroup = "" THEN lcIgName = "ALL".
                   ELSE DO:
                      FIND InvGroup WHERE 
-                          InvGroup.Brand    = gcBrand AND
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                           InvGroup.InvGroup = INPUT InvGroup
                         NO-LOCK NO-ERROR.
                      IF NOT AVAILABLE InvGroup THEN DO:

@@ -45,7 +45,7 @@ repeat:
        HIDE FRAME asno.
        IF nhaku NE 0 THEN DO:
           FIND FIRST Invoice where 
-                     Invoice.Brand  = gcBrand AND
+                     Invoice.Brand  = Syst.CUICommon:gcBrand AND
                      Invoice.InvNum <= nhaku
           USE-INDEX InvNum no-lock no-error.
 
@@ -70,7 +70,7 @@ repeat:
        HIDE FRAME nimi.
        if liCustNum > 0 THEN DO:
           FIND FIRST Invoice where 
-                     Invoice.Brand  = gcBrand AND
+                     Invoice.Brand  = Syst.CUICommon:gcBrand AND
                      Invoice.CustNum >= liCustNum
           no-lock no-error.
 

@@ -112,7 +112,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST Offer WHERE 
-           Offer.Brand = gcBrand AND
+           Offer.Brand = Syst.CUICommon:gcBrand AND
            Offer.Offer = icOffer NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Offer THEN DO:
    MESSAGE "Offer not available"
@@ -164,7 +164,7 @@ REPEAT WITH FRAME sel:
 
            CREATE OfferCriteria.
            ASSIGN 
-              OfferCriteria.Brand = gcBrand 
+              OfferCriteria.Brand = Syst.CUICommon:gcBrand 
               OfferCriteria.OfferCriteriaID = NEXT-VALUE(OfferCriteriaSeq)
               OfferCriteria.Offer   = icOffer
               OfferCriteria.BeginStamp = ldDefFrom.
@@ -503,7 +503,7 @@ REPEAT WITH FRAME sel:
          
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         RUN Mc/eventsel.p("offercriteria", "#BEGIN" + chr(255) 
-           + gcBrand + chr(255) + icOffer).
+           + Syst.CUICommon:gcBrand + chr(255) + icOffer).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -538,25 +538,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST OfferCriteria WHERE 
-      OfferCriteria.Brand = gcBrand AND
+      OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
       OfferCriteria.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST OfferCriteria WHERE 
-      OfferCriteria.Brand = gcBrand AND
+      OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
       OfferCriteria.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT OfferCriteria WHERE 
-      OfferCriteria.Brand = gcBrand AND
+      OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
       OfferCriteria.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV OfferCriteria WHERE 
-      OfferCriteria.Brand = gcBrand AND
+      OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
       OfferCriteria.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 

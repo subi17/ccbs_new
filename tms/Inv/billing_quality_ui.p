@@ -99,7 +99,7 @@ FORM
    SKIP(1)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " BILLING QUALITY " + 
+     TITLE " " + Syst.CUICommon:ynimi + " BILLING QUALITY " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

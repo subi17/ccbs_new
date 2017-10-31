@@ -11,7 +11,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcResultStruct AS CHAR NO-UNDO. 
@@ -31,7 +31,7 @@ resp_array = add_array(response_toplevel_id, "").
 {newton/src/settenant.i pcTenant}
 
 FOR EACH InvText NO-LOCK WHERE
-         InvText.Brand = gcBrand AND
+         InvText.Brand = Syst.CUICommon:gcBrand AND
          InvText.Target = "SMS" AND
          InvText.ToDate >= TODAY AND
          InvText.FromDate <= TODAY:
@@ -54,7 +54,7 @@ FOR EACH InvText NO-LOCK WHERE
       add_timestamp(lcResultStruct, "timestamp", ldeTimeStamp).
    END.
    FOR EACH RepText NO-LOCK WHERE
-            RepText.Brand     = gcBrand AND
+            RepText.Brand     = Syst.CUICommon:gcBrand AND
             RepText.LinkCode  = STRING(InvText.ITNum) AND
             RepText.TextType  = 32 AND
             RepText.ToDate   >= TODAY AND

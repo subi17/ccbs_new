@@ -71,7 +71,7 @@ PROCEDURE pAddressChange:
    END.
 
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = gcBrand AND
+            MobSub.Brand   = Syst.CUICommon:gcBrand AND
             MobSub.AgrCust = MsRequest.CustNum,
       FIRST bACC NO-LOCK WHERE
             bACC.MsSeq   = MobSub.MsSeq AND

@@ -9,7 +9,7 @@ DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" .
 
 /* this used in staging to set mock tcp handler */
 FIND FIRST TMSParam where
-           TMSParam.Brand      = gcBrand AND 
+           TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
            TMSParam.ParamCode  =  "TCPModule" NO-LOCK NO-ERROR.
 IF AVAIL TMSParam THEN 
          lcTCPModule = TMSParam.CharVal.

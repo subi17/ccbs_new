@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 Katun = "Cron".
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
@@ -98,7 +98,7 @@ PROCEDURE pAmqEDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand        AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand        AND
                  ActionLog.ActionID  = "PrepEDR_HPD"   AND
                  ActionLog.TableName = "PrepEDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
@@ -110,7 +110,7 @@ PROCEDURE pAmqEDRReader:
       ELSE DO:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "PrepEDR"
             ActionLog.KeyValue     = "HPD"
             ActionLog.ActionID     = "PrepEDR_HPD"
@@ -133,7 +133,7 @@ PROCEDURE pAmqEDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.ActionID  = "PrepEDR_HPD" AND
                  ActionLog.TableName = "PrepEDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN

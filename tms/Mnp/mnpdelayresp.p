@@ -44,7 +44,7 @@ OUTPUT STREAM sdump TO value (icFile).
 
 CHECK_LOOP:
 FOR EACH MNPProcess WHERE
-   MNPProcess.Brand = gcBrand AND
+   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
    MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
    MNPProcess.StatusCode = {&MNP_ST_ASOL} NO-LOCK:
 
@@ -71,13 +71,13 @@ FOR EACH MNPProcess WHERE
       END.
 
       FIND MNPOperator WHERE 
-           MNPOperator.Brand = gcBrand AND
+           MNPOperator.Brand = Syst.CUICommon:gcBrand AND
            MNPOperator.OperCode = MNPProcess.OperCode
       NO-LOCK NO-ERROR.
       IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperName.
       ELSE IF AMBIGUOUS(MNPOperator) THEN DO:
          FIND FIRST MNPOperator WHERE 
-                    MNPOperator.Brand = gcBrand AND
+                    MNPOperator.Brand = Syst.CUICommon:gcBrand AND
                     MNPOperator.OperCode = MNPProcess.OperCode
          NO-LOCK.
          IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperBrand.

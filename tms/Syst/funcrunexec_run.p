@@ -48,7 +48,7 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "FREXEC" + STRING(iiFRExecID)
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
@@ -311,7 +311,7 @@ PROCEDURE pFinalize:
       lcActionKey = STRING(iiFRExecID).
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.TableName = "FuncRunExec" AND
                  ActionLog.KeyValue  = lcActionKey AND
                  ActionLog.ActionID  = "FREXEC" + STRING(iiFRExecID) AND

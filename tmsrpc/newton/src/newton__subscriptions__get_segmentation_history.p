@@ -10,7 +10,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
+DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR resp_struct AS CHARACTER NO-UNDO. 
 DEF VAR resp_array AS CHARACTER NO-UNDO. 
 DEF VAR piMsSeq AS INT NO-UNDO. 

@@ -24,7 +24,7 @@ DEFINE INPUT PARAMETER iiUpdateInterval AS INT  NO-UNDO.
       ttResult.TestResult = "Invoice not created".
 
       FOR EACH Invoice NO-LOCK USE-INDEX CustNum WHERE
-               Invoice.Brand = gcBrand AND
+               Invoice.Brand = Syst.CUICommon:gcBrand AND
                Invoice.CustNum = ttResult.InvCust AND
                Invoice.InvDate = idaInvDate AND
                Invoice.InvType = iiInvType,

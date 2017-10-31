@@ -50,13 +50,13 @@ IF liBankDays = ? THEN liBankDays = 0.
 
 
 FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Customer OR Customer.Brand NE gcBrand THEN DO:
+IF NOT AVAILABLE Customer OR Customer.Brand NE Syst.CUICommon:gcBrand THEN DO:
    ocError = "Unknown customer " + STRING(iiCustNum).
    RETURN.
 END.
 
 CREATE PaymPlan.
-ASSIGN PaymPlan.Brand    = gcBrand
+ASSIGN PaymPlan.Brand    = Syst.CUICommon:gcBrand
        PaymPlan.PPlanID  = NEXT-VALUE(PPlan)
        PaymPlan.CustNum  = iiCustNum
        PaymPlan.PPDate   = TODAY

@@ -147,7 +147,7 @@ REPEAT WITH FRAME sel:
            IF llIsNew THEN DO:
 
               CREATE UserLimit.
-              ASSIGN UserLimit.Brand      = gcBrand 
+              ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand 
                      UserLimit.LimitType  = INT(TMSCodes.CodeValue)
                      UserLimit.LimitTarget = icLimitTarget
                      UserLimit.LimitTargetID = icLimitTargetID.
@@ -383,7 +383,7 @@ PROCEDURE find-this-limit:
 
     IF exlock THEN DO:
       FIND TMSCodes  WHERE recid(TMSCodes) = rtab[frame-line(sel)].   
-      FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+      FIND UserLimit WHERE UserLimit.Brand = Syst.CUICommon:gcBrand AND
                      UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                      UserLimit.LimitTarget = icLimitTarget AND
                      UserLimit.LimitTargetID = icLimitTargetID
@@ -391,7 +391,7 @@ PROCEDURE find-this-limit:
     END.
     ELSE DO:
       FIND TMSCodes  WHERE recid(TMSCodes) = rtab[frame-line(sel)] .
-      FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+      FIND UserLimit WHERE UserLimit.Brand = Syst.CUICommon:gcBrand AND
                      UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                      UserLimit.LimitTarget = icLimitTarget AND
                      UserLimit.LimitTargetID = icLimitTargetID
@@ -404,7 +404,7 @@ PROCEDURE findlimitAmt:
 
    lclimitAmt = "not defined".
 
-   FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+   FIND UserLimit WHERE UserLimit.Brand = Syst.CUICommon:gcBrand AND
                   UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                   UserLimit.LimitTarget = icLimitTarget AND
                   UserLimit.LimitTargetID = icLimitTargetID NO-LOCK NO-ERROR.
@@ -416,7 +416,7 @@ PROCEDURE findlimitAmt:
 
        FIND TMSUser WHERE TMSUser.UserCode = icLimitTargetID NO-LOCK NO-ERROR.
 
-       FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+       FIND UserLimit WHERE UserLimit.Brand = Syst.CUICommon:gcBrand AND
                       UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                       UserLimit.LimitTarget = "UserGroup" AND
                       UserLimit.LimitTargetID = TMSUser.UserGroup NO-LOCK NO-ERROR.
@@ -528,7 +528,7 @@ PROCEDURE local-update-record:
 
                  /* create a new user limit */
                  CREATE UserLimit.
-                 ASSIGN UserLimit.Brand      = gcBrand 
+                 ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand 
                         UserLimit.LimitType  = INT(TMSCodes.CodeValue)
                         UserLimit.LimitTarget = icLimitTarget
                         UserLimit.LimitTargetID = icLimitTargetID

@@ -56,7 +56,7 @@ form
  "         Date to .....:" dto no-label format "99-99-99"
  skip(10)
 with row 1 width 80 NO-LABELS
-   title " " + ynimi + " ORDER REPORT " + string(pvm,"99-99-99") + " "
+   title " " + Syst.CUICommon:ynimi + " ORDER REPORT " + string(pvm,"99-99-99") + " "
 FRAME rajat.
 
 form
@@ -113,7 +113,7 @@ end.
 message "Calculating....".
 
 for each order no-lock where
-         order.brand = gcBrand and
+         order.brand = Syst.CUICommon:gcBrand and
          order.crstamp >= fromstamp and
          order.crstamp <= tostamp and
          order.tupas >= 2 and

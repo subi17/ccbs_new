@@ -79,7 +79,7 @@ repeat WITH FRAME frm:
       IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "InvGroup" THEN DO:
             FIND FIRST InvGroup WHERE 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = input InvGroup
             NO-LOCK NO-ERROR.
             IF NOT AVAIL InvGroup THEN DO:
@@ -126,7 +126,7 @@ task:
    OUTPUT STREAM excel TO value(fname).
 
    FIND FIRST InvGroup where
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
               InvGroup.InvGroup = InvGroup
    no-lock no-error.
 
@@ -159,7 +159,7 @@ task:
    put stream excel unformatted "TOTAL" my-nl.
 
    FOR EACH Customer no-lock where
-            Customer.Brand    = gcBrand AND
+            Customer.Brand    = Syst.CUICommon:gcBrand AND
             Customer.CustNum  > 1000    AND
             Customer.InvGroup = InvGroup.
 

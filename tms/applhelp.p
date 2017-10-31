@@ -62,7 +62,7 @@ DO:
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
-else if lookup(frame-field,"gcbrand,Brand") > 0 OR
+else if lookup(frame-field,"Syst.CUICommon:gcBrand,Brand") > 0 OR
      index(frame-field,"brand") > 0 
 THEN DO:
    RUN Help/h-brand.p.

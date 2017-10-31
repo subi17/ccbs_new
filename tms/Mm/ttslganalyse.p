@@ -435,11 +435,11 @@ PROCEDURE local-disp-row:
        CLEAR FRAME sel NO-PAUSE.
 
        find first ccn where 
-                  ccn.brand = gcBrand AND 
+                  ccn.brand = Syst.CUICommon:gcBrand AND 
                   ccn.ccn   = ttslg.ccn no-lock no-error.
 
        find first billitem where
-                  billitem.Brand    = gcBrand AND 
+                  billitem.Brand    = Syst.CUICommon:gcBrand AND 
                   billitem.BillCode = ttslg.BillCode NO-LOCK NO-ERROR.
 
        DISPLAY 
@@ -476,7 +476,7 @@ PROCEDURE local-UPDATE-record:
    IF llChange THEN
    /* can service be changed from here */
    FOR FIRST CTServEl NO-LOCK WHERE 
-             CTServEl.Brand     = gcBrand              AND
+             CTServEl.Brand     = Syst.CUICommon:gcBrand              AND
              CTServEl.ServCom   = ttSLG.CliType AND
              CTServEl.CLIType   = MobSub.CLIType       AND
              CTServEl.FromDate <= TODAY,

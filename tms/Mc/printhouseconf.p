@@ -66,7 +66,7 @@ FORM
     PrintHouseConf.ToDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " PRINTHOUSE CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -381,7 +381,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcPrintHouse 
            lcZipCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -648,7 +648,7 @@ PROCEDURE local-UPDATE-record:
       END.
  
       IF CAN-FIND(FIRST bConf WHERE 
-                        bConf.Brand      = gcBrand                   AND
+                        bConf.Brand      = Syst.CUICommon:gcBrand                   AND
                         bConf.Report     = PrintHouseConf.Report     AND
                         bConf.TableName  = PrintHouseConf.TableName  AND
                         bConf.FieldName  = PrintHouseConf.FieldName  AND

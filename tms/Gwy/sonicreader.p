@@ -20,7 +20,7 @@ fClearLog().
 fSetLogEntryTypes(fGetValidLogEntryTypes()).
 fSetGlobalLoggingLevel(4).
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE STREAM sLog.
 

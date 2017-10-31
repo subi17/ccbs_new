@@ -168,7 +168,7 @@ PROCEDURE pCreateFile:
          IF ldaBankDate EQ ? THEN DO:
 
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.CUICommon:gcBrand AND
                        Order.OrderId = FixedFee.OrderId NO-ERROR.
 
             IF AVAIL Order AND FixedFee.OrderId > 0 THEN DO:
@@ -254,7 +254,7 @@ PROCEDURE pCreateFile:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "TF_" + icFileType
          ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"
@@ -292,7 +292,7 @@ PROCEDURE pPrintLine:
    IF FixedFee.BillCode EQ "RVTERM" THEN
       lcCodFpago = "0212".
    ELSE DO:
-      FIND FIRST Order WHERE Order.brand = gcBrand AND
+      FIND FIRST Order WHERE Order.brand = Syst.CUICommon:gcBrand AND
                              Order.OrderId = liOrderId NO-ERROR.
       IF AVAIL Order THEN DO:
          Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).

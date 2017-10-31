@@ -1,6 +1,6 @@
 &GLOBAL-DEFINE BrandVarDefined Yes
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 

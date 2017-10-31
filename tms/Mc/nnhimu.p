@@ -77,7 +77,7 @@ form
       help "Update or just display new rates"                  
       skip(3)
 WITH COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi + " Update rates for CCNs "
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Update rates for CCNs "
    OVERLAY width 80 ROW 1 NO-LABELS centered
    FRAME Limit.
 
@@ -115,7 +115,7 @@ repeat WITH FRAME Limit:
              END.
              ELSE DO:
                 FIND FIRST CCN where 
-                           CCN.Brand = gcBrand AND
+                           CCN.Brand = Syst.CUICommon:gcBrand AND
                            CCN.CCN   = CCN 
                 no-lock no-error.
                 IF AVAIL CCN THEN 
@@ -134,7 +134,7 @@ repeat WITH FRAME Limit:
             if PriceList = "" then disp "ALL" @ pn.
             ELSE DO:
                FIND PriceList where     
-                    PriceList.Brand     = gcBrand AND
+                    PriceList.Brand     = Syst.CUICommon:gcBrand AND
                     PriceList.PriceList = PriceList
                no-lock no-error.
                IF AVAIL PriceList THEN 
@@ -178,7 +178,7 @@ toimi:
    ELSE IF pr < 0 THEN perce = 1 + (-1 * pr / 100).
 
    FOR EACH Tariff exclusive-lock where
-            Tariff.Brand  = gcBrand  AND
+            Tariff.Brand  = Syst.CUICommon:gcBrand  AND
             Tariff.CCN    = CCN      AND 
            /* only one Date AT a time */
             Tariff.ValidFrom = vdate AND

@@ -52,7 +52,7 @@ IF NOT AVAILABLE mobsub THEN
 
 {Syst/commpaa.i}
 katun = lcUserId.
-gcBrand = "1". 
+Syst.CUICommon:gcBrand = "1". 
 {Syst/tmsconst.i}
 
 

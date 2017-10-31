@@ -54,7 +54,7 @@ FUNCTION fGetCLIs RETURNS LOGICAL
 
          /* FIRST try TO FIND a mobile cli */
          FOR FIRST MSOwner no-lock where 
-                   MSOwner.Brand    = gcBrand AND
+                   MSOwner.Brand    = Syst.CUICommon:gcBrand AND
                    MSOwner.CLI      = SubInvoice.CLI AND
                    MSOwner.TSBegin <= liToPer     AND
                    MSOwner.TSEnd   >= liFromPer,

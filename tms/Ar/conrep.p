@@ -41,7 +41,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 FORMAT "x(30)" 
+   Syst.CUICommon:ynimi at 1 FORMAT "x(30)" 
       "CONTACT REPORT" at 35
       "Page" at 68  
       sl FORMAT "ZZZZ9" SKIP
@@ -97,7 +97,7 @@ IF icFile > "" THEN DO:
 END.
       
 FOR EACH Contact NO-LOCK WHERE
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.UserCode = icUserCode AND
          Contact.ConDate  = idtConDate AND
          (IF iiHandled < 2

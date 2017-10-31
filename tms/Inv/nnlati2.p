@@ -64,14 +64,14 @@ form
 
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " BILLING BY SALESMAN/CUSTOMER/COUNTRY(Service) " +
    string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
-   ynimi at 2 format "x(25)" "BILLING STATISTICS BY" at 40 date1 "-" date2
+   Syst.CUICommon:ynimi at 2 format "x(25)" "BILLING STATISTICS BY" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
    "SALESMAN / CUSTOMER / Country "  at 40 string(pvm,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)

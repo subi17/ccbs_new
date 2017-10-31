@@ -82,7 +82,7 @@ form
    PNPGroup.dto
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " Maintain PNP groups "
    + string(pvm,"99-99-99") + " "
 FRAME sel.
@@ -167,7 +167,7 @@ repeat WITH FRAME sel:
            CREATE PNPGroup.
            ASSIGN
            PNPGroup.pnpseq = NEXT-VALUE(pnpseq)
-           PnpGroup.Brand  = gcBrand .
+           PnpGroup.Brand  = Syst.CUICommon:gcBrand .
            
            new_pnpgroup  = TRUE .
            
@@ -449,7 +449,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f2.
 
-       UPDATE  lcBrand WHEN gcAllBrand = TRUE  
+       UPDATE  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
                haku-Name WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        if haku-Name <> "" THEN DO:
@@ -622,7 +622,7 @@ PROCEDURE LOCAL-DISP-ROW:
 
 
    FIND FIRST CCN WHERE
-              CCN.Brand = gcBrand AND 
+              CCN.Brand = Syst.CUICommon:gcBrand AND 
               CCN.CCN   = PNPGroup.ccn
    NO-LOCK NO-ERROR.
 
@@ -810,7 +810,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             ELSE IF FRAME-FIELD = "rateccn" THEN DO:
 
                FIND FIRST CCN WHERE 
-                          CCN.Brand   = gcBrand AND 
+                          CCN.Brand   = Syst.CUICommon:gcBrand AND 
                           Ccn.Ccn     = input frame lis PNPGroup.Rateccn 
                NO-LOCK NO-ERROR.           
                IF NOT AVAIL CCN THEN DO:

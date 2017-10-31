@@ -40,7 +40,7 @@ MAIN:
 repeat:
 
    find first ServPac  WHERE 
-              ServPac.Brand = gcBrand no-lock no-error.
+              ServPac.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available ServPac then do:
       message "No servpacks available !" view-as alert-box.
       return.
@@ -71,7 +71,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(ServPac).
             down with frame sel.
-            find next ServPac WHERE servpac.Brand = gcBrand no-lock no-error.
+            find next ServPac WHERE servpac.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -101,7 +101,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find ServPac where recid(ServPac) = rtab[frame-line] no-lock.
-               find prev ServPac WHERE Servpac.Brand = gcBrand no-lock no-error.
+               find prev ServPac WHERE Servpac.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available ServPac then do:
                   bell.
                   message "You are on 1st row !".              
@@ -126,7 +126,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find ServPac where recid(ServPac) = rtab[frame-line] no-lock .
-               find next ServPac WHERE Servpac.Brand = gcBrand 
+               find next ServPac WHERE Servpac.Brand = Syst.CUICommon:gcBrand 
                no-lock no-error.
                if not available ServPac then do:
                   bell.
@@ -152,12 +152,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find ServPac where recid(ServPac) = memory no-lock no-error.
-            find prev ServPac WHERE Servpac.Brand = gcBrand 
+            find prev ServPac WHERE Servpac.Brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
             if available ServPac then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev ServPac WHERE Servpac.Brand = gcBrand 
+                  find prev ServPac WHERE Servpac.Brand = Syst.CUICommon:gcBrand 
                   no-lock no-error.
                   if available ServPac then memory = recid(ServPac).
                   else i = frame-down.
@@ -197,7 +197,7 @@ BROWSE:
            if ServPac ENTERED then do:
               find first ServPac where 
                          ServPac.ServPac >= ServPac AND
-                         ServPac.brand    = gcBrand 
+                         ServPac.brand    = Syst.CUICommon:gcBrand 
               no-lock no-error.
              if not available ServPac then do:
                        bell.
@@ -221,7 +221,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first ServPac WHERE Servpac.Brand = gcBrand no-lock.
+           find first ServPac WHERE Servpac.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(ServPac).
            must-print = true.
            next LOOP.
@@ -229,7 +229,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last ServPac no-lock WHERE Servpac.Brand = gcBrand .
+           find last ServPac no-lock WHERE Servpac.Brand = Syst.CUICommon:gcBrand .
            memory = recid(ServPac).
            must-print = true.
            next LOOP.

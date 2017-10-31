@@ -64,7 +64,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fbankdata.i}
 
@@ -301,7 +301,7 @@ ELSE lcOrgId = lcCustomerData[LOOKUP("person_id", lcDataFields)].
 IF Customer.orgid NE lcOrgId THEN DO:
 
    FIND FIRST bCustomer WHERE
-      bCustomer.Brand = gcBrand AND
+      bCustomer.Brand = Syst.CUICommon:gcBrand AND
       bCustomer.OrgID = lcOrgId
    NO-LOCK NO-ERROR.
 
@@ -317,7 +317,7 @@ IF Customer.CustIdType NE "CIF" THEN DO:
    IF lcCustIdType NE Customer.CustIdType THEN DO:
       
       FIND FIRST bCustomer WHERE
-         bCustomer.Brand = gcBrand AND
+         bCustomer.Brand = Syst.CUICommon:gcBrand AND
          bCustomer.OrgID = lcOrgId AND
          bCustomer.CustIdType = lcCustIdType NO-LOCK NO-ERROR.
       
@@ -349,7 +349,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    RUN StarEventInitialize(lhCustContact).
    
    FIND FIRST CustContact WHERE
-              CustContact.Brand = gcBrand AND
+              CustContact.Brand = Syst.CUICommon:gcBrand AND
               CustContact.CustNum = piCustNum AND
               CustContact.CustType = 5 EXCLUSIVE-LOCK NO-ERROR.
 
@@ -359,7 +359,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    ELSE IF get_paramcount(pcCCStruct) > 0 THEN DO:  
       CREATE CustContact.
       ASSIGN
-         CustContact.Brand = gcBrand
+         CustContact.Brand = Syst.CUICommon:gcBrand
          CustContact.Custnum = Customer.Custnum
          CustContact.CustType = 5.
    END.
@@ -673,7 +673,7 @@ IF pcMemoTitle NE "" OR
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = lcMemoHostTable
        Memo.KeyValue  = STRING(Customer.Custnum)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

@@ -64,7 +64,7 @@ form
         format "x(62)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " Texts at different Languages "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Texts at different Languages "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -441,7 +441,7 @@ BROWSE:
         haku = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
 
@@ -475,7 +475,7 @@ BROWSE:
         haku = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hakie.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                hakukie WITH FRAME hakie.
         HIDE FRAME hakie no-pause.
 
@@ -498,7 +498,7 @@ BROWSE:
         hakutext = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                hakutext WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 

@@ -46,7 +46,7 @@ form
  "         Create SoLog req.:" llcheck no-label       SKIP
  skip(4)
 with row 1 width 80 NO-LABELS
-   title " " + ynimi + " SUBSCRIPTION STATUS  " + string(pvm,"99-99-99") + " "
+   title " " + Syst.CUICommon:ynimi + " SUBSCRIPTION STATUS  " + string(pvm,"99-99-99") + " "
 FRAME rajat.
 
 assign 
@@ -191,7 +191,7 @@ end.
             CallAlarm.DeliPara   = lcAction
             CallAlarm.DeliMsg    = lcAction
             CallAlarm.Limit      = 100
-            CallAlarm.Brand      = gcBrand 
+            CallAlarm.Brand      = Syst.CUICommon:gcBrand 
             CallAlarm.Orig       = "800622800"
             CallAlarm.CreditType = 66.
 

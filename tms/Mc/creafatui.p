@@ -70,7 +70,7 @@ FORM
       SKIP
    SKIP(1)
    WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
-        TITLE " " + ynimi + "  GRANT FAT  " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.CUICommon:ynimi + "  GRANT FAT  " + STRING(pvm,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.
@@ -94,11 +94,11 @@ toimi:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       FIND Customer NO-LOCK WHERE
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = liCustNum NO-ERROR.
 
       FIND FatGroup NO-LOCK WHERE
-           FatGroup.Brand = gcBrand AND
+           FatGroup.Brand = Syst.CUICommon:gcBrand AND
            FatGroup.FtGrp = lcFatGroup NO-ERROR.
  
       /* if amount is defined on the group, it cannot be overriden here */
@@ -154,7 +154,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                         FIND Customer WHERE 
                              Customer.CustNum = INPUT liCustNum
                         NO-LOCK NO-ERROR.
-                        IF NOT AVAIL Customer OR Customer.Brand NE gcBrand
+                        IF NOT AVAIL Customer OR Customer.Brand NE Syst.CUICommon:gcBrand
                         THEN DO:
                            MESSAGE "Unknown Customer"
                            VIEW-AS ALERT-BOX ERROR.
@@ -170,7 +170,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                         /* check if cli is defined to chosen customer */
                         liSeq = 0.
                         FOR FIRST MsOwner NO-LOCK WHERE
-                                  MsOwner.Brand   = gcBrand         AND
+                                  MsOwner.Brand   = Syst.CUICommon:gcBrand         AND
                                   MsOwner.CustNum = INPUT liCustNum AND
                                   MsOwner.CLI     = INPUT lcCLI:
                            liSeq = MsOwner.MsSeq.
@@ -188,7 +188,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                   ELSE IF FRAME-FIELD = "lcFatGroup" THEN DO:
                      IF INPUT lcFatGroup > "" THEN DO:
                         FIND FatGroup WHERE
-                             FatGroup.Brand = gcBrand AND
+                             FatGroup.Brand = Syst.CUICommon:gcBrand AND
                              FatGroup.FtGrp = INPUT lcFatGroup 
                         NO-LOCK NO-ERROR.
                         IF NOT AVAILABLE FatGroup THEN DO:

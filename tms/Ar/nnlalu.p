@@ -133,7 +133,7 @@ form
       HELP "Print an account level summary from all postings" skip(1)
    
    with row 1 side-labels width 80
-        title color value(Syst.CUICommon:ctc) " " + ynimi + "  INVOICE JOURNAL  " +
+        title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + "  INVOICE JOURNAL  " +
         string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame rajat.
 
@@ -164,7 +164,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
 
       IF InvGroup > "" THEN DO:
          FIND InvGroup WHERE 
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
               InvGroup.InvGroup = InvGroup NO-LOCK NO-ERROR.
          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.igname @ igname
             WITH FRAME rajat.
@@ -269,7 +269,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      end.
                      else do:
                         find InvGroup where
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                              InvGroup.InvGroup = InvGroup
                         no-lock no-error.
                         if not avail InvGroup then do:

@@ -17,7 +17,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".  
+Syst.CUICommon:gcBrand = "1".  
 
 DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 
@@ -62,7 +62,7 @@ FUNCTION fAddOrder RETURN LOGICAL:
    add_string(order_struct,"msisdn", Order.CLI).
 
     FIND OrderCustomer WHERE 
-         OrderCustomer.Brand = gcBrand AND
+         OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
     IF AVAIL OrderCustomer THEN DO:
@@ -82,7 +82,7 @@ iCount = 0.
 lcOutArray = add_array(response_toplevel_id,"").
 OrderLoop:
 FOR EACH Order WHERE 
-    Order.Brand eq gcBrand AND 
+    Order.Brand eq Syst.CUICommon:gcBrand AND 
     Order.StatusCode eq STRING(piStatus) NO-LOCK USE-INDEX StatusCode:
     IF iCount >= piOffset + piLimit THEN 
        LEAVE OrderLoop.

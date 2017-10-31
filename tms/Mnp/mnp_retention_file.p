@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -32,12 +32,12 @@ FUNCTION fGetPenalty RETURN DECIMAL
 
   CONTRACT_LOOP:
    FOR EACH DCCLI WHERE
-            DCCLI.Brand = gcBrand AND
+            DCCLI.Brand = Syst.CUICommon:gcBrand AND
             DCCLI.DCEvent BEGINS "TERM" AND
             DCCLI.MsSeq = Mobsub.Msseq AND
             DCCLI.ValidTo >= TODAY NO-LOCK,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK:
@@ -49,7 +49,7 @@ FUNCTION fGetPenalty RETURN DECIMAL
                                        TODAY).
 
       FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand     = gcBrand       AND
+                 FMItem.Brand     = Syst.CUICommon:gcBrand       AND
                  FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                  FMItem.PriceList = lcPriceList AND
                  FMItem.FromDate <= TODAY     AND
@@ -86,7 +86,7 @@ FUNCTION fCheckRetentionRule RETURN LOGICAL
       
    RULE_LOOP:
    FOR EACH MNPRetentionRule NO-LOCK WHERE
-            MNPRetentionRule.Brand = gcBrand AND
+            MNPRetentionRule.Brand = Syst.CUICommon:gcBrand AND
             MNPRetentionRule.ToDate >= TODAY AND
             MNPRetentionRule.FromDate <= TODAY:
 
@@ -243,7 +243,7 @@ FUNCTION fGetCaseAmount RETURNS INT
 END.
 
 FOR EACH MNPRetPlatForm NO-LOCK WHERE
-         MNPRetPlatForm.Brand = gcBrand AND
+         MNPRetPlatForm.Brand = Syst.CUICommon:gcBrand AND
          MNPRetPlatForm.Todate >= TODAY AND
          MNPRetPlatForm.FromDate <= TODAY AND
          MNPRetPlatForm.Percentage > 0:
@@ -302,14 +302,14 @@ FUNCTION fGetOperatorName RETURNS CHAR
              
     /*YDR-2632: add operator for making operator based sharing */
    FIND MNPOperator NO-LOCK WHERE
-        MNPOperator.Brand = gcBrand AND
+        MNPOperator.Brand = Syst.CUICommon:gcBrand AND
         MNPOperator.OperCode = icOperCode
    NO-ERROR.
 
    IF AVAIL MNPOperator THEN RETURN MNPOperator.OperName.
    ELSE DO:
       FIND FIRST MNPOperator WHERE
-                 MNPOperator.Brand = gcBrand AND
+                 MNPOperator.Brand = Syst.CUICommon:gcBrand AND
                  MNPOperator.OperCode = icOperCode
       NO-ERROR.
       IF AVAIL MNPOperator AND
@@ -321,7 +321,7 @@ END.
 
 
 IF NOT CAN-FIND(FIRST MNPRetPlatForm NO-LOCK WHERE
-                      MNPRetPlatForm.Brand = gcBrand AND
+                      MNPRetPlatForm.Brand = Syst.CUICommon:gcBrand AND
                       MNPRetPlatForm.Todate >= TODAY AND
                       MNPRetPlatForm.FromDate <= TODAY AND
                       MNPRetPlatForm.Percentage > 0) THEN DO:
@@ -345,7 +345,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
 
    MNP_LOOP:
    FOR EACH MNPProcess NO-LOCK WHERE
-            MNPProcess.Brand = gcBrand AND
+            MNPProcess.Brand = Syst.CUICommon:gcBrand AND
             MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
             MNPProcess.StatusCode = INT(ENTRY(liLoop,lcStatusCodes)),
       FIRST MNPDetails NO-LOCK WHERE
@@ -407,7 +407,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             /* YOT-4956 R6: If suscriber has not any invoices paid, subscription is excluded from Retention file changed to only Postpaid subscriptions */
             IF MobSub.PayType = FALSE AND
                NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                                  Invoice.Brand   = gcBrand            AND
+                                  Invoice.Brand   = Syst.CUICommon:gcBrand            AND
                                   Invoice.CustNum = MobSub.CustNum     AND
                                   Invoice.InvType = {&INV_TYPE_NORMAL} AND
                                   Invoice.PaymState = 2) THEN DO:
@@ -453,7 +453,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                lcOldMNPCat = fSelectCategory(lcOldMNPCat).
             
                FIND FIRST ttMNPRetPlatForm NO-LOCK WHERE
-                          ttMNPRetPlatForm.Brand = gcBrand AND
+                          ttMNPRetPlatForm.Brand = Syst.CUICommon:gcBrand AND
                           ttMNPRetPlatForm.Operators = lcOldMNPCat AND
                           ttMNPRetPlatForm.Name BEGINS MNPRetPlatForm.Name
                           NO-ERROR.

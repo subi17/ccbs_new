@@ -14,7 +14,7 @@ DEFINE BUFFER bTMSPass FOR TMSPass.
 {Syst/commpaa.i}
 katun = pcUser.
 {Func/cparam2.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 {Func/log.i}
 
@@ -148,7 +148,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
           IF NOT plSimulate THEN DO:
              /*create limit for this user */
              CREATE UserLimit.
-             ASSIGN UserLimit.Brand      = gcBrand
+             ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand
                     UserLimit.LimitType  = 9
                     UserLimit.LimitTarget = "TMSUser"
                     UserLimit.LimitTargetID = TMSUser.UserCode
@@ -234,7 +234,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
       IF lcTemp NE "" THEN DO:
 
           FIND UserLimit WHERE
-               UserLimit.Brand = gcBrand AND
+               UserLimit.Brand = Syst.CUICommon:gcBrand AND
                UserLimit.LimitType = 9 AND
                UserLimit.LimitTarget = "TMSUser" AND
                UserLimit.LimitTargetID = TMSUser.UserCode NO-LOCK NO-ERROR.
@@ -243,7 +243,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
              /*create limit for this user */
              IF NOT plSimulate THEN DO:
                 CREATE UserLimit.
-                ASSIGN UserLimit.Brand      = gcBrand
+                ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand
                        UserLimit.LimitType  = 9
                        UserLimit.LimitTarget = "TMSUser"
                        UserLimit.LimitTargetID = TMSUser.UserCode

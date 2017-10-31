@@ -17,7 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant      AS CHARACTER NO-UNDO.
@@ -55,7 +55,7 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND BillItem WHERE 
-     BillItem.Brand = gcBrand AND 
+     BillItem.Brand = Syst.CUICommon:gcBrand AND 
      BillItem.BillCode = pcId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
 IF NOT AVAIL BillItem THEN
@@ -108,7 +108,7 @@ DO licount = 1 TO 5 :
    lctxt = get_string(pcStruct,lctitle[licount]).
 
    FIND RepText NO-LOCK  WHERE 
-        RepText.Brand     = gcBrand AND
+        RepText.Brand     = Syst.CUICommon:gcBrand AND
         RepText.TextType  = 1       AND
         RepText.LinkCode  = pcId    AND
         RepText.Language  = licount AND
@@ -134,7 +134,7 @@ DO licount = 1 TO 5 :
    END.
    ELSE DO: /*create it */        
        CREATE RepText.
-       ASSIGN   RepText.Brand     = gcBrand 
+       ASSIGN   RepText.Brand     = Syst.CUICommon:gcBrand 
                 RepText.TextType  = 1  
                 RepText.LinkCode  = pcId
                 RepText.Language  = licount 

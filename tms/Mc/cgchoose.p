@@ -47,7 +47,7 @@ form
     wCustGroup.chosen     label "Ch" 
 WITH ROW FrmRow centered OVERLAY 12 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE TOKENS (" + gcBrand + ") " 
+    title COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE TOKENS (" + Syst.CUICommon:gcBrand + ") " 
     FRAME sel.
 
 form /* seek Token by Code */
@@ -70,7 +70,7 @@ IF NOT AVAILABLE token THEN  DO:
 END.
 
 for each CustGroup no-lock WHERE
-         CustGroup.Brand = gcBrand:
+         CustGroup.Brand = Syst.CUICommon:gcBrand:
    create wCustGroup.
    assign
      wCustGroup.CustGroup = CustGroup.CustGroup

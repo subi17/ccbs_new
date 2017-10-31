@@ -23,7 +23,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
 
    FIND FIRST DiscountPlan NO-LOCK WHERE 
-              DiscountPlan.Brand = gcBrand AND 
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND 
               DiscountPlan.DPRuleId = pcId NO-ERROR.
 
    IF NOT AVAIL DiscountPlan THEN RETURN

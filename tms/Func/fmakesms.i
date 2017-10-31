@@ -31,7 +31,7 @@ FUNCTION _fCreateCallAlarm RETURNS INTEGER
    
    /* already done */
    FOR FIRST CallAlarm NO-LOCK WHERE
-             CallAlarm.Brand      = gcBrand AND
+             CallAlarm.Brand      = Syst.CUICommon:gcBrand AND
              CallAlarm.CLI        = icCLI   AND
              CallAlarm.DeliStat   = 1       AND
              CallAlarm.CreditType = iiType  AND
@@ -52,7 +52,7 @@ FUNCTION _fCreateCallAlarm RETURNS INTEGER
           CallAlarm.DeliMsg    = icMessage
           CallAlarm.Limit      = 0
           CallAlarm.CreditType = iiType
-          CallAlarm.Brand      = gcBrand
+          CallAlarm.Brand      = Syst.CUICommon:gcBrand
           CallAlarm.ActStamp   = idtActTime
           CallAlarm.Orig       = icOrig
           CallAlarm.ActInterval = icActInt.

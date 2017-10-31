@@ -132,19 +132,19 @@ FUNCTION fItemName RETURNS LOGIC
    CASE icItemType:
    WHEN "BillItem" THEN DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcItemName = BillItem.BIName.
    END.
    WHEN "FATime" THEN DO:
       FIND FIRST FatGroup WHERE
-                 FatGroup.Brand = gcBrand AND
+                 FatGroup.Brand = Syst.CUICommon:gcBrand AND
                  FatGroup.FtGrp = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE FatGroup THEN lcItemName = FatGroup.FtgName.
    END.
    WHEN "DiscountPlan" THEN DO:
       FIND FIRST DiscountPlan WHERE
-                 DiscountPlan.Brand = gcBrand AND
+                 DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                  DiscountPlan.DPRuleId = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE DiscountPlan THEN
          ASSIGN lcItemName = DiscountPlan.DPName
@@ -152,7 +152,7 @@ FUNCTION fItemName RETURNS LOGIC
    END.
    WHEN "Topup" THEN DO:
       FOR FIRST TopupScheme NO-LOCK WHERE
-                TopupScheme.Brand = gcBrand AND
+                TopupScheme.Brand = Syst.CUICommon:gcBrand AND
                 TopupScheme.TopupScheme = icItemValue,
           FIRST TopupSchemeRow OF TopupScheme NO-LOCK WHERE
                 TopupSchemeRow.EndStamp >= ldOfferFrom AND
@@ -169,13 +169,13 @@ FUNCTION fItemName RETURNS LOGIC
    END.                                            
    WHEN "PerContract" THEN DO:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  DayCampaign.DCEvent = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE DayCampaign THEN lcItemName = DayCampaign.DCName.
    END.
    WHEN "ServicePackage" THEN DO:
        FIND ServPac WHERE
-            ServPac.Brand   = gcBrand AND
+            ServPac.Brand   = Syst.CUICommon:gcBrand AND
             ServPac.ServPac = icItemValue NO-LOCK NO-ERROR.
        IF AVAILABLE ServPac THEN lcItemName = ServPac.SPName. 
    END.
@@ -194,11 +194,11 @@ FUNCTION fPenaltyFeeAmount RETURNS DECIMAL
    ldPenalty = 0.
    
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand   = gcBrand AND
+             DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = icPerContract AND
              DayCampaign.TermFeeCalc > 0,
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand     = gcBrand AND
+             FMItem.Brand     = Syst.CUICommon:gcBrand AND
              FMItem.FeeModel  = DayCampaign.TermFeeModel AND
              FMItem.ToDate   >= TODAY AND
              FMItem.FromDate <= TODAY:
@@ -217,7 +217,7 @@ FUNCTION fTopUpAmount RETURNS DECIMAL
    ldTopup = 0.
    
    FOR FIRST TopupScheme NO-LOCK WHERE
-             TopupScheme.Brand = gcBrand AND
+             TopupScheme.Brand = Syst.CUICommon:gcBrand AND
              TopupScheme.TopupScheme = icTopupScheme,
        FIRST TopupSchemeRow OF TopupScheme NO-LOCK WHERE
              TopupSchemeRow.EndStamp >= ldOfferFrom AND
@@ -235,7 +235,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST Offer WHERE 
-           Offer.Brand = gcBrand AND
+           Offer.Brand = Syst.CUICommon:gcBrand AND
            Offer.Offer = icOffer NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Offer THEN DO:
    MESSAGE "Offer not available"
@@ -291,7 +291,7 @@ REPEAT WITH FRAME sel:
 
            CREATE OfferItem.
            ASSIGN 
-              OfferItem.Brand   = gcBrand 
+              OfferItem.Brand   = Syst.CUICommon:gcBrand 
               OfferItem.OfferItemID = NEXT-VALUE(OfferItemSeq)
               OfferItem.Offer   = icOffer
               OfferItem.BeginStamp = ldDefFrom.
@@ -629,7 +629,7 @@ REPEAT WITH FRAME sel:
      END.
          
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO: 
-        RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + gcBrand + chr(255) + icOffer).
+        RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + Syst.CUICommon:gcBrand + chr(255) + icOffer).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -664,25 +664,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.CUICommon:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.CUICommon:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.CUICommon:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.CUICommon:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 

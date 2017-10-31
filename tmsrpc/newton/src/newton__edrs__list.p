@@ -13,7 +13,7 @@
 {Syst/commpaa.i}
 ASSIGN
    katun = "NewtonRPC"
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 {Func/callquery.i}
 
 DEF VAR resp_array AS CHAR NO-UNDO. 
@@ -37,7 +37,7 @@ resp_array = add_array(response_toplevel_id, "").
 tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT "edr",
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT katun,
                INPUT TODAY - 30,
                INPUT TODAY,

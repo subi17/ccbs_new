@@ -75,7 +75,7 @@ OUTPUT STREAM sFile TO VALUE(icFile).
 
 MsRequestLoop:
 FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
-         MsRequest.Brand   = gcBrand AND
+         MsRequest.Brand   = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType = 10      
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:

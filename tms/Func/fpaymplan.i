@@ -105,7 +105,7 @@ FUNCTION fValidForPaymPlan RETURNS INTEGER
    /* has invoice customer another payment plan */
    IF iiPlanType NE 3 THEN 
    FOR EACH bChkPlan NO-LOCK WHERE
-            bChkPlan.Brand   = gcBrand         AND
+            bChkPlan.Brand   = Syst.CUICommon:gcBrand         AND
             bChkPlan.CustNum = bChkInv.CustNum AND
             bChkPlan.PPStatus > 0              AND 
             bChkPlan.PPStatus < 4:

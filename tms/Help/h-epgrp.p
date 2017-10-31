@@ -37,7 +37,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 MAIN:
 repeat:
 
-   find first EPGroup WHERE EPGroup.Brand = gcBrand 
+   find first EPGroup WHERE EPGroup.Brand = Syst.CUICommon:gcBrand 
    no-lock no-error.
    if not available EPGroup then do:
       must-print = false.
@@ -69,7 +69,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(EPGroup).
             down with frame sel.
-            find next EPGroup  WHERE EPGroup.Brand = gcBrand
+            find next EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand
             no-lock no-error.
          end.
          must-print = false.
@@ -100,7 +100,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find EPGroup where recid(EPGroup) = rtab[frame-line] no-lock.
-               find prev EPGroup  WHERE EPGroup.Brand = gcBrand
+               find prev EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand
                no-lock no-error.
                if not available EPGroup then do:
                   bell.
@@ -126,7 +126,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find EPGroup where recid(EPGroup) = rtab[frame-line] no-lock .
-               find next EPGroup  WHERE EPGroup.Brand = gcBrand
+               find next EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand
                no-lock no-error.
                if not available EPGroup then do:
                   bell.
@@ -152,12 +152,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find EPGroup where recid(EPGroup) = memory no-lock no-error.
-            find prev EPGroup  WHERE EPGroup.Brand = gcBrand
+            find prev EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand
             no-lock no-error.
             if available EPGroup then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev EPGroup  WHERE EPGroup.Brand = gcBrand
+                  find prev EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand
                   no-lock no-error.
                   if available EPGroup then memory = recid(EPGroup).
                   else i = frame-down.
@@ -195,7 +195,7 @@ BROWSE:
            hide frame hayr no-pause.
            if EpGroup ENTERED then do:
               find first EPGroup where 
-                         EPGroup.Brand    = gcBrand AND 
+                         EPGroup.Brand    = Syst.CUICommon:gcBrand AND 
                          EPGroup.EpGroup >= EpGroup
               no-lock no-error.
                if not available EPGroup then do:
@@ -220,7 +220,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first EPGroup  WHERE EPGroup.Brand = gcBrand no-lock.
+           find first EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(EPGroup).
            must-print = true.
            next LOOP.
@@ -228,7 +228,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last EPGroup  WHERE EPGroup.Brand = gcBrand no-lock.
+           find last EPGroup  WHERE EPGroup.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(EPGroup).
            must-print = true.
            next LOOP.

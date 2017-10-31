@@ -22,7 +22,7 @@ IF NOT AVAIL Customer THEN DO:
 END.
       
 FIND CustContact WHERE
-     CustContact.Brand = gcBrand AND
+     CustContact.Brand = Syst.CUICommon:gcBrand AND
      CustContact.Custnum = Customer.Custnum AND
      CustContact.CustType = iiCustType NO-LOCK NO-ERROR.
 

@@ -24,7 +24,7 @@ skip(1)
 "          appropriate Function Key."                         skip(1)
 "          You shall then receive customer's number if      " skip
 "          a customer could be found with that argument."     skip(1)
-"  Brand.:" gcBrand   HELP "Brand code (*=ALL)"               SKIP
+"  Brand.:" Syst.CUICommon:gcBrand   HELP "Brand code (*=ALL)"               SKIP
 "  Search:" arg                                               skip(1)
 WITH 
     centered overlay title " FIND CUSTOMER "  NO-LABELS
@@ -39,7 +39,7 @@ PAUSE 0.
 MAIN:
 repeat WITH FRAME frm:
    ehto = 9. RUN Syst/ufkey.p.
-   UPDATE gcbrand WHEN gcallBrand = TRUE arg.
+   UPDATE Syst.CUICommon:gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE arg.
 
 
 ACTION:
@@ -61,10 +61,10 @@ ACTION:
       IF toimi = 1 THEN NEXT MAIN.
 
       IF toimi = 2 THEN DO:
-         IF gcbrand ne "*" THEN 
+         IF Syst.CUICommon:gcBrand ne "*" THEN 
          FIND MSISDN where 
               MSISDN.CLI = arg  AND
-              MSISDN.brand = gcBrand no-lock no-error.
+              MSISDN.brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE
          FIND MSISDN where
               MSISDN.CLI = arg NO-LOCK NO-ERROR.
@@ -80,26 +80,26 @@ ACTION:
                NEXT Action.
             END.
                                                                                            CustNum = MSISDN.CustNum.
-            IF gcBrand ne "*" THEN 
+            IF Syst.CUICommon:gcBrand ne "*" THEN 
             FIND MobSub WHERE 
                  MobSub.CLI   = MSISDN.CLI AND 
-                 Mobsub.Brand = gcBrand NO-LOCK NO-ERROR.
+                 Mobsub.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
             ELSE FIND MobSub WHERE
                       MobSub.CLI   = MSISDN.CLI NO-LOCK NO-ERROR.
 
             IF AVAIL MobSub THEN ASSIGN
                MsSeq = MobSub.MsSeq
-               gcbrand = mobsub.brand.
+               Syst.CUICommon:gcBrand = mobsub.brand.
             LEAVE MAIN.
          END.
        END.
 
 
       IF toimi = 3 THEN DO:
-         IF gcBrand ne "*" THEN 
+         IF Syst.CUICommon:gcBrand ne "*" THEN 
          FIND SIM where 
               SIM.ICC   = arg AND 
-              SIM.Brand = gcBrand no-lock no-error.
+              SIM.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE  FIND SIM where
                     SIM.ICC   = arg  no-lock no-error.
          IF AVAIL SIM THEN DO:
@@ -123,7 +123,7 @@ ACTION:
                           MSOwner.TsEnd >= 99999999
                NO-LOCK NO-ERROR.
                IF AVAIL MSOwner THEN ASSIGN
-                  gcBrand = msowner.Brand 
+                  Syst.CUICommon:gcBrand = msowner.Brand 
                   MsSeq   = MSOwner.MsSeq.
             END.
             LEAVE MAIN.
@@ -138,7 +138,7 @@ ACTION:
          IF AVAIL IMSI THEN DO:
             FIND FIRST sim WHERE 
                        sim.icc  = imsi.icc AND
-                       sim.Brand = gcBrand 
+                       sim.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK NO-ERROR.
        
             IF NOT AVAIL sim THEN NEXT.
@@ -158,16 +158,16 @@ ACTION:
                        MSOwner.TsEnd >= 99999999
             NO-LOCK NO-ERROR.
             IF AVAIL MSOwner THEN ASSIGN
-               gcBrand = msowner.Brand 
+               Syst.CUICommon:gcBrand = msowner.Brand 
                MsSeq   = MSOwner.MsSeq.
             LEAVE MAIN.
          END.   
       END.
 
       IF toimi = 5 THEN DO:
-         IF gcBrand ne "*" THEN 
+         IF Syst.CUICommon:gcBrand ne "*" THEN 
          FIND MobSub where 
-              Mobsub.Brand = gcBrand AND 
+              Mobsub.Brand = Syst.CUICommon:gcBrand AND 
               MobSub.CLI   = arg no-lock no-error.
          ELSE
          FIND MobSub where MobSub.CLI   = arg no-lock no-error.
@@ -175,39 +175,39 @@ ACTION:
          IF AVAIL MobSub THEN DO:
             ASSIGN
                CustNum = MobSub.CustNum 
-               gcbrand = mobsub.brand.
+               Syst.CUICommon:gcBrand = mobsub.brand.
             LEAVE MAIN.
          END.   
       END.
 
       IF toimi = 6 THEN DO:
-         IF gcBrand ne "*" THEN 
+         IF Syst.CUICommon:gcBrand ne "*" THEN 
          FIND Invoice where 
               Invoice.InvNum = integer(arg) AND
-              Invoice.Brand  = gcBrand no-lock no-error.
+              Invoice.Brand  = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE  FIND Invoice where
                     Invoice.InvNum = integer(arg) no-lock no-error.
 
          IF AVAIL Invoice THEN DO:
             ASSIGN 
                CustNum = Invoice.CustNum
-               gcBrand = Invoice.Brand.
+               Syst.CUICommon:gcBrand = Invoice.Brand.
             LEAVE MAIN.
          END.   
       END.  
 
       IF TOIMI = 7 THEN DO:
-         IF gcBrand ne "*" THEN 
+         IF Syst.CUICommon:gcBrand ne "*" THEN 
          FIND FIRST Customer  where 
                     Customer.CustName Begins arg AND
-                    Customer.Brand  = gcBrand NO-LOCK NO-ERROR.
+                    Customer.Brand  = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
          ELSE FIND FIRST Customer where
                          Customer.CustName Begins arg  NO-LOCK NO-ERROR.
 
          IF AVAIL Customer THEN DO:
             ASSIGN 
                CustNum = Customer.CustNum
-               gcBrand = Customer.Brand.
+               Syst.CUICommon:gcBrand = Customer.Brand.
             LEAVE MAIN.
          END.   
       END.

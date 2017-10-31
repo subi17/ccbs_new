@@ -1,6 +1,6 @@
 &GLOBAL-DEFINE BrandVarDefined Yes
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -84,7 +84,7 @@ i = 0.
 
 if lcclitype > "" then do:
    FIND FIRST clitype where
-              clitype.brand = gcbrand and
+              clitype.brand = Syst.CUICommon:gcBrand and
               clitype.clitype = lcclitype NO-LOCK no-error.
    IF NOT AVAIL clitype then do:
       MESSAGE "Unknown Subscr. Type" lcclitype VIEW-AS ALERT-BOX.

@@ -3,7 +3,7 @@ DISABLE TRIGGERS FOR LOAD OF MobSub.
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Mm/fbundle.i}
 
 DEF VAR lcTariff     AS CHAR NO-UNDO.

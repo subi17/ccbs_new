@@ -11,7 +11,7 @@
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -246,7 +246,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
    
    IF AVAILABLE ttRatePlan THEN DO:
       FIND FIRST CLIType WHERE 
-                 CLIType.Brand   = gcBrand             AND 
+                 CLIType.Brand   = Syst.CUICommon:gcBrand             AND 
                  CLIType.CLIType = ttRatePlan.ESubType NO-LOCK NO-ERROR.
       IF NOT AVAILABLE CLIType THEN DO:
          fError("Exsisting Subcription-type rateplan doesn't exists").
@@ -262,7 +262,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                RETURN RETURN-VALUE.
 
             FOR EACH PListConf WHERE 
-                     PListConf.Brand    = gcBrand AND
+                     PListConf.Brand    = Syst.CUICommon:gcBrand AND
                      PListConf.RatePlan = RatePlan.RatePlan NO-LOCK:
                CREATE bPListConf.
                BUFFER-COPY PListConf EXCEPT PListConf.RatePlan 
@@ -288,13 +288,13 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
             RUN pCreRPData.
                                     
             FOR EACH PListConf WHERE 
-                     PListConf.Brand    = gcBrand AND
+                     PListConf.Brand    = Syst.CUICommon:gcBrand AND
                      PListConf.RatePlan = RatePlan.RatePlan NO-LOCK:
                  
                IF PListConf.RatePlan EQ PListConf.PriceList THEN DO:
 
                   FOR EACH Tariff WHERE 
-                           Tariff.Brand     = gcBrand AND 
+                           Tariff.Brand     = Syst.CUICommon:gcBrand AND 
                            Tariff.PriceList = PListConf.PriceList NO-LOCK:
                      CREATE bTariff.
                      BUFFER-COPY Tariff EXCEPT Tariff.PriceList
@@ -312,7 +312,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                   END. 
 
                   FOR EACH PriceList WHERE 
-                           PriceList.Brand     = gcBrand             AND 
+                           PriceList.Brand     = Syst.CUICommon:gcBrand             AND 
                            PriceList.PriceList = PListConf.PriceList NO-LOCK:
                      CREATE bPriceList.
                      BUFFER-COPY PriceList EXCEPT PriceList.PriceList 
@@ -347,7 +347,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                   IF CAN-FIND(FIRST ttTariff NO-LOCK) THEN DO:
                      FOR EACH ttTariff NO-LOCK:
                         FIND Tariff WHERE 
-                             Tariff.Brand     = gcBrand              AND 
+                             Tariff.Brand     = Syst.CUICommon:gcBrand              AND 
                              Tariff.PriceList = ttRatePlan.RPSubType AND 
                              Tariff.CCN       = INT(ttTariff.CCN)    AND
                              Tariff.BDest     = ttTariff.BDest       AND
@@ -370,7 +370,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                         ELSE DO:
                            CREATE Tariff.
                            ASSIGN 
-                              Tariff.Brand       = gcBrand
+                              Tariff.Brand       = Syst.CUICommon:gcBrand
                               Tariff.TariffNum   = NEXT-VALUE(Tariff)
                               Tariff.PriceList   = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
                               Tariff.CCN         = INT(ttTariff.CCN)
@@ -419,7 +419,7 @@ END PROCEDURE.
 PROCEDURE pCreRPData:
    
    FIND FIRST RatePlan WHERE
-              RatePlan.Brand    = gcBrand AND
+              RatePlan.Brand    = Syst.CUICommon:gcBrand AND
               RatePlan.RatePlan = TRIM(CLIType.PricePlan) NO-LOCK NO-ERROR.
    IF NOT AVAILABLE RatePlan THEN DO:           
       fError("Rateplan doesn't exists").
@@ -453,18 +453,18 @@ PROCEDURE pCreTranslations:
 
    FOR EACH ttTrans NO-LOCK:                 
       IF CAN-FIND(FIRST RatePlan WHERE
-                        RatePlan.Brand    = gcBrand            AND 
+                        RatePlan.Brand    = Syst.CUICommon:gcBrand            AND 
                         RatePlan.RatePlan = ttTrans.tLangType) THEN DO:
 
          IF CAN-FIND(FIRST RepText WHERE
-                           RepText.Brand    = gcBrand                    AND
+                           RepText.Brand    = Syst.CUICommon:gcBrand                    AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN
             NEXT.
             
          CREATE RepText.
          ASSIGN 
-            RepText.Brand    = gcBrand    
+            RepText.Brand    = Syst.CUICommon:gcBrand    
             RepText.TextType = 11               /* Default value */       
             RepText.LinkCode = ttTrans.tLangType        
             RepText.Language = INTEGER(ttTrans.tLangint)    

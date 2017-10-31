@@ -221,13 +221,13 @@ repeat:
            if ob-code ENTERED then do:
               IF liType NE ? THEN
                  FIND FIRST FATGroup USE-INDEX FATType WHERE
-                            FATGroup.Brand   = gcBrand AND 
+                            FATGroup.Brand   = Syst.CUICommon:gcBrand AND 
                             FATGroup.FATType = liType  AND
                             FATGroup.FTGrp  >= ob-code NO-LOCK NO-ERROR.
 
               ELSE 
                  FIND FIRST FATGroup USE-INDEX FtGrp WHERE
-                            FATGroup.Brand   = gcBrand AND 
+                            FATGroup.Brand   = Syst.CUICommon:gcBrand AND 
                             FATGroup.FTGrp  >= ob-code NO-LOCK NO-ERROR.
 
               if not available FATGroup then do:
@@ -294,12 +294,12 @@ PROCEDURE local-find-first:
 
    IF liType = ? THEN DO:
       FIND FIRST FATGroup USE-INDEX FTGrp WHERE 
-                 FATGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                 FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND FIRST FATGroup USE-INDEX FATType WHERE 
-                 FATGroup.Brand   = gcBrand AND
+                 FATGroup.Brand   = Syst.CUICommon:gcBrand AND
                  FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    
@@ -309,12 +309,12 @@ PROCEDURE local-find-last:
 
    IF liType = ? THEN DO:
       FIND LAST FATGroup USE-INDEX FTGrp WHERE 
-                FATGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND LAST FATGroup USE-INDEX FATType WHERE 
-                FATGroup.Brand   = gcBrand AND
+                FATGroup.Brand   = Syst.CUICommon:gcBrand AND
                 FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    
@@ -324,12 +324,12 @@ PROCEDURE local-find-prev:
 
    IF liType = ? THEN DO:
       FIND PREV FATGroup USE-INDEX FTGrp WHERE 
-                FATGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND PREV FATGroup USE-INDEX FATType WHERE 
-                FATGroup.Brand   = gcBrand AND
+                FATGroup.Brand   = Syst.CUICommon:gcBrand AND
                 FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    
@@ -339,12 +339,12 @@ PROCEDURE local-find-next:
 
    IF liType = ? THEN DO:
       FIND NEXT FATGroup USE-INDEX FTGrp WHERE 
-                FATGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND NEXT FATGroup USE-INDEX FATType WHERE 
-                FATGroup.Brand   = gcBrand AND
+                FATGroup.Brand   = Syst.CUICommon:gcBrand AND
                 FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    

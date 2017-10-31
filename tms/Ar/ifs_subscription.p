@@ -109,7 +109,7 @@ END FUNCTION.
 FUNCTION fCollectCustomer RETURNS LOGIC:
 
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = gcBrand AND
+            MobSub.Brand   = Syst.CUICommon:gcBrand AND
             MobSub.AgrCust = Customer.CustNum:
       IF CAN-FIND(FIRST ttPicked WHERE ttPicked.MsSeq = MobSub.MsSeq) THEN
          NEXT.
@@ -119,7 +119,7 @@ FUNCTION fCollectCustomer RETURNS LOGIC:
    END.   
    
    FOR EACH TermMobSub NO-LOCK WHERE
-            TermMobSub.Brand   = gcBrand AND
+            TermMobSub.Brand   = Syst.CUICommon:gcBrand AND
             TermMobSub.AgrCust = Customer.CustNum:
       IF CAN-FIND(FIRST ttPicked WHERE ttPicked.MsSeq = TermMobSub.MsSeq) THEN
          NEXT.
@@ -222,7 +222,7 @@ PROCEDURE pModifiedSubscriptions:
          DO liStatus = 1 TO 99:
 
             FOR EACH MobSub NO-LOCK WHERE
-                     MobSub.Brand    = gcBrand AND
+                     MobSub.Brand    = Syst.CUICommon:gcBrand AND
                      MobSub.MsStatus = liStatus AND
                      MobSub.ActivationDate >= ldaModified AND
                      MobSub.ActivationTS >= idLastDump:
@@ -230,7 +230,7 @@ PROCEDURE pModifiedSubscriptions:
             END.
  
             FOR EACH TermMobSub NO-LOCK WHERE
-                     TermMobSub.Brand    = gcBrand AND
+                     TermMobSub.Brand    = Syst.CUICommon:gcBrand AND
                      TermMobSub.MsStatus = liStatus AND
                      TermMobSub.ActivationDate >= ldaModified AND
                      TermMobSub.ActivationTS >= idLastDump:
@@ -289,7 +289,7 @@ PROCEDURE pActiveSubscriptions:
    /* active subscriptions */
    MobLoop:
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand = gcBrand AND
+            MobSub.Brand = Syst.CUICommon:gcBrand AND
             MobSub.CLI > ""        AND
             MobSub.AgrCust > 0
       ON QUIT UNDO, RETRY
@@ -317,7 +317,7 @@ PROCEDURE pTerminatedSubscriptions:
    /* terminated */
    TermMobLoop:
    FOR EACH TermMobSub NO-LOCK WHERE 
-            TermMobSub.Brand = gcBrand
+            TermMobSub.Brand = Syst.CUICommon:gcBrand
       ON QUIT UNDO, RETRY
       ON STOP UNDO, RETRY:
 
@@ -350,7 +350,7 @@ PROCEDURE pVirtualSubscriptions:
             TMSCodes.FieldName = "StatusCode" AND
             TMSCodes.CodeValue NE "6",
        EACH Order NO-LOCK USE-INDEX StatusCode WHERE
-            Order.Brand      = gcBrand AND
+            Order.Brand      = Syst.CUICommon:gcBrand AND
             Order.StatusCode = TMSCodes.CodeValue AND
             Order.InvNum > 0  AND
             Order.CustNum > 0
@@ -485,7 +485,7 @@ PROCEDURE pWrite2File:
          LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
 
          FIND FIRST OrderTimeStamp WHERE
-                    OrderTimeStamp.Brand   = gcBrand   AND
+                    OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
                     OrderTimeStamp.OrderID = Order.OrderID AND
                     OrderTimeStamp.RowType = 3 NO-LOCK NO-ERROR.
          

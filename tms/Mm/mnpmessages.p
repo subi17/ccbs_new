@@ -71,7 +71,7 @@ form
     lcStChange                 COLUMN-LABEL "Msg State"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " M2M messages "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

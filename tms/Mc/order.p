@@ -365,7 +365,7 @@ FORM
     memoch          LABEL "M"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi + " " +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " " +
     " ORDERS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -619,7 +619,7 @@ END FUNCTION.
 
 IF iiOrderId > 0 THEN DO:
    FIND FIRST Order WHERE 
-              Order.Brand   = gcBrand  AND 
+              Order.Brand   = Syst.CUICommon:gcBrand  AND 
               Order.OrderId = iiOrderID NO-LOCK NO-ERROR.
    RUN pOrderView.
    fCleanEventObjects().
@@ -875,7 +875,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
-        SET lcBrand WHEN gcAllBrand = TRUE
+        SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             lDate WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
         IF lDate ENTERED THEN DO:
@@ -905,7 +905,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F3.
         Disp lcBrand With FRAME f3.
-        SET  lcBrand WHEN gcAllBrand = TRUE
+        SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
              CLI WITH FRAME f3.
         HIDE FRAME f3 NO-PAUSE.
         IF CLI ENTERED THEN DO:
@@ -946,7 +946,7 @@ BROWSE:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME fFixed.
-        SET  lcBrand   WHEN gcAllBrand = TRUE
+        SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE
              lcFixedNumber 
              WITH FRAME fFixed.
         HIDE FRAME fFixed NO-PAUSE.
@@ -974,7 +974,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F4.
         Disp lcBrand With FRAME f4.
-        SET  lcBrand   WHEN gcAllBrand = TRUE 
+        SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE 
              liorderid WITH FRAME f4.
         HIDE FRAME f4 NO-PAUSE.
         IF liorderid ENTERED THEN DO:
@@ -985,12 +985,12 @@ BROWSE:
            NO-LOCK NO-ERROR.
            ELSE if icStatus = "" THEN 
            FIND FIRST Order WHERE
-                      Order.Brand   = gcBrand   AND 
+                      Order.Brand   = Syst.CUICommon:gcBrand   AND 
                       Order.orderid = liorderid 
            NO-LOCK NO-ERROR.
            ELSE
            FIND FIRST Order WHERE
-                      Order.Brand      = gcBrand  AND 
+                      Order.Brand      = Syst.CUICommon:gcBrand  AND 
                       Order.orderid    = liorderid  AND
                       Order.StatusCode = icStatus 
            NO-LOCK NO-ERROR.
@@ -1008,7 +1008,7 @@ BROWSE:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F5.
-        SET  lcBrand   WHEN gcAllBrand = TRUE
+        SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE
              lcCustomerId
              lcCustIdType 
              WITH FRAME f5.
@@ -1084,7 +1084,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F2.
         Disp lcBrand With FRAME f2.
-        SET lcBrand WHEN gcAllBrand = TRUE
+        SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             lcContid WITH FRAME f2.
         HIDE FRAME f2 NO-PAUSE.
         IF lcContId ENTERED THEN DO:
@@ -1276,7 +1276,7 @@ PROCEDURE pOrderView:
                           ELSE 1).
 
         FIND FIRST lbOrder NO-LOCK WHERE
-                   lbOrder.Brand = gcBrand AND
+                   lbOrder.Brand = Syst.CUICommon:gcBrand AND
                    lbOrder.MultiSimID = Order.MultiSimId AND
                    lbOrder.MultiSimType = liMultiSimType
         NO-ERROR.
@@ -1669,15 +1669,15 @@ PROCEDURE local-find-others.
    RUN local-find-others-common.
 
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand = gcBrand AND
+              OrderFusion.Brand = Syst.CUICommon:gcBrand AND
               OrderFusion.OrderID = Order.OrderID NO-ERROR.
    
    FIND FIRST OrderDelivery WHERE
-      OrderDelivery.Brand   = gcBrand AND
+      OrderDelivery.Brand   = Syst.CUICommon:gcBrand AND
       OrderDelivery.OrderID = Order.OrderId NO-LOCK NO-ERROR.
    IF AVAIL OrderDelivery THEN DO:
       
-      lcLOStatus = fGetItemName(gcBrand, 
+      lcLOStatus = fGetItemName(Syst.CUICommon:gcBrand, 
                "LOStatusId", 
                STRING(OrderDelivery.LOStatusId),
                5,
@@ -1920,13 +1920,13 @@ PROCEDURE local-UPDATE-record:
                IF FRAME-FIELD = "CurrOper" THEN
                DO:
                   FIND FIRST MNPOperator WHERE
-                             MNPOperator.Brand = gcBrand AND
+                             MNPOperator.Brand = Syst.CUICommon:gcBrand AND
                              MNPOperator.OperName = INPUT Order.CurrOper AND
                              MNPOperator.Active = True
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL MNPOperator THEN
                      FIND FIRST MNPOperator WHERE
-                                MNPOperator.Brand = gcBrand AND
+                                MNPOperator.Brand = Syst.CUICommon:gcBrand AND
                                 MNPOperator.OperName = INPUT Order.CurrOper
                      NO-LOCK NO-ERROR.
                   IF AVAILABlE MNPOperator THEN
@@ -2028,13 +2028,13 @@ PROCEDURE local-update-customer:
       (iiRole = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} OR
        ( iiRole = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
          NOT CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                OrderCustomer.Brand   = gcBrand       AND
+                OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
                 OrderCustomer.OrderID = Order.OrderID AND
                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})))
    THEN llCustIDUpdateOK = TRUE.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand       AND
+              OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
               OrderCustomer.OrderID = Order.OrderID AND
               OrderCustomer.RowType = iiRole NO-ERROR.
    IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -2056,13 +2056,13 @@ PROCEDURE local-update-customer:
    
          IF LENGTH(OrderCustomer.BankCode) = 24 THEN
             FIND FIRST Bank WHERE
-                       Bank.Brand      = gcBrand AND
+                       Bank.Brand      = Syst.CUICommon:gcBrand AND
                        Bank.BankID     = SUBSTRING(OrderCustomer.BankCode,5,4) AND
                        Bank.BankOffice = SUBSTRING(OrderCustomer.BankCode,9,4) 
             NO-LOCK NO-ERROR.
          ELSE
             FIND FIRST Bank WHERE
-                       Bank.Brand      = gcBrand AND
+                       Bank.Brand      = Syst.CUICommon:gcBrand AND
                        Bank.BankID     = SUBSTRING(OrderCustomer.BankCode,1,4) AND
                        Bank.BankOffice = SUBSTRING(OrderCustomer.BankCode,5,4) 
             NO-LOCK NO-ERROR.
@@ -2096,7 +2096,7 @@ PROCEDURE local-update-customer:
       END.
       	  
       FIND FIRST orderpayment NO-LOCK WHERE
-                 orderpayment.brand = gcBrand AND
+                 orderpayment.brand = Syst.CUICommon:gcBrand AND
                  orderpayment.orderid = Order.OrderID
                  NO-ERROR.
       DISP 

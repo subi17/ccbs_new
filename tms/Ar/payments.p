@@ -110,7 +110,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
           "  PAYMENTS  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -243,7 +243,7 @@ IF icRefNum > "" THEN DO:
    END.
    
    FIND FIRST PrePaidRequest WHERE
-              PrePaidRequest.Brand     = gcBrand AND 
+              PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND 
               PrePaidRequest.PPRequest = INT(icRefNum)
    NO-LOCK NO-ERROR.
 
@@ -528,7 +528,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcExtVoucher WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -559,7 +559,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcExtInvID WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -587,7 +587,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               CustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -611,7 +611,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcPaymSrc
               ldPaymAmt WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
@@ -794,7 +794,7 @@ PROCEDURE local-find-FIRST:
 
    IF icRefNum > "" THEN 
       FIND FIRST Payment USE-INDEX RefNum WHERE
-                 Payment.Brand    = gcBrand  AND
+                 Payment.Brand    = Syst.CUICommon:gcBrand  AND
                  Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -826,7 +826,7 @@ PROCEDURE local-find-LAST:
 
    IF icRefNum > "" THEN 
       FIND LAST Payment USE-INDEX RefNum WHERE
-                Payment.Brand    = gcBrand  AND
+                Payment.Brand    = Syst.CUICommon:gcBrand  AND
                 Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -859,7 +859,7 @@ PROCEDURE local-find-NEXT:
 
    IF icRefNum > "" THEN 
       FIND NEXT Payment USE-INDEX RefNum WHERE
-                Payment.Brand    = gcBrand  AND
+                Payment.Brand    = Syst.CUICommon:gcBrand  AND
                 Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -892,7 +892,7 @@ PROCEDURE local-find-PREV:
 
    IF icRefNum > "" THEN 
       FIND PREV Payment USE-INDEX RefNum WHERE
-                Payment.Brand    = gcBrand  AND
+                Payment.Brand    = Syst.CUICommon:gcBrand  AND
                 Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:

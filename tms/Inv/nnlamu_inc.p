@@ -90,7 +90,7 @@ form
    skip(17)
 WITH
    OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " INVOICING " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " INVOICING " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80
    FRAME taka.
 
@@ -155,7 +155,7 @@ IF iiInvType = -1 THEN DO:
    ciperiod = 0.
    /* take first partial month and first full one */
    FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.Brand   = gcBrand  AND
+            FixedFee.Brand   = Syst.CUICommon:gcBrand  AND
             FixedFee.CustNum = CustNum1 AND
             LOOKUP(FixedFee.BillCode,lcItem) > 0:
       
@@ -280,7 +280,7 @@ IF NOT ilSilent THEN DO:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -395,7 +395,7 @@ END.
    
 XCUST:
 FOR EACH Customer   no-lock  where
-         Customer.Brand     = gcBrand     AND
+         Customer.Brand     = Syst.CUICommon:gcBrand     AND
          Customer.CustNum  >= CustNum1    AND
          Customer.CustNum  <= CustNum2    AND
          Customer.InvGroup  = InvGroup,

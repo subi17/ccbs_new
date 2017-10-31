@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -166,18 +166,18 @@ PROCEDURE pReturnMSISDN:
    DEF INPUT PARAMETER idaDate AS DATE NO-UNDO.
 
    FIND FIRST MSISDN WHERE 
-       MSISDN.Brand = gcBrand AND
+       MSISDN.Brand = Syst.CUICommon:gcBrand AND
        MSISDN.CLI = icMSISDN NO-LOCK USE-INDEX CLI NO-ERROR.
    IF NOT AVAILABLE MSISDN THEN 
       RETURN "ERROR:MSISDN not available".
 
    FIND mobsub WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.CUICommon:gcBrand AND
         mobsub.cli = msisdn.cli NO-LOCK NO-ERROR.
    IF AVAIL mobsub THEN RETURN "ERROR:MSISDN is in use".
    
    FIND order WHERE
-        order.brand = gcBrand AND
+        order.brand = Syst.CUICommon:gcBrand AND
         order.cli = msisdn.cli AND
         lookup(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK NO-ERROR.
    IF AVAIL Order THEN RETURN "ERROR:MSISDN is in ongoing order".

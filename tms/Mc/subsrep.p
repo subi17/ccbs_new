@@ -105,7 +105,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(30)" 
+   Syst.CUICommon:ynimi at 1 format "x(30)" 
       "SUBSCRIPTION REVENUE" at 40
       "Page" at 102  
       sl format "ZZZZ9" skip
@@ -181,7 +181,7 @@ VIEW FRAME fQty.
 
 /* invoiced data from desired period, fixed calls and mobile calls */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand    AND
+         InvGroup.Brand     = Syst.CUICommon:gcBrand    AND
          InvGroup.InvGroup >= icInvGrp1  AND
          InvGroup.InvGroup <= icInvGrp2,
     EACH Customer OF InvGroup NO-LOCK,
@@ -196,7 +196,7 @@ FOR EACH InvGroup NO-LOCK WHERE
     EMPTY TEMP-TABLE ttCall.
      
     fMobCDRCollect(INPUT "post",
-                   INPUT gcBrand,
+                   INPUT Syst.CUICommon:gcBrand,
                    INPUT katun,
                    INPUT idtDate1,
                    INPUT idtDate2,
@@ -229,7 +229,7 @@ FOR EACH InvGroup NO-LOCK WHERE
                  ttCall.CurrUnit,
                  "",
                  ttCall.TariffNum,
-                 gcBrand,
+                 Syst.CUICommon:gcBrand,
                  OUTPUT ldNet,
                  OUTPUT ldGross).
 
@@ -351,7 +351,7 @@ BREAK BY ttBal.SubType
       ASSIGN lcSubType = "".
       IF LOOKUP(ttBal.SubType,"fixed,unknown") = 0 THEN DO:
          FIND CLIType WHERE 
-              CLIType.Brand   = gcBrand AND
+              CLIType.Brand   = Syst.CUICommon:gcBrand AND
               CLIType.CLIType = ttBal.SubType NO-LOCK NO-ERROR.
          IF AVAILABLE CLIType THEN lcSubType = CLIType.CLIName.
       END. 
@@ -371,7 +371,7 @@ BREAK BY ttBal.SubType
       CheckPage(3).
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.CUICommon:gcBrand AND
            BillItem.BillCode = ttBal.prod NO-LOCK NO-ERROR.
 
       PUT STREAM tul UNFORMATTED
@@ -388,7 +388,7 @@ BREAK BY ttBal.SubType
       CheckPage(1).
 
       FIND CCN WHERE 
-           CCN.Brand = gcBrand AND
+           CCN.Brand = Syst.CUICommon:gcBrand AND
            CCN.CCN   = ttBal.CCN NO-LOCK NO-ERROR.
 
       PUT STREAM tul UNFORMATTED
@@ -405,17 +405,17 @@ BREAK BY ttBal.SubType
       CheckPage(0).
 
       FIND FIRST BDest WHERE 
-           BDest.Brand = gcBrand AND
+           BDest.Brand = Syst.CUICommon:gcBrand AND
            BDest.BDest = ttBal.BDest NO-LOCK NO-ERROR.
 
       /* to excel-file */
       IF icToFile > "" THEN DO:
 
           FIND BillItem WHERE 
-               BillItem.Brand    = gcBrand AND
+               BillItem.Brand    = Syst.CUICommon:gcBrand AND
                BillItem.BillCode = ttBal.prod NO-LOCK NO-ERROR.
           FIND CCN WHERE 
-               CCN.Brand = gcBrand AND
+               CCN.Brand = Syst.CUICommon:gcBrand AND
                CCN.CCN   = ttBal.CCN NO-LOCK NO-ERROR.
 
           PUT STREAM tul UNFORMATTED 

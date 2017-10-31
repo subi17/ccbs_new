@@ -104,7 +104,7 @@ form /* pAAruutu, scroll */
     TMSUser.toDate   FORMAT "99.99.9999" column-LABEL "Until"
 WITH
     width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " USER IDS "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " USER IDS "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form /* lisAyksiA varten, ei scroll */
@@ -614,7 +614,7 @@ add-new:
 
              /* check if limits amounts is defined individualy  */
             FIND FIRST UserLimit WHERE 
-                       UserLimit.Brand = gcBrand AND 
+                       UserLimit.Brand = Syst.CUICommon:gcBrand AND 
                        UserLimit.LimitTarget = "TMSUser" AND
                        UserLimit.LimitTargetID = TMSUser.UserCode NO-LOCK NO-ERROR.
              IF AVAIL UserLimit THEN DO:

@@ -213,7 +213,7 @@ PROCEDURE pGetPrintHouses:
    
    /* selection criteria */
    FOR EACH PrintHouseConf NO-LOCK WHERE
-            PrintHouseConf.Brand     = gcBrand     AND
+            PrintHouseConf.Brand     = Syst.CUICommon:gcBrand     AND
             PrintHouseConf.Report    = "Invoice"   AND
             PrintHouseConf.ToDate   >= TODAY      AND
             PrintHouseConf.FromDate <= TODAY:
@@ -290,7 +290,7 @@ PROCEDURE pMarkStarted:
    IF ilDBWrite THEN DO: 
 
       IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                        ActionLog.Brand        = gcBrand     AND    
+                        ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                         ActionLog.ActionID     = lcActionID  AND
                         ActionLog.ActionTS    >= ldCheckRun  AND
                         ActionLog.ActionStatus = 0           AND
@@ -308,7 +308,7 @@ PROCEDURE pMarkStarted:
    
          ASSIGN
             ActionLog.ActionTS     = ldThisRun
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = icFileType
             ActionLog.UserCode     = katun
@@ -350,7 +350,7 @@ PROCEDURE pWaitForInvoiceRun:
       END.
  
       IF NOT CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                            ActionLog.Brand        = gcBrand    AND    
+                            ActionLog.Brand        = Syst.CUICommon:gcBrand    AND    
                             ActionLog.ActionID     = "BillRun"  AND
                             ActionLog.ActionTS    >= ldCheckRun AND
                             ActionLog.TableName    = "Invoice"  AND
@@ -449,7 +449,7 @@ PROCEDURE pCollectInvoices:
    
    InvoiceSelect:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand      = gcBrand    AND
+            Invoice.Brand      = Syst.CUICommon:gcBrand    AND
             Invoice.InvDate    = idaInvDate AND
             Invoice.InvType    = liInvType,
       FIRST Customer OF Invoice NO-LOCK:
@@ -688,7 +688,7 @@ PROCEDURE pMarkFinished:
    IF ilDBWrite THEN DO:
       /* mark this run finished */
       FOR FIRST bActionLog USE-INDEX ActionID WHERE
-                bActionLog.Brand        = gcBrand     AND    
+                bActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                 bActionLog.ActionID     = lcActionID  AND
                 bActionLog.ActionTS     = ldThisRun   AND
                 bActionLog.ActionStatus = 0

@@ -16,7 +16,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEFINE VARIABLE gcBrand AS CHARACTER INIT "1" NO-UNDO. 
+DEFINE VARIABLE Syst.CUICommon:gcBrand AS CHARACTER INIT "1" NO-UNDO. 
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
 
 &SCOPED-DEFINE BrandVarDefined YES
@@ -94,7 +94,7 @@ END.
 iCount = 0.
 RequestLoop:
 FOR EACH MsRequest USE-INDEX ReqType WHERE 
-    MsRequest.Brand eq gcBrand AND 
+    MsRequest.Brand eq Syst.CUICommon:gcBrand AND 
     MsRequest.ReqType eq piType AND
     MsRequest.ReqStatus eq piStatus NO-LOCK:
     IF iCount >= piOffset + piLimit THEN 

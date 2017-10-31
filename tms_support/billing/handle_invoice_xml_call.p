@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 {Func/ftransdir.i}
 {Inv/printdoc1tt.i}

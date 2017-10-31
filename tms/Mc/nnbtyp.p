@@ -83,7 +83,7 @@ FORM
 WITH 
    width 80 ROW 1 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
       " B-DESTINATIONS " + 
       string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -414,7 +414,7 @@ repeat WITH FRAME sel:
 
          if copyto NE "" THEN DO:
             IF CAN-FIND(FIRST bBDest WHERE
-                              bBDest.Brand = gcBrand AND
+                              bBDest.Brand = Syst.CUICommon:gcBrand AND
                               bBDest.BDest = copyto AND
                               bBDest.DestType = BDest.DestType AND
                               bBDest.ToDate = 12/31/49)
@@ -450,15 +450,15 @@ repeat WITH FRAME sel:
 
             i = 0.
             IF CAN-FIND(FIRST bBDest WHERE 
-                              bBDest.Brand = gcBrand AND
+                              bBDest.Brand = Syst.CUICommon:gcBrand AND
                               bBDest.BDest = copyto) THEN 
             FOR EACH Tariff NO-LOCK where
-                     Tariff.Brand = gcBrand AND
+                     Tariff.Brand = Syst.CUICommon:gcBrand AND
                      Tariff.BDest = BDest.BDest AND
                      Tariff.ValidTo >= TODAY:
 
                IF CAN-FIND(FIRST bTariff where
-                                 bTariff.Brand    = gcBrand AND
+                                 bTariff.Brand    = Syst.CUICommon:gcBrand AND
                                  bTariff.BDest    = copyto AND
                                  bTariff.CustNum  = Tariff.CustNum  AND
                                  bTariff.PriceList = Tariff.PriceList AND
@@ -619,7 +619,7 @@ repeat WITH FRAME sel:
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
          DISPLAY lcBrand WITH FRAME hayr.
-         UPDATE lcBrand WHEN gcAllBrand
+         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 haku WITH FRAME hayr.
          HIDE FRAME hayr no-pause.
 
@@ -649,7 +649,7 @@ repeat WITH FRAME sel:
          hakunimi = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr2.
-         UPDATE lcBrand WHEN gcAllBrand
+         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 hakunimi WITH FRAME hayr2.
          HIDE FRAME hayr2 no-pause.
 
@@ -669,7 +669,7 @@ repeat WITH FRAME sel:
          hakunimi = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr3.
-         UPDATE lcBrand WHEN gcAllBrand
+         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 liCCN WITH FRAME hayr3.
          HIDE FRAME hayr3 no-pause.
 
@@ -875,7 +875,7 @@ PROCEDURE local-update-record:
    lcRateBDest = "".
    IF BDest.RateBDest > "" THEN
    FIND FIRST bBDest WHERE
-              bBDest.Brand = gcBrand AND
+              bBDest.Brand = Syst.CUICommon:gcBrand AND
               bBDest.BDest = BDest.RateBDest NO-LOCK NO-ERROR.
    IF AVAILABLE bBDest THEN lcRateBDest = bBdest.BDName.
 
@@ -985,7 +985,7 @@ PROCEDURE local-update-record:
                   lcRateBDest = "".
                   IF INPUT BDest.RateBDest > "" THEN DO:
                      FIND FIRST bBDest WHERE
-                                bBDest.Brand = gcBrand AND
+                                bBDest.Brand = Syst.CUICommon:gcBrand AND
                                 bBDest.BDest = INPUT BDest.RateBDest
                      NO-LOCK NO-ERROR.
                      IF NOT AVAILABLE bBDest THEN DO:

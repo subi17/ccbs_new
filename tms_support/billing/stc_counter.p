@@ -12,7 +12,7 @@ Version ......: Yoigo
 {Syst/commpaa.i}
 ASSIGN
    katun = "Qvantel"
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE ldadate AS DATE FORMAT "99.99.9999" NO-UNDO.
 DEF VAR ufkey AS LOG NO-UNDO INIT TRUE.
@@ -91,7 +91,7 @@ DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
       DISP lcDetails WITH FRAME lis.
 
       FOR EACH msrequest NO-LOCK where
-               msrequest.brand = gcBrand and
+               msrequest.brand = Syst.CUICommon:gcBrand and
                msrequest.reqtype = liType and
                msrequest.reqstatus = liStatus and
                msrequest.actstamp = ldeDate :

@@ -30,7 +30,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fbankdata.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -94,7 +94,7 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.CUICommon:gcBrand AND
            NewCLIType.CLIType = pcCliType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err("Unknown CLIType specified").
@@ -171,7 +171,7 @@ END.
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

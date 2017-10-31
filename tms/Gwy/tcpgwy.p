@@ -16,7 +16,7 @@
 {Func/cparam2.i}
 {Func/log.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 /*
 PARAMETERS:

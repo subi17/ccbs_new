@@ -30,7 +30,7 @@
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Mc/dpmember.i}
@@ -183,7 +183,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
       RETURN appl_err("Unknown subscription").
    
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = gcBrand AND
+        SingleFee.Brand       = Syst.CUICommon:gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
@@ -243,12 +243,12 @@ IF (llDeviceStart AND llDeviceScreen) OR
    IF NOT llRenewalOrder THEN DO:
 
       FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.Brand   EQ gcBrand AND
+               DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
                DCCLI.DCEvent EQ "RVTERM12" AND
                DCCLI.MsSeq   EQ MobSub.MsSeq AND
                DCCLI.Validto >= TODAY,
           EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = gcBrand AND
+               FixedFee.Brand = Syst.CUICommon:gcBrand AND
                FixedFee.Custnum = MobSub.Custnum AND
                FixedFee.HostTable = "MobSub" AND
                Fixedfee.KeyValue = STRING(MobSub.MsSeq) AND
@@ -337,7 +337,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
          RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
       FOR EACH DiscountPlan NO-LOCK WHERE
-               DiscountPlan.Brand = gcBrand AND
+               DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
                DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
           EACH DPMember NO-LOCK WHERE

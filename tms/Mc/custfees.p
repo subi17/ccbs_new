@@ -88,7 +88,7 @@ IF InterAct THEN DO WITH FRAME info:
    PAUSE 0.
    IF lcFeeModel ne "" THEN 
       FIND FeeModel  WHERE 
-           FeeModel.Brand    = gcBrand AND
+           FeeModel.Brand    = Syst.CUICommon:gcBrand AND
            FeeModel.FeeModel = lcFeeModel NO-LOCK NO-ERROR.
    ELSE ask-data = TRUE.
 
@@ -140,7 +140,7 @@ Action:
                      UNDO, RETURN.
                   END.   
                   FIND FeeModel  WHERE 
-                       FeeModel.Brand    = gcBrand AND
+                       FeeModel.Brand    = Syst.CUICommon:gcBrand AND
                        FeeModel.FeeModel = INPUT FRAME info lcFeeModel 
                        NO-LOCK NO-ERROR.
                   IF NOT AVAIL FeeModel THEN DO:
@@ -245,7 +245,7 @@ END.  /* interactive mode */
 
 
 FIND FIRST FMItem WHERE
-           FMItem.Brand     = gcBrand AND 
+           FMItem.Brand     = Syst.CUICommon:gcBrand AND 
            FMItem.FeeModel  = lcFeeModel  AND
            FMItem.PriceList = lcPriceList NO-LOCK NO-ERROR.
 IF AVAIL FMItem THEN DO:
@@ -255,14 +255,14 @@ IF AVAIL FMItem THEN DO:
 
    IF interact THEN DO:
       IF CAN-FIND (FIRST SingleFee where
-                         SingleFee.Brand     = gcBrand                  AND
+                         SingleFee.Brand     = Syst.CUICommon:gcBrand                  AND
                          SingleFee.CustNum   = Customer.CustNum         AND
                          SingleFee.CalcObj   = " "                      AND
                          SingleFee.BillPeriod = begper                  AND
                          SingleFee.BillCode    = FMItem.BillCode        AND
                          SingleFee.Amt   = FMItem.Amount)  OR
          CAN-FIND (FIRST FixedFee WHERE
-                         FixedFee.Brand     = gcBrand                   AND
+                         FixedFee.Brand     = Syst.CUICommon:gcBrand                   AND
                          FixedFee.CustNum   = Customer.CustNum          AND
                          FixedFee.CalcObj   = ""                        AND
                          FixedFee.BillCode = FMItem.BillCode            AND
@@ -280,11 +280,11 @@ IF AVAIL FMItem THEN DO:
    END.
 
    FIND PriceList WHERE
-        PriceList.Brand     = gcBrand AND
+        PriceList.Brand     = Syst.CUICommon:gcBrand AND
         PriceList.PriceList = lcPriceList NO-LOCK.
 
    /* contract */
-   lcContract = fFeeContract(gcBrand,
+   lcContract = fFeeContract(Syst.CUICommon:gcBrand,
                              Customer.CustNum,
                              "",  /* take salesman from user */
                              CoDate,

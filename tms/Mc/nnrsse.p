@@ -40,8 +40,8 @@ form
     Reseller.RsName       format "x(30)"
     WITH CENTERED OVERLAY scroll 1 ROW 2 12 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
-    " Browse resellers (" + gcBrand + ") "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    " Browse resellers (" + Syst.CUICommon:gcBrand + ") "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -59,13 +59,13 @@ form /*  search WITH FIELD RsName */
 
 
 FIND FIRST Reseller
-WHERE Reseller.Brand = gcBrand no-lock no-error.
+WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF AVAILABLE Reseller THEN ASSIGN
    memory       = recid(Reseller)
    must-print = TRUE
    must-add    = FALSE.
 ELSE DO:
-   MESSAGE "No resellers available for brand" gcBrand
+   MESSAGE "No resellers available for brand" Syst.CUICommon:gcBrand
    VIEW-AS ALERT-BOX 
    ERROR.
    RETURN.
@@ -103,9 +103,9 @@ repeat WITH FRAME sel:
 
               rtab[FRAME-LINE] = recid(Reseller).
               IF order = 1 THEN FIND NEXT Reseller
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
               ELSE IF order = 2 THEN FIND NEXT Reseller USE-INDEX RsName
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            END.
            ELSE DO:
               CLEAR no-pause.
@@ -165,9 +165,9 @@ BROWSE:
         FIND Reseller where recid(Reseller) = memory.
         DO i = 1 TO FRAME-LINE - 1:
            IF order = 1 THEN FIND prev Reseller
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            IF AVAILABLE Reseller THEN
               ASSIGN firstline = i memory = recid(Reseller).
            ELSE LEAVE.
@@ -190,9 +190,9 @@ BROWSE:
         IF FRAME-LINE = 1 THEN DO:
            FIND Reseller where recid(Reseller) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev Reseller
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            IF NOT AVAILABLE Reseller THEN DO:
               message "YOU ARE ON THE FIRST ROW !".
               BELL. PAUSE 1 no-message.
@@ -221,9 +221,9 @@ BROWSE:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND Reseller where recid(Reseller) = rtab[FRAME-DOWN] no-lock .
            IF order = 1 THEN FIND NEXT Reseller
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            ELSE IF order = 2 THEN FIND NEXT Reseller USE-INDEX RsName
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
            IF NOT AVAILABLE Reseller THEN DO:
               message "YOU ARE ON THE LAST ROW !".
               BELL. PAUSE 1 no-message.
@@ -251,18 +251,18 @@ BROWSE:
         memory = rtab[1].
         FIND Reseller where recid(Reseller) = memory no-lock no-error.
         IF order = 1 THEN FIND prev Reseller
-        WHERE Reseller.Brand = gcBrand no-lock no-error.
+        WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-        WHERE Reseller.Brand = gcBrand no-lock no-error.
+        WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
         IF AVAILABLE Reseller THEN DO:
            memory = recid(Reseller).
 
            /* go back one page */
            DO line = 1 TO (FRAME-DOWN - 1):
               IF order = 1 THEN FIND prev Reseller
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
               ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
               IF AVAILABLE Reseller THEN memory = recid(Reseller).
               ELSE line = FRAME-DOWN.
            END.
@@ -300,7 +300,7 @@ BROWSE:
        HIDE FRAME f1 no-pause.
        if Reseller <> "" THEN DO:
           FIND FIRST Reseller where 
-                     Reseller.Brand     = gcBrand AND
+                     Reseller.Brand     = Syst.CUICommon:gcBrand AND
                      Reseller.Reseller >= Reseller
           no-lock no-error.
           IF NOT AVAILABLE Reseller THEN DO:
@@ -325,7 +325,7 @@ BROWSE:
        HIDE FRAME f2 no-pause.
        if RsName <> "" THEN DO:
           FIND FIRST Reseller where 
-                     Reseller.Brand   = gcBrand AND
+                     Reseller.Brand   = Syst.CUICommon:gcBrand AND
                      Reseller.RsName >= RsName
           USE-INDEX RsName no-lock no-error.
           IF NOT AVAILABLE Reseller THEN DO:
@@ -349,18 +349,18 @@ BROWSE:
 
      else if lookup(nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST Reseller
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST Reseller USE-INDEX RsName
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN memory = recid(Reseller) must-print = TRUE.
        NEXT LOOP.
      END.
 
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST Reseller
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST Reseller USE-INDEX RsName
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN memory = recid(Reseller) must-print = TRUE.
        NEXT LOOP.
      END.

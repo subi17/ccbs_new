@@ -10,7 +10,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEF VAR resp_array         AS CHARACTER NO-UNDO.
@@ -41,7 +41,7 @@ katun = pcUsername.
 {newton/src/settenant.i pcTenant}
 
 FOR EACH mnpretplatform NO-LOCK WHERE
-         mnpretplatform.brand = gcBrand AND
+         mnpretplatform.brand = Syst.CUICommon:gcBrand AND
          mnpretplatform.Todate >= TODAY AND
          mnpretplatform.FromDate <= TODAY:
    CREATE ttMNPRetPlatform.

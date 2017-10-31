@@ -91,7 +91,7 @@ form
     CoRule.Priority   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " COMMISSION RULES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -217,7 +217,7 @@ FUNCTION fFatGroup RETURNS LOGIC
    lcFtgName = "".
    IF icGroup > "" THEN DO:
       FIND FIRST FatGroup WHERE 
-                 FatGroup.Brand = gcBrand AND
+                 FatGroup.Brand = Syst.CUICommon:gcBrand AND
                  FatGroup.FTGrp = icGroup 
       NO-LOCK NO-ERROR.
       IF AVAILABLE FatGroup THEN
@@ -251,7 +251,7 @@ FUNCTION fDispCreationSMS RETURNS LOGIC
    lcCreationSMS = "".
    
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand   AND 
+             InvText.Brand     = Syst.CUICommon:gcBrand   AND 
              InvText.Target    = "SMS"     AND
              InvText.KeyValue  = icSMSText AND
              InvText.FromDate <= TODAY     AND
@@ -272,7 +272,7 @@ FUNCTION fDispActivationSMS RETURNS LOGIC
    lcActivationSMS = "".
    
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand   AND 
+             InvText.Brand     = Syst.CUICommon:gcBrand   AND 
              InvText.Target    = "SMS"     AND
              InvText.KeyValue  = icSMSText AND
              InvText.FromDate <= TODAY     AND
@@ -368,7 +368,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CoRule.
            ASSIGN
-           CoRule.Brand      = gcBrand 
+           CoRule.Brand      = Syst.CUICommon:gcBrand 
            CoRule.CoRuleID   = NEXT-VALUE(CoRule)
            CoRule.CustNum    = 0
            CoRule.RuleDesc   = INPUT FRAME lis CoRule.RuleDesc
@@ -605,7 +605,7 @@ REPEAT WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liRule WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
 
@@ -628,7 +628,7 @@ REPEAT WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   lcDesc WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
 
@@ -770,7 +770,7 @@ REPEAT WITH FRAME sel:
            FIND bCoRule WHERE RECID(bCoRule) = RECID(CoRule) NO-LOCK.
            CREATE CoRule.
            ASSIGN 
-           CoRule.Brand     = gcBrand 
+           CoRule.Brand     = Syst.CUICommon:gcBrand 
            CoRule.CoRuleID  = NEXT-VALUE(CoRule)
            CoRule.RuleDesc  = INPUT FRAME fTemplate CoRule.RuleDesc
            CoRule.CoFrom    = INPUT FRAME fTemplate CoRule.CoFrom
@@ -873,37 +873,37 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -952,7 +952,7 @@ PROCEDURE local-UPDATE-record:
       lcParent = "".
       IF CoRule.ParentRule > 0 THEN DO:
          FIND bCoRule NO-LOCK WHERE 
-              bCoRule.Brand    = gcBrand AND  
+              bCoRule.Brand    = Syst.CUICommon:gcBrand AND  
               bCoRule.CoRuleId = CoRule.ParentRule NO-ERROR.
          IF AVAILABLE bCoRule THEN lcParent = bCoRule.RuleDesc.
       END.
@@ -1094,7 +1094,7 @@ PROCEDURE local-UPDATE-record:
                      DO i = 1 TO NUM-ENTRIES(INPUT CoRule.CLIType):
                         
                         IF NOT CAN-FIND(CLIType WHERE 
-                             CLIType.Brand   = gcBrand AND
+                             CLIType.Brand   = Syst.CUICommon:gcBrand AND
                              CLIType.CLIType = ENTRY(i,INPUT CoRule.CLIType))
                         THEN DO:
                            MESSAGE "Unknown CLI type" 

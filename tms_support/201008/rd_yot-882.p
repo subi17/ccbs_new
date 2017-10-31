@@ -9,7 +9,7 @@ OUTPUT STREAM sLog TO "yot-882.log".
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
@@ -18,7 +18,7 @@ ldTS = Func.Common:mMakeTS().
 llSimulated = FALSE. 
 
 FOR EACH bMSISDN NO-LOCK WHERE
-         bMSISDN.Brand = gcBrand AND
+         bMSISDN.Brand = Syst.CUICommon:gcBrand AND
          ( bMSISDN.CLI BEGINS "62262262"  OR
            bMSISDN.CLI BEGINS "62298"     OR
            bMSISDN.CLI BEGINS "62299"     OR

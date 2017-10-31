@@ -16,7 +16,7 @@ IF llDoEvent THEN DO:
 END.               
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.CUICommon:gcBrand AND 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).

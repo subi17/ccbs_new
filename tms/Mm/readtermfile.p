@@ -257,7 +257,7 @@ REPEAT:
    IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "Customer"
          Memo.KeyValue  = STRING(MobSub.CustNum)
          Memo.CustNum   = MobSub.CustNum

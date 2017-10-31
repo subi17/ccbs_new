@@ -138,7 +138,7 @@ ELSE DO:
    lcDefTxt = fCParamC("EPLOrderTxt").
 
    FIND FIRST InvText NO-LOCK WHERE
-              InvText.Brand    = gcBrand AND
+              InvText.Brand    = Syst.CUICommon:gcBrand AND
               InvText.Target   = "General" AND
               InvText.KeyValue = lcDefTxt NO-ERROR.
    IF AVAILABLE InvText THEN liITNum = InvText.ITNum.
@@ -147,7 +147,7 @@ END.
 IF iiOrderID > 0 THEN DO:
 
    FIND Order NO-LOCK WHERE
-        Order.Brand   = gcBrand AND
+        Order.Brand   = Syst.CUICommon:gcBrand AND
         Order.OrderID = iiOrderID NO-ERROR.
    IF NOT AVAILABLE Order THEN DO:
       ocError = "Unknown order " + STRING(iiOrderID).
@@ -161,7 +161,7 @@ IF iiOrderID > 0 THEN DO:
           liMSSeq = Order.MSSeq.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand       AND
+              OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
               OrderCustomer.OrderID = Order.OrderID AND
               OrderCustomer.RowType = 1 NO-ERROR.
    

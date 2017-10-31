@@ -136,7 +136,7 @@ REPEAT:
    IF ldtPaymDate = ? THEN ldtPaymDate = TODAY.
    
    FIND Invoice WHERE
-        Invoice.Brand    = gcBrand AND
+        Invoice.Brand    = Syst.CUICommon:gcBrand AND
         Invoice.ExtInvID = lcExtInvID NO-LOCK NO-ERROR.
         
    IF NOT AVAILABLE Invoice THEN DO:
@@ -179,7 +179,7 @@ REPEAT:
    END.
    
    FIND InvGroup where 
-        InvGroup.Brand    = gcBrand AND 
+        InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
         InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
 
    ASSIGN 
@@ -226,7 +226,7 @@ REPEAT:
 
    CREATE Memo.
    ASSIGN 
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum

@@ -43,7 +43,7 @@ form
    FFItem.Amt
 WITH
    OVERLAY FRAME LOG ROW 4 12 DOWN width 80 TITLE
-   " " + ynimi + "  SUMMARY OF FUTURE CONTRACT PAYMENTS ". 
+   " " + Syst.CUICommon:ynimi + "  SUMMARY OF FUTURE CONTRACT PAYMENTS ". 
 
 ehto = 9. RUN Syst/ufkey.p.
 PAUSE 0.
@@ -52,7 +52,7 @@ UPDATE
    idate 
    CustNum VALIDATE(INPUT CustNum = 0 OR
                     CAN-FIND(FIRST Customer WHERE 
-                                   Customer.Brand   = gcBrand AND
+                                   Customer.Brand   = Syst.CUICommon:gcBrand AND
                                    Customer.CustNum = INPUT CustNum),
                     "Unknown customer !")
 WITH FRAME Date.
@@ -74,7 +74,7 @@ ELSE DO:
    MESSAGE "Collecting fees ..".
 
    FOR EACH FixedFee no-lock WHERE
-            FixedFee.Brand = gcBrand,
+            FixedFee.Brand = Syst.CUICommon:gcBrand,
        FIRST FFItem of FixedFee no-lock where 
              FFItem.BillPeriod <= Period AND
              FFItem.Billed     = FALSE:

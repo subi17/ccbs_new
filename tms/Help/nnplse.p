@@ -34,7 +34,7 @@ form
     PriceList.DedicList 
     PriceList.Memo  format "x(20)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Price lists (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Price lists (" + Syst.CUICommon:gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -59,7 +59,7 @@ Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Sys
 Runko:
 repeat:
 
-   FIND FIRST PriceList WHERE PriceList.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE PriceList THEN DO:
       MESSAGE "No pricelists available"
       VIEW-AS ALERT-BOX.
@@ -90,7 +90,7 @@ LOOP:
             PriceList.Memo WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(PriceList).
             DOWN WITH FRAME tlse.
-            FIND NEXT PriceList WHERE PriceList.Brand = gcBrand 
+            FIND NEXT PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
          END.
          must-print = FALSE.
@@ -122,7 +122,7 @@ BROWSE:
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND PriceList where recid(PriceList) = rtab[FRAME-LINE] no-lock.
-               FIND prev PriceList WHERE PriceList.Brand = gcBrand 
+               FIND prev PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF NOT AVAILABLE PriceList THEN DO:
                   BELL.
@@ -152,7 +152,7 @@ BROWSE:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND PriceList where recid(PriceList) = rtab[FRAME-LINE] 
                no-lock .
-               FIND NEXT PriceList WHERE PriceList.Brand = gcBrand 
+               FIND NEXT PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF NOT AVAILABLE PriceList THEN DO:
                   BELL.
@@ -182,12 +182,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND PriceList where recid(PriceList) = ylin no-lock no-error.
-            FIND prev PriceList WHERE PriceList.Brand = gcBrand 
+            FIND prev PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             IF AVAILABLE PriceList THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev PriceList WHERE PriceList.Brand = gcBrand 
+                  FIND prev PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                   IF AVAILABLE PriceList THEN ylin = recid(PriceList).
                   ELSE i = FRAME-DOWN.
@@ -226,15 +226,15 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:
               FIND FIRST PriceList where 
-                         PriceList.Brand     = gcBrand AND                                               PriceList.PriceList = INPUT haku
+                         PriceList.Brand     = Syst.CUICommon:gcBrand AND                                               PriceList.PriceList = INPUT haku
               no-lock no-error.
               IF NOT AVAILABLE PriceList THEN 
               FIND FIRST PriceList where 
-                         PriceList.Brand     = gcBrand AND                                               PriceList.PriceList ge INPUT haku
+                         PriceList.Brand     = Syst.CUICommon:gcBrand AND                                               PriceList.PriceList ge INPUT haku
               no-lock no-error.
               IF NOT AVAILABLE PriceList THEN 
               FIND FIRST PriceList where 
-                         PriceList.Brand     = gcBrand AND                                               PriceList.PriceList le INPUT haku
+                         PriceList.Brand     = Syst.CUICommon:gcBrand AND                                               PriceList.PriceList le INPUT haku
               no-lock no-error.
 
               IF NOT AVAILABLE PriceList THEN DO:
@@ -268,7 +268,7 @@ BROWSE:
 
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
-           FIND FIRST PriceList WHERE PriceList.Brand = gcBrand NO-LOCK.
+           FIND FIRST PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(PriceList).
            must-print = TRUE.
            NEXT LOOP.
@@ -276,7 +276,7 @@ BROWSE:
 
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
-           FIND LAST PriceList WHERE PriceList.Brand = gcBrand NO-LOCK.
+           FIND LAST PriceList WHERE PriceList.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(PriceList).
            must-print = TRUE.
            NEXT LOOP.

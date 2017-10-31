@@ -74,7 +74,7 @@ PROCEDURE pCollectCDRs:
 
    /* 
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
+                  INPUT Syst.CUICommon:gcBrand,
                   INPUT katun,
                   INPUT InvSeq.FromDate,   
                   INPUT InvSeq.ToDate,

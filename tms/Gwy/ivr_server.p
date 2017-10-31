@@ -4,7 +4,7 @@
 {Func/heartbeat.i}
 {Func/fgettxt.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE STREAM outfile.
 
@@ -46,7 +46,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 22
       CallAlarm.Orig       = "800622800"
-      CallAlarm.Brand      = gcBrand.
+      CallAlarm.Brand      = Syst.CUICommon:gcBrand.
       
    RELEASE CallAlarm.
 
@@ -252,7 +252,7 @@ OUTPUT CLOSE.
 
             ASSIGN
                PrePaidRequest.CLI       = fGetRPCNodeValue(lcXML,"Subscriber")
-               PrePaidRequest.Brand     = gcBrand
+               PrePaidRequest.Brand     = Syst.CUICommon:gcBrand
                PrePaidRequest.Source    = "IVR"
                PrePaidRequest.PPRequest = NEXT-VALUE(PrePaidReq)
                PrePaidRequest.CommLine  = lcXML
@@ -268,7 +268,7 @@ OUTPUT CLOSE.
          END.
 
          FIND FIRST MobSub WHERE
-                    MobSub.Brand = gcBrand AND
+                    MobSub.Brand = Syst.CUICommon:gcBrand AND
                     MobSub.CLI   = lcCLI
          NO-LOCK NO-ERROR.
 
@@ -290,7 +290,7 @@ OUTPUT CLOSE.
             IF ENTRY(3,lcSogResponse," ") NE "OK" THEN DO TRANSACTION:
 
                FIND FIRST PrePaidRequest WHERE
-                          PrePaidRequest.Brand     = gcBrand AND
+                          PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                           PrePaidRequest.PPRequest = liMyRequest
                EXCLUSIVE-LOCK NO-ERROR.
                ASSIGN
@@ -330,10 +330,10 @@ OUTPUT CLOSE.
                IF liPPRequest NE 0 THEN DO:
 
                   PUT SCREEN ROW 6 COL 1 "6: " + STRING(ETIME,"zzzzz9").
-                  RUN Gwy/pp_platform.p(gcBrand,liPPRequest).
+                  RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,liPPRequest).
 
                   FIND FIRST bufPP WHERE
-                             bufPP.Brand     = gcBrand AND
+                             bufPP.Brand     = Syst.CUICommon:gcBrand AND
                              bufPP.PPRequest = liPPRequest
                   NO-LOCK NO-ERROR.
 
@@ -397,7 +397,7 @@ OUTPUT CLOSE.
       DO TRANSACTION:
       
          FIND FIRST PrePaidRequest WHERE
-                    PrePaidRequest.Brand     = gcBrand AND
+                    PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                     PrePaidRequest.PPRequest = liMyRequest
          EXCLUSIVE-LOCK NO-ERROR.
 
@@ -413,7 +413,7 @@ OUTPUT CLOSE.
             SoLog.MsSeq             = MobSub.MsSeq WHEN AVAIL MobSub
             SoLog.Stat              = 2 WHEN PrePaidRequest.RespCode =  0
             SoLog.Stat              = 1 WHEN PrePaidRequest.RespCode NE 0
-            SoLog.Brand             = gcBrand
+            SoLog.Brand             = Syst.CUICommon:gcBrand
             SoLog.Response          = lcSogResponse
             SoLog.Users             = "IVR First call"
             PrePaidRequest.PPStatus = 2.

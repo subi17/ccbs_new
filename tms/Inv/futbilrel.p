@@ -63,7 +63,7 @@ FORM
         HELP "Name of output file" 
         SKIP(3)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " FUTURE BILLING " +
+        TITLE " " + Syst.CUICommon:ynimi + " FUTURE BILLING " +
         STRING(pvm,"99-99-99") + " "
         FRAME valinta.
 
@@ -71,7 +71,7 @@ VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
 FIND LAST InvGroup WHERE
-          InvGroup.InvGroup = gcBrand
+          InvGroup.InvGroup = Syst.CUICommon:gcBrand
 NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN InvGroup[2] = InvGroup.InvGroup.
 

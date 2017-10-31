@@ -36,7 +36,7 @@ ASSIGN
          BREAK BY SingleFee.Memo[1].
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.CUICommon:gcBrand AND
            BillItem.BillCode = SingleFee.BillCode NO-LOCK no-ERROR.
 
       DISP

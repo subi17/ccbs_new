@@ -458,7 +458,7 @@ BROWSE:
                        IMPORT UNFORMATTED xls.
                        CREATE pnplist.
                        ASSIGN
-                          pnplist.Brand    = gcBrand 
+                          pnplist.Brand    = Syst.CUICommon:gcBrand 
                           pnplist.pnpSeq   = ipPnpSeq
                           pnplist.cli      = TRIM(xls).
                     END.

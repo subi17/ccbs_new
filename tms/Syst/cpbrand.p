@@ -173,8 +173,8 @@ THEN DO:
 END.
 
 /* set default brand for update modules */
-ASSIGN gcBrand = icTargetBrand
-       ynimi   = Brand.BRName.
+ASSIGN Syst.CUICommon:gcBrand = icTargetBrand
+       Syst.CUICommon:ynimi   = Brand.BRName.
 
 /* do all in one transaction (max. few thousand records to copy) 
    -> possibility to undo all */

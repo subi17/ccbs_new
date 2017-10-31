@@ -73,7 +73,7 @@ PROCEDURE pCollectInvoices:
 
    InvoiceSelect:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE 
-            Invoice.Brand = gcBrand AND
+            Invoice.Brand = Syst.CUICommon:gcBrand AND
             Invoice.InvDate = idaInvDate AND
             Invoice.InvType = iiInvType:
          

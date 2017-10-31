@@ -80,7 +80,7 @@ toimi:
 
    OUTPUT STREAM excel TO value(exName).           
 
-   PUT STREAM excel UNFORMATTED  ynimi my-nl my-nl.
+   PUT STREAM excel UNFORMATTED  Syst.CUICommon:ynimi my-nl my-nl.
 
    PUT STREAM excel UNFORMATTED 
       "Calls from Unidentified A-subscriber numbers " +

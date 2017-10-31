@@ -105,12 +105,12 @@ FUNCTION fChangePerMonth RETURNS INTEGER
    DEF VAR ldFromDate AS DEC  NO-UNDO. 
    
    FOR EACH DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK:
       IF CAN-FIND(FIRST DCCLI WHERE
-                        DCCLI.Brand = gcBrand AND
+                        DCCLI.Brand = Syst.CUICommon:gcBrand AND
                         DCCLI.DCEvent = DayCampaign.DCEvent AND
                         DCCLI.MsSeq = iiMsSeq AND
                         DCCLI.ValidFrom <= idtActDate AND
@@ -157,7 +157,7 @@ FUNCTION fIsSTCAllowed RETURNS LOGIC
              LOOKUP(STRING(bBTC.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
              bBTC.ReqCparam5 > "":
       IF LOOKUP(bBTC.ReqCparam1,lcIPLContracts) > 0 OR
-         fMatrixAnalyse(gcBrand,
+         fMatrixAnalyse(Syst.CUICommon:gcBrand,
                         "BTC-DENY",
                         "SubsTypeFrom;SubsTypeTo",
                         icOldCLIType + ";" + icNewCLIType,
@@ -207,7 +207,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
               Customer.custnum EQ Mobsub.custnum NO-LOCK NO-ERROR.           
    /* 1 */
    FIND FIRST NewCliType WHERE
-              NewCLIType.Brand = gcBrand AND
+              NewCLIType.Brand = Syst.CUICommon:gcBrand AND
               NewCLIType.CLIType = icNewCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL NewCLIType THEN DO:
       ocError = "Unknown or missing clitype!".
@@ -333,12 +333,12 @@ FUNCTION fChkSTCPerContr RETURNS LOGICAL:
           
    IF lcTiePeriod = "1" THEN
       FOR EACH DayCampaign WHERE
-               DayCampaign.Brand = gcBrand AND
+               DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
                DayCampaign.TermFeeModel NE "" AND
                DayCampaign.TermFeeCalc > 0 NO-LOCK:
          FIND FIRST DCCLI WHERE
-                    DCCLI.Brand = gcBrand AND
+                    DCCLI.Brand = Syst.CUICommon:gcBrand AND
                     DCCLI.DCEvent = DayCampaign.DCEvent AND
                     DCCLI.MsSeq = MobSub.MsSeq AND
                     DCCLI.ValidFrom <= TODAY AND
@@ -369,7 +369,7 @@ FUNCTION fValidateNewCliType RETURNS INT
 
    /* 1 */
    FIND FIRST CLIType WHERE 
-              CliType.Brand   = gcBrand AND 
+              CliType.Brand   = Syst.CUICommon:gcBrand AND 
               CLIType.Clitype = icNewCliType 
    NO-LOCK NO-ERROR.
    IF NOT AVAIL CLIType THEN DO:
@@ -380,7 +380,7 @@ FUNCTION fValidateNewCliType RETURNS INT
    IF icDataBundleId > "" THEN DO:
 
       FIND FIRST bTariffType WHERE
-                 bTariffType.Brand   = gcBrand AND 
+                 bTariffType.Brand   = Syst.CUICommon:gcBrand AND 
                  bTariffType.Clitype = icDataBundleId 
       NO-LOCK NO-ERROR.
       IF NOT AVAIL bTariffType THEN DO:
@@ -400,7 +400,7 @@ FUNCTION fValidateNewCliType RETURNS INT
    /* 3 */
    FIND FIRST bCTAgrCust WHERE 
               bCTAgrCust.CustNum = Mobsub.AgrCust NO-LOCK NO-ERROR.
-   IF fMatrixAnalyse( INPUT gcBrand,
+   IF fMatrixAnalyse( INPUT Syst.CUICommon:gcBrand,
                         "STC-IDType",
                         "ID;SubsTypeFrom;SubsTypeTo",
                         bCTAgrCust.CustIDType + ";" +
@@ -418,12 +418,12 @@ FUNCTION fValidateNewCliType RETURNS INT
       /* If main line is not active, don't allow STC */
       MOBSUB_LOOP:
       FOR EACH lbMobSub NO-LOCK WHERE
-               lbMobSub.Brand   = gcBrand AND
+               lbMobSub.Brand   = Syst.CUICommon:gcBrand AND
                lbMobSub.InvCust = Mobsub.CustNum AND
                lbMobSub.PayType = FALSE AND
                lbMobSub.MsSeq NE Mobsub.MsSeq,
          FIRST bTariffType NO-LOCK WHERE
-               bTariffType.Brand = gcBrand AND
+               bTariffType.Brand = Syst.CUICommon:gcBrand AND
                bTariffType.CLIType = lbMobSub.TariffBundle AND
                bTariffType.LineType = {&CLITYPE_LINETYPE_MAIN}:
 
@@ -456,7 +456,7 @@ FUNCTION fValidateNewCliType RETURNS INT
       ELSE IF icDataBundleId > "" THEN DO:
 
          FIND DayCampaign NO-LOCK WHERE
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.CUICommon:gcBrand AND
               DayCampaign.DcEvent = icDataBundleId NO-ERROR.
          IF NOT AVAIL DayCampaign OR
                       DayCampaign.StatusCode NE {&DAYCAMPAIGN_STATUSCODE_ACTIVE} THEN DO:

@@ -61,7 +61,7 @@ IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
 lcHeader = "TMR Limit". 
 FIND FIRST TMRule WHERE 
-   TMRule.Brand = gcBrand AND
+   TMRule.Brand = Syst.CUICommon:gcBrand AND
    TMRule.TMRuleSeq = piTMRuleSeq NO-LOCK NO-ERROR.
 IF AVAIL TMRule THEN DO:
    lcHeader = lcHeader + " - " + TMRule.Name.

@@ -17,7 +17,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Mnp/mnp.i}
@@ -81,7 +81,7 @@ FIND FIRST bTermMobSub WHERE
 IF AVAIL bTermMobSub AND bTermMobSub.MultiSIMId > 0 AND
    bTermMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = gcBrand AND
+              lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
               lbMobSub.MultiSimID = bTermMobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               lbMobSub.Custnum = bTermMobSub.Custnum NO-ERROR.
@@ -107,7 +107,7 @@ IF lcMemoTitle > "" AND liMsReq > 0 THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(liMsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

@@ -38,7 +38,7 @@ FUNCTION fPendingRequest RETURNS LOGICAL
       
       IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0 
       THEN RETURN CAN-FIND(FIRST MsRequest WHERE
-                                 MsRequest.Brand     = gcBrand   AND
+                                 MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
                                  MsRequest.ReqType   = iiReqType AND
                                  MsRequest.CustNum   = iiTarget  AND
                                  MsRequest.ReqStatus = 0).
@@ -51,12 +51,12 @@ FUNCTION fPendingRequest RETURNS LOGICAL
                             
    /* any request */                             
    ELSE FOR EACH RequestType NO-LOCK WHERE
-                 RequestType.Brand = gcBrand AND
+                 RequestType.Brand = Syst.CUICommon:gcBrand AND
                  RequestType.InUse = TRUE:
       
       IF LOOKUP(STRING(RequestType.ReqType),{&REQ_CUST_REQUESTS}) > 0 THEN DO: 
          IF CAN-FIND(FIRST MsRequest WHERE
-                           MsRequest.Brand     = gcBrand   AND
+                           MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
                            MsRequest.ReqType   = RequestType.ReqType AND
                            MsRequest.CustNum   = iiTarget  AND
                            MsRequest.ReqStatus = 0)
@@ -115,7 +115,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
 
             PENDING_CREDIT_NOTES:
             FOR EACH bCheckMsRequest NO-LOCK USE-INDEX Custnum where
-                     bCheckMsRequest.Brand      = gcBrand   AND
+                     bCheckMsRequest.Brand      = Syst.CUICommon:gcBrand   AND
                      bCheckMsRequest.ReqType    = iiReqType AND
                      bCheckMsRequest.CustNum    = iiTarget  AND
                      bCheckMsRequest.ReqIParam1 = INTEGER(icParam) AND
@@ -170,7 +170,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
          WHEN 83 THEN DO:
             IF icParam = "CREATE" OR icParam = "DELETE" THEN
                llExist = CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
-                                  MsRequest.Brand      = gcBrand   AND
+                                  MsRequest.Brand      = Syst.CUICommon:gcBrand   AND
                                   MsRequest.ReqType    = iiReqType AND
                                   MsRequest.CustNum    = iiTarget  AND
                                   MsRequest.ReqCParam1 = icParam   AND
@@ -178,7 +178,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
          END. /* WHEN 83 THEN DO: */
          WHEN 84 THEN
             llExist = CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
-                               MsRequest.Brand      = gcBrand   AND
+                               MsRequest.Brand      = Syst.CUICommon:gcBrand   AND
                                MsRequest.ReqType    = iiReqType AND
                                MsRequest.CustNum    = iiTarget  AND
                                LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0).
@@ -212,7 +212,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
          IF icParam = "" THEN DO:
             IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0
             THEN FIND FIRST bCreaReq NO-LOCK WHERE
-                            bCreaReq.Brand     = gcBrand   AND
+                            bCreaReq.Brand     = Syst.CUICommon:gcBrand   AND
                             bCreaReq.ReqType   = iiReqType AND
                             bCreaReq.CustNum   = iiTarget  AND
                             bCreaReq.ReqStatus = 0 NO-ERROR.
@@ -267,7 +267,7 @@ FUNCTION fCreateRequest RETURNS LOGICAL
    CREATE bCreaReq.
    ASSIGN bCreaReq.MsRequest  = NEXT-VALUE(MsRequest)
           bCreaReq.ReqType    = iiReqType
-          bCreaReq.Brand      = gcBrand
+          bCreaReq.Brand      = Syst.CUICommon:gcBrand
           bCreaReq.UserCode   = (katun + (IF icCreator > ""
                                          THEN " / " + icCreator 
                                          ELSE ""))

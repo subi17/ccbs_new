@@ -49,7 +49,7 @@ ASSIGN
 
 form header
    lcLine1 AT 1 SKIP
-   ynimi  AT 1 FORMAT "x(30)" 
+   Syst.CUICommon:ynimi  AT 1 FORMAT "x(30)" 
       "PAYMENTS BY BANK ACCOUNT" AT 35
       "Page" AT 69
       liPage FORMAT "ZZZZ9" SKIP
@@ -103,7 +103,7 @@ VIEW FRAME fQty.
 
 /* separate loop -> info can be shown to user */
 FOR EACH Payment NO-LOCK WHERE
-         Payment.Brand       = gcBrand      AND
+         Payment.Brand       = Syst.CUICommon:gcBrand      AND
          Payment.AccDate    >= idtDate1     AND
          Payment.AccDate    <= idtDate2     AND
          Payment.BankAcc  NE ""             AND
@@ -154,7 +154,7 @@ BY ttPaid.PaymSrc:
       fChkPage(2). 
 
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.CUICommon:gcBrand AND
            InvGroup.InvGroup = ttPaid.InvGrp 
       NO-LOCK NO-ERROR.
 

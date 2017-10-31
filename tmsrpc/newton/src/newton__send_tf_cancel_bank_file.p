@@ -9,7 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/terminal_financing.i}
 
@@ -44,7 +44,7 @@ IF LOOKUP(pcBankCode,{&TF_BANK_CODES}) EQ 0 THEN
    In case yes, exception is returned. */
 Func.Common:mMonthlyStamps(TODAY, ldeMonthBeg, ldeMonthEnd).
 IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE} AND
          MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
          MsRequest.ActStamp >= ldeMonthBeg AND

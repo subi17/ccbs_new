@@ -39,7 +39,7 @@ MAIN:
 repeat:
 
    find first CustTemp WHERE 
-              CustTemp.Brand = gcBrand no-lock no-error.
+              CustTemp.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available CustTemp then do:
       must-print = false.
       must-add = true.
@@ -72,7 +72,7 @@ print-line:
             rtab[frame-line] = recid(CustTemp).
             down with frame sel.
             find next CustTemp WHERE 
-                      CustTemp.Brand = gcBrand no-lock no-error.
+                      CustTemp.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -103,7 +103,7 @@ BROWSE:
             if frame-line = 1 then do:
                find CustTemp where recid(CustTemp) = rtab[frame-line] no-lock.
                find prev CustTemp WHERE 
-                         CustTemp.Brand = gcBrand no-lock no-error.
+                         CustTemp.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available CustTemp then do:
                   bell.
                   message "You are on 1st row !".              
@@ -128,7 +128,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find CustTemp where recid(CustTemp) = rtab[frame-line] no-lock .
-               find next CustTemp WHERE CustTemp.Brand = gcBrand 
+               find next CustTemp WHERE CustTemp.Brand = Syst.CUICommon:gcBrand 
                no-lock no-error.
                if not available CustTemp then do:
                   bell.
@@ -154,12 +154,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find CustTemp where recid(CustTemp) = memory no-lock no-error.
-            find prev CustTemp  WHERE CustTemp.Brand = gcBrand 
+            find prev CustTemp  WHERE CustTemp.Brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
             if available CustTemp then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev CustTemp  WHERE CustTemp.Brand = gcBrand 
+                  find prev CustTemp  WHERE CustTemp.Brand = Syst.CUICommon:gcBrand 
                   no-lock no-error.
                   if available CustTemp then memory = recid(CustTemp).
                   else i = frame-down.
@@ -197,7 +197,7 @@ BROWSE:
            hide frame hayr no-pause.
            if TemplNum ENTERED then do:
               find first CustTemp where 
-                         CustTem.Brand      = gcBrand AND 
+                         CustTem.Brand      = Syst.CUICommon:gcBrand AND 
                          CustTemp.TemplNum >= TemplNum
               no-lock no-error.
                if not available CustTemp then do:
@@ -222,7 +222,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first CustTemp  WHERE CustTemp.Brand = gcBrand no-lock.
+           find first CustTemp  WHERE CustTemp.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(CustTemp).
            must-print = true.
            next LOOP.
@@ -230,7 +230,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last CustTemp   WHERE CustTemp.Brand = gcBrand no-lock.
+           find last CustTemp   WHERE CustTemp.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(CustTemp).
            must-print = true.
            next LOOP.

@@ -30,7 +30,7 @@ def var nro         as char format "x(5)"   NO-UNDO.
 DEF VAR rows        AS INT                  NO-UNDO.
 
 FOR EACH TMSParam no-lock where
-         TMSParam.Brand      = gcBrand AND
+         TMSParam.Brand      = Syst.CUICommon:gcBrand AND
          TMSParam.ParamGroup = "CustNumbers".
 
    CREATE custser.

@@ -1,6 +1,6 @@
 {Syst/testpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 
 DEFINE VARIABLE clis AS CHARACTER NO-UNDO. 

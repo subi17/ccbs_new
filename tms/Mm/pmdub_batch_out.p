@@ -9,7 +9,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Mm/bundle_first_month_fee.i}
@@ -75,8 +75,8 @@ IF NOT lcOutDir > "" OR
    ldeMonthlyFee <= 0 THEN RETURN.
 
 for each clitype where
-         clitype.brand = gcBrand no-lock:
-   if fmatrixanalyse(gcBrand,
+         clitype.brand = Syst.CUICommon:gcBrand no-lock:
+   if fmatrixanalyse(Syst.CUICommon:gcBrand,
                      "percontr",
                      "percontract;substypeto",
                      "pmdub;" + clitype.clitype,
@@ -89,7 +89,7 @@ lcAllowedTypes = substring(lcAllowedTypes,2).
          
 i = 1.
 FOR EACH ActionLog WHERE
-         ActionLog.Brand      = gcBrand AND
+         ActionLog.Brand      = Syst.CUICommon:gcBrand AND
          ActionLog.ActionID   = "PMDUB_OUT" AND
          ActionLog.ActionTS  >= ldeTodayBegin AND
          ActionLog.ActionTS  <= ldeTodayEnd NO-LOCK:
@@ -212,7 +212,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.TableName    = "Cron" AND
                      ActionLog.ActionID     = "PMDUB_OUT" AND
                      ActionLog.KeyValue     = lcFileName AND
@@ -223,7 +223,7 @@ PROCEDURE pMarkStarted:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.ActionID     = "PMDUB_OUT"
             ActionLog.ActionTS     = ldeNow
             ActionLog.TableName    = "Cron"
@@ -242,7 +242,7 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "PMDUB_OUT"
          ActionLog.ActionTS     = ldeNow
          ActionLog.TableName    = "Cron"
@@ -260,7 +260,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
              ActionLog.ActionID     = "PMDUB_OUT" AND
              ActionLog.ActionTS     = ldeNow AND
              ActionLog.TableName    = "Cron" AND

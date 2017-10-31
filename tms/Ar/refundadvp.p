@@ -63,7 +63,7 @@ FORM
    ROW 3 CENTERED OVERLAY FRAME fCrit.
 
 FIND Customer WHERE 
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.CUICommon:gcBrand AND
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    MESSAGE "Unknown customer" iiCustNum

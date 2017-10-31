@@ -95,7 +95,7 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "DUMP" + STRING(iiDumpID)
              ErrorLog.TableName = IF AVAILABLE DumpFile 
                                   THEN DumpFile.DumpName
@@ -563,7 +563,7 @@ PROCEDURE pGetRecords:
          lhField = lhTABLE:BUFFER-FIELD(liCnt).
          IF lhField:NAME = "Brand" THEN DO:
             lcFind = lcFind + " WHERE " + DumpFile.MainTable + 
-                              '.Brand = "' + gcBrand + '"'.
+                              '.Brand = "' + Syst.CUICommon:gcBrand + '"'.
             LEAVE.
          END.
       END.

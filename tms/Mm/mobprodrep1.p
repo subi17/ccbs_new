@@ -42,11 +42,11 @@ FOR EACH MobCDR NO-LOCK WHERE
          InvSeq.Billed,      
    FIRST Customer NO-LOCK WHERE 
          Customer.CustNum = MobCDR.InvCust AND 
-         Customer.Brand   = gcBrand :
+         Customer.Brand   = Syst.CUICommon:gcBrand :
 
    /* skip groups that are not invoiced */
    FIND InvGroup OF Customer  WHERE
-        InvGroup.Brand = gcBrand NO-LOCK.
+        InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
    IF InvGroup.BillPerm = FALSE THEN NEXT.
 
    kpl = kpl + 1.

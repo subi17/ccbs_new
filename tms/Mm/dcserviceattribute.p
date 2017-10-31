@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
            IF INPUT DCServiceAttribute.ServAttr = "" THEN UNDO, LEAVE ADD-ROW.
 
            IF  NOT CAN-FIND(FIRST ServAttr WHERE
-                      ServAttr.Brand = gcBrand AND
+                      ServAttr.Brand = Syst.CUICommon:gcBrand AND
                       ServAttr.ServCom = DCServiceComponent.ServCom AND
                       ServAttr.ServAttr = INPUT DCServiceAttribute.ServAttr) 
            THEN DO:
@@ -661,7 +661,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
     FIND FIRST ServAttr WHERE 
-               ServAttr.Brand = gcBrand AND
+               ServAttr.Brand = Syst.CUICommon:gcBrand AND
                ServAttr.ServCom = DCServiceComponent.ServCom AND
                ServAttr.ServAttr = DCServiceAttribute.ServAttr 
        NO-LOCK NO-ERROR.
@@ -677,16 +677,16 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
    
       FIND FIRST DayCampaign WHERE 
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = DCServicePackage.DCEvent 
            NO-LOCK NO-ERROR.
 
       FIND FIRST ServPac WHERE
-                 ServPac.Brand = gcBrand AND
+                 ServPac.Brand = Syst.CUICommon:gcBrand AND
                  ServPac.ServPac = DCServicePackage.ServPac NO-LOCK NO-ERROR.
            
       FIND FIRST ServCom WHERE
-                 ServCom.Brand = gcBrand AND
+                 ServCom.Brand = Syst.CUICommon:gcBrand AND
                  ServCom.ServCom = DCServiceComponent.ServCom NO-LOCK NO-ERROR.
                  
       DISP 

@@ -83,7 +83,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SCHEDULED KILL REQUESTS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -418,7 +418,7 @@ BROWSE:
        KillDate = TODAY.
        Disp lcBrand WITH FRAME f1.
        UPDATE  
-           lcBrand WHEN gcAllBrand = TRUE
+           lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            KillDate WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF KillDate NE ? THEN DO:
@@ -440,7 +440,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP lcBrand WITH FRAME f2.
-       SET lcBrand WHEN gcAllBrand = TRUE 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
           CLI 
        WITH FRAME f2.                 
        HIDE FRAME f2 NO-PAUSE.
@@ -470,7 +470,7 @@ BROWSE:
        DISP lcBrand WITH FRAME f3.
 
        SET 
-          lcBrand WHEN gcAllBrand = TRUE 
+          lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
           Stat WITH FRAME f3.
 
        HIDE FRAME f3 NO-PAUSE.

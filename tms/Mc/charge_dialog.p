@@ -51,7 +51,7 @@ IF NOT AVAIL Mobsub THEN DO:
 END.
 
 FIND FeeModel WHERE 
-     FeeModel.Brand = gcBrand AND
+     FeeModel.Brand = Syst.CUICommon:gcBrand AND
      FeeModel.FeeModel = icOperation NO-LOCK NO-ERROR.
 IF NOT AVAIL FeeModel THEN DO:
    MESSAGE "Charge/Compensation Billing Event" icOperation "not found"
@@ -66,7 +66,7 @@ lcPriceList = fFeeModelPriceList(MobSub.Custnum,
                                  TODAY).
 
 FIND FIRST FMItem NO-LOCK  WHERE
-   FMItem.Brand     = gcBrand       AND
+   FMItem.Brand     = Syst.CUICommon:gcBrand       AND
    FMItem.FeeModel  = FeeModel.FeeModel AND
    FMItem.PriceList = lcPriceList AND
    FMItem.FromDate <= TODAY     AND

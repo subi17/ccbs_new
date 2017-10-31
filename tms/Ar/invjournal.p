@@ -116,7 +116,7 @@ IF NOT AVAILABLE ttCriter THEN RETURN "ERROR:Criteria not defined".
 
 form header
    viiva1 at 1 SKIP
-   ynimi at 1 "INVOICE JOURNAL FROM PERIOD" at 46
+   Syst.CUICommon:ynimi at 1 "INVOICE JOURNAL FROM PERIOD" at 46
       "Page" at 105 sl FORMAT "ZZZZ9" SKIP
    "Inv.group" at 1 lcInvGroup FORMAT "x(30)" 
       ttCriter.InvDate1 at 46 FORMAT "99-99-9999" "-" 
@@ -149,7 +149,7 @@ with
 
 form header
    viiva1 at 1 SKIP
-   ynimi at 1 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
+   Syst.CUICommon:ynimi at 1 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
      "Page" at 105 sl FORMAT "ZZZZ9" SKIP
    "Inv.group" at 1 
       lcInvGroup FORMAT "x(25)"
@@ -245,7 +245,7 @@ ELSE DO:
 
    FOR EACH TCustGroup,
        EACH cgmember NO-LOCK WHERE
-            cgMember.Brand     = gcBrand AND
+            cgMember.Brand     = Syst.CUICommon:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup:
 
       FIND FIRST tcgmember WHERE 
@@ -269,7 +269,7 @@ IF ttCriter.CustNum1 NE ttCriter.CustNum2 THEN ASSIGN
 
 IF ttCriter.InvGroup > "" THEN DO:
    FIND InvGroup WHERE 
-        InvGroup.Brand    = gcBrand AND
+        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
         InvGroup.InvGroup = ttCriter.InvGroup NO-LOCK NO-ERROR.
    lcInvGroup = ttCriter.InvGroup + " " +   
                 (IF AVAILABLE InvGroup THEN InvGroup.IGName ELSE "").
@@ -279,7 +279,7 @@ ELSE lcInvGroup = "ALL".
 
 runko:
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE             
-         Invoice.Brand      = gcBrand             AND 
+         Invoice.Brand      = Syst.CUICommon:gcBrand             AND 
          Invoice.InvDate   >= ttCriter.InvDate1   AND 
          Invoice.InvDate   <= ttCriter.InvDate2   AND 
          Invoice.ExtInvID  >= ttCriter.ExtInvID1  AND

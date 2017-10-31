@@ -182,7 +182,7 @@ llPDFPrint = (iiTarg = 3).
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(30)"
+   Syst.CUICommon:ynimi at 1 format "x(30)"
       lcRepHeader format "x(35)" AT 35
       otsi[28] format "x(4)" AT 72                  /* Sivu */
       sl format "ZZZ9" SKIP
@@ -305,7 +305,7 @@ END.
 ELSE DO:
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand  AND
+            Customer.Brand    = Syst.CUICommon:gcBrand  AND
             Customer.CustNum >= CustNum1 AND
             Customer.CustNum <= CustNum2:
 

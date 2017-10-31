@@ -37,7 +37,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
 
    /* mark text as sent */
    CREATE ITSendLog.
-   ASSIGN ITSendLog.Brand      = gcBrand
+   ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand
           ITSendLog.TxtType    = 1         /* 1=invtext */
           ITSendLog.ITNum      = liTextID  
           ITSendLog.CustNum    = iiOrderID
@@ -55,7 +55,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
 END.
 
 FIND Order WHERE
-     Order.Brand   = gcBrand  AND
+     Order.Brand   = Syst.CUICommon:gcBrand  AND
      Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Order THEN RETURN "ERROR:Order not available".
 
@@ -113,7 +113,7 @@ END.
 DO WHILE TRUE:
 
    FOR FIRST InvText NO-LOCK WHERE 
-             InvText.Brand     = gcBrand     AND
+             InvText.Brand     = Syst.CUICommon:gcBrand     AND
              InvText.Target    = "OrderConf" AND
              InvText.KeyValue  = lcEmailKey  AND
              InvText.FromDate <= ldtDate     AND

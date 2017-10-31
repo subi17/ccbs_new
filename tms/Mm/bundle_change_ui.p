@@ -103,7 +103,7 @@ MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = lcCurrentBundle NO-LOCK NO-ERROR.
 
    PAUSE 0.
@@ -163,7 +163,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
                IF FRAME-FIELD = "lcCurrentBundle" THEN DO:
                   FIND FIRST DayCampaign WHERE 
-                             DayCampaign.Brand = gcBrand AND
+                             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                              DayCampaign.DCEvent = INPUT lcCurrentBundle 
                   NO-LOCK NO-ERROR.
                   IF NOT AVAILABLE DayCampaign THEN DO:
@@ -187,7 +187,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
                ELSE IF FRAME-FIELD = "lcDCEvent" THEN DO:
                   FIND FIRST bNewBundle WHERE 
-                             bNewBundle.Brand = gcBrand AND
+                             bNewBundle.Brand = Syst.CUICommon:gcBrand AND
                              bNewBundle.DCEvent = INPUT lcDCEvent 
                   NO-LOCK NO-ERROR.
                   IF NOT AVAILABLE bNewBundle THEN DO:
@@ -240,7 +240,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          Mobsub.MultiSimID > 0 THEN DO:
       
          FIND FIRST bbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                    bbMobSub.Brand = gcBrand AND
+                    bbMobSub.Brand = Syst.CUICommon:gcBrand AND
                     bbMobSub.MultiSimId = Mobsub.MultiSimId AND
                     bbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                     bbMobSub.Custnum = Mobsub.Custnum NO-ERROR.
@@ -262,22 +262,22 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
         END.
       END.
       ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                             CLIType.Brand = gcBrand AND
+                             CLIType.Brand = Syst.CUICommon:gcBrand AND
                              CLIType.CLIType = lcCurrentBundle AND
                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) AND
           NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                             CLIType.Brand = gcBrand AND
+                             CLIType.Brand = Syst.CUICommon:gcBrand AND
                              CLIType.CLIType = lcDCEvent AND
                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
          llAddLineTerm = FALSE.
          FOR EACH bbMobSub NO-LOCK WHERE
-                  bbMobSub.Brand   = gcBrand AND
+                  bbMobSub.Brand   = Syst.CUICommon:gcBrand AND
                   bbMobSub.InvCust = Mobsub.CustNum AND
                   bbMobSub.PayType = FALSE AND
                   bbMobSub.MsSeq NE Mobsub.MsSeq,
             FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = gcBrand ANd
+                  CLIType.Brand = Syst.CUICommon:gcBrand ANd
                   CLIType.CLIType = (IF Mobsub.TariffBundle > ""
                                      THEN Mobsub.TariffBundle
                                      ELSE Mobsub.CLIType):

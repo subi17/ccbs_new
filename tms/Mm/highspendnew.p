@@ -144,7 +144,7 @@ FOR EACH HighUsage NO-LOCK,
    FIRST MobSub    NO-LOCK WHERE
          MobSub.CLI = HighUsage.CLI,
    FIRST Customer NO-LOCK WHERE
-         Customer.Brand    = gcBrand AND
+         Customer.Brand    = Syst.CUICommon:gcBrand AND
          Customer.CustNum  = MobSub.CustNum AND
          Customer.InvGroup = icInvGroup:
 
@@ -153,12 +153,12 @@ FOR EACH HighUsage NO-LOCK,
 END.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = gcBrand AND 
+         Customer.Brand    = Syst.CUICommon:gcBrand AND 
          Customer.invGroup = icInvGroup:
          
    FINDSUBS:      
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = gcBrand AND 
+            MobSub.Brand   = Syst.CUICommon:gcBrand AND 
             Mobsub.InvCust = Customer.Custnum AND
             MobSub.PayType = FALSE:
          
@@ -449,7 +449,7 @@ FOR EACH ttTotalCLI,
          
          /* save to db for reporting */
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
                 ErrorLog.ActionID  = "ODIREQHS"
                 ErrorLog.TableName = "MobSub"
                 ErrorLog.KeyValue  = STRING(MobSub.MsSeq)
@@ -484,7 +484,7 @@ PROCEDURE pCollectCDR:
    EMPTY TEMP-TABLE ttCall.
 
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
+                  INPUT Syst.CUICommon:gcBrand,
                   INPUT katun,
                   INPUT idaFromDate,   
                   INPUT idaToDate,

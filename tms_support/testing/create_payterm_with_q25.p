@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 DEF VAR lccli AS CHAR NO-UNDO format "x(10)".
@@ -70,7 +70,7 @@ PROCEDURE pUserInput:
 
             IF FRAME-FIELD = "lcPayterm" THEN DO:
                FIND FIRST DayCampaign WHERE
-                          DayCampaign.Brand = gcBrand and
+                          DayCampaign.Brand = Syst.CUICommon:gcBrand and
                           DayCampaign.DcEvent begins "PAYTERM" and
                           DayCampaign.DcEvent eq INPUT lcPayterm
                NO-LOCK NO-ERROR.

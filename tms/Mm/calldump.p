@@ -15,7 +15,7 @@
 
 {Syst/commali.i}
 katun = "cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/fvatfact.i}
 {Func/excel.i}
@@ -184,10 +184,10 @@ for each ttCalls NO-LOCK:
      lcCCNName = "".
 
    find ccn where 
-        CCN.Brand = gcBrand AND
+        CCN.Brand = Syst.CUICommon:gcBrand AND
         ccn.ccn = ttcalls.ccn no-lock no-error.
    find billitem where 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.CUICommon:gcBrand AND
         billitem.billcode = ttCalls.billcode no-lock no-error.
    assign
      lcBiName  = Billitem.biname when avail billitem

@@ -39,7 +39,7 @@ MAIN:
 repeat:
 
    find first BeaCap WHERE 
-              BeaCap.Brand = gcBrand no-lock no-error.
+              BeaCap.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available BeaCap then do:
       must-print = false.
       must-add = true.
@@ -71,7 +71,7 @@ print-line:
             rtab[frame-line] = recid(BeaCap).
             down with frame sel.
             find next BeaCap WHERE
-                      BeaCap.Brand = gcBrand no-lock no-error.
+                      BeaCap.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -102,7 +102,7 @@ BROWSE:
             if frame-line = 1 then do:
                find BeaCap where recid(BeaCap) = rtab[frame-line] no-lock.
                find prev BeaCap WHERE
-                         BeaCap.Brand = gcBrand no-lock no-error.
+                         BeaCap.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available BeaCap then do:
                   bell.
                   message "You are on 1st row !".              
@@ -128,7 +128,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find BeaCap where recid(BeaCap) = rtab[frame-line] no-lock .
                find next BeaCap WHERE
-                         BeaCap.Brand = gcBrand no-lock no-error.
+                         BeaCap.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available BeaCap then do:
                   bell.
                   message "You are on last row !".
@@ -154,12 +154,12 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find BeaCap where recid(BeaCap) = memory no-lock no-error.
             find prev BeaCap WHERE
-                      BeaCap.Brand = gcBrand no-lock no-error.
+                      BeaCap.Brand = Syst.CUICommon:gcBrand no-lock no-error.
             if available BeaCap then do:
 
                do i = 1 to (frame-down - 1):
                   find prev BeaCap WHERE
-                            BeaCap.Brand = gcBrand no-lock no-error.
+                            BeaCap.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                   if available BeaCap then memory = recid(BeaCap).
                   else i = frame-down.
                end.
@@ -196,7 +196,7 @@ BROWSE:
            hide frame hayr no-pause.
            if bc_name ENTERED then do:
               find first BeaCap where 
-                         BeaCap.Brand   = gcBrand AND 
+                         BeaCap.Brand   = Syst.CUICommon:gcBrand AND 
                          BeaCap.BeaCap >= bc_name
               no-lock no-error.
                if not available BeaCap then do:
@@ -222,7 +222,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first BeaCap WHERE
-                      BeaCap.Brand = gcBrand no-lock.
+                      BeaCap.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(BeaCap).
            must-print = true.
            next LOOP.
@@ -231,7 +231,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last BeaCap WHERE
-                     BeaCap.Brand = gcBrand no-lock.
+                     BeaCap.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(BeaCap).
            must-print = true.
            next LOOP.

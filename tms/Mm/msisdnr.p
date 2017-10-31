@@ -104,7 +104,7 @@ orders = "By 1,By 2,By 3, By 4".
 
 
 FIND FIRST MSISDN WHERE 
-           MSISDN.Brand = gcBrand AND 
+           MSISDN.Brand = Syst.CUICommon:gcBrand AND 
            MSISDN.CLI >= CLIFrom  AND 
            MSISDN.CLI <= CLITo    AND 
            MSISDN.CustNum = MSRange.Custnum 
@@ -168,7 +168,7 @@ ADD-ROW:
 
       /* is there ANY record ? */
       FIND FIRST MSISDN WHERE 
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.CLI >= CLIFrom  AND 
                  MSISDN.CLI <= CLITo    AND 
                  MSISDN.CustNum = MSRange.Custnum 
@@ -463,22 +463,22 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST MSISDN
-       WHERE MSISDN.BRAnd = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum ~ = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAnd = Syst.CUICommon:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum ~ = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST MSISDN 
-       WHERE MSISDN.BRAND = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAND = Syst.CUICommon:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT MSISDN
-       WHERE MSISDN.BRAND = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAND = Syst.CUICommon:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV MSISDN
-       WHERE MSISDN.BRAND = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAND = Syst.CUICommon:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -495,7 +495,7 @@ PROCEDURE local-find-others.
    FIND Customer where Customer.CustNum = MSISDN.CustNum no-lock no-error.
    FIND MSStat of MSISDN no-lock no-error.
    FIND MSClass where 
-        MSClass.Brand = gcBrand AND
+        MSClass.Brand = Syst.CUICommon:gcBrand AND
         MSClass.McCode = MSISDN.McCode no-lock no-error.
 END PROCEDURE.
 

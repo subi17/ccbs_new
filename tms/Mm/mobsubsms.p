@@ -168,7 +168,7 @@ ACTION:
             CallAlarm.Limit    = 0
             CallAlarm.CreditType = 9
             CallAlarm.Orig       = "800622800"
-            CallAlarm.Brand      = gcBrand .
+            CallAlarm.Brand      = Syst.CUICommon:gcBrand .
 
          LEAVE Action.
       END.

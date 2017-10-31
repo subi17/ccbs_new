@@ -31,7 +31,7 @@ form
     Salesoffice.SOName
 WITH
     scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " SALES OFFICE (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " SALES OFFICE (" + Syst.CUICommon:gcBrand + ") " 
     OVERLAY FRAME sel.
 
 form
@@ -51,7 +51,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 Runko:
 repeat:
 
-   FIND FIRST Salesoffice WHERE SalesOffice.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST Salesoffice WHERE SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE Salesoffice THEN DO:
       must-print = FALSE.
       must-add = TRUE.
@@ -80,7 +80,7 @@ add-new:
                LEAVE add-new.
             END.
             IF can-find(Salesoffice where 
-                        SalesOffice.Brand       = gcBrand AND
+                        SalesOffice.Brand       = Syst.CUICommon:gcBrand AND
                         Salesoffice.SalesOffice = Salesoffice)
             THEN DO:
                bell. message "Salesman" Salesoffice " already exists !". NEXT.
@@ -90,7 +90,7 @@ add-new:
          CREATE Salesoffice.
          ASSIGN
            ylin = recid(Salesoffice)
-           SalesOffice.Brand       = gcBrand
+           SalesOffice.Brand       = Syst.CUICommon:gcBrand
            Salesoffice.SalesOffice = Salesoffice.
          UPDATE Salesoffice.SOName.
          CLEAR FRAME tlli no-pause.
@@ -101,7 +101,7 @@ add-new:
 
       /* onko yhtaan tietuetta ? */
       FIND FIRST Salesoffice  WHERE 
-         SalesOffice.Brand = gcBrand NO-LOCK no-error.
+         SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
       IF NOT AVAILABLE Salesoffice THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -120,7 +120,7 @@ print-line:
             rtab[FRAME-LINE] = recid(Salesoffice).
             DOWN WITH FRAME sel.
             FIND NEXT Salesoffice WHERE 
-               SalesOffice.Brand = gcBrand NO-LOCK no-error.
+               SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(sel) - 1 WITH FRAME sel.
@@ -153,7 +153,7 @@ BROWSE:
             IF FRAME-LINE = 1 THEN DO:
                FIND Salesman where recid(Salesman) = rtab[FRAME-LINE] no-lock.
                FIND prev Salesoffice WHERE 
-                  SalesOffice.Brand = gcBrand NO-LOCK no-error.
+                  SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE Salesoffice THEN DO:
                   BELL.
                   message "YOU ARE ON THE FIRST ROW !".
@@ -179,7 +179,7 @@ BROWSE:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND Salesman where recid(Salesman) = rtab[FRAME-LINE] no-lock .
                FIND NEXT Salesoffice WHERE 
-                  SalesOffice.Brand = gcBrand NO-LOCK no-error.
+                  SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE Salesoffice THEN DO:
                   BELL.
                   message "YOU ARE ON THE LAST ROW".
@@ -205,12 +205,12 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
             FIND Salesoffice where recid(Salesoffice) = ylin no-lock no-error.
             FIND prev Salesoffice where 
-               SalesOffice.Brand = gcBrand NO-LOCK no-error.
+               SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE Salesoffice THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
                   FIND prev Salesoffice where 
-                     SalesOffice.Brand = gcBrand NO-LOCK no-error.
+                     SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                   IF AVAILABLE Salesoffice THEN ylin = recid(Salesoffice).
                   ELSE i = FRAME-DOWN.
                END.
@@ -247,7 +247,7 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            if Salesoffice <> "" THEN DO:
               FIND FIRST Salesoffice where 
-                         SalesOffice.Brand        = gcBrand AND
+                         SalesOffice.Brand        = Syst.CUICommon:gcBrand AND
                          Salesoffice.SalesOffice >= Salesoffice
                  no-lock no-error.
               IF NOT AVAILABLE Salesoffice THEN DO:
@@ -279,7 +279,7 @@ BROWSE:
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
            FIND FIRST Salesoffice WHERE 
-              SalesOffice.Brand = gcBrand NO-LOCK no-error.
+              SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
            ylin = recid(Salesoffice).
            must-print = TRUE.
            NEXT LOOP.
@@ -288,7 +288,7 @@ BROWSE:
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
            FIND LAST Salesoffice WHERE 
-              SalesOffice.Brand = gcBrand NO-LOCK no-error.
+              SalesOffice.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
            ylin = recid(Salesoffice).
            must-print = TRUE.
            NEXT LOOP.

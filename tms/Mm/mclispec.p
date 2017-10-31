@@ -106,7 +106,7 @@ ASSIGN lcMacros      = fCParamC("MacroDir") + fCParamC("MacroSpec")
                                              "4")).
 
 FIND MobSub WHERE 
-     MobSub.Brand = gcBrand AND
+     MobSub.Brand = Syst.CUICommon:gcBrand AND
      MobSub.CLI   = icCLI NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN DO:
    MESSAGE "Unknown CLI" icCLI
@@ -179,7 +179,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
           UPDATE 
           InvNum
              VALIDATE(CAN-FIND (FIRST Invoice WHERE
-                                      Invoice.Brand  = gcBrand AND
+                                      Invoice.Brand  = Syst.CUICommon:gcBrand AND
                                       Invoice.InvNum = INPUT invnum),
                       "Unknown Invoice Number!")                   
           pvm1 
@@ -224,7 +224,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                       FIND Invoice WHERE 
                            Invoice.InvNum = INPUT InvNum 
                       NO-LOCK NO-ERROR.
-                      IF AVAIL Invoice AND Invoice.Brand = gcBrand THEN DO: 
+                      IF AVAIL Invoice AND Invoice.Brand = Syst.CUICommon:gcBrand THEN DO: 
                       
                          IF NOT CAN-FIND(FIRST SubInvoice OF Invoice WHERE
                                                SubInvoice.CLI = icCLI)
@@ -400,7 +400,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          /* log from print */
          DO FOR ITSendLog TRANS:
             CREATE ITSendLog.
-            ASSIGN ITSendLog.Brand      = gcBrand 
+            ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                    ITSendLog.TxtType    = 5
                    ITSendLog.ITNum      = 0
                    ITSendLog.CustNum    = MobSub.CustNum

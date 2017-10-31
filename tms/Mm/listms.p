@@ -41,7 +41,7 @@ FIND BillTarg WHERE BillTarg.BillTarg   = mobsub.BillTarg  AND
 
 FORM HEADER
    FILL("=",116) FORMAT "x(116)"         skip
-      ynimi  at 1  FORMAT "x(23)"
+      Syst.CUICommon:ynimi  at 1  FORMAT "x(23)"
       "SERVICES OF MOBILE SUBSCRIPTION" at 41
       pvm    format "99.99.9999" TO 116 skip
       mobno  FORMAT "x(20)"  at 41
@@ -105,11 +105,11 @@ rw-c = 14.
 FOR 
 EACH  subser  OF mobsub  NO-LOCK,
 FIRST servcom WHERE 
-      ServCom.Brand   = gcBrand AND 
+      ServCom.Brand   = Syst.CUICommon:gcBrand AND 
       ServCom.servcom = subser.servcom  NO-LOCK,
 
 FIRST service NO-LOCK WHERE 
-      Service.Brand   = gcBrand AND 
+      Service.Brand   = Syst.CUICommon:gcBrand AND 
       service.Service = servcom.Service
 
 BREAK

@@ -8,7 +8,7 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 /*{Syst/utumaa.i new }
 {Inv/edefine.i new}*/
@@ -32,13 +32,13 @@ lcEmailFile = fCParam("Printing","MailPrintFile") +
               "_" + STRING(iiOrderId) + "_req.html".
 
 FIND Order WHERE
-  Order.Brand   = gcBrand  AND
+  Order.Brand   = Syst.CUICommon:gcBrand  AND
   Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
 
 IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
    Order.OrderType NE {&ORDER_TYPE_MNP} THEN RETURN "".
 
-FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
+FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
                                OrderCustomer.OrderId = iiOrderId AND
                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 /* Only Spanish decided to be supported at the moment

@@ -137,10 +137,10 @@ FUNCTION fMakeServLimit RETURN LOGICAL
    /* Activate */ 
 
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-            ServiceLimitGroup.Brand     = gcBrand AND
+            ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
             ServiceLimitGroup.GroupCode = icServiceLimitGroup,
       FIRST bContract WHERE
-            bContract.Brand = gcBrand AND
+            bContract.Brand = Syst.CUICommon:gcBrand AND
             bContract.DCEvent = ServiceLimitGroup.GroupCode,
        EACH ServiceLimit NO-LOCK WHERE 
             ServiceLimit.GroupCode  = icServiceLimitGroup AND 
@@ -330,10 +330,10 @@ FUNCTION fMakeServLPool RETURN LOGICAL
    END.
 
    FOR FIRST ServiceLimitGroup NO-LOCK WHERE 
-             ServiceLimitGroup.Brand     = gcBrand AND
+             ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
              ServiceLimitGroup.GroupCode = icServiceLimitGroup,
        FIRST DayCampaign WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = ServiceLimitGroup.GroupCode,
         EACH ServiceLimit NO-LOCK WHERE 
              ServiceLimit.GroupCode  = icServiceLimitGroup AND 

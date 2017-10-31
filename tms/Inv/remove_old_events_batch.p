@@ -7,7 +7,7 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun = "cron".
 {Syst/eventlog.i}
 {Inv/old_unbilled_events.i}
@@ -31,7 +31,7 @@ RUN Inv/remove_old_events.p(0,
 IF RETURN-VALUE BEGINS "ERROR" THEN DO TRANS:
    CREATE ErrorLog.
    ASSIGN 
-      ErrorLog.Brand     = gcBrand
+      ErrorLog.Brand     = Syst.CUICommon:gcBrand
       ErrorLog.ActionID  = "RemoveOld"
       ErrorLog.TableName = "BillEvents"
       ErrorLog.KeyValue  = STRING(YEAR(ldaEventDate),"9999") + 

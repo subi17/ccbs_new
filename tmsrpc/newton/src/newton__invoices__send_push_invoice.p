@@ -22,7 +22,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUserName) EQ "" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "VISTA_" + pcUserName.
 {Syst/tmsconst.i}
 {Func/fcreatereq.i}
@@ -42,7 +42,7 @@ ASSIGN
    ldeNextMonth    = liYear * 10000 + liMonth * 100 + 1.
 
 FIND FIRST MsRequest WHERE
-           MsRequest.Brand    = gcBrand AND
+           MsRequest.Brand    = Syst.CUICommon:gcBrand AND
            MsRequest.ReqType  = ({&REQTYPE_PUSH_INVOICE}) AND
            MsRequest.ActStamp > ldeCurrentMonth AND
            MsRequest.ActStamp < ldeNextMonth AND

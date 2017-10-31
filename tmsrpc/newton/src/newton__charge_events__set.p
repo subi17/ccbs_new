@@ -92,7 +92,7 @@ IF NOT AVAIL FMItem THEN DO:
 END.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = pcUserName.
 {Syst/eventval.i}
 

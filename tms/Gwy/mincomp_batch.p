@@ -19,7 +19,7 @@
 
 ASSIGN
    katun   = "PPMINC"
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam2.i}
 {Func/tmsparam4.i}
@@ -71,7 +71,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
          CallAlarm.CreditType = 42
          CallAlarm.Orig       = "622"
          CallAlarm.ActInterval = "28800-75600" /* 8:00-21:00 */
-         CallAlarm.Brand      = gcBrand.
+         CallAlarm.Brand      = Syst.CUICommon:gcBrand.
          
       RELEASE CallAlarm.
    END.
@@ -276,7 +276,7 @@ PROCEDURE pAdjustBalance:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END.
@@ -285,7 +285,7 @@ PROCEDURE pAdjustBalance:
    ASSIGN
       PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
       PrePaidRequest.UserCode    = katun
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = liMsSeq
       PrePaidRequest.CLI         = lcCLI
       PrePaidRequest.PPRequest   = liRequest
@@ -299,7 +299,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.VatAmt      = 0
       PrePaidRequest.TaxZone     = lcTaxZone.
    
-   RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    ldeTS = Func.Common:mMakeTS().
@@ -341,7 +341,7 @@ PROCEDURE pAdjustBalance:
       CREATE Memo.
       ASSIGN
          Memo.CreStamp  = Func.Common:mMakeTS()
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
@@ -407,14 +407,14 @@ PROCEDURE pMarkStarted:
    END.
    /* check that there isn't already another run for the same purpose */
    ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.ActionID     = "MINCONS" AND                     
                      ActionLog.ActionPeriod > 201201 AND
                      ActionLog.ActionStatus = 0 AND
                      actionlog.actionts > 20120101) THEN DO:
       /* this file is already running */
       FIND FIRST ActionLog USE-INDEX ActionID WHERE
-                 ActionLog.Brand        = gcBrand     AND
+                 ActionLog.Brand        = Syst.CUICommon:gcBrand     AND
                  ActionLog.ActionID     = "MINCONS" AND
                  ActionLog.ActionPeriod > 201201 AND
                  ActionLog.ActionStatus = 0 AND 
@@ -428,7 +428,7 @@ PROCEDURE pMarkStarted:
              liLogStatus = 3.
    END.
    ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.ActionID     = "MINCONS" AND
                      ActionLog.KeyValue     = lcFileName AND
                      ActionLog.ActionStatus = 2 AND
@@ -438,7 +438,7 @@ PROCEDURE pMarkStarted:
    END.
    /* check if file is already handled during this month */
    ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-               ActionLog.Brand        = gcBrand     AND
+               ActionLog.Brand        = Syst.CUICommon:gcBrand     AND
                ActionLog.ActionID     = "MINCONS" AND
                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) AND
                Actionlog.actionts > 20120101) AND
@@ -447,7 +447,7 @@ PROCEDURE pMarkStarted:
                 liLogStatus = 1.
    END.
    ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-               ActionLog.Brand        = gcBrand     AND
+               ActionLog.Brand        = Syst.CUICommon:gcBrand     AND
                ActionLog.ActionID     = "MINCONS" AND
                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) AND
                Actionlog.actionts > 20120101) AND 
@@ -461,7 +461,7 @@ PROCEDURE pMarkStarted:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.ActionID     = "MINCONS"
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
@@ -480,7 +480,7 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "MINCONS"
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
@@ -498,7 +498,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
              ActionLog.ActionID     = "MINCONS" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND

@@ -35,7 +35,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  DENY BILLING  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  DENY BILLING  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

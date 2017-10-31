@@ -66,7 +66,7 @@ form
    "        Decimal separator ..:" exdeci                        skip(3)
 WITH 
    ROW 1 side-labels width 80 NO-LABELS
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " SUMMARY OF PAYMENTS AND INVOICES " +
    string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME Limit.
 
@@ -103,7 +103,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
             if InvGroup NE "" THEN DO:
 
                find InvGroup where
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup = InvGroup
                no-lock no-error.
                if not avail Invgroup THEN DO:
@@ -210,7 +210,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    FOR EACH TCustGroup.
       FOR EACH cgmember WHERE
-               CGMember.Brand     = gcBrand AND
+               CGMember.Brand     = Syst.CUICommon:gcBrand AND
                cgmember.custgroup = Tcustgroup.custgroup
       NO-lock.
          FIND FIRST tcgmember WHERE
@@ -235,7 +235,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    LOOP:
    FOR EACH Customer no-lock where
-            Customer.Brand    = gcBrand          AND
+            Customer.Brand    = Syst.CUICommon:gcBrand          AND
             Customer.CustNum >= cgcustno1        AND
             Customer.CustNum <= cgcustno2        AND
            (if InvGroup = "" THEN TRUE 

@@ -36,7 +36,7 @@ DEF VAR lcTermType     AS CHARACTER NO-UNDO.
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
 FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
+     Order.Brand = Syst.CUICommon:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "".
 
@@ -49,7 +49,7 @@ IF ilCheckLOStatus THEN DO:
    IF AVAIL OrderDelivery THEN DO:
 
       FOR EACH bOrderDelivery NO-LOCK WHERE
-               bOrderDelivery.Brand   = gcBrand AND
+               bOrderDelivery.Brand   = Syst.CUICommon:gcBrand AND
                bOrderDelivery.OrderId = OrderDelivery.OrderId AND
                bOrderDelivery.LOTimeStamp = OrderDelivery.LOTimeStamp:
          liCount = liCount + 1.

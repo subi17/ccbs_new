@@ -41,7 +41,7 @@ MAIN:
 repeat:
 
    find first servattr WHERE servattr.servcom = servcom AND 
-              servattr.brand = gcBrand no-lock no-error.
+              servattr.brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available servattr then do:
       must-print = false.
       must-add = true.
@@ -74,7 +74,7 @@ print-line:
             rtab[frame-line] = recid(servattr).
             down with frame sel.
             find next servattr  WHERE servattr.servcom = servcom AND 
-            servattr.brand = gcBrand 
+            servattr.brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
          end.
          must-print = false.
@@ -105,7 +105,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find servattr where recid(servattr) = rtab[frame-line] no-lock.
-               find prev servattr WHERE servattr.servcom = servcom AND servattr.brand = gcBrand
+               find prev servattr WHERE servattr.servcom = servcom AND servattr.brand = Syst.CUICommon:gcBrand
                 no-lock no-error.
                if not available servattr then do:
                   bell.
@@ -131,7 +131,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find servattr where recid(servattr) = rtab[frame-line] no-lock .
-               find next servattr  WHERE servattr.servcom = servcom AND servattr.brand = gcBrand
+               find next servattr  WHERE servattr.servcom = servcom AND servattr.brand = Syst.CUICommon:gcBrand
                no-lock no-error.
                if not available servattr then do:
                   bell.
@@ -157,12 +157,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find servattr where recid(servattr) = memory no-lock no-error.
-            find prev servattr  WHERE servattr.servcom = servcom AND servattr.brand = gcBrand 
+            find prev servattr  WHERE servattr.servcom = servcom AND servattr.brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
             if available servattr then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev servattr  WHERE servattr.servcom = servcom AND servattr.brand = gcBrand
+                  find prev servattr  WHERE servattr.servcom = servcom AND servattr.brand = Syst.CUICommon:gcBrand
                   no-lock no-error.
                   if available servattr then memory = recid(servattr).
                   else i = frame-down.
@@ -201,7 +201,7 @@ BROWSE:
            if ob-code ENTERED then do:
               find first servattr where 
                          servattr.servcom   = servcom AND 
-                         servattr.brand     = gcBrand   ANd
+                         servattr.brand     = Syst.CUICommon:gcBrand   ANd
                          ServAttr.servattr >= ob-code
               no-lock no-error.
                if not available servattr then do:
@@ -227,7 +227,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first servattr  WHERE servattr.servcom = servcom AND 
-                      servattr.brand = gcBrand no-lock.
+                      servattr.brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(servattr).
            must-print = true.
            next LOOP.
@@ -236,7 +236,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last servattr  WHERE 
-            servattr.servcom = servcom AND servattr.brand = gcBrand no-lock.
+            servattr.servcom = servcom AND servattr.brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(servattr).
            must-print = true.
            next LOOP.

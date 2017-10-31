@@ -28,7 +28,7 @@ form
     SMGroup.SGName  format "x(30)"
     SMGroup.Memo[1]  format "x(20)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Salesman Groups (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Salesman Groups (" + Syst.CUICommon:gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -51,7 +51,7 @@ Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Sys
 Runko:
 repeat:
 
-   FIND FIRST SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE SMGroup THEN DO:
       must-print = FALSE.
       must-add = TRUE.
@@ -79,7 +79,7 @@ add-new:
                LEAVE add-new.
             END.
             IF CAN-FIND (SMGroup where 
-                         SMGroup.Brand   = gcBrand AND
+                         SMGroup.Brand   = Syst.CUICommon:gcBrand AND
                          SMGroup.SmGroup = INPUT SMGroup.SmGroup) THEN DO:
                BELL.
                message "Salesman Group  " + string(INPUT SMGroup.SmGroup)
@@ -91,7 +91,7 @@ add-new:
          CREATE SMGroup.
          ASSIGN
            muisti = recid(SMGroup)
-           SMGroup.Brand   = gcBrand
+           SMGroup.Brand   = Syst.CUICommon:gcBrand
            SMGroup.SmGroup = INPUT SMGroup.SmGroup.
          UPDATE SMGroup.SGName SMGroup.Memo[1] .
          CLEAR FRAME tlli no-pause.
@@ -101,7 +101,7 @@ add-new:
       must-print = TRUE.
 
       /* onko yhtaan tietuetta ? */
-      FIND FIRST SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK no-error.
+      FIND FIRST SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
       IF NOT AVAILABLE SMGroup THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -121,7 +121,7 @@ print-line:
             SMGroup.Memo[1] WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(SMGroup).
             DOWN WITH FRAME tlse.
-            FIND NEXT SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND NEXT SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(tlse) - 1 WITH FRAME tlse.
@@ -151,7 +151,7 @@ BROWSE:
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
-               FIND prev SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK no-error.
+               FIND prev SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE SMGroup THEN DO:
                   BELL.
                   message "You are on the 1st row !".
@@ -176,7 +176,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock .
-               FIND NEXT SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK no-error.
+               FIND NEXT SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE SMGroup THEN DO:
                   BELL.
                   message "You are on the last row !".
@@ -201,11 +201,11 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND SMGroup where recid(SMGroup) = muisti no-lock no-error.
-            FIND prev SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND prev SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE SMGroup THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev SMGroup WHERE SMGroup.Brand = gcBrand 
+                  FIND prev SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                   IF AVAILABLE SMGroup THEN muisti = recid(SMGroup).
                   ELSE i = FRAME-DOWN.
@@ -244,7 +244,7 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            if SMGroup <> "" THEN DO:
               FIND FIRST SMGroup where 
-                         SMGroup.Brand    = gcBrand AND
+                         SMGroup.Brand    = Syst.CUICommon:gcBrand AND
                          SMGroup.SmGroup >= INPUT SMGroup
               no-lock no-error.
               IF NOT AVAILABLE SMGroup THEN DO:
@@ -268,7 +268,7 @@ BROWSE:
         END. /* Valinta */
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
-           FIND FIRST SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK.
+           FIND FIRST SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            muisti = recid(SMGroup).
            must-print = TRUE.
            NEXT LOOP.
@@ -276,7 +276,7 @@ BROWSE:
 
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
-           FIND LAST SMGroup WHERE SMGroup.Brand = gcBrand NO-LOCK.
+           FIND LAST SMGroup WHERE SMGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            muisti = recid(SMGroup).
            must-print = TRUE.
            NEXT LOOP.

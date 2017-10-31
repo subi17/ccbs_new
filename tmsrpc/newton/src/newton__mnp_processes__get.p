@@ -54,7 +54,7 @@
 {Syst/commpaa.i}
 ASSIGN
    katun = "Newton"
-      gcBrand = "1".
+      Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mnp/mnp.i}
 
@@ -106,7 +106,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct, "operator_code", MNPProcess.OperCode).
    
    FIND MNPOperator WHERE 
-        MNPOperator.Brand = gcBrand AND
+        MNPOperator.Brand = Syst.CUICommon:gcBrand AND
         MNPOperator.OperCode = MNPProcess.OperCode
    NO-LOCK NO-ERROR.
    
@@ -115,7 +115,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
    ELSE IF AMBIGUOUS(MNPOperator) THEN DO:
       FIND FIRST MNPOperator WHERE 
-                 MNPOperator.Brand = gcBrand AND
+                 MNPOperator.Brand = Syst.CUICommon:gcBrand AND
                  MNPOperator.OperCode = MNPProcess.OperCode
       NO-LOCK NO-ERROR.
       IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperBrand.
@@ -133,7 +133,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
       IF MNPProcess.MNPSeq NE {&MNP_PROCESS_DUMMY_IN} THEN DO:
          FIND Order WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.CUICommon:gcBrand AND
               Order.Orderid = MNPProcess.Orderid NO-LOCK NO-ERROR.
          IF NOT AVAIL Order THEN
             RETURN appl_err("Order not found: " + STRING(MNPProcess.OrderID)).

@@ -60,7 +60,7 @@ FORM
     lcBIName  FORMAT "X(20)" COLUMN-LABEL "Name"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  IMEI " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -385,7 +385,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcIMEI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -408,7 +408,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcBillCode WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        
@@ -613,7 +613,7 @@ PROCEDURE local-find-others.
 
    lcBIName = "".
    FIND FIRST BillItem WHERE
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = IMEIRegister.BillCode NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
    
@@ -679,7 +679,7 @@ PROCEDURE pUpdate:
             
             IF FRAME-FIELD = "BillCode" THEN DO:
                FIND FIRST BillItem WHERE 
-                          BillItem.Brand = gcBrand AND
+                          BillItem.Brand = Syst.CUICommon:gcBrand AND
                           BillItem.BillCode = INPUT IMEIRegister.BillCode
                   NO-LOCK NO-ERROR.
                IF NOT AVAILABLE BillItem THEN DO:

@@ -56,7 +56,7 @@ form
     ShaperConf.Tariff FORMAT "X(15)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Shaper Configurations "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -379,7 +379,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         RUN Mc/eventsel.p("shaperconf", "#BEGIN" + chr(255) 
-           + gcBrand).
+           + Syst.CUICommon:gcBrand).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -542,7 +542,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
      END.
      ELSE IF toimi = 7 THEN DO:
-        RUN Mc/eventsel.p("ShaperConf",gcBrand + CHR(255) + ShaperConf.ShaperConfID).
+        RUN Mc/eventsel.p("ShaperConf",Syst.CUICommon:gcBrand + CHR(255) + ShaperConf.ShaperConfID).
      END.
 
       CLEAR FRAME lis NO-PAUSE.

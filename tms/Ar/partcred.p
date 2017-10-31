@@ -73,7 +73,7 @@ form
     InvRow.CreditInvNum column-label "Cr Inv."    format ">>>>>>>9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " Lines for invoice nbr " + string(iInvNum) + " " 
        + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -586,7 +586,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
     FIND BillItem WHERE 
-         BillItem.Brand    = gcBrand AND
+         BillItem.Brand    = Syst.CUICommon:gcBrand AND
          BillItem.BillCode = InvRow.BillCode NO-LOCK NO-ERROR.
     ASSIGN BCName   = IF AVAILABLE BillItem THEN BillItem.BIName ELSE "".
 

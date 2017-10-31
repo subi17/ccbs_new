@@ -9,7 +9,6 @@
 &GLOBAL-DEFINE CommVarDef YES
 
 
-def shared var ynimi   as char format "x(30)".
 def shared var pvm     as Date format "99-99-99".
 DEF shared VAR qupd    AS lo.
 
@@ -35,8 +34,8 @@ DEF shared VAR helpkey AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrandVarDefined YES
 
-DEF SHARED VAR gcBrand       like customer.brand NO-UNDO.
-DEF SHARED VAR gcAllBrand    AS LOG    NO-UNDO.
+DEF SHARED VAR Syst.CUICommon:gcBrand       like customer.brand NO-UNDO.
+DEF SHARED VAR Syst.CUICommon:gcAllBrand    AS LOG    NO-UNDO.
 
 DEF SHARED VAR ergo-kbd AS LO NO-UNDO.
 

@@ -34,7 +34,7 @@ ASSIGN
 
 form header
    lcLine1 AT 1 SKIP
-   ynimi  AT 1 FORMAT "x(30)" 
+   Syst.CUICommon:ynimi  AT 1 FORMAT "x(30)" 
       "ERRORS IN INTRUM CREDIT LOSS FILE" AT 40
       "Page" AT 103
       liPage FORMAT "ZZZZ9" SKIP

@@ -54,28 +54,28 @@ PROCEDURE pDump:
                 ldOperationDate = EventLog.EventDate.
 
          FOR FIRST Order NO-LOCK WHERE
-                   Order.Brand = gcBrand AND
+                   Order.Brand = Syst.CUICommon:gcBrand AND
                    Order.OrderId = liOrderID AND
              INDEX(Order.OrderChannel,"pos") = 0 AND
                    Order.PayType = FALSE,
             FIRST OrderPayment NO-LOCK WHERE
-                  OrderPayment.Brand = gcBrand AND
+                  OrderPayment.Brand = Syst.CUICommon:gcBrand AND
                   OrderPayment.OrderId = Order.OrderId AND
                   (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
                    Orderpayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
 
             /* Check Terminal billcode */
             FOR EACH OfferItem NO-LOCK WHERE
-                     OfferItem.Brand = gcBrand AND
+                     OfferItem.Brand = Syst.CUICommon:gcBrand AND
                      OfferItem.Offer = Order.Offer AND
                      OfferItem.BeginStamp <= Order.CrStamp AND
                      OfferItem.EndStamp >= Order.CrStamp AND
                      OfferItem.ItemType = "BillItem",
                FIRST BillItem NO-LOCK WHERE
-                     BillItem.Brand    = gcBrand AND
+                     BillItem.Brand    = Syst.CUICommon:gcBrand AND
                      BillItem.BillCode = OfferItem.ItemKey,
                FIRST BitemGroup NO-LOCK WHERE
-                     BitemGroup.Brand   = gcBrand AND
+                     BitemGroup.Brand   = Syst.CUICommon:gcBrand AND
                      BitemGroup.BIGroup = BillItem.BIGroup AND
                      BItemGroup.BIGroup EQ "7":
 
@@ -102,17 +102,17 @@ PROCEDURE pWriteToFile:
    DEF VAR ldeResidualFee AS DEC NO-UNDO.
 
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand = gcBrand AND
+            OfferItem.Brand = Syst.CUICommon:gcBrand AND
             OfferItem.Offer = Order.Offer AND
             OfferItem.ItemType = "PerContract" AND
             OfferItem.BeginStamp <= Order.CrStamp AND
             OfferItem.EndStamp >= Order.CrStamp,
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = OfferItem.ItemKey AND
             DayCampaign.DCType = {&DCTYPE_INSTALLMENT},
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand AND
+            FMItem.Brand     = Syst.CUICommon:gcBrand AND
             FMItem.FeeModel  = DayCampaign.FeeModel AND
             FMItem.ToDate   >= ldOperationDate AND
             FMItem.FromDate <= ldOperationDate:

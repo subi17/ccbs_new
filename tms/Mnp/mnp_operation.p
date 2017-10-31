@@ -58,7 +58,7 @@ CASE pcOperation:
          RETURN "ERROR:Cannot cancel MNPProcess with current status".
             
       FIND Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.OrderID = MNPProcess.OrderId NO-LOCK.
 
       IF MNPProcess.StatusCode = {&MNP_ST_NEW} THEN DO:
@@ -177,7 +177,7 @@ CASE pcOperation:
          RETURN "ERROR:Only rejected process can be closed".
 
       FIND Order WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.OrderID = MNPProcess.OrderId NO-LOCK.
 
       IF Order.StatusCode NE "73" THEN RETURN "ERROR:Order is in wrong status".

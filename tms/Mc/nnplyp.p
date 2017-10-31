@@ -110,7 +110,7 @@ form
     PriceList.Rounding     column-label "D"
     PriceList.Memo     format "x(9)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " PRICE LISTS " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -122,7 +122,7 @@ form
     PriceList.Prefix      LABEL "Prefix ........"
        VALIDATE(INPUT PriceList.Prefix = "" OR 
                 CAN-FIND(FIRST RatePref WHERE
-                               RatePref.Brand  = gcBrand AND 
+                               RatePref.Brand  = Syst.CUICommon:gcBrand AND 
                                RatePref.RatePref = INPUT PriceList.Prefix),
                 "Unknown prefix") 
        SKIP
@@ -534,7 +534,7 @@ BROWSE:
         PriceList = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                PriceList WITH FRAME f1.
         HIDE FRAME f1 no-pause.
 
@@ -558,7 +558,7 @@ BROWSE:
         PLName = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                PLName WITH FRAME f2.
         HIDE FRAME f2 no-pause.
 

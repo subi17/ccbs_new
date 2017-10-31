@@ -74,7 +74,7 @@ form
     VATCode.ToDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
          "  VAT CODES  " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -695,7 +695,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND FIRST Account WHERE 
-              Account.Brand = gcBrand AND 
+              Account.Brand = Syst.CUICommon:gcBrand AND 
               Account.AccNum = VATCode.AccNum 
    NO-LOCK NO-ERROR.
 END PROCEDURE.

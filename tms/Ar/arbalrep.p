@@ -60,7 +60,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(30)" 
+   Syst.CUICommon:ynimi at 1 format "x(30)" 
       "A/R BALANCES" AT 40
       "Page" AT 81  
       sl format "ZZZZ9" SKIP
@@ -109,7 +109,7 @@ ASSIGN sl = 1
 
 /* overpayments AND advance payments */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand  AND
+         InvGroup.Brand     = Syst.CUICommon:gcBrand  AND
          InvGroup.InvGroup >= iInvGrp1 AND
          InvGroup.InvGroup <= iInvGrp2,
 EACH Customer NO-LOCK WHERE
@@ -149,7 +149,7 @@ ASSIGN xQty = 0.
 
 /* unregistered payments */
 FOR EACH UnregPaym NO-LOCK WHERE
-    UnregPaym.Brand = gcBrand AND
+    UnregPaym.Brand = Syst.CUICommon:gcBrand AND
     UnregPaym.State = 0: /* AND 
     UnregPaym.AccDate LE iDate2:  */
 

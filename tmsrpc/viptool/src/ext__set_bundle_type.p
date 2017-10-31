@@ -15,7 +15,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fmakemsreq.i}
@@ -140,7 +140,7 @@ END. /* IF llUpgradeUpsell THEN DO: */
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

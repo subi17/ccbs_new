@@ -31,7 +31,7 @@ DEF VAR liAccount  AS DEC  NO-UNDO EXTENT 10.
 IF idtDate = ? THEN idtDate = TODAY.
 
 FIND Customer WHERE 
-     Customer.Brand   = gcBrand AND 
+     Customer.Brand   = Syst.CUICommon:gcBrand AND 
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    RETURN "ERROR:Unknown customer".

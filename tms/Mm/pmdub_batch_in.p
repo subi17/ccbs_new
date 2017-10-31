@@ -9,7 +9,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Func/ftaxdata.i}
 {Func/xmlfunction.i}
@@ -234,7 +234,7 @@ PROCEDURE pHandleRow:
    IF piErrorCode < 20 THEN RETURN "OK".
    
    FIND FIRST MobSub WHERE
-              MobSub.Brand = gcBrand AND
+              MobSub.Brand = Syst.CUICommon:gcBrand AND
               MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Subscription not found".
    
@@ -290,7 +290,7 @@ PROCEDURE pCreatePPRequest:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END. /* DO WHILE TRUE: */
@@ -300,7 +300,7 @@ PROCEDURE pCreatePPRequest:
    ASSIGN
       PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
       PrePaidRequest.UserCode    = katun
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = MsOwner.MsSeq
       PrePaidRequest.CLI         = MsOwner.CLI
       PrePaidRequest.PPRequest   = liRequest
@@ -334,7 +334,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.TableName    = "Cron"     AND    
                      ActionLog.KeyValue     = lcFileName AND
                      ActionLog.ActionID     = "PMDUB_IN" AND
@@ -345,7 +345,7 @@ PROCEDURE pMarkStarted:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.ActionID     = "PMDUB_IN"
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
@@ -364,7 +364,7 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "PMDUB_IN"
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
@@ -382,7 +382,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
              ActionLog.ActionID     = "PMDUB_IN" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND

@@ -38,7 +38,7 @@ MAIN:
 repeat:
 
    find first Stock WHERE 
-              Stock.Brand = gcBrand no-lock no-error.
+              Stock.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available Stock then do:
       must-print = false.
       must-add = true.
@@ -70,7 +70,7 @@ print-line:
             rtab[frame-line] = recid(Stock).
             down with frame sel.
             find next Stock WHERE 
-                      Stock.Brand = gcBRand no-lock no-error.
+                      Stock.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -101,7 +101,7 @@ BROWSE:
             if frame-line = 1 then do:
                find Stock where recid(Stock) = rtab[frame-line] no-lock.
                find prev Stock  WHERE
-                         Stock.Brand = gcBRand no-lock no-error.
+                         Stock.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available Stock then do:
                   bell.
                   message "You are on 1st row !".              
@@ -127,7 +127,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find Stock where recid(Stock) = rtab[frame-line] no-lock .
                find next Stock  WHERE
-                         Stock.Brand = gcBRand no-lock no-error.
+                         Stock.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available Stock then do:
                   bell.
                   message "You are on last row !".
@@ -153,12 +153,12 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find Stock where recid(Stock) = memory no-lock no-error.
             find prev Stock  WHERE
-                      Stock.Brand = gcBRand no-lock no-error.
+                      Stock.Brand = Syst.CUICommon:gcBrand no-lock no-error.
             if available Stock then do:
 
                do i = 1 to (frame-down - 1):
                   find prev Stock  WHERE
-                            Stock.Brand = gcBRand no-lock no-error.
+                            Stock.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                   if available Stock then memory = recid(Stock).
                   else i = frame-down.
                end.
@@ -196,7 +196,7 @@ BROWSE:
            if Stock ENTERED then do:
               find first Stock where 
                          Stock.Stock >= Stock AND 
-                         Stock.Brand  = gcBrand 
+                         Stock.Brand  = Syst.CUICommon:gcBrand 
               no-lock no-error.
              if not available Stock then do:
                        bell.
@@ -221,7 +221,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first Stock no-lock WHERE 
-           Stock.Brand  = gcBrand
+           Stock.Brand  = Syst.CUICommon:gcBrand
            .
            memory = recid(Stock).
            must-print = true.
@@ -230,7 +230,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last Stock no-lock WHERE Stock.Brand  = gcBrand.
+           find last Stock no-lock WHERE Stock.Brand  = Syst.CUICommon:gcBrand.
            memory = recid(Stock).
            must-print = true.
            next LOOP.

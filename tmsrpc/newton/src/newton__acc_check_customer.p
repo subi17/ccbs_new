@@ -38,7 +38,7 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
+DEF VAR Syst.CUICommon:gcBrand   AS CHAR NO-UNDO INIT "1".
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
 
@@ -60,7 +60,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST Customer WHERE
-           Customer.Brand EQ gcBrand
+           Customer.Brand EQ Syst.CUICommon:gcBrand
        AND Customer.CustIdType EQ pcIdType
        AND Customer.OrgId EQ pcPersonId 
        AND Customer.Roles NE "inactive" 

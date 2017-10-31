@@ -81,7 +81,7 @@ END.
 {Syst/commpaa.i}
 {Syst/eventval.i}
 katun = pcUserName.
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
 END.
@@ -203,10 +203,10 @@ ELSE lcDCEventType = "TERM".
    FOR EACH DCCLI WHERE
       DCCLI.MsSeq = Mobsub.Msseq AND
       DCCLI.ValidTo >= TODAY AND 
-      DCCLI.Brand = gcBrand AND
+      DCCLI.Brand = Syst.CUICommon:gcBrand AND
       DCCLI.DCEvent BEGINS lcDCEventType NO-LOCK,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} NO-LOCK:
       

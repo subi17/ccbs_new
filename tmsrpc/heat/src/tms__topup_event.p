@@ -28,7 +28,7 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
+DEFINE VARIABLE Syst.CUICommon:gcBrand AS CHARACTER NO-UNDO INIT "1".
 {Func/xmlfunction.i}
 {Func/multitenantfunc.i}
 
@@ -95,7 +95,7 @@ END.
 
 CREATE ttPrepaidRequest.
 ttPrepaidRequest.Request = lcType.
-ttPrepaidRequest.Brand = gcBrand.
+ttPrepaidRequest.Brand = Syst.CUICommon:gcBrand.
 ttPrepaidRequest.CLI = get_string(pcStruct, "subscriber_number").
 ttPrepaidRequest.Reference = get_string(pcStruct, "reference").
 

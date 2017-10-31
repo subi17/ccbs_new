@@ -48,7 +48,7 @@ form
  WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) 
-       " SEEK CUSTOMERS (" + gcBrand + ") '" + ashaku + "' " FRAME sel.
+       " SEEK CUSTOMERS (" + Syst.CUICommon:gcBrand + ") '" + ashaku + "' " FRAME sel.
 
 
 form
@@ -64,7 +64,7 @@ with row 1 centered overlay title " SEEK CUSTOMER " FRAME alku.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Customer  USE-INDEX CustNum WHERE 
-      Customer.Brand = gcBrand NO-LOCK no-error.
+      Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAIL Customer THEN DO:
       BELL.
       message "No customers in File - press ENTER !".
@@ -98,14 +98,14 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
 
           IF aakhaku THEN DO:
              FIND FIRST Customer where 
-                Customer.Brand       = gcBrand AND
+                Customer.Brand       = Syst.CUICommon:gcBrand AND
                 Customer.SearchName >= INPUT ashaku
              no-lock no-error.
              order = 2.
           END.
           ELSE IF orghaku THEN DO:
              FIND FIRST Customer where 
-                Customer.Brand  = gcBrand AND
+                Customer.Brand  = Syst.CUICommon:gcBrand AND
                 Customer.OrgId >= INPUT ashaku
              no-lock no-error.
              order = 4.
@@ -122,13 +122,13 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
              END.
              IF numero AND length(ashaku) le 8 THEN DO:
                 FIND FIRST Customer where 
-                   Customer.Brand = gcBrand AND
+                   Customer.Brand = Syst.CUICommon:gcBrand AND
                    CustNum ge integer(ashaku) no-lock no-error.
                 order = 1.
              END.
              ELSE DO:
                 FIND FIRST Customer where 
-                   Customer.Brand  = gcBrand AND
+                   Customer.Brand  = Syst.CUICommon:gcBrand AND
                    CustName ge ashaku no-lock no-error.
                 order = 3.
              END.
@@ -170,16 +170,16 @@ print-line:
                rtab[FRAME-LINE] = recid(Customer).
                IF order = 1 THEN FIND NEXT Customer
                USE-INDEX CustNum WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 2 THEN FIND NEXT Customer
                USE-INDEX SearchName WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 3 THEN FIND NEXT Customer
                USE-INDEX CustName WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 4 THEN FIND NEXT Customer
                USE-INDEX OrgId  WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -249,16 +249,16 @@ BROWSE:
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 1 THEN FIND prev Customer
             USE-INDEX CustNum WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 2 THEN FIND prev Customer
             USE-INDEX SearchName WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 3 THEN FIND prev Customer
             USE-INDEX CustName WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 4 THEN FIND prev Customer
             USE-INDEX OrgId  WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE Customer THEN
                ASSIGN firstline = i memory = recid(Customer).
             ELSE LEAVE.
@@ -282,16 +282,16 @@ BROWSE:
             FIND Customer where recid(Customer) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev Customer
             USE-INDEX CustNum WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 2 THEN FIND prev Customer
             USE-INDEX SearchName WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 3 THEN FIND prev Customer
             USE-INDEX CustName WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 4 THEN FIND prev Customer
             USE-INDEX OrgId  WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Customer THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
                BELL.
@@ -322,16 +322,16 @@ BROWSE:
             FIND Customer where recid(Customer) = rtab[FRAME-DOWN] no-lock .
             IF order = 1 THEN FIND NEXT Customer
             USE-INDEX CustNum WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 2 THEN FIND NEXT Customer
             USE-INDEX SearchName WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 3 THEN FIND NEXT Customer
             USE-INDEX CustName WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 4 THEN FIND NEXT Customer
             USE-INDEX OrgId  WHERE 
-               Customer.Brand = gcBrand NO-LOCK no-error.
+               Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Customer THEN DO:
                message "YOU ARE ON THE LAST ROW A !".
                BELL.
@@ -361,16 +361,16 @@ BROWSE:
          FIND Customer where recid(Customer) = memory no-lock no-error.
          IF order = 1 THEN FIND prev Customer
          USE-INDEX CustNum WHERE 
-            Customer.Brand = gcBrand NO-LOCK no-error.
+            Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 2 THEN FIND prev Customer
          USE-INDEX SearchName WHERE 
-            Customer.Brand = gcBrand NO-LOCK no-error.
+            Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 3 THEN FIND prev Customer
          USE-INDEX CustName  WHERE 
-            Customer.Brand = gcBrand NO-LOCK no-error.
+            Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 4 THEN FIND prev Customer
          USE-INDEX OrgId  WHERE 
-            Customer.Brand = gcBrand NO-LOCK no-error.
+            Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          IF AVAILABLE Customer THEN DO:
             memory = recid(Customer).
 
@@ -378,16 +378,16 @@ BROWSE:
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 1 THEN FIND prev Customer
                USE-INDEX CustNum WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 2 THEN FIND prev Customer
                USE-INDEX SearchName WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 3 THEN FIND prev Customer
                USE-INDEX CustName WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 4 THEN FIND prev Customer
                USE-INDEX OrgId  WHERE 
-                  Customer.Brand = gcBrand NO-LOCK no-error.
+                  Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF AVAILABLE Customer THEN memory = recid(Customer).
                ELSE line = FRAME-DOWN.
             END.
@@ -427,26 +427,26 @@ BROWSE:
 
      else if lookup(nap,"home") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST Customer
-        USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CustNum WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND FIRST Customer
-        USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX SearchName WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 3 THEN FIND FIRST Customer
-        USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CustName WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 4 THEN FIND FIRST Customer
-        USE-INDEX OrgId  WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX OrgId  WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.
 
      else if lookup(nap,"end") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST Customer
-        USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CustNum WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND LAST Customer
-        USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX SearchName WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 3 THEN FIND LAST Customer
-        USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CustName WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 4 THEN FIND LAST Customer
-        USE-INDEX OrgId  WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX OrgId  WHERE Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.

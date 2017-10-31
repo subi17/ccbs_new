@@ -27,11 +27,11 @@ FIND MsRequest WHERE
 NO-LOCK NO-ERROR.
 
 FIND bOldType WHERE
-     bOldType.Brand   = gcBrand AND
+     bOldType.Brand   = Syst.CUICommon:gcBrand AND
      bOldType.CLIType = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
 
 FIND CLIType WHERE
-     CLIType.Brand   = gcBrand AND
+     CLIType.Brand   = Syst.CUICommon:gcBrand AND
      CLIType.CLIType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
 
 /* stc activation solog needed only when paytype changes */ 

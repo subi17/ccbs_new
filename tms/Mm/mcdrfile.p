@@ -15,7 +15,7 @@
 {Mc/lib/tokenchk.i 'MCDRFile'}
 
 
-IF gcAllBrand = FALSE THEN DO:
+IF Syst.CUICommon:gcAllBrand = FALSE THEN DO:
    MESSAGE
    "Only Super User can browse ALL cdr files!"
    VIEW-AS ALERT-BOX TITLE "ACCESS DENIED".
@@ -61,7 +61,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Mobile CDR Files "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

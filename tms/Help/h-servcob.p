@@ -44,7 +44,7 @@ MAIN:
 repeat:
 
    find first ServCom use-index ServCom WHERE 
-              ServCom.Brand  = gcBrand AND 
+              ServCom.Brand  = Syst.CUICommon:gcBrand AND 
               servcom.Service = Service
    no-lock no-error.
    if not available ServCom then do:
@@ -78,7 +78,7 @@ print-line:
             rtab[frame-line] = recid(ServCom).
             down with frame sel.
             find next ServCom use-index ServCom WHERE 
-                      ServCom.Brand  = gcBrand AND
+                      ServCom.Brand  = Syst.CUICommon:gcBrand AND
                       servcom.Service = Service
             no-lock no-error.
          end.
@@ -111,7 +111,7 @@ BROWSE:
             if frame-line = 1 then do:
                find ServCom where recid(ServCom) = rtab[frame-line] no-lock.
                find prev ServCom  use-index ServCom  WHERE 
-                ServCom.Brand  = gcBrand AND
+                ServCom.Brand  = Syst.CUICommon:gcBrand AND
                servcom.Service = Service
                no-lock no-error.
                if not available ServCom then do:
@@ -139,7 +139,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find ServCom where recid(ServCom) = rtab[frame-line] no-lock .
                find next ServCom  use-index ServCom WHERE 
-                ServCom.Brand  = gcBrand AND
+                ServCom.Brand  = Syst.CUICommon:gcBrand AND
                servcom.Service = Service
                no-lock no-error.
                if not available ServCom then do:
@@ -167,14 +167,14 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find ServCom where recid(ServCom) = memory no-lock no-error.
             find prev ServCom  use-index ServCom WHERE 
-                      ServCom.Brand  = gcBrand AND
+                      ServCom.Brand  = Syst.CUICommon:gcBrand AND
                       servcom.Service = Service
             no-lock no-error.
             if available ServCom then do:
 
                do i = 1 to (frame-down - 1):
                   find prev ServCom use-index ServCom WHERE 
-                   ServCom.Brand  = gcBrand AND
+                   ServCom.Brand  = Syst.CUICommon:gcBrand AND
                   servcom.Service = Service
                   no-lock no-error.
                   if available ServCom then memory = recid(ServCom).
@@ -213,7 +213,7 @@ BROWSE:
            hide frame hayr no-pause.
            if ServCom ENTERED then do:
               find first ServCom where 
-                         ServCom.Brand  = gcBrand AND
+                         ServCom.Brand  = Syst.CUICommon:gcBrand AND
                          ServCom.ServCom >= ServCom AND
                servcom.Service = Service
               use-index ServCom no-lock no-error.
@@ -240,7 +240,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first ServCom use-index ServCom WHERE
-                      ServCom.Brand = gcBrand no-lock.
+                      ServCom.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(ServCom).
            must-print = true.
            next LOOP.
@@ -249,7 +249,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last ServCom use-index ServCom WHERE 
-                     Servcom.Brand  = gcBrand no-lock.
+                     Servcom.Brand  = Syst.CUICommon:gcBrand no-lock.
            memory = recid(ServCom).
            must-print = true.
            next LOOP.

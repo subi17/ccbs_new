@@ -112,7 +112,7 @@ ADD-ROW:
                  if frame-field = "ServCom" THEN DO:
                     if input ServEl.ServCom = "" THEN LEAVE add-row.
                     FIND ServCom where 
-                         ServCom.Brand   = gcBrand AND 
+                         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
                          ServCom.ServCom = INPUT ServEl.ServCom
                     no-lock no-error.
                     IF NOT AVAIL ServCom THEN DO:
@@ -121,7 +121,7 @@ ADD-ROW:
                     END.
                     DISP ServCom.ScName ServCom.ScLocalName.
                     FIND ServEl where
-                         ServEl.Brand   = gcBrand              AND 
+                         ServEl.Brand   = Syst.CUICommon:gcBrand              AND 
                          ServEl.ServCom = INPUT ServEl.ServCom AND
                          ServEl.ServPac = ServPac AND Servel.Brand = lcBrand
                     NO-LOCK NO-ERROR.
@@ -519,7 +519,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
        FIND ServCom where
             ServCom.ServCom = ServEl.ServCom AND 
-            ServCom.Brand   = gcBrand NO-LOCK NO-ERROR.
+            ServCom.Brand   = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:

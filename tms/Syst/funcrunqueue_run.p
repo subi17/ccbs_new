@@ -23,7 +23,7 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "FRQUEUERUN" + STRING(iiFRQScheduleID)
              ErrorLog.TableName = "FuncRunQSchedule"
              ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
@@ -98,7 +98,7 @@ PROCEDURE pInitialize:
 
       /* already running */
       IF CAN-FIND(FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = lcActionKey AND
                  ActionLog.ActionID  = "FRQUEUE" + STRING(iiFRQueueID) AND
@@ -120,7 +120,7 @@ PROCEDURE pInitialize:
       
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.CUICommon:gcBrand   
             ActionLog.TableName    = "FuncRunQueue"  
             ActionLog.KeyValue     = lcActionKey
             ActionLog.ActionID     = "FRQUEUE" + STRING(iiFRQueueID)
@@ -223,7 +223,7 @@ PROCEDURE pCancelQueue:
    DO TRANS:
    
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = STRING(iiFRQScheduleID) AND
                  ActionLog.ActionID  = "FRQUEUE" + STRING(iiFRQueueID) AND
@@ -273,7 +273,7 @@ PROCEDURE pFinalize:
       lcActionKey = STRING(iiFRQScheduleID).
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = lcActionKey AND
                  ActionLog.ActionID  = "FRQUEUE" + STRING(iiFRQueueID) AND

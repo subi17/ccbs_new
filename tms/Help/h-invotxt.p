@@ -44,7 +44,7 @@ MAIN:
 repeat:
 
    find first InvText no-lock WHERE 
-              invText.Brand = gcBrand   AND 
+              invText.Brand = Syst.CUICommon:gcBrand   AND 
               InvText.Target = icTarget AND 
        (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue)  
     no-error.
@@ -79,7 +79,7 @@ print-line:
             rtab[frame-line] = recid(InvText).
             down with frame sel.
             find next InvText no-lock WHERE 
-                      invText.Brand = gcBrand AND 
+                      invText.Brand = Syst.CUICommon:gcBrand AND 
                       InvText.Target = icTarget AND 
             (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue)
             no-error.
@@ -114,7 +114,7 @@ BROWSE:
             if frame-line = 1 then do:
                find InvText where recid(InvText) = rtab[frame-line] no-lock.
                find prev InvText no-lock WHERE 
-                         invText.Brand = gcBrand AND 
+                         invText.Brand = Syst.CUICommon:gcBrand AND 
                          InvText.Target = icTarget AND 
                 (if ickeyvalue = "" THEN TRUE 
                  ELSE InvText.Keyvalue = icKeyvalue) no-error.
@@ -145,7 +145,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find InvText where recid(InvText) = rtab[frame-line] no-lock .
                find next InvText no-lock WHERE 
-                         invText.Brand = gcBrand AND 
+                         invText.Brand = Syst.CUICommon:gcBrand AND 
                          InvText.Target = icTarget AND 
                          (if ickeyvalue = "" THEN TRUE 
                          ELSE InvText.Keyvalue = icKeyvalue)  no-error.
@@ -175,14 +175,14 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find InvText where recid(InvText) = memory no-lock no-error.
             find prev InvText no-lock WHERE 
-                      invText.Brand = gcBrand AND 
+                      invText.Brand = Syst.CUICommon:gcBrand AND 
                       InvText.Target = icTarget AND 
               (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue)             no-error.
             if available InvText then do:
 
                do i = 1 to (frame-down - 1):
                   find prev InvText no-lock WHERE 
-                            invText.Brand = gcBrand AND 
+                            invText.Brand = Syst.CUICommon:gcBrand AND 
                             InvText.Target = icTarget AND 
              (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
              no-error.
@@ -222,7 +222,7 @@ BROWSE:
            hide frame hayr no-pause.
            if ob-code ENTERED then do:
               find first InvText where InvText.TxtTitle >= ob-code
-             AND  invText.Brand = gcBrand AND 
+             AND  invText.Brand = Syst.CUICommon:gcBrand AND 
                   InvText.Target = icTarget AND 
               (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
                   no-lock no-error.
@@ -277,7 +277,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first InvText no-lock
-           WHERE invText.Brand = gcBrand AND InvText.Target = icTarget AND (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
+           WHERE invText.Brand = Syst.CUICommon:gcBrand AND InvText.Target = icTarget AND (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
                no-error.
            memory = recid(InvText).
            must-print = true.
@@ -287,7 +287,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last InvText no-lock
-           WHERE invText.Brand = gcBrand AND 
+           WHERE invText.Brand = Syst.CUICommon:gcBrand AND 
                  InvText.Target = icTarget AND 
               (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
                no-error.

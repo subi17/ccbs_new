@@ -33,7 +33,7 @@ DEF VAR lcSetting AS CHAR NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 {Func/fmakemsreq.i}
 
@@ -74,7 +74,7 @@ FIND FIRST SubSer NO-LOCK WHERE
 IF NOT AVAIL SubSer THEN RETURN appl_err("Subscription service not found").
 
 FIND FIRST ServCom NO-LOCK WHERE 
-           ServCom.Brand = gcBrand AND
+           ServCom.Brand = Syst.CUICommon:gcBrand AND
            ServCom.ServCom = SubSer.ServCom NO-ERROR.
 IF NOT AVAIL ServCom THEN RETURN appl_err("Service component not found").
              

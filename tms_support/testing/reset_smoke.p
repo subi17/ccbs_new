@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE tticc   LIKE mobsub.icc.
 DEFINE VARIABLE ttcli   LIKE mobsub.cli.

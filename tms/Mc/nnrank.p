@@ -153,7 +153,7 @@ WITH
 
 FORM HEADER
    viiva1       AT 2 SKIP
-   ynimi        AT 2 
+   Syst.CUICommon:ynimi        AT 2 
    "RANKING LIST OF CUSTOMERS"  AT 45 
    "page"       AT 106 sl FORMAT "ZZZZ9" SKIP
    "Billed values are ex vat amt and calls only, contract fees are omitted" AT 2
@@ -212,7 +212,7 @@ repeat WITH FRAME rajat.
             if input CustGroup = "" then CGName = "NONE".
             ELSE DO:
                FIND CustGroup where
-               CustGroup.Brand     = gcBrand AND
+               CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                CustGroup.CustGroup = INPUT CustGroup no-lock no-error.
                IF NOT AVAIL CustGroup THEN DO:
                   BELL.
@@ -228,7 +228,7 @@ repeat WITH FRAME rajat.
             if input InvGroup = "" then IGName = "ALL INVOICING GROUPS".
             ELSE DO:
                FIND InvGroup where
-               InvGroup.Brand    = gcBrand AND
+               InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                InvGroup.InvGroup = INPUT InvGroup no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
                   BELL.
@@ -244,7 +244,7 @@ repeat WITH FRAME rajat.
             if input Salesman = "" then SmName = "ALL SALESMEN".
             ELSE DO:
                FIND Salesman where
-               SalesMan.Brand    = gcBrand AND
+               SalesMan.Brand    = Syst.CUICommon:gcBrand AND
                Salesman.Salesman = INPUT Salesman no-lock no-error.
                IF NOT AVAIL Salesman THEN DO:
                   BELL.
@@ -260,7 +260,7 @@ repeat WITH FRAME rajat.
             if input Reseller = "" then  RsName = "ALL AGENTS".
             ELSE DO:
                FIND Reseller where
-               Reseller.Brand    = gcBrand AND
+               Reseller.Brand    = Syst.CUICommon:gcBrand AND
                Reseller.Reseller = INPUT Reseller no-lock no-error.
                IF NOT AVAIL Reseller THEN DO:
                   BELL.
@@ -288,7 +288,7 @@ repeat WITH FRAME rajat.
             ELSE 
             DO:
                FIND BillItem WHERE
-                    BillItem.Brand     = gcBrand AND
+                    BillItem.Brand     = Syst.CUICommon:gcBrand AND
                     BillItem.BillCode  = INPUT lcBillCode No-LOCK NO-ERROR.
                IF NOT AVAIL BillItem THEN 
                DO:
@@ -307,7 +307,7 @@ repeat WITH FRAME rajat.
             ELSE
             DO:
                FIND BitemGroup WHERE
-                    BItemGroup.Brand    = gcBrand AND
+                    BItemGroup.Brand    = Syst.CUICommon:gcBrand AND
                     BItemGroup.BIGroup  = INPUT BiGroup No-LOCK NO-ERROR.
                IF NOT AVAIL BitemGroup THEN
                DO:
@@ -318,7 +318,7 @@ repeat WITH FRAME rajat.
                IF AVAIL BitemGroup AND INPUT lcBillCode NE "" THEN
                DO:
                   FIND BillItem NO-LOCK WHERE 
-                       BillItem.Brand    = gcBrand AND
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND
                        BillItem.BillCode = lcBillCode.
                   IF BItemGroup.BIGroup NE BillItem.BIGroup THEN
                   DO:
@@ -416,7 +416,7 @@ toimi:
    DO:
        OUTPUT STREAM excel TO value(exname).
 
-       put stream excel unformatted ynimi tab "RANKING LIST OF CUSTOMERS; Billed VALUES ARE EX VATAmt AND Calls ONLY, CONTRACT FEES ARE OMITTED,".
+       put stream excel unformatted Syst.CUICommon:ynimi tab "RANKING LIST OF CUSTOMERS; Billed VALUES ARE EX VATAmt AND Calls ONLY, CONTRACT FEES ARE OMITTED,".
           RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
@@ -481,7 +481,7 @@ toimi:
  pick:
    FOR
    EACH  Customer USE-INDEX CustNum no-lock where
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.CUICommon:gcBrand AND
 
          (if CustGroup ne "" THEN can-find(CGMember where
                           CGMember.CustNum  = Customer.CustNum           AND
@@ -492,7 +492,7 @@ toimi:
          (if Reseller ne "" THEN Customer.Reseller = Reseller ELSE TRUE),
 
    EACH  Invoice no-lock where
-         Invoice.Brand = gcBrand AND
+         Invoice.Brand = Syst.CUICommon:gcBrand AND
          Invoice.Custnum = Customer.CustNum AND
          Invoice.InvDate >= date1   AND
          Invoice.InvDate <= date2
@@ -516,7 +516,7 @@ toimi:
           IF INPUT BiGroup NE "" THEN 
           DO:
              FIND BillItem NO-LOCK WHERE
-                  BillItem.Brand = gcBrand AND
+                  BillItem.Brand = Syst.CUICommon:gcBrand AND
                   BillItem.BillCode = InvRow.BillCode NO-ERROR.
              IF AVAILABLE BillItem AND 
                 BillItem.BIGroup NE INPUT BiGroup THEN NEXT.
@@ -648,7 +648,7 @@ CUSTOMER:
 
          /* search customer's ALL invoices from that Period */
          FOR EACH Invoice no-lock where
-                  Invoice.Brand    = gcBrand AND
+                  Invoice.Brand    = Syst.CUICommon:gcBrand AND
                   Invoice.CustNum  = Customer.CustNum AND
                   Invoice.InvDate  >= idate1         AND
                   Invoice.InvDate  <= idate2,
@@ -662,7 +662,7 @@ CUSTOMER:
              IF INPUT BiGroup NE "" THEN
              DO:
                 FIND BillItem NO-LOCK WHERE
-                     BillItem.Brand = gcBrand AND
+                     BillItem.Brand = Syst.CUICommon:gcBrand AND
                      BillItem.BillCode = InvRow.BillCode NO-ERROR.
                 IF AVAILABLE BillItem AND
                    BillItem.BIGroup NE INPUT BiGroup THEN NEXT.

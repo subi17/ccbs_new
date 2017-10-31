@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/msreqfunc.i}
@@ -108,7 +108,7 @@ END.
 
 IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     FOR EACH MsRequest NO-LOCK
-    WHERE MsRequest.Brand     = gcBrand 
+    WHERE MsRequest.Brand     = Syst.CUICommon:gcBrand 
       AND MsRequest.ReqType   = liReqType
       AND MsRequest.msseq     = piReference
       AND (MsRequest.ReqStatus = 0
@@ -133,7 +133,7 @@ IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     END.
 END.
 ELSE FOR EACH MsRequest NO-LOCK WHERE 
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.CUICommon:gcBrand AND
          MsRequest.MsSeq = piReference AND
          MsRequest.ReqType = liReqType USE-INDEX MsSeq:
  
@@ -188,13 +188,13 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
             IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND
                MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
                FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                          lbMobSub.Brand  = gcBrand AND
+                          lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
                           lbMobSub.MultiSimID = MobSub.MultiSimID AND
                           lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                           lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
                IF NOT AVAIL lbMobSub THEN DO:
                   FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                             TermMobSub.Brand  = gcBrand AND
+                             TermMobSub.Brand  = Syst.CUICommon:gcBrand AND
                              TermMobSub.MultiSimID = MobSub.MultiSimID AND
                              TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                              TermMobSub.Custnum = MobSub.Custnum NO-ERROR.

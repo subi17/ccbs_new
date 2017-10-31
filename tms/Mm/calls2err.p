@@ -48,7 +48,7 @@ VALIDATE(INPUT cdate1 <= INPUT cdate2,"Invalid order of dates !")
    WIDTH 60   CENTERED
    COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-    " " + ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
+    " " + Syst.CUICommon:ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
     string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
@@ -137,7 +137,7 @@ DO FOR ActionLog TRANS:
    
    ASSIGN
       ActionLog.ActionTS     = Func.Common:mMakeTS()
-      ActionLog.Brand        = gcBrand
+      ActionLog.Brand        = Syst.CUICommon:gcBrand
       ActionLog.TableName    = "MobCDR"
       ActionLog.KeyValue     = STRING(YEAR(cDate2),"9999") + 
                                STRING(MONTH(cDate2),"99") + 

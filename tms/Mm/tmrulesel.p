@@ -304,7 +304,7 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    FIND FIRST TMRule WHERE
-         TMRule.Brand     = gcBrand AND
+         TMRule.Brand     = Syst.CUICommon:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.
@@ -314,7 +314,7 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    
    FIND LAST TMRule WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.CUICommon:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.
@@ -324,7 +324,7 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    
    FIND NEXT TMRule WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.CUICommon:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.
@@ -334,7 +334,7 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    
    FIND PREV TMRule WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.CUICommon:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.

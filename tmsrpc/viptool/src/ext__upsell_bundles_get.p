@@ -20,7 +20,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}
 
@@ -54,7 +54,7 @@ lcContract = fGetUpSellBasicContract(MobSub.MsSeq,
 IF lcContract NE "" THEN DO:
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = lcContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign THEN
@@ -124,7 +124,7 @@ IF Mobsub.PayType = FALSE THEN
                                                 {&REQUEST_SOURCE_EXTERNAL_API}).
 IF lcCustomerContract NE "" THEN DO:
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = lcCustomerContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign THEN

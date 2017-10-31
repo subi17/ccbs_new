@@ -142,7 +142,7 @@ ADD-ROW:
            LEAVE add-row. 
 
            IF NOT CAN-FIND(FIRST BillItem WHERE
-                  BillItem.Brand = gcBrand AND 
+                  BillItem.Brand = Syst.CUICommon:gcBrand AND 
                   BillItem.BillCode = INPUT ServiceLimitTarget.ServiceLMember) 
            THEN DO:
               BELL.
@@ -523,7 +523,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND first BillItem WHERE 
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode       = ServiceLimitTarget.serviceLMember 
    No-LOCK NO-ERROR.
                

@@ -10,7 +10,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun  = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -24,7 +24,7 @@ find order where
          
 /* Cancel pending SMS messages */
 FOR EACH CallAlarm WHERE
-         CallAlarm.Brand = gcBrand AND
+         CallAlarm.Brand = Syst.CUICommon:gcBrand AND
          CallAlarm.CLI = Order.CLI AND
          CallAlarm.DeliStat = 1 AND
          CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:

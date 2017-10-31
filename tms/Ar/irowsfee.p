@@ -431,7 +431,7 @@ BROWSE:
           
           
           FOR FIRST OrderCustomer NO-LOCK WHERE
-                    OrderCustomer.Brand   = gcBrand AND
+                    OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                     OrderCustomer.OrderID = Order.OrderID AND
                     OrderCustomer.RowType = Order.UserRole:
 
@@ -488,7 +488,7 @@ PROCEDURE local-disp-row:
    FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.
 
    find BillItem where 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.CUICommon:gcBrand AND
         BillItem.BillCode = SingleFee.BillCode no-lock no-error.
    if avail BillItem then lcBIName = BillItem.BIName.
    else lcBIName = "!! UNKNOWN !!!".

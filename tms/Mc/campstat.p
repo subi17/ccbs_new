@@ -71,7 +71,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " CAMPAIGN STATISTICS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -391,7 +391,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCampaign WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -414,7 +414,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liCustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -445,7 +445,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCLI WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -476,7 +476,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ldtDate WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 

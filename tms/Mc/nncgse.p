@@ -30,7 +30,7 @@ form
     CustGroup.CGName  format "x(30)"
     CustGroup.Memo[1]  format "x(20)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Customer Groups (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Customer Groups (" + Syst.CUICommon:gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -53,7 +53,7 @@ Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Sys
 Runko:
 repeat:
 
-   FIND FIRST CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE CustGroup THEN DO:
       must-print = FALSE.
       must-add = TRUE.
@@ -82,7 +82,7 @@ LOOP:
                LEAVE add-new.
             END.
             IF CAN-FIND (CustGroup where 
-                         CustGroup.Brand     = gcBrand AND
+                         CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                          CustGroup.CustGroup = INPUT CustGroup.CustGroup) 
             THEN DO:
                BELL.
@@ -95,7 +95,7 @@ LOOP:
          CREATE CustGroup.
          ASSIGN
            muisti = recid(CustGroup)
-           CustGroup.Brand     = gcBrand
+           CustGroup.Brand     = Syst.CUICommon:gcBrand
            CustGroup.CustGroup = INPUT CustGroup.CustGroup.
          UPDATE CustGroup.CGName CustGroup.Memo[1] .
          CLEAR FRAME tlli no-pause.
@@ -105,7 +105,7 @@ LOOP:
       must-print = TRUE.
 
       /* onko yhtaan tietuetta ? */
-      FIND FIRST CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+      FIND FIRST CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
       IF NOT AVAILABLE CustGroup THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -125,7 +125,7 @@ print-line:
             CustGroup.Memo[1] WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(CustGroup).
             DOWN WITH FRAME tlse.
-            FIND NEXT CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND NEXT CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(tlse) - 1 WITH FRAME tlse.
@@ -155,7 +155,7 @@ BROWSE:
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
-               FIND prev CustGroup WHERE CustGroup.Brand = gcBrand 
+               FIND prev CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                IF NOT AVAILABLE CustGroup THEN DO:
                   BELL.
@@ -183,7 +183,7 @@ BROWSE:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] 
                   no-lock .
-               FIND NEXT CustGroup WHERE CustGroup.Brand = gcBrand 
+               FIND NEXT CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                IF NOT AVAILABLE CustGroup THEN DO:
                   BELL.
@@ -210,11 +210,11 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND CustGroup where recid(CustGroup) = muisti no-lock no-error.
-            FIND prev CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND prev CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE CustGroup THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev CustGroup WHERE CustGroup.Brand = gcBrand 
+                  FIND prev CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand 
                      NO-LOCK no-error.
                   IF AVAILABLE CustGroup THEN muisti = recid(CustGroup).
                   ELSE i = FRAME-DOWN.
@@ -253,7 +253,7 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            if CustGroup <> "" THEN DO:
               FIND FIRST CustGroup where 
-                         CustGroup.Brand      = gcBrand AND
+                         CustGroup.Brand      = Syst.CUICommon:gcBrand AND
                          CustGroup.CustGroup >= INPUT CustGroup
               no-lock no-error.
               IF NOT AVAILABLE CustGroup THEN DO:
@@ -289,7 +289,7 @@ BROWSE:
 
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
-           FIND FIRST CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK.
+           FIND FIRST CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            muisti = recid(CustGroup).
            must-print = TRUE.
            NEXT LOOP.
@@ -297,7 +297,7 @@ BROWSE:
 
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
-           FIND LAST CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK.
+           FIND LAST CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            muisti = recid(CustGroup).
            must-print = TRUE.
            NEXT LOOP.

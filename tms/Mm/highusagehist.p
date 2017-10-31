@@ -75,7 +75,7 @@ FORM
 
 WITH ROW FrmRow width 70 OVERLAY FrmDown  DOWN CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  HIGH SPENDER HISTORY   "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -479,7 +479,7 @@ PROCEDURE local-find-others.
       llOpenInvoice    = FALSE
       llClaimPerm      = FALSE.
    FOR EACH invoice WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum
             NO-LOCK.
       ASSIGN 
@@ -493,7 +493,7 @@ PROCEDURE local-find-others.
       ldeInvoiceAverage = 0 .
 
    FOR EACH Invoice NO-LOCK WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum AND
             Invoice.InvDate >= today - 90,
       FIRST SubInvoice OF Invoice NO-LOCK WHERE

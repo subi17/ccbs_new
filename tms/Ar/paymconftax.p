@@ -105,7 +105,7 @@ FUNCTION fDispTaxAccName RETURNS LOGIC
    
    ELSE DO:
       FIND Account WHERE 
-           Account.Brand  = gcBrand AND
+           Account.Brand  = Syst.CUICommon:gcBrand AND
            Account.AccNum = iiTaxAcc NO-LOCK NO-ERROR.
       IF AVAILABLE Account 
       THEN lcTaxAccName = Account.AccName.

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/barrfunc.i}
 
 def buffer MsRequest2 for MsRequest.
@@ -18,7 +18,7 @@ DEFINE VARIABLE ldeTime AS DECIMAL NO-UNDO.
 ldeTime = Func.Common:mMakeTS().
 
 FOR EACH mobsub where
-   mobsub.brand  = gcBrand and
+   mobsub.brand  = Syst.CUICommon:gcBrand and
    mobsub.clitype = "tarj3" NO-LOCK:
 
    i = i + 1.

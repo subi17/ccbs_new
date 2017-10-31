@@ -52,7 +52,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " REFUND PAYMENTS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -142,7 +142,7 @@ MESSAGE "Collect payments ..".
 
 /* collect all undelivered refund payments */
 FOR EACH Payment NO-LOCK WHERE
-         Payment.Brand    = gcBrand     AND
+         Payment.Brand    = Syst.CUICommon:gcBrand     AND
          Payment.AccDate >= TODAY - 120 AND
          Payment.PaymType = 6           AND
          Payment.ExpStamp = 0:
@@ -161,7 +161,7 @@ PAUSE 0.
 DISPLAY ldtDate WITH FRAME fBank.
 
 FIND FIRST BankAcc NO-LOCK WHERE
-           BankAcc.Brand = gcBrand AND
+           BankAcc.Brand = Syst.CUICommon:gcBrand AND
            BankAcc.BankAcc BEGINS "8" NO-ERROR.
 IF AVAILABLE BankAcc THEN DO:
    lcBankAcc = BankAcc.BankAcc.
@@ -470,7 +470,7 @@ REPEAT WITH FRAME sel:
                   
                      IF INPUT lcBankAcc > "" THEN DO:
                         FIND BankAcc WHERE
-                             BankAcc.Brand = gcBrand AND
+                             BankAcc.Brand = Syst.CUICommon:gcBrand AND
                              BankAcc.BankAcc = INPUT lcBankAcc 
                              NO-LOCK NO-ERROR.
                         IF NOT AVAILABLE BankAcc THEN DO:
@@ -703,7 +703,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND Customer WHERE
-        Customer.Brand   = gcBrand AND
+        Customer.Brand   = Syst.CUICommon:gcBrand AND
         Customer.CustNum = ttPaym.CustNum NO-LOCK NO-ERROR. 
    
    FIND Payment WHERE Payment.Voucher = ttPaym.Voucher NO-LOCK.

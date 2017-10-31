@@ -78,7 +78,7 @@ IF lcPassWord NE lcAskPwd THEN DO:
 END.
 
 HIDE FRAME frPassWord.
-liMaintB = INT(fCParamC4(gcBrand,"ServiceBreak","Activation")).
+liMaintB = INT(fCParamC4(Syst.CUICommon:gcBrand,"ServiceBreak","Activation")).
 /* Display current status of solog handling */
 DISP lcStatus[liMaintB + 1]  WITH FRAME frProvision.
 

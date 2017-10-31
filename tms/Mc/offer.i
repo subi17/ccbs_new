@@ -48,7 +48,7 @@ FUNCTION fGetOffer RETURNS CHARACTER
          bTerminal.IMEI > "" THEN DO:
          /* get billcode based on tac code */
          FOR FIRST IMEIRegister NO-LOCK WHERE
-                   IMEIRegister.Brand = gcBrand AND
+                   IMEIRegister.Brand = Syst.CUICommon:gcBrand AND
                    IMEIRegister.IMEI  = SUBSTRING(bTerminal.IMEI,1,8):
             lcBillCode = IMEIRegister.BillCode.       
          END.
@@ -59,7 +59,7 @@ FUNCTION fGetOffer RETURNS CHARACTER
          
       IF lcBillCode > "" AND  
          NOT CAN-FIND(FIRST BillItem WHERE
-                            BillItem.Brand    = gcBrand AND
+                            BillItem.Brand    = Syst.CUICommon:gcBrand AND
                             BillItem.BillCode = lcBillCode AND
                             BillItem.BIGroup  = "7") 
       THEN lcBillCode = "".
@@ -79,7 +79,7 @@ FUNCTION fGetOffer RETURNS CHARACTER
 
    FindOffer:
    FOR EACH Offer NO-LOCK WHERE
-            Offer.Brand     = gcBrand AND
+            Offer.Brand     = Syst.CUICommon:gcBrand AND
             Offer.ToDate   >= idaOfferDate AND
             Offer.FromDate <= idaOfferDate AND
             Offer.Active    = TRUE
@@ -87,7 +87,7 @@ FUNCTION fGetOffer RETURNS CHARACTER
    
       IF lcBillCode > "" THEN DO:
          IF NOT CAN-FIND(FIRST OfferItem WHERE
-                               OfferItem.Brand      = gcBrand        AND
+                               OfferItem.Brand      = Syst.CUICommon:gcBrand        AND
                                OfferItem.Offer      = Offer.Offer    AND
                                OfferItem.ItemType   = "BillItem"     AND
                                OfferItem.ItemKey    = lcBillCode     AND
@@ -99,7 +99,7 @@ FUNCTION fGetOffer RETURNS CHARACTER
       llMatch = TRUE.
       
       FOR EACH OfferCriteria NO-LOCK WHERE
-               OfferCriteria.Brand = gcBrand AND
+               OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
                OfferCriteria.Offer = Offer.Offer AND
                OfferCriteria.EndStamp   >= Order.CrStamp AND
                OfferCriteria.BeginStamp <= Order.CrStamp:
@@ -122,7 +122,7 @@ FUNCTION fGetOffer RETURNS CHARACTER
 
       /* contract for penalty fee */
       FIND FIRST OfferItem WHERE
-                 OfferItem.Brand      = gcBrand        AND
+                 OfferItem.Brand      = Syst.CUICommon:gcBrand        AND
                  OfferItem.Offer      = Offer.Offer    AND
                  OfferItem.ItemType   = "PerContract"  AND
                  OfferItem.EndStamp   >= Order.CrStamp AND
@@ -162,7 +162,7 @@ FUNCTION fValidateOffer RETURNS INT
 
    IF ilNew THEN DO:
       IF CAN-FIND(Offer NO-LOCK WHERE
-         Offer.Brand = gcBrand AND
+         Offer.Brand = Syst.CUICommon:gcBrand AND
          Offer.Offer = ttOffer.Offer) THEN DO:
          ocError = SUBST("Offer &1 already exists", ttOffer.Offer).
          RETURN 1.
@@ -178,7 +178,7 @@ FUNCTION fValidateOffer RETURNS INT
    END.
    ELSE DO: 
       FIND bOffer NO-LOCK WHERE 
-           bOffer.Brand = gcBrand AND
+           bOffer.Brand = Syst.CUICommon:gcBrand AND
            bOffer.Offer = ttOffer.Offer NO-ERROR.
       
       IF NOT AVAIL bOffer THEN DO:
@@ -216,19 +216,19 @@ FUNCTION fGetOfferItemName RETURN CHARACTER
    CASE pcOfferItemType:
    WHEN "BillItem" THEN DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = pcOfferItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcItemName = BillItem.BIName.
    END.
    WHEN "FATime" THEN DO:
       FIND FIRST FatGroup WHERE
-                 FatGroup.Brand = gcBrand AND
+                 FatGroup.Brand = Syst.CUICommon:gcBrand AND
                  FatGroup.FtGrp = pcOfferItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE FatGroup THEN lcItemName = FatGroup.FtgName.
    END.
    WHEN "Topup" THEN DO:
       FIND FIRST TopupScheme WHERE
-                 TopupScheme.Brand = gcBrand AND
+                 TopupScheme.Brand = Syst.CUICommon:gcBrand AND
                  TopupScheme.TopupScheme = pcOfferItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE TopupScheme THEN
          lcItemName = TopupScheme.Description.
@@ -236,19 +236,19 @@ FUNCTION fGetOfferItemName RETURN CHARACTER
    WHEN "PerContract"           OR 
    WHEN "PromotionalBundleItem" THEN DO:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  DayCampaign.DCEvent = pcOfferItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE DayCampaign THEN lcItemName = DayCampaign.DCName.
    END.
    WHEN "ServicePackage" THEN DO: 
        FIND ServPac WHERE
-            ServPac.Brand   = gcBrand AND
+            ServPac.Brand   = Syst.CUICommon:gcBrand AND
             ServPac.ServPac = pcOfferItemValue NO-LOCK NO-ERROR.
        IF AVAILABLE ServPac THEN lcItemName = ServPac.SPName. 
    END.
    WHEN "DiscountPlan" THEN DO:
        FIND FIRST DiscountPlan WHERE
-                  DiscountPlan.Brand = gcBrand AND
+                  DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                   DiscountPlan.DPRuleID  = pcOfferItemValue NO-LOCK NO-ERROR.
        IF AVAILABLE DiscountPlan THEN 
           lcItemName = DiscountPlan.DPName.
@@ -293,7 +293,7 @@ FUNCTION fValidateOfferItem RETURNS INT
    END.
 
    IF NOT CAN-FIND(Offer WHERE 
-                   Offer.Brand = gcBrand AND
+                   Offer.Brand = Syst.CUICommon:gcBrand AND
                    Offer.Offer = ttOfferItem.Offer) THEN DO:
       ocError = "Offer " + ttOfferItem.Offer + " does not exist".
       RETURN 1.
@@ -306,7 +306,7 @@ FUNCTION fValidateOfferItem RETURNS INT
    
    /* Overlapping timeintervals between set/new offeritem and an existing one */
    FOR EACH bOfferItem WHERE
-      bOfferItem.Brand = gcBrand AND
+      bOfferItem.Brand = Syst.CUICommon:gcBrand AND
       bOfferItem.Offer = ttOfferItem.Offer AND
       bOfferItem.ItemType = ttOfferItem.ItemType AND
       bOfferItem.ItemKey = ttOfferItem.ItemKey AND
@@ -396,7 +396,7 @@ FUNCTION fValidateOfferCriteria RETURNS INT
    DEFINE VARIABLE lcType AS CHARACTER NO-UNDO.
 
    IF NOT CAN-FIND(Offer NO-LOCK WHERE
-      Offer.Brand = gcBrand AND
+      Offer.Brand = Syst.CUICommon:gcBrand AND
       Offer.Offer = ttOfferCriteria.Offer) THEN DO:
       ocError = SUBST("Offer &1 not found", ttOfferCriteria.Offer).
       RETURN 1.
@@ -421,7 +421,7 @@ FUNCTION fValidateOfferCriteria RETURNS INT
  
    /* Overlapping timeintervals between set/new offercriteria and an existing one */
    FOR EACH bOfferCriteria WHERE
-      bOfferCriteria.Brand = gcBrand AND
+      bOfferCriteria.Brand = Syst.CUICommon:gcBrand AND
       bOfferCriteria.Offer = ttOfferCriteria.Offer AND
       bOfferCriteria.CriteriaType = ttOfferCriteria.CriteriaType AND
       bOfferCriteria.OfferCriteriaId NE ttOfferCriteria.OfferCriteriaId 
@@ -507,20 +507,20 @@ FUNCTION fGetOfferDeferredPayment RETURNS DECIMAL
    DEF BUFFER FMItem FOR FMItem.
       
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand = gcBrand AND
+            OfferItem.Brand = Syst.CUICommon:gcBrand AND
             OfferItem.Offer = icOffer AND
             OfferItem.BeginStamp <= ideOfferTS AND
             OfferItem.EndStamp >= ideOfferTS AND
             OfferItem.ItemType = "PerContract", 
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = OfferItem.ItemKey AND
             DayCampaign.DCType = {&DCTYPE_INSTALLMENT},
       FIRST FeeModel NO-LOCK WHERE
-            FeeModel.Brand = gcBrand AND
+            FeeModel.Brand = Syst.CUICommon:gcBrand AND
             FeeModel.FeeModel = DayCampaign.FeeModel,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand = gcBrand AND
+            FMItem.Brand = Syst.CUICommon:gcBrand AND
             FMItem.FeeModel = FeeModel.FeeModel:
 
       ASSIGN
@@ -539,7 +539,7 @@ PROCEDURE pGetBundleInfo:
    DEF OUTPUT PARAMETER ocBundleInfo   AS CHAR NO-UNDO.
 
    FOR EACH OrderAction WHERE
-            OrderAction.Brand    = gcBrand   AND
+            OrderAction.Brand    = Syst.CUICommon:gcBrand   AND
             OrderAction.OrderId  = liOrderID AND
             OrderAction.ItemType = "BundleItem" NO-LOCK:
       ocBundleInfo = ocBundleInfo + (IF ocBundleInfo > "" THEN "," ELSE "") + 

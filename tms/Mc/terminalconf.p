@@ -56,7 +56,7 @@ form
     TerminalConf.ValidTo
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Terminal Configurations "
     FRAME sel.
 

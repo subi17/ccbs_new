@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun  = "talammin".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 IF llDoEvent THEN DO:

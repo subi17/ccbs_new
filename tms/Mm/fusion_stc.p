@@ -34,7 +34,7 @@ ASSIGN
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.Orderid = piOrderID NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "Order not found".
          
@@ -69,12 +69,12 @@ ASSIGN
 
 llExtendContract = 
    CAN-FIND (FIRST OrderAction NO-LOCK WHERE
-                   OrderAction.Brand    = gcBrand AND
+                   OrderAction.Brand    = Syst.CUICommon:gcBrand AND
                    OrderAction.OrderId  = Order.OrderId AND
                    OrderAction.ItemType = "ExtendTermContract").
 
 FIND FIRST OrderFusion NO-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Syst.CUICommon:gcBrand AND
            OrderFusion.OrderID = Order.OrderId NO-ERROR.
 IF NOT AVAIL OrderFusion THEN RETURN "OrderFusion not found".
 
@@ -115,7 +115,7 @@ IF fValidateNewCliType(INPUT lcNewCLIType, INPUT lcBundleID,
 THEN RETURN lcError.
 
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.CUICommon:gcBrand AND
            NewCLIType.CLIType = Order.CLIType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN SUBST("Unknown CLIType &1", Order.CLIType).

@@ -26,7 +26,7 @@ ASSIGN
    liReqStat = MsRequest.ReqStatus.
 
 FOR FIRST RequestType NO-LOCK WHERE
-          RequestType.Brand   = gcBrand   AND
+          RequestType.Brand   = Syst.CUICommon:gcBrand   AND
           RequestType.ReqType = liReqType AND 
           RequestType.InUse:
 

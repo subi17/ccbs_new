@@ -76,7 +76,7 @@ PROCEDURE pDelFixedFee:
    END.
 
    FOR EACH FixedFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand      = gcBrand              AND
+            FixedFee.Brand      = Syst.CUICommon:gcBrand              AND
             FixedFee.HostTable  = "MobSub"             AND
             FixedFee.KeyValue   = STRING(Mobsub.MsSeq) AND 
             (IF icBillCode > ""
@@ -241,7 +241,7 @@ PROCEDURE pCreditSingleFee:
    IF idAmt = 0 THEN RETURN.
    
    CREATE SingleFee.
-   ASSIGN SingleFee.Brand      = gcBrand
+   ASSIGN SingleFee.Brand      = Syst.CUICommon:gcBrand
           SingleFee.FMItemId   = NEXT-VALUE(bi-seq)
           SingleFee.CustNum    = MobSub.InvCust
           SingleFee.BillTarget = MobSub.BillTarget

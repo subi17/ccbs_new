@@ -72,7 +72,7 @@ form
     FATGroup.Priority
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Free Air Time Groups "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -166,7 +166,7 @@ orders = "   By Code   ,   By Name   ,By 3, By 4".
 
 
 FIND FIRST FATGroup WHERE 
-           fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+           fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 IF AVAILABLE FATGroup THEN ASSIGN
    Memory       = recid(FATGroup)
@@ -198,14 +198,14 @@ REPEAT WITH FRAME sel:
            VALIDATE
               (FATGroup.FTGrp NOT ENTERED OR
               NOT CAN-FIND(FATGroup using  FATGroup.FTGrp WHERE 
-                           FATGroup.Brand = gcBrand ),
+                           FATGroup.Brand = Syst.CUICommon:gcBrand ),
               "FreeAirTime Group " + string(INPUT FATGroup.FTGrp) +
               " already exists !").
            IF INPUT FRAME lis FATGroup.FTGrp NOT ENTERED THEN 
            LEAVE add-row.
            CREATE FATGroup.
            ASSIGN
-           FatGroup.Brand = gcBrand 
+           FatGroup.Brand = Syst.CUICommon:gcBrand 
            FATGroup.FTGrp = INPUT FRAME lis FATGroup.FTGrp.
 
            RUN local-UPDATE-record.
@@ -225,7 +225,7 @@ REPEAT WITH FRAME sel:
 
       /* is there ANY record ? */
       FIND FIRST FATGroup
-      WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+      WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FATGroup THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -432,13 +432,13 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
-       SET lcBrand WHEN gcAllBrand = TRUE
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            FaTGroup WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF FATGroup ENTERED THEN DO:
           FIND FIRST FATGroup WHERE 
                      FATGroup.FTGrp >= FATGroup AND 
-                     fatgroup.Brand = gcBrand 
+                     fatgroup.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
 
           IF NOT  fRecFound(1) THEN NEXT Browse.
@@ -454,13 +454,13 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
-       SET lcBrand WHEN gcAllBrand = TRUE
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            FtgName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF FtgName ENTERED THEN DO:
           FIND FIRST FATGroup WHERE 
                      FATGroup.FtgName >= Ftgname AND 
-                     fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                     fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
            IF NOT  fRecFound(2) THEN NEXT Browse.
 
@@ -541,7 +541,7 @@ REPEAT WITH FRAME sel:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST FATGroup
-           WHERE fatgroup.Brand = gcBrand) THEN DO:
+           WHERE fatgroup.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -619,46 +619,46 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST FATGroup
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST FATGroup USE-INDEX FtgName
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND FIRST FATGroup USE-INDEX FATType
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 4 THEN FIND FIRST FATGroup USE-INDEX Priority
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR. 
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR. 
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST FATGroup
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST FATGroup USE-INDEX FtgName
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND LAST FATGroup USE-INDEX FATType
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 4 THEN FIND LAST FATGroup USE-INDEX Priority
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR. 
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR. 
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT FATGroup
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT FATGroup USE-INDEX FtgName
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND NEXT FATGroup USE-INDEX FATType
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 4 THEN FIND NEXT FATGroup USE-INDEX Priority
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.   
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.   
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV FATGroup
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV FATGroup USE-INDEX FtgName
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND PREV FATGroup USE-INDEX FATType
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 4 THEN FIND PREV FATGroup USE-INDEX Priority
-       WHERE fatgroup.Brand = gcBrand NO-LOCK NO-ERROR.   
+       WHERE fatgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.   
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -677,7 +677,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND FIRST BillItem WHERE
-              BillItem.Brand    = gcBrand AND 
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND 
               BillItem.BillCode = FATGroup.BillCode
    NO-LOCK NO-ERROR.           
 END PROCEDURE.

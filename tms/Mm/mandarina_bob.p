@@ -26,7 +26,7 @@ lcProcessMode = SESSION:PARAMETER.
 
 /* includes */
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -112,7 +112,7 @@ ASSIGN
  
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -128,7 +128,7 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
@@ -181,7 +181,7 @@ REPEAT:
 
       /* Check subscription */     
       FIND FIRST mobsub WHERE
-                 mobsub.Brand EQ gcBrand AND
+                 mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                  mobsub.CLI   EQ lcMSISDN 
            USE-INDEX CLI NO-LOCK NO-ERROR.
       IF NOT AVAILABLE mobsub THEN DO:
@@ -261,7 +261,7 @@ REPEAT:
          IF LcLP EQ "InternetBarring" THEN DO:
             IF LOOKUP("Internet", lcBarrings) = 0 OR 
                NOT CAN-FIND(FIRST Memo WHERE
-                                  Memo.Brand EQ gcBrand AND
+                                  Memo.Brand EQ Syst.CUICommon:gcBrand AND
                                   Memo.CustNum EQ MobSub.CustNum AND
                                   Memo.HostTable EQ "MobSub" AND
                                   Memo.MemoTitle EQ "OTA Barring activado"
@@ -323,7 +323,7 @@ INPUT STREAM sFilesInDir CLOSE.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}

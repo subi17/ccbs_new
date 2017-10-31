@@ -55,7 +55,7 @@ DO WITH FRAME count:
    cdate 
    InvGroup
    VALIDATE (CAN-FIND(invgroup WHERE 
-                      InvGroup.Brand    = gcBrand AND
+                      InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                       invgroup.invgroup = INPUT invgroup),
              "Unknown Invoice Group Code!").
 
@@ -64,7 +64,7 @@ DO WITH FRAME count:
 
    message "Counting ...".
    FOR EACH Customer no-lock where
-            Customer.Brand     = gcBrand AND
+            Customer.Brand     = Syst.CUICommon:gcBrand AND
             Customer.ContrBeg >= date1   AND
             Customer.ContrBeg <= date2   AND
             (if InvGroup ne "" THEN Customer.InvGroup = InvGroup ELSE TRUE):

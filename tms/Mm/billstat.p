@@ -73,7 +73,7 @@ toimi:
 
 
    FOR EACH Invoice WHERE
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
             Invoice.InvDate >= date1   AND
             Invoice.InvDate <= date2  NO-LOCK.
 

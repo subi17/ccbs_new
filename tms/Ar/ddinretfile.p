@@ -85,7 +85,7 @@ FUNCTION fErrorLog RETURNS DECIMAL
    DO TRANS:
       /* save to db for reporting */
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "DDRET"
              ErrorLog.TableName = "Invoice"
              ErrorLog.KeyValue  = STRING(liInvNum)

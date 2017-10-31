@@ -99,14 +99,14 @@ WITH
     FRAME copy .
 
 FIND Salesman where 
-     Salesman.Brand    = gcBrand AND
+     Salesman.Brand    = Syst.CUICommon:gcBrand AND
      Salesman.Salesman = Salesman no-lock.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember where 
-           SMGMember.Brand = gcBrand AND 
+           SMGMember.Brand = Syst.CUICommon:gcBrand AND 
            SMGMember.Salesman = Salesman no-lock no-error.
 IF AVAILABLE SMGMember THEN ASSIGN
    muisti       = recid(SMGMember)
@@ -144,7 +144,7 @@ add-single:
              PROMPT-FOR SMGMember.SmGroup
              validate(input frame lis SMGMember.SmGroup = "" OR
              can-find(SMGroup where
-                      SMGroup.Brand   = gcBrand AND
+                      SMGroup.Brand   = Syst.CUICommon:gcBrand AND
                       SMGroup.SmGroup = INPUT FRAME lis SMGMember.SmGroup),
                       "Unknown Group !").
              .
@@ -154,14 +154,14 @@ add-single:
              END.
 
              FIND SMGroup where 
-                  SMGroup.Brand   = gcBrand AND
+                  SMGroup.Brand   = Syst.CUICommon:gcBrand AND
                   SMGroup.SmGroup = INPUT SMGMember.SmGroup
              no-lock.
              DISP SMGroup.SGName.
 
              /* is this Salesman already a member in this group ? */
              IF can-find(SMGMember where 
-                         SMGMember.Brand = gcBrand AND 
+                         SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                          SMGMember.Salesman = Salesman AND
                          SMGMember.SmGroup = SMGroup.SmGroup)
              THEN DO:
@@ -177,7 +177,7 @@ add-single:
                 muisti = recid(SMGMember)
                 tulostettava = TRUE
                 INPUT FRAME lis SMGMember.SmGroup
-                SMGMember.Brand    = gcBrand 
+                SMGMember.Brand    = Syst.CUICommon:gcBrand 
                 SMGMember.Salesman = Salesman
                 SMGMember.SmName   = Salesman.SmName.
                 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhSMGMember).
@@ -197,13 +197,13 @@ add-single:
              UPDATE xSalesman
                     validate(input xSalesman = "" OR 
                              can-find(xSalesman where
-                                      xSalesman.Brand    = gcBrand AND
+                                      xSalesman.Brand    = Syst.CUICommon:gcBrand AND
                                       xSalesman.Salesman = input xSalesman),
                              "Unknown Salesman !").
 
              if xSalesman ne "" THEN DO:
                 FIND xSalesman where 
-                     xSalesman.Brand    = gcBrand AND
+                     xSalesman.Brand    = Syst.CUICommon:gcBrand AND
                      xSalesman.Salesman = xSalesman no-lock.
                 DISP xSalesman.SmName.
 
@@ -218,19 +218,19 @@ add-single:
 
                    i = 0.
                    FOR EACH cmember no-lock where
-                            cmember.Brand     = gcBrand AND
+                            cmember.Brand     = Syst.CUICommon:gcBrand AND
                             cmember.Salesman  = xSalesman:
 
                        FIND SMGMember where
                             SMGMember.SmGroup  = cmember.SmGroup AND
-                            SMGMember.Brand    = gcBrand AND 
+                            SMGMember.Brand    = Syst.CUICommon:gcBrand AND 
                             SMGMember.Salesman = Salesman.Salesman
                        no-lock no-error.
 
                        IF NOT AVAIL SMGMember THEN DO:
                           CREATE SMGMember.
                           ASSIGN
-                          SMGMember.Brand    = gcBrand 
+                          SMGMember.Brand    = Syst.CUICommon:gcBrand 
                           SMGMember.Salesman = Salesman.Salesman
                           SMGMember.SmGroup  = cmember.SmGroup
                           SMGMember.SmName   = Salesman.SmName
@@ -251,7 +251,7 @@ add-single:
        END. /* add-group */
 
        FIND FIRST SMGMember where 
-                  SMGMember.Brand = gcBrand AND 
+                  SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                   SMGMember.Salesman = Salesman 
        no-lock no-error.
        IF NOT AVAIL SMGMember THEN LEAVE LOOP.
@@ -282,10 +282,10 @@ tulostus:
                  /* sd */.
               rtab[FRAME-LINE] = recid(SMGMember).
               IF jarj = 1 THEN FIND NEXT SMGMember
-              where SMGMember.Brand = gcBrand AND 
+              where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                     SMGMember.Salesman = Salesman no-lock no-error.
               ELSE IF jarj = 2 THEN FIND NEXT SMGMember USE-INDEX SmName
-              where SMGMember.Brand = gcBrand AND 
+              where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                     SMGMember.Salesman = Salesman no-lock no-error.
            END.
            ELSE DO:
@@ -338,10 +338,10 @@ SELAUS:
         FIND SMGMember where recid(SMGMember) = muisti.
         DO i = 1 TO FRAME-LINE - 1:
            IF jarj = 1 THEN FIND prev SMGMember
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman no-lock no-error.
            ELSE IF jarj = 2 THEN FIND prev SMGMember USE-INDEX SmName
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman no-lock no-error.
            IF AVAILABLE SMGMember THEN
               ASSIGN ekarivi = i muisti = recid(SMGMember).
@@ -365,10 +365,10 @@ SELAUS:
         IF FRAME-LINE = 1 THEN DO:
            FIND SMGMember where recid(SMGMember) = rtab[1] no-lock.
            IF jarj = 1 THEN FIND prev SMGMember
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman no-lock no-error.
            ELSE IF jarj = 2 THEN FIND prev SMGMember USE-INDEX SmName
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman no-lock no-error.
            IF NOT AVAILABLE SMGMember THEN DO:
               message "YOU ARE ON THE FIRST ROW !".
@@ -398,10 +398,10 @@ SELAUS:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND SMGMember where recid(SMGMember) = rtab[FRAME-DOWN] no-lock .
            IF jarj = 1 THEN FIND NEXT SMGMember
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman no-lock no-error.
            ELSE IF jarj = 2 THEN FIND NEXT SMGMember USE-INDEX SmName
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman no-lock no-error.
            IF NOT AVAILABLE SMGMember THEN DO:
               message "YOU ARE ON THE LAST ROW !".
@@ -430,10 +430,10 @@ SELAUS:
         muisti = rtab[1].
         FIND SMGMember where recid(SMGMember) = muisti no-lock no-error.
         IF jarj = 1 THEN FIND prev SMGMember
-        where SMGMember.Brand = gcBrand AND 
+        where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
               SMGMember.Salesman = Salesman no-lock no-error.
         ELSE IF jarj = 2 THEN FIND prev SMGMember USE-INDEX SmName
-        where SMGMember.Brand = gcBrand AND 
+        where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
               SMGMember.Salesman = Salesman no-lock no-error.
         IF AVAILABLE SMGMember THEN DO:
            muisti = recid(SMGMember).
@@ -441,10 +441,10 @@ SELAUS:
            /* menn‰‰n tiedostoa taaksep‰in 1 sivun verran */
            DO rivi = 1 TO (FRAME-DOWN - 1):
               IF jarj = 1 THEN FIND prev SMGMember
-              where SMGMember.Brand = gcBrand AND 
+              where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                     SMGMember.Salesman = Salesman no-lock no-error.
               ELSE IF jarj = 2 THEN FIND prev SMGMember USE-INDEX SmName
-              where SMGMember.Brand = gcBrand AND 
+              where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                     SMGMember.Salesman = Salesman no-lock no-error.
               IF AVAILABLE SMGMember THEN muisti = recid(SMGMember).
               ELSE rivi = FRAME-DOWN.
@@ -484,7 +484,7 @@ SELAUS:
        if Salesman <> "" THEN DO:
           FIND FIRST SMGMember where
                      SMGMember.Salesman >= Salesman AND
-                     SMGMember.Brand = gcBrand AND 
+                     SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                      SMGMember.Salesman = Salesman no-lock no-error.
           IF NOT AVAILABLE SMGMember THEN DO:
              BELL.
@@ -521,10 +521,10 @@ SELAUS:
        SMGMember.SmGroup SMGroup.SGName  /* sd */.
 
        IF jarj = 1 THEN FIND NEXT SMGMember
-       where SMGMember.Brand = gcBrand AND 
+       where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
        ELSE IF jarj = 2 THEN FIND NEXT SMGMember USE-INDEX SmName
-       where SMGMember.Brand = gcBrand AND 
+       where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
        IF AVAILABLE SMGMember THEN muisti = recid(SMGMember).
        ELSE DO:
@@ -532,10 +532,10 @@ SELAUS:
           FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
           /* sitten edellinen */
           IF jarj = 1 THEN FIND prev SMGMember
-          where SMGMember.Brand = gcBrand AND 
+          where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                 SMGMember.Salesman = Salesman no-lock no-error.
           ELSE IF jarj = 2 THEN FIND prev SMGMember USE-INDEX SmName
-          where SMGMember.Brand = gcBrand AND 
+          where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                 SMGMember.Salesman = Salesman no-lock no-error.
           IF AVAILABLE SMGMember THEN DO:
              ASSIGN
@@ -558,7 +558,7 @@ SELAUS:
 
            /* poistettiinko viimeinen tietue ? */
            IF NOT can-find(FIRST SMGMember
-           where SMGMember.Brand = gcBrand AND 
+           where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
                  SMGMember.Salesman = Salesman) THEN DO:
               CLEAR FRAME sel no-pause.
               PAUSE 0 no-message.
@@ -582,10 +582,10 @@ SELAUS:
 
      else if lookup(nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST SMGMember
-       where SMGMember.Brand = gcBrand AND 
+       where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST SMGMember USE-INDEX SmName
-       where SMGMember.Brand = gcBrand AND 
+       where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
        ASSIGN muisti = recid(SMGMember) tulostettava = TRUE.
        NEXT LOOP.
@@ -593,10 +593,10 @@ SELAUS:
 
      else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST SMGMember
-       where SMGMember.Brand = gcBrand AND 
+       where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST SMGMember USE-INDEX SmName
-       where SMGMember.Brand = gcBrand AND 
+       where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
        ASSIGN muisti = recid(SMGMember) tulostettava = TRUE.
        NEXT LOOP.

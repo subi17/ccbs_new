@@ -237,7 +237,7 @@ PROCEDURE pRemoveFees:
          END.
 
          FOR EACH FixedFee NO-LOCK WHERE
-                  FixedFee.Brand = gcBrand AND
+                  FixedFee.Brand = Syst.CUICommon:gcBrand AND
                   FixedFee.CustNum = Customer.CustNum AND
                   FixedFee.InUse = TRUE,
              EACH bFFItem OF FixedFee NO-LOCK WHERE
@@ -344,7 +344,7 @@ PROCEDURE pLogAction:
   
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "BillEvents"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 

@@ -41,18 +41,18 @@ OUTPUT STREAM sdump TO value (icFile).
 
 ERROR_LOOP:
 FOR EACH MNPProcess NO-LOCK WHERE
-         MNPProcess.Brand = gcBrand AND
+         MNPProcess.Brand = Syst.CUICommon:gcBrand AND
          MNPProcess.MNPType = {&MNP_TYPE_IN} AND
          MNPProcess.UpdateTS >= ldeFrom AND
          MNPProcess.UpdateTS <= ldeTo AND
          MNPProcess.StatusCode = {&MNP_ST_ACAN} USE-INDEX UpdateTS,
    FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.OrderID = MNPProcess.OrderID:
 
    /* it's presumed that the latest memo is related to cancellation */
    FIND FIRST Memo NO-LOCK WHERE
-              Memo.Brand = gcBrand AND
+              Memo.Brand = Syst.CUICommon:gcBrand AND
               Memo.HostTable = "MNPProcess" AND
               Memo.KeyValue = STRING(MNPProcess.MNPSeq)
               USE-INDEX HostTable NO-ERROR.

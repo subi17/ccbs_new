@@ -527,7 +527,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND FIRST CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               CLIType.CLIType = DPSubject.DPSubject NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -581,7 +581,7 @@ PROCEDURE local-UPDATE-record:
 
                IF FRAME-FIELD = "SubjectType" THEN DO:
                   FIND FIRST CLIType WHERE
-                             CLIType.Brand = gcBrand AND
+                             CLIType.Brand = Syst.CUICommon:gcBrand AND
                              CLIType.CLIType = 
                                 INPUT DPSubject.DPSubject
                      NO-LOCK NO-ERROR.

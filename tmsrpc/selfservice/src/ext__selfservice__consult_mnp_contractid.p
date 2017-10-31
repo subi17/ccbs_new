@@ -23,7 +23,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
+       Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -120,7 +120,7 @@ FOR EACH Order WHERE
    IF pcDelType = "EMAIL" THEN DO:
       IF lcEmail = "" THEN DO:
          FIND FIRST OrderCustomer WHERE
-                    OrderCustomer.Brand   = gcBrand AND
+                    OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                     OrderCustomer.OrderId = Order.OrderId AND
                     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
          IF AVAIL OrderCustomer AND OrderCustomer.Email > "" THEN
@@ -148,7 +148,7 @@ ELSE IF NOT llOngoing THEN DO:
       RETURN appl_err("MNP order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
+                 MobSub.Brand = Syst.CUICommon:gcBrand AND
                  MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
          RETURN appl_err("Subscription is cancelled").

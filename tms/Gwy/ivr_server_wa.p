@@ -4,7 +4,7 @@
 {Func/heartbeat.i}
 
 ASSIGN
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "Request".
 
 DEFINE STREAM outfile.
@@ -181,7 +181,7 @@ PROCEDURE SocketIO:
          
          FIND FIRST PrePaidRequest WHERE
                     PrePaidRequest.CLI      = lcCLI   AND
-                    PrePaidRequest.Brand    = gcBrand AND
+                    PrePaidRequest.Brand    = Syst.CUICommon:gcBrand AND
                     PrePaidRequest.Source   = "IVR"   AND
                    (PrePaidRequest.PPStatus = 0 OR
                     PrePaidRequest.PPStatus = 9)
@@ -194,14 +194,14 @@ PROCEDURE SocketIO:
 
             ASSIGN
                PrePaidRequest.CLI       = lcCLI
-               PrePaidRequest.Brand     = gcBrand
+               PrePaidRequest.Brand     = Syst.CUICommon:gcBrand
                PrePaidRequest.Source    = "IVR"
                PrePaidRequest.PPRequest = NEXT-VALUE(PrePaidReq)
                PrePaidRequest.CommLine  = lcXML
                PrePaidRequest.PPStatus  = 0.
          
             FIND FIRST MobSub WHERE
-                       MobSub.Brand = gcBrand AND
+                       MobSub.Brand = Syst.CUICommon:gcBrand AND
                        MobSub.CLI   = PrePaidRequest.CLI
             NO-LOCK NO-ERROR.
             
@@ -221,7 +221,7 @@ PROCEDURE SocketIO:
                ASSIGN
                   MsRequest.CreStamp   = PrePaidRequest.TSRequest
                   MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
-                  MsRequest.Brand      = gcBrand
+                  MsRequest.Brand      = Syst.CUICommon:gcBrand
                   MsRequest.MSSeq      = MobSub.MSSeq
                   MsRequest.CLI        = MobSub.CLI
                   MsRequest.CustNum    = MobSub.CustNum

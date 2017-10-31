@@ -143,7 +143,7 @@ PROCEDURE pCancelFuncRunProcess:
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "FRPROCESS" + STRING(iiFRProcessID)
              ErrorLog.TableName = "FuncRunProcess"
              ErrorLog.KeyValue  = STRING(iiFRProcessID)

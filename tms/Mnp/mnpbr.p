@@ -78,7 +78,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  MNP PROCESS LIST  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -508,19 +508,19 @@ PROCEDURE local-find-FIRST:
    ELSE DO:
       IF order = 1 THEN 
          FIND FIRST MNPProcess USE-INDEX MNPType WHERE
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                     MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND FIRST MNPProcess USE-INDEX PortRequest WHERE
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                     MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND FIRST MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                     MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -538,19 +538,19 @@ PROCEDURE local-find-LAST:
    ELSE DO:
       IF order = 1 THEN 
          FIND LAST MNPProcess USE-INDEX MNPType WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND LAST MNPProcess USE-INDEX PortRequest WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND LAST MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -567,19 +567,19 @@ PROCEDURE local-find-NEXT:
    ELSE DO:
       IF order = 1 THEN 
          FIND NEXT MNPProcess USE-INDEX MNPType WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND NEXT MNPProcess USE-INDEX PortRequest WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND NEXT MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -596,19 +596,19 @@ PROCEDURE local-find-PREV:
    ELSE DO:
       IF order = 1 THEN FIND 
          PREV MNPProcess USE-INDEX MNPType WHERE 
-              MNPProcess.Brand = gcBrand AND
+              MNPProcess.Brand = Syst.CUICommon:gcBrand AND
               MNPProcess.MNPType = piMNPType AND 
               MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND PREV MNPProcess USE-INDEX PortRequest WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND PREV MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.CUICommon:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -706,7 +706,7 @@ PROCEDURE local-UPDATE-record:
    WITH FRAME lis.
    
    FIND FIRST Order where 
-      Order.Brand = gcBrand and
+      Order.Brand = Syst.CUICommon:gcBrand and
       Order.orderid = mnpprocess.orderid NO-LOCK NO-ERROR. 
 
    IF AVAIL Order AND MNPProcess.StatusCode = 4 AND Order.StatusCode NE "73" THEN DO:
@@ -756,7 +756,7 @@ PROCEDURE local-UPDATE-record:
             WHEN 1 THEN DO:
             
                FIND FIRST Order WHERE
-                          Order.Brand   = gcBrand AND
+                          Order.Brand   = Syst.CUICommon:gcBrand AND
                           Order.OrderId = MNPProcess.OrderId
                NO-LOCK NO-ERROR.
                FIND FIRST OrderCustomer WHERE
@@ -883,7 +883,7 @@ PROCEDURE local-UPDATE-record:
                            ASSIGN lcOpCode.
 
                            FIND FIRST MNPOperator WHERE
-                                      MNPOperator.Brand = gcBrand AND
+                                      MNPOperator.Brand = Syst.CUICommon:gcBrand AND
                                       MNPOperator.OperName = lcOpCode AND
                                       MNPOperator.Active EQ True
                            NO-LOCK NO-ERROR.

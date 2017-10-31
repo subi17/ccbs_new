@@ -114,7 +114,7 @@ FIND TMSParam WHERE TMSParam.Brand = "1" AND
 IF AVAIL TMSParam THEN lcCCPostpaidPriceList = TMSParam.CharVal. 
 
  /* create records in ttable */
-FOR EACH FeeModel WHERE FeeModel.Brand = gcBrand AND 
+FOR EACH FeeModel WHERE FeeModel.Brand = Syst.CUICommon:gcBrand AND 
                         FeeModel.FMGroup = 1,
     FIRST FMItem OF FeeModel WHERE FMItem.ToDate >= TODAY AND 
                                    FMItem.FromDate <= TODAY AND
@@ -367,7 +367,7 @@ REPEAT WITH FRAME sel:
 
               CREATE SingleFee.
               ASSIGN
-              SingleFee.Brand      = gcBrand 
+              SingleFee.Brand      = Syst.CUICommon:gcBrand 
               SingleFee.CustNum    = iiCustNum
               SingleFee.VATIncl    = Customer.VATIncl
               SingleFee.BillPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
@@ -624,7 +624,7 @@ REPEAT WITH FRAME sel:
        DO:
           
           FIND FIRST SingleFee USE-INDEX CustNum WHERE 
-                     SingleFee.Brand     = gcBrand     AND 
+                     SingleFee.Brand     = Syst.CUICommon:gcBrand     AND 
                      SingleFee.CustNum   = iiCustNum     AND
                      SingleFee.HostTable = lcHostTable AND
                      SingleFee.KeyValue  = lcKeyValue 
@@ -632,7 +632,7 @@ REPEAT WITH FRAME sel:
 
           IF NOT AVAILABLE SingleFee THEN 
           FIND FIRST SingleFee USE-INDEX CustNum WHERE 
-                     SingleFee.Brand     = gcBrand     AND 
+                     SingleFee.Brand     = Syst.CUICommon:gcBrand     AND 
                      SingleFee.CustNum   = iiCustNum     AND
                      SingleFee.HostTable = lcHostTable AND
                      SingleFee.KeyValue >= lcKeyValue 
@@ -749,7 +749,7 @@ REPEAT WITH FRAME sel:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST SingleFee
-           WHERE SingleFee.CustNum = iiCustNum AND singlefee.Brand = gcBrand) 
+           WHERE SingleFee.CustNum = iiCustNum AND singlefee.Brand = Syst.CUICommon:gcBrand) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
@@ -832,7 +832,7 @@ PROCEDURE local-find-FIRST:
      IF icMsseq > "" THEN DO:
         FIND FIRST SingleFee USE-INDEX CustNum WHERE 
                    SingleFee.CustNum   = iiCustNum  AND 
-                   SingleFee.Brand     = gcBrand  AND 
+                   SingleFee.Brand     = Syst.CUICommon:gcBrand  AND 
                    SingleFee.HostTable = "Mobsub" AND
                    SingleFee.KeyValue  = icMsseq
         NO-LOCK NO-ERROR.
@@ -842,7 +842,7 @@ PROCEDURE local-find-FIRST:
        IF order = 1 THEN 
        FIND FIRST SingleFee USE-INDEX CustNum WHERE 
                   SingleFee.CustNum = iiCustNum AND 
-                  SingleFee.Brand   = gcBrand
+                  SingleFee.Brand   = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
              
        ELSE IF order = 2 THEN 
@@ -856,7 +856,7 @@ PROCEDURE local-find-LAST:
      IF icMsseq > "" THEN DO:
         FIND LAST SingleFee USE-INDEX CustNum WHERE 
                   SingleFee.CustNum   = iiCustNum  AND 
-                  SingleFee.Brand     = gcBrand  AND 
+                  SingleFee.Brand     = Syst.CUICommon:gcBrand  AND 
                   SingleFee.HostTable = "Mobsub" AND
                   SingleFee.KeyValue  = icMsseq
         NO-LOCK NO-ERROR.
@@ -866,7 +866,7 @@ PROCEDURE local-find-LAST:
        IF order = 1 THEN 
        FIND LAST SingleFee USE-INDEX CustNum WHERE 
                  SingleFee.CustNum = iiCustNum AND
-                 SingleFee.Brand = gcBrand 
+                 SingleFee.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
              
        ELSE IF order = 2 THEN 
@@ -881,7 +881,7 @@ PROCEDURE local-find-NEXT:
      IF icMsseq > "" THEN DO:
         FIND NEXT SingleFee USE-INDEX CustNum WHERE 
                   SingleFee.CustNum   = iiCustNum  AND 
-                  SingleFee.Brand     = gcBrand  AND 
+                  SingleFee.Brand     = Syst.CUICommon:gcBrand  AND 
                   SingleFee.HostTable = "Mobsub" AND
                   SingleFee.KeyValue  = icMsseq
         NO-LOCK NO-ERROR.
@@ -891,7 +891,7 @@ PROCEDURE local-find-NEXT:
        IF order = 1 THEN 
        FIND NEXT SingleFee USE-INDEX CustNum WHERE 
                  SingleFee.CustNum = iiCustNum AND 
-                 SingleFee.Brand   = gcBrand
+                 SingleFee.Brand   = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
              
        ELSE IF order = 2 THEN 
@@ -906,7 +906,7 @@ PROCEDURE local-find-PREV:
      IF icMsseq > "" THEN DO:
         FIND PREV SingleFee USE-INDEX CustNum WHERE 
                   SingleFee.CustNum   = iiCustNum  AND 
-                  SingleFee.Brand     = gcBrand  AND 
+                  SingleFee.Brand     = Syst.CUICommon:gcBrand  AND 
                   SingleFee.HostTable = "Mobsub" AND
                   SingleFee.KeyValue  = icMsseq
         NO-LOCK NO-ERROR.
@@ -916,7 +916,7 @@ PROCEDURE local-find-PREV:
        IF order = 1 THEN 
        FIND PREV SingleFee USE-INDEX CustNum WHERE 
                  SingleFee.CustNum = iiCustNum AND 
-                 SingleFee.Brand   = gcBrand
+                 SingleFee.Brand   = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
              
        ELSE IF order = 2 THEN 
@@ -949,7 +949,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    llMemo = CAN-FIND(FIRST Memo WHERE
-                           Memo.Brand     = gcBrand AND
+                           Memo.Brand     = Syst.CUICommon:gcBrand AND
                            Memo.HostTable = "SingleFee" AND
                            Memo.KeyValue  = STRING(SingleFee.FMItemId)).
        
@@ -990,7 +990,7 @@ PROCEDURE local-update-record:
       END.
       ELSE IF SingleFee.HostTable = "Order" THEN DO:
          FIND Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.CUICommon:gcBrand AND
               Order.OrderID = INTEGER(SingleFee.KeyValue) NO-LOCK NO-ERROR.
          IF AVAILABLE Order THEN lcCLI = Order.CLI.
       END.
@@ -1220,7 +1220,7 @@ PROCEDURE local-update-record:
                    
                    WHEN "Order" THEN DO:
                       FIND FIRST Order WHERE
-                                 Order.Brand = gcBrand AND
+                                 Order.Brand = Syst.CUICommon:gcBrand AND
                                  Order.OrderID = INT(INPUT FRAME lis
                                                      SingleFee.KeyValue)
                       NO-LOCK NO-ERROR.
@@ -1368,7 +1368,7 @@ PROCEDURE cctool:
                 ufkey      = TRUE.
              LEAVE CHOISE-CC.
            END.
-         FIND FeeModel WHERE FeeModel.Brand = gcBrand AND 
+         FIND FeeModel WHERE FeeModel.Brand = Syst.CUICommon:gcBrand AND 
                              FeeModel.FeeModel  = ttable.ValueId NO-LOCK NO-ERROR.
          
          /* First catch mobsub  */   
@@ -1397,7 +1397,7 @@ PROCEDURE cctool:
                                          TODAY).
 
         FIND FIRST FMItem NO-LOCK  WHERE
-                   FMItem.Brand     = gcBrand       AND
+                   FMItem.Brand     = Syst.CUICommon:gcBrand       AND
                    FMItem.FeeModel  = FeeModel.FeeModel AND
                    FMItem.PriceList = lcPriceList AND
                    FMItem.FromDate <= TODAY     AND
@@ -1409,7 +1409,7 @@ PROCEDURE cctool:
                     lcBillItemCode = FMItem.BillCode.
 
              FIND BillItem   WHERE 
-                  BillItem.Brand       = gcBrand AND
+                  BillItem.Brand       = Syst.CUICommon:gcBrand AND
                   BillItem.BillCode    = FMItem.BillCode    NO-LOCK NO-ERROR.
              IF AVAIL BillItem THEN lcBillItemName = BillItem.BIName. 
         END.

@@ -114,7 +114,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " PAYMENT PLANS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -123,7 +123,7 @@ form
     PaymPlan.CustNum     COLON 20   
        VALIDATE(INPUT PaymPlan.CustNum = 0 OR
                 CAN-FIND(FIRST Customer WHERE 
-                               Customer.Brand   = gcBrand AND
+                               Customer.Brand   = Syst.CUICommon:gcBrand AND
                                Customer.CustNum = INPUT PaymPlan.CustNum),
                 "Unknown customer")
        lcCustName FORMAT "X(35)" NO-LABEL AT 40 SKIP
@@ -166,7 +166,7 @@ FORM
       HELP "Customer to which payment plan will be made"
       VALIDATE(INPUT liCustNum = 0 OR
                CAN-FIND(Customer WHERE 
-                        Customer.Brand = gcBrand AND
+                        Customer.Brand = Syst.CUICommon:gcBrand AND
                         Customer.CustNum = INPUT liCustNum),
               "Unknown customer")
    lcCustName FORMAT "X(35)" 
@@ -302,7 +302,7 @@ FUNCTION fLetterCust RETURNS INTEGER:
       
       /* first check if invoice customer made the request */
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand      = gcBrand          AND
+               MsRequest.Brand      = Syst.CUICommon:gcBrand          AND
                MsRequest.ReqType    = 11               AND
                MsRequest.CustNum    = Customer.CustNum AND
                MsRequest.ReqIParam2 = PaymPlan.PPlanID:
@@ -312,7 +312,7 @@ FUNCTION fLetterCust RETURNS INTEGER:
       /* then from agreement customer */
       IF liLetterCust = 0 THEN
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand      = gcBrand          AND
+               MsRequest.Brand      = Syst.CUICommon:gcBrand          AND
                MsRequest.ReqType    = 11               AND
                MsRequest.CustNum    = Customer.AgrCust AND
                MsRequest.ReqIParam2 = PaymPlan.PPlanID:
@@ -418,7 +418,7 @@ REPEAT WITH FRAME sel:
 
            CREATE PaymPlan.
            ASSIGN
-           PaymPlan.Brand    = gcBrand
+           PaymPlan.Brand    = Syst.CUICommon:gcBrand
            PaymPlan.PPlanID  = NEXT-VALUE(PPlan)
            PaymPlan.CustNum  = INPUT FRAME lis PaymPlan.CustNum
            PaymPlan.PPDate   = TODAY
@@ -698,7 +698,7 @@ REPEAT WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   ldtDate WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
 
@@ -733,7 +733,7 @@ REPEAT WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liCustNum WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
 
@@ -756,7 +756,7 @@ REPEAT WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f3.
            DISPLAY lcBrand WITH FRAME F3.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liStatus WITH FRAME f3.
            HIDE FRAME f3 NO-PAUSE.
 
@@ -834,7 +834,7 @@ REPEAT WITH FRAME sel:
                    INPUT FRAME fCreate liCustNum > 0 
                 THEN DO:
                    FIND Customer WHERE 
-                        Customer.Brand = gcBrand AND
+                        Customer.Brand = Syst.CUICommon:gcBrand AND
                         Customer.CustNum = INPUT FRAME fCreate liCustNum 
                    NO-LOCK NO-ERROR.
                    IF AVAILABLE Customer THEN DO:
@@ -1145,23 +1145,23 @@ PROCEDURE local-find-FIRST:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND FIRST PaymPlan NO-LOCK WHERE
-                  PaymPlan.Brand   = gcBrand AND
+                  PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
                   PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND FIRST PaymPlan NO-LOCK WHERE
-                  PaymPlan.Brand    = gcBrand AND
+                  PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
                   PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    ELSE DO:
        IF order = 1 THEN FIND FIRST PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST PaymPlan 
-          WHERE PaymPlan.Brand = gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND FIRST PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1179,23 +1179,23 @@ PROCEDURE local-find-LAST:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND LAST PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand   = gcBrand AND
+                 PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
                  PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND LAST PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand    = gcBrand AND
+                 PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
                  PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    ELSE DO:
        IF order = 1 THEN FIND LAST PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST PaymPlan 
-          WHERE PaymPlan.Brand = gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND LAST PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1208,23 +1208,23 @@ PROCEDURE local-find-NEXT:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND NEXT PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand   = gcBrand AND
+                 PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
                  PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND NEXT PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand    = gcBrand AND
+                 PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
                  PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    ELSE DO:
        IF order = 1 THEN FIND NEXT PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT PaymPlan 
-          WHERE PaymPlan.Brand = gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND NEXT PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1237,24 +1237,24 @@ PROCEDURE local-find-PREV:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND PREV PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand   = gcBrand AND
+                 PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
                  PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND PREV PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand    = gcBrand AND
+                 PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
                  PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    
    ELSE DO:
        IF order = 1 THEN FIND PREV PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV PaymPlan 
-          WHERE PaymPlan.Brand = gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND PREV PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = gcBrand
+          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1717,7 +1717,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                CREATE Memo.
-               ASSIGN Memo.Brand     = gcBrand
+               ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
                       Memo.HostTable = "PaymPlan"
                       Memo.KeyValue  = STRING(PaymPlan.PPlanID)
                       Memo.CustNum   = PaymPlan.CustNum

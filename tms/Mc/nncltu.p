@@ -26,8 +26,8 @@ DEF VAR rl       AS i NO-UNDO.
 assign tuni1 = "nncltu"
        tuni2 = "".
 
-FIND FIRST Customer no-lock WHERE Customer.Brand = gcBrand no-error.
-FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand no-lock no-error.
+FIND FIRST Customer no-lock WHERE Customer.Brand = Syst.CUICommon:gcBrand no-error.
+FIND FIRST CustLetter WHERE CustLetter.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF NOT AVAILABLE CustLetter THEN DO:
     MESSAGE "No customer letters available."
     VIEW-AS ALERT-BOX
@@ -62,7 +62,7 @@ HELP "Invoice Group" to 39                                         skip
 "                Margin ....:" CustLetter.LtrMargin to 39          skip(5)
 WITH
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
-    " " + ynimi + " Customer letter printing " + string(pvm,"99-99-99") + " "
+    " " + Syst.CUICommon:ynimi + " Customer letter printing " + string(pvm,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 
@@ -80,7 +80,7 @@ repeat WITH FRAME rajat:
       cust-nr1   cust-nr2 validate (input cust-nr2 >= input cust-nr1,
                                     "Invalid order !")
       InvGroup  VALIDATE (can-find(InvGroup where 
-                                   InvGroup.Brand    = gcBrand AND
+                                   InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                                    InvGroup.InvGroup = InvGroup)
                          or InvGroup = "","UNKNOWN INVOICE GROUP")
       CustLetter.LtrMargin
@@ -107,7 +107,7 @@ toimi:
    RUN Syst/udate2c.p(INPUT pvm, INPUT TRUE, OUTPUT paivays).
 
    FOR EACH  Customer no-lock  where
-             Customer.Brand    = gcBrand AND
+             Customer.Brand    = Syst.CUICommon:gcBrand AND
              Customer.CustNum >= cust-nr1     AND
              Customer.CustNum <= cust-nr2     AND
             (if InvGroup ne "" THEN Customer.InvGroup = InvGroup

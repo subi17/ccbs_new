@@ -148,7 +148,7 @@ FIRST Customer NO-LOCK WHERE
    /* text for customer (try to send even if customer has no email address 
       -> get error to log) */
    FOR EACH InvText NO-LOCK WHERE   
-            InvText.Brand    = gcBrand                  AND
+            InvText.Brand    = Syst.CUICommon:gcBrand                  AND
             InvText.Target   = "Customer"               AND
             InvText.KeyValue = STRING(Customer.CustNum) AND
             InvText.FromDate <= idtDate2                AND
@@ -165,7 +165,7 @@ FIRST Customer NO-LOCK WHERE
 
    /* text for invoice group */
    FOR EACH InvText NO-LOCK WHERE
-            InvText.Brand    = gcBrand           AND
+            InvText.Brand    = Syst.CUICommon:gcBrand           AND
             InvText.Target   = "InvGroup"        AND
             InvText.KeyValue = Customer.InvGroup AND
             InvText.FromDate <= idtDate2         AND
@@ -178,10 +178,10 @@ FIRST Customer NO-LOCK WHERE
 
    /* text for customer group */
    FOR EACH CGMember NO-LOCK WHERE
-            CGMember.Brand   = gcBrand AND
+            CGMember.Brand   = Syst.CUICommon:gcBrand AND
             CGMember.CustNum = Customer.CustNum,
        EACH InvText NO-LOCK WHERE
-            InvText.Brand    = gcBrand            AND
+            InvText.Brand    = Syst.CUICommon:gcBrand            AND
             InvText.Target   = "CustGroup"        AND
             InvText.KeyValue = CGMember.CustGroup AND
             InvText.FromDate <= idtDate2          AND
@@ -195,7 +195,7 @@ FIRST Customer NO-LOCK WHERE
 
    /* text for salesman */
    FOR EACH InvText NO-LOCK WHERE
-            InvText.Brand    = gcBrand           AND
+            InvText.Brand    = Syst.CUICommon:gcBrand           AND
             InvText.Target   = "Salesman"        AND
             InvText.KeyValue = Customer.Salesman AND
             InvText.FromDate <= idtDate2         AND

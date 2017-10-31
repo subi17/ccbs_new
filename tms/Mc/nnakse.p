@@ -28,7 +28,7 @@ form
     CustCat.Category
     CatName
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " CATEGORIES (" + gcBrand + ") " OVERLAY FRAME tlse.
+    title color value(Syst.CUICommon:ctc) " CATEGORIES (" + Syst.CUICommon:gcBrand + ") " OVERLAY FRAME tlse.
 
 form /* Maa :n hakua varten */
     haku
@@ -40,7 +40,7 @@ Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Sys
 Runko:
 repeat:
 
-   FIND FIRST CustCat WHERE CustCat.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE CustCat THEN DO:
       must-print = FALSE.
       must-add = TRUE.
@@ -66,7 +66,7 @@ print-line:
             rtab[FRAME-LINE] = recid(CustCat).
             DOWN WITH FRAME tlse.
             FIND NEXT CustCat
-            WHERE CustCat.Brand = gcBrand NO-LOCK no-error.
+            WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(tlse) - 1 WITH FRAME tlse.
@@ -96,7 +96,7 @@ BROWSE:
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND CustCat where recid(CustCat) = rtab[FRAME-LINE] no-lock.
-               FIND prev CustCat WHERE CustCat.Brand = gcBrand NO-LOCK no-error.
+               FIND prev CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE CustCat THEN DO:
                   BELL.
                   message "YOU ARE ON THE FIRST ROW !".
@@ -121,7 +121,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CustCat where recid(CustCat) = rtab[FRAME-LINE] no-lock .
-               FIND NEXT CustCat WHERE CustCat.Brand = gcBrand NO-LOCK no-error.
+               FIND NEXT CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE CustCat THEN DO:
                   BELL.
                   message "YOU ARE ON THE LAST ROW".
@@ -146,11 +146,11 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND CustCat where recid(CustCat) = ylin no-lock no-error.
-            FIND prev CustCat WHERE CustCat.Brand = gcBrand NO-LOCK no-error.
+            FIND prev CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE CustCat THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev CustCat WHERE CustCat.Brand = gcBrand 
+                  FIND prev CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                   IF AVAILABLE CustCat THEN ylin = recid(CustCat).
                   ELSE i = FRAME-DOWN.
@@ -188,7 +188,7 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:
               FIND FIRST CustCat where 
-                 CustCat.Brand     = gcBrand AND
+                 CustCat.Brand     = Syst.CUICommon:gcBrand AND
                  CustCat.Category >= haku
               no-lock no-error.
               IF NOT AVAILABLE CustCat THEN DO:
@@ -220,7 +220,7 @@ BROWSE:
 
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
-           FIND FIRST CustCat WHERE CustCat.Brand = gcBrand NO-LOCK.
+           FIND FIRST CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(CustCat).
            must-print = TRUE.
            NEXT LOOP.
@@ -228,7 +228,7 @@ BROWSE:
 
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
-           FIND LAST CustCat WHERE CustCat.Brand = gcBrand NO-LOCK.
+           FIND LAST CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(CustCat).
            must-print = TRUE.
            NEXT LOOP.

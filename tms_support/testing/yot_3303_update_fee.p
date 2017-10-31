@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
@@ -17,7 +17,7 @@ ldaDate = 06/01/2014.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = gcBrand AND
+          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
           DayCampaign.DCEvent = "PAYTERM24_5" NO-LOCK,
     FIRST MobSub WHERE
           MobSub.MsSeq = 11092403 NO-LOCK,

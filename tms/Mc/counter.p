@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
        IF liCType > 0 THEN DO:
        
            FIND FIRST Counter NO-LOCK WHERE 
-                      Counter.Brand = gcBrand AND 
+                      Counter.Brand = Syst.CUICommon:gcBrand AND 
                       Counter.HostTable = icHostTable AND
                       Counter.KeyValue  = icKeyValue  AND
                       Counter.CounterType = liCType USE-INDEX HostTable NO-ERROR.         
@@ -464,28 +464,28 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
  FIND FIRST Counter NO-LOCK WHERE 
-            Counter.Brand = gcBrand AND 
+            Counter.Brand = Syst.CUICommon:gcBrand AND 
             Counter.HostTable = icHostTable AND
             Counter.KeyValue  = icKeyValue USE-INDEX HostTable NO-ERROR.         
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
   FIND LAST Counter NO-LOCK WHERE 
-            Counter.Brand = gcBrand AND 
+            Counter.Brand = Syst.CUICommon:gcBrand AND 
             Counter.HostTable = icHostTable AND
             Counter.KeyValue  = icKeyValue USE-INDEX HostTable NO-ERROR.          
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
   FIND NEXT Counter NO-LOCK WHERE 
-            Counter.Brand = gcBrand AND 
+            Counter.Brand = Syst.CUICommon:gcBrand AND 
             Counter.HostTable = icHostTable AND
             Counter.KeyValue  = icKeyValue USE-INDEX HostTable NO-ERROR.          
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
   FIND PREV Counter NO-LOCK WHERE 
-            Counter.Brand = gcBrand AND 
+            Counter.Brand = Syst.CUICommon:gcBrand AND 
             Counter.HostTable = icHostTable AND
             Counter.KeyValue  = icKeyValue USE-INDEX HostTable NO-ERROR.          
 END PROCEDURE.

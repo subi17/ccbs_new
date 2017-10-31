@@ -104,7 +104,7 @@ RUN Syst/uexskip.p(1).
 FOR
    EACH  Customer no-lock  where
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand    = gcBrand AND
+                                        CGMember.Brand    = Syst.CUICommon:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                         AND
@@ -179,14 +179,14 @@ FOR
 
    /* memo */
    IF CAN-FIND(FIRST memo WHERE
-               memo.Brand     = gcBrand AND
+               memo.Brand     = Syst.CUICommon:gcBrand AND
                memo.HostTable = "Customer" AND
                memo.KeyValue  = STRING(Customer.CustNum) AND
                memo.memotext NE "") THEN
    DO:
       PUT STREAM excel UNFORMATTED "$memo:".
       FOR EACH memo WHERE
-               memo.Brand     = gcBrand AND
+               memo.Brand     = Syst.CUICommon:gcBrand AND
                memo.HostTable = "Customer" AND
                memo.KeyValue  = STRING(Customer.CustNum) AND
                memo.memotext NE "" NO-LOCK:

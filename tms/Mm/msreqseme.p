@@ -21,7 +21,7 @@ DEF VAR lcLetters AS CHAR  NO-UNDO.
 lcLetters = "A,B,C,D,E,F,G,H,I,J,K,L,M".
 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = gcBrand AND
+         RequestType.Brand = Syst.CUICommon:gcBrand AND
          RequestType.ReqType <= 2:
 
    IF LOOKUP(STRING(RequestType.ReqType),"1,2") > 0 

@@ -26,7 +26,7 @@
    4. Free lock taken in step 1.
 */
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR lcTableName           AS CHAR NO-UNDO.
 DEF VAR lcActionId            AS CHAR NO-UNDO.
@@ -100,7 +100,7 @@ FUNCTION fCollect RETURNS CHAR
    DEF VAR lcErr AS CHAR NO-UNDO.
    
    FOR EACH OrderTimestamp NO-LOCK WHERE
-            OrderTimestamp.Brand EQ gcBrand AND
+            OrderTimestamp.Brand EQ Syst.CUICommon:gcBrand AND
             OrderTimestamp.RowType EQ {&ORDERTIMESTAMP_DELIVERY} AND
             OrderTimestamp.TimeStamp < idEndTS AND
             OrderTimestamp.TimeStamp >= idStartTS:
@@ -112,7 +112,7 @@ FUNCTION fCollect RETURNS CHAR
       IF AVAIL ttOrderList THEN NEXT. /*Skip duplicates*/
       
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand EQ gcBrand AND
+                 Order.Brand EQ Syst.CUICommon:gcBrand AND
                  Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN NEXT. /*This should not happen*/
 
@@ -193,7 +193,7 @@ END.
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -206,7 +206,7 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
@@ -246,7 +246,7 @@ END.
 /*Release execution lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}

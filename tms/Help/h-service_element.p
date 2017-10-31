@@ -209,7 +209,7 @@ repeat:
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:
               find first ServEl where 
-                         ServEl.Brand = gcBrand AND
+                         ServEl.Brand = Syst.CUICommon:gcBrand AND
                          ServEl.ServPac = lcServPac AND
                          ServEl.ServCom >= lcEvent
               no-lock no-error.
@@ -262,7 +262,7 @@ hide frame sel no-pause.
 PROCEDURE local-disp-row:
 
     FIND FIRST ServCom WHERE
-               ServCom.Brand  = gcBrand AND
+               ServCom.Brand  = Syst.CUICommon:gcBrand AND
                ServCom.ServCom = ServEl.ServCom NO-LOCK NO-ERROR.
     display ServEl.ServPac
             ServEl.ServCom
@@ -275,10 +275,10 @@ PROCEDURE local-find-first:
 
    IF lcServPac > "" THEN 
       FIND FIRST ServEl WHERE 
-                 ServEl.Brand = gcBrand AND
+                 ServEl.Brand = Syst.CUICommon:gcBrand AND
                  ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND FIRST ServEl USE-INDEX ServPac WHERE
-                   ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                   ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -286,10 +286,10 @@ PROCEDURE local-find-last:
 
    IF lcServPac > "" THEN 
       FIND LAST ServEl WHERE 
-                ServEl.Brand = gcBrand AND
+                ServEl.Brand = Syst.CUICommon:gcBrand AND
                 ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND LAST ServEl USE-INDEX ServPac WHERE
-                  ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -297,10 +297,10 @@ PROCEDURE local-find-next:
 
    IF lcServPac > "" THEN 
       FIND NEXT ServEl WHERE 
-                ServEl.Brand = gcBrand AND
+                ServEl.Brand = Syst.CUICommon:gcBrand AND
                 ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND NEXT ServEl USE-INDEX ServPac WHERE
-                  ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -308,10 +308,10 @@ PROCEDURE local-find-prev:
 
    IF lcServPac > "" THEN 
       FIND PREV ServEl WHERE 
-                ServEl.Brand = gcBrand AND
+                ServEl.Brand = Syst.CUICommon:gcBrand AND
                 ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND PREV ServEl USE-INDEX ServPac WHERE
-                  ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 

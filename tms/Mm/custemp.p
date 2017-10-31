@@ -64,7 +64,7 @@ form
     Customer.CustName     format "x(14)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  TEMPLATE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -380,7 +380,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        disp lcbrand WITH FRAME f1.
-       SET  lcBrand WHEN gcAllbraND =  TRUE 
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand =  TRUE 
             TemplNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF TemplNum ENTERED THEN DO:
@@ -401,7 +401,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
-       SET  lcBrand WHEN gcallbrand TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand TRUE
             TemplName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF TemplName ENTERED THEN DO:

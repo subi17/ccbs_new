@@ -66,7 +66,7 @@ form
     RatePlan.RPName     /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Rating Plans "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -369,7 +369,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               RatePlan WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -392,7 +392,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               RPName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 

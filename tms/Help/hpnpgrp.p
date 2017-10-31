@@ -46,7 +46,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 MAIN:
 repeat:
 
-   find first PNPGroup WHERE PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+   find first PNPGroup WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    if not available PNPGroup then do:
       MESSAGE "No PNPGroups available !" VIEW-AS ALERT-BOX.
       RETURN.
@@ -80,9 +80,9 @@ print-line:
             rtab[frame-line] = recid(PNPGroup).
             down with frame sel.
             IF order = 1 then find next PNPGroup WHERE 
-               PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+               PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
             IF order = 2 then find next PNPGroup use-index name 
-              WHERE PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+              WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -133,10 +133,10 @@ BROWSE:
                find PNPGroup where recid(PNPGroup) = rtab[frame-line] no-lock.
                if order = 1 then 
                   find prev PNPGroup WHERE 
-                     PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                     PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                if order = 2 then 
                   find prev PNPGroup use-index name WHERE 
-                     PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                     PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                if not available PNPGroup then do:
                   bell.
                   message "You are on 1st row !".              
@@ -163,10 +163,10 @@ BROWSE:
                find PNPGroup where recid(PNPGroup) = rtab[frame-line] no-lock .
                if order = 1 then 
                   find next PNPGroup WHERE 
-                     PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                     PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                if order = 2 then 
                   find next PNPGroup use-index name WHERE 
-                     PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                     PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                if not available PNPGroup then do:
                   bell.
                   message "You are on last row !".
@@ -194,19 +194,19 @@ BROWSE:
             NO-LOCK NO-ERROR.
             if order = 1 then 
                find prev PNPGroup WHERE 
-                  PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                  PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
             if order = 2 then 
                find prev PNPGroup use-index name WHERE 
-                  PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                  PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
             if available PNPGroup then do:
 
                do i = 1 to (frame-down - 1):
                   if order = 1 then    
                      find prev PNPGroup WHERE 
-                        PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                        PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                   if order = 2 then    
                      find prev PNPGroup use-index name WHERE 
-                        PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                        PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                   if available PNPGroup then memory = recid(PNPGroup).
                   else i = frame-down.
                end.
@@ -243,7 +243,7 @@ BROWSE:
            hide frame f1 no-pause.
            if PNPGroup ENTERED then do:
               find first PNPGroup where PNPGroup.PNPGroup >= PNPGroup
-                 AND PNPGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+                 AND PNPGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
               if not available PNPGroup then do:
                  bell.
                  message "None found !".    
@@ -266,7 +266,7 @@ BROWSE:
            hide frame f2 no-pause.
            if PNPGroup ENTERED then do:
               find first PNPGroup 
-              use-index name WHERE PNPGroup.Brand = gcBrand AND
+              use-index name WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand AND
                  PNPGroup.Name >= Name
               NO-LOCK NO-ERROR.
               if not available PNPGroup then do:
@@ -292,9 +292,9 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            if order = 1 then find first PNPGroup  
-              WHERE PNPGroup.Brand = gcBrand no-lock.   
+              WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand no-lock.   
            if order = 2 then find first PNPGroup use-index name 
-              WHERE PNPGroup.Brand = gcBrand no-lock.
+              WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(PNPGroup).
            must-print = true.
            next LOOP.
@@ -303,9 +303,9 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            if order = 1 then find last PNPGroup 
-              WHERE PNPGroup.Brand = gcBrand no-lock.
+              WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand no-lock.
            if order = 2 then find last PNPGroup use-index name 
-              WHERE PNPGroup.Brand = gcBrand no-lock.
+              WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(PNPGroup).
            must-print = true.
            next LOOP.

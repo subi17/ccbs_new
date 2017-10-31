@@ -44,7 +44,7 @@ form /* Browsing list */
    nnpvti.pt-min      COLUMN-LABEL "Minutes"      FORMAT "zzzzzz9"
    nnpvti.pt-mk       COLUMN-LABEL "Sum (EUR)"    FORMAT "ZZZ,ZZZ,ZZ9.99"
    WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " PRODUCT PHONESTATISTICS "  + STRING(pvm1,"99.99.99") + " - " + 
                                   STRING(pvm2,"99.99.99")                      
 FRAME sel.

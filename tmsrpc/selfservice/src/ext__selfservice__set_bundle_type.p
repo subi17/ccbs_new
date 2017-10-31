@@ -25,7 +25,7 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fexternalapi.i}

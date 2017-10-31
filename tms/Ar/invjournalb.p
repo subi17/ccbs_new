@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "laskutus".
 
 {Syst/utumaa.i "new"}
@@ -46,7 +46,7 @@ IF lcTransDir = ? THEN lcTransDir = "".
 IF lcSpoolDir = ? OR lcSpoolDir = "" THEN lcSpoolDir = "/tmp".
 
 FIND FIRST Company NO-LOCK.
-ynimi = Company.CompName.
+Syst.CUICommon:ynimi = Company.CompName.
 
 /* Parameter handling */
 
@@ -120,7 +120,7 @@ fELog("INVJOURNAL","Started").
 
 /* print a detailed report for each invgroup and then a summary from all */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand = gcBrand:
+         InvGroup.Brand = Syst.CUICommon:gcBrand:
 
    RUN pPrintReport(InvGroup.InvGroup,
                     ldtInvDate[1],
@@ -199,7 +199,7 @@ PROCEDURE pPrintReport:
    IF liInvQty = 0 OR RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
 
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "InvJournal"
              ErrorLog.TableName = "cron"
              ErrorLog.KeyValue  = ""
@@ -221,7 +221,7 @@ PROCEDURE pPrintReport:
 
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "InvJournal"

@@ -39,7 +39,7 @@ DEF VAR lcApplicationId AS CHAR NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN
    katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
@@ -134,7 +134,7 @@ IF Customer.DelType NE piDelType THEN DO:
                                        "changed to " + STRING(Customer.DelType)).
       IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN
          FOR EACH MobSub WHERE
-                  MobSub.brand EQ gcbrand AND
+                  MobSub.brand EQ Syst.CUICommon:gcBrand AND
                   Mobsub.custnum EQ Customer.Custnum NO-LOCK:
             fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
                            "InvDelivTypeChanged",Customer.Language,0,

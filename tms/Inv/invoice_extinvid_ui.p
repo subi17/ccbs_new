@@ -35,7 +35,7 @@ FORM
    SKIP(11)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICE NUMBERING " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  INVOICE NUMBERING " + STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
 

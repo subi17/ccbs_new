@@ -79,7 +79,7 @@ form
     ttAccessory.ProductCode  COLON 22
        FORMAT "X(16)"
        VALIDATE(CAN-FIND(BillItem WHERE 
-                         BillItem.Brand   = gcBrand AND
+                         BillItem.Brand   = Syst.CUICommon:gcBrand AND
                          BillItem.BillCode = INPUT ttAccessory.ProductCode),
                 "Unknown billing item")
     lcBIName      
@@ -110,7 +110,7 @@ FUNCTION fBIName RETURNS LOGIC
    lcBIName = "".
    
    FIND BillItem WHERE   
-        BillItem.Brand   = gcBrand AND
+        BillItem.Brand   = Syst.CUICommon:gcBrand AND
         BillItem.BillCode = icBillItem NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName. 
    
@@ -122,7 +122,7 @@ IF iiCustNum > 0 THEN DO:
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.CustNum = iiCustNum,
        EACH OrderAccessory NO-LOCK WHERE
-            OrderAccessory.Brand   = gcBrand AND
+            OrderAccessory.Brand   = Syst.CUICommon:gcBrand AND
             OrderAccessory.OrderID = OrderCustomer.OrderID:
             
       IF CAN-FIND(FIRST ttAccessory WHERE
@@ -141,7 +141,7 @@ END.
 
 ELSE DO:
    FOR EACH OrderAccessory NO-LOCK WHERE
-            OrderAccessory.Brand   = gcBrand AND
+            OrderAccessory.Brand   = Syst.CUICommon:gcBrand AND
             OrderAccessory.OrderID = iiOrderID:
       CREATE ttAccessory.
       BUFFER-COPY OrderAccessory TO ttAccessory.
@@ -198,7 +198,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST OrderAccessory WHERE
-                       OrderAccessory.Brand   = gcBrand   AND
+                       OrderAccessory.Brand   = Syst.CUICommon:gcBrand   AND
                        OrderAccessory.OrderID = iiOrderID AND
                        OrderAccessory.ProductCode = 
                                    INPUT ttAccessory.ProductCode)

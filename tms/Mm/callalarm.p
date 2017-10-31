@@ -85,7 +85,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  ALARM MENU   "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -426,7 +426,7 @@ BROWSE:
        CLEAR FRAME f1.
        DISP lcBrand WITH FRAME F1.
 
-       SET   lcBrand WHEN gcAllBrand TRUE 
+       SET   lcBrand WHEN Syst.CUICommon:gcAllBrand TRUE 
              CustNo WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CustNo ENTERED THEN DO:
@@ -452,7 +452,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
-       SET lcBrand WHEN gcAllBrand TRUE 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand TRUE 
            lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF lcCLI ENTERED THEN DO:
@@ -482,12 +482,12 @@ BROWSE:
        IF actDate  ENTERED THEN DO:
 
           FIND FIRST CallAlarm WHERE 
-              CallAlarm.Brand = gcBrand and
+              CallAlarm.Brand = Syst.CUICommon:gcBrand and
               CallAlarm.actstamp = actstamp
           USE-INDEX actstamp NO-LOCK NO-ERROR.
           IF NOT AVAILABLE CallAlarm THEN 
           FIND LAST CallAlarm WHERE 
-              CallAlarm.Brand = gcBrand and
+              CallAlarm.Brand = Syst.CUICommon:gcBrand and
               CallAlarm.actstamp >= actstamp
           USE-INDEX actstamp NO-LOCK NO-ERROR.
           
@@ -650,27 +650,27 @@ PROCEDURE local-find-FIRST:
 
    IF icCLi > "" THEN DO:
       FIND FIRST CallAlarm WHERE
-                 CallAlarm.Brand = gcBrand AND
+                 CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                  CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND FIRST CallAlarm WHERE
-                 CallAlarm.Brand  = gcBrand AND
+                 CallAlarm.Brand  = Syst.CUICommon:gcBrand AND
                  CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND FIRST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND FIRST CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND FIRST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND FIRST CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND FIRST CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND FIRST CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -678,27 +678,27 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF icCLi > "" THEN DO:
       FIND LAST CallAlarm WHERE
-                CallAlarm.Brand = gcBrand AND
+                CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                 CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND LAST CallAlarm WHERE
-                CallAlarm.Brand  = gcBrand AND
+                CallAlarm.Brand  = Syst.CUICommon:gcBrand AND
                 CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND LAST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND LAST CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND LAST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND LAST CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND LAST CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND LAST CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -706,27 +706,27 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    IF icCLi > "" THEN DO:
       FIND NEXT CallAlarm WHERE
-                CallAlarm.Brand = gcBrand AND
+                CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                 CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND NEXT CallAlarm WHERE
-                CallAlarm.Brand  = gcBrand AND
+                CallAlarm.Brand  = Syst.CUICommon:gcBrand AND
                 CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND NEXT CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND NEXT CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND NEXT CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND NEXT CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND NEXT CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND NEXT CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -734,27 +734,27 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    IF icCLi > "" THEN DO:
       FIND PREV CallAlarm WHERE
-                CallAlarm.Brand = gcBrand AND
+                CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                 CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND PREV CallAlarm WHERE
-                CallAlarm.Brand  = gcBrand AND
+                CallAlarm.Brand  = Syst.CUICommon:gcBrand AND
                 CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND PREV CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND PREV CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND PREV CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND PREV CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND PREV CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND PREV CallAlarm WHERE CallAlarm.Brand = Syst.CUICommon:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -890,7 +890,7 @@ PROCEDURE local-update-record:
                 PAUSE 0.
                 IF FRAME-FIELD = "CustNo" THEN DO:
                    FIND Customer WHERE 
-                        Customer.Brand   = gcBrand AND 
+                        Customer.Brand   = Syst.CUICommon:gcBrand AND 
                         Customer.CustNum =
                    INPUT FRAME lis CallAlarm.CustNO NO-LOCK NO-ERROR.
                    IF NOT AVAIL Customer THEN DO:

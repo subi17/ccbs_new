@@ -96,7 +96,7 @@ PROCEDURE pCollectCDRs:
             InvSeq.InvSeq = ttInvSeq.InvSeq:
 
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
+                     INPUT Syst.CUICommon:gcBrand,
                      INPUT katun,
                      INPUT InvSeq.FromDate,   
                      INPUT InvSeq.ToDate,
@@ -150,7 +150,7 @@ PROCEDURE pLogAction:
    IF liDeleted > 0 OR oiToQueue > 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "InvRowCounter"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 

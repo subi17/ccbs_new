@@ -52,7 +52,7 @@ FORM
       FORMAT "Yes/No"
    SKIP(6)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  OLD UNBILLED EVENTS  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  OLD UNBILLED EVENTS  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

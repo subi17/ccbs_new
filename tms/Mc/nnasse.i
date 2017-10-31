@@ -252,7 +252,7 @@
                  
                  else if frame-field = "Category" THEN DO:
                     FIND FIRST CustCat where 
-                               CustCat.Brand    = gcBrand AND
+                               CustCat.Brand    = Syst.CUICommon:gcBrand AND
                                CustCat.Category = INPUT FRAME lis Customer.Category 
                     no-lock no-error.
                     IF NOT AVAIL CustCat THEN DO:
@@ -339,7 +339,7 @@
                     END.
                     IF Customer.CustIDType <> INPUT FRAME lis Customer.CustIDType THEN DO:
                        FOR EACH CustCat NO-LOCK WHERE
-                                CustCat.Brand = gcBrand:
+                                CustCat.Brand = Syst.CUICommon:gcBrand:
                            IF LOOKUP(INPUT FRAME lis Customer.CustIDType,
                                  CustCat.CustIDType) > 0 THEN DO:
                           DISPLAY 
@@ -377,7 +377,7 @@
               
               ELSE IF FRAME-FIELD = "DataProtected" THEN DO:
                  FIND FIRST Mobsub WHERE 
-                    Mobsub.Brand   = gcBrand AND
+                    Mobsub.Brand   = Syst.CUICommon:gcBrand AND
                     Mobsub.Custnum = Customer.CustNum NO-LOCK NO-ERROR.
                  IF AVAIL Mobsub THEN DO:
                     MESSAGE "The Function is not allowed." SKIP

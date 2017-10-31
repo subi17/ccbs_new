@@ -66,7 +66,7 @@ form
     CustGroup.CGName      /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(Syst.CUICommon:ctc)
-    " Join CustNo " + string(CustNum) + " into group(s) (" + gcBrand + ") "
+    " Join CustNo " + string(CustNum) + " into group(s) (" + Syst.CUICommon:gcBrand + ") "
     FRAME sel.
 
 form
@@ -95,7 +95,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 view FRAME sel.
 
 FIND FIRST CustGroup
-WHERE CustGroup.Brand = gcBrand no-lock no-error.
+WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF AVAILABLE CustGroup THEN ASSIGN
    muisti       = recid(CustGroup)
    tulostettava = TRUE
@@ -137,9 +137,9 @@ tulostus:
          DISPLAY memb CustGroup.CustGroup CustGroup.CGName.
          rtab[FRAME-LINE] = recid(CustGroup).
          IF jarj = 1 THEN FIND NEXT CustGroup
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND NEXT CustGroup USE-INDEX CGName
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       END.
       ELSE DO:
          CLEAR no-pause.
@@ -199,9 +199,9 @@ SELAUS:
    FIND CustGroup where recid(CustGroup) = muisti.
    DO i = 1 TO FRAME-LINE - 1:
       IF jarj = 1 THEN FIND prev CustGroup
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF AVAILABLE CustGroup THEN
          ASSIGN ekarivi = i muisti = recid(CustGroup).
       ELSE LEAVE.
@@ -224,9 +224,9 @@ SELAUS:
    IF FRAME-LINE = 1 THEN DO:
       FIND CustGroup where recid(CustGroup) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev CustGroup
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE CustGroup THEN DO:
          message "YOU ARE ON THE FIRST ROW !".
          BELL. PAUSE 1 no-message.
@@ -253,9 +253,9 @@ SELAUS:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND CustGroup where recid(CustGroup) = rtab[FRAME-DOWN] no-lock .
       IF jarj = 1 THEN FIND NEXT CustGroup
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND NEXT CustGroup USE-INDEX CGName
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE CustGroup THEN DO:
          message "YOU ARE ON THE LAST ROW !".
          BELL. PAUSE 1 no-message.
@@ -281,18 +281,18 @@ SELAUS:
    muisti = rtab[1].
    FIND CustGroup where recid(CustGroup) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev CustGroup
-   WHERE CustGroup.Brand = gcBrand no-lock no-error.
+   WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-   WHERE CustGroup.Brand = gcBrand no-lock no-error.
+   WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    IF AVAILABLE CustGroup THEN DO:
       muisti = recid(CustGroup).
 
       /* menn‰‰n tiedostoa taaksep‰in 1 sivun verran */
       DO rivi = 1 TO (FRAME-DOWN - 1):
          IF jarj = 1 THEN FIND prev CustGroup
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          IF AVAILABLE CustGroup THEN muisti = recid(CustGroup).
          ELSE rivi = FRAME-DOWN.
       END.
@@ -330,7 +330,7 @@ SELAUS:
        HIDE FRAME f1 no-pause.
        if CustGroup <> "" THEN DO:
           FIND FIRST CustGroup where 
-                     CustGroup.Brand = gcBrand AND
+                     CustGroup.Brand = Syst.CUICommon:gcBrand AND
                      CustGroup.CustGroup >= CustGroup
           no-lock no-error.
           IF NOT AVAILABLE CustGroup THEN DO:
@@ -356,7 +356,7 @@ SELAUS:
        HIDE FRAME f2 no-pause.
        if CGName <> "" THEN DO:
           FIND FIRST CustGroup where 
-                     CustGroup.Brand   = gcBrand AND
+                     CustGroup.Brand   = Syst.CUICommon:gcBrand AND
                      CustGroup.CGName >= CGName
           USE-INDEX CGName no-lock no-error.
           IF NOT AVAILABLE CustGroup THEN DO:
@@ -423,18 +423,18 @@ SELAUS:
 
      else if lookup(nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST CustGroup
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST CustGroup USE-INDEX CGName
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN muisti = recid(CustGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
 
      else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST CustGroup
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST CustGroup USE-INDEX CGName
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN muisti = recid(CustGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.

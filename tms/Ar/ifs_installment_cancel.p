@@ -74,14 +74,14 @@ ELSE ASSIGN
 
 RequestLoop:
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = gcBrand AND
+         MsRequest.Brand     = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType   = 9       AND
          MsRequest.ReqStatus = 2       AND
          MsRequest.ActStamp >= ldCheck AND
          MsRequest.DoneStamp >= ldFrom AND
          MsRequest.DoneStamp <= ldTo,
    FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
          DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
          DayCampaign.DCType = "5"
    ON QUIT UNDO, RETRY
@@ -106,7 +106,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       termination */
    ldDebt = 0.    
    FIND FIRST SingleFee WHERE
-              SingleFee.Brand     = gcBrand AND
+              SingleFee.Brand     = Syst.CUICommon:gcBrand AND
               SingleFee.HostTable = "MobSub" AND
               SingleFee.KeyValue  = STRING(MsRequest.MsSeq) AND
               SingleFee.CalcObj   = "DC" + STRING(DCCLI.PerContractID)

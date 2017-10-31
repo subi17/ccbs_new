@@ -106,7 +106,7 @@ orders = "  By RepType  ,  By Member  ,By 3, By 4".
 
 FIND FIRST FATGMember WHERE
            FATGMember.FTGrp = FTGrp AND 
-           FAtgmember.Brand = gcBrand 
+           FAtgmember.Brand = Syst.CUICommon:gcBrand 
  NO-LOCK NO-ERROR.
 IF AVAILABLE FATGMember THEN ASSIGN
    Memory       = recid(FATGMember)
@@ -139,7 +139,7 @@ ADD-ROW:
 
            CREATE FATGMember.
            ASSIGN
-           FATGmember.Brand = gcBrand 
+           FATGmember.Brand = Syst.CUICommon:gcBrand 
            FATGMember.FTGrp = FTGrp.
 
            RUN local-UPDATE-record.
@@ -161,7 +161,7 @@ ADD-ROW:
       /* is there ANY record ? */
       FIND FIRST FATGMember WHERE
                  FATGMember.FTGrp = FTGrp AND 
-                 FAtgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+                 FAtgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FATGMember THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -358,7 +358,7 @@ BROWSE:
        IF MemberType ENTERED THEN DO:
           FIND FIRST FATGMember WHERE 
                      FATGMember.FTGmember  >= Membertype AND 
-                     FAtgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+                     FAtgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
           IF NOT AVAILABLE FATGMember THEN DO:
              BELL.
              MESSAGE "NOT FOUND !".
@@ -383,7 +383,7 @@ BROWSE:
           FIND FIRST FATGMember WHERE 
                      FATGMember.FTGrp     >= FTGrp AND
                      FATGmember.ftgmember >= fatgmember         AND 
-                     FAtgmember.Brand      = gcBrand 
+                     FAtgmember.Brand      = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
           IF NOT AVAILABLE FATGMember THEN DO:
              BELL. MESSAGE "NOT FOUND !".
@@ -451,7 +451,7 @@ BROWSE:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST FATGMember
-           WHERE Fatgmember.Brand = gcBrand) THEN DO:
+           WHERE Fatgmember.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -521,33 +521,33 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST FATGMember WHERE
            FATGMember.FTGrp = FTGrp
-        AND FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+        AND FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST FATGMember USE-INDEX FTGrp
-       WHERE FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST FATGMember WHERE
                   FATGMember.FTGrp = FTGrp AND 
-                  FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+                  FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST FATGMember USE-INDEX FTGrp
-       WHERE FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT FATGMember WHERE
            FATGMember.FTGrp = FTGrp AND 
-           FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+           FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT FATGMember USE-INDEX FTGrp
-       WHERE FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV FATGMember WHERE
            FATGMember.FTGrp = FTGrp AND 
-           FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+           FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV FATGMember USE-INDEX FTGrp
-       WHERE FATgmember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE FATgmember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -573,7 +573,7 @@ PROCEDURE local-find-others.
       liCCN = INTEGER(FATGMember.FTGMember) NO-ERROR.
       
       FIND FIRST CCN where 
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.CUICommon:gcBrand AND
                  CCN.CCN   = liCCN NO-LOCK NO-ERROR.
       IF AVAIL CCN THEN
           membername = CCN.CCNname.
@@ -581,7 +581,7 @@ PROCEDURE local-find-others.
    END.
    ELSE IF FATGMember.MemberType = 1 THEN DO:
       FIND FIRST BillItem where 
-                 BillItem.Brand = gcBrand AND 
+                 BillItem.Brand = Syst.CUICommon:gcBrand AND 
                  BillItem.BillCode = FATGMember.FTGMember NO-LOCK NO-ERROR.
       IF AVAIL BillItem THEN
           membername = BillItem.BIName.
@@ -615,7 +615,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF fatgmember.membertype = 1 THEN RUN Help/nntuse.p.
 
                 IF CAN-FIND (FIRST xxmember WHERE
-                             xxmember.brand      = gcBrand               AND
+                             xxmember.brand      = Syst.CUICommon:gcBrand               AND
                              xxmember.membertype = fatgmember.membertype AND
                              xxmember.ftgrp      = FatGmember.ftgrp      AND
                              xxmember.ftgmember  = siirto                AND
@@ -649,7 +649,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "FTgMember" THEN DO:
 
                    IF CAN-FIND (FIRST xxmember WHERE
-                          xxmember.brand      = gcBrand               AND 
+                          xxmember.brand      = Syst.CUICommon:gcBrand               AND 
                           xxmember.membertype = fatgmember.membertype AND
                           xxmember.ftgrp      = FatGmember.ftgrp      AND
                           xxmember.ftgmember  = INPUT FRAME lis
@@ -668,7 +668,7 @@ PROCEDURE local-UPDATE-record:
                       liCCN = INTEGER(FATGMember.FTGMember) NO-ERROR.
                     
                       FIND FIRST CCN where 
-                                 CCN.Brand = gcBrand AND
+                                 CCN.Brand = Syst.CUICommon:gcBrand AND
                                  CCN.CCN = liCCN NO-LOCK NO-ERROR.
 
                       IF NOT AVAIL CCN THEN DO:
@@ -683,7 +683,7 @@ PROCEDURE local-UPDATE-record:
 
                    ELSE IF  FATGMember.MemberType = 1 THEN DO:
                       FIND FIRST BillItem where 
-                                 BillItem.Brand = gcBrand AND 
+                                 BillItem.Brand = Syst.CUICommon:gcBrand AND 
                                  BillItem.BillCode = FATGMember.FTGMember 
                       NO-LOCK NO-ERROR.
 

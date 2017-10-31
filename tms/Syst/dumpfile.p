@@ -71,7 +71,7 @@ FORM
     DumpFile.Active
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  DUMP FILES  " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -438,7 +438,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcDescription WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -484,7 +484,7 @@ REPEAT WITH FRAME sel:
        END.
  
        IF CAN-FIND(FIRST DFTimeTable WHERE 
-                         DFTimeTable.Brand  = gcBrand AND 
+                         DFTimeTable.Brand  = Syst.CUICommon:gcBrand AND 
                          DFTimeTable.DumpID = DumpFile.DumpID)
        THEN DO:
           MESSAGE "Timetable definitions exist. Delete not allowed."

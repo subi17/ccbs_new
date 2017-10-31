@@ -40,7 +40,7 @@ DEF VAR IGName  LIKE InvGroup.IGName NO-UNDO.
 
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(112)" SKIP
-   ynimi AT 1
+   Syst.CUICommon:ynimi AT 1
    "MONTHLY CALLS"   at 33  s-head  at 50 pvm format "99-99-99" TO 112 SKIP
    "month" at 33 Month at 39  IGName at 50 "Page"  TO 107
       sl format "ZZZ9" TO 112 SKIP
@@ -88,7 +88,7 @@ skip(3)
                  help "Customers with exceeded Limit / all (A/E)"        skip(3)
 WITH
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
-    " " + ynimi + " Monthly call counter report " + string(pvm,"99-99-99") + " "
+    " " + Syst.CUICommon:ynimi + " Monthly call counter report " + string(pvm,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 

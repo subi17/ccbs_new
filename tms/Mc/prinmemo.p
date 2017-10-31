@@ -110,7 +110,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
    DISPLAY lcTarget lcName lcAddr lcPost WITH FRAME rajat.
 END.
 
-FIND FIRST Memo WHERE Memo.Brand     = gcBrand     AND
+FIND FIRST Memo WHERE Memo.Brand     = Syst.CUICommon:gcBrand     AND
                       Memo.HostTable = icHostTable AND
                       Memo.KeyValue  = icKeyValue  AND 
                       Memo.MemoSeq   = iiMemoSeq NO-LOCK NO-ERROR.

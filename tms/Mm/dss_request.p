@@ -79,7 +79,7 @@ PROCEDURE pDSSContract:
    DEF BUFFER bMsRequest      FOR MsRequest.
    
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
               LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0
         NO-LOCK NO-ERROR.
@@ -112,7 +112,7 @@ PROCEDURE pDSSContract:
                   MServiceLimit.Custnum NE MsRequest.Custnum:
 
             FIND FIRST bMsRequest NO-LOCK WHERE
-                       bMsRequest.Brand = gcBrand AND
+                       bMsRequest.Brand = Syst.CUICommon:gcBrand AND
                        bMsRequest.ReqType = 83 AND
                        bMsRequest.Custnum = MServiceLimit.Custnum AND
                        bMsRequest.ReqCParam3 = MsRequest.ReqCParam3 AND
@@ -232,7 +232,7 @@ PROCEDURE pFinalize:
          lcCLI = SUBSTRING(ENTRY(liCount,lcMSISDNS,";"),3). /*remove 34 prefix*/
 
          FIND FIRST MobSub WHERE
-                    MobSub.Brand = gcBrand AND
+                    MobSub.Brand = Syst.CUICommon:gcBrand AND
                     MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
          /* Exclude subs. who requested DSS activation */
          IF NOT AVAILABLE MobSub OR MobSub.CLI = MsRequest.CLI THEN NEXT.
@@ -338,7 +338,7 @@ PROCEDURE pFinalize:
                MobSub.Custnum = MsRequest.Custnum AND
                MobSub.MultiSimID > 0,
          FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-               lbMobSub.Brand = gcBrand AND
+               lbMobSub.Brand = Syst.CUICommon:gcBrand AND
                lbMobSub.MultiSImID = Mobsub.MultiSImID AND
                lbMobSub.MultiSimType NE Mobsub.MultiSIMType AND
                lbMobSub.Custnum = Mobsub.Custnum:
@@ -447,7 +447,7 @@ PROCEDURE pHandleOtherServices:
           ldeStamp = MsRequest.ActStamp.
 
    FOR EACH lbMobSub WHERE
-            lbMobSub.Brand   = gcBrand AND
+            lbMobSub.Brand   = Syst.CUICommon:gcBrand AND
             lbMobSub.InvCust = MsRequest.CustNum AND
             LOOKUP(lbMobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
             (LOOKUP(lbMobSub.TariffBundle,lcDSS2PrimarySubsType) = 0 AND
@@ -486,7 +486,7 @@ PROCEDURE pHandleOtherServices:
 
    FOR EACH ttContract:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:

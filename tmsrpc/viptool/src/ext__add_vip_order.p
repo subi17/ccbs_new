@@ -73,7 +73,7 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 
 {Func/orderchk.i}
@@ -158,7 +158,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL (INPUT pcTitle AS CHARACTER,
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "Order" 
       Memo.KeyValue  = STRING(Order.OrderId) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -254,7 +254,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DO:
       CREATE OrderCustomer.
       ASSIGN
-         OrderCustomer.Brand           = gcBrand 
+         OrderCustomer.Brand           = Syst.CUICommon:gcBrand 
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
@@ -331,7 +331,7 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
    IF pcNumberType EQ "new" THEN DO:
 
       FIND FIRST MSISDN NO-LOCK
-         WHERE msisdn.brand EQ gcBrand 
+         WHERE msisdn.brand EQ Syst.CUICommon:gcBrand 
          AND MSISDN.ValidTo GE {&nowts}
          AND msisdn.cli EQ pcCLI
          AND msisdn.statuscode EQ 1 
@@ -351,7 +351,7 @@ FUNCTION fCheckSIM RETURNS CHARACTER:
    IF pcIcc NE '' THEN 
    DO:
        FIND FIRST SIM EXCLUSIVE-LOCK
-          WHERE SIM.brand EQ gcBrand 
+          WHERE SIM.brand EQ Syst.CUICommon:gcBrand 
           AND SIM.ICC EQ pcIcc
           AND SIM.simstat EQ 1 
           NO-ERROR.
@@ -375,7 +375,7 @@ END.
 FUNCTION fCreateOrder RETURNS LOGICAL:
    CREATE Order.
    ASSIGN
-      Order.Brand           = gcBrand 
+      Order.Brand           = Syst.CUICommon:gcBrand 
       Order.OrderId         = liOrderId
       Order.Salesman        = pcSalesman
       Order.Source          = "external"
@@ -406,13 +406,13 @@ FUNCTION fHandleCorporateCustomer RETURNS LOGICAL:
 
    IF lcIdType = "CIF" THEN DO:
       FIND FIRST Customer WHERE
-                 Customer.Brand      = gcBrand  AND
+                 Customer.Brand      = Syst.CUICommon:gcBrand  AND
                  Customer.OrgId      = lcId     AND
                  Customer.CustIdType = lcIdType AND
                  Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
       IF AVAIL Customer THEN DO:
          FIND FIRST MobSub WHERE
-                    MobSub.Brand   = gcBrand AND
+                    MobSub.Brand   = Syst.CUICommon:gcBrand AND
                     MobSub.AgrCust = Customer.CustNum
               NO-LOCK NO-ERROR.
          IF NOT AVAIL MobSub THEN Order.StatusCode = "20".
@@ -432,7 +432,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
       CREATE OrderTopup.
       ASSIGN
          OrderTopup.Amount = pfTopup
-         OrderTopup.Brand = gcBrand 
+         OrderTopup.Brand = Syst.CUICommon:gcBrand 
          OrderTopup.OrderId = Order.OrderId
          /*OrderTopup.VatAmount = */
       .
@@ -452,7 +452,7 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
    CREATE OrderAccessory.
    ASSIGN
       OrderAccessory.OrderId     = Order.OrderId
-      OrderAccessory.brand       = gcBrand 
+      OrderAccessory.brand       = Syst.CUICommon:gcBrand 
       OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}
       OrderAccessory.ProductCode = OfferItem.ItemKey 
       OrderAccessory.Amount      = OfferItem.Amount .
@@ -559,7 +559,7 @@ fGetOrderFields().
 
 IF pcOfferId NE "" THEN DO:
    FIND Offer WHERE 
-        Offer.Brand = gcBrand AND 
+        Offer.Brand = Syst.CUICommon:gcBrand AND 
         Offer.Offer = pcOfferId NO-LOCK NO-ERROR.
    IF NOT AVAIL Offer THEN
       RETURN appl_err("Offer " + pcOfferId + " is not defined").
@@ -567,7 +567,7 @@ IF pcOfferId NE "" THEN DO:
    
    /* check CLIType using OfferCriteria */
    FIND FIRST OfferCriteria WHERE
-              OfferCriteria.Brand = gcBrand AND
+              OfferCriteria.Brand = Syst.CUICommon:gcBrand AND
               OfferCriteria.Offer = Offer.Offer AND
               OfferCriteria.EndStamp   >= pdePriceSelTime AND
               OfferCriteria.BeginStamp <= pdePriceSelTime AND

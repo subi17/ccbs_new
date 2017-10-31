@@ -107,7 +107,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST Order WHERE 
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Order THEN DO:
    MESSAGE "Order not available"
@@ -436,7 +436,7 @@ REPEAT WITH FRAME sel:
      END.
          
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO: 
-        RUN Mc/eventsel.p("OrderAction", "#BEGIN" + chr(255) + gcBrand + chr(255) + STRING(iiOrder)).
+        RUN Mc/eventsel.p("OrderAction", "#BEGIN" + chr(255) + Syst.CUICommon:gcBrand + chr(255) + STRING(iiOrder)).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -471,25 +471,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST OrderAction WHERE 
-      OrderAction.Brand = gcBrand AND
+      OrderAction.Brand = Syst.CUICommon:gcBrand AND
       OrderAction.OrderId = iiOrder NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST OrderAction WHERE 
-      OrderAction.Brand = gcBrand AND
+      OrderAction.Brand = Syst.CUICommon:gcBrand AND
       OrderAction.OrderId = iiOrder NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT OrderAction WHERE 
-      OrderAction.Brand = gcBrand AND
+      OrderAction.Brand = Syst.CUICommon:gcBrand AND
       OrderAction.OrderId = iiOrder NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV OrderAction WHERE 
-      OrderAction.Brand = gcBrand AND
+      OrderAction.Brand = Syst.CUICommon:gcBrand AND
       OrderAction.OrderId = iiOrder NO-LOCK NO-ERROR.
 END PROCEDURE.
 

@@ -76,7 +76,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  Matrix MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -142,7 +142,7 @@ ADD-ROW:
 
            CREATE Matrix.
            ASSIGN
-           Matrix.Brand  = gcBrand
+           Matrix.Brand  = Syst.CUICommon:gcBrand
            Matrix.MXSeq  = fGetNextMXSeq().
 
            RUN local-UPDATE-record.

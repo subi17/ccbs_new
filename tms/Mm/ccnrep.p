@@ -37,7 +37,7 @@ form
    SKIP(7)
 WITH
    WIDTH 80 ROW 1 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " CCN REPORT " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " CCN REPORT " + string(pvm,"99-99-99") + " "
    SIDE-LABELS FRAME start.
 
 ASSIGN 

@@ -99,7 +99,7 @@ form
     SingleFee.Billed        format "I/" column-label "I"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Single Fees "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -457,7 +457,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET  lcBrand WHEN gcAllBrand = TRUE 
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
             liCustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -481,7 +481,7 @@ BROWSE:
        CLEAR FRAME f3.
        Disp lcBrand With FRAME f3.
        
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             lcBillCode WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -834,7 +834,7 @@ PROCEDURE local-update-record:
                 PAUSE 0.
                 IF FRAME-FIELD = "CustNum" THEN DO:
                    FIND Customer WHERE 
-                        Customer.Brand   = gcBrand AND 
+                        Customer.Brand   = Syst.CUICommon:gcBrand AND 
                         Customer.CustNum =
                    INPUT FRAME lis SingleFee.CustNum NO-LOCK NO-ERROR.
                    IF NOT AVAIL Customer THEN DO:

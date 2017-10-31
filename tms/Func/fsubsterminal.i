@@ -14,7 +14,7 @@ FUNCTION fCreateSubsTerminal RETURNS INT
    DEF VAR liTerminalID AS INT NO-UNDO.
    
    IF CAN-FIND(FIRST SubsTerminal WHERE
-               SubsTerminal.Brand = gcBrand AND
+               SubsTerminal.Brand = Syst.CUICommon:gcBrand AND
                SubsTerminal.OrderID = ibOrder.OrderId NO-LOCK) THEN RETURN 0.
    
    FIND LAST SubsTerminal USE-INDEX TerminalID NO-LOCK NO-ERROR.

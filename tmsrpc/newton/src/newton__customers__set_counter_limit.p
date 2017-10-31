@@ -105,7 +105,7 @@ END.
 
 {Syst/commpaa.i}
 katun = pcUserName.
-gcBrand = lcBrand.
+Syst.CUICommon:gcBrand = lcBrand.
 {Func/flimitreq.i}
 
 /* ready to create the request */

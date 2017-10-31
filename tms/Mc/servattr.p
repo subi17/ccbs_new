@@ -103,7 +103,7 @@ form /* seek ServAttr  BY SAName */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND ServCom WHERE
-     ServCom.Brand   = gcBrand AND
+     ServCom.Brand   = Syst.CUICommon:gcBrand AND
      ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
 
 
@@ -148,7 +148,7 @@ REPEAT WITH FRAME sel:
               (ServAttr.ServAttr NOT ENTERED OR
               NOT CAN-FIND(ServAttr using  ServAttr.ServAttr WHERE  
                            ServAttr.ServCom = icServCom AND 
-                           ServAttr.Brand = gcBrand ),
+                           ServAttr.Brand = Syst.CUICommon:gcBrand ),
               "ServAttr " + string(INPUT ServAttr.ServAttr) +
               " already exists !").
            IF INPUT FRAME lis ServAttr.ServAttr NOT ENTERED THEN 
@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
            CREATE ServAttr.
            ASSIGN
            ServAttr.ServCom  = icServCom  
-           ServAttr.Brand    = gcBrand 
+           ServAttr.Brand    = Syst.CUICommon:gcBrand 
            ServAttr.ServAttr = INPUT FRAME lis ServAttr.ServAttr.
 
            RUN local-UPDATE-record.
@@ -177,7 +177,7 @@ REPEAT WITH FRAME sel:
       /* is there ANY record ? */
       FIND FIRST ServAttr WHERE 
                  ServAttr.ServCom = icServCom AND 
-                 ServAttr.Brand   = gcBrand 
+                 ServAttr.Brand   = Syst.CUICommon:gcBrand 
       NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServAttr THEN LEAVE LOOP.
       NEXT LOOP.
@@ -382,7 +382,7 @@ BROWSE:
        HIDE FRAME f1 NO-PAUSE.
        IF ServAttr ENTERED THEN DO:
           FIND FIRST ServAttr WHERE 
-                     ServAttr.Brand    = gcBrand AND 
+                     ServAttr.Brand    = Syst.CUICommon:gcBrand AND 
                      ServAttr.ServAttr >= ServAttr AND 
                      ServAttr.ServCom   = icServCom NO-LOCK NO-ERROR.
           IF NOT AVAILABLE ServAttr THEN DO:
@@ -407,7 +407,7 @@ BROWSE:
        HIDE FRAME f2 NO-PAUSE.
        IF SAName ENTERED THEN DO:
           FIND FIRST ServAttr WHERE 
-                     ServAttr.Brand   = gcBrand AND 
+                     ServAttr.Brand   = Syst.CUICommon:gcBrand AND 
                      ServAttr.SAName >= SAName AND 
                      ServAttr.ServCom  = icServCom NO-LOCK NO-ERROR.
           IF NOT AVAILABLE ServAttr THEN DO:
@@ -479,7 +479,7 @@ BROWSE:
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST ServAttr
            WHERE ServAttr.ServCom = icServCom AND 
-                 ServAttr.Brand = gcBrand) THEN DO:
+                 ServAttr.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -553,36 +553,36 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST ServAttr
        WHERE ServAttr.ServCom = icServCom AND 
-             ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST ServAttr USE-INDEX SAName
        WHERE ServAttr.ServCom = icServCom AND 
-             ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST ServAttr
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST ServAttr USE-INDEX SAName
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT ServAttr
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT ServAttr USE-INDEX SAName
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV ServAttr
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV ServAttr USE-INDEX SAName
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -602,7 +602,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND FIRST FeeModel WHERE 
-              FeeModel.Brand = gcBrand AND 
+              FeeModel.Brand = Syst.CUICommon:gcBrand AND 
               FeeModel.FeeModel = ServAttr.FeeModel NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -641,7 +641,7 @@ PROCEDURE local-UPDATE-record:
                 IF FRAME-FIELD = "FeeModel" AND 
                    INPUT FRAME lis ServAttr.Feemodel NE "" THEN DO:
                    FIND Feemodel WHERE 
-                        FeeModel.Brand    = gcBrand AND 
+                        FeeModel.Brand    = Syst.CUICommon:gcBrand AND 
                         FeeModel.FeeModel = INPUT FRAME lis ServAttr.FeeModel
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL FeeModel THEN DO:

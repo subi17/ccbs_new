@@ -1,6 +1,6 @@
 {Syst/testpaa.i}
 katun = "ari".
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam.i2}
 {Func/fmakemsreq.i}
 
@@ -34,7 +34,7 @@ for each order no-lock where
    IF (Order.OrderChannel = "pos" AND OrderAccessory.IMEI > "") OR
       (OrderAccessory.ProductCode > "" AND 
        CAN-FIND(FIRST BillItem WHERE
-                      BillItem.Brand    = gcBrand AND
+                      BillItem.Brand    = Syst.CUICommon:gcBrand AND
                       BillItem.BillCode = OrderAccessory.ProductCode AND
                       BillItem.BIGroup  = "7")) 
    THEN DO:                   

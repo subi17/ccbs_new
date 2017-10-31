@@ -368,12 +368,12 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 
@@ -383,12 +383,12 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 
@@ -398,12 +398,12 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 
@@ -413,12 +413,12 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN 
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 

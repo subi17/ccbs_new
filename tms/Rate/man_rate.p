@@ -82,7 +82,7 @@ form
       lcCLIType FORMAT "X(12)" HELP "CLI type, EMPTY = all"
          VALIDATE(INPUT lcCLIType = "" OR
                   CAN-FIND(CLIType WHERE 
-                           CLIType.Brand = gcBrand AND
+                           CLIType.Brand = Syst.CUICommon:gcBrand AND
                            CLIType.CLIType = INPUT lcCLIType),
                  "Unknown CLI type") SKIP
                  
@@ -97,7 +97,7 @@ form
 
 WITH OVERLAY ROW 1 WIDTH 80 COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-      " " + ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
+      " " + Syst.CUICommon:ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
       string(pvm,"99.99.99") + " "  
    NO-LABELS FRAME main.
    
@@ -137,7 +137,7 @@ WITH FRAME main  EDITING:
             end.
             else do:
                find invgroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     invgroup.Invgroup = ig-code no-lock no-error.
                if not avail invgroup then do:
                   bell.

@@ -16,7 +16,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/callquery.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -125,7 +125,7 @@ FUNCTION fCollectBalance RETURNS LOGIC
              ttCall.BalanceType  = icBalanceType.
 
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.CUICommon:gcBrand AND
                 BillItem.BillCode = icBillCode:
          ttCall.BIGroup = BillItem.BIGroup.
       END.
@@ -187,7 +187,7 @@ IF NOT MobSub.PayType THEN DO:
 END.
 
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT "rpc",
                INPUT first_of_month,
                INPUT TODAY,
@@ -206,7 +206,7 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
 IF liErrorCodeOut = 0 AND MobSub.FixedNumber > "" AND
    MobSub.CLI <> MobSub.FixedNumber THEN /* Partial terminated */
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT "rpc",
                INPUT first_of_month,
                INPUT TODAY,
@@ -269,11 +269,11 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          FIRST ServiceLimit NO-LOCK WHERE
                ServiceLimit.SlSeq   = MServiceLimit.SlSeq,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand   = gcBrand AND
+               DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                DayCampaign.DCEvent = ServiceLimit.GroupCode AND
                LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-               FixedFee.Brand     = gcBrand AND
+               FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue  = STRING(ttMsOwner.MsSeq) AND
                FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -282,7 +282,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                FixedFee.BegDate  <= ldaLastDay AND
                FixedFee.EndPer   >= liPeriod,
          FIRST FMItem NO-LOCK WHERE
-               FMItem.Brand     = gcBrand AND
+               FMItem.Brand     = Syst.CUICommon:gcBrand AND
                FMItem.FeeModel  = FixedFee.FeeModel AND
                FMItem.FromDate <= FixedFee.BegDate  AND
                FMItem.ToDate   >= FixedFee.BegDate:
@@ -367,7 +367,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
 
    /* Rest all fixed fee excluding first month fee */
    FOR EACH FixedFee USE-INDEX HostTable WHERE 
-            FixedFee.Brand      = gcBrand AND 
+            FixedFee.Brand      = Syst.CUICommon:gcBrand AND 
             FixedFee.CustNum    = MobSub.InvCust AND 
             FixedFee.HostTable  = "Mobsub" AND
             FixedFee.KeyValue   = STRING(Mobsub.MsSeq) AND
@@ -395,7 +395,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
 
    /* data upsell single fees */
    FOR EACH SingleFee USE-INDEX Custnum WHERE
-            SingleFee.Brand = gcBrand AND
+            SingleFee.Brand = Syst.CUICommon:gcBrand AND
             SingleFee.Custnum = Mobsub.InvCust AND
             SingleFee.HostTable = "Mobsub" AND
             SingleFee.KeyValue = STRING(Mobsub.MsSeq) AND
@@ -615,10 +615,10 @@ PROCEDURE pGetBundleFirstMonthFee:
    IF AVAILABLE bMServiceLimit THEN DO:
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND 
+                DayCampaign.Brand   = Syst.CUICommon:gcBrand AND 
                 DayCampaign.DCEvent = icDcEvent,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -630,7 +630,7 @@ PROCEDURE pGetBundleFirstMonthFee:
           FIRST FFItem OF FixedFee NO-LOCK WHERE
                 FFItem.BillPeriod = liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.CUICommon:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate  AND

@@ -22,7 +22,7 @@
 ------------------------------------------------------ */
 
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "cron".
 
 {Syst/eventlog.i}
@@ -61,7 +61,7 @@ PROCEDURE pCallDump:
 
    /* connect to correct cdr dbs before starting the dump modules */
    fInitializeConnectTables(icTableNames,"").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                           "", 
                           idaRunDate,
                           idaRunDate).
@@ -83,7 +83,7 @@ PROCEDURE pCallDump:
       
    IF ldaOldDb NE ? THEN DO:
       fInitializeConnectTables(icTableNames,"").
-      RUN pDirectConnect2Dbs(gcBrand,
+      RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                              "", 
                              ldaOldDb,
                              ldaOldDb).

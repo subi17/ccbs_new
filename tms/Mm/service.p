@@ -66,7 +66,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "    Service Groups    "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -145,7 +145,7 @@ ADD-ROW:
            VALIDATE
               (Service.Service NOT ENTERED OR
               NOT CAN-FIND(Service using  Service.Service WHERE
-                           Service.Brand = gcBrand ),
+                           Service.Brand = Syst.CUICommon:gcBrand ),
               "Service " + string(INPUT Service.Service) +
               " already exists !").
            IF INPUT FRAME lis Service.Service NOT ENTERED THEN 
@@ -153,7 +153,7 @@ ADD-ROW:
            CREATE Service.
            ASSIGN
            Service.Service = INPUT FRAME lis Service.Service
-           Service.Brand  = gcBrand .
+           Service.Brand  = Syst.CUICommon:gcBrand .
 
            RUN local-UPDATE-record.
 
@@ -371,7 +371,7 @@ BROWSE:
        CLEAR FRAME f1.
        DISP lcBrand WITH FRAME f1.
 
-       SET lcBrand WHEN gcAllBrand = TRUE 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
            Service WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Service ENTERED THEN DO:
@@ -434,7 +434,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        IF can-find(FIRST ServCom WHERE  
-                         ServCom.Brand = gcBrand AND 
+                         ServCom.Brand = Syst.CUICommon:gcBrand AND 
                          ServCom.Service = Service.Service) THEN DO:
           MESSAGE
           "This Service contains one " SKIP

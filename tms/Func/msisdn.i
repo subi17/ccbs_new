@@ -47,7 +47,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
    IF  crit = "DATA" THEN  DO:
 
       Find first tmsparam where
-                 TmsParam.Brand      = gcBrand        AND 
+                 TmsParam.Brand      = Syst.CUICommon:gcBrand        AND 
                  tmsparam.paramgroup = "subser"       AND
                  tmsparam.paramcode  = "DataNumber" 
       NO-LOCK NO-ERROR.
@@ -77,7 +77,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
 
             /* check IF msisdn number is already in use */
             IF NOT can-find(FIRST msisdn where
-                                  msisdn.Brand = gcBrand AND 
+                                  msisdn.Brand = Syst.CUICommon:gcBrand AND 
                                   msisdn.cli = lcGSData + string(liCLI))        
             THEN LEAVE MSISDN.
          END.
@@ -91,7 +91,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
 
    ELSE IF crit = "FAX"  THEN DO:
       Find first tmsparam where
-                 TmsParam.Brand      = gcBrand        AND 
+                 TmsParam.Brand      = Syst.CUICommon:gcBrand        AND 
                  tmsparam.paramgroup = "subser"       AND
                  tmsparam.paramcode  = "FaxNumber" EXCLUSIVE-LOCK NO-ERROR.
 
@@ -107,7 +107,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
 
             /* check IF msisdn number is already in use */
             IF NOT can-find(FIRST msisdn where
-                                  msisdn.Brand = gcBrand AND 
+                                  msisdn.Brand = Syst.CUICommon:gcBrand AND 
                                   msisdn.cli = lcGSFAX + string(liCLI))        
             THEN LEAVE MSISDN.
          END.
@@ -144,7 +144,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
       REPEAT:
          /* check IF msisdn number is already in use */
          IF NOT can-find(FIRST msisdn where
-                               msisdn.Brand = gcBrand AND 
+                               msisdn.Brand = Syst.CUICommon:gcBrand AND 
                                msisdn.cli = lcGSDcf + string(liCLI))    
          THEN LEAVE MSISDN.
 

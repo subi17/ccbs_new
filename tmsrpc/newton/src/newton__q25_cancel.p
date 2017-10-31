@@ -23,7 +23,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i} /* fReqStatus */
 {Func/fmakemsreq.i}
@@ -131,7 +131,7 @@ END.
 ELSE DO: /* Cancel Quota 25 Extension */
 
    FIND DCCLI NO-LOCK WHERE
-        DCCLI.Brand   EQ gcBrand AND
+        DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
         DCCLI.DCEvent EQ "RVTERM12" AND
         DCCLI.MsSeq   EQ MobSub.MsSeq AND
         DCCLI.ValidTo >= TODAY
@@ -161,7 +161,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
          llCreateFees = FALSE.
 
       FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-           FixedFee.Brand     = gcBrand   AND
+           FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
            FixedFee.CustNum   = MobSub.CustNum AND
            FixedFee.HostTable = "MobSub"  AND
            FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -175,7 +175,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
       FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
          IF FFItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = gcBrand AND
+                            Invoice.Brand   = Syst.CUICommon:gcBrand AND
                             Invoice.InvNum  = FFItem.InvNum AND
                             Invoice.InvType = 1 NO-LOCK) THEN NEXT.
          liLastUnBilledPeriod = FFItem.BillPeriod.
@@ -218,7 +218,7 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

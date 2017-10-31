@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
@@ -18,7 +18,7 @@ OUTPUT TO "/apps/yoigo/tms_support/testing/voip_fee_change.txt" append.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = gcBrand AND
+          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
           DayCampaign.DCEvent = "BONO_VOIP" NO-LOCK,
     FIRST ServiceLimit WHERE
           ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK,
@@ -57,7 +57,7 @@ FOR FIRST DayCampaign WHERE
    llclosed = FALSE.
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand   AND 
+            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(liMsSeq) AND
             FixedFee.CalcObj   = DayCampaign.DCEvent:

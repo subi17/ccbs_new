@@ -191,7 +191,7 @@ form
                                    skip
 WITH
    OVERLAY width 80 ROW 1 side-labels COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + "   CREDIT NOTES        " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + "   CREDIT NOTES        " + string(pvm,"99-99-99") + " "
    FRAME rajat.
 
 form
@@ -371,14 +371,14 @@ repeat WITH FRAME rajat:
 
          UPDATE lcExtInvID validate(lcExtInvID = "" OR 
                           can-find(FIRST Invoice where 
-                                         Invoice.Brand  = gcBrand AND
+                                         Invoice.Brand  = Syst.CUICommon:gcBrand AND
                                          Invoice.ExtInvID = input lcExtInvID),
                           "Unknown invoice !").
 
          IF lcExtInvID = "" THEN LEAVE rajat.
 
          FIND Invoice WHERE
-              Invoice.Brand    = gcBrand AND
+              Invoice.Brand    = Syst.CUICommon:gcBrand AND
               Invoice.ExtInvID = lcExtInvID NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Invoice THEN NEXT.
          
@@ -399,7 +399,7 @@ repeat WITH FRAME rajat:
    END.
 
    FIND Invoice where Invoice.InvNum = liInvNum no-lock.
-   IF Invoice.Brand NE gcBrand THEN DO:
+   IF Invoice.Brand NE Syst.CUICommon:gcBrand THEN DO:
       MESSAGE "Invoice belongs to brand" Invoice.Brand
       VIEW-AS ALERT-BOX
       ERROR.
@@ -456,7 +456,7 @@ repeat WITH FRAME rajat:
    
    DO FOR InvGroup:
       FIND FIRST InvGroup WHERE
-                 InvGroup.Brand    = gcBrand AND
+                 InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                  InvGroup.InvGroup = Customer.InvGroup 
       no-lock no-error.
       DISPLAY InvGroup.IGName.  

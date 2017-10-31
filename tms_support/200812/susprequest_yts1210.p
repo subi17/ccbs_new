@@ -32,7 +32,7 @@ DEF BUFFER bMsReq     FOR MsRequest.
 
 FIND MsRequest WHERE
      MsRequest.MsRequest = iiRequest AND
-     MsRequest.Brand     = gcBrand
+     MsRequest.Brand     = Syst.CUICommon:gcBrand
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MsRequest THEN DO:
@@ -122,7 +122,7 @@ PROCEDURE pNew:
    
    /* Package from MsRequest */
    FIND FIRST CTServPac NO-LOCK WHERE
-              CTServPac.Brand     = gcBrand   AND
+              CTServPac.Brand     = Syst.CUICommon:gcBrand   AND
               CTServPac.CLIType   = icCLIType AND
               CTServPac.ServPac   = icServPac AND
               CTServPac.FromDate <= idtDate   AND
@@ -140,14 +140,14 @@ PROCEDURE pNew:
    IF NOT fReqStatus(1,"") THEN RETURN.
     
    FOR EACH CTServEl NO-LOCK WHERE
-            CTServEl.Brand     = gcBrand            AND
+            CTServEl.Brand     = Syst.CUICommon:gcBrand            AND
             CTServEl.CLIType   = CTServPac.CLIType  AND
             CTServEl.ServPac   = CTServPac.ServPac  AND
             CTServEl.FromDate >= CTServPac.FromDate AND
             CTServEl.FromDate <= CTServPac.ToDate   AND
             CTServEl.FromDate <= idtDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand    = gcBrand          AND
+               ServCom.Brand    = Syst.CUICommon:gcBrand          AND
                ServCom.ServCom  = CTServEl.ServCom AND
                ServCom.Target   = 0
          BREAK BY CTServEl.ServPac

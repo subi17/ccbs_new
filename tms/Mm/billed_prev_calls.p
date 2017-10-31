@@ -77,7 +77,7 @@ lcFileName = lcSdir + "/" + lcfilename.
 OUTPUT STREAM sFile TO VALUE(lcfilename).
 
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand       AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand       AND
          Invoice.InvDate >= ldInvFromDate AND
          Invoice.InvDate <= ldInvToDate   AND
          Invoice.InvType  = iiInvType NO-LOCK,

@@ -144,7 +144,7 @@ IF CAN-FIND(FIRST ttError) THEN DO:
 
        /* save to db for reporting */
        CREATE ErrorLog.
-       ASSIGN ErrorLog.Brand     = gcBrand
+       ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
               ErrorLog.ActionID  = "DDPAYM"
               ErrorLog.TableName = "Invoice"
               ErrorLog.KeyValue  = ttError.Inv

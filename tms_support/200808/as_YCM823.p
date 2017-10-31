@@ -6,7 +6,7 @@ clis =
 
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 
 DEFINE VARIABLE lccli AS CHARACTER NO-UNDO. 

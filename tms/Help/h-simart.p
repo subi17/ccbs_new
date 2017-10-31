@@ -37,7 +37,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 MAIN:
 repeat:
 
-   find first SimArt WHERE SimArt.Brand = gcBrand no-lock no-error.
+   find first SimArt WHERE SimArt.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available SimArt then do:
       must-print = false.
       must-add = true.
@@ -68,7 +68,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(SimArt).
             down with frame sel.
-            find next SimArt WHERE SimArt.Brand = gcBrand 
+            find next SimArt WHERE SimArt.Brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
          end.
          must-print = false.
@@ -100,7 +100,7 @@ BROWSE:
             if frame-line = 1 then do:
                find SimArt where recid(SimArt) = rtab[frame-line] no-lock.
                find prev SimArt WHERE 
-                         SimArt.Brand = gcBrand no-lock no-error.
+                         SimArt.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available SimArt then do:
                   bell.
                   message "You are on 1st row !".              
@@ -126,7 +126,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find SimArt where recid(SimArt) = rtab[frame-line] no-lock .
                find next SimArt WHERE 
-                         SimArt.Brand = gcBrand no-lock no-error.
+                         SimArt.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available SimArt then do:
                   bell.
                   message "You are on last row !".
@@ -152,7 +152,7 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find SimArt where recid(SimArt) = memory no-lock no-error.
             find prev SimArt  WHERE
-                      SimArt.Brand = gcBrand no-lock no-error.
+                      SimArt.Brand = Syst.CUICommon:gcBrand no-lock no-error.
             if available SimArt then do:
 
                do i = 1 to (frame-down - 1):
@@ -193,7 +193,7 @@ BROWSE:
            hide frame hayr no-pause.
            if SimArt ENTERED then do:
               find first SimArt where 
-                         SimArt.Brand   = gcBrand AND 
+                         SimArt.Brand   = Syst.CUICommon:gcBrand AND 
                          SimArt.SimArt >= SimArt
               no-lock no-error.
               if not available SimArt then do:
@@ -219,7 +219,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first SimArt no-lock  WHERE
-                      SimArt.Brand = gcBrand.
+                      SimArt.Brand = Syst.CUICommon:gcBrand.
            memory = recid(SimArt).
            must-print = true.
            next LOOP.
@@ -228,7 +228,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last SimArt no-lock  WHERE
-                     SimArt.Brand = gcBrand.
+                     SimArt.Brand = Syst.CUICommon:gcBrand.
            memory = recid(SimArt).
            must-print = true.
            next LOOP.

@@ -57,7 +57,7 @@ Customer.CustName no-label format "x(20)"
 skip(7)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " SPECIFICATION OF FREE Calls " +
+   " " + Syst.CUICommon:ynimi + " SPECIFICATION OF FREE Calls " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
@@ -106,7 +106,7 @@ task:
 
    OUTPUT STREAM excel TO value(exName).
 
-   PUT STREAM excel UNFORMATTED ynimi.  RUN Syst/uexskip.p(2).
+   PUT STREAM excel UNFORMATTED Syst.CUICommon:ynimi.  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
    "Free Calls during " string(exdate1,"99.99.9999") " - "
    string(exdate2,"99.99.9999") " owned by customer "

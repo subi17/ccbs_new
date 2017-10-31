@@ -9,7 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
@@ -47,7 +47,7 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND FeeModel WHERE 
-     FeeModel.Brand = gcBrand AND
+     FeeModel.Brand = Syst.CUICommon:gcBrand AND
      FeeModel.FeeModel = pcId NO-LOCK NO-ERROR.
 IF NOT AVAIL FeeModel THEN DO:
    RETURN appl_err(SUBST("Charge event &1 not found", pcId)).

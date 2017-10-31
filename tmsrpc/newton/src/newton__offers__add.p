@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -52,7 +52,7 @@ katun = pcUserName.
 CREATE ttOffer.
 
 ttOffer.offer           = get_string(pcStruct,"id").
-ttOffer.brand           = gcBrand.
+ttOffer.brand           = Syst.CUICommon:gcBrand.
 ttOffer.todate = ( IF LOOKUP("valid_to", lcStruct) > 0
                    THEN get_date(pcStruct,"valid_to")
                    ELSE 12/31/2049 ).

@@ -105,7 +105,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    END.
    ELSE IF lcDCEvent > "" THEN 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                  DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    ELSE DISPLAY "" @ DayCampaign.DCName WITH FRAME fCriter.
                  
@@ -160,7 +160,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                   IF INPUT lcDCEvent = "" THEN LEAVE.
                    
                   FIND FIRST DayCampaign WHERE
-                             DayCampaign.Brand = gcBrand AND
+                             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                              DayCampaign.DCEvent = INPUT lcDCEvent 
                   NO-LOCK NO-ERROR.
                 
@@ -252,7 +252,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          liConCount = 0.
                   
          FOR EACH DCCLI NO-LOCK WHERE
-                  DCCLI.Brand      = gcBrand      AND
+                  DCCLI.Brand      = Syst.CUICommon:gcBrand      AND
                   DCCLI.MsSeq      = MobSub.MsSeq AND
                   DCCLI.ValidTo   >= ldtContrDate AND 
                   DCCLI.DCEvent   BEGINS "PAYTERM":        
@@ -266,7 +266,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          END.   
       END.       
       ELSE IF CAN-FIND(FIRST DCCLI WHERE
-                             DCCLI.Brand   = gcBrand AND
+                             DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                              DCCLI.DCEvent = lcDCEvent AND
                              DCCLI.MsSeq   = MobSub.MsSeq AND
                              DCCLI.ValidFrom <= ldtContrDate AND

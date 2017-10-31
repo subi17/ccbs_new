@@ -54,7 +54,7 @@ Runko:
 repeat:
 
    FIND FIRST CCN
-   USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+   USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CCN THEN DO:
       must-print = FALSE.
       must-add = TRUE.
@@ -82,7 +82,7 @@ LOOP:
                HIDE FRAME tlli no-pause.
                LEAVE add-new.
             END.
-            IF can-find(CCN WHERE CCN.Brand = gcBrand AND CCN.CCN = liCCN )
+            IF can-find(CCN WHERE CCN.Brand = Syst.CUICommon:gcBrand AND CCN.CCN = liCCN )
             THEN DO:
                BELL.
                message "Land  " + string(input liCCN) + " already exists !".
@@ -93,7 +93,7 @@ LOOP:
          CREATE CCN.
          ASSIGN
            ylin = recid(CCN)
-           CCN.Brand = gcBrand
+           CCN.Brand = Syst.CUICommon:gcBrand
            CCN.CCN = liCCN.
          UPDATE CCNName.
          CLEAR FRAME tlli no-pause.
@@ -104,7 +104,7 @@ LOOP:
 
       /* onko yhtaan tietuetta ? */
       FIND FIRST CCN
-      USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+      USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE CCN THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -122,7 +122,7 @@ print-line:
             DISPLAY CCN.CCN CCNName WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(CCN).
             DOWN WITH FRAME tlse.
-            FIND NEXT CCN USE-INDEX CCNName WHERE CCN.Brand = gcBrand 
+            FIND NEXT CCN USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK NO-ERROR.
          END.
          must-print = FALSE.
@@ -155,7 +155,7 @@ BROWSE:
             IF FRAME-LINE = 1 THEN DO:
                FIND CCN WHERE recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
                FIND prev CCN 
-               USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+               USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                IF NOT AVAILABLE CCN THEN DO:
                   BELL.
                   message "YOU ARE ON THE FIRST ROW !".
@@ -181,7 +181,7 @@ BROWSE:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CCN WHERE recid(CCN) = rtab[FRAME-LINE] NO-LOCK .
                FIND NEXT CCN 
-               USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+               USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                IF NOT AVAILABLE CCN THEN DO:
                   BELL.
                   message "YOU ARE ON THE LAST ROW".
@@ -207,13 +207,13 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND CCN WHERE recid(CCN) = ylin NO-LOCK NO-ERROR.
             FIND prev CCN 
-            USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+            USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
             IF AVAILABLE CCN THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
                   FIND prev CCN 
                   USE-INDEX CCNName
-                  WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+                  WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                   IF AVAILABLE CCN THEN ylin = recid(CCN).
                   ELSE i = FRAME-DOWN.
                END.
@@ -250,7 +250,7 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:
               FIND FIRST CCN WHERE 
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.CUICommon:gcBrand AND
                  CCN.CCNName >= haku
               USE-INDEX CCNName NO-LOCK NO-ERROR.
               IF NOT AVAILABLE CCN THEN DO:
@@ -284,7 +284,7 @@ BROWSE:
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
            FIND FIRST CCN 
-           USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK.
+           USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(CCN).
            must-print = TRUE.
            NEXT LOOP.
@@ -293,7 +293,7 @@ BROWSE:
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
            FIND LAST CCN 
-           USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK.
+           USE-INDEX CCNName WHERE CCN.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(CCN).
            must-print = TRUE.
            NEXT LOOP.

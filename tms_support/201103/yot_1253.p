@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun  = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -33,7 +33,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
          MNPProcess.statuscode = 2) EXCLUSIVE-LOCK.
 
    find order where
-        order.brand = gcBrand and
+        order.brand = Syst.CUICommon:gcBrand and
         order.orderid = MNPProcess.orderid and
         order.statuscode = "12" EXCLUSIVE-LOCK.
    find OrderCustomer of order where
@@ -64,7 +64,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
   
    /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = gcBrand AND
+            CallAlarm.Brand = Syst.CUICommon:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -90,7 +90,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
          CREATE ActionLog.
          ASSIGN
             ActionLog.ActionTS     = Func.Common:mMakeTS()
-            ActionLog.Brand        = gcBrand  
+            ActionLog.Brand        = Syst.CUICommon:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
             ActionLog.UserCode     = katun
@@ -143,7 +143,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
       IF Order.OrderChannel = "pos" THEN DO:
          
          FIND OrderAccessory WHERE
-              OrderAccessory.Brand = gcBrand AND
+              OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
          EXCLUSIVE-LOCK NO-ERROR.

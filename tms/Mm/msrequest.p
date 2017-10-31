@@ -121,7 +121,7 @@ form
     MsRequest.ReqStatus   COLUMN-LABEL "S"        FORMAT ">9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  Requests "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -231,7 +231,7 @@ END FUNCTION.
 FUNCTION fFrameTitle RETURNS LOGIC
   (icTitle AS CHAR).
 
-   FRAME sel:TITLE = " " + ynimi + "  " +
+   FRAME sel:TITLE = " " + Syst.CUICommon:ynimi + "  " +
                      icTitle + "  " +
                      string(pvm,"99-99-99") + " ".                               
 END FUNCTION.
@@ -253,7 +253,7 @@ END.
 
 ELSE 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = gcBrand,
+         RequestType.Brand = Syst.CUICommon:gcBrand,
    FIRST MsReqStatFunc NO-LOCK WHERE
          MsReqStatFunc.ReqType = RequestType.ReqType AND
          LENGTH(MsReqStatFunc.FuncGroup) > 2:
@@ -267,7 +267,7 @@ END.
 
 IF iiReqType >= 0 THEN DO:
    FIND RequestType WHERE
-        RequestType.Brand   = gcBrand AND
+        RequestType.Brand   = Syst.CUICommon:gcBrand AND
         RequestType.ReqType = iiReqType NO-LOCK NO-ERROR.
            
    IF NOT AVAILABLE RequestType THEN DO:
@@ -585,7 +585,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liRequest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -595,14 +595,14 @@ REPEAT WITH FRAME sel:
                MsRequest.MsRequest = liRequest
           NO-LOCK NO-ERROR.
 
-          IF NOT AVAILABLE MsRequest OR MsRequest.Brand NE gcBrand OR
+          IF NOT AVAILABLE MsRequest OR MsRequest.Brand NE Syst.CUICommon:gcBrand OR
              MsRequest.ReqType NE iiReqType OR
              (iiReqStatus NE ? AND MsRequest.ReqStat NE iiReqStatus)
           THEN RELEASE MsRequest.
 
 /* This was too slow */
 /*  THEN FIND LAST MsRequest WHERE
-                         MsRequest.Brand     = gcBrand   AND
+                         MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
                          MsRequest.ReqType   = iiReqType AND
                          MsRequest.MsRequest > liRequest AND
                          (IF iiReqStatus NE ? 
@@ -624,7 +624,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -653,7 +653,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -681,7 +681,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liStatus WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
@@ -1280,7 +1280,7 @@ PROCEDURE local-UPDATE-record:
       NO-LOCK NO-ERROR.
       
       FIND RequestType WHERE
-           RequestType.Brand   = gcBrand AND
+           RequestType.Brand   = Syst.CUICommon:gcBrand AND
            RequestType.ReqType = MsRequest.ReqType NO-LOCK NO-ERROR.
       IF AVAILABLE RequestType 
       THEN lcReqType = RequestType.ReqName.

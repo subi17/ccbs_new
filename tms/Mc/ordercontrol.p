@@ -22,7 +22,7 @@ IF llDoEvent THEN DO:
 END.               
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.CUICommon:gcBrand AND 
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 IF not avail order THEN DO:

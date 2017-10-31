@@ -53,7 +53,7 @@ ELSE ok = TRUE.
 IF ok THEN DO:
    
    FIND LAST new-Customer WHERE
-      new-Customer.Brand = gcBrand
+      new-Customer.Brand = Syst.CUICommon:gcBrand
    USE-INDEX CustNum NO-LOCK NO-ERROR.
    
    new-no = new-Customer.Custnum + 1.
@@ -80,7 +80,7 @@ IF ok THEN DO:
       new-Customer.PaymCust  = new-no
       new-Customer.RepCust   = new-no
       new-Customer.AgrCust   = new-no
-      new-customer.Brand     = gcBrand
+      new-customer.Brand     = Syst.CUICommon:gcBrand
       new-customer.CreUser   = katun
       new-customer.CreDate   = TODAY.
 

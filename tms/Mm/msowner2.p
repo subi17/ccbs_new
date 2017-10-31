@@ -146,7 +146,7 @@ ADD-ROW:
            CREATE MSOwner.
            ASSIGN
            MSOwner.CLI   = INPUT FRAME lis MSOwner.CLI
-           MSOWner.Brand = gcBrand .
+           MSOWner.Brand = Syst.CUICommon:gcBrand .
 
            RUN local-UPDATE-record.
 
@@ -493,7 +493,7 @@ PROCEDURE local-find-others.
    ELSE 
       ASSIGN UserName = "!! REMOVED USER !!".
    FIND CLIType where 
-        CliType.Brand   = gcBrand  AND 
+        CliType.Brand   = Syst.CUICommon:gcBrand  AND 
         CLIType.Clitype = MSOwner.Clitype NO-LOCK NO-ERROR.  
 
 END PROCEDURE.

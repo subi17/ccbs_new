@@ -136,7 +136,7 @@ REPEAT WITH FRAME sel:
            CTServAttr.ServAttr
               VALIDATE(INPUT CTServAttr.ServAttr = "" OR
                        CAN-FIND(ServAttr WHERE
-                                ServAttr.Brand   = gcBrand AND
+                                ServAttr.Brand   = Syst.CUICommon:gcBrand AND
                                 ServAttr.ServCom = CTServEl.ServCom AND
                                 ServAttr.ServAttr = INPUT CTServAttr.ServAttr),
                        "Unknown service attribute")
@@ -549,7 +549,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND ServAttr WHERE
-        ServAttr.Brand    = gcBrand          AND
+        ServAttr.Brand    = Syst.CUICommon:gcBrand          AND
         ServAttr.ServCom  = CTServEl.ServCom AND
         ServAttr.ServAttr = CTServAttr.ServAttr NO-LOCK NO-ERROR.
         
@@ -562,11 +562,11 @@ PROCEDURE local-UPDATE-record:
       CLEAR FRAME lis NO-PAUSE.
       
       FIND ServPac WHERE
-           ServPac.Brand   = gcBrand AND
+           ServPac.Brand   = Syst.CUICommon:gcBrand AND
            ServPac.ServPac = CTServEl.ServPac NO-LOCK NO-ERROR.
 
       FIND ServCom WHERE
-           ServCom.Brand   = gcBrand AND
+           ServCom.Brand   = Syst.CUICommon:gcBrand AND
            ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
            
       DISP 

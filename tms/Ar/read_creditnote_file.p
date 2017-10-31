@@ -10,7 +10,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -129,7 +129,7 @@ PROCEDURE pCreateCreditNote :
 
    /* check invoice */
    FIND Invoice WHERE 
-        Invoice.Brand = gcBrand AND
+        Invoice.Brand = Syst.CUICommon:gcBrand AND
         Invoice.ExtInvId = lcExtInvID NO-LOCK NO-ERROR.
    IF NOT AVAIL Invoice THEN RETURN "ERROR:Invalid invoice number".
 
@@ -184,7 +184,7 @@ PROCEDURE pCreateCreditNote :
    if lireq = 0 then RETURN "ERROR:" + lcError.
 
    create Memo.
-   assign Memo.Brand     = gcBrand
+   assign Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "Invoice"
           Memo.KeyValue  = string(Invoice.Invnum)
           Memo.CustNum   = Invoice.Custnum 

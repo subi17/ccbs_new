@@ -189,7 +189,7 @@ REPEAT WITH FRAME sel:
 
            CREATE DFTimeTable.
            ASSIGN 
-              DFTimeTable.Brand    = gcBrand 
+              DFTimeTable.Brand    = Syst.CUICommon:gcBrand 
               DFTimeTable.DumpID   = iiDumpID
               DFTimeTable.DumpDay  = INPUT FRAME lis DFTimeTable.DumpDay
               DFTimeTable.DumpWeekDay = INPUT FRAME lis DFTimeTable.DumpWeekDay
@@ -552,25 +552,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST DFTimeTable WHERE 
-      DFTimeTable.Brand  = gcBrand AND 
+      DFTimeTable.Brand  = Syst.CUICommon:gcBrand AND 
       DFTimeTable.DumpID = iiDumpID NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST DFTimeTable WHERE 
-      DFTimeTable.Brand  = gcBrand AND 
+      DFTimeTable.Brand  = Syst.CUICommon:gcBrand AND 
       DFTimeTable.DumpID = iiDumpID NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT DFTimeTable WHERE 
-      DFTimeTable.Brand  = gcBrand AND 
+      DFTimeTable.Brand  = Syst.CUICommon:gcBrand AND 
       DFTimeTable.DumpID = iiDumpID NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV DFTimeTable WHERE 
-      DFTimeTable.Brand  = gcBrand AND 
+      DFTimeTable.Brand  = Syst.CUICommon:gcBrand AND 
       DFTimeTable.DumpID = iiDumpID NO-LOCK NO-ERROR.
 END PROCEDURE.
 

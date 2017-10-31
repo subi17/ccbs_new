@@ -567,16 +567,16 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND FIRST BillItem WHERE 
-                 BillItem.Brand = gcBrand AND
+                 BillItem.Brand = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = InvRowCounter.BillCode NO-LOCK NO-ERROR.
 
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.CUICommon:gcBrand AND
                  CCN.CCN = InvRowCounter.CCN NO-LOCK NO-ERROR.
                  
       IF InvRowCounter.DCEvent > "" THEN            
       FIND FIRST DayCampaign WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = InvRowCounter.DCEvent NO-LOCK NO-ERROR.
            
       FIND FIRST Customer WHERE Customer.CustNum = InvRowCounter.InvCust

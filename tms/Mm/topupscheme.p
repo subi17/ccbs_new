@@ -67,7 +67,7 @@ FORM
     TopupScheme.ToDate       COLUMN-LABEL "Valid To"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  TOPUP SCHEMES  " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -413,7 +413,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcTopupScheme WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -450,7 +450,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        IF CAN-FIND(FIRST OfferItem WHERE 
-                         OfferItem.Brand    = gcBrand AND
+                         OfferItem.Brand    = Syst.CUICommon:gcBrand AND
                          OfferItem.ItemType = "Topup" AND
                          OfferItem.ItemKey = TopupScheme.TopupScheme)
        THEN DO:

@@ -39,7 +39,7 @@ IF NOT AVAILABLE mobsub THEN
 
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/dataformat.i}
 {Func/fdss.i}
 
@@ -64,7 +64,7 @@ IF lcDSSBundleId = {&DSS} OR
 liCount = 0.
 
 FOR EACH TMRule  NO-LOCK WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.CUICommon:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate >=  TODAY:
 

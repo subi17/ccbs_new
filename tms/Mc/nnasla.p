@@ -571,7 +571,7 @@ message "Calculating Balance Due, wait ...".
 
 IF AVAILABLE Customer AND 
    CAN-FIND(FIRST PaymPlan WHERE 
-                  PaymPlan.Brand = gcBrand AND
+                  PaymPlan.Brand = Syst.CUICommon:gcBrand AND
                   PaymPlan.CustNum = Customer.CustNum AND
                   PaymPlan.PPStatus = 3)
 THEN lcPaymPlan = "*Paym.plan*".
@@ -587,7 +587,7 @@ IF iiOrderID > 0 THEN DO:
    lcCredited = "".
 
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand     = gcBrand        AND
+            SingleFee.Brand     = Syst.CUICommon:gcBrand        AND
             SingleFee.HostTable = "Order"        AND
             SingleFee.KeyValue  = STRING(iiOrderID),
       FIRST Invoice NO-LOCK WHERE

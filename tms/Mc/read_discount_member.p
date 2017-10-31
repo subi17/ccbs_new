@@ -158,7 +158,7 @@ REPEAT TRANS:
    END.
       
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DiscountPlan THEN DO:
       fError("Unknown discount plan").
@@ -259,7 +259,7 @@ fCleanEventObjects().
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "DPMember"  
       ActionLog.KeyValue     = lcPlainFile
       ActionLog.ActionID     = "DISCUPDATE"

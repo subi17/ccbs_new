@@ -151,7 +151,7 @@ FORM
     SKIP(1)
 
 WITH
-   OVERLAY WIDTH 80 TITLE " " + ynimi + " ADV.PAYMENTS & DEPOSITS " + 
+   OVERLAY WIDTH 80 TITLE " " + Syst.CUICommon:ynimi + " ADV.PAYMENTS & DEPOSITS " + 
    STRING(pvm,"99-99-99") + " " CENTERED NO-LABELS FRAME MAIN.
 
 FUNCTION fChooseType RETURNS INTEGER
@@ -177,7 +177,7 @@ FUNCTION fCheckAcc RETURNS LOGICAL
     IF iAcc = 0 THEN RETURN TRUE. 
 
     FIND Account WHERE 
-         Account.Brand  = gcBrand AND
+         Account.Brand  = Syst.CUICommon:gcBrand AND
          Account.AccNum = iAcc NO-LOCK NO-ERROR.
     IF NOT AVAILABLE Account THEN DO:
         MESSAGE "Unknown Account" iAcc
@@ -277,7 +277,7 @@ REPEAT TRANS WITH FRAME MAIN:
          IF FRAME-FIELD = "CustNum" THEN DO:
             IF INPUT CustNum = 0 THEN UNDO MAIN, LEAVE MAIN.
             FIND FIRST Customer WHERE 
-                       Customer.Brand   = gcBrand AND
+                       Customer.Brand   = Syst.CUICommon:gcBrand AND
                        Customer.CustNum = INPUT CustNum 
             NO-LOCK NO-ERROR.
             IF NOT AVAIL Customer THEN DO:
@@ -291,7 +291,7 @@ REPEAT TRANS WITH FRAME MAIN:
          ELSE IF FRAME-field = "invnum" THEN DO:
             IF INPUT invnum NE 0 THEN DO:
                FIND FIRST Invoice WHERE 
-                          Invoice.Brand  = gcBrand AND
+                          Invoice.Brand  = Syst.CUICommon:gcBrand AND
                           Invoice.InvNum = INPUT invnum
                NO-LOCK NO-ERROR.
                IF NOT AVAIL Invoice THEN DO:

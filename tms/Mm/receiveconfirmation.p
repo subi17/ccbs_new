@@ -20,7 +20,7 @@ END.
 DEF BUFFER BufOrder FOR Order.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand and 
+           Order.Brand   = Syst.CUICommon:gcBrand and 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 MESSAGE "Oletko varma että palvelusopimus allekirjoitettu "

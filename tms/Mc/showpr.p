@@ -22,7 +22,7 @@ DEF VAR liInvType AS INT NO-UNDO.
 
 IF iiInvNum > 0 THEN DO: 
    FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE Invoice OR Invoice.Brand NE gcBrand THEN DO:
+   IF NOT AVAILABLE Invoice OR Invoice.Brand NE Syst.CUICommon:gcBrand THEN DO:
       MESSAGE "Unknown invoice" iiInvNum
       VIEW-AS ALERT-BOX
       ERROR.

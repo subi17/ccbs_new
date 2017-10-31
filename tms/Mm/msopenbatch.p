@@ -46,7 +46,7 @@ PUT STREAM alarmbatch UNFORMATTED
    TODAY "|" string(time,"hh:mm:ss") "|Start" SKIP.
  
 FOR EACH Mobsub NO-LOCK WHERE
-         MobSub.Brand    = gcBrand AND
+         MobSub.Brand    = Syst.CUICommon:gcBrand AND
          LOOKUP(STRING(Mobsub.msstatus),"7,37,47") > 0:
    
    liCreditType = fCreditTypeValue(MobSub.MsSeq,

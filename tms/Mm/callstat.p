@@ -118,7 +118,7 @@ tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 
 fMobCDRCollect(INPUT "post,pre",
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT katun,
                INPUT ldaFrom,
                INPUT ldaTo,
@@ -197,7 +197,7 @@ ELSE IF lcCrit = "PRODUCT" THEN DO:
       
       IF LAST-OF(BufferCall.billcode) THEN DO:
          FIND billitem where 
-              billitem.brand    = gcBrand         AND 
+              billitem.brand    = Syst.CUICommon:gcBrand         AND 
               billitem.billcode = BufferCall.billcode NO-LOCK NO-ERROR.
               
          disp BufferCall.billcode 
@@ -217,7 +217,7 @@ ELSE IF lcCrit = "CCN" THEN DO:
       
       IF LAST-OF(BufferCall.ccn) THEN DO:
          FIND ccn where 
-              ccn.brand  = gcBrand         AND 
+              ccn.brand  = Syst.CUICommon:gcBrand         AND 
               ccn.ccn    = BufferCall.ccn NO-LOCK NO-ERROR.
               
          disp BufferCall.ccn 

@@ -3,7 +3,7 @@
 
 {Syst/commpaa.i}
 katun = "cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/direct_dbconnect.i}
 {Syst/eventlog.i}
@@ -18,7 +18,7 @@ fInitializeConnectTables("PrepCDR","").
 
 ldaPrevPeriod = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
 
-RUN pDirectConnect2Dbs(gcBrand,
+RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                        "",
                        ldaPrevPeriod,
                        ldaPrevPeriod).

@@ -10,7 +10,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Newton".
 {Syst/tmsconst.i}
 
@@ -76,7 +76,7 @@ FOR EACH ttIMEI NO-LOCK:
    {newton/src/findtenant.i YES ordercanal Order OrderId ttIMEI.OrderId}
    
    FIND OrderAccessory WHERE
-        OrderAccessory.Brand = gcBrand AND
+        OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
         OrderAccessory.OrderId = ttImei.OrderId AND
         OrderAccessory.IMEI = ttImei.IMEI AND
         OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}

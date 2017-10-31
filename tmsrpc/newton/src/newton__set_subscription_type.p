@@ -22,7 +22,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Newton".
 
 {Func/fbankdata.i}
@@ -160,7 +160,7 @@ IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
 THEN RETURN appl_err(lcError).
 
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.CUICommon:gcBrand AND
            NewCLIType.CLIType = pcCliType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcCliType)).
@@ -226,7 +226,7 @@ IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.HostTable = "MobSub"
       Memo.KeyValue  = STRING(MobSub.MsSeq)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

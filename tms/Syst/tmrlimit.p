@@ -121,7 +121,7 @@ FUNCTION fDispAction RETURNS LOGIC
    lcRequest = "".
    IF iiAction > 0 THEN DO:
       FIND FIRST RequestType WHERE
-                 RequestType.Brand   = gcBrand AND
+                 RequestType.Brand   = Syst.CUICommon:gcBrand AND
                  RequestType.ReqType = iiAction NO-LOCK NO-ERROR.
       IF AVAILABLE RequestType THEN lcRequest = RequestType.ReqName.
    END.
@@ -136,7 +136,7 @@ FUNCTION fDispSMSText RETURNS LOGIC
    lcSMSText = "".
    
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand   AND 
+             InvText.Brand     = Syst.CUICommon:gcBrand   AND 
              InvText.Target    = "SMS"     AND
              InvText.KeyValue  = icSMSText AND
              InvText.FromDate <= TODAY     AND
@@ -775,7 +775,7 @@ PROCEDURE local-UPDATE-record:
                 
                   IF INPUT TMRLimit.Action > 0 AND 
                      NOT CAN-FIND(FIRST RequestType WHERE
-                                  RequestType.Brand = gcBrand AND
+                                  RequestType.Brand = Syst.CUICommon:gcBrand AND
                                   RequestType.ReqType = INPUT TMRLimit.Action)
                   THEN DO:
                      MESSAGE "Unknown action"

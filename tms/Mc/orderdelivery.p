@@ -324,7 +324,7 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.CUICommon:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -333,7 +333,7 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.CUICommon:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -342,7 +342,7 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.CUICommon:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -351,7 +351,7 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN
       FIND PREV OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.CUICommon:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -381,35 +381,35 @@ PROCEDURE local-find-others.
       liLOStatusId = OrderDelivery.LOStatusId.   
                              
    lcLOStatus = fGetItemName( 
-      gcBrand, 
+      Syst.CUICommon:gcBrand, 
       "LOStatusId", 
       STRING(liLOStatusId),
       5,
       TODAY).
    
    lcLO = fGetItemName( 
-      gcBrand, 
+      Syst.CUICommon:gcBrand, 
       "LOId", 
       STRING(OrderDelivery.LOId),
       5,
       TODAY).
    
    lcCourier = fGetItemName( 
-      gcBrand, 
+      Syst.CUICommon:gcBrand, 
       "CourierId", 
       STRING(OrderDelivery.CourierId),
       5,
       TODAY).
    
    lcIncidentInfoId = fGetItemName( 
-      gcBrand, 
+      Syst.CUICommon:gcBrand, 
       "IncidentInfoId", 
       STRING(OrderDelivery.IncidentInfoId),
       5,
       TODAY).
    
    lcMeasuresInfoId = fGetItemName( 
-      gcBrand, 
+      Syst.CUICommon:gcBrand, 
       "MeasuresInfoId", 
       STRING(OrderDelivery.MeasuresInfoId),
       5,

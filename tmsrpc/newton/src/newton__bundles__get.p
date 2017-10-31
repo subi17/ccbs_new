@@ -24,7 +24,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fprepaidfee.i}
@@ -133,7 +133,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                                           ELSE "National")).
 
    FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand     = gcBrand              AND
+              FMItem.Brand     = Syst.CUICommon:gcBrand              AND
               FMItem.FeeModel  = DayCampaign.FeeModel AND
               FMItem.ToDate   >= TODAY                AND 
               FMItem.FromDate <= TODAY                NO-ERROR.

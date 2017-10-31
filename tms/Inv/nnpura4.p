@@ -111,7 +111,7 @@ ELSE ASSIGN lev        = 106
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 FORMAT "x(30)"
+   Syst.CUICommon:ynimi at 1 FORMAT "x(30)"
       lcRepHeader FORMAT "x(35)" AT 45
       otsi[28] FORMAT "x(4)" AT 97     
       sl FORMAT "ZZZ9" SKIP
@@ -278,7 +278,7 @@ END.
 ELSE DO:
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand  AND
+            Customer.Brand    = Syst.CUICommon:gcBrand  AND
             Customer.CustNum >= CustNum1 AND
             Customer.CustNum <= CustNum2:
 

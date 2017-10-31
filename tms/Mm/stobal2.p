@@ -87,7 +87,7 @@ form /* seek Balance Record  BY SimArt */
 
 FIND Stock where 
      Stock.Stock = p-Stock AND 
-     Stock.Brand = gcBrand no-lock.
+     Stock.Brand = Syst.CUICommon:gcBrand no-lock.
 
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
@@ -97,7 +97,7 @@ orders = "By Code,By Code,By 3, By 4".
 
 
 FIND FIRST StoBal
-where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE StoBal THEN ASSIGN
    Memory       = recid(StoBal)
    must-print   = TRUE
@@ -135,7 +135,7 @@ ADD-ROW:
 
            IF INPUT StoBal.SimArt = "" THEN LEAVE ADD-ROW.
            IF CAN-FIND(FIRST StoBal WHERE
-                             StoBal.Brand  = gcBrand AND
+                             StoBal.Brand  = Syst.CUICommon:gcBrand AND
                              StoBal.StoBal = p-Stock AND
                              StoBal.SimArt = INPUT FRAME lis StoBal.SimArt) THEN DO:
               MESSAGE "Balance Record " + p-Stock + " already exists for Sim Article " +
@@ -145,7 +145,7 @@ ADD-ROW:
 
            CREATE StoBal.
            ASSIGN
-           StoBal.Brand  = gcBrand 
+           StoBal.Brand  = Syst.CUICommon:gcBrand 
            StoBal.StoBal = p-Stock
            StoBal.SimArt = INPUT FRAME lis StoBal.SimArt.
 
@@ -162,7 +162,7 @@ ADD-ROW:
       /* is there ANY record ? */
       FIND FIRST StoBal
       where StoBal.StoBal = p-Stock AND 
-            Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+            Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE StoBal THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -361,7 +361,7 @@ BROWSE:
        HIDE FRAME f2 NO-PAUSE.
        IF SimArt <> "" THEN DO:
           FIND FIRST StoBal WHERE StoBal.SimArt >= SimArt
-          AND StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand 
+          AND StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand 
           USE-INDEX SimArt  NO-LOCK NO-ERROR.
           IF NOT AVAILABLE StoBal THEN DO:
              BELL. MESSAGE "NOT FOUND !".
@@ -427,7 +427,7 @@ BROWSE:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST StoBal
-           where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand) THEN DO:
+           where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 no-MESSAGE.
               LEAVE LOOP.
@@ -492,30 +492,30 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST StoBal
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST StoBal USE-INDEX SimArt
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST StoBal
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST StoBal USE-INDEX SimArt
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT StoBal
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT StoBal USE-INDEX SimArt
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-prev:
        IF order = 1 THEN FIND prev StoBal
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND prev StoBal USE-INDEX SimArt
-       where StoBal.StoBal = p-Stock AND Stobal.Brand = gcBrand NO-LOCK NO-ERROR.
+       where StoBal.StoBal = p-Stock AND Stobal.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:

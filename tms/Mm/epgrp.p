@@ -47,7 +47,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " External BillCode groups "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -98,7 +98,7 @@ orders = "By Code,By Name,By 3, By 4".
 
 
 FIND FIRST EPGroup
-WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE EPGroup THEN ASSIGN
    Memory       = recid(EPGroup)
    must-print   = TRUE
@@ -137,14 +137,14 @@ ADD-ROW:
            VALIDATE
               (EPGroup.EpGroup NOT ENTERED OR
               NOT CAN-FIND(EPGroup using  EPGroup.EpGroup WHERE 
-                 epgroup.Brand = gcBrand ),
+                 epgroup.Brand = Syst.CUICommon:gcBrand ),
               "Ext. BillCode group " + string(INPUT EPGroup.EpGroup) +
               " already exists !").
            IF INPUT FRAME lis EPGroup.EpGroup = "" THEN 
            LEAVE add-row.
            CREATE EPGroup.
            ASSIGN
-           EPGroup.Brand   = gcBrand 
+           EPGroup.Brand   = Syst.CUICommon:gcBrand 
            EPGroup.EpGroup = INPUT FRAME lis EPGroup.EpGroup.
 
            RUN local-UPDATE-record.
@@ -163,7 +163,7 @@ ADD-ROW:
 
       /* is there ANY record ? */
       FIND FIRST EPGroup
-      WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+      WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE EPGroup THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -361,13 +361,13 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             EpGroup WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF EpGroup ENTERED THEN DO:
           FIND FIRST EPGroup WHERE 
                      EPGroup.EpGroup >= EpGroup AND 
-                     Epgroup.Brand = gcBrand 
+                     Epgroup.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
 
           IF NOT  fRecFound(1) THEN NEXT Browse.
@@ -383,13 +383,13 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             EpName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF EpName ENTERED THEN DO:
           FIND FIRST EPGroup USE-INDEX epname WHERE 
                      EPGroup.EpName >= EpName  AND 
-                     Epgroup.Brand = gcBrand 
+                     Epgroup.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
 
           IF NOT  fRecFound(2) THEN NEXT Browse.
@@ -478,7 +478,7 @@ BROWSE:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST EPGroup
-           WHERE epgroup.Brand = gcBrand) THEN DO:
+           WHERE epgroup.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -553,30 +553,30 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST EPGroup
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST EPGroup USE-INDEX EpName
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST EPGroup
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST EPGroup USE-INDEX EpName
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT EPGroup
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT EPGroup USE-INDEX EpName
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV EPGroup
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV EPGroup USE-INDEX EpName
-       WHERE epgroup.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE epgroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:

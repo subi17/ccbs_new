@@ -68,7 +68,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  BILLING ITEMS MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -443,17 +443,17 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        
        IF order = 1 AND icCriteria = "ID" THEN FIND FIRST Customer
-       WHERE Customer.Brand = gcBrand AND 
+       WHERE Customer.Brand = Syst.CUICommon:gcBrand AND 
              Customer.OrgID = icValue NO-LOCK NO-ERROR.
        ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN 
        FIND FIRST Customer  WHERE 
-                  Customer.Brand    = gcBrand                  AND 
+                  Customer.Brand    = Syst.CUICommon:gcBrand                  AND 
                   Customer.CustName  BEGINS  lcLastname        AND 
                   Customer.FirstName BEGINS  lcFirstName 
       NO-LOCK NO-ERROR.
        ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
           FIND FIRST Customer  WHERE
-                     Customer.Brand    = gcBrand               AND
+                     Customer.Brand    = Syst.CUICommon:gcBrand               AND
                      Customer.CustName  BEGINS  lcLastname     AND
                      Customer.FirstName BEGINS  lcFirstName    AND 
                      Customer.OrgID     = "" NO-LOCK NO-ERROR.
@@ -464,17 +464,17 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
 
        IF order = 1 AND icCriteria = "ID" THEN FIND LAST Customer
-              WHERE Customer.Brand = gcBrand  AND 
+              WHERE Customer.Brand = Syst.CUICommon:gcBrand  AND 
                     Customer.OrgID = icValue NO-LOCK NO-ERROR.
        ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN
           FIND LAST Customer  WHERE
-                    Customer.Brand    = gcBrand             AND
+                    Customer.Brand    = Syst.CUICommon:gcBrand             AND
                     Customer.CustName  BEGINS  lcLastname   AND
                     Customer.FirstName BEGINS  lcFirstName  AND 
                     Customer.OrgID ne "" NO-LOCK NO-ERROR.
        ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
           FIND LAST Customer  WHERE
-                    Customer.Brand    = gcBrand             AND
+                    Customer.Brand    = Syst.CUICommon:gcBrand             AND
                     Customer.CustName  BEGINS  lcLastname   AND
                     Customer.FirstName BEGINS  lcFirstName  AND 
                     Customer.OrgID = "" NO-LOCK NO-ERROR.
@@ -484,11 +484,11 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 AND icCriteria = "ID" THEN 
    FIND NEXT Customer
-       WHERE Customer.Brand = gcBrand AND 
+       WHERE Customer.Brand = Syst.CUICommon:gcBrand AND 
             Customer.OrgID = icValue NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN
    FIND NEXT Customer  WHERE
-             Customer.Brand    = gcBrand  AND
+             Customer.Brand    = Syst.CUICommon:gcBrand  AND
              Customer.CustName  BEGINS  lcLastname  AND
              Customer.FirstName BEGINS  lcFirstName AND 
              Customer.OrgID    NE "" 
@@ -496,7 +496,7 @@ PROCEDURE local-find-NEXT:
    NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
    FIND NEXT Customer  WHERE
-             Customer.Brand    = gcBrand            AND
+             Customer.Brand    = Syst.CUICommon:gcBrand            AND
              Customer.CustName  BEGINS  lcLastname  AND
              Customer.FirstName BEGINS  lcFirstName AND 
              Customer.OrgID = "" NO-LOCK NO-ERROR.
@@ -505,17 +505,17 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
 
    IF order = 1 AND icCriteria = "ID" THEN FIND PREV Customer
-      WHERE Customer.brand = gcBrand AND 
+      WHERE Customer.brand = Syst.CUICommon:gcBrand AND 
             Customer.OrgID = icValue NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN
      FIND PREV Customer  WHERE
-                Customer.Brand    = gcBrand  AND
+                Customer.Brand    = Syst.CUICommon:gcBrand  AND
                 Customer.CustName  BEGINS  lcLastname AND
                 Customer.OrgID    ne ""               AND 
                 Customer.FirstName BEGINS  lcFirstName NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
      FIND PREV Customer  WHERE
-               Customer.Brand    = gcBrand  AND
+               Customer.Brand    = Syst.CUICommon:gcBrand  AND
                Customer.CustName  BEGINS  lcLastname   AND
                Customer.FirstName BEGINS  lcFirstName  AND 
                Customer.OrgID = "" NO-LOCK NO-ERROR.
@@ -541,7 +541,7 @@ PROCEDURE local-find-others.
 
    if icCriteria = "ID" THEN 
    FOR EACH Mobsub NO-LOCK WHERE
-            Mobsub.Brand    = gcBrand    AND 
+            Mobsub.Brand    = Syst.CUICommon:gcBrand    AND 
             Mobsub.AgrCust  = Customer.AgrCust.
          
        liqty = liqty + 1.     

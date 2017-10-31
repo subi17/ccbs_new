@@ -188,7 +188,7 @@ FUNCTION fDispItemName RETURNS LOGIC
    CASE lcItemField[iiExtent]:
    WHEN "RateCCN"  THEN DO:
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.CUICommon:gcBrand AND
                  CCN.CCN   = INTEGER(icItemValue) NO-LOCK NO-ERROR.
       IF AVAILABLE CCN THEN lcItemName[iiExtent] = CCN.CCNName.
       ELSE llValid = FALSE.
@@ -199,7 +199,7 @@ FUNCTION fDispItemName RETURNS LOGIC
          lcItemName[iiExtent] = "Use Topup Events".
       ELSE DO:
          FIND FIRST BillItem WHERE
-                    BillItem.Brand    = gcBrand AND
+                    BillItem.Brand    = Syst.CUICommon:gcBrand AND
                     BillItem.BillCode = icItemValue NO-LOCK NO-ERROR.
          IF AVAILABLE BillItem THEN lcItemName[iiExtent] = BillItem.BIName.
          ELSE llValid = FALSE.
@@ -208,7 +208,7 @@ FUNCTION fDispItemName RETURNS LOGIC
    
    WHEN "BDest" THEN DO:
       FIND FIRST BDest WHERE
-                 BDest.Brand = gcBrand AND
+                 BDest.Brand = Syst.CUICommon:gcBrand AND
                  BDest.BDest = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE BDest THEN lcItemName[iiExtent] = BDest.BDName.
    
@@ -218,7 +218,7 @@ FUNCTION fDispItemName RETURNS LOGIC
 
    WHEN "CLIType" THEN DO:
       FIND FIRST CLIType WHERE
-                 CLIType.Brand    = gcBrand AND
+                 CLIType.Brand    = Syst.CUICommon:gcBrand AND
                  CLIType.CLIType = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE CLIType THEN lcItemName[iiExtent] = CLIType.CLIName.
       ELSE llValid = FALSE.

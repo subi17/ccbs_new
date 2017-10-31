@@ -625,7 +625,7 @@ REPEAT WITH FRAME main:
             Mobsub.MultiSimID > 0 THEN DO:
       
             FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-                       lbMobSub.Brand = gcBrand AND
+                       lbMobSub.Brand = Syst.CUICommon:gcBrand AND
                        lbMobSub.MultiSimId = Mobsub.MultiSimId AND
                        lbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                        lbMobSub.Custnum = Mobsub.Custnum
@@ -648,7 +648,7 @@ REPEAT WITH FRAME main:
             END.
          END.
          ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand = gcBrand AND
+                                CLIType.Brand = Syst.CUICommon:gcBrand AND
                                 CLIType.CLIType = Mobsub.TariffBundle AND
                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})
                                 THEN DO:
@@ -656,12 +656,12 @@ REPEAT WITH FRAME main:
             llAddLineTerm = FALSE.
 
             FOR EACH bbMobSub NO-LOCK WHERE
-                     bbMobSub.Brand   = gcBrand AND
+                     bbMobSub.Brand   = Syst.CUICommon:gcBrand AND
                      bbMobSub.InvCust = Mobsub.CustNum AND
                      bbMobSub.PayType = FALSE AND
                      bbMobSub.MsSeq NE Mobsub.MsSeq,
                FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand = gcBrand ANd
+                     CLIType.Brand = Syst.CUICommon:gcBrand ANd
                      CLIType.CLIType = (IF Mobsub.TariffBundle > ""
                                         THEN Mobsub.TariffBundle
                                         ELSE Mobsub.CLIType) AND

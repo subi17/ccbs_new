@@ -37,7 +37,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 MAIN:
 repeat:
 
-   find first RatePlan WHERE RAteplan.Brand = gcBrand  no-lock no-error.
+   find first RatePlan WHERE RAteplan.Brand = Syst.CUICommon:gcBrand  no-lock no-error.
    if not available RatePlan then do:
       must-print = false.
       must-add = true.
@@ -68,7 +68,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(RatePlan).
             down with frame sel.
-            find next RatePlan  WHERE RAteplan.Brand = gcBrand no-lock no-error.
+            find next RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -98,7 +98,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find RatePlan where recid(RatePlan) = rtab[frame-line] no-lock.
-               find prev RatePlan  WHERE RAteplan.Brand = gcBrand 
+               find prev RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand 
                no-lock no-error.
                if not available RatePlan then do:
                   bell.
@@ -124,7 +124,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find RatePlan where recid(RatePlan) = rtab[frame-line] no-lock .
-               find next RatePlan  WHERE RAteplan.Brand = gcBrand
+               find next RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand
                no-lock no-error.
                if not available RatePlan then do:
                   bell.
@@ -150,12 +150,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find RatePlan where recid(RatePlan) = memory no-lock no-error.
-            find prev RatePlan  WHERE RAteplan.Brand = gcBrand
+            find prev RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand
             no-lock no-error.
             if available RatePlan then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev RatePlan  WHERE RAteplan.Brand = gcBrand
+                  find prev RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand
                   no-lock no-error.
                   if available RatePlan then memory = recid(RatePlan).
                   else i = frame-down.
@@ -193,7 +193,7 @@ BROWSE:
            hide frame hayr no-pause.
            if RatePlan ENTERED then do:
               find first RatePlan where 
-                         RatePlan.Brand     = gcBrand AND 
+                         RatePlan.Brand     = Syst.CUICommon:gcBrand AND 
                          RatePlan.RatePlan >= RatePlan
               no-lock no-error.
                if not available RatePlan then do:
@@ -218,7 +218,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first RatePlan  WHERE RAteplan.Brand = gcBrand no-lock.
+           find first RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(RatePlan).
            must-print = true.
            next LOOP.
@@ -226,7 +226,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last RatePlan  WHERE RAteplan.Brand = gcBrand no-lock.
+           find last RatePlan  WHERE RAteplan.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(RatePlan).
            must-print = true.
            next LOOP.

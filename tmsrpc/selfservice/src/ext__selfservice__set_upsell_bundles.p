@@ -24,7 +24,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}
 {Func/fgettxt.i}
@@ -91,7 +91,7 @@ IF NOT AVAIL Customer THEN RETURN appl_err("Customer not found").
 IF pcUpsellId = "CONTD1_UPSELL" THEN pcUpsellId = "CONTDATA_UPSELL".
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = pcUpsellId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
@@ -105,7 +105,7 @@ IF (pcUpsellId = "DATA200_UPSELL" OR
 IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
 
    /* Check if subscription type is not compatible with bundle */
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      pcUpsellId + ";" + MobSub.CLIType,
@@ -176,7 +176,7 @@ ELSE IF NOT fCreateUpsellBundle(
 END.
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = pcUpsellId NO-ERROR.
 
 ASSIGN lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN

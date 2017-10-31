@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 {Mm/subser.i}
 {Syst/tmsconst.i}
@@ -140,7 +140,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
                                     "changed to " + STRING(Customer.DelType)).
       IF liDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN DO:
          FOR EACH MobSub WHERE
-                  MobSub.brand EQ gcbrand AND
+                  MobSub.brand EQ Syst.CUICommon:gcBrand AND
                   Mobsub.custnum EQ Customer.Custnum NO-LOCK:
             fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
                            "InvDelivTypeChanged",Customer.Language,0,
@@ -249,7 +249,7 @@ IF pcReason NE '' AND llUpdate THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand 
+       Memo.Brand     = Syst.CUICommon:gcBrand 
        Memo.HostTable = "Customer" 
        Memo.KeyValue  = STRING(piCustNum) 
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

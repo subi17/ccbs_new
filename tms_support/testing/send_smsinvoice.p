@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
+assign Syst.CUICommon:gcBrand = "1"
        katun = "Qvantel".
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
@@ -51,7 +51,7 @@ repeat:
 
    liInvnum = 0.
    FOR EACH Invoice WHERE
-            Invoice.Brand    = gcBrand AND
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND
             Invoice.CustNum  = Customer.CustNum AND
             Invoice.InvDate  = 11/01/2012 AND
             Invoice.InvType  = 1 AND

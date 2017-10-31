@@ -73,7 +73,7 @@ FORM
    SKIP(6)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " UNBILLED SUBSCRIPTIONS " + 
+     TITLE " " + Syst.CUICommon:ynimi + " UNBILLED SUBSCRIPTIONS " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

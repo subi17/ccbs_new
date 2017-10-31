@@ -16,14 +16,14 @@
   Version ......: TMS / Production version
   --------------------------------------------------------------------------- */
 
-{Syst/commpaa.i} katun = "SOG". gcbrand = "1".
+{Syst/commpaa.i} katun = "SOG". Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 {Func/tmsparam4.i}
 {Func/multitenantfunc.i}
 {Func/log.i}
 {Syst/tmsconst.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE ldToday       AS DATE      NO-UNDO.
 DEFINE VARIABLE lcTime        AS CHARACTER NO-UNDO.
@@ -63,9 +63,9 @@ DEFINE STREAM sLogFile.
 clsNagios   = NEW Class.nagios().
 
 ASSIGN
-   lcLogPath   = fCParamC4(gcBrand,"SOG","LogDirectory")
-   lcURL       = fCParamC4(gcBrand,"SOG","URL_Post")
-   lcLogFile   = fCParamC4(gcBrand,"SOG","LogFile").
+   lcLogPath   = fCParamC4(Syst.CUICommon:gcBrand,"SOG","LogDirectory")
+   lcURL       = fCParamC4(Syst.CUICommon:gcBrand,"SOG","URL_Post")
+   lcLogFile   = fCParamC4(Syst.CUICommon:gcBrand,"SOG","LogFile").
 
 IF lcLogPath > "" AND lcLogFile > "" THEN DO:
    llLogFile = True.
@@ -141,7 +141,7 @@ DO WHILE TRUE :
       liTime = TIME
       llTime = TRUE.
       
-   IF llTime THEN llTime = (fCParamC4(gcBrand,"ServiceBreak","Activation") = "0").
+   IF llTime THEN llTime = (fCParamC4(Syst.CUICommon:gcBrand,"ServiceBreak","Activation") = "0").
 
    IF llTime THEN DO:
    
@@ -227,7 +227,7 @@ END FUNCTION.
 PROCEDURE pSogRequest:
 
    FOR EACH Solog NO-LOCK WHERE 
-            Solog.Brand        = gcBrand    AND 
+            Solog.Brand        = Syst.CUICommon:gcBrand    AND 
             Solog.Stat         = 0          AND 
             Solog.TimeSlotTMS <= Class.timedate:MakeTS()
    BREAK BY Solog.TimeSlotTMS     .

@@ -78,7 +78,7 @@ form
     ActionLog.ActionChar FORMAT "X(22)" COLUMN-LABEL "Info"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " ACTION LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -386,7 +386,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcActionID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -411,7 +411,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcTable 
               lcKey
        WITH FRAME f2.
@@ -558,28 +558,28 @@ PROCEDURE local-find-FIRST:
    
          IF icKeyValue > "" THEN 
             FIND FIRST ActionLog USE-INDEX TableName WHERE
-                       ActionLog.Brand     = gcBrand     AND
+                       ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                        ActionLog.TableName = icTableName AND
                        ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND FIRST ActionLog USE-INDEX TableName WHERE
-                       ActionLog.Brand     = gcBrand     AND
+                       ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                        ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND FIRST ActionLog USE-INDEX ActionID WHERE
-                    ActionLog.Brand    = gcBrand AND
+                    ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                     ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND FIRST ActionLog USE-INDEX ActionID WHERE
-                      ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                      ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND FIRST ActionLog USE-INDEX TableName WHERE
-                 ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -592,28 +592,28 @@ PROCEDURE local-find-LAST:
    
          IF icKeyValue > "" THEN 
             FIND LAST ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName AND
                       ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND LAST ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND LAST ActionLog USE-INDEX ActionID WHERE
-                   ActionLog.Brand    = gcBrand AND
+                   ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                    ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND LAST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND LAST ActionLog USE-INDEX TableName WHERE
-                ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
 
 END PROCEDURE.
@@ -626,28 +626,28 @@ PROCEDURE local-find-NEXT:
    
          IF icKeyValue > "" THEN 
             FIND NEXT ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName AND
                       ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND NEXT ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND NEXT ActionLog USE-INDEX ActionID WHERE
-                   ActionLog.Brand    = gcBrand AND
+                   ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                    ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND NEXT ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
  
    ELSE IF order = 2 THEN DO:
       FIND NEXT ActionLog USE-INDEX TableName WHERE
-                ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
 
 END PROCEDURE.
@@ -660,28 +660,28 @@ PROCEDURE local-find-PREV:
    
          IF icKeyValue > "" THEN 
             FIND PREV ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName AND
                       ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND PREV ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND PREV ActionLog USE-INDEX ActionID WHERE
-                   ActionLog.Brand    = gcBrand AND
+                   ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                    ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND PREV ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND PREV ActionLog USE-INDEX TableName WHERE
-                ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
 
 END PROCEDURE.

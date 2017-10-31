@@ -7,7 +7,7 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun = "cron".
 {Syst/eventlog.i}
 {Func/cparam2.i}
@@ -47,7 +47,7 @@ fELog("DAILY","MobCDRDoubleCheckStopped:" +
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "MobCDR"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99")  +

@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "CRON".
 {Func/cparam2.i}
 {Func/fgettxt.i}
@@ -55,7 +55,7 @@ OUTPUT STREAM Sout TO VALUE(lcLogFile).
 
 TERM_LOOP:
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand      = gcBrand AND
+         MsRequest.Brand      = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_NEW} AND
          MsRequest.ActStamp   = ldeFromTS AND

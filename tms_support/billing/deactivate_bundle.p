@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 find first mobsub where mobsub.cli = "633495343" no-lock no-error.
@@ -23,7 +23,7 @@ message liRequest skip lcResult view-as alert-box.
 CREATE Memo.
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

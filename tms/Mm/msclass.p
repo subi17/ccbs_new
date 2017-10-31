@@ -68,7 +68,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MSISDN Classes "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -399,7 +399,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP lcBrand WITH FRAME f1.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             McCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF McCode ENTERED THEN DO:
@@ -421,7 +421,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP lcBrand WITH FRAME f2.
-       SET lcBrand WHEN gcAllBrand = TRUE
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            McName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF McName ENTERED THEN DO:

@@ -60,7 +60,7 @@ ASSIGN
 
 form header
    lcLine1 AT 1 SKIP
-   ynimi  AT 1 FORMAT "x(30)" 
+   Syst.CUICommon:ynimi  AT 1 FORMAT "x(30)" 
       "DIRECT DEBIT STATUS" AT 40
       "Page" AT 71
       liPage FORMAT "ZZ9" SKIP
@@ -112,7 +112,7 @@ VIEW FRAME fQty.
 
 /* authorization status */
 FOR EACH DDAuth NO-LOCK WHERE
-         DDAuth.Brand = gcBrand,
+         DDAuth.Brand = Syst.CUICommon:gcBrand,
    FIRST Customer OF DDAuth NO-LOCK:
      
    IF DDAuth.AuthDate >= idtAuthDate1 AND
@@ -251,7 +251,7 @@ FOR EACH ttAuth:
       fChkPage(0).
    
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.CUICommon:gcBrand AND
            InvGroup.InvGroup = ttAuth.InvGroup NO-LOCK.
       
       PUT STREAM tul

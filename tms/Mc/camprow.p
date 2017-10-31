@@ -95,28 +95,28 @@ FUNCTION fRowItem RETURNS LOGICAL
    CASE iiType:
    WHEN 1 THEN DO:
       FIND PriceList WHERE 
-           PriceList.Brand     = gcBrand AND
+           PriceList.Brand     = Syst.CUICommon:gcBrand AND
            PriceList.PriceList = icItem 
          NO-LOCK NO-ERROR.
       IF AVAILABLE PriceList THEN lcItem = PriceList.PLName.
    END. 
    WHEN 2 THEN DO:
       FIND DiscPlan WHERE 
-           DiscPlan.Brand    = gcBrand AND
+           DiscPlan.Brand    = Syst.CUICommon:gcBrand AND
            DiscPlan.DiscPlan = icItem 
          NO-LOCK NO-ERROR.
       IF AVAILABLE DiscPlan THEN lcItem = DiscPlan.DPName.
    END.
    WHEN 3 THEN DO:
       FIND FatGroup WHERE
-           FatGroup.Brand = gcBrand AND
+           FatGroup.Brand = Syst.CUICommon:gcBrand AND
            FatGroup.FtGrp = icItem 
          NO-LOCK NO-ERROR.
       IF AVAILABLE FatGroup THEN lcItem = FatGroup.FTGName.
    END.
    WHEN 4 OR WHEN 5 THEN DO:
       FIND FeeModel WHERE
-           FeeModel.Brand    = gcBrand AND
+           FeeModel.Brand    = Syst.CUICommon:gcBrand AND
            FeeModel.FeeModel = icItem 
          NO-LOCK NO-ERROR.
       IF AVAILABLE FeeModel THEN lcItem = FeeModel.FeeName.
@@ -154,7 +154,7 @@ END.
 lcHelpProg = "Help/nnplse.p,Help/h-dplan.p,Help/h-fatgroup.p,Help/h-bevent.p,Help/h-bevent.p".
 
 FIND Campaign WHERE 
-     Campaign.Brand    = gcBrand AND
+     Campaign.Brand    = Syst.CUICommon:gcBrand AND
      Campaign.Campaign = icCampaign NO-LOCK.
 ASSIGN lcTitle = " ROWS FOR CAMPAIGN: " +
                  STRING(Campaign.CaName) + " ".
@@ -249,7 +249,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CampRow.
            ASSIGN
-           CampRow.Brand    = gcBrand 
+           CampRow.Brand    = Syst.CUICommon:gcBrand 
            CampRow.Campaign = icCampaign
            CampRow.CRowType = INPUT FRAME lis CampRow.CRowType.
 

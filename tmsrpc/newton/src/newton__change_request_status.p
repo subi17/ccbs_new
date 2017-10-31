@@ -33,7 +33,7 @@ IF NOT AVAIL MsRequest THEN RETURN
    appl_err(SUBST("MsRequest &1 not found!",piMsRequest)).
 
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Newton".
 {Func/msreqfunc.i}
 

@@ -103,11 +103,11 @@ form
 
 
 find first Brand no-lock WHERE
-           Brand.Brand = gcBrand NO-ERROR.
+           Brand.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 ASSIGN
    empty = fill(" ",78)
    pvm   = TODAY
-   ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
+   Syst.CUICommon:ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
    yvari = FALSE.
 
 
@@ -129,7 +129,7 @@ repeat with frame menu_frame:
 
    if available MenuTree then do:
       assign
-      ftitle[1] = " " + ynimi + " (" + gcBrand + 
+      ftitle[1] = " " + Syst.CUICommon:ynimi + " (" + Syst.CUICommon:gcBrand + 
                        ") " + MenuTitle + " " + string(pvm,"99-99-99")
       substring(ftitle[1],59) = string("(" + MenuId + ")","x(10)")
       title_width = length(ftitle[1]).

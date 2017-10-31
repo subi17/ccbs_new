@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -322,7 +322,7 @@ PROCEDURE pMNPStatusCheck:
                 MNPProcess.StatusCode = ({&MNP_ST_BNOT})) EXCLUSIVE-LOCK:
       
             FIND msisdn where
-               msisdn.brand = gcBrand and
+               msisdn.brand = Syst.CUICommon:gcBrand and
                msisdn.cli = bMNPSub.CLI  AND
                msisdn.statuscode = ({&MSISDN_ST_RETURN_NOTICE_SENT}) AND
                msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
@@ -357,7 +357,7 @@ PROCEDURE pMNPStatusCheck:
            MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
 
       FIND msisdn where
-         msisdn.brand = gcBrand and
+         msisdn.brand = Syst.CUICommon:gcBrand and
          msisdn.cli = MNPSub.CLI  AND
          msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 

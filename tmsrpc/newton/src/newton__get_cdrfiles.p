@@ -12,7 +12,7 @@
 {Syst/commpaa.i}
 ASSIGN
 katun = "cron"
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 DEF VAR resp_array AS CHARACTER NO-UNDO.
 DEF VAR resp_struct AS CHARACTER NO-UNDO.
 

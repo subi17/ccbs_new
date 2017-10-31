@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun  = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/contract_end_date.i}
@@ -250,7 +250,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
    liRequestType = INT(ENTRY(i,lcRequestTypes)).
 
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand       AND
+            MsRequest.Brand     = Syst.CUICommon:gcBrand       AND
             MsRequest.ReqType   = liRequestType AND
             MsRequest.ReqStatus = 2             AND
             MsRequest.ActStamp >= ldBeginStamp  AND 
@@ -259,7 +259,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
       /* must be from postpaid to any other subscription */
       IF MSRequest.reqtype EQ 0 THEN DO:
          IF NOT CAN-FIND (CLIType WHERE 
-                          CLIType.Brand   = gcBrand              AND
+                          CLIType.Brand   = Syst.CUICommon:gcBrand              AND
                           CLIType.CLIType = MsRequest.ReqCParam1 AND
                           CLIType.PayType = 1) THEN NEXT. 
       END.
@@ -289,7 +289,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                DCCLI.ValidTo   >= ldtActDate      AND 
                DCCLI.ValidFrom <= ldtActDate      USE-INDEX MsSeq,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand   = gcBrand       AND 
+               DayCampaign.Brand   = Syst.CUICommon:gcBrand       AND 
                DayCampaign.DCEvent = DCCLI.DCEvent AND
                DayCampaign.DCType  = ({&DCTYPE_DISCOUNT}):
 
@@ -302,7 +302,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
          IF liTermReq > 0 THEN DO:
             /* find singlefee associated */
             FIND FIRST SingleFee WHERE
-                       SingleFee.Brand      = gcBrand                   AND 
+                       SingleFee.Brand      = Syst.CUICommon:gcBrand                   AND 
                        SingleFee.HostTable  = "MobSub"                  AND 
                        SingleFee.KeyValue   = STRING(MsRequest.MsSeq)   AND
                        SingleFee.FeeModel   = DayCampaign.TermFeeModel  AND
@@ -515,7 +515,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                DCCLI.ValidTo   >= ldtActDate      AND 
                DCCLI.ValidFrom <= ldtActDate      USE-INDEX MsSeq,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand   = gcBrand       AND 
+               DayCampaign.Brand   = Syst.CUICommon:gcBrand       AND 
                DayCampaign.DCEvent = DCCLI.DCEvent AND
                DayCampaign.DCType  = ({&DCTYPE_INSTALLMENT}):
          
@@ -527,7 +527,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
          IF liTermReq > 0 THEN DO:
 
             FIND FIRST SingleFee WHERE
-                       SingleFee.Brand      = gcBrand                  AND 
+                       SingleFee.Brand      = Syst.CUICommon:gcBrand                  AND 
                        SingleFee.HostTable  = "MobSub"                 AND 
                        SingleFee.KeyValue   = STRING(MsRequest.MsSeq)  AND
                        SingleFee.FeeModel   = DayCampaign.TermFeeModel AND
@@ -569,7 +569,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
              DCCLI.Amount > 0 then do:
 
             find bResidualFee NO-LOCK where
-                 bResidualFee.brand       = gcBrand                     and
+                 bResidualFee.brand       = Syst.CUICommon:gcBrand                     and
                  bResidualFee.hosttable   = "mobsub"                    and
                  bResidualFee.keyvalue    = string(DCCLI.msseq)         and
                  bResidualFee.sourcetable = "dccli"                     and

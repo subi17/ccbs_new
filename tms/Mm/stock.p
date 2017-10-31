@@ -76,7 +76,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Stock Locations "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -383,7 +383,7 @@ BROWSE:
        Stock = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand With Frame f1.
-       UPDATE lcBrand WHEN gcAllBrand = TRUE Stock WITH FRAME f1.
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE Stock WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Stock <> "" THEN DO:
 
@@ -408,7 +408,7 @@ BROWSE:
        StoName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
-       UPDATE lcBrand WHEN gcAllBrand = TRUE 
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
               StoName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF StoName <> "" THEN DO:

@@ -28,7 +28,7 @@ form
    "      Type :" lDef NO-LABEL 
    help "Total sum or Specification"
    SKIP
-with title " " + ynimi + " UNREGISTERED PAYMENTS " +
+with title " " + Syst.CUICommon:ynimi + " UNREGISTERED PAYMENTS " +
            STRING(pvm,"99-99-99") + " "
    ROW 1 centered Size 80 by 19 FRAME valinta.
 

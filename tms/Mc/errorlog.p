@@ -71,7 +71,7 @@ form
     ErrorLog.ErrorMsg  FORMAT "X(31)"    COLUMN-LABEL "Error"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " ERROR LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -353,7 +353,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcActionID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -378,7 +378,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcTable 
               lcKey
        WITH FRAME f2.
@@ -525,28 +525,28 @@ PROCEDURE local-find-FIRST:
    
          IF icKeyValue > "" THEN 
             FIND FIRST ErrorLog USE-INDEX TableName WHERE
-                       ErrorLog.Brand     = gcBrand     AND
+                       ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                        ErrorLog.TableName = icTableName AND
                        ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND FIRST ErrorLog USE-INDEX TableName WHERE
-                       ErrorLog.Brand     = gcBrand     AND
+                       ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                        ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND FIRST ErrorLog USE-INDEX ActionID WHERE
-                    ErrorLog.Brand    = gcBrand AND
+                    ErrorLog.Brand    = Syst.CUICommon:gcBrand AND
                     ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND FIRST ErrorLog USE-INDEX ActionID WHERE
-                      ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                      ErrorLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND FIRST ErrorLog USE-INDEX TableName WHERE
-                 ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 ErrorLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -559,28 +559,28 @@ PROCEDURE local-find-LAST:
    
          IF icKeyValue > "" THEN 
             FIND LAST ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ErrorLog.TableName = icTableName AND
                       ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND LAST ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND LAST ErrorLog USE-INDEX ActionID WHERE
-                   ErrorLog.Brand    = gcBrand AND
+                   ErrorLog.Brand    = Syst.CUICommon:gcBrand AND
                    ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND LAST ErrorLog USE-INDEX ActionID WHERE
-                     ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ErrorLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND LAST ErrorLog USE-INDEX TableName WHERE
-                ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ErrorLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -593,28 +593,28 @@ PROCEDURE local-find-NEXT:
    
          IF icKeyValue > "" THEN 
             FIND NEXT ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ErrorLog.TableName = icTableName AND
                       ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND NEXT ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND NEXT ErrorLog USE-INDEX ActionID WHERE
-                   ErrorLog.Brand    = gcBrand AND
+                   ErrorLog.Brand    = Syst.CUICommon:gcBrand AND
                    ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND NEXT ErrorLog USE-INDEX ActionID WHERE
-                     ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ErrorLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
  
    ELSE IF order = 2 THEN DO:
       FIND NEXT ErrorLog USE-INDEX TableName WHERE
-                ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ErrorLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -627,28 +627,28 @@ PROCEDURE local-find-PREV:
    
          IF icKeyValue > "" THEN 
             FIND PREV ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ErrorLog.TableName = icTableName AND
                       ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND PREV ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND PREV ErrorLog USE-INDEX ActionID WHERE
-                   ErrorLog.Brand    = gcBrand AND
+                   ErrorLog.Brand    = Syst.CUICommon:gcBrand AND
                    ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND PREV ErrorLog USE-INDEX ActionID WHERE
-                     ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ErrorLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND PREV ErrorLog USE-INDEX TableName WHERE
-                ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ErrorLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.

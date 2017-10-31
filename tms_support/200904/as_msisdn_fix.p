@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
@@ -22,7 +22,7 @@ ASSIGN
   Solog.MsSeq        = 1226219 
   Solog.CLI          = "600007332" 
   Solog.Stat         = 0     /* just created */
-  Solog.Brand        = gcBrand
+  Solog.Brand        = Syst.CUICommon:gcBrand
   Solog.Users        = katun.
 
 ASSIGN     

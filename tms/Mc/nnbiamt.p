@@ -84,7 +84,7 @@ DO FOR TMSUser:
 END.
 
 /* default Date values */
-FIND FIRST Invoice no-lock WHERE Invoice.Brand = gcBrand NO-ERROR.
+FIND FIRST Invoice no-lock WHERE Invoice.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE Invoice THEN
 ASSIGN   
    date2 = Invoice.InvDate
@@ -194,7 +194,7 @@ task:
    OUTPUT STREAM excel TO value(fname).
 
    FOR EACH Invoice no-lock where 
-            Invoice.Brand     = gcBrand  AND
+            Invoice.Brand     = Syst.CUICommon:gcBrand  AND
             Invoice.InvDate  >= date1    AND
             Invoice.InvDate  <= date2    AND
             Invoice.PrintState >= status1  AND

@@ -20,7 +20,7 @@ DEF VAR lcHSender    AS CHAR                         NO-UNDO.
 
 
 FIND FIRST Company NO-LOCK WHERE 
-           Company.Brand = gcBrand NO-ERROR.
+           Company.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE Company THEN ASSIGN
    lcBTName    = Company.CompName
    lcBTAddr    = Company.Address

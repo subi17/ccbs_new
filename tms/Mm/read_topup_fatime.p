@@ -5,7 +5,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/ftaxdata.i}
 {Func/ftopup.i}
 

@@ -33,7 +33,7 @@ FORM
       HELP  "Rule from which events will be used (0/EMPTY = all)"
       VALIDATE(INPUT liCoRule = 0 OR
                CAN-FIND(CoRule WHERE 
-                        CoRule.Brand    = gcBrand AND
+                        CoRule.Brand    = Syst.CUICommon:gcBrand AND
                         CoRule.CoRuleID = INPUT liCoRule),
               "Unknown rule")
 
@@ -72,7 +72,7 @@ FORM
       SKIP(9)
 
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " FAT FROM COMMISSION " +
+        title " " + Syst.CUICommon:ynimi + " FAT FROM COMMISSION " +
         string(pvm,"99-99-99") + " "
         FRAME fCriter.
 
@@ -85,7 +85,7 @@ FUNCTION fCoRule RETURNS LOGICAL
 
    ELSE DO:
       FIND CoRule WHERE 
-           CoRule.Brand    = gcBrand AND
+           CoRule.Brand    = Syst.CUICommon:gcBrand AND
            CoRule.CoRuleID = iiRuleID
       NO-LOCK NO-ERROR.
       IF AVAILABLE CoRule THEN DISPLAY CoRule.RuleDesc WITH FRAME fCriter.
@@ -96,7 +96,7 @@ END FUNCTION.
 VIEW FRAME fCriter.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST Reseller WHERE Reseller.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Reseller WHERE Reseller.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 ASSIGN lcReseller2   = IF AVAILABLE Reseller THEN Reseller.Reseller ELSE ""
        ldtDate2      = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        ldtDate1      = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2))

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -175,7 +175,7 @@ PUT STREAM sLogInvGrain UNFORMATTED SKIP
 */
 Invoices:
 for EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand    = gcBrand   AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand   AND
          Invoice.InvDate >= idaStart  AND
          Invoice.InvDate <= idaEnd    AND
          Invoice.InvType  = iiInvType,
@@ -392,11 +392,11 @@ PUT STREAM sLog UNFORMATTED
 FOR EACH ttCCN NO-LOCK USE-INDEX RowType.
 
    FIND FIRST CCN WHERE
-              CCN.Brand = gcBrand AND  
+              CCN.Brand = Syst.CUICommon:gcBrand AND  
               CCN.CCN = ttCCN.RepCCN NO-LOCK NO-ERROR.
 
    FIND FIRST BillItem WHERE
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = ttCCN.BillCode NO-LOCK NO-ERROR.
 
 

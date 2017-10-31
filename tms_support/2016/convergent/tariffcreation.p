@@ -11,7 +11,7 @@
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -764,18 +764,18 @@ PROCEDURE pCreTranslations:
 
    FOR EACH ttTrans NO-LOCK:
       IF CAN-FIND(FIRST CLIType WHERE 
-                        CLIType.Brand   = gcBrand            AND 
+                        CLIType.Brand   = Syst.CUICommon:gcBrand            AND 
                         CLIType.CLIType = ttTrans.tLangType) THEN DO:
 
          IF CAN-FIND(FIRST RepText WHERE
-                           RepText.Brand    = gcBrand                    AND
+                           RepText.Brand    = Syst.CUICommon:gcBrand                    AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
             NEXT. 
                              
          CREATE RepText.
          ASSIGN 
-            RepText.Brand    = gcBrand    
+            RepText.Brand    = Syst.CUICommon:gcBrand    
             RepText.TextType = 9               /* Default value */       
             RepText.LinkCode = ttTrans.tLangType        
             RepText.Language = INTEGER(ttTrans.tLangint)    

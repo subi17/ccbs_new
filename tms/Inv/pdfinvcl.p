@@ -67,7 +67,7 @@ END FUNCTION.
    are insignificant */
 IF iiInvNum1 = iiInvNum2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE 
-          Invoice.Brand  = gcBrand AND
+          Invoice.Brand  = Syst.CUICommon:gcBrand AND
           Invoice.InvNum = iiInvNum1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -79,7 +79,7 @@ END.
 /* one date is chosen */
 ELSE IF idtInvDate1 = idtInvDate2 THEN
 FOR EACH Invoice NO-LOCK WHERE          
-         Invoice.Brand       = gcBrand       AND
+         Invoice.Brand       = Syst.CUICommon:gcBrand       AND
          Invoice.InvDate     = idtInvDate1   AND
          Invoice.DelType     = iiDelType     AND
          Invoice.InvNum     >= iiInvNum1     AND
@@ -97,7 +97,7 @@ END.
 /* wider selection */
 ELSE 
 FOR EACH  Invoice NO-LOCK WHERE
-          Invoice.Brand        = gcBrand       AND
+          Invoice.Brand        = Syst.CUICommon:gcBrand       AND
           Invoice.InvDate     >= idtInvDate1   AND
           Invoice.InvDate     <= idtInvDate2   AND
           Invoice.InvNum      >= iiInvNum1     AND

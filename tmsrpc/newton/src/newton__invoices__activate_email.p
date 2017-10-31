@@ -8,7 +8,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}

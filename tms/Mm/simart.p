@@ -65,7 +65,7 @@ form
     SimArt.OrdPoint
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SIM Articles "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -378,7 +378,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
        UPDATE 
-           lcBrand WHEN gcAllBrand = TRUE  SimArt WITH FRAME f1.
+           lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  SimArt WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF SimArt <> "" THEN DO:
           FIND FIRST SimArt WHERE 
@@ -398,7 +398,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
 
-       UPDATE  lcBrand WHEN gcAllBrand = TRUE
+       UPDATE  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
                SAName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SAName <> "" THEN DO:

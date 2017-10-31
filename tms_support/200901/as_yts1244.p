@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "anttis".
 {Func/ftopup.i}
 

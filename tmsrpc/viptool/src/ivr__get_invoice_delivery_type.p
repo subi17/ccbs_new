@@ -24,7 +24,7 @@ DEF VAR liDeliveryType  AS INT  NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + ghAuthLog::EndUserId. 
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.

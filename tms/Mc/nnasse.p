@@ -389,7 +389,7 @@ form
     memochr             format "M/"       column-label "M"
 WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) 
-       " " + ynimi + " " + lcFrmTitle + " " +
+       " " + Syst.CUICommon:ynimi + " " + lcFrmTitle + " " +
        string(pvm,"99-99-99") + " " FRAME sel.
 
 form 
@@ -726,7 +726,7 @@ FUNCTION fCustCat RETURNS LOGICAL
 
    dkatnimi = "".
    FIND FIRST CustCat where 
-             CustCat.Brand    = gcBrand AND
+             CustCat.Brand    = Syst.CUICommon:gcBrand AND
              CustCat.Category = icCategory 
    no-lock no-error.
    IF AVAIL CustCat THEN ASSIGN dkatnimi = CustCat.CatName.
@@ -1040,7 +1040,7 @@ repeat WITH FRAME sel:
 
               FIND InvGroup NO-LOCK WHERE 
                    InvGroup.InvGroup = lcInvGroup AND 
-                   InvGroup.Brand    = gcBrand NO-ERROR.
+                   InvGroup.Brand    = Syst.CUICommon:gcBrand NO-ERROR.
                    
               IF NOT AVAILABLE InvGroup THEN DO:
                  MESSAGE "Unknown invoicing group"
@@ -1091,7 +1091,7 @@ repeat WITH FRAME sel:
               xrecid            = recid(Customer).
 
            FIND CustCat WHERE 
-                CustCat.Brand    = gcBrand AND
+                CustCat.Brand    = Syst.CUICommon:gcBrand AND
                 CustCat.Category = Customer.Category 
            NO-LOCK NO-ERROR.
            IF AVAILABLE CustCat THEN Customer.PaymTerm = CustCat.PaymTerm.
@@ -1125,7 +1125,7 @@ repeat WITH FRAME sel:
 
            /* set the default VALUE of CreditInvNum Limit */
            FIND FIRST TMSParam WHERE 
-               TMSParam.Brand = gcBrand AND
+               TMSParam.Brand = Syst.CUICommon:gcBrand AND
                TMSParam.ParamCode = "CreditLimit:" + Customer.Category
            no-lock no-error.
            IF AVAIL TMSParam THEN Customer.CreditLimit = tmsparam.intVal.
@@ -1376,7 +1376,7 @@ repeat WITH FRAME sel:
 
            PAUSE 0.
            DISP lcBrand WITH FRAME search-1. 
-           UPDATE lcBrand WHEN gcAllBrand = TRUE 
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                   CustNum WITH FRAME search-1.
 
            HIDE FRAME search-1 no-pause.
@@ -1407,7 +1407,7 @@ repeat WITH FRAME sel:
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-2. 
            UPDATE
-              lcBrand WHEN gcAllBrand = TRUE 
+              lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
               lcFirstName
               lcSurName1
               lcSurName2
@@ -1498,7 +1498,7 @@ repeat WITH FRAME sel:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-4. 
-           UPDATE lcBrand WHEN gcAllBrand = TRUE 
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                   lcZip WITH FRAME search-4.
            HIDE FRAME search-4 no-pause.
 
@@ -1517,7 +1517,7 @@ repeat WITH FRAME sel:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-6. 
-           UPDATE lcBrand WHEN gcAllBrand = TRUE 
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                   OrgId WITH FRAME search-6.
            HIDE FRAME search-6 no-pause.
            if OrgId <> "" THEN DO:
@@ -1882,7 +1882,7 @@ PROCEDURE local-update-customer:
       IF Customer.CustNum > 1000 THEN DO:
 
          FIND CustCat WHERE 
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.CUICommon:gcBrand AND
               CustCat.Category = INPUT Customer.Category NO-LOCK NO-ERROR.
          IF NOT AVAILABLE CustCat THEN DO:
              MESSAGE "Unknown category"
@@ -1906,7 +1906,7 @@ PROCEDURE local-update-customer:
          END.
          
          FIND FIRST xCustomer WHERE
-            xCustomer.Brand = gcBrand AND
+            xCustomer.Brand = Syst.CUICommon:gcBrand AND
             xCustomer.OrgID = INPUT Customer.OrgId AND
             xCustomer.CustIDType = INPUT Customer.CustIDType AND
             xCustomer.Roles NE "inactive" AND
@@ -2152,7 +2152,7 @@ PROCEDURE local-update-fin:
       IF lcBankAcc > "" THEN DO:
    
          FIND FIRST Bank WHERE
-                    Bank.Brand      = gcBrand AND
+                    Bank.Brand      = Syst.CUICommon:gcBrand AND
                     Bank.BankID     = SUBSTRING(lcBankAcc,5,4) AND
                     Bank.BankOffice = SUBSTRING(lcBankAcc,9,4) NO-LOCK NO-ERROR.
          IF AVAILABLE Bank THEN ASSIGN 
@@ -2473,7 +2473,7 @@ PROCEDURE local-update-fin:
                CREATE Memo.
                ASSIGN
                   Memo.CreStamp  = Func.Common:mMakeTS()
-                  Memo.Brand     = gcBrand
+                  Memo.Brand     = Syst.CUICommon:gcBrand
                   Memo.Custnum   = Customer.CustNum
                   Memo.HostTable = "Customer"
                   Memo.KeyValue  = STRING(Customer.CustNum)

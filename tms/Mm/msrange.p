@@ -85,7 +85,7 @@ form
     MSRange.ExpireDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MSISDN number Ranges "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -520,7 +520,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             CLIFrom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CLIFrom ENTERED THEN DO:
@@ -542,7 +542,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME F2.
-       SET  lcBrand WHEN gcAllBrand = TRUE 
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
             CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF CustNum ENTERED THEN DO:
@@ -644,7 +644,7 @@ BROWSE:
          i = 0.
          FOR 
          EACH xxMSISDN NO-LOCK WHERE 
-              xxMSISDN.Brand      = gcBrand         AND 
+              xxMSISDN.Brand      = Syst.CUICommon:gcBrand         AND 
               xxMSISDN.CLI       >= MSRange.CLIFrom AND
               xxMSISDN.CLI       <= MSRange.CLITo   AND
               xxMSISDN.CustNum    = MSRange.CustNum AND 

@@ -148,7 +148,7 @@ DO TRANSACTION:
    END.                      
 
    FIND FIRST MSISDN WHERE
-              MSISDN.Brand    = gcBrand        AND
+              MSISDN.Brand    = Syst.CUICommon:gcBrand        AND
               MSISDN.CLI      = termMobSub.CLI EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAILABLE MSISDN THEN DO:
       fReqError("MSISDN not found").
@@ -232,7 +232,7 @@ DO TRANSACTION:
       llCallProc = TRUE.
 
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobsub.Brand    = gcBrand            AND
+               bMobsub.Brand    = Syst.CUICommon:gcBrand            AND
                bMobSub.CustNum  = TermMobSub.CustNum AND
                bMobSub.MsSeq   <> TermMobSub.MsSeq   AND
                bMobSub.PayType  = NO:
@@ -278,7 +278,7 @@ DO TRANSACTION:
                         ELSE {&MULTISIMTYPE_PRIMARY}).
 
       FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-                 lbMobSub.Brand = gcBrand AND
+                 lbMobSub.Brand = Syst.CUICommon:gcBrand AND
                  lbMobSub.MultiSimID = MobSub.MultiSimID AND
                  lbMobSub.MultiSimType = liMultiSIMType AND
                  lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -287,7 +287,7 @@ DO TRANSACTION:
       /* Always find primary subs. for DSS activation */
       IF llMultiSIMActive THEN
          FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-                    lbMobSub.Brand = gcBrand AND
+                    lbMobSub.Brand = Syst.CUICommon:gcBrand AND
                     lbMobSub.MultiSimID = MobSub.MultiSimID AND
                     lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                     lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -424,7 +424,7 @@ DO TRANSACTION:
                 llReStoreDefaultShaper = FALSE.
                 /* Service Packages that need to be activated */
                 FOR EACH DCServicePackage NO-LOCK WHERE
-                         DCServicePackage.Brand     = gcBrand AND
+                         DCServicePackage.Brand     = Syst.CUICommon:gcBrand AND
                          DCServicePackage.DCEvent   = bSubMsRequest.ReqCParam3 AND
                          DCServicePackage.ToDate   >= TODAY AND
                          DCServicePackage.FromDate <= TODAY:
@@ -466,7 +466,7 @@ DO TRANSACTION:
           THEN DO:
 
              FIND FIRST DayCampaign NO-LOCK WHERE
-                        DayCampaign.Brand = gcBrand AND
+                        DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                         DayCampaign.DCevent = bSubMsRequest.ReqCparam3 NO-ERROR.
 
              CREATE ttContract.
@@ -485,7 +485,7 @@ DO TRANSACTION:
           THEN DO:
              
              FIND FIRST DayCampaign NO-LOCK WHERE
-                        DayCampaign.Brand = gcBrand AND
+                        DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                         DayCampaign.DCevent = bSubMsRequest.ReqCparam3 NO-ERROR.
 
              CREATE ttContract.
@@ -571,7 +571,7 @@ DO TRANSACTION:
          ttContract.DCEvent = "BONO_VOIP" THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
@@ -677,7 +677,7 @@ DO TRANSACTION:
    /* Create Topup for prepaid subscriptions */
    IF MobSub.PayType THEN DO:
       FOR EACH Memo WHERE
-               Memo.Brand     = gcBrand AND
+               Memo.Brand     = Syst.CUICommon:gcBrand AND
                Memo.CustNum   = MobSub.CustNum AND
                Memo.HostTable = "MobSub" AND
                Memo.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -764,12 +764,12 @@ DO TRANSACTION:
 
    /* ADDLINE-267 fixing reactivation of partial terminated mobile line of convergent cases */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand      = gcBrand                           AND
+                     CLIType.Brand      = Syst.CUICommon:gcBrand                           AND
                      CLIType.CLIType    = MobSub.CLIType                    AND
                     (CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} )) THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand        AND
+               bMobSub.Brand   = Syst.CUICommon:gcBrand        AND
                bMobSub.AgrCust = MobSub.CustNum AND
                bMobSub.MsSeq  <> MobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -783,11 +783,11 @@ DO TRANSACTION:
       If Main line is getting reactivated then
       activate the additional line discount */
    ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                    CLIType.Brand      = gcBrand                           AND
+                    CLIType.Brand      = Syst.CUICommon:gcBrand                           AND
                     CLIType.CLIType    = MobSub.CLIType                    AND                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) 
    THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand        AND
+               bMobSub.Brand   = Syst.CUICommon:gcBrand        AND
                bMobSub.AgrCust = MobSub.CustNum AND
                bMobSub.MsSeq  <> MobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -802,7 +802,7 @@ DO TRANSACTION:
    /* Mark Order as delivered */
    IF MsRequest.ReqIparam1 > 0 THEN DO:
       FIND FIRST Order WHERE
-                 Order.Brand   = gcBrand AND
+                 Order.Brand   = Syst.CUICommon:gcBrand AND
                  Order.OrderId = MsRequest.ReqIparam1
            EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL Order THEN DO:
@@ -826,12 +826,12 @@ DO TRANSACTION:
          
          /* Re-launch retention order if present */
          FIND FIRST OrderAction WHERE
-                    OrderAction.Brand    = gcBrand AND
+                    OrderAction.Brand    = Syst.CUICommon:gcBrand AND
                     OrderAction.OrderId  = Order.OrderId AND
                     OrderAction.ItemType = "OrderId" NO-LOCK NO-ERROR.
          IF AVAIL OrderAction THEN DO:
             FIND FIRST bOrder WHERE
-                       bOrder.Brand   = gcBrand AND
+                       bOrder.Brand   = Syst.CUICommon:gcBrand AND
                        bOrder.StatusCode = {&ORDER_STATUS_CLOSED} AND
                        bOrder.OrderId = INT(OrderAction.ItemKey)
                  NO-LOCK NO-ERROR.
@@ -839,7 +839,7 @@ DO TRANSACTION:
 
                /* Iban conversion for BankAccount */
                FIND FIRST OrderCustomer NO-LOCK WHERE
-                          OrderCustomer.Brand = gcBrand AND
+                          OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
                           OrderCustomer.OrderID = Order.OrderID AND
                           OrderCustomer.RowType = 1 NO-ERROR.
                IF AVAIL OrderCustomer AND LENGTH(OrderCustomer.BankCode) EQ 20 THEN DO:
@@ -854,7 +854,7 @@ DO TRANSACTION:
 
                /* Delete existing close order stamp */
                FIND FIRST OrderTimeStamp WHERE
-                          OrderTimeStamp.Brand   = gcBrand   AND
+                          OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
                           OrderTimeStamp.OrderID = bOrder.OrderId AND
                           OrderTimeStamp.RowType = 3
                     EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
@@ -873,13 +873,13 @@ DO TRANSACTION:
    IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND
       MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
       FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                 lbMobSub.Brand  = gcBrand AND
+                 lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
                  lbMobSub.MultiSimID = MobSub.MultiSimID AND
                  lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                  lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
       IF NOT AVAIL lbMobSub THEN DO:
          FIND FIRST TermMobSub NO-LOCK /*USE-INDEX MultiSIM*/ WHERE
-                    TermMobSub.Brand  = gcBrand AND
+                    TermMobSub.Brand  = Syst.CUICommon:gcBrand AND
                     TermMobSub.MultiSimID = MobSub.MultiSimID AND
                     TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                     TermMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -909,7 +909,7 @@ DO TRANSACTION:
 
    /* YTS-11419 */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.CUICommon:gcBrand AND
                      CLIType.CLIType = MobSub.CLIType AND
                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}) THEN DO:
 
@@ -1156,7 +1156,7 @@ PROCEDURE pReacAddLineDisc:
    FIND FIRST Customer NO-LOCK WHERE
               Customer.Custnum = iiCustNum NO-ERROR.
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand    = gcBrand AND
+            DiscountPlan.Brand    = Syst.CUICommon:gcBrand AND
      LOOKUP(DiscountPlan.DPRuleID, lcAddLineDiscList) > 0 AND
             DiscountPlan.ValidTo >= TODAY,
       FIRST DPMember NO-LOCK WHERE
@@ -1204,7 +1204,7 @@ PROCEDURE pReacExtraLineDiscount:
    IF AVAIL bMLMobSub             AND
       lcExtraLineDiscRuleId NE "" THEN DO:
       FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.Brand      = Syst.CUICommon:gcBrand               AND
                  ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
                  ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
                  ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.

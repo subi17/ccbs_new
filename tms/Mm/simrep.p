@@ -25,7 +25,7 @@ FORM
    "     This program will generate a SIM card report for chosen customer" skip
    SKIP(5)
 WITH NO-LABELS CENTERED OVERLAY ROW 3 WIDTH 76 
-TITLE " " + ynimi + " SIM CARD REPORT FOR CUSTOMER " + string(CustNum) + " "
+TITLE " " + Syst.CUICommon:ynimi + " SIM CARD REPORT FOR CUSTOMER " + string(CustNum) + " "
 FRAME fname.
 
 FIND FIRST Customer NO-LOCK WHERE

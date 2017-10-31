@@ -22,7 +22,7 @@
                 period;date;period (year, month) of FAT
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
+DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INIT "1".
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -57,10 +57,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
 
 FOR EACH mobsub NO-LOCK WHERE
-   mobsub.brand = gcBrand AND
+   mobsub.brand = Syst.CUICommon:gcBrand AND
    mobsub.Custnum = piCustNum,
    EACH COTarg WHERE
-        COTarg.Brand      = gcBrand AND
+        COTarg.Brand      = Syst.CUICommon:gcBrand AND
         COTarg.TargType   = "M" AND
         COTarg.CoTarg     = STRING(Mobsub.MsSeq) NO-LOCK,
       FIRST CORule OF COTarg NO-LOCK
@@ -85,7 +85,7 @@ FOR EACH mobsub NO-LOCK WHERE
    add_double(resp_struct, "commission_divided", CORule.CoNoInst).
    
    FIND FIRST Order WHERE 
-      Order.Brand   = gcBrand AND
+      Order.Brand   = Syst.CUICommon:gcBrand AND
       Order.OrderId = COTarg.OrderId NO-LOCK NO-ERROR.
    
    IF AVAIL Order THEN
@@ -134,7 +134,7 @@ FOR EACH mobsub NO-LOCK WHERE
          fatime_array = add_array(resp_struct, "fatimes").
          
          FOR EACH Fatime WHERE
-            Fatime.Brand   = gcBrand AND
+            Fatime.Brand   = Syst.CUICommon:gcBrand AND
             Fatime.HostTable = "COTarg" AND
             Fatime.KeyValue = STRING(COTarg.COTargId) AND
             Fatime.OrigFat = 0 AND
@@ -152,7 +152,7 @@ FOR EACH mobsub NO-LOCK WHERE
             /* Count total used FAT */
             ldeFatime = 0.
             FOR EACH Fatime2 WHERE
-               Fatime2.Brand     = gcBrand AND
+               Fatime2.Brand     = Syst.CUICommon:gcBrand AND
                Fatime2.HostTable = "COTarg" AND
                Fatime2.KeyValue  = STRING(COTarg.COTargId) AND
                Fatime2.Period    = Fatime.Period AND
@@ -172,7 +172,7 @@ FOR EACH mobsub NO-LOCK WHERE
          topup_array = add_array(resp_struct, "topups").
          
          FOR EACH PrePaidRequest WHERE
-            PrepaidRequest.Brand       = gcBrand AND
+            PrepaidRequest.Brand       = Syst.CUICommon:gcBrand AND
             PrePaidRequest.Reference   = STRING(COTarg.COTargId) AND
             PrePaidRequest.Request     = "RefillTRequest" AND
             PrePaidRequest.Source      = CoRule.PPSource NO-LOCK:

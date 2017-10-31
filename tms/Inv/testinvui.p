@@ -105,7 +105,7 @@ form
    skip(17)
 WITH
    OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " TEST INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " TEST INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
 
@@ -249,7 +249,7 @@ toimi:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -357,7 +357,7 @@ toimi:
    END. /* toimi */
 
 HIDE FRAME lCustNum no-pause.
-fLog("Customer based (lamu3) started  (brand " + gcBrand + ")",katun).
+fLog("Customer based (lamu3) started  (brand " + Syst.CUICommon:gcBrand + ")",katun).
 
 ASSIGN ldBegTime = Func.Common:mMakeTS()
        liCustQty = 0.
@@ -434,7 +434,7 @@ ELSE DO:
 
    XCUST:
    FOR EACH Customer   no-lock  where
-            Customer.Brand     = gcBrand     AND 
+            Customer.Brand     = Syst.CUICommon:gcBrand     AND 
             Customer.CustNum  >= CustNum1    AND
             Customer.CustNum  <= CustNum2    AND
             Customer.CustNum  >  unknown     AND
@@ -532,7 +532,7 @@ ldEndTime = Func.Common:mMakeTS().
 
 
 fLog("Invoice Testing Customer based (testinvui/lamu3) " +
-   "finished (brand " + gcBrand + ") ",katun).
+   "finished (brand " + Syst.CUICommon:gcBrand + ") ",katun).
 
 ok = TRUE.
 

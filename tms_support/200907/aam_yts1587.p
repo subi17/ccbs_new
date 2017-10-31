@@ -15,7 +15,7 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
+ASSIGN Syst.CUICommon:gcBrand = "1" 
        katun   = "RetFile".
        
 {Func/cparam.i2}
@@ -81,17 +81,17 @@ END FUNCTION.
 
 
 /* payment configuration not done */
-IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = gcBrand) THEN RETURN.
+IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = Syst.CUICommon:gcBrand) THEN RETURN.
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
 
 fELog("READPAYM","Started").
 
 /* read all possible origins */
 FOR EACH PaymCfg WHERE
-         PaymCfg.Brand = gcBrand NO-LOCK:
+         PaymCfg.Brand = Syst.CUICommon:gcBrand NO-LOCK:
 
    IF SEARCH(PaymCfg.ConvMod + ".r") = ? THEN NEXT. 
    
@@ -209,7 +209,7 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "DDRetFile"

@@ -156,7 +156,7 @@ ADD-ROW:
 
            CREATE FATGMember.
            ASSIGN
-              FATGmember.Brand = gcBrand 
+              FATGmember.Brand = Syst.CUICommon:gcBrand 
               FATGMember.FTGrp = INPUT frame lis fatgmember.ftgrp.
 
            RUN local-UPDATE-record.
@@ -370,7 +370,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET lcBrand WHEN gcAllBrand = TRUE
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            MemberType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF MemberType ENTERED THEN DO:
@@ -596,7 +596,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF fatgmember.membertype = 1 THEN RUN Help/nntuse.p.
 
                 IF CAN-FIND (FIRST xxmember WHERE 
-                             xxmember.Brand      = gcBrand               AND 
+                             xxmember.Brand      = Syst.CUICommon:gcBrand               AND 
                              xxmember.membertype = fatgmember.membertype AND
                              xxmember.ftgrp      = FatGmember.ftgrp      AND
                              xxmember.ftgmember  = siirto                AND
@@ -658,7 +658,7 @@ PROCEDURE local-UPDATE-record:
 
                    ELSE IF  FATGMember.MemberType = 1 THEN DO:
                       FIND FIRST BillItem where
-                                 BillItem.Brand    = gcBrand    AND 
+                                 BillItem.Brand    = Syst.CUICommon:gcBrand    AND 
                                  BillItem.BillCode = FATGMember.FTGMember 
                       NO-LOCK NO-ERROR.
 

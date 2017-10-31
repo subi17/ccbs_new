@@ -141,7 +141,7 @@ IF AVAIL TMSParam THEN lcCCPrepaidPriceList = TMSParam.CharVal.
 
 
  /* create records in ttable */
- FOR EACH FeeModel WHERE FeeModel.Brand = gcBrand AND 
+ FOR EACH FeeModel WHERE FeeModel.Brand = Syst.CUICommon:gcBrand AND 
                         FeeModel.FMGroup = 1,
     FIRST FMItem OF FeeModel WHERE FMItem.ToDate >= TODAY AND
                                    FMItem.FromDate <= TODAY AND
@@ -168,7 +168,7 @@ FORM
    PrePaidRequest.VatAmt      COLUMN-LABEL "TaxAmt"   FORMAT "->>9.99"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
    COLOR VALUE(Syst.CUICommon:cfc)   
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " TOPUP REQUESTS  "
    + string(pvm,"99-99-99") + " "
 FRAME sel.
@@ -263,7 +263,7 @@ FUNCTION fGetRequestID RETURNS INTEGER:
       liNextID = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liNextID)
       THEN LEAVE.
    END.
@@ -307,7 +307,7 @@ FUNCTION fMinusRequest RETURNS LOGIC
 
    ASSIGN
       PrePaidRequest.PPRequest   = fGetRequestID()
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = iiMsSeq
       PrePaidRequest.CLI         = icCLI
       PrePaidRequest.PPReqPrefix = "999"
@@ -391,7 +391,7 @@ REPEAT WITH FRAME sel:
              NEXT LOOP.
            END.
           
-         FIND FeeModel WHERE FeeModel.Brand = gcBrand AND 
+         FIND FeeModel WHERE FeeModel.Brand = Syst.CUICommon:gcBrand AND 
                              FeeModel.FeeModel  = ttable.ValueId NO-LOCK NO-ERROR.
                             
          /* Fetch default charge */
@@ -403,7 +403,7 @@ REPEAT WITH FRAME sel:
 
 
         FIND FIRST FMItem NO-LOCK  WHERE
-                   FMItem.Brand     = gcBrand       AND
+                   FMItem.Brand     = Syst.CUICommon:gcBrand       AND
                    FMItem.FeeModel  = FeeModel.FeeModel AND
                    FMItem.PriceList = lcPriceList AND
                    FMItem.FromDate <= TODAY     AND
@@ -490,7 +490,7 @@ REPEAT WITH FRAME sel:
 
            ASSIGN
               PrePaidRequest.PPRequest  = fGetRequestID()
-              PrePaidRequest.Brand      = gcBrand
+              PrePaidRequest.Brand      = Syst.CUICommon:gcBrand
               PrePaidRequest.MsSeq      = iiMsSeq
               PrePaidRequest.CLI        = lcMobCLI
               PrePaidRequest.UserCode   = katun
@@ -736,7 +736,7 @@ REPEAT WITH FRAME sel:
        HIDE FRAME f1 NO-PAUSE.
        IF lcCLI ENTERED THEN DO:
           FIND FIRST PrePaidRequest USE-INDEX CLI WHERE 
-                     PrePaidRequest.Brand = gcBrand AND
+                     PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                      PrePaidRequest.CLI >= lcCLI
           NO-LOCK NO-ERROR.
           IF NOT AVAILABLE PrePaidRequest THEN DO:
@@ -760,7 +760,7 @@ REPEAT WITH FRAME sel:
         NO-LOCK NO-ERROR.
 
         IF NOT CAN-FIND(FIRST Payment WHERE
-                              Payment.Brand  = gcBrand AND
+                              Payment.Brand  = Syst.CUICommon:gcBrand AND
                               Payment.RefNum = STRING(PrePaidRequest.PPRequest))
         THEN DO:
            MESSAGE
@@ -907,12 +907,12 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST PrePaidRequest USE-INDEX MsSeq WHERE
-                 PrePaidRequest.Brand = gcBrand AND
+                 PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                  PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST PrePaidRequest USE-INDEX Source WHERE 
-                 PrePaidRequest.Brand = gcBrand AND
+                 PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                  PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -922,12 +922,12 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND LAST PrePaidRequest USE-INDEX Source WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -937,12 +937,12 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND NEXT PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -952,12 +952,12 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN
       FIND PREV PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND PREV PrePaidRequest USE-INDEX Source WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -1161,7 +1161,7 @@ PROCEDURE local-UPDATE-record:
       /* in case of minus adjustment */
       IF PrePaidRequest.OrigRequest > 0 THEN DO: 
          FOR FIRST bufPP NO-LOCK WHERE
-                   bufPP.Brand     = gcBrand  AND
+                   bufPP.Brand     = Syst.CUICommon:gcBrand  AND
                    bufPP.PPRequest = PrePaidRequest.OrigRequest:
           ldMaxAmt =  bufPP.TopUpAmt / 100.
          END.
@@ -1262,7 +1262,7 @@ PROCEDURE local-UPDATE-record:
          ldMinus = 0.   
 
          FOR EACH bufPP NO-LOCK WHERE
-                  bufPP.Brand       = gcBrand                  AND
+                  bufPP.Brand       = Syst.CUICommon:gcBrand                  AND
                   bufPP.OrigRequest = PRePaidRequest.PPRequest AND
                   bufPP.Request     = "AdjustmentTRequest":
             ldMinus = ldMinus + bufPP.TopUpAmt.      

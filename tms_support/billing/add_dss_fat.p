@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun   = "Qvantel".
 {Func/cparam2.i}
 {Func/fdss.i}
@@ -61,7 +61,7 @@ FUNCTION fFatExists RETURNS LOGICAL (icFatGrp     AS CHAR,
    DEF VAR llExists  AS  LOG  NO-UNDO.
    
    FOR EACH FATime NO-LOCK WHERE
-            FATime.Brand = gcBrand AND
+            FATime.Brand = Syst.CUICommon:gcBrand AND
             FATime.MsSeq = iiMsSeq AND
             FATime.FTGrp = icFatGrp AND
             FATime.InvNum = 0 AND
@@ -218,7 +218,7 @@ PROCEDURE pGetCustomerSubscriptions:
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

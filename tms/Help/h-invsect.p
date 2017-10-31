@@ -37,7 +37,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 MAIN:
 repeat:
 
-   find first InvSect WHERE InvSect.Brand = gcBrand no-lock no-error.
+   find first InvSect WHERE InvSect.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available InvSect then do:
       must-print = false.
       MESSAGE "No invoice sections available"
@@ -70,7 +70,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(InvSect).
             down with frame sel.
-            find next InvSect  WHERE InvSect.Brand = gcBrand 
+            find next InvSect  WHERE InvSect.Brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
          end.
          must-print = false.
@@ -101,7 +101,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find InvSect where recid(InvSect) = rtab[frame-line] no-lock.
-               find prev InvSect  WHERE InvSect.Brand = gcBrand
+               find prev InvSect  WHERE InvSect.Brand = Syst.CUICommon:gcBrand
                no-lock no-error.
                if not available InvSect then do:
                   bell.
@@ -127,7 +127,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find InvSect where recid(InvSect) = rtab[frame-line] no-lock .
-               find next InvSect  WHERE InvSect.Brand = gcBrand
+               find next InvSect  WHERE InvSect.Brand = Syst.CUICommon:gcBrand
                no-lock no-error.
                if not available InvSect then do:
                   bell.
@@ -153,12 +153,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find InvSect where recid(InvSect) = memory no-lock no-error.
-            find prev InvSect  WHERE InvSect.Brand = gcBrand
+            find prev InvSect  WHERE InvSect.Brand = Syst.CUICommon:gcBrand
             no-lock no-error.
             if available InvSect then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev InvSect  WHERE InvSect.Brand = gcBrand
+                  find prev InvSect  WHERE InvSect.Brand = Syst.CUICommon:gcBrand
                   no-lock no-error.
                   if available InvSect then memory = recid(InvSect).
                   else i = frame-down.
@@ -196,7 +196,7 @@ BROWSE:
            hide frame hayr no-pause.
            if InvSect ENTERED then do:
               find first InvSect where 
-                         InvSect.Brand    = gcBrand AND 
+                         InvSect.Brand    = Syst.CUICommon:gcBrand AND 
                          invsect.InvSect >= InvSect
               no-lock no-error.
                if not available InvSect then do:
@@ -221,7 +221,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first InvSect  WHERE InvSect.Brand = gcBrand no-lock.
+           find first InvSect  WHERE InvSect.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(InvSect).
            must-print = true.
            next LOOP.
@@ -229,7 +229,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last InvSect   WHERE InvSect.Brand = gcBrand no-lock.
+           find last InvSect   WHERE InvSect.Brand = Syst.CUICommon:gcBrand no-lock.
            memory = recid(InvSect).
            must-print = true.
            next LOOP.

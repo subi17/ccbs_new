@@ -132,7 +132,7 @@ END.
 find invgroup of Customer no-lock no-error.
 if avail invgroup AND invgroup.CompName NE "" 
 then company = invgroup.CompName.
-else company = ynimi.
+else company = Syst.CUICommon:ynimi.
    
 /* first collect contract and single fees into temp-table */
 fCollectFees().   

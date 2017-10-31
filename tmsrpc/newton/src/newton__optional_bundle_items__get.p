@@ -24,7 +24,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
     {newton/src/settenant.i pcTenant}
 
    FIND TMSParam NO-LOCK WHERE 
-        TMSParam.Brand = gcBrand AND
+        TMSParam.Brand = Syst.CUICommon:gcBrand AND
         TMSParam.ParamGroup = "BundleItem" AND
         TMSParam.ParamCode = pcId NO-ERROR.
  

@@ -45,7 +45,7 @@ form
 WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) 
-    " FIND B-DESTINATION (" + gcBrand + ") '" + bthaku + "' " FRAME sel.
+    " FIND B-DESTINATION (" + Syst.CUICommon:gcBrand + ") '" + bthaku + "' " FRAME sel.
 
 
 form
@@ -58,7 +58,7 @@ Syst.CUICommon:cfc = "sel".
 RUN Syst/ufcolor.p. 
 ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
-FIND FIRST BDest WHERE BDest.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND FIRST BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 IF NOT AVAIL BDest THEN DO:
    BELL.
@@ -100,14 +100,14 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO, LEAVE loop :
           IF NOT nrohaku THEN DO:
 
              FIND FIRST BDest where 
-                        BDest.Brand   = gcBrand AND
+                        BDest.Brand   = Syst.CUICommon:gcBrand AND
                         BDest.BDName >= bthaku
              USE-INDEX BDName no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST BDest where 
-                        BDest.Brand  = gcBrand AND
+                        BDest.Brand  = Syst.CUICommon:gcBrand AND
                         BDest.BDest >= bthaku
              no-lock no-error.
              order = 2.
@@ -151,9 +151,9 @@ print-line:
                   BDest.DestType BDest.ToDate.
                rtab[FRAME-LINE] = recid(BDest).
                IF order = 2 THEN FIND NEXT BDest
-               USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND NEXT BDest
-               USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -214,9 +214,9 @@ BROWSE:
          FIND BDest where recid(BDest) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND prev BDest
-            USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev BDest
-            USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE BDest THEN
                ASSIGN firstline = i memory = recid(BDest).
             ELSE LEAVE.
@@ -239,9 +239,9 @@ BROWSE:
          IF FRAME-LINE = 1 THEN DO:
             FIND BDest where recid(BDest) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev BDest
-            USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev BDest
-            USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE BDest THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
                BELL.
@@ -270,9 +270,9 @@ BROWSE:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BDest where recid(BDest) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT BDest
-            USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND NEXT BDest
-            USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE BDest THEN DO:
                message "YOU ARE ON THE LAST ROW !".
                BELL.
@@ -300,18 +300,18 @@ BROWSE:
          memory = rtab[1].
          FIND BDest where recid(BDest) = memory no-lock no-error.
          IF order = 2 THEN FIND prev BDest
-         USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 1 THEN FIND prev BDest
-         USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          IF AVAILABLE BDest THEN DO:
             memory = recid(BDest).
 
             /* go back one page */
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND prev BDest
-               USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND prev BDest
-               USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF AVAILABLE BDest THEN memory = recid(BDest).
                ELSE line = FRAME-DOWN.
             END.
@@ -351,18 +351,18 @@ BROWSE:
 
      else if lookup(nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST BDest
-        USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND FIRST BDest
-        USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(BDest) must-print = TRUE.
         NEXT LOOP.
      END.
 
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST BDest
-        USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDest WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND LAST BDest
-        USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDName WHERE BDest.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(BDest) must-print = TRUE.
         NEXT LOOP.
      END.

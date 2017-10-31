@@ -152,7 +152,7 @@ form
         NO-LABEL
    SKIP(1)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " REVENUE REPORT " +
+        title " " + Syst.CUICommon:ynimi + " REVENUE REPORT " +
         string(pvm,"99-99-99") + " "
         FRAME rajat.
 
@@ -173,7 +173,7 @@ ASSIGN date2       = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
 
 IF lcFileDir = ? OR lcFileDir = "" THEN lcFileDir = "/tmp".       
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN InvGroup[2] = InvGroup.InvGroup.
 
 lcExFile = "".

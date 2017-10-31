@@ -70,7 +70,7 @@ form
     EDRHistory.UpdateDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " EDR History "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -343,7 +343,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCLI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -368,7 +368,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ldaRateDate WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -449,11 +449,11 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN DO:
       FIND FIRST EDRHistory USE-INDEX CLI WHERE
-                 EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND FIRST EDRHistory USE-INDEX UpdateDate WHERE
-                 EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -462,11 +462,11 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN DO:
       FIND LAST EDRHistory USE-INDEX CLI WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND LAST EDRHistory USE-INDEX UpdateDate WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -475,11 +475,11 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN DO:
       FIND NEXT EDRHistory USE-INDEX CLI WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND NEXT EDRHistory USE-INDEX UpdateDate WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -488,11 +488,11 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN DO:
       FIND PREV EDRHistory USE-INDEX CLI WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND PREV EDRHistory USE-INDEX UpdateDate WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -536,13 +536,13 @@ PROCEDURE local-UPDATE-record:
       ELSE lcCustName = "".
       
       FIND FIRST BillItem WHERE
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.CUICommon:gcBrand AND
           BillItem.BillCode = EDRHistory.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
       ELSE lcBIName = "".
 
       FIND FIRST BDest WHERE
-          BDest.Brand = gcBrand AND
+          BDest.Brand = Syst.CUICommon:gcBrand AND
           BDest.BDest = EDRHistory.BDest NO-LOCK NO-ERROR.
       IF AVAILABLE BDest THEN lcBDestName = BDest.BDName.
       ELSE lcBDestName = "".

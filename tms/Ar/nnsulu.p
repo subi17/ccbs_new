@@ -156,13 +156,13 @@ form
 "        Optionally also accounting data is being printed."      skip
 skip(13)
    WITH ROW 1 side-labels width 80
-        title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT JOURNAL " +
+        title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENT JOURNAL " +
         string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc)
         FRAME MAIN.
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 "PAYMENT JOURNAL; PAYMENTS DURING" AT 42 pvm1
+   Syst.CUICommon:ynimi at 1 "PAYMENT JOURNAL; PAYMENTS DURING" AT 42 pvm1
      format "99.99.9999" "-" pvm2 format "99.99.9999" "Page" AT 103
      sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(20)"
@@ -197,7 +197,7 @@ form header
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 "VOUCHER FOR BOOKKEEPING " AT 37 pvm1
+   Syst.CUICommon:ynimi at 1 "VOUCHER FOR BOOKKEEPING " AT 37 pvm1
    format "99.99.9999" "-" pvm2 format "99.99.9999"
    "Page" at 103 sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(24)"  AT 37
@@ -355,7 +355,7 @@ toimi:
                      END.
                      ELSE DO:
                         FIND InvGroup where 
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                              InvGroup.InvGroup = InvGroup
                         no-lock no-error.
                         IF NOT AVAIL InvGroup THEN DO:
@@ -448,7 +448,7 @@ message "Printing ...".
 main : 
 repeat:
 FOR EACH  Payment no-lock USE-INDEX AccDate where  
-          Payment.Brand     = gcBrand     AND
+          Payment.Brand     = Syst.CUICommon:gcBrand     AND
           Payment.AccDate  >= pvm1        AND 
           Payment.AccDate  <= pvm2        AND 
           Payment.InvNum   >= InvNum1     AND 

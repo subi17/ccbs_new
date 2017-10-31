@@ -39,7 +39,7 @@ DEF VAR db-name   AS C  NO-UNDO.
 /* Line Feed Char used as line separator in MemoText field */
 LF = chr(10).
 
-FIND FIRST memo WHERE memo.Brand     = gcBrand   AND
+FIND FIRST memo WHERE memo.Brand     = Syst.CUICommon:gcBrand   AND
                       memo.HostTable = HostTable AND
                       memo.KeyValue  = KeyValue  AND 
                       memo.MemoSeq   = MemoSeq NO-LOCK NO-ERROR.
@@ -51,7 +51,7 @@ ASSIGN tuni1 = "memo"
 
 FORM HEADER                                                 
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
-   ynimi "MEMO/NOTE" AT 34 pvm FORMAT "99.99.99" TO 78                   SKIP
+   Syst.CUICommon:ynimi "MEMO/NOTE" AT 34 pvm FORMAT "99.99.99" TO 78                   SKIP
    memo.MemoTitle AT 28 "Page "  AT 71        sl FORMAT "zz9"      TO 78    SKIP
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
    WITH

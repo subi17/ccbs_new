@@ -33,7 +33,7 @@ function fwritememo returns logic
     iicust  as int):
     
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "MobSub"
           Memo.KeyValue  = STRING(iiMsSeq)
           Memo.CustNum   = iiCust

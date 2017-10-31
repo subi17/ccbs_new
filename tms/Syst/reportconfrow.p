@@ -106,7 +106,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST ReportConf WHERE 
-           ReportConf.Brand = gcBrand AND
+           ReportConf.Brand = Syst.CUICommon:gcBrand AND
            ReportConf.ReportID = icReportID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE ReportConf THEN DO:
    MESSAGE "Report not available"
@@ -152,7 +152,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANS WITH FRAME lis:
 
-           DISPLAY gcBrand @ ReportConfRow.Brand
+           DISPLAY Syst.CUICommon:gcBrand @ ReportConfRow.Brand
                    icReportID @ ReportConfRow.ReportID.
 
            i = 1. 
@@ -162,7 +162,7 @@ REPEAT WITH FRAME sel:
            
            CREATE ReportConfRow.
            ASSIGN 
-              ReportConfRow.Brand     = gcBrand 
+              ReportConfRow.Brand     = Syst.CUICommon:gcBrand 
               ReportConfRow.ConfRowID = i
               ReportConfRow.ReportID  = icReportID.
 
@@ -526,25 +526,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST ReportConfRow WHERE 
-      ReportConfRow.Brand = gcBrand AND
+      ReportConfRow.Brand = Syst.CUICommon:gcBrand AND
       ReportConfRow.ReportID = icReportID NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST ReportConfRow WHERE 
-      ReportConfRow.Brand = gcBrand AND
+      ReportConfRow.Brand = Syst.CUICommon:gcBrand AND
       ReportConfRow.ReportID = icReportID NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT ReportConfRow WHERE 
-      ReportConfRow.Brand = gcBrand AND
+      ReportConfRow.Brand = Syst.CUICommon:gcBrand AND
       ReportConfRow.ReportID = icReportID NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV ReportConfRow WHERE 
-      ReportConfRow.Brand = gcBrand AND
+      ReportConfRow.Brand = Syst.CUICommon:gcBrand AND
       ReportConfRow.ReportID = icReportID NO-LOCK NO-ERROR.
 END PROCEDURE.
 

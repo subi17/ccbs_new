@@ -17,7 +17,7 @@ END.
 /* check order exist */
 /* check order exist */
 FIND Order NO-LOCK WHERE
-     Order.Brand = gcbrand AND
+     Order.Brand = Syst.CUICommon:gcBrand AND
      Order.OrderId = piOrderId NO-ERROR.
 IF NOT AVAIL Order THEN 
    RETURN SUBST("Unknown Order id &1",STRING(piOrderId)).

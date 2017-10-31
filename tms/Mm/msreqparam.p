@@ -457,7 +457,7 @@ PROCEDURE pGetParameters:
    
    /* check what fields are used for this request type and get their values */
    FOR EACH RequestParam NO-LOCK WHERE
-            RequestParam.Brand     = gcBrand             AND
+            RequestParam.Brand     = Syst.CUICommon:gcBrand             AND
             RequestParam.ReqType   = lhType:BUFFER-VALUE AND
             RequestParam.DispParam = TRUE                AND
             RequestParam.Usage     > "":
@@ -571,7 +571,7 @@ PROCEDURE pCLIType:
    DEF OUTPUT PARAMETER ocDescription AS CHAR NO-UNDO.
  
    FIND CLIType WHERE 
-        CLIType.Brand   = gcBrand AND
+        CLIType.Brand   = Syst.CUICommon:gcBrand AND
         CLIType.CLIType = icValue NO-LOCK NO-ERROR.
    IF AVAILABLE CLIType THEN 
       ocDescription = CLIType.CLIName.
@@ -589,7 +589,7 @@ PROCEDURE pServCom:
       icValue = ENTRY(1,icValue,".").
 
    FIND ServCom WHERE 
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = icValue NO-LOCK NO-ERROR.
    IF AVAILABLE ServCom THEN 
       ocDescription = ServCom.SCName.
@@ -603,7 +603,7 @@ PROCEDURE pServPac:
    DEF OUTPUT PARAMETER ocDescription AS CHAR NO-UNDO.
 
    FIND ServPac WHERE
-        ServPac.Brand   = gcBrand  AND
+        ServPac.Brand   = Syst.CUICommon:gcBrand  AND
         ServPAc.ServPac = icValue NO-LOCK NO-ERROR.
    IF AVAILABLE ServPac THEN 
       ocDescription = ServPac.SPName.
@@ -617,7 +617,7 @@ PROCEDURE pDayCampaign:
    DEF OUTPUT PARAMETER ocDescription AS CHAR NO-UNDO.
 
    FIND DayCampaign WHERE
-        DayCampaign.Brand   = gcBrand  AND
+        DayCampaign.Brand   = Syst.CUICommon:gcBrand  AND
         DayCampaign.DCEvent = icValue NO-LOCK NO-ERROR.
    IF AVAILABLE DayCampaign THEN 
       ocDescription = DayCampaign.DCName.
@@ -631,7 +631,7 @@ PROCEDURE pBillCode:
    DEF OUTPUT PARAMETER ocDescription AS CHAR NO-UNDO.
 
    FIND BillItem WHERE
-        BillItem.Brand    = gcBrand  AND
+        BillItem.Brand    = Syst.CUICommon:gcBrand  AND
         BillItem.BillCode = icValue NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN 
       ocDescription = BillItem.BIName.

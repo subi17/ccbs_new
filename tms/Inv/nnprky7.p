@@ -35,7 +35,7 @@ form
    "CLI / Billing Item / CCN." AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + 
+        title " " + Syst.CUICommon:ynimi + 
         " CALL SUMMARY PER CCN (REPORT 7) " +
         string(pvm,"99-99-99") + " "
         FRAME valinta.
@@ -112,7 +112,7 @@ toimi:
             InvNum
             VALIDATE(INPUT InvNum = 0 OR
                      CAN-FIND (FIRST Invoice WHERE
-                               Invoice.Brand  = gcBrand AND
+                               Invoice.Brand  = Syst.CUICommon:gcBrand AND
                                Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             WITH FRAME rajat.
@@ -134,7 +134,7 @@ toimi:
                UPDATE
                CustNum
                   validate(CAN-FIND(FIRST Customer WHERE 
-                                    Customer.Brand   = gcBrand AND
+                                    Customer.Brand   = Syst.CUICommon:gcBrand AND
                                     Customer.CustNum = INPUT CustNum),
                            "Unknown customer")                            
                pvm1

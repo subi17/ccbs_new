@@ -82,7 +82,7 @@ FORM
    RepText.ToDate          FORMAT "99-99-99" COLUMN-LABEL "Valid To"
    RepText.RepText         FORMAT "x(29)"
 WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
       "  TRANSLATIONS  " + STRING(pvm,"99-99-99") + " "     
    FRAME sel.
 
@@ -459,7 +459,7 @@ REPEAT WITH FRAME sel:
          haku2 = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          DISPLAY lcBrand WITH FRAME hayr1.
-         UPDATE lcBrand WHEN gcAllBrand
+         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 liType
                 haku2 WITH FRAME hayr1.
 
@@ -674,14 +674,14 @@ PROCEDURE local-find-FIRST:
 
    IF icKeyValue > "" THEN DO:
       FIND FIRST RepText WHERE
-                 RepText.Brand    = gcBrand    AND
+                 RepText.Brand    = Syst.CUICommon:gcBrand    AND
                  RepText.TextType = iiTextType AND
                  RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
       IF order = 1 THEN 
-      FIND FIRST RepText WHERE RepText.Brand = gcBrand
+      FIND FIRST RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
          
@@ -691,13 +691,13 @@ PROCEDURE local-find-LAST:
 
    IF icKeyValue > "" THEN DO:
       FIND LAST RepText WHERE
-                RepText.Brand    = gcBrand    AND
+                RepText.Brand    = Syst.CUICommon:gcBrand    AND
                 RepText.TextType = iiTextType AND
                 RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
-      FIND LAST RepText WHERE RepText.Brand = gcBrand
+      FIND LAST RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
    
@@ -707,13 +707,13 @@ PROCEDURE local-find-NEXT:
 
    IF icKeyValue > "" THEN DO:
       FIND NEXT RepText WHERE
-                RepText.Brand    = gcBrand    AND
+                RepText.Brand    = Syst.CUICommon:gcBrand    AND
                 RepText.TextType = iiTextType AND
                 RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
-      FIND NEXT RepText WHERE RepText.Brand = gcBrand
+      FIND NEXT RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
 
@@ -723,13 +723,13 @@ PROCEDURE local-find-PREV:
  
    IF icKeyValue > "" THEN DO:
       FIND PREV RepText WHERE
-                RepText.Brand    = gcBrand    AND
+                RepText.Brand    = Syst.CUICommon:gcBrand    AND
                 RepText.TextType = iiTextType AND
                 RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
-      FIND PREV RepText WHERE RepText.Brand = gcBrand
+      FIND PREV RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
 

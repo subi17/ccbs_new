@@ -19,7 +19,7 @@ SESSION:NUMERIC-FORMAT = "European".
 {Func/ftransdir.i}
 /*{femaildata2.i}*/
 
-ASSIGN gcBrand = "1".
+ASSIGN Syst.CUICommon:gcBrand = "1".
 
 DEF INPUT PARAM icFile AS CHAR NO-UNDO.
 DEF INPUT PARAM icOUTPUTFile AS CHAR NO-UNDO.
@@ -157,7 +157,7 @@ OUTPUT STREAM soutfile CLOSE.
 INPUT STREAM sinfile CLOSE.
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = gcBrand     AND
+           OrderCustomer.Brand   = Syst.CUICommon:gcBrand     AND
            OrderCustomer.OrderID = iiOrderNbr  AND
            OrderCustomer.RowType = 1 NO-ERROR.
 

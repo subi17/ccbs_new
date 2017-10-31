@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
                  if frame-field = "ServCom" THEN DO:
                     if input ttSubSer.ServCom = "" THEN LEAVE add-row.
                     FIND ServCom where 
-                         ServCom.Brand   = gcBrand    AND 
+                         ServCom.Brand   = Syst.CUICommon:gcBrand    AND 
                          ServCom.ServCom = INPUT ttSubSer.ServCom
                     no-lock no-error.
                     IF NOT AVAIL ServCom THEN DO:
@@ -312,7 +312,7 @@ REPEAT WITH FRAME sel:
            /* check if component is defined for clitype and get 
               default value */
            FIND FIRST CTServEl WHERE
-                      CTServEl.Brand    = gcBrand        AND
+                      CTServEl.Brand    = Syst.CUICommon:gcBrand        AND
                       CTServEl.ServCom  = INPUT FRAME lis ttSubSer.ServCom AND
                       CTServEl.CLIType  = MobSub.CLIType AND
                       CTServEl.FromDate <= INPUT FRAME lis ttSubSer.SSDate
@@ -595,7 +595,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(FALSE).
         IF AVAILABLE ttSubSer THEN DO:
            FIND ServCom WHERE 
-                ServCom.Brand   = gcBrand AND
+                ServCom.Brand   = Syst.CUICommon:gcBrand AND
                 ServCom.ServCom = ttSubSer.ServCom NO-LOCK NO-ERROR.
            IF NOT AVAILABLE ServCom OR 
               NOT ServCom.ServAttrL 
@@ -770,7 +770,7 @@ PROCEDURE local-find-this:
        FIND ttSubSer WHERE recid(ttSubSer) = rtab[frame-line(sel)] 
        NO-LOCK.
     FIND ServCom WHERE 
-         ServCom.Brand   = gcBrand AND 
+         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
          ServCom.ServCom = ENTRY(1,ttSubSer.ServCom,".") 
     NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -819,11 +819,11 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND ServPac WHERE 
-        ServPac.Brand   = gcBrand   AND 
+        ServPac.Brand   = Syst.CUICommon:gcBrand   AND 
         ServPac.ServPac = ttSubSer.ServPac NO-LOCK NO-ERROR.
    
    FIND ServCom WHERE 
-        ServCom.Brand   = gcBrand  AND 
+        ServCom.Brand   = Syst.CUICommon:gcBrand  AND 
         ServCom.ServCom = ENTRY(1,ttSubSer.ServCom,".") NO-LOCK NO-ERROR.
 
    llRequest = CAN-FIND(FIRST MsRequest WHERE      
@@ -1003,7 +1003,7 @@ PROCEDURE local-UPDATE-record:
             /* are there rules for updating other components due
                to the change of this one */
             FOR EACH ScUpdRule NO-LOCK WHERE
-                     ScUpdRule.Brand    = gcBrand          AND
+                     ScUpdRule.Brand    = Syst.CUICommon:gcBrand          AND
                      ScUpdRule.ServCom  = ttSubSer.ServCom AND
                      ScUpdRule.OldValue = liOldStat        AND
                      ScUpdRule.NewValue = liNewStat:
@@ -1044,7 +1044,7 @@ PROCEDURE local-UPDATE-record:
 
          ttSubSer.ServPac = "".
          FOR FIRST CTServEl NO-LOCK WHERE
-                   CTServEl.Brand   = gcBrand          AND 
+                   CTServEl.Brand   = Syst.CUICommon:gcBrand          AND 
                    CTServEl.ServCom = ttSubSer.ServCom AND
                    CTServEl.CLIType = MobSub.CLIType   AND
                    CTServEl.FromDate <= TODAY:
@@ -1104,7 +1104,7 @@ PROCEDURE local-copy-ServPac:
       UPDATE lcServPac 
          VALIDATE(input lcServPac = "" OR 
                   CAN-FIND(ServPac where
-                           ServPac.Brand   = gcBrand AND 
+                           ServPac.Brand   = Syst.CUICommon:gcBrand AND 
                            ServPac.ServPac = INPUT lcServPac),
                  "UNKNOWN Service PACK !")
          ldtDate.
@@ -1117,7 +1117,7 @@ PROCEDURE local-copy-ServPac:
       END.
       
       FIND ServPac WHERE
-           ServPac.Brand   = gcBrand AND 
+           ServPac.Brand   = Syst.CUICommon:gcBrand AND 
            ServPac.ServPac = lcServPac NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServPac THEN DO:
          MESSAGE "Service package record not found for: " lcServPac
@@ -1138,7 +1138,7 @@ PROCEDURE local-copy-ServPac:
       
       /* package must be defined to clitype */
       IF NOT CAN-FIND(FIRST CTServPac WHERE
-                            CTServPac.Brand     = gcBrand        AND
+                            CTServPac.Brand     = Syst.CUICommon:gcBrand        AND
                             CTServpac.CLIType   = MobSub.CLIType AND
                             CTServPac.ServPac   = lcServPac      AND
                             CTServPac.FromDate <= TODAY)

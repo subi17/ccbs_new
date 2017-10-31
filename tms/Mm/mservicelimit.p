@@ -392,7 +392,7 @@ BROWSE:
         FIND FIRST servicelimit WHERE 
                    ServiceLimit.slseq = mservicelimit.slseq NO-LOCK NO-ERROR.
         FIND FIRST servicelimitGroup WHERE 
-                   ServiceLimitGroup.Brand = gcBrand AND
+                   ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
                    servicelimitgroup.groupcode = servicelimit.GroupCode
         NO-LOCK NO-ERROR.           
                    
@@ -429,7 +429,7 @@ BROWSE:
         FIND FIRST servicelimit WHERE 
                    ServiceLimit.slseq = mservicelimit.slseq NO-LOCK NO-ERROR.
         FIND FIRST servicelimitGroup WHERE 
-                   ServiceLimitGroup.Brand = gcBrand AND
+                   ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
                    servicelimitgroup.groupcode = servicelimit.GroupCode
         NO-LOCK NO-ERROR.
 
@@ -492,7 +492,7 @@ BROWSE:
           END.
        
           FOR EACH FixedFee WHERE 
-                   FixedFee.Brand             = gcBrand                     AND
+                   FixedFee.Brand             = Syst.CUICommon:gcBrand                     AND
                    FixedFee.HostTable         = "mobsub"                    AND 
                    Fixedfee.keyvalue          = string(mservicelimit.msseq) AND                   Fixedfee.servicelimitgroup = lcgroup .
                     

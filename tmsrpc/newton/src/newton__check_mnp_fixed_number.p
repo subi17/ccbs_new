@@ -13,14 +13,14 @@ pcFixedNumber = get_string(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF CAN-FIND(FIRST MobSub WHERE
-                  MobSub.brand EQ Syst.Parameters:gcBrand AND
+                  MobSub.brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
                   MobSub.fixedNumber EQ pcFixedNumber) THEN
     RETURN appl_err("Subscription exists for this number").
 
 FOR EACH OrderFusion NO-LOCK WHERE
          OrderFusion.FixedNumber EQ pcFixedNumber,
     EACH Order NO-LOCK WHERE
-         Order.brand    EQ Syst.Parameters:gcBrand AND
+         Order.brand    EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
          Order.OrderId  EQ OrderFusion.OrderId AND
          LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0:
     RETURN appl_err("Order exists for this number").

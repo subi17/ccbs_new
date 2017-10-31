@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun

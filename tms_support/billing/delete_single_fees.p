@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
+assign Syst.CUICommon:gcBrand = "1"
        katun = "Qvantel".
 {Syst/eventval.i}
 
@@ -27,7 +27,7 @@ output stream sbak to /apps/yoigo/tms_support/billing/delete_single_fees.d appen
 FUNCTION fDeleteSingleFee RETURNS LOGICAL (INPUT iiTermPeriod AS INT):
 
    FIND FIRST SingleFee USE-INDEX Custnum WHERE
-              SingleFee.Brand = gcBrand AND
+              SingleFee.Brand = Syst.CUICommon:gcBrand AND
               SingleFee.Custnum = MobSub.CustNum AND
               SingleFee.HostTable = "Mobsub" AND
               SingleFee.KeyValue = STRING(MobSub.MsSeq) AND

@@ -13,7 +13,7 @@
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
 {Func/lib/eventlog.i}
@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 FIND FIRST OrderAccessory EXCLUSIVE-LOCK WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
            OrderAccessory.OrderId = liOrderId AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 

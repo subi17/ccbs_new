@@ -69,26 +69,26 @@ view FRAME sel.
 orders = "By Code,By Name,By 3, By 4".
 
 FIND FIRST ServCom WHERE 
-           ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+           ServCom.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAILABLE ServCom THEN  DO:
    MESSAGE "No Service components available !" view-as alert-box.
    return.
 END.
 
 FIND Order WHERE 
-     Order.Brand = gcBrand AND 
+     Order.Brand = Syst.CUICommon:gcBrand AND 
      Orderid     = iiOrderId 
 NO-LOCK NO-ERROR.
 
 for each ServCom no-lock WHERE 
-         ServCom.Brand = gcBrand :
+         ServCom.Brand = Syst.CUICommon:gcBrand :
    create ttService.
    assign
      ttService.ServCom = ServCom.ServCom
      ttService.ScName  = ServCom.ScName.
 
    IF CAN-FIND(ServEl WHERE 
-               ServEl.Brand   = gcBrand AND 
+               ServEl.Brand   = Syst.CUICommon:gcBrand AND 
                ServEl.ServPac = "*1"    AND
                ServEl.ServCom = ServCom.ServCom) 
    THEN ttService.chosen = TRUE.
@@ -351,7 +351,7 @@ NO-LOCK:
                OrderService.Service = ttService.ServCom NO-ERROR.
     IF NOT AVAILABLE OrderService THEN DO:
        CREATE OrderService.
-       ASSIGN OrderService.Brand   = gcBrand
+       ASSIGN OrderService.Brand   = Syst.CUICommon:gcBrand
               OrderService.OrderID = Order.OrderID
               OrderService.Service = ttService.ServCom.
     END.

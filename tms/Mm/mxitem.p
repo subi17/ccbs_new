@@ -70,7 +70,7 @@ form
 
 WITH ROW FrmRow width 72 CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  ORDER FUNCTION ITEMS MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

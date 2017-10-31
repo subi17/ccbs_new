@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/tsformat.i}
@@ -135,7 +135,7 @@ REPEAT:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "TF_CREAD_" + lcTFBank
          ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"

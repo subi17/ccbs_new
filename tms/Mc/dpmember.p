@@ -649,7 +649,7 @@ PROCEDURE local-find-others.
       liKeyValue = INT(DPMember.KeyValue) NO-ERROR.
 
    FIND FIRST DiscountPlan WHERE 
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPId = DPMember.DPId NO-LOCK NO-ERROR.
    IF AVAILABLE DiscountPlan THEN ASSIGN
       lcDPRuleID = DiscountPlan.DPRuleID
@@ -746,7 +746,7 @@ PROCEDURE local-UPDATE-record:
                   IF INPUT lcDPRuleID = "" THEN UNDO, LEAVE UpdateMember.
                   
                   FIND FIRST DiscountPlan WHERE 
-                     DiscountPlan.Brand = gcBrand AND
+                     DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                      DiscountPlan.DPRuleId = INPUT lcDPRuleID NO-LOCK NO-ERROR.
   
                   IF NOT AVAILABLE DiscountPlan THEN DO:

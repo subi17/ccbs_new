@@ -17,7 +17,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
@@ -99,7 +99,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = pcNewBundle NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 

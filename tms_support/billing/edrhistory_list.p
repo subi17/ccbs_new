@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "qvantel".
 {edrhistory_changes.i}
 
@@ -259,7 +259,7 @@ FOR EACH ttAmtChanged WHERE
          ttAmtChanged.Amount NE 0:
 
    FIND FIRST BillItem WHERE 
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = ttAmtChanged.BillCode NO-LOCK NO-ERROR.
               
    PUT STREAM sLog UNFORMATTED           
@@ -324,7 +324,7 @@ FOR EACH ttErrorChanged WHERE
          ttErrorChanged.Qty NE 0:
 
    FIND FIRST BillItem WHERE 
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = ttErrorChanged.BillCode NO-LOCK NO-ERROR.
               
    FIND FIRST MobError WHERE MobError.MobError = ttErrorChanged.ErrorCode

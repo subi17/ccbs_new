@@ -10,7 +10,7 @@
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -171,7 +171,7 @@ REPEAT:
       END.
       
       FIND FIRST Invoice NO-LOCK WHERE 
-                 Invoice.Brand    = gcBrand  AND 
+                 Invoice.Brand    = Syst.CUICommon:gcBrand  AND 
                  Invoice.ExtInvID = lcInvNum NO-ERROR.  
       IF NOT AVAIL Invoice THEN DO:
          fError("Invalid Invoice Number").

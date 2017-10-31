@@ -77,7 +77,7 @@ FUNCTION fCheckNewSIM RETURNS CHAR
  iiSimDeliv AS INT):
    
    FIND new-SIM NO-LOCK WHERE 
-      new-SIM.Brand = gcBrand AND 
+      new-SIM.Brand = Syst.CUICommon:gcBrand AND 
       new-SIM.ICC = icICC
    NO-ERROR.
    
@@ -129,7 +129,7 @@ FIND MobSub   WHERE
 NO-LOCK.
 
 FIND SIM      WHERE 
-     SIM.Brand    = gcBrand AND 
+     SIM.Brand    = Syst.CUICommon:gcBrand AND 
      SIM.ICC      = MobSub.ICC
 NO-LOCK NO-ERROR.
      

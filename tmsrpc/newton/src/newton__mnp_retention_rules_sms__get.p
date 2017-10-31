@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR pcTenant       AS CHAR      NO-UNDO. 
 DEF VAR lcResultStruct AS CHAR      NO-UNDO. 
@@ -28,7 +28,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
       
 FOR EACH InvText NO-LOCK WHERE
-         InvText.Brand = gcBrand AND
+         InvText.Brand = Syst.CUICommon:gcBrand AND
          InvText.Target = "SMS" AND
          InvText.KeyValue BEGINS "MNPRescue" AND
          InvText.Language = 1 AND

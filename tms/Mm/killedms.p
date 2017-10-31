@@ -40,7 +40,7 @@ help "Latest Date of call" skip(1)
 "          other ..................:" statother 
 skip(1)
 WITH
-   width 80 overlay no-labels title " " + ynimi +
+   width 80 overlay no-labels title " " + Syst.CUICommon:ynimi +
    " Count mobile subscriptions " FRAME rajat.
 
 pvm1 = date(month(TODAY),1,year(TODAY)).
@@ -80,7 +80,7 @@ toimi:
    FOR EACH MSOwner no-lock where
             MSOwner.TsBegin >= stamp1  AND
             MSOwner.TsEnd   <= stamp2  AND 
-            MSOwner.Brand    = gcBrand :
+            MSOwner.Brand    = Syst.CUICommon:gcBrand :
 
       lkm = lkm + 1.
 

@@ -68,7 +68,7 @@ form
     DumpLog.FileName FORMAT "X(40)" COLUMN-LABEL "Filename"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "DUMP LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 

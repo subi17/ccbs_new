@@ -12,7 +12,7 @@ DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 DEF VAR llOk AS LOG NO-UNDO.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.CUICommon:gcBrand AND 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:

@@ -34,7 +34,7 @@ repeat:
 END.      
     
 
-   FOR EACH MobSub WHERE Mobsub.Brand = gcBrand AND 
+   FOR EACH MobSub WHERE Mobsub.Brand = Syst.CUICommon:gcBrand AND 
    (IF CustNum NE 0 THEN MobSub.CustNum = CustNum ELSE TRUE) no-lock:
 
       /* ALL */
@@ -52,7 +52,7 @@ END.
 
   FOR EACH MSOwner no-lock where
            MSOwner.TsEnd   <= 999999999  AND
-           MSOwner.Brand    = gcBrand    AND 
+           MSOwner.Brand    = Syst.CUICommon:gcBrand    AND 
      NOT CAN-FIND(First mobsub WHERE mobsub.msseq = msowner.msseq)     . 
 
        ASSIGN

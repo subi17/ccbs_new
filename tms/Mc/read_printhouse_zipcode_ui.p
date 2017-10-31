@@ -36,7 +36,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  ZIP CODE FILE  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  ZIP CODE FILE  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

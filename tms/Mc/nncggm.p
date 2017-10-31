@@ -193,7 +193,7 @@ skip
 WITH
    centered OVERLAY NO-LABEL ROW 1
    title " Gather members into customer group '" + CustGroup + "' " +
-         "(" + gcBrand + ") "
+         "(" + Syst.CUICommon:gcBrand + ") "
    FRAME rajat.
 
 form
@@ -216,7 +216,7 @@ llEMail = FALSE.
 PAUSE 0.
 
 FIND FIRST custgroup WHERE
-           CustGroup.Brand     = gcBrand AND
+           CustGroup.Brand     = Syst.CUICommon:gcBrand AND
            custgroup.custgroup = custgroup
 EXCLUSIVE-LOCK NO-ERROR.           
 
@@ -287,22 +287,22 @@ with frame rajat.
 pause 0.
 
 FIND custgroup where  
-     CustGroup.Brand     = gcBrand AND
+     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
      custgroup.custgroup = xcustgroup   NO-LOCK NO-ERROR.
 FIND CustCat where
-     CustCat.Brand    = gcBrand AND
+     CustCat.Brand    = Syst.CUICommon:gcBrand AND
      CustCat.Category = Category     NO-LOCK NO-ERROR.
 FIND PriceList where 
-     PriceList.Brand     = gcBrand AND
+     PriceList.Brand     = Syst.CUICommon:gcBrand AND
      PriceList.PriceList = Pricelist    NO-LOCK NO-ERROR.
 FIND invgroup where 
-     InvGroup.Brand     = gcBrand AND
+     InvGroup.Brand     = Syst.CUICommon:gcBrand AND
      InvGroup.InvGroup  = invgroup     NO-LOCK NO-ERROR.
 FIND salesman where 
-     Salesman.Brand     = gcBrand AND
+     Salesman.Brand     = Syst.CUICommon:gcBrand AND
      Salesman.SalesMan  = salesman     NO-LOCK NO-ERROR.
 FIND Reseller where
-     Reseller.Brand    = gcBrand AND
+     Reseller.Brand    = Syst.CUICommon:gcBrand AND
      Reseller.reseller = reseller     NO-LOCK NO-ERROR.
 FIND rcust where rcust.CustNum         = rd-cust-nr   NO-LOCK NO-ERROR.
 
@@ -350,7 +350,7 @@ IF updatemode  THEN
               "ALL CUSTOMERS" @ CustGroup.CGName.
             ELSE DO:
                FIND CustGroup where 
-                    CustGroup.Brand     = gcBrand AND
+                    CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                     CustGroup.CustGroup = INPUT xCustGroup
                no-lock no-error.
                IF NOT AVAIL CustGroup THEN DO:
@@ -369,7 +369,7 @@ IF updatemode  THEN
             if input Category = "" then disp "ALL" @ CustCat.CatName.
             ELSE DO:
                FIND CustCat where 
-                    CustCat.Brand    = gcBrand AND
+                    CustCat.Brand    = Syst.CUICommon:gcBrand AND
                     CustCat.Category = INPUT Category 
                no-lock no-error.
                IF NOT AVAIL CustCat THEN DO:
@@ -383,7 +383,7 @@ IF updatemode  THEN
             if input InvGroup = "" then disp "ALL" @ InvGroup.Igname.
             ELSE DO:                        
                FIND InvGroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup = INPUT InvGroup
                no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -397,7 +397,7 @@ IF updatemode  THEN
             if input PriceList = "" then disp "ALL" @ PriceList.PLName.
             ELSE DO:
                FIND PriceList where 
-                    PriceList.Brand     = gcBrand AND
+                    PriceList.Brand     = Syst.CUICommon:gcBrand AND
                     PriceList.PriceList = INPUT PriceList no-lock no-error.
                IF NOT AVAIL PriceList THEN DO:
                   bell. message "UNKNOWN !". NEXT.
@@ -422,7 +422,7 @@ IF updatemode  THEN
             if input Salesman = "" then disp "ALL" @ Salesman.SmName.
             ELSE DO:
                FIND Salesman where 
-                    Salesman.Brand     = gcBrand AND
+                    Salesman.Brand     = Syst.CUICommon:gcBrand AND
                     Salesman.SalesMan = INPUT Salesman
                no-lock no-error.
                IF NOT AVAIL Salesman THEN DO:
@@ -436,7 +436,7 @@ IF updatemode  THEN
             if input Reseller = "" then disp "ALL" @ Reseller.rsName.
             ELSE DO:
                FIND Reseller where 
-                    Reseller.Brand    = gcBrand AND
+                    Reseller.Brand    = Syst.CUICommon:gcBrand AND
                     Reseller.reseller = INPUT Reseller
                no-lock no-error.
                IF NOT AVAIL Reseller THEN DO:
@@ -471,7 +471,7 @@ IF updatemode  THEN
 
                IF lcCheck NE "Fixed" AND
                   NOT CAN-FIND(CLIType WHERE 
-                               CLIType.Brand   = gcBrand AND
+                               CLIType.Brand   = Syst.CUICommon:gcBrand AND
                                CLIType.CLIType = lcCheck)
                THEN DO:
                   liCount = 99.
@@ -527,11 +527,11 @@ toimi:
    /* seek Customers AND accept those matching WITH given parameters */
    if xCustGroup ne "" THEN DO:
       FIND FIRST CGMember where 
-                 CGMember.Brand     = gcBrand AND
+                 CGMember.Brand     = Syst.CUICommon:gcBrand AND
                  CGMember.CustGroup = xCustGroup no-lock no-error.
       FIND Customer WHERE Customer.CustNum = CGMember.CustNum no-lock no-error.
    END.
-   ELSE FIND FIRST Customer WHERE Customer.Brand = gcBrand no-lock no-error.
+   ELSE FIND FIRST Customer WHERE Customer.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
 
 
@@ -718,7 +718,7 @@ Customer:
 
       if xCustGroup ne "" THEN DO:
          FIND NEXT CGMember where 
-                   CGMember.Brand     = gcBrand AND
+                   CGMember.Brand     = Syst.CUICommon:gcBrand AND
                    CGMember.CustGroup = xCustGroup
          no-lock no-error.
          IF NOT AVAIL CGMember THEN LEAVE Customer.
@@ -727,7 +727,7 @@ Customer:
               Customer.CustNum =  CGMember.CustNum no-lock no-error.
       END.
       ELSE FIND NEXT Customer WHERE 
-         Customer.Brand = gcBrand no-lock no-error.
+         Customer.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
    END. /* Customer */
    PAUSE 0.
@@ -742,7 +742,7 @@ Customer:
    MESSAGE "Do You Want to Save Used Criteria?" update ok.    
    IF OK THEN DO:
       Find FIRST CustGroup WHERE
-                 CustGroup.Brand     = gcBrand AND
+                 CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                  CustGroup.CustGroup = CustGroup
       EXCLUSIVE-LOCK No-ERROR.
 

@@ -37,7 +37,7 @@ DEF VAR xrecid       AS RECID.
 def var mess         as c   format "x(34)"  NO-UNDO EXTENT 5.
 def var memb         as lo format "*/" NO-UNDO.
 
-FIND FIRST company where company.Brand = gcBrand no-lock.
+FIND FIRST company where company.Brand = Syst.CUICommon:gcBrand no-lock.
 
 IF llDoEvent THEN 
 DO:

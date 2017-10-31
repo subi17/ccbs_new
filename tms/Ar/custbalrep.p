@@ -61,7 +61,7 @@ FUNCTION CheckPage RETURNS LOGIC
 END.
 
 FIND FIRST Customer WHERE 
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN.           
 
@@ -76,7 +76,7 @@ ASSIGN
 
 FORM header
    line1 AT 1 SKIP
-   ynimi at 1 format "x(28)" 
+   Syst.CUICommon:ynimi at 1 format "x(28)" 
    "Customer Balance Report" AT 30
    "Page" AT 68  
    sl format "ZZZZ9" SKIP
@@ -106,7 +106,7 @@ PUT STREAM tul UNFORMATTED
 rl = rl + 7.
 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand   = gcBrand AND
+         Invoice.Brand   = Syst.CUICommon:gcBrand AND
          Invoice.CustNum = Customer.CustNum:
 
    RUN Ar/invbal.p(INPUT Invoice.InvNum, OUTPUT lDebt ).

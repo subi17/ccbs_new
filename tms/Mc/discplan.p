@@ -78,7 +78,7 @@ form
              /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Discount Plans "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -384,7 +384,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
-       SET lcBrand WHEN gcAllBrand
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand
            DiscPlan WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF DiscPlan ENTERED THEN DO:
@@ -406,7 +406,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        disp lcBrand with frame f2.
-       SET lcBrand WHEN gcAllBrand
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand
            DPName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF DPName ENTERED THEN DO:

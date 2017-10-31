@@ -68,7 +68,7 @@ help "(D)irect, (I)ndirect  (?)=ALL" SKIP
  skip(1)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " EXCEL-SUMMARY OF Billed PRODUCTS " +
+   " " + Syst.CUICommon:ynimi + " EXCEL-SUMMARY OF Billed PRODUCTS " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
@@ -86,7 +86,7 @@ repeat WITH FRAME start:
       exdate1  validate(exdate1 ne ?,"Give first Date !")
       exdate2  validate(input exdate2 >= input exdate1,"Invalid order !")
       InvGroup  validate(InvGroup = "" OR can-find(InvGroup where
-                                 InvGroup.Brand  = gcBrand AND
+                                 InvGroup.Brand  = Syst.CUICommon:gcBrand AND
                                  InvGroup.InvGroup = InvGroup),
                                  "Group does not exist !")
       exConnType
@@ -117,10 +117,10 @@ task:
    /* headers FIRST */
    if InvGroup ne "" THEN DO:
       FIND InvGroup NO-LOCK where 
-           InvGroup.Brand  = gcBrand AND
+           InvGroup.Brand  = Syst.CUICommon:gcBrand AND
            InvGroup.InvGroup = InvGroup.
    END.   
-   PUT STREAM excel UNFORMATTED ynimi.
+   PUT STREAM excel UNFORMATTED Syst.CUICommon:ynimi.
    RUN Syst/uexskip.p(1).
    put stream excel unformatted "Invoicing group: ".
    if InvGroup ne "" THEN PUT STREAM excel UNFORMATTED
@@ -141,7 +141,7 @@ task:
 
    FOR
       EACH  Invoice no-lock where
-            Invoice.Brand  = gcBrand AND
+            Invoice.Brand  = Syst.CUICommon:gcBrand AND
             Invoice.InvDate >= exdate1  AND
             Invoice.InvDate <= exdate2,
       FIRST Customer no-lock where
@@ -156,7 +156,7 @@ task:
 
    FOR
       EACH  Invoice no-lock where
-            Invoice.Brand  = gcBrand AND
+            Invoice.Brand  = Syst.CUICommon:gcBrand AND
             Invoice.InvDate >= exdate1  AND
             Invoice.InvDate <= exdate2,
       FIRST Customer no-lock where
@@ -174,7 +174,7 @@ task:
 
       IF last-of(InvRow.BillCode) THEN DO:
          FIND BillItem where 
-              BillItem.Brand  = gcBrand AND
+              BillItem.Brand  = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = InvRow.BillCode no-lock no-error.
          IF AVAIL BillItem THEN ProdName = BillItem.BIName.
          else                ProdName = "!! UNKNOWN !!".

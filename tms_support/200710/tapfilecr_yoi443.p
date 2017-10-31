@@ -22,7 +22,7 @@
 {Func/cparam.i2}
 
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE INPUT PARAMETER pcPLMN     AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER pdaDate1   AS DATE      NO-UNDO.

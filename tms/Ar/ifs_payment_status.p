@@ -87,7 +87,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = gcBrand      AND    
+                  ActionLog.Brand        = Syst.CUICommon:gcBrand      AND    
                   ActionLog.TableName    = "Invoice"    AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSPAYSTAT" AND
@@ -97,7 +97,7 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = lcPlainFile
       ActionLog.UserCode     = katun
@@ -180,7 +180,7 @@ PROCEDURE pInitialize:
 
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = gcBrand      AND
+            ActionLog.Brand    = Syst.CUICommon:gcBrand      AND
             ActionLog.ActionID = "IFSPAYSTAT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -251,7 +251,7 @@ PROCEDURE pReadEvents:
       END.
 
       FIND FIRST Invoice WHERE 
-                 Invoice.Brand    = gcBrand AND
+                 Invoice.Brand    = Syst.CUICommon:gcBrand AND
                  Invoice.ExtInvID = lcInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN DO:
          fError("Unknown invoice").
@@ -342,7 +342,7 @@ PROCEDURE pReadEvents:
                                             lcClaimStatus).
 
          CREATE Memo.
-         ASSIGN Memo.Brand     = gcBrand
+         ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
                 Memo.HostTable = "Invoice"
                 Memo.KeyValue  = STRING(Invoice.InvNum)
                 Memo.CustNum   = Invoice.CustNum

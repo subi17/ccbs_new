@@ -32,7 +32,7 @@ DEFINE VARIABLE lcPassWd  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liLoop AS INTEGER NO-UNDO. 
 
 /* use brand 1 to get tmsparams, will be selected later */
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
 {Func/tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
 
@@ -106,7 +106,7 @@ do with frame login:
             /* copy user id into the common variables */
             assign
               ergo-kbd    = TmsUser.ErgoKeyb
-              gcAllBrand  = (IF INDEX("*",TMSUser.brand) > 0 THEN TRUE 
+              Syst.CUICommon:gcAllBrand  = (IF INDEX("*",TMSUser.brand) > 0 THEN TRUE 
                              ELSE FALSE).
 
 

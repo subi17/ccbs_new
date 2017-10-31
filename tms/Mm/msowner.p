@@ -266,7 +266,7 @@ REPEAT WITH FRAME sel:
            CREATE MSOwner.
            ASSIGN
            MSOwner.CLI   = INPUT FRAME lis MSOwner.CLI
-           MSOwner.Brand = gcBrand .
+           MSOwner.Brand = Syst.CUICommon:gcBrand .
 
            RUN local-UPDATE-record.
 
@@ -669,7 +669,7 @@ PROCEDURE local-find-others.
    lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    FIND CLIType where 
-        CliType.Brand   = gcBrand  AND 
+        CliType.Brand   = Syst.CUICommon:gcBrand  AND 
         CLIType.Clitype = MSOwner.Clitype NO-LOCK NO-ERROR.  
 
    Func.Common:mSplitTS(MsOwner.TsBeg,

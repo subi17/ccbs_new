@@ -45,7 +45,7 @@ REPEAT WITH FRAME rajat:
            DO:
                ASSIGN FRAME MAIN asno.
                FIND FIRST customer WHERE 
-                  Customer.Brand   = gcBrand AND
+                  Customer.Brand   = Syst.CUICommon:gcBrand AND
                   Customer.CustNum = asno NO-ERROR.
                IF asno = 0 OR
                NOT AVAILABLE customer THEN
@@ -78,7 +78,7 @@ REPEAT WITH FRAME rajat:
            DO:
                ASSIGN FRAME main invno.
                FIND FIRST invoice WHERE 
-                  Invoice.Brand  = gcBrand AND
+                  Invoice.Brand  = Syst.CUICommon:gcBrand AND
                   invoice.invnum = invno NO-ERROR.
                IF invno NE 0 AND
                NOT AVAILABLE invoice THEN

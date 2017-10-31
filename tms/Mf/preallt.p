@@ -65,7 +65,7 @@ form
     Presel.Orderer  format "x(25)"       /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Browser of PreselectTransactions "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

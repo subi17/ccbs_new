@@ -195,7 +195,7 @@ END.
 IF fIsConvergenceTariff(Order.CLIType) THEN DO:
 
    FIND orderfusion NO-LOCK WHERE
-        orderfusion.Brand = gcBrand AND
+        orderfusion.Brand = Syst.CUICommon:gcBrand AND
         orderfusion.orderid = order.orderid NO-ERROR.
    IF NOT AVAIL orderfusion THEN DO:
       fReqError("OrderFusion not found").
@@ -242,7 +242,7 @@ ELSE DO:
    IF AVAIL OrderFusion THEN DO:
       IF CAN-FIND(
          FIRST Mobsub WHERE 
-               Mobsub.Brand = gcBrand AND
+               Mobsub.Brand = Syst.CUICommon:gcBrand AND
                Mobsub.FixedNumber = orderfusion.fixednumber) THEN DO:
          fReqError("Subscription with the same fixed number already exists").
          RETURN. 
@@ -290,7 +290,7 @@ IF NOT AVAIL mobsub THEN DO:
    END.
 
    FIND FIRST MSISDN WHERE 
-              MSISDN.Brand    = gcBrand    AND 
+              MSISDN.Brand    = Syst.CUICommon:gcBrand    AND 
               MSISDN.CLI      = Order.CLI  AND 
               MSISDN.ValidTo >= Func.Common:mMakeTS() 
    EXCLUSIVE-LOCK NO-ERROR.
@@ -300,7 +300,7 @@ IF NOT AVAIL mobsub THEN DO:
       CREATE MSISDN.
       ASSIGN
          MSISDN.CLI         = order.CLI
-         MSISDN.Brand       = gcBrand
+         MSISDN.Brand       = Syst.CUICommon:gcBrand
          MSISDN.Stat        = 3.
 
       ASSIGN 
@@ -341,7 +341,7 @@ IF NOT AVAIL mobsub THEN DO:
                           OrderCustomer.CustIdType = "CIF").
 
    FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand   = gcBrand   AND
+            OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
             OrderCustomer.OrderID = Order.OrderID:
 
       CASE OrderCustomer.RowType:
@@ -440,7 +440,7 @@ IF NOT AVAIL mobsub THEN DO:
       following fields has to be updated */
    IF Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
       FIND FIRST lbMLOrder NO-LOCK WHERE 
-                 lbMLOrder.Brand      = gcBrand          AND 
+                 lbMLOrder.Brand      = Syst.CUICommon:gcBrand          AND 
                  lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
 
       IF AVAIL lbMLOrder THEN 
@@ -586,14 +586,14 @@ IF NOT AVAIL mobsub THEN DO:
          IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
             lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,Order.CLIType).
             lcReplacedTxt = fConvBundleToBillItem(lcBundleId).
-            lcReplacedTxt = fGetItemName(gcBrand,
+            lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                          "BillItem",
                                          lcReplacedTxt,
                                          Customer.Language,
                                          TODAY).
          END.
          ELSE 
-            lcReplacedTxt = fGetItemName(gcBrand,
+            lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                          "CLIType",
                                          Order.CLIType,
                                          Customer.Language,
@@ -700,7 +700,7 @@ END.
 
 /* If pending additional line orders are available then release them */  
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = gcBrand                            AND
+           OrderCustomer.Brand   = Syst.CUICommon:gcBrand                            AND
            OrderCustomer.OrderId = Order.OrderId                      AND
            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
@@ -783,7 +783,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
 
    IF Order.FtGrp > "" AND 
       CAN-FIND(FIRST FatGroup WHERE
-                     FatGroup.Brand = gcBrand AND
+                     FatGroup.Brand = Syst.CUICommon:gcBrand AND
                      FatGroup.FtGrp = Order.FtGrp)
    THEN lcFatGroup = Order.FtGrp.
    ELSE lcFatGroup = fCParamC("OrderCampaignFat").
@@ -814,7 +814,7 @@ END.
 /* Create Default shaper, if there is no bundle with subscription */
 /* this must be executed before calling orderaction_exec */
 FIND FIRST OrderAction WHERE
-           OrderAction.Brand    = gcBrand AND
+           OrderAction.Brand    = Syst.CUICommon:gcBrand AND
            OrderAction.OrderId  = Order.OrderID AND
            OrderAction.ItemType = "BundleItem" AND
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
@@ -879,7 +879,7 @@ IF NOT MobSub.PayType THEN DO:
 
    IF lcBundleId > "" OR
       CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.Brand = gcBrand          AND
+                     MsRequest.Brand = Syst.CUICommon:gcBrand          AND
                      MsRequest.ReqType = {&REQTYPE_DSS} AND
                      MsRequest.Custnum = MobSub.CustNum AND
                      MsRequest.ReqCParam1 = "CREATE"    AND
@@ -908,7 +908,7 @@ IF NOT MobSub.PayType THEN DO:
          /* If already DSS2 group exists then add extraline subscription 
             AND its associated main line to DSS2 group */  
          FOR EACH lbMobSubs NO-LOCK WHERE
-                  lbMobSubs.Brand        = gcBrand        AND
+                  lbMobSubs.Brand        = Syst.CUICommon:gcBrand        AND
                   lbMobSubs.CustNum      = MobSub.CustNum AND
                   lbMobSubs.MultiSimId  <> 0              AND
                  (lbMobSubs.MultiSimType = {&MULTISIMTYPE_PRIMARY} OR
@@ -930,7 +930,7 @@ IF NOT MobSub.PayType THEN DO:
    ELSE IF Order.MultiSimId > 0 AND
            Order.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO: 
       FOR FIRST lbOrder NO-LOCK WHERE
-                lbOrder.Brand = gcBrand AND
+                lbOrder.Brand = Syst.CUICommon:gcBrand AND
                 lbOrder.MultiSimID = Order.MultiSimId AND
                 lbOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                 lbOrder.StatusCode = {&ORDER_STATUS_DELIVERED},
@@ -972,7 +972,7 @@ IF NOT MobSub.PayType THEN DO:
                there is DSS2 termination request. YTS-8140 
               used lbMobSub.Custnum cause of ACC */
          FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                    bTerMsRequest.Brand = gcBrand AND
+                    bTerMsRequest.Brand = Syst.CUICommon:gcBrand AND
                     bTerMsRequest.ReqType = 83 AND
                     bTerMsRequest.Custnum = lbMobSub.Custnum AND
                     bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
@@ -1012,7 +1012,7 @@ IF TODAY - Customer.CreDate > 60 THEN DO:
 
    INVSEARCH_LOOP:
    FOR EACH Invoice WHERE
-            Invoice.Brand = gcBrand AND
+            Invoice.Brand = Syst.CUICommon:gcBrand AND
             Invoice.Custnum = Customer.Custnum AND
             Invoice.InvType = 1 NO-LOCK:
       IF Invoice.DueDate < TODAY - 30 AND
@@ -1069,7 +1069,7 @@ IF Order.MultiSimID > 0 THEN DO:
    CASE Order.MultiSimType:
       WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
          FOR FIRST lbOrder NO-LOCK USE-INDEX MultiSIMId WHERE
-                   lbOrder.Brand = gcBrand AND
+                   lbOrder.Brand = Syst.CUICommon:gcBrand AND
                    lbOrder.MultiSimID = Order.MultiSimID AND
                    lbOrder.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                    lbOrder.StatusCode = {&ORDER_STATUS_PENDING_MAIN_LINE}:
@@ -1097,20 +1097,20 @@ END.
 /* release pending secondary line orders, YDR-1089 */
 IF CLIType.LineType > 0 AND
    CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-            OrderAction.Brand = gcBrand AND
+            OrderAction.Brand = Syst.CUICommon:gcBrand AND
             OrderAction.OrderId = Order.OrderID AND
             OrderAction.ItemType = "BundleItem" AND
             CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand = gcBrand AND
+                           CLIType.Brand = Syst.CUICommon:gcBrand AND
                            CLIType.CLIType = OrderAction.ItemKey AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN
    FOR EACH lbOrderCustomer NO-LOCK WHERE   
-            lbOrderCustomer.Brand      EQ gcBrand AND 
+            lbOrderCustomer.Brand      EQ Syst.CUICommon:gcBrand AND 
             lbOrderCustomer.CustId     EQ Customer.OrgId AND
             lbOrderCustomer.CustIdType EQ Customer.CustIdType AND
             lbOrderCustomer.RowType    EQ 1,
        EACH lbOrder NO-LOCK WHERE
-            lbOrder.Brand              EQ gcBrand AND
+            lbOrder.Brand              EQ Syst.CUICommon:gcBrand AND
             lbOrder.orderid            EQ lbOrderCustomer.Orderid AND
             lbOrder.statuscode         EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
       RUN Mc/orderinctrl.p(lbOrder.OrderID, 0, TRUE).
@@ -1201,7 +1201,7 @@ PROCEDURE check-order:
       END.
 
       FIND FIRST clitype WHERE
-                 clitype.brand = gcBrand and
+                 clitype.brand = Syst.CUICommon:gcBrand and
                  clitype.clitype = order.clitype NO-LOCK NO-ERROR.
       IF NOT AVAIL clitype THEN DO:
         ocError =  "Invalid CLIType !".
@@ -1226,7 +1226,7 @@ PROCEDURE pCreateCommission:
 
       /* Referee commission creation */
       FIND bRefMobSub NO-LOCK WHERE
-         bRefMobSub.Brand = gcBrand AND
+         bRefMobSub.Brand = Syst.CUICommon:gcBrand AND
          bRefMobSub.CLI   = Order.Referee NO-ERROR.
       
       IF AVAIL bRefMobSub THEN DO:
@@ -1237,12 +1237,12 @@ PROCEDURE pCreateCommission:
             bRefCust.Custnum = bRefMobSub.Custnum NO-ERROR.
         
          FIND bRefCLIType NO-LOCK WHERE
-            bRefCLIType.Brand = gcBrand AND
+            bRefCLIType.Brand = Syst.CUICommon:gcBrand AND
             bRefCLIType.CLIType = bRefMobSub.CLIType.
 
          liRuleId = 0.
          FOR EACH CORule NO-LOCK WHERE
-                  CORule.Brand = gcBrand AND
+                  CORule.Brand = Syst.CUICommon:gcBrand AND
                   CORule.RuleType = 2 AND
                   CORule.CoFrom <= ldaOrderDate AND
                   CORule.CoTo   >= ldaOrderDate AND
@@ -1263,7 +1263,7 @@ PROCEDURE pCreateCommission:
             
             CREATE COTarg.
             ASSIGN
-               COTarg.Brand         = gcBrand
+               COTarg.Brand         = Syst.CUICommon:gcBrand
                CoTarg.CoTargID      = NEXT-VALUE(CommSeq)
                COTarg.CommStatus    = 1
                COTarg.TargType      = "M"
@@ -1321,7 +1321,7 @@ PROCEDURE pCreateCommission:
          /* Promoted (=Orderer) commission handling begins */   
          liRuleId = 0.
          FOR EACH CORule NO-LOCK WHERE
-                  CORule.Brand = gcBrand AND
+                  CORule.Brand = Syst.CUICommon:gcBrand AND
                   CORule.RuleType = 3 AND
                   CORule.CoFrom <= ldaOrderDate AND
                   CORule.CoTo   >= ldaOrderDate AND
@@ -1342,7 +1342,7 @@ PROCEDURE pCreateCommission:
             
             CREATE COTarg.
             ASSIGN
-               COTarg.Brand         = gcBrand
+               COTarg.Brand         = Syst.CUICommon:gcBrand
                CoTarg.CoTargID      = NEXT-VALUE(CommSeq)
                COTarg.CommStatus    = 1
                COTarg.TargType      = "M"

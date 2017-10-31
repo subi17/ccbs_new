@@ -31,7 +31,7 @@ form
     InvGroup.InvGroup
     InvGroup.IGName  format "x(30)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Invoicing Groups (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Invoicing Groups (" + Syst.CUICommon:gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -53,7 +53,7 @@ Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Sys
 Runko:
 repeat:
 
-   FIND FIRST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE InvGroup THEN DO:
       must-print = FALSE.
    END.
@@ -79,7 +79,7 @@ Repeat WITH FRAME tlse:
             WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(InvGroup).
             DOWN WITH FRAME tlse.
-            FIND NEXT InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND NEXT InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(tlse) - 1 WITH FRAME tlse.
@@ -109,7 +109,7 @@ BROWSE:
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock.
-               FIND prev InvGroup WHERE InvGroup.Brand = gcBrand 
+               FIND prev InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF NOT AVAILABLE InvGroup THEN DO:
                   BELL.
@@ -135,7 +135,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock .
-               FIND NEXT InvGroup WHERE InvGroup.Brand = gcBrand 
+               FIND NEXT InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF NOT AVAILABLE InvGroup THEN DO:
                   BELL.
@@ -161,11 +161,11 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND InvGroup where recid(InvGroup) = ylin no-lock no-error.
-            FIND prev InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND prev InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE InvGroup THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev InvGroup WHERE InvGroup.Brand = gcBrand 
+                  FIND prev InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                   IF AVAILABLE InvGroup THEN ylin = recid(InvGroup).
                   ELSE i = FRAME-DOWN.
@@ -205,18 +205,18 @@ BROWSE:
            if haku <> "" THEN DO:
 
               FIND FIRST InvGroup where 
-                 InvGroup.Brand    = gcBrand AND
+                 InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                  InvGroup.InvGroup = INPUT haku
               no-lock no-error.
 
               IF NOT AVAILABLE InvGroup THEN 
                  FIND FIRST InvGroup where 
-                    InvGroup.Brand    =  gcBrand AND
+                    InvGroup.Brand    =  Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup ge INPUT haku
                  no-lock no-error.
               IF NOT AVAILABLE InvGroup THEN 
                  FIND FIRST InvGroup where 
-                    InvGroup.Brand    =  gcBrand AND
+                    InvGroup.Brand    =  Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup le INPUT haku
                  no-lock no-error.
 
@@ -243,7 +243,7 @@ BROWSE:
         END. /* Valinta */
         /* Ensimmainen tietue */
         else if lookup(nap,"home,h") > 0 THEN DO:
-           FIND FIRST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK.
+           FIND FIRST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(InvGroup).
            must-print = TRUE.
            NEXT LOOP.
@@ -251,7 +251,7 @@ BROWSE:
 
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
-           FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK.
+           FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(InvGroup).
            must-print = TRUE.
            NEXT LOOP.

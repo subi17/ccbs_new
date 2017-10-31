@@ -2,7 +2,7 @@
 
 {Syst/commpaa.i}
 katun = "ari".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 

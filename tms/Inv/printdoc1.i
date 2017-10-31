@@ -198,7 +198,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liGroupType  AS INTEGER   NO-UNDO.
    FOR EACH BillItem NO-LOCK WHERE
-      BillItem.Brand = gcBrand
+      BillItem.Brand = Syst.CUICommon:gcBrand
       BREAK BY BillItem.BIGroup:
       
       IF FIRST-OF(BillItem.BIGroup)
@@ -206,7 +206,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
          liGroupOrder = 0.
          liGroupType  = 0.
          FOR BItemGroup NO-LOCK WHERE
-            BItemGroup.Brand   = gcBrand AND
+            BItemGroup.Brand   = Syst.CUICommon:gcBrand AND
             BItemGroup.BIGroup = BillItem.BIGroup:
 
             liGroupOrder = BItemGroup.InvoiceOrder.
@@ -217,7 +217,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
       FOR
          EACH Language NO-LOCK,
          EACH RepText NO-LOCK WHERE
-            RepText.Brand = gcBrand                AND
+            RepText.Brand = Syst.CUICommon:gcBrand                AND
             RepText.TextType  = 1                  AND 
             RepText.LinkCode  = BillItem.BillCode  AND
             RepText.Language  = Language.Language:
@@ -345,7 +345,7 @@ FUNCTION fLocalItemName RETURNS CHARACTER
    DEF VAR lcName AS CHAR NO-UNDO. 
 
    /* translation or basic name */  
-   lcName = fGetItemName(gcBrand,
+   lcName = fGetItemName(Syst.CUICommon:gcBrand,
                          icItem,
                          icCode,
                          iiLanguage,
@@ -393,7 +393,7 @@ FUNCTION fLocalCCName RETURNS CHARACTER:
    
    /* country name for roaming */
    IF LOOKUP(STRING(ttCall.SpoCMT),{&ROAMING_CALLCASE}) > 0 THEN DO:
-      lcCCName = fDestCountryName(gcBrand,
+      lcCCName = fDestCountryName(Syst.CUICommon:gcBrand,
                                   liLanguage,
                                   ttCall.SpoCMT,
                                   ttCall.DateSt,
@@ -473,7 +473,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
    liFFCount = liAmtPos. 
    
    FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.Brand      = gcBrand                    AND
+            FixedFee.Brand      = Syst.CUICommon:gcBrand                    AND
             FixedFee.CustNum    = Invoice.CustNum            AND
             FixedFee.HostTable  = "MobSub"                   AND
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
@@ -483,7 +483,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
       
       IF FixedFee.BillCode EQ "PAYTERM" THEN
          FIND FIRST bQ25SingleFee NO-LOCK WHERE
-                    bQ25SingleFee.Brand       = gcBrand              AND
+                    bQ25SingleFee.Brand       = Syst.CUICommon:gcBrand              AND
                     bQ25SingleFee.Custnum     = FixedFee.Custnum     AND
                     bQ25SingleFee.HostTable   = FixedFee.HostTable   AND
                     bQ25SingleFee.KeyValue    = Fixedfee.KeyValue    AND
@@ -584,7 +584,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
       END. 
         
       FOR FIRST bPenaltySingleFee NO-LOCK WHERE
-                bPenaltySingleFee.Brand       = gcBrand              AND
+                bPenaltySingleFee.Brand       = Syst.CUICommon:gcBrand              AND
                 bPenaltySingleFee.Custnum     = FixedFee.Custnum     AND
                 bPenaltySingleFee.HostTable   = FixedFee.HostTable   AND
                 bPenaltySingleFee.KeyValue    = Fixedfee.KeyValue    AND
@@ -616,7 +616,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
          IF AVAIL bQ25SingleFee THEN DO: 
 
             FOR FIRST FMItem NO-LOCK WHERE
-                      FMItem.Brand     = gcBrand            AND
+                      FMItem.Brand     = Syst.CUICommon:gcBrand            AND
                       FMItem.FeeModel  = FixedFee.FeeModel  AND
                       FMItem.ToDate   >= FixedFee.BegDate   AND
                       FMItem.FromDate <= FixedFee.BegDate:
@@ -630,7 +630,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
 
          IF FixedFee.OrderId > 0 THEN DO:
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.CUICommon:gcBrand AND
                        Order.OrderId = FixedFee.OrderID NO-ERROR.
             IF AVAIL Order THEN Func.Common:mTS2Date(Order.CrStamp, 
                                          OUTPUT ldaOrderDate).
@@ -731,7 +731,7 @@ PROCEDURE pGetInvoiceHeaderData:
       liOrder = 1.
 
    FOR EACH bOldInvoice NO-LOCK WHERE
-            bOldInvoice.Brand = gcBrand AND
+            bOldInvoice.Brand = Syst.CUICommon:gcBrand AND
             bOldInvoice.Custnum = Invoice.Custnum AND
             bOldInvoice.InvDate >= ldaInvoiceFrom AND
             bOldInvoice.ITGroupID = Invoice.ITGroupID AND
@@ -924,7 +924,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                               MsRequest.ActStamp  >  ldeActStamp        AND
                               MsRequest.ActStamp <= ldToPer) THEN
                FOR FIRST SingleFee WHERE
-                         SingleFee.Brand     = gcBrand                  AND
+                         SingleFee.Brand     = Syst.CUICommon:gcBrand                  AND
                          SingleFee.CustNum   = SubInvoice.CustNum       AND
                          SingleFee.HostTable = "MobSub"                 AND
                          SingleFee.KeyValue  = STRING(SubInvoice.MsSeq) AND
@@ -1002,7 +1002,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ttCLIType.TsEnd   = ttMsOwner.TsEnd.
 
             FIND FIRST CLIType WHERE 
-                       CLIType.Brand   = gcBrand AND
+                       CLIType.Brand   = Syst.CUICommon:gcBrand AND
                        CLIType.CLIType = ttCLIType.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN DO:
 
@@ -1031,10 +1031,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
 
                IF lcGroupCode BEGINS "CONTF" THEN
                   FOR FIRST DayCampaign NO-LOCK WHERE 
-                            DayCampaign.Brand = gcBrand AND 
+                            DayCampaign.Brand = Syst.CUICommon:gcBrand AND 
                             DayCampaign.DCEvent = lcGroupCode,
                       FIRST FMItem NO-LOCK WHERE
-                            FMItem.Brand = gcBrand AND
+                            FMItem.Brand = Syst.CUICommon:gcBrand AND
                             FMItem.FeeModel = DayCampaign.FeeModel:
                      FIND FIRST ttRow WHERE  
                                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
@@ -1452,7 +1452,7 @@ PROCEDURE pMarkPrinted:
       IF Invoice.InvType NE 99 THEN DO:
 
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                 ITSendLog.TxtType    = 3
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = Invoice.CustNum
@@ -1501,7 +1501,7 @@ PROCEDURE pErrorFile:
       /* save to db for reporting */
       IF ilDBWrite THEN DO:
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
                 ErrorLog.ActionID  = icActionID
                 ErrorLog.TableName = IF ttError.TableName > ""
                                      THEN ttError.TableName

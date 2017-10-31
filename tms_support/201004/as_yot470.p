@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 /*
 RUN tapfilecr("",TODAY - 7,TODAY - 7,"",FALSE).
 */

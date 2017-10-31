@@ -71,7 +71,7 @@ form
     Trunk.TrIn       column-label "B"                  format "Y/N"
 WITH
     width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " CIRCUIT GROUPS "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " CIRCUIT GROUPS "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form

@@ -81,7 +81,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " SERVICE FEES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -95,7 +95,7 @@ form
     ServFee.FeeModel    COLON 20
        VALIDATE(INPUT ServFee.FeeModel = "" OR
                 CAN-FIND(FeeModel WHERE 
-                         FeeModel.Brand = gcBrand AND
+                         FeeModel.Brand = Syst.CUICommon:gcBrand AND
                          FeeModel.FeeModel = INPUT ServFee.FeeModel),
                 "Unknown fee model")
        FeeModel.FeeName NO-LABEL   SKIP
@@ -523,7 +523,7 @@ REPEAT WITH FRAME sel:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  lcServType WITH FRAME f1.
           HIDE FRAME f1 NO-PAUSE.
 
@@ -594,7 +594,7 @@ REPEAT WITH FRAME sel:
            DELETE ServFee.
 
            /* was LAST record DELETEd ? */
-           IF NOT CAN-FIND(FIRST ServFee WHERE ServFee.Brand = gcBrand) 
+           IF NOT CAN-FIND(FIRST ServFee WHERE ServFee.Brand = Syst.CUICommon:gcBrand) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
@@ -732,7 +732,7 @@ PROCEDURE local-UPDATE-record:
 
       IF liInvInfo > 0 THEN DO:
          FIND FIRST HdrText NO-LOCK WHERE
-                    HdrText.Brand  = gcBrand AND
+                    HdrText.Brand  = Syst.CUICommon:gcBrand AND
                     HdrText.te-nro = liInvInfo AND
                     HdrText.te-kie = 1 NO-ERROR.
                               
@@ -835,7 +835,7 @@ PROCEDURE local-UPDATE-record:
                ELSE IF FRAME-FIELD = "liInvInfo" THEN DO:
                   IF INPUT liInvInfo > 0 THEN DO:
                      FIND FIRST HdrText NO-LOCK WHERE
-                                HdrText.Brand  = gcBrand AND
+                                HdrText.Brand  = Syst.CUICommon:gcBrand AND
                                 HdrText.te-nro = INPUT liInvInfo AND
                                 HdrText.te-kie = 1  /* 1 must always exist */
                      NO-ERROR.

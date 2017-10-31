@@ -135,7 +135,7 @@ form
     MenuTree.MenuClass     /* column-label "PgCl"          */
  WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " MenuText TREE "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " MenuText TREE "
     + string(pvm,"99-99-99") + " "
  FRAME sel.
 

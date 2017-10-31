@@ -64,7 +64,7 @@ form
     TCC.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  TECHNICAL CALL CASE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
            LEAVE add-row.
            CREATE TCC.
            ASSIGN
-              TCC.Brand = gcBrand 
+              TCC.Brand = Syst.CUICommon:gcBrand 
               TCC.TCC  = INPUT FRAME lis TCC.TCC
               TCC.ValidFrom = TODAY
               TCC.ValidTo = DATE(12,31,2049).
@@ -545,32 +545,32 @@ PROCEDURE local-find-this:
 END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
-       IF order = 1 THEN FIND FIRST TCC WHERE TCC.Brand = gcBrand 
+       IF order = 1 THEN FIND FIRST TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand 
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST TCC USE-INDEX TCCName 
-       WHERE TCC.Brand = gcBrand
+       WHERE TCC.Brand = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
-       IF order = 1 THEN FIND LAST TCC WHERE TCC.Brand = gcBrand
+       IF order = 1 THEN FIND LAST TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST TCC USE-INDEX TCCName  
-       WHERE TCC.Brand = gcBrand       /* srule */ NO-LOCK NO-ERROR.
+       WHERE TCC.Brand = Syst.CUICommon:gcBrand       /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
-       IF order = 1 THEN FIND NEXT TCC WHERE TCC.Brand = gcBrand
+       IF order = 1 THEN FIND NEXT TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT TCC USE-INDEX TCCName
-       WHERE TCC.Brand = gcBrand  /* srule */ NO-LOCK NO-ERROR.
+       WHERE TCC.Brand = Syst.CUICommon:gcBrand  /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
-       IF order = 1 THEN FIND PREV TCC WHERE TCC.Brand = gcBrand
+       IF order = 1 THEN FIND PREV TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV TCC USE-INDEX TCCName
-       WHERE TCC.Brand = gcBrand   /* srule */ NO-LOCK NO-ERROR.
+       WHERE TCC.Brand = Syst.CUICommon:gcBrand   /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -588,12 +588,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND FIRST CCN WHERE 
-              CCN.Brand = gcBrand AND 
+              CCN.Brand = Syst.CUICommon:gcBrand AND 
               CCN.CCN   = TCC.Bcc 
    NO-LOCK NO-ERROR.
 
    FIND FIRST BDest WHERE
-              BDest.Brand = gcBrand AND 
+              BDest.Brand = Syst.CUICommon:gcBrand AND 
               BDest.BDest = TCC.BDest AND
               BDest.ToDate >= TCC.ValidFrom AND
               BDest.FromDate <= TCC.ValidTo NO-LOCK No-ERROR.

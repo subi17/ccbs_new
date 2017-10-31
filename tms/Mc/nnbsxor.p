@@ -78,7 +78,7 @@ help "Invoicing group's code, empty for all"  SKIP
 "                Decimal separator ...:" exdeci help "Period/Comma" skip(6)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " XOR-SUMMARY OF PAYMENTS WITH ACCOUNTS " +
+   " " + Syst.CUICommon:ynimi + " XOR-SUMMARY OF PAYMENTS WITH ACCOUNTS " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.

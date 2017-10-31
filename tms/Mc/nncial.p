@@ -53,7 +53,7 @@ UPDATE
    idate 
    CustNum VALIDATE(INPUT CustNum = 0 OR
                     CAN-FIND(FIRST Customer WHERE 
-                                   Customer.Brand   = gcBrand AND
+                                   Customer.Brand   = Syst.CUICommon:gcBrand AND
                                    Customer.CustNum = INPUT CustNum),
                     "Unknown customer !")
 WITH FRAME Date.
@@ -75,7 +75,7 @@ ELSE DO:
    MESSAGE "Collecting fees ..".
 
    FOR EACH FixedFee no-lock WHERE
-            FixedFee.Brand      = gcBrand AND
+            FixedFee.Brand      = Syst.CUICommon:gcBrand AND
             FixedFee.EndPeriod <= Period,
       FIRST FFItem of FixedFee no-lock where 
             FFItem.BillPeriod <= Period AND
@@ -106,7 +106,7 @@ BY Customer.CustName
 WITH FRAME LOG.
 
    FIND FIRST Salesman no-lock where 
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.CUICommon:gcBrand AND
               Salesman.Salesman = Customer.Salesman.
    DISP 
       Salesman.SmName   format "x(15)"

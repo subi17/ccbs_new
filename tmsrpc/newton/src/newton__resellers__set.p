@@ -17,7 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 
@@ -60,7 +60,7 @@ ELSE
 
 {newton/src/settenant.i pcTenant}
 
-FIND Reseller EXCLUSIVE-LOCK WHERE Reseller.Brand = gcBrand AND Reseller.Reseller = pcReseller NO-ERROR.
+FIND Reseller EXCLUSIVE-LOCK WHERE Reseller.Brand = Syst.CUICommon:gcBrand AND Reseller.Reseller = pcReseller NO-ERROR.
 IF NOT AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller not found: &1",pcReseller)).
 
@@ -140,7 +140,7 @@ END.
 IF lcResellerTF EQ "ADD" THEN DO:
    CREATE ResellerTF.
    ASSIGN
-      ResellerTF.Brand     = gcBrand
+      ResellerTF.Brand     = Syst.CUICommon:gcBrand
       ResellerTF.Reseller  = ttReseller.Reseller
       ResellerTF.TFBank    = pcBankCode
       ResellerTF.ValidFrom = pdaBankCodeFrom.

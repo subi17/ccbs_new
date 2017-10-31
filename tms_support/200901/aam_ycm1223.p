@@ -63,7 +63,7 @@ for each order no-lock use-index stamp where
    if licashcust > 0 then DO TRANS:
 
       FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-               SingleFee.Brand     = gcBrand AND
+               SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                SingleFee.HostTable = "Order" AND
                SingleFee.KeyValue  = STRING(Order.OrderID):
                

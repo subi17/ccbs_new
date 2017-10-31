@@ -467,7 +467,7 @@ PROCEDURE local-UPDATE-record:
    IF llChange THEN
    /* can service be changed from here */
    FOR FIRST CTServEl NO-LOCK WHERE 
-             CTServEl.Brand     = gcBrand              AND
+             CTServEl.Brand     = Syst.CUICommon:gcBrand              AND
              CTServEl.ServCom   = ttSubSerPara.ServCom AND
              CTServEl.CLIType   = MobSub.CLIType       AND
              CTServEl.FromDate <= TODAY,
@@ -530,7 +530,7 @@ PROCEDURE local-UPDATE-record:
                   ldPara = DECIMAL(INPUT ttSubserPara.paravalue) NO-ERROR.
                   IF ldPara > 0 THEN DO:
                      FIND FIRST ServAttr WHERE 
-                                ServAttr.Brand    = gcBrand            AND 
+                                ServAttr.Brand    = Syst.CUICommon:gcBrand            AND 
                                 ServAttr.ServCom  = ttSubserPara.servcom AND 
                                 ServAttr.ServAttr = ttSubserPara.paraname
                      NO-LOCK NO-ERROR.

@@ -34,7 +34,7 @@ form
 
    skip(13)
    WITH ROW 1 side-labels width 80
-   title " " + ynimi + " ALARM LIST " +
+   title " " + Syst.CUICommon:ynimi + " ALARM LIST " +
    string(pvm,"99-99-99") + " "
    FRAME valinta.
 

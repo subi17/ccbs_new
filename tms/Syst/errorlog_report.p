@@ -56,7 +56,7 @@ PUT STREAM sFile UNFORMATTED
    "Error"       SKIP.
 
 FOR EACH ErrorLog NO-LOCK WHERE
-         ErrorLog.Brand     = gcBrand    AND
+         ErrorLog.Brand     = Syst.CUICommon:gcBrand    AND
          ErrorLog.ActionID  = icActionID AND
          ErrorLog.ActionTS >= ldBeginTS  AND
          ErrorLog.ActionTS <= ldEndTS:

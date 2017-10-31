@@ -33,7 +33,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/callquery.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -262,7 +262,7 @@ IF NOT MobSub.PayType THEN DO:
 END.
 
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT "rpc",
                INPUT ldaCDRCollectFrom,
                INPUT TODAY,
@@ -351,7 +351,7 @@ ELSE ASSIGN
 /* yoigo-yoigo counter */
 IF MobSub.CLIType EQ "CONT" THEN DO:
    FIND FIRST DCCli NO-LOCK WHERE
-              DCCli.Brand = gcBrand AND
+              DCCli.Brand = Syst.CUICommon:gcBrand AND
               DCCli.dcevent = "YOIGOYOIGO" AND
               DCCli.msseq = mobsub.msseq AND
               DCCli.validto >= TODAY NO-ERROR.
@@ -423,7 +423,7 @@ IF NOT MobSub.PayType THEN DO:
    /* Check if there is any active DSS upsell */
    IF llDSSActive THEN
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = lcDSSBundleId:
       
       DO liLoop = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
@@ -509,7 +509,7 @@ DO liLoop = 1 TO 5:
       FIRST ServiceLimit NO-LOCK WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = ServiceLimit.GroupCode NO-LOCK:
 
       IF LOOKUP(STRING(DayCampaign.DCType),

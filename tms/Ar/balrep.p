@@ -77,7 +77,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(35)" 
+   Syst.CUICommon:ynimi at 1 format "x(35)" 
       "CURRENT A/R BALANCES" AT 45
       "Page" AT 103 
       sl format "ZZZZ9" SKIP
@@ -144,7 +144,7 @@ IF icFile > "" THEN DO:
 END.
 
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand  AND
+         InvGroup.Brand     = Syst.CUICommon:gcBrand  AND
          InvGroup.InvGroup >= icInvGrp1 AND
          InvGroup.InvGroup <= icInvGrp2,
     EACH Customer NO-LOCK WHERE
@@ -171,7 +171,7 @@ BY Customer.CustNum:
     
     /* debt from invoices */
     FOR EACH Invoice NO-LOCK WHERE
-             Invoice.Brand       = gcBrand          AND
+             Invoice.Brand       = Syst.CUICommon:gcBrand          AND
              Invoice.CustNum     = Customer.CustNum AND
              Invoice.ClaimState >= idClaimQty1      AND
              Invoice.ClaimState <= idClaimQty2      AND

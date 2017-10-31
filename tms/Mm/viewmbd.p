@@ -118,15 +118,15 @@ lcBDName = fMobCDRBDestName(ttCall.SpoCMT,
                             ttCall.DateSt).
                          
 FIND BillItem WHERE
-     BillItem.Brand          = gcBrand      AND 
+     BillItem.Brand          = Syst.CUICommon:gcBrand      AND 
      BillItem.BillCode       = ttCall.BillCode        NO-LOCK NO-ERROR.
 
 FIND FIRST CCN WHERE
-           CCN.Brand     = gcBrand          AND 
+           CCN.Brand     = Syst.CUICommon:gcBrand          AND 
            CCN.CCN       = ttCall.rateCCN           NO-LOCK NO-ERROR.    
            
 FIND FIRST bCCN WHERE
-           bCCN.Brand     = gcBrand          AND 
+           bCCN.Brand     = Syst.CUICommon:gcBrand          AND 
            bCCN.CCN       = ttCall.CCN           NO-LOCK NO-ERROR.    
 
 ASSIGN

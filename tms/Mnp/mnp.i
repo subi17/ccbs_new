@@ -162,7 +162,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 12
       CallAlarm.Orig       = pcSender
-      CallAlarm.Brand      = gcBrand.
+      CallAlarm.Brand      = Syst.CUICommon:gcBrand.
       
    RELEASE CallAlarm.
 
@@ -814,7 +814,7 @@ FUNCTION fRetention RETURNS LOGICAL
          RUN Mc/orderinctrl.p(bOrder.OrderId, 0, TRUE).
       ELSE DO:
          FIND FIRST OrderCustomer WHERE
-                    OrderCustomer.Brand   = gcBrand AND
+                    OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                     OrderCustomer.OrderId = bOrder.OrderId AND
                     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
          IF AVAIL OrderCustomer THEN DO:

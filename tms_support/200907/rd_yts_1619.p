@@ -1,7 +1,7 @@
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 

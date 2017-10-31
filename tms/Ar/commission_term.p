@@ -61,7 +61,7 @@ PROCEDURE pTerminateCommission:
    END.
 
    FOR EACH CoTarg NO-LOCK WHERE
-            CoTarg.Brand    = gcBrand AND
+            CoTarg.Brand    = Syst.CUICommon:gcBrand AND
             CoTarg.TargType = "M"     AND
             CoTarg.CoTarg   = STRING(iiMsSeq):
 
@@ -105,7 +105,7 @@ PROCEDURE pTerminateCommission:
          the same order */
       IF icSource = "termination" AND CoTarg.OrderID > 0 THEN 
       FOR EACH bTarg NO-LOCK USE-INDEX OrderID WHERE
-               bTarg.Brand   = gcBrand AND
+               bTarg.Brand   = Syst.CUICommon:gcBrand AND
                bTarg.OrderID = CoTarg.OrderID AND
                bTarg.CoTarg NE CoTarg.CoTarg:
          
@@ -151,7 +151,7 @@ PROCEDURE pTerminateFAT:
    olTerminated = FALSE.
    
    FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-            FATime.Brand     = gcBrand  AND
+            FATime.Brand     = Syst.CUICommon:gcBrand  AND
             FATime.HostTable = "CoTarg" AND
             FATime.KeyValue  = STRING(iiCoTargID) AND
             FATime.InvNum    = 0        AND
@@ -189,7 +189,7 @@ PROCEDURE pTerminateTopUp:
    olTerminated = FALSE.
    
    FOR EACH PrepaidRequest EXCLUSIVE-LOCK USE-INDEX Reference WHERE
-            PrepaidRequest.Brand     = gcBrand  AND
+            PrepaidRequest.Brand     = Syst.CUICommon:gcBrand  AND
             PrepaidRequest.Reference = STRING(iiCoTargID) AND
             PrepaidRequest.Request   = "Commission" AND
             PrepaidRequest.PPStatus  = 0:

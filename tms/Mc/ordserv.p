@@ -68,7 +68,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
 form
     OrderService.Service  COLON 15
        VALIDATE(CAN-FIND(ServCom WHERE 
-                         ServCom.Brand   = gcBrand AND
+                         ServCom.Brand   = Syst.CUICommon:gcBrand AND
                          ServCom.ServCom = INPUT OrderService.Service),
                 "Unknown service")
     lcSCName      
@@ -94,7 +94,7 @@ FUNCTION fSCName RETURNS LOGIC
    lcSCName = "".
    
    FIND ServCom WHERE   
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
    IF AVAILABLE ServCom THEN lcSCName = ServCom.SCName. 
    
@@ -146,7 +146,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(OrderService WHERE
-                       OrderService.Brand   = gcBrand AND
+                       OrderService.Brand   = Syst.CUICommon:gcBrand AND
                        OrderService.OrderID = iiOrderID 
                         USING OrderService.Service) THEN DO:
               MESSAGE "OrderService already exists with code"     
@@ -157,7 +157,7 @@ REPEAT WITH FRAME sel:
            
            
            CREATE OrderService.
-           ASSIGN OrderService.Brand   = gcBrand
+           ASSIGN OrderService.Brand   = Syst.CUICommon:gcBrand
                   OrderService.OrderID = iiOrderID
                   OrderService.Service = INPUT OrderService.Service.
 
@@ -380,7 +380,7 @@ REPEAT WITH FRAME sel:
        IF lcServCom > "" THEN DO:
        
           FIND FIRST OrderService WHERE 
-                     OrderService.Brand    = gcBrand   AND
+                     OrderService.Brand    = Syst.CUICommon:gcBrand   AND
                      OrderService.OrderID  = iiOrderID AND
                      OrderService.Service >= lcServCom
           NO-LOCK NO-ERROR.
@@ -520,7 +520,7 @@ PROCEDURE local-find-FIRST:
 
        IF order = 1 THEN 
        FIND FIRST OrderService WHERE    
-                  OrderService.Brand   = gcBrand AND
+                  OrderService.Brand   = Syst.CUICommon:gcBrand AND
                   OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
          
 END PROCEDURE.
@@ -529,7 +529,7 @@ PROCEDURE local-find-LAST:
 
        IF order = 1 THEN 
        FIND LAST OrderService WHERE    
-                 OrderService.Brand   = gcBrand AND
+                 OrderService.Brand   = Syst.CUICommon:gcBrand AND
                  OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
   
 END PROCEDURE.
@@ -538,7 +538,7 @@ PROCEDURE local-find-NEXT:
 
        IF order = 1 THEN 
        FIND NEXT OrderService WHERE    
-                 OrderService.Brand   = gcBrand AND
+                 OrderService.Brand   = Syst.CUICommon:gcBrand AND
                  OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -547,7 +547,7 @@ PROCEDURE local-find-PREV:
  
        IF order = 1 THEN 
        FIND PREV OrderService WHERE    
-                 OrderService.Brand   = gcBrand AND
+                 OrderService.Brand   = Syst.CUICommon:gcBrand AND
                  OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
     
 END PROCEDURE.

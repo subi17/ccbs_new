@@ -71,7 +71,7 @@ DEF VAR krmin             AS DE NO-UNDO.
 def var aslanimi          as char format "x(22)" NO-UNDO.
 def var asranimi          as char format "x(22)" NO-UNDO.
 def var asrenimi          as char format "x(22)" NO-UNDO.
-def var mynimi            as char format "x(12)" NO-UNDO.
+def var mSyst.CUICommon:ynimi            as char format "x(12)" NO-UNDO.
 def var rsname            as char format "x(12)" NO-UNDO.
 def var plname            as char format "x(22)" NO-UNDO.
 def var igname            as char format "x(22)" NO-UNDO.
@@ -101,7 +101,7 @@ else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 
 form header
    fill("=",90) format "x(90)" SKIP
-   ynimi "LARGE CUSTOMER LIST" at 33 "Page" at 83 sl format "ZZZ9" TO 90 SKIP
+   Syst.CUICommon:ynimi "LARGE CUSTOMER LIST" at 33 "Page" at 83 sl format "ZZZ9" TO 90 SKIP
 
    "SORTED BY " + entry(order1,jar1) + entry(order2,jar2)  at 33 format "x(36)"
    string(pvm,"99-99-99") TO 90 SKIP
@@ -127,9 +127,9 @@ message "Printing in process, cancel: press 'END'".
 print-line:
 FOR
     EACH Customer no-lock            where
-         Customer.Brand     = gcBrand AND
+         Customer.Brand     = Syst.CUICommon:gcBrand AND
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand     = gcBrand AND
+                                        CGMember.Brand     = Syst.CUICommon:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                       AND
@@ -179,13 +179,13 @@ FOR
    END.
 
    FIND FIRST Salesman where
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.CUICommon:gcBrand AND
               Salesman.Salesman = Customer.Salesman no-lock no-error.
-   IF AVAIL Salesman THEN mynimi = Salesman.SmName.
-   else                   mynimi = "! UNKNOWN !".
+   IF AVAIL Salesman THEN mSyst.CUICommon:ynimi = Salesman.SmName.
+   else                   mSyst.CUICommon:ynimi = "! UNKNOWN !".
 
    FIND FIRST Reseller where
-              Reseller.Brand    = gcBrand AND
+              Reseller.Brand    = Syst.CUICommon:gcBrand AND
               Reseller.Reseller = Customer.Reseller no-lock no-error.
    IF AVAIL Reseller THEN rsname = Reseller.RsName.
    else                 rsname = "! UNKNOWN !".
@@ -214,7 +214,7 @@ FOR
 
    dkatnimi = "".
    FIND FIRST CustCat where 
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.CUICommon:gcBrand AND
               CustCat.Category = Customer.Category 
       no-lock no-error.
    IF AVAIL CustCat THEN ASSIGN dkatnimi = CustCat.CatName.
@@ -230,7 +230,7 @@ FOR
    hdr0 =  "".
    if CustGroup ne "" THEN DO:
       FIND CustGroup where 
-           CustGroup.Brand     = gcBrand AND
+           CustGroup.Brand     = Syst.CUICommon:gcBrand AND
            CustGroup.CustGroup = CustGroup no-lock.
       hdr0 = "Customers in an External Group '" + CustGroup + "': " +
       CustGroup.CGName.
@@ -254,7 +254,7 @@ FOR
 
    /* basic data of a customer */
    DISPLAY STREAM tul
-     aslanimi asrenimi asranimi mynimi rsname tot1 tot2
+     aslanimi asrenimi asranimi mSyst.CUICommon:ynimi rsname tot1 tot2
      dkatnimi kaytalv plname igname Customer.Size Customer.ConnType
      Customer.CustNum Customer.OrgId
      Customer.SearchName Customer.CustName Customer.COName Customer.Contact
@@ -272,13 +272,13 @@ FOR
 
    /* is there a memo text ? */
    IF CAN-FIND(FIRST memo WHERE
-                     memo.Brand     = gcBrand AND
+                     memo.Brand     = Syst.CUICommon:gcBrand AND
                      memo.HostTable = "Customer" AND
                      memo.KeyValue  = STRING(Customer.CustNum) AND
                      memo.memotext NE "") THEN
    DO:
       FOR EACH memo WHERE
-               memo.Brand     = gcBrand AND
+               memo.Brand     = Syst.CUICommon:gcBrand AND
                memo.HostTable = "Customer" AND
                memo.KeyValue  = STRING(Customer.CustNum) AND
                memo.memotext NE "" NO-LOCK:

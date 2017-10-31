@@ -43,7 +43,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  BNET for Mobile Operators and Service Providers  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -129,7 +129,7 @@ ADD-ROW:
            validate
               (bnet.BnetCode NOT ENTERED or
               NOT CAN-FIND(bnet using  bnet.BnetCode WHERE
-                           bnet.brand = gcBrand ),
+                           bnet.brand = Syst.CUICommon:gcBrand ),
               "Billing Type " + string(INPUT bnet.BnetCode) +
               " already exists !").
            IF INPUT FRAME lis bnet.BnetCode = "" THEN 
@@ -350,7 +350,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET   lcBrand WHEN gcAllBrand = TRUE  BnetCode WITH FRAME f1.
+       SET   lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  BnetCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF BnetCode ENTERED THEN DO:
           FIND FIRST bnet WHERE bnet.BnetCode >= BnetCode
@@ -370,7 +370,7 @@ BROWSE:
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
 
-       SET  lcBrand WHEN gcAllBrand = TRUE BnetName WITH FRAME f2.
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE BnetName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF BnetName ENTERED THEN DO:
           FIND FIRST bnet USE-INDEX BnetName  

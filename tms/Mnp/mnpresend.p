@@ -6,7 +6,7 @@ DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcStatus AS CHARACTER NO-UNDO.
 
 FIND Order WHERE
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.CUICommon:gcBrand AND
      Order.OrderId = piOrderId
 NO-LOCK.
 

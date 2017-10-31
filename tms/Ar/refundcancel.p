@@ -51,7 +51,7 @@ END.
           
 ELSE 
 FOR EACH MsRequest EXCLUSIVE-LOCK USE-INDEX CustNum WHERE
-         MsRequest.Brand      = gcBrand    AND
+         MsRequest.Brand      = Syst.CUICommon:gcBrand    AND
          MsRequest.ReqType    = 23         AND
          MsRequest.CustNum    = iiCustNum  AND
          MsRequest.ReqIParam1 = iiInvNum   AND

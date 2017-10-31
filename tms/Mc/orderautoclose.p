@@ -10,14 +10,14 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE ldeCrStamp AS DECIMAL NO-UNDO.
 ldeCrStamp = Func.Common:mMake2DT(TODAY - 45, 0).
 
 FOR EACH order where
-   order.brand = gcbrand and
+   order.brand = Syst.CUICommon:gcBrand and
    order.statuscode = {&ORDER_STATUS_MORE_DOC_NEEDED} and
    order.crstamp < ldeCrStamp NO-LOCK:
 

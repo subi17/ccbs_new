@@ -19,7 +19,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 

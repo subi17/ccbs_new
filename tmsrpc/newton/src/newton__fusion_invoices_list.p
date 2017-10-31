@@ -12,7 +12,7 @@
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Inv/fusioninvoice.i}
 

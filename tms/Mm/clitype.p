@@ -96,7 +96,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  SUBSCRIPTION TYPE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -179,7 +179,7 @@ FUNCTION fAccName RETURNS CHARACTER
    IF iiAccNum = 0 THEN RETURN "".
 
    FIND Account WHERE 
-        Account.Brand  = gcBrand AND
+        Account.Brand  = Syst.CUICommon:gcBrand AND
         Account.AccNum = iiAccNum NO-LOCK NO-ERROR.
    IF AVAILABLE Account THEN RETURN Account.AccName.
    ELSE RETURN "?".
@@ -284,7 +284,7 @@ REPEAT WITH FRAME sel:
            VALIDATE
               (CLIType.CLIType NOT ENTERED OR
               NOT CAN-FIND(CLIType using  CLIType.CLIType WHERE 
-                           CLIType.Brand  = gcBrand ),
+                           CLIType.Brand  = Syst.CUICommon:gcBrand ),
               "CLIType " + string(INPUT CLIType.CLIType) +
               " already exists !").
            IF INPUT FRAME lis CLIType.CLIType = "" THEN 
@@ -511,7 +511,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP CLIType With FRAME f1.
-       SET  lcBrand WHEN gcallbrand = TRUE CLIType WITH FRAME f1.
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE CLIType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CLIType ENTERED THEN DO:
           IF lcBrand ne "*" THEN 
@@ -725,7 +725,7 @@ PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
       FIND DiscPlan WHERE
-           DiscPlan.Brand    = gcBrand AND 
+           DiscPlan.Brand    = Syst.CUICommon:gcBrand AND 
            DiscPlan.DiscPlan = CLIType.DiscPlan
       NO-LOCK NO-ERROR.
       IF AVAIL Discplan THEN DPName = Discplan.DPName.
@@ -740,7 +740,7 @@ PROCEDURE local-UPDATE-record:
       IF AVAIL TMSCodes THEN SPName = TMSCodes.CodeName.               
  
       FIND RatePlan WHERE
-           RatePlan.Brand    = gcBrand AND
+           RatePlan.Brand    = Syst.CUICommon:gcBrand AND
            RatePlan.RatePlan = CLIType.Priceplan
       NO-LOCK NO-ERROR.
       IF AVAIL RatePlan THEN PLName = RatePlan.RPName.
@@ -898,7 +898,7 @@ PROCEDURE local-UPDATE-record:
                   THEN DISPLAY  "" @ DPName with frame lis.
                   ELSE DO:
                      FIND Discplan WHERE 
-                          DiscPlan.Brand    = gcBRand AND 
+                          DiscPlan.Brand    = Syst.CUICommon:gcBrand AND 
                           Discplan.Discplan = INPUT CLIType.Discplan
                      NO-LOCK NO-ERROR.
                      IF NOT AVAIL Discplan THEN DO:
@@ -912,7 +912,7 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF FRAME-FIELD = "Priceplan" THEN DO:
                   FIND rateplan  WHERE 
-                       rateplan.Brand     = gcBrand AND 
+                       rateplan.Brand     = Syst.CUICommon:gcBrand AND 
                        rateplan.rateplan  = input PricePlan
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL rateplan THEN DO:

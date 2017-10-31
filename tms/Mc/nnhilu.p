@@ -60,13 +60,13 @@ form
       label "File Name ......" skip(3)
 WITH
    width 80 ROW 1 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " PRINT CUSTOMER Price LIST " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " PRINT CUSTOMER Price LIST " + string(pvm,"99-99-99") + " "
    side-labels FRAME rajat.
 
 
 form header
    fill ("=",lev) format "x(170)" SKIP
-   ynimi "PRICELIST" at 64 "Page" at 161 sl format "ZZZZ9" TO 170
+   Syst.CUICommon:ynimi "PRICELIST" at 64 "Page" at 161 sl format "ZZZZ9" TO 170
    SKIP
    string(pvm,"99-99-99") TO 170 SKIP
    fill ("=",lev) format "x(170)" skip(1)
@@ -153,21 +153,21 @@ ELSE OUTPUT STREAM tul TO value(fname).
 
    print-line:
    FOR EACH  BDest   no-lock WHERE
-             BDest.Brand   = gcBrand,
+             BDest.Brand   = Syst.CUICommon:gcBrand,
        EACH  RateCCN no-lock where
-             RateCCN.Brand = gcBrand AND
+             RateCCN.Brand = Syst.CUICommon:gcBrand AND
              RateCCN.BDest = BDest.BDest AND
              RateCCN.DestType = BDest.DestType,
        FIRST CCN no-lock where
-             CCN.Brand = gcBrand AND
+             CCN.Brand = Syst.CUICommon:gcBrand AND
              CCN.CCN   = RateCCN.CCN
    BREAK BY BDest.BDest:
 
       FOR EACH Tariff no-lock where
-               Tariff.Brand   = gcBrand AND
+               Tariff.Brand   = Syst.CUICommon:gcBrand AND
                Tariff.CCN     = CCN.CCN,
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.CUICommon:gcBrand AND
             BillItem.BillCode = Tariff.BillCode:
 
          /* onko kjA pyytAnyt keskeytystA ? */

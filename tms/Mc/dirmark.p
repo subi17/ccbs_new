@@ -39,7 +39,7 @@ form
     DMarketing.DirMarkName     /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " DIRECT MARKETING CODES "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -320,7 +320,7 @@ BROWSE:
        DirMark = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
-       UPDATE lcBrand WHEN gcAllBrand = TRUE
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
               DirMark WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF DirMark <> "" THEN DO:
@@ -342,7 +342,7 @@ BROWSE:
        DirMarkName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         Disp lcBrand With FRAME f2.
-       UPDATE  lcBrand WHEN gcAllBrand = TRUE
+       UPDATE  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
                DirMarkName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF DirMarkName <> "" THEN DO:

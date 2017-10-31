@@ -18,7 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 {Func/cparam2.i}
@@ -59,7 +59,7 @@ IF lcMiYoigoURL = "" OR lcMiYoigoURL = ? THEN
    RETURN appl_err("Missing system configuration").
 
 FIND FIRST Invoice WHERE
-           Invoice.Brand    = gcBrand AND
+           Invoice.Brand    = Syst.CUICommon:gcBrand AND
            Invoice.ExtInvID = pcExtInvId NO-LOCK NO-ERROR.
 IF NOT AVAIL Invoice THEN
    RETURN appl_err("Invoice not found").

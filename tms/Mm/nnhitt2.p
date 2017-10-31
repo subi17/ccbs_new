@@ -38,7 +38,7 @@ fr-header = " PRICE DETAILS ".
 
 
 FIND FIRST Tariff where
-           Tariff.Brand = gcBrand AND 
+           Tariff.Brand = Syst.CUICommon:gcBrand AND 
            Tariff.TariffNum = iiTariffNum
 no-lock no-error.
 

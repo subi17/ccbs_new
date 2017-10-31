@@ -447,7 +447,7 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
        IF order = 1 THEN FIND FIRST OrderTopup WHERE
-          OrderTopUp.Brand   = gcBrand AND
+          OrderTopUp.Brand   = Syst.CUICommon:gcBrand AND
           OrderTopUp.OrderID = iiOrderID
           NO-LOCK NO-ERROR.
          
@@ -456,7 +456,7 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
 
        IF order = 1 THEN FIND LAST OrderTopup WHERE
-          OrderTopUp.Brand   = gcBrand AND
+          OrderTopUp.Brand   = Syst.CUICommon:gcBrand AND
           OrderTopUp.OrderID = iiOrderID
           NO-LOCK NO-ERROR.
  
@@ -465,7 +465,7 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
 
        IF order = 1 THEN FIND NEXT OrderTopup WHERE
-          OrderTopUp.Brand   = gcBrand AND
+          OrderTopUp.Brand   = Syst.CUICommon:gcBrand AND
           OrderTopUp.OrderID = iiOrderID
           NO-LOCK NO-ERROR.
           
@@ -474,7 +474,7 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
  
        IF order = 1 THEN FIND PREV OrderTopup WHERE
-          OrderTopUp.Brand   = gcBrand AND
+          OrderTopUp.Brand   = Syst.CUICommon:gcBrand AND
           OrderTopUp.OrderID = iiOrderID
           NO-LOCK NO-ERROR.
   

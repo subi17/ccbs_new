@@ -222,7 +222,7 @@ form
  Invoice.CustName    no-label format "x(26)"
  pVouch             label "Voucher"
  help "Voucher #, F9: Previous vouchers" SKIP
-with title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENTS TO INVOICES "
+with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENTS TO INVOICES "
  + string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
   width 80 side-labels FRAME INV-NO.
 
@@ -460,7 +460,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
         exclusive-lock no-error.
 
    IF NOT AVAILABLE Invoice OR 
-      Invoice.Brand NE gcBrand 
+      Invoice.Brand NE Syst.CUICommon:gcBrand 
    THEN DO:
       bell. message "Unknown Invoice Nbr !". pause 1 no-message.
       CLEAR FRAME payment no-pause. NEXT LASKU.
@@ -680,7 +680,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
          DISPLAY kaccno kaccmk deb kre  WITH FRAME acct.
 
          IF CAN-FIND(FIRST memo WHERE
-                           memo.Brand     = gcBrand   AND
+                           memo.Brand     = Syst.CUICommon:gcBrand   AND
                            memo.HostTable = "Payment" AND
                            memo.KeyValue  = STRING(Payment.Voucher) AND
                            memo.memotext NE "") THEN DO:
@@ -709,7 +709,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
       CREATE Payment. 
       ASSIGN Payment.Voucher  = fGetIntVoucher()
-             Payment.Brand    = gcBrand 
+             Payment.Brand    = Syst.CUICommon:gcBrand 
              suopvm           = muispvm
              ldPayment        = ldOldDue
              kirjpvm          = muispvm.
@@ -1030,7 +1030,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
         /* is this an advance payment invoice */
         IF ldAPAmt = 0 THEN DO: 
            FIND Account WHERE 
-                Account.Brand  = gcBrand AND
+                Account.Brand  = Syst.CUICommon:gcBrand AND
                 Account.AccNum = Invoice.ARAccNum NO-LOCK NO-ERROR.
            IF AVAILABLE Account AND Account.AccType = 19 AND lAPVatAmt = 0
            THEN ldAPAmt = -1 * ysuoyht.
@@ -1101,7 +1101,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                   AccNum = INPUT FRAME acct kaccno[ac-ind]. 
                   IF AccNum NE 0 THEN DO:
                      FIND Account where 
-                         Account.Brand = gcBrand AND
+                         Account.Brand = Syst.CUICommon:gcBrand AND
                          Account.AccNum = AccNum no-lock no-error.
                      IF NOT AVAIL Account THEN DO:
                         bell. message "Unknown account !".
@@ -1161,7 +1161,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
        DO ii = 1 TO 10.
           IF kaccno[ii] NE 0 THEN DO:
              FIND Account where 
-                Account.Brand  = gcBrand AND
+                Account.Brand  = Syst.CUICommon:gcBrand AND
                 Account.AccNum = kaccno[ii]
                 no-lock no-error.
              IF AVAILABLE Account THEN ASSIGN 
@@ -1332,7 +1332,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             IF fPeriodLocked(kirjpvm,TRUE) THEN NEXT. 
 
             FIND InvGroup where 
-               InvGroup.Brand    = gcBrand AND
+               InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                InvGroup.InvGroup = Customer.InvGroup 
                NO-LOCK.
             ASSIGN b-acc = InvGroup.UpdCustBal.
@@ -1422,7 +1422,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                ASSIGN kactype[ii] = 0.
                IF kaccno[ii] NE 0 THEN DO:
                   FIND Account where 
-                     Account.Brand  = gcBrand AND
+                     Account.Brand  = Syst.CUICommon:gcBrand AND
                      Account.AccNum = kaccno[ii]
                      no-lock no-error.
                   IF AVAILABLE Account THEN ASSIGN 
@@ -1565,7 +1565,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             IF NOT ok THEN NEXT TOIMI.    
 
             FIND InvGroup where 
-               InvGroup.Brand = gcBrand AND
+               InvGroup.Brand = Syst.CUICommon:gcBrand AND
                InvGroup.InvGroup = Customer.InvGroup 
                NO-LOCK.
             ASSIGN b-acc = InvGroup.UpdCustBal.

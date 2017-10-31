@@ -7,7 +7,7 @@ DEF VAR lfr AS FixtureReader NO-UNDO.
 DEF BUFFER lbRequest FOR MsRequest.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 lfr = NEW FixtureReader().
 lfr:verbosity = -1.

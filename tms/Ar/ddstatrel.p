@@ -57,7 +57,7 @@ FORM
    SKIP(5)
    
    with row 1 side-labels width 80
-        title " " + ynimi + " DD STATUS REPORT " +
+        title " " + Syst.CUICommon:ynimi + " DD STATUS REPORT " +
         string(pvm,"99-99-99") + " "
         frame fCrit.
 

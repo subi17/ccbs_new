@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Inv/chk_cdr_invrowcounter.i}
 
 def var i as int no-undo.

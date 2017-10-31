@@ -116,7 +116,7 @@ FUNCTION fError RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "IFSDUMP"
              ErrorLog.TableName = "Invoice"
              ErrorLog.KeyValue  = STRING(Invoice.InvNum)
@@ -300,7 +300,7 @@ FUNCTION fGetTaxZone RETURNS CHAR
    IF LOOKUP(icTaxZone,lcTaxZones) > 0 THEN RETURN icTaxZone.
    
    FIND FIRST InvGroup WHERE 
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
               InvGroup.InvGroup = icInvGroup NO-LOCK NO-ERROR.
    IF AVAILABLE InvGroup 
    THEN RETURN InvGroup.TaxZone.
@@ -366,7 +366,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
 
    InvoiceLoop:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand   = gcBrand   AND
+            Invoice.Brand   = Syst.CUICommon:gcBrand   AND
             Invoice.InvDate = ldaDate   AND
             Invoice.InvType NE 99       AND
             Invoice.ExtInvID > ""       AND
@@ -590,7 +590,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       FOR FIRST Order WHERE
                 Order.InvNum = liInvNum NO-LOCK,
           FIRST OrderPayment WHERE
-                OrderPayment.Brand   = gcBrand AND
+                OrderPayment.Brand   = Syst.CUICommon:gcBrand AND
                 OrderPayment.OrderId = Order.OrderId NO-LOCK:
           ASSIGN lcNCFRef = OrderPayment.BinNumber + OrderPayment.AuthNumber
                  lcNumberRef = OrderPayment.CCReference
@@ -644,17 +644,17 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    FOR FIRST Order NO-LOCK WHERE
              Order.InvNum = liInvNum,
         EACH OfferItem NO-LOCK WHERE
-             OfferItem.Brand = gcBrand AND
+             OfferItem.Brand = Syst.CUICommon:gcBrand AND
              OfferItem.Offer = Order.Offer AND
              OfferItem.BeginStamp <= Order.CrStamp AND
              OfferItem.EndStamp >= Order.CrStamp AND
              OfferItem.ItemType = "PerContract", 
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = OfferItem.ItemKey AND
              DayCampaign.DCType = {&DCTYPE_INSTALLMENT},
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand = gcBrand AND
+             FMItem.Brand = Syst.CUICommon:gcBrand AND
              FMItem.FeeModel = DayCampaign.FeeModel:
 
        ASSIGN
@@ -713,7 +713,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          ttRow.Amt = ttRow.AmtExclVat + ttRow.VatAmt.
          
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = InvRow.BillCode NO-LOCK NO-ERROR.
                  
       IF NOT AVAILABLE BillItem THEN DO:           
@@ -737,7 +737,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       END.
        
       IF NOT CAN-FIND(FIRST Account WHERE
-                            Account.Brand  = gcBrand AND
+                            Account.Brand  = Syst.CUICommon:gcBrand AND
                             Account.AccNum = InvRow.SlsAcc) THEN DO:
          fError(InvRow.BillCode + ": Invalid account").
          NEXT InvoiceLoop.                   
@@ -918,7 +918,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                                           lcbillcodes_to_set3 + "," +
                                           lcbillcodes_to_set4) > 0 THEN DO:
             FIND FIRST BillItem WHERE
-                       BillItem.Brand    = gcBrand AND
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND
                        BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
                        
             IF AVAILABLE BillItem THEN DO:

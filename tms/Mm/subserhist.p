@@ -445,7 +445,7 @@ PROCEDURE local-find-this:
        FIND SubSer WHERE recid(SubSer) = rtab[frame-line(sel)] 
        NO-LOCK.
     FIND ServCom WHERE 
-         ServCom.Brand   = gcBrand AND 
+         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
          ServCom.ServCom = ENTRY(1,SubSer.ServCom,".") 
     NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -493,11 +493,11 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND ServPac WHERE 
-        ServPac.Brand   = gcBrand   AND 
+        ServPac.Brand   = Syst.CUICommon:gcBrand   AND 
         ServPac.ServPac = SubSer.ServPac NO-LOCK NO-ERROR.
    
    FIND ServCom WHERE 
-        ServCom.Brand   = gcBrand  AND 
+        ServCom.Brand   = Syst.CUICommon:gcBrand  AND 
         ServCom.ServCom = ENTRY(1,SubSer.ServCom,".") NO-LOCK NO-ERROR.
 
 END PROCEDURE.

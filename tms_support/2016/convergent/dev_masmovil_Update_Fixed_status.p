@@ -8,7 +8,7 @@ subscription data. Others will be only partially completed.
 
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
 {Mc/orderfusion.i}
@@ -53,7 +53,7 @@ IF ERROR-STATUS:ERROR THEN DO:
 END.
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.OrderID = liOrderID NO-ERROR.
 IF NOT AVAIL Order THEN DO:
    MESSAGE "Order not found" VIEW-AS ALERT-BOX.
@@ -61,7 +61,7 @@ IF NOT AVAIL Order THEN DO:
 END.
 
 FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Syst.CUICommon:gcBrand AND
            OrderFusion.OrderId = liOrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN DO:
    MESSAGE "Order type is incorrect" VIEW-AS ALERT-BOX.

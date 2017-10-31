@@ -89,7 +89,7 @@ SKIP
 "    Billed     " lkm2 "calls, " summa2 "/" summa2a "w/VAT " 
 skip(1)
 WITH
-   row 5 col 3 overlay no-labels title " " + ynimi +
+   row 5 col 3 overlay no-labels title " " + Syst.CUICommon:ynimi +
    " Total Value of Calls,  "  + string(substr(lcCLI,1,16)) + ") " FRAME rajat.
 
 
@@ -136,7 +136,7 @@ repeat WITH FRAME rajat:
    EMPTY TEMP-TABLE ttCall.
     
    fMobCDRCollect(INPUT "post,pre",
-                  INPUT gcBrand,
+                  INPUT Syst.CUICommon:gcBrand,
                   INPUT katun,
                   INPUT pvm1,
                   INPUT pvm2,

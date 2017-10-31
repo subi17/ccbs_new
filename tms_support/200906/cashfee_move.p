@@ -48,7 +48,7 @@ repeat:
          END.
        
          FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-                  SingleFee.Brand     = gcBrand AND
+                  SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                   SingleFee.HostTable = "Order" AND
                   SingleFee.KeyValue  = STRING(Order.OrderId) AND
                   SingleFee.CalcObj   = lcCalcObj:

@@ -8,7 +8,7 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 /*{Syst/utumaa.i new }*/
 /*{Inv/edefine.i new}*/
@@ -29,7 +29,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
 
    /* mark text as sent */
    CREATE ITSendLog.
-   ASSIGN ITSendLog.Brand      = gcBrand
+   ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand
           ITSendLog.TxtType    = 1       /* inf. text */
           ITSendLog.ITNum      = -10     /* temp value for avoiding email sending twice */ 
           ITSendLog.CustNum    = iiOrderID
@@ -52,10 +52,10 @@ lcEmailFile = fCParam("Printing","MailPrintFile") +
               "_" + STRING(iiOrderId) + "_conf.html".
 
 FIND Order WHERE
-  Order.Brand   = gcBrand  AND
+  Order.Brand   = Syst.CUICommon:gcBrand  AND
   Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
 
-FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
+FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
                                OrderCustomer.OrderId = iiOrderId AND
                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 

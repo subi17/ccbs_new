@@ -61,7 +61,7 @@ form
    skip(10)
 with
    row 1 width 80 overlay color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
-   " " + ynimi + " Payments into a/r, input from OCR file " + string(pvm,"99-99-9999") +
+   " " + Syst.CUICommon:ynimi + " Payments into a/r, input from OCR file " + string(pvm,"99-99-9999") +
    " " frame main.
 
 
@@ -69,7 +69,7 @@ Syst.CUICommon:cfc = "sel".  RUN Syst/ufcolor.p.
 view frame main.
 
 /* payment configuration file */
-IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = gcBrand) THEN DO:
+IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = Syst.CUICommon:gcBrand) THEN DO:
    MESSAGE 
    "SYSTEM ERROR:"                   SKIP
    "Payment file configuration"  SKIP
@@ -80,7 +80,7 @@ END.
 
 amt-o = 0.
 FOR EACH PaymCfg WHERE
-         PaymCfg.Brand = gcBrand NO-LOCK:
+         PaymCfg.Brand = Syst.CUICommon:gcBrand NO-LOCK:
 
    /* read all possible origin records */
    CREATE worigin.

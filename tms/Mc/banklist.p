@@ -42,7 +42,7 @@ FORM
     Bank.Address
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " BANKS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -294,13 +294,13 @@ BROWSE:
        DO:
           IF lcBankOffice NE "" THEN 
           FIND FIRST Bank NO-LOCK WHERE 
-                     Bank.Brand = gcBrand AND 
+                     Bank.Brand = Syst.CUICommon:gcBrand AND 
                      Bank.BankID = lcBankId AND
                      Bank.BankOffice BEGINS replace(lcBankOffice," / ",chr(255))
           NO-ERROR.
           ELSE 
           FIND FIRST Bank NO-LOCK WHERE 
-                     Bank.Brand  = gcBrand AND
+                     Bank.Brand  = Syst.CUICommon:gcBrand AND
                      Bank.BankId = lcBankId NO-ERROR.
           IF NOT AVAILABLE Bank THEN DO:
              BELL.

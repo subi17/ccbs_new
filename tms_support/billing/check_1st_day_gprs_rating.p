@@ -16,7 +16,7 @@ Customer number, MSISDN, STC date, old subs type, new subs type, billig item, nu
 DEF VAR ldtInputDate AS DATE NO-UNDO. 
 DEF VAR ldBeginStamp AS DEC NO-UNDO. 
 DEF VAR ldEndStamp AS DEC NO-UNDO. 
-DEF VAR gcBrand AS CHAR NO-UNDO INITIAL "1". 
+DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INITIAL "1". 
 DEF VAR liQty AS INT NO-UNDO. 
 DEF VAR ldAmt As DEC NO-UNDO.
 DEF VAR lcInvNum AS CHAR NO-UNDO. 
@@ -77,7 +77,7 @@ OUTPUT STREAM sLog TO VALUE("/apps/yoigo/tms_support/billing/check_1st_day_gprs_
          + DAY(ldtInputdate)) + ".log").
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}) AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 
@@ -119,7 +119,7 @@ FOR EACH MsRequest NO-LOCK WHERE
 END.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType = 81 AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 

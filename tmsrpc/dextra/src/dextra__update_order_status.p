@@ -175,7 +175,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
 katun = "Dextra".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/dextra.i}
@@ -184,7 +184,7 @@ gcBrand = "1".
 {Func/orderfunc.i}
 
 /* Set access to right tenant */
-FOR FIRST Order WHERE Order.Brand = gcBrand AND Order.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+FOR FIRST Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
     ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
 END.
 
@@ -207,7 +207,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    /* YPR-4984, Router delivered to customer */
    IF liLOStatusId EQ 99998 THEN DO:
       FIND FIRST OrderFusion WHERE
-                 OrderFusion.Brand EQ gcBrand AND
+                 OrderFusion.Brand EQ Syst.CUICommon:gcBrand AND
                  OrderFusion.orderid EQ Order.OrderId NO-ERROR.
       IF AVAIL OrderFusion THEN DO:
          FIND FIRST FusionMessage WHERE
@@ -241,7 +241,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    END.  
    ELSE DO:
       FIND FIRST OrderAccessory WHERE
-         OrderAccessory.Brand = gcBrand AND
+         OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
          OrderAccessory.OrderId = Order.OrderId AND
          OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
          NO-LOCK NO-ERROR.
@@ -263,7 +263,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
       END.
 
       FIND FIRST SubsTerminal WHERE
-         SubsTerminal.Brand = gcBrand AND
+         SubsTerminal.Brand = Syst.CUICommon:gcBrand AND
          SubsTerminal.OrderId = Order.OrderId AND
          SubsTerminal.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
 
@@ -294,7 +294,7 @@ END.
 
 CREATE OrderDelivery.
 ASSIGN
-   OrderDelivery.Brand = gcBrand
+   OrderDelivery.Brand = Syst.CUICommon:gcBrand
    OrderDelivery.OrderId = Order.OrderId
    OrderDelivery.LOTimeStamp = ldeLOTimeStamp
    OrderDelivery.CourierId = liCourierId
@@ -309,14 +309,14 @@ IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
 IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
 
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
    NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN DO:
       CREATE OrderCustomer.
       ASSIGN
-         OrderCustomer.Brand     = gcBrand 
+         OrderCustomer.Brand     = Syst.CUICommon:gcBrand 
          OrderCustomer.OrderId   = Order.OrderId
          OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
    END.

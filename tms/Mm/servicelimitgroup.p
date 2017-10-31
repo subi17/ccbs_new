@@ -59,7 +59,7 @@ form
     
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SERVICELIMIT  GROUPS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -140,7 +140,7 @@ ADD-ROW:
            LEAVE add-row.
            CREATE ServiceLimitGroup.
            ASSIGN
-           ServiceLimitGroup.Brand     = gcBrand 
+           ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand 
            ServiceLimitGroup.GroupCode = INPUT FRAME lis 
                                          ServiceLimitGroup.GroupCode.
 
@@ -594,7 +594,7 @@ PROCEDURE local-UPDATE-record:
                 PAUSE 0.
                 IF FRAME-FIELD = "BillCode" THEN DO:
                    FIND BillItem WHERE 
-                        BillItem.Brand = gcBrand AND
+                        BillItem.Brand = Syst.CUICommon:gcBrand AND
                         BillItem.BillCode =
                    INPUT FRAME lis ServiceLimitGroup.ValidFrom NO-LOCK NO-ERROR.
                    IF NOT AVAIL BillItem THEN DO:

@@ -15,7 +15,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -81,7 +81,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
@@ -175,7 +175,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
      SubSer.MsSeq = Mobsub.MsSeq AND
      SubSer.ServCom = pcServiceId,
    FIRST ServCom NO-LOCK WHERE 
-      ServCom.Brand = gcBrand AND
+      ServCom.Brand = Syst.CUICommon:gcBrand AND
       ServCom.ServCom = pcServiceID:
 
       /* Check ongoing service requests */
@@ -329,7 +329,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO:
    
       FIND FIRST ServCom WHERE
-                 ServCom.Brand = gcBrand AND
+                 ServCom.Brand = Syst.CUICommon:gcBrand AND
                  ServCom.ServCom = pcServiceID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServCom THEN RETURN appl_err("Invalid Service Id").
 

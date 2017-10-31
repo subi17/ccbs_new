@@ -73,7 +73,7 @@ FORM
     PaymConfig.TaxRules
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " PAYMENT POSTING RULES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -158,7 +158,7 @@ FUNCTION fDispDebitAccName RETURNS LOGIC
    
    ELSE DO:
       FIND Account WHERE 
-           Account.Brand  = gcBrand AND
+           Account.Brand  = Syst.CUICommon:gcBrand AND
            Account.AccNum = iiDebitAcc NO-LOCK NO-ERROR.
       IF AVAILABLE Account 
       THEN lcDebitAccName = Account.AccName.
@@ -176,7 +176,7 @@ FUNCTION fDispCreditAccName RETURNS LOGIC
    
    ELSE DO:
       FIND Account WHERE 
-           Account.Brand  = gcBrand AND
+           Account.Brand  = Syst.CUICommon:gcBrand AND
            Account.AccNum = iiCreditAcc NO-LOCK NO-ERROR.
       IF AVAILABLE Account 
       THEN lcCreditAccName = Account.AccName.
@@ -473,7 +473,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            liPaymType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
-       SET lcBrand WHEN gcAllBrand
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand
            lcPaymSrc WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 

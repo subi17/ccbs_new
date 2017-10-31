@@ -3,7 +3,7 @@ DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 {Syst/tmsconst.i}
 
@@ -14,7 +14,7 @@ FIND FIRST msisdnnumber where
 
 IF NOT AVAIL msisdnnumber THEN  RETURN.
 
-FIND FIRST msisdn where msisdn.brand = gcBrand and 
+FIND FIRST msisdn where msisdn.brand = Syst.CUICommon:gcBrand and 
       msisdn.cli = msisdnnumber.cli NO-LOCK NO-ERROR.
 IF NOT AVAIL msisdn THEN RETURN.
 

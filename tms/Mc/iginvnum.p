@@ -173,7 +173,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST IgInvNum WHERE
-                             IgInvNum.Brand    = gcBrand    AND
+                             IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
                              IgInvNum.InvGroup = icInvGroup 
                              USING IgInvNum.InvType AND
                                    IgInvNum.FromDate) THEN DO:
@@ -186,7 +186,7 @@ REPEAT WITH FRAME sel:
            
            
            CREATE IgInvNum.
-           ASSIGN IgInvNum.Brand    = gcBrand
+           ASSIGN IgInvNum.Brand    = Syst.CUICommon:gcBrand
                   IgInvNum.InvGroup = icInvGroup
                   IgInvNum.InvType  = INPUT FRAME lis IgInvNum.InvType
                   IgInvNum.FromDate = INPUT FRAME lis IgInvNum.FromDate.
@@ -418,7 +418,7 @@ REPEAT WITH FRAME sel:
        IF liInvType > 0 THEN DO:
        
           FIND FIRST IgInvNum WHERE 
-                     IgInvNum.Brand    = gcBrand    AND
+                     IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
                      IgInvNum.InvGroup = icInvGroup AND
                      IgInvNum.InvType >= liInvType
           NO-LOCK NO-ERROR.
@@ -557,7 +557,7 @@ PROCEDURE local-find-FIRST:
 
        IF order = 1 THEN 
        FIND FIRST IgInvNum WHERE
-                  IgInvNum.Brand    = gcBrand    AND
+                  IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
                   IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
          
 END PROCEDURE.
@@ -566,7 +566,7 @@ PROCEDURE local-find-LAST:
 
        IF order = 1 THEN 
        FIND LAST IgInvNum WHERE
-                 IgInvNum.Brand    = gcBrand    AND
+                 IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
                  IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
        
 END PROCEDURE.
@@ -575,7 +575,7 @@ PROCEDURE local-find-NEXT:
 
        IF order = 1 THEN 
        FIND NEXT IgInvNum WHERE
-                 IgInvNum.Brand    = gcBrand    AND
+                 IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
                  IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -583,7 +583,7 @@ PROCEDURE local-find-PREV:
  
        IF order = 1 THEN 
        FIND PREV IgInvNum WHERE
-                 IgInvNum.Brand    = gcBrand    AND
+                 IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
                  IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 

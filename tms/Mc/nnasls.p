@@ -59,7 +59,7 @@ DEF VAR rlx     AS INT.
 DEF VAR lev     AS INT init 169.
 def var ke      as log format "Yes/No"   init "No".
 DEF VAR edmyyja AS c   NO-UNDO.
-DEF VAR mynimi  AS c   NO-UNDO.
+DEF VAR mSyst.CUICommon:ynimi  AS c   NO-UNDO.
 DEF VAR rsname  AS c   NO-UNDO.
 DEF VAR fake    AS DA  NO-UNDO EXTENT 4.
 DEF VAR pr-code AS c   NO-UNDO.
@@ -83,7 +83,7 @@ x-cg-code = (if CustGroup ne "" then CustGroup else "NONE").
 
 form header
    viiva1  AT 2 SKIP
-   ynimi at 2 "SMALL CUSTOMER LIST" at 64 "Page" AT 161
+   Syst.CUICommon:ynimi at 2 "SMALL CUSTOMER LIST" at 64 "Page" AT 161
    sl format "ZZZZ9" TO 170
    SKIP
    "By " + entry(order1,jar1) + entry(order2,jar2)
@@ -202,7 +202,7 @@ print-line:
 FOR
     EACH Customer no-lock            where
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand    = gcBrand AND
+                                        CGMember.Brand    = Syst.CUICommon:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                         AND
@@ -230,15 +230,15 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
 
    /* asiakasta hoitavan myyjAn nimi */
    FIND Salesman where 
-        Salesman.Brand    = gcBrand AND
+        Salesman.Brand    = Syst.CUICommon:gcBrand AND
         Salesman.Salesman = Customer.Salesman
    no-lock no-error.
-   IF AVAIL Salesman THEN ASSIGN mynimi = Salesman.SmName.
-   else                          mynimi = "!! UNKNOWN !!".
+   IF AVAIL Salesman THEN ASSIGN mSyst.CUICommon:ynimi = Salesman.SmName.
+   else                          mSyst.CUICommon:ynimi = "!! UNKNOWN !!".
 
    if Customer.Reseller ne "" THEN DO:
       FIND Reseller where 
-           Reseller.Brand    = gcBrand AND
+           Reseller.Brand    = Syst.CUICommon:gcBrand AND
            Reseller.Reseller = Customer.Reseller
       no-lock no-error.
       IF AVAIL Reseller THEN ASSIGN rsname = Reseller.RsName.
@@ -258,7 +258,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
            Customer.CustNum          tab
            pr-code                 tab
            Customer.Salesman         tab
-           mynimi                  tab
+           mSyst.CUICommon:ynimi                  tab
            Customer.Reseller         tab
            rsname                  tab
            Customer.CustName         tab
@@ -293,7 +293,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
       skip(1)
       "Salesman:"                      AT 2 space(1)
       Customer.Salesman  format "x(8)"   space(1)
-      mynimi           format "x(30)"
+      mSyst.CUICommon:ynimi           format "x(30)"
       "Reseller:"                    AT 45 space(1)
       Customer.Reseller  format "x(8)"  space(1)
       rsname           format "x(30)"

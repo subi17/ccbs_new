@@ -61,7 +61,7 @@ for each order no-lock where
             ", pp-request " + STRING(PrePaidRequest.PPRequest).
 
    /* Get the voucher no. */
-   liVouch = fGetAndUpdVoucher(gcBrand,2).
+   liVouch = fGetAndUpdVoucher(Syst.CUICommon:gcBrand,2).
 
    ldAmt = PrePaidRequest.TopUpAmt / 100.
    
@@ -74,7 +74,7 @@ for each order no-lock where
    
    CREATE Payment.
    ASSIGN 
-       Payment.Brand    = gcBrand
+       Payment.Brand    = Syst.CUICommon:gcBrand
        Payment.Voucher  = liVouch
        Payment.CustNum  = Customer.CustNum
        Payment.CustName = lcName
@@ -107,7 +107,7 @@ for each order no-lock where
       /* separate Memo */
       CREATE Memo.
       ASSIGN 
-          Memo.Brand     = gcBrand
+          Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "payment"
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
@@ -133,7 +133,7 @@ for each order no-lock where
       lcExtVoucher = Payment.ExtVoucher.
    
       IF NOT CAN-FIND(FIRST Payment WHERE
-                            Payment.Brand      = gcBrand AND
+                            Payment.Brand      = Syst.CUICommon:gcBrand AND
                             Payment.ExtVoucher = lcExtVoucher AND
                             RECID(Payment) NE lrRecid)
       THEN LEAVE.

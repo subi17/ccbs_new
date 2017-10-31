@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "Cron".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
@@ -33,7 +33,7 @@ liConfDays = fCParamI("WaitingCanceleInvoiceDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand      = gcBrand AND
+         MsRequest.Brand      = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_CONFIRMATION_PENDING}:
 

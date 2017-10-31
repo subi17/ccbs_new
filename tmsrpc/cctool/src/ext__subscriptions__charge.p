@@ -17,7 +17,7 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcustpl.i}
 
@@ -51,7 +51,7 @@ IF LOOKUP("amount", lcStruct) GT 0 THEN
 ELSE DO:
 
   FIND FeeModel WHERE 
-       FeeModel.Brand = gcBrand AND
+       FeeModel.Brand = Syst.CUICommon:gcBrand AND
        FeeModel.FeeModel = lcEventId NO-LOCK NO-ERROR.
   IF NOT AVAIL FeeModel THEN DO:
             RETURN appl_err(SUBST("Charge/Comp billing event  &1 not found", lcEventId)).
@@ -63,7 +63,7 @@ ELSE DO:
                                    TODAY).
 
   FIND FIRST FMItem NO-LOCK  WHERE
-             FMItem.Brand     = gcBrand       AND
+             FMItem.Brand     = Syst.CUICommon:gcBrand       AND
              FMItem.FeeModel  = FeeModel.FeeModel AND
              FMItem.PriceList = lcPriceList AND
              FMItem.FromDate <= TODAY     AND

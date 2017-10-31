@@ -552,7 +552,7 @@ FUNCTION fErrorLog RETURNS LOGIC
  
    /* save to db for reporting */
    CREATE ErrorLog.
-   ASSIGN ErrorLog.Brand     = gcBrand
+   ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
           ErrorLog.ActionID  = "BRUN"
           ErrorLog.TableName = "Customer"
           ErrorLog.KeyValue  = STRING(iiCustnum)
@@ -735,7 +735,7 @@ FUNCTION fInvRowVAT RETURNS LOGICAL
                 ttIR.VatCode = 0.
                   
          FIND BillItem NO-LOCK WHERE 
-              BillItem.Brand    = gcBrand AND
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = ttir.BillCode NO-ERROR.
          IF NOT AVAILABLE BillItem THEN NEXT. /* will be rejected later on */
 
@@ -961,7 +961,7 @@ PROCEDURE pCreateInv:
       /* invseq handling */
       EMPTY TEMP-TABLE ttInvSeq.
 
-      gcBrand = xCustomer.Brand.
+      Syst.CUICommon:gcBrand = xCustomer.Brand.
 
       /* get a list of subscriptions that should not be billed */
       lcBillDeny = "".
@@ -1148,7 +1148,7 @@ PROCEDURE pCreateInv:
              THEN ldToPer = ldToPer + 0.86399.
 
              FOR FIRST MSOwner NO-LOCK WHERE
-                       MSOwner.Brand = gcBrand   AND
+                       MSOwner.Brand = Syst.CUICommon:gcBrand   AND
                        MsOwner.CLI   = ttCLI.CLI AND
                        MsOwner.TsBeg <= ldToPer  AND
                        MsOwner.TsEnd >= ldFromPer:
@@ -1185,7 +1185,7 @@ PROCEDURE pCreateInv:
                 THEN TRUE
                 ELSE ttEventCust.CustNum = xCustomer.CustNum),
           EACH FixedFee no-lock where
-               FixedFee.Brand   = gcBrand             AND 
+               FixedFee.Brand   = Syst.CUICommon:gcBrand             AND 
                FixedFee.CustNum = ttEventCust.CustNum AND
                FixedFee.InUse   = TRUE:
 
@@ -1314,7 +1314,7 @@ PROCEDURE pCreateInv:
             /* FATime */                  
             FOR EACH bttEventCust,
                 EACH FATime NO-LOCK USE-INDEX FATType WHERE
-                     Fatime.Brand      = gcBrand               AND 
+                     Fatime.Brand      = Syst.CUICommon:gcBrand               AND 
                      Fatime.CustNum    = bttEventCust.CustNum  AND 
                     (FATime.InvNum    = 0 or Fatime.InvNum = -1 * liSeq) AND
                      FATime.FatType    = 1 /* FIXED FEES */    AND
@@ -1323,7 +1323,7 @@ PROCEDURE pCreateInv:
                      THEN FATime.Period <= ciperiod 
                      ELSE FATime.Period = FFItem.BillPeriod),
                FIRST FatGroup NO-LOCK WHERE
-                     FatGroup.Brand = gcBrand AND 
+                     FatGroup.Brand = Syst.CUICommon:gcBrand AND 
                      FatGroup.FTGrp = FATime.FTGrp,
                EACH  FatGMember of FatGroup NO-LOCK WHERE
                      FatGMember.MemberType = 1             AND
@@ -1352,7 +1352,7 @@ PROCEDURE pCreateInv:
                   IF FixedFee.VatIncl NE Fatime.VatIncl AND
                      xCustomer.VatUsage < 3 THEN 
                   FOR FIRST BillItem NO-LOCK WHERE
-                            BillItem.Brand    = gcBrand AND
+                            BillItem.Brand    = Syst.CUICommon:gcBrand AND
                             BillItem.BillCode = FFItem.BillCode:
                           
                       ldVatPerc = fRegionTaxPerc(xCustomer.Region,
@@ -1381,13 +1381,13 @@ PROCEDURE pCreateInv:
 
       IF iiInvType = 6 OR iiInvType = 7 THEN 
       FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-               SingleFee.Brand     = gcBrand AND
+               SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                SingleFee.HostTable = "Order" AND
                SingleFee.KeyValue  = STRING(liOrderId) AND
                SingleFee.Billed    = FALSE   AND
                SingleFee.Active    = TRUE,
          FIRST Order NO-LOCK WHERE
-               Order.Brand   = gcBrand AND
+               Order.Brand   = Syst.CUICommon:gcBrand AND
                Order.OrderID = liOrderId:
                
          /* combine by product code */
@@ -1431,7 +1431,7 @@ PROCEDURE pCreateInv:
           EACH SingleFee EXCLUSIVE-LOCK WHERE
                SingleFee.CustNum     = ttEventCust.CustNum AND
                SingleFee.BillPeriod <= ciperiod            AND
-               SingleFee.Brand       = gcBrand             AND 
+               SingleFee.Brand       = Syst.CUICommon:gcBrand             AND 
                SingleFee.Billed      = FALSE               AND
                SingleFee.Active      = TRUE:
 
@@ -1472,7 +1472,7 @@ PROCEDURE pCreateInv:
          END.
          ELSE IF SingleFee.HostTable = "Order" THEN 
          FOR FIRST Order NO-LOCK WHERE
-                   Order.Brand   = gcBrand AND
+                   Order.Brand   = Syst.CUICommon:gcBrand AND
                    Order.OrderID = INTEGER(SingleFee.KeyValue):
             ASSIGN 
                lcCLI   = Order.CLI
@@ -1532,7 +1532,7 @@ PROCEDURE pCreateInv:
          IF iiInvType NE 6 AND iiInvType NE 7 THEN 
          FOR EACH bttEventCust,
              EACH FATime NO-LOCK USE-INDEX FATType WHERE
-                  Fatime.Brand      = gcBrand               AND 
+                  Fatime.Brand      = Syst.CUICommon:gcBrand               AND 
                   Fatime.CustNum    = bttEventCust.CustNum  AND 
                   (FATime.InvNum    = 0 or Fatime.InvNum = -1 * liSeq) AND
                   FATime.FatType    = 3 /* single fees */   AND
@@ -1541,7 +1541,7 @@ PROCEDURE pCreateInv:
                    THEN FATime.Period <= ciperiod 
                    ELSE FATime.Period = SingleFee.BillPeriod),
              FIRST FatGroup NO-LOCK WHERE
-                   FatGroup.Brand = gcBrand AND 
+                   FatGroup.Brand = Syst.CUICommon:gcBrand AND 
                    FatGroup.FTGrp = FATime.FTGrp,
              EACH  FatGMember of FatGroup NO-LOCK WHERE
                    FatGMember.MemberType = 1             AND
@@ -1568,7 +1568,7 @@ PROCEDURE pCreateInv:
                 IF SingleFee.VatIncl NE Fatime.VatIncl AND
                    xCustomer.VatUsage < 3 THEN 
                 FOR FIRST BillItem NO-LOCK WHERE
-                          BillItem.Brand    = gcBrand AND
+                          BillItem.Brand    = Syst.CUICommon:gcBrand AND
                           BillItem.BillCode = SingleFee.BillCode:
                           
                     ldVatPerc = fRegionTaxPerc(xCustomer.Region,
@@ -1610,7 +1610,7 @@ PROCEDURE pCreateInv:
                   MsOwner.TsBeg   <= ldBillPer[2]      AND
                   MsOwner.TsEnd   >= ldBillPer[1],
             FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand   = gcBrand AND
+                  CLIType.Brand   = Syst.CUICommon:gcBrand AND
                   CLIType.CLIType = MsOwner.CLIType AND
                   CLIType.MinimAmt > 0:
 
@@ -1684,7 +1684,7 @@ PROCEDURE pCreateInv:
                          MsOwner.TsBeg  <= ldToPer           AND
                          MsOwner.TsEnd  >= ldFromPer,
                    FIRST CLIType NO-LOCK WHERE
-                         CLIType.Brand   = gcBrand AND
+                         CLIType.Brand   = Syst.CUICommon:gcBrand AND
                          CLIType.CLIType = MsOwner.CLIType:
 
                   IF CLIType.ArAccNum > 0 THEN 
@@ -1692,7 +1692,7 @@ PROCEDURE pCreateInv:
                
                   /* this period already handled */
                   IF CAN-FIND(FIRST ActionLog WHERE
-                     ActionLog.Brand        = gcBrand       AND
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand       AND
                      ActionLog.TableName    = "MobSub"      AND
                      ActionLog.KeyValue     = STRING(MsOwner.MsSeq) AND
                      ActionLog.ActionID     = "MINCONS"     AND
@@ -1776,7 +1776,7 @@ PROCEDURE pCreateInv:
          IF FIRST-OF(ttCLI.CLI) THEN DO:
             /* is something defined for this cli */
             IF CAN-FIND(FIRST FATime WHERE
-                              FATime.Brand = gcBrand AND 
+                              FATime.Brand = Syst.CUICommon:gcBrand AND 
                               FATime.CLI   = ttcli.CLI)              
             THEN ASSIGN ldtFrom = ttCLI.FromDate
                         ldtTo   = ttCLI.ToDate.
@@ -1794,7 +1794,7 @@ PROCEDURE pCreateInv:
                    lcPer2 = YEAR(ldtTo) * 100 + MONTH(ldtTo).
                    
             FOR EACH FATime NO-LOCK WHERE
-                     Fatime.Brand    = gcBrand          AND 
+                     Fatime.Brand    = Syst.CUICommon:gcBrand          AND 
                      FATime.cli      = ttcli.CLI        AND
                      (FATime.InvNum  = 0 OR Fatime.InvNum = -1 * liSeq) AND
                      FATime.FatType  = 0  /* calls */   AND
@@ -2045,7 +2045,7 @@ PROCEDURE pCreateInv:
             IF llBillInt AND lcDepoItem = "" AND lcIntItem > "" AND
                iiInvType NE 6 AND iiInvType NE 7 THEN 
             FOR EACH CustIntEvent no-lock USE-INDEX CustNum where
-                     CustIntEvent.Brand        = gcBrand           AND 
+                     CustIntEvent.Brand        = Syst.CUICommon:gcBrand           AND 
                      CustIntEvent.CustNum      = xcustomer.CustNum AND
                      CustIntEvent.BilledInvNum = 0,
                FIRST Invoice NO-LOCK WHERE
@@ -2117,7 +2117,7 @@ PROCEDURE pCreateInv:
                            ttIR.VatPerc = 0.
  
                IF NOT CAN-FIND(BillItem WHERE 
-                               BillItem.Brand    = gcBrand AND
+                               BillItem.Brand    = Syst.CUICommon:gcBrand AND
                                BillItem.BillCode = ttir.BillCode)
                THEN DO:
                   ASSIGN lRejBill    = TRUE
@@ -2397,7 +2397,7 @@ PROCEDURE pFixCDR:
                    FixCDR.CurrUnit,
                    "",
                    FixCDR.TariffID,
-                   gcBrand,
+                   Syst.CUICommon:gcBrand,
                    OUTPUT ldNet,
                    OUTPUT ldGross).
 
@@ -2448,7 +2448,7 @@ PROCEDURE pFixCDR:
          /* 1: a known freephone number */
          lD2D = Func.Common:mHMS2TS(FixCDR.Date,string(FixCDR.TimeStart,"hh:mm:ss")).
          FIND FIRST BDestHist where
-                    BDestHist.Brand   = gcBrand        AND 
+                    BDestHist.Brand   = Syst.CUICommon:gcBrand        AND 
                     BDestHist.BDest   = FixCDR.BDest   AND
                     BDestHist.CustNum = FixCDR.InvCust AND
                     BDestHist.vFrom  <= lD2D           AND
@@ -2619,7 +2619,7 @@ PROCEDURE pMobCDR:
                    MobCDR.CurrUnit,
                    "",
                    MobCDR.TariffNum,
-                   gcBrand,
+                   Syst.CUICommon:gcBrand,
                    OUTPUT ldNet,
                    OUTPUT ldGross).
 
@@ -3329,7 +3329,7 @@ PROCEDURE pInvoiceHeader:
             
             /* is there a delivery address */
             FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand   = gcBrand   AND
+                       OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
                        OrderCustomer.OrderID = liOrderID AND
                        OrderCustomer.RowType = 4 
             NO-LOCK NO-ERROR.
@@ -3351,7 +3351,7 @@ PROCEDURE pInvoiceHeader:
                      
             /* actual invoice customer */             
             FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand   = gcBrand   AND
+                       OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
                        OrderCustomer.OrderID = liOrderID AND
                        OrderCustomer.RowType = Order.InvCustRole 
             NO-LOCK NO-ERROR.
@@ -3481,7 +3481,7 @@ PROCEDURE pInvoiceHeader:
                   ttIR.MsSeq   = ttRowVat.MsSeq AND
                   ttIR.RowType = 7,
             FIRST Account NO-LOCK WHERE
-                  Account.Brand  = gcBrand AND
+                  Account.Brand  = Syst.CUICommon:gcBrand AND
                   Account.AccNum = ttIR.SlsAcc:
                      
             IF Account.AccType = 19 THEN 
@@ -3565,7 +3565,7 @@ PROCEDURE pInvoiceHeader:
          IF liMinDays > 0 THEN DO:
 
             FOR EACH Invoice NO-LOCK WHERE
-                     Invoice.Brand   = gcBrand AND
+                     Invoice.Brand   = Syst.CUICommon:gcBrand AND
                      Invoice.CustNum = Customer.CustNum:
                IF pDate2 - Invoice.ToDate < liLastBill
                THEN liLastBill = pDate2 - Invoice.ToDate.
@@ -3775,13 +3775,13 @@ PROCEDURE pInvoiceHeader:
             /* mark invoice nbr to order */
             IF liOrderID > 0 THEN 
             FOR FIRST Order EXCLUSIVE-LOCK WHERE
-                      Order.Brand   = gcBrand AND
+                      Order.Brand   = Syst.CUICommon:gcBrand AND
                       Order.OrderID = liOrderID:
                Order.InvNum = Invoice.InvNum.
 
                /* ar account for cash invoices */
                FOR FIRST CLIType NO-LOCK WHERE
-                         CLIType.Brand   = gcBrand AND
+                         CLIType.Brand   = Syst.CUICommon:gcBrand AND
                          CLIType.CLIType = Order.CLIType:
                   IF CLIType.ArAccNum > 0 THEN DO:
                      FIND CURRENT Invoice EXCLUSIVE-LOCK.
@@ -3795,7 +3795,7 @@ PROCEDURE pInvoiceHeader:
             IF LOOKUP(STRING(Invoice.InvType),"1,99") > 0 THEN DO:
                CREATE ActionLog.
                ASSIGN 
-                  ActionLog.Brand        = gcBrand   
+                  ActionLog.Brand        = Syst.CUICommon:gcBrand   
                   ActionLog.TableName    = "MobSub"  
                   ActionLog.KeyValue     = STRING(Invoice.MsSeq) 
                   ActionLog.ActionChar   = Invoice.CLI
@@ -3994,7 +3994,7 @@ PROCEDURE pInvoiceHeader:
                /* another process has used the same number */
                IF ERROR-STATUS:ERROR OR Invoice.ExtInvID = ""  OR
                   CAN-FIND(FIRST bChkInv USE-INDEX ExtInvID WHERE
-                                 bChkInv.Brand    = gcBrand AND 
+                                 bChkInv.Brand    = Syst.CUICommon:gcBrand AND 
                                  bChkInv.ExtInvID = lcExtInvID AND
                                  RECID(bChkInv) NE RECID(Invoice)) 
                THEN DO:

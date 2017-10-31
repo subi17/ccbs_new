@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 
@@ -59,7 +59,7 @@ ELSE
 
 CREATE ttReseller.
 ASSIGN
-   ttReseller.Brand      = gcBrand
+   ttReseller.Brand      = Syst.CUICommon:gcBrand
    ttReseller.Reseller   = pcId
    ttReseller.RsName     = get_string(pcStruct, "name")
    ttReseller.EntityCode = (IF LOOKUP("entity_code",lcStruct) > 0
@@ -77,7 +77,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND Reseller NO-LOCK WHERE
-     Reseller.Brand = gcBrand AND
+     Reseller.Brand = Syst.CUICommon:gcBrand AND
      Reseller.Reseller = ttReseller.Reseller NO-ERROR.
 IF AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller already exists: &1", ttReseller.Reseller)).

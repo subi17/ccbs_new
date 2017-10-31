@@ -137,7 +137,7 @@ END.
 */
 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand   = gcBrand AND
+         Invoice.Brand   = Syst.CUICommon:gcBrand AND
          Invoice.CustNum = Customer.Custnum,
     EACH EventLog NO-LOCK WHERE
          EventLog.TableName = "Invoice" AND
@@ -262,7 +262,7 @@ FOR EACH EventLog NO-LOCK WHERE
 END.
 
 FOR EACH PaymPlan NO-LOCK WHERE
-         PaymPlan.Brand = gcBrand AND
+         PaymPlan.Brand = Syst.CUICommon:gcBrand AND
          PaymPlan.CustNum = Customer.CustNum:
 
    FOR EACH EventLog NO-LOCK WHERE
@@ -376,7 +376,7 @@ FOR EACH MsOwner OF Customer NO-LOCK:
    /* pnp groups */
    FOR EACH ttCodes,
        EACH PNPGroup NO-LOCK WHERE
-            PNPGroup.Brand     = gcBrand         AND
+            PNPGroup.Brand     = Syst.CUICommon:gcBrand         AND
             PNPGroup.GroupType = ttCodes.IntCode AND
             PNPGroup.PNPGroup  = MsOwner.CLI:
             
@@ -388,7 +388,7 @@ FOR EACH MsOwner OF Customer NO-LOCK:
        
        FOR EACH EventLog NO-LOCK WHERE
                 EventLog.TableName = "PNPGroup" AND
-                EventLog.Key       = gcBrand + CHR(255) + 
+                EventLog.Key       = Syst.CUICommon:gcBrand + CHR(255) + 
                                      STRING(PNPGroup.PNPSeq):
           fCrTemp().      
        END.
@@ -398,7 +398,7 @@ FOR EACH MsOwner OF Customer NO-LOCK:
    FOR EACH ttCodes,
        EACH EventLog NO-LOCK WHERE
             EventLog.TableName = "PNPGroup" AND
-            EventLog.Key       = gcBrand + CHR(255) + 
+            EventLog.Key       = Syst.CUICommon:gcBrand + CHR(255) + 
                                  STRING(ttCodes.IntCode) + CHR(255) +
                                  STRING(MsOwner.CLI):
           fCrTemp().      
@@ -435,7 +435,7 @@ END.
 /* pnp numbers */
 FOR EACH EventLog NO-LOCK WHERE
          EventLog.TableName = "PNPList" AND
-         EventLog.Key BEGINS gcBrand + CHR(255) + 
+         EventLog.Key BEGINS Syst.CUICommon:gcBrand + CHR(255) + 
                              STRING(Customer.CustNum) + CHR(255):
 
    fCrTemp().
@@ -451,7 +451,7 @@ form
     temp-event.ttType     FORMAT ">9"       COLUMN-LABEL "Type"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Eventlog BROWSER for Customer " + xxkey + "  "
     + string(pvm,"99.99.99") + " "
 FRAME sel.

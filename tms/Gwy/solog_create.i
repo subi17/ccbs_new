@@ -33,7 +33,7 @@ FUNCTION fCreateSolog RETURNS INT
       Solog.MsSeq        = iiMsSeq
       Solog.CLI          = icCLI
       Solog.Stat         = 0
-      Solog.Brand        = gcBrand 
+      Solog.Brand        = Syst.CUICommon:gcBrand 
       Solog.Users        = katun    
       Solog.MSrequest    = 0
       Solog.CommLine    = STRING(liSolog) + " " + icCommLine 

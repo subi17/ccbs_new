@@ -68,7 +68,7 @@ FORM
    SKIP(6)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80 OVERLAY
-        TITLE " " + ynimi + " CONTACT REPORT " +
+        TITLE " " + Syst.CUICommon:ynimi + " CONTACT REPORT " +
         STRING(pvm,"99-99-99") + " "
         FRAME valinta.
 
@@ -97,7 +97,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    
    IF liCustNum > 0 THEN DO:
       FIND Customer WHERE 
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN DISPLAY Customer.CustName.
    END.
@@ -155,7 +155,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
                IF FRAME-FIELD = "liCustNum" THEN DO:
                   IF INPUT liCustNum > 0 THEN DO:
                      FIND Customer WHERE 
-                          Customer.Brand   = gcBrand AND
+                          Customer.Brand   = Syst.CUICommon:gcBrand AND
                           Customer.CustNum = INPUT liCustNum 
                      NO-LOCK NO-ERROR.
                      IF NOT AVAILABLE Customer THEN DO:

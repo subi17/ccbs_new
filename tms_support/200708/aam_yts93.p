@@ -39,7 +39,7 @@ for first order exclusive-lock where
                    0.0).
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "Order"
           Memo.KeyValue  = STRING(Order.OrderID)
           Memo.CustNum   = Order.CustNum

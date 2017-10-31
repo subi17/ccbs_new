@@ -69,7 +69,7 @@ form
     lcTarget             COLUMN-LABEL "TargetDb" FORMAT "X(8)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Mobile Rating Error Codes "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

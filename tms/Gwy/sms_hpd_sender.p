@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/log.i}
 {Func/ftransdir.i}
 {Func/replog_reader.i}

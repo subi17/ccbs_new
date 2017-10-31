@@ -89,7 +89,7 @@ help "(D)irect, (I)ndirect  (?)=ALL" SKIP
  skip(1)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " EXCEL-SUMMARY OF ACCOUNTS " +
+   " " + Syst.CUICommon:ynimi + " EXCEL-SUMMARY OF ACCOUNTS " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
@@ -238,7 +238,7 @@ task:
    if InvGroup ne "" THEN DO:
       FIND InvGroup where InvGroup.InvGroup = InvGroup.
    END.   
-   PUT STREAM excel UNFORMATTED ynimi.
+   PUT STREAM excel UNFORMATTED Syst.CUICommon:ynimi.
    RUN Syst/uexskip.p(1).
    put stream excel unformatted "Invoicing group: ".
    if InvGroup ne "" THEN PUT STREAM excel UNFORMATTED

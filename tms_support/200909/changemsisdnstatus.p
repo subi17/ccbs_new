@@ -13,7 +13,7 @@ INPUT STREAM sMSISDN FROM VALUE(pcInputFile).
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 
 REPEAT:

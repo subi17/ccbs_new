@@ -201,7 +201,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
    
    IF lcNewCategory > "" THEN DO:
       FIND CustCat WHERE 
-           CustCat.Brand    = gcBrand AND
+           CustCat.Brand    = Syst.CUICommon:gcBrand AND
            CustCat.Category = lcNewCategory NO-LOCK NO-ERROR.
       IF AVAILABLE CustCat THEN lcNewCatName = CustCat.CatName.
    END. 
@@ -367,7 +367,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                   
                IF FRAME-FIELD = "lcNewCategory" THEN DO:
                   FIND CustCat WHERE 
-                       CustCat.Brand    = gcBrand AND
+                       CustCat.Brand    = Syst.CUICommon:gcBrand AND
                        CustCat.Category = INPUT lcNewCategory 
                   NO-LOCK NO-ERROR.
 

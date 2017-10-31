@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "Cron".
    
 {Func/cparam2.i}
@@ -51,7 +51,7 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "FRINVPRINT" + STRING(iiFRExecID)
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
@@ -96,7 +96,7 @@ FUNCTION fCreateActionLog RETURNS LOGICAL
    DO TRANS:
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = "FuncRunProcess"
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
                                   STRING(MONTH(TODAY),"99") +
@@ -160,8 +160,8 @@ QUIT.
 PROCEDURE pInitialize:
 
    FIND FIRST Company WHERE
-              Company.Brand = gcBrand NO-LOCK NO-ERROR.
-   IF AVAILABLE Company THEN ynimi = Company.CompName.
+              Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+   IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
 
    ASSIGN 
       llReplica = fIsThisReplica()
@@ -320,7 +320,7 @@ PROCEDURE pPrintInvoices:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Invoice"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 

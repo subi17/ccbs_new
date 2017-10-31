@@ -78,7 +78,7 @@ form
     CCN.CCNName   /* column-label "Country's name" */
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " CALL CASE NUMBERS (CCN) "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " CALL CASE NUMBERS (CCN) "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 {Func/brand.i}
@@ -425,7 +425,7 @@ BROWSE:
         haku = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
 
@@ -447,7 +447,7 @@ BROWSE:
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 

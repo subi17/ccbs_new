@@ -12,7 +12,7 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
+ASSIGN Syst.CUICommon:gcBrand = "1" 
        katun   = "Cron".
        
 {Func/cparam2.i}
@@ -94,7 +94,7 @@ FOR EACH ttFiles:
       fConvertBrandToTenant(lcTenant)) THEN NEXT.
 
    IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                      ActionLog.Brand = gcBrand AND
+                      ActionLog.Brand = Syst.CUICommon:gcBrand AND
                       ActionLog.TableName = "Cron" AND
                       ActionLog.KeyValue = lcPlainFile AND
                       ActionLog.ActionID = "SubsTerm" AND
@@ -103,7 +103,7 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = lcPlainFile
          ActionLog.ActionID     = "SubsTerm"

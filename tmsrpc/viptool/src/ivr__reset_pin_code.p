@@ -22,7 +22,7 @@ DEF VAR pcPIN AS CHAR NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 {Syst/eventval.i}
 {Func/fsmsreq.i}

@@ -44,7 +44,7 @@ FUNCTION fMarkRelated RETURNS LOGIC
 
    /* also other commissions related to the same order will be marked */
    FOR EACH bRelated NO-LOCK USE-INDEX OrderID WHERE
-            bRelated.Brand     = gcBrand AND
+            bRelated.Brand     = Syst.CUICommon:gcBrand AND
             bRelated.OrderID   = CoTarg.OrderID AND
             bRelated.CoTargID NE CoTarg.CoTargID AND
             bRelated.CommStatus = 1:
@@ -69,7 +69,7 @@ RUN pCalculateCommission (OUTPUT oiChecked,
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "CoTarg"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 
@@ -124,10 +124,10 @@ PROCEDURE pCalculateCommission:
    
    CommissionQueue:
    FOR EACH CoTarg NO-LOCK WHERE
-            CoTarg.Brand      = gcBrand AND
+            CoTarg.Brand      = Syst.CUICommon:gcBrand AND
             CoTarg.CommStatus = 1,
       FIRST CoRule NO-LOCK WHERE
-            CoRule.Brand    = gcBrand AND
+            CoRule.Brand    = Syst.CUICommon:gcBrand AND
             CoRule.CoRuleID = CoTarg.CoRuleID:
             
       ASSIGN
@@ -214,11 +214,11 @@ PROCEDURE pCalculateCommission:
 
          /* if promoted has done a payment type change then rejection */
          FOR FIRST bRelated NO-LOCK USE-INDEX OrderID WHERE
-                   bRelated.Brand     = gcBrand AND
+                   bRelated.Brand     = Syst.CUICommon:gcBrand AND
                    bRelated.OrderID   = CoTarg.OrderID AND
                    bRelated.CoTarg    = STRING(bPromotedSub.MsSeq),
              FIRST bRule NO-LOCK WHERE
-                   bRule.Brand    = gcBrand AND
+                   bRule.Brand    = Syst.CUICommon:gcBrand AND
                    bRule.CoRuleID = bRelated.CoRuleID:
             
             llRelatedType = (bRule.PayType = 2).
@@ -240,11 +240,11 @@ PROCEDURE pCalculateCommission:
             
          /* make sure that referee hasn't been terminated or done a stc */
          FOR FIRST bRelated NO-LOCK USE-INDEX OrderID WHERE
-                   bRelated.Brand     = gcBrand AND
+                   bRelated.Brand     = Syst.CUICommon:gcBrand AND
                    bRelated.OrderID   = CoTarg.OrderID AND
                    bRelated.CoTarg   NE CoTarg.CoTarg,
              FIRST bRule NO-LOCK WHERE
-                   bRule.Brand    = gcBrand AND
+                   bRule.Brand    = Syst.CUICommon:gcBrand AND
                    bRule.CoRuleID = bRelated.CoRuleID:
 
             FIND FIRST bRefereeSub WHERE 
@@ -302,7 +302,7 @@ PROCEDURE pCalculateCommission:
          /* topup recharged */    
          ELSE DO:
             FOR EACH PrepaidRequest NO-LOCK USE-INDEX MsSeq WHERE
-                     PrepaidRequest.Brand   = gcBrand AND
+                     PrepaidRequest.Brand   = Syst.CUICommon:gcBrand AND
                      PrepaidRequest.MsSeq   = bPromotedSub.MsSeq AND
                      LOOKUP(PrepaidRequest.Source,"ATM") > 0 AND
                      LOOKUP(PrepaidRequest.Request,"RCG,ANT") > 0 AND
@@ -393,7 +393,7 @@ PROCEDURE pCreateFat:
    END.
          
    FIND FIRST FatGroup WHERE
-              FatGroup.Brand = gcBrand AND
+              FatGroup.Brand = Syst.CUICommon:gcBrand AND
               FatGroup.FtGrp = CoRule.FtGrp NO-LOCK NO-ERROR.
    IF NOT AVAILABLE FatGroup THEN DO:
       fCommStatus(CoTarg.CoTargID,

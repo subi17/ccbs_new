@@ -198,7 +198,7 @@ FORM
     UnregPaym.RefNum    FORMAT "X(17)"
     UnregPaym.BankAcc   FORMAT "x(14)"
 WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " UNREGISTERED PAYMENTS " + STRING(pvm,"99-99-99") + " "     
     FRAME sel.
 
@@ -686,7 +686,7 @@ REPEAT WITH FRAME sel:
             haku1 = ?.
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr1.
-            UPDATE lcBrand WHEN gcAllBrand
+            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku1 WITH FRAME hayr1.
             HIDE FRAME hayr1 NO-PAUSE.
 
@@ -720,7 +720,7 @@ REPEAT WITH FRAME sel:
             haku2 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr2.
-            UPDATE lcBrand WHEN gcAllBrand
+            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku2 WITH FRAME hayr2.
             HIDE FRAME hayr2 NO-PAUSE.
 
@@ -752,7 +752,7 @@ REPEAT WITH FRAME sel:
             haku3 = 0.
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr3.
-            UPDATE lcBrand WHEN gcAllBrand
+            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                     haku3 WITH FRAME hayr3.
             HIDE FRAME hayr3 NO-PAUSE.
 
@@ -784,7 +784,7 @@ REPEAT WITH FRAME sel:
             haku4 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr4.
-            UPDATE lcBrand WHEN gcAllBrand
+            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku4 WITH FRAME hayr4.
             HIDE FRAME hayr4 NO-PAUSE.
 
@@ -816,7 +816,7 @@ REPEAT WITH FRAME sel:
             haku5 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr5.
-            UPDATE lcBrand WHEN gcAllBrand
+            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku5 WITH FRAME hayr5.
             HIDE FRAME hayr5 NO-PAUSE.
 
@@ -1042,7 +1042,7 @@ REPEAT WITH FRAME sel:
             NO-LOCK NO-ERROR.
 
             IF NOT AVAIL Invoice OR 
-               Invoice.Brand NE gcBrand
+               Invoice.Brand NE Syst.CUICommon:gcBrand
             THEN DO:
                BELL.
                MESSAGE "Invoice number " UnregPaym.InvNum " is not available !".
@@ -1266,7 +1266,7 @@ REPEAT WITH FRAME sel:
             IF asno  = 0 THEN LEAVE.
 
             FIND Customer WHERE Customer.CustNum = asno NO-LOCK.
-            IF Customer.Brand NE gcBrand
+            IF Customer.Brand NE Syst.CUICommon:gcBrand
             THEN DO:
                MESSAGE "Unknown customer"
                VIEW-AS ALERT-BOX.
@@ -1392,7 +1392,7 @@ REPEAT WITH FRAME sel:
             IF asno = 0 THEN LEAVE.
 
             FIND Customer WHERE Customer.CustNum = asno NO-LOCK.
-            IF Customer.Brand NE gcBrand
+            IF Customer.Brand NE Syst.CUICommon:gcBrand
             THEN DO:
                MESSAGE "Unknown customer"
                VIEW-AS ALERT-BOX.

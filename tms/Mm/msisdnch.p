@@ -130,7 +130,7 @@ IF NOT AVAIL msisdn THEN DO:
 END.
 
 FIND FIRST MSRange WHERE 
-           MSRange.Brand    = gcBrand    AND 
+           MSRange.Brand    = Syst.CUICommon:gcBrand    AND 
            MSRange.CLIFrom <= MSISDN.CLI AND
            MSRange.CLITo   >= MSISDN.CLI
 NO-LOCK NO-ERROR.
@@ -190,7 +190,7 @@ REPEAT TRANSACTION WITH FRAME main:
             END.
             
             FIND FIRST new-MSISDN WHERE  
-                       new-MSISDN.Brand   = gcBrand  AND
+                       new-MSISDN.Brand   = Syst.CUICommon:gcBrand  AND
                        new-MSISDN.CLI     = new-CLI  
                        USE-INDEX CLI
             EXCLUSIVE-LOCK NO-ERROR.
@@ -207,7 +207,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
                /* Check double timestamp  */ 
                FIND FIRST active-MSISDN WHERE  
-                          active-MSISDN.Brand = gcBrand AND
+                          active-MSISDN.Brand = Syst.CUICommon:gcBrand AND
                           active-MSISDN.CLI = new-CLI  AND
                           active-MSISDN.ValidTo > Func.Common:mMakeTS() AND
                           recid(active-msisdn) ne recid(new-msisdn)

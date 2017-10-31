@@ -84,7 +84,7 @@ repeat WITH FRAME frm:
       IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "InvGroup" THEN DO:
             FIND FIRST InvGroup WHERE 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = input InvGroup
             NO-LOCK NO-ERROR.
             IF NOT AVAIL InvGroup THEN DO:
@@ -148,16 +148,16 @@ task:
    PUT STREAM excel UNFORMATTED my-nl.
 
    FOR EACH Customer no-lock where
-            Customer.Brand    = gcBrand AND
+            Customer.Brand    = Syst.CUICommon:gcBrand AND
             Customer.CustNum  > 1000    AND
             Customer.InvGroup = InvGroup,
 
       FIRST Salesman no-lock where
-            Salesman.Brand    = gcBrand AND
+            Salesman.Brand    = Syst.CUICommon:gcBrand AND
             Salesman.Salesman = Customer.Salesman,
 
       FIRST Salesoffice no-lock where
-            SalesOffice.Brand       = gcBrand AND
+            SalesOffice.Brand       = Syst.CUICommon:gcBrand AND
             Salesoffice.SalesOffice = Salesman.SalesOffice.
 
       DISP 

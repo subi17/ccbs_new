@@ -98,7 +98,7 @@ PROCEDURE pModifiedSubscriptions:
       liReqType = INTEGER(ENTRY(liCnt,lcTypeList)).
       
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand   = gcBrand   AND
+               MsRequest.Brand   = Syst.CUICommon:gcBrand   AND
                MsRequest.ReqType = liReqType AND
                MsRequest.ReqStat = 2         AND
                MsRequest.ActStamp > idLastDump
@@ -128,7 +128,7 @@ END PROCEDURE.
 PROCEDURE pAllSubscriptions:
 
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand = gcBrand
+            MobSub.Brand = Syst.CUICommon:gcBrand
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
 

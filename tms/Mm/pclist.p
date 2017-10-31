@@ -189,7 +189,7 @@ PROCEDURE pReadContracts:
             DCCLI.MSSeq = ihMobSub::Msseq NO-LOCK:
      
       FIND FIRST Memo WHERE  
-          Memo.Brand     = gcBrand                AND 
+          Memo.Brand     = Syst.CUICommon:gcBrand                AND 
           Memo.HostTable = "MobSub"               AND 
           Memo.KeyValue  = STRING(DCCLI.MsSeq)    AND 
           Memo.Memotitle begins "Periodical" NO-LOCK NO-ERROR. 
@@ -229,7 +229,7 @@ PROCEDURE pReadContracts:
       ldeSec = Func.Common:mMakeTS().
       
       FIND FIRST Memo WHERE  
-          Memo.Brand     = gcBrand                AND 
+          Memo.Brand     = Syst.CUICommon:gcBrand                AND 
           Memo.HostTable = "MobSub"               AND 
           Memo.KeyValue  = STRING(DCCLI.MsSeq)    AND 
           Memo.Memotitle begins "Periodical" NO-LOCK NO-ERROR. 
@@ -307,7 +307,7 @@ ELSE IF icKeyType = "customer" THEN DO:
    lcFormHeader = "CUSTOMER'S PERIODICAL CONTRACTS".
    FIND FIRST Customer WHERE Customer.Custnum = iiKey NO-LOCK NO-ERROR.
    FOR EACH Mobsub WHERE
-      Mobsub.Brand   = gcBrand AND
+      Mobsub.Brand   = Syst.CUICommon:gcBrand AND
       Mobsub.Custnum = iiKey NO-LOCK:
       RUN pReadContracts ((BUFFER Mobsub:HANDLE)).
    END.
@@ -770,7 +770,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    FIND FIRST DayCampaign NO-LOCK WHERE
-      DayCampaign.Brand = gcBrand AND 
+      DayCampaign.Brand = Syst.CUICommon:gcBrand AND 
       DayCampaign.DCEvent = ttContract.Contract NO-ERROR.
    
    IF DayCampaign.DCType = "1" THEN DO:
@@ -786,7 +786,7 @@ PROCEDURE local-update-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       
       FIND FIRST DayCampaign NO-LOCK WHERE
-         DayCampaign.Brand = gcBrand AND 
+         DayCampaign.Brand = Syst.CUICommon:gcBrand AND 
          DayCampaign.DCEvent = ttContract.Contract NO-ERROR.
 
       /* Get Type description */

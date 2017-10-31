@@ -92,7 +92,7 @@ IF AVAILABLE MobSub THEN DO:
 END.
 ELSE DO:
    FIND FIRST MsOwner NO-LOCK WHERE
-              MsOwner.Brand = gcBrand AND
+              MsOwner.Brand = Syst.CUICommon:gcBrand AND
               MsOwner.CLI   = icCLI NO-ERROR.
    IF AVAILABLE MsOwner THEN 
       FIND Customer WHERE Customer.CustNum = MsOwner.InvCust NO-LOCK NO-ERROR.
@@ -115,7 +115,7 @@ END.
 lcSource = ENTRY(1,icSource,":").
 
 FIND PrePaidRequest WHERE
-     PrePaidRequest.Brand     = gcBrand AND
+     PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
      PrePaidRequest.PPRequest = iiRequest NO-LOCK NO-ERROR.
 IF NOT AVAILABLE PrePaidRequest OR iiRequest = ? THEN DO:
    IF lcSource NE "MCNOC" THEN DO:
@@ -131,7 +131,7 @@ ASSIGN lcInvGroup = Customer.InvGroup
 /* get correct invgroup through taxzone for atm events */
 IF lcSource = "ATM" THEN DO:
    FOR FIRST InvGroup NO-LOCK WHERE
-             InvGroup.Brand   = gcBrand AND
+             InvGroup.Brand   = Syst.CUICommon:gcBrand AND
              InvGroup.TaxZone = PrepaidRequest.TaxZone:
       ASSIGN lcInvGroup = InvGroup.InvGroup
              lcTaxZone  = InvGroup.TaxZone.
@@ -208,7 +208,7 @@ WHEN "CC" OR WHEN "MANFIX" OR  WHEN "COMP" THEN DO:
       
       IF PrePaidRequest.OrigRequest > 0 THEN 
       FOR FIRST bOrigReq NO-LOCK WHERE
-                bOrigReq.Brand     = gcBrand AND
+                bOrigReq.Brand     = Syst.CUICommon:gcBrand AND
                 bOrigReq.PPRequest = PrePaidRequest.OrigRequest:
 
          CASE bOrigReq.Source:
@@ -275,7 +275,7 @@ IF llMinus THEN DO:
    /* try to get original accounts */
    IF PrePaidRequest.OrigRequest > 0 THEN 
    FOR FIRST Payment NO-LOCK WHERE
-             Payment.Brand   = gcBrand AND
+             Payment.Brand   = Syst.CUICommon:gcBrand AND
              Payment.CustNum = Customer.CustNum AND
              Payment.RefNum  = STRING(PrePaidRequest.OrigRequest):
       
@@ -352,7 +352,7 @@ REPEAT:
    ELSE LEAVE.
 END.
 
-ASSIGN Payment.Brand    = gcBrand
+ASSIGN Payment.Brand    = Syst.CUICommon:gcBrand
        Payment.CustNum  = Customer.CustNum
        Payment.CustName = Customer.CustName + " " + Customer.FirstName
        Payment.InvNum   = 0
@@ -390,7 +390,7 @@ DO liCount = 1 TO 3:
    IF Payment.AccNum[liCount] = 0 THEN NEXT. 
 
    FIND Account where 
-        Account.Brand  = gcBrand AND 
+        Account.Brand  = Syst.CUICommon:gcBrand AND 
         Account.AccNum = Payment.AccNum[liCount]
       NO-LOCK NO-ERROR.
    IF AVAILABLE Account THEN ASSIGN 
@@ -411,7 +411,7 @@ IF lcMemo > "" THEN DO:
    
    /* separate Memo */
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "payment"
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
@@ -464,7 +464,7 @@ REPEAT:
    IF liCount > 10000 THEN LEAVE.
 
    IF NOT CAN-FIND(FIRST Payment WHERE
-                         Payment.Brand      = gcBrand AND
+                         Payment.Brand      = Syst.CUICommon:gcBrand AND
                          Payment.ExtVoucher = lcExtVoucher AND
                          RECID(Payment) NE lrRecid)
    THEN LEAVE.

@@ -32,7 +32,7 @@ DEFINE VARIABLE ldBeginTS AS DECIMAL NO-UNDO.
 DEFINE VARIABLE ldEndTS AS DECIMAL NO-UNDO.
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liInvCust AS INTEGER NO-UNDO.  
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INITIAL "1".
+DEFINE VARIABLE Syst.CUICommon:gcBrand AS CHARACTER NO-UNDO INITIAL "1".
 DEFINE VARIABLE liQty AS INTEGER NO-UNDO. 
 DEFINE VARIABLE llInvoiced AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE liCount AS INTEGER NO-UNDO. 
@@ -109,7 +109,7 @@ FOR EACH ServiceLimit NO-LOCK WHERE
                         OUTPUT liInvCust).
         liCount = 0 .
         FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                 FixedFee.Brand     = gcBrand   AND 
+                 FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
                  FixedFee.HostTable = "MobSub"  AND
                  FixedFee.KeyValue  = STRING(MServiceLimit.MsSeq),
             EACH FFItem OF FixedFee NO-LOCK WHERE 
@@ -142,7 +142,7 @@ PUT STREAM sLogSum UNFORMATTED
 
 /* fixed fee - list2 ------------------------------- */
 FOR EACH FixedFee NO-LOCK USE-INDEX BillCode WHERE
-         FixedFee.Brand = gcBrand AND 
+         FixedFee.Brand = Syst.CUICommon:gcBrand AND 
          FixedFee.BillCode = "MDUBMF",
     EACH FFItem OF FixedFee NO-LOCK WHERE
          FFItem.BillPeriod <= (YEAR(ldaBegin) * 100 + MONTH(ldaBegin)):
@@ -156,7 +156,7 @@ FOR EACH FixedFee NO-LOCK USE-INDEX BillCode WHERE
 
     /* check if has been invoiced in given period*/
      FIND Invoice WHERE
-          Invoice.Brand = gcBrand AND 
+          Invoice.Brand = Syst.CUICommon:gcBrand AND 
           Invoice.InvNum = FFItem.InvNum AND 
           Invoice.InvDate >= ldaInvStart AND
           Invoice.InvDate <= ldaInvEnd NO-LOCK NO-ERROR. 

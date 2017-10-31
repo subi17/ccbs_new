@@ -45,7 +45,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 {Mm/fbundle.i}
@@ -260,7 +260,7 @@ add_int(memo_struct,"service", INT(fMemoCount("service",TermMobSub.Msseq,True)))
 
 /* satisfaction value */
 FIND FIRST PIndicator  WHERE
-           PIndicator.Brand = gcBrand AND
+           PIndicator.Brand = Syst.CUICommon:gcBrand AND
            PIndicator.HostTable = "MobSub" AND
            PIndicator.KeyValue = STRING(TermMobSub.MsSeq) AND
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}  

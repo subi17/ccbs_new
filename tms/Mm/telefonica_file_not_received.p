@@ -9,7 +9,7 @@
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 Katun = "Qvantel".
 {Func/cparam2.i}
 {Func/email.i}
@@ -22,7 +22,7 @@ DEF VAR lcEmailText   AS CHAR NO-UNDO.
 liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
 FIND FIRST ActionLog WHERE
-           ActionLog.Brand        = gcBrand        AND
+           ActionLog.Brand        = Syst.CUICommon:gcBrand        AND
            ActionLog.ActionID     = "TELEFONICA"   AND
            ActionLog.ActionPeriod = liPeriod NO-LOCK NO-ERROR.
 IF AVAIL ActionLog THEN RETURN.

@@ -135,16 +135,16 @@ FUNCTION fTargetAddr RETURNS LOGICAL
                                STRING(iiAddress)).
           
    FIND Customer WHERE 
-        Customer.Brand   = gcBrand AND
+        Customer.Brand   = Syst.CUICommon:gcBrand AND
         Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
         
    IF iiAddress = 4 THEN      
    FIND bOwner WHERE
-        bOwner.Brand   = gcBrand AND
+        bOwner.Brand   = Syst.CUICommon:gcBrand AND
         bOwner.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF iiAddress = 5 THEN      
    FIND bOwner WHERE
-        bOwner.Brand   = gcBrand AND
+        bOwner.Brand   = Syst.CUICommon:gcBrand AND
         bOwner.CustNum = Customer.InvCust NO-LOCK NO-ERROR.
          
    IF iiMsSeq > 0 
@@ -154,7 +154,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
    ELSE DO:
       liMSSeq = 0.
       FIND FIRST MsOwner NO-LOCK USE-INDEX CLI WHERE
-                 MsOwner.Brand   = gcBrand   AND
+                 MsOwner.Brand   = Syst.CUICommon:gcBrand   AND
                  MsOwner.CLI     = lcCLI     AND
                  MsOwner.CustNum = liCustNum 
                  NO-ERROR.
@@ -234,7 +234,7 @@ IF iiCustNum > 0 THEN DO:
    liCustNum = iiCustNum.
    
    FIND Customer WHERE 
-        Customer.Brand   = gcBrand AND
+        Customer.Brand   = Syst.CUICommon:gcBrand AND
         Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN DO:
       MESSAGE "Unknown customer" liCustNum
@@ -402,7 +402,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                    
                    IF liCustNum > 0 THEN DO:
                       FIND Customer WHERE 
-                           Customer.Brand = gcBrand AND
+                           Customer.Brand = Syst.CUICommon:gcBrand AND
                            Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
                       IF NOT AVAILABLE Customer THEN DO:
                          BELL.
@@ -421,12 +421,12 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                    IF lcCli > "" THEN DO: 
                       IF liCustNum > 0 
                       THEN FIND FIRST MsOwner NO-LOCK USE-INDEX CLI WHERE
-                                      MsOwner.Brand   = gcBrand AND
+                                      MsOwner.Brand   = Syst.CUICommon:gcBrand AND
                                       MsOwner.CLI     = lcCLI   AND
                                       MsOwner.CustNum = liCustNum 
                            NO-ERROR.
                       ELSE FIND FIRST MsOwner NO-LOCK USE-INDEX CLI WHERE
-                                      MsOwner.Brand   = gcBrand AND
+                                      MsOwner.Brand   = Syst.CUICommon:gcBrand AND
                                       MsOwner.CLI     = lcCLI   AND
                                       MsOwner.TsBeg  <= liPer   AND
                                       MsOwner.TsEnd  >= liPer 

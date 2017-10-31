@@ -376,7 +376,7 @@ END.
 
 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = gcBrand:
+         RequestType.Brand = Syst.CUICommon:gcBrand:
 
    IF LENGTH(STRING(RequestType.ReqType)) > 1 THEN lcSpace = " ".
    ELSE lcSpace = "  ".

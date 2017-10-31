@@ -95,12 +95,12 @@ IF icUpdateListMode = "update-mode-cc" THEN DO:
 
   llCanDelete = FALSE.
 
-  FIND TMSParam WHERE TMSParam.Brand = gcBrand AND
+  FIND TMSParam WHERE TMSParam.Brand = Syst.CUICommon:gcBrand AND
                       TMSParam.ParamGroup = "CCAdminTool" AND
                       TMSParam.ParamCode = "BillItemAccount" NO-LOCK NO-ERROR.
   IF AVAIL TMSParam THEN liccAcount = TMSParam.IntVal.
  
-  FIND TMSParam WHERE TMSParam.Brand = gcBrand AND
+  FIND TMSParam WHERE TMSParam.Brand = Syst.CUICommon:gcBrand AND
                       TMSParam.ParamGroup = "CCAdminTool" AND
                       TMSParam.ParamCode = "BillItemSAPRId" NO-LOCK NO-ERROR.
   IF AVAIL TMSParam THEN lcCCSAPRId = TMSParam.CharVal.
@@ -118,7 +118,7 @@ form
                         FORMAT ">>>>>>>9"
     BillItem.TaxClass   COLUMN-LABEL "TaxClass"
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Billing Items " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -510,7 +510,7 @@ BROWSE:
         haku = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand 
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand 
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if haku <> "" THEN DO:
@@ -530,7 +530,7 @@ BROWSE:
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand 
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand 
                haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -550,7 +550,7 @@ BROWSE:
         BIGroup = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME haku3.
-        UPDATE lcBrand WHEN gcAllBrand 
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand 
                BIGroup WITH FRAME haku3.
 
         HIDE FRAME haku3 no-pause.

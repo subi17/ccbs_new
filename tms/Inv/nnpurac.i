@@ -104,7 +104,7 @@ FUNCTION fDiscType RETURNS CHARACTER
 
    /* first check if pricelist is dedicated */
    FOR FIRST Tariff NO-LOCK WHERE
-             Tariff.Brand     = gcBrand AND   
+             Tariff.Brand     = Syst.CUICommon:gcBrand AND   
              Tariff.TariffNum = iiTariff:
 
        IF Tariff.CustNum > 0
@@ -141,7 +141,7 @@ FUNCTION fBillItemVat RETURNS DECIMAL
 
    ELSE IF ilVatUsed THEN 
    FOR FIRST BillItem NO-LOCK WHERE 
-             BillItem.Brand    = gcBrand AND
+             BillItem.Brand    = Syst.CUICommon:gcBrand AND
              BillItem.BillCode = icBillCode,
        FIRST VatCode NO-LOCK WHERE 
              VatCode.VatCode = BillItem.VatCode:
@@ -190,7 +190,7 @@ FUNCTION fCLIOwner RETURNS LOGICAL
 
    /* FIRST try TO FIND a mobile CLI */
    FOR FIRST MSOwner NO-LOCK WHERE 
-             MSOwner.Brand    = gcBrand    AND
+             MSOwner.Brand    = Syst.CUICommon:gcBrand    AND
              MSOwner.CLI      =  icCLI     AND
              MSOwner.TSBegin <= xInvStamp  AND
              MSOwner.TSEnd   >= xInvStamp,
@@ -278,7 +278,7 @@ FUNCTION fCustHeader RETURNS LOGICAL.
    /* company name */
    FIND invgroup of Customer NO-LOCK NO-ERROR.
    IF AVAIL invgroup THEN company = InvGroup.CompName.
-   ELSE                   company = ynimi.
+   ELSE                   company = Syst.CUICommon:ynimi.
 
    /* Haetaan RaportointitCustomer */
    FIND FIRST xCustomer WHERE xCustomer.CustNum = liRepCust
@@ -318,7 +318,7 @@ FUNCTION fDispMPM RETURNS LOGICAL
    (icBillCode AS CHAR).
 
    FIND BillItem WHERE
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.CUICommon:gcBrand AND
         BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
    IF NOT AVAILABLE BillItem THEN RETURN FALSE.
    

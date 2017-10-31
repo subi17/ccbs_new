@@ -168,7 +168,7 @@ suoritettu       label "Total payments ..." AT 2
                  format "zzzzzzzz9.99-" SKIP
 skip
 
-with title color value(Syst.CUICommon:ctc) " " + ynimi + " UPDATE AN INVOICE "
+with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " UPDATE AN INVOICE "
 + string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
 width 80 side-LABELs
 FRAME Invoice.
@@ -233,7 +233,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
    PROMPT-FOR Invoice.InvNum /*WITH FRAME Invoice */
    VALIDATE(input InvNum = "" OR input InvNum ="0" OR
             CAN-FIND (FIRST Invoice WHERE 
-                            Invoice.Brand  = gcBrand AND
+                            Invoice.Brand  = Syst.CUICommon:gcBrand AND
                             Invoice.Invnum = INPUT InvNum),
             "Invoice not found !") .
    if input Invoice.InvNum = "" or input Invoice.InvNum = "0" THEN LEAVE LOOP.

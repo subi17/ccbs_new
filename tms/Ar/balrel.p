@@ -104,13 +104,13 @@ form
       FORMAT "X(47)"
    SKIP(2)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " BALANCE REPORT " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.CUICommon:ynimi + " BALANCE REPORT " + STRING(pvm,"99-99-99") + " "
 FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
 ASSIGN liCustNum[2]  = 999999999  
        ldClaimQty[2] = 8

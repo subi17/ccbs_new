@@ -9,7 +9,7 @@ Version ......: yoigo
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEF VAR liEnd AS INT NO-UNDO.
@@ -43,7 +43,7 @@ END.
 IF liDeleted > 0 THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand        = gcBrand
+      ActionLog.Brand        = Syst.CUICommon:gcBrand
       ActionLog.TableName    = "Cron"
       ActionLog.KeyValue     = STRING(YEAR(TODAY) * 100 +
                                       MONTH(TODAY) * 100 +

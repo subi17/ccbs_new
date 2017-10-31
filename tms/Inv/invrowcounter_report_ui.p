@@ -99,7 +99,7 @@ FORM
    SKIP(3)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " INVOICE ROW COUNTER REPORT " + 
+     TITLE " " + Syst.CUICommon:ynimi + " INVOICE ROW COUNTER REPORT " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
@@ -131,7 +131,7 @@ FUNCTION fDispBillItem RETURNS LOGIC
    
    ELSE DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand = gcBrand AND
+                 BillItem.Brand = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
       ELSE lcBIName = "".
@@ -152,7 +152,7 @@ FUNCTION fDispCCN RETURNS LOGIC
       
    ELSE DO:  
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.CUICommon:gcBrand AND
                  CCN.CCN   = iiCCN NO-LOCK NO-ERROR.
       IF AVAILABLE CCN THEN lcCCNName = CCN.CCNName.
       ELSE CCN.CCNName = "".
@@ -239,7 +239,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                   
                   IF INPUT lcExtInvID > "" THEN DO:  
                      IF NOT CAN-FIND(FIRST Invoice WHERE 
-                                           Invoice.Brand = gcBrand AND
+                                           Invoice.Brand = Syst.CUICommon:gcBrand AND
                                            Invoice.ExtInvID = INPUT lcExtInvId)
                      THEN DO:
                         MESSAGE "Unknown invoice"
@@ -325,7 +325,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          END.
          
          FIND FIRST Invoice WHERE 
-                    Invoice.Brand = gcBrand AND
+                    Invoice.Brand = Syst.CUICommon:gcBrand AND
                     Invoice.ExtInvID = lcExtInvId NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Invoice THEN DO:
             MESSAGE "Unknown invoice"

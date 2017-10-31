@@ -26,7 +26,7 @@ DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}
 
@@ -152,14 +152,14 @@ PROCEDURE pCollectActivations:
 
    RequestLoop:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
             MsRequest.ReqType   = 8       AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
             MsRequest.DoneStamp >= ldFrom AND
             MsRequest.DoneStamp <= ldTo,
       FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
             DayCampaign.DCType = "5":
 
@@ -192,7 +192,7 @@ PROCEDURE pCollectActivations:
 
             IF AVAIL bmsrequest then do:
                FIND FIRST order NO-LOCK where
-                          order.brand = gcBrand and
+                          order.brand = Syst.CUICommon:gcBrand and
                           order.orderid = bmsrequest.reqiparam1 NO-ERROR.
                IF AVAIL order AND
                   INDEX(Order.OrderChannel,"pos") = 0 THEN NEXT RequestLoop.
@@ -220,13 +220,13 @@ PROCEDURE pCollectActivations:
 
       FF_LOOP:
       FOR FIRST DCCLI NO-LOCK WHERE
-                DCCLI.Brand   = gcBrand AND
+                DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                 DCCLI.MsSeq   = MsRequest.MsSeq AND
                 DCCLI.DCEvent = MsRequest.ReqCParam3 AND
                 DCCLI.ValidFrom <= ldaActDate AND
                 DCCLI.ValidTo >= ldaActDate,
           EACH FixedFee NO-LOCK USE-INDEX Custnum WHERE
-               FixedFee.Brand    = gcBrand AND
+               FixedFee.Brand    = Syst.CUICommon:gcBrand AND
                FixedFee.Custnum  = MsRequest.Custnum AND 
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -317,7 +317,7 @@ PROCEDURE pCollectACC:
       ldCheck = ldFrom.
 
    FOR EACH msrequest NO-LOCK where
-            msrequest.brand = gcBrand and
+            msrequest.brand = Syst.CUICommon:gcBrand and
             msrequest.reqtype = 10 and
             msrequest.reqstatus = 2 and
             MsRequest.ActStamp >= ldCheck AND
@@ -375,7 +375,7 @@ PROCEDURE pCollectACC:
                liFFItemQty = 0.
             
             FOR FIRST FeeModel NO-LOCK WHERE 
-                      FeeModel.Brand = gcBrand AND
+                      FeeModel.Brand = Syst.CUICommon:gcBrand AND
                       FeeModel.FeeModel EQ FixedFee.FeeModel,
                FIRST FMItem OF FeeModel NO-LOCK:
             
@@ -425,7 +425,7 @@ PROCEDURE pCollectACC:
          /* new owner */
          FF_LOOP:
          FOR EACH FixedFee NO-LOCK USE-INDEX Custnum WHERE
-                  FixedFee.Brand     = gcBrand AND
+                  FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                   FIxedFee.Custnum = bmsowner.custnum AND 
                   FixedFee.HostTable = "MobSub" AND
                   FixedFee.KeyValue  = STRING(bmsowner.MsSeq) AND
@@ -519,14 +519,14 @@ PROCEDURE pCollectTerminations:
 
    RequestLoop:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
             MsRequest.ReqType   = 9       AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
             MsRequest.DoneStamp >= ldFrom AND
             MsRequest.DoneStamp <= ldTo,
       FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
             DayCampaign.DCType = {&DCTYPE_INSTALLMENT}
       ON QUIT UNDO, RETRY
@@ -600,7 +600,7 @@ PROCEDURE pCollectTerminations:
          liFFItemQty = 0.
 
       FIND FIRST SingleFee WHERE
-                 SingleFee.Brand     = gcBrand AND
+                 SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                  SingleFee.HostTable = "MobSub" AND
                  SingleFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                  SingleFee.CalcObj   = "DC" + STRING(DCCLI.PerContractID)
@@ -609,7 +609,7 @@ PROCEDURE pCollectTerminations:
          ldDebt = SingleFee.Amt.
          
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
+                FixedFee.Brand = Syst.CUICommon:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND

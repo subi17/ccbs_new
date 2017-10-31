@@ -23,7 +23,7 @@
 
 ASSIGN
 katun = "cron"
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR pcTenant    AS CHARACTER NO-UNDO.
 DEF VAR resp_array  AS CHARACTER NO-UNDO.

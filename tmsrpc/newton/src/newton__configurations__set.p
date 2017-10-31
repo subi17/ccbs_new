@@ -15,7 +15,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mc/provmaint.i}
 {Func/tmsparam4.i}

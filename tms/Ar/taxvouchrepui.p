@@ -80,7 +80,7 @@ FORM
    SKIP(5)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " TOUP TAX REPORT " + 
+     TITLE " " + Syst.CUICommon:ynimi + " TOUP TAX REPORT " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

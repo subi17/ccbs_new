@@ -38,7 +38,7 @@ form
 
    skip(13)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " MOBILE calls SPECS # 2  " +
+        title " " + Syst.CUICommon:ynimi + " MOBILE calls SPECS # 2  " +
         string(today,"99-99-99") + " "
         FRAME valinta.
 

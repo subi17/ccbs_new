@@ -83,7 +83,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " CONTACT LIST "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -137,7 +137,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
           liQty   = 0.
           
    FOR EACH Contact WHERE 
-            Contact.Brand    = gcBrand    AND
+            Contact.Brand    = Syst.CUICommon:gcBrand    AND
             Contact.UserCode = icUserCode AND
             Contact.ConState = liState    AND
             Contact.ConDate  = idtConDate:
@@ -211,7 +211,7 @@ REPEAT WITH FRAME sel:
            IF iiCustNum > 0 THEN DO WITH FRAME lis: 
                DISPLAY iiCustNum @ Contact.CustNum. 
                FIND Customer WHERE 
-                    Customer.Brand   = gcBrand AND
+                    Customer.Brand   = Syst.CUICommon:gcBrand AND
                     Customer.CustNum = iiCustNum 
                NO-LOCK NO-ERROR.
                IF AVAILABLE Customer THEN DISPLAY Customer.CustName.
@@ -233,7 +233,7 @@ REPEAT WITH FRAME sel:
                  IF FRAME-FIELD = "CustNum" THEN DO:
                     IF INPUT Contact.CustNum NE 0 THEN DO:
                        FIND Customer WHERE 
-                            Customer.Brand   = gcBrand AND
+                            Customer.Brand   = Syst.CUICommon:gcBrand AND
                             Customer.CustNum = INPUT Contact.CustNum 
                        NO-LOCK NO-ERROR.
                        IF NOT AVAILABLE Customer THEN DO:
@@ -268,7 +268,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST Contact WHERE
-                             Contact.Brand    = gcBrand                AND
+                             Contact.Brand    = Syst.CUICommon:gcBrand                AND
                              Contact.CustNum  = INPUT Contact.CustNum  AND
                              Contact.ConDate  = INPUT Contact.PlanDate AND
                              Contact.ConState = 0)
@@ -282,7 +282,7 @@ REPEAT WITH FRAME sel:
            
            CREATE Contact.
            ASSIGN
-           Contact.Brand    = gcBrand
+           Contact.Brand    = Syst.CUICommon:gcBrand
            Contact.ConId    = NEXT-VALUE(ConID)
            Contact.CustNum  = INPUT FRAME lis Contact.CustNum
            Contact.PlanDate = INPUT FRAME lis Contact.PlanDate
@@ -525,7 +525,7 @@ REPEAT WITH FRAME sel:
 
         IF liCustNum > 0 THEN DO:
            FIND FIRST Contact WHERE 
-                      Contact.Brand    = gcBrand    AND
+                      Contact.Brand    = Syst.CUICommon:gcBrand    AND
                       Contact.UserCode = icUserCOde AND
                       Contact.ConState = liState    AND
                       Contact.ConDate  = idtConDate AND
@@ -811,7 +811,7 @@ PROCEDURE local-find-FIRST:
 
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND FIRST Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -819,7 +819,7 @@ PROCEDURE local-find-FIRST:
    
    ELSE DO:
       IF order = 1 THEN FIND FIRST Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -832,7 +832,7 @@ PROCEDURE local-find-LAST:
 
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND LAST Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -840,7 +840,7 @@ PROCEDURE local-find-LAST:
    
    ELSE DO:
       IF order = 1 THEN FIND LAST Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -853,7 +853,7 @@ PROCEDURE local-find-NEXT:
 
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND NEXT Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -861,7 +861,7 @@ PROCEDURE local-find-NEXT:
    
    ELSE DO:
       IF order = 1 THEN FIND NEXT Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -874,7 +874,7 @@ PROCEDURE local-find-PREV:
  
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND PREV Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -882,7 +882,7 @@ PROCEDURE local-find-PREV:
    
    ELSE DO:
       IF order = 1 THEN FIND PREV Contact WHERE 
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.CUICommon:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -911,7 +911,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND Customer WHERE
-        Customer.Brand   = gcBrand AND
+        Customer.Brand   = Syst.CUICommon:gcBrand AND
         Customer.CustNum = Contact.CustNum NO-LOCK NO-ERROR. 
    IF AVAILABLE Customer THEN lcPhone = Customer.Phone.
    

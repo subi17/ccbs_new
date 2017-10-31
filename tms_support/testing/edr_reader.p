@@ -12,7 +12,7 @@ Version ......: Yoigo
 {Syst/commpaa.i}
 ASSIGN
    katun = "Qvantel"
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCLIType AS CHARACTER NO-UNDO.

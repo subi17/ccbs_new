@@ -30,7 +30,7 @@ DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
 DEF BUFFER lbOrder          FOR Order.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.CUICommon:gcBrand AND 
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -97,7 +97,7 @@ IF llDoEvent THEN DO:
 END.               
       
 FIND FIRST OrderCustomer WHERE
-   OrderCustomer.Brand = gcBrand AND
+   OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
    OrderCustomer.OrderId = Order.OrderId AND
    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -132,7 +132,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO: /* shouldn't never ge
          Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
       IF AVAIL Customer THEN DO:
          FIND FIRST MobSub WHERE
-                    MobSub.Brand   = gcBrand AND
+                    MobSub.Brand   = Syst.CUICommon:gcBrand AND
                     MobSub.AgrCust = Customer.CustNum
               NO-LOCK NO-ERROR.
          IF NOT AVAIL MobSub THEN lcNewStatus = "20".
@@ -221,7 +221,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
     Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}) AND
    CAN-FIND(lbOrder NO-LOCK WHERE
-            lbOrder.Brand = gcBrand AND
+            lbOrder.Brand = Syst.CUICommon:gcBrand AND
             lbOrder.CLI = Order.CLI AND
      LOOKUP(lbOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOrder.OrderID NE Order.Orderid) THEN DO:
@@ -251,7 +251,7 @@ IF Order.MultiSIMId > 0 AND
    Order.MultiSIMType = {&MULTISIMTYPE_SECONDARY} THEN DO:
 
    FIND FIRST lbOrder NO-LOCK WHERE
-              lbOrder.Brand = gcBrand AND
+              lbOrder.Brand = Syst.CUICommon:gcBrand AND
               lbOrder.MultiSIMId = Order.MultiSIMId AND
               lbOrder.MultiSImType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
    IF AVAIL lbOrder AND
@@ -263,16 +263,16 @@ ELSE IF Order.Ordertype < 2 AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand       = gcBrand       AND
+                  CLIType.Brand       = Syst.CUICommon:gcBrand       AND
                   CLIType.CLIType     = Order.CLIType AND
                  (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
                   CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
-                     OrderAction.Brand = gcBrand AND
+                     OrderAction.Brand = Syst.CUICommon:gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
                      OrderAction.ItemType = "BundleItem" AND
                 CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                               CLIType.Brand = gcBrand AND
+                               CLIType.Brand = Syst.CUICommon:gcBrand AND
                                CLIType.CLIType = OrderAction.ItemKey AND
                                CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}))
                             THEN DO:
@@ -326,7 +326,7 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
       Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
    IF AVAIL Customer THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand   = gcBrand AND
+                 MobSub.Brand   = Syst.CUICommon:gcBrand AND
                  MobSub.AgrCust = Customer.CustNum
            NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN lcNewStatus = "20".

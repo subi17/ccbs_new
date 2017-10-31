@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
+assign Syst.CUICommon:gcBrand = "1"
        katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/fixedfee.i}

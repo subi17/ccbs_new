@@ -43,7 +43,7 @@ MAIN:
 repeat:
 
    find first SIM  use-index SimSer WHERE 
-              sim.Brand = gcBrand no-lock no-error.
+              sim.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available SIM then do:
       must-print = false.
       must-add = true.
@@ -72,7 +72,7 @@ print-line:
             rtab[frame-line] = recid(SIM).
             down with frame sel.
             find next SIM no-lock use-index SimSer WHERE 
-                      sim.Brand = gcBrand no-error.
+                      sim.Brand = Syst.CUICommon:gcBrand no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -103,7 +103,7 @@ BROWSE:
             if frame-line = 1 then do:
                find SIM where recid(SIM) = rtab[frame-line] no-lock.
                find prev SIM no-lock  use-index SimSer WHERE 
-                         sim.Brand = gcBrand no-error.
+                         sim.Brand = Syst.CUICommon:gcBrand no-error.
                if not available SIM then do:
                   bell.
                   message "You are on 1st row !".              
@@ -129,7 +129,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find SIM where recid(SIM) = rtab[frame-line] no-lock .
                find next SIM no-lock use-index SimSer  WHERE 
-                         sim.Brand = gcBrand no-error.
+                         sim.Brand = Syst.CUICommon:gcBrand no-error.
                if not available SIM then do:
                   bell.
                   message "You are on last row !".
@@ -155,12 +155,12 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find SIM where recid(SIM) = memory no-lock no-error.
             find prev SIM no-lock  use-index SimSer WHERE 
-                      sim.Brand = gcBrand no-error.
+                      sim.Brand = Syst.CUICommon:gcBrand no-error.
             if available SIM then do:
 
                do i = 1 to (frame-down - 1):
                   find prev SIM no-lock use-index SimSer 
-                  WHERE sim.Brand = gcBrand no-error. 
+                  WHERE sim.Brand = Syst.CUICommon:gcBrand no-error. 
                   if available SIM then memory = recid(SIM).
                   else i = frame-down.
                end.
@@ -197,7 +197,7 @@ BROWSE:
            hide frame hayr no-pause.
            if ICC ENTERED then do:
               find first SIM use-index SimSer where 
-                         SIM.Brand = gcBrand AND 
+                         SIM.Brand = Syst.CUICommon:gcBrand AND 
                          SIM.ICC >= ICC 
               no-lock no-error.
               if not available SIM then do:
@@ -223,7 +223,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first SIM no-lock use-index SimSer WHERE 
-                      sim.Brand = gcBrand .
+                      sim.Brand = Syst.CUICommon:gcBrand .
            memory = recid(SIM).
            must-print = true.
            next LOOP.
@@ -232,7 +232,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last SIM no-lock use-index SimSer WHERE 
-                     sim.Brand = gcBrand .
+                     sim.Brand = Syst.CUICommon:gcBrand .
            memory = recid(SIM).
            must-print = true.
            next LOOP.

@@ -109,7 +109,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
             if input lcInvGroup = "" then assign IGName = "ALL".
             ELSE DO:
                FIND FIRST InvGroup no-lock where
-                          InvGroup.Brand    = gcBrand AND
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                           InvGroup.InvGroup = INPUT lcInvGroup
                NO-ERROR.
                IF NOT AVAIL InvGroup THEN DO:
@@ -156,7 +156,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
          
          qty = 0.
          FOR EACH Invoice NO-LOCK USE-INDEX InvDate where
-                  Invoice.Brand   = gcBrand    AND
+                  Invoice.Brand   = Syst.CUICommon:gcBrand    AND
                   Invoice.InvDate = ldtInvDate AND
                   Invoice.PrintState = 0       AND
                   Invoice.PaymState  = 0       AND
@@ -194,7 +194,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
 
    qty = 0.
    FOR EACH Invoice USE-INDEX InvDate where
-            Invoice.Brand   = gcBrand    AND
+            Invoice.Brand   = Syst.CUICommon:gcBrand    AND
             Invoice.InvDate = ldtInvDate AND
             Invoice.PrintState = 0       AND
             Invoice.PaymState  = 0       AND

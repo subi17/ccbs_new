@@ -138,7 +138,7 @@ repeat WITH FRAME rajat:
    UPDATE
       CustGroup validate(input CustGroup = "" OR
          can-find(FIRST CustGroup where
-                        CustGroup.Brand     = gcBrand AND
+                        CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                         CustGroup.CustGroup = input CustGroup), "NONE FOUND !")
       asno1
       asno2 validate(INPUT asno2 >= INPUT asno1,
@@ -147,7 +147,7 @@ repeat WITH FRAME rajat:
       myyja2 validate(input myyja2 >= input myyja1, "Incorrect Order !")
       Category validate(input Category = "" or
           can-find(first CustCat where                              
-                         CustCat.Brand    = gcBrand AND
+                         CustCat.Brand    = Syst.CUICommon:gcBrand AND
                          CustCat.Category = input Category), "NONE FOUND !")
       apvm1
       apvm2 validate(input apvm2 >= input apvm1, "Invalid Order !")
@@ -157,11 +157,11 @@ repeat WITH FRAME rajat:
       ConnType
       InvGroup validate(input InvGroup = "" OR 
           can-find(FIRST InvGroup where
-                         InvGroup.Brand    = gcBrand AND
+                         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                          InvGroup.InvGroup = input InvGroup), "NONE FOUND !")
       Reseller validate(input Reseller = "" OR 
           can-find(FIRST Reseller where
-                         Reseller.Brand    = gcBrand AND
+                         Reseller.Brand    = Syst.CUICommon:gcBrand AND
                          Reseller.Reseller = input Reseller), "NONE FOUND !")
       j1 j2
       WITH FRAME rajat EDITING:

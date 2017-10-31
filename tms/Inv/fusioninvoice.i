@@ -37,7 +37,7 @@ FUNCTION fPendingFusionEmailRequest RETURNS LOGICAL
           ldeNextMonth = Func.Common:mMake2DT(ldaNextMonth,0).
 
    RETURN CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                         MsRequest.Brand    = gcBrand AND
+                         MsRequest.Brand    = Syst.CUICommon:gcBrand AND
                          MsRequest.ReqType  = {&REQTYPE_FUSION_EMAIL} AND
                          MsRequest.ActStamp > ldeCurrentMonth AND
                          MsRequest.ActStamp < ldeNextMonth AND
@@ -54,7 +54,7 @@ FUNCTION fFusionEmailValidate RETURNS LOGICAL(INPUT idaPeriod AS DATE,
    DEF VAR ldeNextMonth AS DEC NO-UNDO. 
 
    IF NOT CAN-FIND(FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand    = gcBrand AND
+                         ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                          ActionLog.ActionID = "TELEFONICA" AND
                          ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 +
                                                   MONTH(idaPeriod) AND

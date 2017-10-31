@@ -10,7 +10,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -190,7 +190,7 @@ REPEAT:
       END.   
       
       FIND Invoice WHERE
-           Invoice.Brand          = gcBrand      AND  
+           Invoice.Brand          = Syst.CUICommon:gcBrand      AND  
            Invoice.CustNum        = liCustNum    AND
            MONTH(Invoice.InvDate) = MONTH(TODAY) AND  
            Invoice.InvType        = 99           EXCLUSIVE-LOCK NO-ERROR. 
@@ -302,7 +302,7 @@ REPEAT:
                                             lcBillRunID).
                                             
               FIND Invoice WHERE 
-                   Invoice.Brand          = gcBrand      AND 
+                   Invoice.Brand          = Syst.CUICommon:gcBrand      AND 
                    Invoice.CustNum        = liCustNum    AND
                    MONTH(Invoice.InvDate) = MONTH(TODAY) AND  
                    Invoice.InvType        = 99           NO-LOCK NO-ERROR.

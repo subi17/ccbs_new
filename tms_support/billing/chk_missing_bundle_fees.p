@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
 ldeNow = Func.Common:mMakeTS().

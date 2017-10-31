@@ -52,7 +52,7 @@ FIND Customer OF PaidInv NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN "ERROR:Unknown customer".
 
 FIND InvGroup where 
-     InvGroup.Brand    = gcBrand AND 
+     InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
      InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
 
 ASSIGN 

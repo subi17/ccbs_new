@@ -25,7 +25,7 @@ INDEX s s.
 PAUSE 0.
 VIEW FRAME LOG.
 MESSAGE "Calculating SIM Cards, wait a moment ...".
-FOR EACH SIM no-lock WHERE sim.Brand = gcBrand .
+FOR EACH SIM no-lock WHERE sim.Brand = Syst.CUICommon:gcBrand .
     FIND tt WHERE tt.s = sim.simstat NO-ERROR.
     IF NOT AVAIL tt THEN DO:
        CREATE tt.

@@ -264,7 +264,7 @@ repeat:
          FIND invgroup of Customer no-lock no-error.
          IF AVAIL invgroup AND InvGroup.CompName > "" 
          THEN company = InvGroup.CompName.
-         ELSE company = ynimi.
+         ELSE company = Syst.CUICommon:ynimi.
 
          /* cover sheet txt */ 
          IF llCaSivu < 0 THEN DO:

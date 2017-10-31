@@ -28,7 +28,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
    
    IF CAN-FIND(
       FIRST MsRequest NO-LOCK WHERE
-            MsRequest.Brand = gcBrand AND
+            MsRequest.Brand = Syst.CUICommon:gcBrand AND
             MsRequest.ReqType = iiReqType AND
             MsRequest.ReqCparam1 = icBankCode AND
       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
@@ -37,7 +37,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
    END.
 
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand = gcBrand AND
+            MsRequest.Brand = Syst.CUICommon:gcBrand AND
             MsRequest.ReqType = iiReqType AND
             MsRequest.ReqCparam1 = icBankCode
       BY ActStamp DESC:
@@ -134,7 +134,7 @@ FUNCTION fGetInstallmentOrderId RETURNS INT
          if bmsrequest.reqiparam1 eq 0 then return 0.
 
          FIND FIRST order NO-LOCK where
-                    order.brand = gcBrand and
+                    order.brand = Syst.CUICommon:gcBrand and
                     order.orderid = bmsrequest.reqiparam1 NO-ERROR.
          IF AVAIL Order THEN RETURN order.orderid.
          RETURN 0.
@@ -145,7 +145,7 @@ FUNCTION fGetInstallmentOrderId RETURNS INT
            
          IF msrequest.reqiparam3 > 0 THEN
             for first fixedfee NO-LOCK where
-                      fixedfee.brand = gcBrand and
+                      fixedfee.brand = Syst.CUICommon:gcBrand and
                       fixedfee.custnum = msrequest.custnum and
                       fixedfee.hosttable = "MobSub" and
                       fixedfee.keyvalue = string(msrequest.msseq) and
@@ -164,7 +164,7 @@ FUNCTION fGetInstallmentOrderId RETURNS INT
             IF AVAIL bmsrequest and
                      bmsrequest.reqiparam3 > 0 then   
                for first fixedfee NO-LOCK where
-                         fixedfee.brand = gcBrand and
+                         fixedfee.brand = Syst.CUICommon:gcBrand and
                          fixedfee.custnum = bmsrequest.custnum and
                          fixedfee.hosttable = "MobSub" and
                          fixedfee.keyvalue = string(bmsrequest.msseq) and
@@ -180,7 +180,7 @@ FUNCTION fGetInstallmentOrderId RETURNS INT
          IF MsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqIParam1 > 0 THEN DO:
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.CUICommon:gcBrand AND
                        Order.OrderId = MsRequest.ReqIParam1 NO-ERROR.
             IF AVAILABLE Order THEN RETURN Order.OrderId.
          END.

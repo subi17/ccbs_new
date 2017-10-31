@@ -114,7 +114,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  TERMINATED MOBILE SUBSCRIPTION  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -607,7 +607,7 @@ BROWSE:
 
         IF lcFixedNumber  > ""  THEN DO:
            FOR FIRST SearchTermMobsub WHERE
-                     SearchTermMobsub.Brand = gcBrand AND
+                     SearchTermMobsub.Brand = Syst.CUICommon:gcBrand AND
                      SearchTermMobsub.FixedNumber EQ lcFixedNumber NO-LOCK.
            END.
 
@@ -880,7 +880,7 @@ PROCEDURE local-find-others.
    DEF input parameter llsel AS LOG NO-UNDO.
       
    IF CAN-FIND(FIRST memo WHERE 
-                     Memo.Brand     = gcBrand                AND
+                     Memo.Brand     = Syst.CUICommon:gcBrand                AND
                      Memo.HostTable = "TermMobsub"               AND
                      Memo.KeyValue  = STRING(TermMobsub.MsSeq)   AND
                     (Memo.MemoText NE "" OR 
@@ -920,7 +920,7 @@ PROCEDURE local-find-others.
       ELSE lcBillTarget = STRING(TermMobsub.Billtarget).
       
       FIND FIRST sim WHERE 
-                 SIM.Brand  = gcBrand AND 
+                 SIM.Brand  = Syst.CUICommon:gcBrand AND 
                  Sim.Icc = TermMobsub.ICC
       NO-LOCK NO-ERROR.
               
@@ -931,14 +931,14 @@ PROCEDURE local-find-others.
    
       /* FAT */ 
       llFatime = can-find(FIRST fatime WHERE
-                                Fatime.Brand = gcBrand AND 
+                                Fatime.Brand = Syst.CUICommon:gcBrand AND 
                                 fatime.cli    = TermMobsub.cli AND
                                 FATime.MsSeq  = TermMobSub.MsSeq AND
                                 fatime.invnum = 0).
       /* eGift */ 
 
       lleGift  =  can-find(FIRST FATime WHERE
-                                 Fatime.Brand    = gcBrand AND 
+                                 Fatime.Brand    = Syst.CUICommon:gcBrand AND 
                                  FATime.CustNum  = TermMobsub.CustNum AND 
                                  FATime.cli      = TermMobsub.CLI     AND
                                  FATime.MsSeq    = TermMobSub.MsSeq   AND
@@ -954,7 +954,7 @@ PROCEDURE local-find-others.
       /* SalesMan */ 
 
       FIND FIRST Salesman WHERE 
-                 SalesMan.Brand    = gcBrand AND 
+                 SalesMan.Brand    = Syst.CUICommon:gcBrand AND 
                  Salesman.Salesman = TermMobsub.Salesman
       NO-LOCK NO-ERROR.
 
@@ -1013,7 +1013,7 @@ PROCEDURE local-find-others.
       /* periodical contract */
       lcPerContr = "NO".
       FOR FIRST DCCLI NO-LOCK WHERE
-                DCCLI.Brand      = gcBrand      AND
+                DCCLI.Brand      = Syst.CUICommon:gcBrand      AND
                 DCCLI.DCEvent    = lcDCEvent    AND
                 DCCLI.MsSeq      = TermMobsub.MsSeq AND
                 DCCLI.ValidTo   >= TODAY        AND

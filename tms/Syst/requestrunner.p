@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "request".
    
 {Func/heartbeat.i}
@@ -108,7 +108,7 @@ END.
 IF liQueue = 0 THEN RETURN "ERROR:Queue has not been selected".
 
 FIND RequestQueue WHERE 
-     RequestQueue.Brand = gcBrand AND
+     RequestQueue.Brand = Syst.CUICommon:gcBrand AND
      RequestQueue.Queue = liQueue NO-LOCK NO-ERROR.
 IF NOT AVAILABLE RequestQueue THEN RETURN "ERROR:Queue not defined".
      
@@ -127,7 +127,7 @@ DO WHILE TRUE
 
    /* get the latest configuration */ 
    FIND RequestQueue WHERE 
-        RequestQueue.Brand = gcBrand AND
+        RequestQueue.Brand = Syst.CUICommon:gcBrand AND
         RequestQueue.Queue = liQueue NO-LOCK NO-ERROR.
 
    IF NOT RequestQueue.InUse THEN LEAVE REQUESTER.     
@@ -152,7 +152,7 @@ DO WHILE TRUE
 
    /* go through all types */ 
    FOR EACH RequestType NO-LOCK WHERE
-            RequestType.Brand = gcBrand  AND
+            RequestType.Brand = Syst.CUICommon:gcBrand  AND
             RequestType.Queue = RequestQueue.Queue AND
             RequestType.InUse:
 

@@ -116,7 +116,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST ReportConf WHERE 
-           ReportConf.Brand = gcBrand AND
+           ReportConf.Brand = Syst.CUICommon:gcBrand AND
            ReportConf.ReportID = icReportID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE ReportConf THEN DO:
    MESSAGE "Report not available"
@@ -516,7 +516,7 @@ PROCEDURE pInitTempTable:
     
     
    FOR EACH ReportConfRow NO-LOCK WHERE
-            ReportConfRow.Brand    = gcBrand AND
+            ReportConfRow.Brand    = Syst.CUICommon:gcBrand AND
             ReportConfRow.ReportID = icReportID
    BY ReportConfRow.RowType 
    BY ReportConfRow.DecValue 

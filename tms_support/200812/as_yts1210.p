@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/barrfunc.i}
 
 DEF VAR lrOLBRec      AS RECID                  NO-UNDO.

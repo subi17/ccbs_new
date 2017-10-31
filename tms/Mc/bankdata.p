@@ -136,7 +136,7 @@ REPEAT:
          lcZipCode = SUBSTRING(lcLine,243,8).
         
       FIND FIRST Bank WHERE
-                 Bank.Brand      = gcBrand  AND
+                 Bank.Brand      = Syst.CUICommon:gcBrand  AND
                  Bank.BankId     = lcBankID AND
                  Bank.BankOffice = lcOffice EXCLUSIVE-LOCK NO-ERROR.
                   
@@ -144,7 +144,7 @@ REPEAT:
 
          CREATE Bank.
          ASSIGN 
-            Bank.Brand      = gcBrand
+            Bank.Brand      = Syst.CUICommon:gcBrand
             Bank.BankId     = lcBankID
             Bank.BankOffice = lcOffice
             oiNew           = oiNew + 1.
@@ -198,7 +198,7 @@ END.
 
 /* list all banks that were not in the file */
 FOR EACH Bank NO-LOCK WHERE
-         Bank.Brand = gcBrand AND
+         Bank.Brand = Syst.CUICommon:gcBrand AND
          Bank.FileDate NE ldtFileDate:
 
    IF Bank.FileDate > ldtFileDate THEN NEXT. 

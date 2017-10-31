@@ -5,7 +5,7 @@ def var lcfile    as char no-undo.
 def var j         as int no-undo.
 def var ldtBegin  as decimal no-undo.
 def var ldtEnd    as decimal no-undo.
-def var gcBrand AS CHARACTER NO-UNDO initial "1". 
+def var Syst.CUICommon:gcBrand AS CHARACTER NO-UNDO initial "1". 
 
 def stream slog.
 
@@ -44,7 +44,7 @@ ldtEnd = Func.Common:mHMS2TS(ldaEnd,"23:59:59").
 
 
 FOR EACH MsRequest NO-LOCK WHERE
-         Msrequest.Brand = gcBrand  AND 
+         Msrequest.Brand = Syst.CUICommon:gcBrand  AND 
          ( MsRequest.ReqType =  {&REQTYPE_CONTRACT_ACTIVATION} OR
            MsRequest.ReqType =  {&REQTYPE_CONTRACT_TERMINATION} ) AND
          MsRequest.ActStamp >= ldtBegin AND 

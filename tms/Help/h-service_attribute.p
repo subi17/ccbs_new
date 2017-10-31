@@ -238,10 +238,10 @@ PROCEDURE local-find-first:
 
    IF lcServCom > "" THEN 
       FIND FIRST ServAttr WHERE 
-                 ServAttr.Brand = gcBrand AND
+                 ServAttr.Brand = Syst.CUICommon:gcBrand AND
                  ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND FIRST ServAttr USE-INDEX ServCom WHERE
-                   ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                   ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -249,10 +249,10 @@ PROCEDURE local-find-last:
 
    IF lcServCom > "" THEN 
       FIND LAST ServAttr WHERE 
-                ServAttr.Brand = gcBrand AND
+                ServAttr.Brand = Syst.CUICommon:gcBrand AND
                 ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND LAST ServAttr USE-INDEX ServCom WHERE
-                  ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -260,10 +260,10 @@ PROCEDURE local-find-next:
 
    IF lcServCom > "" THEN 
       FIND NEXT ServAttr WHERE 
-                ServAttr.Brand = gcBrand AND
+                ServAttr.Brand = Syst.CUICommon:gcBrand AND
                 ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND NEXT ServAttr USE-INDEX ServCom WHERE
-                  ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -271,10 +271,10 @@ PROCEDURE local-find-prev:
 
    IF lcServCom > "" THEN 
       FIND PREV ServAttr WHERE 
-                ServAttr.Brand = gcBrand AND
+                ServAttr.Brand = Syst.CUICommon:gcBrand AND
                 ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND PREV ServAttr USE-INDEX ServCom WHERE
-                  ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 

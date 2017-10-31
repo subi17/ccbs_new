@@ -17,7 +17,7 @@ DEFINE INPUT PARAMETER iCParam     AS CHARACTER.
 
 FIND MsRequest WHERE
      MsRequest.MsRequest = iiMsRequest AND
-     MsRequest.Brand     = gcBrand
+     MsRequest.Brand     = Syst.CUICommon:gcBrand
 NO-LOCK NO-ERROR.
 
 DEF VAR ldtActivate AS DATE      NO-UNDO.

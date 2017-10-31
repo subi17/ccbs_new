@@ -72,7 +72,7 @@ form
    skip(17)
 with
    overlay title color value(Syst.CUICommon:ctc)
-   " " + ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
    color value(Syst.CUICommon:cfc) width 80
    frame taka.
 
@@ -145,7 +145,7 @@ ASSIGN
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = asno1 NO-LOCK NO-ERROR.
    FIND InvGroup WHERE 
-        InvGroup.Brand    = gcBrand AND
+        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
         InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
    IF NOT AVAIL InvGroup THEN DO:
       MESSAGE
@@ -213,7 +213,7 @@ toimi:
                   end.
 
                   find InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   if not avail InvGroup then do:
@@ -332,14 +332,14 @@ hide frame lasno no-pause.
 message "Sorting customers and calls ...".
 XCUST:
 for each Customer   no-lock  where
-         Customer.Brand     = gcBrand  AND
+         Customer.Brand     = Syst.CUICommon:gcBrand  AND
          Customer.CustNum  >= asno1    and
          Customer.CustNum  <= asno2    and
          Customer.CustNum  >  unknown  and
          Customer.InvGroup  = InvGroup,
 
    first InvGroup  no-lock where
-         InvGroup.Brand    = gcBrand AND
+         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
          InvGroup.InvGroup = Customer.InvGroup.
 
    /* only customers with killed subscriptions */

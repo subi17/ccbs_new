@@ -62,7 +62,7 @@ FUNCTION fCalcQty RETURNS LOGICAL.
           ttContact.Handled   = 0.
                  
    FOR EACH Contact NO-LOCK WHERE
-            Contact.Brand    = gcBrand AND
+            Contact.Brand    = Syst.CUICommon:gcBrand AND
             Contact.UserCode = ttContact.UserCode AND
             Contact.ConDate  = ttContact.ConDate:
             
@@ -84,7 +84,7 @@ IF icUserCode > "" THEN DO:
 END.
 
 FOR EACH Contact NO-LOCK WHERE 
-         Contact.Brand    = gcBrand AND
+         Contact.Brand    = Syst.CUICommon:gcBrand AND
          Contact.UserCode = icUserCode:
    FIND FIRST ttContact WHERE
               ttContact.UserCode = Contact.UserCode AND

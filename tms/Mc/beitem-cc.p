@@ -302,7 +302,7 @@ PROCEDURE local-add-record:
           END.
           
        FIND BillItem WHERE 
-            BillItem.Brand = gcBrand AND 
+            BillItem.Brand = Syst.CUICommon:gcBrand AND 
             BillItem.BillCode = ttable.ValueId NO-LOCK NO-ERROR.
 
       ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.

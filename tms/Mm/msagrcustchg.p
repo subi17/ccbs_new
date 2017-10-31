@@ -199,7 +199,7 @@ PROCEDURE pOwnerChange:
    IF liNewOwner = 0 THEN DO: 
       
       FIND FIRST bNewCust WHERE
-         bNewCust.Brand      = gcBrand AND
+         bNewCust.Brand      = Syst.CUICommon:gcBrand AND
          bNewCust.OrgId      = ENTRY(13,MsRequest.ReqCParam1,";") AND
          bNewCust.CustIdType = ENTRY(12,MsRequest.ReqCParam1,";") AND
          bNewCust.Roles NE "inactive"
@@ -285,7 +285,7 @@ PROCEDURE pOwnerChange:
    END.
 
    FIND bOldCustCat NO-LOCK WHERE
-        bOldCustCat.Brand = gcBrand AND
+        bOldCustCat.Brand = Syst.CUICommon:gcBrand AND
         bOldCustCat.Category = Customer.Category NO-ERROR.
 
    Func.Common:mSplitTS(MsRequest.ActStamp,
@@ -506,7 +506,7 @@ PROCEDURE pOwnerChange:
          IF llNewCust OR 
             (NOT llNewCust AND MobSub.PayType = FALSE AND
              NOT CAN-FIND(FIRST bMobSub WHERE
-                                bMobSub.Brand     = gcBrand AND
+                                bMobSub.Brand     = Syst.CUICommon:gcBrand AND
                                 bMobSub.MsSeq    <> MobSub.MsSeq AND
                                 bMobSub.CustNum   = bNewCust.CustNum AND
                                 bMobSub.PayType   = FALSE)) THEN DO:
@@ -572,7 +572,7 @@ PROCEDURE pOwnerChange:
             IF bNewCust.CustIdType = "CIF" AND
                NOT llNewCust THEN DO:
                FIND FIRST CustContact WHERE
-                          CustContact.Brand = gcBrand AND
+                          CustContact.Brand = Syst.CUICommon:gcBrand AND
                           CustContact.CustNum = bNewCust.CustNum AND
                           CustContact.CustType = {&CUSTCONTACT_CONTACT}
                           EXCLUSIVE-LOCK NO-ERROR.
@@ -655,7 +655,7 @@ PROCEDURE pOwnerChange:
 
             /* Category according to id type */ 
             FOR EACH CustCat NO-LOCK WHERE 
-                     CustCat.Brand = gcBrand: 
+                     CustCat.Brand = Syst.CUICommon:gcBrand: 
                IF LOOKUP(bNewCust.CustIDType,CustCat.CustIDType) > 0 THEN DO: 
                   bNewCust.Category = CustCat.Category.
                   bNewCust.PaymTerm = CustCat.PaymTerm.
@@ -804,7 +804,7 @@ PROCEDURE pOwnerChange:
            Customer.Custnum = liNewOwner.
 
       FIND FIRST bMobsub NO-LOCK USE-INDEX MultiSimID WHERE
-                 bMobsub.Brand  = gcBrand AND
+                 bMobsub.Brand  = Syst.CUICommon:gcBrand AND
                  bMobSub.MultiSimId = Mobsub.MultiSimId AND
                  bMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                  bMobSub.Custnum = MsRequest.Custnum NO-ERROR.
@@ -969,7 +969,7 @@ PROCEDURE pMsCustMove:
          ELSE DO:
         
             FIND CLIType WHERE 
-                 CLIType.Brand   = gcBrand AND
+                 CLIType.Brand   = Syst.CUICommon:gcBrand AND
                  CLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN ASSIGN 
                BillTarget.BillTarget = CLIType.BillTarget
@@ -990,7 +990,7 @@ PROCEDURE pMsCustMove:
       ELSE ldtFeeTo = DATE(MONTH(ldtActDate) + 1,1,YEAR(ldtActDate)) - 1.
     
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = gcBrand      AND
+               FATime.Brand  = Syst.CUICommon:gcBrand      AND
                FATime.MsSeq  = MobSub.MsSeq AND
                FATime.InvNum = 0            AND
                FATime.Period >= liFeePeriod:
@@ -1038,7 +1038,7 @@ PROCEDURE pMsCustMove:
       
       /* MSISDN */
       FIND FIRST MSISDN NO-LOCK WHERE 
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.CLI = MobSub.CLI NO-ERROR.
       IF AVAILABLE MSISDN THEN DO:
          fMakeMsidnHistoryTS(RECID(MSISDN),MsRequest.ActStamp).
@@ -1053,7 +1053,7 @@ PROCEDURE pMsCustMove:
              
       /* SIM */
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand = gcBrand   AND
+                 SIM.Brand = Syst.CUICommon:gcBrand   AND
                  SIM.ICC   = MobSub.ICC NO-ERROR.
       IF AVAILABLE SIM THEN SIM.CustNum = iiNewUser.
       
@@ -1105,7 +1105,7 @@ PROCEDURE pMsCustMove:
 
       /* Exclude DSS fixedfee logic here, DSS logic in fdss.i */
       FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-               FixedFee.Brand     = gcBrand              AND
+               FixedFee.Brand     = Syst.CUICommon:gcBrand              AND
                FixedFee.HostTable = "MobSub"             AND 
                FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                FixedFee.InUse     = TRUE                 AND
@@ -1205,7 +1205,7 @@ PROCEDURE pMsCustMove:
 
       /* Move future RVTERM single fees */
       FOR EACH SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = gcBrand AND
+               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                SingleFee.Custnum     = Mobsub.InvCust AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -1362,7 +1362,7 @@ PROCEDURE pMsCustMove:
    END.
    ELSE IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
       FOR EACH bOMobSub NO-LOCK WHERE
-               bOMobSub.Brand   = gcBrand      AND
+               bOMobSub.Brand   = Syst.CUICommon:gcBrand      AND
                bOMobSub.AgrCust = liOldAgrCust AND
                bOMobSub.MsSeq  <> MobSub.MsSeq AND
                LOOKUP(bOMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -1502,7 +1502,7 @@ PROCEDURE pUpdateDSSAccount:
       MobSub.MultiSimId > 0 AND
       MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
       CAN-FIND (FIRST bMobsub NO-LOCK USE-INDEX MultiSimID WHERE
-                      bMobsub.Brand  = gcBrand AND
+                      bMobsub.Brand  = Syst.CUICommon:gcBrand AND
                       bMobSub.MultiSimId = Mobsub.MultiSimId AND
                       bMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                       bMobSub.Custnum = iiOldCustNum) AND
@@ -1526,7 +1526,7 @@ PROCEDURE pUpdateDSSAccount:
       MobSub.MultiSimId > 0 AND
       MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
       CAN-FIND (FIRST bMobsub NO-LOCK USE-INDEX MultiSimID WHERE
-                      bMobsub.Brand  = gcBrand AND
+                      bMobsub.Brand  = Syst.CUICommon:gcBrand AND
                       bMobSub.MultiSimId = Mobsub.MultiSimId AND
                       bMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                       bMobSub.Custnum = iiNewCustnum) AND
@@ -1543,7 +1543,7 @@ PROCEDURE pUpdateDSSAccount:
                     OUTPUT lcError) THEN DO:
 
       FIND FIRST bMobsub NO-LOCK USE-INDEX MultiSimID WHERE
-                 bMobsub.Brand  = gcBrand AND
+                 bMobsub.Brand  = Syst.CUICommon:gcBrand AND
                  bMobSub.MultiSimId = Mobsub.MultiSimId AND
                  bMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                  bMobSub.Custnum = iiNewCustnum NO-ERROR.
@@ -1571,7 +1571,7 @@ PROCEDURE pUpdateDSSAccount:
                            {&REQ_INACTIVE_STATUSES}) = 0 NO-ERROR.
          IF NOT AVAIL bMsRequest THEN
             FIND FIRST bMsRequest NO-LOCK WHERE
-                       bMsRequest.Brand = gcBrand           AND
+                       bMsRequest.Brand = Syst.CUICommon:gcBrand           AND
                        bMsRequest.ReqType = {&REQTYPE_DSS}  AND
                        bMsRequest.CustNum = iiOldCustNum    AND
                        bMsRequest.ReqCParam1 = "DELETE"     AND
@@ -1889,7 +1889,7 @@ PROCEDURE pHandleAdditionalLines:
         MobSub.MsSeq = iiMsSeq NO-ERROR.
    IF NOT AVAIL Mobsub OR NOT
       CAN-FIND(FIRST CLIType NO-LOCK WHERE   
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.CUICommon:gcBrand AND
                      CLIType.CLIType = Mobsub.TariffBundle AND
                      CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) 
       THEN RETURN.
@@ -1900,11 +1900,11 @@ PROCEDURE pHandleAdditionalLines:
 
    /* check if other primary line exists */
    FOR EACH bMobsub NO-LOCK WHERE
-            bMobsub.Brand  = gcBrand AND
+            bMobsub.Brand  = Syst.CUICommon:gcBrand AND
             bMobSub.Custnum = iiOldCustNum AND
             bMobSub.PayType = FALSE,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.CUICommon:gcBrand AND
             CLIType.CLIType = bMobSub.TariffBundle AND
             CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN}:
       RETURN.
@@ -1944,11 +1944,11 @@ PROCEDURE pHandleAdditionalLines:
 
    ADDITIONAL_SUBS:
    FOR EACH bMobsub NO-LOCK WHERE
-            bMobsub.Brand  = gcBrand AND
+            bMobsub.Brand  = Syst.CUICommon:gcBrand AND
             bMobSub.Custnum = iiOldCustNum AND
             bMobSub.PayType = FALSE,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.CUICommon:gcBrand AND
             CLIType.CLIType = (IF bMobSub.TariffBundle > ""
                                THEN bMobSub.TariffBundle
                                ELSE bMobSub.CLIType) AND

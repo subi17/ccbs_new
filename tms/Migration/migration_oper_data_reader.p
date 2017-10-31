@@ -22,7 +22,7 @@
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -105,7 +105,7 @@ PUT STREAM sLog UNFORMATTED
 /*Ensure that multiple instances of the program are not running*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -121,7 +121,7 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
@@ -162,7 +162,7 @@ END.
 /*Release ActionLog lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -195,7 +195,7 @@ FUNCTION fUpsellExists RETURNS CHAR
    (icUPS AS CHAR):
    DEF BUFFER DayCampaign for DayCampaign.
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand EQ gcBrand AND
+              DayCampaign.Brand EQ Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent EQ icUps NO-ERROR.
    IF NOT AVAIL DayCampaign THEN RETURN "Item not found " + icUPS.
 
@@ -396,7 +396,7 @@ FUNCTION fSetMigrationTerminals RETURNS CHAR
    DO i = 1 TO NUM-ENTRIES(icTerminals):
       lcTerminal =  STRING(ENTRY(i,icTerminals)).
       CREATE SubsTerminal.
-      ASSIGN SubsTerminal.brand = gcBrand
+      ASSIGN SubsTerminal.brand = Syst.CUICommon:gcBrand
              SubsTerminal.OrderID = iiOrderid
              SubsTerminal.imei = lcTerminal.
 
@@ -687,7 +687,7 @@ PROCEDURE pReadInputJSON:
          lcMSISDN = ttRootLevel.msisdn. 
          limsseq = 0.
          FIND FIRST mobsub NO-LOCK WHERE
-                    mobsub.brand = gcBrand AND
+                    mobsub.brand = Syst.CUICommon:gcBrand AND
                     mobsub.cli = lcMSISDN NO-ERROR.
          IF AVAIL mobsub then do:
             liMsSeq = mobsub.msseq.

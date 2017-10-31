@@ -92,7 +92,7 @@ form
     InvGroup.TaxZone        FORMAT "X(5)" COLUMN-LABEL "TaxZ."
     WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Invoice groups "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -108,7 +108,7 @@ form
        HELP "Use invoice number sequence from this group"
        VALIDATE(INPUT InvGroup.InvForm = INPUT InvGroup.InvGroup OR
                 CAN-FIND(InvGroup WHERE
-                         InvGroup.Brand    = gcBrand AND
+                         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                          InvGroup.InvGroup = INPUT InvGroup.InvForm),
                 "Unknown group") 
     InvGroup.CompName   /* LABEL FORMAT */ COLON 22
@@ -477,7 +477,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame haku-f1.
         UPDATE 
-           lcBrand when gcAllBrand
+           lcBrand when Syst.CUICommon:gcAllBrand
            haku-ig-code WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-ig-code <> "" THEN DO:
@@ -500,7 +500,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME haku-f2.
         UPDATE 
-           lcBrand when gcAllBrand
+           lcBrand when Syst.CUICommon:gcAllBrand
            haku-ig-name WITH FRAME haku-f2.
         HIDE FRAME haku-f2 no-pause.
         if haku-ig-name <> "" THEN DO:
@@ -623,7 +623,7 @@ BROWSE:
         IF ok THEN DO:
 
             FIND FIRST Customer WHERE 
-                       Customer.Brand = gcBrand AND
+                       Customer.Brand = Syst.CUICommon:gcBrand AND
                        Customer.InvGroup = InvGroup.InvGroup
             no-lock no-error.
             IF AVAIL Customer THEN DO:

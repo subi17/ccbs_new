@@ -93,7 +93,7 @@ form
     SubsTerminal.BillCode  COLON 22
        FORMAT "X(16)"
        VALIDATE(CAN-FIND(FIRST BillItem WHERE 
-                          BillItem.Brand   = gcBrand AND
+                          BillItem.Brand   = Syst.CUICommon:gcBrand AND
                           BillItem.BillCode = INPUT SubsTerminal.BillCode),
                 "Unknown billing item")
        lcBIName FORMAT "X(30)" NO-LABEL SKIP
@@ -128,7 +128,7 @@ FUNCTION fBIName RETURNS LOGIC
    
    lcBIName = "".
    FIND FIRST BillItem WHERE   
-        BillItem.Brand   = gcBrand AND
+        BillItem.Brand   = Syst.CUICommon:gcBrand AND
         BillItem.BillCode = icBillItem NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName. 
    
@@ -674,7 +674,7 @@ PROCEDURE local-UPDATE-record:
          CREATE Memo.
          ASSIGN
                Memo.CreStamp  = Func.Common:mMakeTS()
-               Memo.Brand     = gcBrand
+               Memo.Brand     = Syst.CUICommon:gcBrand
                Memo.HostTable = "MobSub"
                Memo.KeyValue  = STRING(SubsTerminal.MsSeq)
                Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -708,7 +708,7 @@ PROCEDURE pFillTempTable:
 
    ELSE IF iiOrderID > 0 THEN DO:
       FOR EACH SubsTerminal NO-LOCK WHERE
-               SubsTerminal.Brand   = gcBrand AND
+               SubsTerminal.Brand   = Syst.CUICommon:gcBrand AND
                SubsTerminal.OrderID = iiOrderID,
          FIRST MsOwner NO-LOCK WHERE
                MsOwner.MsSeq = SubsTerminal.MsSeq:

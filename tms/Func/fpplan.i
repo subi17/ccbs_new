@@ -15,7 +15,7 @@ FUNCTION fPaymPlanPaid RETURNS LOGICAL
     DEF VAR ldBatch AS DEC NO-UNDO.
     
     FOR EACH PaymPlan EXCLUSIVE-LOCK WHERE
-             PaymPlan.Brand   = gcBrand   AND
+             PaymPlan.Brand   = Syst.CUICommon:gcBrand   AND
              PaymPlan.CustNum = iiCustNum AND
              PaymPlan.PPStatus < 4,
        FIRST PPInv OF PaymPlan NO-LOCK WHERE

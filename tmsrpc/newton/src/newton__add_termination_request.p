@@ -18,7 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Mm/fbundle.i}
 {Func/msisdn_prefix.i}

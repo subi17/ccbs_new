@@ -10,7 +10,7 @@
 
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "CRON".
 {Func/q25functions.i}
 {Func/ftransdir.i}

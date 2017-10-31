@@ -135,18 +135,18 @@ END.
 liFeeCust = MobSub.InvCust.
 
 FIND FIRST msowner WHERE 
-           msowner.brand = gcBrand AND 
+           msowner.brand = Syst.CUICommon:gcBrand AND 
            msowner.CLI   = mobsub.Cli no-lock no-error.
 
 IF iiContract > 0 
 THEN FIND Contract WHERE 
-          Contract.Brand    = gcBrand AND
+          Contract.Brand    = Syst.CUICommon:gcBrand AND
           Contract.Contract = STRING(iiContract) NO-LOCK NO-ERROR.
 
 /* use default if not given */          
 IF iiContract = 0 OR NOT AVAILABLE Contract 
 THEN FIND Contract  WHERE 
-          Contract.Brand    = gcBrand AND 
+          Contract.Brand    = Syst.CUICommon:gcBrand AND 
           Contract.Contract = msowner.contract NO-LOCK NO-ERROR.
 
 IF avail contract THEN ASSIGN
@@ -189,7 +189,7 @@ IF InterAct THEN DO WITH FRAME info:
    PAUSE 0.
    IF FeeModel ne "" THEN DO:
       FIND FeeModel  WHERE 
-           FeeModel.Brand    = gcBrand  AND 
+           FeeModel.Brand    = Syst.CUICommon:gcBrand  AND 
            FeeModel.FeeModel = FeeModel NO-LOCK NO-ERROR.
 
       /* PriceList is stored on PricePlan record */
@@ -237,7 +237,7 @@ ACTION:
                      UNDO, RETURN.
                   END.   
                   FIND FeeModel  WHERE 
-                       FeeModel.Brand    = gcBrand   AND 
+                       FeeModel.Brand    = Syst.CUICommon:gcBrand   AND 
                        FeeModel.FeeModel = 
                   INPUT FRAME info FeeModel NO-LOCK NO-ERROR.
                   IF NOT AVAIL FeeModel THEN DO:
@@ -323,17 +323,17 @@ ok = TRUE.
 
 FOR                             
 EACH FMItem NO-LOCK  WHERE
-     FMItem.Brand     = gcBrand     AND 
+     FMItem.Brand     = Syst.CUICommon:gcBrand     AND 
      FMItem.FeeModel  = FeeModel    AND
      FMItem.PriceList = lcPriceList AND
      FMItem.FromDate <= CoDate      AND
      FMItem.ToDate   >= CoDate,
 
      BillItem no-lock WHERE
-     BillItem.BRand    = gcBrand   AND 
+     BillItem.BRand    = Syst.CUICommon:gcBrand   AND 
      BillItem.BillCode = FMItem.BillCode,
 FIRST PriceList NO-LOCK WHERE
-      PriceList.Brand     = gcBrand AND
+      PriceList.Brand     = Syst.CUICommon:gcBrand AND
       PriceList.PriceList = lcPriceList:
 
      IF FMItem.BillType NE "NF" THEN /* Not no fee */
@@ -367,7 +367,7 @@ FIRST PriceList NO-LOCK WHERE
            ASSIGN
            SingleFee.FMItemId    = NEXT-VALUE(bi-seq).                             
            ASSIGN
-           SingleFee.Brand       = gcBrand 
+           SingleFee.Brand       = Syst.CUICommon:gcBrand 
            SingleFee.CustNum     = liFeeCust  /* customer number         */
            SingleFee.BillTarget  = MobSub.BillTarget /* Billing Target        */
            SingleFee.CalcObj     = "MsSeq" +       /* MobSub id               */
@@ -427,7 +427,7 @@ FIRST PriceList NO-LOCK WHERE
            CREATE FixedFee.
 
            ASSIGN      
-           FixedFee.Brand      = gcBrand 
+           FixedFee.Brand      = Syst.CUICommon:gcBrand 
            FixedFee.FFNum      = NEXT-VALUE(contract) /* sequence FOR contract   */
            FixedFee.BegPeriod  = Period           /* beginning Period        */
            FixedFee.CustNum    = liFeeCust        /* customer no.            */

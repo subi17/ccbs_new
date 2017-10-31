@@ -113,7 +113,7 @@ REPEAT:
    END.
 
    FIND FIRST PrintHouseConf WHERE
-              PrintHouseConf.Brand     = gcBrand AND
+              PrintHouseConf.Brand     = Syst.CUICommon:gcBrand AND
               PrintHouseConf.Report    = "Invoice" AND
               PrintHouseConf.TableName = "Customer" AND
               PrintHouseConf.FieldName = "ZipCode" AND
@@ -132,7 +132,7 @@ REPEAT:
    ELSE DO:
       CREATE PrintHouseConf.
       ASSIGN 
-         PrintHouseConf.Brand     = gcBrand 
+         PrintHouseConf.Brand     = Syst.CUICommon:gcBrand 
          PrintHouseConf.Report    = "Invoice" 
          PrintHouseConf.TableName = "Customer"
          PrintHouseConf.FieldName = "ZipCode" 
@@ -161,7 +161,7 @@ END.
    that were not included in the file are ended */
 IF CAN-FIND(FIRST ttUpdated) THEN 
 FOR EACH bUpdateConf NO-LOCK WHERE
-         bUpdateConf.Brand     = gcBrand AND
+         bUpdateConf.Brand     = Syst.CUICommon:gcBrand AND
          bUpdateConf.Report    = "Invoice" AND
          bUpdateConf.TableName = "Customer" AND
          bUpdateConf.FieldName = "ZipCode" AND
@@ -183,7 +183,7 @@ fCleanEventObjects().
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "PrinHouseConf"  
       ActionLog.KeyValue     = lcPlainFile
       ActionLog.ActionID     = "ZIPCODE_PH"

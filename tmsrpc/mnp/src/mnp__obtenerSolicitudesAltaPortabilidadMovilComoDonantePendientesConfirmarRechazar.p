@@ -73,7 +73,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.UpdateTS    = {&nowts} 
          MNPProcess.CreatedTS   = ttInput.CreatedTS
          MNPProcess.MNPUpdateTS = ttInput.StatusTS
-         MNPProcess.Brand       = gcBrand
+         MNPProcess.Brand       = Syst.CUICommon:gcBrand
          MNPProcess.MNPType     = {&MNP_TYPE_OUT} /* mnp out */
          MNPProcess.MNPSeq      = next-value(m2mrequest)
          MNPProcess.PortingTime = ttInput.portingTime

@@ -62,7 +62,7 @@ form
     CostCentre.CCName    
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " Cost Centres "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -170,7 +170,7 @@ REPEAT WITH FRAME sel:
       ASSIGN must-print = TRUE.
 
       /* is there ANY record ? */
-      FIND FIRST CostCentre WHERE CostCentre.Brand = gcBrand 
+      FIND FIRST CostCentre WHERE CostCentre.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
       IF NOT AVAILABLE CostCentre THEN LEAVE LOOP.
       NEXT LOOP.
@@ -374,7 +374,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  lcCostCentre WITH FRAME f1.
           HIDE FRAME f1 NO-PAUSE.
 
@@ -396,7 +396,7 @@ BROWSE:
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
-          UPDATE lcBrand WHEN gcAllBrand
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                  lcName WITH FRAME f2.
           HIDE FRAME f2 NO-PAUSE.
 
@@ -434,7 +434,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        FOR FIRST BillItem NO-LOCK WHERE
-                 BillItem.Brand      = gcBrand AND
+                 BillItem.Brand      = Syst.CUICommon:gcBrand AND
                  BillItem.CostCentre = CostCentre.CostCentre:
           MESSAGE "Cost centre is used on billing item" 
                   BillItem.BillCode ". Delete not allowed."

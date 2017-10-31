@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "ari".
 {Syst/eventval.i}
 {Func/faccper.i}
@@ -257,7 +257,7 @@ PROCEDURE pCreditNote:
  
       /* check IF invoice number is already in use */
       IF NOT can-find(FIRST Invoice where
-                            Invoice.Brand    = gcBrand AND 
+                            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
                             Invoice.ExtInvID = lcExtInvID AND
                             RECID(Invoice) NE liInvRecid) 
       THEN LEAVE ExtInvNum.
@@ -337,7 +337,7 @@ PROCEDURE pCreditNote:
       */
       /* in yoigo newest accounts are always used 
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.CUICommon:gcBrand AND
                 BillItem.BillCode = bCreditRow.BillCode:
          bCreditRow.SlsAcc = fInvRowAccount(Customer.Category,
                                             bCreditInv.VatUsage).
@@ -377,7 +377,7 @@ PROCEDURE pCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = katun
       Memo.HostTable = "Invoice"
@@ -417,7 +417,7 @@ PROCEDURE pCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = katun
       Memo.HostTable = "Invoice"

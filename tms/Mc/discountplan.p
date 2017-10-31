@@ -66,7 +66,7 @@ FORM
     DiscountPlan.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  DISCOUNT PLAN  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -129,7 +129,7 @@ FUNCTION fBillItemName RETURNS LOGIC
   (icBillCode AS CHAR):
   
    FIND FIRST BillItem WHERE
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN DISPLAY BillItem.BIName WITH FRAME lis.
    ELSE DISPLAY "" @ BillItem.BIName WITH FRAME lis.
@@ -473,7 +473,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcRuleID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -883,7 +883,7 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF FRAME-FIELD = "BillCode" THEN DO:
                   IF NOT CAN-FIND(FIRST BillItem WHERE
-                        BillItem.Brand = gcBrand AND
+                        BillItem.Brand = Syst.CUICommon:gcBrand AND
                         BillItem.BillCode = INPUT DiscountPlan.BillCode)
                   THEN DO:
                      MESSAGE "Unknown billing item"

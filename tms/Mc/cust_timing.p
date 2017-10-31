@@ -43,7 +43,7 @@ END.
 DEF INPUT PARAMETER  iicustnum  AS INT  NO-UNDO.
 
 FIND FIRST customer NO-LOCK WHERE 
-           Customer.Brand   = gcBrand  AND 
+           Customer.Brand   = Syst.CUICommon:gcBrand  AND 
            customer.CustNum = iiCustNum NO-ERROR.
 
 FIND FIRST EventLog WHERE 
@@ -230,7 +230,7 @@ REPEAT WITH FRAME main:
                 
                 IF FRAME-FIELD = "ttInvCust" THEN DO:
                    FIND FIRST bCustomer WHERE 
-                              bCustomer.Brand   = gcBRand AND 
+                              bCustomer.Brand   = Syst.CUICommon:gcBrand AND 
                               bCustomer.CustNum = INPUT ttCustomer.TTInvCust
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL bCustomer THEN DO:
@@ -245,7 +245,7 @@ REPEAT WITH FRAME main:
                 ELSE IF FRAME-FIELD = "TTInvCode" THEN DO:
                    IF INPUT FRAME main TTInvCode ne "00" THEN DO:
                       FIND FIRST InvRunlog  WHERE 
-                                 InvRunLog.Brand    = gcBRand AND 
+                                 InvRunLog.Brand    = Syst.CUICommon:gcBrand AND 
                                  InvRunLog.InvCode = INPUT ttCustomer.TTInvCode
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL InvRunLog THEN DO:

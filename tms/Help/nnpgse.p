@@ -41,7 +41,7 @@ form
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(Syst.CUICommon:ctc) 
-       " BillCode GROUP FINDING FROM (" + gcBrand + ") '" + pgseek + "' " 
+       " BillCode GROUP FINDING FROM (" + Syst.CUICommon:gcBrand + ") '" + pgseek + "' " 
        FRAME sel.
 
 
@@ -57,7 +57,7 @@ with row 1 centered overlay title " BillCode GROUP FINDING " FRAME alku.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST BItemGroup USE-INDEX BIGroup WHERE 
-      BItemGroup.Brand = gcBrand NO-LOCK no-error.
+      BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAIL BItemGroup THEN DO:
       BELL.
       message "No BillCode groups - press ENTER !".
@@ -90,14 +90,14 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO LOOP, LEAVE LOOP:
 
           IF NOT nrohaku THEN DO:
              FIND FIRST BItemGroup where 
-                        BItemGroup.Brand    = gcBrand AND
+                        BItemGroup.Brand    = Syst.CUICommon:gcBrand AND
                         BItemGroup.BIGName >= pgseek
              no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST BItemGroup where 
-                        BItemGroup.Brand    = gcBrand AND
+                        BItemGroup.Brand    = Syst.CUICommon:gcBrand AND
                         BItemGroup.BIGroup >= pgseek
              no-lock no-error.
              order = 2.
@@ -137,10 +137,10 @@ print-line:
                DISPLAY BItemGroup.BIGroup BItemGroup.BIGName.
                rtab[FRAME-LINE] = recid(BItemGroup).
                IF order = 2 THEN FIND NEXT BItemGroup
-               USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand 
+               USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND NEXT BItemGroup
-               USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand 
+               USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
             END.
             ELSE DO:
@@ -202,10 +202,10 @@ BROWSE:
          FIND BItemGroup where recid(BItemGroup) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND prev BItemGroup
-            USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand 
+            USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev BItemGroup
-            USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand 
+            USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             IF AVAILABLE BItemGroup THEN
                ASSIGN firstline = i memory = recid(BItemGroup).
@@ -229,10 +229,10 @@ BROWSE:
          IF FRAME-LINE = 1 THEN DO:
             FIND BItemGroup where recid(BItemGroup) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev BItemGroup
-            USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand 
+            USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev BItemGroup
-            USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand 
+            USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             IF NOT AVAILABLE BItemGroup THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
@@ -261,10 +261,10 @@ BROWSE:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT BItemGroup
-            USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand 
+            USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND NEXT BItemGroup
-            USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand 
+            USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
             NO-LOCK no-error.
             IF NOT AVAILABLE BItemGroup THEN DO:
                message "YOU ARE ON THE LAST ROW !".
@@ -292,19 +292,19 @@ BROWSE:
          memory = rtab[1].
          FIND BItemGroup where recid(BItemGroup) = memory no-lock no-error.
          IF order = 2 THEN FIND prev BItemGroup
-         USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 1 THEN FIND prev BItemGroup
-         USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          IF AVAILABLE BItemGroup THEN DO:
             memory = recid(BItemGroup).
 
             /* go back one page */
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND prev BItemGroup
-               USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand 
+               USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND prev BItemGroup
-               USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand 
+               USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF AVAILABLE BItemGroup THEN memory = recid(BItemGroup).
                ELSE line = FRAME-DOWN.
@@ -345,18 +345,18 @@ BROWSE:
 
      else if lookup(nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST BItemGroup
-        USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND FIRST BItemGroup
-        USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(BItemGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST BItemGroup
-        USE-INDEX BIGroup WHERE BItemGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BIGroup WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND LAST BItemGroup
-        USE-INDEX BIGName WHERE BItemGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BIGName WHERE BItemGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(BItemGroup) must-print = TRUE.
         NEXT LOOP.
      END.

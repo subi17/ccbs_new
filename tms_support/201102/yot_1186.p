@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "vikasagr".
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 define variable ldenow    as decimal no-undo.
 define variable llheader  as logical no-undo init true.
@@ -19,7 +19,7 @@ for each msisdnnumber where
          msisdnnumber.cli >= "633010000" and
          msisdnnumber.cli <= "633099999" no-lock,
     first msisdn where
-          msisdn.brand = gcbrand and
+          msisdn.brand = Syst.CUICommon:gcBrand and
           msisdn.cli   = msisdnnumber.cli and
           msisdn.validto > ldenow no-lock:
 

@@ -452,7 +452,7 @@ PROCEDURE local-disp-row:
    FIND FFItem WHERE RECID(FFItem) = ttRow.FFItem NO-LOCK.
 
    FIND BillItem where 
-        BillItem.Brand = gcBrand AND
+        BillItem.Brand = Syst.CUICommon:gcBrand AND
         BillItem.BillCode = FFItem.BillCode no-lock no-error.
    IF AVAIL BillItem THEN prod-name = BIName.
    else prod-name = "!! UNKNOWN !!!".

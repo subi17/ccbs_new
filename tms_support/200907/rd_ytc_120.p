@@ -1,7 +1,7 @@
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/xmlfunction.i}
 
@@ -48,7 +48,7 @@ FOR EACH PrepaidRequest NO-LOCK WHERE
        RUN Gwy/balancequery.p (PrepaidRequest.CLI).
        */
 
-        RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
+        RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,PrePaidRequest.PPRequest).
         lcXML = RETURN-VALUE.
         liRespCode = INT(fGetRPCNodeValue(lcXML,"responseCode")) NO-ERROR.
         

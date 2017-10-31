@@ -63,7 +63,7 @@ FUNCTION fError RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "COLLACTION"
              ErrorLog.TableName = "MobSub"
              ErrorLog.KeyValue  = STRING(liMsSeq)
@@ -84,7 +84,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = gcBrand      AND    
+                  ActionLog.Brand        = Syst.CUICommon:gcBrand      AND    
                   ActionLog.TableName    = "MobSub"     AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSCOLLECT" AND
@@ -94,7 +94,7 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "MobSub"  
       ActionLog.KeyValue     = lcPlainFile
       ActionLog.UserCode     = katun
@@ -172,7 +172,7 @@ PROCEDURE pInitialize:
  
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = gcBrand      AND
+            ActionLog.Brand    = Syst.CUICommon:gcBrand      AND
             ActionLog.ActionID = "IFSCOLLECT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -388,7 +388,7 @@ PROCEDURE pSetBarring:
       END.   
 
       lcBarring = ENTRY(1,icBarrCommand,"=").
-      lcBarrTrans = fGetItemName(gcBrand,
+      lcBarrTrans = fGetItemName(Syst.CUICommon:gcBrand,
                                  "BarringCode",
                                  lcBarring,
                                  5,
@@ -398,7 +398,7 @@ PROCEDURE pSetBarring:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum

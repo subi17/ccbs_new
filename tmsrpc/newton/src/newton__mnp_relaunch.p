@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
 {Func/fcustdata.i}
@@ -133,7 +133,7 @@ END.
 IF Order.CurrOper NE pcOldOperator THEN DO:
    
    FIND FIRST MNPOperator WHERE
-              MNPOperator.Brand = gcBrand AND
+              MNPOperator.Brand = Syst.CUICommon:gcBrand AND
               MNPOperator.OperName = pcOldOperator
    NO-LOCK NO-ERROR.
    IF NOT AVAIL MNPOperator THEN 
@@ -212,7 +212,7 @@ FIND CURRENT Order NO-LOCK.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.CUICommon:gcBrand
     Memo.HostTable = "Order"
     Memo.KeyValue  = STRING(Order.OrderId)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -226,7 +226,7 @@ IF AVAIL MNPProcess THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MNPProcess"
        Memo.KeyValue  = STRING(MNPProcess.MNPSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

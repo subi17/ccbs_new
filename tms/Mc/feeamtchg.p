@@ -87,7 +87,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
    END.
 
    FIND CLIType WHERE 
-        CLIType.Brand   = gcBrand AND
+        CLIType.Brand   = Syst.CUICommon:gcBrand AND
         CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CLIType THEN DO:
        MESSAGE "Unknown CLI type"
@@ -130,7 +130,7 @@ PAUSE 0.
 VIEW FRAME fMobQty.
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand   = gcBrand AND
+         MobSub.Brand   = Syst.CUICommon:gcBrand AND
          MobSub.CLIType = lcCLIType:
 
    liMobSub = liMobSub + 1.
@@ -139,7 +139,7 @@ FOR EACH MobSub NO-LOCK WHERE
    DISP liMobSub WITH FRAME fMobQty.
    
    FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-            FixedFee.Brand     = gcBrand              AND 
+            FixedFee.Brand     = Syst.CUICommon:gcBrand              AND 
             FixedFee.HostTable = "MobSub"             AND
             FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
             LOOKUP(FixedFee.BillCode,lcBillCode) > 0  AND

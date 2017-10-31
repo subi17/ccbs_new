@@ -43,7 +43,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " Maintain PNP groups "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -108,7 +108,7 @@ add-new:
            CREATE pnpgroup.
            ASSIGN
            pnpgroup.pnpseq = NEXT-VALUE(pnpseq)
-           pnpgroup.Brand  = gcBrand 
+           pnpgroup.Brand  = Syst.CUICommon:gcBrand 
            pnpgroup.pnpgrouptupe = 1.
 
            RUN LOCAL-UPDATE-RECORD(true).
@@ -322,7 +322,7 @@ BROWSE:
        HIDE FRAME haku-f1 no-pause.
        if haku-pnpgroup <> "" THEN DO:
           FIND FIRST pnpgroup where 
-                     Pnpgroup.Brand     = gcBrand AND 
+                     Pnpgroup.Brand     = Syst.CUICommon:gcBrand AND 
                      pnpgroup.pnpgroup >= haku-pnpgroup
           /* search condition */ no-lock no-error.
           IF NOT AVAILABLE pnpgroup THEN DO:
@@ -380,7 +380,7 @@ BROWSE:
            DELETE pnpgroup.
 
            /* in the LAST record was deleted ? */
-           IF NOT can-find(FIRST pnpgroup WHERE pnpgroup.Brand = gcBrand 
+           IF NOT can-find(FIRST pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand 
            /* search condition */) THEN DO:
               CLEAR FRAME sel no-pause.
               PAUSE 0 no-message.
@@ -452,12 +452,12 @@ si-recid = xrecid.
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE
-              BillItem.Brand    = gcBrand AND 
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND 
               BillItem.BillCode = pnpgroup.BillCode
    NO-LOCK NO-ERROR.
  
    FIND FIRST CCN WHERE
-              CCN.Brand = gcBRand AND 
+              CCN.Brand = Syst.CUICommon:gcBrand AND 
               CCN.CCN = pnpgroup.ccn
    NO-LOCK NO-ERROR.
   
@@ -476,7 +476,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-NEXT.
 
    IF order = 1 THEN 
-      FIND NEXT pnpgroup WHERE pnpgroup.Brand = gcBRand 
+      FIND NEXT pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand 
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -484,7 +484,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-PREV.
 
    IF order = 1 THEN 
-      FIND PREV pnpgroup WHERE pnpgroup.Brand = gcBRand
+      FIND PREV pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -492,7 +492,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-FIRST.
 
    IF order = 1 THEN 
-      FIND FIRST pnpgroup WHERE pnpgroup.Brand = gcBRand
+      FIND FIRST pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -500,7 +500,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-LAST.
 
    IF order = 1 THEN 
-      FIND LAST pnpgroup WHERE pnpgroup.Brand = gcBRand
+      FIND LAST pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -512,18 +512,18 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    IF NOT bNew THEN DO:
 
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand   AND 
+                 BillItem.Brand    = Syst.CUICommon:gcBrand   AND 
                  BillItem.BillCode = pnpgroup.BillCode
       NO-LOCK NO-ERROR.
  
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND 
+                 CCN.Brand = Syst.CUICommon:gcBrand AND 
                  CCN.CCN   = pnpgroup.ccn
       NO-LOCK NO-ERROR.
 
 
       FIND FIRST xxRateccn WHERE 
-                 xxRateccn.Brand = gcBrand AND 
+                 xxRateccn.Brand = Syst.CUICommon:gcBrand AND 
                  xxRateccn.ccn   = pnpgroup.rateccn 
       no-lock no-error.
 
@@ -568,7 +568,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ELSE IF FRAME-FIELD = "RateCCN" THEN DO:
             if input frame lis pnpgroup.RateCCN = "" OR 
             NOT CAN-FIND(FIRST Rateccn WHERE 
-                               Rateccn.Brand = gcBrand AND 
+                               Rateccn.Brand = Syst.CUICommon:gcBrand AND 
                                Rateccn.ccn = INPUT FRAME lis PnpGroup.rateccn) 
             THEN DO:
                BELL.
@@ -577,7 +577,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                NEXT.
             END.
             FIND FIRST xxRateccn WHERE 
-                       xxRateccn.Brand = gcBrand and 
+                       xxRateccn.Brand = Syst.CUICommon:gcBrand and 
                     xxRateccn.ccn = INPUT FRAME lis PnpGroup.rateccn no-lock.
         
             DISP xxrateccn.ccnname @ lcrateccnname with frame lis.
@@ -603,7 +603,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
             
             IF CAN-FIND(FIRST xxpnpgroup WHERE
-                              xxPnpGroup.Brand    = gcBrand                 AND                               xxpnpgroup.pnpgroup = input pnpgroup.pnpgroup AND
+                              xxPnpGroup.Brand    = Syst.CUICommon:gcBrand                 AND                               xxpnpgroup.pnpgroup = input pnpgroup.pnpgroup AND
                               xxpnpgroup.dto      = input pnpgroup.dto      AND
                               RECID(xxpnpgroup)   ne RECID(pnpgroup))
             THEN DO:

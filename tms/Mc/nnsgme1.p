@@ -58,7 +58,7 @@ form
     SMGMember.SmName     column-label "Salesman's name"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-    " Members in Salesman Group " + SMGroup + " (" + gcBrand + ") " 
+    " Members in Salesman Group " + SMGroup + " (" + Syst.CUICommon:gcBrand + ") " 
 FRAME sel.
 
 form
@@ -95,7 +95,7 @@ WITH
 
 
 FIND SMGroup where 
-     SMGroup.Brand   = gcBrand AND
+     SMGroup.Brand   = Syst.CUICommon:gcBrand AND
      SMGroup.SmGroup = SMGroup no-lock.
 
 
@@ -145,7 +145,7 @@ ADD-SMAN:
       PROMPT-FOR SMGMember.Salesman
       validate(input SMGMember.Salesman = "" OR 
                can-find(Salesman where
-                        Salesman.Brand    = gcBrand AND
+                        Salesman.Brand    = Syst.CUICommon:gcBrand AND
                         Salesman.Salesman = INPUT SMGMember.Salesman),
               "Unknown Salesman !").
       if input SMGMember.Salesman = "" THEN DO:
@@ -154,7 +154,7 @@ ADD-SMAN:
       END.
 
       FIND Salesman where 
-           Salesman.Brand    = gcBrand AND
+           Salesman.Brand    = Syst.CUICommon:gcBrand AND
            Salesman.Salesman = INPUT SMGMember.Salesman
       no-lock.
       DISP Salesman.SMName @ SMGMember.SmName.
@@ -196,12 +196,12 @@ ADD-SMAN:
         UPDATE xg-code 
         validate(input xg-code = "" OR 
                  can-find(xSMGroup where
-                          xSMGroup.Brand   = gcBrand AND
+                          xSMGroup.Brand   = Syst.CUICommon:gcBrand AND
                           xSMGroup.SmGroup = input xg-code),"Unknown group !").
 
         if xg-code ne "" THEN DO:
            FIND xSMGroup where 
-                xSMGroup.Brand   = gcBrand AND
+                xSMGroup.Brand   = Syst.CUICommon:gcBrand AND
                 xSMGroup.SmGroup = xg-code no-lock.
            DISP xSMGroup.SGName. 
 

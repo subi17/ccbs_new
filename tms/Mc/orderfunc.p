@@ -25,7 +25,7 @@ DEF TEMP-TABLE ttBrowser NO-UNDO
 
 if iiorderid > 0 THEN 
 FIND FIRST Order NO-LOCK WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.CUICommon:gcBrand AND 
            Order.OrderID = iiOrderID NO-ERROR.
            
 DEF VAR lcCodeName   AS CHAR NO-UNDO.

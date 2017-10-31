@@ -66,7 +66,7 @@ form
    PNPGroup.dTo
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    "  " + icCLI + " PNP groups "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -135,7 +135,7 @@ repeat WITH FRAME sel:
                       Customer.CustNum = Mobsub.CustNum NO-LOCK NO-ERROR.
            
            FIND FIRST xxPnpgroup WHERE
-                      xxPnpgroup.Brand    = gcBrand AND 
+                      xxPnpgroup.Brand    = Syst.CUICommon:gcBrand AND 
                       xxPnpgroup.Pnpgroup = "FRIENDS" NO-LOCK NO-ERROR.
 
            IF AVAIL xxPnpgroup THEN DO:
@@ -144,7 +144,7 @@ repeat WITH FRAME sel:
              TO PnpGroup.
               ASSIGN
                  PNPGroup.pnpseq    = NEXT-VALUE(pnpseq)
-                 PNPGroup.Brand     = gcBrand
+                 PNPGroup.Brand     = Syst.CUICommon:gcBrand
                  PNPGroup.groupType = 2
                  Pnpgroup.PnpGroup  = icCLI
                  Pnpgroup.dFrom     = today
@@ -433,7 +433,7 @@ BROWSE:
 
            /* in the LAST record was deleted ? */
            IF NOT can-find(FIRST PNPGroup
-              WHERE PNPGroup.Brand = gcBrand ) THEN DO:
+              WHERE PNPGroup.Brand = Syst.CUICommon:gcBrand ) THEN DO:
               CLEAR FRAME sel no-pause.
               PAUSE 0 no-message.
               LEAVE LOOP.
@@ -507,7 +507,7 @@ si-recid = xrecid.
 PROCEDURE LOCAL-DISP-ROW: 
 
    FIND FIRST CCN WHERE
-              CCN.Brand  = gcBRand AND 
+              CCN.Brand  = Syst.CUICommon:gcBrand AND 
               CCN.CCN    = PNPGroup.ccn
    NO-LOCK NO-ERROR.
 
@@ -525,7 +525,7 @@ PROCEDURE LOCAL-FIND-NEXT.
 
    IF order = 1 THEN 
       FIND NEXT PNPGroup WHERE
-                PNPGroup.Brand     = gcBrand AND
+                PNPGroup.Brand     = Syst.CUICommon:gcBrand AND
                 PNPGroup.GroupType = 2       AND
                 PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -536,7 +536,7 @@ PROCEDURE LOCAL-FIND-PREV.
 
    IF order = 1 THEN 
       FIND PREV PNPGroup WHERE
-                PNPGroup.Brand     = gcBrand AND
+                PNPGroup.Brand     = Syst.CUICommon:gcBrand AND
                 PNPGroup.GroupType = 2       AND
                 PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -546,7 +546,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-FIRST.
    IF order = 1 THEN 
       FIND FIRST PNPGroup WHERE
-                 PNPGroup.Brand     = gcBrand AND
+                 PNPGroup.Brand     = Syst.CUICommon:gcBrand AND
                  PNPGroup.GroupType = 2       AND
                  PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -557,7 +557,7 @@ PROCEDURE LOCAL-FIND-LAST.
 
    IF order = 1 THEN 
       FIND LAST PNPGroup WHERE
-                PNPGroup.Brand     = gcBrand AND
+                PNPGroup.Brand     = Syst.CUICommon:gcBrand AND
                 PNPGroup.GroupType = 2       AND
                 PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -576,7 +576,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    IF NOT bNew THEN DO:
 
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND 
+                 CCN.Brand = Syst.CUICommon:gcBrand AND 
                  CCN.CCN   = PNPGroup.ccn
       NO-LOCK NO-ERROR.
 
@@ -630,7 +630,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
 
             IF CAN-FIND(FIRST xxPNPGroup WHERE
-                              xxPNPGroup.Brand    = gcBrand                 AND
+                              xxPNPGroup.Brand    = Syst.CUICommon:gcBrand                 AND
                               xxPNPGroup.PNPGroup = input PNPGroup.PNPGroup AND
                               xxPNPGroup.dto      = input PNPGroup.dto      AND
                               RECID(xxPNPGroup)   ne RECID(PNPGroup))

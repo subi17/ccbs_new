@@ -36,7 +36,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -116,7 +116,7 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcAppId) THEN
 katun = lcAppId + "_" + ghAuthLog::EndUserId.
 
 FIND FIRST ServCom NO-LOCK WHERE
-           ServCom.Brand = gcBrand AND
+           ServCom.Brand = Syst.CUICommon:gcBrand AND
            ServCom.ServCom = pcServiceCode NO-ERROR.
 IF NOT AVAILABLE ServCom OR
    LOOKUP(ServCom.ServCom,"LP,NAM,BPSUB") > 0 THEN

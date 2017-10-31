@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
@@ -40,7 +40,7 @@ repeat:
         Solog.MsSeq        = termmobSub.MsSeq 
         Solog.CLI          = termmobSub.Cli 
         Solog.Stat         = 0     /* just created */
-        Solog.Brand        = gcBrand
+        Solog.Brand        = Syst.CUICommon:gcBrand
         Solog.Users        = katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp

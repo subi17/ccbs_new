@@ -57,12 +57,12 @@ MAIN:
 repeat:
 
    find first MSISDN WHERE 
-              MSISDN.Brand = gcBrand   AND
+              MSISDN.Brand = Syst.CUICommon:gcBrand   AND
               MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
               MSISDN.StatusCode = 1 
    NO-LOCK NO-ERROR.
    FIND MSClass WHERE 
-        MSClass.Brand  = gcBrand AND 
+        MSClass.Brand  = Syst.CUICommon:gcBrand AND 
         MSClass.MCCode = MSISDN.MCCode NO-LOCK NO-ERROR.
 
    if not available MSISDN then do:
@@ -92,7 +92,7 @@ print-line:
             rtab[frame-line] = recid(MSISDN).
             down with frame sel.
             find next MSISDN WHERE
-                      MSISDN.BRand      = gcBrand  AND 
+                      MSISDN.BRand      = Syst.CUICommon:gcBrand  AND 
                        MSISDN.ValidTo > Func.Common:mMakeTS()  AND
                       MSISDN.StatusCode = 1 no-lock no-error.
          end.
@@ -125,7 +125,7 @@ BROWSE:
             if frame-line = 1 then do:
                find MSISDN where recid(MSISDN) = rtab[frame-line] no-lock.
                find prev MSISDN WHERE
-                         MSISDN.BRand      = gcBrand  AND 
+                         MSISDN.BRand      = Syst.CUICommon:gcBrand  AND 
                           MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
                          MSISDN.StatusCode = 1 
                no-lock no-error.
@@ -156,7 +156,7 @@ BROWSE:
                find next MSISDN WHERE
                          MSISDN.StatusCode = 1  AND 
                           MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
-                         MSISDN.Brand      = gcBrand 
+                         MSISDN.Brand      = Syst.CUICommon:gcBrand 
                no-lock no-error.
                if not available MSISDN then do:
                   bell.
@@ -183,7 +183,7 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find MSISDN where recid(MSISDN) = memory no-lock no-error.
             find prev MSISDN WHERE
-                      MSISDN.Brand      = gcBrand AND 
+                      MSISDN.Brand      = Syst.CUICommon:gcBrand AND 
                        MSISDN.ValidTo > Func.Common:mMakeTS() AND
                       MSISDN.StatusCode = 1 
             no-lock no-error.
@@ -191,7 +191,7 @@ BROWSE:
 
                do i = 1 to (frame-down - 1):
                   find prev MSISDN WHERE
-                            MSISDN.Brand      = gcBrand AND
+                            MSISDN.Brand      = Syst.CUICommon:gcBrand AND
                              MSISDN.ValidTo > Func.Common:mMakeTS() AND 
                             MSISDN.StatusCode = 1 no-lock no-error.
                   if available MSISDN then memory = recid(MSISDN).
@@ -233,7 +233,7 @@ BROWSE:
            hide frame hayr no-pause.
            if CLI ENTERED then do:
               find first MSISDN where 
-                         Msisdn.Brand = gcBrand AND 
+                         Msisdn.Brand = Syst.CUICommon:gcBrand AND 
                          MSISDN.CLI >= CLI AND
                           MSISDN.ValidTo > Func.Common:mMakeTS() AND
                          MSISDN.StatusCode = 1
@@ -272,7 +272,7 @@ CU-DATA:
         repeat with frame cust:
 
            find Customer of MSISDN WHERE
-                            Msisdn.Brand      = gcBrand AND 
+                            Msisdn.Brand      = Syst.CUICommon:gcBrand AND 
                             MSISDN.StatusCode = 1 no-lock no-error.
 
            disp
@@ -309,7 +309,7 @@ CU-Action:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first MSISDN WHERE
-                      MSISDN.Brand      = gcBrand  AND 
+                      MSISDN.Brand      = Syst.CUICommon:gcBrand  AND 
                        MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
                       MSISDN.StatusCode = 1 no-lock.
            memory = recid(MSISDN).
@@ -320,7 +320,7 @@ CU-Action:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last MSISDN WHERE
-                     MSISDN.Brand      = gcBrand AND 
+                     MSISDN.Brand      = Syst.CUICommon:gcBrand AND 
                       MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
                      MSISDN.StatusCode = 1 no-lock.
            memory = recid(MSISDN).

@@ -226,7 +226,7 @@ ELSE lcMacros = "".
 form
    skip(17)
    WITH TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
 COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
 form
@@ -654,7 +654,7 @@ repeat:
              ASSIGN INPUT InvGroup.
              if InvGroup ne "" AND NOT
                 can-find(invgroup where 
-                         InvGroup.Brand    = gcBrand AND
+                         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                          invgroup.InvGroup = InvGroup) THEN DO:
                 BELL.
                 message "UNKNOWN INVOICEGROUP !".
@@ -669,7 +669,7 @@ repeat:
              if cg-code = "" then disp "NONE" @ CustGroup.CGName.
              ELSE DO:
                 FIND CustGroup where 
-                     CustGroup.Brand     = gcBrand AND
+                     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                      CustGroup.custGroup = cg-code 
                 no-lock no-error.
                 IF NOT AVAIL CustGroup THEN DO:
@@ -728,7 +728,7 @@ repeat:
          /* are Customer in the ext group in correct i-group also ? */
          if cg-code ne "" THEN DO:
             FOR EACH  cgmember no-lock where 
-                      cgMember.Brand     = gcBrand AND
+                      cgMember.Brand     = Syst.CUICommon:gcBrand AND
                       cgmember.custgroup = cg-code,
                 FIRST Customer no-lock where
                       Customer.CustNum  = cgmember.custnum AND
@@ -797,7 +797,7 @@ repeat:
 
    /* don't check delivery type here, allow printing of all invoices */
    FOR EACH  Invoice  where                 
-             Invoice.Brand       = gcBrand AND
+             Invoice.Brand       = Syst.CUICommon:gcBrand AND
              Invoice.InvNum     >= lano1   AND
              Invoice.InvNum     <= lano2   AND
              Invoice.InvDate    >= i-date1 AND
@@ -1186,7 +1186,7 @@ repeat:
       /* log from print */
       DO FOR ITSendLog:
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                 ITSendLog.TxtType    = 3
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = Invoice.CustNum

@@ -11,7 +11,7 @@ Version ......: Yoigo
 {Syst/commpaa.i}
 ASSIGN
    katun = "Qvantel"
-      gcBrand = "1".
+      Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 

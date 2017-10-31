@@ -33,7 +33,7 @@ FORM
    SKIP(10)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  RESPONSES TO CSB19  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  RESPONSES TO CSB19  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

@@ -84,7 +84,7 @@ FORM
       SKIP(3)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " BILLING RUN " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + " BILLING RUN " + STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDefaultPeriod RETURNS LOGIC
@@ -180,7 +180,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
       /* check that no test invoices exist */
       IF CAN-FIND(FIRST Invoice WHERE 
-                        Invoice.Brand   = gcBrand AND
+                        Invoice.Brand   = Syst.CUICommon:gcBrand AND
                         Invoice.InvType = 99)
       THEN DO:
          MESSAGE "Test invoices must be deleted " SKIP
@@ -214,7 +214,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
          IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
             CREATE ErrorLog.
-            ASSIGN ErrorLog.Brand     = gcBrand
+            ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
                    ErrorLog.ActionID  = "SplitBillRun" 
                    ErrorLog.TableName = "Invoice"
                    ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")

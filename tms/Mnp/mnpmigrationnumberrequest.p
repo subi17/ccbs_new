@@ -32,7 +32,7 @@ ASSIGN
    MNPProcess.FormRequest = MNPProcessFather.FormRequest
    MNPProcess.OrderId     = 0
    MNPProcess.StatusCode  = 0
-   MNPProcess.Brand       = gcBrand
+   MNPProcess.Brand       = Syst.CUICommon:gcBrand
    MNPProcess.MNPType     = 6
    MNPProcess.UserCode    = katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.

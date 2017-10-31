@@ -278,7 +278,7 @@ PROCEDURE pInvoiceDetails:
    liODIRequest = 0.
    /* odi request */
    FOR FIRST MsRequest NO-LOCK WHERE
-             MsRequest.Brand      = gcBrand AND
+             MsRequest.Brand      = Syst.CUICommon:gcBrand AND
              MsRequest.ReqType    = 20      AND
              MsRequest.CustNum    = Invoice.CustNum AND
              MsRequest.ReqCParam1 = Invoice.ExtInvID:

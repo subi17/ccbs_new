@@ -75,7 +75,7 @@ FORM
    "       " CatName     NO-LABEL
    SKIP(3)   
    WITH ROW 1 SIDE-LABELS WIDTH 79
-        TITLE " " + ynimi + " CUSTOMER REPORT " +
+        TITLE " " + Syst.CUICommon:ynimi + " CUSTOMER REPORT " +
         STRING(TODAY,"99-99-99") + " "                   
         FRAME crit.
 
@@ -146,7 +146,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "Salesman" THEN DO:
                IF INPUT Salesman NE "" THEN DO:
                   FIND FIRST Salesman WHERE    
-                             Salesman.Brand    = gcBrand AND
+                             Salesman.Brand    = Syst.CUICommon:gcBrand AND
                              Salesman.Salesman = INPUT Salesman
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL Salesman THEN DO:
@@ -161,7 +161,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "RateCust" THEN DO:
                IF INPUT RateCust NE 0 THEN DO:
                   FIND FIRST Customer WHERE    
-                             Customer.Brand   = gcBrand AND
+                             Customer.Brand   = Syst.CUICommon:gcBrand AND
                              Customer.CustNum = INPUT RateCust
                   NO-LOCK NO-ERROR.
                  
@@ -196,7 +196,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "InvGroup" THEN DO:
                IF INPUT InvGroup NE "" THEN DO:
                   FIND FIRST InvGroup WHERE    
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                              InvGroup.InvGroup = INPUT InvGroup
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -211,7 +211,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "Reseller" THEN DO:
                IF INPUT Reseller NE "" THEN DO:
                   FIND FIRST Reseller WHERE    
-                             Reseller.Brand    = gcBrand AND
+                             Reseller.Brand    = Syst.CUICommon:gcBrand AND
                              Reseller.Reseller = INPUT Reseller
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL Reseller THEN DO:
@@ -226,7 +226,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "RatePlan" THEN DO:
                IF INPUT RatePlan NE "" THEN DO:
                   FIND FIRST RatePlan WHERE    
-                             RatePlan.Brand    = gcBrand AND
+                             RatePlan.Brand    = Syst.CUICommon:gcBrand AND
                              RatePlan.RatePlan = INPUT RatePlan
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL RatePlan THEN DO:
@@ -241,7 +241,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "DiscPlan" THEN DO:
                IF INPUT DiscPlan NE "" THEN DO:
                   FIND FIRST DiscPlan WHERE    
-                             DiscPlan.Brand    = gcBrand AND
+                             DiscPlan.Brand    = Syst.CUICommon:gcBrand AND
                              DiscPlan.DiscPlan = INPUT DiscPlan
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL DiscPlan THEN DO:
@@ -255,7 +255,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "Category" THEN DO:
                IF INPUT Category NE "" THEN DO:
                   FIND FIRST CustCat WHERE    
-                             CustCat.Brand    = gcBrand AND
+                             CustCat.Brand    = Syst.CUICommon:gcBrand AND
                              CustCat.Category = INPUT Category
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL CustCat THEN DO:
@@ -300,7 +300,7 @@ REPEAT WITH FRAME crit:
    IF(lCG) THEN DO:
 
       FOR EACH CGMember NO-LOCK WHERE
-              CGMember.Brand = gcBrand AND
+              CGMember.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(CGMember.CustGroup,lGroups) > 0.
 
          CREATE tCustNums.

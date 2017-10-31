@@ -39,7 +39,7 @@ DEF  input PARAMETer  ipPnpSeq AS INT NO-UNDO .
 
 FIND FIRST pnpgroup WHERE
            pnpgroup.pnpseq = ipPnpSeq  AND 
-           pnpgroup.Brand  = gcBrand 
+           pnpgroup.Brand  = Syst.CUICommon:gcBrand 
 NO-LOCK NO-ERROR.
 
 DEF VAR liCustNum LIKE PNPList.pnpSeq  NO-UNDO.
@@ -365,7 +365,7 @@ BROWSE:
           FIND FIRST PNPList where 
                      PNPList.CustNum  = liCustNum     AND 
                      PnpList.PnpSeq   = ipPnpSeq      AND 
-                     pnplist.Brand    = gcBrand 
+                     pnplist.Brand    = Syst.CUICommon:gcBrand 
           /* search condition */ no-lock no-error.
           IF NOT AVAILABLE PNPList THEN DO:
              BELL.
@@ -458,7 +458,7 @@ BROWSE:
                        IMPORT UNFORMATTED xls.
                        CREATE PNPList.
                        ASSIGN
-                          PNPList.Brand  = gcBrand
+                          PNPList.Brand  = Syst.CUICommon:gcBrand
                           PNPList.pnpSeq = ipPnpSeq
                           PNPList.BDestFrom  = TRIM(xls).
                     END.
@@ -531,7 +531,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-NEXT.
       FIND NEXT PNPList USE-INDEX PNPSeq WHERE
-                PNPList.Brand  = gcBrand AND
+                PNPList.Brand  = Syst.CUICommon:gcBrand AND
                 PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -539,7 +539,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-PREV.
       FIND PREV PNPList USE-INDEX PNPSeq WHERE
-                 PNPList.Brand  = gcBrand AND
+                 PNPList.Brand  = Syst.CUICommon:gcBrand AND
                  PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -547,7 +547,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-FIRST.
       FIND FIRST PNPList USE-INDEX PNPSeq WHERE
-                 PNPList.Brand  = gcBrand AND
+                 PNPList.Brand  = Syst.CUICommon:gcBrand AND
                  PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -555,7 +555,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-LAST.
       FIND LAST PNPList USE-INDEX PNPSeq WHERE
-                PNPList.Brand  = gcBrand AND
+                PNPList.Brand  = Syst.CUICommon:gcBrand AND
                 PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -569,7 +569,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       CREATE PNPList.
       ASSIGN
          PNPList.pnpSeq    = ipPnpseq
-         PNPList.Brand     = gcBrand.
+         PNPList.Brand     = Syst.CUICommon:gcBrand.
       FIND FIRST Customer WHERE
                  Customer.CustNum = PNPList.CustNum
       NO-LOCK NO-ERROR.
@@ -580,13 +580,13 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                  Customer.CustNum = PNPList.CustNum
       NO-LOCK NO-ERROR.
       FIND FIRST PriceList WHERE
-                 PriceList.Brand     = gcBrand AND 
+                 PriceList.Brand     = Syst.CUICommon:gcBrand AND 
                  PriceList.PriceList = PNPList.PriceList
       NO-LOCK NO-ERROR.
    END.
 
    FIND FIRST pnpgroup WHERE
-              Pnpgroup.Brand  = gcBRand aND 
+              Pnpgroup.Brand  = Syst.CUICommon:gcBrand aND 
               pnpgroup.pnpseq = ipPnpSeq
    NO-LOCK NO-ERROR.
 
@@ -618,7 +618,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             IF FRAME-FIELD = "PriceList" THEN DO:
                ASSIGN PNPList.PriceList.
                FIND FIRST PriceList WHERE
-                          Pricelist.Brand    = gcBrand AND 
+                          Pricelist.Brand    = Syst.CUICommon:gcBrand AND 
                           PriceList.PriceList = PNPList.PriceList
                NO-LOCK NO-ERROR.
                IF NOT AVAIL PriceList THEN DO:

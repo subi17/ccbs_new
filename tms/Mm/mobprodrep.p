@@ -40,7 +40,7 @@ form /* Browsing list */
    nnpvti.pt-min      COLUMN-LABEL "Minutes"      FORMAT "zzzzzz9"
    nnpvti.pt-mk       COLUMN-LABEL "Sum (EUR)"    FORMAT "ZZZ,ZZZ,ZZ9.99"
    WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " MOBILE CALL PRODUCT STATISTICS "  + STRING(pvm1,"99.99.99") + " - " + 
                                   STRING(pvm2,"99.99.99")                      
 FRAME sel.
@@ -106,7 +106,7 @@ REPEAT WITH FRAME sel:
       IF AVAILABLE nnpvti THEN DO:
          IF pt-tuno = "TOTAL" THEN tunimi = "". ELSE DO:
             FIND BillItem WHERE 
-                 BillItem.Brand    = gcBrand AND 
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND 
                  BillItem.BillCode = pt-tuno NO-LOCK NO-ERROR.
             IF AVAIL BillItem THEN tunimi = BillItem.BIName.
             ELSE tunimi = "!! Unknown !!".
@@ -168,7 +168,7 @@ BROWSE:
                SCROLL DOWN.
                IF pt-tuno = "TOTAL" THEN tunimi = "". ELSE DO:
                   FIND BillItem WHERE 
-                       BillItem.Brand    = gcBrand AND 
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
                        BillItem.BillCode = pt-tuno NO-LOCK NO-ERROR.
                   IF AVAIL BillItem THEN tunimi = BillItem.BIName.
                   ELSE tunimi = "!! Unknown !!".
@@ -203,7 +203,7 @@ BROWSE:
                SCROLL UP.
                IF pt-tuno = "TOTAL" THEN tunimi = "". ELSE DO:
                   FIND BillItem WHERE 
-                       BillItem.Brand    = gcBrand AND 
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
                        BillItem.BillCode = pt-tuno NO-LOCK NO-ERROR.
                   IF AVAIL BillItem THEN tunimi = BillItem.BIName.
                   ELSE tunimi = "!! Unknown !!".

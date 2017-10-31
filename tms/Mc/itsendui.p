@@ -47,7 +47,7 @@ FORM
       FORMAT "X(8)"
       VALIDATE(INPUT lcInvGroup = "" OR
                CAN-FIND(InvGroup WHERE 
-                        InvGroup.Brand    = gcBrand AND
+                        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                         InvGroup.InvGroup = INPUT lcInvGroup),
               "Unknown invoicing group")
 
@@ -91,7 +91,7 @@ FORM
 
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " SENDING OF INFORMATION TEXTS " +
+        TITLE " " + Syst.CUICommon:ynimi + " SENDING OF INFORMATION TEXTS " +
               STRING(pvm,"99-99-99") + " "
         FRAME fCriter.
 
@@ -156,7 +156,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                       THEN DISPLAY "ALL" ;& InvGroup.IGName. 
                       ELSE DO:
                          FIND InvGroup WHERE 
-                              InvGroup.Brand    = gcBrand AND
+                              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                               InvGroup.InvGroup = INPUT lcInvGroup
                          NO-LOCK NO-ERROR.
                          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.IGName.

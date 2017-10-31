@@ -5,7 +5,7 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "cron".
    
 {Func/email.i}
@@ -113,7 +113,7 @@ DEFINE STREAM osDumpPent.
 DO liStatus = 1 TO 10:
 
 FOR EACH Solog NO-LOCK USE-INDEX Stat WHERE 
-         Solog.Brand = gcBrand  AND
+         Solog.Brand = Syst.CUICommon:gcBrand  AND
          Solog.Stat  = liStatus AND
          Solog.ActivationTs       >= ldFrom AND
          Solog.ActivationTs       < ldTo    AND

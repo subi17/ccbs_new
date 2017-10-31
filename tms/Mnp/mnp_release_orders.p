@@ -9,12 +9,12 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_MNP_PENDING}:
    fSetOrderStatus(Order.OrderId,"3").
 END.

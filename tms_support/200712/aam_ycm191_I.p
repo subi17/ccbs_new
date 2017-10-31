@@ -75,7 +75,7 @@ by order.orderid:
       ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.MemoTitle = "Credit Reason"
       Memo.CreUser   = katun
       Memo.HostTable = "Invoice"

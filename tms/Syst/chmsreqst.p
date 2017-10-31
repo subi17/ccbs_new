@@ -164,7 +164,7 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
       CREATE Memo.
       ASSIGN
          Memo.CreStamp  = Func.Common:mMakeTS() 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "Order"
          Memo.KeyValue  = STRING(Order.OrderId)
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -212,19 +212,19 @@ CASE iiToStatus:
          END.
          
          FIND FIRST MobSub NO-LOCK WHERE 
-                    MobSub.Brand = gcBrand AND
+                    MobSub.Brand = Syst.CUICommon:gcBrand AND
                     MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
          IF CAN-FIND(
                 FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand    = gcBrand                         AND
+                      CLIType.Brand    = Syst.CUICommon:gcBrand                         AND
                       CLIType.CLIType  = (IF MobSub.TariffBundle > ""
                                              THEN MobSub.TariffBundle
                                           ELSE MobSub.CLIType)           AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) AND
             CAN-FIND(
                 FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand   = gcBrand                       AND
+                      CLIType.Brand   = Syst.CUICommon:gcBrand                       AND
                       CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                             THEN MsRequest.ReqCParam5
                                          ELSE MsRequest.ReqCParam2)   AND
@@ -326,7 +326,7 @@ CASE iiToStatus:
          DEFINE VARIABLE msisdn-recid AS RECID NO-UNDO.
          
          FIND FIRST MSISDN-back NO-LOCK WHERE
-            MSISDN-back.Brand = gcBrand AND
+            MSISDN-back.Brand = Syst.CUICommon:gcBrand AND
             MSISDN-back.CLI   = MsRequest.ReqCParam2 USE-INDEX CLI.
          IF MSISDN-back.StatusCode = 27 THEN DO:
             msisdn-recid = recid(msisdn-back).
@@ -403,11 +403,11 @@ CASE iiToStatus:
 
          /* Additional SIM Termination logic */
          IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand    = gcBrand                         AND
+                           CLIType.Brand    = Syst.CUICommon:gcBrand                         AND
                            CLIType.CLIType  = MsRequest.ReqCparam1            AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) AND
             CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand    = gcBrand                   AND
+                           CLIType.Brand    = Syst.CUICommon:gcBrand                   AND
                            CLIType.CLIType  = MsRequest.ReqCparam2      AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
             
@@ -506,7 +506,7 @@ ELSE DO:
    IF MsRequest.ReqType = 10 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
       /* cancel pending sms */
       FOR FIRST CallAlarm EXCLUSIVE-LOCK USE-INDEX CLI WHERE
-                CallAlarm.Brand    = gcBrand       AND
+                CallAlarm.Brand    = Syst.CUICommon:gcBrand       AND
                 CallAlarm.CLI      = MsRequest.CLI AND
                 CallAlarm.DeliStat = 1             AND
                 CallAlarm.DeliPara = "PD":
@@ -575,14 +575,14 @@ PROCEDURE ipMulitSIMTermination:
        MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    
        FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                  lbMobSub.Brand        = gcBrand                 AND
+                  lbMobSub.Brand        = Syst.CUICommon:gcBrand                 AND
                   lbMobSub.MultiSimID   = MobSub.MultiSimID       AND
                   lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                   lbMobSub.Custnum      = MobSub.Custnum NO-ERROR.
                      
        IF NOT AVAIL lbMobSub THEN DO:
           FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                     TermMobSub.Brand        = gcBrand                 AND
+                     TermMobSub.Brand        = Syst.CUICommon:gcBrand                 AND
                      TermMobSub.MultiSimID   = MobSub.MultiSimID       AND
                      TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                      TermMobSub.Custnum      = MobSub.Custnum NO-ERROR.

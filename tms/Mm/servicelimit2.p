@@ -214,7 +214,7 @@ ADD-ROW:
                     UNDO add-row, LEAVE add-row.
 
                     FIND ServiceLimitGroup WHERE 
-                         ServiceLimitGroup.Brand = gcBrand AND 
+                         ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND 
                          ServiceLimitGroup.GroupCode = 
                        INPUT  servicelimit.GroupCode
                     NO-LOCK NO-ERROR.
@@ -464,7 +464,7 @@ BROWSE:
         RUN local-find-this(FALSE).
 
         FIND FIRST DayCampaign WHERE
-                   DayCampaign.Brand      = gcBrand AND 
+                   DayCampaign.Brand      = Syst.CUICommon:gcBrand AND 
                    DayCampaign.DCevent    = ServiceLimit.GroupCode AND
                    DayCampaign.ValidTo   >= Today NO-LOCK NO-ERROR.
         IF AVAIL DayCampaign AND
@@ -646,7 +646,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
        FIND ServicelimitGroup  WHERE 
-            ServiceLimitGroup.Brand = gcBrand AND
+            ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
             ServicelimitGroup.GroupCode = ServiceLimit.GroupCode 
         NO-LOCK NO-ERROR. 
 END PROCEDURE.

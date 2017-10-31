@@ -388,7 +388,7 @@ END PROCEDURE.
 PROCEDURE local-find-first:
 
    FIND FIRST Invoice where 
-              Invoice.Brand   = gcBrand AND
+              Invoice.Brand   = Syst.CUICommon:gcBrand AND
               Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3
@@ -399,7 +399,7 @@ END PROCEDURE.
 PROCEDURE local-find-last:
 
    FIND LAST Invoice where 
-             Invoice.Brand   = gcBrand AND
+             Invoice.Brand   = Syst.CUICommon:gcBrand AND
              Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3
@@ -410,7 +410,7 @@ END PROCEDURE.
 PROCEDURE local-find-next:
 
    FIND NEXT Invoice where 
-             Invoice.Brand   = gcBrand AND
+             Invoice.Brand   = Syst.CUICommon:gcBrand AND
              Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3
@@ -421,7 +421,7 @@ END PROCEDURE.
 PROCEDURE local-find-prev:
 
    FIND PREV Invoice where 
-             Invoice.Brand   = gcBrand AND
+             Invoice.Brand   = Syst.CUICommon:gcBrand AND
              Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3

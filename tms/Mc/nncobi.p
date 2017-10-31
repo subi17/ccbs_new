@@ -710,7 +710,7 @@ PROCEDURE local-find-others:
    END.
  
    FIND Invoice NO-LOCK WHERE
-        Invoice.Brand  = gcBrand AND
+        Invoice.Brand  = Syst.CUICommon:gcBrand AND
         Invoice.InvNum = FFItem.InvNum
    NO-ERROR.
    IF AVAIL Invoice THEN lcExtInvNum = Invoice.ExtInvId.

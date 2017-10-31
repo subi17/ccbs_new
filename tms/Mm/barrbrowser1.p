@@ -290,7 +290,7 @@ REPEAT WITH FRAME frTop:
                      CREATE Memo.
                      ASSIGN
                        Memo.crestamp  = Func.Common:mMakeTS()
-                       Memo.Brand     = gcBrand
+                       Memo.Brand     = Syst.CUICommon:gcBrand
                        Memo.creuser   = katun
                        Memo.memoseq   = NEXT-VALUE(memoseq)   
                        Memo.hosttable = "MobSub" 

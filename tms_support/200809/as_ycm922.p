@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcBrand = "1" .
+Syst.CUICommon:gcBrand = "1" .
 katun = "anttis".
 
 {Func/msisdn.i}

@@ -535,7 +535,7 @@ PROCEDURE pGetDSSBillingInfo:
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode:
 
          IF CAN-FIND(FIRST ttDSSInfo WHERE
@@ -672,7 +672,7 @@ PROCEDURE pGetDSSBillingInfo:
          ELSE IF LOOKUP(bDayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN DO:
             IF bMServiceLimit.EndTS = ldPeriodTo AND
                CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                         MsRequest.Brand = gcBrand           AND
+                         MsRequest.Brand = Syst.CUICommon:gcBrand           AND
                          MsRequest.ReqType = {&REQTYPE_DSS}  AND
                          MsRequest.Custnum = ttMsOwner.Custnum AND
                          MsRequest.ReqCParam1 = "DELETE"     AND
@@ -727,7 +727,7 @@ PROCEDURE pGetDSSBillingInfo:
             /* for each used because there might exist  
                same type of fixed fee in the past */
             FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                     FixedFee.Brand     = gcBrand AND
+                     FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                      FixedFee.HostTable = "MobSub" AND
                      FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                      FixedFee.FeeModel  = bDayCampaign.FeeModel AND
@@ -766,10 +766,10 @@ PROCEDURE pGetDSSBillingInfo:
              ldeDataAllocated = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND
+                DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                 DayCampaign.DCEvent = ttDSSInfo.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -778,7 +778,7 @@ PROCEDURE pGetDSSBillingInfo:
                 FixedFee.BegDate  <= ldToDate   AND
                 FixedFee.EndPer   >= liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.CUICommon:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate:

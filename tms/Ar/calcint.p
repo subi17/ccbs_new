@@ -75,7 +75,7 @@ IF payday > dueday + liDelay THEN DO:  /* it was a late payment */
              co = 1.
 
       FOR EACH Interest NO-LOCK WHERE
-               Interest.Brand      = gcBrand AND 
+               Interest.Brand      = Syst.CUICommon:gcBrand AND 
                Interest.ValidFrom <= payday  AND
                Interest.IntType   < 2
       BY Interest.ValidFrom DESC:
@@ -114,7 +114,7 @@ IF payday > dueday + liDelay THEN DO:  /* it was a late payment */
 
       /* get latest Interest % */
       FOR EACH Interest NO-LOCK WHERE 
-               Interest.Brand      = gcBrand AND
+               Interest.Brand      = Syst.CUICommon:gcBrand AND
                Interest.ValidFrom <= payday  AND
                Interest.IntType   < 2
       BY Interest.ValidFrom DESC:

@@ -10,7 +10,7 @@
 {Func/tmsparam4.i}
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Mc/provmaint.i}
 
 DEF VAR pcTenant       AS CHAR NO-UNDO.
@@ -37,7 +37,7 @@ END.
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand = gcBrand AND
+           MobSub.Brand = Syst.CUICommon:gcBrand AND
            MobSub.CLI   = pcMsisdn NO-WAIT NO-ERROR. /* Find with MSISDN */
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err(SUBST("MSISDN not found &1", pcMsisdn)).

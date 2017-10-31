@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -225,7 +225,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.ActionID     = "TELEFONICA" AND
                      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}) THEN
       lcError = "Batch not started due to ongoing run".
@@ -240,7 +240,7 @@ PROCEDURE pMarkStarted:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.ActionID     = "TELEFONICA"
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
@@ -259,7 +259,7 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "TELEFONICA"
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
@@ -279,7 +279,7 @@ PROCEDURE pMarkError:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
              ActionLog.ActionID     = "TELEFONICA" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND
@@ -299,7 +299,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
              ActionLog.ActionID     = "TELEFONICA" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND
@@ -321,7 +321,7 @@ PROCEDURE pCollectFusionInvoices:
    DEF VAR liSubs AS INT NO-UNDO. 
 
    FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand = gcBrand AND
+            Invoice.Brand = Syst.CUICommon:gcBrand AND
             Invoice.InvDate >= ldaInvDate AND
             Invoice.InvType = 1 AND
             (Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
@@ -375,7 +375,7 @@ PROCEDURE pCollectFusionInvoices:
          FOR EACH Invrow NO-LOCK WHERE 
                   Invrow.InvNum = Invoice.Invnum,
             FIRST BillItem NO-LOCK WHERE
-                  BillItem.Brand = gcBrand AND
+                  BillItem.Brand = Syst.CUICommon:gcBrand AND
                   BillItem.BillCode = InvRow.BillCode:
 
              IF LOOKUP(BillItem.BillCode,"CONTFF2MF,CONTSF14MF,CONTSF10MF") > 0 THEN 
@@ -473,7 +473,7 @@ PROCEDURE pAnalyzeTelefonicaInvoices:
       IF ttTF.Mapping = {&FI_MAPPING_TF} THEN DO: 
          
          FIND Customer NO-LOCK WHERE
-              Customer.Brand = gcBrand AND
+              Customer.Brand = Syst.CUICommon:gcBrand AND
               Customer.OrgId = ttTF.CustomerId AND
               Customer.CustIdType NE "passport" AND
               Customer.Roles NE "inactive" NO-ERROR.

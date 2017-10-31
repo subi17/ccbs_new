@@ -7,7 +7,7 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "Qvantel".
 
 {Syst/tmsconst.i}
@@ -147,14 +147,14 @@ FUNCTION fCheckMSISDN RETURNS LOG (INPUT iiStatus_MSISDN AS INT,
 
    IF icUsedMSISDN > "" THEN DO:
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.CLI   = icUsedMSISDN AND   /* Search with given MSISDN number */
                  MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    ELSE DO: /* Find first free */
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
@@ -170,7 +170,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    IF icSimIcc > "" THEN DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
                  SIM.ICC   EQ icSimIcc AND   /* Search with given ICC number */
-                 SIM.Brand EQ gcBrand AND
+                 SIM.Brand EQ Syst.CUICommon:gcBrand AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
 
       IF AVAILABLE SIM THEN   /* If stock not correct then ask confirmation */
@@ -189,7 +189,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    END.
    ELSE DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand EQ gcBrand AND
+                 SIM.Brand EQ Syst.CUICommon:gcBrand AND
                 (SIM.Stock EQ "TESTING" OR
                  SIM.Stock EQ "EMATESTING") AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
@@ -273,7 +273,7 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
       BUFFER-COPY ttOrder EXCEPT OrderId MsSeq Salesman TO Order.
 
       ASSIGN
-         Order.Brand           = gcBrand
+         Order.Brand           = Syst.CUICommon:gcBrand
          Order.OrderId         = NEXT-VALUE(OrderId)
          Order.CrStamp         = Func.Common:mMakeTS()
          Order.StatusCode      = "1"
@@ -340,7 +340,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHAR (INPUT iiOrderId     AS INT,
    END.
 
    ASSIGN
-      OrderCustomer.Brand   = gcBrand
+      OrderCustomer.Brand   = Syst.CUICommon:gcBrand
       OrderCustomer.OrderId = iiOrderId
       OrderCustomer.RowType = 1.
 
@@ -356,7 +356,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
    CREATE OrderTopup.
    ASSIGN
       OrderTopup.Amount = 20.00
-      OrderTopup.Brand = gcBrand
+      OrderTopup.Brand = Syst.CUICommon:gcBrand
       OrderTopup.OrderId = Order.OrderId.
    lCreate = TRUE.
    RETURN lCreate.
@@ -636,7 +636,7 @@ PROCEDURE pDeactContract:
 
             IF lcContractID = "" THEN DO:
                FIND FIRST OrderAction WHERE
-                          OrderAction.Brand = gcBrand AND
+                          OrderAction.Brand = Syst.CUICommon:gcBrand AND
                           OrderAction.OrderId = ttSubscription.OrderId AND
                           OrderAction.ItemType = "BundleItem" AND
                           OrderAction.ItemKey BEGINS "MDUB" NO-LOCK NO-ERROR.
@@ -850,7 +850,7 @@ PROCEDURE pSTC:
                 lcNewCLIType = "CONTSF".
 
       FIND FIRST NewCliType WHERE
-                 NewCLIType.Brand   = gcBrand AND
+                 NewCLIType.Brand   = Syst.CUICommon:gcBrand AND
                  NewCLIType.CLIType = lcNewCLIType NO-LOCK NO-ERROR.
       IF NOT AVAIL NewCLIType THEN
          lcRemark = lcRemark + "," + "Invalid CLIType specified " + lcNewCLIType.

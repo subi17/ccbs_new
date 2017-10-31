@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 Katun = "Cron".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -49,7 +49,7 @@ FUNCTION fReport RETURNS CHAR
    DEF VAR lcRow AS CHAR NO-UNDO.
    OUTPUT STREAM sOutFile to VALUE(lcFile) APPEND.
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand EQ gcBrand AND
+            Order.Brand EQ Syst.CUICommon:gcBrand AND
             Order.CRStamp < idEndTS AND
             Order.CRStamp >= idStartTS:
       FIND FIRST OrderCustomer1 NO-LOCK WHERE
@@ -109,7 +109,7 @@ ASSIGN
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -122,7 +122,7 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
@@ -161,7 +161,7 @@ END.
 /*Update cunrent collection period end time to actionlog*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}

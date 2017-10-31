@@ -169,7 +169,7 @@ llFound = CAN-FIND(FIRST SubSer WHERE
 /* and attributes */
 IF llFound THEN
 FOR FIRST CTServEl NO-LOCK WHERE
-          CTServEl.Brand     = gcBrand        AND
+          CTServEl.Brand     = Syst.CUICommon:gcBrand        AND
           CTServEl.ServCom   = lcNumberInq    AND
           CTServEl.CLIType   = MobSub.CLIType AND
           CTServEl.FromDate <= TODAY,

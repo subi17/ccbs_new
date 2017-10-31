@@ -35,7 +35,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  PAYMENT STATUS  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  PAYMENT STATUS  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

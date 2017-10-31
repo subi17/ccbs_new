@@ -22,7 +22,7 @@ DEF VAR pcExtInviId AS CHAR NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/duplicate_invoice.i}

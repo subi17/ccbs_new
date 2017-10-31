@@ -70,7 +70,7 @@ form
     SimBatch.TpKey     
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SimBatch "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -204,7 +204,7 @@ ADD-ROW:
 
            CREATE SimBatch.
            ASSIGN
-           SimBatch.Brand    = gcBrand 
+           SimBatch.Brand    = Syst.CUICommon:gcBrand 
            SimBatch.Simbatch = NEXT-VALUE(SimBatch)
            SimBatch.ManCode  = INPUT FRAME lis SimBatch.ManCode
            SimBatch.DelDate  = INPUT FRAME lis SimBatch.DelDate.
@@ -426,7 +426,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
-       SET   lcBrand WHEN gcAllBrand = TRUE
+       SET   lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
              Mancode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Mancode ENTERED THEN DO:
@@ -447,7 +447,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME f2.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             SimArt WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SimArt ENTERED THEN DO:
@@ -646,10 +646,10 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND SimMan WHERE 
-        SimMan.Brand = gcBrand AND
+        SimMan.Brand = Syst.CUICommon:gcBrand AND
         SimMan.Mancode = SimBatch.ManCode NO-LOCK NO-ERROR.
    FIND SimArt WHERE 
-        SimArt.Brand = gcBrand AND 
+        SimArt.Brand = Syst.CUICommon:gcBrand AND 
         SimArt.SimArt = SimBatch.SimArt NO-LOCK NO-ERROR.
 END PROCEDURE.
 

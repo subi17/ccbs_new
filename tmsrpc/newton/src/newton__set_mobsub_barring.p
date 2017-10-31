@@ -12,7 +12,7 @@
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 katun    = "NewtonAd".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 
 /* Input parameters */
 DEF VAR pcUser AS CHAR NO-UNDO.

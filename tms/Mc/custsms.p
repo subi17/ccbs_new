@@ -162,7 +162,7 @@ ACTION:
             CallAlarm.DeliMsg  = lcText
             CallAlarm.Limit    = 0
             CallAlarm.CreditType = 9
-            CallAlarm.Brand      = gcBrand .
+            CallAlarm.Brand      = Syst.CUICommon:gcBrand .
 
          LEAVE Action.
       END.

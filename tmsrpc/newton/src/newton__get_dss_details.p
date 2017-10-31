@@ -10,7 +10,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -125,7 +125,7 @@ FOR EACH bMsOwner NO-LOCK WHERE
        FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
              bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
        FIRST bDayCampaign WHERE
-             bDayCampaign.Brand = gcBrand AND
+             bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
              bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
 
          IF LOOKUP(STRING(bDayCampaign.DCType),

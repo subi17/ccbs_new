@@ -70,7 +70,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  KILLED MOBSUB  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -128,7 +128,7 @@ IF lcPassword = ? THEN lcPassword = "".
 
 
 FIND FIRST msowner use-index custnum  WHERE 
-           msowner.Brand = gcBrand  AND 
+           msowner.Brand = Syst.CUICommon:gcBrand  AND 
            msowner.TSEnd < 99999999 
 /* srule */ NO-LOCK NO-ERROR.
 IF AVAILABLE msowner THEN ASSIGN
@@ -163,14 +163,14 @@ ADD-ROW:
            validate
               (msowner.CustNum NOT ENTERED or
               NOT CAN-FIND(msowner using  msowner.CustNum WHERE 
-                                          msowner.Brand = gcBrand ),
+                                          msowner.Brand = Syst.CUICommon:gcBrand ),
               "History Data " + string(INPUT msowner.CustNum) +
               " already exists !").
            IF INPUT FRAME lis msowner.CustNum = "" THEN 
            LEAVE add-row.
            create msowner.
            ASSIGN
-           msowner.Brand   = gcBrand 
+           msowner.Brand   = Syst.CUICommon:gcBrand 
            msowner.CustNum = INPUT FRAME lis msowner.CustNum.
 
            RUN local-update-record.
@@ -191,7 +191,7 @@ ADD-ROW:
 
       /* is there ANY record ? */
       FIND FIRST msowner use-index custnum WHERE 
-                 msowner.Brand = gcBrand AND 
+                 msowner.Brand = Syst.CUICommon:gcBrand AND 
                  msowner.TSEnd < 99999999 
 
       /* srule */ NO-LOCK NO-ERROR.
@@ -402,7 +402,7 @@ BROWSE:
        IF CustNum ENTERED THEN DO:
           FIND FIRST msowner WHERE 
                      msowner.CustNum >= CustNum AND 
-                     msowner.Brand = gcBrand 
+                     msowner.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
           IF NOT AVAILABLE msowner THEN DO:
              BELL.
@@ -427,7 +427,7 @@ BROWSE:
        IF CLI ENTERED THEN DO:
           FIND FIRST msowner WHERE 
                      msowner.CLI >= CLI AND 
-                     msowner.Brand = gcBrand 
+                     msowner.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
           IF NOT AVAILABLE msowner THEN DO:
              BELL. MESSAGE "NOT FOUND !".
@@ -451,7 +451,7 @@ BROWSE:
        IF CLI ENTERED THEN DO:
           FIND FIRST msowner WHERE 
                      msowner.Imsi >= imno AND 
-                     msowner.Brand = gcBrand
+                     msowner.Brand = Syst.CUICommon:gcBrand
           NO-LOCK NO-ERROR.
           IF NOT AVAILABLE msowner THEN DO:
              BELL. MESSAGE "NOT FOUND !".
@@ -555,56 +555,56 @@ PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST msowner USE-INDEX CustNum 
        WHERE msowner.TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST msowner USE-INDEX CLI 
        WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND FIRST msowner USE-INDEX imsi 
        WHERE TSEnd < 99999999 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST msowner USE-INDEX CustNum 
        WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST msowner USE-INDEX CLI
        WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND LAST msowner USE-INDEX imsi
        WHERE TSEnd < 99999999 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT msowner USE-INDEX CustNum 
         WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT msowner USE-INDEX CLI
        WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND NEXT msowner USE-INDEX imsi
        WHERE TSEnd < 99999999 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV msowner USE-INDEX CustNum 
        WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV msowner USE-INDEX CLI
        WHERE TSEnd < 99999999 
 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND PREV msowner USE-INDEX imsi
        WHERE TSEnd < 99999999 
-      AND msowner.Brand = gcBrand NO-LOCK NO-ERROR.
+      AND msowner.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -651,7 +651,7 @@ PROCEDURE local-update-record:
 
       
       FIND CLIType where 
-        CliType.Brand   = gcBrand  AND 
+        CliType.Brand   = Syst.CUICommon:gcBrand  AND 
         CLIType.Clitype = MSOwner.Clitype NO-LOCK NO-ERROR.  
    
       DISP 

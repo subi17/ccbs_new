@@ -18,7 +18,7 @@
 
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Func/fbankdata.i}
 {Func/create_eventlog.i}

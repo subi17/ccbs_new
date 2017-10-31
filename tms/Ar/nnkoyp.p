@@ -96,7 +96,7 @@ form
     CustIntEvent.Percent    column-label "Int%%"  
     CustIntEvent.Amt        column-label "Int tot"  
 WITH width 80 ROW liRow OVERLAY scroll 1 liDown DOWN
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " OVERTIME INTERESTS " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -463,7 +463,7 @@ repeat WITH FRAME sel:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku-asno WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
 
@@ -485,7 +485,7 @@ repeat WITH FRAME sel:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku-lanro WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 

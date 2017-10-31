@@ -8,7 +8,7 @@
 
 &IF "{&BrandVarDefined}" NE "YES"
 &THEN
-DEF NEW SHARED VAR gcBrand       like customer.brand NO-UNDO.
+DEF NEW SHARED VAR Syst.CUICommon:gcBrand       like customer.brand NO-UNDO.
 &GLOBAL-DEFINE BrandVarDefined YES
 &ENDIF
 
@@ -17,7 +17,7 @@ def new shared var ctc as char format "x(24)".
 def            var ccc as char format "x(24)".
 
 /* otsikoissa näkyvät */
-def new shared var ynimi   as char format "x(30)".
+def new shared var Syst.CUICommon:ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99" init TODAY.
 DEF NEW shared VAR qupd    AS lo init TRUE.
 
@@ -45,7 +45,7 @@ DEF NEW shared VAR helpkey AS CHAR NO-UNDO.
 DEF NEW shared VAR ginvno  AS i NO-UNDO.
 
 
-DEF NEW SHARED VAR gcAllBrand    AS LOG NO-UNDO.
+DEF NEW SHARED VAR Syst.CUICommon:gcAllBrand    AS LOG NO-UNDO.
 DEF NEW SHARED VAR ergo-kbd AS LO NO-UNDO.
 
 on f1 go.
@@ -63,12 +63,12 @@ on f21 HELP.
 status INPUT off.
 
 
-katun = "admin".  yvari = true. ynimi = "!!! TESTI !!!".
-gcallbrand = TRUE .
-gcbrand    = "1".
+katun = "admin".  yvari = true. Syst.CUICommon:ynimi = "!!! TESTI !!!".
+Syst.CUICommon:gcAllBrand = TRUE .
+Syst.CUICommon:gcBrand    = "1".
 
 
-update gcbrand label "Brand"
+update Syst.CUICommon:gcBrand label "Brand"
 with side-labels row 10 centered title " Default brand " frame tstfram.
 
 hide frame tstfram.

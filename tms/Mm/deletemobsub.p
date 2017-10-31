@@ -82,7 +82,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.CreStamp  = ldCurrTS
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
@@ -260,7 +260,7 @@ PROCEDURE pTerminate:
    /* COFF if partial termination cli = fixednumber (no actions needed) */
    IF NOT(MobSub.cli BEGINS "8" OR MobSub.cli BEGINS "9") THEN DO:
       FIND FIRST MSISDN WHERE
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.CLI   = MobSub.CLI
       EXCLUSIVE-LOCK NO-ERROR.
 
@@ -556,7 +556,7 @@ PROCEDURE pTerminate:
          fIsConvergentFixedContract(DCCLI.DCEvent)) THEN NEXT.
 
       FIND FIRST DayCampaign NO-LOCK WHERE
-                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                  DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
       
       IF AVAIL DayCampaign AND (DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} OR DayCampaign.DCEvent BEGINS "TVTERM") THEN 
@@ -593,7 +593,7 @@ PROCEDURE pTerminate:
       IF ServiceLimit.GroupCode BEGINS {&DSS} THEN NEXT.
 
       FIND FIRST DayCampaign WHERE 
-                 DayCampaign.Brand      = gcBrand AND 
+                 DayCampaign.Brand      = Syst.CUICommon:gcBrand AND 
                  DayCampaign.DCEvent    = ServiceLimit.GroupCode AND 
                  DayCampaign.ValidFrom <= Today AND 
                  DayCampaign.ValidTo   >= Today NO-LOCK NO-ERROR.
@@ -619,10 +619,10 @@ PROCEDURE pTerminate:
                   IF lcBundleId = {&DSS} OR (lcBundleId = "DSS2" AND
                      LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN
                   FOR FIRST FeeModel NO-LOCK WHERE
-                            FeeModel.Brand = gcBrand AND
+                            FeeModel.Brand = Syst.CUICommon:gcBrand AND
                             FeeModel.FeeModel = DayCampaign.FeeModel,
                       FIRST FMItem NO-LOCK WHERE
-                            FMItem.Brand = gcBrand AND
+                            FMItem.Brand = Syst.CUICommon:gcBrand AND
                             FMItem.FeeModel = FeeModel.FeeModel AND
                             FMItem.Todate >= TODAY AND
                             FMItem.BrokenRental = 1: /* full month */
@@ -647,7 +647,7 @@ PROCEDURE pTerminate:
    FOR EACH ttContract:
 
       FIND FIRST DayCampaign WHERE 
-                 DayCampaign.Brand      = gcBrand AND 
+                 DayCampaign.Brand      = Syst.CUICommon:gcBrand AND 
                  DayCampaign.DCEvent    = ttContract.DCEvent AND 
                  DayCampaign.ValidTo   >= Today NO-LOCK NO-ERROR.
               
@@ -813,7 +813,7 @@ PROCEDURE pTerminate:
          RUN Mc/closeorder.p(Order.OrderID, TRUE).
          
          FIND FIRST MNPRetPlatform WHERE
-                    MNPRetPlatform.Brand = gcBrand AND
+                    MNPRetPlatform.Brand = Syst.CUICommon:gcBrand AND
                     MNPRetPlatform.RetentionPlatform = MNPSub.RetentionPlatform
          NO-LOCK NO-ERROR.
 
@@ -881,7 +881,7 @@ PROCEDURE pTerminate:
          IF Order.Custnum NE MobSub.Custnum THEN DO:
 
             CREATE ErrorLog.
-            ASSIGN ErrorLog.Brand     = gcBrand
+            ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
                    ErrorLog.ActionID  = "ORDERCANCEL"
                    ErrorLog.TableName = "Order"
                    ErrorLog.KeyValue  = STRING(Order.OrderId) 
@@ -962,7 +962,7 @@ PROCEDURE pTerminate:
              ldaKillDatePostpone  = ADD-INTERVAL(ldaKillDate,1,"months").
 
       FOR EACH SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = gcBrand AND
+               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                SingleFee.Custnum     = MobSub.CustNum AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
@@ -992,7 +992,7 @@ PROCEDURE pTerminate:
                Order.OrderType = {&ORDER_TYPE_STC} AND
                Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
          FIRST OrderFusion NO-LOCK WHERE
-               OrderFusion.Brand = gcBrand AND
+               OrderFusion.Brand = Syst.CUICommon:gcBrand AND
                OrderFusion.OrderID = Order.OrderID:
 
          IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
@@ -1028,7 +1028,7 @@ PROCEDURE pTerminate:
       llCallProc = TRUE.
       
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobsub.Brand    = gcBrand        AND
+               bMobsub.Brand    = Syst.CUICommon:gcBrand        AND
                bMobSub.CustNum  = MobSub.CustNum AND
                bMobSub.MsSeq   <> liMsSeq        AND 
                bMobSub.PayType  = NO AND
@@ -1105,12 +1105,12 @@ PROCEDURE pTerminate:
    /* OR */
    /* Close Extra line discount, if extra line subscription is terminated */
    IF (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                      bCLIType.Brand      = Syst.Parameters:gcBrand          AND
+                      bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand          AND
                       bCLIType.CLIType    = TermMobSub.CLIType               AND
                       bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
                LOOKUP(bCLIType.CLIType,lcExtraMainLineCLITypes) > 0)) OR
       (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                      bCLIType.Brand      = Syst.Parameters:gcBrand          AND
+                      bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand          AND
                       bCLIType.CLIType    = TermMobSub.CLIType               AND
                       bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
                 LOOKUP(bCLIType.CLIType,lcExtraLineCLITypes) > 0)) THEN
@@ -1129,7 +1129,7 @@ PROCEDURE pTerminate:
 
       IF AVAIL lELOrder THEN DO:
          FIND FIRST lELOrderAction NO-LOCK WHERE
-                    lELOrderAction.Brand    = gcBrand                 AND
+                    lELOrderAction.Brand    = Syst.CUICommon:gcBrand                 AND
                     lELOrderAction.OrderID  = lELOrder.OrderID        AND
                     lELOrderAction.ItemType = "ExtraLineDiscount"     AND
              LOOKUP(lELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
@@ -1158,17 +1158,17 @@ PROCEDURE pTerminate:
       ADDLINE-323 fixed bug 
       Additional Line with mobile only ALFMO-5 */
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.Parameters:gcBrand AND
+              DiscountPlan.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(TermMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-               bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+               bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
                bCLIType.CLIType    = TermMobSub.CLIType                AND
                bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
               (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
                bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY})) THEN
    DO:
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand            AND
+               bMobSub.Brand   = Syst.CUICommon:gcBrand            AND
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -1182,7 +1182,7 @@ PROCEDURE pTerminate:
    /* Additional Line with mobile only ALFMO-5 */
    ELSE IF AVAIL DiscountPlan AND 
         CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                 bCLIType.Brand      = Syst.Parameters:gcBrand           AND
+                 bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
                  bCLIType.CLIType    = TermMobSub.CLIType                AND                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
         NOT CAN-FIND(FIRST DPMember WHERE
                            DPMember.DPId = DiscountPlan.DPId AND
@@ -1197,18 +1197,18 @@ PROCEDURE pTerminate:
       IF AVAILABLE bCustomer THEN 
       DO:
          FOR EACH OrderCustomer NO-LOCK WHERE
-             OrderCustomer.Brand      = Syst.Parameters:gcBrand    AND
+             OrderCustomer.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand    AND
              OrderCustomer.CustIDType = bCustomer.CustIDType AND
              OrderCustomer.CustID     = bCustomer.OrgID     AND
              OrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
          FIRST bOrdTemp NO-LOCK WHERE
-               bOrdTemp.Brand      = Syst.Parameters:gcBrand           AND
+               bOrdTemp.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
                bOrdTemp.OrderID    = OrderCustomer.OrderID             AND
                LOOKUP(bOrdTemp.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 AND
                LOOKUP(bOrdTemp.CLIType, {&ADDLINE_CLITYPES}) > 0:
     
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand    = Syst.Parameters:gcBrand AND
+                        OrderAction.Brand    = Syst.Parameters:Syst.CUICommon:gcBrand AND
                         OrderAction.OrderID  = bOrdTemp.OrderID   AND
                         OrderAction.ItemType = "AddLineDiscount" AND
                         LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
@@ -1224,17 +1224,17 @@ PROCEDURE pTerminate:
             main line then removing the orderaction from ongoing
             additional line */
          FOR EACH OrderCustomer NO-LOCK WHERE
-                  OrderCustomer.Brand      = Syst.Parameters:gcBrand    AND
+                  OrderCustomer.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand    AND
                   OrderCustomer.CustIDType = bCustomer.CustIDType AND
                   OrderCustomer.CustID     = bCustomer.OrgID     AND
                   OrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
             FIRST bOrder NO-LOCK WHERE
-                  bOrder.Brand      = Syst.Parameters:gcBrand           AND
+                  bOrder.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
                   bOrder.OrderID    = OrderCustomer.OrderID             AND
                   LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 AND
                   LOOKUP(bOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:         
             FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
-                       OrderAction.Brand    = Syst.Parameters:gcBrand    AND
+                       OrderAction.Brand    = Syst.Parameters:Syst.CUICommon:gcBrand    AND
                        OrderAction.OrderID  = bOrder.OrderID   AND
                        OrderAction.ItemType = "AddLineDiscount" AND
                 LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 NO-ERROR.
@@ -1276,7 +1276,7 @@ PROCEDURE pTerminate:
          END.
       END.
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand            AND
+               bMobSub.Brand   = Syst.CUICommon:gcBrand            AND
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -1310,15 +1310,15 @@ END PROCEDURE.
 PROCEDURE pReturnMSISDN:
    DEF INPUT PARAMETER icMSISDN AS CHAR NO-UNDO.
 
-   FIND FIRST MSISDN WHERE MSISDN.Brand = gcBrand AND MSISDN.CLI = icMSISDN NO-LOCK USE-INDEX CLI NO-ERROR.
+   FIND FIRST MSISDN WHERE MSISDN.Brand = Syst.CUICommon:gcBrand AND MSISDN.CLI = icMSISDN NO-LOCK USE-INDEX CLI NO-ERROR.
    IF NOT AVAILABLE MSISDN THEN 
       RETURN "ERROR:MSISDN not available".
 
-   FIND MobSub WHERE MobSub.Brand = gcBrand AND MobSub.Cli = MSISDN.Cli NO-LOCK NO-ERROR.
+   FIND MobSub WHERE MobSub.Brand = Syst.CUICommon:gcBrand AND MobSub.Cli = MSISDN.Cli NO-LOCK NO-ERROR.
    IF AVAIL MobSub THEN 
       RETURN "ERROR:MSISDN is in use".
    
-   FIND Order WHERE Order.Brand = gcBrand AND Order.cli = msisdn.cli AND LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK NO-ERROR.
+   FIND Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.cli = msisdn.cli AND LOOKUP(Order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-LOCK NO-ERROR.
    IF AVAIL Order THEN 
       RETURN "ERROR:MSISDN is in ongoing order".
 
@@ -1394,12 +1394,12 @@ PROCEDURE pOrderCancellation:
    /* YDR-1034 */
    ELSE IF lcTermReason = "3" THEN DO:
       FOR FIRST OrderPayment NO-LOCK WHERE
-                OrderPayment.Brand = gcBrand AND
+                OrderPayment.Brand = Syst.CUICommon:gcBrand AND
                 OrderPayment.OrderId = Order.OrderId AND
                (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
                 OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}): 
          CREATE ActionLog.
-         ASSIGN ActionLog.Brand     = gcBrand
+         ASSIGN ActionLog.Brand     = Syst.CUICommon:gcBrand
                 ActionLog.ActionID  = "OrderCancel"
                 ActionLog.ActionTS  = Func.Common:mMakeTS()
                 ActionLog.TableName = "Order"
@@ -1435,7 +1435,7 @@ PROCEDURE pOrderCancellation:
       CREATE ActionLog.
       ASSIGN
          ActionLog.ActionTS     = Func.Common:mMakeTS()
-         ActionLog.Brand        = gcBrand  
+         ActionLog.Brand        = Syst.CUICommon:gcBrand  
          ActionLog.TableName    = "Order"  
          ActionLog.KeyValue     = STRING(Order.Orderid)
          ActionLog.UserCode     = katun
@@ -1469,7 +1469,7 @@ PROCEDURE pMultiSIMTermination:
    IF NOT MobSub.MultiSimID > 0 THEN RETURN.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = gcBrand AND
+              lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
               lbMobSub.MultiSimID = MobSub.MultiSimID AND
               lbMobSub.MultiSimType NE MobSub.MultiSimType AND
               lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -1479,7 +1479,7 @@ PROCEDURE pMultiSIMTermination:
    CREATE ActionLog.
    ASSIGN
       ActionLog.ActionTS     = Func.Common:mMakeTS()
-      ActionLog.Brand        = gcBrand  
+      ActionLog.Brand        = Syst.CUICommon:gcBrand  
       ActionLog.TableName    = "Customer"  
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
       ActionLog.UserCode     = katun
@@ -1641,7 +1641,7 @@ PROCEDURE pChangeDelType:
                 llgInvDate AND 
                 llgInvType THEN DO: 
             FOR EACH Invoice EXCLUSIVE-LOCK WHERE
-                     Invoice.Brand      = gcBrand            AND
+                     Invoice.Brand      = Syst.CUICommon:gcBrand            AND
                      Invoice.CustNum    = Customer.CustNum   AND
                      Invoice.InvDate    = TODAY              AND
                      Invoice.InvType    = {&INV_TYPE_NORMAL} AND 

@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
@@ -34,7 +34,7 @@ IF llDoEvent THEN DO:
 END.
 
 FOR EACH MsRequest WHERE
-         MsRequest.Brand      = gcBrand AND
+         MsRequest.Brand      = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_ICC_CHANGE} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_CONFIRMATION_PENDING} NO-LOCK:
 

@@ -479,7 +479,7 @@ PROCEDURE local-find-others.
       IF icTableName = "Order" THEN DO:
 
          FOR EACH Order NO-LOCK WHERE
-                  Order.Brand      = gcBrand AND
+                  Order.Brand      = Syst.CUICommon:gcBrand AND
                   Order.StatusCode = STRING(ttData.CodeValue):
 
             ttData.CodeAmt = ttData.CodeAmt + 1.
@@ -494,7 +494,7 @@ PROCEDURE local-find-others.
       ELSE IF icTableName = "MsRequest" THEN DO:
 
          FOR EACH MsRequest NO-LOCK WHERE
-                  MsRequest.Brand     = gcBrand    AND
+                  MsRequest.Brand     = Syst.CUICommon:gcBrand    AND
                   MsRequest.ReqType   = liParam[1] AND
                   MsRequest.ReqStatus = ttData.CodeValue:
 

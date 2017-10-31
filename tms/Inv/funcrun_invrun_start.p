@@ -62,7 +62,7 @@ QUIT.
 PROCEDURE pInitialize:
 
    ASSIGN
-      gcBrand      = '1'
+      Syst.CUICommon:gcBrand      = '1'
       katun        = 'cron'
       ldeBegTime   = Func.Common:mMakeTS()
       ldaEBADueDate = ?
@@ -125,7 +125,7 @@ PROCEDURE pInitialize:
             FuncRunResult.FRResultSeq = FuncRunProcess.ProcSeq:
 
       FIND FIRST Customer WHERE
-                 Customer.Brand   = gcBrand AND 
+                 Customer.Brand   = Syst.CUICommon:gcBrand AND 
                  Customer.CustNum = FuncRunResult.IntParam
       NO-LOCK NO-ERROR.
       
@@ -168,7 +168,7 @@ PROCEDURE pCreateInvoices:
    
       ASSIGN
          ActionLog.ActionTS     = Func.Common:mMakeTS()
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
          ActionLog.UserCode     = katun
@@ -239,7 +239,7 @@ PROCEDURE pFinalize:
    DO TRANS:
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand        = gcBrand   AND
+                 ActionLog.Brand        = Syst.CUICommon:gcBrand   AND
                  ActionLog.TableName    = "Invoice" AND
                  ActionLog.KeyValue     = lcBillRun AND
                  ActionLog.ActionID     = "BillRun" AND
@@ -250,7 +250,7 @@ PROCEDURE pFinalize:
    
          ASSIGN
             ActionLog.ActionTS     = Func.Common:mMakeTS()
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun
             ActionLog.UserCode     = katun

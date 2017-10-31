@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE liRangeStart AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liRangeEnd   AS INTEGER NO-UNDO. 
@@ -37,7 +37,7 @@ FUNCTION fCreateMSIDNStamp RETURNS LOGICAL
          
          CREATE MSISDN.
          ASSIGN
-            MSISDN.Brand      = gcBrand
+            MSISDN.Brand      = Syst.CUICommon:gcBrand
             MSISDN.CLI        = msisdnnumber.cli
             MSISDN.ValidFrom  = ldeNow 
             MSISDN.POS        = ""

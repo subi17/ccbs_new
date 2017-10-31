@@ -94,7 +94,7 @@ form /* seek  target */
 
 
 FIND CoRule WHERE 
-     CoRule.Brand    = gcBrand  AND
+     CoRule.Brand    = Syst.CUICommon:gcBrand  AND
      CoRule.CoRuleId = iiRuleID NO-LOCK.
      
 ASSIGN lcTitle = " COMM. BASIS FOR: " +
@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
                     
                     ELSE DO:
                        FIND BillItem WHERE 
-                            BillItem.Brand    = gcBrand  AND
+                            BillItem.Brand    = Syst.CUICommon:gcBrand  AND
                             BillItem.BillCode = INPUT CoBasis.BillCode
                        NO-LOCK NO-ERROR.
                        IF NOT AVAILABLE BillItem THEN DO:
@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
                     
                     ELSE DO:
                        FIND CCN WHERE 
-                            CCN.Brand = gcBrand  AND
+                            CCN.Brand = Syst.CUICommon:gcBrand  AND
                             CCN.CCN   = INPUT CoBasis.CCN
                        NO-LOCK NO-ERROR.
                        IF NOT AVAILABLE CCN THEN DO:
@@ -205,7 +205,7 @@ REPEAT WITH FRAME sel:
 
            IF CAN-FIND(
               FIRST CoBasis WHERE 
-                    CoBasis.Brand    = gcBrand  AND
+                    CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
                     CoBasis.CoRuleid = iiRuleId AND  
                     CoBasis.BillCode = INPUT FRAME lis CoBasis.BillCode AND
                     CoBasis.CCN      = INPUT FRAME lis CoBasis.CCN)
@@ -222,7 +222,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CoBasis.
            ASSIGN
-           CoBasis.Brand    = gcBrand  
+           CoBasis.Brand    = Syst.CUICommon:gcBrand  
            CoBasis.CoRuleID = iiRuleID 
            CoBasis.BillCode = INPUT FRAME lis CoBasis.BillCode
            CoBasis.CCN      = INPUT FRAME lis CoBasis.CCN.
@@ -480,7 +480,7 @@ BROWSE:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST CoBasis WHERE 
-                                 CoBasis.Brand    = gcBrand  AND
+                                 CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
                                  CoBasis.CoRuleId = iiRuleID) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
@@ -555,28 +555,28 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST CoBasis
-        WHERE CoBasis.Brand    = gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST CoBasis
-        WHERE CoBasis.Brand    = gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT CoBasis
-        WHERE CoBasis.Brand    = gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV CoBasis
-        WHERE CoBasis.Brand    = gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -603,7 +603,7 @@ PROCEDURE local-find-others.
 
    IF CoBasis.BillCode > "" AND CoBasis.CCN >= 0 THEN DO:
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand  AND
+           BillItem.Brand    = Syst.CUICommon:gcBrand  AND
            BillItem.BillCode = CoBasis.BillCode 
       NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
@@ -611,7 +611,7 @@ PROCEDURE local-find-others.
 
    IF CoBasis.CCN > 0 THEN DO:
       FIND CCN WHERE 
-           CCN.Brand = gcBrand  AND
+           CCN.Brand = Syst.CUICommon:gcBrand  AND
            CCN.CCN   = CoBasis.CCN NO-LOCK NO-ERROR.
       IF AVAILABLE CCN THEN lcCCNName = CCN.CCNName.
    END.

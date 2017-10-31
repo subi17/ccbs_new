@@ -62,7 +62,7 @@ form
 WITH
     width 80 OVERLAY scroll 1 14 DOWN ROW 2 centered
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-    " INVOICES  (" + gcBrand + ") "
+    " INVOICES  (" + Syst.CUICommon:gcBrand + ") "
     FRAME sel.
 
 form 
@@ -349,7 +349,7 @@ print-line:
 
         IF lcExtInvID > "" THEN DO:
            FIND FIRST Invoice where 
-                      Invoice.Brand   = gcBrand AND
+                      Invoice.Brand   = Syst.CUICommon:gcBrand AND
                       Invoice.ExtInvID >= lcExtInvID
            no-lock NO-ERROR.
 
@@ -386,7 +386,7 @@ print-line:
 
         IF liCustNum > 0 THEN DO:
            FIND FIRST Invoice where 
-                      Invoice.Brand   = gcBrand AND
+                      Invoice.Brand   = Syst.CUICommon:gcBrand AND
                       Invoice.CustNum >= liCustNum
            no-lock NO-ERROR.
 
@@ -405,12 +405,12 @@ print-line:
 
         IF ldtInvDate <> ? THEN DO:
            FIND LAST Invoice where 
-                     Invoice.Brand  = gcBrand AND
+                     Invoice.Brand  = Syst.CUICommon:gcBrand AND
                      Invoice.InvDate = ldtInvDate    
            no-lock NO-ERROR.
            IF NOT AVAILABLE Invoice THEN 
            FIND FIRST Invoice where 
-                      Invoice.Brand  = gcBrand AND
+                      Invoice.Brand  = Syst.CUICommon:gcBrand AND
                       Invoice.InvDate > ldtInvDate    
            no-lock NO-ERROR.
 
@@ -497,23 +497,23 @@ PROCEDURE local-find-next:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND NEXT Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND NEXT Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand   = gcBrand   AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                 Invoice.CustNum = liInvCust AND
                 Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.
    ELSE DO:
       IF      order = 1 THEN FIND NEXT Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND NEXT Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND NEXT Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND NEXT Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -523,23 +523,23 @@ PROCEDURE local-find-prev:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND PREV Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND PREV Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand   = gcBrand   AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                 Invoice.CustNum = liInvCust AND
                 Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.
    ELSE DO:
       IF      order = 1 THEN FIND PREV Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND PREV Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND PREV Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND PREV Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -549,23 +549,23 @@ PROCEDURE local-find-first:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND FIRST Invoice USE-INDEX CustNum WHERE
-                 Invoice.Brand = gcBrand AND
+                 Invoice.Brand = Syst.CUICommon:gcBrand AND
                  Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND FIRST Invoice USE-INDEX CustNum WHERE
-                 Invoice.Brand   = gcBrand   AND
+                 Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                  Invoice.CustNum = liInvCust AND
                  Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.
    ELSE DO:
       IF      order = 1 THEN FIND FIRST Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND FIRST Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND FIRST Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND FIRST Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -575,22 +575,22 @@ PROCEDURE local-find-last:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND LAST Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND LAST Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand   = gcBrand   AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                 Invoice.CustNum = liInvCust AND
                 Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.           ELSE DO:
       IF      order = 1 THEN FIND LAST Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND LAST Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND LAST Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND LAST Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.

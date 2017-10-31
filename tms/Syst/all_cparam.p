@@ -75,7 +75,7 @@ form
     TMSParam.Online  column-label "OL"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Parameter Browser "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -429,7 +429,7 @@ BROWSE:
        ParamCode = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ParamCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -452,7 +452,7 @@ BROWSE:
        ParamGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ParamGroup WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -475,7 +475,7 @@ BROWSE:
        ParamName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ParamName WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -621,7 +621,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN Mc/eventsel.p("TMSParam", gcBrand + chr(255) + TMSParam.ParamGroup +
+        RUN Mc/eventsel.p("TMSParam", Syst.CUICommon:gcBrand + chr(255) + TMSParam.ParamGroup +
                                    chr(255) + TMSParam.ParamCode).
         ufkey = TRUE.
         NEXT.

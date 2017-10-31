@@ -88,7 +88,7 @@ END.
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
 
 FIND FIRST DCCLI WHERE
-           DCCLI.Brand   = gcBrand   AND
+           DCCLI.Brand   = Syst.CUICommon:gcBrand   AND
            DCCLI.DCEvent = icDCEvent AND
            DCCLI.MSSeq   = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DCCLI THEN DO:
@@ -106,7 +106,7 @@ END.
 IF fLocalPendingRequest() THEN RETURN.
  
 FIND FIRST DayCampaign WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = icDCEvent NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DayCampaign THEN RETURN.
       
@@ -196,7 +196,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
          CREATE Memo.
          ASSIGN 
-            Memo.Brand     = gcBrand
+            Memo.Brand     = Syst.CUICommon:gcBrand
             Memo.HostTable = "MobSub"
             Memo.KeyValue  = STRING(MobSub.MsSeq)
             Memo.CustNum   = MobSub.CustNum

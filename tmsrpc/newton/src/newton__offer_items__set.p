@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -135,7 +135,7 @@ IF gi_xmlrpc_error NE 0 THEN DO:
 END.
 
 FIND Offer WHERE
-     Offer.Brand = gcBrand AND 
+     Offer.Brand = Syst.CUICommon:gcBrand AND 
      Offer.Offer = ttOfferItem.Offer NO-LOCK NO-ERROR.
 IF NOT AVAIL Offer THEN DO:
    RETURN appl_err("Offer " + ttOfferItem.Offer + " does not exist").
@@ -161,7 +161,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 
    FIND FIRST TopupScheme WHERE 
-      TopupScheme.Brand = gcBrand AND
+      TopupScheme.Brand = Syst.CUICommon:gcBrand AND
       TopupScheme.TopupScheme = ttOfferItem.ItemKey NO-LOCK NO-ERROR.
    IF AVAIL TopupScheme THEN
    DO:

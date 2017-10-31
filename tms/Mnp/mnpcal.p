@@ -74,7 +74,7 @@ FORM
     MNPCal.DeliveryType
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MNP CALENDAR  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -462,7 +462,7 @@ BROWSE:
          RUN Syst/ufkey.p.
 
          FIND FIRST TMSParam WHERE
-            TMSParam.Brand = gcBrand AND
+            TMSParam.Brand = Syst.CUICommon:gcBrand AND
             TMSParam.ParamCode = "MNPMinWindow" AND
             TMSParam.ParamGroup = "MNP" NO-LOCK NO-ERROR.
          
@@ -832,7 +832,7 @@ PROCEDURE local-UPDATE-record:
             
             IF INPUT MNPCal.MNPTariff NE "" THEN DO:
                FIND FIRST CliType WHERE
-                  CliType.Brand   = gcBrand AND 
+                  CliType.Brand   = Syst.CUICommon:gcBrand AND 
                   CliType.CliType = INPUT MNPCal.MNPTariff
                NO-LOCK NO-ERROR.
                IF NOT AVAIL Clitype THEN DO:

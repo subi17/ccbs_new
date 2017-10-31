@@ -42,7 +42,7 @@ FORM
       FORMAT "99-99-99"
    SKIP(9)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICE ROW COUNTERS  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  INVOICE ROW COUNTERS  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

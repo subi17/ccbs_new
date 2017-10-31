@@ -42,7 +42,7 @@ PROCEDURE pRunRequest:
       /* go through all */                               
       IF iiRequestID = 0 THEN  
          FOR EACH MsRequest NO-LOCK WHERE
-                  MsRequest.Brand     = gcBrand   AND
+                  MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
                   MsRequest.ReqType   = iiReqType AND     
                   MsRequest.ReqStatus = iiReqStat AND   
                   MsRequest.ActStamp <= idActTime /* scheduled or immediate */

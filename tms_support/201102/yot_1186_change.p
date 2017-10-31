@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "vikasagr".
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 
 define variable ldenow    as decimal no-undo.
@@ -21,7 +21,7 @@ for each msisdnnumber where
          msisdnnumber.cli <= "633099999" and
          msisdnnumber.rank = 0 no-lock,
     first msisdn where
-          msisdn.brand = gcbrand and
+          msisdn.brand = Syst.CUICommon:gcBrand and
           msisdn.cli   = msisdnnumber.cli and
           msisdn.validto > ldenow no-lock:
 

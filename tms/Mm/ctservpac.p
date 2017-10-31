@@ -81,7 +81,7 @@ form
     CTServPac.ToDate      
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " CLIType Services "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -91,7 +91,7 @@ form
     CTServPac.CLIType     COLON 20
        VALIDATE(INPUT CTServPac.CLIType = "" OR
                 CAN-FIND(CLIType WHERE 
-                         CLIType.Brand   = gcBrand AND
+                         CLIType.Brand   = Syst.CUICommon:gcBrand AND
                          CLIType.CLIType = INPUT CTServPac.CLIType),
                 "Unknown CLI Type")       
        lcCLIName NO-LABEL FORMAT "X(30)" SKIP
@@ -99,7 +99,7 @@ form
        FORMAT "X(12)"
        VALIDATE(INPUT CTServPac.ServPac = "" OR
                 CAN-FIND(ServPac WHERE 
-                         ServPac.Brand   = gcBrand AND
+                         ServPac.Brand   = Syst.CUICommon:gcBrand AND
                          ServPac.ServPac = INPUT CTServPac.ServPac),
                 "Unknown service package")
        lcSPName NO-LABEL FORMAT "X(30)" SKIP
@@ -421,7 +421,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcServPac WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -788,14 +788,14 @@ PROCEDURE pCopyComponents:
           liQty = 0.
              
    FOR EACH ServEl NO-LOCK WHERE
-            ServEl.Brand   = gcBrand AND
+            ServEl.Brand   = Syst.CUICommon:gcBrand AND
             ServEl.ServPac = icServPac,
       FIRST ServCom NO-LOCK WHERE
-            ServCom.Brand   = gcBrand AND
+            ServCom.Brand   = Syst.CUICommon:gcBrand AND
             ServCom.ServCom = ServEl.ServCom:
                       
       FIND CTServEl WHERE
-           CTServEl.Brand    = gcBrand         AND
+           CTServEl.Brand    = Syst.CUICommon:gcBrand         AND
            CTServEl.CLIType  = icCLIType       AND
            CTServEl.ServPac  = icServPac       AND
            CTServEl.ServCom  = ServEl.ServCom  AND
@@ -803,7 +803,7 @@ PROCEDURE pCopyComponents:
     
       IF NOT AVAILABLE CTServEl THEN DO:                
          CREATE CTServEl.
-         ASSIGN CTServEl.Brand      = gcBrand
+         ASSIGN CTServEl.Brand      = Syst.CUICommon:gcBrand
                 CTServEl.CTServEl   = NEXT-VALUE(CTServEl)
                 CTServEl.CLIType    = icCLIType
                 CTServEl.ServPac    = icServPac
@@ -816,7 +816,7 @@ PROCEDURE pCopyComponents:
       END.
 
       FOR EACH ServAttr NO-LOCK WHERE
-               ServAttr.Brand   = gcBrand AND
+               ServAttr.Brand   = Syst.CUICommon:gcBrand AND
                ServAttr.ServCom = ServEl.ServCom:
                          
          IF CAN-FIND(CTServAttr WHERE

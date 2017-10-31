@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
+ASSIGN Syst.CUICommon:gcBrand = "1" 
        katun   = "rfndfile".
        
 {Func/cparam2.i}

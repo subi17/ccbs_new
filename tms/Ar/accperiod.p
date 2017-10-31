@@ -71,7 +71,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " ACCOUNTING PERIODS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -448,7 +448,7 @@ BROWSE:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            AccPeriod WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF AccPeriod ENTERED THEN DO:
@@ -471,7 +471,7 @@ BROWSE:
        PAUSE 0.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
-       SET lcBrand WHEN gcAllBrand
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand
            FromDate WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF FromDate ENTERED THEN DO:

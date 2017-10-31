@@ -124,7 +124,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
             bServiceLimit.SLSeq = bMServiceLimit.SLSeq AND
             bServiceLimit.DialType = {&DIAL_TYPE_GPRS},
       FIRST DayCampaign NO-LOCK WHERE 
-            DayCampaign.Brand   = gcBrand AND
+            DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = bServiceLimit.GroupCode AND
             LOOKUP(STRING(DayCampaign.DCType),
                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -369,13 +369,13 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
          NEXT. 
       
       FIND FIRST bDayCampaign NO-LOCK WHERE 
-                 bDayCampaign.Brand   = gcBrand                 AND 
+                 bDayCampaign.Brand   = Syst.CUICommon:gcBrand                 AND 
                  bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-ERROR.
       
       IF NOT AVAIL bDayCampaign THEN NEXT.
 
       FIND FIRST bFMItem NO-LOCK WHERE  
-                 bFMItem.Brand     = gcBrand               AND       
+                 bFMItem.Brand     = Syst.CUICommon:gcBrand               AND       
                  bFMItem.FeeModel  = bDayCampaign.FeeModel AND
                  bFMItem.ToDate   >= TODAY                 AND 
                  bFMItem.FromDate <= TODAY                 NO-ERROR.
@@ -397,7 +397,7 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
              llgBundle     = TRUE.
          ELSE DO:
             FIND FIRST bFixedFee NO-LOCK WHERE
-                       bFixedFee.Brand      = gcBrand                      AND 
+                       bFixedFee.Brand      = Syst.CUICommon:gcBrand                      AND 
                        bFixedFee.HostTable  = "MobSub"                     AND 
                        bFixedFee.CustNum    = iiCustnum                    AND
                        bFixedFee.KeyValue   = STRING(bMServicelimit.MsSeq) AND 
@@ -419,7 +419,7 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
       
       IF bFMItem.BillMethod THEN DO:
          FOR EACH bSingleFee NO-LOCK WHERE
-                  bSingleFee.Brand      = gcBrand                      AND
+                  bSingleFee.Brand      = Syst.CUICommon:gcBrand                      AND
                   bSingleFee.Custnum    = iiCustnum                    AND
                   bSingleFee.HostTable  = "MobSub"                     AND
                   bSingleFee.KeyValue   = STRING(bMServiceLimit.MsSeq) AND

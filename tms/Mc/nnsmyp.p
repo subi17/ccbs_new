@@ -85,7 +85,7 @@ form
 with
     width 80 overlay scroll 1 15 down row 1
     color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi + " Maintain salesmen "
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Maintain salesmen "
     + string(pvm,"99-99-99") + " " frame sel.
 
 form
@@ -462,7 +462,7 @@ BROWSE:
            xReseller = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   xReseller with frame f1.
            hide frame f1 no-pause.
 
@@ -485,7 +485,7 @@ BROWSE:
            SmName = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   SmName with frame f2.
            hide frame f2 no-pause.
 
@@ -513,7 +513,7 @@ BROWSE:
            xSalesman = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F3.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   xSalesman with frame f3.
            hide frame f3 no-pause.
 

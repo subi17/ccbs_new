@@ -8,11 +8,6 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-def new shared var cfc as char format "x(24)".
-def new shared var ctc as char format "x(24)".
-def        var ccc as char format "x(24)".
-
-def new shared var ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99".
 def new shared var qupd    AS lo.
 
@@ -38,8 +33,8 @@ def new shared var helpkey AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrandVarDefined YES
 
-def new shared var gcBrand       like customer.brand NO-UNDO.
-def new shared var gcAllBrand    AS LOG    NO-UNDO.
+def new shared var Syst.CUICommon:gcBrand       like customer.brand NO-UNDO.
+def new shared var Syst.CUICommon:gcAllBrand    AS LOG    NO-UNDO.
 
 def new shared var ergo-kbd AS LO NO-UNDO.
 
@@ -57,7 +52,7 @@ END.
 on f21 HELP.
 status INPUT off.
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 &ENDIF
 

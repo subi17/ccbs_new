@@ -67,7 +67,7 @@ form
     RZItem.DialType  COLUMN-LABEL "DT"  FORMAT ">9"
 WITH ROW FrmRow WIDTH 76 CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  RZItem MENU " 
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -643,12 +643,12 @@ PROCEDURE local-find-others.
               RoamZone.RoamZone = RZItem.RoamZone NO-LOCK NO-ERROR.
    
    FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand AND 
+              BDest.Brand = Syst.CUICommon:gcBrand AND 
               BDest.BDest = RZitem.CountryPrefix AND
               BDest.DestType = 1 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE BDest THEN
    FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand AND 
+              BDest.Brand = Syst.CUICommon:gcBrand AND 
               BDest.BDest = RZitem.CountryPrefix NO-LOCK NO-ERROR.
    
    FIND FIRST TMSCodes WHERE
@@ -694,14 +694,14 @@ PROCEDURE local-update-record:
                 END.
                 ELSE IF FRAME-FIELD = "CountryPrefix" THEN DO:
                    FIND FIRST BDest WHERE 
-                        BDest.Brand = gcBrand AND
+                        BDest.Brand = Syst.CUICommon:gcBrand AND
                         BDest.BDest = 
                    INPUT FRAME lis RZItem.CountryPrefix AND
                         BDest.DestType = 1
                    NO-LOCK NO-ERROR.
                    IF NOT AVAILABLE BDest THEN 
                    FIND FIRST BDest WHERE 
-                        BDest.Brand = gcBrand AND
+                        BDest.Brand = Syst.CUICommon:gcBrand AND
                         BDest.BDest = 
                    INPUT FRAME lis RZItem.CountryPrefix
                    NO-LOCK NO-ERROR.

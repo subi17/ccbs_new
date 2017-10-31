@@ -109,7 +109,7 @@ form
     CustCat.segment COLUMN-LABEL "Segment" FORMAT "X(17)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " CUSTOMER CATEGORIES "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -525,7 +525,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame hayr.
         UPDATE 
-           lcBrand WHEN gcAllBrand
+           lcBrand WHEN Syst.CUICommon:gcAllBrand
            haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if haku <> "" THEN DO:
@@ -547,7 +547,7 @@ BROWSE:
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME hayr2.
         UPDATE 
-           lcBrand WHEN gcAllBrand
+           lcBrand WHEN Syst.CUICommon:gcAllBrand
            haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:

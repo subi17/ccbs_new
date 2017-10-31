@@ -132,7 +132,7 @@ form
     FixedFee.EndPeriod   /* column-label "Exp per"  */
     FixedFee.Memo[1]     /* column-label "Memo"     */    format "x(7)"
 WITH width 80 ROW 1 OVERLAY scroll 1 15 DOWN
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " CONTRACT FEES "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -829,7 +829,7 @@ BROWSE:
            CustNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   CustNum WITH FRAME f1.
            HIDE FRAME f1 no-pause.
 
@@ -851,7 +851,7 @@ BROWSE:
            BillCode = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   BillCode WITH FRAME f2.
            HIDE FRAME f2 no-pause.
 

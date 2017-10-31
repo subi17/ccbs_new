@@ -35,7 +35,7 @@ PROCEDURE pInitHistory:
       CREATE ttHistory.
       BUFFER-COPY MobCDR TO ttHistory.
       ASSIGN 
-         ttHistory.Brand = gcBrand
+         ttHistory.Brand = Syst.CUICommon:gcBrand
          ttHistory.Rated = "Current"
          ttHistory.UpdateSource = "Current"
          ocGSMBnr = MobCDR.GSMBnr.
@@ -47,7 +47,7 @@ PROCEDURE pInitHistory:
       EMPTY TEMP-TABLE ttCall.
      
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
+                     INPUT Syst.CUICommon:gcBrand,
                      INPUT katun,
                      INPUT idaDateSt,
                      INPUT idaDateSt,
@@ -81,7 +81,7 @@ PROCEDURE pInitHistory:
    END.
    
    FOR EACH bHistory NO-LOCK WHERE
-            bHistory.Brand  = gcBrand AND
+            bHistory.Brand  = Syst.CUICommon:gcBrand AND
             bHistory.CLI    = icCLI AND
             bHistory.DateSt = idaDateSt AND
             bHistory.TimeSt = iiTimeSt AND

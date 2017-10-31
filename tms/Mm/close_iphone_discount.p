@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun   = "CRON".
 {Func/cparam2.i}
 
@@ -65,7 +65,7 @@ EACH_DISCOUNT:
 DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
    lcIPhoneDiscountRuleId = ENTRY(liCount,lcIPhoneDiscountRuleIds).
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = lcIPhoneDiscountRuleId NO-LOCK NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN DO:
       PUT STREAM sout UNFORMATTED "ERROR:Invalid Iphone Discount: " +
@@ -93,7 +93,7 @@ DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
       ldaInvDate = Func.Common:mLastDayOfMonth(DCCLI.ValidFrom) + 1.
 
       FOR EACH Invoice WHERE
-               Invoice.Brand     = gcBrand AND
+               Invoice.Brand     = Syst.CUICommon:gcBrand AND
                Invoice.CustNum   = Customer.CustNum AND
                Invoice.InvDate  >= ldaInvDate AND
                Invoice.InvType   = 1 AND

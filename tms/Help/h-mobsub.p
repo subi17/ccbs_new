@@ -47,7 +47,7 @@ MAIN:
 repeat:
 
    find first mobsub WHERE 
-              mobsub.BRand      = gcBrand 
+              mobsub.BRand      = Syst.CUICommon:gcBrand 
    NO-LOCK NO-ERROR.
 
    if not available mobsub then do:
@@ -77,7 +77,7 @@ print-line:
             rtab[frame-line] = recid(mobsub).
             down with frame sel.
             find next mobsub WHERE
-                      mobsub.BRand      = gcBrand  no-lock no-error.
+                      mobsub.BRand      = Syst.CUICommon:gcBrand  no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -108,7 +108,7 @@ BROWSE:
             if frame-line = 1 then do:
                find mobsub where recid(mobsub) = rtab[frame-line] no-lock.
                find prev mobsub WHERE
-                         mobsub.BRand      = gcBrand  
+                         mobsub.BRand      = Syst.CUICommon:gcBrand  
                no-lock no-error.
                if not available mobsub then do:
                   bell.
@@ -135,7 +135,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find mobsub where recid(mobsub) = rtab[frame-line] no-lock .
                find next mobsub WHERE
-                         mobsub.Brand      = gcBrand 
+                         mobsub.Brand      = Syst.CUICommon:gcBrand 
                no-lock no-error.
                if not available mobsub then do:
                   bell.
@@ -162,13 +162,13 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find mobsub where recid(mobsub) = memory no-lock no-error.
             find prev mobsub WHERE
-                      mobsub.Brand      = gcBrand 
+                      mobsub.Brand      = Syst.CUICommon:gcBrand 
             no-lock no-error.
             if available mobsub then do:
 
                do i = 1 to (frame-down - 1):
                   find prev mobsub WHERE
-                            mobsub.Brand      = gcBrand no-lock no-error.
+                            mobsub.Brand      = Syst.CUICommon:gcBrand no-lock no-error.
                   if available mobsub then memory = recid(mobsub).
                   else i = frame-down.
                end.
@@ -207,7 +207,7 @@ BROWSE:
            hide frame hayr no-pause.
            if CLI ENTERED then do:
               find first mobsub where 
-                         mobsub.Brand = gcBrand AND 
+                         mobsub.Brand = Syst.CUICommon:gcBrand AND 
                          mobsub.CLI >= CLI 
               no-lock no-error.
              if not available mobsub then do:
@@ -272,7 +272,7 @@ CU-DATA:
         repeat with frame cust:
 
            find Customer of mobsub WHERE
-                            mobsub.Brand      = gcBrand no-lock no-error.
+                            mobsub.Brand      = Syst.CUICommon:gcBrand no-lock no-error.
 
            disp
            mobsub.CustNum    Customer.CustName when avail Customer
@@ -309,7 +309,7 @@ CU-Action:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first mobsub WHERE
-                      mobsub.Brand      = gcBrand  no-lock no-error.
+                      mobsub.Brand      = Syst.CUICommon:gcBrand  no-lock no-error.
            memory = recid(mobsub).
            must-print = true.
            next LOOP.
@@ -318,7 +318,7 @@ CU-Action:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last mobsub WHERE
-                     mobsub.Brand      = gcBrand no-lock no-error.
+                     mobsub.Brand      = Syst.CUICommon:gcBrand no-lock no-error.
            memory = recid(mobsub).
            must-print = true.
            next LOOP.

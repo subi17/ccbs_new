@@ -12,7 +12,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -73,7 +73,7 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND CustCat EXCLUSIVE-LOCK WHERE
-     CustCat.Brand = gcBrand AND
+     CustCat.Brand = Syst.CUICommon:gcBrand AND
      CustCat.Category = pcCategory NO-WAIT NO-ERROR.
 
 IF NOT AVAIL CustCat THEN 

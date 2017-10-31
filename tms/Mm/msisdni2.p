@@ -58,7 +58,7 @@ help "Latest Date of call" skip(1)
 "  Prepaid " lkm1 "calls, " summa1 "euros"         SKIP(1)
 "  Current balance              " ldCurBal "euros" SKIP(1)  
 WITH
-   row 7 col 9 overlay no-labels title " " + ynimi +
+   row 7 col 9 overlay no-labels title " " + Syst.CUICommon:ynimi +
    "  Total Value of Calls,  "  + string(substr(lcCLI,1,16)) + ") " FRAME rajat.
 
 
@@ -91,7 +91,7 @@ repeat WITH FRAME rajat:
    EMPTY TEMP-TABLE ttCall.
     
    fMobCDRCollect(INPUT "pre",
-                  INPUT gcBrand,
+                  INPUT Syst.CUICommon:gcBrand,
                   INPUT katun,
                   INPUT pvm1,
                   INPUT pvm2,

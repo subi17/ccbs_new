@@ -39,7 +39,7 @@ WITH SIDE-LABELS 1 DOWN ROW 8 CENTERED OVERLAY
     TITLE " Collecting " FRAME fColl.
 
 FOR EACH EDRHistory NO-LOCK WHERE
-         EDRHistory.Brand = gcBrand AND
+         EDRHistory.Brand = Syst.CUICommon:gcBrand AND
          EDRHistory.UpdateDate = TODAY - 1:
 
    /* only the latest rerate should be picked */

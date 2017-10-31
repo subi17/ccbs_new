@@ -77,7 +77,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1 
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " PERIODICAL CONTRACTS " 
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -213,7 +213,7 @@ FUNCTION fFeeModel RETURNS CHAR
    IF icFeeModel = "" THEN RETURN "".
    
    FIND FIRST FeeModel WHERE
-              FeeModel.Brand    = gcBrand AND
+              FeeModel.Brand    = Syst.CUICommon:gcBrand AND
               FeeModel.FeeModel = icFeeModel NO-LOCK NO-ERROR.
    IF AVAILABLE FeeModel 
    THEN RETURN FeeModel.FeeName.
@@ -267,7 +267,7 @@ repeat WITH FRAME sel:
         DO TRANSACTION:
 
            CREATE DayCampaign.
-           DayCampaign.Brand = gcBrand.
+           DayCampaign.Brand = Syst.CUICommon:gcBrand.
 
            RUN LOCAL-UPDATE-RECORD(true).
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR
@@ -506,7 +506,7 @@ repeat WITH FRAME sel:
        FIND DayCampaign where recid(DayCampaign) = rtab[FRAME-LINE] no-lock.
 
        IF CAN-FIND(FIRST DCCLI WHERE 
-                         DCCLI.Brand   = gcBrand AND 
+                         DCCLI.Brand   = Syst.CUICommon:gcBrand AND 
                          DCCLI.DCEvent = DayCampaign.DCEvent)
        THEN DO:
           MESSAGE "Day campaign is in use on subscriptions," SKIP
@@ -667,12 +667,12 @@ si-recid = xrecid.
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE
-              BillItem.Brand    = gcBrand AND
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = DayCampaign.DCTarget
    NO-LOCK NO-ERROR.
  
    FIND FIRST bBillItem WHERE 
-              bBillItem.Brand    = gcBrand AND
+              bBillItem.Brand    = Syst.CUICommon:gcBrand AND
               bBillItem.BillCode = DayCampaign.BillCode 
    NO-LOCK NO-ERROR.
 
@@ -741,12 +741,12 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = DayCampaign.DCTarget
       NO-LOCK NO-ERROR.
  
       FIND FIRST bBillItem WHERE
-                 bBillItem.Brand    = gcBrand AND
+                 bBillItem.Brand    = Syst.CUICommon:gcBrand AND
                  bBillItem.BillCode = DayCampaign.BillCode
       NO-LOCK NO-ERROR.
 
@@ -771,7 +771,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       ELSE lcCalcMethod = "".
                   
       FIND FIRST ccn WHERE 
-                 ccn.Brand = gcBrand AND       
+                 ccn.Brand = Syst.CUICommon:gcBrand AND       
                  ccn.ccn   = DayCampaign.ccn NO-LOCK NO-ERROR.
 
       DISP 
@@ -980,7 +980,7 @@ PROCEDURE pUpdate:
                END.
                ELSE IF CAN-FIND(FIRST 
                      xxDayCampaign WHERE
-                     xxDayCampaign.Brand    = gcBrand AND
+                     xxDayCampaign.Brand    = Syst.CUICommon:gcBrand AND
                      xxDayCampaign.DCEvent  = input DayCampaign.DCEvent  AND
                      RECID(xxDayCampaign)   ne RECID(DayCampaign))
                THEN DO:
@@ -1032,7 +1032,7 @@ PROCEDURE pUpdate:
 
             ELSE IF FRAME-FIELD = "BillItem" THEN DO:
                FIND FIRST bBillItem WHERE 
-                   bBillItem.Brand    = gcBrand AND
+                   bBillItem.Brand    = Syst.CUICommon:gcBrand AND
                    bBillItem.BillCode = input frame lis DayCampaign.BillCode
                NO-LOCK NO-ERROR.
                IF NOT AVAIL bBillItem THEN DO:

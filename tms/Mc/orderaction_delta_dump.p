@@ -71,7 +71,7 @@ FOR EACH EventLog NO-LOCK where
    IF ERROR-STATUS:ERROR THEN NEXT.
    
    FOR EACH OrderAction NO-LOCK WHERE
-            OrderAction.Brand = gcBrand AND
+            OrderAction.Brand = Syst.CUICommon:gcBrand AND
             OrderAction.OrderId = liOrderID:
       fCollect().
    END.

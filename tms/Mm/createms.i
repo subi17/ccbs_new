@@ -91,7 +91,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
 
    /* SIM batch  (Here we get the ADKEY #) */ 
    FIND FIRST SimBatch WHERE  
-              SimBatch.Brand    = gcBrand AND  
+              SimBatch.Brand    = Syst.CUICommon:gcBrand AND  
               SimBatch.SimBatch = sim.SimBatch  
    NO-LOCK NO-ERROR.
             
@@ -161,7 +161,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
    FOR EACH subser NO-LOCK WHERE
             subser.MsSeq = piMsSeq, 
       FIRST ServCom NO-LOCK WHERE  
-            ServCom.Brand   = gcBrand           AND  
+            ServCom.Brand   = Syst.CUICommon:gcBrand           AND  
             ServCom.ServCom = subser.Servcom    AND  
             ServCom.ActType  = 0 
    BREAK BY SubSer.ServCom
@@ -180,7 +180,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
          THEN lcServPac = CTServEl.ServPac.
          ELSE 
          FOR FIRST ServEl NO-LOCK WHERE
-                   ServEl.Brand   = gcBrand AND
+                   ServEl.Brand   = Syst.CUICommon:gcBrand AND
                    ServEl.ServCom = SubSer.ServCom:
             lcServPac = ServEl.ServPac.
          END.
@@ -234,7 +234,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
             SubSer.ServCom = SubSerPara.ServCom AND
             SubSer.SSStat  = 1,
       FIRST ServCom NO-LOCK WHERE
-            ServCom.Brand   = gcBrand AND
+            ServCom.Brand   = Syst.CUICommon:gcBrand AND
             ServCom.ServCom = SubSerPara.ServCom
    BREAK BY SubSerPara.ServCom
          BY SubSerPara.ParaName

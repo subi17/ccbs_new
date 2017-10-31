@@ -40,7 +40,7 @@ DEF  input PARAMETer  ipPnpSeq   AS INT  NO-UNDO .
 DEF  INPUT PARAMETER  icpnpgroup AS CHAR NO-UNDO.
 
    FIND FIRST pnpgroup WHERE
-              Pnpgroup.Brand  = gcBrand AND
+              Pnpgroup.Brand  = Syst.CUICommon:gcBrand AND
               pnpgroup.pnpseq = ipPnpSeq
    NO-LOCK NO-ERROR.
 
@@ -362,7 +362,7 @@ print-line:
        HIDE FRAME haku-f1 no-pause.
        if haku-pnplist <> 0 THEN DO:
           FIND FIRST pnplist where 
-                     pnplist.Brand = gcBrand AND
+                     pnplist.Brand = Syst.CUICommon:gcBrand AND
                      pnplist.pnpSeq >= haku-pnplist
           /* search condition */ no-lock no-error.
           IF NOT AVAILABLE pnplist THEN DO:
@@ -466,7 +466,7 @@ print-line:
                        IMPORT UNFORMATTED xls.
                        CREATE pnplist.
                        ASSIGN
-                          PNPList.Brand  = gcBrand
+                          PNPList.Brand  = Syst.CUICommon:gcBrand
                           pnplist.pnpSeq = ipPnpSeq
                           pnplist.cli      = TRIM(xls).
                     END.
@@ -538,7 +538,7 @@ PROCEDURE LOCAL-FIND-NEXT.
 
    IF order = 1 THEN 
       FIND NEXT pnplist WHERE
-                PnpList.Brand  = gcBrand  AND
+                PnpList.Brand  = Syst.CUICommon:gcBrand  AND
                 pnplist.pnpSeq = ipPnpSeq and
                 pnplist.cli   ne icpnpgroup
       NO-LOCK NO-ERROR.
@@ -549,7 +549,7 @@ PROCEDURE LOCAL-FIND-PREV.
 
    IF order = 1 THEN 
       FIND PREV pnplist WHERE
-                PnpList.Brand  = gcBrand  AND
+                PnpList.Brand  = Syst.CUICommon:gcBrand  AND
                 pnplist.pnpSeq = ipPnpSeq and
                 pnplist.cli   ne icpnpgroup
       NO-LOCK NO-ERROR.
@@ -560,7 +560,7 @@ PROCEDURE LOCAL-FIND-FIRST.
 
    IF order = 1 THEN 
       FIND FIRST pnplist WHERE
-                 PnpList.Brand  = gcBrand  AND
+                 PnpList.Brand  = Syst.CUICommon:gcBrand  AND
                  pnplist.pnpSeq = ipPnpSeq and
                  pnplist.cli   ne icpnpgroup
                  
@@ -572,7 +572,7 @@ PROCEDURE LOCAL-FIND-LAST.
 
    IF order = 1 THEN 
       FIND LAST pnplist WHERE
-                PnpList.Brand  = gcBrand  AND
+                PnpList.Brand  = Syst.CUICommon:gcBrand  AND
                 pnplist.pnpSeq = ipPnpSeq  AND                                 
                 pnplist.cli   ne icpnpgroup
       NO-LOCK NO-ERROR.
@@ -592,11 +592,11 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          pnplist.DialTypeUsed[3]     = TRUE
          pnplist.DialTypeUsed[4]     = TRUE
          pnplist.DialTypeUsed[5]     = FALSE
-         PNPList.Brand               = gcBrand.
+         PNPList.Brand               = Syst.CUICommon:gcBrand.
    END.
          
    FIND FIRST pnpgroup WHERE
-              PnpGroup.Brand  = gcBrand AND
+              PnpGroup.Brand  = Syst.CUICommon:gcBrand AND
               pnpgroup.pnpseq = ipPnpSeq
    NO-LOCK NO-ERROR.
 

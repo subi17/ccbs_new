@@ -3,7 +3,7 @@
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 {Syst/tmsconst.i}
 
@@ -48,7 +48,7 @@ REPEAT:
  
    /* find the old one */
    FIND NEXT bMSISDN WHERE 
-              bMSISDN.Brand = gcbrand and 
+              bMSISDN.Brand = Syst.CUICommon:gcBrand and 
               bMSISDN.CLI = lcCLI  NO-LOCK NO-ERROR.
    ASSIGN 
    lcOldStock = bMSISDN.POS
@@ -56,7 +56,7 @@ REPEAT:
 
    /* get again the new one */
    FIND FIRST bbMSISDN WHERE 
-              bbMSISDN.Brand = gcbrand and 
+              bbMSISDN.Brand = Syst.CUICommon:gcBrand and 
               bbMSISDN.CLI = lcCLI  NO-LOCK NO-ERROR.
 
         /* change status and stock  */

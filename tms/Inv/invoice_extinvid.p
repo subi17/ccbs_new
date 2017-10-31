@@ -70,7 +70,7 @@ FUNCTION fError RETURNS LOGIC
    DO TRANS:
       CREATE ErrorLog.
       ASSIGN 
-         ErrorLog.Brand     = gcBrand
+         ErrorLog.Brand     = Syst.CUICommon:gcBrand
          ErrorLog.ActionID  = "INVEXTID"
          ErrorLog.TableName = "Invoice"
          ErrorLog.KeyValue  = STRING(YEAR(idtInvDate),"9999") + 
@@ -93,7 +93,7 @@ FUNCTION fCreateActionLog RETURNS LOGIC
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Invoice"  
          ActionLog.ActionID     = "ExtInvID"
          ActionLog.KeyValue     = STRING(YEAR(idtInvDate),"9999") + 
@@ -152,7 +152,7 @@ IF iiAction = 2 THEN DO:
 
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.ActionID     = "ExtInvID"  AND
                      ActionLog.ActionTS    >= ldCheckRun  AND
                      ActionLog.ActionStatus = 0           AND
@@ -178,7 +178,7 @@ IF iiAction = 2 THEN DO:
       END.
       
       IF NOT CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                            ActionLog.Brand        = gcBrand    AND    
+                            ActionLog.Brand        = Syst.CUICommon:gcBrand    AND    
                             ActionLog.ActionID     = "BillRun"  AND
                             ActionLog.ActionTS    >= ldCheckRun AND
                             ActionLog.TableName    = "Invoice"  AND
@@ -262,7 +262,7 @@ PROCEDURE pCheckNumbering:
    DEF VAR liPrefixLength AS INTEGER NO-UNDO. 
 
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand   = gcBrand    AND
+            Invoice.Brand   = Syst.CUICommon:gcBrand    AND
             Invoice.InvDate = idtInvDate AND
             Invoice.InvType = iiInvType
    BY Invoice.ExtInvID
@@ -319,7 +319,7 @@ PROCEDURE pCheckNumbering:
                            STRING(liOtherID,"99999999").
             
                IF CAN-FIND(FIRST Invoice WHERE 
-                                 Invoice.Brand    = gcBrand AND
+                                 Invoice.Brand    = Syst.CUICommon:gcBrand AND
                                  Invoice.ExtInvID = lcOtherID)
                THEN DO:
                   liOtherBatch = liOtherID.
@@ -339,7 +339,7 @@ PROCEDURE pCheckNumbering:
          lcPrevious = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength).
     
       IF NOT CAN-FIND(FIRST IgInvNum WHERE
-                            IgInvNum.Brand   = gcBrand AND
+                            IgInvNum.Brand   = Syst.CUICommon:gcBrand AND
                             IgInvNum.InvType = Invoice.InvType AND
                             IgInvNum.SeqPrefix = lcPrevious)
       THEN DO:
@@ -368,9 +368,9 @@ PROCEDURE pRenumber:
 
    /* current sequences */
    FOR EACH InvGroup NO-LOCK WHERE
-            InvGroup.Brand = gcBrand,
+            InvGroup.Brand = Syst.CUICommon:gcBrand,
       FIRST IgInvNum NO-LOCK WHERE
-            IgInvNum.Brand    = gcBrand AND
+            IgInvNum.Brand    = Syst.CUICommon:gcBrand AND
             IgInvNum.InvGroup = InvGroup.InvGroup AND
             IgInvNum.InvType  = iiInvType AND
             IgInvNum.FromDate <= idtInvDate:
@@ -386,7 +386,7 @@ PROCEDURE pRenumber:
    
       /* remove current numbers from invoices */
       FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-               Invoice.Brand      = gcBrand    AND
+               Invoice.Brand      = Syst.CUICommon:gcBrand    AND
                Invoice.InvDate    = idtInvDate AND
                Invoice.InvType    = iiInvType  AND
                Invoice.PrintState = 0          AND
@@ -431,7 +431,7 @@ PROCEDURE pRenumber:
             lcExtInvID = ttGroup.InvPrefix + STRING(liNumber,"99999999").
          
             IF CAN-FIND(FIRST Invoice WHERE 
-                              Invoice.Brand    = gcBrand AND
+                              Invoice.Brand    = Syst.CUICommon:gcBrand AND
                               Invoice.ExtInvID = lcExtInvID)
             THEN DO:
                ttGroup.InvNum = liNumber.
@@ -442,7 +442,7 @@ PROCEDURE pRenumber:
          END.              
 
          FOR FIRST IgInvNum EXCLUSIVE-LOCK WHERE
-                   IgInvNum.Brand    = gcBrand AND
+                   IgInvNum.Brand    = Syst.CUICommon:gcBrand AND
                    IgInvNum.InvGroup = ttGroup.InvGroup AND
                    IgInvNum.InvType  = iiInvType AND
                    IgInvNum.FromDate <= idtInvDate AND
@@ -455,7 +455,7 @@ PROCEDURE pRenumber:
    
    /* set new numbers */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand      = gcBrand    AND
+            Invoice.Brand      = Syst.CUICommon:gcBrand    AND
             Invoice.InvDate    = idtInvDate AND
             Invoice.ExtInvID   = ""         AND 
             Invoice.InvType    = iiInvType  AND
@@ -472,7 +472,7 @@ PROCEDURE pRenumber:
 
       REPEAT:
          IF NOT CAN-FIND(FIRST bInv WHERE 
-                               bInv.Brand = gcBrand AND
+                               bInv.Brand = Syst.CUICommon:gcBrand AND
                                bInv.ExtInvID = lcExtInvID) 
          THEN LEAVE.
          
@@ -522,7 +522,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FIND FIRST ActionLog USE-INDEX ActionID WHERE
-              ActionLog.Brand        = gcBrand     AND    
+              ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
               ActionLog.ActionID     = "ExtInvID"  AND
               ActionLog.ActionTS     = ldThisRun   AND
               ActionLog.ActionStatus = 0 NO-LOCK NO-ERROR.

@@ -62,7 +62,7 @@ form
                   "Upper limit must be at least equal to lower limit")
    SKIP(4)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " AVERAGE REVENUE REPORT " +
+        TITLE " " + Syst.CUICommon:ynimi + " AVERAGE REVENUE REPORT " +
         STRING(pvm,"99-99-99") + " "
         frame valinta.
 
@@ -72,10 +72,10 @@ ASSIGN
    ldtDate2 = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
    ldtDate1 = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2)).
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ig-code[2] = InvGroup.InvGroup.
 
-FIND LAST CLIType WHERE CLIType.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST CLIType WHERE CLIType.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN lcCLIType[2] = CLIType.CLIType.
 
 DISPLAY

@@ -190,7 +190,7 @@ ADD-ROW:
                     END.
                     /* check if BillCode is valid */
                     IF NOT CAN-FIND(BillItem WHERE 
-                            BillItem.Brand    = gcBrand AND
+                            BillItem.Brand    = Syst.CUICommon:gcBrand AND
                             BillItem.BillCode = INPUT DPBasis.BillCode) 
                     THEN DO:
                        MESSAGE 
@@ -216,7 +216,7 @@ ADD-ROW:
 
                     /* is CCN valid ? */
                     IF NOT CAN-FIND(FIRST CCN WHERE 
-                                    CCN.Brand = gcBrand AND
+                                    CCN.Brand = Syst.CUICommon:gcBrand AND
                                     CCN.CCN = INPUT DPBasis.CCN)
                     THEN DO:
                        MESSAGE 
@@ -690,14 +690,14 @@ PROCEDURE local-find-others.
    TargName = "ALL Calls".
    IF DPBasis.BillCode NE "" THEN DO:
       FIND BillItem WHERE 
-         BillItem.Brand    = gcBrand AND
+         BillItem.Brand    = Syst.CUICommon:gcBrand AND
          BillItem.BillCode = DPBasis.BillCode NO-LOCK NO-ERROR.
       IF AVAIL BillItem THEN targName  = BillItem.BIName.
                      ELSE targName  = "! Unknown BillCode !".
    END.
    ELSE IF DPBasis.CCN NE 0 THEN DO:
       FIND FIRST CCN WHERE  
-         CCN.Brand = gcBrand AND
+         CCN.Brand = Syst.CUICommon:gcBrand AND
          CCN.CCN = DPBasis.CCN NO-LOCK NO-ERROR.
       IF AVAIL CCN THEN TargName = CCN.CCNName.
                      ELSE targName = "! Unknown CCN !".

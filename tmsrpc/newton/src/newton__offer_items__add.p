@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Mc/offer.i}
 {newton/src/xmlrpc_names.i}
@@ -53,7 +53,7 @@ IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 CREATE ttOfferItem.
 ASSIGN
     ttOfferItem.OfferItemId   = NEXT-VALUE(OfferItemSeq)
-    ttOfferItem.Brand         = gcBrand
+    ttOfferItem.Brand         = Syst.CUICommon:gcBrand
     ttOfferItem.Offer         = get_string(pcStruct, "offer_id")
     ttOfferItem.VatIncl       = get_bool(pcStruct, "vat_included")
     ttOfferItem.Amount        = (IF LOOKUP("amount", lcStruct) > 0 THEN get_double( pcStruct, "amount") ELSE 0)
@@ -94,7 +94,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 
    FIND TopupScheme WHERE 
-        TopupScheme.Brand = gcBrand AND
+        TopupScheme.Brand = Syst.CUICommon:gcBrand AND
         TopupScheme.TopupScheme = ttOfferItem.ItemKey NO-LOCK NO-ERROR.
    
    IF AVAIL TopupScheme THEN DO:

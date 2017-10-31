@@ -36,7 +36,7 @@ repeat:
       RUN StarEventMakeModifyEvent (lhCustomer).
 
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
              Memo.HostTable = "Customer"
              Memo.KeyValue  = string(customer.custnum)
              Memo.CustNum   = customer.custnum

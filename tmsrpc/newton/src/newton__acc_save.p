@@ -215,7 +215,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {Syst/commpaa.i}
 ASSIGN
    katun = "VISTA_" + pcSalesMan
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 {Mm/msagrcustchg.i}
 {Func/fcustchangereq.i}
 {Func/fcharge_comp_loaded.i}

@@ -15,7 +15,7 @@
 {Func/msreqfunc.i}
 {Func/fpcmaintreq.i}
 {Func/fcreatereq.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO.
@@ -67,7 +67,7 @@ IF NOT AVAIL SubsTerminal then
     return appl_err("Subscription terminal was not found").
 
 
-FIND FIRST Order NO-LOCK WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ Substerminal.OrderId NO-ERROR.
+FIND FIRST Order NO-LOCK WHERE Order.Brand EQ Syst.CUICommon:gcBrand AND Order.OrderId EQ Substerminal.OrderId NO-ERROR.
 IF NOT AVAIL Order THEN
     appl_err("Order for device was not found").
    
@@ -114,7 +114,7 @@ IF LOOKUP("reason",lcStruct) > 0 THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(SubsTerminal.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

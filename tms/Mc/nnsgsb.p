@@ -61,7 +61,7 @@ WITH
     centered OVERLAY scroll 1 13 DOWN ROW 2
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " CHOOSE MEMBERS INTO Salesman GROUP '" +
-    icSMGroup + "' (" + gcBrand + ") " FRAME sel.
+    icSMGroup + "' (" + Syst.CUICommon:gcBrand + ") " FRAME sel.
 
 
 form /* FIND Salesman BY code */
@@ -82,12 +82,12 @@ form /* FIND Salesoffice */
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 FIND SMGroup WHERE
-     SMGroup.Brand   = gcBrand AND
+     SMGroup.Brand   = Syst.CUICommon:gcBrand AND
      SMGroup.SMGroup = icSMGroup NO-LOCK NO-ERROR.
 IF NOT AVAILABLE SMGroup THEN RETURN.
 
 FIND FIRST Salesman 
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman 
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman 
    no-lock no-error.
 IF AVAIL Salesman THEN
    ASSIGN memory = recid(Salesman) must-print = TRUE must-add    = FALSE.
@@ -124,13 +124,13 @@ print-line:
 
           rtab[FRAME-LINE] = recid(Salesman).
           IF order = 1 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
           ELSE IF order = 3 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
           ELSE IF order = 2 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
           ELSE IF order = 4 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        END.
        ELSE DO:  CLEAR no-pause.  rtab[FRAME-LINE] = ?. END.
        IF FRAME-LINE = FRAME-DOWN THEN LEAVE. DOWN.
@@ -175,13 +175,13 @@ BROWSE:
     FIND Salesman where recid(Salesman) = memory NO-LOCK.
     DO i = 1 TO FRAME-LINE - 1:
        IF order = 1 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        ELSE IF order = 3 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
        ELSE IF order = 2 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
        ELSE IF order = 4 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        IF AVAILABLE Salesman THEN
           ASSIGN firstline = i memory = recid(Salesman).
        ELSE LEAVE.
@@ -200,13 +200,13 @@ BROWSE:
     IF FRAME-LINE = 1 THEN DO:
        FIND Salesman where recid(Salesman) = rtab[1] no-lock.
        IF order = 1 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        ELSE IF order = 3 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
        ELSE IF order = 2 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
        ELSE IF order = 4 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        IF NOT AVAILABLE Salesman THEN DO:
           message "YOU ARE ON THE FIRST ROW !".
           BELL. PAUSE 1 no-message. NEXT BROWSE.
@@ -229,13 +229,13 @@ BROWSE:
     IF FRAME-LINE = FRAME-DOWN THEN DO:
        FIND Salesman where recid(Salesman) = rtab[FRAME-DOWN] no-lock .
        IF order = 1 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        ELSE IF order = 3 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
        ELSE IF order = 2 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
        ELSE IF order = 4 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
        IF NOT AVAILABLE Salesman THEN DO:
           message "YOU ARE ON THE LAST ROW !".
           BELL.  PAUSE 1 no-message. NEXT BROWSE.
@@ -259,25 +259,25 @@ BROWSE:
     memory = rtab[1].
     FIND Salesman where recid(Salesman) = memory no-lock no-error.
     IF order = 1 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+    WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
     ELSE IF order = 3 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+    WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
     ELSE IF order = 2 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX SmName  no-lock no-error.
+    WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName  no-lock no-error.
     ELSE IF order = 4 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+    WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
     IF AVAILABLE Salesman THEN DO:
        memory = recid(Salesman).
        /* go back one page */
        DO line = 1 TO (FRAME-DOWN - 1):
           IF order = 1 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
           ELSE IF order = 3 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
           ELSE IF order = 2 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
           ELSE IF order = 4 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
           IF AVAILABLE Salesman THEN memory = recid(Salesman).
           ELSE line = FRAME-DOWN.
        END.
@@ -310,7 +310,7 @@ BROWSE:
    HIDE FRAME hayr no-pause.
    if Salesman <> "" THEN DO:
       FIND FIRST Salesman where 
-                 Salesman.Brand = gcBrand AND
+                 Salesman.Brand = Syst.CUICommon:gcBrand AND
                  Salesman.Salesman >= Salesman
       USE-INDEX Salesman no-lock no-error.
       IF NOT AVAILABLE Salesman THEN DO:
@@ -330,7 +330,7 @@ BROWSE:
    HIDE FRAME hayr3 no-pause.
    if Salesoffice <> "" THEN DO:
       FIND FIRST Salesman where 
-                 Salesman.Brand = gcBrand AND
+                 Salesman.Brand = Syst.CUICommon:gcBrand AND
                  Salesman.SalesOffice >= Salesoffice
       no-lock no-error.
       IF NOT AVAILABLE Salesman THEN DO:
@@ -350,7 +350,7 @@ BROWSE:
    HIDE FRAME hayr2 no-pause.
    if SmName <> "" THEN DO:
       FIND FIRST Salesman where 
-                 Salesman.Brand = gcBrand AND
+                 Salesman.Brand = Syst.CUICommon:gcBrand AND
                  Salesman.SmName >= SmName
       no-lock no-error.
       IF NOT AVAILABLE Salesman THEN DO:
@@ -391,26 +391,26 @@ BROWSE:
 
      else if lookup(nap,"home,h") > 0 THEN DO:
    IF order = 1 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
    ELSE IF order = 3 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
    ELSE IF order = 2 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
    ELSE IF order = 4 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
    ASSIGN memory = recid(Salesman) must-print = TRUE.
    NEXT LOOP.
      END.
 
      else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
    IF order = 1 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
    ELSE IF order = 3 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesoffice no-lock no-error.
    ELSE IF order = 2 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX SmName no-lock no-error.
    ELSE IF order = 4 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.CUICommon:gcBrand USE-INDEX Salesman no-lock no-error.
    ASSIGN memory = recid(Salesman) must-print = TRUE.
    NEXT LOOP.
      END.

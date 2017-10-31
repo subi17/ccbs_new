@@ -71,7 +71,7 @@ form
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(Syst.CUICommon:ctc)
-    " Members in a c-group " + icCustGroup + " (" + gcBrand + ") "
+    " Members in a c-group " + icCustGroup + " (" + Syst.CUICommon:gcBrand + ") "
    FRAME sel.
 
 form
@@ -108,7 +108,7 @@ WITH
 
 
 FIND CustGroup where 
-     CustGroup.Brand     = gcBrand AND
+     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
      CustGroup.CustGroup = icCustGroup no-lock.
 
 
@@ -221,7 +221,7 @@ ADD-CUST:
                 PROMPT-FOR xcg-code
                 validate(INPUT xcg-code  = "" OR 
                          can-find(xCustGroup where
-                                  xCustGroup.Brand     = gcBrand AND
+                                  xCustGroup.Brand     = Syst.CUICommon:gcBrand AND
                                   xCustGroup.CustGroup = input xcg-code),
                          "Unknown group !").
 
@@ -231,7 +231,7 @@ ADD-CUST:
 
              if xcg-code ne "" THEN DO:
                 FIND xCustGroup where 
-                     xCustGroup.Brand     = gcBrand AND
+                     xCustGroup.Brand     = Syst.CUICommon:gcBrand AND
                      xCustGroup.CustGroup = xcg-code no-lock.
                 DISP xCustGroup.CGName.
 

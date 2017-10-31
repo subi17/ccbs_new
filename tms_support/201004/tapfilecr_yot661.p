@@ -23,7 +23,7 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE INPUT PARAMETER pcPLMN     AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER pdaDate1   AS DATE      NO-UNDO.
@@ -299,7 +299,7 @@ PROCEDURE pTap3File:
    IF liVersion = 0 THEN DO TRANS:
    
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "TAPFILE"
              ErrorLog.TableName = "TAP"
              ErrorLog.KeyValue  = STRING(TODAY,"999999")

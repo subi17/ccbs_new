@@ -63,7 +63,7 @@ FORM
     BDestConf.ToDate  COLUMN-LABEL "Valid To"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " BDEST CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -153,7 +153,7 @@ REPEAT WITH FRAME sel:
            PROMPT-FOR BDestConf.BDCGroup WITH FRAME lis.
            IF INPUT BDestConf.BDCGroup = "" THEN UNDO, LEAVE ADD-ROW.
            IF CAN-FIND(FIRST BDestConf WHERE 
-                             BDestConf.Brand = gcBrand
+                             BDestConf.Brand = Syst.CUICommon:gcBrand
                              USING INPUT BDestConf.BDCGroup)
            THEN DO:
               MESSAGE "Given ID is already in use"
@@ -391,7 +391,7 @@ REPEAT WITH FRAME sel:
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcBDCGroup WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        

@@ -7,7 +7,7 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 Katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}

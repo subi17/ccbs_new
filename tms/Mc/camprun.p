@@ -58,7 +58,7 @@ DEF TEMP-TABLE ttCamp NO-UNDO
 
 /* valid campaigns */
 FOR EACH Campaign NO-LOCK WHERE
-         Campaign.Brand     = gcBrand     AND
+         Campaign.Brand     = Syst.CUICommon:gcBrand     AND
          Campaign.Campaign >= icCampaign1 AND
          Campaign.Campaign <= icCampaign2,
     EACH CampRow OF Campaign NO-LOCK:
@@ -85,7 +85,7 @@ END.
 /* customers and clis to which campaign can be used */
 FOR EACH ttCust,
 FIRST Customer NO-LOCK WHERE
-      Customer.Brand   = gcBrand AND
+      Customer.Brand   = Syst.CUICommon:gcBrand AND
       Customer.CustNum = ttCust.CustNum,
 FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       MSOwner.MSSeq   = ttCust.MSSeq AND
@@ -114,7 +114,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       
       /* already used for this cli */
       IF CAN-FIND(FIRST CampStat WHERE
-                        CampStat.Brand    = gcBrand         AND
+                        CampStat.Brand    = Syst.CUICommon:gcBrand         AND
                         CampStat.Campaign = ttCamp.Campaign AND
                         CampStat.CLI      = MsOwner.CLI      AND
                         CampStat.CustNum  = MsOwner.CustNum)
@@ -214,7 +214,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
    
          /* statistics from handled campaign events */ 
          CREATE CampStat.
-         ASSIGN CampStat.Brand    = gcBrand
+         ASSIGN CampStat.Brand    = Syst.CUICommon:gcBrand
                 CampStat.Campaign = ttCamp.Campaign
                 CampStat.CustNum  = MsOwner.CustNum
                 CampStat.CLI      = MsOwner.CLI

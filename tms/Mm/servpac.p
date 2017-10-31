@@ -77,7 +77,7 @@ form
     ServPac.SPName      /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Service Packages "
     + (IF icCLIType > "" THEN "of '" + icCLIType + "'  " ELSE "")
     + string(pvm,"99-99-99") + " "
@@ -375,7 +375,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET lcBrand WHEN gcAllBrand = TRUE
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            ServPac WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF ServPac ENTERED THEN DO:
@@ -395,7 +395,7 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With frame f2.
-       SET lcBrand WHEN gcAllBrand = TRUE
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
            SPName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SPName ENTERED THEN DO:
@@ -447,7 +447,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        IF CAN-FIND(FIRST ServEl WHERE 
-                         ServEl.Brand   = gcBrand AND 
+                         ServEl.Brand   = Syst.CUICommon:gcBrand AND 
                          ServEl.ServPac = ServPac.ServPac) THEN DO:
           MESSAGE
           "This package contains one or more" SKIP
@@ -485,7 +485,7 @@ REPEAT WITH FRAME sel:
        IF ok THEN DO:
 
            FOR EACH ServEl WHERE
-                    ServEl.Brand   = gcBrand AND 
+                    ServEl.Brand   = Syst.CUICommon:gcBrand AND 
                     ServEl.ServPac = ServPac.ServPac.
 
               IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhServEl).

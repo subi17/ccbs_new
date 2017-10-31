@@ -72,7 +72,7 @@ IF icCriteria BEGINS "ORGID" OR
    END.
     
    for each customer no-lock where 
-            customer.brand = gcbrand and
+            customer.brand = Syst.CUICommon:gcBrand and
             customer.orgid = icValue and
             Customer.Roles NE "inactive":
 

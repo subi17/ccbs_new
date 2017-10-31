@@ -183,7 +183,7 @@ PROCEDURE pNew:
    FOR EACH ttProvCommand:
 
       FIND ServCom NO-LOCK WHERE
-           ServCom.Brand   = gcBrand AND
+           ServCom.Brand   = Syst.CUICommon:gcBrand AND
            ServCom.ServCom = ttProvCommand.component NO-ERROR.
 
       IF NOT AVAILABLE ServCom THEN DO:
@@ -192,7 +192,7 @@ PROCEDURE pNew:
       END.
 
       FIND FIRST CTServEl NO-LOCK WHERE
-                 CTServEl.Brand     = gcBrand   AND
+                 CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
                  CTServEl.ServCom   = ServCom.ServCom AND
                  CTServEl.CLIType   = MobSub.CLIType AND
                  CTServEl.FromDate <= TODAY NO-ERROR.
@@ -459,7 +459,7 @@ PROCEDURE pDone.
  
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MsRequest.MsSeq)
          Memo.CustNum   = MsRequest.CustNum

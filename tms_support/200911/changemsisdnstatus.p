@@ -14,7 +14,7 @@ INPUT STREAM sMSISDN FROM VALUE(pcInputFile).
 
 {Syst/commpaa.i}
 katun = "rafaeldv".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
@@ -28,7 +28,7 @@ REPEAT:
    FIND FIRST msisdnnumber where
       msisdnnumber.cli = cClI NO-LOCK.
       
-   FIND FIRST msisdn where msisdn.brand = gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.CUICommon:gcBrand and 
       msisdn.cli = msisdnnumber.cli and 
       msisdn.statuscode = 0 and
       msisdn.validto > ldTS NO-LOCK NO-ERROR.

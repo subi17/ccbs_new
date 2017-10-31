@@ -61,7 +61,7 @@ FORM
     MNPOperator.OperBrand
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MNP OPERATORS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -122,7 +122,7 @@ ADD-ROW:
            CLEAR FRAME lis NO-PAUSE.
            
            CREATE MNPOperator.
-           MNPOperator.Brand = gcBrand.
+           MNPOperator.Brand = Syst.CUICommon:gcBrand.
 
            RUN local-UPDATE-record.
 
@@ -470,11 +470,11 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST MNPOperator WHERE
-                 MNPOperator.Brand EQ gcBrand
+                 MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND FIRST MNPOperator WHERE
-                 MNPOperator.Brand EQ gcBrand
+                 MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -483,11 +483,11 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand 
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand 
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -496,11 +496,11 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -509,11 +509,11 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.

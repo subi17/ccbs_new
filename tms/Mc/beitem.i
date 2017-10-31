@@ -428,7 +428,7 @@ PROCEDURE local-find-others.
           BillItem.BillCode  = FMItem.BillCode 
           NO-LOCK NO-ERROR.
        FIND first ServiceLimitGroup WHERE
-                  ServiceLimitGroup.Brand = gcBrand AND  
+                  ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND  
                   ServiceLimitGroup.GroupCode  =FMItem.ServiceLimitGroup
        NO-LOCK NO-ERROR.
                                 

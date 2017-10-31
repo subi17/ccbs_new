@@ -93,7 +93,7 @@ FORM
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  HIGH SPENDER MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -786,7 +786,7 @@ PROCEDURE local-find-others.
    IF not avail invseq then next.
 
    FIND FIRST memo WHERE 
-              Memo.Brand     = gcBrand               AND
+              Memo.Brand     = Syst.CUICommon:gcBrand               AND
               memo.Custnum   = Invseq.Custnum        AND 
               Memo.Hosttable = "Highusage"           AND  
               memo.keyvalue  = STRING(HighUsage.Invseq) + "|" +                                STRING(Highusage.cli)
@@ -795,7 +795,7 @@ PROCEDURE local-find-others.
    IF avail memo then llmemo = true.
    
    FOR EACH invoice WHERE 
-            Invoice.Brand    = gcBrand         AND
+            Invoice.Brand    = Syst.CUICommon:gcBrand         AND
             Invoice.Custnum  = Invseq.CustNum  AND 
             Invoice.CrInvNum = 0  NO-LOCK.
       ASSIGN 
@@ -807,7 +807,7 @@ PROCEDURE local-find-others.
 
 
    FOR EACH Invoice NO-LOCK WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum AND
             Invoice.InvDate >= today - 90,
       FIRST SubInvoice OF Invoice NO-LOCK WHERE

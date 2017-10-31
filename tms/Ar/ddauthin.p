@@ -106,7 +106,7 @@ DEF STREAM suoravalt.
 
 FORM HEADER
    FILL("=",112) FORMAT "x(112)" SKIP
-   ynimi AT 1 FORMAT "X(30)" 
+   Syst.CUICommon:ynimi AT 1 FORMAT "X(30)" 
       "DIRECT DEBIT AUTHORIZATIONS" AT 45 "Page" AT 103
       sl FORMAT "ZZZZ9" SKIP
    icAuthFile AT 1 FORMAT "X(100)" 
@@ -141,7 +141,7 @@ END FUNCTION.
 FUNCTION fCopy2Failed RETURNS LOGICAL.
 
    CREATE DDAuth.
-   ASSIGN DDAuth.Brand   = gcBrand
+   ASSIGN DDAuth.Brand   = Syst.CUICommon:gcBrand
           DDAuth.CustNum = 0
           DDAuth.AuthID  = NEXT-VALUE(dpseq).
           
@@ -150,7 +150,7 @@ FUNCTION fCopy2Failed RETURNS LOGICAL.
    IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDDAuth).
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "DDAuth"
           Memo.KeyValue  = STRING(DDAuth.AuthId)
           Memo.CustNum   = 0
@@ -310,7 +310,7 @@ REPEAT TRANSACTION:
            IF INDEX(yksilointi,"-") = 0 AND LENGTH(yksilointi) <= 8
            THEN DO:
               FIND Customer NO-LOCK WHERE
-                   Customer.Brand = gcBrand AND
+                   Customer.Brand = Syst.CUICommon:gcBrand AND
                    Customer.CustNum = INTEGER(yksilointi) NO-ERROR.
               IF AVAILABLE Customer THEN liCustNum = Customer.CustNum.
            END.
@@ -325,7 +325,7 @@ REPEAT TRANSACTION:
                      liInvCust = 0.
               
               FOR FIRST MobSub NO-LOCK WHERE
-                        MobSub.Brand = gcBrand AND
+                        MobSub.Brand = Syst.CUICommon:gcBrand AND
                         MobSub.CLI   = lcCLI:
                  ASSIGN liCustNum = MobSub.CustNum
                         liInvCust = MobSub.InvCust.
@@ -334,7 +334,7 @@ REPEAT TRANSACTION:
               /* already killed ? */
               IF liCustNum = 0 THEN 
               FOR FIRST MsOwner NO-LOCK WHERE
-                        MsOwner.Brand = gcBrand AND
+                        MsOwner.Brand = Syst.CUICommon:gcBrand AND
                         MsOwner.CLI   = lcCLI:
                  ASSIGN liCustNum = MsOwner.CustNum
                         liInvCust = MsOwner.InvCust.
@@ -360,7 +360,7 @@ REPEAT TRANSACTION:
 
            IF liCustNum = 0 OR 
               NOT AVAILABLE Customer OR
-              Customer.Brand NE gcBrand
+              Customer.Brand NE Syst.CUICommon:gcBrand
            THEN DO:
               HandMsg = HandMsg + 
                         "Customer could not be identified". 
@@ -432,7 +432,7 @@ REPEAT TRANSACTION:
            ELSE IF KasTun = 2 OR KasTun = 4 THEN DO: 
              
               FIND FIRST DDAuth WHERE 
-              DDAuth.Brand   = gcBrand AND
+              DDAuth.Brand   = Syst.CUICommon:gcBrand AND
               DDAuth.CustNum = Customer.CustNum
               EXCLUSIVE-LOCK NO-ERROR.
 

@@ -141,7 +141,7 @@ FIND FIRST AgrCust WHERE
 
 FIND FIRST CLIType WHERE
            CLIType.Clitype = MobSub.CliType  AND
-           CliType.Brand   = gcBrand NO-LOCK NO-ERROR.
+           CliType.Brand   = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
            
 lcAgrCustName = Func.Common:mDispCustName(BUFFER Agrcust).
 
@@ -277,7 +277,7 @@ ASSIGN
 IF lcBankAccount ne "" THEN DO:
    
    FIND FIRST Bank WHERE
-              Bank.Brand      = gcBrand AND
+              Bank.Brand      = Syst.CUICommon:gcBrand AND
               Bank.BankID     = SUBSTRING(lcBankAccount,5,4) AND
               Bank.BankOffice = SUBSTRING(lcBankAccount,9,4) 
    NO-LOCK NO-ERROR.
@@ -411,7 +411,7 @@ REPEAT  WITH FRAME main:
                    END.     
                    
                    FIND FIRST PriceList WHERE 
-                              PriceList.Brand     = gcBrand AND 
+                              PriceList.Brand     = Syst.CUICommon:gcBrand AND 
                               Pricelist.PriceList = Clitype.PricePlan 
                    NO-LOCK NO-ERROR.
 
@@ -426,7 +426,7 @@ REPEAT  WITH FRAME main:
                    END.
                    
                    FIND FIRST NewCliType WHERE
-                              NewCLIType.Brand = gcBrand AND
+                              NewCLIType.Brand = Syst.CUICommon:gcBrand AND
                               NewCLIType.CLIType = INPUT new-type NO-LOCK.
                    IF NewCLIType.PayType = 2 THEN 
                       liCreditcheck = 0.
@@ -505,7 +505,7 @@ REPEAT  WITH FRAME main:
       END. /* EDITING */
 
       FIND FIRST NewCliType WHERE
-                 NewCLIType.Brand = gcBrand AND
+                 NewCLIType.Brand = Syst.CUICommon:gcBrand AND
                  NewCLIType.CLIType = new-type NO-LOCK NO-ERROR.
       
       ASSIGN
@@ -554,7 +554,7 @@ REPEAT  WITH FRAME main:
             IF MobSub.Paytype = TRUE AND
                NewCLIType.PayType = 1 AND
                NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
+                                  bMobSub.Brand     = Syst.CUICommon:gcBrand AND
                                   bMobSub.MsSeq    <> MobSub.MsSeq AND
                                   bMobSub.CustNum   = Customer.CustNum AND
                                   bMobSub.PayType   = FALSE) THEN DO:
@@ -630,7 +630,7 @@ REPEAT  WITH FRAME main:
   
   if liCreditCheck = 1 THEN DO:
      FIND FIRST NewCliType WHERE
-                NewCLIType.Brand = gcBrand AND
+                NewCLIType.Brand = Syst.CUICommon:gcBrand AND
                 NewCLIType.CLIType = INPUT new-type NO-LOCK NO-ERROR.
      IF AVAILABLE NewCLIType AND NewCLIType.PayType = 2 THEN 
         liCreditcheck = 0.
@@ -673,7 +673,7 @@ REPEAT  WITH FRAME main:
             Mobsub.MultiSimID > 0 THEN DO:
       
             FIND FIRST bbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                       bbMobSub.Brand = gcBrand AND
+                       bbMobSub.Brand = Syst.CUICommon:gcBrand AND
                        bbMobSub.MultiSimId = Mobsub.MultiSimId AND
                        bbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                        bbMobSub.Custnum = Mobsub.Custnum
@@ -696,24 +696,24 @@ REPEAT  WITH FRAME main:
             END.
          END.
          ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand = gcBrand AND
+                                CLIType.Brand = Syst.CUICommon:gcBrand AND
                                 CLIType.CLIType = Mobsub.TariffBundle AND
                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})
                 AND
                 NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                   CLIType.Brand = gcBrand AND
+                                   CLIType.Brand = Syst.CUICommon:gcBrand AND
                                    CLIType.CLIType = lcBundle AND
                                    CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
             llAddLineTerm = FALSE.
 
             FOR EACH bbMobSub NO-LOCK WHERE
-                     bbMobSub.Brand   = gcBrand AND
+                     bbMobSub.Brand   = Syst.CUICommon:gcBrand AND
                      bbMobSub.InvCust = Mobsub.CustNum AND
                      bbMobSub.PayType = FALSE AND
                      bbMobSub.MsSeq NE Mobsub.MsSeq,
                FIRST bCliType NO-LOCK WHERE
-                     bCliType.Brand = gcBrand AND
+                     bCliType.Brand = Syst.CUICommon:gcBrand AND
                      bCliType.CLiType = (IF bbMobSub.TariffBundle > ""
                                         THEN bbMobSub.TariffBundle
                                         ELSE bbMobSub.CLIType) AND

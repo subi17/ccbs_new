@@ -142,7 +142,7 @@ ASSIGN
       ttFMItem.BillType  = "CC".
 
 {Syst/commpaa.i}
-gcBrand = lcBrand.
+Syst.CUICommon:gcBrand = lcBrand.
 {Syst/eventval.i}
 katun = "VISTA_" + get_string(pcStruct, "username").
 

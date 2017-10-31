@@ -115,13 +115,13 @@ END.
 DO i = 1 TO NUM-ENTRIES(lcFields) TRANS:
    
    IF CAN-FIND(RequestParam WHERE
-               RequestParam.Brand      = gcBrand   AND
+               RequestParam.Brand      = Syst.CUICommon:gcBrand   AND
                RequestParam.ReqType    = iiReqType AND
                RequestParam.ParamField = ENTRY(i,lcFields))
    THEN NEXT.
       
    CREATE RequestParam.
-   ASSIGN RequestParam.Brand      = gcBrand 
+   ASSIGN RequestParam.Brand      = Syst.CUICommon:gcBrand 
           RequestParam.ReqType    = iiReqType
           RequestParam.ParamField = ENTRY(i,lcFields).
 END.
@@ -166,7 +166,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           DISPLAY gcBrand @ RequestParam.Brand
+           DISPLAY Syst.CUICommon:gcBrand @ RequestParam.Brand
                    iiReqType @ RequestParam.ReqType.
 
            PROMPT-FOR RequestParam.ParamField WITH FRAME lis.
@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
            END.
            
            IF CAN-FIND(FIRST RequestParam WHERE
-                             RequestParam.Brand   = gcBrand AND
+                             RequestParam.Brand   = Syst.CUICommon:gcBrand AND
                              RequestParam.ReqType = iiReqType 
                              USING FRAME lis RequestParam.ParamField)
            THEN DO:
@@ -191,7 +191,7 @@ REPEAT WITH FRAME sel:
 
            CREATE RequestParam.
            ASSIGN 
-              RequestParam.Brand    = gcBrand
+              RequestParam.Brand    = Syst.CUICommon:gcBrand
               RequestParam.ReqType  = iiReqType
               RequestParam.ParamField = INPUT FRAME lis 
                                         RequestParam.ParamField.
@@ -427,7 +427,7 @@ REPEAT WITH FRAME sel:
        
        IF lcParamField > "" THEN DO:
           FIND FIRST RequestParam WHERE 
-                     RequestParam.Brand   = gcBrand AND
+                     RequestParam.Brand   = Syst.CUICommon:gcBrand AND
                      RequestParam.ReqType = iiReqType AND
                      RequestParam.ParamField >= lcParamField
           NO-LOCK NO-ERROR.
@@ -575,7 +575,7 @@ PROCEDURE local-find-FIRST:
 
    IF iiReqType ne ? THEN DO:
        IF order = 1 THEN FIND FIRST RequestParam 
-          WHERE RequestParam.Brand = gcBrand AND
+          WHERE RequestParam.Brand = Syst.CUICommon:gcBrand AND
                 RequestParam.ReqType = iiReqType
           NO-LOCK NO-ERROR.
    END.
@@ -584,7 +584,7 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF iiReqType ne ? THEN DO:
        IF order = 1 THEN FIND LAST RequestParam
-          WHERE RequestParam.Brand = gcBrand AND
+          WHERE RequestParam.Brand = Syst.CUICommon:gcBrand AND
                 RequestParam.ReqType = iiReqType
           NO-LOCK NO-ERROR.
    END.
@@ -593,7 +593,7 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    IF iiReqType ne ? THEN DO:
        IF order = 1 THEN FIND NEXT RequestParam
-          WHERE RequestParam.Brand = gcBrand AND
+          WHERE RequestParam.Brand = Syst.CUICommon:gcBrand AND
                 RequestParam.ReqType = iiReqType
           NO-LOCK NO-ERROR.
    END.
@@ -602,7 +602,7 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    IF iiReqType ne ?  THEN DO:
        IF order = 1 THEN FIND PREV RequestParam
-          WHERE RequestParam.Brand = gcBrand AND
+          WHERE RequestParam.Brand = Syst.CUICommon:gcBrand AND
                 RequestParam.ReqType = iiReqType
           NO-LOCK NO-ERROR.
    END.
@@ -631,7 +631,7 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND RequestType WHERE 
-           RequestType.Brand   = gcBrand AND
+           RequestType.Brand   = Syst.CUICommon:gcBrand AND
            RequestType.ReqType = RequestParam.ReqType NO-LOCK NO-ERROR.
       
       DISP 

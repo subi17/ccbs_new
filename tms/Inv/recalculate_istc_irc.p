@@ -46,7 +46,7 @@ ELSE ASSIGN
                 DAY(iiDate)).
 
 IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                   ActionLog.Brand = gcBrand AND
+                   ActionLog.Brand = Syst.CUICommon:gcBrand AND
                    ActionLog.TableName = "Cron" AND
                    ActionLog.KeyValue BEGINS lcActionID AND
                    ActionLog.ActionID = "ISTC_IRC_CHK" AND
@@ -56,7 +56,7 @@ IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
 DO TRANS:
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand        = gcBrand
+      ActionLog.Brand        = Syst.CUICommon:gcBrand
       ActionLog.ActionID     = "ISTC_IRC_CHK"
       ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.TableName    = "Cron"
@@ -68,7 +68,7 @@ DO TRANS:
 END.
 
 FOR EACH msrequest NO-LOCK WHERE
-         msrequest.brand = gcBrand AND
+         msrequest.brand = Syst.CUICommon:gcBrand AND
          msrequest.reqtype = 0 AND
          msrequest.reqstatus = 2 and
          msrequest.actstamp >= ldeFrom and

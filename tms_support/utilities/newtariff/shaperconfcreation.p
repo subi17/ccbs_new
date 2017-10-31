@@ -8,7 +8,7 @@
   ----------------------------------------------------------------------*/
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -155,7 +155,7 @@ DEFINE VARIABLE lcShaperConfID AS CHARACTER NO-UNDO.
       ELSE DO:                 
          CREATE ShaperConf.
          ASSIGN 
-            ShaperConf.Brand         = gcBrand
+            ShaperConf.Brand         = Syst.CUICommon:gcBrand
             ShaperConf.ShaperConfID  = ttShaperConf.SConfId          
             ShaperConf.Template      = ttShaperConf.Template
             ShaperConf.TariffType    = ttShaperConf.TariffType

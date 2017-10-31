@@ -175,7 +175,7 @@ form /* memo */
 
 FIND Service WHERE 
      Service.Service = Service AND 
-     Service.Brand   = gcBrand NO-LOCK.
+     Service.Brand   = Syst.CUICommon:gcBrand NO-LOCK.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
@@ -185,7 +185,7 @@ orders = "By Code,By Name,By 3, By 4".
 
 FIND FIRST ServCom WHERE 
            ServCom.Service = Service AND 
-           ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+           ServCom.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE ServCom THEN ASSIGN
    Memory       = recid(ServCom)
    must-print   = TRUE
@@ -217,7 +217,7 @@ REPEAT WITH FRAME sel:
            VALIDATE
               (ServCom.ServCom NOT ENTERED OR
               NOT CAN-FIND(ServCom using  ServCom.ServCom WHERE  
-                           Servcom.Brand = gcBrand ),
+                           Servcom.Brand = Syst.CUICommon:gcBrand ),
               "ServCom " + string(INPUT ServCom.ServCom) +
               " already exists !").
            IF INPUT FRAME lis ServCom.ServCom NOT ENTERED THEN 
@@ -225,7 +225,7 @@ REPEAT WITH FRAME sel:
            CREATE ServCom.
            ASSIGN
            ServCom.Service  = Service  
-           ServCom.Brand   = gcBrand 
+           ServCom.Brand   = Syst.CUICommon:gcBrand 
            ServCom.ServCom = INPUT FRAME lis ServCom.ServCom.
 
            RUN local-UPDATE-record.
@@ -246,7 +246,7 @@ REPEAT WITH FRAME sel:
       /* is there ANY record ? */
       FIND FIRST ServCom
       WHERE ServCom.Service = Service AND 
-            ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+            ServCom.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServCom THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -457,7 +457,7 @@ REPEAT WITH FRAME sel:
            HIDE FRAME f1 NO-PAUSE.
            IF ServCom ENTERED THEN DO:
               FIND FIRST ServCom WHERE 
-                         ServCom.Brand    = gcBrand AND 
+                         ServCom.Brand    = Syst.CUICommon:gcBrand AND 
                          ServCom.ServCom >= ServCom AND 
                          ServCom.Service   = Service NO-LOCK NO-ERROR.
               IF NOT AVAILABLE ServCom THEN DO:
@@ -482,7 +482,7 @@ REPEAT WITH FRAME sel:
            HIDE FRAME f2 NO-PAUSE.
            IF ScName ENTERED THEN DO:
               FIND FIRST ServCom WHERE 
-                         ServCom.Brand   = gcBrand AND 
+                         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
                          ServCom.ScName >= ScName AND 
                          ServCom.Service  = Service NO-LOCK NO-ERROR.
               IF NOT AVAILABLE ServCom THEN DO:
@@ -578,7 +578,7 @@ REPEAT WITH FRAME sel:
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST ServCom
            WHERE ServCom.Service = Service AND 
-                 ServCom.Brand = gcBrand) THEN DO:
+                 ServCom.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -662,36 +662,36 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST ServCom
        WHERE ServCom.Service = Service AND 
-             ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServCom.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST ServCom USE-INDEX SCName
        WHERE ServCom.Service = Service AND 
-             ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServCom.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST ServCom
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST ServCom USE-INDEX SCName
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT ServCom
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT ServCom USE-INDEX SCName
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV ServCom
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV ServCom USE-INDEX SCName
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -856,7 +856,7 @@ PROCEDURE local-UPDATE-record:
                 IF FRAME-FIELD = "FeeModel" THEN DO: 
                    IF INPUT FRAME lis ServCom.Feemodel NE "" THEN DO:
                       FIND Feemodel WHERE 
-                           FeeModel.Brand    = gcBrand AND 
+                           FeeModel.Brand    = Syst.CUICommon:gcBrand AND 
                            FeeModel.FeeModel = INPUT FRAME lis ServCom.FeeModel
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL FeeModel THEN DO:
@@ -872,7 +872,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ClFeeModel" THEN DO: 
                    IF INPUT FRAME lis ServCom.ClFeemodel NE "" THEN DO:
                       FIND Feemodel WHERE 
-                           FeeModel.Brand    = gcBrand AND 
+                           FeeModel.Brand    = Syst.CUICommon:gcBrand AND 
                            FeeModel.FeeModel = INPUT FRAME lis 
                                                ServCom.ClFeeModel
                       NO-LOCK NO-ERROR.
@@ -889,7 +889,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ChgFeeModel" THEN DO: 
                    IF INPUT FRAME lis ServCom.ChgFeemodel NE "" THEN DO:
                       FIND Feemodel WHERE 
-                           FeeModel.Brand    = gcBrand AND 
+                           FeeModel.Brand    = Syst.CUICommon:gcBrand AND 
                            FeeModel.FeeModel = INPUT FRAME lis 
                                                ServCom.ChgFeeModel
                       NO-LOCK NO-ERROR.
@@ -906,7 +906,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "SMSTxt" THEN DO: 
                    IF INPUT FRAME lis ServCom.SMSTxt NE "" THEN DO:
                       IF NOT CAN-FIND(FIRST InvText WHERE
-                         InvText.Brand    = gcBrand AND
+                         InvText.Brand    = Syst.CUICommon:gcBrand AND
                          InvText.Target   = "SMS"   AND
                          InvText.KeyValue = INPUT FRAME lis ServCom.SMSTxt)
                       THEN DO:
@@ -920,7 +920,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ClSMSTxt" THEN DO: 
                    IF INPUT FRAME lis ServCom.ClSMSTxt NE "" THEN DO:
                       IF NOT CAN-FIND(FIRST InvText WHERE
-                         InvText.Brand    = gcBrand AND
+                         InvText.Brand    = Syst.CUICommon:gcBrand AND
                          InvText.Target   = "SMS"   AND
                          InvText.KeyValue = INPUT FRAME lis ServCom.ClSMSTxt)
                       THEN DO:
@@ -934,7 +934,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ChgSMSTxt" THEN DO: 
                    IF INPUT FRAME lis ServCom.ChgSMSTxt NE "" THEN DO:
                       IF NOT CAN-FIND(FIRST InvText WHERE
-                         InvText.Brand    = gcBrand AND
+                         InvText.Brand    = Syst.CUICommon:gcBrand AND
                          InvText.Target   = "SMS"   AND
                          InvText.KeyValue = INPUT FRAME lis ServCom.ChgSMSTxt)
                       THEN DO:
@@ -993,7 +993,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ServiceLimit" THEN DO:
                    IF INPUT ServCom.ServiceLimit > "" THEN DO:
                       FIND ServiceLimitGroup WHERE 
-                           ServiceLimitGroup.Brand     = gcBrand AND
+                           ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
                            ServiceLimitGroup.GroupCode = 
                                INPUT ServCom.ServiceLimit
                       NO-LOCK NO-ERROR.

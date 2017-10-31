@@ -17,7 +17,7 @@ FIND FIRST mnpprocess where
 
 {Syst/commpaa.i}
 katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Mnp/mnp.i}
 
 FUNCTION fNewXML RETURNS CHAR 
@@ -38,7 +38,7 @@ FUNCTION fNewXML RETURNS CHAR
 
 
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.CUICommon:gcBrand AND
               Order.OrderId = iiOrderId
    NO-LOCK NO-ERROR.
 

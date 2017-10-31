@@ -15,7 +15,7 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 /*
 PARAMETERS:

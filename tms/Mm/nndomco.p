@@ -89,7 +89,7 @@ form
    "                Display double calls ........:" bDisp  skip(3)
 WITH
    width 80 ROW 1 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " MARK DOUBLE MOBILE calls " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " MARK DOUBLE MOBILE calls " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME start.
 
 IF NOT bbatch THEN DO:
@@ -166,7 +166,7 @@ repeat WITH FRAME start:
 
    /* connect db(s) */
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                           "",
                           cadate2,
                           cadate2).
@@ -186,7 +186,7 @@ repeat WITH FRAME start:
  
    IF ldaOldDb NE ? THEN DO:
       fInitializeConnectTables("MobCDR","old").
-      RUN pDirectConnect2Dbs(gcBrand,
+      RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                              "old",
                              ldaOldDb,
                              ldaOldDb).

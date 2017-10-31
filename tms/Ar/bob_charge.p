@@ -10,7 +10,7 @@
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -209,7 +209,7 @@ PROCEDURE ip_CrtSingleFee:
       END.   
           
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand             AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand             AND
                  BillItem.BIGroup  = {&BITEM_GRP_CHARGE} AND
                  Billitem.BillCode = lcBillingItem       NO-LOCK NO-ERROR.
        
@@ -219,7 +219,7 @@ PROCEDURE ip_CrtSingleFee:
       END.   
 
       CREATE SingleFee.
-      ASSIGN SingleFee.Brand       = gcBrand
+      ASSIGN SingleFee.Brand       = Syst.CUICommon:gcBrand
              SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
              SingleFee.CustNum     = MobSub.CustNum
              SingleFee.BillTarget  = 1
@@ -246,7 +246,7 @@ PROCEDURE ip_CrtSingleFee:
           CREATE Memo.
           ASSIGN
               Memo.CreStamp  = Func.Common:mMakeTS()
-              Memo.Brand     = gcBrand
+              Memo.Brand     = Syst.CUICommon:gcBrand
               Memo.HostTable = "SingleFee"
               Memo.CustNum   = MobSub.CustNum
               Memo.KeyValue  = STRING(liKeyValue)

@@ -25,7 +25,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    {newton/src/settenant.i pcTenant}
 
-   FIND FatGroup NO-LOCK WHERE FatGroup.Brand = gcBrand AND FatGroup.FtGrp = pcId NO-ERROR.
+   FIND FatGroup NO-LOCK WHERE FatGroup.Brand = Syst.CUICommon:gcBrand AND FatGroup.FtGrp = pcId NO-ERROR.
 
    IF NOT AVAIL FatGroup THEN 
       RETURN appl_err("FAT scheme not found: " + pcId).

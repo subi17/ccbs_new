@@ -174,7 +174,7 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
 
       /* If Groupcode is specified then charge is usage based month */
       IF icGroupCode > "" THEN
-         ldBRAmt = fCalculateLastMonthFee(gcBrand,
+         ldBRAmt = fCalculateLastMonthFee(Syst.CUICommon:gcBrand,
                                           iiMsSeq,
                                           icGroupCode,
                                           ldeOriginalFee,
@@ -194,7 +194,7 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
          /* Billed item can be changed if it is billed by test invoice */
          IF bCloseItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = gcBrand AND
+                            Invoice.Brand   = Syst.CUICommon:gcBrand AND
                             Invoice.InvNum  = bCloseItem.InvNum AND
                             Invoice.InvType = 99 NO-LOCK) THEN DO:
             ASSIGN

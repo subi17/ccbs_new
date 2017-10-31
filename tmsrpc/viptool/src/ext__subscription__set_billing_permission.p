@@ -30,7 +30,7 @@ IF NOT AVAIL TMSCodes THEN
 
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 

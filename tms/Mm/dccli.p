@@ -81,7 +81,7 @@ form
     llMemo              COLUMN-LABEL "M"
 WITH ROW FrmRow width 78 CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " PERIODICAL CONTRACT ROWS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -171,7 +171,7 @@ REPEAT WITH FRAME sel:
            ASSIGN
            DCCLI.CLI          = lccli
            DCCLI.msseq        = iiMsSeq
-           DCCLI.Brand        = gcBrand
+           DCCLI.Brand        = Syst.CUICommon:gcBrand
            DCCLI.DCEvent      = icEvent
            DCCLI.ContractDate = TODAY.
 
@@ -662,7 +662,7 @@ PROCEDURE local-find-FIRST:
           iiMsSeq     > 0        AND 
           icEvent     > ""  THEN  
          FIND FIRST DCCLI WHERE
-                    DCCLI.Brand   = gcBRand AND 
+                    DCCLI.Brand   = Syst.CUICommon:gcBrand AND 
                     DCCLI.MSSEq   = iiMsSeq AND 
                     DCCLI.Dcevent = icEvent NO-LOCK NO-ERROR.
                                        
@@ -677,7 +677,7 @@ PROCEDURE local-find-FIRST:
                      DCCLI.MSSEq = iiMsSeq USE-INDEX DCEvent NO-LOCK NO-ERROR.
       ELSE IF Order = 2 AND dcevent > "" THEN
             FIND FIRST DCCLI WHERE 
-                       DCCLI.Brand   = gcBrand AND
+                       DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                        DCCLI.DCEvent = icEvent USE-INDEX DCEvent 
             NO-LOCK NO-ERROR.
       ELSE IF Order = 2 THEN  FIND FIRST DCCLI  USE-INDEX DCEvent.     
@@ -690,7 +690,7 @@ PROCEDURE local-find-LAST:
           iiMsSeq     > 0        AND 
           icEvent     > ""  THEN  
          FIND LAST  DCCLI use-index DCEvent WHERE
-                    DCCLI.Brand   = gcBRand AND 
+                    DCCLI.Brand   = Syst.CUICommon:gcBrand AND 
                     DCCLI.MSSEq   = iiMsSeq AND 
                     DCCLI.Dcevent = icEvent NO-LOCK NO-ERROR.
       
@@ -706,7 +706,7 @@ PROCEDURE local-find-LAST:
                      DCCLI.MSSEq = iiMsSeq USE-INDEX DCEvent NO-LOCK NO-ERROR.
       ELSE IF Order = 2 AND dcevent > "" THEN
           FIND LAST  DCCLI WHERE
-                     DCCLI.Brand   = gcBrand AND
+                     DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                      DCCLI.DCEvent = icEvent USE-INDEX DCEvent
           NO-LOCK NO-ERROR.
       ELSE IF Order = 2 THEN
@@ -719,7 +719,7 @@ PROCEDURE local-find-NEXT:
           iiMsSeq     > 0        AND 
           icEvent     > ""  THEN  
          FIND NEXT  DCCLI use-index DCEvent WHERE
-                    DCCLI.Brand   = gcBRand AND 
+                    DCCLI.Brand   = Syst.CUICommon:gcBrand AND 
                     DCCLI.MSSEq   = iiMsSeq AND 
                     DCCLI.Dcevent = icEvent NO-LOCK NO-ERROR.
       
@@ -734,7 +734,7 @@ PROCEDURE local-find-NEXT:
                     DCCLI.MSSEq = iiMsSeq USE-INDEX DCEvent NO-LOCK NO-ERROR.
       ELSE IF Order = 2 AND dcevent > "" THEN
           FIND NEXT  DCCLI WHERE
-                     DCCLI.Brand   = gcBrand AND
+                     DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                      DCCLI.DCEvent = icEvent USE-INDEX DCEvent
           NO-LOCK NO-ERROR.
       ELSE IF Order = 2 THEN
@@ -748,7 +748,7 @@ PROCEDURE local-find-PREV:
           iiMsSeq     > 0        AND 
           icEvent     > ""  THEN  
          FIND PREV  DCCLI use-index DCEvent WHERE
-                    DCCLI.Brand   = gcBRand AND 
+                    DCCLI.Brand   = Syst.CUICommon:gcBrand AND 
                     DCCLI.MSSEq   = iiMsSeq AND 
                     DCCLI.Dcevent = icEvent NO-LOCK NO-ERROR.
       
@@ -764,7 +764,7 @@ PROCEDURE local-find-PREV:
                      DCCLI.MSSEq = iiMsSeq USE-INDEX DCEvent NO-LOCK NO-ERROR.
       ELSE IF Order = 2 AND dcevent > "" THEN
          FIND LAST  DCCLI WHERE
-                    DCCLI.Brand   = gcBrand AND
+                    DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                     DCCLI.DCEvent = icEvent USE-INDEX DCEvent
          NO-LOCK NO-ERROR.
       ELSE IF Order = 2 THEN 
@@ -790,11 +790,11 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = DCCLI.DCEvent NO-LOCK NO-ERROR.
  
    FIND FIRST Memo WHERE  
-              Memo.Brand     = gcBrand                AND 
+              Memo.Brand     = Syst.CUICommon:gcBrand                AND 
               Memo.HostTable = "MobSub"               AND 
               Memo.KeyValue  = STRING(DCCLI.MsSeq)    AND 
               Memo.Memotitle Begins "Per.Contract"  NO-LOCK NO-ERROR. 
@@ -844,7 +844,7 @@ PROCEDURE local-update-record:
                 PAUSE 0.
                 IF FRAME-FIELD = "DCEvent" THEN DO:
                    FIND DayCampaign WHERE 
-                        DayCampaign.Brand   = gcBrand ANd
+                        DayCampaign.Brand   = Syst.CUICommon:gcBrand ANd
                         DayCampaign.DCEvent =
                    INPUT FRAME lis DCCLI.DCEvent NO-LOCK NO-ERROR.
                    IF NOT AVAIL DayCampaign THEN DO:
@@ -880,7 +880,7 @@ PROCEDURE local-update-record:
 
                 ELSE IF FRAME-FIELD = "ValidTo" THEN DO:
                    IF CAN-FIND(FIRST bDCCLI WHERE
-                          bDCCLI.Brand     =  gcBrand               AND
+                          bDCCLI.Brand     =  Syst.CUICommon:gcBrand               AND
                           bDCCLI.DCEvent   =  INPUT DCCLI.DCEvent   AND
                           bDCCLI.MsSeq     =  DCCLI.MsSeq           AND
                           bDCCLI.ValidTo   >= INPUT DCCLI.ValidFrom AND

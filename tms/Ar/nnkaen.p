@@ -106,12 +106,12 @@ form
    "       will be calculated according to customer's prior payment behaviour."    SKIP
    skip(11)
    WITH ROW 1 side-labels width 80
-   title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT FORECAST " +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENT FORECAST " +
    string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
 
 form header
    viiva1 AT 2 SKIP
-   ynimi at 2 "PAYMENT FORECAST OF NOT PAID INVOICES" at 44 "Page" AT 108     
+   Syst.CUICommon:ynimi at 2 "PAYMENT FORECAST OF NOT PAID INVOICES" at 44 "Page" AT 108     
    sl format "ZZ9" SKIP
    "Inv.group" at 2 InvGroup IGName format "x(22)"
    jar + ", " + pytx at 44 format "x(60)"
@@ -208,7 +208,7 @@ toimi:
                   END.
                   ELSE DO:
                      FIND InvGroup where
-                          InvGroup.Brand    = gcBrand AND
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                           InvGroup.InvGroup = InvGroup
                      no-lock no-error.
                      IF NOT AVAIL InvGroup THEN DO:
@@ -309,7 +309,7 @@ ASSIGN
 
 FOR EACH TCustGroup.
    FOR EACH cgmember WHERE
-            cgMember.Brand     = gcBrand AND
+            cgMember.Brand     = Syst.CUICommon:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup
    NO-lock.
       FIND FIRST tcgmember WHERE
@@ -335,7 +335,7 @@ END.
 message "Printing in process - cancel, press 'END'".
 runko : repeat:
 for each Customer no-lock where 
-         Customer.Brand    = gcBrand          AND
+         Customer.Brand    = Syst.CUICommon:gcBrand          AND
          Customer.CustNum >= cgcustno1        AND
          Customer.CustNum <= cgcustno2        AND
          (if InvGroup ne "" THEN

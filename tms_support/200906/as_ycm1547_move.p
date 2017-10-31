@@ -226,7 +226,7 @@ PROCEDURE pOwnerChange:
          ELSE DO:
         
             FIND CLIType WHERE 
-                 CLIType.Brand   = gcBrand AND
+                 CLIType.Brand   = Syst.CUICommon:gcBrand AND
                  CLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN ASSIGN 
                BillTarget.BillTarget = CLIType.BillTarget
@@ -243,7 +243,7 @@ PROCEDURE pOwnerChange:
       liFeePeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
     
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = gcBrand      AND
+               FATime.Brand  = Syst.CUICommon:gcBrand      AND
                FATime.MsSeq  = MobSub.MsSeq AND
                FATime.InvNum = 0            AND
                FATime.Period >= liFeePeriod:
@@ -263,7 +263,7 @@ PROCEDURE pOwnerChange:
       END.
   /* 
       FIND FIRST MSISDN NO-LOCK WHERE 
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.CLI = MobSub.CLI NO-ERROR.
       IF AVAILABLE MSISDN THEN DO:
          fLocalMakeMsidnHistory(RECID(MSISDN)).
@@ -278,7 +278,7 @@ PROCEDURE pOwnerChange:
              
       /* SIM */
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand = gcBrand   AND
+                 SIM.Brand = Syst.CUICommon:gcBrand   AND
                  SIM.ICC   = MobSub.ICC NO-ERROR.
       IF AVAILABLE SIM THEN SIM.CustNum = liNewUser.
    END. 
@@ -299,7 +299,7 @@ PROCEDURE pOwnerChange:
                     DAY(ldtFeeDate).
                     
       FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-               FixedFee.Brand     = gcBrand              AND
+               FixedFee.Brand     = Syst.CUICommon:gcBrand              AND
                FixedFee.HostTable = "MobSub"             AND 
                FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                FixedFee.InUse     = TRUE AND
@@ -325,7 +325,7 @@ PROCEDURE pOwnerChange:
       liFeePeriod = TRUNCATE(liFeePeriod / 100,0).
       
       FOR EACH SingleFee EXCLUSIVE-LOCK WHERE
-               SingleFee.Brand      = gcBrand              AND
+               SingleFee.Brand      = Syst.CUICommon:gcBrand              AND
                SingleFee.HostTable  = "MobSub"             AND 
                SingleFee.KeyValue   = STRING(MobSub.MsSeq) AND
                SingleFee.Active     = TRUE                 AND

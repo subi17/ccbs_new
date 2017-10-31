@@ -41,7 +41,7 @@ HELP "Subscription Status, 0 for all" StatName SKIP
 SKIP(5)
 WITH
    width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " SUBSCRIPTION REPORT " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " SUBSCRIPTION REPORT " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME start.
 
 ASSIGN 
@@ -86,7 +86,7 @@ repeat WITH FRAME start:
             ASSIGN CLIType.
             IF CLIType NE "" THEN DO:
                FIND CLIType WHERE 
-                    Clitype.Brand   = gcBrand AND 
+                    Clitype.Brand   = Syst.CUICommon:gcBrand AND 
                     CLIType.CLIType = CLIType NO-LOCK NO-ERROR.
                IF NOT AVAIL CLIType THEN DO:
                   MESSAGE "Unknown CLIType !".

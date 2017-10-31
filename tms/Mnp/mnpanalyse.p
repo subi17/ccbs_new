@@ -10,7 +10,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
 katun = "MNPAnalyse".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/barrfunc.i}
 {Syst/tmsconst.i}
@@ -102,7 +102,7 @@ PROCEDURE pMNPAnalyse:
 
    MNPPROCESS_LOOP:
    FOR EACH MNPProcess WHERE
-      MNPProcess.Brand = gcBrand AND
+      MNPProcess.Brand = Syst.CUICommon:gcBrand AND
       MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
       MNPProcess.StatusCode = {&MNP_ST_ASOL} AND
       MNPProcess.StateFlag = {&MNP_STATEFLAG_NOT_ANALYSED} AND
@@ -141,7 +141,7 @@ PROCEDURE pMNPAnalyse:
          END.
          ELSE 
          DO:      
-            FIND FIRST Msisdn WHERE Msisdn.Brand = gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
+            FIND FIRST Msisdn WHERE Msisdn.Brand = Syst.CUICommon:gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
             IF AVAIL Msisdn AND Msisdn.StatusCode = {&MSISDN_ST_RETURNED} THEN 
             DO:
                lcRejectReason = "RECH_BNUME".
@@ -212,7 +212,7 @@ PROCEDURE pMNPAnalyse:
          FOR EACH MNPSub WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
          
             /* put possible number termination on hold */
-            FIND FIRST Msisdn WHERE Msisdn.Brand = gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
+            FIND FIRST Msisdn WHERE Msisdn.Brand = Syst.CUICommon:gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
             IF AVAIL Msisdn AND Msisdn.StatusCode = {&MSISDN_ST_RETURN_NOTICE_SENT} THEN 
             DO:
                FIND FIRST bMNPProcess WHERE bMNPProcess.MNPSeq     = MNPSub.MNPSeq           AND 

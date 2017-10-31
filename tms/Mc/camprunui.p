@@ -73,7 +73,7 @@ FORM
 
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " CAMPAIGN RUN " +
+        TITLE " " + Syst.CUICommon:ynimi + " CAMPAIGN RUN " +
               STRING(pvm,"99-99-99") + " "
         FRAME fCriter.
 
@@ -84,7 +84,7 @@ ASSIGN liCustNum2    = 999999999
        ldtDate1      = TODAY
        ldtDate2      = TODAY.
 
-FIND LAST Campaign NO-LOCK WHERE Campaign.Brand = gcBrand NO-ERROR.
+FIND LAST Campaign NO-LOCK WHERE Campaign.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE Campaign THEN lcCampaign2 = Campaign.Campaign.
 
 

@@ -157,7 +157,7 @@ REPEAT WITH FRAME sel:
                     if input CTServEl.ServCom = "" THEN LEAVE add-row.
                     
                     FIND ServCom where 
-                         ServCom.Brand   = gcBrand AND 
+                         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
                          ServCom.ServCom = INPUT CTServEl.ServCom
                     no-lock no-error.
                     IF NOT AVAIL ServCom THEN DO:
@@ -167,7 +167,7 @@ REPEAT WITH FRAME sel:
 
                     /* must be part of the general package */
                     IF NOT CAN-FIND(FIRST ServEl WHERE
-                             ServEl.Brand   = gcBrand   AND
+                             ServEl.Brand   = Syst.CUICommon:gcBrand   AND
                              ServEl.ServPac = icServPac AND
                              ServEl.ServCom = INPUT CTServEl.ServCom)
                     THEN DO:
@@ -188,7 +188,7 @@ REPEAT WITH FRAME sel:
                     END.
 
                     IF CAN-FIND(CTServEl WHERE
-                         CTServEl.Brand    = gcBrand                AND 
+                         CTServEl.Brand    = Syst.CUICommon:gcBrand                AND 
                          CTServEl.CLIType  = icCLIType              AND
                          CTServEl.ServPac  = icServPac              AND
                          CTServEl.ServCom  = INPUT CTServEl.ServCom AND
@@ -216,7 +216,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CTServEl.
            ASSIGN
-           CTServEl.Brand    = gcBrand
+           CTServEl.Brand    = Syst.CUICommon:gcBrand
            CTServEl.CTServEl = NEXT-VALUE(CTServEl)
            CTServEl.CLIType  = icCLIType
            CTServEl.ServPac  = icServPac  
@@ -451,7 +451,7 @@ REPEAT WITH FRAME sel:
        HIDE FRAME f1 NO-PAUSE.
        IF lcServCom > "" THEN DO:
           FIND FIRST CTServEl WHERE 
-                     CTServEl.Brand    = gcBrand   AND
+                     CTServEl.Brand    = Syst.CUICommon:gcBrand   AND
                      CTServEl.CLIType  = icCLIType AND
                      CTServEl.ServPac  = icServPac AND 
                      CTServEl.ServCom >= lcServCom  
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
 
 
         FIND ServCom WHERE
-             ServCom.Brand   = gcBrand AND
+             ServCom.Brand   = Syst.CUICommon:gcBrand AND
              ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN 
         RUN Mm/ctservattr.p(CTServEl.CTServEl).
@@ -534,7 +534,7 @@ REPEAT WITH FRAME sel:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST CTServEl
-           WHERE CTServEl.ServPac = ServPac AND CTServEl.Brand = gcBrand) 
+           WHERE CTServEl.ServPac = ServPac AND CTServEl.Brand = Syst.CUICommon:gcBrand) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
@@ -608,28 +608,28 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -649,7 +649,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
        FIND ServCom where
-            ServCom.Brand   = gcBrand  AND 
+            ServCom.Brand   = Syst.CUICommon:gcBrand  AND 
             ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
 
        llServType = (CTServEl.ServType = 0). 
@@ -665,10 +665,10 @@ PROCEDURE local-UPDATE-record:
       CLEAR FRAME lis NO-PAUSE.
       
       FIND CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.CUICommon:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
       FIND ServPac WHERE 
-           ServPac.Brand   = gcBrand AND 
+           ServPac.Brand   = Syst.CUICommon:gcBrand AND 
            ServPac.ServPac = icServPac NO-LOCK NO-ERROR.
 
       IF AVAILABLE ServCom THEN DO:

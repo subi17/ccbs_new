@@ -13,7 +13,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -182,7 +182,7 @@ PROCEDURE pUpdateOrderStatus:
 
    /* find order */   
    FIND Order WHERE 
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.CUICommon:gcBrand AND
         Order.OrderId = iiOrderId NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Order THEN 
       RETURN "ERROR:Invalid Order ID".
@@ -263,7 +263,7 @@ PROCEDURE pUpdateOrderStatus:
       CASE icNewStatus:
          WHEN "7" THEN DO:
             FIND OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand = gcBrand AND
+                 OrderFusion.Brand = Syst.CUICommon:gcBrand AND
                  OrderFusion.OrderID = Order.OrderID NO-ERROR.
             IF NOT AVAILABLE OrderFusion THEN
                RETURN "ERROR:Order type is not Fusion".
@@ -317,7 +317,7 @@ PROCEDURE pUpdateOrderStatus:
       CREATE Memo.
       ASSIGN
          Memo.CreStamp  = Func.Common:mMakeTS() 
-         Memo.Brand     = gcBrand 
+         Memo.Brand     = Syst.CUICommon:gcBrand 
          Memo.HostTable = "Order" 
          Memo.KeyValue  = STRING(Order.OrderId) 
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

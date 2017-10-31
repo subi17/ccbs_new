@@ -63,7 +63,7 @@ form /* seek Billing Event Item  BY BillCode */
 
 
 FIND EPGroup WHERE 
-     EPGroup.Brand   = gcBrand  AND 
+     EPGroup.Brand   = Syst.CUICommon:gcBrand  AND 
      EPGroup.EpGroup = EpGroup NO-LOCK.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
@@ -73,7 +73,7 @@ orders = "By Price List,By BillCode  ,By 3, By 4".
 
 FIND FIRST EPMember WHERE 
            EPMember.EpGroup = EPGroup.EpGroup AND 
-           EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+           EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE EPMember THEN ASSIGN
    Memory       = recid(EPMember)
    must-print   = TRUE
@@ -158,7 +158,7 @@ ADD-ROW:
       /* is there ANY record ? */
       FIND FIRST EPMember
       WHERE EPMember.EpGroup = EPGroup.EpGroup AND 
-            EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+            EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE EPMember THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -428,7 +428,7 @@ BROWSE:
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST EPMember
            WHERE EPMember.EpGroup = EPGroup.EpGroup AND 
-                 EPMember.Brand = gcBrand) THEN DO:
+                 EPMember.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -507,30 +507,30 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST EPMember 
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST EPMember USE-INDEX BillCode
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST EPMember
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST EPMember USE-INDEX BillCode
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT EPMember
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT EPMember USE-INDEX BillCode
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV EPMember USE-INDEX EpGroup
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV EPMember USE-INDEX BillCode
-       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.EpGroup = EPGroup.EpGroup AND EPMember.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:

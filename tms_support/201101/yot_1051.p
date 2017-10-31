@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/mdub.i}
 
 input from yot_1051.input.
@@ -21,12 +21,12 @@ repeat trans:
         mobsub.cli = lcLine NO-LOCK.
    
    if can-find(first fatime NO-LOCK where
-                     fatime.brand = gcbrand and
+                     fatime.brand = Syst.CUICommon:gcBrand and
                      fatime.msseq = mobsub.msseq and
                      fatime.ftgrp = "BONO8CP" use-index MobSub) then do:
    
       FOR EACH fatime NO-LOCK where
-               fatime.brand = gcbrand and
+               fatime.brand = Syst.CUICommon:gcBrand and
                fatime.msseq = mobsub.msseq and
                fatime.ftgrp = "BONO8CP" use-index MobSub:
          put stream sout unformatted
@@ -93,7 +93,7 @@ repeat trans:
    END.
       
    FOR EACH fatime NO-LOCK where
-            fatime.brand = gcbrand and
+            fatime.brand = Syst.CUICommon:gcBrand and
             fatime.msseq = mobsub.msseq and
             fatime.ftgrp = "BONO8CP" use-index Mobsub:
       put stream sout unformatted

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "YOT-858".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/orderfunc.i}
 {Func/msreqfunc.i}
 {Syst/eventval.i}
@@ -58,7 +58,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
    
 /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = gcBrand AND
+            CallAlarm.Brand = Syst.CUICommon:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -80,7 +80,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
          CREATE ActionLog.
          ASSIGN
             ActionLog.ActionTS     = Func.Common:mMakeTS()
-            ActionLog.Brand        = gcBrand  
+            ActionLog.Brand        = Syst.CUICommon:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
             ActionLog.UserCode     = katun
@@ -111,7 +111,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
    IF Order.OrderChannel = "pos" THEN DO:
       
       FIND OrderAccessory WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
            OrderAccessory.OrderId = Order.OrderId AND
            OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
       EXCLUSIVE-LOCK NO-ERROR.

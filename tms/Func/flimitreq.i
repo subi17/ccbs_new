@@ -40,7 +40,7 @@ FUNCTION fLimitRequest RETURNS INTEGER
    
    /* Check ongoing limit requests */
    FIND FIRST MsRequest WHERE
-      MsRequest.Brand = gcBrand AND
+      MsRequest.Brand = Syst.CUICommon:gcBrand AND
       MsRequest.Reqtype = 40 AND
       MsRequest.CustNum = iiCustnum AND
       LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") >  0 
@@ -53,7 +53,7 @@ FUNCTION fLimitRequest RETURNS INTEGER
    
    /* Check ongoing agreement customer requests */
    FIND FIRST MsRequest WHERE
-      MsRequest.Brand = gcBrand AND
+      MsRequest.Brand = Syst.CUICommon:gcBrand AND
       MsRequest.Reqtype = 10 AND
       MsRequest.CustNum = iiCustnum AND
       LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3,7") >  0 

@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -205,13 +205,13 @@ PROCEDURE pUpdateFusionOrder:
 
    /* find order */   
    FIND Order NO-LOCK WHERE 
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.CUICommon:gcBrand AND
         Order.OrderId = piOrderId NO-ERROR.
    IF NOT AVAILABLE Order THEN 
       RETURN "ERROR:Invalid Order ID".
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = gcBrand AND 
+        OrderFusion.Brand = Syst.CUICommon:gcBrand AND 
         OrderFusion.OrderID = Order.OrderID NO-ERROR.
    IF NOT AVAILABLE OrderFusion THEN 
       RETURN "ERROR:Order type is not Fusion".

@@ -109,7 +109,7 @@ FUNCTION fSetCustData RETURNS LOGICAL:
                      SUBSTRING(lcBankAcc,15). 
       
       FIND FIRST Bank WHERE
-                 Bank.Brand      = gcBrand AND
+                 Bank.Brand      = Syst.CUICommon:gcBrand AND
                  Bank.BankID     = SUBSTRING(Customer.BankAcc,5,4) AND
                  Bank.BankOffice = SUBSTRING(Customer.BankAcc,9,4) 
       NO-LOCK NO-ERROR.

@@ -156,11 +156,11 @@ FOR EACH MsRequest NO-LOCK WHERE
 END.
 
 FOR EACH PrePaidRequest NO-LOCK WHERE
-         PrePaidRequest.Brand = gcBrand AND
+         PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
          PrePaidRequest.CLI   = lcCli,
     EACH EventLog       NO-LOCK WHERE
          EventLog.TableName = "PrePaidRequest" AND
-         EventLog.Key BEGINS gcBrand + CHR(255) + STRING(PrePaidRequest.PPRequest).
+         EventLog.Key BEGINS Syst.CUICommon:gcBrand + CHR(255) + STRING(PrePaidRequest.PPRequest).
 
    fCrTemp().
 
@@ -176,7 +176,7 @@ END.
 
 FOR EACH EventLog NO-LOCK WHERE
          EventLog.TableName = "MSISDN" AND
-         EventLog.Key BEGINS  gcBrand + CHR(255) + STRING(lcCli).
+         EventLog.Key BEGINS  Syst.CUICommon:gcBrand + CHR(255) + STRING(lcCli).
 
    fCrTemp().
 END. 
@@ -190,7 +190,7 @@ END.
 
 FOR EACH EventLog NO-LOCK WHERE
          EventLog.TableName = "Memo" AND
-         EventLog.Key BEGINS gcbrand + CHR(255) + "Mobsub" + CHR(255) + 
+         EventLog.Key BEGINS Syst.CUICommon:gcBrand + CHR(255) + "Mobsub" + CHR(255) + 
                              STRING(limsseq) + CHR(255).
 
    fCrTemp().
@@ -199,7 +199,7 @@ END.
 
 FOR EACH EventLog NO-LOCK WHERE
          EventLog.TableName = "MsOwner" AND
-         EventLog.Key       Begins gcBrand + CHR(255) + lcCli + CHR(255). 
+         EventLog.Key       Begins Syst.CUICommon:gcBrand + CHR(255) + lcCli + CHR(255). 
    fCrTemp().
 END.
 
@@ -215,7 +215,7 @@ END.
 
 FOR EACH ttCodes,
     EACH PNPGroup NO-LOCK WHERE
-         PNPGroup.Brand     = gcBrand         AND
+         PNPGroup.Brand     = Syst.CUICommon:gcBrand         AND
          PNPGroup.GroupType = ttCodes.IntCode AND
          PNPGroup.PNPGroup  = lcCli:
          
@@ -223,7 +223,7 @@ FOR EACH ttCodes,
    /* pnp groups */
    FOR EACH EventLog NO-LOCK WHERE
             EventLog.TableName = "PNPGroup" AND
-            EventLog.Key       = gcBrand + CHR(255) + STRING(PNPGroup.PNPSeq):
+            EventLog.Key       = Syst.CUICommon:gcBrand + CHR(255) + STRING(PNPGroup.PNPSeq):
       fCrTemp().      
    END.
 
@@ -231,7 +231,7 @@ FOR EACH ttCodes,
    FOR EACH PNPList OF PNPGroup NO-LOCK,
        EACH EventLog NO-LOCK WHERE
             EventLog.TableName = "PNPList" AND
-            EventLog.Key       = gcBrand                 + CHR(255) + 
+            EventLog.Key       = Syst.CUICommon:gcBrand                 + CHR(255) + 
                                  STRING(PNPList.CustNum) + CHR(255) + 
                                  PNPList.BDestFrom       + CHR(255) + 
                                  PNPList.BDestTo:
@@ -244,7 +244,7 @@ END.
 FOR EACH ttCodes,
     EACH EventLog NO-LOCK WHERE
          EventLog.TableName = "PNPGroup" AND
-         EventLog.Key       = gcBrand + CHR(255) + 
+         EventLog.Key       = Syst.CUICommon:gcBrand + CHR(255) + 
                               STRING(ttCodes.IntCode) + CHR(255) +
                               STRING(lcCli):
    fCrTemp().      
@@ -262,7 +262,7 @@ form
     temp-event.ttType     FORMAT ">9"       COLUMN-LABEL "Type"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Eventlog BROWSER for Customer " + xxkey + "  "
     + string(pvm,"99.99.99") + " "
 FRAME sel.

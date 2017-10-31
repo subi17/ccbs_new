@@ -10,7 +10,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "Qvantel".
 
 DEFINE VARIABLE liNumEntries    AS INTEGER   NO-UNDO.
@@ -36,11 +36,11 @@ PUT STREAM slog UNFORMATTED "Offer ID" CHR(9)
 
 EACH_OFFER:
 FOR EACH Offer WHERE
-         Offer.Brand  = gcBrand AND
+         Offer.Brand  = Syst.CUICommon:gcBrand AND
          Offer.Active = TRUE    AND
          Offer.ToDate >= TODAY  NO-LOCK,
    FIRST OfferCriteria WHERE
-         OfferCriteria.Brand        = gcBrand       AND
+         OfferCriteria.Brand        = Syst.CUICommon:gcBrand       AND
          OfferCriteria.Offer        = Offer.Offer   AND
          OfferCriteria.CriteriaType = "CLITYPE"     AND
          OfferCriteria.BeginStamp  <= ldeCurrStamp  AND
@@ -119,14 +119,14 @@ PROCEDURE pCreateOfferItem:
     END. /* FOR EACH bOfferItem NO-LOCK BY bOfferItem.OfferItemID */
 
     IF NOT CAN-FIND(FIRST OfferItem WHERE
-                          OfferItem.Brand    = gcBrand      AND
+                          OfferItem.Brand    = Syst.CUICommon:gcBrand      AND
                           OfferItem.Offer    = icOfferID    AND
                           OfferItem.ItemType = icItemType   AND
                           OfferItem.ItemKey  = icBundleName AND
                           OfferItem.BeginStamp <= ldeCurrStamp AND
                           OfferItem.EndStamp   >= ldeCurrStamp) THEN DO:
        CREATE OfferItem.
-       ASSIGN OfferItem.Brand        = gcBrand
+       ASSIGN OfferItem.Brand        = Syst.CUICommon:gcBrand
               OfferItem.Offer        = icOfferID
               OfferItem.OfferItemID  = (liLastSeq + 1)
               OfferItem.BeginStamp   = (ldeCurrStamp + 0.00001)

@@ -79,7 +79,7 @@ PROCEDURE pServCompSolog:
             OUTPUT liActTime).
         
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = MsRequest.ReqCParam1 NO-ERROR.
    
    IF NOT AVAILABLE ServCom THEN DO:
@@ -169,7 +169,7 @@ PROCEDURE pServAttrSolog:
             OUTPUT liActTime).
         
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = lcServCom NO-ERROR.
    IF NOT AVAILABLE ServCom THEN DO:
       fReqError("Unknown service " + lcServCom).
@@ -177,7 +177,7 @@ PROCEDURE pServAttrSolog:
    END. 
 
    FIND ServAttr NO-LOCK WHERE
-        ServAttr.Brand    = gcBrand   AND
+        ServAttr.Brand    = Syst.CUICommon:gcBrand   AND
         ServAttr.ServCom  = lcServCom AND
         ServAttr.ServAttr = lcServAttr NO-ERROR.
    IF NOT AVAILABLE ServAttr THEN DO:
@@ -290,7 +290,7 @@ PROCEDURE pServCompUpdate:
             OUTPUT liActTime).
 
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = MsRequest.ReqCParam1 NO-ERROR.
    IF NOT AVAILABLE ServCom THEN DO:
       fReqError("Unknown service " + MsRequest.ReqCParam1).
@@ -495,7 +495,7 @@ PROCEDURE pServCompUpdate:
          /* fixedfee and restore the existing fixedfee itself     */
          IF SubSer.ServCom = "BB" THEN
             FOR FIRST FixedFee WHERE
-                      FixedFee.Brand     = gcBrand        AND
+                      FixedFee.Brand     = Syst.CUICommon:gcBrand        AND
                       FixedFee.Custnum   = MobSub.CustNum AND
                       FixedFee.HostTable = "MobSub"       AND
                       FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -515,7 +515,7 @@ PROCEDURE pServCompUpdate:
          lcReqContr = "".
          /* if salesman defined then get contract id */
          IF MsRequest.Salesman > "" THEN 
-            lcReqContr = fFeeContract(gcBrand,
+            lcReqContr = fFeeContract(Syst.CUICommon:gcBrand,
                                       MobSub.CustNum,
                                       MsRequest.Salesman,
                                       ldtFeeDate,
@@ -531,7 +531,7 @@ PROCEDURE pServCompUpdate:
          ELSE DO:
             /* Open the existing fixed fee related to the BB service */
             FOR FIRST FixedFee WHERE
-                      FixedFee.Brand     = gcBrand        AND
+                      FixedFee.Brand     = Syst.CUICommon:gcBrand        AND
                       FixedFee.Custnum   = MobSub.CustNum AND
                       FixedFee.HostTable = "MobSub"       AND
                       FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -739,7 +739,7 @@ PROCEDURE pServCompUpdate:
              lcOnlyVoiceContracts   = fCParamC("ONLY_VOICE_CONTRACTS").
 
       FOR FIRST bOrigRequest NO-LOCK WHERE
-                bOrigRequest.Brand     = gcBrand AND
+                bOrigRequest.Brand     = Syst.CUICommon:gcBrand AND
                 bOrigRequest.MsRequest = MsRequest.OrigRequest:
          IF MsRequest.ReqIParam1 = 2 AND /* STC/BTC Initiator */
             (bOrigRequest.ReqType = 0 OR bOrigRequest.ReqType = 81) THEN DO:
@@ -759,10 +759,10 @@ PROCEDURE pServCompUpdate:
          END. /* IF bOrigRequest.ReqType = 0 */
          ELSE IF bOrigRequest.ReqType = 13 THEN DO:  /* New Subs with BB */
             FOR FIRST bOrder WHERE
-                      bOrder.Brand   = gcBrand AND
+                      bOrder.Brand   = Syst.CUICommon:gcBrand AND
                       bOrder.OrderId = INT(bOrigRequest.ReqCParam2) NO-LOCK,
                 FIRST bOrderAccessory WHERE
-                      bOrderAccessory.Brand   = gcBrand AND
+                      bOrderAccessory.Brand   = Syst.CUICommon:gcBrand AND
                       bOrderAccessory.OrderId = bOrder.OrderId AND
                       bOrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-LOCK:
                 lcSMSTxt = MsRequest.ReqCParam1 + "ActNewTerm".
@@ -858,7 +858,7 @@ PROCEDURE pServCompUpdate:
       MsRequest.ReqCParam1 = "LP"                  AND 
       MsRequest.ReqIParam1 = 1                     THEN DO:
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
              Memo.HostTable = "MobSub"
              Memo.KeyValue  = STRING(MsRequest.MsSeq)
              Memo.CustNum   = MsRequest.CustNum
@@ -909,7 +909,7 @@ PROCEDURE pServAttrUpdate:
             OUTPUT liActTime).
         
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = lcServCom NO-ERROR.
    IF NOT AVAILABLE ServCom THEN DO:
       fReqError("Unknown service " + lcServCom).
@@ -917,7 +917,7 @@ PROCEDURE pServAttrUpdate:
    END. 
 
    FIND ServAttr NO-LOCK WHERE
-        ServAttr.Brand    = gcBrand   AND
+        ServAttr.Brand    = Syst.CUICommon:gcBrand   AND
         ServAttr.ServCom  = lcServCom AND
         ServAttr.ServAttr = lcServAttr NO-ERROR.
    IF NOT AVAILABLE ServAttr THEN DO:

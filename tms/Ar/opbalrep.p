@@ -51,7 +51,7 @@ ASSIGN
 
 FORM HEADER
    viiva1 AT 1 SKIP
-   ynimi at 1 FORMAT "x(30)" 
+   Syst.CUICommon:ynimi at 1 FORMAT "x(30)" 
       "OVERPAYMENT BALANCES" AT 35
       "Page" AT 68             
       sl FORMAT "ZZZZ9" SKIP
@@ -92,7 +92,7 @@ ASSIGN rl = 8.
 
 CustCollect:
 FOR EACH Customer WHERE
-         Customer.Brand = gcBrand USE-INDEX CustNum NO-LOCK:
+         Customer.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum NO-LOCK:
     lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                
     ldOPAmt = fGetCustBal(Customer.CustNum,"TOTAL","OP").

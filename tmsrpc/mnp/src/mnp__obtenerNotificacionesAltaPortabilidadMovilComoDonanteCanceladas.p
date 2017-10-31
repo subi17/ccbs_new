@@ -132,7 +132,7 @@ FOR EACH ttInput NO-LOCK:
    
       /* Cancel possible SMS messages */
       FOR EACH CallAlarm WHERE
-               CallAlarm.Brand = gcBrand AND
+               CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                CallAlarm.CLI = MNPSub.CLI AND
                CallAlarm.DeliStat = 1 AND
                CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -173,13 +173,13 @@ FOR EACH ttInput NO-LOCK:
          IF MobSub.MultiSIMId > 0 AND
             MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
             FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                       lbMobSub.Brand  = gcBrand AND
+                       lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
                        lbMobSub.MultiSimID = MobSub.MultiSimID AND
                        lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                        lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
             IF NOT AVAIL lbMobSub THEN DO:
                FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                          TermMobSub.Brand  = gcBrand AND
+                          TermMobSub.Brand  = Syst.CUICommon:gcBrand AND
                           TermMobSub.MultiSimID = MobSub.MultiSimID AND
                           TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                           TermMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -207,7 +207,7 @@ FOR EACH ttInput NO-LOCK:
          END. /* IF MobSub.MultiSIMId > 0 AND */
          ELSE IF CAN-FIND(
             FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = gcBrand AND
+                  CLIType.Brand = Syst.CUICommon:gcBrand AND
                   CLIType.CLIType = (IF MobSub.TariffBundle > ""
                                      THEN MobSub.TariffBundle
                                      ELSE MobSub.CLIType) AND

@@ -99,7 +99,7 @@ PROCEDURE pCollectCDRs:
       EMPTY TEMP-TABLE ttCall.
                
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
+                     INPUT Syst.CUICommon:gcBrand,
                      INPUT katun,
                      INPUT idaCDRDate1,
                      INPUT idaCDRDate2,

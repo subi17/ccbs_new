@@ -17,7 +17,7 @@
 
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR resp_array AS CHARACTER NO-UNDO.
@@ -34,7 +34,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
       
 FOR EACH mnpretentionrule NO-LOCK WHERE
-         mnpretentionrule.brand = gcBrand AND
+         mnpretentionrule.brand = Syst.CUICommon:gcBrand AND
          mnpretentionrule.ToDate >= TODAY AND
          mnpretentionrule.FromDate <= TODAY:
    
@@ -50,7 +50,7 @@ FOR EACH mnpretentionrule NO-LOCK WHERE
 
    IF MNPRetentionRule.SMSText > "" THEN DO:
       FIND FIRST InvText NO-LOCK WHERE
-                 InvText.Brand = gcBrand AND
+                 InvText.Brand = Syst.CUICommon:gcBrand AND
                  InvText.Target = "SMS" AND
                  InvText.KeyValue = MNPRetentionRule.SMSText AND
                  InvText.Language = 1 AND

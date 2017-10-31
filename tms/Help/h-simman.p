@@ -37,7 +37,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 MAIN:
 repeat:
 
-   find first SimMan WHERE simman.Brand = gcBRand no-lock no-error.
+   find first SimMan WHERE simman.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available SimMan then do:
       must-print = false.
       must-add = true.
@@ -69,7 +69,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(SimMan).
             down with frame sel.
-            find next SimMan WHERE simman.Brand = gcBRand no-lock no-error.
+            find next SimMan WHERE simman.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -99,7 +99,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find SimMan where recid(SimMan) = rtab[frame-line] no-lock.
-               find prev SimMan WHERE simman.Brand = gcBRand no-lock no-error.
+               find prev SimMan WHERE simman.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available SimMan then do:
                   bell.
                   message "You are on 1st row !".              
@@ -124,7 +124,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find SimMan where recid(SimMan) = rtab[frame-line] no-lock .
-               find next SimMan WHERE simman.Brand = gcBRand no-lock no-error.
+               find next SimMan WHERE simman.Brand = Syst.CUICommon:gcBrand no-lock no-error.
                if not available SimMan then do:
                   bell.
                   message "You are on last row !".
@@ -149,11 +149,11 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find SimMan where recid(SimMan) = memory no-lock no-error.
-            find prev SimMan WHERE simman.Brand = gcBRand no-lock no-error.
+            find prev SimMan WHERE simman.Brand = Syst.CUICommon:gcBrand no-lock no-error.
             if available SimMan then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev SimMan WHERE simman.Brand = gcBRand 
+                  find prev SimMan WHERE simman.Brand = Syst.CUICommon:gcBrand 
                   no-lock no-error.
                   if available SimMan then memory = recid(SimMan).
                   else i = frame-down.
@@ -191,7 +191,7 @@ BROWSE:
            hide frame hayr no-pause.
            if Mancode ENTERED then do:
               find first SimMan where 
-                         SimMan.Brand    = gcBrand AND 
+                         SimMan.Brand    = Syst.CUICommon:gcBrand AND 
                          SimMan.Mancode >= Mancode
               no-lock no-error.
               if not available SimMan then do:
@@ -216,7 +216,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first SimMan no-lock WHERE simman.Brand = gcBRand.
+           find first SimMan no-lock WHERE simman.Brand = Syst.CUICommon:gcBrand.
            memory = recid(SimMan).
            must-print = true.
            next LOOP.
@@ -224,7 +224,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last SimMan no-lock WHERE simman.Brand = gcBRand.
+           find last SimMan no-lock WHERE simman.Brand = Syst.CUICommon:gcBrand.
            memory = recid(SimMan).
            must-print = true.
            next LOOP.

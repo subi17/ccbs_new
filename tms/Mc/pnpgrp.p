@@ -60,7 +60,7 @@ form
 WITH width 75 OVERLAY CENTERED scroll 1 13 DOWN
    COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " 
-   + ynimi 
+   + Syst.CUICommon:ynimi 
    + " maintain Customer " 
    + STRING(iCustnum) 
    + " PnPGroups "
@@ -111,7 +111,7 @@ repeat WITH FRAME sel:
          DO TRANSAction :
             CREATE CustPNPGroup.
             ASSIGN
-            CustPNPGroup.Brand    = gcBrand 
+            CustPNPGroup.Brand    = Syst.CUICommon:gcBrand 
             CustPNPGroup.PnPPrior = 0
             CustPNPGroup.Custnum  = iCustnum. 
             RUN local-update.

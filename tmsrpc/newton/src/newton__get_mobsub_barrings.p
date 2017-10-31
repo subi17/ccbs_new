@@ -17,7 +17,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 katun    = "NewtonAd".
-gcBrand  = "1".
+Syst.CUICommon:gcBrand  = "1".
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 {Func/transname.i}
@@ -149,7 +149,7 @@ FUNCTION fGetServiceName RETURN CHARACTER
 
    IF NOT AVAIL Tmscodes THEN RETURN pcDigit.
 
-   RETURN fGetItemName(gcBrand,
+   RETURN fGetItemName(Syst.CUICommon:gcBrand,
                 "TMSCodes",
                 tmscodes.tablename + "|" +
                 tmscodes.fieldname + "|" +
@@ -162,7 +162,7 @@ FUNCTION fGetBarringName RETURN CHARACTER
   (INPUT pcCode AS CHARACTER,
    INPUT piLang AS INTEGER):
 
-   RETURN fGetItemName(gcBrand,
+   RETURN fGetItemName(Syst.CUICommon:gcBrand,
                "BarringCode",
                 pcCode,
                 piLang,
@@ -182,7 +182,7 @@ FUNCTION fGetBarringGroupName RETURN CHARACTER
 
    IF NOT AVAIL Tmscodes THEN RETURN pcBarringGroup.
 
-   RETURN fGetItemName(gcBrand,
+   RETURN fGetItemName(Syst.CUICommon:gcBrand,
                 "TMSCodes",
                 Tmscodes.TableName + "|" +
                 Tmscodes.FieldName + "|" +

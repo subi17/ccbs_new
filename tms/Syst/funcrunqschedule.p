@@ -916,7 +916,7 @@ PROCEDURE pUpdateStatus:
          IF lcNewState = "Cancelled" THEN DO:   
             CREATE ErrorLog.
             ASSIGN 
-               ErrorLog.Brand     = gcBrand
+               ErrorLog.Brand     = Syst.CUICommon:gcBrand
                ErrorLog.ActionID  = "FRQUEUERUN" + STRING(iiFRQScheduleID)
                ErrorLog.TableName = "FuncRunQSchedule"
                ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
@@ -925,7 +925,7 @@ PROCEDURE pUpdateStatus:
                ErrorLog.ActionTS  = Func.Common:mMakeTS().
 
             FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = STRING(FuncRunQSchedule.FRQueueID) AND
                  ActionLog.ActionID  = "FRQUEUE" + 

@@ -158,7 +158,7 @@ FUNCTION fProfileExtention RETURNS LOGIC
 
    /* go through all clitype level packages which are type 2 */
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand      AND
+            CTServPac.Brand     = Syst.CUICommon:gcBrand      AND
             CTServPac.CLIType   = icCLIType    AND
             CTServPac.ServType  = 2            AND 
             CTServPac.FromDate <= idtDate      AND
@@ -170,14 +170,14 @@ FUNCTION fProfileExtention RETURNS LOGIC
       IF NOT FIRST-OF(CTServPac.ServPac) THEN NEXT.
       
       FOR EACH CTServEl WHERE
-               CTServEl.Brand     = gcBrand            AND
+               CTServEl.Brand     = Syst.CUICommon:gcBrand            AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
                CTServEl.FromDate <= CTServPac.ToDate   AND
                CTServEl.FromDate <= idtDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand   = gcBrand AND
+               ServCom.Brand   = Syst.CUICommon:gcBrand AND
                ServCom.ServCom = CTServEl.ServCom
       BREAK BY ServCom.ScPosition  /* order from component */
             BY CTServEl.ServCom
@@ -239,7 +239,7 @@ FUNCTION fIsPackageOn RETURNS LOGIC
    llAlreadyOn = TRUE.
    
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand   AND
+            CTServPac.Brand     = Syst.CUICommon:gcBrand   AND
             CTServPac.CLIType   = icCLIType AND
             CTServPac.ServPac   = icPackage AND  
             CTServPac.FromDate <= idtDate   AND
@@ -251,7 +251,7 @@ FUNCTION fIsPackageOn RETURNS LOGIC
       
       CheckElements:
       FOR EACH CTServEl WHERE
-               CTServEl.Brand     = gcBrand            AND
+               CTServEl.Brand     = Syst.CUICommon:gcBrand            AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
@@ -382,7 +382,7 @@ PROCEDURE pCopyPackage:
    lcServSkipList = fCParamC("ServSkipList").
 
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand   AND
+            CTServPac.Brand     = Syst.CUICommon:gcBrand   AND
             CTServPac.CLIType   = icCLIType AND
             CTServPac.FromDate <= idtDate   AND
             CTServPac.ToDate   >= idtDate
@@ -404,14 +404,14 @@ PROCEDURE pCopyPackage:
       llFound = TRUE.
         
       FOR EACH CTServEl NO-LOCK WHERE
-               CTServEl.Brand     = gcBrand   AND
+               CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
                CTServEl.FromDate <= CTServPac.ToDate   AND
                CTServEl.FromDate <= idtDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand    = gcBrand          AND
+               ServCom.Brand    = Syst.CUICommon:gcBrand          AND
                ServCom.ServCom  = CTServEl.ServCom AND
                ServCom.Target   = 0
       BREAK BY ServCom.ScPosition
@@ -487,7 +487,7 @@ PROCEDURE pCopyPackage:
          /* are there default values defined on per.contract */
          IF icDCEvent > "" THEN 
          FOR FIRST bDCPackage NO-LOCK WHERE
-                   bDCPackage.Brand     = gcBrand AND
+                   bDCPackage.Brand     = Syst.CUICommon:gcBrand AND
                    bDCPackage.DCEvent   = icDCEvent AND
                    bDCPackage.ServPac   = ttServCom.ServPac AND
                    bDCPackage.ToDate   >= idtDate AND
@@ -668,7 +668,7 @@ PROCEDURE pCopyPackage:
          /* list of fee models for fee creation */
          IF ilSetFees AND ttServCom.DefValue  > 0 THEN DO:
             FIND FIRST ServPac WHERE
-                 ServPac.Brand   = gcBrand AND
+                 ServPac.Brand   = Syst.CUICommon:gcBrand AND
                  ServPac.ServPac = ttServCom.ServPac NO-LOCK NO-ERROR.
 
             IF AVAILABLE ServPac AND ServPac.FeeModel > "" THEN DO:
@@ -746,7 +746,7 @@ PROCEDURE pCopyPackage:
    IF ilSetFees THEN DO:
    
       /* contract */
-      lcContract = fFeeContract(gcBrand,
+      lcContract = fFeeContract(Syst.CUICommon:gcBrand,
                                 bContSub.CustNum,
                                 "",  
                                 idtDate,
@@ -818,7 +818,7 @@ PROCEDURE pTerminatePackage:
    EMPTY TEMP-TABLE ttServAttr.
  
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand      AND
+            CTServPac.Brand     = Syst.CUICommon:gcBrand      AND
             CTServPac.CLIType   = icOldCLIType AND
             CTServPac.ServPac   = icServPac    AND 
             CTServPac.FromDate <= ldaEndDate   AND
@@ -832,14 +832,14 @@ PROCEDURE pTerminatePackage:
       llFound = TRUE.
             
       FOR EACH CTServEl NO-LOCK WHERE
-               CTServEl.Brand     = gcBrand   AND
+               CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
                CTServEl.FromDate <= CTServPac.ToDate   AND
                CTServEl.FromDate <= ldaEndDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand    = gcBrand          AND
+               ServCom.Brand    = Syst.CUICommon:gcBrand          AND
                ServCom.ServCom  = CTServEl.ServCom AND
                ServCom.Target   = 0
       BREAK BY ServCom.ScPosition
@@ -875,7 +875,7 @@ PROCEDURE pTerminatePackage:
          llCommonComponent = FALSE.
 
          FOR FIRST bDCPackage NO-LOCK WHERE
-                   bDCPackage.Brand     = gcBrand AND
+                   bDCPackage.Brand     = Syst.CUICommon:gcBrand AND
                    bDCPackage.DCEvent   = ENTRY(liCount,icBundleList) AND
                    bDCPackage.ServPac   = ttServCom.ServPac AND
                    bDCPackage.ToDate   >= ldaEndDate + 1 AND
@@ -994,7 +994,7 @@ PROCEDURE pTerminatePackage:
       /* contract */
       FIND bContSub WHERE bContSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE bContSub THEN
-      lcContract = fFeeContract(gcBrand,
+      lcContract = fFeeContract(Syst.CUICommon:gcBrand,
                                 bContSub.CustNum,
                                 "",  
                                 ldaEndDate,
@@ -1045,10 +1045,10 @@ PROCEDURE pGetGeneralPackage:
    DEF INPUT  PARAMETER icServPac AS CHAR NO-UNDO. 
 
    FOR EACH ServEl NO-LOCK WHERE
-            ServEl.Brand   = gcBrand AND
+            ServEl.Brand   = Syst.CUICommon:gcBrand AND
             ServEl.ServPac = icServPac,
       FIRST ServCom NO-LOCK WHERE
-            ServCom.Brand   = gcBrand AND
+            ServCom.Brand   = Syst.CUICommon:gcBrand AND
             ServCom.ServCom = ServEl.ServCom AND
             ServCom.Target  = 0:
              
@@ -1058,7 +1058,7 @@ PROCEDURE pGetGeneralPackage:
       
       IF ServCom.ServAttr THEN 
       FOR EACH ServAttr NO-LOCK WHERE
-               ServAttr.Brand   = gcBrand AND
+               ServAttr.Brand   = Syst.CUICommon:gcBrand AND
                ServAttr.ServCom = ServCom.ServCom:
          CREATE ttServAttr.
          BUFFER-COPY ServAttr TO ttServAttr.

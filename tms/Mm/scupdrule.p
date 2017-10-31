@@ -66,7 +66,7 @@ form
     ScUpdRule.UpdValue    
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " Service Update Rules "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -106,7 +106,7 @@ FUNCTION fServName RETURNS CHARACTER
   (idServCom AS CHAR).
 
   FIND ServCom WHERE
-       ServCom.Brand   = gcBrand AND
+       ServCom.Brand   = Syst.CUICommon:gcBrand AND
        ServCom.ServCom = idServCom NO-LOCK NO-ERROR.
   IF AVAILABLE ServCom
   THEN RETURN ServCom.SCName.
@@ -160,7 +160,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF NOT CAN-FIND(ServCom WHERE
-                           ServCom.Brand = gcBrand AND
+                           ServCom.Brand = Syst.CUICommon:gcBrand AND
                            ServCom.ServCom = INPUT ScUpdRule.ServCom)
            THEN DO:
               MESSAGE "Unknown service" 
@@ -391,14 +391,14 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
        IF lcServCom > "" THEN DO:
        
           FIND FIRST ScUpdRule WHERE 
-                     ScUpdRule.Brand    = gcBrand AND
+                     ScUpdRule.Brand    = Syst.CUICommon:gcBrand AND
                      ScUpdRule.ServCom >= lcServCom
           NO-LOCK NO-ERROR.
 
@@ -416,14 +416,14 @@ REPEAT WITH FRAME sel:
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
        IF lcServCom > "" THEN DO:
        
           FIND FIRST ScUpdRule WHERE 
-                     ScUpdRule.Brand       = gcBrand AND
+                     ScUpdRule.Brand       = Syst.CUICommon:gcBrand AND
                      ScUpdRule.UpdServCom >= lcServCom
           NO-LOCK NO-ERROR.
 
@@ -665,7 +665,7 @@ PROCEDURE local-UPDATE-record:
                   END. 
                      
                   IF CAN-FIND(FIRST bScUpdRule WHERE
-                     bScUpdRule.Brand      = gcBrand                    AND 
+                     bScUpdRule.Brand      = Syst.CUICommon:gcBrand                    AND 
                      bScUpdRule.ServCom    = ScUpdRule.ServCom          AND
                      bScUpdRule.OldValue   = INPUT ScUpdRule.OldValue   AND
                      bScUpdRule.NewValue   = INPUT ScUpdRule.NewValue   AND

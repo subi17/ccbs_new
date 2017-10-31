@@ -30,7 +30,7 @@ DEF BUFFER xxCustomer FOR customer.
 DEF VAR    Updated    AS  I   NO-UNDO.
 
 FOR EACH Invoice NO-LOCK where 
-         Invoice.Brand    = gcBrand AND 
+         Invoice.Brand    = Syst.CUICommon:gcBrand AND 
          Invoice.InvDate >= invdate,
    FIRST Customer OF Invoice No-LOCK
 Break 
@@ -43,7 +43,7 @@ By Invoice.CustNum.
    IF LAST-OF(Invoice.CustNum) THEN DO:
 
       FIND LAST CustClass USE-INDEX amt WHERE
-             CustClass.Brand = gcBrand AND 
+             CustClass.Brand = Syst.CUICommon:gcBrand AND 
              CustClass.amt <= (ACCUM SUB-TOTAL BY invoice.CustNum Invoice.amt) /
                               (ACCUM SUB-COUNT BY invoice.CustNum Invoice.amt)
       NO-LOCK no-error.

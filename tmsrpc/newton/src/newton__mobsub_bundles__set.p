@@ -16,7 +16,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -358,7 +358,7 @@ IF piBundleAction EQ 1 THEN
 ELSE 
     lcOnOff = "Desactivar".
 
-FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = pcBundleId NO-ERROR.
+FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = pcBundleId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err(SUBST("Invalid Bundle Id: &1", pcBundleId)).
 

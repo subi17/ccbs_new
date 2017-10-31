@@ -27,7 +27,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 {Func/fexternalapi.i}
@@ -173,7 +173,7 @@ IF liReq > 0 THEN DO:
 
    /*YPR-1966, add different memo writing*/
    IF lcApplicationId EQ "701" THEN DO:
-      lcItemName = fGetItemName(gcBrand,
+      lcItemName = fGetItemName(Syst.CUICommon:gcBrand,
                                 "BarringCode",
                                 pcBCode,
                                 5, /*en*/
@@ -191,7 +191,7 @@ IF liReq > 0 THEN DO:
                     lcDetailedUser).
    END.
    ELSE DO:
-      lcItemName = fGetItemName(gcBrand,
+      lcItemName = fGetItemName(Syst.CUICommon:gcBrand,
                                 "BarringCode",
                                 pcBCode,
                                 1, /*es*/

@@ -56,7 +56,7 @@ PROCEDURE connect-tables:
 
    /* did it go well ? */
    FIND solog WHERE 
-        Solog.Brand = gcBrand AND 
+        Solog.Brand = Syst.CUICommon:gcBrand AND 
         SOLog.SoLog = new-so-seq NO-LOCK.
 
    IF AVAIL solog then ASSIGN mobsub.MsStatus = 2. /* On going */
@@ -95,7 +95,7 @@ PROCEDURE connect-tables:
       CallAlarm.DeliMsg    = lcAlarmMess
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 9
-      CallAlarm.Brand      = gcBrand .
+      CallAlarm.Brand      = Syst.CUICommon:gcBrand .
 
 END PROCEDURE.
 

@@ -12,7 +12,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
 katun = "XMLRPC-Heat".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fcreatereq.i}
 
 FUNCTION fReqStat RETURNS LOGICAL

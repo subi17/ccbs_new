@@ -8,7 +8,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun   = "Qvantel".
 {Func/cparam2.i}
 {Func/fcpfat.i}
@@ -63,7 +63,7 @@ ASSIGN ldaPromoFromDate  = fCParamDa("DSSPromoFromDate")
 message ldPromoPeriodFrom skip ldPromoPeriodTo skip ldPeriodFrom skip ldPeriodTo skip liLastMonthPeriod view-as alert-box.
 
 FOR EACH FATime WHERE
-         FATime.Brand  = gcBrand AND
+         FATime.Brand  = Syst.CUICommon:gcBrand AND
          FATime.FTGrp  = "DSSCPFREE" AND
          FATime.InvNum = 0 AND
          FATime.LastPeriod > liLastMonthPeriod NO-LOCK,
@@ -101,7 +101,7 @@ FOR EACH FATime WHERE
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

@@ -291,7 +291,7 @@ PROCEDURE local-update-record:
                 ELSE IF FRAME-FIELD = "ServiceLimitGroup" THEN DO:
                    IF INPUT  servicelimitgroup  ne "" THEN DO:
                        FIND FIRST ServiceLimitGroup WHERE
-                                  ServiceLimitGroup.Brand = gcBrand AND 
+                                  ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND 
                                   ServiceLimitGroup.GroupCode = INPUT FRAME lis
                                   ServiceLimitGroup NO-LOCK NO-ERROR.
                        IF NOT AVAIL servicelimitgroup THEN DO:

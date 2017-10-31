@@ -60,7 +60,7 @@ form
     Product.ProdName     /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY SCROLL 1 15 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Products "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

@@ -440,13 +440,13 @@ PROCEDURE local-UPDATE-record:
       ELSE lcCustName = "".
       
       FIND FIRST BillItem WHERE
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.CUICommon:gcBrand AND
           BillItem.BillCode = ttHistory.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
       ELSE lcBIName = "".
 
       FIND FIRST BDest WHERE
-          BDest.Brand = gcBrand AND
+          BDest.Brand = Syst.CUICommon:gcBrand AND
           BDest.BDest = ttHistory.BDest NO-LOCK NO-ERROR.
       IF AVAILABLE BDest THEN lcBDestName = BDest.BDName.
       ELSE lcBDestName = "".
@@ -499,7 +499,7 @@ PROCEDURE pInitHistory:
       CREATE ttHistory.
       BUFFER-COPY MobCDR TO ttHistory.
       ASSIGN 
-         ttHistory.Brand = gcBrand
+         ttHistory.Brand = Syst.CUICommon:gcBrand
          ttHistory.Rated = "Current"
          ttHistory.UpdateSource = "Current"
          lcGSMBnr = MobCDR.GSMBnr.
@@ -511,7 +511,7 @@ PROCEDURE pInitHistory:
       EMPTY TEMP-TABLE ttCall.
      
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
+                     INPUT Syst.CUICommon:gcBrand,
                      INPUT katun,
                      INPUT idaDateSt,
                      INPUT idaDateSt,
@@ -545,7 +545,7 @@ PROCEDURE pInitHistory:
    END.
    
    FOR EACH EDRHistory NO-LOCK WHERE
-            EDRHistory.Brand  = gcBrand AND
+            EDRHistory.Brand  = Syst.CUICommon:gcBrand AND
             EDRHistory.CLI    = icCLI AND
             EDRHistory.DateSt = idaDateSt AND
             EDRHistory.TimeSt = iiTimeSt AND

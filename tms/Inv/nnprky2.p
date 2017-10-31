@@ -62,7 +62,7 @@ form
    "Calling Customer / CLI / Billing Item / CCN."       AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + 
+        title " " + Syst.CUICommon:ynimi + 
         " CALL DETAILS (REPORT 2) " +
         string(pvm,"99-99-99") + " "
         FRAME valinta.
@@ -211,7 +211,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
             InvNum
             VALIDATE(INPUT InvNum = 0 OR
                      CAN-FIND (FIRST Invoice WHERE
-                                     Invoice.Brand  = gcBrand AND
+                                     Invoice.Brand  = Syst.CUICommon:gcBrand AND
                                      Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             WITH FRAME rajat.
@@ -250,7 +250,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                         CAN-FIND(FIRST CLI WHERE 
                                        CLI.CLI = INPUT lcAtil) OR
                         CAN-FIND(FIRST MSOwner WHERE 
-                                       MSOwner.Brand = gcBrand AND
+                                       MSOwner.Brand = Syst.CUICommon:gcBrand AND
                                        MSOwner.CLI = INPUT lcAtil),
                        "Unknown CLI")
                liPrintTo        
@@ -333,7 +333,7 @@ IF llCover THEN DO:
                 liPer2 = Func.Common:mMake2DT(pvm2,86399).
    
          FIND FIRST MsOwner NO-LOCK WHERE
-                    MsOwner.Brand   = gcBrand AND
+                    MsOwner.Brand   = Syst.CUICommon:gcBrand AND
                     MsOwner.CustNum = CustNum1 AND
                     MsOwner.CLI     = lcAtil   AND
                     MsOwner.TsBeg  <= liPer2   AND
@@ -342,7 +342,7 @@ IF llCover THEN DO:
                     
       ELSE 
       FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand   = gcBrand AND
+                 MsOwner.Brand   = Syst.CUICommon:gcBrand AND
                  MsOwner.CLI     = lcAtil  AND
                  MsOwner.TsBeg  <= liPer2  AND
                  MsOwner.TsEnd  >= liPer1 NO-ERROR.
@@ -456,7 +456,7 @@ IF liPrintTo <= 2 THEN DO:
       IF CustNum1 = CustNum2 THEN 
       DO FOR ITSendLog TRANS:
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                 ITSendLog.TxtType    = 5
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = CustNum1

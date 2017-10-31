@@ -44,7 +44,7 @@ FORM
       FORMAT "X(8)"
       VALIDATE(INPUT lcInvGroup = "" OR
                CAN-FIND(InvGroup WHERE 
-                        InvGroup.Brand    = gcBrand AND
+                        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                         InvGroup.InvGroup = INPUT lcInvGroup),
               "Unknown invoicing group")
 
@@ -84,7 +84,7 @@ FORM
       HELP "Rule that is used, 0 (empty) = ALL"
       VALIDATE(INPUT liCoRuleID = 0 OR 
                CAN-FIND(CoRule WHERE 
-                        CoRule.Brand    = gcBrand AND
+                        CoRule.Brand    = Syst.CUICommon:gcBrand AND
                         CORule.CoRuleID = INPUT liCoRuleID),
                "Unknown rule")
       FORMAT ">>>>>>>>"
@@ -111,7 +111,7 @@ FORM
       HELP "EMPTY = all resellers"
       VALIDATE(INPUT lcReseller = "" OR
                CAN-FIND(Reseller WHERE
-                        Reseller.Brand    = gcBrand AND
+                        Reseller.Brand    = Syst.CUICommon:gcBrand AND
                         Reseller.Reseller = INPUT lcReseller),
                "Unknown reseller")
       FORMAT "X(8)"
@@ -125,7 +125,7 @@ FORM
       HELP "EMPTY = all salesmen"
       VALIDATE(INPUT lcSalesman = "" OR
                CAN-FIND(Salesman WHERE 
-                        Salesman.Brand    = gcBrand AND
+                        Salesman.Brand    = Syst.CUICommon:gcBrand AND
                         Salesman.Salesman = INPUT lcSalesman),
                "Unknown salesman")
       FORMAT "X(8)"
@@ -147,7 +147,7 @@ FORM
       SKIP(2)
 
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " COMMISSION CALCULATION " +
+        title " " + Syst.CUICommon:ynimi + " COMMISSION CALCULATION " +
         string(pvm,"99-99-99") + " "
         FRAME fCriter.
 
@@ -159,7 +159,7 @@ FUNCTION fReseller RETURNS LOGICAL
 
    ELSE DO:
       FIND Reseller WHERE 
-           Reseller.Brand    = gcBrand AND
+           Reseller.Brand    = Syst.CUICommon:gcBrand AND
            Reseller.Reseller = icReseller
       NO-LOCK NO-ERROR.
       IF AVAILABLE Reseller THEN DISPLAY Reseller.RsName WITH FRAME fCriter. 
@@ -175,7 +175,7 @@ FUNCTION fSalesman RETURNS LOGICAL
 
    ELSE DO:
       FIND Salesman WHERE   
-           Salesman.Brand    = gcBrand AND
+           Salesman.Brand    = Syst.CUICommon:gcBrand AND
            Salesman.Salesman = icSalesman
       NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN DISPLAY Salesman.SmName WITH FRAME fCriter.
@@ -254,7 +254,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                       THEN DISPLAY "ALL" ;& InvGroup.IGName. 
                       ELSE DO:
                          FIND InvGroup WHERE  
-                              InvGroup.Brand    = gcBrand AND
+                              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                               InvGroup.InvGroup = INPUT lcInvGroup
                          NO-LOCK NO-ERROR.
                          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.IGName.

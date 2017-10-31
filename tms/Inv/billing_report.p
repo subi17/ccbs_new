@@ -243,7 +243,7 @@ PROCEDURE pInitialize:
    END.
 
    FOR FIRST Invoice NO-LOCK USE-INDEX InvDate WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.InvDate = idaInvDate AND
                 Invoice.InvType = iiInvType:
          liBillPeriod = YEAR(Invoice.ToDate) * 100 + MONTH(Invoice.ToDate).
@@ -356,7 +356,7 @@ PROCEDURE pInitialize:
 
 
    FOR FIRST ReportConf NO-LOCK WHERE
-             ReportConf.Brand    = gcBrand AND
+             ReportConf.Brand    = Syst.CUICommon:gcBrand AND
              ReportConf.ReportID = "BillingReport":
 
       FOR EACH ReportConfRow OF ReportConf NO-LOCK WHERE
@@ -397,7 +397,7 @@ PROCEDURE pCollectInvoices:
    ldPrintStamp = Func.Common:mMake2DT(idaInvDate + 2,86399).  
 
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand    = gcBrand    AND
+            Invoice.Brand    = Syst.CUICommon:gcBrand    AND
             Invoice.InvDate  = idaInvDate AND
             Invoice.InvType  = iiInvType,
       FIRST Customer NO-LOCK WHERE
@@ -664,7 +664,7 @@ PROCEDURE pPrintReport:
    BREAK BY ttInvGroup.InvGroup:
    
       FIND FIRST InvGroup WHERE
-                 InvGroup.Brand = gcBrand AND
+                 InvGroup.Brand = Syst.CUICommon:gcBrand AND
                  InvGroup.InvGroup = ttInvGroup.InvGroup NO-LOCK NO-ERROR.
                  
       IF FIRST(ttInvGroup.InvGroup) THEN 

@@ -103,7 +103,7 @@ FUNCTION fParamDescription RETURNS LOGIC
    IF icParamField begins "#" THEN lcParamDesc = "Special rule".
    ELSE 
    FOR FIRST RequestParam NO-LOCK WHERE
-             RequestParam.Brand   = gcBrand AND
+             RequestParam.Brand   = Syst.CUICommon:gcBrand AND
              RequestParam.ReqType = RequestAction.ReqType AND
              RequestParam.ParamField = icParamField:
       lcParamDesc = RequestParam.Usage.      
@@ -124,7 +124,7 @@ IF NOT AVAILABLE RequestAction THEN DO:
 END.
 
 FOR EACH RequestParam NO-LOCK WHERE
-         RequestParam.Brand   = gcBrand AND
+         RequestParam.Brand   = Syst.CUICommon:gcBrand AND
          RequestParam.ReqType = RequestAction.ReqType AND
          RequestParam.Usage > "":
    lcFields = lcFields + (IF lcFields > "" THEN "," ELSE "") + 

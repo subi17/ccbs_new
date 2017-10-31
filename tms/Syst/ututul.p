@@ -66,7 +66,7 @@ form
     TMSReport.EMail  format "x(20)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-    ynimi + " PRINTOUTS "
+    Syst.CUICommon:ynimi + " PRINTOUTS "
     + string(pvm,"99-99-99")
     FRAME sel.
 

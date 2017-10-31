@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 Katun = "Cron".
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
@@ -99,7 +99,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand        AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand        AND
                  ActionLog.ActionID  = "PrepCDR_HPD"   AND
                  ActionLog.TableName = "PrepCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
@@ -111,7 +111,7 @@ PROCEDURE pAmqCDRReader:
       ELSE DO:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "PrepCDR"
             ActionLog.KeyValue     = "HPD"
             ActionLog.ActionID     = "PrepCDR_HPD"
@@ -164,7 +164,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
                  ActionLog.ActionID  = "PrepCDR_HPD" AND
                  ActionLog.TableName = "PrepCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN
@@ -181,7 +181,7 @@ PROCEDURE pDBConnect:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("PrepCDR,McdrDtl2","").
 
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).

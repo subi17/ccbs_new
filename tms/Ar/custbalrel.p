@@ -56,7 +56,7 @@ form
       HELP "Create a fee for customer for printing this report"
       FORMAT "Yes/No"
    SKIP
-WITH TITLE " " + ynimi +  " A/R CUSTOMER REPORT " + 
+WITH TITLE " " + Syst.CUICommon:ynimi +  " A/R CUSTOMER REPORT " + 
            STRING(pvm,"99-99-99") + " "
    ROW 1 centered Size 80 by 19 NO-LABELS OVERLAY FRAME valinta.
 
@@ -76,7 +76,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
  
       lcCustName = "".
       FIND Customer NO-LOCK WHERE
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = liCustNum NO-ERROR.
       IF AVAILABLE Customer THEN lcCustName = Customer.CustName.
                  
@@ -122,7 +122,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                      
                         FIND Customer WHERE Customer.CustNum = INPUT liCustNum
                         NO-LOCK NO-ERROR.
-                        IF NOT AVAIL Customer OR Customer.Brand NE gcBrand
+                        IF NOT AVAIL Customer OR Customer.Brand NE Syst.CUICommon:gcBrand
                         THEN DO:
                            MESSAGE "Unknown Customer !".
                            NEXT.

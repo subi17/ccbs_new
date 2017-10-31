@@ -112,7 +112,7 @@ END FUNCTION.
 
 IF iiInvNum1 = iiInvNum2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand  = gcBrand AND
+          Invoice.Brand  = Syst.CUICommon:gcBrand AND
           Invoice.InvNum = iiInvNum1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -124,7 +124,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          /* delivery type is on paper */
          Invoice.DelType <= 1          AND
@@ -151,7 +151,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand    AND
+         Invoice.Brand  = Syst.CUICommon:gcBrand    AND
          Invoice.InvNum >= iiInvNum1  AND  
          Invoice.InvNum <= iiInvNum2  AND    
          /* delivery type is on paper */

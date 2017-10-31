@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST IGVoucher WHERE
-                             IGVoucher.Brand    = gcBrand    AND
+                             IGVoucher.Brand    = Syst.CUICommon:gcBrand    AND
                              IGVoucher.InvGroup = icInvGroup 
                              USING IGVoucher.PaymType AND
                                    IGVoucher.FromDate) THEN DO:
@@ -187,7 +187,7 @@ REPEAT WITH FRAME sel:
            
            
            CREATE IGVoucher.
-           ASSIGN IGVoucher.Brand    = gcBrand
+           ASSIGN IGVoucher.Brand    = Syst.CUICommon:gcBrand
                   IGVoucher.InvGroup = icInvGroup
                   IGVoucher.PaymType = INPUT FRAME lis IGVoucher.PaymType
                   IGVoucher.FromDate = INPUT FRAME lis IGVoucher.FromDate.
@@ -419,7 +419,7 @@ REPEAT WITH FRAME sel:
        IF liPaymType > 0 THEN DO:
        
           FIND FIRST IGVoucher WHERE 
-                     IGVoucher.Brand    = gcBrand    AND
+                     IGVoucher.Brand    = Syst.CUICommon:gcBrand    AND
                      IGVoucher.InvGroup = icInvGroup AND
                      IGVoucher.PaymType >= liPaymType
           NO-LOCK NO-ERROR.
@@ -558,7 +558,7 @@ PROCEDURE local-find-FIRST:
 
        IF order = 1 THEN 
        FIND FIRST IGVoucher WHERE
-                  IGVoucher.Brand    = gcBrand    AND
+                  IGVoucher.Brand    = Syst.CUICommon:gcBrand    AND
                   IGVoucher.InvGroup = icInvGroup NO-LOCK NO-ERROR.
        /*
        ELSE IF order = 2 THEN FIND FIRST IGVoucher USE-INDEX SeqPrefix 
@@ -571,7 +571,7 @@ PROCEDURE local-find-LAST:
 
        IF order = 1 THEN 
        FIND LAST IGVoucher WHERE
-                 IGVoucher.Brand    = gcBrand    AND
+                 IGVoucher.Brand    = Syst.CUICommon:gcBrand    AND
                  IGVoucher.InvGroup = icInvGroup NO-LOCK NO-ERROR.
        
 END PROCEDURE.
@@ -580,7 +580,7 @@ PROCEDURE local-find-NEXT:
 
        IF order = 1 THEN 
        FIND NEXT IGVoucher WHERE
-                 IGVoucher.Brand    = gcBrand    AND
+                 IGVoucher.Brand    = Syst.CUICommon:gcBrand    AND
                  IGVoucher.InvGroup = icInvGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -588,7 +588,7 @@ PROCEDURE local-find-PREV:
  
        IF order = 1 THEN 
        FIND PREV IGVoucher WHERE
-                 IGVoucher.Brand    = gcBrand    AND
+                 IGVoucher.Brand    = Syst.CUICommon:gcBrand    AND
                  IGVoucher.InvGroup = icInvGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 

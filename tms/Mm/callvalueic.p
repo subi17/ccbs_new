@@ -48,7 +48,7 @@ form
 "    Not Billed " lkm1 "calls, EUR" summa1 "/" summa1a "w/VAT " SKIP
 "    Billed     " lkm2 "calls, EUR" summa2 "/" summa2a "w/VAT " SKIP(1)
 WITH
-   row 5 col 3 overlay no-labels title " " + ynimi +
+   row 5 col 3 overlay no-labels title " " + Syst.CUICommon:ynimi +
    " Total value of calls, inv.cust. " + string(Customer.CustNum) + " " 
    FRAME rajat.
 
@@ -100,7 +100,7 @@ repeat WITH FRAME rajat:
    EMPTY TEMP-TABLE ttCall.
     
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
+                  INPUT Syst.CUICommon:gcBrand,
                   INPUT katun,
                   INPUT pvm1,
                   INPUT pvm2,

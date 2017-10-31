@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
+ASSIGN Syst.CUICommon:gcBrand = "1" 
        katun   = "Cron".
        
 {Func/cparam2.i}
@@ -37,8 +37,8 @@ llControl = (SESSION:PARAMETER = "control").
 IF llControl THEN lcControl = "_CONTROL".
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
 
 IF llControl THEN 
    lcReadDir = fCParamC("IFSPaymStatusControl").

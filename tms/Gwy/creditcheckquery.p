@@ -13,7 +13,7 @@ DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" .
 DEF BUFFER bOrigRequest FOR MsRequest.
 
 FIND FIRST TMSParam where
-           TMSParam.Brand      = gcBrand AND 
+           TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
            TMSParam.ParamCode  =  "TCPModule" NO-LOCK NO-ERROR.
 IF AVAIL TMSParam THEN 
          lcTCPModule = TMSParam.CharVal.
@@ -50,7 +50,7 @@ DEF VAR lcAnswerCodes AS CHAR NO-UNDO.
 DEF VAR llOK AS LOG NO-UNDO. 
       
 FIND FIRST MSrequest WHERE 
-           MSRequest.Brand     = gcBrand    AND
+           MSRequest.Brand     = Syst.CUICommon:gcBrand    AND
            MSRequest.MSRequest = iiRequest NO-LOCK NO-ERROR.
    
 IF MsRequest.OrigRequest > 0 THEN DO:            
@@ -268,7 +268,7 @@ PROCEDURE pHeader:
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 
    FIND FIRST MSrequest WHERE 
-              MSRequest.Brand     = gcBrand    AND
+              MSRequest.Brand     = Syst.CUICommon:gcBrand    AND
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
    
    FIND MobSub WHERE
@@ -291,12 +291,12 @@ PROCEDURE pHeader:
             lcType = "STC_RENOVE".
 
             FIND Order WHERE
-                 Order.Brand = gcBrand AND
+                 Order.Brand = Syst.CUICommon:gcBrand AND
                  Order.OrderID = bOrigRequest.ReqIParam2 NO-LOCK NO-ERROR.
             IF NOT AVAIL Order THEN RETURN "ERROR:Renove order missing".
             
             FIND OrderAccessory WHERE
-                 OrderAccessory.Brand = gcBrand AND
+                 OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
                  OrderAccessory.OrderID = Order.OrderID AND
                  OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-LOCK NO-ERROR.
 
@@ -398,7 +398,7 @@ PROCEDURE pHeader:
          lcOfferId = Order.Offer.
 
       FOR FIRST Order NO-LOCK WHERE
-            Order.Brand = gcBrand                   AND
+            Order.Brand = Syst.CUICommon:gcBrand                   AND
             Order.OrderID = bOrigRequest.ReqIParam2 /*AND
             Order.DeliveryType = {&ORDER_DELTYPE_POS} */ ,
          FIRST OrderCustomer NO-LOCK WHERE

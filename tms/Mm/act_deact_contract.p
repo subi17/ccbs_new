@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -86,7 +86,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
 
          ldeActStamp = Func.Common:mMakeTS().
 
-         IF fMatrixAnalyse(gcBrand,
+         IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            icContract + ";" + MobSub.CLIType,
@@ -272,7 +272,7 @@ REPEAT:
    
       /* To prevent duplicate file handling (YTS-5280) */
       IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand = gcBrand AND
+                         ActionLog.Brand = Syst.CUICommon:gcBrand AND
                          ActionLog.TableName = "Cron" AND
                          ActionLog.KeyValue = lcFileName AND
                          ActionLog.ActionID = "ContractBOB" AND
@@ -281,7 +281,7 @@ REPEAT:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.CUICommon:gcBrand   
             ActionLog.TableName    = "Cron"  
             ActionLog.KeyValue     = lcFileName
             ActionLog.ActionID     = "ContractBOB"
@@ -360,7 +360,7 @@ PROCEDURE pCheckContract:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.CUICommon:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Invalid MSISDN".
 

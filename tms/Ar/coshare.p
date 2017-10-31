@@ -188,7 +188,7 @@ ADD-ROW:
 
            IF INPUT FRAME lis CoShare.TargType = "C" THEN DO:
               IF NOT CAN-FIND(FIRST Customer WHERE 
-                                    Customer.Brand  = gcBrand AND
+                                    Customer.Brand  = Syst.CUICommon:gcBrand AND
                                     Customer.CustNum = 
                                 INTEGER(INPUT FRAME lis CoShare.CoTarg))
               THEN DO:
@@ -201,7 +201,7 @@ ADD-ROW:
 
            ELSE IF INPUT FRAME lis CoShare.TargType = "R" THEN DO:
               IF NOT CAN-FIND(FIRST Reseller WHERE 
-                                    Reseller.Brand   = gcBrand AND
+                                    Reseller.Brand   = Syst.CUICommon:gcBrand AND
                                     Reseller.Reseller = 
                                 INPUT FRAME lis CoShare.CoTarg)
               THEN DO:
@@ -221,7 +221,7 @@ ADD-ROW:
 
            ELSE IF INPUT FRAME lis CoShare.TargType = "S" THEN DO:
               IF NOT CAN-FIND(FIRST Salesman WHERE 
-                                    Salesman.Brand   = gcBrand AND
+                                    Salesman.Brand   = Syst.CUICommon:gcBrand AND
                                     Salesman.Salesman = 
                                 INPUT FRAME lis CoShare.CoTarg)
               THEN DO:
@@ -644,13 +644,13 @@ PROCEDURE local-find-others.
    END. 
    WHEN "R" THEN DO:
       FIND FIRST Reseller WHERE     
-                 Reseller.Brand    = gcBrand AND
+                 Reseller.Brand    = Syst.CUICommon:gcBrand AND
                  Reseller.Reseller = CoShare.CoTarg NO-LOCK NO-ERROR.
       IF AVAILABLE Reseller THEN lcTargName = Reseller.RsName.
    END.
    WHEN "S" THEN DO:
       FIND FIRST Salesman WHERE 
-                 Salesman.Brand    = gcBrand AND
+                 Salesman.Brand    = Syst.CUICommon:gcBrand AND
                  Salesman.Salesman = CoShare.CoTarg 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN lcTargName = Salesman.SmName.

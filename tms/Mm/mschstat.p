@@ -196,26 +196,26 @@ PROCEDURE local-find-others.
                                  fatime.invnum = 0).
          FIND msstat    OF msisdn                            NO-LOCK NO-ERROR.
          FIND msclass   WHERE 
-              MSClass.Brand = gcBrand AND
+              MSClass.Brand = Syst.CUICommon:gcBrand AND
               MSClass.McCode  = MSISDN.McCode NO-LOCK NO-ERROR.
          FIND reseller    WHERE 
-              ReSeller.Brand    = gcBrand   AND 
+              ReSeller.Brand    = Syst.CUICommon:gcBrand   AND 
               Reseller.Reseller = MobSub.Reseller  
          NO-LOCK NO-ERROR.
          FIND salesman  WHERE 
-              Salesman.Brand    = gcBrand AND 
+              Salesman.Brand    = Syst.CUICommon:gcBrand AND 
               Salesman.Salesman = MobSub.SalesMan  
          NO-LOCK NO-ERROR.
          FIND sim       WHERE 
-              SIM.Brand       = gcBrand AND 
+              SIM.Brand       = Syst.CUICommon:gcBrand AND 
               SIM.ICC         = MobSub.ICC     
          NO-LOCK NO-ERROR.
          FIND stock     WHERE 
-              Stock.Brand     = gcBrand  AND 
+              Stock.Brand     = Syst.CUICommon:gcBrand  AND 
               Stock.Stock     = SIM.Stock     NO-LOCK NO-ERROR.
          FIND mobcount  WHERE MobCount.MsSeq  = MobSub.MsSeq  NO-LOCK NO-ERROR.
          FIND CliType   WHERE 
-              CliType.Brand   = gcBrand   AND 
+              CliType.Brand   = Syst.CUICommon:gcBrand   AND 
               CliType.CliType = MobSub.CliType 
          NO-LOCK NO-ERROR.
 

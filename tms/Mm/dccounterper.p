@@ -274,7 +274,7 @@ BROWSE:
          RUN LOCAL-FIND-OTHERS.
          
          FIND FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = icEvent NO-LOCK. 
 
          IF DayCampaign.DCType EQ "8" AND

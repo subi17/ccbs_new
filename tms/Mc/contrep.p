@@ -54,7 +54,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(30)" 
+   Syst.CUICommon:ynimi at 1 format "x(30)" 
       "CONTRACTS" at 40
       "Page" at 102  
       sl format "ZZZZ9" skip
@@ -117,7 +117,7 @@ IF idtClDate1 = ? AND idtClDate2 NE ?
 THEN idtClDate1 = DATE(01,01,2000).
 
 FOR EACH Contract NO-LOCK WHERE
-         Contract.Brand      = gcBrand      AND 
+         Contract.Brand      = Syst.CUICommon:gcBrand      AND 
          Contract.CustNum   >= iiCustNum1   AND
          Contract.CustNum   <= iiCustNum2   AND
          Contract.Salesman  >= icSalesman1  AND

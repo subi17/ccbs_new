@@ -5,7 +5,7 @@
 
 {Syst/commali.i}
 katun = "cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 
 

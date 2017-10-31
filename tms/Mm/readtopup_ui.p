@@ -37,7 +37,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  TOPUP FILE  " + 
+     TITLE " " + Syst.CUICommon:ynimi + "  TOPUP FILE  " + 
            STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 

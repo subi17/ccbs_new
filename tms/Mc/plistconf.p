@@ -85,7 +85,7 @@ form
    PListConf.dTo
    llActive          column-label "Act."
 with width 80 overlay scroll 1 15 down ROW 1
-   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
+   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " Pricelist history " + string(pvm,"99-99-99") + " "
    frame sel.
 
@@ -115,7 +115,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 view frame sel.
 
 FIND FIRST RatePlan WHERE
-           RatePlan.Brand    = gcBrand AND 
+           RatePlan.Brand    = Syst.CUICommon:gcBrand AND 
            RatePlan.RatePlan = icRatePlan NO-LOCK NO-ERROR.
 IF NOT AVAILABLE RatePlan THEN RETURN.
 

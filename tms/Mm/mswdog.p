@@ -96,7 +96,7 @@ END.  /* bbatch */
    
    /* Headers TO the PaymFile */
    PUT STREAM excel UNFORMATTED
-   ynimi " " 
+   Syst.CUICommon:ynimi " " 
    "Watchdog Report of Mobile Subscribers, Printed out "
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
@@ -104,7 +104,7 @@ END.  /* bbatch */
    RUN Syst/uexskip.p(2).                           
 
    PUT STREAM fraud UNFORMATTED
-   ynimi " Credit balance report of mobile subscribers, Printed out " 
+   Syst.CUICommon:ynimi " Credit balance report of mobile subscribers, Printed out " 
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
    DAY  (TODAY) FORMAT "99" my-nl my-nl
@@ -123,7 +123,7 @@ END.  /* bbatch */
 
    FOR
    EACH MobSub NO-LOCK WHERE 
-        MobSub.Brand = gcBrand .
+        MobSub.Brand = Syst.CUICommon:gcBrand .
 
       ASSIGN
       nocont   = FALSE

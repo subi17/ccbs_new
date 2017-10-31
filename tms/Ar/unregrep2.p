@@ -64,7 +64,7 @@ ASSIGN
 
 form header
    viiva1 AT 1 SKIP
-   ynimi at 1 format "x(28)" 
+   Syst.CUICommon:ynimi at 1 format "x(28)" 
       "Unregistered Payments" AT 32
       "Page" AT 68  
       sl format "ZZZZ9" SKIP
@@ -102,7 +102,7 @@ ASSIGN sl = 1
        rl = 0.
 
 FOR EACH UnregPaym WHERE 
-         UnregPaym.Brand   = gcBrand AND
+         UnregPaym.Brand   = Syst.CUICommon:gcBrand AND
          UnregPaym.AccDate <= iDate  AND
          UnregPaym.State NE 2
 no-lock.

@@ -14,7 +14,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}
 {Func/fgettxt.i}
@@ -45,7 +45,7 @@ IF pcUpsellId = "CONTD1_UPSELL" THEN pcUpsellId = "CONTDATA_UPSELL".
 IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
 
    /* Check if subscription type is not compatible with bundle */
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      pcUpsellId + ";" + MobSub.CLIType,

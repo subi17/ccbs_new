@@ -55,15 +55,15 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusesOngoing):
    liStatus = INT(ENTRY(liLoop, lcStatusesOngoing)).
 
    FOR EACH mnpprocess NO-LOCK where
-            mnpprocess.brand = gcBrand and
+            mnpprocess.brand = Syst.CUICommon:gcBrand and
             mnpprocess.mnptype = {&MNP_TYPE_IN} and
             mnpprocess.statuscode = liStatus,
       FIRST Order NO-LOCK USE-INDEX OrderID WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.CUICommon:gcBrand AND
             Order.Orderid = mnpprocess.orderid ANd
             LOOKUP(Order.orderchannel,{&ORDER_CHANNEL_INDIRECT}) > 0,
       FIRST SalesMan NO-LOCK WHERE
-            SalesMan.Brand = gcBrand AND
+            SalesMan.Brand = Syst.CUICommon:gcBrand AND
             SalesMan.SalesMan = Order.SalesMan AND
             SalesMan.Reseller = "PH":
       
@@ -82,16 +82,16 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusesFinal):
    liStatus = INT(ENTRY(liLoop, lcStatusesFinal)).
 
    FOR EACH mnpprocess NO-LOCK USE-INDEX updatets WHERE
-            mnpprocess.brand = gcBrand and
+            mnpprocess.brand = Syst.CUICommon:gcBrand and
             mnpprocess.mnptype = {&MNP_TYPE_IN} and
             mnpprocess.updatets > ldeFrom AND
             mnpprocess.statuscode = liStatus,
       FIRST Order NO-LOCK USE-INDEX OrderID WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.CUICommon:gcBrand AND
             Order.Orderid = mnpprocess.orderid AND
             LOOKUP(Order.orderchannel,{&ORDER_CHANNEL_INDIRECT}) > 0,
       FIRST SalesMan NO-LOCK WHERE
-            SalesMan.Brand = gcBrand AND
+            SalesMan.Brand = Syst.CUICommon:gcBrand AND
             SalesMan.SalesMan = Order.SalesMan AND
             SalesMan.Reseller = "PH":
       

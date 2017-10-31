@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
 {Func/memo.i}
@@ -94,7 +94,7 @@ PROCEDURE pUpdateStatus:
 
                     IF lcDiscPlan > "" THEN 
                     DO:
-                        FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
+                        FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = Syst.CUICommon:gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
                         IF AVAIL DiscountPlan THEN 
                         DO:
                             FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom <= TODAY AND DPRate.ValidTo >= TODAY NO-LOCK NO-ERROR.

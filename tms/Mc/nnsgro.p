@@ -64,7 +64,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Salesman Groups "
     + string(pvm,"99-99-99") + " "
 FRAME sel.
@@ -386,7 +386,7 @@ SELAUS:
        SMGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               SMGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
 
@@ -409,7 +409,7 @@ SELAUS:
        SGName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               SGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
 

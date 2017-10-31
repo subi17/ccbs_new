@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
+assign Syst.CUICommon:gcBrand = "1"
        katun = "Qvantel2".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -26,7 +26,7 @@ repeat :
 import unformatted lcline.
 
 FOR FIRST MobSub WHERE
-          MobSub.Brand = gcBrand AND
+          MobSub.Brand = Syst.CUICommon:gcBrand AND
           MobSub.CLI = entry(1,lcline,"|") NO-LOCK:
 
    assign liRequest = 0

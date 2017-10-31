@@ -59,7 +59,7 @@ form
     SimMan.ManName     /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY SCROLL 1 15 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SIM Card Vendors/Manufacturers "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -96,7 +96,7 @@ view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 FIND FIRST SimMan
-WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE SimMan THEN ASSIGN
    Memory       = recid(SimMan)
    must-print   = TRUE
@@ -138,7 +138,7 @@ ADD-ROW:
            IF input SimMan.Mancode = "" THEN LEAVE ADD-ROW.
            CREATE SimMan.
            ASSIGN
-           SimMan.Brand   = gcBrand 
+           SimMan.Brand   = Syst.CUICommon:gcBrand 
            SimMan.Mancode = INPUT FRAME lis SimMan.Mancode.
            UPDATE SimMan.ManName.
 
@@ -154,7 +154,7 @@ ADD-ROW:
 
       /* is there ANY record ? */
       FIND FIRST SimMan
-      WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+      WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE SimMan THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -351,13 +351,13 @@ BROWSE:
        Mancode = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         Disp lcBrand With FRAME f1.
-       UPDATE  lcBrand WHEN gcAllBrand = TRUE
+       UPDATE  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
               Mancode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Mancode <> "" THEN DO:
           FIND FIRST SimMan WHERE 
                      SimMan.Mancode >= mancode AND 
-                     simman.Brand   = gcBrand 
+                     simman.Brand   = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
 
           IF NOT  fRecFound(1) THEN NEXT Browse.
@@ -373,13 +373,13 @@ BROWSE:
        ManName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         Disp lcBrand With FRAME f2.
-       UPDATE lcBrand WHEN gcAllBrand = TRUE
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
               ManName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF ManName <> "" THEN DO:
           FIND FIRST SimMan USE-INDEX manname WHERE 
                      SimMan.ManName >= manname   AND 
-                     simman.Brand = gcBrand 
+                     simman.Brand = Syst.CUICommon:gcBrand 
           NO-LOCK NO-ERROR.
 
           IF NOT  fRecFound(2) THEN NEXT Browse.
@@ -432,7 +432,7 @@ BROWSE:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST SimMan
-           WHERE simman.Brand = gcBrand) THEN DO:
+           WHERE simman.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 no-MESSAGE.
               LEAVE LOOP.
@@ -499,30 +499,30 @@ si-recid = xrecid.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST SimMan
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST SimMan USE-INDEX manName
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST SimMan
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST SimMan USE-INDEX manName
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT SimMan
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT SimMan USE-INDEX manName
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-prev:
        IF order = 1 THEN FIND prev SimMan
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND prev SimMan USE-INDEX manName
-       WHERE simman.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE simman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:

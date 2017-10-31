@@ -64,7 +64,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  CFO NUMBER RANGE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -107,7 +107,7 @@ VIEW FRAME sel.
 orders = "  By Code  ,  By Name  ,By 3, By 4".
 
 
-FIND FIRST CFOSer WHERE CFOser.Brand = gcBrand 
+FIND FIRST CFOSer WHERE CFOser.Brand = Syst.CUICommon:gcBrand 
 /* srule */ NO-LOCK NO-ERROR.
 IF AVAILABLE CFOSer THEN ASSIGN
    Memory       = recid(CFOSer)
@@ -143,19 +143,19 @@ ADD-ROW:
         ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
-           DISP gcBrand @ Cfoser.Brand WITH FRAME lis.
+           DISP Syst.CUICommon:gcBrand @ Cfoser.Brand WITH FRAME lis.
            PROMPT-FOR CFOSer.CLIFrom
            VALIDATE
               (CFOSer.CLIFrom NOT ENTERED OR
               NOT CAN-FIND(CFOSer using  CFOSer.CLIFrom WHERE
-                           CFOser.Brand = GcbRAnd ),
+                           CFOser.Brand = Syst.CUICommon:gcBrand ),
               "CFO serie " + string(INPUT CFOSer.CLIFrom) +
               " already exists !").
            IF INPUT FRAME lis CFOSer.CLIFrom = "" THEN 
            LEAVE add-row.
            CREATE CFOSer.
            ASSIGN
-           CFOser.Brand   = gcBrand 
+           CFOser.Brand   = Syst.CUICommon:gcBrand 
            CFOSer.CLIFrom = INPUT FRAME lis CFOSer.CLIFrom.
 
            RUN local-UPDATE-record.
@@ -175,7 +175,7 @@ ADD-ROW:
       ASSIGN must-print = TRUE.
 
       /* is there ANY record ? */
-      FIND FIRST CFOSer WHERE CFOser.Brand = gcBrand 
+      FIND FIRST CFOSer WHERE CFOser.Brand = Syst.CUICommon:gcBrand 
       /* srule */ NO-LOCK NO-ERROR.
       IF NOT AVAILABLE CFOSer THEN LEAVE LOOP.
       NEXT LOOP.
@@ -378,7 +378,7 @@ BROWSE:
        IF CFOSer ENTERED THEN DO:
           FIND FIRST CFOSer WHERE 
                      CFOSer.CLIFrom >= CFOSer AND 
-                     CFOSer.Brand    = gcBrand 
+                     CFOSer.Brand    = Syst.CUICommon:gcBrand 
           /* srule */ NO-LOCK NO-ERROR.
           IF NOT AVAILABLE CFOSer THEN DO:
              BELL.
@@ -535,22 +535,22 @@ PROCEDURE local-find-this:
 END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
-       IF order = 1 THEN FIND FIRST CFOSer WHERE CFOSer.Brand    = gcBrand
+       IF order = 1 THEN FIND FIRST CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
-       IF order = 1 THEN FIND LAST CFOSer WHERE CFOSer.Brand    = gcBrand
+       IF order = 1 THEN FIND LAST CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
-       IF order = 1 THEN FIND NEXT CFOSer WHERE CFOSer.Brand    = gcBrand
+       IF order = 1 THEN FIND NEXT CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
-       IF order = 1 THEN FIND PREV CFOSer WHERE CFOSer.Brand    = gcBrand
+       IF order = 1 THEN FIND PREV CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 

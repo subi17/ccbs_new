@@ -19,7 +19,7 @@
 
 {Syst/commpaa.i}
 katun = "snet".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/coinv.i}
 {Syst/eventval.i} 
@@ -60,7 +60,7 @@ def var xOk       as log  no-undo.
 /* ask both original invoice and credit invoice -> one way to be sure 
    that user knows what is going on */
 pause 0.
-update gcBrand 
+update Syst.CUICommon:gcBrand 
           label "Brand"
           colon 15 skip
        xDebInv 
@@ -77,7 +77,7 @@ update gcBrand
 if xDebInv = 0 or xCredInv = 0 then return.
 
 find first Invoice where 
-    Invoice.Brand  = gcBrand AND
+    Invoice.Brand  = Syst.CUICommon:gcBrand AND
     Invoice.InvNum = xDebInv no-error.
 if not available Invoice then do:
     message "Unknown debit invoice"
@@ -176,7 +176,7 @@ END.
 
 /* are there other creditings on this invoice */
 FOR EACH cInvoice NO-LOCK WHERE
-         cInvoice.Brand    = gcBrand         AND 
+         cInvoice.Brand    = Syst.CUICommon:gcBrand         AND 
          cInvoice.CustNum  = Invoice.CustNum AND
          cInvoice.CrInvNum = Invoice.InvNum  AND
          cInvoice.InvNum  NE bInvoice.InvNum
@@ -238,7 +238,7 @@ for each InvRow of Invoice no-lock where
     /* bitems can also be combined */
     IF InvRow.FFItemNum > 0 THEN 
     FOR FIRST SingleFee where
-              SingleFee.Brand = gcBrand AND 
+              SingleFee.Brand = Syst.CUICommon:gcBrand AND 
               SingleFee.FMItemId = InvRow.FFItemNum:
 
         assign SingleFee.billed = true

@@ -166,7 +166,7 @@ FUNCTION fErrorLog RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "BRANALYSIS"
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
@@ -1222,7 +1222,7 @@ PROCEDURE pCheckFixedFee:
 
    IF ttCriteria.CriteriaField = "BillCode" THEN
       FOR EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = gcBrand AND
+               FixedFee.Brand = Syst.CUICommon:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue = STRING(MsOwner.MsSeq) AND
                FixedFee.InUse = TRUE AND
@@ -1256,7 +1256,7 @@ PROCEDURE pCheckFixedFee:
       END.
    ELSE IF ttCriteria.CriteriaField = "CalcObj" THEN
       FOR EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = gcBrand AND
+               FixedFee.Brand = Syst.CUICommon:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue = STRING(MsOwner.MsSeq) AND
                FixedFee.InUse = TRUE AND
@@ -1309,7 +1309,7 @@ PROCEDURE pCheckSingleFee:
       liTo    = TRUNCATE(ttCriteria.PeriodEnd / 100,0).
    
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand = gcBrand AND
+            SingleFee.Brand = Syst.CUICommon:gcBrand AND
             SingleFee.HostTable = "MobSub" AND
             SingleFee.KeyValue = STRING(MsOwner.MsSeq) AND
             SingleFee.Active = TRUE AND
@@ -1341,7 +1341,7 @@ PROCEDURE pCheckFATime:
       liTo    = TRUNCATE(ttCriteria.PeriodEnd / 100,0).
    
    FOR EACH FATime NO-LOCK USE-INDEX MobSub WHERE
-            FATime.Brand = gcBrand AND
+            FATime.Brand = Syst.CUICommon:gcBrand AND
             FATime.MsSeq = MsOwner.MsSeq AND
             FATime.InvNum = 0 AND
             FATime.FTGrp MATCHES(ttCriteria.ValueIncluded):

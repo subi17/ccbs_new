@@ -71,7 +71,7 @@ form
     IFiSpx.SimArt
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " IMSI PaymFile Specifications "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -174,7 +174,7 @@ ADD-ROW:
                   if input IFiSpx.ManCode = "" THEN 
                      UNDO ADD-row, LEAVE add-row.
                      FIND SimMan where 
-                        Simman.Brand   = gcBrand AND 
+                        Simman.Brand   = Syst.CUICommon:gcBrand AND 
                         SimMan.Mancode = INPUT IFiSpx.ManCode
                         no-lock no-error.
                      IF NOT AVAIL SimMan THEN 
@@ -187,7 +187,7 @@ ADD-ROW:
                   else if frame-field = "Version" THEN 
                   DO:
                      FIND IFiSpx where 
-                        ifispx.Brand   = gcBrand AND 
+                        ifispx.Brand   = Syst.CUICommon:gcBrand AND 
                         IFiSpx.ManCode = INPUT IFiSpx.ManCode AND 
                         IFiSpx.Version = INPUT IFiSpx.Version
                         no-lock no-error.
@@ -202,7 +202,7 @@ ADD-ROW:
                APPLY LASTKEY.
             END.      
             CREATE IFiSpx.
-            ASSIGN IFIspx.Brand   = gcBrand 
+            ASSIGN IFIspx.Brand   = Syst.CUICommon:gcBrand 
                    IFiSpx.ManCode = INPUT FRAME lis IFiSpx.ManCode 
                    IFiSpx.Version = INPUT FRAME lis IFiSpx.Version.
 
@@ -438,7 +438,7 @@ BROWSE:
          Mancode = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          Disp lcBrand With FRAME f1.
-         UPDATE lcBrand WHEN gcAllBrand = TRUE
+         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             Mancode WITH FRAME f1.
          HIDE FRAME f1 NO-PAUSE.
          IF Mancode <> "" THEN 

@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 {Func/cparam2.i}
 
-ASSIGN gcBrand = "1"
+ASSIGN Syst.CUICommon:gcBrand = "1"
        katun   = "batch".
 
 DEFINE STREAM osDump.

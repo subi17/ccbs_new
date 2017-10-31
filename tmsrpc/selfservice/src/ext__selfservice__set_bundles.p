@@ -30,7 +30,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -109,7 +109,7 @@ IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
 lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = pcBundleId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
@@ -124,7 +124,7 @@ ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
    THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(gcBrand,
+IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,

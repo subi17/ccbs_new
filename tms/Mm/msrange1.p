@@ -521,7 +521,7 @@ PROCEDURE MarkRankedMSISDNInRange:
          x-MSISDN.CLI         <=  icEndCLI     AND
          x-MSISDN.StatusCode  >= iBeginStatus  AND
          x-MSISDN.StatusCode  <= iEndStatus    AND
-         x-MSISDN.Brand        = gcBrand       AND 
+         x-MSISDN.Brand        = Syst.CUICommon:gcBrand       AND 
          x-MSISDN.ValidTo      > Func.Common:mMakeTS()     AND 
          x-MSISDN.pos          = ""
       BREAK BY x-MSISDN.CLI:

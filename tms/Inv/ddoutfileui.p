@@ -116,7 +116,7 @@ FORM
    SKIP
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICES TO CSB19  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  INVOICES TO CSB19  " + STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -129,7 +129,7 @@ FUNCTION fIGName RETURNS LOGIC
                
    ELSE DO:
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.CUICommon:gcBrand AND
            InvGroup.InvGroup = icInvGroup
       NO-LOCK NO-ERROR.
       IF AVAILABLE InvGroup THEN lcIgName = InvGroup.IGName.
@@ -260,7 +260,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
                   IF INPUT lcInvGroup > "" AND
                      NOT CAN-FIND(InvGroup WHERE 
-                                  InvGroup.Brand    = gcBrand AND
+                                  InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                                   InvGroup.InvGroup = INPUT lcInvGroup)
                   THEN DO:
                      MESSAGE "Unknown invoicing group."

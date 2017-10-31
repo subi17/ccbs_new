@@ -31,7 +31,7 @@ form
    "              File Name ...:" fname
       help "Name of the output file"                                   skip(7)
 with centered width 80 no-label 
-   title " " + ynimi + "  Contract payment report " FRAME frm.
+   title " " + Syst.CUICommon:ynimi + "  Contract payment report " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
@@ -58,7 +58,7 @@ repeat WITH FRAME frm:
             ASSIGN CustNum.
             IF CustNum NE 0 THEN DO:
                FIND FIRST Customer where
-                          Customer.Brand   = gcBrand AND
+                          Customer.Brand   = Syst.CUICommon:gcBrand AND
                           Customer.CustNum = CustNum
                no-lock no-error.
                IF AVAIL Customer THEN DISP Customer.CustName WITH FRAME frm.
@@ -106,7 +106,7 @@ task:
       "Memo"      my-nl.
 
    FOR EACH FixedFee no-lock where
-            FixedFee.Brand = gcBrand AND
+            FixedFee.Brand = Syst.CUICommon:gcBrand AND
            (IF CustNum NE 0 
             THEN FixedFee.CustNum = CustNum
             ELSE TRUE).

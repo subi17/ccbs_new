@@ -1,6 +1,6 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -95,7 +95,7 @@ IF ERROR-STATUS:ERROR THEN DO:
    RETURN.
 END.
 
-FOR FIRST Order WHERE Order.Brand = gcBrand AND Order.OrderId = liOrderID TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+FOR FIRST Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.OrderId = liOrderID TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
     ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
 END.
 
@@ -110,7 +110,7 @@ DO liDBCount = 1 TO NUM-DBS:
 END.
 
 FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Syst.CUICommon:gcBrand AND
            OrderFusion.OrderId = liOrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN DO:
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_ORDERID}).

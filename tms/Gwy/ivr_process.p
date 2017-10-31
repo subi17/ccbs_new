@@ -4,7 +4,7 @@
 {Func/heartbeat.i}
 {Func/fgettxt.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 FUNCTION fCallAlarm RETURNS LOGICAL
   (INPUT pcAction AS CHARACTER,
@@ -44,7 +44,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 22
       CallAlarm.Orig       = "800622800"
-      CallAlarm.Brand      = gcBrand.
+      CallAlarm.Brand      = Syst.CUICommon:gcBrand.
       
    RELEASE CallAlarm.
 
@@ -101,7 +101,7 @@ REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
    PUT SCREEN ROW 23 "Processing...    ".
 
    FOR EACH PrePaidRequest NO-LOCK WHERE
-            PrePaidRequest.Brand    = gcBrand AND
+            PrePaidRequest.Brand    = Syst.CUICommon:gcBrand AND
             PrePaidRequest.Source   = "IVR"   AND
            (PrePaidRequest.PPStatus = 0 OR
             PrePaidRequest.PPStatus = 9),
@@ -197,14 +197,14 @@ PROCEDURE pIvrProcess:
 
    IF liPPRequest NE 0 THEN DO:
 
-      RUN Gwy/pp_platform.p(gcBrand,liPPRequest).
+      RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,liPPRequest).
 
       lcResponse = RETURN-VALUE.
       
       lcRespCode = fGetRPCNodeValue(lcResponse,"responseCode").
       
       FIND FIRST bufPP WHERE
-                 bufPP.Brand     = gcBrand AND
+                 bufPP.Brand     = Syst.CUICommon:gcBrand AND
                  bufPP.PPRequest = liPPRequest
       EXCLUSIVE-LOCK NO-ERROR.
       

@@ -26,7 +26,7 @@ DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER bOrder FOR Order.
 
 FIND Order WHERE
-     Order.Brand = gcBrand AND
+     Order.Brand = Syst.CUICommon:gcBrand AND
      Order.OrderId = piOrderId NO-LOCK NO-ERROR.
 
 RUN Mc/creditscoring.p(
@@ -41,7 +41,7 @@ IF liEmployees < 10 THEN liEmployees = 10.
 ldeTime = Func.Common:mMakeTS().
 
 FIND FIRST OrderCustomer WHERE 
-   OrderCustomer.Brand = gcBrand AND
+   OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
    OrderCustomer.OrderId = piOrderId AND
    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -52,13 +52,13 @@ IF Order.OrderType EQ 2 THEN DO:
 END.
 ELSE DO:
    FOR EACH Order WHERE 
-      Order.Brand = gcBrand AND
+      Order.Brand = Syst.CUICommon:gcBrand AND
       Order.StatusCode = "20" NO-LOCK:
       RUN pHandleOrder.
    END.
 
    FOR EACH Order WHERE 
-      Order.Brand = gcBrand AND
+      Order.Brand = Syst.CUICommon:gcBrand AND
       Order.StatusCode = "21" NO-LOCK:
       RUN pHandleOrder.
    END.
@@ -69,7 +69,7 @@ IF llDoEvent THEN fCleanEventObjects().
 PROCEDURE pHandleOrder:
 
    FIND FIRST OrderCustomer WHERE 
-      OrderCustomer.Brand   = gcBrand AND
+      OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
       OrderCustomer.OrderId = Order.OrderId AND
       OrderCustomer.RowType = 1 AND
       OrderCustomer.CustId  = lcCustId NO-LOCK NO-ERROR.
@@ -101,7 +101,7 @@ PROCEDURE pHandleOrder:
          WHEN "21" THEN DO:
          
             FIND FIRST Customer WHERE
-               Customer.Brand = gcBrand AND
+               Customer.Brand = Syst.CUICommon:gcBrand AND
                Customer.OrgId = OrderCustomer.CustId AND
                Customer.CustIdType = "CIF" AND
                Customer.Role NE "inactive" NO-LOCK NO-ERROR.
@@ -135,7 +135,7 @@ PROCEDURE pHandleOrder:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = ldeTime
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "Order"
       Memo.KeyValue  = STRING(bOrder.OrderId)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

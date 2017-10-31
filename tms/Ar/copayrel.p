@@ -47,7 +47,7 @@ FORM
         HELP "Events of one rule, or all = 0 (empty)"
         VALIDATE(INPUT liCoRuleID = 0 OR 
                  CAN-FIND(CoRule WHERE 
-                          CoRule.Brand    = gcBrand AND
+                          CoRule.Brand    = Syst.CUICommon:gcBrand AND
                           CORule.CoRuleID = INPUT liCoRuleID),
                  "Unknown rule")
         FORMAT ">>>>>>>>"
@@ -117,16 +117,16 @@ FORM
    SKIP(2)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " COMMISSION REPORT " +
+        TITLE " " + Syst.CUICommon:ynimi + " COMMISSION REPORT " +
         STRING(pvm,"99-99-99") + " "
         FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST Reseller WHERE Reseller.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Reseller WHERE Reseller.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE Reseller THEN ASSIGN lcReseller[2] = Reseller.Reseller.
-FIND LAST Salesman WHERE Salesman.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE Salesman THEN ASSIGN lcSalesman[2] = Salesman.Salesman.
 ASSIGN liCustNum[2]   = 999999999          
        ldtCalcDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))

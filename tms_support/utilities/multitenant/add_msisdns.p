@@ -3,7 +3,7 @@
    MasMovil range specified to 72260 */
 {Syst/commpaa.i}
 katun = "qvantel".
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 {Func/multitenantfunc.i}
 /* Create free MSISDNs starting from begin to end. */
@@ -241,7 +241,7 @@ DO ld = liBegin TO liEnd TRANS:
 
    CREATE MSISDN.
    ASSIGN
-      MSISDN.Brand      = gcBrand
+      MSISDN.Brand      = Syst.CUICommon:gcBrand
       MSISDN.CLI        = msisdnnumber.cli
       MSISDN.ValidFrom  = ldeNow
       MSISDN.POS        = "ONLINE"

@@ -63,7 +63,7 @@ form
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(Syst.CUICommon:ctc)
     " Join SMan '" + string(Salesman) + "' " + substr(Salesman.SmName,1,16) +
-    " into groups (" + gcBrand + ") "
+    " into groups (" + Syst.CUICommon:gcBrand + ") "
     FRAME sel.
 
 form
@@ -86,7 +86,7 @@ form /* Salesman Group :n haku kent‰ll‰ SGName */
 
 
 FIND Salesman where 
-     Salesman.Brand    = gcBrand AND
+     Salesman.Brand    = Syst.CUICommon:gcBrand AND
      Salesman.Salesman = Salesman no-lock.
 
 
@@ -94,7 +94,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 view FRAME sel.
 
 FIND FIRST SMGroup
-WHERE SMGroup.Brand = gcBrand no-lock no-error.
+WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF AVAILABLE SMGroup THEN ASSIGN
    muisti       = recid(SMGroup)
    tulostettava = TRUE
@@ -134,9 +134,9 @@ tulostus:
 
          rtab[FRAME-LINE] = recid(SMGroup).
          IF jarj = 1 THEN FIND NEXT SMGroup
-         WHERE SMGroup.Brand = gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND NEXT SMGroup USE-INDEX SGName
-         WHERE SMGroup.Brand = gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       END.
       ELSE DO:
          CLEAR no-pause.
@@ -196,9 +196,9 @@ SELAUS:
    FIND SMGroup where recid(SMGroup) = muisti NO-LOCK.
    DO i = 1 TO FRAME-LINE - 1:
       IF jarj = 1 THEN FIND prev SMGroup
-      WHERE SMGroup.Brand = gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-      WHERE SMGroup.Brand = gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF AVAILABLE SMGroup THEN
          ASSIGN ekarivi = i muisti = recid(SMGroup).
       ELSE LEAVE.
@@ -221,9 +221,9 @@ SELAUS:
    IF FRAME-LINE = 1 THEN DO:
       FIND SMGroup where recid(SMGroup) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev SMGroup
-      WHERE SMGroup.Brand = gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-      WHERE SMGroup.Brand = gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE SMGroup THEN DO:
          message "YOU ARE ON THE FIRST ROW !".
          BELL. PAUSE 1 no-message.
@@ -250,9 +250,9 @@ SELAUS:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND SMGroup where recid(SMGroup) = rtab[FRAME-DOWN] no-lock .
       IF jarj = 1 THEN FIND NEXT SMGroup
-      WHERE SMGroup.Brand = gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND NEXT SMGroup USE-INDEX SGName
-      WHERE SMGroup.Brand = gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE SMGroup THEN DO:
          message "YOU ARE ON THE LAST ROW !".
          BELL. PAUSE 1 no-message.
@@ -278,18 +278,18 @@ SELAUS:
    muisti = rtab[1].
    FIND SMGroup where recid(SMGroup) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev SMGroup
-   WHERE SMGroup.Brand = gcBrand no-lock no-error.
+   WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-   WHERE SMGroup.Brand = gcBrand no-lock no-error.
+   WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    IF AVAILABLE SMGroup THEN DO:
       muisti = recid(SMGroup).
 
       /* menn‰‰n tiedostoa taaksep‰in 1 sivun verran */
       DO rivi = 1 TO (FRAME-DOWN - 1):
          IF jarj = 1 THEN FIND prev SMGroup
-         WHERE SMGroup.Brand = gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-         WHERE SMGroup.Brand = gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          IF AVAILABLE SMGroup THEN muisti = recid(SMGroup).
          ELSE rivi = FRAME-DOWN.
       END.
@@ -327,7 +327,7 @@ SELAUS:
        HIDE FRAME f1 no-pause.
        if SMGroup <> "" THEN DO:
           FIND FIRST SMGroup where 
-                     SMGroup.Brand = gcBrand AND
+                     SMGroup.Brand = Syst.CUICommon:gcBrand AND
                      SMGroup.SmGroup >= SMGroup
           no-lock no-error.
           IF NOT AVAILABLE SMGroup THEN DO:
@@ -353,7 +353,7 @@ SELAUS:
        HIDE FRAME f2 no-pause.
        if SGName <> "" THEN DO:
           FIND FIRST SMGroup where 
-                     SMGroup.Brand = gcBrand AND
+                     SMGroup.Brand = Syst.CUICommon:gcBrand AND
                      SMGroup.SGName >= SGName
           USE-INDEX SGName no-lock no-error.
 
@@ -421,18 +421,18 @@ SELAUS:
 
      else if lookup(nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST SMGroup
-       WHERE SMGroup.Brand = gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST SMGroup USE-INDEX SGName
-       WHERE SMGroup.Brand = gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN muisti = recid(SMGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
 
      else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST SMGroup
-       WHERE SMGroup.Brand = gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST SMGroup USE-INDEX SGName
-       WHERE SMGroup.Brand = gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN muisti = recid(SMGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
@@ -448,7 +448,7 @@ si-recid = xrecid.
 PROCEDURE local-disp-row:
 
    memb = can-find(SMGMember where 
-                   SMGMember.Brand    = gcBrand AND
+                   SMGMember.Brand    = Syst.CUICommon:gcBrand AND
                    SMGMember.SmGroup  = SMGroup.SmGroup AND
                    SMGMember.Salesman = Salesman).
 

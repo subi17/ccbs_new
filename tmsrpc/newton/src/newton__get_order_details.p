@@ -128,7 +128,7 @@
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/order.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
@@ -183,7 +183,7 @@ IF AVAIL DMS THEN DO:
 END.
 
 FIND OrderPayment WHERE 
-     OrderPayment.Brand = gcBrand AND 
+     OrderPayment.Brand = Syst.CUICommon:gcBrand AND 
      OrderPayment.OrderId = piOrderId NO-LOCK NO-ERROR.
 
 IF AVAILABLE OrderPayment AND
@@ -214,7 +214,7 @@ FOR EACH bMsRequest NO-LOCK WHERE
          bMsRequest.ReqStatus    = 0 AND
          bMsRequest.Reqcparam3   = "RVTERM12",
     FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
-          SingleFee.Brand        = gcBrand AND
+          SingleFee.Brand        = Syst.CUICommon:gcBrand AND
           SingleFee.Custnum      = Order.CustNum AND
           SingleFee.HostTable    = "Mobsub" AND
           SingleFee.KeyValue     = STRING(Order.MsSeq) AND
@@ -225,7 +225,7 @@ FOR EACH bMsRequest NO-LOCK WHERE
    lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
 FOR EACH DCCLI NO-LOCK WHERE
-         DCCLI.Brand    = gcBrand AND
+         DCCLI.Brand    = Syst.CUICommon:gcBrand AND
          DCCLI.DCEvent  = "RVTERM12" AND
          DCCLI.MsSeq    = Order.MsSeq AND
          DCCLI.ValidTo >= TODAY,
@@ -237,7 +237,7 @@ FOR EACH DCCLI NO-LOCK WHERE
           bMsRequest.ActStamp   <= Func.Common:mMake2DT(DCCLI.ValidFrom,86399) AND
           bMsRequest.Reqcparam3  = "RVTERM12",
     FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
-          SingleFee.Brand        = gcBrand AND
+          SingleFee.Brand        = Syst.CUICommon:gcBrand AND
           SingleFee.Custnum      = Order.CustNum AND
           SingleFee.HostTable    = "Mobsub" AND
           SingleFee.KeyValue     = STRING(Order.MsSeq) AND
@@ -397,7 +397,7 @@ IF iTerminalOfferItemId >= 0 THEN DO:
 END.
 
 FIND OrderAccessory NO-LOCK WHERE 
-     OrderAccessory.Brand = gcBrand AND 
+     OrderAccessory.Brand = Syst.CUICommon:gcBrand AND 
      OrderAccessory.OrderId = piOrderId AND
      OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -426,7 +426,7 @@ END.
 laptop_array = add_array(top_struct,"order_laptops").
 
 FIND OfferItem WHERE
-     OfferItem.Brand = gcBrand AND
+     OfferItem.Brand = Syst.CUICommon:gcBrand AND
      OfferItem.Offer = Order.Offer AND
      OfferItem.ItemType = "PerContract" AND
      OfferItem.ItemKey BEGINS "PAYTERM" AND
@@ -452,7 +452,7 @@ IF AVAIL OrderAccessory THEN
    add_string(top_struct,"sub_accessory", OrderAccessory.productcode).
 
 FIND OrderCustomer WHERE 
-     OrderCustomer.Brand = gcBrand AND 
+     OrderCustomer.Brand = Syst.CUICommon:gcBrand AND 
      OrderCustomer.OrderId = piOrderId AND 
      OrderCustomer.RowType = 4
      NO-LOCK NO-ERROR.
@@ -475,7 +475,7 @@ IF AVAIL OrderCustomer THEN DO:
 END.
 
 FIND OrderCustomer WHERE 
-     OrderCustomer.Brand = gcBrand AND 
+     OrderCustomer.Brand = Syst.CUICommon:gcBrand AND 
      OrderCustomer.OrderId = piOrderId AND 
      OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} 
      NO-LOCK NO-ERROR.
@@ -519,7 +519,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING})).
 
       FIND FIRST OrderCustomer WHERE 
-                 OrderCustomer.Brand = gcBrand AND 
+                 OrderCustomer.Brand = Syst.CUICommon:gcBrand AND 
                  OrderCustomer.OrderId = piOrderId AND 
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
       NO-LOCK NO-ERROR.
@@ -555,7 +555,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       END.
       
       FIND FIRST OrderCustomer WHERE 
-                 OrderCustomer.Brand = gcBrand AND 
+                 OrderCustomer.Brand = Syst.CUICommon:gcBrand AND 
                  OrderCustomer.OrderId = piOrderId AND 
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_BILLING}
       NO-LOCK NO-ERROR.

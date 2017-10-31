@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
+   Syst.CUICommon:gcBrand = "1"
    katun   = "Cron".
    
 {Func/cparam2.i}
@@ -49,12 +49,12 @@ END.
 
 /* connect to correct cdr dbs */
 FIND FIRST Invoice USE-INDEX InvDate WHERE
-           Invoice.Brand = gcBrand AND
+           Invoice.Brand = Syst.CUICommon:gcBrand AND
            Invoice.InvDate = ldaInvDate AND
            Invoice.InvType = liInvType NO-LOCK NO-ERROR.
 IF AVAILABLE Invoice THEN DO:
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                           "",  
                           Invoice.ToDate,
                           Invoice.ToDate).

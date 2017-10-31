@@ -105,7 +105,7 @@ OUTPUT STREAM sFile TO VALUE(icFile).
 IF icDumpMode = "full" THEN        
 MSISDNFullLoop:
 FOR EACH MSISDN NO-LOCK USE-INDEX CLI WHERE
-         MSISDN.Brand = gcBrand AND
+         MSISDN.Brand = Syst.CUICommon:gcBrand AND
          MSISDN.ValidTo >= Func.Common:mMake2DT(TODAY,0)
 BREAK BY MSISDN.CLI
       BY MSISDN.ValidFrom DESC
@@ -133,7 +133,7 @@ ELSE DO:
    MSISDNFreeLoop:
    FOR EACH ttStatus,
        EACH MSISDN NO-LOCK USE-INDEX StatusCode WHERE
-            MSISDN.Brand = gcBrand AND
+            MSISDN.Brand = Syst.CUICommon:gcBrand AND
             MSISDN.StatusCode = ttStatus.StatusCode AND
             MSISDN.ValidTo   >= Func.Common:mMake2DT(ldaModified,0)
    BREAK BY MSISDN.CLI
@@ -158,7 +158,7 @@ ELSE DO:
             NOT CAN-FIND(FIRST ttStatus WHERE 
                                ttStatus.StatusCode = MsStat.StatusCode),
        EACH MSISDN NO-LOCK USE-INDEX ActionDate WHERE
-            MSISDN.Brand = gcBrand AND
+            MSISDN.Brand = Syst.CUICommon:gcBrand AND
             MSISDN.StatusCode = MSStat.StatusCode AND
             MSISDN.ActionDate = ldaModified 
    BREAK BY MSISDN.CLI

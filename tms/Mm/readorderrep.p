@@ -32,7 +32,7 @@ ASSIGN
 
 /* report all gift orders created on given day */
 FOR EACH Order NO-LOCK USE-INDEX Stamp WHERE
-         Order.Brand        = gcBrand        AND
+         Order.Brand        = Syst.CUICommon:gcBrand        AND
          Order.CrStamp     >= ldReportDay[1] AND
          Order.CrStamp     <= ldReportDay[2] AND
          Order.OrderChannel = icChannel      AND

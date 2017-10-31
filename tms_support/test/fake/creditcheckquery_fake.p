@@ -57,7 +57,7 @@ PROCEDURE pHeader:
    DEF BUFFER bOrigRequest FOR MsRequest.
    
    FIND FIRST MSrequest WHERE 
-              MSRequest.Brand     = gcBrand    AND
+              MSRequest.Brand     = Syst.CUICommon:gcBrand    AND
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
    
    llACC = FALSE.

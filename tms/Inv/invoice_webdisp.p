@@ -26,7 +26,7 @@ DEF BUFFER bInv FOR Invoice.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.ActionID     = "WebDisp"
       ActionLog.KeyValue     = STRING(YEAR(idaInvDate),"9999") + 
@@ -42,7 +42,7 @@ DO TRANS:
 END.   
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand    AND
          Invoice.InvDate  = idaInvDate AND
          Invoice.InvType  = iiInvType  AND
          Invoice.CustNum >= iiCustNum1 AND

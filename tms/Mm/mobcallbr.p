@@ -63,7 +63,7 @@ ASSIGN
 tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT icCDRType,
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT katun,
                INPUT dtStartDate,
                INPUT dtEndDate,
@@ -135,7 +135,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     (IF icCDRType EQ "fraud"
      THEN " Fraud CDRs "
      ELSE " Mobile Calls ")

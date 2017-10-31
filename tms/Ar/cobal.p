@@ -49,7 +49,7 @@ liFromPer = YEAR(TODAY) * 100 + MONTH(TODAY).
 
 /* unpaid commission events */
 FOR EACH CoEvent NO-LOCK WHERE
-         CoEvent.Brand     = gcBrand  AND
+         CoEvent.Brand     = Syst.CUICommon:gcBrand  AND
          CoEvent.CalcDate >= idtDate1 AND
          CoEvent.CalcDate <= idtDate2 AND
          CoEvent.PaymDate  = ?,

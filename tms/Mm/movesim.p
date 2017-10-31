@@ -75,7 +75,7 @@ WITH
    width 80
    OVERLAY
    TITLE 
-   " " + ynimi + 
+   " " + Syst.CUICommon:ynimi + 
    " MOVE SIM CARDS " +
    string(pvm,"99.99.9999") + " "
    NO-LABELS
@@ -104,7 +104,7 @@ REPEAT WITH FRAME main:
 
          IF FRAME-FIELD = "stock1" THEN DO:
             FIND Stock WHERE 
-                 Stock.Brand = gcBrand   AND 
+                 Stock.Brand = Syst.CUICommon:gcBrand   AND 
                  Stock.Stock = INPUT Stock1 NO-LOCK NO-ERROR.
             IF NOT AVAIL Stock THEN DO:
                BELL.
@@ -116,7 +116,7 @@ REPEAT WITH FRAME main:
 
          ELSE IF FRAME-FIELD = "SimArt" THEN DO:
             FIND SimArt WHERE 
-                 SimArt.Brand  = gcBrand AND 
+                 SimArt.Brand  = Syst.CUICommon:gcBrand AND 
                  SimArt.SimArt = INPUT SimArt NO-LOCK NO-ERROR.
             IF NOT AVAIL SimArt THEN DO:
                BELL.
@@ -127,7 +127,7 @@ REPEAT WITH FRAME main:
          END.
          ELSE IF FRAME-FIELD = "Stock2" THEN DO:
             FIND Stock2 WHERE 
-                 Stock2.Brand  = gcBrand AND 
+                 Stock2.Brand  = Syst.CUICommon:gcBrand AND 
                  Stock2.Stock = INPUT Stock2 NO-LOCK NO-ERROR.
             IF NOT AVAIL Stock2 THEN DO:
                BELL.
@@ -155,7 +155,7 @@ REPEAT WITH FRAME main:
                Qty = integer(substr(INPUT icc2,2)).
 
                FIND xSIM WHERE 
-                    xSim.Brand = gcBrand AND 
+                    xSim.Brand = Syst.CUICommon:gcBrand AND 
                     xSIM.ICC   = INPUT icc1 NO-LOCK.
                IF NOT AVAIL xSIM THEN DO:
                   BELL.
@@ -165,7 +165,7 @@ REPEAT WITH FRAME main:
 
                DO i = 1 TO Qty - 1.  
                   FIND NEXT xSIM WHERE
-                            xSim.Brand = gcBrand 
+                            xSim.Brand = Syst.CUICommon:gcBrand 
                   no-lock no-error.
                   IF NOT AVAIL xSIM THEN DO:
                      BELL.
@@ -242,10 +242,10 @@ ACTION:
             SIM.SimArt = SimArt  AND
             SIM.ICC    >= icc1   AND
             SIM.ICC    <= icc2   AND 
-            SIM.Brand   = gcBrand :
+            SIM.Brand   = Syst.CUICommon:gcBrand :
 
        FIND  StoBal WHERE
-             Stobal.Brand  = gcBrand    AND 
+             Stobal.Brand  = Syst.CUICommon:gcBrand    AND 
              StoBal.SimArt = SIM.SimArt AND
              StoBal.StoBal = SIM.Stock
        EXCLUSIVE-LOCK no-error.
@@ -266,12 +266,12 @@ ACTION:
        FIND  StoBal WHERE
              StoBal.SimArt = SIM.SimArt AND
              StoBal.StoBal = SIM.Stock  AND 
-             StoBal.Brand  = gcBrand 
+             StoBal.Brand  = Syst.CUICommon:gcBrand 
        EXCLUSIVE-LOCK NO-ERROR.
        IF NOT AVAIL StoBal THEN DO:
           CREATE StoBal.
           ASSIGN
-             Stobal.Brand     = gcBrand 
+             Stobal.Brand     = Syst.CUICommon:gcBrand 
              StoBal.SimArt    = SIM.SimArt
              StoBal.StoBal    = SIM.Stock
              StoBal.Balance   = StoBal.Balance    + 1

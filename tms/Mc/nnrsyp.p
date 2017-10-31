@@ -68,7 +68,7 @@ form
     Reseller.RsName     /* column-label format */
 with width 80 overlay scroll 1 15 down
     color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " Resellers "
     + string(pvm,"99-99-99") + " "
     frame sel.
@@ -407,7 +407,7 @@ BROWSE:
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        DISP lcBrand with frame f1.
        UPDATE 
-          lcBrand WHEN gcAllBrand
+          lcBrand WHEN Syst.CUICommon:gcAllBrand
            Reseller with frame f1.
        hide frame f1 no-pause.
 
@@ -431,7 +431,7 @@ BROWSE:
 
        DISP lcBrand with frame f2.
        UPDATE 
-          lcBrand WHEN gcAllBrand
+          lcBrand WHEN Syst.CUICommon:gcAllBrand
           RsName with frame f2.
        hide frame f2 no-pause.
 

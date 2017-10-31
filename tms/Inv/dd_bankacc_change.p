@@ -68,7 +68,7 @@ FUNCTION fError RETURNS LOGIC
    DO TRANS:
       /* save to db for reporting */
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "DDBankChg"
              ErrorLog.TableName = "Customer"
              ErrorLog.KeyValue  = STRING(liCustNum)
@@ -250,7 +250,7 @@ PROCEDURE pFinalize:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Customer"  
          ActionLog.KeyValue     = "CSB19" 
          ActionLog.ActionID     = "DDBankChg"

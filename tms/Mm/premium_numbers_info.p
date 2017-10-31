@@ -408,7 +408,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcBNumberPreFix WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        

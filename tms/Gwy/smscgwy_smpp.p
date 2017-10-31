@@ -7,7 +7,7 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{Syst/commpaa.i} gcBrand = "1".
+{Syst/commpaa.i} Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Gwy/charset.i}
 {lib/smpp/smpp_defs.i}

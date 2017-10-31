@@ -22,7 +22,7 @@ form
 bank.bankid COLUMN-LABEL "Bank"
 bank.bankoffice   COLUMN-LABEL "Office"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-title color value(Syst.CUICommon:ctc) " Banks (" + gcBrand + ") "
+title color value(Syst.CUICommon:ctc) " Banks (" + Syst.CUICommon:gcBrand + ") "
 OVERLAY FRAME kase.
 
 Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
@@ -36,7 +36,7 @@ repeat:
 
    ehto = 3. RUN Syst/ufkey.p.
 
-   FIND FIRST bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE bank THEN DO:
 
       message " No Banks at all !".
@@ -63,7 +63,7 @@ LOOP:
             DISPLAY  bank.bankid bank.bankoffice WITH FRAME kase.
             rtab[FRAME-LINE] = recid(bank).
             DOWN WITH FRAME kase.
-            FIND NEXT bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+            FIND NEXT bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(kase) - 1 WITH FRAME kase.
@@ -85,7 +85,7 @@ BROWSE:
          WITH FRAME kase:
             IF FRAME-LINE = 1 THEN DO:
                FIND bank where recid(bank) = rtab[FRAME-LINE] no-lock.
-               FIND prev bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+               FIND prev bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE bank THEN DO:
                   BELL.
                   message "This is the 1st Row !".
@@ -114,7 +114,7 @@ BROWSE:
 
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND bank where recid(bank) = rtab[FRAME-LINE] no-lock .
-               FIND NEXT bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+               FIND NEXT bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE bank THEN DO:
                   BELL.
                   message "This is the last row !".
@@ -138,13 +138,13 @@ BROWSE:
          /* previous page */
          else if nap = "page-up" or nap = "prev-page" THEN DO:
             FIND bank where recid(bank) = ylin no-lock no-error.
-            FIND prev bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+            FIND prev bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
 
             IF AVAILABLE bank THEN DO:
 
                /* go back one page */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+                  FIND prev bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                   IF AVAILABLE bank THEN ylin = recid(bank).
                   ELSE i = FRAME-DOWN.
                END.
@@ -186,14 +186,14 @@ BROWSE:
 
 
         else if nap = "end,e" THEN DO : /* LAST record */
-           FIND LAST bank WHERE Bank.Brand = gcBrand NO-LOCK.
+           FIND LAST bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(bank).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
         else if nap = "home,h" THEN DO:
-           FIND FIRST bank WHERE Bank.Brand = gcBrand NO-LOCK.
+           FIND FIRST bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(bank).
            must-print = TRUE.
            NEXT LOOP.

@@ -99,7 +99,7 @@ FORM
          HELP "Email Address, EMPTY = Only file "
    SKIP(3)   
    WITH ROW 1 SIDE-LABELS WIDTH 79
-        TITLE " " + ynimi + " INVOICE STATISTICS " +
+        TITLE " " + Syst.CUICommon:ynimi + " INVOICE STATISTICS " +
         STRING(TODAY,"99-99-99") + " "                   
         FRAME valinta.
 

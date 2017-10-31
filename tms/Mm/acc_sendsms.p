@@ -85,7 +85,7 @@ liCreated = fMakeSchedSMS(iiCustNum,
                           
 IF liCreated > 0 AND icMessage = "PreviousDay" THEN 
 FOR FIRST CallAlarm EXCLUSIVE-LOCK WHERE
-          CallAlarm.Brand = gcBrand       AND
+          CallAlarm.Brand = Syst.CUICommon:gcBrand       AND
           CallAlarm.CLI   = MsRequest.CLI AND
           CallAlarm.DeliStat = 1 AND
           CallAlarm.CASeq    = liCreated:

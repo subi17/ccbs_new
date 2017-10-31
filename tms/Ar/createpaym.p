@@ -96,7 +96,7 @@ REPEAT:
    ELSE LEAVE.
 END.
 
-ASSIGN Payment.Brand      = gcBrand
+ASSIGN Payment.Brand      = Syst.CUICommon:gcBrand
        Payment.CustNum    = iiCustNum
        Payment.PaymAmt    = idPosting[1]
        Payment.TotAmt     = idPosting[1]
@@ -134,7 +134,7 @@ lcPref = "".
 DO liCount = 1 TO liAccCnt:
 
    FIND Account where 
-        Account.Brand  = gcBrand AND 
+        Account.Brand  = Syst.CUICommon:gcBrand AND 
         Account.AccNum = Payment.AccNum[liCount]
    NO-LOCK NO-ERROR.
    IF AVAILABLE Account THEN 
@@ -232,7 +232,7 @@ IF icMemo > "" THEN DO:
 
    /* separate Memo */
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "Payment"
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
@@ -272,7 +272,7 @@ REPEAT:
    IF liCount > 10000 THEN LEAVE.
 
    IF NOT CAN-FIND(FIRST Payment WHERE
-                         Payment.Brand      = gcBrand AND
+                         Payment.Brand      = Syst.CUICommon:gcBrand AND
                          Payment.ExtVoucher = lcExtVoucher AND
                          RECID(Payment) NE lrRecid)
    THEN LEAVE.

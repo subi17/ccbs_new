@@ -164,7 +164,7 @@ form
 "               from invoices defined below:"
    SKIP(13)
    WITH TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
+   " " + Syst.CUICommon:ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
 COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
 form
@@ -303,7 +303,7 @@ repeat ON ENDKEY UNDO, NEXT:
             IF INPUT lano1 = INPUT lano2 THEN DO:
 
                FIND FIRST Invoice NO-LOCK where
-                          Invoice.Brand   = gcBrand AND
+                          Invoice.Brand   = Syst.CUICommon:gcBrand AND
                           Invoice.InvNum  = INPUT lano1.
                FIND FIRST Customer NO-LOCK where
                           Customer.CustNum = Invoice.CustNum.
@@ -333,7 +333,7 @@ repeat ON ENDKEY UNDO, NEXT:
 
              ELSE DO:
                 Find invgroup where 
-                     InvGroup.Brand   = gcBrand AND
+                     InvGroup.Brand   = Syst.CUICommon:gcBrand AND
                      invgroup.InvGroup = lcInvGroup 
                    NO-LOCK NO-ERROR.
                 IF NOT AVAILABLE InvGroup THEN DO:
@@ -352,7 +352,7 @@ repeat ON ENDKEY UNDO, NEXT:
              if CustGroup = "" then disp "NONE" @ custgroup.cgname.
              ELSE DO:
                 FIND custgroup where 
-                     CustGroup.Brand     = gcBrand AND
+                     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                      custgroup.custgroup = CustGroup 
                    NO-LOCK NO-ERROR.
                 IF NOT AVAIL custgroup THEN DO:
@@ -430,7 +430,7 @@ END.  /* LOOP */
 MESSAGE "Creating direct debit file ...".
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand   = gcBrand     AND
+         Invoice.Brand   = Syst.CUICommon:gcBrand     AND
          Invoice.InvDate >= i-date1     AND
          Invoice.InvDate <= i-date2     AND
          Invoice.InvNum >= lano1       AND
@@ -462,7 +462,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
       /* is an ext cust group selected ? */
       if CustGroup ne "" AND
          NOT can-find(first CGMember where 
-                            CGMember.Brand     = gcBrand AND
+                            CGMember.Brand     = Syst.CUICommon:gcBrand AND
                             CGMember.custgroup = CustGroup and
                             CGMember.custnum   = Customer.CustNum) 
       THEN NEXT. 

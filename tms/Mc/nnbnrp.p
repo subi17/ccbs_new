@@ -58,7 +58,7 @@ repeat WITH FRAME frm:
       IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
          IF lookup(frame-field,"PriceList") > 0 THEN DO:
             FIND FIRST PriceList WHERE 
-                       PriceList.Brand  = gcBrand AND
+                       PriceList.Brand  = Syst.CUICommon:gcBrand AND
                        PriceList.PriceList = INPUT PriceList 
             NO-LOCK NO-ERROR.
 
@@ -100,7 +100,7 @@ task:
    message "Printing prices ...".
 
    FIND FIRST PriceList no-lock where
-              PriceList.Brand  = gcBrand AND
+              PriceList.Brand  = Syst.CUICommon:gcBrand AND
               PriceList.PriceList = PriceList NO-ERROR.
 
    /* header texts */
@@ -129,7 +129,7 @@ task:
       my-nl.
 
    FOR EACH  Tariff no-lock where
-             Tariff.Brand     = gcBrand AND
+             Tariff.Brand     = Syst.CUICommon:gcBrand AND
              (IF   pricelist    = "ALL" THEN TRUE 
               ELSE Tariff.PriceList = PriceList)
    BREAK
@@ -141,7 +141,7 @@ task:
 
       IF Tariff.CCN > 0 THEN 
       FIND FIRST CCN NO-LOCK WHERE
-             CCN.Brand = gcBrand AND
+             CCN.Brand = Syst.CUICommon:gcBrand AND
              CCN.CCN   = Tariff.CCN NO-ERROR.
 
       /* Price data */

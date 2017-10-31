@@ -61,7 +61,7 @@ IF NOT AVAILABLE MsRequest OR
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 FIND Order WHERE
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.CUICommon:gcBrand AND 
      Order.OrderId = MsRequest.ReqIParam1 EXCLUSIVE-LOCK NO-ERROR.
    
 IF NOT AVAILABLE Order THEN DO:
@@ -152,7 +152,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
 
    IF Order.FtGrp > "" AND 
       CAN-FIND(FIRST FatGroup WHERE
-                     FatGroup.Brand = gcBrand AND
+                     FatGroup.Brand = Syst.CUICommon:gcBrand AND
                      FatGroup.FtGrp = Order.FtGrp)
    THEN lcFatGroup = Order.FtGrp.
    ELSE lcFatGroup = fCParamC("OrderCampaignFat").
@@ -221,7 +221,7 @@ RUN Mm/createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 IF OrderCustomer.CustID = "CIF" THEN DO:
 
    FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand   = gcBrand   AND
+            OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
             OrderCustomer.OrderID = Order.OrderID AND
             OrderCustomer.RowType = 5:
 

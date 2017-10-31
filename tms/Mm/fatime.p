@@ -123,7 +123,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " FATime "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -260,21 +260,21 @@ orders = "   By CustNo  ,   By MSISDN ,  By period  , By 4".
 
 IF icFatGrp > "" THEN DO:
    FIND FIRST FATime WHERE 
-              FATime.BRand = gcBrand AND 
+              FATime.BRand = Syst.CUICommon:gcBrand AND 
               FATime.FtGrp = icFatGrp
    NO-LOCK NO-ERROR.
    MaxOrder = 1.
 END.
 ELSE IF iiCustNum > 0 THEN DO:
    FIND FIRST FATime WHERE 
-             FATime.Brand   = gcBrand AND 
+             FATime.Brand   = Syst.CUICommon:gcBrand AND 
              FATime.CustNum = iiCustNum 
    NO-LOCK NO-ERROR.
    MaxOrder = 1.
 END.
 ELSE IF icCLI > "" THEN DO:
    FIND FIRST FATime WHERE 
-              FATime.Brand = gcBrand AND 
+              FATime.Brand = Syst.CUICommon:gcBrand AND 
               FATime.CLI = icCLi AND
               FATime.MsSeq = iiMsSeq
    NO-LOCK NO-ERROR.
@@ -282,7 +282,7 @@ ELSE IF icCLI > "" THEN DO:
 END.
 
 ELSE FIND FIRST FATime  use-index InvNum
-WHERE FATime.Brand = gcBrand NO-LOCK NO-ERROR.
+WHERE FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
 
 IF AVAILABLE FATime THEN ASSIGN
@@ -319,7 +319,7 @@ REPEAT WITH FRAME sel:
            FATime.QtyUnit = "Amt"
            FATime.FtGrp   = icFatGrp
            FATime.CustNum = iiCustNum
-           FATime.Brand   = gcBrand 
+           FATime.Brand   = Syst.CUICommon:gcBrand 
            FATime.CLI     = icCLi
            FATime.MsSeq   = iiMsSeq
            FATime.FatType = 0.
@@ -327,7 +327,7 @@ REPEAT WITH FRAME sel:
            /* defaults from group */ 
            IF FATime.FtGrp > "" THEN DO:
               FIND FatGroup WHERE 
-                   FatGroup.Brand = gcBrand AND
+                   FatGroup.Brand = Syst.CUICommon:gcBrand AND
                    FatGroup.FtGrp = FATime.FtGrp NO-LOCK.
               fDefaults().
            END.
@@ -366,7 +366,7 @@ REPEAT WITH FRAME sel:
 
       /* is there ANY record ? */
       FIND FIRST FATime
-      WHERE FATime.Brand = gcBrand NO-LOCK NO-ERROR.
+      WHERE FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FATime THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -577,12 +577,12 @@ REPEAT WITH FRAME sel:
 
           IF icFatGrp > "" THEN 
           FIND FIRST FATime WHERE 
-                     FATime.BRand = gcBrand AND
+                     FATime.BRand = Syst.CUICommon:gcBrand AND
                      FATime.FtGrp    = icFatGrp AND 
                      FATime.CustNum >= CustNum
                NO-LOCK NO-ERROR.
           ELSE FIND FIRST FATime WHERE 
-                          FATime.BRand = gcBrand AND
+                          FATime.BRand = Syst.CUICommon:gcBrand AND
                           FATime.CustNum >= CustNum
                NO-LOCK NO-ERROR.
 
@@ -611,18 +611,18 @@ REPEAT WITH FRAME sel:
 
           IF icFatGrp > "" THEN 
           FIND FIRST FATime WHERE 
-                     FATime.BRand = gcBrand AND
+                     FATime.BRand = Syst.CUICommon:gcBrand AND
                      FATime.FtGrp = icFatGrp AND 
                      FATime.CLI  >= CLI
                NO-LOCK NO-ERROR.
           ELSE IF iiCustNum > 0 THEN 
           FIND FIRST FATime WHERE
-                     FATime.BRand = gcBrand AND
+                     FATime.BRand = Syst.CUICommon:gcBrand AND
                      FATime.CustNum = iiCustNum AND
                      FATime.CLI    >= CLI
                NO-LOCK NO-ERROR. 
           ELSE FIND FIRST FATime WHERE 
-                          FATime.BRand = gcBrand AND
+                          FATime.BRand = Syst.CUICommon:gcBrand AND
                           FATime.CLI >= CLI
                NO-LOCK NO-ERROR.
 
@@ -819,19 +819,19 @@ PROCEDURE local-find-FIRST:
 
    IF icFatGrp > "" THEN DO:
       FIND FIRST FATime WHERE 
-                 FATime.BRand = gcBrand AND
+                 FATime.BRand = Syst.CUICommon:gcBrand AND
                  FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND FIRST FATime WHERE 
-                 FATime.BRand = gcBrand AND
+                 FATime.BRand = Syst.CUICommon:gcBrand AND
                  FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND FIRST FATime WHERE 
-                 FATime.BRand = gcBrand AND
+                 FATime.BRand = Syst.CUICommon:gcBrand AND
                  FATime.CLI = icCLI AND
                  FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -839,10 +839,10 @@ PROCEDURE local-find-FIRST:
    ELSE DO:
        IF order = 1 THEN 
        FIND FIRST FATime USE-INDEX InvNum WHERE 
-                  FATime.Brand = gcBrand NO-LOCK NO-ERROR.
+                  FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND FIRST FATime USE-INDEX CLI WHERE
-                  FATime.Brand = gcBrand NO-LOCK NO-ERROR.
+                  FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END. 
 
 END PROCEDURE.
@@ -850,19 +850,19 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF icFatGrp > "" THEN DO:
       FIND LAST FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND LAST FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND LAST FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.CLI = icCLI AND
                 FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -870,10 +870,10 @@ PROCEDURE local-find-LAST:
    ELSE DO:
        IF order = 1 THEN 
        FIND LAST FATime USE-INDEX InvNum WHERE
-                 FATime.BRand = gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND LAST FATime USE-INDEX CLI WHERE
-                FATime.BRand = gcBrand
+                FATime.BRand = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
    END. 
 
@@ -883,19 +883,19 @@ PROCEDURE local-find-NEXT:
 
    IF icFatGrp > "" THEN DO:
       FIND NEXT FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND NEXT FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND NEXT FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.CLI = icCLI AND
                 FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -903,10 +903,10 @@ PROCEDURE local-find-NEXT:
    ELSE DO:
        IF order = 1 THEN 
        FIND NEXT FATime USE-INDEX InvNum WHERE
-                 FATime.BRand = gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND NEXT FATime USE-INDEX CLI WHERE 
-                 FATime.BRand = gcBrand  NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END. 
 
 END PROCEDURE.
@@ -915,19 +915,19 @@ PROCEDURE local-find-PREV:
 
    IF icFatGrp > "" THEN DO:
       FIND PREV FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND PREV FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND PREV FATime WHERE 
-                FATime.BRand = gcBrand AND
+                FATime.BRand = Syst.CUICommon:gcBrand AND
                 FATime.CLI = icCLI AND
                 FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -935,10 +935,10 @@ PROCEDURE local-find-PREV:
    ELSE DO:
        IF order = 1 THEN 
        FIND PREV FATime USE-INDEX InvNum WHERE
-                 FATime.BRand = gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND PREV FATime USE-INDEX CLI WHERE
-                 FATime.BRand = gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END. 
 
 END PROCEDURE.
@@ -975,7 +975,7 @@ PROCEDURE local-find-others.
        ELSE payername = "FreeOfCharge".
 
        FIND FIRST FATGroup WHERE
-                  FATGroup.Brand = gcBrand AND 
+                  FATGroup.Brand = Syst.CUICommon:gcBrand AND 
                   FATGroup.FTGrp = FATime.FTGrp NO-LOCK NO-ERROR.
 
        CustName = "".
@@ -1111,7 +1111,7 @@ PROCEDURE local-UPDATE-record:
 
                    ELSE DO:
                       FIND MobSub WHERE 
-                           Mobsub.Brand = gcBrand AND 
+                           Mobsub.Brand = Syst.CUICommon:gcBrand AND 
                            MobSub.Cli =
                          INPUT FRAME lis FATime.CLI  NO-LOCK NO-ERROR.
                       IF NOT AVAIL Mobsub THEN DO:
@@ -1150,7 +1150,7 @@ PROCEDURE local-UPDATE-record:
                            INPUT FATime.CustNum = 0)
                    THEN DO: 
                       FIND Customer WHERE
-                           Customer.Brand   = gcBrand AND 
+                           Customer.Brand   = Syst.CUICommon:gcBrand AND 
                            Customer.CustNum = INPUT FRAME lis FATime.CustNum 
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL Customer  THEN DO:
@@ -1170,7 +1170,7 @@ PROCEDURE local-UPDATE-record:
 
                 ELSE IF FRAME-FIELD = "Ftgrp" THEN DO:
                    FIND FIRST fatgroup WHERE
-                              FAtGroup.Brand = gcBRand AND 
+                              FAtGroup.Brand = Syst.CUICommon:gcBrand AND 
                               fatgroup.ftgrp =  INPUT FRAME lis FATime.FTgrp 
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL Fatgroup THEN DO:
@@ -1247,7 +1247,7 @@ PROCEDURE local-UPDATE-record:
              liCrePeriod = FATime.Period.
                 
              FIND FatGroup NO-LOCK WHERE
-                  FatGroup.Brand = gcBrand AND
+                  FatGroup.Brand = Syst.CUICommon:gcBrand AND
                   FatGroup.FtGrp = INPUT FATime.FtGrp.
                   
              IF FatGroup.PeriodQty > 1 THEN 

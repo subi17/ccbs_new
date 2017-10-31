@@ -38,7 +38,7 @@ MAIN:
 repeat:
 
    find first DiscountPlan where
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.ValidFrom <= TODAY AND
               DiscountPlan.ValidTo >= TODAY no-lock no-error.
    if not available DiscountPlan then do:
@@ -72,7 +72,7 @@ print-line:
             rtab[frame-line] = recid(DiscountPlan).
             down with frame sel.
             find next DiscountPlan where
-                      DiscountPlan.Brand = gcBrand AND
+                      DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                       DiscountPlan.ValidFrom <= TODAY AND
                       DiscountPlan.ValidTo >= TODAY no-lock no-error.
          end.
@@ -105,7 +105,7 @@ BROWSE:
             if frame-line = 1 then do:
                find DiscountPlan where recid(DiscountPlan) = rtab[frame-line] no-lock.
                find prev DiscountPlan where
-                         DiscountPlan.Brand = gcBrand AND
+                         DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                          DiscountPlan.ValidFrom <= TODAY AND
                          DiscountPlan.ValidTo >= TODAY no-lock no-error.
                if not available DiscountPlan then do:
@@ -133,7 +133,7 @@ BROWSE:
             if frame-line = frame-down then do:
                find DiscountPlan where recid(DiscountPlan) = rtab[frame-line] no-lock .
                find next DiscountPlan where
-                         DiscountPlan.Brand = gcBrand AND
+                         DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                          DiscountPlan.ValidFrom <= TODAY AND
                          DiscountPlan.ValidTo >= TODAY no-lock no-error.
                if not available DiscountPlan then do:
@@ -161,14 +161,14 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find DiscountPlan where recid(DiscountPlan) = memory no-lock no-error.
             find prev DiscountPlan where
-                      DiscountPlan.Brand = gcBrand AND
+                      DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                       DiscountPlan.ValidFrom <= TODAY AND
                       DiscountPlan.ValidTo >= TODAY no-lock no-error.
             if available DiscountPlan then do:
 
                do i = 1 to (frame-down - 1):
                   find prev DiscountPlan where
-                            DiscountPlan.Brand = gcBrand AND
+                            DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                             DiscountPlan.ValidFrom <= TODAY AND
                             DiscountPlan.ValidTo >= TODAY no-lock no-error.
                   if available DiscountPlan then memory = recid(DiscountPlan).
@@ -207,7 +207,7 @@ BROWSE:
            hide frame hayr no-pause.
            if DiscountPlan ENTERED then do:
               find first DiscountPlan where
-                         DiscountPlan.Brand = gcBrand AND
+                         DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                          DiscountPlan.DPRuleId >= DiscountPlan AND
                          DiscountPlan.ValidFrom <= TODAY AND
                          DiscountPlan.ValidTo >= TODAY
@@ -235,7 +235,7 @@ BROWSE:
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
            find first DiscountPlan where
-                      DiscountPlan.Brand = gcBrand AND
+                      DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                       DiscountPlan.ValidFrom <= TODAY AND
                       DiscountPlan.ValidTo >= TODAY
               no-lock no-error.
@@ -247,7 +247,7 @@ BROWSE:
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
            find last DiscountPlan where
-                     DiscountPlan.Brand = gcBrand AND
+                     DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                      DiscountPlan.ValidFrom <= TODAY AND
                      DiscountPlan.ValidTo >= TODAY
               no-lock no-error.

@@ -22,7 +22,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fcreatereq.i}
@@ -74,7 +74,7 @@ IF TRIM(katun) EQ "VISTA_" THEN
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = lcNewPayterm AND
            DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} AND
            DayCampaign.ValidFrom <= TODAY AND
@@ -107,7 +107,7 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

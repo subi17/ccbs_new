@@ -116,7 +116,7 @@ PROCEDURE pChangeMSISDN:
               MSISDN.ValidTo > Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
 
    FIND FIRST MSRange WHERE 
-              MSRange.Brand    = gcBrand    AND 
+              MSRange.Brand    = Syst.CUICommon:gcBrand    AND 
               MSRange.CLIFrom <= MSISDN.CLI AND
               MSRange.CLITo   >= MSISDN.CLI
    NO-LOCK NO-ERROR.
@@ -160,7 +160,7 @@ PROCEDURE pChangeMSISDN:
       MSOwner.BillTarget  = Mobsub.BillTarget
       MSOwner.MsSeq       = MobSub.MsSeq 
       MSowner.imsi        = mobsub.imsi
-      MSowner.brand       = gcBrand 
+      MSowner.brand       = Syst.CUICommon:gcBrand 
       MSOWner.TSEnd       = 99999999.99999
       MsOwner.CliType     = mobsub.clitype
       MsOwner.CLIEvent    = "CLI".
@@ -262,7 +262,7 @@ PROCEDURE pChangeMSISDN:
          CREATE Memo.
          ASSIGN
             Memo.CreStamp  = Func.Common:mMakeTS() 
-            Memo.Brand     = gcBrand                 
+            Memo.Brand     = Syst.CUICommon:gcBrand                 
             Memo.HostTable = "MobSub"                
             Memo.KeyValue  = STRING(DCCLI.MsSeq)     
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

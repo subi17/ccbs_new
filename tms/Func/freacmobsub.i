@@ -92,7 +92,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
       IF btermmobsub.msseq EQ liReactMsseq THEN DO: 
          /* Bypass this one MsSeq only once and remove value from Cparam */
          FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-                    TMSParam.Brand     = gcBrand AND
+                    TMSParam.Brand     = Syst.CUICommon:gcBrand AND
                     TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
          IF AVAILABLE TMSParam THEN DO:
             ASSIGN TMSParam.IntVal = -1.
@@ -109,14 +109,14 @@ FUNCTION freacprecheck RETURNS CHARACTER
       RETURN "Subscription is already active with same MSISDN".
 
    IF CAN-FIND (FIRST order where
-                      order.brand = gcBrand AND
+                      order.brand = Syst.CUICommon:gcBrand AND
                       order.cli = bTermMobSub.cli and
                       order.ordertype < 2 AND
                lookup(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0) THEN
       RETURN "Ongoing active order with same MSISDN".
 
    IF NOT CAN-FIND (FIRST MSISDN where 
-                          MSISDN.Brand = gcBrand AND
+                          MSISDN.Brand = Syst.CUICommon:gcBrand AND
                           MSISDN.CLI   = bTermMobSub.CLI) THEN
       RETURN "MSISDN not found".
 
@@ -128,13 +128,13 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF NOT AVAILABLE SIM THEN RETURN "SIM not found".
    ELSE DO:
       FIND FIRST mobsub WHERE
-                 mobsub.brand = gcBrand AND
+                 mobsub.brand = Syst.CUICommon:gcBrand AND
                  mobsub.imsi = imsi.imsi NO-LOCK NO-ERROR.
       IF AVAIL mobsub THEN RETURN "SIM is already in use".
    END.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               CLIType.CLIType = (IF bTermMobsub.TariffBundle > ""
                                  THEN bTermMobsub.TariffBundle
                                  ELSE bTermMobsub.CLIType) NO-ERROR.
@@ -143,11 +143,11 @@ FUNCTION freacprecheck RETURNS CHARACTER
             CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
 
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand AND
+               bMobSub.Brand   = Syst.CUICommon:gcBrand AND
                bMobSub.InvCust = bTermMobSub.CustNum AND
                bMobSub.PayType = FALSE,
          FIRST CLIType NO-LOCK WHERE
-               CLIType.Brand = gcBrand AND
+               CLIType.Brand = Syst.CUICommon:gcBrand AND
                CLIType.CLIType = bMobSub.TariffBundle AND
                CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
          llPrimaryActive = TRUE.
@@ -158,7 +158,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
          IF btermmobsub.msseq EQ liReactMsseq THEN DO:
          /* Bypass this one MsSeq only once and remove value from Cparam */
             FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-                       TMSParam.Brand     = gcBrand AND
+                       TMSParam.Brand     = Syst.CUICommon:gcBrand AND
                        TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
             IF AVAILABLE TMSParam THEN DO:
                ASSIGN TMSParam.IntVal = -1.

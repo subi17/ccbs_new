@@ -74,17 +74,17 @@ IF icDumpMode NE "modified" THEN idLastDump = 0.
 /* postpaid charges and compensation -----------------------------*/
 MsRequestLoop:
 FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
-         MsRequest.Brand   = gcBrand AND
+         MsRequest.Brand   = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType = 76 AND
          MsRequest.CreStamp >= idLastDump,
     FIRST FMItem NO-LOCK WHERE 
-          FMItem.Brand = gcBrand AND
+          FMItem.Brand = Syst.CUICommon:gcBrand AND
           FMItem.FeeModel = MsRequest.ReqCParam1 AND
           DATETIME(FMItem.ToDate) >= 
              Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp) AND 
           DATETIME(FMItem.FromDate) <= Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp),
     FIRST BillItem NO-LOCK WHERE 
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.CUICommon:gcBrand AND
           BillItem.BillCode = FMItem.BillCode
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -151,18 +151,18 @@ END. /* end MsRequestLoop ----------------------------------------*/
 PrePaidRequestLoop:
 FOR EACH ttSource,
     EACH PrePaidRequest NO-LOCK WHERE
-         PrePaidRequest.Brand  = gcBrand AND
+         PrePaidRequest.Brand  = Syst.CUICommon:gcBrand AND
          PrePaidRequest.Source = ttSource.PPSource AND
          PrePaidRequest.TSRequest >= idLastDump, 
     FIRST FMItem NO-LOCK WHERE 
-          FMItem.Brand = gcBrand AND
+          FMItem.Brand = Syst.CUICommon:gcBrand AND
           FMItem.FeeModel = PrePaidRequest.ReqCParam1 AND
           DATETIME(FMItem.ToDate) >= 
              Func.Common:mTimeStamp2DateTime(PrePaidRequest.TSRequest) AND 
           DATETIME(FMItem.FromDate) <= 
              Func.Common:mTimeStamp2DateTime(PrePaidRequest.TSRequest),
     FIRST BillItem NO-LOCK WHERE 
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.CUICommon:gcBrand AND
           BillItem.BillCode = FMItem.BillCode
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:

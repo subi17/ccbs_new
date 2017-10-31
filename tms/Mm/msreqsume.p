@@ -22,7 +22,7 @@ DEF VAR lcLetters AS CHAR  NO-UNDO.
 lcLetters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O".
 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = gcBrand AND
+         RequestType.Brand = Syst.CUICommon:gcBrand AND
          RequestType.ReqType <= 82:
 
    IF LOOKUP(STRING(RequestType.ReqType),"0,3,4,8,9,10,13,15,18,19,82") > 0 

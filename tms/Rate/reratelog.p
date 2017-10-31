@@ -70,7 +70,7 @@ form
     RerateLog.ChangedQty   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        " RERATE LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -355,7 +355,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liCustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -379,7 +379,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -404,7 +404,7 @@ REPEAT WITH FRAME sel:
        CLEAR FRAME f3.
        DISPLAY lcBrand WITH FRAME F3.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ldaRateDate WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -485,15 +485,15 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN DO:
       FIND FIRST RerateLog USE-INDEX InvCust WHERE
-                 RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND FIRST RerateLog USE-INDEX CLI WHERE
-                 RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND FIRST RerateLog USE-INDEX StartDate WHERE
-                 RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -502,15 +502,15 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN DO:
       FIND LAST RerateLog USE-INDEX InvCust WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND LAST RerateLog USE-INDEX CLI WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND LAST RerateLog USE-INDEX StartDate WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -519,15 +519,15 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN DO:
       FIND NEXT RerateLog USE-INDEX InvCust WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND NEXT RerateLog USE-INDEX CLI WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND NEXT RerateLog USE-INDEX StartDate WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -536,15 +536,15 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN DO:
       FIND PREV RerateLog USE-INDEX InvCust WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND PREV RerateLog USE-INDEX CLI WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND PREV RerateLog USE-INDEX StartDate WHERE
-                RerateLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.

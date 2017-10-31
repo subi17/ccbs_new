@@ -83,7 +83,7 @@ form
       FORMAT "Customer/User"
 
 WITH TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " PDF INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " PDF INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
 side-labels COLOR value(Syst.CUICommon:cfc) ROW 1 centered OVERLAY FRAME rajat.
 
 form
@@ -234,7 +234,7 @@ repeat:
              ASSIGN INPUT InvGroup.
              if InvGroup ne "" AND NOT
                 can-find(invgroup where 
-                         InvGroup.Brand    = gcBrand AND 
+                         InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
                          invgroup.InvGroup = InvGroup) THEN DO:
                 BELL.
                 message "UNKNOWN INVOICEGROUP !".
@@ -249,7 +249,7 @@ repeat:
              if CustGroup = "" then disp "NONE" @ CustGroup.CGName.
              ELSE DO:
                 FIND CustGroup where 
-                     CustGroup.Brand     = gcBrand AND
+                     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                      CustGroup.custGroup = CustGroup 
                    no-lock no-error.
                 IF NOT AVAIL CustGroup THEN DO:
@@ -336,7 +336,7 @@ repeat:
          /* are customers in the ext group in correct i-group also ? */
          if CustGroup ne "" THEN DO:
             FOR EACH  cgmember no-lock where 
-                      cgMember.Brand     = gcBrand AND
+                      cgMember.Brand     = Syst.CUICommon:gcBrand AND
                       cgmember.custgroup = CustGroup,
                 FIRST Customer no-lock where
                       Customer.CustNum  = cgmember.custnum AND

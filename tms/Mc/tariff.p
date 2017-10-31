@@ -116,7 +116,7 @@ form
 WITH 
    width 80 OVERLAY scroll 1 15 DOWN ROW 1
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi + lBrHdr
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + lBrHdr
 FRAME sel.
 
 
@@ -612,7 +612,7 @@ repeat WITH FRAME sel:
         plseek = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr1.
-        UPDATE lcBrand WHEN gcAllBrand AND iiCCN = 0
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND iiCCN = 0
                plseek WITH FRAME hayr1.
         HIDE FRAME hayr1 no-pause.
 
@@ -673,7 +673,7 @@ repeat WITH FRAME sel:
         lcCSeek = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand AND icPList = "" AND iiCust = 0
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND icPList = "" AND iiCust = 0
                lcCSeek WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 
@@ -709,7 +709,7 @@ repeat WITH FRAME sel:
         liCustSeek = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr3.
-        UPDATE lcBrand WHEN gcAllBrand AND iiCCN = 0
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND iiCCN = 0
                liCustSeek WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
 

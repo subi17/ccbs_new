@@ -47,13 +47,13 @@ form
 lcInvGroup HELP "Invoicing Group" InvGroup.IGName skip(11)
 WITH
    width 80 overlay title 
-   " " + ynimi + " Summary Of AdvPayments and Deposits " + 
+   " " + Syst.CUICommon:ynimi + " Summary Of AdvPayments and Deposits " + 
    STRING(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 form header /* header FOR printout */                
    fill("=",78) format "x(78)" SKIP
-   ynimi AT 1
+   Syst.CUICommon:ynimi AT 1
       "SUMMARY OF DEPOSITS" AT 34
       "Page" to 70 sl format "zz9" TO 78
 
@@ -118,7 +118,7 @@ repeat WITH FRAME rajat:
          if frame-field = "lcInvGroup" THEN DO :
             if input lcInvGroup ne "" THEN DO:
                FIND InvGroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup = INPUT lcInvGroup 
                     no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -159,7 +159,7 @@ Action:
 
    IF lcInvGroup NE "" THEN 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand AND
+            Customer.Brand    = Syst.CUICommon:gcBrand AND
             Customer.InvGroup = lcInvGroup:
 
       fChkCust().
@@ -167,7 +167,7 @@ Action:
 
    ELSE 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand  = gcBrand:
+            Customer.Brand  = Syst.CUICommon:gcBrand:
       fChkCust().
    END.
 

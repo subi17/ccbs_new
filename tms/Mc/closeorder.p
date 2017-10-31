@@ -42,7 +42,7 @@ DEFINE BUFFER lbOrd           FOR Order.
 DEFINE BUFFER lbMLOrder       FOR Order.
 
 FIND Order WHERE 
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.CUICommon:gcBrand AND 
      Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -189,7 +189,7 @@ IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
    Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}) THEN DO:
    
    FIND FIRST MSISDN WHERE
-              MSISDN.Brand = gcBrand AND
+              MSISDN.Brand = Syst.CUICommon:gcBrand AND
               MSISDN.CLI   = Order.CLI
    EXCLUSIVE-LOCK NO-ERROR.
    
@@ -222,7 +222,7 @@ IF llDoEvent THEN
 /* Convergent and Mobile only Additional Line */
 /* Extra Line */
 FIND FIRST lbOrderCustomer NO-LOCK WHERE
-           lbOrderCustomer.Brand   = gcBrand       AND
+           lbOrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
            lbOrderCustomer.OrderId = Order.OrderId AND
            lbOrderCustomer.RowType = 1             NO-ERROR.
 IF AVAILABLE lbOrderCustomer THEN 
@@ -231,7 +231,7 @@ DO:
    FIND FIRST lbCustomer WHERE lbCustomer.CustNum = lbOrderCustomer.CustNum NO-LOCK NO-ERROR.
    IF AVAIL lbCustomer THEN 
    DO:
-       FIND FIRST lbCustCat WHERE lbCustCat.Brand = gcBrand AND lbCustCat.Category = lbCustomer.Category NO-LOCK NO-ERROR.
+       FIND FIRST lbCustCat WHERE lbCustCat.Brand = Syst.CUICommon:gcBrand AND lbCustCat.Category = lbCustomer.Category NO-LOCK NO-ERROR.
        IF AVAIL lbCustCat THEN 
        DO:
            ASSIGN llMainLineMigrationOngoing = (IF lbCustCat.Pro <> lbOrderCustomer.Pro THEN TRUE ELSE FALSE).
@@ -266,7 +266,7 @@ DO:
         Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN
    DO:
       FIND FIRST lbMLOrder EXCLUSIVE-LOCK WHERE
-                 lbMLOrder.Brand        EQ Syst.Parameters:gcBrand    AND
+                 lbMLOrder.Brand        EQ Syst.Parameters:Syst.CUICommon:gcBrand    AND
                  lbMLOrder.OrderId      EQ Order.MultiSimId           AND
                  lbMLOrder.MultiSimId   EQ Order.OrderId              AND
                  lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND

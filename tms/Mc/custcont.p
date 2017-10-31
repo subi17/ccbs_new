@@ -77,7 +77,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk   = 0  
       ufk[1]= 7  
       ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
-                                       CustContact.Brand = gcBrand AND
+                                       CustContact.Brand = Syst.CUICommon:gcBrand AND
                                        CustContact.Custnum = Customer.Custnum AND
                                        CustContact.CustType = 5)
       ufk[8]= 8 

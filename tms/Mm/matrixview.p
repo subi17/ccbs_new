@@ -114,7 +114,7 @@ END.
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{Syst/commpaa.i} katun = "polkki". gcbrand = "1".
+{Syst/commpaa.i} katun = "polkki". Syst.CUICommon:gcBrand = "1".
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
 {Syst/eventval.i}
@@ -164,7 +164,7 @@ form
 
 WITH ROW FrmRow width 70 OVERLAY CENTERED FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  MATRIX  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

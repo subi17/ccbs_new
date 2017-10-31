@@ -13,7 +13,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Mc/invoicetarget.i}
 
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -104,7 +104,7 @@ DO TRANS:
       CREATE Memo.
       ASSIGN
           Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = gcBrand 
+          Memo.Brand     = Syst.CUICommon:gcBrand 
           Memo.HostTable = "Customer" 
           Memo.KeyValue  = STRING(piCustNum) 
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

@@ -64,7 +64,7 @@ case atablename:
             if not avail order then next.
 
             FIND FIRST OrderCustomer NO-LOCK WHERE
-                       OrderCustomer.Brand   = gcBrand       AND
+                       OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
                        OrderCustomer.OrderID = Order.OrderID AND
                        OrderCustomer.RowType = 1 NO-ERROR.
             

@@ -12,7 +12,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -99,7 +99,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
        ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
@@ -141,7 +141,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       CREATE Memo.
       ASSIGN
           Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = gcBrand
+          Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "MobSub"
           Memo.KeyValue  = STRING(Mobsub.MsSeq)
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

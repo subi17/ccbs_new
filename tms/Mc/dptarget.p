@@ -96,13 +96,13 @@ FUNCTION fTargetName RETURNS CHAR
    CASE icTargetTable:
    WHEN "BillItem" THEN DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand = gcBrand AND
+                 BillItem.Brand = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = icTargetKey NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcTarget = BillItem.BIName.
    END.
    WHEN "BItemGroup" THEN DO:
       FIND FIRST BItemGroup WHERE
-                 BItemGroup.Brand = gcBrand AND
+                 BItemGroup.Brand = Syst.CUICommon:gcBrand AND
                  BItemGroup.BIGroup = icTargetKey NO-LOCK NO-ERROR.
       IF AVAILABLE BItemGroup THEN lcTarget = BItemGroup.BIGName.
    END.

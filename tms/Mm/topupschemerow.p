@@ -113,7 +113,7 @@ FUNCTION fBillItem RETURNS CHAR
    IF icBillCode = "" THEN RETURN "".
    
    FIND FIRST BillItem WHERE
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN RETURN BillItem.BIName.
    ELSE RETURN "".
@@ -125,7 +125,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 VIEW FRAME sel.
 
 FIND FIRST TopupScheme WHERE 
-           TopupScheme.Brand = gcBrand AND 
+           TopupScheme.Brand = Syst.CUICommon:gcBrand AND 
            TopupScheme.TopupScheme = icTopupScheme NO-LOCK NO-ERROR.
 IF NOT AVAILABLE TopupScheme THEN DO:
    MESSAGE "Topup Scheme not available"
@@ -183,7 +183,7 @@ REPEAT WITH FRAME sel:
  
            CREATE TopupSchemeRow.
            ASSIGN 
-              TopupSchemeRow.Brand   = gcBrand 
+              TopupSchemeRow.Brand   = Syst.CUICommon:gcBrand 
               TopupSchemeRow.TopupSchemeRowID = i
               TopupSchemeRow.TopupScheme   = icTopupScheme
               TopupSchemeRow.BeginStamp = ldDefFrom.
@@ -429,7 +429,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        IF CAN-FIND(FIRST OfferItem WHERE 
-                         OfferItem.Brand    = gcBrand AND
+                         OfferItem.Brand    = Syst.CUICommon:gcBrand AND
                          OfferItem.ItemType = "Topup" AND
                          OfferItem.ItemKey = TopupSchemeRow.TopupScheme)
        THEN DO:
@@ -559,25 +559,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST TopupSchemeRow WHERE 
-      TopupSchemeRow.Brand = gcBrand AND
+      TopupSchemeRow.Brand = Syst.CUICommon:gcBrand AND
       TopupSchemeRow.TopupScheme = icTopupScheme NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST TopupSchemeRow WHERE 
-      TopupSchemeRow.Brand = gcBrand AND
+      TopupSchemeRow.Brand = Syst.CUICommon:gcBrand AND
       TopupSchemeRow.TopupScheme = icTopupScheme NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT TopupSchemeRow WHERE 
-      TopupSchemeRow.Brand = gcBrand AND
+      TopupSchemeRow.Brand = Syst.CUICommon:gcBrand AND
       TopupSchemeRow.TopupScheme = icTopupScheme NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV TopupSchemeRow WHERE 
-      TopupSchemeRow.Brand = gcBrand AND
+      TopupSchemeRow.Brand = Syst.CUICommon:gcBrand AND
       TopupSchemeRow.TopupScheme = icTopupScheme NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -662,7 +662,7 @@ PROCEDURE local-UPDATE-record:
 
       IF NOT llUpdateAmount THEN DO:
          IF NOT CAN-FIND(FIRST OfferItem WHERE 
-                               OfferItem.Brand    = gcBrand AND
+                               OfferItem.Brand    = Syst.CUICommon:gcBrand AND
                                OfferItem.ItemType = "Topup" AND
                                OfferItem.ItemKey = TopupSchemeRow.TopupScheme)
          THEN llUpdateAmount = TRUE.                      

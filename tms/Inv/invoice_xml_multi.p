@@ -90,7 +90,7 @@ FORM
    SKIP(1)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICES TO XML  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  INVOICES TO XML  " + STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -225,7 +225,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
             IF llDBWrite THEN DO TRANS:
                CREATE ErrorLog.
-               ASSIGN ErrorLog.Brand     = gcBrand
+               ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
                       ErrorLog.ActionID  = "PRINTINVXML" 
                       ErrorLog.TableName = "Invoice"
                       ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")

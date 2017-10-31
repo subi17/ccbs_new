@@ -62,7 +62,7 @@ END FUNCTION.
 
 
    FOR EACH mnpprocess where
-            mnpprocess.brand = gcBrand AND
+            mnpprocess.brand = Syst.CUICommon:gcBrand AND
             mnpprocess.mnptype = {&MNP_TYPE_IN} and
             mnpprocess.updatets > idLastDump NO-LOCK:
 
@@ -104,7 +104,7 @@ END FUNCTION.
    END.
 
    FOR EACH mnpprocess where
-            mnpprocess.brand = gcBrand AND
+            mnpprocess.brand = Syst.CUICommon:gcBrand AND
             mnpprocess.mnptype = {&MNP_TYPE_OUT} and
             mnpprocess.updatets > idLastDump NO-LOCK:
 
@@ -170,7 +170,7 @@ PROCEDURE pMNPINKPI:
         mnpprocess.mnpseq = piMNPSeq NO-LOCK.
    
    find order where
-        order.brand = gcBrand and
+        order.brand = Syst.CUICommon:gcBrand and
         order.orderid = mnpprocess.orderid NO-LOCK.
 
    /* check order status */

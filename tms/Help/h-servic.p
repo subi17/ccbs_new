@@ -40,7 +40,7 @@ MAIN:
 repeat:
 
    find first Service WHERE 
-              Service.Brand = gcBrand no-lock no-error.
+              Service.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    if not available Service then do:
       message "No services available !" view-as alert-box.
       return.
@@ -71,7 +71,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(Service).
             down with frame sel.
-            find next Service WHERE service.Brand = gcBrand  no-lock no-error.
+            find next Service WHERE service.Brand = Syst.CUICommon:gcBrand  no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -101,7 +101,7 @@ BROWSE:
          with frame sel:
             if frame-line = 1 then do:
                find Service where recid(Service) = rtab[frame-line] no-lock.
-               find prev Service  WHERE service.Brand = gcBrand 
+               find prev Service  WHERE service.Brand = Syst.CUICommon:gcBrand 
                no-lock no-error.
                if not available Service then do:
                   bell.
@@ -127,7 +127,7 @@ BROWSE:
          if lookup(nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find Service where recid(Service) = rtab[frame-line] no-lock .
-               find next Service  WHERE service.Brand = gcBrand  
+               find next Service  WHERE service.Brand = Syst.CUICommon:gcBrand  
                no-lock no-error.
                if not available Service then do:
                   bell.
@@ -153,12 +153,12 @@ BROWSE:
          /* previous page */
          else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
             find Service where recid(Service) = memory no-lock no-error.
-            find prev Service  WHERE service.Brand = gcBrand 
+            find prev Service  WHERE service.Brand = Syst.CUICommon:gcBrand 
             no-lock no-error.
             if available Service then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev Service  WHERE service.Brand = gcBrand 
+                  find prev Service  WHERE service.Brand = Syst.CUICommon:gcBrand 
                   no-lock no-error.
                   if available Service then memory = recid(Service).
                   else i = frame-down.
@@ -197,7 +197,7 @@ BROWSE:
            hide frame hayr no-pause.
            if Service ENTERED then do:
               find first Service where 
-                         Service.Brand   = gcBrand AND 
+                         Service.Brand   = Syst.CUICommon:gcBrand AND 
                          Service.Service >= Service
               no-lock no-error.
              if not available Service then do:
@@ -222,7 +222,7 @@ BROWSE:
         end. /* Choose */
         /* First record */
         else if lookup(nap,"home,h") > 0 then do:
-           find first Service  WHERE service.Brand = gcBrand  no-lock.
+           find first Service  WHERE service.Brand = Syst.CUICommon:gcBrand  no-lock.
            memory = recid(Service).
            must-print = true.
            next LOOP.
@@ -230,7 +230,7 @@ BROWSE:
 
         /* last record */
         else if lookup(nap,"end,e") > 0 then do :
-           find last Service  WHERE service.Brand = gcBrand  no-lock.
+           find last Service  WHERE service.Brand = Syst.CUICommon:gcBrand  no-lock.
            memory = recid(Service).
            must-print = true.
            next LOOP.

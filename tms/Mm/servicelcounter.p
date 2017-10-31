@@ -569,7 +569,7 @@ PROCEDURE local-find-others.
    IF AVAIL Servicelimit THEN DO:
     
       FIND FIRST ServiceLimitGroup WHERE
-         ServiceLimitGroup.Brand = gcBrand AND
+         ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
          ServiceLimitGroup.GroupCode = ServiceLimit.GroupCode NO-LOCK NO-ERROR.
      
       ASSIGN 

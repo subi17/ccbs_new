@@ -42,7 +42,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  DELIVERY STATE  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  DELIVERY STATE  " + STRING(pvm,"99-99-99") + " "
      FRAME fCrit.
 
 

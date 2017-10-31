@@ -13,7 +13,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 
@@ -57,7 +57,7 @@ END.
 CREATE ttMNPRetentionRule.
 ASSIGN
    ttMNPRetentionRule.RetentionRuleID = liRetentionRuleID
-   ttMNPRetentionRule.Brand = gcBrand
+   ttMNPRetentionRule.Brand = Syst.CUICommon:gcBrand
    ttMNPRetentionRule.Fromdate = TODAY
    ttMNPRetentionRule.Todate = 12/31/2049.
 
@@ -97,7 +97,7 @@ IF LOOKUP("sms_token",lcStruct) > 0 THEN DO:
 
    IF ttMNPRetentionRule.SMSText > "" THEN DO:
       FIND FIRST InvText NO-LOCK WHERE
-                 InvText.Brand = gcBrand AND
+                 InvText.Brand = Syst.CUICommon:gcBrand AND
                  InvText.Target = "SMS" AND
                  InvText.KeyValue = ttMNPRetentionRule.SMSText AND
                  InvText.FromDate <= TODAY AND

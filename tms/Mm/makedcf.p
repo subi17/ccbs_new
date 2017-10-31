@@ -58,7 +58,7 @@ IF liValue = ? OR
 END.
                         
 FIND ServCom WHERE 
-     ServCom.Brand   = gcBrand AND 
+     ServCom.Brand   = Syst.CUICommon:gcBrand AND 
      ServCom.ServCom = "PP2" no-lock.
 
 FIND FIRST subser WHERE 
@@ -79,7 +79,7 @@ ASSIGN SubSer.SSStat    = 1
 
 /* default attributes from clitype definitions */
 FOR FIRST CTServEl NO-LOCK WHERE
-          CtServEl.Brand     = gcBrand AND
+          CtServEl.Brand     = Syst.CUICommon:gcBrand AND
           CtServEl.ServCom   = SubSer.ServCom AND
           CTServEl.CLIType   = MobSub.CLIType AND
           CTServEl.FromDate <= idtDate,
@@ -119,7 +119,7 @@ IF not avail MSISDN then do:
    create MSISDN.
    ASSIGN 
       MSISDN.cli        = lccli
-      MSISDN.brand      = gcbrand 
+      MSISDN.brand      = Syst.CUICommon:gcBrand 
       MSISDN.custnum    = mobsub.custnum
       MSISDN.statuscode = 4.
 ENd.           

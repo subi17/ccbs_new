@@ -15,7 +15,7 @@
 {Func/excel.i}
 {Func/cparam2.i}
 
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 katun = "batch".
 
 DEF TEMP-TABLE ttService

@@ -128,7 +128,7 @@ help "Invoicing group's code, empty for all"  SKIP
 "                Invoice states ......:" state1 "-" state2 skip(1)
 WITH
    width 73 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) 
-   " " + ynimi + " XOR-SUMMARY OF ACCOUNTS " +
+   " " + Syst.CUICommon:ynimi + " XOR-SUMMARY OF ACCOUNTS " +
    string(pvm,"99-99-99") + " " centered NO-LABELS FRAME start.
 
 ASSIGN

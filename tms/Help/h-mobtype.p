@@ -27,7 +27,7 @@ form
       CLIType.CliName  format "x(30)"
       CLIType.StatusCode
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " CLI Type (" + gcBrand + ") " OVERLAY FRAME sel.
+    title color value(Syst.CUICommon:ctc) " CLI Type (" + Syst.CUICommon:gcBrand + ") " OVERLAY FRAME sel.
 
 form /* SEEK Code */
     ob-code
@@ -40,7 +40,7 @@ MAIN:
 repeat:
 
    FIND FIRST CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -77,7 +77,7 @@ print-line:
             rtab[FRAME-LINE] = recid(CLIType).
             DOWN WITH FRAME sel.
             FIND NEXT CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -112,7 +112,7 @@ BROWSE:
             IF FRAME-LINE = 1 THEN DO:
                FIND CLIType where recid(CLIType) = rtab[FRAME-LINE] no-lock.
                FIND PREV CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -142,7 +142,7 @@ BROWSE:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CLIType where recid(CLIType) = rtab[FRAME-LINE] no-lock .
                FIND NEXT CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -172,7 +172,7 @@ BROWSE:
          else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
             FIND CLIType where recid(CLIType) = Memory no-lock no-error.
             FIND PREV CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -181,7 +181,7 @@ BROWSE:
 
                DO i = 1 TO (FRAME-DOWN - 1):
                   FIND PREV CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -222,7 +222,7 @@ BROWSE:
            HIDE FRAME hayr no-pause.
            IF ob-code ENTERED THEN DO:
               FIND FIRST CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -250,7 +250,7 @@ BROWSE:
         /* FIRST record */
         else if lookup(nap,"home,h") > 0 THEN DO:
            FIND FIRST CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -263,7 +263,7 @@ BROWSE:
         /* LAST record */
         else if lookup(nap,"end,e") > 0 THEN DO :
            FIND LAST CLIType WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.CUICommon:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),

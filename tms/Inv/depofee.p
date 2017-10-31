@@ -43,7 +43,7 @@ END.
 
         
 FIND Order NO-LOCK WHERE 
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.CUICommon:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAILABLE Order THEN DO:
    ocError = "Unknown order".
@@ -92,7 +92,7 @@ IF ldAmount = 0 OR ldAmount = ? THEN DO:
 END.
 
 FIND BillItem NO-LOCK WHERE     
-     BillItem.Brand    = gcBrand AND
+     BillItem.Brand    = Syst.CUICommon:gcBrand AND
      BillItem.BillCode = lcDepoItem NO-ERROR.
 IF NOT AVAILABLE BillItem THEN DO:
    ocError = "Unknown billing item " + lcDepoItem.
@@ -100,7 +100,7 @@ IF NOT AVAILABLE BillItem THEN DO:
 END. 
    
 FIND Customer NO-LOCK WHERE
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.CUICommon:gcBrand AND
      Customer.CustNum = liDepoCust NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    ocError = "Unknown deposit/adv.paym customer " + STRING(liDepoCust).
@@ -112,7 +112,7 @@ ASSIGN liBillPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
 
 /* already done (should invoice creation be tried if billed = false ?) */
 FOR FIRST SingleFee NO-LOCK WHERE
-          SingleFee.Brand     = gcBrand AND
+          SingleFee.Brand     = Syst.CUICommon:gcBrand AND
           SingleFee.HostTable = "Order" AND
           SingleFee.KeyValue  = STRING(Order.OrderID) AND
           SingleFee.BillCode  = lcDepoItem:
@@ -126,7 +126,7 @@ DO FOR SingleFee TRANS:
    CREATE SingleFee.
 
    ASSIGN
-   SingleFee.Brand       = gcBrand 
+   SingleFee.Brand       = Syst.CUICommon:gcBrand 
    SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
    SingleFee.CustNum     = liDepoCust    
    SingleFee.BillTarget  = 1

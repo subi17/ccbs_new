@@ -24,7 +24,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
+       Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -95,7 +95,7 @@ FOR EACH Order WHERE
    Func.Common:mSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               Ordercustomer.OrderID EQ Order.OrderId AND
               OrderCustomer.Rowtype EQ 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN 
@@ -142,7 +142,7 @@ ELSE IF NOT llOngoing THEN DO:
       RETURN appl_err("Renewal order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
+                 MobSub.Brand = Syst.CUICommon:gcBrand AND
                  MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
          RETURN appl_err("Subscription is cancelled"). 

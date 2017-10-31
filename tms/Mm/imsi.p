@@ -107,7 +107,7 @@ view FRAME sel.
 orders = "By IMSI No,By Cust No.,By 3, By 4".
 
 FIND SIM where SIM.ICC = ICC  no-lock.
-FIND Customer of SIM WHERE customer.Brand = gcBrand no-lock no-error.
+FIND Customer of SIM WHERE customer.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 
 FIND FIRST IMSI where IMSI.ICC = ICC 
 NO-LOCK NO-ERROR.
@@ -582,7 +582,7 @@ PROCEDURE local-find-others:
 
 
        FIND FIRST MobSub WHERE 
-                  MobSub.Brand = gcBrand AND 
+                  MobSub.Brand = Syst.CUICommon:gcBrand AND 
                   MobSub.IMSI = IMSI.IMSI  NO-LOCK NO-ERROR.
 
        FIND BillTarg OF Customer WHERE

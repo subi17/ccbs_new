@@ -54,7 +54,7 @@ skip(6)
     COLOR VALUE(Syst.CUICommon:cfc)
 
     TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-    " " + ynimi + "   " + 
+    " " + Syst.CUICommon:ynimi + "   " + 
     " REPORT OF PRESELECT CUSTOMERS    "
     + STRING(pvm,"99-99-99") + " "
 
@@ -106,7 +106,7 @@ Action:
    OUTPUT STREAM excel TO value(prerep). 
 
    PUT STREAM excel UNFORMATTED
-   ynimi         skip(1)
+   Syst.CUICommon:ynimi         skip(1)
    "CARRIER PRESELECTION RECORDS" SKIP
    "Sent:"    tab 
       sdate1 format "99.99.9999" " - " sdate2 format "99.99.9999" my-nl

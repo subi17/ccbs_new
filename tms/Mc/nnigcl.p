@@ -69,7 +69,7 @@ repeat WITH FRAME frm:
   ASSIGN i1 = 0.
   /* CLOSE ALL customers from an invoice group */
   FOR EACH Customer no-lock where
-           Customer.Brand    = gcBrand AND
+           Customer.Brand    = Syst.CUICommon:gcBrand AND
            Customer.InvGroup = InvGroup:
 
      FIND FIRST MthCall where 

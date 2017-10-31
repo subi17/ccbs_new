@@ -83,7 +83,7 @@ FUNCTION fCollAmt RETURNS LOGICAL
    THEN RETURN FALSE. 
 
    FIND BillItem NO-LOCK WHERE 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.CUICommon:gcBrand AND
         BillItem.BillCode = icProd NO-ERROR.
    liAccount = IF AVAILABLE BillItem THEN BillItem.AccNum ELSE 0. 
 
@@ -170,7 +170,7 @@ PUT STREAM sLog MY-NL.
 
 
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand   AND
+         InvGroup.Brand     = Syst.CUICommon:gcBrand   AND
          InvGroup.InvGroup >= icInvGrp1 AND
          InvGroup.InvGroup <= icInvGrp2 AND
          (IF NOT ilBanned 
@@ -262,7 +262,7 @@ FOR EACH InvGroup NO-LOCK WHERE
                    MobCDR.CurrUnit,
                    "",
                    MobCDR.TariffNum,
-                   gcBrand,
+                   Syst.CUICommon:gcBrand,
                    OUTPUT ldNet,
                    OUTPUT ldGross).
 
@@ -285,7 +285,7 @@ FOR EACH InvGroup NO-LOCK WHERE
                    FixCDR.CurrUnit,
                    "",
                    FixCDR.TariffID,
-                   gcBrand,
+                   Syst.CUICommon:gcBrand,
                    OUTPUT ldNet,
                    OUTPUT ldGross).
 

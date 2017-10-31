@@ -75,7 +75,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " SLG ANALYSE " 
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -163,7 +163,7 @@ repeat WITH FRAME sel:
         DO TRANSACTION:
 
            CREATE SLGAnalyse.
-           SLGAnalyse.Brand = gcBrand.
+           SLGAnalyse.Brand = Syst.CUICommon:gcBrand.
 
            RUN LOCAL-UPDATE-RECORD(true).
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR
@@ -545,25 +545,25 @@ PROCEDURE LOCAL-FIND-NEXT.
 
    IF order = 1 AND not llShowHistory  THEN 
       FIND NEXT SLGAnalyse use-index belongto WHERE 
-                SLGAnalyse.Brand      = gcBrand AND 
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND 
                 SLGAnalyse.ValidFrom <= today   AND 
                 SLGAnalyse.ValidTo   >= today
       NO-LOCK NO-ERROR.
 
    ELSE IF order = 1 THEN 
       FIND NEXT SLGAnalyse use-index belongto WHERE
-                  SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+                  SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
    ELSE IF order = 2 AND not llShowHistory  THEN 
       FIND NEXT SLGAnalyse use-index BillCode WHERE 
-                SLGAnalyse.Brand      = gcBrand AND 
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND 
                 SLGAnalyse.ValidFrom <= today   AND 
                 SLGAnalyse.ValidTo   >= today
       NO-LOCK NO-ERROR.
 
    ELSE IF order = 2 THEN 
       FIND NEXT SLGAnalyse use-index BillCode WHERE
-                SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                   
 
 END PROCEDURE.
@@ -572,7 +572,7 @@ PROCEDURE LOCAL-FIND-PREV.
 
    IF order = 1 AND not llShowHistory THEN 
       FIND PREV SLGAnalyse use-index belongto WHERE 
-                SLGAnalyse.Brand      = gcBrand AND
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND
                 SLGAnalyse.ValidFrom <= today   AND
                 SLGAnalyse.ValidTo   >= today
                                                 
@@ -580,18 +580,18 @@ PROCEDURE LOCAL-FIND-PREV.
 
    ELSE IF order = 1 THEN 
       FIND Prev SLGAnalyse use-index belongto WHERE
-                   SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+                   SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 
    ELSE IF order = 2 AND not llShowHistory THEN 
       FIND PREV SLGAnalyse use-index BillCode WHERE 
-                SLGAnalyse.Brand      = gcBrand AND
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND
                 SLGAnalyse.ValidFrom <= today   AND
                 SLGAnalyse.ValidTo   >= today
       NO-LOCK NO-ERROR.
 
    ELSE IF order = 2 THEN 
       FIND Prev SLGAnalyse use-index billCode WHERE
-                SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
                    
 
 END PROCEDURE.
@@ -600,44 +600,44 @@ PROCEDURE LOCAL-FIND-FIRST.
 
    IF order = 1 AND not llShowHistory THEN 
       FIND FIRST SLGAnalyse use-index belongto WHERE 
-                 SLGAnalyse.Brand      = gcBrand AND
+                 SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND
                  SLGAnalyse.ValidFrom <= today   AND
                  SLGAnalyse.ValidTo   >= today    
       NO-LOCK NO-ERROR.
    ELSE IF order = 1 THEN 
       FIND FIRST SLGAnalyse use-index belongto WHERE
-                 SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+                 SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    ELSE IF order = 2 AND not llShowHistory THEN 
       FIND FIRST SLGAnalyse use-index BillCode WHERE 
-                 SLGAnalyse.Brand      = gcBrand AND
+                 SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND
                  SLGAnalyse.ValidFrom <= today   AND
                  SLGAnalyse.ValidTo   >= today    
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST SLGAnalyse use-index billCode WHERE
-                 SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+                 SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-LAST.
 
    IF order = 1 AND not llShowHistory  THEN 
       FIND LAST SLGAnalyse use-index belongto WHERE 
-                SLGAnalyse.Brand      = gcBrand AND
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND
                 SLGAnalyse.ValidFrom <= today   AND
                 SLGAnalyse.ValidTo   >= today
       NO-LOCK NO-ERROR.
    ELSE IF order = 1 THEN
    FIND LAST SLGAnalyse use-index belongto WHERE
-               SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+               SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    ELSE IF order = 2 AND not llShowHistory  THEN 
       FIND LAST SLGAnalyse use-index billCode WHERE 
-                SLGAnalyse.Brand      = gcBrand AND
+                SLGAnalyse.Brand      = Syst.CUICommon:gcBrand AND
                 SLGAnalyse.ValidFrom <= today   AND
                 SLGAnalyse.ValidTo   >= today
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN
    FIND LAST SLGAnalyse use-index billCode WHERE
-               SLGAnalyse.Brand      = gcBrand NO-LOCK NO-ERROR.
+               SLGAnalyse.Brand      = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE LOCAL-UPDATE-RECORD. 
@@ -649,12 +649,12 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    IF NOT bNew THEN DO:
 
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = SLGAnalyse.BillCode
       NO-LOCK NO-ERROR.
 
       FIND FIRST CliType WHERE
-                 CliType.Brand    = gcBrand AND
+                 CliType.Brand    = Syst.CUICommon:gcBrand AND
                  Clitype.CliType  = SLGAnalyse.CliType
       NO-LOCK NO-ERROR.
     
@@ -666,13 +666,13 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       NO-LOCK NO-ERROR.
 
       FIND FIRST Bdest WHERE 
-                 Bdest.Brand = gcBrand AND 
+                 Bdest.Brand = Syst.CUICommon:gcBrand AND 
                  BDest.BDest = SLGAnalyse.BDest AND
                  BDest.ToDate >= SLGAnalyse.ValidFrom AND
                  BDest.FromDate <= SLGAnalyse.ValidTo NO-LOCK NO-ERROR.
             
       FIND FIRST CCN WHERE
-                 CCN.Brand    = gcBrand AND
+                 CCN.Brand    = Syst.CUICommon:gcBrand AND
                  CCN.CCN      = SLGAnalyse.CCN
       NO-LOCK NO-ERROR.
       
@@ -745,7 +745,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
 
          IF FRAME-FIELD = "CliType" THEN DO:
             FIND FIRST CliType WHERE 
-                       Clitype.Brand   = gcBrand AND
+                       Clitype.Brand   = Syst.CUICommon:gcBrand AND
                        CliType.CliType = input frame lis SLGAnalyse.CliType
             NO-LOCK NO-ERROR.
             IF NOT AVAIL CliType THEN DO:
@@ -760,7 +760,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
 
          ELSE IF FRAME-FIELD = "BillItem" THEN DO:
             FIND FIRST BillItem WHERE 
-                       BillItem.Brand    = gcBrand AND
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND
                        BillItem.BillCode = input frame lis SLGAnalyse.BillCode
             NO-LOCK NO-ERROR.
             IF NOT AVAIL BillItem THEN DO:
@@ -776,7 +776,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ELSE IF FRAME-FIELD = "CCN" THEN DO:
             IF INPUT SLGAnalyse.CCN > 0 THEN DO:
                FIND FIRST CCN WHERE 
-                          CCN.Brand    = gcBrand AND
+                          CCN.Brand    = Syst.CUICommon:gcBrand AND
                           CCN.CCN      = input frame lis SLGAnalyse.CCN
                NO-LOCK NO-ERROR.
                IF NOT AVAIL CCN THEN DO:
@@ -793,7 +793,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ELSE IF FRAME-FIELD = "Bdest" THEN DO:
             IF INPUT SLGAnalyse.Bdest > "" THEN DO:
                FIND FIRST Bdest WHERE 
-                     Bdest.Brand = gcBrand AND
+                     Bdest.Brand = Syst.CUICommon:gcBrand AND
                      Bdest.Bdest = input frame lis SLGAnalyse.Bdest AND
                      BDest.ToDate >= INPUT FRAME lis SLGAnalyse.ValidFrom AND
                      BDest.FromDate <= INPUT FRAME lis SLGAnalyse.ValidTo 
@@ -803,7 +803,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             
                   liMatches = 0.
                   FOR EACH Bdest NO-LOCK WHERE 
-                        Bdest.Brand = gcBrand AND
+                        Bdest.Brand = Syst.CUICommon:gcBrand AND
                         Bdest.Bdest MATCHES input frame lis SLGAnalyse.Bdest:
                      liMatches = liMatches + 1.
                   END.
@@ -850,7 +850,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             
             IF INPUT SLGANalyse.slgatype = 1 THEN DO:
                FIND FIRST ServiceLimitGroup WHERE 
-                          ServiceLimitGroup.Brand = gcBrand ANd
+                          ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand ANd
                           ServiceLimitGroup.GroupCode  = 
                           input frame lis SLGAnalyse.ServiceLimitGroup
                NO-LOCK NO-ERROR.
@@ -864,7 +864,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
             ELSE IF  INPUT SLGANalyse.slgatype = 2 THEN DO:
                FIND FIRST DayCampaign WHERE
-                          DayCampaign.Brand = gcBrand AND
+                          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                           DayCampaign.DCEvent = 
                           input frame lis SLGAnalyse.ServiceLimitGroup 
                NO-LOCK NO-ERROR.
@@ -1011,7 +1011,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
 
          IF FRAME-FIELD = "lcCliType" THEN DO:
             FIND FIRST CliType WHERE 
-                       Clitype.Brand   = gcBrand AND
+                       Clitype.Brand   = Syst.CUICommon:gcBrand AND
                        CliType.CliType = input frame generate lcCliType
             NO-LOCK NO-ERROR.
             IF NOT AVAIL CliType THEN DO:
@@ -1026,7 +1026,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
 
          ELSE IF FRAME-FIELD = "lcBillCode" THEN DO:
             FIND FIRST BillItem WHERE 
-                       BillItem.Brand    = gcBrand AND
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND
                        BillItem.BillCode = input frame generate lcBillCode
             NO-LOCK NO-ERROR.
             IF NOT AVAIL BillItem AND 
@@ -1047,7 +1047,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             
             IF INT(INPUT lcCCN) > 0  THEN 
             FIND FIRST CCN WHERE 
-                       CCN.Brand    = gcBrand AND
+                       CCN.Brand    = Syst.CUICommon:gcBrand AND
                        CCN.CCN = INT(input frame generate lcCCN)
             NO-LOCK NO-ERROR.
             IF NOT AVAIL CCN AND 
@@ -1068,7 +1068,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
          
             IF  INPUT FRAME generate liDesttype = 1 THEN DO:
                FIND FIRST Bdest WHERE 
-                  Bdest.Brand = gcBrand AND
+                  Bdest.Brand = Syst.CUICommon:gcBrand AND
                   Bdest.Bdest = input frame generate lcBdest AND
                   BDest.ToDate >= INPUT FRAME generate ldtValidF AND
                   BDest.FromDate <= INPUT FRAME generate ldtValidT
@@ -1204,15 +1204,15 @@ PROCEDURE LOCAL-GENERATE-RECORD.
    END.
 
    FOR EACH Clitype NO-LOCK  WHERE 
-            Clitype.Brand   = gcBrand AND 
+            Clitype.Brand   = Syst.CUICommon:gcBrand AND 
             CliType.Clitype = lcClitype,
        EACH RatePlan NO-LOCK WHERE 
-            RatePlan.Brand  = gcBrand AND 
+            RatePlan.Brand  = Syst.CUICommon:gcBrand AND 
             RatePlan.RatePlan = Clitype.Priceplan,
        EACH plistconf OF RatePlan,
        EACH Pricelist of PlistConf,
        EACH Tariff WHERE 
-            Tariff.Brand      = gcBrand             AND 
+            Tariff.Brand      = Syst.CUICommon:gcBrand             AND 
             Tariff.PriceList  = PriceList.Pricelist AND
             Tariff.ValidFrom <= ldtValidT NO-LOCK.
       
@@ -1225,12 +1225,12 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       IF lcBDest = "*"  THEN DO:
       
          FOR EACH Bdest WHERE 
-                  BDest.Brand = gcBrand AND
+                  BDest.Brand = Syst.CUICommon:gcBrand AND
                   BDest.ToDate >= ldtValidF AND
                   BDest.FromDate <= ldtValidT  NO-LOCK:
                   
             FIND FIRST ttSLG WHERE 
-                       ttSLG.Brand     = gcBrand         AND 
+                       ttSLG.Brand     = Syst.CUICommon:gcBrand         AND 
                        ttSlg.Belongto  = TRUE            AND 
                        ttSlg.CliType   = lcClitype       AND
                        ttSLG.BillCode  = Tariff.BillCode AND 
@@ -1241,7 +1241,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             
             CREATE ttSLG.
             ASSIGN 
-               ttSLG.Brand     = gcBrand 
+               ttSLG.Brand     = Syst.CUICommon:gcBrand 
                ttSlg.Belongto  = TRUE
                ttSlg.CliType   = lcClitype
                ttSLG.BillCode  = Tariff.BillCode
@@ -1256,7 +1256,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       END.
       ELSE IF liDesttype = 1 THEN DO:
          FIND FIRST ttSLG WHERE 
-                    ttSLG.Brand     = gcBrand         AND 
+                    ttSLG.Brand     = Syst.CUICommon:gcBrand         AND 
                     ttSlg.Belongto  = TRUE            AND 
                     ttSlg.CliType   = lcClitype       AND
                     ttSLG.BillCode  = Tariff.BillCode AND 
@@ -1265,7 +1265,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
                  
          CREATE ttSLG.
          ASSIGN 
-            ttSLG.Brand     = gcBrand 
+            ttSLG.Brand     = Syst.CUICommon:gcBrand 
             ttSlg.Belongto  = TRUE
             ttSlg.CliType   = lcClitype
             ttSLG.BillCode  = Tariff.BillCode
@@ -1281,13 +1281,13 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       ELSE IF liDestType = 2 THEN DO:   
          
          FOR EACH Bdest WHERE 
-                  BDest.Brand = gcBrand  AND 
+                  BDest.Brand = Syst.CUICommon:gcBrand  AND 
                   Bdest.DestType = INT(lcBdest) AND
                   BDest.ToDate >= ldtValidF AND
                   BDest.FromDate <= ldtValidT NO-LOCK:
                   
             FIND FIRST ttSLG WHERE 
-                       ttSLG.Brand     = gcBrand         AND 
+                       ttSLG.Brand     = Syst.CUICommon:gcBrand         AND 
                        ttSlg.Belongto  = TRUE            AND 
                        ttSlg.CliType   = lcClitype       AND
                        ttSLG.BillCode  = Tariff.BillCode AND 
@@ -1298,7 +1298,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             
             CREATE ttSLG.
             ASSIGN 
-               ttSLG.Brand     = gcBrand 
+               ttSLG.Brand     = Syst.CUICommon:gcBrand 
                ttSlg.Belongto  = TRUE
                ttSlg.CliType   = lcClitype
                ttSLG.BillCode  = Tariff.BillCode

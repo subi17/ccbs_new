@@ -88,7 +88,7 @@ toimi:
                   END.
                   ELSE do: 
                      FIND invgroup WHERE 
-                          InvGroup.Brand    = gcBrand AND 
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
                           invgroup.InvGroup = InvGroup
                      NO-LOCK NO-ERROR.
                      IF not avail invgroup THEN do:
@@ -134,7 +134,7 @@ toimi:
    /***** CUSTOMER SECTION ****/
 
    FOR EACH Customer WHERE
-            Customer.Brand     = gcBrand  AND 
+            Customer.Brand     = Syst.CUICommon:gcBrand  AND 
             Customer.CustNum  >= CustNum1 AND
             Customer.CustNum  <= CustNum2 AND
             (IF   InvGroup NE "*" THEN 
@@ -172,12 +172,12 @@ toimi:
          Addserv = "".      
 
          FOR EACH FixedFee  where 
-                  Fixedfee.Brand     = gcBrand       AND
+                  Fixedfee.Brand     = Syst.CUICommon:gcBrand       AND
                   FixedFee.Hosttable = "mobsub"      AND 
                   FixedFee.Keyvalue  = STRING(mobsub.msseq) NO-LOCK.
 
             Find first BillItem where 
-                       BillItem.Brand    = gcBrand AND 
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
                        BillItem.BillCode = FixedFee.BillCode 
             no-lock no-error.
             addserv = addserv + BillItem.BIName + ",".

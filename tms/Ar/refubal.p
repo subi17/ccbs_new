@@ -69,7 +69,7 @@ FORM
    ROW 3 CENTERED OVERLAY FRAME fCrit.
 
 FIND Customer WHERE 
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.CUICommon:gcBrand AND
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    MESSAGE "Unknown customer" iiCustNum
@@ -105,7 +105,7 @@ toimi:
 repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    FIND Account WHERE 
-        Account.Brand  = gcBrand AND
+        Account.Brand  = Syst.CUICommon:gcBrand AND
         Account.AccNum = liAccNum NO-LOCK NO-ERROR.
 
    PAUSE 0.
@@ -162,7 +162,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
                 
                 ELSE IF FRAME-FIELD = "liAccNum" THEN DO:
                    FIND Account WHERE
-                        Account.Brand  = gcBrand AND
+                        Account.Brand  = Syst.CUICommon:gcBrand AND
                         Account.AccNum = INPUT liAccNum NO-LOCK NO-ERROR.
                    IF NOT AVAILABLE Account THEN DO:
                       BELL.

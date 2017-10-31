@@ -152,7 +152,7 @@ help "Latest date of call" skip(1)
 "    Billed     " lkm2 "calls," xCur2 summa2 "/" summa2a "w/VAT " SKIP(1)
 "    Pricelist(s) used:" xPLCode FORMAT "x(20)"                   SKIP(1)
 WITH
-   row 5 col 3 overlay no-labels title " " + ynimi +
+   row 5 col 3 overlay no-labels title " " + Syst.CUICommon:ynimi +
    " Total value of calls, cust. " + string(Customer.CustNum) + " " +
    substr(Customer.CustName,1,16) + " " FRAME rajat.
 

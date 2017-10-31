@@ -42,7 +42,7 @@ DEF VAR llUseBatch AS LOGICAL INITIAL TRUE NO-UNDO.
 
 IF iiBatch EQ 0 THEN llUseBatch = false.
 
-gcallbrand = true.
+Syst.CUICommon:gcAllBrand = true.
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -102,7 +102,7 @@ form
 WITH width 80 OVERLAY FrmDown DOWN ROW FrmRow
     COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc)  
-     " " + ynimi +
+     " " + Syst.CUICommon:ynimi +
      " Sim Cards " + string(pvm,"99-99-99") + " "
      FRAME sel.
 
@@ -488,7 +488,7 @@ BROWSE:
             FIND ImsiCustomer WHERE ImsiCustomer.CustNum =  IMSI.CustNum NO-LOCK NO-ERROR. 
 
             FIND MobSub WHERE 
-                 mobsub.brand = gcBrand AND
+                 mobsub.brand = Syst.CUICommon:gcBrand AND
                  MobSub.IMSI = IMSI.IMSI NO-LOCK NO-ERROR. 
             FIND BillTarget WHERE
                  BillTarget.CustNum = ImsiCustomer.CustNum AND
@@ -695,7 +695,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
        
    FIND SimBatch WHERE 
-        SimBatch.Brand = gcBrand AND
+        SimBatch.Brand = Syst.CUICommon:gcBrand AND
         SimBatch.SimBatch = SIM.SimBatch NO-LOCK NO-ERROR.
    
    FIND FIRST MobSub WHERE MobSub.MsSeq = SIM.MsSeq NO-LOCK NO-ERROR.
@@ -706,9 +706,9 @@ PROCEDURE local-find-others.
    ELSE RELEASE Customer.  
    
    FIND SIMStat where SIMStat.SIMStat = SIM.SIMStat no-lock no-error.
-   FIND SimMan of SIM WHERE SimMan.Brand = gcBrand no-lock no-error.
+   FIND SimMan of SIM WHERE SimMan.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    FIND SimArt WHERE 
-        SimArt.Brand = gcBrand AND
+        SimArt.Brand = Syst.CUICommon:gcBrand AND
         SimArt.SimArt = SIM.SimArt no-lock no-error.
    FIND Stock of SIM NO-LOCK NO-ERROR.
 
@@ -774,7 +774,7 @@ REPEAT WITH FRAME LIS:
          DO:
             /* ASSIGN manufacture's code from SimMan record */
             FIND SimMan where 
-                 SimMan.Brand = gcBrand AND
+                 SimMan.Brand = Syst.CUICommon:gcBrand AND
                  SimMan.Mancode = INPUT FRAME lis SIM.ManCode NO-LOCK NO-ERROR.
             IF NOT AVAIL SimMan THEN 
             DO:
@@ -789,7 +789,7 @@ REPEAT WITH FRAME LIS:
          ELSE IF FRAME-FIELD = "SimArt" THEN 
          DO:
             FIND SimArt WHERE 
-                 SimArt.Brand = gcBrand AND 
+                 SimArt.Brand = Syst.CUICommon:gcBrand AND 
                  SimArt.SimArt =
                               INPUT FRAME lis SIM.SimArt 
             NO-LOCK NO-ERROR.

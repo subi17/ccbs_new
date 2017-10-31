@@ -11,7 +11,7 @@
 {Mnp/mnpoutchk.i}
 {Syst/commpaa.i}
 katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 /*Input parameters*/
 DEFINE VARIABLE pcStruct    AS CHARACTER NO-UNDO.

@@ -30,7 +30,7 @@ form
       HELP "Latest posting date of overpayments to be reported" 
    skip(9)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " OVERPAYMENT BALANCE REPORT " +
+        title " " + Syst.CUICommon:ynimi + " OVERPAYMENT BALANCE REPORT " +
         string(pvm,"99-99-99") + " "
         FRAME valinta.
 

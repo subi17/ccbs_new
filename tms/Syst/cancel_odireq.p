@@ -49,7 +49,7 @@ REPEAT WITH FRAME fCancel ON ENDKEY UNDO, LEAVE:
       IF llOk THEN DO:
    
          FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
-                  MsRequest.Brand   = gcBrand AND
+                  MsRequest.Brand   = Syst.CUICommon:gcBrand AND
                   MsRequest.ReqType = 20      AND
                   MsRequest.ReqStat = 0:
                

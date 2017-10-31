@@ -11,7 +11,7 @@
 {Syst/commpaa.i}
 ASSIGN
    katun   = "Cron"
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
@@ -70,7 +70,7 @@ IF fDMSOnOff() NE TRUE THEN RETURN.
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -83,7 +83,7 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
@@ -154,7 +154,7 @@ INPUT STREAM sFile CLOSE.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -226,7 +226,7 @@ PROCEDURE pUpdateDMS:
       lcDocList       = ENTRY(8,pcLine,lcSep).
       
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.CUICommon:gcBrand AND
               Order.OrderID EQ liOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "ERROR:ORDER NOT AVAILABLE:" + STRING(liOrderId).

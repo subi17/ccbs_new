@@ -48,7 +48,7 @@ DEF INPUT PARAM  ilXOnlySum   AS LOG FORMAT "Yes/No"   NO-UNDO.
 
 /* INPUT PARAMETER VALIDATION */
 FIND FIRST InvGroup NO-LOCK WHERE
-           InvGroup.Brand    = gcBrand AND 
+           InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
            InvGroup.InvGroup = icInvGroup
            NO-ERROR.
 IF NOT AVAIL InvGroup THEN 
@@ -153,7 +153,7 @@ viiva3 = fill("-",lev).
 /* FRAME SIVUOTS */
 form header
    viiva1 at 2 skip
-   ynimi at 2 "INVOICE JOURNAL FROM PERIOD" at 47
+   Syst.CUICommon:ynimi at 2 "INVOICE JOURNAL FROM PERIOD" at 47
      "Page" at 106 sl format "ZZZZ9" skip
    "Inv.group" at 2 icInvGroup IGName format "x(14)" "ConnType:"
    ilConnType format "Dir/Indir"
@@ -187,7 +187,7 @@ with
 /* FRAME TILYHT */
 form header
    viiva1 at 2 skip
-   ynimi at 2 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
+   Syst.CUICommon:ynimi at 2 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
      "Page" at 106 sl format "ZZZZ9" skip
    "Inv.group" at 2 icInvGroup IGName format "x(20)"
      idaPvm1 at 43 format "99-99-9999" "-" idaPvm2 format "99-99-9999"
@@ -274,7 +274,7 @@ EMPTY TEMP-TABLE ttTotal.
 
 FOR EACH TCustGroup.
    FOR EACH cgmember WHERE
-            cgMember.Brand     = gcBrand AND
+            cgMember.Brand     = Syst.CUICommon:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup
    NO-lock.
       FIND FIRST tcgmember WHERE
@@ -306,7 +306,7 @@ runko:
 for each Invoice no-lock USE-INDEX InvDate where             
       Invoice.InvDate   >= idaPvm1         and 
       Invoice.InvDate   <= idaPvm2         and 
-      Invoice.Brand      = gcBrand      AND 
+      Invoice.Brand      = Syst.CUICommon:gcBrand      AND 
       Invoice.ExtInvID  >= icExtInvID1  AND
       Invoice.ExtInvID  <= icExtInvID2  AND
       Invoice.CustNum   >= iiCustnum[1] AND

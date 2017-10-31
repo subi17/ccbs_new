@@ -58,7 +58,7 @@ viiva4 = fill("-",lev).
 
 form header
    viiva1 AT 2 SKIP
-   ynimi at 2 "ALARMLIST" AT 55
+   Syst.CUICommon:ynimi at 2 "ALARMLIST" AT 55
    "page" at 106 sl format "ZZZZ9" SKIP
    string(pvm,"99-99-99") AT 108 SKIP
    viiva2 AT 2 skip(1)
@@ -93,7 +93,7 @@ eka = TRUE.
 print-line:
 repeat:
    FOR EACH Customer no-lock where
-            Customer.Brand   = gcBrand AND
+            Customer.Brand   = Syst.CUICommon:gcBrand AND
             Customer.CustNum >= kund1  AND
             (IF kund2 NE 0 THEN Customer.CustNum <= kund2 ELSE TRUE):
 

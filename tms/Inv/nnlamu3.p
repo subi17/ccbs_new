@@ -103,7 +103,7 @@ DEF STREAM sTimeLog.
 /* Check that no Test Invoices exist in TMS,
    Tests must be deleted before real invoicing can be done.  */
 FIND FIRST Invoice NO-LOCK WHERE 
-           Invoice.Brand   = gcBrand AND
+           Invoice.Brand   = Syst.CUICommon:gcBrand AND
            Invoice.InvType = 99 
            NO-ERROR.
 IF AVAIL Invoice THEN DO:
@@ -139,7 +139,7 @@ form
    skip(17)
 WITH
    OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + ynimi + " INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
+   " " + Syst.CUICommon:ynimi + " INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
 
@@ -282,7 +282,7 @@ toimi:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -437,7 +437,7 @@ HIDE FRAME lCustNum no-pause.
 
 OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
-   "Customer based (lamu3) started  (brand " gcBrand 
+   "Customer based (lamu3) started  (brand " Syst.CUICommon:gcBrand 
    " group " InvGroup ") " 
    STRING(TODAY,"99.99.9999") " "
    STRING(TIME,"hh:mm:ss")
@@ -453,7 +453,7 @@ message "Sorting customers and Calls ...".
 
 XCUST:
 FOR EACH Customer   no-lock  where
-         Customer.Brand     = gcBrand     AND 
+         Customer.Brand     = Syst.CUICommon:gcBrand     AND 
          Customer.CustNum  >= CustNum1    AND
          Customer.CustNum  <= CustNum2    AND
          Customer.CustNum  >  unknown     AND
@@ -556,7 +556,7 @@ RUN pGetAmt in pHandle (OUTPUT lQty,
 
 OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
-   "Customer based (lamu3) finished (brand " gcBrand 
+   "Customer based (lamu3) finished (brand " Syst.CUICommon:gcBrand 
    " group " InvGroup "): " 
    Func.Common:mTS2HMS(ldEndTime)
    "|Dur: " 
@@ -599,7 +599,7 @@ IF ok AND lQty > 0 THEN DO:
     DO FOR ActionLog TRANS:
        CREATE ActionLog.
        ASSIGN 
-          ActionLog.Brand        = gcBrand   
+          ActionLog.Brand        = Syst.CUICommon:gcBrand   
           ActionLog.TableName    = "Invoice"  
           ActionLog.KeyValue     = lcBillRun 
           ActionLog.ActionID     = "BillRun"

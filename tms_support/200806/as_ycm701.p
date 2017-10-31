@@ -5,7 +5,7 @@ DEFINE BUFFER bTMSPass FOR TMSPass.
 
 {Syst/commpaa.i}
 {Func/cparam.i2}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = FALSE. 
 

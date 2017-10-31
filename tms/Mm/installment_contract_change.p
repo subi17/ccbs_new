@@ -77,7 +77,7 @@ PROCEDURE pInstallmentContractChange:
    DEF VAR ldaLastUnBilledDate    AS DATE NO-UNDO.
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
    IF NOT AVAIL DayCampaign OR 
       DayCampaign.ValidFrom > TODAY OR
@@ -95,7 +95,7 @@ PROCEDURE pInstallmentContractChange:
    liFFBegPeriod = YEAR(DCCLI.ValidFrom) * 100 + MONTH(DCCLI.ValidFrom).
 
    FIND FIRST FixedFee NO-LOCK USE-INDEX CustNum WHERE
-              FixedFee.Brand     = gcBrand   AND
+              FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
               FixedFee.CustNum   = MobSub.CustNum AND
               FixedFee.HostTable = "MobSub"  AND
               FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -104,7 +104,7 @@ PROCEDURE pInstallmentContractChange:
               FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.
    IF NOT AVAIL FixedFee THEN
       FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-           FixedFee.Brand     = gcBrand   AND
+           FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
            FixedFee.CustNum   = MobSub.CustNum AND
            FixedFee.HostTable = "MobSub"  AND
            FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -116,7 +116,7 @@ PROCEDURE pInstallmentContractChange:
 
          IF FFItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = gcBrand AND
+                            Invoice.Brand   = Syst.CUICommon:gcBrand AND
                             Invoice.InvNum  = FFItem.InvNum AND
                             Invoice.InvType = 1 NO-LOCK) THEN
             ldeCreditNoteAmount = ldeCreditNoteAmount + FFItem.Amt.

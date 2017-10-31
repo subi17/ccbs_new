@@ -61,7 +61,7 @@ form
  
 WITH OVERLAY CENTERED  scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + /*ynimi +*/
+   title color value(Syst.CUICommon:ctc) " " + /*Syst.CUICommon:ynimi +*/
    " COUNTERS for period " + STRING(liPeriod) + " " + icEvent + " "
    FRAME sel.
 
@@ -391,7 +391,7 @@ si-recid = xrecid.
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE 
-              BillItem.Brand    = gcBrand AND
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = DCCounter.BillCode 
    NO-LOCK NO-ERROR.
     
@@ -500,7 +500,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    FIND FIRST DayCampaign WHERE
-      DayCampaign.Brand = gcBrand AND
+      DayCampaign.Brand = Syst.CUICommon:gcBrand AND
       DayCampaign.DCEvent = dccli.dcevent NO-LOCK NO-ERROR.
    
    FIND FIRST TMSCodes WHERE

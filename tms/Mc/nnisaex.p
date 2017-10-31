@@ -83,7 +83,7 @@ form
      skip(1)
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT/CUSTOMER "
    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
@@ -137,7 +137,7 @@ TOIMI:
    OUTPUT STREAM excel TO value(exFile).
 
    PUT STREAM excel UNFORMATTED
-      ynimi  tab "Invoice summary by Salesman / agent / customer".
+      Syst.CUICommon:ynimi  tab "Invoice summary by Salesman / agent / customer".
       RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
