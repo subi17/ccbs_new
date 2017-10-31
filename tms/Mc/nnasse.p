@@ -240,7 +240,7 @@ DEF VAR x2           AS i   NO-UNDO.
 def var memochr      AS LOG NO-UNDO.
 DEF VAR CLI          LIKE CLI.CLI NO-UNDO.
 DEF VAR debug        AS LOG    NO-UNDO INIT TRUE.
-DEF VAR save-ehto    LIKE Syst.CUICommon:ehto NO-UNDO.
+DEF VAR save-ehto    AS INTEGER NO-UNDO.
 DEF VAR save-ufk     LIKE ufk  NO-UNDO.
 DEF VAR lcBankAcc    AS CHAR   NO-UNDO.
 DEF VAR llDDBank     AS LOG    NO-UNDO. 

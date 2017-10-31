@@ -22,6 +22,8 @@ def var ufk_mitka as char.
 def var ufk_toimi as char.
 def var ufk_nro as int.
 
+DEFINE VARIABLE sel_t AS CHARACTER FORMAT "x(8)" EXTENT 16 NO-UNDO.
+
 assign  ufk_mitka = "1,f1,2,f2,3,f3,4,f4,5,f5,6,f6,7,f7,8,f8,RETURN,ENTER"
         ufk_toimi = "112233445566778899".
 

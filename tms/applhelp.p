@@ -11,7 +11,7 @@
 
 def new shared var siirto as char format "x(75)".
 DEF VAR i AS INT NO-UNDO.
-DEF VAR save-ehto LIKE Syst.CUICommon:ehto NO-UNDO.
+DEF VAR save-ehto AS INT NO-UNDO.
 DEF VAR save-ufk LIKE ufk   NO-UNDO.
 DEF VAR hmod AS c NO-UNDO.
 DEF VAR pp AS INT NO-UNDO.
@@ -22,7 +22,7 @@ DEF VAR lcCode AS CHAR NO-UNDO.
 
 
 /* talteen ufKey:n common-arvot jottei sotketa paikkoja */
-save-Syst.CUICommon:ehto = ehto.
+save-ehto = Syst.CUICommon:ehto.
 DO i = 1 TO 9 :
    save-ufk[i] = ufk[i].
 END.

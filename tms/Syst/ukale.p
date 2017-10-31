@@ -100,7 +100,7 @@ toimi:
       IF uf THEN DO:
          ASSIGN
             ufk[1]=24 ufk[2]=25 ufk[3]=0 ufk[4]=0
-            ufk[5]=11 ufk[6]=0  ufk[7]=0 ufk[8]=8 ehto=3.
+            ufk[5]=11 ufk[6]=0  ufk[7]=0 ufk[8]=8 Syst.CUICommon:ehto = 3.
          if helpkey <> "f9" THEN ufk[5] = 0.
          RUN Syst/ufkey.p.
          uf=false.

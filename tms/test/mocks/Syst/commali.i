@@ -10,7 +10,6 @@
 
 def new shared var katun   as char format "x(8)".
 
-def new shared var sel_t   as char format "x(8)"  EXTENT 16.
 def new shared var ufk     as int  format "z"     EXTENT 9.
 
 def new shared var nap     AS CHAR.
