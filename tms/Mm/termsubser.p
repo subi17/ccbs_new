@@ -147,7 +147,7 @@ form
     ttSubSer.SSParam  format "x(13)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)  " Services of TermMobsub " + TermMobsub.CLI + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)  " Services of TermMobsub " + TermMobsub.CLI + " "
     FRAME sel.
 
 form
@@ -166,7 +166,7 @@ form
               "Date is mandatory and cannot be in the past")
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -174,13 +174,13 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Subscriber's Service  BY  ServCom */
     ServCom
     HELP "Enter service component code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SERVICE COMPONENT "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SERVICE COMPONENT "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Subscriber's Service  BY ServPac */
     ttSubSer.ServPac
     HELP "Enter Service Package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SERVICE PACKAGE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SERVICE PACKAGE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

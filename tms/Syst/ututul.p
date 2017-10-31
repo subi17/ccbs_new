@@ -65,7 +65,7 @@ form
     TMSReport.ChEMail   format "Y/N" Column-label "C"
     TMSReport.EMail  format "x(20)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     ynimi + " PRINTOUTS "
     + string(pvm,"99-99-99")
     FRAME sel.
@@ -87,7 +87,7 @@ form
     HELP "More E-mail addresses" SKIP
 
     WITH  OVERLAY ROW 8 centered COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc) fr-header WITH side-labels
+    TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
     FRAME lis.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -352,7 +352,7 @@ BROWSE:
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) TMSReport.RepName TMSReport.Memo
+        COLOR DISPLAY value(Syst.CUICommon:ctc) TMSReport.RepName TMSReport.Memo
         TMSReport.PageWidth TMSReport.UpdPerm .
 
         FIND NEXT TMSReport no-lock no-error.

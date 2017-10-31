@@ -65,7 +65,7 @@ form
     SimArt.OrdPoint
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " SIM Articles "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -80,7 +80,7 @@ form
     SimArt.OrdPoint
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
@@ -102,7 +102,7 @@ form /* seek SIM Article  BY  SimArt */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "SimArticle:" SimArt
     help "Enter Article Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SIM Article  BY SAName */
@@ -111,7 +111,7 @@ form /* seek SIM Article  BY SAName */
 
     "ArticlName:" SAName
     help "Enter Article Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -442,7 +442,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        SimArt.SimArt SimArt.SAName SimArt.Brand.
 
        RUN local-find-NEXT.

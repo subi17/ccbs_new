@@ -39,7 +39,7 @@ form
     Trunk.OpCode                 column-label "Op Code"
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " CGR BROWSER: SEEK FROM '"  + TrunkCode + "' " FRAME sel.
+    title color value(Syst.CUICommon:ctc) " CGR BROWSER: SEEK FROM '"  + TrunkCode + "' " FRAME sel.
 
 
 form

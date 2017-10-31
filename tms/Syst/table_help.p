@@ -51,13 +51,13 @@ FORM
     ttTable.TableDesc  FORMAT "X(57)" COLUMN-LABEL "Description"   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " SELECT TABLE "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " SELECT TABLE "
     FRAME sel.
 
 form 
     "Table:" lcTableName FORMAT "X(20)"
     HELP "Enter table name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TABLE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TABLE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 

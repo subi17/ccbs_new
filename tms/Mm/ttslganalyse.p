@@ -75,7 +75,7 @@ form
 
 WITH ROW FrmRow OVERLAY CENTERED FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " NEW ATTRIBUTES FOR PERIODICAL/SERVICE COUNTERS " 
     FRAME sel.
 
@@ -86,7 +86,7 @@ form
     ttSLG.ValidFrom 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -304,7 +304,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ttSLG.CliType     ttSLG.BillCode 
        ttSLG.CCN ttSLG.Bdest 
        CCN.CCNName WHEN AVAIL CCN BillItem.BIName.

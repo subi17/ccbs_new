@@ -83,7 +83,7 @@ form
     lcTime             COLUMN-LABEL "Sent" FORMAT "X(14)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " TEXT SEND LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -107,7 +107,7 @@ form
     ITSendLog.SendInfo   COLON 16 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -117,21 +117,21 @@ form /* seek  ITSendLog */
     "Brand ..:" lcBrand skip
     "Customer:" liCustnum
     HELP "Enter Customer nbr "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  ITSendLog */
     "Brand .:" lcBrand skip
     "Invoice:" liInvnum
     HELP "Enter Invoice nbr "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Invoice "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Invoice "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  ITSendLog */
     "Brand ..:" lcBrand skip
     "Rep.Type:" lcRepType
     HELP "Enter report type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Report Type "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Report Type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -461,7 +461,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ITSendLog.CustNum Customer.CustName lcTime.
 
        RUN local-find-NEXT.

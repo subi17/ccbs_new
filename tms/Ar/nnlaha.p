@@ -21,7 +21,7 @@ DEF VAR liCustNum AS INT                 NO-UNDO.
 form
    nhaku
    help "Give number of an invoice"
-   with title color value(ctc) " INVOICE No. "
+   with title color value(Syst.CUICommon:ctc) " INVOICE No. "
    ROW 2 col 2 COLOR value(Syst.CUICommon:cfc) NO-LABELS
    OVERLAY FRAME asno.
 
@@ -29,7 +29,7 @@ form
     liCustNum FORMAT ">>>>>>>9"
     help "Give customer's number"           
     WITH ROW 2 col 2 TITLE
-    color value(ctc) " CUSTOMER'S Number "
+    color value(Syst.CUICommon:ctc) " CUSTOMER'S Number "
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME nimi.
 
     assign Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.

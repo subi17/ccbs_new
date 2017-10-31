@@ -67,7 +67,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "Members Of " + FTGrp
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "Members Of " + FTGrp
     FRAME sel.
 
 form
@@ -79,7 +79,7 @@ form
 
 WITH  OVERLAY ROW 3 WIDTH 60 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS
 
     FRAME lis.
@@ -87,14 +87,14 @@ WITH  OVERLAY ROW 3 WIDTH 60 centered
 form /* seek  MemberType */
     Membertype
     HELP "Enter Target Of Fatime Group "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TARGET "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TARGET "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
  form
     FATGMember.Memo
 
     WITH OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Memo: " + FATGMember.FTGrp + "/" + FATGMember.FTGMember WITH NO-LABELS 1 columns
     FRAME f4.
 
@@ -421,7 +421,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         FATGMember.FTGMember .
 
        RUN local-find-NEXT.

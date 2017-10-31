@@ -57,7 +57,7 @@ form
    CLIPref.State
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " Maintain operator prefixes "
    + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -68,19 +68,19 @@ form
    "  State ....:" CLIPref.State  SKIP
 WITH  OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH NO-LABELS FRAME lis.
 
 form /*  search WITH FIELD Pref */
    Pref
    help "Give prefix"
-with row 4 col 2 title color value(ctc) " FIND PREFIX "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PREFIX "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD Pref */
    CLI 
    help "Give CLI"
-with row 4 col 2 title color value(ctc) " FIND CLI "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CLI "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -454,7 +454,7 @@ BROWSE:
        FIND CLIPref where recid(CLIPref) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           CLIPref.Pref
           CLIPref.CLI 
           CLIPref.CLIId 

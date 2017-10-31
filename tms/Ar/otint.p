@@ -71,7 +71,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Overtime interests "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -86,7 +86,7 @@ HELP "0=General, 1=Fixed, 2=Added to confirmed reference rate"
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -96,14 +96,14 @@ form /* seek Interest record  BY  ValidFrom */
     "Brand:" lcBrand skip
     "Date :" ValidFrom
     HELP "Enter Start Date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND DATE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND DATE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Interest record  BY IntPerc */
     "Brand:" lcBrand skip
     "Perc.:" IntPerc
     HELP "Enter Percent"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND PERCENT "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND PERCENT "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -421,7 +421,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           Interest.ValidFrom 
           Interest.IntPerc 
           Interest.IntType  

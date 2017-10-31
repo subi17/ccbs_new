@@ -66,7 +66,7 @@ form
     Salesman.SMName 
 WITH ROW FrmRow centered overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " USER'S SALESMAN DEFINITIONS  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -82,7 +82,7 @@ form
         Salesman.SMName NO-LABEL SKIP
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -425,7 +425,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(TRUE).
              
         /* Highlight */
-        COLOR DISPLAY VALUE(ctc)
+        COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         UserSman.UserCode
         UserSman.Brand
         UserSman.Salesman.

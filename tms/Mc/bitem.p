@@ -99,7 +99,7 @@ form
     SingleFee.Billed        format "I/" column-label "I"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Single Fees "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -134,7 +134,7 @@ form
 
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -142,14 +142,14 @@ form /* seek Billable item  BY  CustNum */
     "Brand ..:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Customer:" liCustNum HELP "Enter Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUST. NO "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUST. NO "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billable item  BY BillPeriod */
     "Brand :" lcBrand  HELP "Enter Brand"
       VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Period:"  BillPeriod HELP "Enter Billing Period"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Period "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Period "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Billable item  BY BillCode */
@@ -157,7 +157,7 @@ form /* seek Billable item  BY BillCode */
       VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") 
       SKIP
     "BillItem:"  lcBillCode HELP "Enter Billing Item code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillItem "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BillItem "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
@@ -165,7 +165,7 @@ form
     SingleFee.Memo
     WITH OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Invoice Text: Customer No " + STRING(singlefee.custnum) + "  " + 
                      singlefee.billcode +  " " 
     WITH NO-LABELS 1 columns
@@ -544,7 +544,7 @@ BROWSE:
         END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           SingleFee.CustNum      
           SingleFee.BillTarget  
           lcCustName    

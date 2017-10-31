@@ -29,7 +29,7 @@ form
     MenuClass.MCName  format "x(30)"
     MenuClass.Memo[1]  format "x(34)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Program classes " OVERLAY FRAME tlse.
+    title color value(Syst.CUICommon:ctc) " Program classes " OVERLAY FRAME tlse.
 
 form
     MenuClass.MenuClass SKIP
@@ -37,14 +37,14 @@ form
     MenuClass.Memo[1]    SKIP
 
 WITH OVERLAY ROW 8 centered
-    TITLE COLOR value(ctc) tlli-ots
+    TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
     COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Program Class :n hakua varten */
     MenuClass
     help "Enter No of Class"
-    with row 4 col 2 title color value(ctc) " FIND Program Class "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Program Class "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

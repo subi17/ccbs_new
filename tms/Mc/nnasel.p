@@ -47,7 +47,7 @@ form
     Customer.PostOffice   format "x(6)"  column-label "City"
  WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) 
+    title color value(Syst.CUICommon:ctc) 
        " SEEK CUSTOMERS (" + gcBrand + ") '" + ashaku + "' " FRAME sel.
 
 

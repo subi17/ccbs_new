@@ -83,7 +83,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " CONTACT LIST "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -97,7 +97,7 @@ FORM
        FORMAT ">,>>>,>>9"
        SKIP
 WITH  OVERLAY ROW 17 WIDTH 80
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " UNHANDLED CUSTOMERS "
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " UNHANDLED CUSTOMERS "
     SIDE-LABELS FRAME fTotal.
 
 form
@@ -111,7 +111,7 @@ form
     Contact.ConState COLON 20 
 WITH  OVERLAY ROW 5 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -119,13 +119,13 @@ WITH  OVERLAY ROW 5 centered
 form /* seek  Contact */
     "Customer:" liCustNum
     HELP "Enter customer nbr"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  Contact */
     "Amount:" ldAmt FORMAT "->,>>>,>>9.99"
     HELP "Enter amount"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Amount "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Amount "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -592,7 +592,7 @@ REPEAT WITH FRAME sel:
        END.
        
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Contact.CustNum Customer.CustName Contact.CustBal.
 
        RUN local-find-NEXT.
@@ -702,7 +702,7 @@ REPEAT WITH FRAME sel:
            END.
        
            /* Highlight */
-           COLOR DISPLAY VALUE(ctc)
+           COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
            Contact.CustNum Customer.CustName Contact.CustBal.
 
            RUN local-find-NEXT.

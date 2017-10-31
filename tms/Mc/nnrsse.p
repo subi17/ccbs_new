@@ -40,7 +40,7 @@ form
     Reseller.RsName       format "x(30)"
     WITH CENTERED OVERLAY scroll 1 ROW 2 12 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Browse resellers (" + gcBrand + ") "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -48,13 +48,13 @@ form
 form /*  search WITH FIELD Reseller */
     Reseller
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND CODE"
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE"
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD RsName */
     RsName
     help "Give ..."
-    with row 4 col 2 title color value(ctc) " FIND NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

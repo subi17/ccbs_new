@@ -63,7 +63,7 @@ form
     /* sd */            /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY SCROLL 1 15 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " ProdPacks "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -75,20 +75,20 @@ form
     FeeModel.FeeName   NO-LABEL                SKIP
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 
     FRAME lis.
 
 form /* seek ProdPack  BY  ProdPack */
     ProdPack
     help "Enter ProdPack Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ProdPack BY PPName */
     PPName
     help "Enter ProdPack Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -442,7 +442,7 @@ BROWSE:
        FIND ProdPack WHERE recid(ProdPack) = rtab[FRAME-LINE] NO-LOCK.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           ProdPack.ProdPack 
           ProdPack.PPName 
           ProdPack.FeeModel

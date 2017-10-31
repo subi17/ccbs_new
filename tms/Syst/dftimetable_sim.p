@@ -50,7 +50,7 @@ form
     lcWeekDay         FORMAT "X(9)"     COLUMN-LABEL "WeekDay"
     lcTime            FORMAT "X(8)"     COLUMN-LABEL "Time"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "  TIMETABLE  "  FRAME sel.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) "  TIMETABLE  "  FRAME sel.
 
 
 FIND DFTimeTable WHERE RECID(DFTimeTable) = irTimeTable NO-LOCK NO-ERROR.

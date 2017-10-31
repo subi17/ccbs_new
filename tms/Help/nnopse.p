@@ -36,7 +36,7 @@ form
     Operator.Operator                 column-label "OpCode" 
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " OPERATOR BROWSER: SEEK FROM '"  + Operator + "' " FRAME sel.
+    title color value(Syst.CUICommon:ctc) " OPERATOR BROWSER: SEEK FROM '"  + Operator + "' " FRAME sel.
 
 
 form

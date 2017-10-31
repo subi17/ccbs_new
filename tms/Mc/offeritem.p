@@ -78,7 +78,7 @@ FORM
     ldtToDate          FORMAT "99-99-99"    COLUMN-LABEL "To"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " ITEMS FOR OFFER " + STRING(icOffer) + " "
     FRAME sel.
 
@@ -102,7 +102,7 @@ FORM
     OfferItem.DispOnInvoice COLON 20 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -538,7 +538,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           OfferItem.ItemType
           OfferItem.ItemKey
           ldItemAmount.

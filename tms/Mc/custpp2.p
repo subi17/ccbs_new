@@ -65,7 +65,7 @@ form
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " BillCode Packs of customer " + STRING(CustNum) + ": " + 
     Customer.CustName + " "
     FRAME sel.
@@ -81,14 +81,14 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek ProdPack  BY  ProdPack */
     ProdPack
     HELP "Enter Code of BillCode Package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND FIRST Customer WHERE Customer.CustNum = CustNum USE-INDEX CustNum NO-LOCK.
@@ -447,7 +447,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CustPP.ProdPack. 
 
        RUN local-find-NEXT.

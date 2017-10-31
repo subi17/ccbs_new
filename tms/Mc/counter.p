@@ -62,7 +62,7 @@ form
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) lcHeader FRAME sel.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) lcHeader FRAME sel.
 
 form
     Counter.Brand         COLON 22 FORMAT "X(2)" SKIP
@@ -76,14 +76,14 @@ form
     Counter.EndStamp     COLON 22 
 WITH  OVERLAY ROW 4 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form 
     "Counter Type:" liCType FORMAT ">>>>>>>9"
     HELP "Enter Counter Type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Counter Type "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Counter Type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fCTName RETURNS LOGIC
@@ -353,7 +353,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Counter.CounterType Counter.CounterAmt
        Counter.BeginStamp Counter.EndStamp .
 
@@ -376,7 +376,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Counter.CounterType Counter.CounterAmt
        Counter.BeginStamp Counter.EndStamp .
 

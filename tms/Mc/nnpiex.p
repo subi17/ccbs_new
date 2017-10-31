@@ -66,7 +66,7 @@ form
    "        Decimal separator ..:" exdeci                        skip(3)
 WITH 
    ROW 1 side-labels width 80 NO-LABELS
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " SUMMARY OF PAYMENTS AND INVOICES " +
    string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME Limit.
 

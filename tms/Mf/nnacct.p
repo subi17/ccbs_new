@@ -77,13 +77,13 @@ form
   "          Customers B-number list .." bnfile no-label format "x(20)"
 
 WITH
-   color value(Syst.CUICommon:cfc) title color value(ctc) " Accounting Report to Excel "
+   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " Accounting Report to Excel "
    OVERLAY width 80 side-labels FRAME krit.
 
 form
    bnfile format "x(16)" NO-LABEL
 WITH
-   color value(Syst.CUICommon:cfc) title color value(ctc) " Seekt customer/file "
+   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " Seekt customer/file "
    fsize DOWN OVERLAY ROW 3 col 60 FRAME act.
 
 

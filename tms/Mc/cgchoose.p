@@ -47,13 +47,13 @@ form
     wCustGroup.chosen     label "Ch" 
 WITH ROW FrmRow centered OVERLAY 12 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " CHOOSE TOKENS (" + gcBrand + ") " 
+    title COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE TOKENS (" + gcBrand + ") " 
     FRAME sel.
 
 form /* seek Token by Code */
     CustGroup
     help "Enter Token Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

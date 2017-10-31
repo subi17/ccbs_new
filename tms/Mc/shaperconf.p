@@ -56,7 +56,7 @@ form
     ShaperConf.Tariff FORMAT "X(15)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Shaper Configurations "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -72,7 +72,7 @@ form
     ShaperConf.Active
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -80,13 +80,13 @@ WITH  OVERLAY ROW 4 centered
 form /* seek ShaperConf  BY  ShaperConf */
     ShaperConf
     HELP "Enter Code of ShaperConf"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form  /* seek ShaperConf  BY  */
     ShaperConf
     HELP "Enter Name of ShaperConf"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
     
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

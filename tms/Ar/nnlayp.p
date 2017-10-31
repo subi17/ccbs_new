@@ -139,7 +139,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " INVOICE File "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE File "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -151,7 +151,7 @@ form
    format "z,zzz,zz9.99" skip(1)
    " Is this OK (Y/N) ?" ok  format "Yes/No"
 WITH
-    OVERLAY ROW 3 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 3 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " ATTENTION ! ! ! " NO-LABEL WITH FRAME unetto.
 
 {Func/brand.i}
@@ -160,14 +160,14 @@ form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip
     "Invoice:" lcExtInvID  FORMAT "X(14)" 
     help "Give Invoice No."    
-    with row 4 col 2 title color value(ctc) " FIND INVOICE No."
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE No."
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* Invoicen asnolla hakua varten */
     "Brand ..:" lcBrand skip
     "Customer:" hakuCustNum
     help "Give Customer No."
-    with row 4 col 2 title color value(ctc) " FIND CUST # "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST # "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hakie.
 
 form /* Invoicen summan hakua varten */
@@ -178,14 +178,14 @@ form /* Invoicen summan hakua varten */
        skip
     "Amount ......:" hakunetto   
        help "Give Billed Amount"   SKIP
- with row 4 col 2 title color value(ctc) " FIND AMOUNT "
+ with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AMOUNT "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* Invoicen paivayshakua varten */
     "Brand:" lcBrand skip
     "Date :" InvDate
     help "Give Date of Invoice"
-    with row 4 col 2 title color value(ctc) " FIND Date "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Date "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 form /* memo */

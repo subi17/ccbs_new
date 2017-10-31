@@ -110,7 +110,7 @@ form
     PriceList.Rounding     column-label "D"
     PriceList.Memo     format "x(9)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
     " PRICE LISTS " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -138,7 +138,7 @@ form
 
     WITH  OVERLAY ROW 3 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 
     FRAME lis.
 
@@ -148,14 +148,14 @@ form /* Price List search WITH FIELD PriceList */
     "Brand:" lcBrand skip
     "Code :" PriceList
     help "Give pricelist's code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Price List search WITH FIELD PLName */
     "Brand:" lcBrand skip
     "Name :" PLName
     help "Give pricelist's name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* FOR copying */
@@ -704,7 +704,7 @@ BROWSE:
         FIND PriceList where recid(PriceList) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.CUICommon:ctc)
            PriceList.PriceList FORMAT "X(18)" 
 
            PriceList.PLName 

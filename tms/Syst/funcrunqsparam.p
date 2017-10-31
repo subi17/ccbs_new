@@ -67,7 +67,7 @@ FORM
     lcParamValue FORMAT "X(20)" COLUMN-LABEL "Value"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " PARAMETERS FOR SCHEDULED QUEUE " + lcQueueDesc + " "
     FRAME sel.
 
@@ -85,7 +85,7 @@ FORM
        LABEL "Value" FORMAT "X(50)" SKIP
 WITH  OVERLAY ROW liUpdateRow centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

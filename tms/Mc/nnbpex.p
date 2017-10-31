@@ -67,7 +67,7 @@ help "(D)irect, (I)ndirect  (?)=ALL" SKIP
 
  skip(1)
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " EXCEL-SUMMARY OF Billed PRODUCTS " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 

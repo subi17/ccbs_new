@@ -32,7 +32,7 @@ form
    MedSect.Uniq
 WITH width 55 OVERLAY centered ROW 3 scroll 1 12 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " FTAM sections "
    + string(pvm,"99-99-99") + " "
    FRAME tlse.

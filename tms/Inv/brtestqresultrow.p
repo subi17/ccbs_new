@@ -67,7 +67,7 @@ FORM
     BRTestQResultRow.TestResult FORMAT "X(20)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " RESULT ROWS OF " + STRING(iiBRTestQResultID) + " "
     FRAME sel.
 
@@ -89,7 +89,7 @@ FORM
     BRTestQResultRow.TestResult       COLON 25 
 WITH  OVERLAY ROW liUpdateRow centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

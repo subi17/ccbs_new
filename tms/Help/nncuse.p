@@ -28,19 +28,19 @@ form
    Currency.Currency  
    Currency.CurrName  column-label "Name"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " Currency CODE "
+   title color value(Syst.CUICommon:ctc) " Currency CODE "
    OVERLAY FRAME tlse.
 
 form
    Currency.Currency label "Code" SKIP
    Currency.CurrName label "Name" skip(1)
-WITH OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
+WITH OVERLAY ROW 8 centered TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
    COLOR value(Syst.CUICommon:cfc) side-labels 1 col  FRAME tlli.
 
 form 
    Currency
    help "Give a country's Name or beginning of it"
-with row 4 col 2 title color value(ctc) " FIND Code  "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Code  "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

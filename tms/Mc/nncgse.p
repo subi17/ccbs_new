@@ -30,7 +30,7 @@ form
     CustGroup.CGName  format "x(30)"
     CustGroup.Memo[1]  format "x(20)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Customer Groups (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Customer Groups (" + gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -39,14 +39,14 @@ form
     CustGroup.Memo[1]    SKIP
 
 WITH OVERLAY ROW 8 centered
-    TITLE COLOR value(ctc) tlli-ots
+    TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
     COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Invoicing Group :n hakua varten */
     CustGroup
     help "Enter Code of a Customer Group"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

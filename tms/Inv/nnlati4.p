@@ -48,7 +48,7 @@ help "Code of an External Customer Group (EMPTY = none)" SKIP
         help "One for certain, empty for all" TO 50 skip(2)
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header

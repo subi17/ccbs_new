@@ -132,7 +132,7 @@ form
     FixedFee.EndPeriod   /* column-label "Exp per"  */
     FixedFee.Memo[1]     /* column-label "Memo"     */    format "x(7)"
 WITH width 80 ROW 1 OVERLAY scroll 1 15 DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
     " CONTRACT FEES "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -169,7 +169,7 @@ help "First Period YYYYMM from which this payment shall be invoiced"
     "Contract is in use :" FixedFee.InUse                          SKIP
 
  WITH  OVERLAY ROW 1 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header NO-LABEL
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header NO-LABEL
     FRAME lis.
 
 {Func/brand.i}
@@ -185,14 +185,14 @@ form /*  search WITH FIELD CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" CustNum
     help "Give Customer No."
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD BillCode */
     "Brand ..:" lcBrand skip
     "BillItem:" BillCode
     help "Give BillItem Code"
-    with row 4 col 2 title color value(ctc) " FIND BillItem CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND BillItem CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* memo */
@@ -1067,7 +1067,7 @@ BROWSE:
        END.   
 
        /* line TO be deleted is hi-lighted */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           FixedFee.CustNum cust-name FixedFee.BillCode FixedFee.Contract 
           FixedFee.EndPeriod FixedFee.Amt FixedFee.BegPeriod.
 

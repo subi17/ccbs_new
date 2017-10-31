@@ -67,7 +67,7 @@ form
     ServAttr.FeeModel    column-label "FeeModel" format "x(7)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Attributes of Service Component '" + icServCom  + "'"
     FRAME sel.
 
@@ -86,20 +86,20 @@ form
        FeeModel.FeeName NO-LABEL    SKIP
 WITH  OVERLAY ROW 5 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek ServAttr  BY  ServAttr */
     ServAttr
     HELP "Enter Code of ServAttr"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ServAttr  BY SAName */
     SAName
     HELP "Enter Name of ServAttr"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND ServCom WHERE
@@ -446,7 +446,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ServAttr.ServAttr ServAttr.SAName .
 
        RUN local-find-NEXT.

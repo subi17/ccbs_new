@@ -52,7 +52,7 @@ form
         help "One for certain, empty for all" TO 44 skip(5)
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/CUSTOMER "    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/CUSTOMER "    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 

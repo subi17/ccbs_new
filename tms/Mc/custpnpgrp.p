@@ -62,7 +62,7 @@ form
    CustPNPGroup.PnPPrior
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " maintain Customer PNP Groups "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -77,7 +77,7 @@ form
    CustPNPGroup.PnPPrior
 WITH  OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
@@ -86,14 +86,14 @@ form /*  search WITH FIELD CustNum */
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CustomerNo:" CustNum
     help "Give Customer number"
-    with row 4 col 2 title color value(ctc) " FIND Customer "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Customer "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WICTH FIELD PnpGroup */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Pnp Group :" PnpGroup help "Give PNP Group"
-    with row 4 col 2 title color value(ctc) " FIND PNP "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PNP "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /*  search WITH FIELD PnPPriorform */
@@ -101,7 +101,7 @@ form /*  search WITH FIELD PnPPriorform */
 
     PnPPrior
     help "Give Priority"
-    with row 4 col 2 title color value(ctc) " FIND Priority "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Priority "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -433,7 +433,7 @@ BROWSE:
        FIND CustPNPGroup where recid(CustPNPGroup) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           CustPNPGroup.CustNum 
           CustPNPGroup.PnpGroup 
           CustPNPGroup.PnPPrior.

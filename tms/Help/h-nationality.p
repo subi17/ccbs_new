@@ -38,19 +38,19 @@ form
     Nationality.NtName   
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "  Nationalities  " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "  Nationalities  " 
     FRAME sel.
 
 form /* seek  Nationality */
     "Nationality:" lcNationality
     HELP "Enter Nationality"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Nationality "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Nationality "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Name:" lcNtName
     HELP "Enter Nationality name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

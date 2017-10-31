@@ -45,7 +45,7 @@ form
   p[29] p[30] p[31] p[32] p[33] p[34] p[35] " "  vk[5] SKIP
   p[36] p[37] "                "                 vk[6]
 
-  WITH TITLE COLOR value(ctc) kuu
+  WITH TITLE COLOR value(Syst.CUICommon:ctc) kuu
   COLOR value(Syst.CUICommon:cfc) ROW 9 col 50
   NO-LABEL OVERLAY FRAME kal.
 
@@ -108,7 +108,7 @@ toimi:
       nap = "".
       CHOOSE FIELD p
       keys chalku
-      COLOR value(ctc) no-error.
+      COLOR value(Syst.CUICommon:ctc) no-error.
       nap = keylabel(LASTKEY).
 
       if nap = "1" or nap = "f1" THEN DO:

@@ -82,7 +82,7 @@ form
 WITH
    width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " Maintain monthly call counters "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -102,20 +102,20 @@ form
     "(1 = Limit 2 = Invoice 3 = Both)"
     WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH NO-LABEL
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     seek-cust-nr
     help "Give customer number"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER number "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER number "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD Month */
     seek-mth
     help "Give month (YYMM)"
-    with row 4 col 2 title color value(ctc) " FIND MONTH "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND MONTH "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* UPDATE whitelist FileName */
@@ -642,7 +642,7 @@ BROWSE:
        FIND MthCall where recid(MthCall) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit
           MthCall.CloseDate MthCall.CloseType.
 

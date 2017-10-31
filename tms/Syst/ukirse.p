@@ -25,7 +25,7 @@ form
 TMSPrinter.PrinterId       /* column-label "Printer"
                           help "Printer"         */
 WITH scroll 1 11 DOWN  ROW 4 col 15 COLOR value(Syst.CUICommon:cfc)
-title color value(ctc) " ALL PRINTERS "
+title color value(Syst.CUICommon:ctc) " ALL PRINTERS "
 OVERLAY FRAME sel.
 
 runko:

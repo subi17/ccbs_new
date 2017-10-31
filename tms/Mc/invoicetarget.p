@@ -62,7 +62,7 @@ FORM
    InvoiceTarget.ToDate
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
    COLOR VALUE(Syst.CUICommon:cfc)   
-   TITLE COLOR VALUE(ctc) 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
       " InvoiceTargets " + " "
    FRAME sel.
 
@@ -75,13 +75,13 @@ FORM
    InvoiceTarget.ToDate COLON 20
 WITH OVERLAY ROW 3 centered
    COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(ctc) ac-hdr 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
    SIDE-LABELS 
    FRAME lis.
 
 form liNewITGroup
     HELP "Enter new invoice target group ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " MOVE TO NEW GROUP "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " MOVE TO NEW GROUP "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 IF iiMsSeq > 0 THEN ASSIGN

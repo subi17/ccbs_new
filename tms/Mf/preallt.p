@@ -65,7 +65,7 @@ form
     Presel.Orderer  format "x(25)"       /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Browser of PreselectTransactions "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -90,7 +90,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
   /*  1 columns */
     FRAME lis.
@@ -98,13 +98,13 @@ WITH  OVERLAY ROW 4 centered
 form /* seek PRESELECT  BY  CustNum */
     CustNum
     HELP "Enter number of Customer"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTNO "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTNO "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek PRESELECT  BY CLI */
     CLI
     HELP "Enter Subscriper number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -443,7 +443,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Presel.CustNum Customer.CustName  
        Presel.CLI Presel.PsType Presel.Orderer.
 

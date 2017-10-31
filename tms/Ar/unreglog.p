@@ -46,7 +46,7 @@ form
     UnregLog.Amount
 WITH ROW FrmRow  CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) 
+    title COLOR VALUE(Syst.CUICommon:ctc) 
     " Booked PAYMENTS "
     FRAME sel.
 
@@ -58,7 +58,7 @@ form
     UnregLog.Amount
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
@@ -66,13 +66,13 @@ WITH  OVERLAY ROW 4 centered
 form /* seek  BY  AccDate */
     AccDate
     help "Enter Date"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND BOOKING Date "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND BOOKING Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek   BY CustNum */
     CustNum
     help "Enter Customer Nbr"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

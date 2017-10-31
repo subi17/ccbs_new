@@ -60,7 +60,7 @@ FORM
     lcBIName  FORMAT "X(20)" COLUMN-LABEL "Name"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  IMEI " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -74,7 +74,7 @@ FORM
        lcBIName NO-LABEL FORMAT "X(30)" 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -82,14 +82,14 @@ FORM
     "Brand:" lcBrand skip
     "IMEI:"  lcIMEI FORMAT "X(17)" 
     HELP "Enter IMEI"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND IMEI "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND IMEI "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "Brand ......:" lcBrand skip
     "Billing Item:" lcBillCode FORMAT "X(16)" 
     HELP "Enter billing item code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Billing Item "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Billing Item "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -442,7 +442,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        IMEIRegister.IMEI IMEIRegister.BillCode.
        
        RUN local-find-NEXT.

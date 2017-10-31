@@ -388,7 +388,7 @@ form
     lcRoles             format "X(5)"     column-label "A I U"   
     memochr             format "M/"       column-label "M"
 WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) 
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) 
        " " + ynimi + " " + lcFrmTitle + " " +
        string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -417,7 +417,7 @@ form /* Customer :n tunnuksella hakua varten */
                "Unknown brand")
       SKIP
    "Number ...:" CustNum help "Enter Customer Number"
-with row 4 col 2 title color value(ctc) " FIND CUST No. "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST No. "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-1.
 
 form /* Customer :n nimella hakua varten */
@@ -436,7 +436,7 @@ form /* Customer :n nimella hakua varten */
   SKIP
   "Company...:" lcCompany  FORMAT "X(30)"
      HELP "Company name" SKIP
-  with row 4 col 2 title color value(ctc) " FIND Name "
+  with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-2.
  
 form /* Aakkoshakua varten */
@@ -445,7 +445,7 @@ form /* Aakkoshakua varten */
                "Unknown brand")
       SKIP
    "Abbreviat.:" SearchName help "Enter abbreviation"
-with row 4 col 2 title color value(ctc) " FIND ABBREVIATION "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND ABBREVIATION "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-3.
 
 form /* FIND zip */
@@ -454,7 +454,7 @@ form /* FIND zip */
                "Unknown brand")
       SKIP
    "Zip Code .:" lcZip  help "Enter ZIP code"
-with row 4 col 2 title color value(ctc) " FIND ZIP "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND ZIP "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-4.
 
 form /* FIND OrgCode */
@@ -463,7 +463,7 @@ form /* FIND OrgCode */
                "Unknown brand")
       SKIP
    "PersonID .:" OrgId  help "Enter personID or company ID"
-with row 4 col 2 title color value(ctc) " FIND PERSONID "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PERSONID "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-6.
 
 form /* FIND CLI # */
@@ -472,7 +472,7 @@ form /* FIND CLI # */
                "Unknown brand")
       SKIP
    "CLI ......:" CLI help "Enter A-number or beginning of it"
-with row 4 col 2 title color value(ctc) " FIND CLI "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CLI "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-7.
 
 

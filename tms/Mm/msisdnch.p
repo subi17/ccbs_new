@@ -63,7 +63,7 @@ form /* asks MSISDN Number */
 
 WITH
    OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS
-   TITLE COLOR VALUE(ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
 FRAME main.
 
 {Func/tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.

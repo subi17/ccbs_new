@@ -59,19 +59,19 @@ form
     ttCustomer.ICName     FORMAT "X(12)"    COLUMN-LABEL "ICust Name"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ac-hdr + " " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ac-hdr + " " 
     FRAME sel.
 
 form /* seek  ttCustomer */
     "Customer Nbr:" liCustNum
     HELP "Enter customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND number "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND number "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Name:" lcCustName
     HELP "Enter customer name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fPickCustomer RETURNS LOGICAL

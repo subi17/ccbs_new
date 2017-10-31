@@ -59,7 +59,7 @@ FORM
     FuncRunQueue.Active     
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  FUNCTION QUEUE  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -73,7 +73,7 @@ FORM
     FuncRunQueue.QueueDesc   VIEW-AS EDITOR SIZE 60 BY 3
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -82,7 +82,7 @@ FORM
     "Brand:" lcBrand skip
     "ID   :" liFRQueueID FORMAT ">>>>>>>9" 
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -425,7 +425,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        FuncRunQueue.FRQueueID FuncRunQueue.QueueDesc.
         
        RUN local-find-NEXT.

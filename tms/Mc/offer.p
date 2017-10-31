@@ -67,7 +67,7 @@ FORM
     Offer.Description FORMAT "X(15)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  OFFERS  " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -87,7 +87,7 @@ FORM
     Offer.Description VIEW-AS EDITOR SIZE 60 BY 3
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -95,14 +95,14 @@ FORM
     "Brand:" lcBrand skip
     "Offer:" lcOffer FORMAT "X(16)" 
     HELP "Enter offer ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Offer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Offer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "Brand:" lcBrand skip
     "Offer:" lcName FORMAT "X(20)" 
     HELP "Enter offer name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Offer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Offer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 IF icOffer > "" THEN ASSIGN
@@ -456,7 +456,7 @@ REPEAT WITH FRAME sel:
        END.
         
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Offer.Offer 
        Offer.FromDate Offer.ToDate Offer.OfferAmount .
 

@@ -56,7 +56,7 @@ form
     TerminalConf.ValidTo
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Terminal Configurations "
     FRAME sel.
 
@@ -67,7 +67,7 @@ form
     TerminalConf.ValidTo SKIP
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -75,13 +75,13 @@ WITH  OVERLAY ROW 6 centered
 form /* seek TerminalConf  BY  TerminalConf */
     TerminalConf
     HELP "Enter Code of TerminalConf"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form  /* seek TerminalConf  BY  */
     TerminalConf
     HELP "Enter Name of TerminalConf"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
     
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

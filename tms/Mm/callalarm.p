@@ -85,7 +85,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  ALARM MENU   "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -114,7 +114,7 @@ form
     "CreditType ...:" CallAlarm.CreditType lccreditname format "x(30)" 
 WITH  overlay row 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS NO-LABEL
 
     FRAME lis.
@@ -125,7 +125,7 @@ form /* seek  CustNo */
     "Unknown brand")
     "CustomerNo:"  CustNo
     HELP "Enter Customer Number of the Call Limit "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CLI */
@@ -134,7 +134,7 @@ form /* seek  CLI */
    "Unknown brand")
    "Msisdn No.:"  lcCLI
     HELP "Enter CLI of the Call Limit"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 form /* seek  CLI */
@@ -143,7 +143,7 @@ form /* seek  CLI */
 
    "Time......:"  ActDate ActTime
     HELP "Enter Activated Date and time"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TIMESTAMP "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TIMESTAMP "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
@@ -524,7 +524,7 @@ BROWSE:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CallAlarm.CustNO CallAlarm.CLI  CallAlarm.DeliStat
         stname callalarm.actstamp lcdelitype lccreditname.
 

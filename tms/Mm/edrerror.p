@@ -52,7 +52,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  EDR ERROR CODES  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -64,7 +64,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -89,13 +89,13 @@ WITH OVERLAY ROW 8 CENTERED 1 COLUMNS SIDE-LABELS TITLE " Error EDRs"
 form /* seek  ErrorCode */
     ErrorCode
     HELP "Enter Code of ERROR Type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  me-name */
     me-name
     HELP "Enter Name of the ERROR Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

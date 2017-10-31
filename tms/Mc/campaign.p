@@ -66,7 +66,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " CAMPAIGNS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -84,7 +84,7 @@ form
     Campaign.CampType    COLON 20             
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -92,21 +92,21 @@ form /* seek  Campaign */
     "Brand ..:" lcBrand skip
     "Campaign:" Campaign
     HELP "Enter campaign code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND campaign "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND campaign "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CaName */
     "Brand:" lcBrand skip
     "Name :" lcName
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  ToDate */
     "Brand ..:" lcBrand skip
     "End Date:" ldTDate FORMAT "99-99-99"
     HELP "Enter ending date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Campaign.Campaign Campaign.CaName .
 
        RUN local-find-NEXT.

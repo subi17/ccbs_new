@@ -66,7 +66,7 @@ def var order         as int   no-undo.
 
 form
    valik no-label
-   with overlay 2 down title color value(ctc) " CHOOSE ORDER FOR PRINTOUT "
+   with overlay 2 down title color value(Syst.CUICommon:ctc) " CHOOSE ORDER FOR PRINTOUT "
    color value(Syst.CUICommon:cfc) row 6 centered frame rival.
 
 form
@@ -74,7 +74,7 @@ form
    "         unpaid invoices according to given criteria:"    skip
    skip(15)
    with row 1 side-labels width 80
-        title color value(ctc) " " + ynimi + " AGE ANALYSIS " +
+        title color value(Syst.CUICommon:ctc) " " + ynimi + " AGE ANALYSIS " +
         string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame valinta.
 
@@ -106,7 +106,7 @@ form
    aryhma6 label "Group 6 " "days" "  - " lryhma6 no-label "days" skip
    "Group 7 :" aryhma7 no-label "days overdue invoices" 
 
-   with title color value(ctc) " CRITERIA FOR PRINTOUT " side-labels
+   with title color value(Syst.CUICommon:ctc) " CRITERIA FOR PRINTOUT " side-labels
    color value(Syst.CUICommon:cfc) row 4 centered overlay frame rajat.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.

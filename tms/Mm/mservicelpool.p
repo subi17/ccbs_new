@@ -68,7 +68,7 @@ form
     lcInclUnit FORMAT "x(10)" column-label "Unit"
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Rating Pools " + lcServiceLimit
     FRAME sel.
 

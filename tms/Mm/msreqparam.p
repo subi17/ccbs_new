@@ -47,7 +47,7 @@ FORM
     ttParam.Description COLUMN-LABEL "Description"  FORMAT "X(20)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "  REQUEST PARAMETERS " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "  REQUEST PARAMETERS " 
     FRAME sel.
 
 FORM
@@ -57,7 +57,7 @@ FORM
     ttParam.Description COLON 15 LABEL "Description"  FORMAT "X(50)"
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

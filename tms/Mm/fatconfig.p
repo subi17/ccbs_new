@@ -71,7 +71,7 @@ form
     FATConfig.ConfRule1  FORMAT "X(16)" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " " + icFatGroup + " CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -89,7 +89,7 @@ form
     FATConfig.ConfRule3  COLON 22
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -412,7 +412,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        FATConfig.ConfType FATConfig.ValidFrom FATConfig.ValidTo.
 
        RUN local-find-NEXT.

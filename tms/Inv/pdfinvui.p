@@ -82,7 +82,7 @@ form
       HELP "Send PDF to invoicing (C)ustomer or to TMS (U)ser (i.e. You)"
       FORMAT "Customer/User"
 
-WITH TITLE COLOR value(ctc)
+WITH TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " PDF INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
 side-labels COLOR value(Syst.CUICommon:cfc) ROW 1 centered OVERLAY FRAME rajat.
 
@@ -92,7 +92,7 @@ form
     "  5: PDF-file formed                        " skip
     "  6: PDF sent to customer via eMail         " skip
 with
-   title color value (ctc) " Printing Status For Invoices " color value(Syst.CUICommon:cfc)
+   title color value (Syst.CUICommon:ctc) " Printing Status For Invoices " color value(Syst.CUICommon:cfc)
    overlay centered row 14 frame statu.
 
 ASSIGN 

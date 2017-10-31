@@ -64,7 +64,7 @@ FORM
     BRTestCase.Active
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  BILLING TEST CASE  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -84,7 +84,7 @@ FORM
     BRTestCase.ResultQty          COLON 25
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -92,14 +92,14 @@ FORM
     "Brand:" lcBrand skip
     "Case ID:" liTestCaseID FORMAT ">>>>>>>9" 
     HELP "Enter ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "Brand:" lcBrand skip
     "Description:" lcName FORMAT "X(20)" 
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Description "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Description "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM
@@ -525,7 +525,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        BRTestCase.BRTestCaseID BRTestCase.Description.
         
        RUN local-find-NEXT.

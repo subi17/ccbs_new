@@ -55,7 +55,7 @@ form
     SIMStat.SSName     /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY SCROLL 1 15 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " SIM Status Codes "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -65,20 +65,20 @@ form
     SIMStat.SSName    /* LABEL FORMAT */
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek SIM Status  BY  SIMStat */
     SimStat
     help "Enter ...."
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SIM Status  BY SSName */
     SSName
     help "Enter ..."
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -390,7 +390,7 @@ BROWSE:
        FIND SIMStat WHERE recid(SIMStat) = rtab[FRAME-LINE] NO-LOCK.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        SIMStat.SIMStat SIMStat.SSName /* sd */.
 
        RUN local-find-NEXT.

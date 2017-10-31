@@ -92,7 +92,7 @@ form
     InvGroup.TaxZone        FORMAT "X(5)" COLUMN-LABEL "TaxZ."
     WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Invoice groups "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -132,21 +132,21 @@ form
         help "Days from last to bill to ignore minimum invoicing amount"
     InvGroup.Banned COLON 22
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header 
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header 
     side-labels FRAME lis.
 
 form /* Invoicing Group search WITH FIELD InvGroup */
     "Brand:" lcBrand skip       
     "Code :" haku-ig-code
     help "Give a code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* Invoicing Group search WITH FIELD IGName */
     "Brand:" lcBrand skip
     "Name :" haku-ig-name
     help "Give a name"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 FUNCTION fZoneName RETURNS LOGIC
@@ -583,7 +583,7 @@ BROWSE:
         FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.CUICommon:ctc) 
            InvGroup.Brand 
            InvGroup.InvGroup 
            InvGroup.IGName 

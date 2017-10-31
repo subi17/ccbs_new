@@ -83,7 +83,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " SCHEDULED KILL REQUESTS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -107,7 +107,7 @@ form
 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) /*ac-hdr*/ " VIEW KILL REQUEST "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) /*ac-hdr*/ " VIEW KILL REQUEST "
     NO-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -119,14 +119,14 @@ form /* seek KillMs  BY  CLI */
     VALIDATE(lcbrand = "*" OR 
     CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "MSISDN No :" CLI HELP "Enter MSISDN number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek KillMs  BY Date */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Kill Date.:" killdate HELP "Enter KILL Date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND KILL Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND KILL Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek KillMs  BY Stat */
@@ -134,7 +134,7 @@ form /* seek KillMs  BY Stat */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     stat HELP "Enter Status"
     "(1: Pending 2: Failed 3: OK)"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND STATUS "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND STATUS "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -491,7 +491,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         KillMs.CLI 
         KillMs.RequestTS
         KillMs.ExecuteTS

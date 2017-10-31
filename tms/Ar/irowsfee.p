@@ -82,7 +82,7 @@ form
     SingleFee.Memo[1]     column-label "Memo"    format "x(26)"
 with
     centered row 2 overlay scroll 1 13 down
-    color value(Syst.CUICommon:cfc) title color value(ctc) " " +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " +
     substr(Customer.CustName,1,18) + " / " + substr(lcBIName,1,18) +
     ": Invoice = " + string(iiInvNum) + ", CustNo = " +
     string(Customer.CustNum) + " "  frame sel.
@@ -101,13 +101,13 @@ form
     lcOtherData FORMAT "X(50)"                              SKIP
 
  with  overlay row 5 centered
-    color value(Syst.CUICommon:cfc) title color value(ctc) fr-header with no-label
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) fr-header with no-label
     frame lis.
 
 form /*  search with field CustNum */
     BillPeriod
     help "Give Period YyyyMm"
-    with row 4 col 2 title color value(ctc) " FIND PERIOD "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PERIOD "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* memo */

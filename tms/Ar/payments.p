@@ -110,7 +110,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
           "  PAYMENTS  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -201,14 +201,14 @@ form /* seek  Voucher */
     "Brand .:" lcBrand skip
     "Voucher:" lcExtVoucher
     HELP "Enter Voucher number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND VOUCHER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND VOUCHER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  InvNum */
     "Brand .:" lcBrand skip
     "Invoice:" lcExtInvID
     HELP "Enter Invoice Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND INVOICE"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND INVOICE"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -216,7 +216,7 @@ form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" CustNum
     HELP "Enter Customer Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  source & amt */
@@ -226,7 +226,7 @@ form /* seek  source & amt */
     "Amount:" ldPaymAmt 
        HELP "Payment amount"
        FORMAT "->>>>>>9.99" skip
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SOURCE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SOURCE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 

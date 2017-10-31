@@ -64,7 +64,7 @@ form
 
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " BILLING BY SALESMAN/CUSTOMER/COUNTRY(Service) " +
    string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 

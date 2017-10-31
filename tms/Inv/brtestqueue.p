@@ -63,7 +63,7 @@ FORM
     BRTestQueue.Active
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  BILLING TEST CASE  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -77,7 +77,7 @@ FORM
     BRTestQueue.Description VIEW-AS EDITOR SIZE 60 BY 2
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -86,7 +86,7 @@ FORM
     "Brand:" lcBrand skip
     "Description:" lcName FORMAT "X(20)" 
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Description "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Description "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -426,7 +426,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        BRTestQueue.BRTestQueueID BRTestQueue.Description.
         
        RUN local-find-NEXT.

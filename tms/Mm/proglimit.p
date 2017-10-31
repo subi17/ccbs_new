@@ -74,7 +74,7 @@ form
 
 WITH width 74 OVERLAY CENTERED scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + lcTitle + " "  
+   title color value(Syst.CUICommon:ctc) " " + ynimi + lcTitle + " "  
    + string(pvm,"99-99-99") + " "  FRAME sel.
 
 form          
@@ -90,13 +90,13 @@ form
    ProgLimit.LimitTo       COLON 23                  
 WITH OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 form /*  search WITH FIELD ProgLimit */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Event "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Event "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FIND FIRST ServiceLimit WHERE 
@@ -383,7 +383,7 @@ repeat WITH FRAME sel:
        FIND ProgLimit where recid(ProgLimit) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           
           ProgLimit.ValidTo
           ProgLimit.ValidFrom

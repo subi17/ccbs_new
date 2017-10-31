@@ -228,7 +228,7 @@ HELP "Do you want re-analyse Rating CCN using Calltype and Destination"
    ROW 1 
    WIDTH 80
    COLOR VALUE(Syst.CUICommon:cfc) 
-   TITLE COLOR VALUE(ctc) 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " " + ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
     string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
    

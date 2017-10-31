@@ -59,7 +59,7 @@ form
       help "Name of the printout file"
       label "File Name ......" skip(3)
 WITH
-   width 80 ROW 1 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   width 80 ROW 1 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " PRINT CUSTOMER Price LIST " + string(pvm,"99-99-99") + " "
    side-labels FRAME rajat.
 

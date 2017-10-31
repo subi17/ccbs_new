@@ -58,7 +58,7 @@ form
     Ttype-name         column-label "TypeName" format "x(42)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " OVERPAYMENT TRANSACTIONS OF "
     + STRING(iiCustNum) + " " 
     + lcCustName
@@ -79,7 +79,7 @@ form
 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -87,13 +87,13 @@ WITH  OVERLAY ROW 3 centered
 form /* seek BROWSE  BY  InvNum */
     InvNum
     HELP "Enter number of Invoice"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND number "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND number "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek BROWSE  BY EventDate */
     EventDate
     HELP "Enter Date of transaction"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

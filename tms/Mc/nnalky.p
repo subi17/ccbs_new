@@ -113,7 +113,7 @@ form
    exFile  label "   Name of Output File"
            help "Name for output File (ASCII-format, File RepType '.txt')"
    SKIP(1) 
-with width 80 title color value(ctc) " CUSTOMER LISTS " side-labels
+with width 80 title color value(Syst.CUICommon:ctc) " CUSTOMER LISTS " side-labels
    COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME rajat.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.

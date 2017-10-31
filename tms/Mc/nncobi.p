@@ -89,7 +89,7 @@ form
     lcMemoAvail        column-label "M" FORMAT "x(1)"
 WITH
     centered ROW 2 OVERLAY scroll 1 13 DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) " " +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " +
     substr(lcCustName,1,16) + " / " + substr(prod-name,1,16) +
     ": Billable ITEMS, Type = " + string(FixedFee.BillMethod) + ", intvl = " +
     string(FixedFee.Interval) + " "  FRAME sel.
@@ -101,13 +101,13 @@ form
     "Billable Payment:" FFItem.Amt                           SKIP
     "Our Own Cost ...:" FFItem.OwnCost                       SKIP
  WITH  OVERLAY ROW 7 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header WITH NO-LABEL
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH NO-LABEL
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     BillPeriod
     help "Give Period YyyyMm"
-    with row 4 col 2 title color value(ctc) " FIND Period "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Period "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* memo */
@@ -510,7 +510,7 @@ BROWSE:
        END.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           FFItem.BillPeriod
           FFItem.Concerns[1]
           FFItem.Concerns[2]

@@ -47,7 +47,7 @@ FORM "New status:" ReqStat FORMAT "z9"
 
  WITH  OVERLAY ROW 4 centered
  COLOR VALUE(Syst.CUICommon:cfc)
- TITLE COLOR VALUE(ctc) " Add status "
+ TITLE COLOR VALUE(Syst.CUICommon:ctc) " Add status "
  NO-LABELS
  FRAME upd.
 

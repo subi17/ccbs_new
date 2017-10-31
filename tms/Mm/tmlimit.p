@@ -81,7 +81,7 @@ FORM
     Limit.DefValue  COLUMN-LABEL "Def" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + lcHeader + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + lcHeader + " "
     FRAME sel.
 
 form 
@@ -97,7 +97,7 @@ form
 
 WITH OVERLAY ROW 6 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc) " View Limit " WITH no-labels side-labels
+   TITLE COLOR value(Syst.CUICommon:ctc) " View Limit " WITH no-labels side-labels
    FRAME vlimit.
 
 
@@ -107,7 +107,7 @@ FORM
 
 WITH  OVERLAY ROW 8 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) lcLisTitle  
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) lcLisTitle  
     SIDE-LABELS 
     FRAME lis.
 

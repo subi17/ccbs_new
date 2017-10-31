@@ -63,7 +63,7 @@ form
     lcBDestLimit             FORMAT "x(4)" column-label "BDestAmt"
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " COUNTERS for period " + STRING(iiPeriod) + " " + icEvent + " "
     FRAME sel.
 
@@ -85,7 +85,7 @@ form
    "Unit charge.......:" ldeUnitCharge    SKIP
 WITH OVERLAY ROW 2 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    " COUNTERS for period " + STRING(iiPeriod) + " " + icEvent + " "
    WITH no-labels side-labels
    FRAME lis.

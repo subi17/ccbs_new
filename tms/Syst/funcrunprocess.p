@@ -73,7 +73,7 @@ FORM
     FuncRunProcess.Processed  FORMAT "->>>>>>>9"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " PROCESSES OF " + lcConfName + "/" + STRING(iiFRExecID) + " "
     FRAME sel.
 
@@ -102,7 +102,7 @@ FORM
        VIEW-AS EDITOR SIZE 45 BY 3
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -412,7 +412,7 @@ REPEAT WITH FRAME sel:
        END.
   
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           FuncRunProcess.ProcSeq
           FuncRunProcess.RunState.
 

@@ -198,7 +198,7 @@ FORM
     UnregPaym.RefNum    FORMAT "X(17)"
     UnregPaym.BankAcc   FORMAT "x(14)"
 WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " UNREGISTERED PAYMENTS " + STRING(pvm,"99-99-99") + " "     
     FRAME sel.
 
@@ -243,7 +243,7 @@ FORM
                         FORMAT "Yes/No" 
                         HELP "Calculate delay interest from payment" SKIP
     "Memo:"  UnregPaym.Memo      NO-LABEL VIEW-AS EDITOR Size 60 BY 5
-WITH  OVERLAY ROW 1 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+WITH  OVERLAY ROW 1 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
     fr-header WITH SIDE-LABELS FRAME lis.
 
 FORM
@@ -253,7 +253,7 @@ FORM
    mench[3] SKIP
    mench[4] SKIP
    mench[5]
-WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    " CHOOSE BOOKING TYPE " WITH NO-LABELS FRAME f-menu.
 
 FORM
@@ -268,7 +268,7 @@ FORM
    OldSum          LABEL "Old overpayment "
    PreSum          LABEL "Booking sum ...."
    NewSum          LABEL "New overpayment "
-WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    " OVERPAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME over.
 
 FORM
@@ -283,7 +283,7 @@ FORM
    OldSum          LABEL "Old Adv.Payment "
    PreSum          LABEL "Booking sum ...."
    NewSum          LABEL "New Adv.Payment "
-WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    " ADVANCE PAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME AdvPaym.
 
 {Func/brand.i}
@@ -292,35 +292,35 @@ FORM /* Seek a Date */
    "Brand:" lcBrand skip
    "Date :" haku1
    HELP "Give the payment date"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Date "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 FORM /* Seek a customer's name */
    "Brand:" lcBrand skip
    "Name :" haku2
    HELP "Give the customer's name or beginning of it"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Name "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 FORM /* Seek an amount */
    "Brand :" lcBrand skip
    "Amount:" haku3
    HELP "Give the payment amount"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND AMOUNT "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND AMOUNT "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM /* Seek a reference number */
    "Brand :" lcBrand skip
    "Refnum:" haku4
    HELP "Give the reference number"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND REF.NUM. "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND REF.NUM. "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr4.
 
 FORM /* Seek a Bank AccNum */
    "Brand:" lcBrand skip
    "Bank :"  haku5
    HELP "Give the bank account"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Bank Account "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Bank Account "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr5.
 
 Syst.CUICommon:cfc = "sel". 
@@ -913,7 +913,7 @@ REPEAT WITH FRAME sel:
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE] NO-LOCK.
 
          /* line TO be deleted is lightened */
-         COLOR DISPLAY VALUE(ctc)
+         COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
          UnregPaym.PaymDate
          UnregPaym.CustName 
          UnregPaym.PaidAmt

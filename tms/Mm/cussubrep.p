@@ -53,7 +53,7 @@ FORm SKIP(1)
    CustNum2   NO-LABEL HELP "Customers TO number"      FORMAT "zzzzzzzz9" skip
    path    LABEL  " Path and Filename ......"  FORMAT "x(40)"
 
-WITH title color value(ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
+WITH title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
    color value(Syst.CUICommon:cfc) row 4 centered overlay FRAME rajat.
 ASSIGN
    CustNum1  = 1001

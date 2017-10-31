@@ -133,7 +133,7 @@ form
       HELP "Print an account level summary from all postings" skip(1)
    
    with row 1 side-labels width 80
-        title color value(ctc) " " + ynimi + "  INVOICE JOURNAL  " +
+        title color value(Syst.CUICommon:ctc) " " + ynimi + "  INVOICE JOURNAL  " +
         string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame rajat.
 

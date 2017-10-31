@@ -61,32 +61,32 @@ form
     notes                                   column-label "M"
 WITH
     width 80 OVERLAY scroll 1 14 DOWN ROW 2 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " INVOICES  (" + gcBrand + ") "
     FRAME sel.
 
 form 
     "Invoice:" lcExtInvID  FORMAT "X(12)" 
     help "Invoice number"    
-    with row 4 col 2 title color value(ctc) " FIND INVOICE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 form 
     "System Invoice:" liInvNum FORMAT ">>>>>>>9" 
     help "System invoice number"
-    with row 4 col 2 title color value(ctc) " FIND SYST INVOICE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND SYST INVOICE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F2.
 
 form 
     "Customer:" liCustNum FORMAT ">>>>>>>9" 
     help "Customer number"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER"
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER"
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F3.
 
 form 
     "Invoice Date:" ldtInvDate FORMAT "99-99-99" 
     help "Invoice date"
-    with row 4 col 2 title color value(ctc) " FIND DATE"
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND DATE"
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F4.
 
 {Func/brand.i}

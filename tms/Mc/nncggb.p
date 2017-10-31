@@ -65,7 +65,7 @@ form
     CustGroup.CustGroup      /* COLUMN-LABEL FORMAT */
     CustGroup.CGName      /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Join CustNo " + string(CustNum) + " into group(s) (" + gcBrand + ") "
     FRAME sel.
 
@@ -78,13 +78,13 @@ WITH
 form /* Customer Group :n haku kentällä CustGroup */
     CustGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä CGName */
     CGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

@@ -168,7 +168,7 @@ FORM
    PrePaidRequest.VatAmt      COLUMN-LABEL "TaxAmt"   FORMAT "->>9.99"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
    COLOR VALUE(Syst.CUICommon:cfc)   
-   TITLE COLOR VALUE(ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
    " TOPUP REQUESTS  "
    + string(pvm,"99-99-99") + " "
 FRAME sel.
@@ -246,12 +246,12 @@ FORM
        FORMAT "X(30)" 
 
 WITH  OVERLAY ROW 1 centered COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr SIDE-LABELS FRAME lis.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr SIDE-LABELS FRAME lis.
 
 FORM /* seek  PrePaidRequest */
    lcCLI
       HELP "Enter code"
-WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY
 FRAME f1.
 

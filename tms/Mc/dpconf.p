@@ -82,7 +82,7 @@ FORM
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Discounts of Discount Plan " + DiscPlan + " " 
     FRAME sel.
 
@@ -107,7 +107,7 @@ WITH
     CENTERED                            
     NO-LABEL
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -131,7 +131,7 @@ WITH
     CENTERED
     NO-LABEL
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) lis2-hdr
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) lis2-hdr
     SIDE-LABELS 
     FRAME lis2.
 
@@ -145,20 +145,20 @@ WITH
     CENTERED
     NO-LABEL
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " FIXED DISCOUNT " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIXED DISCOUNT " 
     SIDE-LABELS 
     FRAME lis3.
 
 FORM /* seek DPConf  by  ValidFrom */
     " " ValidFrom
     HELP "Enter Effective Date"
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY  FRAME f1.
 
 FORM /* seek DPConf  by DPCName */
     DPCName
     HELP "Enter name of Discount Group"
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND NAME "
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND DiscPlan WHERE DiscPlan.DiscPlan = DiscPlan NO-LOCK no-error.
@@ -548,7 +548,7 @@ ASK-F2:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DPConf.ValidFrom DPConf.DPCName .
 
        RUN local-find-NEXT.

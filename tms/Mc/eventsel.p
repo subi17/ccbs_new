@@ -76,7 +76,7 @@ form
     EventLog.EventLogStatus FORMAT ">9" COLUMN-LABEL "Type"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Eventlog BROWSER "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -92,7 +92,7 @@ form
     muutokset VIEW-AS EDITOR size-chars 60 BY 10
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     2 columns
     FRAME lis.
@@ -103,7 +103,7 @@ form /* seek Eventlog  BY  Date */
     "Time..:"
     lcevtime
     HELP "Enter Time 99:99:99"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date & Time"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date & Time"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Eventlog  BY UserCode */
@@ -111,13 +111,13 @@ form /* seek Eventlog  BY UserCode */
     HELP "Enter Usercode" SKIP
     "Date.:" ldate
     HELP "Enter Date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND User "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Eventlog  BY  TableName and keyvalue */
     "Table..:" lcTable HELP "Enter TableName or beginning of it " SKIP
     "Key....:" lcKey   HELP "Enter KeyValue or beginning of it"
-            WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table & Key "
+            WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Table & Key "
                 COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 IF icTableName > "" 

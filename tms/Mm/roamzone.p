@@ -53,7 +53,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  ROAMZONE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -65,7 +65,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -73,7 +73,7 @@ WITH  overlay row 4 centered
 form /* seek  RoamZone */
     RoamZone
     HELP "Enter RoamZone  "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ROAMZONE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ROAMZONE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
  
@@ -368,7 +368,7 @@ BROWSE:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        RoamZone.RoamZone RoamZone.RZName .
 
        RUN local-find-NEXT.

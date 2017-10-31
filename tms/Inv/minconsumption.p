@@ -60,7 +60,7 @@ form
     MinConsumption.Amount COLUMN-LABEL "Amount"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " MINIMUM CONSUMPTION " FRAME sel.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " MINIMUM CONSUMPTION " FRAME sel.
 
 form
     MinConsumption.MsSeq COLON 20
@@ -70,14 +70,14 @@ form
     MinConsumption.Amount   COLON 20
 WITH  OVERLAY ROW 4 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form 
     "Subscription ID:" liMsSeq FORMAT ">>>>>>>9"
     HELP "Enter subscription ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -330,7 +330,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        MinConsumption.MsSeq MinConsumption.FromDate
        MinConsumption.ToDate MinConsumption.Amount.
 

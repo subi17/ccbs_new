@@ -62,7 +62,7 @@ FORM
     lcFieldData         FORMAT "X(20)" COLUMN-LABEL "Description"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " SELECT " + icTitle + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " SELECT " + icTitle + " "
     FRAME sel.
 
 form
@@ -71,14 +71,14 @@ form
     ttField.FieldHelp  COLON 13 LABEL "Description" FORMAT "X(60)"
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form 
     "Field:" lcField FORMAT "X(20)"
     HELP "Enter field name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FIELD "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND FIELD "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 

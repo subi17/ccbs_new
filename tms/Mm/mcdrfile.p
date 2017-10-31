@@ -61,7 +61,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Mobile CDR Files "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -76,7 +76,7 @@ form
 
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     3 columns
     FRAME lis.
@@ -84,13 +84,13 @@ WITH  OVERLAY ROW 2 centered
 form /* seek Mobile CDR Sequence  BY  Station */
     station
     HELP "Enter Station"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MTX Code "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MTX Code "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Mobile CDR Sequence  BY FileSeq */
     FileSeq
     HELP "Enter Sequence"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Sequence No. "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Sequence No. "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -398,7 +398,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        MCDRFile.Station MCDRFile.Station .
 
        RUN local-find-NEXT.

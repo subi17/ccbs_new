@@ -64,7 +64,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Erroneus Mobile Calls "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -76,7 +76,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -86,7 +86,7 @@ form /* seek Mobile Call  by  DateSt */
     HELP "Error Code"
     DateSt
     HELP "Enter first desired call date where that code should occur"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE/DATE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE/DATE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 

@@ -71,7 +71,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " CAMPAIGN STATISTICS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -86,7 +86,7 @@ form
     CampStat.CampDate   COLON 20 
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -94,14 +94,14 @@ form /* seek  CampStat */
     "Brand ..:" lcBrand skip
     "Campaign:" lcCampaign FORMAT "X(12)"
     HELP "Enter Campaign code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Campaign "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Campaign "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  Cust */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum FORMAT ">>>>>>>9"
        HELP "Enter Customer"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -109,14 +109,14 @@ form /* seek  CLI */
     "Brand:" lcBrand skip
     "CLI .:" lcCLI FORMAT "X(15)"
     HELP "Enter CLI"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  CampDate */
     "Brand:" lcBrand skip
     "Date :" ldTDate FORMAT "99-99-99"
     HELP "Enter usage date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

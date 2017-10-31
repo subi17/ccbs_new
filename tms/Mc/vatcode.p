@@ -74,7 +74,7 @@ form
     VATCode.ToDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
          "  VAT CODES  " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -106,31 +106,31 @@ form
     Account.AccName   COLON 20
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr side-labels FRAME lis.
 
 form /* seek VATAmt Code  BY  VATCode */
     liVATCode
     help "Enter VAT Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek VATAmt Code  BY VCName */
     VATPercent
     help "Enter VAT Percent"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND %%% "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND %%% "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek VAT Code  BY taxzone */
     lcTaxZone
     help "Enter Tax zone"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ZONE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ZONE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek VAT Code  BY taxzone */
     lcTaxClass
     help "Enter Tax class"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CLASS "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CLASS "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 
@@ -527,7 +527,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           VATCode.VATCode 
           VATCode.VCName 
           VATCode.VATPerc

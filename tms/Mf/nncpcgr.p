@@ -62,7 +62,7 @@ form
    MedTrunk.Type  
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + " Exchange CGR ranges " 
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " Exchange CGR ranges " 
    + string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -74,19 +74,19 @@ form
    MedTrunk.OpCode
    MedTrunk.Type  
 WITH  OVERLAY ROW 4 centered
-   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-labels 1 columns FRAME lis.
 
 form /*  search WITH FIELD TrFrom */
     TrFrom
     help "Give range or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND RANGE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RANGE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD TrName */
     TrName
     help "Give Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -511,7 +511,7 @@ BROWSE:
        FIND MedTrunk where recid(MedTrunk) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           MedTrunk.Ident 
           MedTrunk.TrFrom 
           MedTrunk.TrTo

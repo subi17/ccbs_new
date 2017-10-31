@@ -77,7 +77,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1 
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " PERIODICAL CONTRACTS " 
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -122,7 +122,7 @@ form
       HELP "Upsell corresponding to that Bundle" SKIP
 WITH OVERLAY ROW 1 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 FORM
@@ -142,14 +142,14 @@ FORM
       HELP "First month calculation method, (F)ull or (R)elative"
    SKIP(1)
 WITH OVERLAY ROW 5 CENTERED   
-   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME fFees.
 
 
 form /*  search WITH FIELD DayCampaign */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Event "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Event "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 
@@ -516,7 +516,7 @@ repeat WITH FRAME sel:
        END.
        
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           DayCampaign.DCEvent 
 
           DayCampaign.ValidFrom

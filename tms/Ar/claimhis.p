@@ -82,7 +82,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  CLAIMING HISTORY  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -93,14 +93,14 @@ form /* seek  invoice */
     "Brand .:" lcBrand skip
     "Invoice:" lInvNum
     HELP "Enter invoice number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND INVOICE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND INVOICE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  customer */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
@@ -108,7 +108,7 @@ form /* seek  Date */
     "Brand:" lcBrand skip
     "Date :" lClaimDate FORMAT "99-99-9999"
     HELP "Enter claiming date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
@@ -117,7 +117,7 @@ form
     VIEW-AS EDITOR SIZE 60 BY 5 
     with overlay row 8 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc)
+    title COLOR VALUE(Syst.CUICommon:ctc)
     " memo: " + ClaimHist.handler + " " WITH no-labels 1 columns
     frame f4.
 
@@ -542,7 +542,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(TRUE).
              
         /* Highlight */
-        COLOR DISPLAY VALUE(ctc)
+        COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         lcExtInvID
         ClaimHist.ClaimState
         ClaimHist.ClaimDate

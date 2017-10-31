@@ -68,7 +68,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " BANK ACCOUNTS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -88,7 +88,7 @@ form
     BankAccount.DDAllocation  FORMAT ">>9" COLON 15
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -98,7 +98,7 @@ form /* seek  BankAccount */
     "Brand ......:" lcBrand SKIP
     "Bank Account:" lcBankAccount
     HELP "Enter bank account "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BANK ACCOUNT "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BANK ACCOUNT "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 IF gcHelpParam > "" THEN ASSIGN 
@@ -424,7 +424,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        BankAccount.BankAccount BankAccount.BankData.
 
        RUN local-find-NEXT.

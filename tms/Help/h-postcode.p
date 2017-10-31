@@ -41,26 +41,26 @@ form
     PostCode.Region
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "  PostCodes  " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "  PostCodes  " 
     FRAME sel.
 
 form /* seek  PostCode */
     "Zip Code:" lcZipCode
     HELP "Enter zip code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Zip Code "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Zip Code "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Post Office:" lcPostOffice
     FORMAT "X(30)" 
     HELP "Enter postoffice (city)"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Post Office "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Post Office "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  */
     "Region:" lcRegion
     HELP "Enter region"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Region "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Region "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 

@@ -62,7 +62,7 @@ form
     Salesoffice.SOName
     Salesoffice.CostCentre /* column-label "Cct" help "Cost center" */
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Maintain sales offices " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -76,7 +76,7 @@ form
     VALIDATE(SalesOffice.CostCentre ne "000","Missing Cost Centre!")
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
@@ -84,14 +84,14 @@ form /*  search WITH FIELD Salesoffice */
     "Brand:" lcBrand skip
     "Code :" haku-so-code
     help "Give code or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD SOName */
     "Brand:" lcBrand skip
     "Name :" haku-so-name
     help "Give Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -421,7 +421,7 @@ BROWSE:
        FIND Salesoffice where recid(Salesoffice) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           Salesoffice.Brand   
           Salesoffice.SalesOffice 
           Salesoffice.SOName  

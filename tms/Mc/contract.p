@@ -85,7 +85,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " CONTRACTS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -131,7 +131,7 @@ form
 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -141,28 +141,28 @@ form /* seek  contract */
     "Brand ..:" lcBrand skip
     "Contract:" lcContract
     HELP "Enter contract ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND contract "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND contract "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND customer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND customer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  Salesman */
     "Brand ..:" lcBrand skip
     "Salesman:" xSalesman
     HELP "Enter Salesman code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Salesman "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Salesman "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  date */
     "Brand:" lcBrand skip
     "Date :" ldtFrom
     HELP "Enter beginning date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Beg. Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Beg. Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 form /* seek  date */
@@ -172,7 +172,7 @@ form /* seek  date */
        SKIP
     "Date :" ldtTo
        HELP "Enter end date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND End Date"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND End Date"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
@@ -648,7 +648,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Contract.Contract Contract.CustNum Contract.Salesman .
 
        RUN local-find-NEXT.

@@ -42,7 +42,7 @@ FORM
     Bank.Address
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " BANKS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -58,7 +58,7 @@ FORM
    "Updated .....:" Bank.FileDate     
 WITH OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -66,7 +66,7 @@ FORM /* seek Bank  BY BankId and BankOffice */
     "BankId......:" lcBankId HELP "Enter BankId" SKIP
     "Office......:" lcBankOffice  HELP "Enter BankOffice or beginning of it"
    WITH OVERLAY row 4 col 2 
-   TITLE COLOR VALUE(ctc) " FIND BANK "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BANK "
    COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f1.
 

@@ -94,28 +94,28 @@ FORM
     ttTMCounter.LimitId   FORMAT ">9"  COLUMN-LABEL "LID"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + lcHeader + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + lcHeader + " "
     FRAME sel.
 
 FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
     "CustNbr:" lcCustnum FORMAT ">>>>>>>9" 
     HELP "Enter Customer Number" SKIP
    WITH OVERLAY row 4 col 2 
-   TITLE COLOR VALUE(ctc) " FIND Customer "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
    COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f1.
 
 FORM /* seek  MSBalance */
    "Subscr.ID:" liMsSeq FORMAT ">>>>>>>9"
       HELP "Enter Subscription ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription "
       COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
     "Usage exceeds....:" ldeAmount FORMAT ">>>>>>9.999"
    HELP "Enter value" SKIP
    WITH OVERLAY row 4 col 2 
-   TITLE COLOR VALUE(ctc) " COUNTER FILTER "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " COUNTER FILTER "
    COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f3.
 

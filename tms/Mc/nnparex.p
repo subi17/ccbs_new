@@ -58,7 +58,7 @@ form
      skip(1)
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT "
    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 

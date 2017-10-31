@@ -67,7 +67,7 @@ form
     RZItem.DialType  COLUMN-LABEL "DT"  FORMAT ">9"
 WITH ROW FrmRow WIDTH 76 CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  RZItem MENU " 
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -85,7 +85,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -93,13 +93,13 @@ WITH  overlay row 4 centered
 form /* seek  RZItem-code */
     RZItem-code
     HELP "Enter Code of RZItem "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CountryPrefix */
     lcCountryPrefix
     HELP "Enter CountryPrefix"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CountryPrefix "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CountryPrefix "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
  
@@ -463,7 +463,7 @@ BROWSE:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        RZItem.PLMNCode RZItem.CountryPrefix .
 
        RUN local-find-NEXT.

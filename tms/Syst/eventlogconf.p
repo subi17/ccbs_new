@@ -62,7 +62,7 @@ FORM
     EventLogConf.FromDate
     EventLogConf.ToDate
 WITH ROW FrmRow WIDTH 80 OVERLAY FrmDown DOWN
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " EVENTLOG CONFIGURATION " 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " EVENTLOG CONFIGURATION " 
     FRAME sel.
 
 FORM
@@ -73,7 +73,7 @@ FORM
     EventLogConf.ToDate       COLON 20
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -362,7 +362,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           EventLogConf.TableName
           EventLogConf.ConfigType
           EventLogConf.ConfigValue.

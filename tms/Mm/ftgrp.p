@@ -72,7 +72,7 @@ form
     FATGroup.Priority
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Free Air Time Groups "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -103,7 +103,7 @@ form
     FATGroup.InvMemo[3]  COLON 17 NO-LABEL 
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -111,7 +111,7 @@ form /* seek Billing Event  BY  FATGroup */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "FAT Group.:" FATGroup FORMAT "X(16)" HELP "Enter Fatime Group"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND GROUP "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND GROUP "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event  BY FtgName */
@@ -119,7 +119,7 @@ form /* seek Billing Event  BY FtgName */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Fat Name..:" Ftgname
     HELP "Enter Fatime Event Name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -511,7 +511,7 @@ REPEAT WITH FRAME sel:
 
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        FATGroup.FTGrp FATGroup.FtgName .
 
        RUN local-find-NEXT.

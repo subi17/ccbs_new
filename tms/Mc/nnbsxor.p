@@ -77,7 +77,7 @@ help "Earliest registration day of payment"
 help "Invoicing group's code, empty for all"  SKIP
 "                Decimal separator ...:" exdeci help "Period/Comma" skip(6)
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " XOR-SUMMARY OF PAYMENTS WITH ACCOUNTS " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 

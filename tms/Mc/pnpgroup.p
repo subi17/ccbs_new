@@ -82,7 +82,7 @@ form
    PNPGroup.dto
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " Maintain PNP groups "
    + string(pvm,"99-99-99") + " "
 FRAME sel.
@@ -101,7 +101,7 @@ form
    "Valid To...:" PNPGroup.dto      
 WITH OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH no-labels
 FRAME lis.
 
@@ -110,7 +110,7 @@ form /*  search WITH FIELD PNPGroup */
    VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
    "PnPGroup..:" haku-PNPGroup                          
    help "Give ...."
-with row 4 col 2 title color value(ctc) " FIND PNPGroup "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PNPGroup "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD Name */
@@ -118,7 +118,7 @@ form /*  search WITH FIELD Name */
    VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
    "PnPname..:" haku-Name
    help "Give ...."
-with row 4 col 2 title color value(ctc) " FIND NAME "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -475,7 +475,7 @@ BROWSE:
        FIND PNPGroup where recid(PNPGroup) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           PNPGroup.PNPGroup 
           lcGroupType
           PNPGroup.Name

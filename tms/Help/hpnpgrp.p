@@ -28,18 +28,18 @@ form
     PNPGroup.PNPGroup
     PNPGroup.Name  format "x(20)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " PNPGroups " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " PNPGroups " overlay frame sel.
 
 form /* SEEK code */
     PNPGroup
     help "Enter Code of a PNPGroup"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* SEEK code */
     Name
     help "Enter Name of a PNPGroup"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

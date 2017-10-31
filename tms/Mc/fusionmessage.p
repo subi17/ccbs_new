@@ -53,7 +53,7 @@ FORM
    ttDocs.FixedStatusTS FORMAT "99999999.99999"  COLUMN-LABEL "Fixed TS"
    ttDocs.UpdateTS      FORMAT "99999999.99999"  COLUMN-LABEL "Update TS"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) "Messages"  FRAME sel.
 
 form
     "Order ID..........:" ttDocs.OrderId 
@@ -92,7 +92,7 @@ form
 
     WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Message Contents " NO-LABELS 
     FRAME fDetails.
 

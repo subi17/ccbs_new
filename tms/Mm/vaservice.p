@@ -63,7 +63,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  VALUE ADDED SERVICE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -81,20 +81,20 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS no-label
     FRAME lis.
 
 form /* seek  BDest */
     BDest
     HELP "Enter Code of Billing Type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek ServiceName */
    ServiceName
     HELP "Enter Name of the Billing Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
@@ -415,7 +415,7 @@ BROWSE:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        VAService.BDest     /* column-label format */
        VAService.ServiceName     /* column-label format */
        VAService.ServiceAddress  /* column-label format */

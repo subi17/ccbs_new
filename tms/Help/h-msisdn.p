@@ -32,13 +32,13 @@ form
       MSISDN.CustNum
       MSClass.MCName format "x(8)" Column-label "MSISDN Class" 
       with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " MSISDNs " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " MSISDNs " overlay frame sel.
 
 form /* SEEK Code */
     m_pref space(0) 
     CLI format "x(12)"
     help "Enter MSISDN No. "
-    with row 4 col 2 title color value(ctc) " FIND MSISDN "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND MSISDN "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 
@@ -47,7 +47,7 @@ form
   WITH
   overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
+    title COLOR VALUE(Syst.CUICommon:ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
     side-labels 
     FRAME cust.
 

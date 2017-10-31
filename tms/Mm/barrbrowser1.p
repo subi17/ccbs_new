@@ -71,7 +71,7 @@ DEFINE TEMP-TABLE ttBarrings NO-UNDO
 form /* Set new commands */
     lcBCommand FORMAT "X(70)"
     HELP "Enter Barring Command"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     "Enter Barring Command (Type #REFRESH in case of re-provisioning)"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
@@ -86,7 +86,7 @@ FORM
     ttBarrings.UserCode FORMAT "x(5)"
     ttBarrings.EventTS FORMAT "x(20)"
     WITH OVERLAY ROW 1 12 DOWN COL 1 WIDTH 80
-    TITLE COLOR VALUE(ctc) " " + "Barring packages" + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "Barring packages" + " "
     COLOR VALUE(Syst.CUICommon:cfc)   
 
 FRAME frTop.
@@ -95,7 +95,7 @@ FORM
    lcPMask FORMAT "x(13)" NO-LABEL lcPMask NO-LABEL FORMAT "x(66)" SKIP
    WITH OVERLAY ROW 17 COL 1 WIDTH 80  
 
-   TITLE COLOR VALUE(ctc) " " + "Total Barring Mask" + " "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "Total Barring Mask" + " "
    COLOR VALUE(Syst.CUICommon:cfc)
 
 FRAME frBottom.
@@ -104,7 +104,7 @@ FORM
    lcBarringMemoText NO-LABEL VIEW-AS EDITOR SIZE 65 BY 5
    WITH OVERLAY ROW 10 COL 2 WIDTH 70 
    
-   TITLE COLOR VALUE(ctc) "" + "Memo for barring" + " "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) "" + "Memo for barring" + " "
    COLOR VALUE (Syst.CUICommon:cfc)
 
 FRAME frBarrMemo.

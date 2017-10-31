@@ -31,12 +31,12 @@ form
     ttPaymSrc.PaymSrc  format "x(8)"  label "Source"
     ttPaymSrc.SrcName  format "x(40)" Label "Name"
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Payment Sources " OVERLAY FRAME sel.
+    title color value(Syst.CUICommon:ctc) " Payment Sources " OVERLAY FRAME sel.
 
 form /* SEEK code */
     lcPaymSrc
     help "Enter Name of a PaymSrc"
-    with row 4 col 2 title color value(ctc) " FIND PaymSrc "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PaymSrc "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

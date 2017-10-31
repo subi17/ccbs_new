@@ -64,7 +64,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  VALUE ADDED SERVICE OPERATOR  MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -88,19 +88,19 @@ form
        account.accname FORMAT "X(30)" SKIP
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr  NO-LABELS 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr  NO-LABELS 
     FRAME lis.
 
 form /* seek  OperID */
     OperID
     HELP "Enter Code of Billing Type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek VOName */
    VOName
     HELP "Enter Name of the Billing Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
@@ -414,7 +414,7 @@ BROWSE:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        VASOper.OperID     /* column-label format */
        VASOper.VOName     /* column-label format */
        VASOper.OrigPrice

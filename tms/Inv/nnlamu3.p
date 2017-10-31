@@ -138,7 +138,7 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
+   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
@@ -182,7 +182,7 @@ form
                                                 SKIP    
    lowvalue label " Low value invoices ....."
            help "Create invoices that are below the minimum invoicing amount"
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
 form
@@ -191,7 +191,7 @@ form
     " Oldest unpaid Calls ......: " upmth  NO-LABEL  
     lowvalue format "(created)/(not created)" NO-LABEL
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
+   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 15 FRAME lCustNum.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.

@@ -71,7 +71,7 @@ FORM
     DumpFile.Active
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  DUMP FILES  " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -99,7 +99,7 @@ FORM
     DumpFile.Description VIEW-AS EDITOR SIZE 60 BY 3
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -120,20 +120,20 @@ FORM
     DumpFile.EventLogFields COLON 20 
        VIEW-AS EDITOR SIZE 50 BY 3
 WITH  OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " ADDITIONAL SETTINGS " SIDE-LABELS  FRAME fAddit.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " ADDITIONAL SETTINGS " SIDE-LABELS  FRAME fAddit.
 
 FORM
     liLength                COLON 65 LABEL "Length" SKIP
     DumpFile.QueryClause VIEW-AS EDITOR SIZE 60 BY 12
 WITH  OVERLAY ROW 3 centered COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " QUERY CLAUSE " SIDE-LABELS FRAME fQuery.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " QUERY CLAUSE " SIDE-LABELS FRAME fQuery.
 
 
 FORM 
     "Brand .....:" lcBrand skip
     "Description:" lcDescription FORMAT "X(20)" 
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Description "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Description "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -493,7 +493,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DumpFile.DumpID DumpFile.Description
        DumpFile.FileName DumpFile.MainTable.
         

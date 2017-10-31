@@ -79,7 +79,7 @@ form
     minne  label "New Level for submenu ............."
     help "New Level for moved fixmenus " SKIP
 
-    with color value(Syst.CUICommon:cfc) title color value(ctc) " MOVE SUBMENU "
+    with color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " MOVE SUBMENU "
          OVERLAY centered ROW 4 FRAME siirto side-labels.
 
 
@@ -118,7 +118,7 @@ form
              help "Token code for this menu item"
 
     WITH OVERLAY ROW 6 centered side-labels
-    TITLE COLOR value(ctc) fr-header COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc) fr-header COLOR value(Syst.CUICommon:cfc)
     FRAME lis.
 
 form
@@ -135,7 +135,7 @@ form
     MenuTree.MenuClass     /* column-label "PgCl"          */
  WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " MenuText TREE "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " MenuText TREE "
     + string(pvm,"99-99-99") + " "
  FRAME sel.
 
@@ -143,19 +143,19 @@ form
 form /* tason hakua varten */
     haku
     help "Enter Level No"                           
-    with row 4 col 1 title color value(ctc) " FIND Level "
+    with row 4 col 1 title color value(Syst.CUICommon:ctc) " FIND Level "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /*  tunnuksen hakua varten */
     haku2
     help "Enter Function Code"                          
-    with row 4 col 47 title color value(ctc) " FIND CODE "
+    with row 4 col 47 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  Search by module  */
     haku3
     help "Enter Module Name"                          
-    with row 4 col 35 title color value(ctc) " FIND MODULE "
+    with row 4 col 35 title color value(Syst.CUICommon:ctc) " FIND MODULE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 
@@ -778,7 +778,7 @@ siirto:             repeat:
         delline = FRAME-LINE.
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) MenuTree.Level MenuTree.MenuId
+        COLOR DISPLAY value(Syst.CUICommon:ctc) MenuTree.Level MenuTree.MenuId
         MenuTree.Position MenuTree.MenuNum tx1 tx2
         MenuTree.MenuType MenuTree.Module MenuTree.MenuTitle MenuTree.State[1]
         MenuTree.MenuClass.

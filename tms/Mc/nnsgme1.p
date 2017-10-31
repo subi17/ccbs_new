@@ -57,7 +57,7 @@ form
     SMGMember.Salesman    
     SMGMember.SmName     column-label "Salesman's name"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " Members in Salesman Group " + SMGroup + " (" + gcBrand + ") " 
 FRAME sel.
 
@@ -66,20 +66,20 @@ form
     SMGMember.SmName    
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels 1 columns
 FRAME lis.
 
 form /* member :n haku kentällä Salesman */
     Salesman
     help "Enter Salesman's code "
-    with row 4 col 2 title color value(ctc) " FIND Salesman "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Salesman "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä SmName */
     SmName
     help "Enter Salesman's Name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
@@ -516,7 +516,7 @@ SELAUS:
        FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        SMGMember.Salesman SMGMember.SmName.
 
        IF jarj = 1 THEN FIND NEXT SMGMember

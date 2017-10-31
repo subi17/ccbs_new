@@ -59,7 +59,7 @@ form
     UGMember.Memo     /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Members in an User Group " + UserGroup + ": " +
     substring(UserGrp.UGName,1,16)
     + " " FRAME sel.
@@ -69,20 +69,20 @@ form
     TMSUser.UserName     /* LABEL FORMAT */
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 form /* member :n haku kentällä UserCode */
     UserCode
     help "Type User ID "
-    with row 4 col 2 title color value(ctc) " FIND USER ID "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND USER ID "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä UserName */
     UserName
     help "Type User's Name"
-    with row 4 col 2 title color value(ctc) " FIND UserName "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND UserName "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
@@ -526,7 +526,7 @@ SELAUS:
        FIND UGMember where recid(UGMember) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        UGMember.UserCode UGMember.UserName UGMember.Memo.
 
        IF jarj = 1 THEN FIND NEXT UGMember

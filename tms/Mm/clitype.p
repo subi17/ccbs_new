@@ -96,7 +96,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  SUBSCRIPTION TYPE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -159,7 +159,7 @@ form
 
 WITH OVERLAY ROW 2 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    ac-hdr  WITH no-labels
 FRAME lis.
 
@@ -169,7 +169,7 @@ form /* seek  CLIType */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CliType ..:"  CLIType FORMAT "X(12)"               
     HELP "Enter Code of Cli Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -571,7 +571,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CLIType.CLIType CLIType.CLIName CliType.Brand.
 
        RUN local-find-NEXT.

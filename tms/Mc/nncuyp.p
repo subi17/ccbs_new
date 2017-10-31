@@ -61,7 +61,7 @@ form
    Currency.SubName
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " Maintain Currency Codes "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -77,20 +77,20 @@ form
    Currency.SubName
 WITH  OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
 form /*  search WITH FIELD Currency */
     Currency
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD CurrName */
     CurrName
     help "Give ..."
-    with row 4 col 2 title color value(ctc) " FIND NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -437,7 +437,7 @@ BROWSE:
        FIND Currency where recid(Currency) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           Currency.Currency 
           Currency.CurrName
           Currency.SubUnit

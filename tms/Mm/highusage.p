@@ -93,7 +93,7 @@ FORM
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  HIGH SPENDER MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -121,7 +121,7 @@ form
 
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABEL
     FRAME lis.
 
@@ -130,13 +130,13 @@ form /* seek  HighUsage */
     HELP "Enter Customer Number "
     "Period" lihakuperiod 
     HELP "Enter Period" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     CLI
     HELP "Enter MSISDN Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

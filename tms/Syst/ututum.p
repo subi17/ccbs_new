@@ -61,7 +61,7 @@ form
     TMSRepCfg.PrinterId  column-label "Printer"
     tnimi           column-label "Effect"
  WITH ROW 2 centered OVERLAY scroll 1 13 DOWN
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " " + TMSReport.Memo + ": PRINT PARAMETERS "
     FRAME sel.
 
@@ -74,7 +74,7 @@ form
     TMSRepCfg.UserCode            label "User ........"
     help "User ID or empty for ALL users" SKIP
  WITH  OVERLAY ROW 8 centered COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc) fr-header WITH side-labels
+    TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
     FRAME lis.
 
 FIND FIRST TMSReport where TMSReport.RepName = si-tul no-lock no-error.
@@ -410,7 +410,7 @@ BROWSE:
         FIND TMSRepCfg where recid(TMSRepCfg) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
+        COLOR DISPLAY value(Syst.CUICommon:ctc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
                                  tnimi WITH FRAME sel.
 
         FIND NEXT TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.

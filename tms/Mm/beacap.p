@@ -62,7 +62,7 @@ form
                        /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Bearer Capability codes "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -74,20 +74,20 @@ form
 
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek BeaCap  BY  BeaCap */
     BeaCap
     help "Enter BeaCap's number"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND number "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND number "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek BeaCap  BY BcName */
     BCName
     help "Enter BeaCap's Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -405,7 +405,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        BeaCap.BeaCap BeaCap.BcName BeaCap.Brand.
 
        RUN local-find-NEXT.

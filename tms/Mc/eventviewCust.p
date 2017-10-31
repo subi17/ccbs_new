@@ -110,7 +110,7 @@ form
    temp-event.newvalue  format "x(20)" LABEL "New"
    WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " VIEW AN Event Customer " + xxkey 
     FRAME sel.
 
@@ -124,7 +124,7 @@ form
     muutokset VIEW-AS EDITOR size-chars 50 BY 10
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -132,13 +132,13 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Eventlog  BY  TableName */
     TableName
     HELP "Enter Tablename"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TableName "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TableName "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Eventlog  BY UserCode */
     UserCode
     HELP "Enter Usercode"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND User "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

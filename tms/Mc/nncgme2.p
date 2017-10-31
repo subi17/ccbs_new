@@ -65,7 +65,7 @@ form
     CGMember.Memo     /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Memberships of CustNo " + string(CustNum) + ": " +
     substring(Customer.CustName,1,16)
     + " " FRAME sel.
@@ -77,7 +77,7 @@ form
     CGMember.Memo    label "Info ...."
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " ADD ONE GROUP "
+    title color value(Syst.CUICommon:ctc) " ADD ONE GROUP "
     WITH side-labels
     FRAME lis.
 
@@ -90,7 +90,7 @@ WITH
 form /* member :n haku kentällä CustGroup */
     CustGroup
     help "Type Group Code "
-with row 4 col 2 title color value(ctc) " FIND GROUP CODE "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND GROUP CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -522,7 +522,7 @@ SELAUS:
        FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        CGMember.CustGroup CustGroup.CGName CGMember.Memo /* sd */.
 
        IF jarj = 1 THEN FIND NEXT CGMember

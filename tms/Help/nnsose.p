@@ -31,20 +31,20 @@ form
     Salesoffice.SOName
 WITH
     scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " SALES OFFICE (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " SALES OFFICE (" + gcBrand + ") " 
     OVERLAY FRAME sel.
 
 form
     Salesoffice    label "Sales off."
     SOName         label "Name"
 
-    WITH OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
+    WITH OVERLAY ROW 8 centered TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
     COLOR value(Syst.CUICommon:cfc) side-labels 1 col  FRAME tlli.
 
 form /* hakua varten */
     Salesoffice
     help "Give sales office's code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

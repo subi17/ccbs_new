@@ -63,7 +63,7 @@ FORM
     PremiumNumber.ValidTo
 WITH ROW FrmRow width 80 centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
        " Premium Numbers Information "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -77,7 +77,7 @@ FORM
     PremiumNumber.ValidTo        COLON 20
 WITH  OVERLAY ROW 5 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -85,7 +85,7 @@ FORM
     "Brand        : " lcBrand skip
     "BNumberPreFix: " lcBNumberPreFix FORMAT "X(9)" 
     HELP "Enter BNumberPreFix"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BNumberPreFix "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BNumberPreFix "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 IF gcHelpParam > "" THEN ASSIGN
@@ -441,7 +441,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        PremiumNumber.BNumberPreFix PremiumNumber.OperatorName.
         
        RUN local-find-NEXT.

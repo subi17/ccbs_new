@@ -56,7 +56,7 @@ form
     TaxClass.TCName 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  TAXCLASSES  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -65,14 +65,14 @@ form
     TaxClass.TCName  COLON 22 
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  TaxClass */
     "TaxClass:" lcTaxClass FORMAT "x(12)"
     HELP "Enter TaxClass"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TaxClass "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TaxClass "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -378,7 +378,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        TaxClass.TaxClass TaxClass.TCName.
 
        RUN local-find-NEXT.

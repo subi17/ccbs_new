@@ -112,7 +112,7 @@ form
 WITH OVERLAY ROW FrmRow FrmDown DOWN centered 
 
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " KNOWN OWNERS OF MOBILE SUBSCRIPTION ID" + STRING(MSOwner.MSSeq) + " "
     FRAME sel.
 
@@ -155,7 +155,7 @@ form
                          Msowner.MandateDate FORMAT "99-99-9999" NO-LABEL SKIP
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     /*1 columns*/
     FRAME lis.

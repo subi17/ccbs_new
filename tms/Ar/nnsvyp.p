@@ -84,7 +84,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi + lcHeader 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi + lcHeader 
     + string(pvm,"99-99-9999") + " "
     FRAME sel.
 
@@ -104,7 +104,7 @@ form
 
 WITH  OVERLAY ROW 7 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -114,14 +114,14 @@ form /* seek ddAuth  BY  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" CustNum FORMAT ">>>>>>>9"
     HELP "Give Customer Nbr."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ddAuth  BY Archive */
     "Brand .:" lcBrand skip
     "Archive:" Archive
     HELP "Give Archive Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ARCHIVE CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ARCHIVE CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 IF ilFailed 
@@ -482,7 +482,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DDAuth.CustNum DDAuth.Archive .
 
        RUN local-find-NEXT.

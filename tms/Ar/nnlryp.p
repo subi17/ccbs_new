@@ -120,7 +120,7 @@ form
     InvRow.RowType   column-label "T"          FORMAT "9"
 WITH
     OVERLAY scroll 1 13 DOWN ROW 2 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " Rows in invoice nr " + string(Invoice.ExtInvID) + 
        " (VAT " + STRING(Invoice.VatIncl,"Incl./Excl.") + ") "
     FRAME sel.
@@ -135,7 +135,7 @@ form /* lisays / change */
     InvRow.Amt      label "Row net ....." format "->>>>>9.999"
 WITH
     OVERLAY ROW 4 centered side-labels 1 col
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header
     FRAME lis.
 
 FORM /* ACCOUNT DATA */

@@ -88,7 +88,7 @@ form
     solog.response    format "x(5)" column-label "Resp"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Service ORDER LOG "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -98,7 +98,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 form /* seek SOLog  BY  CLI */
     "Brand Code:" lcBrand  HELP "Enter Brand  "    SKIP
     "MSISDN No.:" CLI  FORMAT "x(11)"  HELP "Enter MSISDN number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek SOLog  BY SoSeq */
@@ -107,18 +107,18 @@ form /* seek SOLog  BY SoSeq */
     "Unknown brand")
     SKIP
     "SequenceNo:" SoLog  HELP "Enter Service OrderSeq"     
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ORDSEQ "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ORDSEQ "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SOLog  BY Stat */
     Stat  HELP "Enter Status"  "(0:NEW  1:FAIL  2:OK)"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND STATUS "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND STATUS "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 FORM /* seek SOLog BY TimeSlotTMS */
     BatchDate FORMAT "99.99.99" 
     HELP "Enter Day of Future (Batch) Activation"
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND ACT. DAY "
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ACT. DAY "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

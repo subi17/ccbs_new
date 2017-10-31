@@ -45,7 +45,7 @@ skip(1)
 
 WITH  OVERLAY ROW 1 centered width 80
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " SMS INFORMATION FOR  " + mobsub.cli  
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " SMS INFORMATION FOR  " + mobsub.cli  
     NO-LABELS FRAME main.
 
 PAUSE 0.

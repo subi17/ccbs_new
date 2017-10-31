@@ -51,7 +51,7 @@ form
     ttContact.Handled   FORMAT ">>>>>9"   COLUMN-LABEL "Handled"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Contact lists "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

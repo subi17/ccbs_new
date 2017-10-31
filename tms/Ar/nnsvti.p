@@ -163,7 +163,7 @@ form
 "  INSTRUCTION: This program creates a direct debit file" skip
 "               from invoices defined below:"
    SKIP(13)
-   WITH TITLE COLOR value(ctc)
+   WITH TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
 COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
@@ -212,7 +212,7 @@ form
       HELP "Pick invoices that have already been sent to DD"
       SKIP
       
-with title color value(ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
+with title color value(Syst.CUICommon:ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
 COLOR value(Syst.CUICommon:cfc) ROW 7 centered OVERLAY FRAME rajat.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.

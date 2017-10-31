@@ -90,7 +90,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  MNP PROCESS LIST  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -108,7 +108,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr with no-labels side-labels
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr with no-labels side-labels
     FRAME lis.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

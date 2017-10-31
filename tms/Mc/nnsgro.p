@@ -64,7 +64,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Salesman Groups "
     + string(pvm,"99-99-99") + " "
 FRAME sel.
@@ -82,7 +82,7 @@ form
     SMGroup.SGName 
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels 1 columns
 FRAME lis.
 
@@ -92,14 +92,14 @@ form /* Salesman group :n haku kentällä SMGroup */
     "Brand:" lcBrand skip
     "Group:" SMGroup
     help "Enter Code of Group"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Salesman group :n haku kentällä SGName */
     "Brand:" lcBrand skip
     "Name :" SGName
     help "Enter Name of Group"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -445,7 +445,7 @@ SELAUS:
        FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        SMGroup.SmGroup SMGroup.SGName /* sd */.
 
        IF order = 1 THEN FIND NEXT SMGroup

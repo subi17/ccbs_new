@@ -94,7 +94,7 @@ FIND FIRST Company no-lock no-error.
 
 form
    valik NO-LABEL
-   with overlay 2 down title color value(ctc) " CHOOSE ORDER FOR PRINTOUT "
+   with overlay 2 down title color value(Syst.CUICommon:ctc) " CHOOSE ORDER FOR PRINTOUT "
    COLOR value(Syst.CUICommon:cfc) ROW 6 centered FRAME rival.
 
 form
@@ -106,7 +106,7 @@ form
    "       will be calculated according to customer's prior payment behaviour."    SKIP
    skip(11)
    WITH ROW 1 side-labels width 80
-   title color value(ctc) " " + ynimi + " PAYMENT FORECAST " +
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT FORECAST " +
    string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
 
 form header
@@ -170,7 +170,7 @@ form
                  "6. Later "                     SKIP
    pyynto  label "Notice payment behaviour" SKIP
 
-   with title color value(ctc) " CRITERIA FOR PRINTOUT "  side-labels
+   with title color value(Syst.CUICommon:ctc) " CRITERIA FOR PRINTOUT "  side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 8 centered OVERLAY FRAME rajat.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.

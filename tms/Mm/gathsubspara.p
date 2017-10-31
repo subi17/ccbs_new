@@ -62,7 +62,7 @@ form
     SubserPara.ParaName
 
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(Syst.CUICommon:cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " FRAME sel.
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " CHOOSE MEMBERS INTO GROUP " FRAME sel.
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 

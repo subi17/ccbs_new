@@ -85,7 +85,7 @@ form
 with
     width 80 overlay scroll 1 15 down row 1
     color value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " Maintain salesmen "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " Maintain salesmen "
     + string(pvm,"99-99-99") + " " frame sel.
 
 form
@@ -100,7 +100,7 @@ form
     "Parent's code .....:" Salesman.Parent  p-SmName  no-label      skip
     with  overlay row 4 centered
     color value(Syst.CUICommon:cfc)
-    title color value(ctc)
+    title color value(Syst.CUICommon:ctc)
     fr-header with  no-labels /* 1 columns */
     frame lis.
 
@@ -126,21 +126,21 @@ form /*  search with field Salesman */
     "Brand ..:" lcBrand skip
     "Salesman:" xSalesman
     help "Give Salesman's code"
-    with row 4 col 2 title color value(ctc) " FIND Salesman'S CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Salesman'S CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f3.
 
 form /*  search with field SmName */
     "Brand:" lcBrand skip
     "Name :" SmName
     help "Give Salesman's name"
-    with row 4 col 2 title color value(ctc) " FIND Salesman'S NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Salesman'S NAME "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 form /*  search with field Reseller */
     "Brand ..:" lcBrand skip
     "Reseller:" xReseller
     help "Give reseller code"
-    with row 4 col 2 title color value(ctc) " FIND RESELLER "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RESELLER "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 FUNCTION fRsName RETURNS CHARACTER.
@@ -566,7 +566,7 @@ BROWSE:
        find Salesman where recid(Salesman) = rtab[frame-line] no-lock.
 
        /* line to be deleted is lightened */
-       color display value(ctc)
+       color display value(Syst.CUICommon:ctc)
        Salesman.Salesman Salesman.SmName 
        Salesman.Parent 
        /* Salesman.p-perc */

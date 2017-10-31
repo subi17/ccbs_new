@@ -91,7 +91,7 @@ form
     MNPOperation.StatusCode      COLUMN-LABEL "St"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " MNP messages "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -110,7 +110,7 @@ form
 
 WITH OVERLAY ROW 6 centered 1 columns 
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc) " View Message " WITH side-labels
+   TITLE COLOR value(Syst.CUICommon:ctc) " View Message " WITH side-labels
    FRAME lis.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

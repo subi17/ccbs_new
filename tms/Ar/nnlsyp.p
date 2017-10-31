@@ -168,7 +168,7 @@ suoritettu       label "Total payments ..." AT 2
                  format "zzzzzzzz9.99-" SKIP
 skip
 
-with title color value(ctc) " " + ynimi + " UPDATE AN INVOICE "
+with title color value(Syst.CUICommon:ctc) " " + ynimi + " UPDATE AN INVOICE "
 + string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
 width 80 side-LABELs
 FRAME Invoice.
@@ -177,7 +177,7 @@ form
 Invoice.CustName LABEL "Customer's Name....."
 Invoice.Address  LABEL "Address ............"
 Invoice.PostOffice  LABEL "Post office ........"
-with title color value(ctc) " 9999: DIVERSE CUSTOMER "
+with title color value(Syst.CUICommon:ctc) " 9999: DIVERSE CUSTOMER "
 COLOR value(Syst.CUICommon:cfc) ROW 5 centered side-LABELs OVERLAY
 FRAME oso.
 

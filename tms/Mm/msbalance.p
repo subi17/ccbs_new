@@ -85,7 +85,7 @@ form
     MsBalance.Amount     COLUMN-LABEL "Balance" FORMAT "->>,>>>,>>9.99" 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
        " SUBSCRIPTION BALANCES "
     FRAME sel.
 
@@ -106,14 +106,14 @@ FORM
        FORMAT ">>,>>>,>>9.99"
 WITH ROW 4 CENTERED OVERLAY SIDE-LABELS
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
        " MINUS ADJUSTMENT "
     FRAME fMinus.
 
 form /* seek  MSBalance */
     "Subscription:" liMsSeq FORMAT ">>>>>>>9"
        HELP "Enter subscription id"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription "
        COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 

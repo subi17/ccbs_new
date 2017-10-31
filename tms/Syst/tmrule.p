@@ -84,7 +84,7 @@ FORM
     TMRule.CounterItems FORMAT "X(18)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  TM RULES " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -117,7 +117,7 @@ FORM
     TMRule.NewCustomer    COLON 15 FORMAT "Yes/No"
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -125,7 +125,7 @@ FORM
     "Brand:" lcBrand skip
     "Rule :" lcName FORMAT "X(20)" 
     HELP "Enter rule name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rule "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Rule "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fLimitSourceName RETURNS LOGIC
@@ -540,7 +540,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        TMRule.TMRuleSeq TMRule.Name
        TMRule.FromDate TMRule.ToDate TMRule.CounterItems .
 

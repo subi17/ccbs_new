@@ -59,7 +59,7 @@ form
    CurRate.ExchRate
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " Maintain Currency Rates "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -71,20 +71,20 @@ form
    CurRate.ExchRate
 WITH  OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
 form /*  search WITH FIELD Currency */
     Currency
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Currency CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Currency CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD RateDate */
     RateDate
     help "Give ..."
-    with row 4 col 2 title color value(ctc) " FIND Currency Date "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Currency Date "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -484,7 +484,7 @@ BROWSE:
        no-lock no-error.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           CurRate.Currency 
           CurRate.RateDate 
           Currency.CurrName 

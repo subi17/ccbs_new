@@ -81,7 +81,7 @@ form
     llMemo              COLUMN-LABEL "M"
 WITH ROW FrmRow width 78 CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " PERIODICAL CONTRACT ROWS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -97,7 +97,7 @@ form
     DCCLI.TermDate       FORMAT "99-99-9999"
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -111,13 +111,13 @@ FORM
 form /* seek  DCCLI */
     lCCli
     HELP "Enter MSISDN "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN " 
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN " 
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
     
 form 
      lcEvent
      HELP "Enter Event  "
-     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND EVENT "
+     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND EVENT "
      COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
  

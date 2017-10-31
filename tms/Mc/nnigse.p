@@ -31,7 +31,7 @@ form
     InvGroup.InvGroup
     InvGroup.IGName  format "x(30)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Invoicing Groups (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Invoicing Groups (" + gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -39,14 +39,14 @@ form
     InvGroup.IGName SKIP
 
 WITH OVERLAY ROW 8 centered
-    TITLE COLOR value(ctc) tlli-ots
+    TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
     COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Invoicing Group :n hakua varten */
     haku
     help "Enter Code of an Invoicing Group"
-    with row 4 col 2 title color value(ctc) "FIND Inv.Group"
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) "FIND Inv.Group"
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

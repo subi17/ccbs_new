@@ -73,7 +73,7 @@ form
 
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " PRESELECTION "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " PRESELECTION "
     NO-LABELS 
   /*  1 columns */
     FRAME lis.
@@ -97,7 +97,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " PRESELECTION "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " PRESELECTION "
     NO-LABELS 
   /*  1 columns */
     FRAME lispres.
@@ -113,7 +113,7 @@ form
     pecode                    COLUMN-LABEL "Rc"
     chang                     COLUMN-LABEL "Ch"
 WITH centered OVERLAY ROW 2 13 DOWN
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) 
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) 
     " PRESELECT. OF CLI SERIES " + an1 + "-" + an2 + " " 
     FRAME sel.
 
@@ -121,7 +121,7 @@ WITH centered OVERLAY ROW 2 13 DOWN
 form /* Numeron haku kentällä CustNum */
     haku-CLI 
     help "Enter A-sub no. or its first digits"         
-    with row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND A-SUB. NO "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form 
@@ -129,7 +129,7 @@ SKIP(1)
 "   You have still some marked CLI left!        " SKIP
 "   Do you wish to continue anyway? (Y/N)"     
     ok help "Continue without saving?"       SKIP(1)
-    with row 6 centered title color value(ctc) " NOT SAVED "
+    with row 6 centered title color value(Syst.CUICommon:ctc) " NOT SAVED "
     NO-LABELS OVERLAY FRAME saved.
 
 

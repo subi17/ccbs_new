@@ -31,21 +31,21 @@ form
    CCNName          column-label "Name"
 WITH
    scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " LANDCODE " OVERLAY
+   title color value(Syst.CUICommon:ctc) " LANDCODE " OVERLAY
 FRAME tlse.
 
 form
    liCCN       label "Land" SKIP
    CCNName      label "Name" SKIP(1)
 WITH
-   OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
+   OVERLAY ROW 8 centered TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
    COLOR value(Syst.CUICommon:cfc) side-labels 1 col
 FRAME tlli.
 
 form /* Maa :n hakua varten */
    haku
       help "Give a country's Name or beginning of it"
-with row 4 col 2 title color value(ctc) " FIND Land  "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Land  "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY
 FRAME hayr.
 

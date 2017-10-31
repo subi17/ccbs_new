@@ -142,7 +142,7 @@ FORM
 
 WITH
    OVERLAY ROW 2 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(ctc) 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
       " Subscription Termination / De-activation " + MobSub.CLI + " "
    NO-LABELS  
 FRAME main.

@@ -95,7 +95,7 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
+   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " REGENERATION " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
@@ -118,7 +118,7 @@ form
      help "Latest Period where Unbilled contract items are Billed now"     SKIP 
   lowvalue label " Low value invoices ....."
            help "Create invoices that are below the minimum invoicing amount"
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.

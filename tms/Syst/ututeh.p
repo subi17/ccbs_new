@@ -60,7 +60,7 @@ form
     PrintCodes.AvailLines column-label "Use Lines"
     WITH ROW 2 col 2 centered OVERLAY scroll 1 13 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " PRINTER '" + si-kirj + "':  EFFECTS "
     FRAME sel.
 
@@ -81,7 +81,7 @@ form
     help "How many lines shall be Printed on one page before FORM FEED" SKIP
     WITH OVERLAY ROW 8 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header side-labels 
     FRAME lis.
 
@@ -90,7 +90,7 @@ form
     PrintCode.EffOff[2]     label "End  " AT 2 SKIP
     WITH OVERLAY ROW 15 width 78
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Effect " + PrintCodes.Effect + " INTERPRETED " side-labels centered
     FRAME nakym.
 
@@ -394,7 +394,7 @@ BROWSE:
         FIND PrintCodes where recid(PrintCodes) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) PrintCodes.Effect EffName
+        COLOR DISPLAY value(Syst.CUICommon:ctc) PrintCodes.Effect EffName
                        PrintCodes.PageWidth PrintCodes.PageLength PrintCodes.AvailLines.
 
         FIND NEXT PrintCodes where PrintCodes.PrinterId = si-kirj no-lock no-error.

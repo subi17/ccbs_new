@@ -40,7 +40,7 @@ form
 
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc) 
+    TITLE COLOR value(Syst.CUICommon:ctc) 
        " BillCode GROUP FINDING FROM (" + gcBrand + ") '" + pgseek + "' " 
        FRAME sel.
 

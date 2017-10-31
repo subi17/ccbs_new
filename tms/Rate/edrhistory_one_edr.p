@@ -68,7 +68,7 @@ FORM
     ttHistory.Rated  FORMAT "X(8)" COLUMN-LABEL "Changed" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " Changes "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Changes "
     FRAME sel.
 
 form
@@ -93,7 +93,7 @@ form
     ttHistory.UpdateSource COLON 20  
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

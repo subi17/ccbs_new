@@ -73,7 +73,7 @@ form
     InvRow.CreditInvNum column-label "Cr Inv."    format ">>>>>>>9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " Lines for invoice nbr " + string(iInvNum) + " " 
        + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -135,7 +135,7 @@ FORM
 form /* seek InvRow  BY  InvRow */
     xBillCode
     HELP "Enter BillCode code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

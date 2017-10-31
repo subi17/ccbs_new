@@ -66,7 +66,7 @@ form
     SubserPara.SSDate    COLUMN-LABEL "Date" 
 WITH ROW FrmRow OVERLAY CENTERED FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     "  HISTORY OF SERVICE PARAMETERS FOR " + servcom
     FRAME sel.
 
@@ -79,7 +79,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.

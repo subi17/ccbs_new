@@ -85,7 +85,7 @@ form
     MSRange.ExpireDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " MSISDN number Ranges "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -100,7 +100,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -113,7 +113,7 @@ help "Customer to whom a MSISDN range shall be reserved "
 
 WITH  OVERLAY ROW 2 WITH centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " Search And Reserve a MSISDN Range "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Search And Reserve a MSISDN Range "
     NO-LABELS 
     FRAME f3.
 
@@ -123,7 +123,7 @@ form /* seek number Range  BY  CLIFrom */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "MsisdnFrom:" CLIFrom
     HELP "Enter MSISDN number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek number Range  BY CustNum */
@@ -131,7 +131,7 @@ form /* seek number Range  BY CustNum */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CustomerNo:" CustNum
     HELP "Enter Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -613,7 +613,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        MSRange.CLIFrom MSRange.CustNum .
 
        RUN local-find-NEXT.

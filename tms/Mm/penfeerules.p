@@ -80,7 +80,7 @@ form
    " Create penalty Fee:" DCCLI.CreateFees SKIP
 WITH OVERLAY ROW 2 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    " PENALTY FEE RULES FOR " + icEvent + " "
    WITH no-labels side-labels
    FRAME lis.

@@ -71,7 +71,7 @@ form
     Trunk.TrIn       column-label "B"                  format "Y/N"
 WITH
     width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " CIRCUIT GROUPS "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " CIRCUIT GROUPS "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -90,19 +90,19 @@ form
     Trunk.Memo[4]    NO-LABEL AT 19              SKIP
     Trunk.Memo[5]    NO-LABEL AT 19              SKIP 
 WITH
-    OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels FRAME lis.
 
 form /* Trunkgrupp search WITH FIELD ExCode */
     h-ex-code
     help "Give exchange code"
-    with row 4 col 2 title color value(ctc) " FIND EXCHANGE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND EXCHANGE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f1.
 
 form /* Trunkgrupp search WITH FIELD /* x */ Operator */
     h-op-code
     help "Give operator code"
-    with row 4 col 2 title color value(ctc) " FIND OPERATOR "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OPERATOR "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -575,7 +575,7 @@ BROWSE:
        FIND Trunk where recid(Trunk) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
          Trunk.ExCode Exchange.ExName Trunk.ExCode Trunk.TrunkCode
          Trunk.TrunkName Trunk.OpCode Operator.OperName
          Trunk.TrInt Trunk.TrIn.

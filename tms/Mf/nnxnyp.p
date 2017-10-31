@@ -43,7 +43,7 @@ form
     AreaPair.NeigArea     column-label "X-AREA"
     xx-name          /* column-label "AngrAnsande!ort/stad" */
 WITH width 80 OVERLAY scroll 1 14 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " Bordering areacode "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " Bordering areacode "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -54,19 +54,19 @@ form
     xx-name        NO-LABEL SKIP
 
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header WITH side-labels
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
     FRAME lis.
 
 form /* angrAnsande riktnr. search WITH FIELD AreaCode */
     AreaCode
     help "Give A-client's areacode"
-    with row 4 col 2 title color value(ctc) " FIND A-AB. AREACODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND A-AB. AREACODE "
     COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f1.
 
 form /* angrAnsande riktnr. search WITH FIELD NeigArea */
     NeigArea
     help "Give bordering region's areacode"
-    with row 4 col 2 title color value(ctc) " FIND BORDERING AREA "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND BORDERING AREA "
     COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -505,7 +505,7 @@ BROWSE:
         FIND AreaPair where recid(AreaPair) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.CUICommon:ctc)
         AreaPair.AreaCode AreaPair.NeigArea AreaName xx-name.
 
         IF order = 1 THEN FIND NEXT AreaPair

@@ -44,7 +44,7 @@ form /* Browsing list */
    nnpvti.pt-min      COLUMN-LABEL "Minutes"      FORMAT "zzzzzz9"
    nnpvti.pt-mk       COLUMN-LABEL "Sum (EUR)"    FORMAT "ZZZ,ZZZ,ZZ9.99"
    WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
    " PRODUCT PHONESTATISTICS "  + STRING(pvm1,"99.99.99") + " - " + 
                                   STRING(pvm2,"99.99.99")                      
 FRAME sel.
@@ -52,7 +52,7 @@ FRAME sel.
 form /* Statistics search WITH FIELD pt-tuno */
    haku-pt-tuno
    HELP "Give Productcode"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND PRODUCT "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND PRODUCT "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME haku.
 
@@ -65,7 +65,7 @@ form /* Ask period */
    "-"
    pvm2 NO-LABEL HELP "Last date to calculate"
    SKIP(1)
-   WITH ROW 6 CENTERED TITLE COLOR VALUE(ctc) " PRODUCT STATISTICS "
+   WITH ROW 6 CENTERED TITLE COLOR VALUE(Syst.CUICommon:ctc) " PRODUCT STATISTICS "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME add-new.
 

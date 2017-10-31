@@ -59,7 +59,7 @@ FORM
     ErrQty
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  ERROR ITEMS MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -69,7 +69,7 @@ FORM
    MobError.MEName    /* label format */
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -77,13 +77,13 @@ WITH  overlay row 4 centered
 form /* seek  ErrorCode */
     ErrorCode
     HELP "Enter Code of ERROR Type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  me-name */
     me-name
     HELP "Enter Name of the ERROR Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 form
@@ -91,7 +91,7 @@ form
 
     with overlay row 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc)
+    title COLOR VALUE(Syst.CUICommon:ctc)
     " MEMO: " + MobError.MEName + " " WITH no-labels 1 columns
     frame f4.
 

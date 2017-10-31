@@ -101,7 +101,7 @@ form
     SIMStat.SSName  format "x(26)" column-label "Status name"
 WITH width 80 OVERLAY FrmDown DOWN ROW FrmRow
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)  
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)  
      " " + ynimi +
      " Sim Cards " + string(pvm,"99-99-99") + " "
      FRAME sel.
@@ -126,7 +126,7 @@ form
 
  WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels     FRAME lis.
 
 form /* seek SIM card  BY  ICC */
@@ -136,7 +136,7 @@ form /* seek SIM card  BY  ICC */
 
     "ICC Number:" icc
     help "Enter ID"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ICC-ID "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ICC-ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SIM card  BY CustNum */
@@ -145,7 +145,7 @@ form /* seek SIM card  BY CustNum */
     "Unknown brand")      SKIP
     "CustNumber:" CustNum
     help "Enter Customer No."
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek SIM card  BY SimArt */
@@ -158,7 +158,7 @@ form /* seek SIM card  BY SimArt */
 
     "Imsi Number:"     IMSI
     help "Enter IMSI No."
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND IMSI "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND IMSI "
     COLOR VALUE(Syst.CUICommon:cfc) 
 
     NO-LABELS OVERLAY FRAME f3.
@@ -176,7 +176,7 @@ form
     IMSI.PUK1  COLON 20 SKIP
     IMSI.PUK2  COLON 20 
     WITH SIDE-LABELS 1 DOWN 
-    TITLE COLOR VALUE(ctc) " IMSI number on SIM(ICC) " + ICC + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " IMSI number on SIM(ICC) " + ICC + " "
     OVERLAY ROW 2
     CENTERED FRAME imsi.
 

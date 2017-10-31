@@ -34,7 +34,7 @@ FORM
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcUpdatedTS            FORMAT "X(10)" COLUMN-LABEL "Updated"
    WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(Syst.CUICommon:cfc) 
-   TITLE COLOR VALUE(ctc) "Third Party Services" FRAME sel.
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) "Third Party Services" FRAME sel.
 
 FORM
     "MsSeq .............:" TPService.MsSeq
@@ -66,7 +66,7 @@ FORM
     "Cancellation Reason:" TPService.TermReason
     SKIP(1)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.

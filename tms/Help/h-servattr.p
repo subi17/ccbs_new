@@ -28,12 +28,12 @@ form
       ServAttr.servattr
       servattr.SAName  format "x(30)" COLUMN-LABEL "APN"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " PDP " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " PDP " overlay frame sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter Type of an Object Billing Type"
-    with row 4  col 2 title color value(ctc) " FIND CODE "
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

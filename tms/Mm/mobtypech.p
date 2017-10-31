@@ -183,7 +183,7 @@ form /* asks MSISDN number */
    " Change fee ....:"   llCreateFees SKIP
    " Data Bundle....:" lcBundle FORMAT "x(12)" SKIP
    WITH  OVERLAY ROW 2 centered
-   COLOR VALUE(Syst.CUICommon:cfc)TITLE COLOR VALUE(ctc) " Subscription type change " 
+   COLOR VALUE(Syst.CUICommon:cfc)TITLE COLOR VALUE(Syst.CUICommon:ctc) " Subscription type change " 
    NO-LABELS SIDE-LABEL FRAME main.
 
 FUNCTION FTime2Dec RETURNS DECIMAL

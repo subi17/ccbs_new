@@ -54,7 +54,7 @@ form
 WITH
    width 48 OVERLAY scroll 1 ROW 2 12 DOWN
    centered NO-LABEL COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " Monthly call counters "
+   title color value(Syst.CUICommon:ctc) " Monthly call counters "
    FRAME sel.
 
 form
@@ -71,7 +71,7 @@ form
 
     WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH NO-LABEL
     FRAME lis.
 
@@ -323,7 +323,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        FIND MthCall where recid(MthCall) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit MthCall.CloseDate.
 
        IF order = 1 THEN FIND NEXT MthCall

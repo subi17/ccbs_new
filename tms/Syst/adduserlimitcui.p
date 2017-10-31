@@ -75,7 +75,7 @@ FORM
     lcLimitAmt            COLUMN-LABEL "Value" FORMAT "X(20)"    
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
 COLOR VALUE(Syst.CUICommon:cfc)
-TITLE COLOR VALUE(ctc)  "Limits for " + icLimitTarget + " " + icLimitTargetID 
+TITLE COLOR VALUE(Syst.CUICommon:ctc)  "Limits for " + icLimitTarget + " " + icLimitTargetID 
 FRAME sel.
 
 
@@ -91,7 +91,7 @@ FORM
 
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -101,7 +101,7 @@ WITH  OVERLAY ROW 1 centered
 form /* SEEK Code */
     ob-code
     help "Enter Type "
-    with row 4  col 2 title color value(ctc) " Find Type "
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " Find Type "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 

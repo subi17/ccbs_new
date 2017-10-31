@@ -94,7 +94,7 @@ form
     lcStatus         COLUMN-LABEL "Status"     FORMAT "X(11)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     lcTitle
     FRAME sel.
 
@@ -125,7 +125,7 @@ form
     PPBatch.RefNum   COLON 20
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -607,7 +607,7 @@ REPEAT WITH FRAME sel:
        END. 
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        PPBatch.PPBatch PPBatch.DueDate PPBatch.Amount .
 
        RUN local-find-NEXT.

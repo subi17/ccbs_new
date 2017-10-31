@@ -66,7 +66,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Billable Mobile calls "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -77,32 +77,32 @@ form
                     
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr
     SIDE-LABELS  1 columns    FRAME lis.
 
 form /* seek Mobile Call  BY  DateSt */
     DateSt timest
     HELP "Enter CallDate and time"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date AND TIME "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date AND TIME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Mobile Call  BY CustNum */
     CustNum
     HELP "Enter A-Sub Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND A-CUST "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND A-CUST "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Mobile Call  BY A-sub. */
 
     CLI FORMAT "x(12)"
     HELP "Enter calling MSISDN No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek Mobile Call  BY A-sub. */
     gsmbnr FORMAT "x(11)"
     HELP "Enter called b-No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND B-NUMBER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND B-NUMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

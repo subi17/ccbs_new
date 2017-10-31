@@ -40,7 +40,7 @@ form
       FORMAT "X(30)"
    
    SKIP(6)
-with title color value(ctc) 
+with title color value(Syst.CUICommon:ctc) 
   " " + ynimi + " COPY A NEW BRAND  " + 
   STRING(pvm,"99-99-99")  + " "
   side-labels color value(Syst.CUICommon:cfc) 

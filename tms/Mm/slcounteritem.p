@@ -53,14 +53,14 @@ form
       FORMAT "x(15)"  /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
    " COUNTER ITEMS "
     FRAME sel.
 
 form /* seek SLCounterItem  BY  SLCounterItem */
     lcSLCounterItem
     HELP "Enter Item"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ITEM "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ITEM "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

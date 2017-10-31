@@ -102,21 +102,21 @@ form
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Service Order LOG of MobSub " + lcCLI + " "
     FRAME sel.
 
 form /* seek ttSoLog  BY SoSeq */
     SoLog2
     HELP "Enter OrdSeq"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ORDSEQ "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ORDSEQ "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ttSoLog  BY Stat */
     stat
     HELP "Enter Status"
     "(0:NEW  1:FAIL 2: PENDING 3:OK)"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND STATUS "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND STATUS "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -515,7 +515,7 @@ BROWSE:
        END. 
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         ttSoLog.SoLog ttSoLog.CreatedTS ttSoLog.TimeSlotTMS ttSoLog.CompletedTS.
 
        RUN local-find-NEXT.

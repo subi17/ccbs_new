@@ -69,7 +69,7 @@ form
    
 WITH ROW 2 OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + icTitle + " " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
 

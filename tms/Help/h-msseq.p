@@ -32,12 +32,12 @@ form
     ttMobsub.Msseq  label "Subscr.ID"
     ttMobsub.CLI Label "MSISDN"
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Subscriptions " OVERLAY FRAME sel.
+    title color value(Syst.CUICommon:ctc) " Subscriptions " OVERLAY FRAME sel.
 
 form /* SEEK code */
     lcRepCode
     help "Enter Name of a Report Code"
-    with row 4 col 2 title color value(ctc) " FIND Subscription "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Subscription "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

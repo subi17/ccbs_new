@@ -65,7 +65,7 @@ FORM
     ReportConfRow.LogicValue
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " CONFIGURATION FOR REPORT " + STRING(icReportID) + " "
     FRAME sel.
 
@@ -83,7 +83,7 @@ FORM
     ReportConfRow.LogicValue COLON 20
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -406,7 +406,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           ReportConfRow.RowType
           ReportConfRow.CharValue
           ReportConfRow.IntValue.

@@ -92,7 +92,7 @@ WITH FRAME PaidAmt.
    PaymSrc             
 
  WITH
-   OVERLAY ROW 3 12 DOWN COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   OVERLAY ROW 3 12 DOWN COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " PAYMENTS ON INVOICE NO. " + string(InvNum) + " " centered FRAME PaidAmt.
 
    ASSIGN rtab[FRAME-LINE] = recid(Payment).

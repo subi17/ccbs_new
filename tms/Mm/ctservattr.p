@@ -63,7 +63,7 @@ form
     CTServAttr.ChgAllowed  column-label "ChgA" format "Y/N"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Attributes of Service Component '" + CTServEl.ServCom  + "'"
     FRAME sel.
 
@@ -79,14 +79,14 @@ form
     CTServAttr.ChgAllowed COLON 20     SKIP
 WITH  OVERLAY ROW 5 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek CTServAttr  BY  CTServAttr */
     lcServAttr
     HELP "Enter Code of Service Attribute"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -411,7 +411,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CTServAttr.ServAttr CTServAttr.FromDate .
 
        RUN local-find-NEXT.

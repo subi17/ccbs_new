@@ -72,7 +72,7 @@ form
     ttAccessory.OrderID FORMAT ">>>>>>>9" COLUMN-LABEL "Order"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) lcHeader FRAME sel.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) lcHeader FRAME sel.
 
 form
     ttAccessory.OrderID      COLON 22 FORMAT ">>>>>>>9" 
@@ -93,14 +93,14 @@ form
     ttAccessory.HardBookState COLON 22 FORMAT "X(20)" 
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  ttAccessory */
     "Billing Item:" lcBillItem FORMAT "x(12)"
     HELP "Enter billing item"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Billing Item "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Billing Item "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -466,7 +466,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ttAccessory.ProductCode ttAccessory.IMEI.
 
        RUN local-find-NEXT.

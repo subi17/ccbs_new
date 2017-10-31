@@ -82,7 +82,7 @@ form
     ac-type-name        column-label "TypeName" format "x(25)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " ACCOUNTS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -95,7 +95,7 @@ form
     ac-type-name         label "TypeName" format "x(30)"
     WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
@@ -105,14 +105,14 @@ form /* BROWSE search WITH FIELD Account */
     "Brand .:" lcBrand skip
     "Account:" haku-ac-nr FORMAT ">>>>>>>9"
     help "Give number of Account"
-    with row 4 col 2 title color value(ctc) " FIND number "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND number "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* BROWSE search WITH FIELD AccName */
     "Brand:" lcBrand skip
     "Name :" haku-ac-name
     help "Give Name of Account"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 form /* memo */
@@ -500,7 +500,7 @@ BROWSE:
        FIND Account where recid(Account) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        Account.Brand
        Account.AccNum Account.AccName AccType ac-type-name.
 

@@ -25,12 +25,12 @@ form
     TaxClass.TaxClass   
     TaxClass.TCName    
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " TAX CLASSES " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " TAX CLASSES " overlay frame sel.
 
 form /* SEEK Code */
     lcEvent
     help "Enter class"
-    with row 4 col 2 title color value(ctc) " FIND CLASS"
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CLASS"
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

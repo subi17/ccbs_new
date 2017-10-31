@@ -60,7 +60,7 @@ form
     MobPref.Memo  
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Prefixes for Mobile numbers "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -70,13 +70,13 @@ form
     MobPref.Operator
     MobPref.Memo
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header side-labels 1 columns
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header side-labels 1 columns
     FRAME lis.
 
 form /* Nat prefix search WITH FIELD Prefix */
     Prefix
     help "Give prefix"
-    with row 4 col 2 title color value(ctc) " FIND PREFIX "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PREFIX "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -489,7 +489,7 @@ BROWSE:
        FIND MobPref where recid(MobPref) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc) MobPref.Prefix MobPref.Memo.
+       COLOR DISPLAY value(Syst.CUICommon:ctc) MobPref.Prefix MobPref.Memo.
 
        IF order = 1 THEN FIND NEXT MobPref
        /* search condition */ no-lock no-error.

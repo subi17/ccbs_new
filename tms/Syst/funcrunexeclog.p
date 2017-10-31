@@ -59,7 +59,7 @@ FORM
     FuncRunExecLog.FRStatus   FORMAT "X(30)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " STATUS INFO OF " + lcConfName + " "
     FRAME sel.
 
@@ -73,7 +73,7 @@ FORM
     FuncRunExecLog.FRStatus   COLON 20
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

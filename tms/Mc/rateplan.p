@@ -66,7 +66,7 @@ form
     RatePlan.RPName     /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Rating Plans "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -77,7 +77,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) ac-hdr 
+    title COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     side-labels 
     1 columns
     FRAME lis.
@@ -88,14 +88,14 @@ form /* seek RatePlan  by  RatePlan */
     "Brand:" lcBrand skip
     "Code :" RatePlan
     help "Enter Rating Plan's code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f1.
 
 form /* seek RatePlan  by RPName */
     "Brand:" lcBrand skip
     "Name :" DGName
     help "Enter Rating Plan's name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
 
@@ -453,7 +453,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        RatePlan.RatePlan RatePlan.RPName .
 
        RUN local-find-NEXT.

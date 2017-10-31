@@ -62,7 +62,7 @@ FORM
     PaymConfTax.TaxAccNum COLUMN-LABEL "Account"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " TAX POSTING RULES " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " TAX POSTING RULES " 
     FRAME sel.
 
 FORM
@@ -73,7 +73,7 @@ FORM
        lcTaxAccName NO-LABEL FORMAT "X(30)" SKIP
 WITH  OVERLAY ROW 12 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " TAX RULE "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " TAX RULE "
     SIDE-LABELS 
     FRAME lis.
 
@@ -389,7 +389,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        PaymConfTax.TaxZone
        PaymConfTax.TaxAccNum.
 

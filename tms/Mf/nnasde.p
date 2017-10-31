@@ -57,7 +57,7 @@ form
    CLI.ValueLimit
    CLI.Active
 WITH OVERLAY ROW 3 SCROLL 1 12 DOWN CENTERED
-   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " " +
+   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
    " Customer " + STRING(liCustNum) + " Maintain A-Sub details " 
    + STRING(pvm,"99-99-99") + " " 
 FRAME sel.
@@ -75,14 +75,14 @@ form
    HELP "Day WHEN A-sub will be disconnected - DD.MM.YY" endTime
    HELP "Time WHEN A-sub will be disconnected - HH:MM:SS"         SKIP
 WITH  OVERLAY ROW 6 CENTERED
-   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    fr-header WITH NO-LABELS 
 FRAME lis.
 
 form /*  search with field CLI */
    lcCLI
    HELP "Give A-Sub number"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND A-Sub "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND A-Sub "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME f1.
 
@@ -349,7 +349,7 @@ BROWSE:
          END.
 
          /* line TO be deleted is lightened */
-         COLOR DISPLAY value(ctc) 
+         COLOR DISPLAY value(Syst.CUICommon:ctc) 
             CLI.CLI
             CLI.Ref
             CLI.Pwd

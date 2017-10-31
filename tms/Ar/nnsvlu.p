@@ -62,7 +62,7 @@ FORM
        help "Name of input file (F9 = list of files)"
    SKIP(6) 
    WITH WIDTH 80 ROW 1 SIDE-LABELS
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " IMPORT DD AUTHORIZATIONS "  + string(pvm,"99-99-99") + " "
     FRAME fStart.
 

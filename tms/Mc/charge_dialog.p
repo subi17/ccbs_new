@@ -35,7 +35,7 @@ FORM
     "Charge:" ldeCharge 
        HELP "Enter charge"
        FORMAT ">>9.99" SKIP
-    WITH CENTERED ROW 8 TITLE COLOR VALUE(ctc) " DEFINE CHARGE "
+    WITH CENTERED ROW 8 TITLE COLOR VALUE(Syst.CUICommon:ctc) " DEFINE CHARGE "
     NO-LABELS OVERLAY FRAME f1.
 
 ok = FALSE.

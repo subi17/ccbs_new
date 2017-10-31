@@ -38,7 +38,7 @@ FORM
 
     WITH CENTERED OVERLAY SCROLL 1 13 DOWN ROW 3
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " Direct Marketing " FRAME sel.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Direct Marketing " FRAME sel.
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST DMarketing USE-INDEX DirMarkName WHERE 
               DMArketing.Brand = gcBrand 

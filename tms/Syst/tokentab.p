@@ -44,7 +44,7 @@ form
     tabletoken.tokencode
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " TABLES FOR TOKEN " + itoken + " "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -54,14 +54,14 @@ form
     tabletoken.tokencode
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek tabletoken by Code */
     tablename
     help "Enter Table Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND TABLE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND TABLE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

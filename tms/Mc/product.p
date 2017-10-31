@@ -60,7 +60,7 @@ form
     Product.ProdName     /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY SCROLL 1 15 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Products "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -70,20 +70,20 @@ form
     Product.ProdName    /* LABEL FORMAT */
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek Product  BY  Product */
     Product
     help "Enter Product Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Product BY ProdName */
     ProdName
     help "Enter Product Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -412,7 +412,7 @@ BROWSE:
        FIND Product WHERE recid(Product) = rtab[FRAME-LINE] NO-LOCK.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Product.Product Product.ProdName /* sd */.
 
        RUN local-find-NEXT.

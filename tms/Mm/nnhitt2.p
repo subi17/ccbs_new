@@ -168,7 +168,7 @@ form /* ADD */
    SPACE(1)
    SKIP
 WITH
-   WITH ROW 1 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) 
+   WITH ROW 1 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) 
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 

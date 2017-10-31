@@ -59,7 +59,7 @@ form
    CustPNPGroup.PnPPrior
 WITH width 75 OVERLAY CENTERED scroll 1 13 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " 
+   title color value(Syst.CUICommon:ctc) " " 
    + ynimi 
    + " maintain Customer " 
    + STRING(iCustnum) 
@@ -73,7 +73,7 @@ form
    CustPNPGroup.PnPPrior
 WITH  OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
@@ -345,7 +345,7 @@ BROWSE:
        FIND CustPNPGroup where recid(CustPNPGroup) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           CustPNPGroup.PnpGroup 
           CustPNPGroup.PnPPrior.
 

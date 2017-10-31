@@ -54,7 +54,7 @@ FORM
     lcDelType COLUMN-LABEL "Del.Type"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  InvoiceTargetGroups  " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -72,20 +72,20 @@ FORM
     lcDelType                           COLON 20 LABEL "Delivery Type"
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "ITGroupID:" liinvoicetargetgroup
     HELP "Enter invoicetargetgroup ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND InvoiceTargetGroup "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND InvoiceTargetGroup "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "Custnum:" liCustnum FORMAT ">>>>>>>>9" 
     HELP "Enter customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND InvoiceTargetGroup "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND InvoiceTargetGroup "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 IF iiCustnum > 0 THEN ASSIGN

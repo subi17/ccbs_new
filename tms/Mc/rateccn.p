@@ -81,7 +81,7 @@ form
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " RATING CCNs "  + string(pvm,"99-99-99") + " "
     FRAME sel.      
 
@@ -98,7 +98,7 @@ form
                   FORMAT "X(30)"
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -108,7 +108,7 @@ form
     "Brand:" lcBrand skip
     "Type :" liDialType
     HELP "Enter Dialling type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Dialling type"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Dialling type"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -423,7 +423,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        RateCCN.DialType RateCCN.CCN .
 
        RUN local-find-NEXT.

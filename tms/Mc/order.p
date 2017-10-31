@@ -337,7 +337,7 @@ form
         "3rd:" AT 70 OrderCustomer.OutPostMarketing
 		
  WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS SIDE-LABEL FRAME fCustomer.
 
 FORM
@@ -365,7 +365,7 @@ FORM
     memoch          LABEL "M"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi + " " +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi + " " +
     " ORDERS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -376,7 +376,7 @@ FORM
     COLON 25 lcMultiSIMType NO-LABEL FORMAT "X(9)" SKIP
     liMultiSimOrder COLON 25 LABEL "Primary/Secondary Order" 
  WITH OVERLAY ROW 5 WIDTH 50 centered
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "Multi SIM Info" 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) "Multi SIM Info" 
     SIDE-LABEL FRAME frMultiSIM.
 
 {Func/brand.i}
@@ -459,7 +459,7 @@ form
     
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -484,14 +484,14 @@ form /* seek  Date */
     VALIDATE(CAN-FIND(Brand WHERE 
                       Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Order date:" lDate HELP "Enter date of order"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND DATE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND DATE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     "Brand Code:" lcBrand  HELP "Enter Brand"
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Msisdn no :" CLI HELP "Enter CLI Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NUMBER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NUMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  OrderId */
@@ -500,7 +500,7 @@ form /* seek  OrderId */
              CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "OrderId ..:" liOrderid
     HELP "Enter Order Id"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 form /* seek  With CustId */
@@ -512,7 +512,7 @@ form /* seek  With CustId */
     "Customer ID Type ..:" lcCustIdType
     HELP "CIF N/A NIE NIF Passport"  SKIP
         
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
@@ -523,7 +523,7 @@ form /* seek  With Fixed number */
     "Fixed number .......:" lcFixedNumber FORMAT "x(11)"
     HELP "Fixed number" SKIP
         
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME fFixed.
 
 form /* seek  PersonId */
@@ -531,7 +531,7 @@ form /* seek  PersonId */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Contract Id:"  lcContId
     HELP "Enter Contract Id"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

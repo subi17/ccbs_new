@@ -116,7 +116,7 @@ form
 WITH 
    width 80 OVERLAY scroll 1 15 DOWN ROW 1
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + lBrHdr
+   title color value(Syst.CUICommon:ctc) " " + ynimi + lBrHdr
 FRAME sel.
 
 
@@ -217,7 +217,7 @@ form /* ADD */
    SPACE(1)
    SKIP
 WITH
-   WITH ROW 1 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) 
+   WITH ROW 1 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) 
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 
@@ -228,7 +228,7 @@ form /* haku PriceList:lla */
    "Code :" plseek
    help "Give a pricelist code"
 WITH 
-   row 4 col 2 title color value(ctc) " FIND Price LIST "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Price LIST "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 form /*  :n asno hakua varten */
@@ -236,7 +236,7 @@ form /*  :n asno hakua varten */
    "CCN .:" lcCSeek
    help "Give a CCN"
 WITH 
-   row 4 col 2 title color value(ctc) " FIND CCN "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CCN "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  :n asno hakua varten */
@@ -244,7 +244,7 @@ form /*  :n asno hakua varten */
    "Cust :" liCustSeek
    help "Give customer number"
 WITH 
-   row 4 col 2 title color value(ctc) " FIND Customer "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Customer "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 IF irRowID NE 0 THEN DO WITH FRAME lis:
@@ -755,7 +755,7 @@ repeat WITH FRAME sel:
         FIND Tariff where recid(Tariff) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.CUICommon:ctc) 
            Tariff.ValidFrom
            Tariff.ValidTo
            Tariff.PriceList 

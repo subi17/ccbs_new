@@ -134,7 +134,7 @@ DEF VAR liBatch      AS INT   NO-UNDO EXTENT 2.
 
 form
    valik NO-LABEL
-   with overlay 2 down title color value(ctc) " CHOOSE SORT ORDER "
+   with overlay 2 down title color value(Syst.CUICommon:ctc) " CHOOSE SORT ORDER "
    COLOR value(Syst.CUICommon:cfc) ROW 6 centered FRAME rival.
 
 ASSIGN
@@ -156,7 +156,7 @@ form
 "        Optionally also accounting data is being printed."      skip
 skip(13)
    WITH ROW 1 side-labels width 80
-        title color value(ctc) " " + ynimi + " PAYMENT JOURNAL " +
+        title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT JOURNAL " +
         string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc)
         FRAME MAIN.
 
@@ -260,7 +260,7 @@ form
    sutil     at 5 label "Acct nos. and amounts of each payment  " SKIP
    sukoo     at 5 label "A separate Acct Summary for bookkeeping" SKIP
    xOnlySum  at 5 label "Print only the Account Summary ........" SKIP
-with title color value(ctc) " PRINTOUT PARAMETERS " side-labels
+with title color value(Syst.CUICommon:ctc) " PRINTOUT PARAMETERS " side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 7 centered OVERLAY FRAME options.
 
 FUNCTION fChgPage RETURNS LOGICAL

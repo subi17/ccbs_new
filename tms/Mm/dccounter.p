@@ -61,7 +61,7 @@ form
  
 WITH OVERLAY CENTERED  scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + /*ynimi +*/
+   title color value(Syst.CUICommon:ctc) " " + /*ynimi +*/
    " COUNTERS for period " + STRING(liPeriod) + " " + icEvent + " "
    FRAME sel.
 
@@ -78,14 +78,14 @@ form
 
 WITH OVERLAY ROW 2 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH no-labels side-labels
    FRAME lis.
 
 form /*  search WITH FIELD DCCounter */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND xxxxxxx "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

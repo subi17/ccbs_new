@@ -69,7 +69,7 @@ form
 WITH OVERLAY ROW FrmRow FrmDown DOWN centered
 
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " KNOWN OWNERS OF MOBILE SUBSCRIPTION " + msowner.CLI + " "
     FRAME sel.
 
@@ -90,7 +90,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
     FRAME lis.

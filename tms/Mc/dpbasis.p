@@ -70,7 +70,7 @@ FORM
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
     DPConf.DPCName + " Contains: " 
     FRAME sel.
 
@@ -83,7 +83,7 @@ WITH
     CENTERED
     NO-LABEL
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -91,7 +91,7 @@ WITH
 FORM /* seek DPBasis  by KeyField */
     KeyField
     HELP "Enter Billing Code or CCN"             
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND DISCOUNT "
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND DISCOUNT "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND DPConf WHERE DPConf.DPConfNum = DPConfNum NO-LOCK no-error.
@@ -546,7 +546,7 @@ ASK-F1:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DPBasis.CCN DPBasis.BillCode .
 
        RUN local-find-NEXT.

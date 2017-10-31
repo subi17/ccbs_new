@@ -81,7 +81,7 @@ form
     lcGraph             FORMAT "X(8)" COLUMN-LABEL "Graph"
     BItemGroup.InvoiceOrder
 WITH width 80 OVERLAY /* scroll 1 */ 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Billing Item Groups " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -109,7 +109,7 @@ form
        FORMAT "X(30)"
        SKIP
     BItemGroup.InvoiceOrder COLON 20
-WITH  OVERLAY ROW 7 col 5 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+WITH  OVERLAY ROW 7 col 5 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels FRAME lis.
 
 {Func/brand.i}
@@ -118,14 +118,14 @@ form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "Code :" haku
     help "Give a code or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* produkt :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give a Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* memo */
@@ -544,7 +544,7 @@ BROWSE:
         FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) BItemGroup.BIGroup BItemGroup.BIGName.
+        COLOR DISPLAY value(Syst.CUICommon:ctc) BItemGroup.BIGroup BItemGroup.BIGName.
 
         IF order = 1 THEN FIND NEXT BItemGroup 
            WHERE BItemGroup.Brand = lcBrand no-lock no-error.

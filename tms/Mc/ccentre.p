@@ -62,7 +62,7 @@ form
     CostCentre.CCName    
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " Cost Centres "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -71,7 +71,7 @@ form
     CostCentre.CCName     COLON 20   
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -81,14 +81,14 @@ form /* seek  CostCentre */
     "Brand:" lcBrand skip
     "Code :" lcCostCentre
     HELP "Enter Cost Centre"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Code "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Code "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CCName */
     "Brand:" lcBrand skip
     "Name :" lcName 
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -443,7 +443,7 @@ BROWSE:
        END.
        
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CostCentre.CostCentre CostCentre.CCName.
 
        RUN local-find-NEXT.

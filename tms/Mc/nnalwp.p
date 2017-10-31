@@ -94,7 +94,7 @@ help "Type of subscriber: (D)irect / (I)ndirect connection, (?) = ALL"
 skip(1)
 
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " CUSTOMER MAILING LIST " + string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 cdate2 = TODAY.

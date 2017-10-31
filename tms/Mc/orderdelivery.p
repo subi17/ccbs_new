@@ -69,7 +69,7 @@ FORM
     "Measures info......:" OrderDelivery.MeasuresInfoId lcMeasuresInfoId FORMAT "x(30)" SKIP
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 

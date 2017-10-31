@@ -67,7 +67,7 @@ form
     FeeModel.FeeName    
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Billing Events "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -79,7 +79,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -90,14 +90,14 @@ form /* seek Billing Event  BY  FeeModel */
     "Brand:" lcBrand skip
     "Code :" FeeModel format "x(16)"
     HELP "Enter Billing Event Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event  BY FeeName */
     "Brand:" lcBrand skip
     "Name :" FeeName
     HELP "Enter Billing Event Name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -107,7 +107,7 @@ form
 
     WITH OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " memo: " + FeeModel.FeeName + " " WITH NO-LABELS 1 columns
     FRAME f4.
 
@@ -475,7 +475,7 @@ BROWSE:
 
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        FeeModel.FeeModel FeeModel.FeeName .
 
        RUN local-find-NEXT.

@@ -71,7 +71,7 @@ form  /* Note ! FRAME SEL has exceptionally 2 rows / record */
     IMSI.PIN2        AT 70
 WITH centered OVERLAY 3 DOWN ROW 2
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc)  " IMSI numbers  on SIM(ICC) " + ICC + " "
+    title COLOR VALUE(Syst.CUICommon:ctc)  " IMSI numbers  on SIM(ICC) " + ICC + " "
     FRAME sel.
 
 form
@@ -85,20 +85,20 @@ form
     IMSI.PUK2
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek IMSI number  BY  IMSI */
     IMSI
     help "Enter IMSI No."
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND IMSI No. "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND IMSI No. "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek IMSI number  BY CustNum */
     CustNum
     help "Enter CustoNo"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST No "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CUST No "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -433,7 +433,7 @@ BROWSE:
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        IMSI.IMSI IMSI.CustNum /* sd */.
 
        RUN local-find-NEXT.

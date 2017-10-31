@@ -39,19 +39,19 @@ form
    MedHist.Date
    MedHist.FileTime
 WITH width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + " Preprosessor configuration "
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " Preprosessor configuration "
    + string(pvm,"99-99-99") + " " FRAME sel.
 
 form /*  search WITH FIELD Ident */
     Ident
     help "Give Ident"
-    with row 4 col 2 title color value(ctc) " FIND Ident "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Ident "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD Date */
     Date
         help "Give Date"
-            with row 4 col 2 title color value(ctc) " FIND Date "
+            with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Date "
                 COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

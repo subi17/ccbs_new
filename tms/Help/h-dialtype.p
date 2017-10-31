@@ -25,12 +25,12 @@ form
       DialType.DialType
       DialType.DTName  format "x(30)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " Dialling Type " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " Dialling Type " overlay frame sel.
 
 form /* SEEK Code */
     se-code
     help "Enter Code of Dialling Type"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

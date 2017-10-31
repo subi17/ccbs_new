@@ -69,7 +69,7 @@ FORM
     BRTestCriteria.Active
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " CRITERIA OF " + lcTitle + " "
     FRAME sel.
 
@@ -90,7 +90,7 @@ FORM
     BRTestCriteria.EventDateTo      COLON 25 FORMAT "X(256)" VIEW-AS FILL-IN SIZE 25 BY 1
 WITH  OVERLAY ROW liUpdateRow centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -435,7 +435,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           BRTestCriteria.BRTestCriteriaID
           BRTestCriteria.CriteriaTable
           BRTestCriteria.CriteriaField.

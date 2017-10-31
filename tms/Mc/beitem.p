@@ -91,7 +91,7 @@ form
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Items of B-Event " + 
         FeeModel.Brand + "/" + FeeModel.FeeModel + ": " + 
         FeeModel.FeeName + " "
@@ -129,7 +129,7 @@ form
           
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -138,13 +138,13 @@ WITH  OVERLAY ROW 2 centered
 form /* seek Billing Event Item  BY  PriceList */
     PriceList
     HELP "Enter Price List Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND P-LIST "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND P-LIST "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event Item  BY BillCode */
     BillCode
     HELP "Enter BillCode"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillCode "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BillCode "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -373,7 +373,7 @@ END PROCEDURE.
 
 PROCEDURE highlight-row:
 
-COLOR DISPLAY VALUE(ctc)
+COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           FMItem.PriceList    
           FMItem.BillCode     
           BillItem.BIName     

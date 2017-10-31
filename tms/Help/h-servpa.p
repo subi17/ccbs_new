@@ -26,12 +26,12 @@ form
       ServPac.ServPac
       ServPac.SPName  format "x(30)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " Service Package " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " Service Package " overlay frame sel.
 
 form /* SEEK Code */
     ServPac
     help "Enter Code of Service Package"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

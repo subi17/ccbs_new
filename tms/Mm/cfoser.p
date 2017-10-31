@@ -64,7 +64,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  CFO NUMBER RANGE MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -79,7 +79,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -87,7 +87,7 @@ WITH  OVERLAY ROW 4 centered
 form /* seek  CFOSer */
     CFOSer
     HELP "Enter Number of series "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NUMBER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NUMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -96,7 +96,7 @@ form
 
     WITH OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Memo: " + CFOSer.clifrom + " " WITH NO-LABELS 1 columns
     FRAME f4.
 
@@ -419,7 +419,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CFOSer.CLIFrom CFOSer.CLIFrom 
        CFOSer.Brand
        CFOSer.ValidFrom

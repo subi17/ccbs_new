@@ -67,7 +67,7 @@ FORM
 
    WITH ROW 1 17 DOWN WIDTH 80
    COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(ctc) " " + "ADMIN LEVEL MAINTENANCE MENU" + " "
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "ADMIN LEVEL MAINTENANCE MENU" + " "
    CENTERED
 
 FRAME frMain.
@@ -105,7 +105,7 @@ FORM
 
     ttMaintMenu.MaintType FORMAT "x(12)"
     WITH ROW 2 OVERLAY 15 DOWN COL 2 WIDTH 20
-    TITLE COLOR VALUE(ctc) " " + "MAINTENANCE TYPE" + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "MAINTENANCE TYPE" + " "
     COLOR VALUE(Syst.CUICommon:cfc)
     NO-LABEL
 

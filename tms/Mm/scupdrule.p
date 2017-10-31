@@ -66,7 +66,7 @@ form
     ScUpdRule.UpdValue    
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " Service Update Rules "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -82,7 +82,7 @@ form
     ScUpdRule.UpdValue    COLON 18 
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -90,14 +90,14 @@ form /* seek  ScUpdRule */
     "Brand .:" lcBrand skip
     "Service:" lcServCom FORMAT "x(12)"
     HELP "Enter service component"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Service "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Service "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  ScUpdRule */
     "Brand .:" lcBrand skip
     "Service:" lcServCom FORMAT "X(12)"
     HELP "Enter updated service component"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Updated Service "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Updated Service "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -447,7 +447,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ScUpdRule.ServCom ScUpdRule.OldValue ScUpdRule.NewValue
        ScUpdRule.UpdServCom ScUpdRule.UpdValue.
 

@@ -81,7 +81,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " SERVICE FEES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -114,7 +114,7 @@ form
                 "Date is mandatory, and cannot be less than begin date") SKIP
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -124,7 +124,7 @@ form /* seek  ServFee */
     "Brand:" lcBrand skip
     "Type :" lcServType
     HELP "Enter Service Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Type "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fServType RETURNS LOGICAL
@@ -562,7 +562,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ServFee.ServType ServFee.ServKey ServFee.EventType ServFee.FeeModel.
 
        RUN local-find-NEXT.

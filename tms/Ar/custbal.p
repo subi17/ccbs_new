@@ -83,14 +83,14 @@ form
     ttCustBal.Amt        COLUMN-LABEL "Balance" FORMAT "->>,>>>,>>9.99" 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
        " DETAILED A/R BALANCES "
     FRAME sel.
 
 form /* seek  CustBal */
     "MSISDN:" lcCLI FORMAT "X(12)"  
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fMakeTemp RETURNS LOGIC

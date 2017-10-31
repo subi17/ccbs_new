@@ -75,7 +75,7 @@ form
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " SLG ANALYSE " 
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -97,7 +97,7 @@ form
    SLGAnalyse.Prior              COLON 23 FORMAT "99"
 WITH OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 FORM
@@ -123,7 +123,7 @@ FRAME Generate.
 form /*  search WITH FIELD SLGAnalyse */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Event "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Event "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -413,7 +413,7 @@ repeat WITH FRAME sel:
        FIND SLGAnalyse where recid(SLGAnalyse) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           SLGAnalyse.BelongTo
           SLGAnalyse.CliType 
           SLGAnalyse.ValidTo

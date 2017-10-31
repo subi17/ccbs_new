@@ -62,7 +62,7 @@ FORM
     lcRunStamp       FORMAT "X(20)" COLUMN-LABEL "Test Done"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " TEST RESULTS OF " + STRING(iiBRTestQueueID) + " "
     FRAME sel.
 
@@ -76,7 +76,7 @@ FORM
        lcUserCode NO-LABEL FORMAT "X(30)" 
 WITH  OVERLAY ROW liUpdateRow centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

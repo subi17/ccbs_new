@@ -51,7 +51,7 @@ form
     InvSeq.Billed   format "*/"  Column-label "B"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)  
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)  
     " Invoice Sequences (All Brands) "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -67,7 +67,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -75,19 +75,19 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Mobile user  BY  InvSeq */
     InvSeq
     HELP "Enter InvSeq no"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND InvSeq "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND InvSeq "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Mobile user  BY  CustNum */
     CustNum
     HELP "Enter First Name of User"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTNO "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTNO "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Mobile user  BY InvNum */
     InvNum
     HELP "Enter Postal Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND INVOICE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND INVOICE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 

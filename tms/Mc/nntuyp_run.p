@@ -118,7 +118,7 @@ form
                         FORMAT ">>>>>>>9"
     BillItem.TaxClass   COLUMN-LABEL "TaxClass"
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Billing Items " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -167,7 +167,7 @@ form
     BillItem.ItemType  LABEL "Item Type ."
        HELP "Billing Item Type (0=mobile, 1=covergent)"
        FORMAT ">>9" SKIP
-WITH  OVERLAY ROW 2 CENTERED COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+WITH  OVERLAY ROW 2 CENTERED COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels FRAME lis.
 
 {Func/brand.i}
@@ -176,21 +176,21 @@ form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "Code :" haku
     help "Give Code or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* produkt :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give Name or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* BillCode group - haku */
     "Brand:" lcBrand skip
     "Group:" BIGroup
     help "Give GroupCode or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND GROUP "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND GROUP "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku3.
 
 form /* cost accounts */
@@ -585,7 +585,7 @@ BROWSE:
         FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.CUICommon:ctc) 
               BillItem.Brand BillItem.BillCode BillItem.BIName BillItem.AccNum
               BIGName BillItem.TaxClass BillItem.BIGroup.
 

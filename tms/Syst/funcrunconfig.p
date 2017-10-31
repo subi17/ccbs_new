@@ -62,7 +62,7 @@ FORM
     FuncRunConfig.Active
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  FUNCTION CONFIGURATION  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -85,7 +85,7 @@ FORM
     FuncRunConfig.Description VIEW-AS EDITOR SIZE 60 BY 2
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -94,7 +94,7 @@ FORM
     "Brand:" lcBrand skip
     "Name :" lcName FORMAT "X(20)" 
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -455,7 +455,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        FuncRunConfig.FRConfigID FuncRunConfig.Description
        FuncRunConfig.RunQty.
         

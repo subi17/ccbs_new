@@ -64,7 +64,7 @@ form
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " MSISDN Nos in Range " + CLIFrom + " - " + CLITo
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " MSISDN Nos in Range " + CLIFrom + " - " + CLITo
     + " "
     FRAME sel.
 
@@ -73,7 +73,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -83,7 +83,7 @@ form
     MSISDN.CustNum    label "Customer ..." Customer.CustName NO-LABEL AT 25 SKIP
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
+    title COLOR VALUE(Syst.CUICommon:ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
     side-labels 
     FRAME cust.
 
@@ -91,7 +91,7 @@ form /* seek MSISDN number  BY  CLI */
     m_pref space(0)
     CLI format "x(9)"
     HELP "Enter MSISDN number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN No. "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN No. "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND MSRange WHERE recid(MSRange) = ra-recid no-lock.

@@ -70,7 +70,7 @@ form
     RerateLog.ChangedQty   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " RERATE LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -96,7 +96,7 @@ form
     RerateLog.ChangedQty COLON 20 
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -107,21 +107,21 @@ FORM
    "Brand:" lcBrand skip
    "Customer:" liCustNum
       HELP "Enter invoice customer"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Invoice Customer "
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Invoice Customer "
        COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
    "Brand:" lcBrand skip
    "MSISDN:" lcCLI
       HELP "Enter MSISDN"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
        COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM
    "Brand:" lcBrand skip
    "Rated:" ldaRateDate
       HELP "Enter rating date"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rating Date "
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Rating Date "
        COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 

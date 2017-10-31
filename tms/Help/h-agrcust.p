@@ -47,14 +47,14 @@ form
     Customer.OrgID      FORMAT "X(11)"    COLUMN-LABEL "PersonID"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " AGREEMENT CUSTOMERS " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " AGREEMENT CUSTOMERS " 
     FRAME sel.
 
 form /* seek  Customer */
     "Customer Nbr:" liCustNum
        HELP "Enter customer number"
        FORMAT ">>>>>>>9"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND number "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND number "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
@@ -64,14 +64,14 @@ form /* seek  */
    "FirstName ......:" lcFirstName 
        FORMAT "X(20)"
        HELP "First name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  */
     "PersonID/CompanyID:" lcOrgID
        HELP "Enter person id / company id"
        FORMAT "X(11)" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND person ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND person ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

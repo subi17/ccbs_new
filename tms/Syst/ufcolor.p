@@ -13,14 +13,14 @@ if opsys = "msdos" THEN DO:
     message "VArimAAritys puuttuu, frame " + cfc.
     PAUSE 2 no-message.
       END.
-      ELSE ASSIGN Syst.CUICommon:cfc = FColor.FrameColor ctc = FColor.TitleColor.
+      ELSE ASSIGN Syst.CUICommon:cfc = FColor.FrameColor Syst.CUICommon:ctc = FColor.TitleColor.
    END.
 END.
 
 if not available FColor or opsys <> "msdos" OR NOT yvari THEN DO:
    ASSIGN
    Syst.CUICommon:cfc = "normal"
-   ctc = "messages".
+   Syst.CUICommon:ctc = "messages".
 END.
 PAUSE 0.
 

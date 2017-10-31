@@ -68,7 +68,7 @@ FORM
     RequestParam.DispParam COLUMN-LABEL "View"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        "  PARAMETERS OF TYPE " + STRING(iiReqType) + " "
     FRAME sel.
 
@@ -88,14 +88,14 @@ FORM
     RequestParam.DispParam      COLON 20    
 WITH  OVERLAY ROW 5 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "Param:" lcParamField FORMAT "X(15)"
     HELP "Enter status"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Parameter"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Parameter"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -456,7 +456,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        RequestParam.ParamField
        RequestParam.Usage.
 

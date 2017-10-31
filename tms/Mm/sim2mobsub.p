@@ -86,7 +86,7 @@ SKIP(2)
 "  Time ....:" MSISDN.PortingTime            SKIP(1)
 
 WITH
-   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    " Activate subscription  " + mobsub.cli + " "
    NO-LABELS FRAME lis.
 DEF VAR s AS INT NO-UNDO.

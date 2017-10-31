@@ -77,7 +77,7 @@ form
       help "Update or just display new rates"                  
       skip(3)
 WITH COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi + " Update rates for CCNs "
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " Update rates for CCNs "
    OVERLAY width 80 ROW 1 NO-LABELS centered
    FRAME Limit.
 

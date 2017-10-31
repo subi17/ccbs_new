@@ -31,12 +31,12 @@ form
       mobsub.CustNum
 
       with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " mobsubs " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " mobsubs " overlay frame sel.
 
 form /* SEEK Code */
     CLI format "x(12)"
     help "Enter mobsub No. "
-    with row 4 col 2 title color value(ctc) " FIND mobsub "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND mobsub "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 

@@ -76,7 +76,7 @@ form
 
 WITH ROW FrmRow width 76 CENTERED  OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  TriggerEvents for  " + icTriggerConfID  + " " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -100,20 +100,20 @@ form
 
 WITH  OVERLAY ROW 3 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  TriggerEvent */
     "TriggerEvent:" lcTriggerEvent FORMAT "X(16)"
     HELP "Enter TriggerEvent"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TriggerEvent "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TriggerEvent "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  TriggerEvent */
     "Name:" lcRgName FORMAT "x(30)"
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fIsValidInputFile RETURN CHAR
@@ -562,7 +562,7 @@ REPEAT WITH FRAME sel:
           NEXT.
        END.
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        TriggerEvent.TriggerEventID     
        TriggerEvent.TriggerConfID
        TriggerEvent.EventSource   

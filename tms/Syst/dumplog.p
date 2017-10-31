@@ -68,7 +68,7 @@ form
     DumpLog.FileName FORMAT "X(40)" COLUMN-LABEL "Filename"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "DUMP LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -84,7 +84,7 @@ form
     DumpLog.Filesize COLON 20
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -98,7 +98,7 @@ WITH OVERLAY ROW 1 centered
 form /* seek  DumpLog */
     "DumpID:" liDumpID 
     HELP "Enter Dump ID "
-    WITH row 4 col 1 TITLE COLOR VALUE(ctc) " FIND Dump ID "
+    WITH row 4 col 1 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Dump ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 

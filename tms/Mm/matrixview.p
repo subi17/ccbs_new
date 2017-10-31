@@ -164,7 +164,7 @@ form
 
 WITH ROW FrmRow width 70 OVERLAY CENTERED FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  MATRIX  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.

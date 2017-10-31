@@ -76,7 +76,7 @@ form
     CustGroup.CreUser 
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
        " Customer Groups " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -92,7 +92,7 @@ form
     CustGroup.CreDate
     CustGroup.CreUser
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) lm-ots WITH side-labels 1 columns
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 {Func/brand.i}
@@ -108,14 +108,14 @@ form /* Customer Group :n haku kentällä CustGroup */
     "Brand:" lcBrand skip
     "Group:" CustGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä CGName */
     "Brand:" lcBrand skip
     "Name :" CGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -477,7 +477,7 @@ SELAUS:
        FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        CustGroup.CustGroup CustGroup.CGName CustGroup.CreDate CustGroup.CreUser.
 
        IF order = 1 THEN FIND NEXT CustGroup

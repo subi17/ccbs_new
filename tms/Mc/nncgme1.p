@@ -70,7 +70,7 @@ form
     Customer.PostOffice       column-label "City" format "x(12)"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Members in a c-group " + icCustGroup + " (" + gcBrand + ") "
    FRAME sel.
 
@@ -79,20 +79,20 @@ form
     Customer.CustName     /* LABEL FORMAT */
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 form /* member :n haku kentällä CustNum */
     CustNum
     help "Type Customer number "
-    with row 4 col 2 title color value(ctc) " FIND CUST. NO. "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST. NO. "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä CustName */
     CustName
     help "Type Customer's Name"
-    with row 4 col 2 title color value(ctc) " FIND CUST. Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST. Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
@@ -597,7 +597,7 @@ SELAUS:
        FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        CGMember.CustNum CGMember.CustName CGMember.Memo Customer.PostOffice
        /* sd */.
 

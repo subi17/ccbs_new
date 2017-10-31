@@ -25,12 +25,12 @@ form
       Stock.Stock FORMAT "x(12)"
       Stock.StoName  format "x(30)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " Stock Locations " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " Stock Locations " overlay frame sel.
 
 form /* SEEK piip by piip */
     Stock FORMAT "x(12)"
     help "Enter Code of a Stock location"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

@@ -72,7 +72,7 @@ form
 
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " "   + 
+   title color value(Syst.CUICommon:ctc) " "   + 
    " Servicelimits "
    + string(pvm,"99-99-99") + " "
    FRAME sel.
@@ -125,7 +125,7 @@ END FUNCTION.
 form /*  search WITH FIELD mservicelimit */
     haku-servicelimit
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -531,7 +531,7 @@ BROWSE:
        FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           lccli
           mservicelimit.inclamt.
 

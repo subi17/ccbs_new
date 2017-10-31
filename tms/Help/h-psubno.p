@@ -28,13 +28,13 @@ def var lname       as c                    no-undo.
 form
       CLI.CLI format "x(20)"
     with scroll 1 11 down  row 4 WIDTH 40 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " SubNumbers of Cust(" + string(CustNum) + ") " 
+    title color value(Syst.CUICommon:ctc) " SubNumbers of Cust(" + string(CustNum) + ") " 
     overlay frame sel.
 
 form /* SEEK CODE */
     CLI
     help "Enter Customer's CLI"
-    with row 4 col 2 title color value(ctc) " FIND NUMBER "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NUMBER "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 find  Customer where Customer.CustNum =  CustNum no-lock.

@@ -61,7 +61,7 @@ form /* pAAruutu, scroll */
     MenuText.MenuNum MenuText.MenuText
     WITH ROW 1 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " CHOOSE MENUTEXT "
+    title color value(Syst.CUICommon:ctc) " CHOOSE MENUTEXT "
     FRAME sel.
 
 form
@@ -70,7 +70,7 @@ form
     toi        label "       2.line ..."
     WITH  OVERLAY ROW 8 col 5
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header side-labels 1 columns
     FRAME lis.
 
@@ -78,14 +78,14 @@ form /* menunron hakua varten */
     ha-menro
     help "Give a menu number or beginning of it"
     WITH ROW 4 col 2 TITLE
-    color value(ctc) " SEEK MENUNUMBER "
+    color value(Syst.CUICommon:ctc) " SEEK MENUNUMBER "
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puYR.
 
 form /* menunimen hakua varten */
     ha-metex
     help "Give a menu name or beginning of it"
     WITH ROW 4 col 2 TITLE
-    color value(ctc) " SEEK MENUTEXT "
+    color value(Syst.CUICommon:ctc) " SEEK MENUTEXT "
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puHE.
 
 /* Haetaan Company */

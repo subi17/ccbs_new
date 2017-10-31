@@ -29,12 +29,12 @@ form
     TMSCodes.CodeValue FORMAT "X(12)" 
     TMSCodes.CodeName  format "x(40)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) FieldName overlay with frame sel.
+    title color value(Syst.CUICommon:ctc) FieldName overlay with frame sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter Type "
-    with row 4  col 2 title color value(ctc) " FIND CODE "
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

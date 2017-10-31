@@ -66,7 +66,7 @@ FORM
     lcState              FORMAT "X(12)" COLUMN-LABEL "Status"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  DB CONFIGURATION  " + "  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -89,7 +89,7 @@ FORM
        lcState NO-LABEL FORMAT "X(20)" 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -98,7 +98,7 @@ FORM
     "Brand ....:" lcBrand skip
     "Table Name:" lcTableName FORMAT "X(20)" 
     HELP "Enter table name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Table "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -441,7 +441,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DBConfig.DBConfigID DBConfig.Description
        DBConfig.TableName DBConfig.ToDate.
         

@@ -46,7 +46,7 @@ form
    with 
      row 8 
      centered 
-     title color value(ctc) " MULTI-BRAND TMS: USER LOGIN "
+     title color value(Syst.CUICommon:ctc) " MULTI-BRAND TMS: USER LOGIN "
      side-labels color value(Syst.CUICommon:cfc) overlay frame login.
 
 

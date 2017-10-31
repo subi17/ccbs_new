@@ -71,20 +71,20 @@ form
    
 WITH ROW FrmRow OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + icTitle + " " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
 
 form /* seek  CodeValue */
     "Code value:" lcCodeValue
     HELP "Enter code value"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE VALUE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE VALUE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek CodeName */
     "Code Name:" lcCodeName
     HELP "Enter code name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE NAME "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FOR EACH TMSCodes NO-LOCK WHERE

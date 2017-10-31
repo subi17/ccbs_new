@@ -68,7 +68,7 @@ form
     Reseller.RsName     /* column-label format */
 with width 80 overlay scroll 1 15 down
     color value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Resellers "
     + string(pvm,"99-99-99") + " "
     frame sel.
@@ -84,7 +84,7 @@ form
     Reseller.email          label "Email"
     Reseller.Fuc1
     Reseller.Fuc2
-    with  overlay row 5 centered color value(Syst.CUICommon:cfc) title color value(ctc)
+    with  overlay row 5 centered color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
     fr-header with side-labels 1 columns
     frame lis.
 
@@ -102,14 +102,14 @@ form /* serch */
     "Brand:" lcBrand skip
     "Code :" Reseller
     help "Give reseller's code"
-    with row 4 col 2 title color value(ctc) " FIND RESELLER'S CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RESELLER'S CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* reseller search with field RsName */
     "Brand:" lcBrand skip
     "Name :" RsName
     help "Give reseller's name or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND RESELLER'S NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RESELLER'S NAME "
     color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 
@@ -481,7 +481,7 @@ BROWSE:
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
 
        /* line to be deleted is lightened */
-       color display value(ctc)
+       color display value(Syst.CUICommon:ctc)
        Reseller.Reseller Reseller.RsName.
 
        if order = 1 then find next Reseller

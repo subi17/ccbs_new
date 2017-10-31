@@ -31,12 +31,12 @@ form
     ttRepCode.RepCode  format "x(8)"  label "Report"
     ttRepCode.RepName  format "x(40)" Label "Name"
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Report Codes " OVERLAY FRAME sel.
+    title color value(Syst.CUICommon:ctc) " Report Codes " OVERLAY FRAME sel.
 
 form /* SEEK code */
     lcRepCode
     help "Enter Name of a Report Code"
-    with row 4 col 2 title color value(ctc) " FIND Code "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Code "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

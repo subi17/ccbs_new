@@ -39,7 +39,7 @@ form
    "               Invoices before: " Date  no-label format "99-99-9999"
    skip(8)
 WITH ROW 1 side-labels width 80
-   title color value(ctc) " " + ynimi + " SUMMARY OF UNPAID INVOICES " +
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " SUMMARY OF UNPAID INVOICES " +
    string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME frm.
 
 form
@@ -50,7 +50,7 @@ form
    "Date of latest invoice ..:" ldate  format "99-99-9999"           SKIP
    skip(1)
 WITH
-   centered ROW 5 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   centered ROW 5 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " UNPAID INVOICES "  NO-LABELS
    OVERLAY FRAME debt.
 

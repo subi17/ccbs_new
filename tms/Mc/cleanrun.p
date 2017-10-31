@@ -71,7 +71,7 @@ RUN Inv/lamupers.p persistent set pHandle.
 form
    skip(17)
 with
-   overlay title color value(ctc)
+   overlay title color value(Syst.CUICommon:ctc)
    " " + ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
    color value(Syst.CUICommon:cfc) width 80
    frame taka.
@@ -115,14 +115,14 @@ form
      format "Killed/All"
      SKIP
 
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
    color value(Syst.CUICommon:cfc) row 2 centered overlay frame rajat.
 
 form
     " Consecutive invoice number: " lasno  no-label           skip
     " Minimum invoicing amount .: " mininv no-label           skip
 with
-   title color value (ctc) " INVOICE GROUP DATA " color value(Syst.CUICommon:cfc)
+   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " color value(Syst.CUICommon:cfc)
    overlay centered row 15 frame lasno.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.

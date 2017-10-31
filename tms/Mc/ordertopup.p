@@ -56,7 +56,7 @@ form
     OrderTopup.Amount   
 WITH ROW FrmRow WIDTH 25 CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " TOPUPS OF ORDER " + STRING(iiOrderID) + " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " TOPUPS OF ORDER " + STRING(iiOrderID) + " "
     FRAME sel.
 
 form
@@ -64,7 +64,7 @@ form
     OrderTopup.VatAmount COLON 22 
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -341,7 +341,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        OrderTopup.Amount.
 
        RUN local-find-NEXT.

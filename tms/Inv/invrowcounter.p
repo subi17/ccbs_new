@@ -84,7 +84,7 @@ FORM
     InvRowCounter.Quantity  FORMAT "->>>>>>>9"
     InvRowCounter.Amount
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " INVOICE ROW COUNTERS " FRAME sel.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " INVOICE ROW COUNTERS " FRAME sel.
 
 FORM
     InvRowCounter.InvCust    COLON 20
@@ -122,18 +122,18 @@ FORM
     InvRowCounter.DataAmt     COLON 20 
        InvRowCounter.ExtraAmount COLON 50 
    WITH OVERLAY ROW 1 centered
-      COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) ac-hdr SIDE-LABELS FRAME lis.
+      COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr SIDE-LABELS FRAME lis.
 
 FORM 
     "BillCode:" lcBillCode FORMAT "X(16)"
     HELP "Enter billing item"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Billing Item "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Billing Item "
        COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "MSISDN:" lcCLI FORMAT "X(16)"
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
        COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM 

@@ -54,13 +54,13 @@ form
     ttService.chosen   COLUMN-LABEL "CH"
 WITH ROW FrmRow centered OVERLAY 12 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " CHOOSE SERVICES " 
+    title COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE SERVICES " 
     FRAME sel.
 
 form /* seek ServCom by Code */
     ServCom
     help "Enter ServCom Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

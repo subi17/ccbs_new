@@ -66,7 +66,7 @@ FORM
     PrintHouseConf.ToDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " PRINTHOUSE CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -87,7 +87,7 @@ FORM
                 "End date cannot be earlier than begin date")
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -96,7 +96,7 @@ FORM
     "PrintHouse:" lcPrintHouse FORMAT "X(12)" skip
     "ZipCode...:" lcZipCode    FORMAT "X(6)" 
     HELP "Enter PrintHouse number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND PrintHouse"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND PrintHouse"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -437,7 +437,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        PrintHouseConf.PrintHouse PrintHouseConf.Report
        PrintHouseConf.FieldName PrintHouseConf.KeyValue .
 

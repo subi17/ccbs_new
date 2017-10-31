@@ -57,7 +57,7 @@ form
     CoTarg.CommStatus
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     lcTitle
     FRAME sel.
 
@@ -74,14 +74,14 @@ FORM
     "Commission Rule ID:" COTarg.CORuleId SKIP
 WITH  OVERLAY ROW 5 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) "COMMISSION INFO" 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "COMMISSION INFO" 
     NO-LABELS 
     FRAME lis.
 
 form /* seek  target */
     lcTarg
     HELP "Enter target type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND target type "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND target type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 IF icType = "rule" THEN DO:

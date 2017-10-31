@@ -29,14 +29,14 @@ form
     ExName          column-label "Name"
 WITH
     scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " EXCHANGES "
+    title color value(Syst.CUICommon:ctc) " EXCHANGES "
     OVERLAY FRAME tlse.
 
 form /* Maa :n geta varten */
     get
     help "Give ident"
 WITH
-    row 4 col 2 title color value(ctc) " FIND IDENT  "
+    row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND IDENT  "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

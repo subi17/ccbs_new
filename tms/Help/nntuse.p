@@ -42,7 +42,7 @@ form
 
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) 
+    title color value(Syst.CUICommon:ctc) 
        " FIND BillItem (" + gcBrand + ") " + tuhaku + " " FRAME sel.
 
 

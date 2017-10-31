@@ -64,7 +64,7 @@ form
     UserGrp.CreDate
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " User Groups "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -79,7 +79,7 @@ form
     UserGrp.CreDate
     UserGrp.CreUser
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) lm-ots WITH side-labels 1 columns
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 form
@@ -91,13 +91,13 @@ WITH
 form /* User Group :n haku kentällä UserGroup */
     UserGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* User Group :n haku kentällä UGName */
     UGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -431,7 +431,7 @@ SELAUS:
        FIND UserGrp where RECID(UserGrp) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        UserGrp.UserGroup UserGrp.UGName UserGrp.CreDate UserGrp.CreUser
        /* sd */.
 

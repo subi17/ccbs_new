@@ -40,19 +40,19 @@ form
     AreaPair.NeigArea   column-label "Areanr"
     AreaName            column-label "City"  format "x(35)"
 WITH centered OVERLAY scroll 1 10 DOWN ROW 3 COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Neighbour areas for " + AreaCode + " "
+    title color value(Syst.CUICommon:ctc) " Neighbour areas for " + AreaCode + " "
     + this-rnom.AreaName + " " FRAME sel.
 
 form
     NeigArea label "Areanr"  AreaName NO-LABEL SKIP
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header WITH side-labels
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
     FRAME lis.
 
 form /* angrAnsande riktnr. search WITH FIELD NeigArea */
     NeigArea
     help "Enter Areanumber"
-    with row 4 col 2 title color value(ctc) " FIND AREA NUMBER "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AREA NUMBER "
     COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f1.
 
 FIND this-rnom where this-rnom.AreaCode = AreaCode no-lock.
@@ -438,7 +438,7 @@ BROWSE:
    FIND AreaPair where recid(AreaPair) = rtab[FRAME-LINE] no-lock.
 
    /* line TO be deleted is lightened */
-   COLOR DISPLAY value(ctc)
+   COLOR DISPLAY value(Syst.CUICommon:ctc)
    AreaPair.NeigArea AreaName.
 
    IF order = 1 THEN FIND NEXT AreaPair

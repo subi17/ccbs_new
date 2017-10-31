@@ -60,7 +60,7 @@ form
    "   Amount of payments:" rc       NO-LABEL FORMAT "zzzzzz" SKIP(1)
    skip(10)
 with
-   row 1 width 80 overlay color value(Syst.CUICommon:cfc) title color value(ctc)
+   row 1 width 80 overlay color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
    " " + ynimi + " Payments into a/r, input from OCR file " + string(pvm,"99-99-9999") +
    " " frame main.
 

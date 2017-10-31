@@ -110,7 +110,7 @@ form
 
 WITH CENTERED  ROW FrmRow FrmDown DOWN WIDTH 80
     COLOR VALUE(Syst.CUICommon:cfc) OVERLAY
-    TITLE COLOR VALUE(ctc) " " + ynimi + " Information Texts " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi + " Information Texts " 
         + string(pvm,"99-99-99") + " "
         FRAME sel.
 
@@ -154,7 +154,7 @@ form
 
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        ac-hdr + "  Text ID: " + STRING(InvText.ITNum) + " "
     SIDE-LABELS
     FRAME lis.
@@ -165,7 +165,7 @@ form /* seek InvText BY  Date */
     "Brand:" lcBrand skip
     "Date :" FromDate
     HELP "Enter FromDate"      
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FromDate "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND FromDate "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek InvText BY   */
@@ -176,7 +176,7 @@ form /* seek InvText BY   */
     SKIP
     "KeyValue:" lckeyvalue FORMAT "X(25)"
       HELP "Enter Key Value" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Target"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -644,7 +644,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        InvText.FromDate InvText.ToDate
        InvText.Target. 
 

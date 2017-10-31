@@ -25,7 +25,7 @@ form
     ServAttr.ServAttr    
     ServAttr.SAName FORMAT "X(30)" COLUMN-LABEL "Name"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

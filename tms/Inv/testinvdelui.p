@@ -46,7 +46,7 @@ SKIP (2)
 "           Invoices deleted ....:" liInvCount    SKIP 
 SKIP(5)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
+   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " DELETE TEST INVOICES " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1 NO-LABELS
    FRAME mainFrame.

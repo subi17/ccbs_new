@@ -23,7 +23,7 @@ form
 t-target.target COLUMN-LABEL "Target"
 t-target.expl   COLUMN-LABEL "Description"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-title color value(ctc) " Targets "
+title color value(Syst.CUICommon:ctc) " Targets "
 OVERLAY FRAME kase.
 
 Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

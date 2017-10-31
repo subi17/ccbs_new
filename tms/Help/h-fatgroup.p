@@ -34,12 +34,12 @@ form
     FATGroup.FatPerc  COLUMN-LABEL "Disc.%"
     FATGroup.PeriodQty COLUMN-LABEL "Per."
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " FAT Group " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " FAT Group " overlay frame sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter code of an Fatime Group"
-    with row 4  col 2 title color value(ctc) " FIND GROUP "
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND GROUP "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

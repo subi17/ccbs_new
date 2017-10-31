@@ -77,7 +77,7 @@ FORM
     DPMember.ValidTo   FORMAT "99-99-99"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " DISCOUNT PLAN MEMBERS "
     FRAME sel.
 
@@ -104,7 +104,7 @@ FORM
        SKIP(1)
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -113,7 +113,7 @@ FORM
        HELP "Enter table name" SKIP
     "Key Value:" lcKeyValue FORMAT "X(20)"
        HELP "Enter key value"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Member "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Member "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -459,7 +459,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           DPMember.HostTable
           DPMember.KeyValue
           DPMember.DiscValue

@@ -81,7 +81,7 @@ form
     PPInv.Amount    COLUMN-LABEL "PP Amount"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     lcTitle
     FRAME sel.
 
@@ -91,7 +91,7 @@ form
     SKIP(1)
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -488,7 +488,7 @@ REPEAT WITH FRAME sel:
        END. 
        
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        PPInv.InvNum PPInv.Amount .
 
        RUN local-find-NEXT.

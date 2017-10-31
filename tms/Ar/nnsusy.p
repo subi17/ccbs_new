@@ -222,7 +222,7 @@ form
  Invoice.CustName    no-label format "x(26)"
  pVouch             label "Voucher"
  help "Voucher #, F9: Previous vouchers" SKIP
-with title color value(ctc) " " + ynimi + " PAYMENTS TO INVOICES "
+with title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENTS TO INVOICES "
  + string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
   width 80 side-labels FRAME INV-NO.
 
@@ -284,7 +284,7 @@ form
     ysuoyht      NO-LABEL
     ykorko       label "Overt. Int" AT 32        
     SKIP(1)
-with title color value(ctc) " PAYMENT "
+with title color value(Syst.CUICommon:ctc) " PAYMENT "
  COLOR value(Syst.CUICommon:cfc) ROW 4 col 1 OVERLAY side-labels FRAME payment.
 
 /* acctietoja varten */
@@ -303,7 +303,7 @@ form
  deb at 2 label "Debet "                                 SKIP
  kre at 2 label "Credit"                                 SKIP
 WITH
- title color value(ctc) " ACCOUNT       AMOUNT "
+ title color value(Syst.CUICommon:ctc) " ACCOUNT       AMOUNT "
  COLOR value(Syst.CUICommon:cfc) ROW 4 col 57 side-labels OVERLAY FRAME acct.
 
 FORM 
@@ -331,7 +331,7 @@ SKIP(1)
       dprop FORMAT "->,>>>,>>9.99"
    SKIP(1)
 
-WITH title color value(ctc) " USE CUSTOMER'S UNBOOKED Balance ? "
+WITH title color value(Syst.CUICommon:ctc) " USE CUSTOMER'S UNBOOKED Balance ? "
            COLOR value(Syst.CUICommon:cfc) OVERLAY ROW 3 centered NO-LABELS FRAME overp.
 
 

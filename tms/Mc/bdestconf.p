@@ -63,7 +63,7 @@ FORM
     BDestConf.ToDate  COLUMN-LABEL "Valid To"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " BDEST CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -80,7 +80,7 @@ FORM
     BDestConf.ConfigValue1 COLON 20 FORMAT ">>>>>>>9"
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -88,7 +88,7 @@ FORM
     "Brand:" lcBrand skip
     "Group:" lcBDCGroup FORMAT ">>>>>9" 
     HELP "Enter group ID "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Group"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Group"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fGroupType RETURNS LOGIC
@@ -441,7 +441,7 @@ REPEAT WITH FRAME sel:
        END.
        
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        BDestConf.BDCGroup 
        BDestConf.BDCName.
 

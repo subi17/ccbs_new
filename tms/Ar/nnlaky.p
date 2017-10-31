@@ -81,7 +81,7 @@ form
     avoinna            column-label "BalanceDue" format "->>>>>>9.99"
 
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN 
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " " + ynimi + " ALL INVOICES "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -91,14 +91,14 @@ form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip
     "Invoice:" liInvNum
     help "Give Invoice No."    
-    with row 4 col 2 title color value(ctc) " FIND INVOICE No."
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE No."
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 form /* Invoicen asnolla hakua varten */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     help "Give Customer Name"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F2.
 
 

@@ -88,7 +88,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " " + lcType + " "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -111,7 +111,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS NO-LABEL
     FRAME lis.
 
@@ -119,14 +119,14 @@ form /* seek  CustNo */
     "Brand :" lcBrand skip
     "CustNo:" CustNo
     HELP "Enter Customer Number of the Call Limit "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CLI */
     "Brand:" lcBrand skip
     "CLI .:" CLI
     HELP "Enter CLI of the Call Limit"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -432,7 +432,7 @@ BROWSE:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CallLimit.Brand   
        CallLimit.CustNo  
        CustName          

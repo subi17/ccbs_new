@@ -64,22 +64,22 @@ form
     Customer.ZipCode   format "x(12)"   column-label "District"
     Customer.RepCodes format "x(6)"    column-label "Rep."
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(Syst.CUICommon:cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " CHOOSE MEMBERS INTO GROUP " +
     CustGroup + " (" + gcBrand + ") " FRAME sel.
 
 form /* FIND Customer BY number */
     CustNum help "Enter Customer No."
-    with row 4 col 2 title color value(ctc) " FIND CUST. No. "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST. No. "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND Customer BY Name */
     CustName help "Enter Customer's name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND Customer BY abbreviation */
     SearchName help "Enter abbreviation of name"
-    with row 4 col 2 title color value(ctc) " FIND ABBREVIATION "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND ABBREVIATION "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 form

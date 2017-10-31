@@ -53,7 +53,7 @@ skip(6)
  WITH  OVERLAY ROW 1 WIDTH 80
     COLOR VALUE(Syst.CUICommon:cfc)
 
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " " + ynimi + "   " + 
     " REPORT OF PRESELECT CUSTOMERS    "
     + STRING(pvm,"99-99-99") + " "

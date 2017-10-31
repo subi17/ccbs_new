@@ -81,7 +81,7 @@ form
     CTServPac.ToDate      
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " CLIType Services "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -113,7 +113,7 @@ form
                 "End date cannot be before beginning date")
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -121,7 +121,7 @@ form /* seek  ServPac */
     "Brand ......:" lcBrand skip
     "Service Pack:" lcServPac
     HELP "Enter service package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Service Package "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Service Package "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
@@ -465,7 +465,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CTServPac.CLIType CTServPac.ServPac 
        CTServPac.FromDate CTServPac.ToDate.
 

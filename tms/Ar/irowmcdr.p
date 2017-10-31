@@ -77,7 +77,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Billable Mobile calls "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -89,7 +89,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -97,7 +97,7 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Mobile Call  BY  DateSt */
     DateSt
     HELP "Enter CallDate"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -105,7 +105,7 @@ form /* seek Mobile Call  BY A-sub. */
     m_pref SPACE(0)
     CLI FORMAT "x(8)"
     HELP "Enter calling MSISDN No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 

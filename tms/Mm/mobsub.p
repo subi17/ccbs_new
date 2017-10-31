@@ -164,7 +164,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  MOBILE SUBSCRIPTION  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -173,13 +173,13 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 form /* seek Mobsub CLI */
     lcCli  
     HELP "Enter MSISDN  "
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Msisdn "
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Msisdn "
     COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Mobsub MsSeq */
     liMsSeq  
     HELP "Enter Subscription ID  "
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Subscription ID "
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription ID "
     COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
 
@@ -192,7 +192,7 @@ form /* Customer :n nimella hakua varten */
   SKIP
   "Company:" lcCompany  FORMAT "X(30)"
   HELP "Company name" SKIP
-  with row 4 col 2 title color value(ctc) " FIND Name "
+  with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -200,7 +200,7 @@ form /* Customer :n nimella hakua varten */
 form /* seek  CustNum */
     liCustNum
     HELP "Enter Customer No "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer No"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer No"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
                 
 form /* Customer :n nimella hakua varten */
@@ -209,7 +209,7 @@ form /* Customer :n nimella hakua varten */
   "FirstName ......:" lcFirstName
   FORMAT "X(20)"
   HELP "First name"
-  with row 4 col 2 title color value(ctc) " FIND AGREEMENT NAME "
+  with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AGREEMENT NAME "
   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
  
 
@@ -217,24 +217,24 @@ form /* Customer :n nimella hakua varten */
 form /* seek  CustNum */
    lcPersonID
    HELP "Enter Person ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Person ID"   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 form /* seek  CustNum */
     liMSStatus
     HELP "Enter Subscription Status" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND StatusCode " 
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND StatusCode " 
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f6.
                 
 form
    lcICC
    HELP "Enter Person ICC" 
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
    "FIND ICC"  COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f7.
 
 form
    lcFixedNumber
    HELP "Enter Fixed Number" 
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
    "FIND FIXED NUMBER" COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

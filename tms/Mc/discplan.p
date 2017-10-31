@@ -78,7 +78,7 @@ form
              /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Discount Plans "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -92,7 +92,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) ac-hdr 
+    title COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     side-labels 
     1 columns
     FRAME lis.
@@ -101,14 +101,14 @@ form /* seek DiscPlan  by  DiscPlan */
     "Brand:" lcBrand skip
     "Code :" DiscPlan
     help "Enter Discount Plan's code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f1.
 
 form /* seek DiscPlan  by DPName */
     "Brand:" lcBrand skip 
     "Name :" DPName 
     help "Enter Discount Plan's name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -461,7 +461,7 @@ BROWSE:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        discplan.brand 
        discplan.DiscPlan 
        discplan.DPName . 

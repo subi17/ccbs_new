@@ -83,7 +83,7 @@ form
     BillTarget.DiscPlan 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Billing Targets Of Cust " + string(CustNum) + 
     ": " + lcCustName + " "
     FRAME sel.
@@ -96,14 +96,14 @@ form
        DiscPlan.DPName NO-LABEL AT 29 SKIP
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     side-labels 
     FRAME lis.
 
 form /* seek Invoicing Target  BY  BillTarget */
     BillTarget
     help "Enter Billing Target"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Target NO. "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Target NO. "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND  Customer where Customer.CustNum = CustNum no-lock.
@@ -444,7 +444,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        BillTarget.BillTarget BillTarget.RatePlan BillTarget.DiscPlan .
 
        RUN local-find-NEXT.

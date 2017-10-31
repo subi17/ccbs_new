@@ -29,7 +29,7 @@ FORM
    lcKey         FORMAT "X(30)"   LABEL "Filtering Key" 
    ttFilter.FQty FORMAT ">>>>>>9" LABEL "Invoice Qty (All)"
    WITH SCROLL 1 11 DOWN ROW 4 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
-        TITLE COLOR VALUE(ctc) " CHOOSE KEY " OVERLAY FRAME sel.
+        TITLE COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE KEY " OVERLAY FRAME sel.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 

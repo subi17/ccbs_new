@@ -68,7 +68,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80  OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Stock Balances "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -81,7 +81,7 @@ form
 
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
@@ -103,7 +103,7 @@ form /* seek Balance Record  BY  Stock */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     Stock
     help "Enter Stock Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND SCODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND SCODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Balance Record  BY SimArt */
@@ -111,7 +111,7 @@ form /* seek Balance Record  BY SimArt */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     SimArt
     help "Enter Article Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ACODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -485,7 +485,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        StoBal.StoBal StoBal.SimArt .
 
        RUN local-find-NEXT.

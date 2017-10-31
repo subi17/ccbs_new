@@ -78,7 +78,7 @@ form
     CCN.CCNName   /* column-label "Country's name" */
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " CALL CASE NUMBERS (CCN) "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " CALL CASE NUMBERS (CCN) "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 {Func/brand.i}
@@ -89,7 +89,7 @@ form
     CCN.CCNName  COLON 20
     WITH  OVERLAY ROW 8 col 5
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 
     FRAME lis.
 
@@ -97,21 +97,21 @@ form /* nnmaan nimi :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "CCN .:" haku
     help "Give CCN"
-    with row 4 col 2 title color value(ctc) " FIND CCN"
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CCN"
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* nnmaan nimi :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give CCN's Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* report ccn  */
     "Brand :" lcBrand skip
     "RepCCN:" haku3
     help "Give reporting CCN"
-    with row 4 col 2 title color value(ctc) " FIND REPORT CCN "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND REPORT CCN "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -495,7 +495,7 @@ BROWSE:
         FIND CCN where recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) CCN.CCN CCN.CCNName.
+        COLOR DISPLAY value(Syst.CUICommon:ctc) CCN.CCN CCN.CCNName.
 
         IF order = 1 THEN FIND NEXT CCN 
            WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.

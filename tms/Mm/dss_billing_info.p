@@ -97,7 +97,7 @@ form
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
        " DSS Billing Information "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -118,7 +118,7 @@ form
     ttDSSInfo.BundleFee     COLON 20                  LABEL "Bundle Fee"
 WITH  OVERLAY ROW 3 width 50 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

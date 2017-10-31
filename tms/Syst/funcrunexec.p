@@ -74,7 +74,7 @@ FORM
     FuncRunExec.RunState    FORMAT "X(14)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) lcTitle
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) lcTitle
     FRAME sel.
 
 FORM
@@ -99,7 +99,7 @@ FORM
        LABEL "Processed Events"
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -489,7 +489,7 @@ REPEAT WITH FRAME sel:
        END.
   
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           FuncRunExec.FRExecID
           FuncRunExec.RunState.
 

@@ -25,14 +25,14 @@ form
    Salesman.Salesman
    Salesman.SmName
 with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-   title color value(ctc) " Salesman " overlay 
+   title color value(Syst.CUICommon:ctc) " Salesman " overlay 
 frame sel.
 
 form /* SEEK Code */
    se-code
       help "Enter Salesman Code"
 with
-   row 4 col 2 title color value(ctc) " FIND CODE "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
    color value(Syst.CUICommon:cfc) no-labels overlay
 frame hayr.
 

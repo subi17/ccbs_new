@@ -71,7 +71,7 @@ FORM
    
 WITH ROW FrmRow OVERLAY 15 DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + icTitle + " " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
 
@@ -83,7 +83,7 @@ FORM "Item identifer..:" MsReqFuncItem.ItemId   SKIP
 
 WITH  OVERLAY ROW 4 centered
  COLOR VALUE(Syst.CUICommon:cfc)
- TITLE COLOR VALUE(ctc) " Add/Update "
+ TITLE COLOR VALUE(Syst.CUICommon:ctc) " Add/Update "
  NO-LABELS 
  FRAME upd.
 
@@ -383,7 +383,7 @@ REPEAT WITH FRAME sel:
            END.
         END. 
         /* Highlight */
-        COLOR DISPLAY VALUE(ctc)
+        COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         MsReqFuncItem.ItemId MsReqFuncItem.ItemDesc.
          
         RUN local-find-NEXT.

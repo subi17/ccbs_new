@@ -72,7 +72,7 @@ FORM
     DCServicePackage.ToDate
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        "  SERVICE PACKAGES OF " + STRING(icDCEvent) + " (Active) "
     FRAME sel.
 
@@ -90,14 +90,14 @@ FORM
     DCServicePackage.ToDate      COLON 20    
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "ServPac:" lcServPac FORMAT "X(16)"
     HELP "Enter service package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Service Pacage "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Service Pacage "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -480,7 +480,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DCServicePackage.ServPac
        DCServicePackage.FromDate
        DCServicePackage.ToDate.

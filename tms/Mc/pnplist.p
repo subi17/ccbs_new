@@ -72,7 +72,7 @@ FORM
    PNPList.BDestTo
 WITH ROW 3 CENTERED OVERLAY scroll 1 12 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " PNP numbers: " + pnpgroup.name + " " 
+   title color value(Syst.CUICommon:ctc) " PNP numbers: " + pnpgroup.name + " " 
 FRAME sel.
 
 FORM
@@ -86,13 +86,13 @@ FORM
       HELP "TO B-number for PNP series"   SKIP
 WITH OVERLAY ROW 6 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header  WITH no-labels
 FRAME lis.
 
 form /*  search WITH FIELD PNPList */
    liCustNum help "Give ...."
-with row 4 col 2 title color value(ctc) " FIND Customer "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Customer "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FORM
@@ -390,7 +390,7 @@ BROWSE:
        FIND PNPList where recid(PNPList) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           PNPList.BDestFrom 
        WITH FRAME sel.
 

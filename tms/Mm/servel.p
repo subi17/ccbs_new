@@ -69,7 +69,7 @@ form
     ServCom.ScName     format "x(31)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Service Components "
     + (IF icServPac > "" THEN "of '" + icServPac + "'  " ELSE "") 
     + string(pvm,"99-99-99") + " "
@@ -91,7 +91,7 @@ form
     ServEl.SeValue COLON 20
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -101,7 +101,7 @@ form /* seek ServEl  BY  ServPac */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = gcBrand),"Unknown brand") SKIP
     "Package:" lcServPac
     HELP "Enter Code of Service Package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND PACKAGE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND PACKAGE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ServEl  BY ServEl */
@@ -109,7 +109,7 @@ form /* seek ServEl  BY ServEl */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = gcBrand),"Unknown brand") SKIP
     "Component:" lcServCom             
     HELP "Enter Code of Service Component"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND COMPONENT "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND COMPONENT "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -535,7 +535,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ServEl.ServPac ServEl.ServCom .
 
        RUN local-find-NEXT.

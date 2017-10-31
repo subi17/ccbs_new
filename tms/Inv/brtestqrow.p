@@ -74,7 +74,7 @@ FORM
     ttQRow.Active
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " CASE ROWS OF " + STRING(iiBRTestQueueID) + " "
     FRAME sel.
 
@@ -88,26 +88,26 @@ FORM
     BRTestQRow.CaseQty        COLON 25
 WITH  OVERLAY ROW liUpdateRow centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "Row ID:" liQRowID FORMAT ">>>>>>>9" 
     HELP "Enter ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ROW ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ROW ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "Case ID:" liBRTestCaseID FORMAT ">>>>>>>9" 
     HELP "Enter ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CASE ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CASE ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM 
     "Description:" lcDescription FORMAT "X(30)" 
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Description "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Description "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
@@ -536,7 +536,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           ttQRow.BRTestQRowID
           ttQRow.BRTestCaseID.
 

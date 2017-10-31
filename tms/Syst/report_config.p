@@ -77,7 +77,7 @@ FORM
     ttConfig.DispDetails FORMAT "Yes/No"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " CONFIGURATION FOR REPORT " + STRING(icReportID) + " "
     FRAME sel.
 
@@ -93,7 +93,7 @@ FORM
         HELP "Disp details on report"
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

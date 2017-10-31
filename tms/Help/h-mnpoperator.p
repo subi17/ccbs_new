@@ -37,19 +37,19 @@ form
     MNPOperator.OperName
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "  MNP Operators  " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "  MNP Operators  " 
     FRAME sel.
 
 form /* seek  MNPOperator */
     "MNPOperator:" lcMNPOperator
     HELP "Enter MNPOperator"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MNPOperator "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MNPOperator "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Name:" lcOperCode
     HELP "Enter MNPOperator name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

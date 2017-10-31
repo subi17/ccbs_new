@@ -70,7 +70,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  KILLED MOBSUB  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -93,7 +93,7 @@ form
     "Contract ........:" MSOwner.Contract 
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -101,19 +101,19 @@ WITH  OVERLAY ROW 3 centered
 form /* seek  CustNum */
     CustNum
     HELP "Enter Customer number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTNO "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTNO "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CLI */
     CLI
     HELP "Enter MSISDN Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN"
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 form /* seek  CLI */
     imno
     HELP "Enter IMSI number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND IMSI "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND IMSI "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 

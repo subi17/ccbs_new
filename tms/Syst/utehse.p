@@ -38,7 +38,7 @@ form
     PrintCodes.AvailLines column-label "Use lines/page"
     WITH ROW 2 col 2 centered  OVERLAY scroll 1 13 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " PRINTER '" + xPrinterId + "' EFFECTS "
     FRAME sel.
 

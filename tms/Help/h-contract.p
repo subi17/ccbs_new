@@ -32,12 +32,12 @@ form
     lcCLI  FORMAT "X(16)" LABEL "CLI" 
     Contract.Salesman
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " Contracts " overlay frame sel.
+    title color value(Syst.CUICommon:ctc) " Contracts " overlay frame sel.
 
 form /* SEEK Code */
     ldtDate
     help "Enter Contract Date"
-    with row 4 col 2 title color value(ctc) " FIND CONTRACT "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CONTRACT "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

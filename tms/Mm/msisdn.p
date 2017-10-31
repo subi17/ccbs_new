@@ -152,7 +152,7 @@ form
     
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " MSISDN Numbers "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -178,7 +178,7 @@ form
 WITH
    overlay row 4 centered NO-LABELS
    COLOR VALUE(Syst.CUICommon:cfc)
-   title COLOR VALUE(ctc)
+   title COLOR VALUE(Syst.CUICommon:ctc)
    ac-hdr WITH 
    Frame lis.
 
@@ -188,7 +188,7 @@ form /* seek ttMSISDN No.  by  CLI */
       CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
    "MSISDN No.:" CLI format "x(11)"
       help "Enter ttMSISDN"
-   WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ttMSISDN NO."
+   WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ttMSISDN NO."
    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f1.
 
 form /* seek ttMSISDN No.  by CustNum */
@@ -196,7 +196,7 @@ form /* seek ttMSISDN No.  by CustNum */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CustomerNo:" CustNum
     help "Enter Customer"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST. NO. "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CUST. NO. "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
 form /* seek ttMSISDN No.  by StatusCode */
@@ -204,7 +204,7 @@ form /* seek ttMSISDN No.  by StatusCode */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "StatusCode:" StatusCode 
     help "Enter Status"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND STATUS "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND STATUS "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f3.
 
 form /* seek ttMSISDN No.  by StatusCode */
@@ -213,7 +213,7 @@ form /* seek ttMSISDN No.  by StatusCode */
               CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Order Id..:" OrderId 
     help "Enter OrderId"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ORDERID "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ORDERID "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f4.
 
 FUNCTION fVALmino RETURNS LOGICAL(CLI AS CHAR).
@@ -738,7 +738,7 @@ if ttMSISDN.StatusCode ne 1 then do:
 end.   
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ttMSISDN.CLI ttMSISDN.CustNum ttMSISDN.brand .
 
        RUN local-find-NEXT.

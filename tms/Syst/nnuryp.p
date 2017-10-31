@@ -66,7 +66,7 @@ form
     urname              column-label "Type of Right"
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " User Rights "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -84,20 +84,20 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels
     FRAME lis.
 
 form /* seek User Right  BY  UserCode */
     UserCode
     help "Enter User ID"
-    with row 4 col 2 title color value(ctc) " FIND USER ID "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND USER ID "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek User Right  BY MenuClass */
     MenuClass
     help "Enter Program Class No."
-    with row 4 col 2 title color value(ctc) " FIND CLASS NO. "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CLASS NO. "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

@@ -56,7 +56,7 @@ form
     MenuClass.Memo[1]    /* column-label */ format "x(30)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " Program Classes "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -68,20 +68,20 @@ form
     MenuClass.Memo[1 FOR 10] NO-LABEL   AT 7
  WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels
     FRAME lis.
 
 form /* seek Program Class  BY  MenuClass */
     MenuClass
     help "Enter no. of class"
-    with row 4 col 2 title color value(ctc) " FIND NO. "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NO. "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Program Class  BY MCName */
     MCName
     help "Enter Name of class"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -429,7 +429,7 @@ BROWSE:
 
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        MenuClass.MenuClass MenuClass.MCName MenuClass.Memo[1].
 
        IF jarj = 1 THEN FIND NEXT MenuClass

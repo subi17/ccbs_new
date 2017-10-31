@@ -96,7 +96,7 @@ form
     CustIntEvent.Percent    column-label "Int%%"  
     CustIntEvent.Amt        column-label "Int tot"  
 WITH width 80 ROW liRow OVERLAY scroll 1 liDown DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
     " OVERTIME INTERESTS " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -114,7 +114,7 @@ form
     CustIntEvent.Amt           LABEL "Interest Amount" FORMAT "->>>>>>>9.99"
     CustIntEvent.BilledInvNum  LABEL "Billed on Inv.Nbr"                       
 WITH  OVERLAY ROW 3 col 3
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) ac-hdr 1 col FRAME lis.
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) ac-hdr 1 col FRAME lis.
 
 {Func/brand.i}
 
@@ -148,14 +148,14 @@ form /* Asiakasnumerohaku */
     "Brand ..:" lcBrand skip
     "Customer:" haku-asno
     help "Enter number of Customer"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* LAskunumerohaku */
     "Brand .:" lcBrand skip
     "Invoice:" haku-lanro
     help "Enter number of Invoice"
-    with row 4 col 2 title color value(ctc) " FIND INVOICE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 IF iiCustNum > 0 THEN ASSIGN 
@@ -516,7 +516,7 @@ repeat WITH FRAME sel:
         END.
         
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.CUICommon:ctc)
         lcCustName CustIntEvent.CustNum CustIntEvent.PaymDate 
         CustIntEvent.InvNum CustIntEvent.LateDays
         CustIntEvent.PaidAmt CustIntEvent.Percent CustIntEvent.Amt.

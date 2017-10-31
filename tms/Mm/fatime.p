@@ -123,7 +123,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " FATime "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -173,27 +173,27 @@ form
     lcIntInvNum NO-LABEL FORMAT "X(12)"
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek Billable item  BY  CLI */
     Custnum
     HELP "Enter Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER. NO "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER. NO "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* seek Billable item  BY  CLI */
     CLI
     HELP "Enter CLI No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI. NO "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI. NO "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Billable item  BY Period */
     period
     HELP "Enter Billing Period"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Period "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Period "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
@@ -202,7 +202,7 @@ form
 
     WITH OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Invoice Text " WITH NO-LABELS 1 columns
     FRAME f4.
 
@@ -674,7 +674,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         liTransPeriod FATime.cli 
         FATime.FTGrp  FATime.Amt  FATime.Used FATime.Transfer   
         FATime.QtyUnit   CustName  .

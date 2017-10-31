@@ -56,7 +56,7 @@ form
 
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " MID-WEEK Holiday "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -68,20 +68,20 @@ form
 
     WITH  OVERLAY ROW 8 col 5
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
 form /* ArkipyhA :n tunnuksella hakua varten */
     haku
     help "Give holiday's code or beginning of it"
-    with row 4 col 2 title color value(ctc) " HOLIDAYCODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " HOLIDAYCODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* ArkipyhA :n nimella hakua varten */
     haku2
     help "Give holiday's Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " HOLIDAYNAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " HOLIDAYNAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -431,7 +431,7 @@ BROWSE:
         FIND NatHoliday where recid(NatHoliday) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) NatHoliday.Holiday NatHoliday.HName
+        COLOR DISPLAY value(Syst.CUICommon:ctc) NatHoliday.Holiday NatHoliday.HName
         .
 
         IF order = 1 THEN FIND NEXT NatHoliday no-lock no-error.

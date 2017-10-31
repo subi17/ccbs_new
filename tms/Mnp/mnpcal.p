@@ -74,7 +74,7 @@ FORM
     MNPCal.DeliveryType
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " MNP CALENDAR  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -98,7 +98,7 @@ FORM
     lcDeliveryType FORMAT "x(20)"
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -398,7 +398,7 @@ BROWSE:
         
         RUN local-find-this(TRUE).
         
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.CUICommon:ctc)
            MNPCal.OrderChannel   
            MNPCal.Region
            MNPCal.MNPProduct 

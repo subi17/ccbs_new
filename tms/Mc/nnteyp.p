@@ -64,7 +64,7 @@ form
         format "x(62)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " Texts at different Languages "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " Texts at different Languages "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -74,7 +74,7 @@ form
        VIEW-AS EDITOR SIZE 70 BY 12
 
     WITH  OVERLAY ROW 3 CENTERED COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 
     FRAME lis.
 
@@ -84,21 +84,21 @@ form /* HdrTextn nimi :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "Code :" haku
     help " Give text's code or beginning of it "
-    with row 4 col 2 title color value(ctc) " TEXTCODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " TEXTCODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* HdrTextn kielikoodilla hakua varten */
     "Brand ..:" lcBrand skip
     "Language:" hakukie
     help "Give Language code (1 - 9)"
-    with row 4 col 2 title color value(ctc) " LANGUAGE CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " LANGUAGE CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hakie.
 
 form /* HdrTextn nimi :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Text :" hakutext
     help " Give text or beginning of it "
-    with row 4 col 2 title color value(ctc) " TEXT "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " TEXT "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -549,7 +549,7 @@ BROWSE:
         FIND HdrText where recid(HdrText) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) HdrText.te-nro HdrText.te-text
+        COLOR DISPLAY value(Syst.CUICommon:ctc) HdrText.te-nro HdrText.te-text
         te-kie /* qq */.
 
         IF order = 1 THEN FIND NEXT HdrText 

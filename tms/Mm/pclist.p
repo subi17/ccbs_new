@@ -119,7 +119,7 @@ FORM
     
     WITH ROW FrmRow CENTERED overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + lcFormHeader + " " +  " "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + lcFormHeader + " " +  " "
 FRAME sel.
 
 FORM
@@ -154,7 +154,7 @@ FORM
 
    WITH  overlay row 2 centered
    COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(ctc) ac-hdr 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
    NO-LABELS SIDE-LABELS
     /*1 columns*/
 FRAME lis.
@@ -162,19 +162,19 @@ FRAME lis.
 form
     liMsSeq FORMAT ">>>>>>>>9" 
     HELP "Enter subscription ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SUBSCRIPTION ID " 
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SUBSCRIPTION ID " 
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
  
 form
     lCCli FORMAT "X(12)"
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN " 
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN " 
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
     
 form 
      lcEvent FORMAT "X(12)"
      HELP "Enter Contract"
-     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CONTRACT "
+     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CONTRACT "
      COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 

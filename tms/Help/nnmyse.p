@@ -40,7 +40,7 @@ form
     Salesman.Salesman                 column-label "SmCode" 
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) 
+    title color value(Syst.CUICommon:ctc) 
     " Salesman BROWSER: FROM (" + gcBrand + ") '"  + Salesman + "' " 
     FRAME sel.
 

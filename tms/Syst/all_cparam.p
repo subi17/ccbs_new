@@ -75,7 +75,7 @@ form
     TMSParam.Online  column-label "OL"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Parameter Browser "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -91,7 +91,7 @@ form
     FORMAT "x(256)" VIEW-AS FILL-IN SIZE 30 BY 1
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
@@ -101,21 +101,21 @@ form /* seek PARAM  BY  ParamCode */
     "Brand:" lcBrand skip
     "Code :" ParamCode
     help "Enter Code of param"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek PARAM BY ParamGroup */
     "Brand:" lcBrand skip
     "Group:" ParamGroup
     help "Enter Group of param"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND GROUP "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND GROUP "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek PARAM BY ParamName */
     "Brand:" lcBrand skip
     "Name :" ParamName
     help "Enter Name of param"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form    
@@ -147,7 +147,7 @@ form
 
     WITH OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " memo: " + TMSParam.ParamCode + " " WITH NO-LABELS 1 columns
     FRAME f4.
 
@@ -524,7 +524,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        TMSParam.ParamCode TMSParam.ParamGroup TMSParam.ParamName.
 
        RUN local-find-NEXT.

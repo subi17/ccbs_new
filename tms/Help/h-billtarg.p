@@ -27,13 +27,13 @@ form
     BillTarg.BillTarg format ">>>>9"
     BillTarg.RatePlan  format "x(35)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " Billing targets of customer " + STRING(iiCustNum)
+    title color value(Syst.CUICommon:ctc) " Billing targets of customer " + STRING(iiCustNum)
     overlay frame sel.
 
 form /* SEEK Code */
     BillTarg
     help "Enter Code of Billing Target"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

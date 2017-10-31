@@ -59,24 +59,24 @@ form
     soname           column-label "Name of Sales Office"
 WITH
     centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " CHOOSE MEMBERS INTO Salesman GROUP '" +
     icSMGroup + "' (" + gcBrand + ") " FRAME sel.
 
 
 form /* FIND Salesman BY code */
     Salesman help "Enter Salesman's Code"
-    with row 4 col 2 title color value(ctc) " FIND SALESMAN "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND SALESMAN "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND Salesman BY name */
     SmName help "Enter salesman's name"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND Salesoffice */
     Salesoffice help "Enter code of Salesoffice "
-    with row 4 col 2 title color value(ctc) " FIND OFFICE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OFFICE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.

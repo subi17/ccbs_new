@@ -30,13 +30,13 @@ form
     ttable.ValueId FORMAT "X(12)" 
     ttable.Description FORMAT  "x(40)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) ititle overlay with frame sel.
+    title color value(Syst.CUICommon:ctc) ititle overlay with frame sel.
 
 
 form /* SEEK Code */
     ob-code
     help "Enter Type "
-    with row 4  col 2 title color value(ctc) " FIND CODE "
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 

@@ -70,7 +70,7 @@ form
     ttPaymVouch.Voucher  FORMAT ">>>>>>>9" COLUMN-LABEL "Voucher"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Voucher Number Series "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -84,7 +84,7 @@ form
        HELP "Last used payment voucher number" 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 

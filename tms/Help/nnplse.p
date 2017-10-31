@@ -34,7 +34,7 @@ form
     PriceList.DedicList 
     PriceList.Memo  format "x(20)"
 WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " Price lists (" + gcBrand + ") " 
+    title color value(Syst.CUICommon:ctc) " Price lists (" + gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -45,14 +45,14 @@ form
     PriceList.Memo    SKIP
 
 WITH OVERLAY ROW 8 centered
-    TITLE COLOR value(ctc) tlli-ots
+    TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
     COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Invoicing Group :n hakua varten */
     haku
     help "Enter Code of a Price List"
-    with row 4 col 2 title color value(ctc) " FIND Price List "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Price List "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

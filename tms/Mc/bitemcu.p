@@ -137,7 +137,7 @@ form
     SingleFee.InvNum      COLUMN-LABEL "Inv.Nbr"   
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Single Fees: " +  string(iiCustNum) + " " + 
         substr(lcCustName,1,24) + " "
     FRAME sel.
@@ -202,7 +202,7 @@ form
 
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -221,7 +221,7 @@ form
   /*  "Period .........:" BillPeriod NO-LABEL SKIP */
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis-cctools.
 
@@ -232,13 +232,13 @@ form /* seek Billable item  BY  keyvalue */
        FORMAT "X(15)" SKIP
     "ID ...:" lcKeyValue  
        HELP "Enter target ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Target "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billable item  BY BillPeriod */
     BillPeriod
     HELP "Enter Billing Period"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Period "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Period "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fValidateMsSeq RETURNS LOGIC
@@ -705,7 +705,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        SingleFee.BillCode
        SingleFee.BillPeriod
        SingleFee.Amt

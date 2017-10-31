@@ -51,7 +51,7 @@ form
     notes                           column-label "Memo"
 WITH CENTERED OVERLAY scroll 1 10 DOWN ROW 3
     COLOR value(Syst.CUICommon:cfc) 
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
        " CHOOSE INVOICE " +
        " (" + STRING(CustNum) + " " + lcCustName + ") "
     FRAME sel.

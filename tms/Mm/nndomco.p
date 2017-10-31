@@ -88,7 +88,7 @@ form
    help "Logfile's name,  empty: no log"                   SKIP
    "                Display double calls ........:" bDisp  skip(3)
 WITH
-   width 80 ROW 1 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   width 80 ROW 1 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " MARK DOUBLE MOBILE calls " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME start.
 

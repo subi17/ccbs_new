@@ -57,7 +57,7 @@ form
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  CUSTOMER TEMPORARILY CREDIT LIMIT MENU  "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -72,7 +72,7 @@ form
 
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -82,7 +82,7 @@ form /* seek  CustNum */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CustomerNo:" CustNum
     HELP "Enter Customer Number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer"
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -371,7 +371,7 @@ BROWSE:
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        AddCustLimit.CustNum AddCustLimit.Dto AddCustLimit.amount
          AddCustLimit.memo AddCustLimit.Brand .
 

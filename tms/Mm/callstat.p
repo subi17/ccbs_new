@@ -65,7 +65,7 @@ FORM
 
 WITH ROW 5 CENTERED width 40 OVERLAY 10  DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " "  
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Calls by " + lcCrit + " "  
     + string(pvm,"99-99-99") 
 FRAME aa.
 
@@ -76,7 +76,7 @@ FORM
 
 WITH ROW 5 CENTERED width 60 OVERLAY 10  DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Calls by " + lcCrit + " " 
     + string(pvm,"99-99-99") 
 FRAME ab.
 
@@ -87,7 +87,7 @@ FORM
 
 WITH ROW 3 CENTERED width 60 OVERLAY 13  DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Calls by " + lcCrit + " " 
     + string(pvm,"99-99-99") 
 FRAME ac.
 

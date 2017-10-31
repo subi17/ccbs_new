@@ -116,7 +116,7 @@ f_level = s_level.
 
 
 pause 0.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. pcolor = ctc. pclear = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. pcolor = Syst.CUICommon:ctc. pclear = cfc.
 view frame menu_frame.
 
 mlevel = 1.

@@ -104,7 +104,7 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
+   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " TEST INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
@@ -147,14 +147,14 @@ form
    llCreateXML LABEL " Create XMLs ............" FORMAT "Yes/No"
            HELP "Create XMLs for PDF generation"
            
-with title color value(ctc) " CRITERIA FOR CREATING TEST INVOICES " side-labels
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING TEST INVOICES " side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
 form
     " Consecutive invoice number: " lcInvNum  NO-LABEL           SKIP
     " Minimum invoicing amount .: " mininv NO-LABEL           SKIP
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
+   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 16 FRAME lCustNum.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.

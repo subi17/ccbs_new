@@ -77,7 +77,7 @@ form
    pnplist.ToDate
 WITH ROW 3 WIDTH 55 CENTERED OVERLAY scroll 1 12 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + pnpgroup.name
+   title color value(Syst.CUICommon:ctc) " " + pnpgroup.name
    FRAME sel.
 
 form
@@ -92,13 +92,13 @@ HELP "MSISDN number "                                    SKIP
    "Valid time:" pnplist.FromDate pnplist.ToDate     
 WITH OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header  WITH no-labels
    FRAME lis.
 
 form /*  search WITH FIELD pnplist */
    haku-pnplist help "Give ...."
-with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND xxxxxxx "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FORM
@@ -388,7 +388,7 @@ print-line:
        FIND pnplist where recid(pnplist) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           pnplist.cli 
           pnplist.DialTypeUsed[1]
           pnplist.DialTypeUsed[2] 

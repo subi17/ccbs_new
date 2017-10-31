@@ -28,12 +28,12 @@ form
     CustCat.Category
     CatName
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " CATEGORIES (" + gcBrand + ") " OVERLAY FRAME tlse.
+    title color value(Syst.CUICommon:ctc) " CATEGORIES (" + gcBrand + ") " OVERLAY FRAME tlse.
 
 form /* Maa :n hakua varten */
     haku
     help "Give a code or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND CODE  "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE  "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

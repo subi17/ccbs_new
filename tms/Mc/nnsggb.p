@@ -61,7 +61,7 @@ form
     SMGroup.SmGroup      /* COLUMN-LABEL FORMAT */
     SMGroup.SGName      /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Join SMan '" + string(Salesman) + "' " + substr(Salesman.SmName,1,16) +
     " into groups (" + gcBrand + ") "
     FRAME sel.
@@ -75,13 +75,13 @@ WITH
 form /* Salesman Group :n haku kentällä SMGroup */
     SMGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Salesman Group :n haku kentällä SGName */
     SGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

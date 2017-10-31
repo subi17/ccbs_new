@@ -82,7 +82,7 @@ FORM
    RepText.ToDate          FORMAT "99-99-99" COLUMN-LABEL "Valid To"
    RepText.RepText         FORMAT "x(29)"
 WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(ctc) " " + ynimi +
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
       "  TRANSLATIONS  " + STRING(pvm,"99-99-99") + " "     
    FRAME sel.
 
@@ -110,7 +110,7 @@ FORM
    RepText.RepText AT 3 
       NO-LABEL
       VIEW-AS EDITOR SIZE 75 BY 3
-WITH OVERLAY ROW 7 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+WITH OVERLAY ROW 7 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 {Func/brand.i}
@@ -120,7 +120,7 @@ FORM /* hakua2 varten */
    "Type ....:" liType FORMAT ">>9" SKIP
    "Key Value:" haku2  FORMAT "X(16)" 
       HELP "Key value for type"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND KEY VALUE "
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND KEY VALUE "
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 FUNCTION fCheckExisting RETURNS LOGICAL:
@@ -489,7 +489,7 @@ REPEAT WITH FRAME sel:
          FIND RepText WHERE RECID(RepText) = rtab[FRAME-LINE] NO-LOCK.
 
          /* line to be deleted is lightened */
-         COLOR DISPLAY VALUE(ctc)
+         COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
             RepText.TextType
             RepText.Language
             RepText.RepText

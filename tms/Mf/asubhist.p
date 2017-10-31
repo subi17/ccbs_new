@@ -56,7 +56,7 @@ FORM
    lcfrom            COLUMN-LABEL "Valid from" FORMAT "x(16)"
    lcto              COLUMN-LABEL "Valid to"   FORMAT "x(16)"
 WITH CENTERED OVERLAY ROW 2 13 DOWN
-   COLOR value(Syst.CUICommon:cfc) title COLOR value(ctc) 
+   COLOR value(Syst.CUICommon:cfc) title COLOR value(Syst.CUICommon:ctc) 
    " HISTORY OF A-SUB NUMBER " + an1 + " " 
 FRAME sel.
 
@@ -64,7 +64,7 @@ FORM /* Numeron haku kentällä CustNum */
    haku-CLI  
       HELP "Enter A-sub no. or its first digits"          
 WITH
-   ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND A-SUB. NO " 
+   ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND A-SUB. NO " 
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME haku-f1.
 

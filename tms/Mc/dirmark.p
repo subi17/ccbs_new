@@ -39,7 +39,7 @@ form
     DMarketing.DirMarkName     /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " DIRECT MARKETING CODES "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -51,7 +51,7 @@ form
     "Direct marketing name ..:"  DMarketing.DirMarkName NO-LABEL 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr /* WITH side-labels 1 columns */
     FRAME lis.
 
@@ -60,7 +60,7 @@ form /* seek VAT Code  BY  DirMark */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "DirMarket.:" DirMark
     help "Enter Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Code  BY DirMarkName */
@@ -68,7 +68,7 @@ form /* seek Code  BY DirMarkName */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "DirName ..:" DirMarkName
     help "Enter Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -369,7 +369,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DMarketing.DirMark DMarketing.DirMarkName .
 
        RUN local-find-NEXT.

@@ -52,7 +52,7 @@ form
     Brand.BRName    /* label format */
 WITH  overlay row 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -60,7 +60,7 @@ WITH  overlay row 4 centered
 form /* seek Brand  by  Brand */
     xBrand
     HELP "Enter Code of Brand"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     NO-labels overlay FRAME f1.
 
 form /* seek Brand  by xBRName */

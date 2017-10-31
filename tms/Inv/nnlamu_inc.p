@@ -89,7 +89,7 @@ IF NOT ilSilent THEN DO:
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
+   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " INVOICING " + string(pvm,"99-99-99") + " "
    COLOR value(Syst.CUICommon:cfc) width 80
    FRAME taka.
@@ -119,7 +119,7 @@ form
    mark    label " Approve automatically .."
            help "Approve all invoices automatically (Yes/No) ?" 
                                                 SKIP(1)    
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 form
@@ -127,7 +127,7 @@ form
     " Consecutive invoice number: " lcInvNum  NO-LABEL           
     SKIP(1)
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
+   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
    Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.

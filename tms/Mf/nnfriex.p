@@ -56,7 +56,7 @@ help "Earliest day of call"
 Customer.CustName no-label format "x(20)"
 skip(7)
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " SPECIFICATION OF FREE Calls " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 

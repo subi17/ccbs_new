@@ -48,7 +48,7 @@ SKIP(2)
 "  Name     : " nam FORMAT "x(40)" SKIP(2)
 "  Status   : " msstatus FORMAT ">9" "View list of options by pressing <F9>" SKIP(4)
 WITH
-   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
+   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
    " Mobsub status change " + mobsub.cli + " "
    NO-LABELS FRAME stat.
    

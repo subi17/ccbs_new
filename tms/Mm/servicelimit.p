@@ -70,7 +70,7 @@ form
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " ServiceLimit Groups " + groupcode    
     FRAME sel.
 
@@ -87,20 +87,20 @@ form
     Servicelimit.web          COLON 20 
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek Billing Event Item  BY  GroupCode */
     GroupCode
     HELP "Enter Price List Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND P-LIST "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND P-LIST "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event Item  BY SLCode */
     SLCode
     HELP "Enter SLCode"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SLCode "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SLCode "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -486,7 +486,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           ServiceLimit.GroupCode    
           ServiceLimit.SLCode     
           

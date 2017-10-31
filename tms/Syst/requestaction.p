@@ -86,7 +86,7 @@ FORM
     RequestAction.ValidTo
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        "  ACTIONS OF TYPE " + STRING(iiReqType) + " (Active) "
     FRAME sel.
 
@@ -110,14 +110,14 @@ FORM
     RequestAction.ValidTo      COLON 20    
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "CLIType:" lcCLIType FORMAT "X(15)"
     HELP "Enter CLIType"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLIType"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLIType"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fActionDesc RETURNS CHAR
@@ -543,7 +543,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        lcPayType
        RequestAction.CLIType
        RequestAction.ActionType.

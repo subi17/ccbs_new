@@ -73,7 +73,7 @@ FORM
     PaymConfig.TaxRules
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " PAYMENT POSTING RULES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -95,7 +95,7 @@ FORM
     PaymConfig.TaxRules  COLON 18   
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " RULE "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " RULE "
     SIDE-LABELS 
     FRAME lis.
 
@@ -109,14 +109,14 @@ FORM
     "Brand:" lcBrand skip
     "Type :" liPaymType
     HELP "Enter payment type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Type "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM  
     "Brand :" lcBrand skip
     "Source:" lcPaymSrc
     HELP "Enter payment source"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Source "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Source "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fPaymTypeName RETURNS LOGIC
@@ -524,7 +524,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        PaymConfig.PaymType PaymConfig.PaymSrc
        PaymConfig.FromDate PaymConfig.ToDate .
 

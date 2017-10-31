@@ -61,7 +61,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     "  VAS B-DESTINATIONS   "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -74,7 +74,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -82,13 +82,13 @@ WITH  OVERLAY ROW 4 centered
 form /* seek  VASBdest */
     VASBdest
     HELP "Enter B-destination "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND B-DESTINATION "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND B-DESTINATION "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  OperID */
     OperID
     HELP "Enter Name of the oper id"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) "FIND OPER ID"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) "FIND OPER ID"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -413,7 +413,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        VASBdest.Bdest VASBdest.OperID Vasbdest.invevent.
 
        RUN local-find-NEXT.

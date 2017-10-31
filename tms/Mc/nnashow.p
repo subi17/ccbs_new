@@ -49,7 +49,7 @@ form
     lcfrom          COLUMN-LABEL "Valid from" FORMAT "x(16)"
     lhist           COLUMN-LABEL "H"
 WITH centered OVERLAY ROW 2 13 DOWN
-    color value(Syst.CUICommon:cfc) title color value(ctc) 
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) 
    " A-sub.Nums Of Invoicing Target " + STRING(bt) + " Of Cust " + STRING(cust)
 FRAME sel.
 
@@ -71,7 +71,7 @@ FRAME lis.
 form /* Numeron haku kentällä CustNum */
     haku-CLI 
     help "Enter A-sub no. or its FIRST digits"         
-WITH row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
+WITH row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND A-SUB. NO "
      COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME haku-f1.
 

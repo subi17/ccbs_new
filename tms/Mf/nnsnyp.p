@@ -61,7 +61,7 @@ form
     /* sd */          /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " National numberingplan "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -74,19 +74,19 @@ form
     NumPlan.Operator   label "Operator code ......."
     Operator.OperName  label "Operators name ......"
 WITH
-    OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 1 columns FRAME lis.
 
 form /* Nummerserie search WITH FIELD AreaCode */
     h-rn-rnr
     help "Give areacode "
-    with row 4 col 2 title color value(ctc) " FIND AREACODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AREACODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f1.
 
 form /* Nummerserie search WITH FIELD Operator */
     h-op-code
     help "Give operator code"
-    with row 4 col 2 title color value(ctc) " FIND OPERATOR "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OPERATOR "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -479,7 +479,7 @@ BROWSE:
        FIND NumPlan where recid(NumPlan) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        NumPlan.AreaCode NumPlan.Operator AreaCode.AreaName .
 
        IF order = 1 THEN FIND NEXT NumPlan

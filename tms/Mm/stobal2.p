@@ -48,7 +48,7 @@ form
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Balances in Stock " + p-Stock + " "
     FRAME sel.
 
@@ -56,7 +56,7 @@ form
     StoBal.SimArt
     WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
@@ -76,13 +76,13 @@ with centered overlay title "Det. Bal. Art " + StoBal.SimArt + " / "
 form /* seek Balance Record  BY  Stock */
     Stock
     help "Enter Stock Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND SCODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND SCODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Balance Record  BY SimArt */
     SimArt
     help "Enter Article Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ACODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND Stock where 
@@ -397,7 +397,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        SimArt.SAName StoBal.SimArt .
 
        RUN local-find-NEXT.

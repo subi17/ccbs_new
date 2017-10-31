@@ -79,7 +79,7 @@ form
     ttTerminal.OrderID   FORMAT ">>>>>>>9" COLUMN-LABEL "Order"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) lcHeader FRAME sel.
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) lcHeader FRAME sel.
 
 form
     SubsTerminal.TerminalID COLON 22 
@@ -106,20 +106,20 @@ form
        lcPerContract FORMAT "X(30)" NO-LABEL 
 WITH  OVERLAY ROW 4 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form 
     "Subscription ID:" liMsSeq FORMAT ">>>>>>>9"
     HELP "Enter subscription ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form 
     "MSISDN:" lcCLI FORMAT "x(12)"
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -404,7 +404,7 @@ REPEAT WITH FRAME sel:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ttTerminal.BillCode ttTerminal.IMEI.
 
        RUN local-find-NEXT.

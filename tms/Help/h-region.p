@@ -38,19 +38,19 @@ form
     Region.RgName   
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "  Regions  " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "  Regions  " 
     FRAME sel.
 
 form /* seek  Region */
     "Region:" lcRegion
     HELP "Enter region"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Region "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Region "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Name:" lcRgName
     HELP "Enter region name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 

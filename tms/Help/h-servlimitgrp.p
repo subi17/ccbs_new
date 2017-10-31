@@ -25,12 +25,12 @@ form
       ServiceLimitGroup.GroupCode
       ServiceLimitGroup.GroupName  format "x(30)"
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " ServiceLimit Groups " OVERLAY FRAME sel.
+    title color value(Syst.CUICommon:ctc) " ServiceLimit Groups " OVERLAY FRAME sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter RepType of an Object Billing RepType"
-    with row 4  col 2 title color value(ctc) " FIND CODE "
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.

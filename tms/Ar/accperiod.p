@@ -71,7 +71,7 @@ form
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " ACCOUNTING PERIODS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -85,7 +85,7 @@ form
     AccPeriod.PerLocked COLON 12
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -93,14 +93,14 @@ form /* seek  AccPeriod */
     "Brand :" lcBrand skip
     "Period:" AccPeriod
     HELP "Enter Period "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Period "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Period "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  FromDate */
     "Brand:" lcBrand skip
     "Date :" FromDate
     HELP "Enter period's begin date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -497,7 +497,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        AccPeriod.Period AccPeriod.FromDate AccPeriod.ToDate 
        AccPeriod.PerLocked.
 

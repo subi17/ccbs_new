@@ -57,7 +57,7 @@ form
    rsoper.fileid
    rsoper.Reseller rscode.RsName
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi + 
+   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi + 
    " Maintain reseller operators " + string(pvm,"99-99-99") + " "
 FRAME sel.
 
@@ -73,19 +73,19 @@ form
    " Preselect RepType .:" rsoper.pstype     SKIP
    " Preselect script:" rsoper.cps-script  
 WITH OVERLAY ROW 4 centered
-   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH NO-LABELS FRAME lis.
 
 form /*  search WITH FIELD CustNum */
    CustNum
    help "Give customer number"
-with row 4 col 2 title color value(ctc) " FIND CUSTOMER number "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER number "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD Operator */
    Operator
    help "Give operator code"
-with row 4 col 2 title color value(ctc) " FIND OPERATOR CODE "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OPERATOR CODE "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -514,7 +514,7 @@ BROWSE:
                   OperIndir.Operator = rsoper.Operator
        no-lock no-error.
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           rsoper.CustNum  Customer.CustName
           rsoper.Operator OperIndir.Prefix WHEN AVAIL OperIndir
           rsoper.fileid
@@ -566,7 +566,7 @@ BROWSE:
        no-lock no-error.
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           rsoper.CustNum  Customer.CustName
           rsoper.Operator OperIndir.Prefix WHEN AVAIL OperIndir
           rsoper.fileid

@@ -85,7 +85,7 @@ form
    PListConf.dTo
    llActive          column-label "Act."
 with width 80 overlay scroll 1 15 down ROW 1
-   color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
+   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + ynimi +
    " Pricelist history " + string(pvm,"99-99-99") + " "
    frame sel.
 
@@ -98,17 +98,17 @@ form
    "   Valid to date ..:" PListConf.dTo
 with  overlay row 6 centered width 35
    color value(Syst.CUICommon:cfc)
-   title color value(ctc)
+   title color value(Syst.CUICommon:ctc)
    fr-header with no-labels frame lis.
 
 form /* Price List search with field PList */
    PList help "Give pricelist's code"
-with row 4 col 2 title color value(ctc) " FIND CODE "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
    color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* Price List search with field PLName */
    PLName help "Give pricelist's name"
-with row 4 col 2 title color value(ctc) " FIND NAME "
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
    color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
@@ -419,7 +419,7 @@ BROWSE:
         find PListConf where recid(PListConf) = rtab[frame-line] no-lock.
 
         /* line to be deleted is lightened */
-        color display value(ctc)
+        color display value(Syst.CUICommon:ctc)
            PListConf.RatePlan
            PListConf.PriceList 
            PriceList.PLName 

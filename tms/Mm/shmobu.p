@@ -29,7 +29,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(ctc) " Subscriber Data "
+    title COLOR VALUE(Syst.CUICommon:ctc) " Subscriber Data "
     side-labels 1 columns FRAME subs.
 
 

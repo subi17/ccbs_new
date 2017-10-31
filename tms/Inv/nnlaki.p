@@ -225,7 +225,7 @@ ELSE lcMacros = "".
 
 form
    skip(17)
-   WITH TITLE COLOR value(ctc)
+   WITH TITLE COLOR value(Syst.CUICommon:ctc)
    " " + ynimi + " INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
 COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
@@ -257,7 +257,7 @@ form
    " Specification reports ...:"  rap no-label format "Yes/No"
       help "Print call specification reports for each invoice (Y/N)" SKIP
 
-with title color value(ctc) " INVOICE CRITERIA " side-labels
+with title color value(Syst.CUICommon:ctc) " INVOICE CRITERIA " side-labels
 COLOR value(Syst.CUICommon:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 {Inv/invsta.frm}

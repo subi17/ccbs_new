@@ -59,7 +59,7 @@ form
    Company.Address4     label "Addit. Address3" AT 10 FORMAT "X(40)" SKIP
    SKIP(1)
    
-with title color value(ctc) " " + ynimi + " COMPANY INFORMATION "
+with title color value(Syst.CUICommon:ctc) " " + ynimi + " COMPANY INFORMATION "
      + string(pvm,"99-99-99") + " "
      COLOR value(Syst.CUICommon:cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.

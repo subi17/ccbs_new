@@ -83,7 +83,7 @@ FORM
 WITH 
    width 80 ROW 1 OVERLAY scroll 1 15 DOWN
    COLOR value(Syst.CUICommon:cfc)
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
       " B-DESTINATIONS " + 
       string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -109,7 +109,7 @@ FORM
    BDest.FromDate LABEL "Valid From" COLON 20 SKIP
    BDest.ToDate LABEL "Valid To" COLON 20
 WITH  
-   OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
+   OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-LABELs FRAME lis.
 
 {Func/brand.i}
@@ -120,7 +120,7 @@ FORM
    "BDest:" haku
    help "Give B-destination."                         
 WITH 
-   row 4 col 2 title color value(ctc) " FIND B-DESTINATION "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND B-DESTINATION "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 FORM 
@@ -128,7 +128,7 @@ FORM
    "Name :" hakunimi
    help "Give name of B-Destination"             
 WITH 
-   row 4 col 2 title color value(ctc) " FIND NAME "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 FORM 
@@ -136,7 +136,7 @@ FORM
    "Name :" liCCN
    help "Give CCN"             
 WITH 
-   row 4 col 2 title color value(ctc) " FIND CCN "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CCN "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM
@@ -718,7 +718,7 @@ repeat WITH FRAME sel:
         FIND BDest where recid(BDest) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.CUICommon:ctc) 
            BDest.BDest BDest.BDName    BDest.Brand.
 
         IF order = 1 THEN FIND NEXT BDest where

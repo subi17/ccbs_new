@@ -66,7 +66,7 @@ form
     AreaCode.Local
 WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " National Areacodes " +
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " National Areacodes " +
      string(pvm,"99-99-99") + " " FRAME sel.
 
 form
@@ -81,26 +81,26 @@ form
     /* ld */
 WITH  OVERLAY ROW 4 centered
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
 form /* SamtrafiksomrAde search WITH FIELD TrafficArea */
     haku-st-nr
     help "Give area "
-    with row 4 col 2 title color value(ctc) " FIND AREA "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AREA "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* SamtrafiksomrAde search WITH FIELD AreaCode */
     haku-rn-rnr
     help "Give a area code or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND AREACODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AREACODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 form /* SamtrafiksomrAde search WITH FIELD AreaCode */
     haku-AreaName
     help "Give a area Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND AREANAME "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AREANAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -524,7 +524,7 @@ BROWSE:
         FIND AreaCode where recid(AreaCode) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.CUICommon:ctc)
         AreaCode.TrafficArea AreaCode.AreaCode AreaPlan.AreaName AreaCode.POI AreaCode.Local
         AreaCode.AreaName /* sd */.
 

@@ -45,7 +45,7 @@ form
     FusionInvoice.InvoiceNum
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " Fusion Invoices "
     + string(pvm,"99-99-9999") + " "
     FRAME sel.
@@ -77,7 +77,7 @@ form
     FusionInvoice.TotalToPay     FORMAT "-z,zz9.99"
 WITH  OVERLAY ROW 2 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     2 columns
     FRAME lis.
@@ -98,7 +98,7 @@ form
     
 WITH  OVERLAY ROW 8 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) "MOBILE INVOICE"
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "MOBILE INVOICE"
     SIDE-LABELS 
     2 columns
     FRAME lis2.
@@ -106,25 +106,25 @@ WITH  OVERLAY ROW 8 centered
 form /* seek FusionInvoice  BY  FusionInvoice */
     liCustnum
     HELP "Enter Fusion InvNum"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FuInvNo "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND FuInvNo "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek FusionInvoice  BY CoName */
     liCustnum
     HELP "Enter InvDate"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND InvDate "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND InvDate "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek FusionInvoice  BY CoName */
     liCustnum
     HELP "Enter CustomerId"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CustomerID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CustomerID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek FusionInvoice  BY CoName */
     liCustnum
     HELP "Enter Custnum"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Custnum "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Custnum "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 

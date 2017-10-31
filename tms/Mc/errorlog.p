@@ -71,7 +71,7 @@ form
     ErrorLog.ErrorMsg  FORMAT "X(31)"    COLUMN-LABEL "Error"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " ERROR LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -90,7 +90,7 @@ form
        VIEW-AS EDITOR SIZE 60 BY 5
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -100,7 +100,7 @@ form /* seek  ErrorLog */
     "Brand :" lcBrand skip
     "Action:" lcActionID
     HELP "Enter action ID "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Action ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Action ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -110,7 +110,7 @@ form /* seek  ErrorLog */
        HELP "Enter table name "
     "Key .:" lcKey
        HELP "Enter key value for table"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Table "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -413,7 +413,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ErrorLog.TableName ErrorLog.KeyValue ldtDate.
 
        RUN local-find-NEXT.

@@ -70,7 +70,7 @@ form
     SimBatch.TpKey     
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " SimBatch "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -90,7 +90,7 @@ form
 
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -100,7 +100,7 @@ form /* seek SimBatch  BY  Mancode */
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
      "Man.Code..:"    mancode
     HELP "Enter Code of Manufacturer"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MANUFACTURER CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MANUFACTURER CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SimBatch  BY SimArt */
@@ -108,7 +108,7 @@ form /* seek SimBatch  BY SimArt */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "SimArticle:"   SimARt
     HELP "Enter Code of SIM Article"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ARTICLE CODE "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ARTICLE CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* memo */
@@ -116,7 +116,7 @@ form /* memo */
 
     WITH OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " memo of Batch#: " + string(SimBatch.SimBatch) + " " 
     WITH NO-LABELS 1 columns
     FRAME f4.
@@ -498,7 +498,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        SimBatch.ManCode SimBatch.SimArt SimBatch.TpKey SimBatch.DelDate.
 
        RUN local-find-NEXT.

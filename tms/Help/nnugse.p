@@ -28,7 +28,7 @@ form
     UserGrp.UGName  format "x(30)"
     UserGrp.memo[1]  format "x(20)"
 with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(ctc) " User Groups " overlay frame tlse.
+    title color value(Syst.CUICommon:ctc) " User Groups " overlay frame tlse.
 
 form
     UserGrp.UserGroup skip
@@ -36,14 +36,14 @@ form
     UserGrp.memo[1]    skip
 
 with overlay row 8 centered
-    title color value(ctc) tlli-ots
+    title color value(Syst.CUICommon:ctc) tlli-ots
     color value(Syst.CUICommon:cfc) side-labels 1 col
     frame tlli.
 
 form /* Invoicing Group :n hakua varten */
     UserGroup
     help "Enter Code of an User Group"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

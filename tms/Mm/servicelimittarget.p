@@ -67,7 +67,7 @@ form
    ServiceLimitTarget.outsideRate  COLUMN-LABEL "OutSide"
 WITH ROW FrmRow  OVERLAY CENTERED FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) "Servicelimit  members " + 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "Servicelimit  members " + 
        (if iislseq = 0 THEN "ALL" ELSE STRING(iislseq))
     FRAME sel.
 
@@ -83,14 +83,14 @@ form
       FORMAT "X(20)" SKIP(1) 
 WITH  OVERLAY ROW 6 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr
     SIDE-LABELS
     FRAME lis.
 
 form /* seek  MemberType */
     Membertype
     HELP "Enter Member Of Fatime Group "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MEMBER "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MEMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -374,7 +374,7 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         ServiceLimitTarget.ServiceLMember 
         ServiceLimitTarget.InsideRate
         ServiceLimitTarget.OutsideRate

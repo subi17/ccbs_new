@@ -58,24 +58,24 @@ form
     TMSUser.UserNum                     column-label "UserNo"
     TMSUser.UserName  format "x(16)"    column-label "Name"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(Syst.CUICommon:cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " CHOOSE MEMBERS INTO GROUP " +
     UserGroup + " " FRAME sel.
 
 
 
 form /* FIND User BY number */
     UserCode help "Enter User Id"
-    with row 4 col 2 title color value(ctc) " FIND USERID "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND USERID "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND User BY name */
     UserName help "Enter User's name"
-    with row 4 col 2 title color value(ctc) " FIND name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND User BY abbreviation */
     UserNum help "Enter User No."
-    with row 4 col 2 title color value(ctc) " FIND USER NO."
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND USER NO."
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.

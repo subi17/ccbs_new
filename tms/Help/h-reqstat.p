@@ -42,14 +42,14 @@ form
    ttReqStat.ttReqStat NO-LABEL FORMAT "x(2)"
    ttReqStat.StName    NO-LABEL FORMAT "x(28)"
 with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-   title color value(ctc) " Request status " overlay 
+   title color value(Syst.CUICommon:ctc) " Request status " overlay 
 frame sel.
 
 form /* SEEK Code */
    se-code
       help "Enter Code of Status name "
 with
-   row 4 col 2 title color value(ctc) " FIND CODE "
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
    color value(Syst.CUICommon:cfc) no-labels overlay
 frame hayr.
 

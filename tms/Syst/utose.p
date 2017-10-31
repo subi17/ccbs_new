@@ -44,19 +44,19 @@ form
     MenuTree.MenuTitle
 
     WITH OVERLAY scroll 1 ROW 4 10 DOWN centered
-    color value(Syst.CUICommon:cfc) title color value(ctc) " BROWSE FUNCTION SHORTCUTS "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " BROWSE FUNCTION SHORTCUTS "
     FRAME sel.
 
 form /* toimintotunnuksella hakua varten */
     haku
     help "Give function code or beginning of it ..."
-    with row 4 col 2 title color value(ctc) " FIND FUNCTION CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND FUNCTION CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* toimintonimella hakua varten */
     haku2
     help "Give function name or beginning of it ..."
-    with row 4 col 2 title color value(ctc) " FIND FUNCTION name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND FUNCTION name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 /* allowed tokens */

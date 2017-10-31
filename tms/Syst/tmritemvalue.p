@@ -79,7 +79,7 @@ FORM
     lcItemValue[5]  COLUMN-LABEL " " FORMAT "X(4)" 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " ITEM VALUES FOR RULE " + STRING(iiTMRuleSeq) + " "
     FRAME sel.
 
@@ -158,7 +158,7 @@ FORM
  
 WITH  OVERLAY ROW 7 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -610,7 +610,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           TMRItemValue.FromDate
           TMRItemValue.ToDate
           lcItemValue[1 for 5].

@@ -109,7 +109,7 @@ form
     CustCat.segment COLUMN-LABEL "Segment" FORMAT "X(17)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi +
+    title color value(Syst.CUICommon:ctc) " " + ynimi +
     " CUSTOMER CATEGORIES "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -142,7 +142,7 @@ form
       HELP "Customer segment" SKIP 
  WITH  OVERLAY ROW 7 col 5
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 
     FRAME lis.
 
@@ -150,14 +150,14 @@ form /* kategorian tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "Code :" haku
     help "Give a code or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* kategorian nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give a Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
@@ -575,7 +575,7 @@ BROWSE:
         FIND CustCat where recid(CustCat) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.CUICommon:ctc) 
         CustCat.Category CustCat.CatName .
 
         run pFindNext.

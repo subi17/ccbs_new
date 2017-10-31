@@ -45,7 +45,7 @@ form
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " B-Event " + FeeModel + ": " + FeeModel.FeeName + " / Price List " + PriceList
     + " "
     FRAME sel.
@@ -58,7 +58,7 @@ form
     FMItem.Amount
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -67,7 +67,7 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Billing Event Item  BY BillCode */
     BillCode
     HELP "Enter BillCode Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillCode "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BillCode "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 

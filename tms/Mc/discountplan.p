@@ -66,7 +66,7 @@ FORM
     DiscountPlan.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  DISCOUNT PLAN  " +
        string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -112,7 +112,7 @@ FORM
        HELP "Visible in CC tools"
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -121,7 +121,7 @@ FORM
     "Brand:" lcBrand skip
     "Name :" lcRuleID FORMAT "X(20)" 
     HELP "Enter rule ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rule ID "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Rule ID "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -531,7 +531,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DiscountPlan.DPId DiscountPlan.DPName
        DiscountPlan.Priority.
         

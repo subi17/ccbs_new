@@ -25,12 +25,12 @@ form
       FeeModel.FeeModel FORMAT "X(16)"
       FeeModel.FeeName  format "x(50)"
     with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc) overlay
-    title color value(ctc) " Billing Events " FRAME sel.                
+    title color value(Syst.CUICommon:ctc) " Billing Events " FRAME sel.                
 
 form /* SEEK Code */
     FeeModel
     help "Enter Code of a Billing Event "        
-    with row 4 col 2 title color value(ctc) " FIND CODE "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.

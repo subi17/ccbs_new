@@ -40,7 +40,7 @@ FORM
    "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " Installation Address "
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Installation Address "
     NO-LABELS
     FRAME fAddr.
 PAUSE 0 NO-MESSAGE.

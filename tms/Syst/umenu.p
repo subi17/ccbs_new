@@ -56,7 +56,7 @@ form /* pAAruutu, scroll */
     MenuText.MenuText    column-label "Text" help "Text's funktion key"
 WITH ROW 1 width 80 OVERLAY scroll 1 15 DOWN
     COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " MENU - TEXTER " FRAME sel.
+    title color value(Syst.CUICommon:ctc) " MENU - TEXTER " FRAME sel.
 
 form
     MenuText.MenuNum label "TextNo ........" skip(1)
@@ -64,7 +64,7 @@ form
     toi        label "       2.rad ...."
     WITH  OVERLAY ROW 8 col 5
     COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header side-labels 1 columns
     FRAME lis.
 
@@ -72,14 +72,14 @@ form /* menunron hakua varten */
     ha-menro
     help "Give a textNo"
     WITH ROW 4 col 2 TITLE
-    color value(ctc) " SEEK TEXTNO "
+    color value(Syst.CUICommon:ctc) " SEEK TEXTNO "
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puYR.
 
 form /* menunimen hakua varten */
     ha-metex
     help "Give a text"
     WITH ROW 4 col 2 TITLE
-    color value(ctc) " SEEK TEXT "
+    color value(Syst.CUICommon:ctc) " SEEK TEXT "
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puHE.
 
 /* Haetaan Company */

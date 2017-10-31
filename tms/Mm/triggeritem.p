@@ -75,7 +75,7 @@ form
 
 WITH ROW FrmRow width 72 CENTERED  OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        "  TriggerItems for  " + icTriggerConfID +  string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -92,20 +92,20 @@ form
                     
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  TriggerItem */
     "Customer number:" liCustNum
     HELP "Enter Customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  TriggerItem */
     "Name:" lcRgName FORMAT "x(30)"
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fZoneName RETURNS LOGIC
@@ -471,7 +471,7 @@ REPEAT WITH FRAME sel:
           NEXT.
        END.
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        TriggerItem.TriggerEventID     
        TriggerItem.TriggerConfID
        TriggerItem.InvCust   

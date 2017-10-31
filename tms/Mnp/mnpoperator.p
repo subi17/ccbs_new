@@ -61,7 +61,7 @@ FORM
     MNPOperator.OperBrand
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
     " MNP OPERATORS "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -76,7 +76,7 @@ FORM
     MNPOperator.Active LABEL "Active"
 WITH  OVERLAY ROW 4 centered 1 columns
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr with side-labels
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr with side-labels
     NO-LABELS 
     FRAME lis.
 
@@ -353,7 +353,7 @@ BROWSE:
          RUN local-find-this(FALSE).
         
          ok = FALSE.
-         COLOR DISPLAY value(ctc)
+         COLOR DISPLAY value(Syst.CUICommon:ctc)
             MNPOperator.Opername
             MNPOperator.OperCode.
         

@@ -105,7 +105,7 @@ form /* pAAruutu, scroll */
     TMSUser.toDate   FORMAT "99.99.9999" column-LABEL "Until"
 WITH
     width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(ctc) " " + ynimi + " USER IDS "
+    title color value(Syst.CUICommon:ctc) " " + ynimi + " USER IDS "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
 form /* lisAyksiA varten, ei scroll */
@@ -142,27 +142,27 @@ form /* lisAyksiA varten, ei scroll */
     moremail       NO-LABEL format "x(75)"
        HELP "More E-mail addresses" 
 WITH  OVERLAY ROW 2 centered COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(ctc) fr-header WITH side-labels
+    TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
         FRAME lis.
 
 form /* KAyttAjAn hakua varten */
     ha-nimi FORMAT "x(20)"
     help "Enter User TMS ID"    
     WITH ROW 4 col 2
-    title color value(ctc) " SEEK USER TMS ID "     
+    title color value(Syst.CUICommon:ctc) " SEEK USER TMS ID "     
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha1.
 
 form /* numeron hakua varten */
     ha-nimi format "x(20)"
     help "Enter Foreign ID"      
-    with row 4 col 2 title color value(ctc) " SEEK BY FOREIGN ID "
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " SEEK BY FOREIGN ID "
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha2.
 
 form /* Nimen hakua varten */
     ha-nimi FORMAT "x(30)"
     help "Enter User Name"    
     WITH ROW 4 col 2
-    title color value(ctc) " SEEK USER BY NAME "     
+    title color value(Syst.CUICommon:ctc) " SEEK USER BY NAME "     
     NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha3.
 
 FORM
@@ -589,7 +589,7 @@ add-new:
        else if nap = "6" or nap = "f6" AND lcRight = "RW" THEN DO TRANS:
           FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE]
           exclusive-lock.
-          COLOR DISPLAY value(ctc) 
+          COLOR DISPLAY value(Syst.CUICommon:ctc) 
              TMSUser.UserCode 
              TMSUser.UserName 
              TMSUser.Initials

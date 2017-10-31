@@ -91,7 +91,7 @@ form
     CoRule.Priority   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
        " COMMISSION RULES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -156,7 +156,7 @@ form
     CoRule.ActivationSMS COLON 20 FORMAT "X(20)"
        lcActivationSMS NO-LABEL FORMAT "X(30)" SKIP
 WITH OVERLAY ROW 1 centered
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS FRAME lis.
 
 form            
@@ -169,7 +169,7 @@ form
                 "Date is mandatory")
 WITH  OVERLAY ROW 7 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) " Copy a New Rule From Template " 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Copy a New Rule From Template " 
     SIDE-LABELS 
     FRAME fTemplate.
 
@@ -179,7 +179,7 @@ form /* seek  */
     "Brand :" lcBrand skip
     "RuleID:" liRule
     HELP "Enter rule ID "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID"
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
@@ -187,7 +187,7 @@ form /* seek  */
     "Brand .....:" lcBrand skip
     "Description:" lcDesc
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND description "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND description "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
@@ -677,7 +677,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CoRule.CoRuleID CoRule.RuleDesc .
 
        RUN local-find-NEXT.

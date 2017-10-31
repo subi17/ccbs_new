@@ -62,7 +62,7 @@ FORM
     lcItemName         FORMAT "X(30)"       COLUMN-LABEL "Name"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc) 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        " ORDER ACTION ITEMS FOR ORDER " + STRING(iiOrder) + " "
     FRAME sel.
 
@@ -75,7 +75,7 @@ FORM
     OrderAction.ItemParam COLON 20 FORMAT "X(40)"
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -345,7 +345,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           OrderAction.ItemType
           OrderAction.ItemKey
           lcItemName.

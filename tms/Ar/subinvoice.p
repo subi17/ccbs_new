@@ -75,14 +75,14 @@ form
     SubInvoice.ClaimState
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(ctc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
        " SUBINVOICES OF INVOICE "  + STRING(lcExtInvID) + " "
     FRAME sel.
 
 form /* seek  SubInvoice */
     "SubInvoice:" liSubInvNum FORMAT ">>>>9"
     HELP "Enter SubInvoice"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SubInvoice "
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SubInvoice "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
