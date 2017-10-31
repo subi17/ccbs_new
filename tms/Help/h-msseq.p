@@ -40,7 +40,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Subscription "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 FOR EACH MobSub WHERE
          MobSub.Custnum = iiCustnum NO-LOCK:
@@ -110,7 +110,7 @@ repeat:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW ttMobsub.MsSeq {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) ttMobsub.MsSeq WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) ttMobsub.MsSeq WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

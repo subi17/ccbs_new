@@ -273,7 +273,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcServices):
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-   EMPTY TEMP-TABLE ttBarringList.
+      EMPTY TEMP-TABLE ttBarringList.
    EMPTY TEMP-TABLE ttBGroup.
 END.

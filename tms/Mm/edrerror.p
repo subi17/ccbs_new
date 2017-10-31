@@ -98,7 +98,7 @@ form /* seek  me-name */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -170,11 +170,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row ttEDRError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttEDRError.MobError WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttEDRError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row ttEDRError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttEDRError.MEName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttEDRError.MEName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-line] = ? THEN NEXT.

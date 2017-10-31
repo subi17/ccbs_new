@@ -147,7 +147,7 @@ form /* seek  CLI */
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,  By Stamp  , By 4".
@@ -277,16 +277,16 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row CallAlarm.CustNO {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CallAlarm.CustNO WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CallAlarm.CustNO WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row CallAlarm.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CallAlarm.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CallAlarm.CLI WITH FRAME sel.
       END.
 
       ELSE IF order = 3 THEN DO:
         choose row CallAlarm.actstamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CallAlarm.actstamp WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CallAlarm.actstamp WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
 
@@ -547,7 +547,7 @@ BROWSE:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        CallAlarm.CustNO CallAlarm.CLI lccreditname lcdelitype.
        IF ok THEN DO:
 

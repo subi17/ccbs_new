@@ -113,7 +113,7 @@ FUNCTION fStatusName RETURNS LOGICAL
 END.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -196,7 +196,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       CHOOSE ROW DumpLog.DumpId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      COLOR DISPLAY VALUE(ccc) DumpLog.DumpId WITH FRAME sel.
+      COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DumpLog.DumpId WITH FRAME sel.
 
       nap = keylabel(LASTKEY).
 

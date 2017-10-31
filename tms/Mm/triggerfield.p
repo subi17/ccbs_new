@@ -84,7 +84,7 @@ form /* seek  BTName */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -208,11 +208,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TriggerField.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerField.TriggerConfID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerField.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TriggerField.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerField.TableName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerField.TableName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -369,7 +369,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TriggerField.TriggerConfID TriggerField.TableName .
        IF ok THEN DO:
 

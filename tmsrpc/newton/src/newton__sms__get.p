@@ -67,5 +67,4 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

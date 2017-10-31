@@ -53,7 +53,7 @@ form
 with row 1 centered overlay title " SEEK Circuit Groups " FRAME alku.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Trunk USE-INDEX ExCode no-lock no-error.
    IF NOT AVAIL Trunk THEN DO:
       BELL.
@@ -176,11 +176,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW Trunk.TrunkCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Trunk.TrunkCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Trunk.TrunkCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW Trunk.TrunkName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Trunk.TrunkName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Trunk.TrunkName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

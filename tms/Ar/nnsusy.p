@@ -406,7 +406,7 @@ ASSIGN muispvm    = pvm.
 
 fCurrLabels(""). 
 
-assign Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+assign Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME INV-NO.
 view FRAME payment.
 view FRAME acct.
@@ -1001,7 +1001,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
      END.  /* xdontupd = FALSE */
 
      assign muispvm  = suopvm. Syst.CUICommon:cfc = "sel".
-     RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+     RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
      ASSIGN lAPVatAmt = 0. 
 

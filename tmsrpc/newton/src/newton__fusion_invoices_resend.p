@@ -88,5 +88,4 @@ IF liRequest = 0 THEN RETURN appl_err("Email request creation failed").
 add_boolean(response_toplevel_id, "", True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

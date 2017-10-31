@@ -42,7 +42,7 @@ form
     " PRINTER '" + xPrinterId + "' EFFECTS "
     FRAME sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = xPrinterId no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.

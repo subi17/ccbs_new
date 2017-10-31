@@ -702,7 +702,7 @@ cd-title = " " +
     
 ldNetBal = ldCustOP + ldCustAP - ldCustINT - blan.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 PAUSE 0.
 view frame sel.
@@ -812,7 +812,7 @@ print-line:
 
       hide message no-pause.
       choose row Invoice.ExtInvID {Syst/uchoose.i} no-error with frame sel.
-      color DISPlay value(ccc) Invoice.ExtInvID with frame sel.
+      color DISPlay value(Syst.CUICommon:ccc) Invoice.ExtInvID with frame sel.
 
       assign nap = keylabel(lastkey).
 

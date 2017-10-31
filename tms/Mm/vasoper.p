@@ -104,7 +104,7 @@ form /* seek VOName */
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -221,11 +221,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row VASOper.OperID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) VASOper.OperID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) VASOper.OperID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row VASOper.VOName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) VASOper.VOName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) VASOper.VOName WITH FRAME sel.
       END.
       
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -443,7 +443,7 @@ BROWSE:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        VASOper.OperID     /* column-label format */
        VASOper.VOName     /* column-label format */
        VASOper.OrigPrice

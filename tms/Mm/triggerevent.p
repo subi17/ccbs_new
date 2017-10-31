@@ -175,7 +175,7 @@ FUNCTION fZoneName RETURNS LOGIC
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -306,11 +306,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TriggerEvent.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerEvent.TriggerConfID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerEvent.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TriggerEvent.EventSource {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerEvent.EventSource WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerEvent.EventSource WITH FRAME sel.
       END.
 
 
@@ -590,7 +590,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TriggerEvent.TriggerEventID TriggerEvent.EventSource TriggerEvent.Created TriggerEvent.Handled 
        TriggerEvent.StatusCode  TriggerEvent.Activated TriggerEvent.TriggerConfID.
 

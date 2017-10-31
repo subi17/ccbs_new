@@ -93,7 +93,7 @@ form /* seek  MemberType */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MEMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Type  ,  By Member  ,By 3, By 4".
@@ -238,7 +238,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ServiceLimitTarget.ServiceLMember {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServiceLimitTarget.ServiceLMember WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServiceLimitTarget.ServiceLMember WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -399,7 +399,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ServiceLimitTarget.ServiceLMember with frame sel.
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhServiceLimitTarget).

@@ -87,7 +87,7 @@ form /* Customer Group :n haku kentällä UGName */
 FIND TMSUser where TMSUser.UserCode = UserCode no-lock.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UserGrp
@@ -172,11 +172,11 @@ SELAUS:
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
    CHOOSE ROW UserGrp.UserGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) UserGrp.UserGroup WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) UserGrp.UserGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
    CHOOSE ROW UserGrp.UGName {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) UserGrp.UGName WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) UserGrp.UGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

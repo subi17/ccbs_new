@@ -237,7 +237,7 @@ form
    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
    "FIND FIXED NUMBER" COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  ".
@@ -334,19 +334,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Mobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Mobsub.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Mobsub.MsSeq  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Mobsub.MsSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW Mobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Mobsub.AgrCust WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
         CHOOSE ROW Mobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Mobsub.MSStatus WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.MSStatus WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

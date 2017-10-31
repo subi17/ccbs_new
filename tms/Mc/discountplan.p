@@ -169,7 +169,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -335,12 +335,12 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW DiscountPlan.DPRuleID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DiscountPlan.DPRuleID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DiscountPlan.DPRuleID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DiscountPlan.DPID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DiscountPlan.DPID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DiscountPlan.DPID WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -554,7 +554,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        DiscountPlan.DPId DiscountPlan.DPName
        DiscountPlan.Priority.
        

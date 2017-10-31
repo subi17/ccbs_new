@@ -181,7 +181,7 @@ toimi:
     CHOOSE ROW bnfile
     help "Choose customer and press ENTER !" {Syst/uchoose.i} no-error
     WITH FRAME act.
-    COLOR DISPLAY value(ccc) bnfile.
+    COLOR DISPLAY value(Syst.CUICommon:ccc) bnfile.
 
     cnum = frame-line(act).
     bnfile = entry(cnum,cname).

@@ -117,4 +117,3 @@ END FUNCTION.
 */
 
 checkNewSubscriptions().
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

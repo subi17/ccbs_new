@@ -92,7 +92,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -173,7 +173,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttSLG.CliType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSLG.CliType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSLG.CliType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -328,7 +328,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ttSLG.CliType ttSLG.BillCode
        ttSLG.CCN ttSLG.Bdest CCN.CCNName WHEN AVAIL CCN BillItem.BIName.
        IF ok THEN DO:

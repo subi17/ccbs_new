@@ -64,5 +64,4 @@ IF liRequestID = 0 THEN RETURN appl_err(lcError).
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -49,7 +49,7 @@ form
 
 with row 1 centered overlay title " SEEK RSO" FRAME alku.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST AreaPlan USE-INDEX TrafficArea no-lock no-error.
    IF NOT AVAIL AreaPlan THEN DO:
       BELL.
@@ -167,11 +167,11 @@ selaus:
       HIDE MESSAGE no-pause.
       IF jarj = 2 THEN DO:
          CHOOSE ROW AreaPlan.TrafficArea {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaPlan.TrafficArea WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPlan.TrafficArea WITH FRAME sel.
       END.
       ELSE IF jarj = 1 THEN DO:
          CHOOSE ROW AreaPlan.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaPlan.AreaName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPlan.AreaName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

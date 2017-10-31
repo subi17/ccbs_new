@@ -78,7 +78,7 @@ form
     FRAME lis.
 
 FIND FIRST TMSReport where TMSReport.RepName = si-tul no-lock no-error.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
 IF AVAILABLE TMSRepCfg THEN DO:
@@ -278,7 +278,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW TMSRepCfg.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc) TMSRepCfg.UserCode WITH FRAME sel.
+      COLOR DISPLAY value(Syst.CUICommon:ccc) TMSRepCfg.UserCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -433,7 +433,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
+        COLOR DISPLAY value(Syst.CUICommon:ccc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
                                  tnimi WITH FRAME sel.
         IF ok THEN DO:
 

@@ -67,8 +67,6 @@ END.
 
 EMPTY TEMP-TABLE ttStatus.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1.
-
 fELog("FUNCRUNEXEC_RUN" +
          (IF lcHost > "" THEN "_" + lcHost ELSE ""),
       "handled" + STRING(liHandled)).

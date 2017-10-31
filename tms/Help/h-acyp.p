@@ -55,7 +55,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 END.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -111,7 +111,7 @@ BROWSE:
 
          hide message no-pause.
          choose row actype.AccType {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) actype.AccType with frame sel.
+         color display value(Syst.CUICommon:ccc) actype.AccType with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
          nap = keylabel(lastkey).

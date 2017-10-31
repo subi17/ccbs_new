@@ -90,7 +90,7 @@ FIND Stock where
      Stock.Brand = gcBrand no-lock.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Code,By 3, By 4".
@@ -226,7 +226,7 @@ BROWSE:
 
       IF order = 1 THEN DO:
         CHOOSE ROW StoBal.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) StoBal.SimArt WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) StoBal.SimArt WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -419,7 +419,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        SimArt.SAName StoBal.SimArt .
        IF ok THEN DO:
 

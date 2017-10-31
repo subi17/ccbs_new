@@ -102,7 +102,7 @@ form /* Invoicen asnolla hakua varten */
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -189,15 +189,15 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvNum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
          CHOOSE ROW Invoice.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.CustNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.CustNum WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
          CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvDate WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:

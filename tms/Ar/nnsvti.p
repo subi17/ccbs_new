@@ -215,7 +215,7 @@ form
 with title color value(Syst.CUICommon:ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
 COLOR value(Syst.CUICommon:cfc) ROW 7 centered OVERLAY FRAME rajat.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 view FRAME rajat. view FRAME statu. PAUSE 0 no-message.

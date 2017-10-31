@@ -130,7 +130,7 @@ WITH
    title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
-   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    view FRAME taka. PAUSE 0 no-message.
 
    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

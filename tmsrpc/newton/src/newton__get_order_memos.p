@@ -78,5 +78,4 @@ END.
 add_int(top_struct, "more_memos", liLeftCounter).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

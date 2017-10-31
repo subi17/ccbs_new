@@ -87,7 +87,7 @@ form /*  search WITH FIELD RateDate */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Currency Date "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CurRate
@@ -267,11 +267,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW CurRate.Currency {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CurRate.Currency WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CurRate.Currency WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CurRate.RateDate {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CurRate.RateDate WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CurRate.RateDate WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -524,7 +524,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           CurRate.Currency 
           CurRate.RateDate 
           Currency.CurrName 

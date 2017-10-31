@@ -159,7 +159,7 @@ FUNCTION fDispQtyUnit RETURNS LOGICAL.
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "   By Code   ,   By Name   ,By 3, By 4".
@@ -288,19 +288,19 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE. 
       IF order = 1 THEN DO:
         CHOOSE ROW FATGroup.FTgrp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FATGroup.FTgrp WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATGroup.FTgrp WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FATGroup.FtgName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FATGroup.FtgName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATGroup.FtgName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW FATGroup.FatType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FATGroup.FatType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATGroup.FatType WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW FATGroup.Priority  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FATGroup.Priority WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATGroup.Priority WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -533,7 +533,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        FATGroup.FTGrp FATGroup.FtgName .
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhFATGroup).

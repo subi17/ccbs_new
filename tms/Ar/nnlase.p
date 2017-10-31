@@ -91,7 +91,7 @@ form
 
 {Func/brand.i}
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 IF gcHelpParam > "" THEN DO:
@@ -184,19 +184,19 @@ print-line:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.ExtInvID WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Invoice.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.CustNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvDate WITH FRAME sel.
       END.
 
       ASSIGN nap = keylabel(LASTKEY).

@@ -510,7 +510,7 @@ ELSE DO:
    RETURN.
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -579,16 +579,16 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW temp-event.ttdate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) temp-event.ttdate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) temp-event.ttdate WITH FRAME sel.
       END.
 
       ELSE  IF order = 2 THEN DO:
         CHOOSE ROW temp-event.ttuser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) temp-event.ttuser WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) temp-event.ttuser WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW temp-event.tttable {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) temp-event.tttable WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) temp-event.tttable WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

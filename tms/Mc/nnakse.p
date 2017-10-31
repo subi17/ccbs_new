@@ -36,7 +36,7 @@ form /* Maa :n hakua varten */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE  "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -86,7 +86,7 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW CustCat.Category {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) CustCat.Category WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CustCat.Category WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

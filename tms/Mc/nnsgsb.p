@@ -79,7 +79,7 @@ form /* FIND Salesoffice */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OFFICE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 FIND SMGroup WHERE
      SMGroup.Brand   = gcBrand AND
@@ -160,7 +160,7 @@ BROWSE:
     CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 4 THEN
     CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+      COLOR DISPLAY value(Syst.CUICommon:ccc)
       Salesman.Salesman Salesman.Salesman Salesman.SalesOffice Salesman.SmName
       WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

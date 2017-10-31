@@ -267,7 +267,7 @@ toimi:
       IF toimi = 5 THEN DO:
          if pyynto then pytx = "PAYMENT BEHAVIOUR NOTICED".
          else           pytx = "PAYMENT BEHAVIOUR NOT NOTICED".
-         Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   ccc = Syst.CUICommon:cfc.
+         Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.
@@ -280,7 +280,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
                "Choose printing order, press ENTER !".
                READKEY PAUSE 0.
                CHOOSE ROW valik {Syst/uchoose.i} no-error.
-               COLOR DISPLAY value(ccc) valik WITH FRAME rival.
+               COLOR DISPLAY value(Syst.CUICommon:ccc) valik WITH FRAME rival.
                i = FRAME-LINE.
                HIDE MESSAGE no-pause.
                ASSIGN order = i

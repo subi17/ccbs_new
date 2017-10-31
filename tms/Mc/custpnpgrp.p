@@ -104,7 +104,7 @@ form /*  search WITH FIELD PnPPriorform */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Priority "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CustPNPGroup
@@ -240,7 +240,7 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW CustPNPGroup.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CustPNPGroup.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CustPNPGroup.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -462,7 +462,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           CustPNPGroup.CustNum 
           CustPNPGroup.PnpGroup 
           CustPNPGroup.PnPPrior.

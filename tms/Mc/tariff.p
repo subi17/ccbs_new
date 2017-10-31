@@ -281,7 +281,7 @@ IF icBDest NE "" AND CAN-FIND(FIRST Tariff WHERE
 ELSE
    lBrHdr  = lBrHdr + "(CCN " + STRING(iiCCN) + ") ".
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -447,11 +447,11 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Tariff.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Tariff.PriceList WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Tariff.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Tariff.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Tariff.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Tariff.CCN WITH FRAME sel.
       END.
       
       nap = KEYLABEL(LASTKEY).
@@ -786,7 +786,7 @@ repeat WITH FRAME sel:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.CUICommon:ccc) 
            Tariff.ValidFrom
            Tariff.ValidTo
            Tariff.PriceList

@@ -62,7 +62,7 @@ form
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* get table names in all dbs */
@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttTable.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttTable.TableName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttTable.TableName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

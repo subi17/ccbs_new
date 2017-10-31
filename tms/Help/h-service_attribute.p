@@ -28,7 +28,7 @@ form
     title color value(Syst.CUICommon:ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 ASSIGN
    lcServCom = gcHelpParam
@@ -91,7 +91,7 @@ repeat:
 
          hide message no-pause.
          choose row ServAttr.ServCom {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) ServAttr.ServCom with frame sel.
+         color display value(Syst.CUICommon:ccc) ServAttr.ServCom with frame sel.
 
          nap = keylabel(lastkey).
 

@@ -60,5 +60,4 @@ ELSE
    add_string(response_toplevel_id, "", "OK").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

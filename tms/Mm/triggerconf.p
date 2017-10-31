@@ -105,7 +105,7 @@ FUNCTION fZoneName RETURNS LOGIC
      */
 END FUNCTION.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -228,11 +228,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TriggerConf.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerConf.TriggerConfID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerConf.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TriggerConf.TCNAme {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerConf.TCNAme WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerConf.TCNAme WITH FRAME sel.
       END.
 
 
@@ -484,7 +484,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TriggerConf.TriggerConfID TriggerConf.Prior TriggerConf.TCName 
        TriggerConf.ValidFrom  TriggerConf.ValidTo       TriggerConf.EventRule  lcRuleName
               .

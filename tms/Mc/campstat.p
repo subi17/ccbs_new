@@ -119,7 +119,7 @@ form /* seek  CampDate */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Campaign ," +
@@ -242,19 +242,19 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CampStat.Campaign {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.Campaign WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.Campaign WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CampStat.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW CampStat.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.CLI WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW CampStat.CampDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.CampDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.CampDate WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

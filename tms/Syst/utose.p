@@ -68,7 +68,7 @@ FOR FIRST TMSUser NO-LOCK WHERE
 END.
 
 Syst.CUICommon:cfc = "rajat". RUN Syst/ufcolor.p.
-assign ccc = Syst.CUICommon:cfc mc = index(siirto,"*") > 0.
+assign Syst.CUICommon:ccc = Syst.CUICommon:cfc mc = index(siirto,"*") > 0.
 
 view FRAME sel.
 
@@ -198,11 +198,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW MenuTree.MenuId {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.MenuId WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.MenuId WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW MenuTree.MenuTitle {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.MenuTitle WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.MenuTitle WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

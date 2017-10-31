@@ -49,7 +49,7 @@ form
 
 with row 1 centered overlay title " SEEK OPERATORS " FRAME alku.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Operator USE-INDEX Operator no-lock no-error.
    IF NOT AVAIL Operator THEN DO:
       BELL.
@@ -172,11 +172,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW Operator.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Operator.Operator WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Operator.Operator WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW Operator.OperName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Operator.OperName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Operator.OperName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

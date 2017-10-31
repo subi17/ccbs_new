@@ -121,7 +121,7 @@ IF NOT AVAILABLE DiscountPlan THEN DO:
 END.
 lcPlan = DiscountPlan.DPRuleID.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -260,7 +260,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW DPTarget.TargetTable {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DPTarget.TargetTable WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DPTarget.TargetTable WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -427,7 +427,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO DELETE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           DPTarget.TargetTable
           DPTarget.TargetKey
           DPTarget.ValidTo.

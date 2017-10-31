@@ -100,7 +100,7 @@ ASSIGN
    i-date2   = pvm
    liDelType = 2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 ehto = 9. RUN Syst/ufkey.p.

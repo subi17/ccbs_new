@@ -96,7 +96,7 @@ form
     " Message Contents " NO-LABELS 
     FRAME fDetails.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 fCollect(iiOrderId).
@@ -168,7 +168,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttDocs.CreatedTS {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttDocs.CreatedTS WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttDocs.CreatedTS WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

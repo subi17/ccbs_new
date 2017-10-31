@@ -130,7 +130,7 @@ form /* seek Mobile Call  BY A-sub. */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND B-NUMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = 
@@ -261,19 +261,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TMQueue.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMQueue.DateSt WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMQueue.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TMQueue.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMQueue.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMQueue.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW TMQueue.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMQueue.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMQueue.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW TMQueue.MSSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMQueue.MSSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMQueue.MSSeq WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

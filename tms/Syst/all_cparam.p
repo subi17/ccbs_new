@@ -152,7 +152,7 @@ form
     FRAME f4.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = " By Code , By Group , By Name , By 4".
@@ -290,15 +290,15 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
         CHOOSE ROW TMSParam.ParamCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMSParam.ParamCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMSParam.ParamCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
         CHOOSE ROW TMSParam.ParamGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMSParam.ParamGroup WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMSParam.ParamGroup WITH FRAME sel.
       END.
     IF order = 3 THEN DO:
         CHOOSE ROW TMSParam.ParamName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMSParam.ParamName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMSParam.ParamName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -546,7 +546,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TMSParam.ParamCode TMSParam.ParamGroup TMSParam.ParamName.
        IF ok THEN DO:
 

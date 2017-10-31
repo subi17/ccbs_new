@@ -120,5 +120,4 @@ resp_struct = add_struct(response_toplevel_id, "").
 add_string(resp_struct, "id", STRING(liITGroupID)).
 
 FINALLY:
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

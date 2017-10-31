@@ -122,7 +122,7 @@ WITH  OVERLAY ROW 3 width 50 centered
     SIDE-LABELS 
     FRAME lis.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -202,11 +202,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttDSSInfo.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttDSSInfo.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

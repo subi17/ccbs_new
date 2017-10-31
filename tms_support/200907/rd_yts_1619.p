@@ -41,4 +41,4 @@ gcBrand = "1".
 
   RELEASE MSISDN.
 
- IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
+ 

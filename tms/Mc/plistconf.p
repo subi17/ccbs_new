@@ -111,7 +111,7 @@ form /* Price List search with field PLName */
 with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
    color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view frame sel.
 
 FIND FIRST RatePlan WHERE
@@ -230,7 +230,7 @@ BROWSE:
       hide message no-pause.
       if order = 1 then do:
          choose row PListConf.RatePlan {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) PListConf.RatePlan with frame sel.
+         color display value(Syst.CUICommon:ccc) PListConf.RatePlan with frame sel.
       end.
       if rtab[frame-line] = ? then next.
 
@@ -459,7 +459,7 @@ BROWSE:
            "Are you SURE You want to delete ?"
         view-as alert-box question buttons YES-NO update ok.
 
-        color display value(ccc)
+        color display value(Syst.CUICommon:ccc)
            PListConf.RatePlan
            PListConf.PriceList 
            PriceList.PLName 

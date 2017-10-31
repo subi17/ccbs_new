@@ -97,7 +97,7 @@ form
     FRAME f4.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -229,11 +229,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW BillType.BillType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BillType.BillType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BillType.BillType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW BillType.BTName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BillType.BTName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BillType.BTName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -449,7 +449,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        BillType.BillType BillType.BTName .
        IF ok THEN DO:
 

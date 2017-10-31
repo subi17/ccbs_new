@@ -37,7 +37,7 @@ WITH width 55 OVERLAY centered ROW 3 scroll 1 12 DOWN
    + string(pvm,"99-99-99") + " "
    FRAME tlse.
 
-Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -94,7 +94,7 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW MedSect.Type {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) 
+         COLOR DISPLAY value(Syst.CUICommon:ccc) 
             MedSect.Type
             MedSect.Name
             MedSect.Num 

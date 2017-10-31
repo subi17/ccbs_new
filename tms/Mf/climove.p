@@ -105,7 +105,7 @@ form /* FIND asub */
 with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND ASUB No. "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-1.
 
-Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -183,7 +183,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW ttCLISer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      COLOR DISPLAY value(ccc) ttCLISer.CLIFrom WITH FRAME sel.
+      COLOR DISPLAY value(Syst.CUICommon:ccc) ttCLISer.CLIFrom WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? THEN DO:
          BELL.

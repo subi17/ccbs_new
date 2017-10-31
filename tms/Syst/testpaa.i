@@ -12,9 +12,6 @@ DEF NEW SHARED VAR gcBrand       like customer.brand NO-UNDO.
 &GLOBAL-DEFINE BrandVarDefined YES
 &ENDIF
 
-def new shared var ghFunc1 as handle.
-if not valid-handle(ghFunc1) then RUN Func/func.p persistent set ghFunc1.
-
 def new shared var cfc as char format "x(24)".
 def new shared var ctc as char format "x(24)".
 def            var ccc as char format "x(24)".

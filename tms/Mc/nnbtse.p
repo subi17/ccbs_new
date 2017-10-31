@@ -56,7 +56,7 @@ with row 1 centered overlay title " FIND B-DESTINATION " FRAME alku.
 
 Syst.CUICommon:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN ccc = Syst.CUICommon:cfc.
+ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 FIND FIRST BDest WHERE BDest.Brand = gcBrand NO-LOCK NO-ERROR.
 
@@ -191,11 +191,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW BDest.BDest {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.BDest WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.BDest WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW BDest.BDName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.BDName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.BDName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

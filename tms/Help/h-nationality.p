@@ -54,7 +54,7 @@ form /* seek  */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -136,11 +136,11 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
          CHOOSE ROW Nationality.Nationality {Syst/uchoose.i} NO-ERROR 
             WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Nationality.Nationality WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Nationality.Nationality WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Nationality.NtName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Nationality.NtName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Nationality.NtName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

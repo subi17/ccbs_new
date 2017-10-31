@@ -39,7 +39,7 @@ form /* SEEK CODE */
 
 find  Customer where Customer.CustNum =  CustNum no-lock.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view frame sel.
 MAIN:
 repeat:
@@ -102,7 +102,7 @@ BROWSE:
 
          hide message no-pause.
          choose row CLI.CLI {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) CLI.CLI with frame sel.
+         color display value(Syst.CUICommon:ccc) CLI.CLI with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
          nap = keylabel(lastkey).

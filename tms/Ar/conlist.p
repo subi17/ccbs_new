@@ -153,7 +153,7 @@ END FUNCTION.
 
 IF iiCustNum > 0 THEN FrmDown = 15. 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders       = "By Customer ," +
@@ -385,11 +385,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW Contact.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contact.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contact.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Contact.CustBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contact.CustBal WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contact.CustBal WITH FRAME sel.
       END.
 
 
@@ -614,7 +614,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "Mark this row as handled ?" UPDATE ok FORMAT "Yes/No".
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        Contact.CustNum Customer.CustName Contact.CustBal.
 
        IF ok THEN DO:
@@ -724,7 +724,7 @@ REPEAT WITH FRAME sel:
 
            ASSIGN ok = FALSE.
            MESSAGE "Delete this row ?" UPDATE ok FORMAT "Yes/No".
-           COLOR DISPLAY VALUE(ccc)
+           COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
            Contact.CustNum Customer.CustName Contact.CustBal.
 
            IF ok THEN DO:

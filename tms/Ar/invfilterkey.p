@@ -31,7 +31,7 @@ FORM
    WITH SCROLL 1 11 DOWN ROW 4 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
         TITLE COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE KEY " OVERLAY FRAME sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 ASSIGN
    ufkey      = TRUE
@@ -92,7 +92,7 @@ REPEAT with frame sel:
 
       hide message no-pause.
       choose row lcKey {Syst/uchoose.i} no-error with frame sel.
-      color display value(ccc) lcKey with frame sel.
+      color display value(Syst.CUICommon:ccc) lcKey with frame sel.
 
       nap = keylabel(lastkey).
 

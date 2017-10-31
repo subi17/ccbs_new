@@ -118,7 +118,7 @@ form /* Customer Group :n haku kentällä CGName */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
@@ -254,11 +254,11 @@ SELAUS:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CustGroup.CustGroup WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CustGroup.CustGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -506,7 +506,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        CustGroup.CustGroup CustGroup.CGName CustGroup.CreDate CustGroup.CreUser.
        IF ok THEN DO:
 

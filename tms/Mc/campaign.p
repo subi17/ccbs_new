@@ -109,7 +109,7 @@ form /* seek  ToDate */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Campaign ," +
@@ -252,15 +252,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Campaign.Campaign {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Campaign.Campaign WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Campaign.Campaign WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Campaign.CaName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Campaign.CaName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Campaign.CaName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW Campaign.ToDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Campaign.ToDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Campaign.ToDate WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -505,7 +505,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        Campaign.Campaign Campaign.CaName .
 
        IF ok THEN DO:

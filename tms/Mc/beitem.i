@@ -12,7 +12,7 @@ FIND FeeModel WHERE
     FeeModel.Brand    = "1"  AND 
     FeeModel.FeeModel = FeeModel NO-LOCK.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 VIEW FRAME sel. 
 

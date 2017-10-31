@@ -368,9 +368,6 @@ END.
 add_int(response_toplevel_id, "", liResult).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN 
-      DELETE OBJECT ghFunc1 NO-ERROR. 
-      
    IF llDoEvent THEN 
       fCleanEventObjects().
 END.

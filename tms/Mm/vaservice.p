@@ -98,7 +98,7 @@ form /* seek ServiceName */
     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -228,11 +228,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row VAService.BDest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) VAService.BDest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) VAService.BDest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row VAService.ServiceName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) VAService.ServiceName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) VAService.ServiceName WITH FRAME sel.
       END.
       
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -443,7 +443,7 @@ BROWSE:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        VAService.BDest     /* column-label format */
        VAService.ServiceName     /* column-label format */
        VAService.ServiceAddress  /* column-label format */

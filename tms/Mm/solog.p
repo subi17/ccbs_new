@@ -121,7 +121,7 @@ FORM /* seek SOLog BY TimeSlotTMS */
     WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ACT. DAY "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 ASSIGN
@@ -256,19 +256,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SOLog.SOLog {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SOLog.SOLog WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SOLog.SOLog WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW SOLog.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SOLog.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SOLog.CLI WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) xstat WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) xstat WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW SOLog.TimeSlotTMS  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SOLog.TimeSlotTMS WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SOLog.TimeSlotTMS WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

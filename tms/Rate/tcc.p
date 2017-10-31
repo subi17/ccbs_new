@@ -112,7 +112,7 @@ form /* seek  TCCName */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST TCC
@@ -241,11 +241,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TCC.TCC {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TCC.TCC WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TCC.TCC WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TCC.TCCName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TCC.TCCName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TCC.TCCName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -458,7 +458,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TCC.TCC TCC.TCCName 
        TCC.BCC.
        

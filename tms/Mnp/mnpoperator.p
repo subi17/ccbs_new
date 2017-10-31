@@ -80,7 +80,7 @@ WITH  OVERLAY ROW 4 centered 1 columns
     NO-LABELS 
     FRAME lis.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By OperName ,  By OperCode".
@@ -209,11 +209,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPOperator.Opername {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPOperator.Opername WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPOperator.Opername WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
         CHOOSE ROW MNPOperator.OperCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPOperator.OperCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPOperator.OperCode WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -374,7 +374,7 @@ BROWSE:
             "ARE YOU SURE YOU WANT TO DELETE THIS ROW?" 
          UPDATE ok.
 
-         COLOR DISPLAY value(ccc)
+         COLOR DISPLAY value(Syst.CUICommon:ccc)
             MNPOperator.Opername
             MNPOperator.OperCode.
          

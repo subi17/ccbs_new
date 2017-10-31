@@ -95,7 +95,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -244,7 +244,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW BRTestQueue.BRTestQueueID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BRTestQueue.BRTestQueueID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BRTestQueue.BRTestQueueID WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -448,7 +448,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           BRTestQueue.BRTestQueueID BRTestQueue.Description.
        
        IF ok THEN DO:

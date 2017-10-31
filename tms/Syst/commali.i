@@ -9,17 +9,6 @@
 &GLOBAL-DEFINE CommVarDef YES
 
 
-&IF "{&SKIP_FUNC_I}" NE "YES" 
-&THEN
-   def shared var ghFunc1 as handle.
-   if not valid-handle(ghFunc1) then RUN Func/func.p persistent set ghFunc1.
-&ENDIF
-
-
-def shared var cfc as char format "x(24)".
-def shared var ctc as char format "x(24)".
-def        var ccc as char format "x(24)".
-
 def shared var ynimi   as char format "x(30)".
 def shared var pvm     as Date format "99-99-99".
 DEF shared VAR qupd    AS lo.

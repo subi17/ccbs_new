@@ -111,7 +111,7 @@ form /* seek DiscPlan  by DPName */
     WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -249,11 +249,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row discplan.DiscPlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) discplan.DiscPlan WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) discplan.DiscPlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row discplan.DPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) discplan.DPName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) discplan.DPName WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
 
@@ -485,7 +485,7 @@ BROWSE:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        discplan.brand
        discplan.DiscPlan 
        discplan.DPName .

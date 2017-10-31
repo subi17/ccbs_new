@@ -40,7 +40,7 @@ form /* SEEK Code */
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 ovalueid = ?. 
 
 MAIN:
@@ -96,7 +96,7 @@ BROWSE:
 
          hide message no-pause.
          choose row ttable.ValueId {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) ttable.ValueId with frame sel.
+         color display value(Syst.CUICommon:ccc) ttable.ValueId with frame sel.
 
          nap = keylabel(lastkey).
          if frame-value = "" and rtab[frame-line] = ? and

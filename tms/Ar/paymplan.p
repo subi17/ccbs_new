@@ -343,7 +343,7 @@ ASSIGN lcPassword  = fCParamC("MsAddressChg")
        lcAdminPwd  = fCParamC("PaymPlanCreditControl").
 IF lcPassword = ? THEN lcPassword = "".
  
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = " By Date     ," + 
@@ -533,15 +533,15 @@ REPEAT WITH FRAME sel:
       IF liAutoRun = 0 THEN DO:
          IF order = 1 THEN DO:
            CHOOSE ROW PaymPlan.PPDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-           COLOR DISPLAY VALUE(ccc) PaymPlan.PPDate WITH FRAME sel.
+           COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PaymPlan.PPDate WITH FRAME sel.
          END.
          ELSE IF order = 2 THEN DO:
            CHOOSE ROW PaymPlan.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-           COLOR DISPLAY VALUE(ccc) PaymPlan.CustNum WITH FRAME sel.
+           COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PaymPlan.CustNum WITH FRAME sel.
          END.
          ELSE IF order = 3 THEN DO:
            CHOOSE ROW lcStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-           COLOR DISPLAY VALUE(ccc) lcStatus WITH FRAME sel.
+           COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcStatus WITH FRAME sel.
          END.
 
          nap = keylabel(LASTKEY).
@@ -1019,7 +1019,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        PaymPlan.Amount
        PaymPlan.CustNum PaymPlan.PPDate lcStatus .
 

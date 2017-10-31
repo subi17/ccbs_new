@@ -160,7 +160,7 @@ FUNCTION fZoneName RETURNS LOGIC
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 run pFindFirst.
@@ -338,11 +338,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW InvGroup.InvGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) InvGroup.InvGroup WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) InvGroup.InvGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW InvGroup.IGName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) InvGroup.IGName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) InvGroup.IGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -612,7 +612,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "DO YOU REALLY WANT TO ERASE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.CUICommon:ccc) 
            InvGroup.InvGroup 
            InvGroup.IGName 
            InvGroup.BillPerm 

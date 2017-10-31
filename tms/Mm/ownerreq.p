@@ -215,7 +215,7 @@ IF iiReqStat = 14 THEN ASSIGN
    ldtActivate:LABEL IN FRAME sel          = "Inv.Date"
    MsRequest.ReqIParam1:LABEL IN FRAME sel = "    Days".
    
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Request ," +
@@ -388,19 +388,19 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MsRequest.MsRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MsRequest.MsRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.MsRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MsRequest.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MsRequest.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.CLI WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW MsRequest.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MsRequest.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW MsRequest.ReqStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MsRequest.ReqStatus WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.ReqStatus WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

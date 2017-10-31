@@ -101,7 +101,7 @@ form /* seek  RatePref */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Dialling Type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "   By Prefix        ,By Dialling Type  , By 3, By 4".
@@ -253,11 +253,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW RatePref.Prefix {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RatePref.Prefix WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RatePref.Prefix WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW RatePref.DialType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RatePref.DialType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RatePref.DialType WITH FRAME sel.
       END.
 
 
@@ -455,7 +455,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        RatePref.DialType RatePref.Prefix .
 
        IF ok THEN DO:

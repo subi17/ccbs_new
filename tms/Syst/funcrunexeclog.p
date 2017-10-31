@@ -94,7 +94,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -188,7 +188,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW FuncRunExecLog.FRExecID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FuncRunExecLog.FRExecID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FuncRunExecLog.FRExecID WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

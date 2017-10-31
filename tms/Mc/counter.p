@@ -98,7 +98,7 @@ FUNCTION fCTName RETURNS LOGIC
 
 END FUNCTION.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -181,7 +181,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW Counter.CounterType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Counter.CounterType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Counter.CounterType WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

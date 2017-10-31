@@ -26,7 +26,7 @@ WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
 title color value(Syst.CUICommon:ctc) " Targets "
 OVERLAY FRAME kase.
 
-Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 runko:
 repeat:
 
@@ -75,7 +75,7 @@ BROWSE:
 
          HIDE MESSAGE.
          CHOOSE ROW  t-target.target {Syst/uchoose.i} no-error WITH FRAME kase.
-         COLOR DISPLAY value(ccc)  t-target.target WITH FRAME kase.
+         COLOR DISPLAY value(Syst.CUICommon:ccc)  t-target.target WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

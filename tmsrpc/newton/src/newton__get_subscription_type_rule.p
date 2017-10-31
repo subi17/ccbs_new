@@ -627,5 +627,4 @@ END. /* IF NOT MobSub.PayType THEN DO: */
 fAddCLITypeStruct().
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

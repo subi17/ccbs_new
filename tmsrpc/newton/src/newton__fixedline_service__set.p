@@ -202,11 +202,3 @@ PROCEDURE pActivateTVService:
     RETURN "".
 
 END PROCEDURE.
-
-FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN 
-      DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
-
-
-

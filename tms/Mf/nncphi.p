@@ -54,7 +54,7 @@ form /*  search WITH FIELD Date */
             with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Date "
                 COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MedHist
@@ -132,19 +132,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MedHist.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedHist.Ident WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MedHist.Date {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedHist.Date WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.Date WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW MedHist.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedHist.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW MedHist.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedHist.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.

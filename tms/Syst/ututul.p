@@ -90,7 +90,7 @@ form
     TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
     FRAME lis.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 PAUSE 0 no-message.
 view FRAME sel.
 FIND FIRST TMSReport no-lock no-error.
@@ -220,7 +220,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW TMSReport.Memo {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc) TMSReport.Memo WITH FRAME sel.
+      COLOR DISPLAY value(Syst.CUICommon:ccc) TMSReport.Memo WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -374,7 +374,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) TMSReport.RepName TMSReport.Memo
+        COLOR DISPLAY value(Syst.CUICommon:ccc) TMSReport.RepName TMSReport.Memo
         TMSReport.PageWidth TMSReport.UpdPerm  TMSReport.ChEMail 
         TMSReport.EMail.
         IF ok THEN DO:

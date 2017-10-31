@@ -122,7 +122,7 @@ form /* memo */
     FRAME f4.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Vendor, By Type ,By 3, By 4".
@@ -291,11 +291,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SimBatch.Brand {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SimBatch.Brand WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SimBatch.Brand WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW SimBatch.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SimBatch.SimArt WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SimBatch.SimArt WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -520,7 +520,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        SimBatch.ManCode SimBatch.SimArt SimBatch.TpKey SimBatch.DelDate.
        IF ok THEN DO:
 

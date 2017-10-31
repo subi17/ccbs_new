@@ -60,5 +60,4 @@ END.
 RETURN appl_err(SUBST("Status change from &1 to &2 is not possible with msrequest type &3.", MsRequest.ReqStatus, piNewStatus, MsRequest.ReqType)).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

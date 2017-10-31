@@ -105,7 +105,7 @@ form /* seek Mobile Call  BY A-sub. */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND B-NUMBER "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = 
@@ -234,23 +234,23 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW prepcdr.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) prepcdr.DateSt WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) prepcdr.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW prepcdr.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) prepcdr.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) prepcdr.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW prepcdr.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) prepcdr.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) prepcdr.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW prepcdr.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) prepcdr.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) prepcdr.CLI WITH FRAME sel.
       END.
       ELSE IF order = 5 THEN DO:
         CHOOSE ROW prepcdr.GsmBnr  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) prepcdr.GsmBnr WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) prepcdr.GsmBnr WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -88,7 +88,7 @@ form /* seek User Right  BY MenuClass */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CLASS NO. "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UserRight
@@ -246,11 +246,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
         CHOOSE ROW UserRight.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) UserRight.MenuClass WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) UserRight.MenuClass WITH FRAME sel.
       END.
       ELSE IF jarj = 1 THEN DO:
         CHOOSE ROW UserRight.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) UserRight.MenuClass WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) UserRight.MenuClass WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

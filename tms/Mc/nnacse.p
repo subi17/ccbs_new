@@ -55,7 +55,7 @@ form
 
 with row 1 centered overlay title " Account FINDING " FRAME alku.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Account USE-INDEX AccNum WHERE 
       Account.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Account THEN DO:
@@ -179,11 +179,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW Account.AccNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Account.AccNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Account.AccNum WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW Account.AccName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Account.AccName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Account.AccName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

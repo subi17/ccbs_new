@@ -96,7 +96,7 @@ FORM /* seek DPBasis  by KeyField */
 
 FIND DPConf WHERE DPConf.DPConfNum = DPConfNum NO-LOCK no-error.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.  
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.  
 VIEW FRAME sel.                              
 
 orders = "By Product,By BDestination,By 3, By 4".
@@ -379,7 +379,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW targName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) targName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) targName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTkey).
@@ -568,7 +568,7 @@ ASK-F1:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        DPBasis.CCN DPBasis.BillCode .
        IF ok THEN DO:
 

@@ -88,7 +88,7 @@ form /*  search WITH FIELD DCCounter */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND xxxxxxx "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -232,7 +232,7 @@ BROWSE:
       
       IF order = 1 THEN DO:
         CHOOSE ROW DCCounter.dcdate {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) DCCounter.dcdate WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) DCCounter.dcdate WITH FRAME sel.
       END. 
       nap = keylabel(LASTKEY).
 

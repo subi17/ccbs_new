@@ -168,7 +168,7 @@ BY InvRow.FromDate:
            ttRow.Order  = i.
 END.           
            
-Syst.CUICommon:cfc = "kory". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "kory". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST ttRow no-error.
@@ -250,7 +250,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW InvRow.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc) InvRow.BillCode WITH FRAME sel.
+      COLOR DISPLAY value(Syst.CUICommon:ccc) InvRow.BillCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.

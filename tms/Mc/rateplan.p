@@ -99,7 +99,7 @@ form /* seek RatePlan  by RPName */
     COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -233,11 +233,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row RatePlan.RatePlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RatePlan.RatePlan WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RatePlan.RatePlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row RatePlan.RPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RatePlan.RPName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RatePlan.RPName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        RatePlan.RatePlan RatePlan.RPName .
        IF ok THEN DO:
 

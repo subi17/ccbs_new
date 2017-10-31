@@ -113,7 +113,7 @@ form /* reseller search with field RsName */
     color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view frame sel.
 
 find first Reseller
@@ -251,11 +251,11 @@ BROWSE:
       hide message no-pause.
       if order = 1 then do:
         choose row Reseller.Reseller {Syst/uchoose.i} no-error with frame sel.
-        color display value(ccc) Reseller.Reseller with frame sel.
+        color display value(Syst.CUICommon:ccc) Reseller.Reseller with frame sel.
       end.
       else if order = 2 then do:
         choose row Reseller.RsName {Syst/uchoose.i} no-error with frame sel.
-        color display value(ccc) Reseller.RsName with frame sel.
+        color display value(Syst.CUICommon:ccc) Reseller.RsName with frame sel.
       end.
       if rtab[frame-line] = ? then next.
 
@@ -510,7 +510,7 @@ BROWSE:
 
        assign ok = false.
        message "DO YOU REALLY WANT TO DELETE (y/n) ? " update ok.
-       color display value(ccc)
+       color display value(Syst.CUICommon:ccc)
        Reseller.Reseller Reseller.RsName.
        if ok then do:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhresell).

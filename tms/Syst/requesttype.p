@@ -112,7 +112,7 @@ IF iiQueue > 0 OR gcHelpParam > "" THEN ASSIGN
    FrmRow  = 2
    FrmDown = 14.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -266,7 +266,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW RequestType.ReqType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RequestType.ReqType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RequestType.ReqType WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -488,7 +488,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        RequestType.ReqType RequestType.ReqName
        RequestType.InUse RequestType.Queue.
        

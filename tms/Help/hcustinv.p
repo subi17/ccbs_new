@@ -59,7 +59,7 @@ WITH CENTERED OVERLAY scroll 1 10 DOWN ROW 3
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
 lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -142,7 +142,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvNum WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
@@ -304,7 +304,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         ELSE ASSIGN
              order = ex-order
              must-print = FALSE.
-        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
         NEXT LOOP.
      END.
 

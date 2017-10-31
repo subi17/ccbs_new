@@ -41,7 +41,7 @@ form
     with scroll 1 8 down  row 8 centered 
     title " Credit Items " overlay frame sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 
 find first creditrate no-lock where 
@@ -122,7 +122,7 @@ BROWSE:
 
          hide message no-pause.
          choose row ttCredItem.CredDate {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) ttCredItem.CredDate with frame sel.
+         color display value(Syst.CUICommon:ccc) ttCredItem.CredDate with frame sel.
 
          nap = keylabel(lastkey).
 

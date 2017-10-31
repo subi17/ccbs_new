@@ -70,7 +70,7 @@ FORM /* seek Bank  BY BankId and BankOffice */
    COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By BankId".
@@ -152,7 +152,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Bank.BankId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Bank.BankId WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Bank.BankId WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.

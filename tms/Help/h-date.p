@@ -69,7 +69,7 @@ form
     with scroll 1 4 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(Syst.CUICommon:ctc) " Dates " overlay frame sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -126,7 +126,7 @@ BROWSE:
 
          hide message no-pause.
          choose row Paiva.Paiva {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) Paiva.Paiva with frame sel.
+         color display value(Syst.CUICommon:ccc) Paiva.Paiva with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
          nap = keylabel(lastkey).

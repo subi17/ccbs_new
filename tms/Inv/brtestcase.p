@@ -149,7 +149,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -314,12 +314,12 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW BRTestCase.BRTestCaseID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BRTestCase.BRTestCaseID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BRTestCase.BRTestCaseID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW BRTestCase.Description {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BRTestCase.Description WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BRTestCase.Description WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -547,7 +547,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           BRTestCase.BRTestCaseID BRTestCase.Description.
        
        IF ok THEN DO:

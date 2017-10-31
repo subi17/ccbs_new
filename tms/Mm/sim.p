@@ -180,7 +180,7 @@ form
     OVERLAY ROW 2
     CENTERED FRAME imsi.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel. 
 
 orders = "By ICC,By CustNo,By ArtCode, By 4".
@@ -314,7 +314,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SIM.ICC {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SIM.ICC WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SIM.ICC WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
       

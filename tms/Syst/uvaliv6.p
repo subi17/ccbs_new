@@ -159,7 +159,7 @@ form /*  Search by module  */
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST MenuTree no-lock no-error.
    IF AVAILABLE MenuTree THEN ASSIGN memory = recid(MenuTree)
@@ -399,15 +399,15 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW MenuTree.Level {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.Level WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.Level WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW MenuTree.Module {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.Module WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.Module WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW MenuTree.MenuId {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.MenuId WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.MenuId WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -806,7 +806,7 @@ siirto:             repeat:
         exclusive-lock.
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO ERASE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) MenuTree.Level MenuTree.MenuId
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.Level MenuTree.MenuId
         MenuTree.Position MenuTree.MenuNum tx1 tx2
         MenuTree.MenuType MenuTree.Module MenuTree.MenuTitle MenuTree.State[1]
         MenuTree.MenuClass.

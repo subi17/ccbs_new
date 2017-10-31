@@ -57,7 +57,7 @@ form /* angrAnsande riktnr. search WITH FIELD NeigArea */
 
 FIND this-rnom where this-rnom.AreaCode = AreaCode no-lock.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST AreaPair where AreaPair.AreaCode = AreaCode no-lock no-error.
@@ -218,19 +218,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
     CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
-    COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
+    COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
     CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
-    COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
+    COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
     CHOOSE ROW AreaPair.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-    COLOR DISPLAY value(ccc) AreaPair.?? WITH FRAME sel.
+    COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
     CHOOSE ROW AreaPair.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-    COLOR DISPLAY value(ccc) AreaPair.? WITH FRAME sel.
+    COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -475,7 +475,7 @@ BROWSE:
 
    ASSIGN ok = FALSE.
    message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-   COLOR DISPLAY value(ccc) AreaPair.NeigArea AreaName.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.NeigArea AreaName.
    IF ok THEN DO:
 
        DELETE AreaPair.

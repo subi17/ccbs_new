@@ -93,5 +93,4 @@ pdMNPPortingDate = fMNPHoliday(pdMNPPortingDate,TRUE).
 add_datetime(response_toplevel_id, "", pdMNPPortingDate).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -126,7 +126,7 @@ form /*  search WITH FIELD SLGAnalyse */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Event "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
                      
@@ -250,11 +250,11 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW SLGAnalyse.CliType {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) SLGAnalyse.CliType WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) SLGAnalyse.CliType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW SLGAnalyse.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) SLGAnalyse.CliType WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) SLGAnalyse.CliType WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -445,7 +445,7 @@ repeat WITH FRAME sel:
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           SLGAnalyse.CliType 
           SLGAnalyse.ValidTo
           SLGAnalyse.CCN

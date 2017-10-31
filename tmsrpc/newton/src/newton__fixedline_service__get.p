@@ -148,9 +148,4 @@ FOR EACH daycampaign NO-LOCK:
        add_string(top_struct, "category"  , "tv").
    END.
 END.
-
-FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN 
-      DELETE OBJECT ghFunc1 NO-ERROR.
-END.
           

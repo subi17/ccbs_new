@@ -194,7 +194,7 @@ WITH
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Invoice WHERE Invoice.Brand = lcBrand USE-INDEX ExtInvID
@@ -283,19 +283,19 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.ExtInvID {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.ExtInvID WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvDate WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Invoice.CustNum  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.CustNum  WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.CustNum  WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Invoice.InvAmt {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvAmt WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvAmt WITH FRAME sel.
       END.
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 

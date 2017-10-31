@@ -114,7 +114,7 @@ form /* report ccn  */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND REPORT CCN "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST CCN WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
    IF AVAILABLE CCN THEN ASSIGN memory = recid(CCN)
@@ -259,11 +259,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW CCN.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CCN.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CCN.CCN WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW CCN.CCNName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CCN.CCNName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CCN.CCNName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -533,7 +533,7 @@ BROWSE:
                    BDest.BDest
                    ". Deletion is not allowed."
            VIEW-AS ALERT-BOX.
-           COLOR DISPLAY value(ccc) CCN.CCN CCN.CCNName.
+           COLOR DISPLAY value(Syst.CUICommon:ccc) CCN.CCN CCN.CCNName.
            NEXT.
         END.
 
@@ -544,14 +544,14 @@ BROWSE:
                    RateCCN.BDest
                    ". Deletion is not allowed."
            VIEW-AS ALERT-BOX.
-           COLOR DISPLAY value(ccc) CCN.CCN CCN.CCNName.
+           COLOR DISPLAY value(Syst.CUICommon:ccc) CCN.CCN CCN.CCNName.
            NEXT.
         END.
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
 
-        COLOR DISPLAY value(ccc) CCN.CCN CCN.CCNName.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CCN.CCN CCN.CCNName.
 
         IF ok THEN DO:
 

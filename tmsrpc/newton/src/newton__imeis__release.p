@@ -100,5 +100,4 @@ add_boolean(response_toplevel_id,"", true).
 
 FINALLY:
    EMPTY TEMP-TABLE ttIMEI.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

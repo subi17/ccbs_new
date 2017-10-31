@@ -134,7 +134,7 @@ form /* seek  ITSendLog */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Report Type "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "   By Customer   ," +
@@ -235,17 +235,17 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ITSendLog.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ITSendLog.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ITSendLog.CustNum WITH FRAME sel.
       END.
 
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ITSendLog.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ITSendLog.InvNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ITSendLog.InvNum WITH FRAME sel.
       END.
 
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW ITSendLog.RepType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ITSendLog.RepType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ITSendLog.RepType WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -483,7 +483,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ITSendLog.CustNum  Customer.CustName lcTime.
 
        IF ok THEN DO:

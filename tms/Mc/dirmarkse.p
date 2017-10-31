@@ -39,7 +39,7 @@ FORM
     WITH CENTERED OVERLAY SCROLL 1 13 DOWN ROW 3
     COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(Syst.CUICommon:ctc) " Direct Marketing " FRAME sel.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST DMarketing USE-INDEX DirMarkName WHERE 
               DMArketing.Brand = gcBrand 
    NO-LOCK NO-ERROR.
@@ -137,11 +137,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
          CHOOSE ROW DMarketing.DirMark {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) DMarketing.DirMark WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DMarketing.DirMark WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
         CHOOSE ROW DMarketing.DirMarkName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) DMarketing.DirMarkName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DMarketing.DirMarkName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

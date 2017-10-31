@@ -63,7 +63,7 @@ form
 
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " CHOOSE MEMBERS INTO GROUP " FRAME sel.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 
 FIND FIRST SubserPara WHERE 
@@ -132,7 +132,7 @@ BROWSE:
     CHOOSE ROW SubserPara.msseq {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
     CHOOSE ROW SubserPara.ParaValue {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+      COLOR DISPLAY value(Syst.CUICommon:ccc)
       SubserPara.msseq   SubserPara.ParaValue
       WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

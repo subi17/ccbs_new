@@ -90,7 +90,7 @@ ELSE DO:
 END.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -163,11 +163,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.Month WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.Month WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -352,7 +352,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit MthCall.CloseDate.
        IF ok THEN DO:
 

@@ -121,7 +121,7 @@ WITH
     color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Account WHERE Account.Brand = lcBrand
@@ -280,11 +280,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW Account.AccNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Account.AccNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Account.AccNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Account.AccName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Account.AccName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Account.AccName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -530,7 +530,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        Account.Brand
        Account.AccNum Account.AccName AccType ac-type-name.
        IF ok THEN DO:

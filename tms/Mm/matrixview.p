@@ -188,7 +188,7 @@ Break BY ttName.numero.
    END.    
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -296,7 +296,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW ttMatrix.Val[1] {Syst/uchoose.i} 
         NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttMatrix.Val WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttMatrix.Val WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).
 

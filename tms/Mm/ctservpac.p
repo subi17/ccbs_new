@@ -144,7 +144,7 @@ FUNCTION fServTypeName RETURNS LOGIC
                              STRING(iiServType)).
 END FUNCTION.
  
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -290,7 +290,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CTServPac.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CTServPac.ServPac WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CTServPac.ServPac WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -487,7 +487,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(TRUE).
 
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        CTServPac.CLIType CTServPac.ServPac
        CTServPac.FromDate CTServPac.ToDate.
 

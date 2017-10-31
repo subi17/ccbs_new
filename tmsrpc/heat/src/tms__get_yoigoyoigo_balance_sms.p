@@ -137,5 +137,4 @@ add_string(response_toplevel_id, "", lcMsg).
 fReqStat(2, lcMsg).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

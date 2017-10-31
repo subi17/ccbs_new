@@ -89,7 +89,7 @@ form /*  search WITH FIELD TrName */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MedTrunk
@@ -269,19 +269,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MedTrunk.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.Ident WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MedTrunk.TrName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.TrName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.TrName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW MedTrunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW MedTrunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -553,7 +553,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           MedTrunk.Ident 
           MedTrunk.TrFrom 
           MedTrunk.TrTo

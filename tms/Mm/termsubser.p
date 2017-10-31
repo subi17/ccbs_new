@@ -189,7 +189,7 @@ FIND TermMobsub WHERE TermMobsub.MsSeq = iiMsSeq NO-LOCK.
 /* get current definitions, servpac index is sorted by date */
 RUN pSetTempTable.
         
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
@@ -295,11 +295,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttSubSer.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSubSer.ServCom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSubSer.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ttSubSer.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSubSer.ServPac WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSubSer.ServPac WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

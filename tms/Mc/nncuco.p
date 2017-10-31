@@ -303,7 +303,7 @@ lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -629,7 +629,7 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW FixedFee.KeyValue {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) FixedFee.KeyValue WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) FixedFee.KeyValue WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -1032,7 +1032,7 @@ repeat WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           FixedFee.BillCode FixedFee.EndPeriod
           FixedFee.Amt FixedFee.BegPeriod FixedFee.Cli.
        IF ok THEN DO:

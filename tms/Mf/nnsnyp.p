@@ -89,7 +89,7 @@ form /* Nummerserie search WITH FIELD Operator */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OPERATOR "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST NumPlan
@@ -228,19 +228,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW NumPlan.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.AreaCode WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) NumPlan.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW NumPlan.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.Operator WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) NumPlan.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW NumPlan.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) NumPlan.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW NumPlan.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) NumPlan.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -516,7 +516,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "DO YOU REALLY WANT TO DELETE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        NumPlan.AreaCode NumPlan.Operator /* sd */.
        IF ok THEN DO:
 

@@ -124,7 +124,7 @@ FOR EACH Brand NO-LOCK WHERE
                                     ELSE 0.
 END.             
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code of Section,By Name of Section,By 3, By 4".
@@ -209,7 +209,7 @@ BROWSE:
       IF order = 1 THEN DO:
         CHOOSE ROW ttPaymVouch.Brand {Syst/uchoose.i} NO-ERROR
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttPaymVouch.Brand WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttPaymVouch.Brand WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

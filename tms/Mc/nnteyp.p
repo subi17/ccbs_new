@@ -101,7 +101,7 @@ form /* HdrTextn nimi :n nimella hakua varten */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " TEXT "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST HdrText WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -270,15 +270,15 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW HdrText.te-nro {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) HdrText.te-nro WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-nro WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW HdrText.te-kie  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) HdrText.te-kie  WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-kie  WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW HdrText.te-text {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) HdrText.te-text WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-text WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -582,7 +582,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(ccc) HdrText.te-nro HdrText.te-text
+        COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-nro HdrText.te-text
         te-kie /* qq */.
         IF ok THEN DO:
 

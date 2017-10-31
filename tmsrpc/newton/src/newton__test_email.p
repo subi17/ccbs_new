@@ -41,5 +41,4 @@ RUN Mc/sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFil
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

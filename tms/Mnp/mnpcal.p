@@ -110,7 +110,7 @@ WITH  OVERLAY ROW 4 centered
     NO-LABELS 
     FRAME fWindow.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -234,15 +234,15 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPCal.OrderChannel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPCal.OrderChannel WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPCal.OrderChannel WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MNPCal.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPCal.Region WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPCal.Region WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW MNPCal.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPCal.MessageType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPCal.MessageType WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -418,7 +418,7 @@ BROWSE:
            ok = FALSE.
         END.
         
-        COLOR DISPLAY value(ccc)
+        COLOR DISPLAY value(Syst.CUICommon:ccc)
            MNPCal.OrderChannel
            MNPCal.Region
            MNPCal.MNPProduct 

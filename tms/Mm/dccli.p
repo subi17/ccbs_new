@@ -122,7 +122,7 @@ form
 
  
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By cli   ,  By Name  ,By 3, By 4".
@@ -269,11 +269,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row DCCLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DCCLI.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DCCLI.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row DCCLI.DCEvent {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DCCLI.DCEvent WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DCCLI.DCEvent WITH FRAME sel.
       END.
       
       nap = keylabel(LASTKEY).

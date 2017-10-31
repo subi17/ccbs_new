@@ -122,7 +122,7 @@ form /* seek date  */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Salesman  ,  By Customer   , By Payment , By 4".
@@ -207,15 +207,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CoEvent.Salesman {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoEvent.Salesman WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoEvent.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CoEvent.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoEvent.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoEvent.CustNum WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW CoEvent.PaymDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoEvent.PaymDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoEvent.PaymDate WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -456,7 +456,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        CoEvent.Salesman CoEvent.CustNum CoEvent.PaymDate.
 
        IF ok THEN DO:

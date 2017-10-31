@@ -92,7 +92,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -276,7 +276,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW PremiumNumber.BNumberPreFix {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) PremiumNumber.BNumberPreFix WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PremiumNumber.BNumberPreFix WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -463,7 +463,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO DELETE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        PremiumNumber.BNumberPreFix PremiumNumber.OperatorName.
        
        IF ok THEN DO:

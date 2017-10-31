@@ -253,7 +253,7 @@ FUNCTION fDefaults RETURNS LOGICAL:
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "   By CustNo  ,   By MSISDN ,  By period  , By 4".
@@ -434,15 +434,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW FATime.custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FATime.custnum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATime.custnum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FATime.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FATime.cli WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATime.cli WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW liTransPeriod {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) liTransPeriod WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) liTransPeriod WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -707,7 +707,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        liTransPeriod .
        IF ok THEN DO:
 

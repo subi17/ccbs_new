@@ -101,7 +101,7 @@ form /* seek Invoice Section  BY ISName */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code of Section,By Name of Section,By 3, By 4".
@@ -242,11 +242,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW InvSect.InvSect {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvSect.InvSect WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) InvSect.InvSect WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW InvSect.ISName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvSect.ISName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) InvSect.ISName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -473,7 +473,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        InvSect.InvSect InvSect.ISName .
        IF ok THEN DO:
 

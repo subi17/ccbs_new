@@ -92,7 +92,7 @@ IF iiCustnum > 0 THEN ASSIGN
    FrmRow = 3
    FrmDown = 8.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -286,11 +286,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW invoicetargetgroup.itgroupid {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) invoicetargetgroup.itgroupid WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) invoicetargetgroup.itgroupid WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW invoicetargetgroup.custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) invoicetargetgroup.custnum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) invoicetargetgroup.custnum WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

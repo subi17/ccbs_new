@@ -90,7 +90,7 @@ FIND Salesman where
      Salesman.Salesman = Salesman no-lock.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
@@ -174,11 +174,11 @@ SELAUS:
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
    CHOOSE ROW SMGroup.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) SMGroup.SmGroup WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) SMGroup.SmGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
    CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) SMGroup.SGName WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

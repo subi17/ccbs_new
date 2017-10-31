@@ -93,7 +93,7 @@ FIND FIRST Company no-lock no-error.
 IF AVAILABLE Company THEN ASSIGN yvari = TRUE.
 ELSE ASSIGN yvari = FALSE.
 
- Syst.CUICommon:cfc = "mese". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+ Syst.CUICommon:cfc = "mese". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
  view FRAME sel.
 
  IF siirto <> ? THEN DO:
@@ -236,11 +236,11 @@ add-new:
 
        IF order = 1 THEN DO:
           CHOOSE ROW MenuNum {Syst/uchoose.i} no-error WITH FRAME sel.
-          COLOR DISPLAY value(ccc) MenuNum WITH FRAME sel.
+          COLOR DISPLAY value(Syst.CUICommon:ccc) MenuNum WITH FRAME sel.
        END.
        ELSE DO:
           CHOOSE ROW MenuText {Syst/uchoose.i}    no-error WITH FRAME sel.
-          COLOR DISPLAY value(ccc) MenuText WITH FRAME sel.
+          COLOR DISPLAY value(Syst.CUICommon:ccc) MenuText WITH FRAME sel.
        END.
 
        IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -466,7 +466,7 @@ add-new:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) MenuText.MenuNum MenuText.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MenuText.MenuNum MenuText.
         IF ok THEN DO:
             IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhMenuText).
             DELETE MenuText.

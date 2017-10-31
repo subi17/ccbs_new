@@ -109,7 +109,7 @@ WITH
 
 FIND Customer where Customer.CustNum = CustNum no-lock.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CGMember
@@ -339,11 +339,11 @@ SELAUS:
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
         CHOOSE ROW CGMember.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CGMember.CustGroup WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CGMember.CustGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
         CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -551,7 +551,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        CGMember.CustGroup CustGroup.CGName CGMember.Memo /* sd */.
        IF ok THEN DO:
 

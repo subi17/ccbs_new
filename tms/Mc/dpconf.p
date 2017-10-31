@@ -163,7 +163,7 @@ FORM /* seek DPConf  by DPCName */
 
 FIND DiscPlan WHERE DiscPlan.DiscPlan = DiscPlan NO-LOCK no-error.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Eff. Date  ,By Description,By 3, By 4".
@@ -343,11 +343,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW DPConf.ValidFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DPConf.ValidFrom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DPConf.ValidFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DPConf.DPCName  NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DPConf.DPCName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DPConf.DPCName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTkey).
@@ -570,7 +570,7 @@ ASK-F2:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        DPConf.ValidFrom DpConf.ValidTo DPConf.DPCName .
        IF ok THEN DO:
 

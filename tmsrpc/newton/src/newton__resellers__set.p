@@ -160,5 +160,4 @@ add_struct(response_toplevel_id, "").
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
    EMPTY TEMP-TABLE ttReseller.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

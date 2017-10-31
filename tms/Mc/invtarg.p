@@ -108,7 +108,7 @@ form /* seek Invoicing Target  BY  BillTarget */
 
 FIND  Customer where Customer.CustNum = CustNum no-lock.
 lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By No. ,By name,By 3, By 4".
@@ -252,7 +252,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW BillTarget.BillTarget {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BillTarget.BillTarget WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BillTarget.BillTarget WITH FRAME sel.
       END.
 
       nap = keylabel(LASTkey).
@@ -481,7 +481,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        BillTarget.BillTarget BillTarget.RatePlan BillTarget.DiscPlan.
        IF ok THEN DO:
 

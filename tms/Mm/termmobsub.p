@@ -182,7 +182,7 @@ form /* seek Mobsub MsSeq */
     WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription ID "
     COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  , By 4".
@@ -291,19 +291,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TermMobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TermMobsub.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TermMobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TermMobsub.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TermMobsub.MsSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TermMobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW TermMobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TermMobsub.AgrCust WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TermMobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
         CHOOSE ROW TermMobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TermMobsub.MSStatus WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TermMobsub.MSStatus WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

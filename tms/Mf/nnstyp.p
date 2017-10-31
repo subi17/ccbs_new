@@ -85,7 +85,7 @@ form /* samtrafiksomrAde search WITH FIELD AreaName */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST AreaPlan
@@ -219,19 +219,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW AreaPlan.TrafficArea {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) AreaPlan.TrafficArea WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPlan.TrafficArea WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW AreaPlan.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) AreaPlan.AreaName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPlan.AreaName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW AreaPlan.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) AreaPlan.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPlan.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW AreaPlan.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) AreaPlan.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPlan.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -488,7 +488,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        AreaPlan.TrafficArea AreaPlan.AreaName .
        IF ok THEN DO:
 

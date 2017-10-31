@@ -121,7 +121,7 @@ FUNCTION fBillItem RETURNS CHAR
 END FUNCTION.
  
  
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST TopupScheme WHERE 
@@ -284,7 +284,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW TopupSchemeRow.TopupSchemeRowID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TopupSchemeRow.TopupSchemeRowID 
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TopupSchemeRow.TopupSchemeRowID 
            WITH FRAME sel.
       END.
 
@@ -463,7 +463,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           TopupSchemeRow.TopupSchemeRowID
           TopupSchemeRow.Amount
           TopupSchemeRow.BillCode.

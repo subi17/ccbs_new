@@ -51,7 +51,7 @@ form
     side-labels 
     FRAME cust.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -114,7 +114,7 @@ BROWSE:
 
          hide message no-pause.
          choose row MSISDN.CLI {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) MSISDN.CLI with frame sel.
+         color display value(Syst.CUICommon:ccc) MSISDN.CLI with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
          nap = keylabel(lastkey).

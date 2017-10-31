@@ -126,7 +126,7 @@ form /* seek Subscriber's Service  BY ServPac */
 
 FIND MobSub WHERE MobSub.MsSeq = MsSeq NO-LOCK.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
@@ -214,11 +214,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SubSer.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SubSer.ServCom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SubSer.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW SubSer.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SubSer.ServPac WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SubSer.ServPac WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

@@ -86,7 +86,7 @@ form /*  search with field CLI */
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -168,7 +168,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      IF AVAIL CLI THEN COLOR DISPLAY value(ccc) 
+      IF AVAIL CLI THEN COLOR DISPLAY value(Syst.CUICommon:ccc) 
          CLI.CLI 
          CLI.Ref
          CLI.Pwd
@@ -375,7 +375,7 @@ BROWSE:
 
          ASSIGN ok = FALSE.
          MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY value(ccc) 
+         COLOR DISPLAY value(Syst.CUICommon:ccc) 
             CLI.CLI
             CLI.Ref
             CLI.Pwd

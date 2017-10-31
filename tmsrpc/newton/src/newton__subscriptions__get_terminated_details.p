@@ -269,5 +269,4 @@ IF AVAIL PIndicator THEN
     add_string(resp_struct,"satisfaction_value",PIndicator.IndicatorValue) .
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

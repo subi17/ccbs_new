@@ -78,7 +78,7 @@ form /* FIND User BY abbreviation */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND USER NO."
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 
 FIND FIRST TMSUser USE-INDEX UserCode no-lock no-error.
@@ -151,7 +151,7 @@ BROWSE:
          CHOOSE ROW TMSUser.UserNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
          CHOOSE ROW TMSUser.UserName {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+      COLOR DISPLAY value(Syst.CUICommon:ccc)
       TMSUser.UserCode TMSUser.UserNum TMSUser.UserName WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
       nap = keylabel(LASTKEY).

@@ -132,7 +132,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
     
 END FUNCTION.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Customer ," +
@@ -249,11 +249,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttPaym.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttPaym.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttPaym.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW ttPaym.Amt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttPaym.Amt WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttPaym.Amt WITH FRAME sel.
       END.
 
 
@@ -581,7 +581,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ttPaym.CustNum Customer.CustName ttPaym.Amt.
 
        IF ok THEN DO:

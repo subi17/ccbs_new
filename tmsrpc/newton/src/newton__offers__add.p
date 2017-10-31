@@ -99,5 +99,4 @@ add_string(lcRespStruct, "id", Offer.Offer).
 RELEASE Offer.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -507,7 +507,6 @@ END.  /* MainLoop */
 
 DELETE OBJECT lhField.
 DELETE OBJECT lhSource. 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 
 IF lcInvSeqList = "" THEN QUIT.
 

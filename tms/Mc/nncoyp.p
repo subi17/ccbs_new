@@ -217,7 +217,7 @@ END FUNCTION.
 
 
     
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST FixedFee
@@ -662,11 +662,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW FixedFee.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) FixedFee.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) FixedFee.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FixedFee.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) FixedFee.BillCode WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) FixedFee.BillCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -1097,7 +1097,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           FixedFee.CustNum cust-name FixedFee.BillCode FixedFee.Contract    
           FixedFee.EndPeriod FixedFee.Amt FixedFee.BegPeriod
           FixedFee.Memo[1].  

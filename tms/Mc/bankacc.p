@@ -105,7 +105,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 4 
    FrmDown = 10.
    
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Bank Account ,  By Name    ,By 3, By 4".
@@ -256,7 +256,7 @@ BROWSE:
       IF order = 1 THEN DO:
         CHOOSE ROW BankAccount.BankAccount {Syst/uchoose.i} NO-ERROR 
               WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BankAccount.BankAccount WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BankAccount.BankAccount WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -446,7 +446,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        BankAccount.BankAccount BankAccount.BankData.
 
        IF ok THEN DO:

@@ -217,6 +217,4 @@ do while true:
     IF RETURN-VALUE = "LEAVE" THEN LEAVE.
 end.    
 
-IF VALID-HANDLE(ghFunc1)   THEN DELETE OBJECT ghFunc1.
-
 QUIT.

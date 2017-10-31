@@ -35,7 +35,7 @@ form /* SEEK Code */
     with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -101,7 +101,7 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW CLIType.Clitype {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLIType.Clitype WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CLIType.Clitype WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

@@ -41,7 +41,7 @@ form /* SEEK Code */
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -97,7 +97,7 @@ BROWSE:
 
          hide message no-pause.
          choose row mobsub.CLI {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) mobsub.CLI with frame sel.
+         color display value(Syst.CUICommon:ccc) mobsub.CLI with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
          nap = keylabel(lastkey).

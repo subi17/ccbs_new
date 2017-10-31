@@ -73,9 +73,6 @@ add_boolean(top_struct, "result", True).
 FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
-
-   IF VALID-HANDLE(ghFunc1) THEN 
-      DELETE OBJECT ghFunc1 NO-ERROR.
 END.
 
 

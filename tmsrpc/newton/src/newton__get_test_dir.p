@@ -28,7 +28,6 @@ PUT STREAM outfile UNFORMATTED
 OUTPUT STREAM outfile CLOSE.
 
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 
 resp_array = add_array(response_toplevel_id, "").
       resp_struct = add_struct(resp_array,"").

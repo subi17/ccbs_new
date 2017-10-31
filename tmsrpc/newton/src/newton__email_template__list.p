@@ -50,6 +50,5 @@ FOR EACH InvText NO-LOCK WHERE
       add_string(lcLangItemStruct, "emailtext", InvText.InvText).
 END.
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

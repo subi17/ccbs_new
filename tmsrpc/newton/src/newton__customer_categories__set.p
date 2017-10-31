@@ -115,6 +115,5 @@ RELEASE CustCat.
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+      IF llDoEvent THEN fCleanEventObjects().
 END.

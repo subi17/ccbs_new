@@ -128,5 +128,4 @@ END.
 add_int(response_toplevel_id, "",  piValue).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

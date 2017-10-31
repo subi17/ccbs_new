@@ -46,7 +46,7 @@ form /* Invoicing Group :n hakua varten */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -138,7 +138,7 @@ BROWSE:
 
          hide message no-pause.
          choose row UserGrp.UserGroup {Syst/uchoose.i} no-error with frame tlse.
-         color display value(ccc) UserGrp.UserGroup with frame tlse.
+         color display value(Syst.CUICommon:ccc) UserGrp.UserGroup with frame tlse.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
          nap = keylabel(lastkey).

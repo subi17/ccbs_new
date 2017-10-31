@@ -68,4 +68,3 @@ fCreateLimitHistory(
 
 add_boolean(response_toplevel_id,"", TRUE).
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

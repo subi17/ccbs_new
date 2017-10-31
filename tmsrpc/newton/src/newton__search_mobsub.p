@@ -297,5 +297,4 @@ IF sub_struct = '' THEN
     RETURN appl_err(SUBST("No MobSub for &1 found", Customer.CustNum)).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

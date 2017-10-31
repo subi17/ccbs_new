@@ -128,7 +128,7 @@ form /* seek FusionInvoice  BY CoName */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By FuInvNum  ,By InvDate   ,By CustomerID,By CustNum   ".
@@ -216,19 +216,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW FusionInvoice.FuInvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FusionInvoice.FuInvNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FusionInvoice.FuInvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FusionInvoice.Invdate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FusionInvoice.Invdate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FusionInvoice.Invdate WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW FusionInvoice.CustomerID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FusionInvoice.CustomerID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FusionInvoice.CustomerID WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW FusionInvoice.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FusionInvoice.Custnum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FusionInvoice.Custnum WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

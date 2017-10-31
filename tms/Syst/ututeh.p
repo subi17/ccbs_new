@@ -94,7 +94,7 @@ form
     " Effect " + PrintCodes.Effect + " INTERPRETED " side-labels centered
     FRAME nakym.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = si-kirj no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = si-kirj no-lock no-error.
@@ -389,7 +389,7 @@ BROWSE:
      END.
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
-        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
         delline = FRAME-LINE.
         FIND PrintCodes where recid(PrintCodes) = rtab[FRAME-LINE] no-lock.
 
@@ -416,7 +416,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) PrintCodes.Effect EffName
+        COLOR DISPLAY value(Syst.CUICommon:ccc) PrintCodes.Effect EffName
                        PrintCodes.PageWidth PrintCodes.PageLength PrintCodes.AvailLines.
         IF ok THEN DO:
             IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhPrintCodes).

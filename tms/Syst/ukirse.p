@@ -32,7 +32,7 @@ runko:
 repeat ON ENDKEY UNDO runko, NEXT runko:
    ASSIGN
    siirto = ?
-   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
    FIND FIRST TMSPrinter  no-lock no-error.
    IF NOT AVAILABLE TMSPrinter THEN DO:
@@ -78,7 +78,7 @@ BROWSE:
 
          HIDE MESSAGE.
          CHOOSE ROW TMSPrinter.PrinterId {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) TMSPrinter.PrinterId WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) TMSPrinter.PrinterId WITH FRAME sel.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

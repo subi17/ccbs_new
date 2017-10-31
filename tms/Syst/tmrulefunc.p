@@ -56,7 +56,7 @@ WITH ROW FrmRow OVERLAY FrmDown DOWN
     CENTERED NO-LABELS 
     FRAME sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -139,7 +139,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttMenu.Menutext {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttMenu.MenuText WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttMenu.MenuText WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).
 

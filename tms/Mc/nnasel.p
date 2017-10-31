@@ -62,7 +62,7 @@ form
     "  - Organization CODE   (END)"   SKIP
 with row 1 centered overlay title " SEEK CUSTOMER " FRAME alku.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Customer  USE-INDEX CustNum WHERE 
       Customer.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Customer THEN DO:
@@ -217,19 +217,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Customer.CustNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Customer.SearchName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Customer.SearchName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Customer.SearchName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Customer.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Customer.CustName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Customer.CustName WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Customer.OrgId WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Customer.OrgId WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

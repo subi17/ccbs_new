@@ -93,7 +93,7 @@ form /* UPDATE whitelist FileName */
     title color value(Syst.CUICommon:cfc) " ADD OPENED NUMBERS TO A File "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME wl.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -227,19 +227,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW ClosedCust.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) ClosedCust.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ClosedCust.Date {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.Date WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) ClosedCust.Date WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW ClosedCust.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) ClosedCust.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW ClosedCust.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) ClosedCust.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -605,7 +605,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           ClosedCust.CustNum ClosedCust.Date ClosedCust.DateOpen ClosedCust.State
           ClosedCust.Printed ClosedCust.Called.
 

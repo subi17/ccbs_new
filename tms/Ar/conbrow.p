@@ -100,7 +100,7 @@ FOR EACH Contact NO-LOCK WHERE
    
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Date , By 3, By 4".
@@ -185,7 +185,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW ttContact.ConDate {Syst/uchoose.i} NO-ERROR
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttContact.ConDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttContact.ConDate WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

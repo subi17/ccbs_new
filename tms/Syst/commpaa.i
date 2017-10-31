@@ -10,16 +10,6 @@
 DEF NEW SHARED VAR gcBrand       like customer.brand NO-UNDO.
 DEF NEW SHARED VAR gcAllBrand    AS LOG NO-UNDO.
 
-&IF "{&SKIP_FUNC_I}" NE "YES" 
-&THEN
-def new shared var ghFunc1 as handle.
-if not valid-handle(ghFunc1) then RUN Func/func.p persistent set ghFunc1.
-&ENDIF
-
-def new shared var cfc as char format "x(24)".
-def new shared var ctc as char format "x(24)".
-def            var ccc as char format "x(24)".
-
 /* otsikoissa näkyvät */
 def new shared var ynimi   as char format "x(30)".
 def new shared var pvm     as Date format "99-99-99" init TODAY.

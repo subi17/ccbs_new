@@ -87,7 +87,7 @@ form /* seek PreselErr  by PSEName */
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By BankOffice,By 3, By 4".
@@ -212,19 +212,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row PreselErr.PSError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PreselErr.PSError WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PreselErr.PSError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row PreselErr.PSEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PreselErr.PSEName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PreselErr.PSEName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         choose row PreselErr.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PreselErr.?? WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PreselErr.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         choose row PreselErr.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PreselErr.? WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PreselErr.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-line] = ? THEN NEXT.
@@ -430,7 +430,7 @@ BROWSE:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        PreselErr.PSError PreselErr.PSEName .
        IF ok THEN DO:
 

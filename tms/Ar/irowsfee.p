@@ -171,7 +171,7 @@ else do:
    return.
 end.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view frame sel.
 LOOP:
 repeat with frame sel:
@@ -234,7 +234,7 @@ BROWSE:
       hide message no-pause.
       if order = 1 then do:
         choose row SingleFee.BillPeriod {Syst/uchoose.i} no-error with frame sel.
-        color display value(ccc) SingleFee.BillPeriod with frame sel.
+        color display value(Syst.CUICommon:ccc) SingleFee.BillPeriod with frame sel.
       end.
 
       if rtab[frame-line] = ? then next.

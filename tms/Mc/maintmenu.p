@@ -83,7 +83,7 @@ FORM
     menuc[8] FORMAT "x(56)" SKIP
     menuc[9] FORMAT "x(56)" SKIP
     WITH ROW 2 COL 22 OVERLAY 
-    COLOR VALUE(ccc)
+    COLOR VALUE(Syst.CUICommon:ccc)
     TITLE "   MAINTENANCE ACTION   "
     NO-LABEL
 FRAME frTop.

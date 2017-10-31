@@ -119,7 +119,7 @@ FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
    COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = " By Customer    , By Subscription, By Usage       ".
@@ -201,17 +201,17 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttTMCounter.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttTMCounter.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttTMCounter.CustNum WITH FRAME sel.
       END.
       
       IF order = 2 THEN DO:
          CHOOSE ROW ttTMCounter.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttTMCounter.MsSeq WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttTMCounter.MsSeq WITH FRAME sel.
       END.
       
       IF order = 3 THEN DO:
          CHOOSE ROW lcValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) lcValue WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcValue WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.

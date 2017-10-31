@@ -68,7 +68,7 @@ FIND BillItem WHERE
      BillItem.BillCode = BillCode NO-LOCK.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By BillCode  ,By 3, By 4".
@@ -226,7 +226,7 @@ BROWSE:
 
       IF order = 1 THEN DO:
         CHOOSE ROW EPMember.EpGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) EPMember.EpGroup WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) EPMember.EpGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -425,7 +425,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        EPMember.EpGroup EPGroup.EpName.
        IF ok THEN DO:
 

@@ -57,7 +57,7 @@ form
 with row 1 centered overlay title " SEEK BillItem " FRAME alku.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST BillItem WHERE BillItem.Brand = gcBrand 
       USE-INDEX BillCode no-lock no-error.
    IF NOT AVAIL BillItem THEN DO:
@@ -188,11 +188,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW BillItem.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BillCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BillItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW BillItem.BIName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BIName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BillItem.BIName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

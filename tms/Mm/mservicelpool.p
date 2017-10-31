@@ -72,7 +72,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     " Rating Pools " + lcServiceLimit
     FRAME sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSSeq   , By SLSeq ,By 3, By 4".
@@ -195,7 +195,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row msseq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) msseq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) msseq WITH FRAME sel.
       END.
       
       IF rtab[FRAME-line] = ? THEN NEXT.

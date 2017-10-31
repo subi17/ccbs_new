@@ -90,7 +90,7 @@ form /* seek  keytype */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -217,11 +217,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW userkeys.usercode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) userkeys.usercode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) userkeys.usercode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW userkeys.keytype {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) userkeys.keytype WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) userkeys.keytype WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -425,7 +425,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        userkeys.usercode userkeys.keytype .
        IF ok THEN DO:
 

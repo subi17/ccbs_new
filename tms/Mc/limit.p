@@ -110,7 +110,7 @@ WITH  OVERLAY ROW 8 centered
 orders = "By Customer    ,By Subscription".
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -213,11 +213,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Limit.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Limit.Custnum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Limit.Custnum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
         CHOOSE ROW Limit.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Limit.MsSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Limit.MsSeq WITH FRAME sel.
       END.
       
       nap = keylabel(LASTKEY).

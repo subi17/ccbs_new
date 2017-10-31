@@ -161,5 +161,4 @@ fAddSubStruct().
 add_int(top_struct, "sub_count", 1).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

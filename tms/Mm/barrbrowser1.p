@@ -75,7 +75,7 @@ form /* Set new commands */
     "Enter Barring Command (Type #REFRESH in case of re-provisioning)"
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -201,7 +201,7 @@ REPEAT WITH FRAME frTop:
          GO-ON (home f1 f4 END CURSOR-DOWN
          CURSOR-UP CURSOR-LEFT CURSOR-RIGHT) NO-ERROR
          WITH FRAME frTop.
-         COLOR DISPLAY VALUE(ccc) ttBarrings.BarringCode WITH FRAME rfLLeft.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttBarrings.BarringCode WITH FRAME rfLLeft.
       END.
       
       nap = keylabel(LASTKEY).

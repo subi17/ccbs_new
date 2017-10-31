@@ -311,5 +311,4 @@ ELSE lcQuery = lcQuery + ' BY OrderDate DESC'.
 fListQuery(lcBuffers,lcQuery).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

@@ -95,7 +95,7 @@ WITH  OVERLAY ROW 4 centered
     /*1 columns*/
     FRAME lis.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Date,By 2,By 3, By 4".
@@ -225,7 +225,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MSOwner.TsBegin {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSOwner.TsBegin WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MSOwner.TsBegin WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -145,7 +145,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
          CHOOSE ROW nnpvti.pt-tuno {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) nnpvti.pt-tuno WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) nnpvti.pt-tuno WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
       nap = KEYLABEL(LASTKEY).

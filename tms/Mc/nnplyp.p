@@ -180,7 +180,7 @@ with centered overlay row 3 title " COPY ENTRIES INTO " + PriceList.PriceList +
     " FROM OTHER Price LIST " FRAME plcopy.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST PriceList
@@ -367,11 +367,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW PriceList.PriceList {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) PriceList.PriceList WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) PriceList.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW PriceList.PLName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) PriceList.PLName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) PriceList.PLName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -743,7 +743,7 @@ BROWSE:
         MESSAGE 
            "Are you SURE You want to delete Price list and its entries (Y/N) ?"
            UPDATE ok.
-        COLOR DISPLAY value(ccc)
+        COLOR DISPLAY value(Syst.CUICommon:ccc)
            PriceList.PriceList FORMAT "X(18)"
            PriceList.PLName 
            PriceList.Currency

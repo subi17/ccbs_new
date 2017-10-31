@@ -45,7 +45,7 @@ form
     with scroll 1 5 down  row 11 centered 
     title lctitle   overlay frame sel.
 
-   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 END.
 
 DEF BUFFER xxCustomer FOR Customer.
@@ -208,7 +208,7 @@ BROWSE:
 
          hide message no-pause.
          choose row ttCustomer.CustNum {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) ttCustomer.CustNum with frame sel.
+         color display value(Syst.CUICommon:ccc) ttCustomer.CustNum with frame sel.
 
          nap = keylabel(lastkey).
 

@@ -94,7 +94,7 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW custser.ParamCode {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) custser.ParamCode WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) custser.ParamCode WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

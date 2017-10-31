@@ -111,7 +111,7 @@ form /* seek  PortRequest */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -205,16 +205,16 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPProcess.FormRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPProcess.FormRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPProcess.FormRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MNPProcess.PortRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPProcess.PortRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPProcess.PortRequest WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
         CHOOSE ROW MNPProcess.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPProcess.StatusCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPProcess.StatusCode WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

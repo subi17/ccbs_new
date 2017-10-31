@@ -67,7 +67,7 @@ form /* seek  */
 /* default country */
 lcDefCountry = fCParamC("CountryCodeDef").
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -149,15 +149,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW PostCode.ZipCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) PostCode.ZipCode WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PostCode.ZipCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW PostCode.PostOffice {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) PostCode.PostOffice WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PostCode.PostOffice WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW PostCode.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) PostCode.Region WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PostCode.Region WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

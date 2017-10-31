@@ -89,7 +89,7 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 
 FIND FIRST CustGroup
@@ -164,7 +164,7 @@ BROWSE:
     CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
     CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+      COLOR DISPLAY value(Syst.CUICommon:ccc)
       CustGroup.CustGroup CustGroup.CreUser  CustGroup.CGName
       WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

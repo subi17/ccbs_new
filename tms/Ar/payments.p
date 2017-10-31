@@ -291,7 +291,7 @@ ELSE IF iiInvNum > 0 THEN DO:
    FRAME sel:TITLE = " PAYMENTS OF INVOICE " + Invoice.ExtInvID + " ".
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-FIRST.
@@ -377,19 +377,19 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Payment.ExtVoucher {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Payment.ExtVoucher WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.ExtVoucher WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Payment.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Payment.ExtInvID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW Payment.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Payment.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW Payment.PaymSrc  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Payment.PaymSrc WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.PaymSrc WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -776,7 +776,7 @@ mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
                       
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 ASSIGN
    month    = (year(pvm) * 100) + month(pvm)
@@ -1226,7 +1226,7 @@ repeat WITH FRAME sel:
          ELSE IF order = 4 THEN
             CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
        
-         COLOR DISPLAY value(ccc) 
+         COLOR DISPLAY value(Syst.CUICommon:ccc) 
          Customer.CustNum Customer.ZipCode
          Customer.OrgId lcCustName
          WITH FRAME sel.

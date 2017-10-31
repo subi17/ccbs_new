@@ -59,5 +59,4 @@ lcName =  Func.Common:mDispCustName(BUFFER Customer).
 add_string(response_toplevel_id,"",lcName).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

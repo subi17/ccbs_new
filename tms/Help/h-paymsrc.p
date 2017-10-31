@@ -39,7 +39,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PaymSrc "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 lcPaymSrc = Func.Common:mTMSCodeList("Payment",
                              "PaymSrc").
@@ -113,7 +113,7 @@ repeat:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW ttPaymSrc.PaymSrc {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) ttPaymSrc.PaymSrc WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) ttPaymSrc.PaymSrc WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
          nap = keylabel(LASTKEY).

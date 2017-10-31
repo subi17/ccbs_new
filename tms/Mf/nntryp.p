@@ -105,7 +105,7 @@ form /* Trunkgrupp search WITH FIELD /* x */ Operator */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OPERATOR "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Trunk
@@ -313,19 +313,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW Trunk.ExCode {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Trunk.ExCode WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Trunk.ExCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Trunk.OpCode {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Trunk.OpCode WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Trunk.OpCode WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW Trunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Trunk.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Trunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW Trunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Trunk.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Trunk.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -615,7 +615,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "DO YOU REALLY WANT TO DELETE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
          Trunk.ExCode Exchange.ExName Trunk.ExCode Trunk.TrunkCode
          Trunk.TrunkName Trunk.OpCode Operator.OperName
          Trunk.TrInt Trunk.TrIn.

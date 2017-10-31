@@ -71,8 +71,6 @@ END.
 
 EMPTY TEMP-TABLE ttStatus.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1.
-
 fELog("FUNCRUNQUEUE_RUN","handled" + STRING(liHandled)).
 
 QUIT.

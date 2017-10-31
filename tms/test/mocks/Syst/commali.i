@@ -8,14 +8,6 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-
-&IF "{&SKIP_FUNC_I}" NE "YES" 
-&THEN
-   def new shared var ghFunc1 as handle.
-   if not valid-handle(ghFunc1) then run Func/func.p persistent set ghFunc1.
-&ENDIF
-
-
 def new shared var cfc as char format "x(24)".
 def new shared var ctc as char format "x(24)".
 def        var ccc as char format "x(24)".

@@ -97,7 +97,7 @@ ASSIGN lcTitle = " COMM. SHARING FOR: " +
                  CoTarg.CoTarg   + "/" +
                  STRING(CoTarg.RsLevel). 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Target Type ,    ,   , By 4".
@@ -320,15 +320,15 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CoShare.TargType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoShare.TargType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoShare.TargType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CoShare.CoTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoShare.CoTarg WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoShare.CoTarg WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW CoShare.RsLevel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoShare.RsLevel WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoShare.RsLevel WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -514,7 +514,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        CoShare.TargType CoShare.CoTarg .
 
        IF ok THEN DO:

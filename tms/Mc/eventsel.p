@@ -131,7 +131,7 @@ IF ENTRY(1,icKey,CHR(255)) = "#BEGIN" THEN ASSIGN
    llBegins = TRUE.
 ELSE llBegins = FALSE.
    
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -215,15 +215,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Eventlog.EventDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Eventlog.EventDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Eventlog.EventDate WITH FRAME sel.
       END.
       ELSE  IF order = 2 THEN DO:
         CHOOSE ROW Eventlog.UserCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Eventlog.UserCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Eventlog.UserCode WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW Eventlog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Eventlog.TableName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Eventlog.TableName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

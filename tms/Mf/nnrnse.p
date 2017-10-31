@@ -52,7 +52,7 @@ form
 
 with row 1 centered overlay title " SEEK AREANUMBER " FRAME alku.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST AreaCode USE-INDEX AreaCode no-lock no-error.
    IF NOT AVAIL AreaCode THEN DO:
       BELL.
@@ -170,11 +170,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW AreaCode.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaCode.AreaCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaCode.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW AreaCode.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaCode.AreaName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaCode.AreaName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

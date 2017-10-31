@@ -121,7 +121,7 @@ form
 with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
    COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

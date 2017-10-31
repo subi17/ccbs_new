@@ -85,7 +85,7 @@ IF NOT AVAILABLE FuncRunProcess THEN DO:
    RETURN.
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW FuncRunResult.FRProcessID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FuncRunResult.FRProcessID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FuncRunResult.FRProcessID WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

@@ -84,7 +84,7 @@ form /* ArkipyhA :n nimella hakua varten */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " HOLIDAYNAME "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST NatHoliday no-lock no-error.
 IF AVAILABLE NatHoliday THEN ASSIGN memory = recid(NatHoliday)
@@ -208,11 +208,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW NatHoliday.Holiday {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) NatHoliday.Holiday WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) NatHoliday.Holiday WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW NatHoliday.HName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) NatHoliday.HName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) NatHoliday.HName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -458,7 +458,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) " UPDATE ok.
-        COLOR DISPLAY value(ccc) NatHoliday.Holiday NatHoliday.HName
+        COLOR DISPLAY value(Syst.CUICommon:ccc) NatHoliday.Holiday NatHoliday.HName
         .
         IF ok THEN DO:
 

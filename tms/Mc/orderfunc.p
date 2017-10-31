@@ -104,7 +104,7 @@ WITH ROW FrmRow width 40 OVERLAY FrmDown DOWN
     FRAME sel.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -192,11 +192,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttBrowser.OFName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttBrowser.OFName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

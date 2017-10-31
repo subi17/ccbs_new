@@ -110,7 +110,7 @@ ELSE DO:
    RETURN.
 
 END.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -237,11 +237,11 @@ repeat WITH FRAME sel:
 
       IF order = 1 THEN DO:
         CHOOSE ROW ProgLimit.LimitFrom {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ProgLimit.validfrom WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) ProgLimit.validfrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ProgLimit.LimitFrom {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ProgLimit.validto WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) ProgLimit.validto WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -413,7 +413,7 @@ repeat WITH FRAME sel:
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           ProgLimit.ValidTo
           ProgLimit.ValidFrom
           ProgLimit.LimitFrom

@@ -89,7 +89,7 @@ WITH  OVERLAY ROW 4 centered
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -217,7 +217,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
          CHOOSE ROW MsReqFuncItem.ItemDesc {Syst/uchoose.i} 
          NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) MsReqFuncItem.ItemDesc WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsReqFuncItem.ItemDesc WITH FRAME sel.
       END.
       
       nap = keylabel(LASTKEY).
@@ -408,7 +408,7 @@ REPEAT WITH FRAME sel:
          
          ASSIGN ok = FALSE.
          MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(ccc) MsReqFuncItem.ItemId MsReqFuncItem.ItemDesc.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsReqFuncItem.ItemId MsReqFuncItem.ItemDesc.
            
          IF ok THEN DO:
             FIND ttSelected EXCLUSIVE-LOCK WHERE

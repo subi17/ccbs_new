@@ -100,7 +100,7 @@ form /* seek BROWSE  BY EventDate */
 FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
 
 lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Invoice  ,   By Date    ,   By 3    , By 4".
@@ -195,11 +195,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW OPLog.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) OPLog.InvNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) OPLog.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW OPLog.EventDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) OPLog.EventDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) OPLog.EventDate WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

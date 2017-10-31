@@ -176,7 +176,7 @@ form /* seek  date */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Contract  ," +
@@ -341,23 +341,23 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW Contract.Contract {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contract.Contract WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.Contract WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Contract.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contract.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Contract.Salesman {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contract.Salesman WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Contract.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contract.FromDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.FromDate WITH FRAME sel.
       END.
       ELSE IF order = 5 THEN DO:
          CHOOSE ROW Contract.ToDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) Contract.ToDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.ToDate WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -687,7 +687,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        Contract.Contract Contract.CustNum Contract.Salesman .
 
        IF ok THEN DO:

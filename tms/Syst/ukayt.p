@@ -175,7 +175,7 @@ FRAME PWD.
 
 llAdminUser = fIsAdminUser(katun).
 
- Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
  view FRAME sel.
 
 order = 1.
@@ -332,17 +332,17 @@ add-new:
 
        IF order = 1 THEN DO:
           CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
-          COLOR DISPLAY value(ccc) TMSUser.UserCode WITH FRAME sel.
+          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.UserCode WITH FRAME sel.
        END.
        IF order = 2 THEN DO:
           CHOOSE ROW TMSUser.UserName {Syst/uchoose.i}
              no-error WITH FRAME sel.
-          COLOR DISPLAY value(ccc) TMSUser.UserName WITH FRAME sel.
+          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.UserName WITH FRAME sel.
        END.
        IF order = 3 THEN DO:
           CHOOSE ROW TMSUser.ForeignID {Syst/uchoose.i}
              no-error WITH FRAME sel.
-          COLOR DISPLAY value(ccc) TMSUser.ForeignID WITH FRAME sel.
+          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.ForeignID WITH FRAME sel.
        END.
 
 
@@ -602,7 +602,7 @@ add-new:
           memory = rtab[1 + i].
           ASSIGN ok = FALSE.
           message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-          COLOR DISPLAY value(ccc) 
+          COLOR DISPLAY value(Syst.CUICommon:ccc) 
              TMSUser.UserCode 
              TMSUser.UserName 
              TMSUser.Initials

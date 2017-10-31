@@ -118,7 +118,6 @@ IF lcMemoTitle > "" AND liMsReq > 0 THEN DO:
 END. /* IF lcMemoTitle > "" THEN DO: */
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 
 

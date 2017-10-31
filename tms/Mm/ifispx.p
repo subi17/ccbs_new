@@ -126,7 +126,7 @@ form /* seek Spex  BY  Mancode */
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
@@ -285,12 +285,12 @@ BROWSE:
       IF order = 1 THEN 
       DO:
          CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) IFiSpx.ManCode WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN 
       DO:
          CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) IFiSpx.ManCode WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -490,7 +490,7 @@ BROWSE:
 
          ASSIGN ok = FALSE.
          MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(ccc)
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
          IFiSpx.ManCode IFiSpx.ManCode .
          IF ok THEN 
          DO:

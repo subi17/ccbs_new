@@ -299,5 +299,4 @@ add_string(lcresultStruct, "resultDescription", "success").
 
 FINALLY:
    ghAuthLog::TransactionId = "690".
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

@@ -232,7 +232,7 @@ FUNCTION fStatusName RETURNS LOGIC
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -349,11 +349,11 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -548,7 +548,7 @@ repeat WITH FRAME sel:
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           DayCampaign.DCEvent 
           DayCampaign.ValidFrom
           DayCampaign.ValidTo

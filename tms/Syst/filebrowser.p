@@ -47,7 +47,7 @@ Syst.CUICommon:cfc = "sel".
 
 RUN Syst/ufcolor.p.
 
-ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 VIEW FRAME sel.
 
@@ -122,7 +122,7 @@ REPEAT WITH FRAME sel:
 
         CHOOSE ROW ttFiles.FileName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
-        COLOR DISPLAY VALUE(ccc) ttFiles.FileName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttFiles.FileName WITH FRAME sel.
 
       END.
 

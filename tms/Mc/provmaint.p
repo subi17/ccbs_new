@@ -42,7 +42,7 @@ FORM
     "  Solog handling is currently.:" lcStatus FORMAT "x(3)"
     WITH ROW 4 OVERLAY
     CENTERED
-    COLOR VALUE(ccc)
+    COLOR VALUE(Syst.CUICommon:ccc)
     TITLE "   PROVISIONING   "
     NO-LABEL
 FRAME frProvision.
@@ -64,7 +64,7 @@ FORM
     "Enter password:" lcPassWord
     WITH ROW 4 OVERLAY
     CENTERED
-    COLOR VALUE(ccc)
+    COLOR VALUE(Syst.CUICommon:ccc)
     TITLE " PASSWORD "
     NO-LABEL
 FRAME frPassWord.

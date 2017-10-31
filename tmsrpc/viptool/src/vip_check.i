@@ -11,7 +11,6 @@ ELSE IF vipMSISDN.POS NE "VIP" THEN lcVIPError = "Msisdn is not a VIP number".
 IF lcVIPError NE "" THEN DO:
 &IF "{&CommVarDef}" EQ "YES" 
 &THEN
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-&ENDIF
+   &ENDIF
    RETURN appl_err(lcVIPError).
 END.

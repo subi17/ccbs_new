@@ -626,7 +626,7 @@ IF iiOrderId > 0 THEN DO:
    LEAVE.
 END.          
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By OrgId , By Name  ,By OrderId , By Status , By OrgID , By  Cli ,  By orderid  ".
@@ -727,19 +727,19 @@ BROWSE:
       IF iiOrderID = 0 THEN DO:
          IF order = 1 OR ORDER = 5 THEN DO:
             CHOOSE ROW lcStamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(ccc) lcStamp WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcStamp WITH FRAME sel.
          END.
          ELSE IF order = 2 OR Order = 7 THEN DO:
             CHOOSE ROW Order.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(ccc) Order.CLI WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Order.CLI WITH FRAME sel.
          END.
          ELSE IF order = 3 OR Order = 6 THEN DO:
             CHOOSE ROW Order.ContractID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(ccc) Order.ContractID WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Order.ContractID WITH FRAME sel.
          END.
          IF order = 4 THEN DO:
             CHOOSE ROW Order.OrderId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(ccc) Order.OrderId WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Order.OrderId WITH FRAME sel.
          END.
       END.
 

@@ -130,7 +130,7 @@ form /* UPDATE whitelist FileName */
     title color value(Syst.CUICommon:cfc) " ADD CLOSED NUMBERS TO A File "
     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME wl.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MthCall
@@ -305,19 +305,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.Month WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.Month WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW MthCall.CloseDate {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.CloseDate WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.CloseDate WITH FRAME sel.
       END.
 /*    ELSE IF order = 4 THEN DO:
         CHOOSE ROW MthCall.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -680,7 +680,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit
           MthCall.CloseDate MthCall.CloseType.
        IF ok THEN DO:

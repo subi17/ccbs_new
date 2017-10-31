@@ -170,7 +170,7 @@ FUNCTION fBDestClass RETURNS CHAR
 END.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST BDest where 
@@ -352,15 +352,15 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW BDest.BDest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.BDest WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.BDest WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
          CHOOSE ROW BDest.BDName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.BDName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.BDName WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
          CHOOSE ROW BDest.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.CCN WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -757,7 +757,7 @@ repeat WITH FRAME sel:
 
         ASSIGN ok = FALSE.
         MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N)" UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.CUICommon:ccc) 
            BDest.BDest BDest.BDName  BDest.Brand.
         IF ok THEN DO:
 

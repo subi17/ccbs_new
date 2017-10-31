@@ -56,7 +56,7 @@ form
 with row 1 centered overlay title " SEEK SALESMEN " FRAME alku.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Salesman USE-INDEX Salesman WHERE 
       Salesman.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Salesman THEN DO:
@@ -182,11 +182,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Salesman.Salesman WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Salesman.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Salesman.SmName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Salesman.SmName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.

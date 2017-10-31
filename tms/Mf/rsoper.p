@@ -88,7 +88,7 @@ form /*  search WITH FIELD Operator */
 with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND OPERATOR CODE "
    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST rsoper no-lock no-error.
@@ -231,19 +231,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW rsoper.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) rsoper.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) rsoper.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW rsoper.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) rsoper.Operator WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) rsoper.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW rsoper.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) rsoper.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) rsoper.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW rsoper.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) rsoper.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) rsoper.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.

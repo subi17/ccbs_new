@@ -75,7 +75,7 @@ FOR EACH ttDays,
    ttEvent.EventTime = ttTimes.DumpTime.
 END.    
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 lcDays = "Sun,Mon,Tues,Wednes,Thurs,Fri,Satur".
@@ -157,7 +157,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttEvent.EventDay {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttEvent.EventDay WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttEvent.EventDay WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

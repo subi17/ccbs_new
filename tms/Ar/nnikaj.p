@@ -247,7 +247,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       else if toimi = 5 then do:
          IF NOT llOnlySummary THEN DO:
             assign
-            Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   ccc = Syst.CUICommon:cfc.
+            Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
             do i = 1 to 2 with frame rival:
                valik = valikko[i].
                display valik.
@@ -261,7 +261,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                "Choose printing order, press ENTER !".
                readkey pause 0.
                choose row valik {Syst/uchoose.i} no-error.
-               color display value(ccc) valik with frame rival.
+               color display value(Syst.CUICommon:ccc) valik with frame rival.
                i = frame-line.
                hide message no-pause.
                assign order = i.

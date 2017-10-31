@@ -683,5 +683,4 @@ fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
 add_int(response_toplevel_id, "", liOrderId).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

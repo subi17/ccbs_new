@@ -325,7 +325,7 @@ FORM /* Seek a Bank AccNum */
 
 Syst.CUICommon:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN ccc = Syst.CUICommon:cfc.
+ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 xState = 0.
@@ -494,7 +494,7 @@ REPEAT WITH FRAME sel:
          CHOOSE ROW UnregPaym.RefNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 5 THEN
          CHOOSE ROW UnregPaym.BankAcc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      COLOR DISPLAY VALUE(ccc) 
+      COLOR DISPLAY VALUE(Syst.CUICommon:ccc) 
       UnregPaym.PaymDate UnregPaym.CustName UnregPaym.PaidAmt 
       UnregPaym.RefNum UnregPaym.BankAcc
       WITH FRAME sel.
@@ -940,7 +940,7 @@ REPEAT WITH FRAME sel:
 
          ASSIGN ok = FALSE.
          MESSAGE " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(ccc)
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
          UnregPaym.PaymDate 
          UnregPaym.CustName 
          UnregPaym.PaidAmt

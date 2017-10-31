@@ -201,7 +201,7 @@ WITH
    BillItem.BillCode + " - " + BillItem.BIName OVERLAY FRAME tbacc.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -352,15 +352,15 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW BillItem.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BillCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BillItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW BillItem.BIName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BIName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BillItem.BIName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW BillItem.BIGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BIGroup WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) BillItem.BIGroup WITH FRAME sel.
       END.
 
 
@@ -613,7 +613,7 @@ BROWSE:
         MESSAGE 
         "WARNING: YOU SHOULD NEVER DELETE A BillCode THAT EXISTS ON CALLS/INVOICES !".
         message " DO YOU REALLY WANT TO ERASE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.CUICommon:ccc) 
            BillItem.Brand BillItem.BillCode BillItem.BIName BillItem.AccNum
            BIGName BillItem.TaxClass BillItem.BIGroup.
         IF ok THEN DO:

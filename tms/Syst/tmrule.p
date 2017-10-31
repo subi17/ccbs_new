@@ -199,7 +199,7 @@ FUNCTION fTicketTypeName RETURNS LOGIC
    DISP lcTicketType WITH FRAME lis.
 END FUNCTION.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -363,7 +363,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TMRule.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMRule.Name WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TMRule.Name WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -563,7 +563,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TMRule.TMRuleSeq TMRule.Name
        TMRule.FromDate TMRule.ToDate TMRule.CounterItems.
        

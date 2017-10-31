@@ -71,7 +71,7 @@ ELSE DO:
    RETURN.
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -143,11 +143,11 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW Reseller.Reseller {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Reseller.Reseller WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Reseller.Reseller WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Reseller.RsName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Reseller.RsName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) Reseller.RsName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

@@ -523,4 +523,3 @@ fReportInt("t_mgm_sales", liMGMSalesToday).
 fReportInt("y_mgm_sales", liMGMSalesYesterday).
 fReportInt("total_mgm_sales", liMGMSalesCum).
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

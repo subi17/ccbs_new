@@ -493,5 +493,4 @@ ELSE
 add_string(lcReturnStruct, 'segment',lcSegment).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

@@ -119,7 +119,7 @@ FORM
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -206,11 +206,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW EDRHistory.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) EDRHistory.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) EDRHistory.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW EDRHistory.UpdateDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) EDRHistory.UpdateDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) EDRHistory.UpdateDate WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

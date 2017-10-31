@@ -108,7 +108,7 @@ END.
                                 
 IF icTitle = "" THEN icTitle = "Requests".
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -207,11 +207,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttData.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttData.CodeValue WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttData.CodeValue WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW ttData.CodeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttData.CodeName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttData.CodeName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

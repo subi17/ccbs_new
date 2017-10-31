@@ -157,7 +157,7 @@ WITH
    OVERLAY centered ROW 14 FRAME lCustNum.
 
 IF NOT ilSilent THEN DO:
-   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
+   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    view FRAME taka. PAUSE 0 no-message.
 
    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

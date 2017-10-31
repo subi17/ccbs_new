@@ -69,7 +69,7 @@ form /* angrAnsande riktnr. search WITH FIELD NeigArea */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND BORDERING AREA "
     COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST AreaPair
@@ -257,19 +257,19 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW AreaPair.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaPair.AreaCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
          CHOOSE ROW AreaPair.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaPair.?? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW AreaPair.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaPair.? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
@@ -542,7 +542,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(ccc)
+        COLOR DISPLAY value(Syst.CUICommon:ccc)
         AreaPair.AreaCode AreaPair.NeigArea AreaName xx-name.
         IF ok THEN DO:
 

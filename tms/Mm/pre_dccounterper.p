@@ -50,7 +50,7 @@ WITH OVERLAY CENTERED  scroll 3 15 DOWN
    FRAME sel.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 IF idtFrom = ? THEN idtFrom = 12/1/2006.
@@ -135,11 +135,11 @@ BROWSE:
       
       IF order = 1 THEN DO:
         CHOOSE ROW liPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) liPeriod WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) liPeriod WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW PPInvSeq.FromDate {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) PPInvSeq.FromDate WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) PPInvSeq.FromDate WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).

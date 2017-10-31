@@ -102,7 +102,7 @@ FIND Salesman where
      Salesman.Brand    = gcBrand AND
      Salesman.Salesman = Salesman no-lock.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember where 
@@ -324,11 +324,11 @@ SELAUS:
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
         CHOOSE ROW SMGMember.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) SMGMember.SmGroup WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) SMGMember.SmGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
         CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) SMGroup.SGName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -550,7 +550,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        SMGMember.SmGroup SMGroup.SGName  /* sd */.
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhSMGMember).

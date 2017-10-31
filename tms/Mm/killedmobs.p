@@ -118,7 +118,7 @@ form /* seek  CLI */
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By CustNo  ,  By Msisdn  ,  By Imsi  , By 4".
@@ -258,16 +258,16 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row msowner.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) msowner.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) msowner.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row msowner.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) msowner.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) msowner.CLI WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
         choose row msowner.Imsi {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) msowner.Imsi WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) msowner.Imsi WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
 

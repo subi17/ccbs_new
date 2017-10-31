@@ -36,7 +36,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -93,7 +93,7 @@ BROWSE:
 
          hide message no-pause.
          choose row BillTarg.BillTarg {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) BillTarg.BillTarg with frame sel.
+         color display value(Syst.CUICommon:ccc) BillTarg.BillTarg with frame sel.
 
          nap = keylabel(lastkey).
          if frame-value = "" and rtab[frame-line] = ? and

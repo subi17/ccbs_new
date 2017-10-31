@@ -165,7 +165,7 @@ ELSE ASSIGN
    liRow  = 1
    liDown = 15.
    
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 order = 1.
@@ -313,11 +313,11 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW CustIntEvent.CustNum  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CustIntEvent.CustNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CustIntEvent.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW CustIntEvent.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CustIntEvent.InvNum WITH FRAME sel. 
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CustIntEvent.InvNum WITH FRAME sel. 
       END.
 
       nap = keylabel(LASTKEY).
@@ -545,7 +545,7 @@ repeat WITH FRAME sel:
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-        COLOR DISPLAY value(ccc)
+        COLOR DISPLAY value(Syst.CUICommon:ccc)
         lcCustName CustIntEvent.CustNum CustIntEvent.PaymDate 
         CustIntEvent.InvNum CustIntEvent.LateDays
         CustIntEvent.PaidAmt CustIntEvent.Percent CustIntEvent.Amt.

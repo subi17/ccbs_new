@@ -114,7 +114,7 @@ form /* seek Status Code  BY UserCode */
     WITH ROW 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 lcSystUser = fTokenRights(katun,"SYST").
@@ -272,11 +272,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW memo.MemoTitle {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) memo.MemoTitle WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) memo.MemoTitle WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW memo.CreUser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) memo.CreUser WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) memo.CreUser WITH FRAME sel.
       END.
       nap = keylabel(LASTKEY).
 
@@ -468,7 +468,7 @@ BROWSE:
  
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        memo.MemoTitle memo.CreUser CommitDate .
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhMemo).

@@ -137,7 +137,7 @@ lcConfName = BRTestQueue.Description.
 
 RUN pRowsToTempTable(iiBRTestQueueID).
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -298,19 +298,19 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW ttQRow.BRTestQRowID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttQRow.BRTestQRowID 
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttQRow.BRTestQRowID 
            WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ttQRow.BRTestCaseID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttQRow.BRTestCaseID 
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttQRow.BRTestCaseID 
            WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW ttQRow.CaseDescription {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttQRow.CaseDescription 
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttQRow.CaseDescription 
            WITH FRAME sel.
       END.
 
@@ -559,7 +559,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           ttQRow.BRTestQRowID
           ttQRow.BRTestCaseID.
        

@@ -68,7 +68,7 @@ WITH
    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME haku-f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -155,19 +155,19 @@ BROWSE:
       hide MESSAGE NO-PAUSE.
       IF jarj = 1 THEN DO:
          CHOOSE ROW lcfrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) lcfrom WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) lcfrom WITH FRAME sel.
       END.
 /*      ELSE IF jarj = 2 THEN DO:
          CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CLI.CLI WITH FRAME sel.
       END.
     IF jarj = 3 THEN DO:
          CHOOSE ROW CLI.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.?? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CLI.?? WITH FRAME sel.
       END.
       ELSE IF jarj = 4 THEN DO:
          CHOOSE ROW CLI.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CLI.? WITH FRAME sel.
       END.
 */
       IF rtab[frame-line] = ? THEN NEXT.

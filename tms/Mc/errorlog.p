@@ -122,7 +122,7 @@ IF icTableName > "" OR icActionID > "" THEN ASSIGN
  FrmRow   = 3
  FrmDown  = 13.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -216,11 +216,11 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ErrorLog.ActionID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ErrorLog.ActionID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ErrorLog.ActionID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ErrorLog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ErrorLog.TableName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ErrorLog.TableName WITH FRAME sel.
       END.
 
       nap = keylabel(LASTKEY).
@@ -435,7 +435,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ErrorLog.TableName ErrorLog.KeyValue ldtDate.
 
        IF ok THEN DO:

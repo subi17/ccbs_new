@@ -134,7 +134,7 @@ END FUNCTION.
          
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By SLCode  ,By 3, By 4".
@@ -314,11 +314,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ServiceLimit.GroupCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServiceLimit.GroupCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServiceLimit.GroupCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ServiceLimit.SLCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServiceLimit.SLCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServiceLimit.SLCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
@@ -511,7 +511,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           ServiceLimit.GroupCode    
           ServiceLimit.SLCode     
           

@@ -156,7 +156,7 @@ FUNCTION fRsName RETURNS CHARACTER.
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 view frame sel.
 
@@ -298,15 +298,15 @@ BROWSE:
       hide message no-pause.
       if order = 1 then do:
         choose row Salesman.Reseller {Syst/uchoose.i} no-error with frame sel.
-        color display value(ccc) Salesman.Reseller with frame sel.
+        color display value(Syst.CUICommon:ccc) Salesman.Reseller with frame sel.
       end.
       else if order = 2 then do:
         choose row Salesman.SmName {Syst/uchoose.i} no-error with frame sel.
-        color display value(ccc) Salesman.SmName with frame sel.
+        color display value(Syst.CUICommon:ccc) Salesman.SmName with frame sel.
       end.
       else if order = 3 then do:
         choose row Salesman.Salesman {Syst/uchoose.i} no-error with frame sel.
-        color display value(ccc) Salesman.Salesman with frame sel.
+        color display value(Syst.CUICommon:ccc) Salesman.Salesman with frame sel.
       end.
 
       nap = keylabel(lastkey).
@@ -593,7 +593,7 @@ BROWSE:
 
        assign ok = false.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " update ok.
-       color display value(ccc)
+       color display value(Syst.CUICommon:ccc)
        Salesman.Salesman Salesman.SmName 
        Salesman.Parent 
        Salesman.Reseller RsName

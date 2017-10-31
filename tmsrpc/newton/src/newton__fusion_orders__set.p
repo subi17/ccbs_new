@@ -57,5 +57,4 @@ IF NOT RETURN-VALUE BEGINS "OK:" THEN
 add_string(response_toplevel_id, "", "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

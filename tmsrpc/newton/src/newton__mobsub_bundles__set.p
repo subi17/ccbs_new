@@ -436,8 +436,3 @@ Func.Common:mWriteMemoWithType("MobSub",                             /* HostTabl
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 add_int(lcResultStruct,lcReturnValue,liReturnValue).
-
-FINALLY:
-    IF VALID-HANDLE(ghFunc1) THEN 
-        DELETE OBJECT ghFunc1 NO-ERROR.
-END.

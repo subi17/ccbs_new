@@ -40,7 +40,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CONTRACT "
     color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -98,7 +98,7 @@ BROWSE:
 
          hide message no-pause.
          choose row Contract.FromDate {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) Contract.FromDate with frame sel.
+         color display value(Syst.CUICommon:ccc) Contract.FromDate with frame sel.
 
          nap = keylabel(lastkey).
 

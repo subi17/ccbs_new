@@ -123,7 +123,7 @@ IF NOT AVAILABLE BRTestQResult THEN DO:
    RETURN.
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -217,7 +217,7 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW BRTestQResultRow.QResultRowID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BRTestQResultRow.QResultRowID 
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BRTestQResultRow.QResultRowID 
            WITH FRAME sel.
       END.
 
