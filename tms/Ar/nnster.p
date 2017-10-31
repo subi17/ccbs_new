@@ -73,9 +73,12 @@ WITH
    title " " + Syst.CUICommon:ynimi + " Account Summary " + STRING(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header /* header FOR printout */                
    fill("=",78) format "x(78)" SKIP
-   Syst.CUICommon:ynimi AT 1
+   ynimi AT 1
       "ACCOUNT SUMMARY" AT 34
       "Page" to 70 sl format "zzz9" TO 78
    "Acct " at 1 acct format "zzzzz9" AccName format "x(18)"

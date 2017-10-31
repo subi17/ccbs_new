@@ -74,9 +74,12 @@ ASSIGN
    sl = 1
    rl = 0.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 FORM header
    line1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 format "x(28)" 
+   ynimi at 1 format "x(28)" 
    "Customer Balance Report" AT 30
    "Page" AT 68  
    sl format "ZZZZ9" SKIP

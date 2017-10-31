@@ -32,9 +32,12 @@ DEF VAR ma-nro2      LIKE CCN.CCN FORMAT ">>>9" NO-UNDO.
 
 DEF VAR lev          AS i                 NO-UNDO init 114.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(80)"       SKIP
-   Syst.CUICommon:ynimi at 1 "COUNTRY NUMBERS" at 31 pvm format "99-99-99" TO 78
+   ynimi at 1 "COUNTRY NUMBERS" at 31 pvm format "99-99-99" TO 78
    "Page"       at 66 sl format "ZZZ9" SKIP
    fill ("=",lev) format "x(80)"       SKIP
 
@@ -66,7 +69,7 @@ skip(4)
                     AT 37                                             skip(4)
 WITH
     COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
-    " " + Syst.CUICommon:ynimi + " Country number report " + string(pvm,"99-99-99") + " "
+    " " + ynimi + " Country number report " + string(pvm,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 

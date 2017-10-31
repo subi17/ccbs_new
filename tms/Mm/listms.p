@@ -39,9 +39,12 @@ FIND imsi    WHERE imsi.IMSI      = mobsub.IMSI   NO-LOCK.
 FIND BillTarg WHERE BillTarg.BillTarg   = mobsub.BillTarg  AND
                    BillTarg.CustNum  = mobsub.CustNum  NO-LOCK.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 FORM HEADER
    FILL("=",116) FORMAT "x(116)"         skip
-      Syst.CUICommon:ynimi  at 1  FORMAT "x(23)"
+      ynimi  at 1  FORMAT "x(23)"
       "SERVICES OF MOBILE SUBSCRIPTION" at 41
       pvm    format "99.99.9999" TO 116 skip
       mobno  FORMAT "x(20)"  at 41

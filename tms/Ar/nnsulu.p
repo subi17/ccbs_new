@@ -148,6 +148,9 @@ InvNum2     = 99999999
 tosi2       = 99999999
 liPaymType2 = 9.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
    skip(1)
 "  Note: This program prints out a journal of payments (payments for"     skip
@@ -156,13 +159,13 @@ form
 "        Optionally also accounting data is being printed."      skip
 skip(13)
    WITH ROW 1 side-labels width 80
-        title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENT JOURNAL " +
+        title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT JOURNAL " +
         string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc)
         FRAME MAIN.
 
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 "PAYMENT JOURNAL; PAYMENTS DURING" AT 42 pvm1
+   ynimi at 1 "PAYMENT JOURNAL; PAYMENTS DURING" AT 42 pvm1
      format "99.99.9999" "-" pvm2 format "99.99.9999" "Page" AT 103
      sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(20)"
@@ -197,7 +200,7 @@ form header
 
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 "VOUCHER FOR BOOKKEEPING " AT 37 pvm1
+   ynimi at 1 "VOUCHER FOR BOOKKEEPING " AT 37 pvm1
    format "99.99.9999" "-" pvm2 format "99.99.9999"
    "Page" at 103 sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(24)"  AT 37

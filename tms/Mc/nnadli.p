@@ -39,6 +39,9 @@ DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustAP   AS DEC
    INDEX CustName CustName CustNum. 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
    skip(1)
 "  Note: This program prints out a summary of customers who have either" skip
@@ -47,13 +50,13 @@ form
 lcInvGroup HELP "Invoicing Group" InvGroup.IGName skip(11)
 WITH
    width 80 overlay title 
-   " " + Syst.CUICommon:ynimi + " Summary Of AdvPayments and Deposits " + 
+   " " + ynimi + " Summary Of AdvPayments and Deposits " + 
    STRING(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 form header /* header FOR printout */                
    fill("=",78) format "x(78)" SKIP
-   Syst.CUICommon:ynimi AT 1
+   ynimi AT 1
       "SUMMARY OF DEPOSITS" AT 34
       "Page" to 70 sl format "zz9" TO 78
 

@@ -113,10 +113,12 @@ DEF TEMP-TABLE TCGMember NO-UNDO
 FIND FIRST ttCriter NO-ERROR.
 IF NOT AVAILABLE ttCriter THEN RETURN "ERROR:Criteria not defined".
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
 
 form header
    viiva1 at 1 SKIP
-   Syst.CUICommon:ynimi at 1 "INVOICE JOURNAL FROM PERIOD" at 46
+   ynimi at 1 "INVOICE JOURNAL FROM PERIOD" at 46
       "Page" at 105 sl FORMAT "ZZZZ9" SKIP
    "Inv.group" at 1 lcInvGroup FORMAT "x(30)" 
       ttCriter.InvDate1 at 46 FORMAT "99-99-9999" "-" 
@@ -149,7 +151,7 @@ with
 
 form header
    viiva1 at 1 SKIP
-   Syst.CUICommon:ynimi at 1 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
+   ynimi at 1 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
      "Page" at 105 sl FORMAT "ZZZZ9" SKIP
    "Inv.group" at 1 
       lcInvGroup FORMAT "x(25)"

@@ -62,9 +62,12 @@ ASSIGN
     viiva3 = fill("-",lev)
     viiva4 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 format "x(28)" 
+   ynimi at 1 format "x(28)" 
       "Unregistered Payments" AT 32
       "Page" AT 68  
       sl format "ZZZZ9" SKIP

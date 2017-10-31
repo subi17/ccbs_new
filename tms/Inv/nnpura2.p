@@ -180,9 +180,12 @@ viiva5     = FILL(" ",2) + fill("-",lev - 2)
 epltul     = (iiTarg = 1)
 llPDFPrint = (iiTarg = 3).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 format "x(30)"
+   ynimi at 1 format "x(30)"
       lcRepHeader format "x(35)" AT 35
       otsi[28] format "x(4)" AT 72                  /* Sivu */
       sl format "ZZZ9" SKIP

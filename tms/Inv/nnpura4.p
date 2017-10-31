@@ -109,9 +109,12 @@ ELSE ASSIGN lev        = 106
             viiva4     = FILL(" ",5)  + fill("-",lev - 5)
             viiva5     = FILL(" ",4)  + fill("-",lev - 4).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 FORMAT "x(30)"
+   ynimi at 1 FORMAT "x(30)"
       lcRepHeader FORMAT "x(35)" AT 45
       otsi[28] FORMAT "x(4)" AT 97     
       sl FORMAT "ZZZ9" SKIP

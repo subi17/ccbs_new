@@ -47,9 +47,12 @@ ASSIGN
     lcLine3   = FILL("-",liWidth)
     lcLine4   = FILL("-",liWidth).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    lcLine1 AT 1 SKIP
-   Syst.CUICommon:ynimi  AT 1 FORMAT "x(30)" 
+   ynimi  AT 1 FORMAT "x(30)" 
       "PAYMENTS BY BANK ACCOUNT" AT 35
       "Page" AT 69
       liPage FORMAT "ZZZZ9" SKIP

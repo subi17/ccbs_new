@@ -39,9 +39,12 @@ ASSIGN
     viiva3   = FILL("-",lev)
     viiva4   = FILL("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 FORMAT "x(30)" 
+   ynimi at 1 FORMAT "x(30)" 
       "CONTACT REPORT" at 35
       "Page" at 68  
       sl FORMAT "ZZZZ9" SKIP

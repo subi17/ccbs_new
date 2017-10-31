@@ -81,9 +81,12 @@ else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 x-cg-code = (if CustGroup ne "" then CustGroup else "NONE").
 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1  AT 2 SKIP
-   Syst.CUICommon:ynimi at 2 "SMALL CUSTOMER LIST" at 64 "Page" AT 161
+   ynimi at 2 "SMALL CUSTOMER LIST" at 64 "Page" AT 161
    sl format "ZZZZ9" TO 170
    SKIP
    "By " + entry(order1,jar1) + entry(order2,jar2)

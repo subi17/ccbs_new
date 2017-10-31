@@ -103,10 +103,12 @@ DEF TEMP-TABLE SvRapo NO-UNDO
 
 DEF STREAM suoravalt.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
 
 FORM HEADER
    FILL("=",112) FORMAT "x(112)" SKIP
-   Syst.CUICommon:ynimi AT 1 FORMAT "X(30)" 
+   ynimi AT 1 FORMAT "X(30)" 
       "DIRECT DEBIT AUTHORIZATIONS" AT 45 "Page" AT 103
       sl FORMAT "ZZZZ9" SKIP
    icAuthFile AT 1 FORMAT "X(100)" 

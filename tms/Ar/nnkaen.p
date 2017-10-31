@@ -92,6 +92,9 @@ lcTypeDenied = fCParamC("InvTypeDenied").
 
 FIND FIRST Company no-lock no-error.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
    valik NO-LABEL
    with overlay 2 down title color value(Syst.CUICommon:ctc) " CHOOSE ORDER FOR PRINTOUT "
@@ -106,12 +109,12 @@ form
    "       will be calculated according to customer's prior payment behaviour."    SKIP
    skip(11)
    WITH ROW 1 side-labels width 80
-   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENT FORECAST " +
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT FORECAST " +
    string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
 
 form header
    viiva1 AT 2 SKIP
-   Syst.CUICommon:ynimi at 2 "PAYMENT FORECAST OF NOT PAID INVOICES" at 44 "Page" AT 108     
+   ynimi at 2 "PAYMENT FORECAST OF NOT PAID INVOICES" at 44 "Page" AT 108     
    sl format "ZZ9" SKIP
    "Inv.group" at 2 InvGroup IGName format "x(22)"
    jar + ", " + pytx at 44 format "x(60)"

@@ -150,10 +150,13 @@ viiva1 = fill("=",lev)
 viiva2 = fill("=",lev)
 viiva3 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 /* FRAME SIVUOTS */
 form header
    viiva1 at 2 skip
-   Syst.CUICommon:ynimi at 2 "INVOICE JOURNAL FROM PERIOD" at 47
+   ynimi at 2 "INVOICE JOURNAL FROM PERIOD" at 47
      "Page" at 106 sl format "ZZZZ9" skip
    "Inv.group" at 2 icInvGroup IGName format "x(14)" "ConnType:"
    ilConnType format "Dir/Indir"
@@ -187,7 +190,7 @@ with
 /* FRAME TILYHT */
 form header
    viiva1 at 2 skip
-   Syst.CUICommon:ynimi at 2 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
+   ynimi at 2 "ACCOUNT SUMMARY / VOUCHER FOR GENERAL LEDGER" at 37
      "Page" at 106 sl format "ZZZZ9" skip
    "Inv.group" at 2 icInvGroup IGName format "x(20)"
      idaPvm1 at 43 format "99-99-9999" "-" idaPvm2 format "99-99-9999"

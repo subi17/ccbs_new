@@ -56,9 +56,12 @@ viiva2 = fill("=",lev)
 viiva3 = fill("-",lev)
 viiva4 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 2 SKIP
-   Syst.CUICommon:ynimi at 2 "ALARMLIST" AT 55
+   ynimi at 2 "ALARMLIST" AT 55
    "page" at 106 sl format "ZZZZ9" SKIP
    string(pvm,"99-99-99") AT 108 SKIP
    viiva2 AT 2 skip(1)

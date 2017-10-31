@@ -32,9 +32,12 @@ ASSIGN
     lcLine3   = FILL("-",liWidth)
     lcLine4   = FILL("-",liWidth).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    lcLine1 AT 1 SKIP
-   Syst.CUICommon:ynimi  AT 1 FORMAT "x(30)" 
+   ynimi  AT 1 FORMAT "x(30)" 
       "ERRORS IN INTRUM CREDIT LOSS FILE" AT 40
       "Page" AT 103
       liPage FORMAT "ZZZZ9" SKIP

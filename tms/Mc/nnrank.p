@@ -151,9 +151,12 @@ help "Name for output file" NO-LABEL    Qty TO 78
 WITH
    overlay width 80 title " Customer ranking list " NO-LABELS FRAME rajat.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 FORM HEADER
    viiva1       AT 2 SKIP
-   Syst.CUICommon:ynimi        AT 2 
+   ynimi        AT 2 
    "RANKING LIST OF CUSTOMERS"  AT 45 
    "page"       AT 106 sl FORMAT "ZZZZ9" SKIP
    "Billed values are ex vat amt and calls only, contract fees are omitted" AT 2
@@ -416,7 +419,7 @@ toimi:
    DO:
        OUTPUT STREAM excel TO value(exname).
 
-       put stream excel unformatted Syst.CUICommon:ynimi tab "RANKING LIST OF CUSTOMERS; Billed VALUES ARE EX VATAmt AND Calls ONLY, CONTRACT FEES ARE OMITTED,".
+       put stream excel unformatted ynimi tab "RANKING LIST OF CUSTOMERS; Billed VALUES ARE EX VATAmt AND Calls ONLY, CONTRACT FEES ARE OMITTED,".
           RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED

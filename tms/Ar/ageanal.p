@@ -95,10 +95,12 @@ viiva2       = fill("=",lev)
 viiva3       = fill("-",lev)
 lcTypeDenied = fCParamC("InvTypeDenied"). 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
 
 form header
    viiva1 at 1 skip
-   Syst.CUICommon:ynimi  at 1 
+   ynimi at 1 
       "AGE ANALYSIS" at 55 
       "Page" at 125 sl format "ZZ9" skip
    "Inv.Group:" at 2 lcGrpHeader format "x(24)"

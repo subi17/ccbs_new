@@ -58,9 +58,12 @@ ASSIGN
     lcSessionNum           = SESSION:NUMERIC-FORMAT
     SESSION:NUMERIC-FORMAT = "European".
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    lcLine1 AT 1 SKIP
-   Syst.CUICommon:ynimi  AT 1 FORMAT "x(30)" 
+   ynimi AT 1 FORMAT "x(30)" 
       "DIRECT DEBIT STATUS" AT 40
       "Page" AT 71
       liPage FORMAT "ZZ9" SKIP

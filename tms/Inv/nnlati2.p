@@ -62,16 +62,19 @@ form
      sm-code2 NO-LABEL 
      HELP "Salesman to" skip(5)
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " BILLING BY SALESMAN/CUSTOMER/COUNTRY(Service) " +
    string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
-   Syst.CUICommon:ynimi at 2 format "x(25)" "BILLING STATISTICS BY" at 40 date1 "-" date2
+   ynimi at 2 format "x(25)" "BILLING STATISTICS BY" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
    "SALESMAN / CUSTOMER / Country "  at 40 string(pvm,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)

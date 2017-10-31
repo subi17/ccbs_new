@@ -102,10 +102,12 @@ ASSIGN
     viiva4   = fill("-",lev)
     liDefVat = fCParamI("DefVatCode"). 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
 
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 format "x(30)" 
+   ynimi at 1 format "x(30)" 
       "SUBSCRIPTION REVENUE" at 40
       "Page" at 102  
       sl format "ZZZZ9" skip

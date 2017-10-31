@@ -82,10 +82,13 @@ ASSIGN
 IF icFile > "" THEN ASSIGN
    lcSesNum               = SESSION:NUMERIC-FORMAT
    SESSION:NUMERIC-FORMAT = "EUROPEAN".
-   
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 1 SKIP
-   Syst.CUICommon:ynimi at 1 FORMAT "x(30)" 
+   ynimi at 1 FORMAT "x(30)" 
       "COMMISSION REPORT" at 40
       "Page" at 102  
       sl FORMAT "ZZZZ9" SKIP
