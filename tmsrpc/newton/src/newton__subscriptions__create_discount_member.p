@@ -80,17 +80,17 @@ PROCEDURE pConvMainLine :
 
    for-blk:
    FOR FIRST bCustomer WHERE
-             bCustomer.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             bCustomer.Brand      = Syst.CUICommon:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
              bCustomer.CustidType = icCustIDType            AND
              bCustomer.Roles     NE "inactive"              NO-LOCK,
        EACH  bMobSub NO-LOCK WHERE
-             bMobSub.Brand   = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             bMobSub.Brand   = Syst.CUICommon:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE                   AND
             (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
              bMobSub.MsStatus = {&MSSTATUS_BARRED}),
-       FIRST bCliType WHERE bCliType.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
+       FIRST bCliType WHERE bCliType.Brand = Syst.CUICommon:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
       
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
@@ -116,17 +116,17 @@ PROCEDURE pMobOnlyMainLine :
    DEFINE BUFFER bMobSub   FOR MobSub.
 
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCliType, {&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
   
    for-blk:
    FOR FIRST bCustomer WHERE
-             bCustomer.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             bCustomer.Brand      = Syst.CUICommon:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
              bCustomer.CustidType = icCustIDType            AND
              bCustomer.Roles     NE "inactive"              NO-LOCK,
        EACH  bMobSub NO-LOCK WHERE
-             bMobSub.Brand   = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             bMobSub.Brand   = Syst.CUICommon:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.MsSeq  <> MobSub.MsSeq            AND
              bMobSub.PayType = FALSE:

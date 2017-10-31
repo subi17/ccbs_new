@@ -22,14 +22,14 @@ IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_RESERVE_NUMBER} THEN
    RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.OrderId = FusionMessage.OrderID NO-ERROR.
 IF NOT AVAIL Order THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "Order not found").
 
 FIND OrderFusion EXCLUSIVE-LOCK WHERE
-     OrderFusion.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+     OrderFusion.Brand = Syst.CUICommon:gcBrand AND
      OrderFusion.OrderID = FusionMessage.OrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,

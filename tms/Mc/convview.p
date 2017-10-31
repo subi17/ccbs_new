@@ -18,7 +18,7 @@ DEF VAR lcFixedTime AS CHAR NO-UNDO.
 
 
 FIND FIRST OrderFusion NO-LOCK where
-           OrderFusion.Brand eq Syst.Parameters:Syst.CUICommon:gcBrand AND
+           OrderFusion.Brand eq Syst.CUICommon:gcBrand AND
            OrderFusion.OrderID EQ iiOrderID NO-ERROR.
 
 IF NOT AVAIL OrderFusion THEN DO:

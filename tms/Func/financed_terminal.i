@@ -19,7 +19,7 @@ FUNCTION fIsDirectChannelCetelemOrder RETURNS LOG
    IF INDEX(Order.OrderChannel,"POS") > 0 THEN RETURN FALSE.
 
    RETURN CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                         OrderAction.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+                         OrderAction.Brand = Syst.CUICommon:gcBrand AND
                          OrderAction.OrderID = Order.OrderID AND
                          OrderAction.ItemType = "TerminalFinancing" AND
                          OrderAction.ItemKey = "0225").
@@ -33,7 +33,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    DEF BUFFER OrderCustomer FOR OrderCustomer.
       
    FIND Order NO-LOCK WHERE
-        Order.Brand  = Syst.Parameters:Syst.CUICommon:gcBrand AND
+        Order.Brand  = Syst.CUICommon:gcBrand AND
         Order.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN {&TF_STATUS_YOIGO}.
@@ -41,7 +41,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    IF icDCEvent = "RVTERM12" THEN DO:
 
       IF CAN-FIND(FIRST SingleFee WHERE
-                        SingleFee.Brand       = Syst.Parameters:Syst.CUICommon:gcBrand AND
+                        SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                         SingleFee.Custnum     = Order.CustNum AND
                         SingleFee.HostTable   = "MobSub" AND
                         SingleFee.KeyValue    = STRING(Order.MsSeq) AND
@@ -52,7 +52,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    ELSE IF icDCEvent BEGINS "PAYTERM" THEN DO:
    
       FOR FIRST OrderCustomer NO-LOCK WHERE
-                OrderCustomer.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+                OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
                 OrderCustomer.Order = iiOrderId AND
                 OrderCustomer.RowType = 1:
 
@@ -66,7 +66,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
             RETURN {&TF_STATUS_YOIGO}.
 
          IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                           OfferItem.Brand       = Syst.Parameters:Syst.CUICommon:gcBrand AND
+                           OfferItem.Brand       = Syst.CUICommon:gcBrand AND
                            OfferItem.Offer       = Order.Offer    AND
                            OfferItem.ItemType    = "PerContract"  AND
                            OfferItem.ItemKey BEGINS "PAYTERM"     AND

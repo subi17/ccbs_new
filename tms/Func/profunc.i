@@ -27,7 +27,7 @@ FUNCTION fIsPro RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
 
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              CustCat.Brand EQ Syst.CUICommon:gcBrand AND
               CustCat.Category EQ icCategory NO-ERROR.
               
    IF AVAIL CustCat AND Custcat.pro THEN RETURN TRUE.
@@ -41,7 +41,7 @@ FUNCTION fIsSelfEmpl RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
 
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              CustCat.Brand EQ Syst.CUICommon:gcBrand AND
               CustCat.Category EQ icCategory NO-ERROR.
 
    IF AVAIL CustCat AND INDEX(custcat.catname, "self") > 0 THEN RETURN TRUE.
@@ -171,7 +171,7 @@ FUNCTION fIsProOrder RETURNS LOGICAL
    DEF BUFFER Order FOR Order.
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ  Syst.Parameters:Syst.CUICommon:gcBrand AND
+              Order.Brand EQ  Syst.CUICommon:gcBrand AND
               Order.OrderID EQ iiOrderID NO-ERROR.
 
    IF INDEX(Order.orderchannel,"PRO") > 0 THEN
@@ -187,7 +187,7 @@ FUNCTION fIs2PTariff RETURNS LOGICAL
    DEF BUFFER CLIType FOR CLIType.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              CLIType.Brand EQ Syst.CUICommon:gcBrand AND
               CLIType.CliType EQ icCLIType NO-ERROR.
    IF AVAIL CliType AND
             CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN 
@@ -204,7 +204,7 @@ FUNCTION fIs3PTariff RETURNS LOGICAL
    DEF BUFFER CLIType FOR CLIType.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              CLIType.Brand EQ Syst.CUICommon:gcBrand AND
               CLIType.CliType EQ icCLIType NO-ERROR.
    IF AVAIL CliType AND
             CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN
@@ -231,12 +231,12 @@ FUNCTION fValidateProSTC RETURNS CHAR
    IF NOT fIsPro(Customer.Category) THEN RETURN "". /*No PRO logic needed*/
 
    FIND FIRST bCurr NO-LOCK WHERE
-              bCurr.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              bCurr.Brand EQ Syst.CUICommon:gcBrand AND
               bCurr.Clitype EQ icCurrCLIType NO-ERROR.
    IF NOT AVAIL bCurr THEN RETURN "Incorrect CLIType".
 
    FIND FIRST bNew NO-LOCK WHERE
-              bNew.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              bNew.Brand EQ Syst.CUICommon:gcBrand AND
               bNew.Clitype EQ icNewCLIType NO-ERROR.
    IF NOT AVAIL bNew THEN RETURN "Incorrect CLIType".
 
@@ -278,19 +278,19 @@ FUNCTION fGetProFeemodel RETURNS CHAR
    DEF BUFFER DayCampaign FOR DayCampaign.
 
    FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             CLIType.Brand = Syst.CUICommon:gcBrand AND
              CLIType.CLIType = icCliType AND
              CLIType.FixedBundle > "",
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = CLIType.FixedBundle:
       RETURN DayCampaign.FeeModel.
    END.
    FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             CLIType.Brand = Syst.CUICommon:gcBrand AND
              CLIType.CLIType = icCliType,
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = CLIType.clitype:
       RETURN DayCampaign.FeeModel.
    END.

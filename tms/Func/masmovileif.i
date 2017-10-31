@@ -118,14 +118,14 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER CLIType FOR CliType.
 
    FIND FIRST Order NO-LOCK where 
-              Order.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              Order.Brand EQ Syst.CUICommon:gcBrand AND
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "ERROR: Order not found " + STRING(iiOrderID) .
 
   /*Use delivery customer information if it is avbailable*/
    FIND FIRST OrderCustomer NO-LOCK WHERE 
-              OrderCustomer.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId EQ iiOrderid AND 
               OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
               NO-ERROR.
@@ -133,7 +133,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       RETURN "ERROR: Install address data not found " + STRING(iiOrderID) .
    
    FIND FIRST bOrderCustomer NO-LOCK WHERE 
-              bOrderCustomer.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              bOrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               bOrderCustomer.OrderId EQ iiOrderid AND 
               bOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
               NO-ERROR.
@@ -142,13 +142,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       RETURN "ERROR: Customer data not found " + STRING(iiOrderID) .
 
    FIND FIRST bHolderOrderCustomer NO-LOCK WHERE 
-              bHolderOrderCustomer.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              bHolderOrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               bHolderOrderCustomer.OrderId EQ iiOrderid AND 
               bHolderOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
               NO-ERROR.
    
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+              OrderFusion.Brand EQ Syst.CUICommon:gcBrand AND
               OrderFusion.OrderID EQ iiOrderID NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
                RETURN "ERROR: Fixed Order data not found " + STRING(iiOrderID) .

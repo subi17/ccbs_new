@@ -447,12 +447,12 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
       RETURN FALSE.
 
    FOR EACH labOrderCustomer NO-LOCK WHERE
-            labOrderCustomer.Brand      EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+            labOrderCustomer.Brand      EQ Syst.CUICommon:gcBrand AND
             labOrderCustomer.CustId     EQ icCustID                AND
             labOrderCustomer.CustIdType EQ icCustIDType            AND
             labOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
        EACH labOrder NO-LOCK WHERE
-            labOrder.Brand      EQ Syst.Parameters:Syst.CUICommon:gcBrand           AND
+            labOrder.Brand      EQ Syst.CUICommon:gcBrand           AND
             labOrder.OrderId    EQ labOrderCustomer.OrderId          AND
             labOrder.Statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
             LOOKUP(labOrder.CLIType,{&ADDLINE_CLITYPES}) > 0:
@@ -666,7 +666,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
    FIND FIRST lbELOrder NO-LOCK WHERE
-              lbELOrder.Brand        EQ Syst.Parameters:Syst.CUICommon:gcBrand           AND
+              lbELOrder.Brand        EQ Syst.CUICommon:gcBrand           AND
               lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
               lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
               lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
@@ -697,7 +697,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             /* Check if Main line order is closed, If closed, 
                then close extraline ongoing order */
             FIND FIRST lbMLOrder NO-LOCK WHERE 
-                       lbMLOrder.Brand        EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+                       lbMLOrder.Brand        EQ Syst.CUICommon:gcBrand AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
                        lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
                        lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 

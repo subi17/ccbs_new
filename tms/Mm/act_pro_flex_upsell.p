@@ -13,7 +13,7 @@
 {Func/upsellbundle.i}
 {Func/matrix.i}
 
-Syst.CUICommon:gcBrand =  Syst.Parameters:Syst.CUICommon:gcBrand.
+Syst.CUICommon:gcBrand =  Syst.CUICommon:gcBrand.
 katun = "Cron".
 /*
 "FLEX_500MB_UPSELL"

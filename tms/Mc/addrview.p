@@ -13,7 +13,7 @@
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
 FIND FIRST OrderCustomer NO-LOCK where
-           OrderCustomer.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+           OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
            OrderCustomer.OrderId EQ iiOrderid AND
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-ERROR.

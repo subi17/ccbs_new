@@ -1105,12 +1105,12 @@ PROCEDURE pTerminate:
    /* OR */
    /* Close Extra line discount, if extra line subscription is terminated */
    IF (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                      bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand          AND
+                      bCLIType.Brand      = Syst.CUICommon:gcBrand          AND
                       bCLIType.CLIType    = TermMobSub.CLIType               AND
                       bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
                LOOKUP(bCLIType.CLIType,lcExtraMainLineCLITypes) > 0)) OR
       (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                      bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand          AND
+                      bCLIType.Brand      = Syst.CUICommon:gcBrand          AND
                       bCLIType.CLIType    = TermMobSub.CLIType               AND
                       bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
                 LOOKUP(bCLIType.CLIType,lcExtraLineCLITypes) > 0)) THEN
@@ -1158,10 +1158,10 @@ PROCEDURE pTerminate:
       ADDLINE-323 fixed bug 
       Additional Line with mobile only ALFMO-5 */
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.Parameters:Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(TermMobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-               bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
+               bCLIType.Brand      = Syst.CUICommon:gcBrand           AND
                bCLIType.CLIType    = TermMobSub.CLIType                AND
                bCLIType.LineType   = {&CLITYPE_LINETYPE_MAIN}          AND 
               (bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT}  OR 
@@ -1182,7 +1182,7 @@ PROCEDURE pTerminate:
    /* Additional Line with mobile only ALFMO-5 */
    ELSE IF AVAIL DiscountPlan AND 
         CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                 bCLIType.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
+                 bCLIType.Brand      = Syst.CUICommon:gcBrand           AND
                  bCLIType.CLIType    = TermMobSub.CLIType                AND                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
         NOT CAN-FIND(FIRST DPMember WHERE
                            DPMember.DPId = DiscountPlan.DPId AND
@@ -1197,18 +1197,18 @@ PROCEDURE pTerminate:
       IF AVAILABLE bCustomer THEN 
       DO:
          FOR EACH OrderCustomer NO-LOCK WHERE
-             OrderCustomer.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand    AND
+             OrderCustomer.Brand      = Syst.CUICommon:gcBrand    AND
              OrderCustomer.CustIDType = bCustomer.CustIDType AND
              OrderCustomer.CustID     = bCustomer.OrgID     AND
              OrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
          FIRST bOrdTemp NO-LOCK WHERE
-               bOrdTemp.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
+               bOrdTemp.Brand      = Syst.CUICommon:gcBrand           AND
                bOrdTemp.OrderID    = OrderCustomer.OrderID             AND
                LOOKUP(bOrdTemp.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 AND
                LOOKUP(bOrdTemp.CLIType, {&ADDLINE_CLITYPES}) > 0:
     
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand    = Syst.Parameters:Syst.CUICommon:gcBrand AND
+                        OrderAction.Brand    = Syst.CUICommon:gcBrand AND
                         OrderAction.OrderID  = bOrdTemp.OrderID   AND
                         OrderAction.ItemType = "AddLineDiscount" AND
                         LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 ) THEN
@@ -1224,17 +1224,17 @@ PROCEDURE pTerminate:
             main line then removing the orderaction from ongoing
             additional line */
          FOR EACH OrderCustomer NO-LOCK WHERE
-                  OrderCustomer.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand    AND
+                  OrderCustomer.Brand      = Syst.CUICommon:gcBrand    AND
                   OrderCustomer.CustIDType = bCustomer.CustIDType AND
                   OrderCustomer.CustID     = bCustomer.OrgID     AND
                   OrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
             FIRST bOrder NO-LOCK WHERE
-                  bOrder.Brand      = Syst.Parameters:Syst.CUICommon:gcBrand           AND
+                  bOrder.Brand      = Syst.CUICommon:gcBrand           AND
                   bOrder.OrderID    = OrderCustomer.OrderID             AND
                   LOOKUP(bOrder.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0 AND
                   LOOKUP(bOrder.CLIType, {&ADDLINE_CLITYPES}) > 0:         
             FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
-                       OrderAction.Brand    = Syst.Parameters:Syst.CUICommon:gcBrand    AND
+                       OrderAction.Brand    = Syst.CUICommon:gcBrand    AND
                        OrderAction.OrderID  = bOrder.OrderID   AND
                        OrderAction.ItemType = "AddLineDiscount" AND
                 LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 NO-ERROR.

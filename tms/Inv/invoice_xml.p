@@ -513,7 +513,7 @@ PROCEDURE pInvoice2XML:
       lhXML:WRITE-DATA-ELEMENT("CustomerTaxZone",Invoice.TaxZone).
      
       FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand EQ Syst.Parameters:Syst.CUICommon:gcBrand AND
+                 CustCat.Brand EQ Syst.CUICommon:gcBrand AND
                  CustCat.Category EQ Customer.Category NO-ERROR.
          IF AVAILABLE CustCat THEN
             lhXML:WRITE-DATA-ELEMENT("Segment",CustCat.Segment).
