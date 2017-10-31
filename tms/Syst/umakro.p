@@ -51,10 +51,10 @@ IF lcMacros = "" OR lcMacros = ? THEN RETURN.
 
 /* get printer's physical name */
 FIND FIRST TMSPrinter where
-           TMSPrinter.PrinterId = TMSPrinter
+           TMSPrinter.PrinterId = Syst.CUICommon:TMSPrinter
 NO-LOCK NO-ERROR.
 IF NOT AVAIL TMSPrinter THEN 
-MESSAGE "SYSTEM ERROR: printer record" TMSPrinter "does not exist"
+MESSAGE "SYSTEM ERROR: printer record" Syst.CUICommon:TMSPrinter "does not exist"
 VIEW-AS ALERT-BOX ERROR.
 
 /* IF NOT into PaymFile or email*/

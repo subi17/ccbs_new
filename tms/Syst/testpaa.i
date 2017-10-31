@@ -10,7 +10,6 @@
 def new shared var katun   as char format "x(8)".
 
 /* ufkey.p:n tarvitsemat */
-DEF NEW shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 DEF NEW shared VAR yvari AS LOG NO-UNDO.
 
 def new shared var gcHelpParam as char NO-UNDO.

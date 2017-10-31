@@ -581,7 +581,7 @@ ELSE DO:
       /* effect code is the same as macro nbr */
       IF liCount > 0 THEN
       FOR FIRST PrintCodes NO-LOCK WHERE
-                PrintCodes.PrinterId = TMSPrinter AND
+                PrintCodes.PrinterId = Syst.CUICommon:TMSPrinter AND
                 PrintCodes.Effect    = STRING(liCount):
 
           lcMacroEff = PrintCodes.EffOn[2].

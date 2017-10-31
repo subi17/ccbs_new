@@ -776,7 +776,7 @@ IF oso = "" THEN DO:
 
    IF lcMacroEff > "" THEN DO:
       FIND FIRST PrintCodes NO-LOCK WHERE 
-                 PrintCodes.PrinterId = TMSPrinter AND
+                 PrintCodes.PrinterId = Syst.CUICommon:TMSPrinter AND
                  PrintCodes.Effect    = lcMacroEff NO-ERROR.
 
       IF AVAILABLE PrintCodes THEN las_teh = PrintCodes.EffOn[2].

@@ -10,7 +10,6 @@
 
 def new shared var katun   as char format "x(8)".
 
-def new shared var TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 def new shared var yvari AS LOG NO-UNDO.
 
 def new shared var si-recid    AS RECID NO-UNDO.

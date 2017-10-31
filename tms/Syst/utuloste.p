@@ -175,7 +175,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
    END.
 
    ASSIGN 
-     TMSPrinter = TMSPrinter.PrinterId.
+     Syst.CUICommon:TMSPrinter = TMSPrinter.PrinterId.
 
    IF otsi1 = "" THEN ASSIGN
       otsi1   = " " + TMSReport.Memo + " "
@@ -295,7 +295,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
                /* IF a slave printer was used, store the UNIX script name
                into shared 'kirjoitin' VARIABLE */
 
-               TMSPrinter = TMSPrinter.PrinterId.
+               Syst.CUICommon:TMSPrinter = TMSPrinter.PrinterId.
 
                DISPLAY 
                   kirloo1 
@@ -623,7 +623,7 @@ ELSE DO: /* Tila = sulje */
          takaisin ja otetaan talteen scriptin nimi, jolla tulostetaan
          tilapaistiedosto, jossa teksti sijaitsee */
 
-         FIND TMSPrinter WHERE TMSPrinter.PrinterId = TMSPrinter NO-LOCK.
+         FIND TMSPrinter WHERE TMSPrinter.PrinterId = Syst.CUICommon:TMSPrinter NO-LOCK.
          strnimi1 = substring(TMSPrinter.Device,2).
 
          UNIX SILENT value(strnimi1) value(oso).

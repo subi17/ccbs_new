@@ -11,7 +11,6 @@
 
 def shared var katun   as char format "x(8)".
 
-DEF shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 DEF shared VAR yvari AS LOG NO-UNDO.
 
 DEF shared VAR si-recid    AS RECID NO-UNDO.
