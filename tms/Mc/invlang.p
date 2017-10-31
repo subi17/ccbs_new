@@ -651,7 +651,7 @@ PROCEDURE local-find-others:
 
    itname = Func.Common:mTMSCodeName("RepText",
                              "TextType",
-                             RepText.TextType).
+                             STRING(RepText.TextType)).
 
 END PROCEDURE.
 

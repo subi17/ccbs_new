@@ -20,7 +20,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i} 
 /* temp-table */
 {Ar/paymfile.i}
 {Func/farplog.i}

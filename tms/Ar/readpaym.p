@@ -109,7 +109,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}                                               
-{Func/timestamp.i} 
 {Syst/utumaa.i}
 {Ar/bankrej.i}
 {Func/fvoucher.i}

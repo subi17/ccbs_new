@@ -98,7 +98,6 @@ resp_array = add_array(response_toplevel_id, "").
 {Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{Func/timestamp.i}            
 {Func/finvbal.i}
 {Func/fcreditvalid.i}
 {Syst/tmsconst.i}

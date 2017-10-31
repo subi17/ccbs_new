@@ -1191,7 +1191,7 @@ PROCEDURE local-UPDATE-record:
          ldeVatAmt   = PrePaidRequest.VatAmt    / 100 
          lcRespCode  = Func.Common:mTMSCodeName("PrePaidRequest",
                                         "RespCode",
-                                        PrePaidRequest.RespCode)
+                                        STRING(PrePaidRequest.RespCode))
          lcStatus    = Func.Common:mTMSCodeName("PrePaidRequest",
                                         "PPStatus",
                                         STRING(PrePaidRequest.PPStatus)).

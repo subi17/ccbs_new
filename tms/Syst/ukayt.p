@@ -34,7 +34,6 @@
   Version ......: Yoigo
   ----------------------------------------------------------------------- */
 
-{Func/timestamp.i} 
 {Func/chkmail.i}
 {Syst/commali.i} 
 {Syst/eventval.i}

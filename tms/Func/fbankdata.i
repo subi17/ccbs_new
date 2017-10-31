@@ -8,7 +8,6 @@
 */
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}  
 
 /* convert into data form */
 FUNCTION fBankAcc2Data RETURNS CHARACTER

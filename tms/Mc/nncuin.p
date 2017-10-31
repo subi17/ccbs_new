@@ -12,7 +12,6 @@
 {Func/excel.i}
 {Func/function.i}
 {Syst/commali.i}
-{Func/date.i} 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'invoice'}
 

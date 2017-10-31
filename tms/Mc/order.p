@@ -1754,7 +1754,7 @@ PROCEDURE local-find-others.
    
       lcOrdPayMeth = Func.Common:mTMSCodeName("OrderPayment",
                                       "Method",
-                                      OrderPayment.Method).
+                                      STRING(OrderPayment.Method)).
    END.
       
    IF Order.DeliverySecure EQ 1
@@ -1765,7 +1765,7 @@ PROCEDURE local-find-others.
 
    lcDeliveryType = Func.Common:mTMSCodeName("Order",
                                    "DeliveryType",
-                                   liDeliveryType).
+                                   STRING(liDeliveryType)).
 
    liMsRequest = 0.
    IF Order.MSSeq > 0 THEN DO:
