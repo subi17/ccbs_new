@@ -269,7 +269,7 @@ DO TRANS:
       ActionLog.ActionChar   = STRING(oiDone) + 
                                " discounts were updated"
       ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.FromDate     = TODAY
       ActionLog.ToDate       = TODAY.
       ActionLog.ActionTS     = Func.Common:mMakeTS().

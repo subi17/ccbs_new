@@ -80,7 +80,7 @@ FUNCTION fError RETURNS LOGIC
                               STRING(Invoice.CustNum) +
                               " Nbr: " + STRING(Invoice.InvNum)
          ErrorLog.ErrorChar = Invoice.ExtInvID
-         ErrorLog.UserCode  = katun.
+         ErrorLog.UserCode  = Syst.CUICommon:katun.
          ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
  
@@ -101,7 +101,7 @@ FUNCTION fCreateActionLog RETURNS LOGIC
                                   STRING(DAY(idtInvDate),"99")
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionDec    = iiInvType
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionStatus = iiStatus
          ActionLog.ActionChar   = icText
          ActionLog.ActionTS     = ldThisRun.

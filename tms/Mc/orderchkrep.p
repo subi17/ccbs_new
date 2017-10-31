@@ -7,7 +7,7 @@ jl
 {Func/cparam2.i}
 
 ASSIGN
-   katun   = "cron"
+   Syst.CUICommon:katun   = "cron"
    Syst.CUICommon:gcBrand = "1".
 
 DEF STREAM sLog.

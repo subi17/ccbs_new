@@ -87,8 +87,8 @@ IF pcmemoStruct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-katun = "VISTA_" + lcusername.
-IF TRIM(katun) EQ "VISTA_" THEN
+Syst.CUICommon:katun = "VISTA_" + lcusername.
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 IF pdeQ25NewAmt <= 0 THEN
@@ -147,7 +147,7 @@ IF lcmemo_title > "" THEN DO:
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.

@@ -1,7 +1,7 @@
 /* Set Solog to status Ok for a defined list of ServCom */
 
 {Syst/commpaa.i}
-katun = "fakeSolog".
+Syst.CUICommon:katun = "fakeSolog".
 Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 {Func/fgettxt.i}

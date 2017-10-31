@@ -41,7 +41,7 @@ DEFINE VARIABLE liCallQty    AS INTEGER   NO-UNDO.
 
 ASSIGN
    Syst.CUICommon:gcBrand      = '1'
-   katun        = 'cron'
+   Syst.CUICommon:katun        = 'cron'
    lcInvRunFile = SESSION:PARAM
    lcTransDir   = fCParamC("SplitInvRunArc")
    ldeBegTime   = Func.Common:mMakeTS()
@@ -145,7 +145,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
          ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionID     = "BillRun"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
@@ -213,7 +213,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
             ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = "BillRun"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)

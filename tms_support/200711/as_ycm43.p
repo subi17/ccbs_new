@@ -14,7 +14,7 @@ Description
 */
 
 {Syst/testpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 RUN /apps/snet/200711/calldump_ycm43.p(0,date(5,5,2007)).
 RUN /apps/snet/200711/calldump_ycm43.p(0,date(5,6,2007)).

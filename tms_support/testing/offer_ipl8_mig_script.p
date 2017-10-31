@@ -10,7 +10,7 @@
 
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "Qvantel".
+       Syst.CUICommon:katun   = "Qvantel".
 
 DEFINE VARIABLE liTestCount     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liLastSeq       AS INTEGER   NO-UNDO.

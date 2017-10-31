@@ -8,7 +8,7 @@
 {Syst/commpaa.i}
 ASSIGN 
    Syst.CUICommon:gcBrand = "1"
-   katun = "cron".
+   Syst.CUICommon:katun = "cron".
 {Syst/eventlog.i}
 {Inv/old_unbilled_events.i}
 
@@ -39,7 +39,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO TRANS:
                            STRING(DAY(ldaEventDate),"99")
       ErrorLog.ErrorMsg  = RETURN-VALUE
       ErrorLog.ErrorChar = ""
-      ErrorLog.UserCode  = katun.
+      ErrorLog.UserCode  = Syst.CUICommon:katun.
       ErrorLog.ActionTS  = Func.Common:mMakeTS().
 END.
 

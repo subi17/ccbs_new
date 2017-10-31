@@ -10,7 +10,7 @@
 
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "CRON".
+       Syst.CUICommon:katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -24,7 +24,7 @@ liConfDays = fCParamI("WaitingCancelICCDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 60.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

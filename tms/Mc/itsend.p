@@ -113,7 +113,7 @@ FUNCTION fSendText RETURNS LOGICAL.
              ITSendLog.CustNum    = Customer.CustNum
              ITSendLog.EMail      = xMailAddr
              ITSendLog.RepType    = "IT"
-             ITSendLog.UserCode   = katun.
+             ITSendLog.UserCode   = Syst.CUICommon:katun.
              ITSendLog.SendStamp  = Func.Common:mMakeTS().
              
       OS-DELETE VALUE(lcFile).

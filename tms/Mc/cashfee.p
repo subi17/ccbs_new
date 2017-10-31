@@ -65,7 +65,7 @@ DEF VAR liOrderTime     AS INT  NO-UNDO.
 RUN pInitializeReturnValue.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
@@ -111,7 +111,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
    
       IF llDoEvent THEN
          RUN StarEventMakeCreateEventWithMemo(lhSingleFee,
-                                              katun,
+                                              Syst.CUICommon:katun,
                                               "CashInvoiceCreation").
 
       RELEASE SingleFee.
@@ -226,7 +226,7 @@ PROCEDURE pMakeCashInvoice:
                   SingleFee.CustNum = MobSub.InvCust.      
                   IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
                                           lhSingleFee,
-                                          katun,
+                                          Syst.CUICommon:katun,
                                           "CashInvoiceCreation").
                END.
 
@@ -511,7 +511,7 @@ PROCEDURE pUseFeeModel:
                    ErrorLog.KeyValue  = STRING(Order.OrderId) 
                    ErrorLog.ErrorChar = lcTerminal 
                    ErrorLog.ErrorMsg  = "Terminal fee model was not found"
-                   ErrorLog.UserCode  = katun.
+                   ErrorLog.UserCode  = Syst.CUICommon:katun.
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
              ocError = "Terminal fee model was not found".
              RETURN "ERROR:" + ocError.
@@ -786,7 +786,7 @@ PROCEDURE pSingleFee:
                                         STRING(idAmount) + 
                                         ", discount=" + STRING(ldTermDiscAmt) +
                                         ", campaign=" + Order.Campaign
-                   ErrorLog.UserCode  = katun.
+                   ErrorLog.UserCode  = Syst.CUICommon:katun.
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
          

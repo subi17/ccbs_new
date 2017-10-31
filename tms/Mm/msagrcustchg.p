@@ -48,7 +48,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 10 THEN
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -579,7 +579,7 @@ PROCEDURE pOwnerChange:
                IF AVAILABLE CustContact THEN DO:
                   IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                           lhCustContact,
-                                          katun,
+                                          Syst.CUICommon:katun,
                                           lcMemo).
                   DELETE CustContact.
                END.
@@ -605,7 +605,7 @@ PROCEDURE pOwnerChange:
 
                liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                 INPUT TODAY,
-                                                INPUT katun,
+                                                INPUT Syst.CUICommon:katun,
                                                 INPUT 0, /* msseq */
                                                 INPUT "", /* cli */
                                                 INPUT bNewCust.CustNum,
@@ -640,13 +640,13 @@ PROCEDURE pOwnerChange:
          IF NOT llNewCust AND llDoEvent THEN
             RUN StarEventMakeModifyEventWithMemo(
                                     lhCustomer,
-                                    katun,
+                                    Syst.CUICommon:katun,
                                     lcMemo).
          
          IF llNewCust THEN DO:
             ASSIGN 
             bNewCust.ChgStamp   = Func.Common:mMakeTS()
-            bNewCust.CreUser    = katun
+            bNewCust.CreUser    = Syst.CUICommon:katun
             bNewCust.PaymCust   = liNewOwner
             bNewCust.AgrCust    = liNewOwner
             bNewCust.RepCust    = bNewCust.CustNum
@@ -1298,7 +1298,7 @@ PROCEDURE pMsCustMove:
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bOwner:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    RELEASE MsOwner.

@@ -38,7 +38,7 @@ DEF BUFFER xhinta FOR Tariff.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser where
-              TMSUser.UserCode = katun
+              TMSUser.UserCode = Syst.CUICommon:katun
    no-lock no-error.
    fname = fChkPath(TMSUser.RepDir) + "custprices.txt".
 END.

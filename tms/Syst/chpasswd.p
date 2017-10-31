@@ -25,7 +25,7 @@ DEFINE TEMP-TABLE ttHistory
 FIELD passwd AS CHAR.
 
 DEFINE VARIABLE lcUserCode AS CHARACTER NO-UNDO FORMAT "X(16)". 
-lcUserCode = katun.
+lcUserCode = Syst.CUICommon:katun.
 
 DEFINE VARIABLE lcNewPass  AS CHARACTER FORMAT "X(16)" NO-UNDO.
 DEFINE VARIABLE lcOldPass  AS CHARACTER FORMAT "X(16)" NO-UNDO.
@@ -80,7 +80,7 @@ FRAME passFrame.
    -------------------------------------------------------------------- */
    
 FIND FIRST tmsuser NO-LOCK WHERE 
-           tmsuser.usercode = katun.
+           tmsuser.usercode = Syst.CUICommon:katun.
            
 /* get the user's password history in temptable */
 liHistoryCount = 0.

@@ -33,7 +33,7 @@ DEF NEW shared STREAM excel.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUSer where TMSUser.UserCode = katun no-lock.
+   FIND TMSUSer where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUSer.RepDir.
 END.
 

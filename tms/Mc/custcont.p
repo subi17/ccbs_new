@@ -17,7 +17,7 @@
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -170,7 +170,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
 
                   liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                    INPUT TODAY,
-                                                   INPUT katun,
+                                                   INPUT Syst.CUICommon:katun,
                                                    INPUT 0, /* msseq */
                                                    INPUT "", /* cli */
                                                    INPUT Customer.CustNum,
@@ -210,7 +210,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
 
                      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                       INPUT TODAY,
-                                                      INPUT katun,
+                                                      INPUT Syst.CUICommon:katun,
                                                       INPUT 0, /* msseq */
                                                       INPUT "", /* cli */
                                                       INPUT Customer.CustNum,

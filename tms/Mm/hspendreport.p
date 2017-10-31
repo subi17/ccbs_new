@@ -11,7 +11,7 @@
 {Syst/eventlog.i}
 
 Syst.CUICommon:gcBrand = "1".
-katun = "cron".
+Syst.CUICommon:katun = "cron".
              
 RUN Mm/highusagerep.p(INPUT Func.Common:mMake2DT(INPUT today - 90, INPUT 0),"",0).
 

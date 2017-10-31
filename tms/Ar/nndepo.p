@@ -46,7 +46,7 @@
 {Func/fpaymentreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
@@ -218,7 +218,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = Payment.PaymDate
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = iType 
          OPLog.InvNum    = Payment.InvNum
          OPLog.Voucher   = Payment.Voucher

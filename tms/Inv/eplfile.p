@@ -1062,7 +1062,7 @@ BY wInvoice.InvNum:
                                        ELSE 2
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
-                ITSendLog.UserCode   = katun.
+                ITSendLog.UserCode   = Syst.CUICommon:katun.
                 ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  

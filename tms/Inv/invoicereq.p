@@ -174,7 +174,7 @@ PROCEDURE pODInvoice:
                     ?,
                     "",             /* memo */
                     FALSE,          /* no messages to screen */
-                    katun,
+                    Syst.CUICommon:katun,
                     "",
                     0,
                     "",

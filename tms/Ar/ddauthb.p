@@ -12,7 +12,7 @@
 {Syst/commpaa.i}
 
 ASSIGN Syst.CUICommon:gcBrand = "1" 
-       katun   = "ddauth".
+       Syst.CUICommon:katun   = "ddauth".
 
 {Syst/utumaa.i "new"}
 {Func/cparam2.i}

@@ -81,7 +81,7 @@ ASSIGN cust-nr2 = Customer.CustNum date1 = TODAY date2 = TODAY.
 
 /*
 DO FOR kayt:
-   FIND kayt where kayt.ka-tun = katun no-lock.
+   FIND kayt where kayt.ka-tun = Syst.CUICommon:katun no-lock.
    exdir = kayt.txtdir.
 END.
 

@@ -59,7 +59,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN 
    liMsSeq           = get_pos_int(pcPayTermStruct, "msseq")
-   katun             = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.CUICommon:katun             = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcNewPayterm      = get_nonempty_string(pcPayTermStruct, "payterm_contract")
    ldeResidualValue  = get_double(pcPayTermStruct, "residual_value") WHEN
                        LOOKUP("residual_value",lcStruct) > 0
@@ -186,7 +186,7 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0).

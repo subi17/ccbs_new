@@ -15,7 +15,7 @@
 
 IF llDoEvent THEN DO:
 
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
   {Func/lib/eventlog.i}
       
@@ -60,7 +60,7 @@ DEF VAR s AS INT NO-UNDO.
 /* dont allow to change mobsub.msstatus for subscriptions
    with statuses 2,10,11,12,13,14 */
 s =  mobsub.msstatus.
-IF katun = "marikav" then do: end.
+IF Syst.CUICommon:katun = "marikav" then do: end.
 ELSE IF s = 2  OR 
    s = 10 OR
    s = 11 OR

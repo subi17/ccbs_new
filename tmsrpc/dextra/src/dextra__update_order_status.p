@@ -174,7 +174,7 @@ END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-katun = "Dextra".
+Syst.CUICommon:katun = "Dextra".
 Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
@@ -199,7 +199,7 @@ DO liDBCount = 1 TO NUM-DBS
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
 END.
    
@@ -340,7 +340,7 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
       IF NEW OrderCustomer THEN
          fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
                                   "",
-                                  katun,
+                                  Syst.CUICommon:katun,
                                   "").
       ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
    END.

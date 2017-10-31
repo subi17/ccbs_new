@@ -10,7 +10,7 @@
 {Syst/commpaa.i}
 ASSIGN 
    Syst.CUICommon:gcBrand = "1"
-   katun   = "Cron".
+   Syst.CUICommon:katun   = "Cron".
    
 {Func/cparam2.i}
 {Inv/printdoc1tt.i}
@@ -56,7 +56,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
@@ -101,7 +101,7 @@ FUNCTION fCreateActionLog RETURNS LOGICAL
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
                                   STRING(MONTH(TODAY),"99") +
                                   STRING(DAY(TODAY),"99")
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionID     = "FRPROCESS" + STRING(liFRProcessID)
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionChar   = icMsg
@@ -325,7 +325,7 @@ PROCEDURE pPrintInvoices:
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 
                                   STRING(DAY(TODAY),"99")
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionDec    = liPrinted

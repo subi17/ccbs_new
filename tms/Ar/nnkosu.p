@@ -225,7 +225,7 @@ REPEAT:
    /* update log */
    fCreateArplog(xPaymFile,
                  wOrigin.WLogPr,
-                 katun). 
+                 Syst.CUICommon:katun). 
 
    /* delete or move the payment file to archive */
    IF liRead > 0 THEN RUN pDeleteFile(xPaymFile). 

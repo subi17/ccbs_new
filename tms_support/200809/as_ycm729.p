@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 {Func/fmakemsreq.i}
-katun = "CreSub".
+Syst.CUICommon:katun = "CreSub".
 Syst.CUICommon:gcBrand = "1".
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO. 

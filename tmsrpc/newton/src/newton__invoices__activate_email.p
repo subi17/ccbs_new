@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "tmsrpc".
+       Syst.CUICommon:katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -33,7 +33,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i NO Mobile MsRequest MsRequest piRequestId}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    lhInvoiceTargetGroup = BUFFER InvoiceTargetGroup:HANDLE.

@@ -382,7 +382,7 @@ PROCEDURE pService:
                               1, /* activate */
                               "", /* params */
                               Func.Common:mMakeTS(),
-                              katun,
+                              Syst.CUICommon:katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
                               "",
@@ -397,7 +397,7 @@ PROCEDURE pService:
                               1, /* activate */
                               "", /* params */
                               Func.Common:mMakeTS(),
-                              katun,
+                              Syst.CUICommon:katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
                               "",
@@ -511,7 +511,7 @@ PROCEDURE pQ25Extension:
       liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
       lcTFBank = ""
       liPercontractId = INT(OrderAction.ItemParam).
-      lcOrigKatun = katun.
+      lcOrigSyst.CUICommon:katun = Syst.CUICommon:katun.
 
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
@@ -549,7 +549,7 @@ PROCEDURE pQ25Extension:
       ldaDate = TODAY.
 
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN
-      katun = Order.OrderChannel + "_" + Order.Salesman.
+      Syst.CUICommon:katun = Order.OrderChannel + "_" + Order.Salesman.
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
@@ -566,7 +566,7 @@ PROCEDURE pQ25Extension:
                              "",
                              OUTPUT lcResult).
 
-   katun = lcOrigKatun.
+   Syst.CUICommon:katun = lcOrigKatun.
  
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.

@@ -454,7 +454,7 @@ FOR EACH ttTotalCLI,
                 ErrorLog.TableName = "MobSub"
                 ErrorLog.KeyValue  = STRING(MobSub.MsSeq)
                 ErrorLog.ErrorMsg  = "Creation failed: " + lcResult
-                ErrorLog.UserCode  = katun.
+                ErrorLog.UserCode  = Syst.CUICommon:katun.
                 ErrorLog.ActionTS  = Func.Common:mMakeTS().
          
       END.
@@ -485,7 +485,7 @@ PROCEDURE pCollectCDR:
 
    fMobCDRCollect(INPUT "post",
                   INPUT Syst.CUICommon:gcBrand,
-                  INPUT katun,
+                  INPUT Syst.CUICommon:katun,
                   INPUT idaFromDate,   
                   INPUT idaToDate,
                   INPUT 0,

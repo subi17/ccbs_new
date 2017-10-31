@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Syst/tmsconst.i}
 
 DEF VAR ldeAlreadyFatAmt AS DEC  NO-UNDO.

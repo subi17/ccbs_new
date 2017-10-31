@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun = "MNP-ADAPTER".
+Syst.CUICommon:katun = "MNP-ADAPTER".
 Syst.CUICommon:gcBrand = "1".
 {Mnp/mnp.i}
 {Func/xmlfunction.i}

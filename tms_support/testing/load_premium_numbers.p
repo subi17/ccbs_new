@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun   = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 
 DEF VAR lcInputFile     AS CHAR NO-UNDO FORMAT "x(45)".
 DEF VAR lcOutputFile    AS CHAR NO-UNDO FORMAT "x(45)".

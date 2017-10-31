@@ -79,7 +79,7 @@ DISPLAY "ALL" @ InvGroup.IGName WITH FRAME limit.
 
 DO FOR TMSUser:
    FIND TMSUser where
-        TMSUser.UserCode = katun
+        TMSUser.UserCode = Syst.CUICommon:katun
    no-lock.
    fname = TMSUser.RepDir + "/invlist.txt".
 END.

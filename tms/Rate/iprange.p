@@ -9,7 +9,7 @@
 {Syst/commali.i}
 /*
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 Syst.CUICommon:qupd = True.
 */
@@ -19,7 +19,7 @@ Syst.CUICommon:qupd = True.
 {Rate/iprange.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

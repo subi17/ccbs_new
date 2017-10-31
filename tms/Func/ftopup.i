@@ -42,7 +42,7 @@ FUNCTION fCreateTopUpRequest RETURNS INTEGER
    CREATE PrepaidRequest.
    ASSIGN
       PrepaidRequest.Brand       = Syst.CUICommon:gcBrand
-      PrepaidRequest.UserCode    = katun
+      PrepaidRequest.UserCode    = Syst.CUICommon:katun
       PrepaidRequest.PPRequest   = liReturn
       PrePaidRequest.PPReqPrefix = icPrefix
       PrePaidRequest.MsSeq       = iiMsSeq

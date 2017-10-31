@@ -10,7 +10,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
@@ -133,7 +133,7 @@ FOR EACH ttCust:
 
       fCreateRequest({&REQTYPE_DUPLICATE_INVOICE},
                      Func.Common:mMake2DT(ldtActivationDate,0),
-                     katun,
+                     Syst.CUICommon:katun,
                      FALSE,      /* fees     */
                      FALSE).     /* send sms */
 

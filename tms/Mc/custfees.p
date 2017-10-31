@@ -300,7 +300,7 @@ IF AVAIL FMItem THEN DO:
                 CoDate,    /* TO FixedFee.BegDate */
                 ?,
                 lcContract,
-                katun,
+                Syst.CUICommon:katun,
                 "",
                 0,
                 "",

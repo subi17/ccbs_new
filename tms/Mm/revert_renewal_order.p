@@ -72,7 +72,7 @@ END. /* IF AVAIL bSubMsRequest THEN DO: */
 Func.Common:mSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
 END.

@@ -129,7 +129,7 @@ FUNCTION GetFileName RETURNS CHAR.
 
 END FUNCTION.
 
-FIND TMSUser NO-LOCK WHERE TMSUser.UserCode = katun NO-ERROR.
+FIND TMSUser NO-LOCK WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-ERROR.
 IF AVAIL TMSUser THEN DO:
    IF TMSUser.RepDir NE "" THEN osohak = TMSUser.RepDir.
    lcUserEMail = TMSUser.EMail.
@@ -140,7 +140,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
    FIND FIRST TMSReport WHERE TMSReport.RepName = tuni1 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSReport THEN
    FIND FIRST TMSReport WHERE TMSReport.RepName = "********" NO-LOCK NO-ERROR.
-   FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = katun AND TMSRepCfg.RepName = tuni1
+   FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = Syst.CUICommon:katun AND TMSRepCfg.RepName = tuni1
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSRepCfg THEN
       FIND FIRST TMSRepCfg WHERE TMSRepCfg.RepName = tuni1 NO-LOCK NO-ERROR.
@@ -193,7 +193,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
       FIND FIRST TMSReport WHERE TMSReport.RepName = tuni2 NO-LOCK NO-ERROR.
       IF NOT AVAILABLE TMSReport THEN
       FIND FIRST TMSReport WHERE TMSReport.RepName = "********" NO-LOCK NO-ERROR.
-      FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = katun AND TMSRepCfg.RepName = tuni2
+      FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = Syst.CUICommon:katun AND TMSRepCfg.RepName = tuni2
       NO-LOCK NO-ERROR.
       IF NOT AVAILABLE TMSRepCfg THEN
          FIND FIRST TMSRepCfg WHERE TMSRepCfg.RepName = tuni2 NO-LOCK NO-ERROR.
@@ -597,7 +597,7 @@ ELSE DO: /* Tila = sulje */
       OUTPUT STREAM report TO VALUE(cfile).
       PUT STREAM report UNFORMATTED 
          "Report : " mailsubj SKIP
-         "Sender : " katun SKIP
+         "Sender : " Syst.CUICommon:katun SKIP
          "Day ...: " STRING(TODAY,"99.99.9999") SKIP.
        OUTPUT STREAM report CLOSE.
 

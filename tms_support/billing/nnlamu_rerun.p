@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 {Func/tmsparam2.i}
 {Inv/billrund.i NEW}
 {Func/faccper.i}

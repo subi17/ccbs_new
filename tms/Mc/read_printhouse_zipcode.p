@@ -7,7 +7,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -193,7 +193,7 @@ DO TRANS:
       ActionLog.ActionChar   = STRING(oiDone) + 
                                " zip codes were updated"
       ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.FromDate     = TODAY
       ActionLog.ToDate       = TODAY.
       ActionLog.ActionTS     = Func.Common:mMakeTS().

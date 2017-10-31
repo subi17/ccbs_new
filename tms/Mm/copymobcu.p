@@ -20,7 +20,7 @@ DEF BUFFER new-Customer FOR Customer.
 
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -81,7 +81,7 @@ IF ok THEN DO:
       new-Customer.RepCust   = new-no
       new-Customer.AgrCust   = new-no
       new-customer.Brand     = Syst.CUICommon:gcBrand
-      new-customer.CreUser   = katun
+      new-customer.CreUser   = Syst.CUICommon:katun
       new-customer.CreDate   = TODAY.
 
 

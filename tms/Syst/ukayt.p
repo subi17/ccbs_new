@@ -77,7 +77,7 @@ DEF VAR lcExclGroup  AS CHAR               NO-UNDO INIT "NOTinUSE".
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -172,7 +172,7 @@ FORM
 WITH NO-LABELS CENTERED ROW 4
 FRAME PWD.
 
-llAdminUser = fIsAdminUser(katun).
+llAdminUser = fIsAdminUser(Syst.CUICommon:katun).
 
  Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
  view FRAME sel.
@@ -253,7 +253,7 @@ add-new:
             ASSIGN
                tmspass.createts = Func.Common:mMakeTS()
                tmspass.usercode = tmsuser.usercode
-               tmspass.creator = katun
+               tmspass.creator = Syst.CUICommon:katun
                tmspass.password = tmsuser.password.
       
      addEMail: REPEAT WITH FRAME lis:

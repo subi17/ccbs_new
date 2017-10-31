@@ -38,7 +38,7 @@ Syst.CUICommon:gcBrand = "1".
 
 form
    skip(1)
-   katun  label   "  User Id ....." 
+   Syst.CUICommon:katun  label   "  User Id ....." 
    help "Enter a valid TMS User ID  (EMPTY ID: QUIT)" TmsUser.UserName no-label 
    skip
    lcPassWd FORMAT "X(16)" label   "  Password ... " blank
@@ -62,31 +62,31 @@ do with frame login:
    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    assign Syst.CUICommon:si-pvm = TODAY.
 
-   if katun = "" then do:
+   if Syst.CUICommon:katun = "" then do:
       Syst.CUICommon:cfc = "tunnus". RUN Syst/ufcolor.p.
 
       input through value("who am i").
 
-      import unformatted katun.
+      import unformatted Syst.CUICommon:katun.
       input close.
-      katun  = ENTRY(1,katun," ").
-      if entry(1,katun," ") = "starnet" then Katun = "eka".
+      Syst.CUICommon:katun  = ENTRY(1,Syst.CUICommon:katun," ").
+      if entry(1,Syst.CUICommon:katun," ") = "starnet" then Syst.CUICommon:katun = "eka".
 
-      disp katun with frame login.
+      disp Syst.CUICommon:katun with frame login.
 
       USER_LOGIN: /* ASK USER ID AND PASSWORD */
       repeat with frame login on endkey undo USER_LOGIN, RETURN:
-            update katun
-                   validate (input katun = "" or 
+            update Syst.CUICommon:katun
+                   validate (input Syst.CUICommon:katun = "" or 
                    can-find(FIRST TmsUser where 
-                                  TmsUser.UserCode = INPUT katun AND
+                                  TmsUser.UserCode = INPUT Syst.CUICommon:katun AND
                                   TmsUser.UserGroup NE "NOTinUSE"),
                              "UNKNOWN USER ID - PLEASE CHECK AND RETYPE !").
 
-            if katun = "" then quit.
+            if Syst.CUICommon:katun = "" then quit.
 
             find TmsUser where  
-                 TmsUser.UserCode = katun no-lock no-error.
+                 TmsUser.UserCode = Syst.CUICommon:katun no-lock no-error.
 
             disp TmsUser.UserName.
             PAUSE 0.
@@ -201,7 +201,7 @@ do with frame login:
             leave.
       end. /* USER_LOGIN */
 
-      if katun = "" then quit. 
+      if Syst.CUICommon:katun = "" then quit. 
 
    end. /* login */
 

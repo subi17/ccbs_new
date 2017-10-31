@@ -105,7 +105,7 @@ FUNCTION fErrorLog RETURNS LOGIC
                                   STRING(DAY(TODAY),"99")
              ErrorLog.ErrorChar = icDumpMode
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    

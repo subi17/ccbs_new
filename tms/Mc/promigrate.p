@@ -10,7 +10,7 @@
 {Func/setfees.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -84,7 +84,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                     ?,
                     "Pro Migrate",    /* memo   */
                     FALSE,           /* no messages to screen */
-                    katun,
+                    Syst.CUICommon:katun,
                     "ProMigrate",
                     0,
                     "",

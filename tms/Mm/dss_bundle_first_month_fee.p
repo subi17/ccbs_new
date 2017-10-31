@@ -75,7 +75,7 @@ IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
          ActionLog.ActionChar   = STRING(oiHandled) + 
                                   " first month fees were updated"
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.FromDate     = idaFromDate
          ActionLog.ToDate       = idaToDate.
          ActionLog.ActionTS     = Func.Common:mMakeTS().

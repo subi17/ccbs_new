@@ -8,7 +8,7 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -228,7 +228,7 @@ PROCEDURE pMarkStarted:
             ActionLog.ActionTS     = ldeNow
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) 
             ActionLog.ActionChar   = "Batch not started due to ongoing run".
@@ -247,7 +247,7 @@ PROCEDURE pMarkStarted:
          ActionLog.ActionTS     = ldeNow
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
       RELEASE ActionLog.   

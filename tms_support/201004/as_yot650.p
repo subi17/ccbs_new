@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "YOT-649".
+Syst.CUICommon:katun = "YOT-649".
 Syst.CUICommon:gcBrand = "1".
 {Func/orderfunc.i}
 {Syst/tmsconst.i}
@@ -69,7 +69,7 @@ repeat:
                ActionLog.Brand        = Syst.CUICommon:gcBrand  
                ActionLog.TableName    = "Order"  
                ActionLog.KeyValue     = STRING(Order.Orderid)
-               ActionLog.UserCode     = katun
+               ActionLog.UserCode     = Syst.CUICommon:katun
                ActionLog.ActionID     = "SIMRELEASE"
                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
                ActionLog.ActionStatus = 2

@@ -11,7 +11,7 @@
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
@@ -1578,7 +1578,7 @@ FOR EACH Order NO-LOCK WHERE
             fAfterSalesRequest(
                xOrder.MsSeq,
                xOrder.OrderId,
-               katun,
+               Syst.CUICommon:katun,
                Func.Common:mMakeTS(),
                "7",
                OUTPUT ocResult

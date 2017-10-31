@@ -849,7 +849,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                ELSE IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER mServiceLimit:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.CUICommon:katun,
                                    "").
 
             END.

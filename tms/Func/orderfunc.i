@@ -23,7 +23,7 @@
 {Func/msisdn.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -166,7 +166,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   RELEASE FusionMessage.
                END.
                
-               IF katun NE "Dextra" AND
+               IF Syst.CUICommon:katun NE "Dextra" AND
                  (bfOrder.Logistics > "" OR llHardBook = TRUE OR
                  llCancelFusion = TRUE) THEN DO:
                   fLogisticsRequest(

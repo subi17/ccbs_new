@@ -29,7 +29,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
@@ -346,7 +346,7 @@ FUNCTION fMarkInvoiceItems RETURNS DECIMAL
           
       IF llDoEvent AND iiInvType NE 99
          THEN RUN StarEventMakeModifyEventWithMemo(
-                              lhSingleFee,katun,"InvoiceCreation").
+                              lhSingleFee,Syst.CUICommon:katun,"InvoiceCreation").
 
       /* if created within this run -> delete */
       IF iiInvNum = 0 AND SingleFee.CalcObj > "" AND
@@ -354,7 +354,7 @@ FUNCTION fMarkInvoiceItems RETURNS DECIMAL
       THEN DO:
          IF llDoEvent AND iiInvType NE 99
             THEN RUN StarEventMakeDeleteEventWithMemo(
-                              lhSingleFee,katun,"InvoiceCreation").
+                              lhSingleFee,Syst.CUICommon:katun,"InvoiceCreation").
          DELETE SingleFee.
       END.
                              
@@ -438,7 +438,7 @@ FUNCTION fErrorLog RETURNS LOGIC
           ErrorLog.ErrorChar = icCLI 
           ErrorLog.ErrorMsg  = icError + CHR(10) + 
                                "Target group: " + STRING(iiITGroupID)
-          ErrorLog.UserCode  = katun
+          ErrorLog.UserCode  = Syst.CUICommon:katun
           ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.
@@ -1067,7 +1067,7 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
                 "",
                 iiITGroup,
                 "Temporary MandateId generation, when no MandateId available").
-      fELog(katun,"INVOICE:MandateId:Customer:" + 
+      fELog(Syst.CUICommon:katun,"INVOICE:MandateId:Customer:" + 
                   STRING(iiCustNum)).
 
    END.
@@ -1160,7 +1160,7 @@ PROCEDURE pCreateInv:
        "{&EDRHandling}" NE "NO" 
    &THEN 
    IF ilRerate THEN RUN pInitializeRerateReport IN fhRRHandle (
-         katun,
+         Syst.CUICommon:katun,
          idaFromDate, /* from */
          idaToDate, /* to */
          lcBillRun). /* icInvRunCode*/
@@ -1368,7 +1368,7 @@ PROCEDURE pCreateInv:
                          "",
                          0,
                          "Pending rating/counter issues prevented billing").
-               fELog(katun,"INVOICE:PENDING_RATING:Customer:" + 
+               fELog(Syst.CUICommon:katun,"INVOICE:PENDING_RATING:Customer:" + 
                            STRING(bCustomer.CustNum)).
             END.
             NEXT INVRUNLOOP.
@@ -1386,7 +1386,7 @@ PROCEDURE pCreateInv:
                          "",
                          0,
                          "Erroneous billing counters iSS").
-               fELog(katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
+               fELog(Syst.CUICommon:katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
                            STRING(bCustomer.CustNum)).
                /* mark invseqs back to unbilled*/ 
                fMarkInvoiceItems(?,0,0,iiInvType).
@@ -1409,7 +1409,7 @@ PROCEDURE pCreateInv:
                       "",
                       0,
                       "Erroneous billing counters").
-            fELog(katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
+            fELog(Syst.CUICommon:katun,"INVOICE:ERRONEOUS_COUNTERS:Customer:" + 
                         STRING(bCustomer.CustNum)).
             fMarkInvoiceItems(?,0,0,iiInvType).
             NEXT INVRUNLOOP.
@@ -1433,7 +1433,7 @@ PROCEDURE pCreateInv:
 
          /* duplicated VAT handling was found */
          IF NOT llAllowDbl AND lDBLVat THEN DO:
-            fELog(katun,"INVOICE:DBLVAT:Customer:" + STRING(bCustomer.CustNum)).
+            fELog(Syst.CUICommon:katun,"INVOICE:DBLVAT:Customer:" + STRING(bCustomer.CustNum)).
             fErrorLog(bCustomer.CustNum,
                       "",  
                       0,
@@ -1470,7 +1470,7 @@ PROCEDURE pCreateInv:
                          ?,
                          "¤" + lcBillRun,
                          FALSE,
-                         katun,
+                         Syst.CUICommon:katun,
                          "InvoiceCreation",
                          0,
                          "",
@@ -1529,7 +1529,7 @@ PROCEDURE pCreateInv:
                                   ?,
                                   "¤" + lcBillRun,
                                   FALSE,
-                                  katun,
+                                  Syst.CUICommon:katun,
                                   "InvoiceCreation",
                                   0,
                                   "",
@@ -1855,7 +1855,7 @@ PROCEDURE pCreateInv:
 
             /* reject reason found, write it to log */
             IF lRejBill THEN DO:    
-                fELog(katun,"INVOICE:" + lcRejReason + 
+                fELog(Syst.CUICommon:katun,"INVOICE:" + lcRejReason + 
                         ":Customer:" + STRING(bCustomer.CustNum)).
                 fErrorLog(bCustomer.CustNum,
                           lcRejCLI,
@@ -1937,7 +1937,7 @@ PROCEDURE pCancel:
       END.
 
       /* row to external eventlog however */
-      fELog(katun,"INVOICE:" + STRING(ttNewInv.InvNum) + ":Cancelled").
+      fELog(Syst.CUICommon:katun,"INVOICE:" + STRING(ttNewInv.InvNum) + ":Cancelled").
 
       DELETE ttNewInv.
    END.
@@ -4112,7 +4112,7 @@ PROCEDURE pInvoiceHeader:
             lcRejReason = "ValueTooLow:" + STRING(ttInv.InvAmt).
                
          /* ROW FOR NOT created invoices */
-         fELog(katun,"INVOICE:" + lcRejReason + 
+         fELog(Syst.CUICommon:katun,"INVOICE:" + lcRejReason + 
                       ":Customer:" + STRING(ttInv.CustNum)).
          fErrorLog(ttInv.CustNum,
                    "", 
@@ -4521,7 +4521,7 @@ PROCEDURE pInvoiceHeader:
             CREATE OPLog.
             ASSIGN OPLog.CustNum   = Invoice.CustNum
                    OPLog.EventDate = Invoice.InvDate
-                   OPLog.UserCode  = katun
+                   OPLog.UserCode  = Syst.CUICommon:katun
                    OPLog.EventType = IF ttCustBal.Type = "AP"
                                      THEN 11
                                      ELSE 3
@@ -4549,7 +4549,7 @@ PROCEDURE pInvoiceHeader:
                 Memo.KeyValue  = STRING(Invoice.InvNum)
                 Memo.CustNum   = Invoice.CustNum
                 Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                Memo.CreUser   = katun
+                Memo.CreUser   = Syst.CUICommon:katun
                 Memo.MemoTitle = "Minimum Amount Limit Ignored"
                 Memo.MemoText  = "Reason: " + STRING(liIgnoMin)
                 Memo.CreStamp  = Func.Common:mMakeTS().
@@ -4592,7 +4592,7 @@ PROCEDURE pInvoiceHeader:
             lcPaymMemo        = (IF Customer.CustNum = liCLossCust
                                  THEN "Credit loss customer"
                                  ELSE "Cleaning run") +
-                                " Handler: " + katun
+                                " Handler: " + Syst.CUICommon:katun
             Invoice.PaymState = 3. 
       END. 
  
@@ -4608,7 +4608,7 @@ PROCEDURE pInvoiceHeader:
             liPaymType  = 0
             lcPaymMemo  = (IF Customer.Category = lcOwnUse
                            THEN "Own" ELSE "VIP") +
-                          " use.  Handler: " + katun.
+                          " use.  Handler: " + Syst.CUICommon:katun.
       END.
 
       /* if total amount is zero then mark as paid */
@@ -4940,7 +4940,7 @@ PROCEDURE pFunctionQueueRun:
 END PROCEDURE.
 
 PROCEDURE pGenerateReport:
-   fLog("new invoices generated by billing run",katun).
+   fLog("new invoices generated by billing run", Syst.CUICommon:katun).
    FOR EACH ttNewInv NO-LOCK,
       FIRST invoice NO-LOCK WHERE
             invoice.invnum = ttNewInv.invnum:

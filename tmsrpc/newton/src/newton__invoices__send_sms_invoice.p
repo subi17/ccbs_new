@@ -23,7 +23,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
-katun = "VISTA_" + pcUserName.
+Syst.CUICommon:katun = "VISTA_" + pcUserName.
 
 {newton/src/settenant.i pcTenant}
 

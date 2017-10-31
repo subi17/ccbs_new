@@ -48,7 +48,7 @@
                                     INPUT  Order.Cli,
                                     INPUT  Order.CustNum,
                                     INPUT  1,
-                                    INPUT  katun,
+                                    INPUT  Syst.CUICommon:katun,
                                     INPUT  OrderFusion.FixedInstallationTS,
                                     INPUT  "CREATE-FIXED",
                                     INPUT  STRING(Order.OrderId),
@@ -427,7 +427,7 @@
                   fAfterSalesRequest(
                      Order.MsSeq,
                      Order.OrderId,
-                     katun,
+                     Syst.CUICommon:katun,
                      Func.Common:mMakeTS(),
                      "7",
                      OUTPUT ocResult
@@ -827,7 +827,7 @@
                 fReactivationRequest(INPUT Order.MsSeq,
                                      INPUT Order.OrderId,
                                      INPUT ldeSwitchTS,
-                                     INPUT katun,
+                                     INPUT Syst.CUICommon:katun,
                                      {&REQUEST_SOURCE_NEWTON},
                                      OUTPUT ocResult).
              ELSE
@@ -835,7 +835,7 @@
                                   INPUT  Order.Cli,
                                   INPUT  Order.CustNum,
                                   INPUT  1,
-                                  INPUT  katun,
+                                  INPUT  Syst.CUICommon:katun,
                                   INPUT  ldeSwitchTS,
                                   INPUT  "CREATE",
                                   INPUT  STRING(Order.OrderId),

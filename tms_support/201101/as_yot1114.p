@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 

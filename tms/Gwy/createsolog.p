@@ -163,7 +163,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       

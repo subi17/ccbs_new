@@ -90,7 +90,7 @@ FUNCTION fErrorLog RETURNS DECIMAL
              ErrorLog.TableName = "Invoice"
              ErrorLog.KeyValue  = STRING(liInvNum)
              ErrorLog.ActionTS  = ldCurrStamp
-             ErrorLog.UserCode  = katun
+             ErrorLog.UserCode  = Syst.CUICommon:katun
              ErrorLog.ErrorMsg  = icMessage.
    END.
       

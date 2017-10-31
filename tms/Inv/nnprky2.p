@@ -466,7 +466,7 @@ IF liPrintTo <= 2 THEN DO:
                                        ELSE 4
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Spec2"
-                ITSendLog.UserCode   = katun.
+                ITSendLog.UserCode   = Syst.CUICommon:katun.
                 ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
        
@@ -495,7 +495,7 @@ RUN Mc/creasfee.p (CustNum1,
               ?,
               "",
               TRUE,
-              katun,
+              Syst.CUICommon:katun,
               "",
               0,
               "",

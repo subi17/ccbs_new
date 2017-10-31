@@ -88,7 +88,7 @@ WITH
    + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 DO FOR TMSUser.
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = fChkPath(TMSUser.RepDir).
 END.
 assign exFile   = exdir + "inv-smag.txt".

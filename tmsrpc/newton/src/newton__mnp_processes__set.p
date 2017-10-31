@@ -92,7 +92,7 @@ END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-katun = pcUsername.
+Syst.CUICommon:katun = pcUsername.
 Syst.CUICommon:gcBrand = "1".
 
 IF pcOperation = "cancel" AND LOOKUP("pdf",lcstruct) > 0 THEN DO:

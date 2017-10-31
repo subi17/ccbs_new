@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
 piCustNum = get_int(pcStruct,"customer_id").
-katun = pcUserName. 
+Syst.CUICommon:katun = pcUserName. 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
 pcReason = get_string(pcStruct,"reason").
 IF LOOKUP("default",lcStruct) > 0 THEN 
@@ -108,7 +108,7 @@ DO TRANS:
           Memo.HostTable = "Customer" 
           Memo.KeyValue  = STRING(piCustNum) 
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "Invoice Target Group Add"
           Memo.MemoText  = pcReason
           Memo.CustNum   = piCustNum. 

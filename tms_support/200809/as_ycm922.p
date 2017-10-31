@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1" .
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 {Func/msisdn.i}
 

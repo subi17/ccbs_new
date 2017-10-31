@@ -34,7 +34,7 @@ DO TRANS:
                                STRING(DAY(idaInvDate),"99")
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = iiInvType
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionStatus = 0.
 
    FIND CURRENT ActionLog NO-LOCK.

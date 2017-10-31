@@ -27,7 +27,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-katun = "VISTA_" + pcUserName.
+Syst.CUICommon:katun = "VISTA_" + pcUserName.
 
 liRequestID = fFusionEmailRequest(
                 INPUT Func.Common:mMakeTS(),

@@ -16,7 +16,7 @@
   Version ......: TMS / Production version
   --------------------------------------------------------------------------- */
 
-{Syst/commpaa.i} katun = "SOG". Syst.CUICommon:gcBrand = "1".
+{Syst/commpaa.i} Syst.CUICommon:katun = "SOG". Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 {Func/tmsparam4.i}
 {Func/multitenantfunc.i}

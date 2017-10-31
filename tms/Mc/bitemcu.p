@@ -42,7 +42,7 @@
 {Func/fuserright.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -392,7 +392,7 @@ REPEAT WITH FRAME sel:
                                                              
               IF llDoEvent THEN
                  RUN StarEventMakeCreateEventWithMemo(lhSingleFee,
-                                                      katun,
+                                                      Syst.CUICommon:katun,
                                                       "ManualCUI").
 
               ASSIGN
@@ -742,7 +742,7 @@ REPEAT WITH FRAME sel:
 
            IF llDoEvent THEN
               RUN StarEventMakeDeleteEventWithMemo (lhSingleFee,
-                                                    katun,
+                                                    Syst.CUICommon:katun,
                                                     "ManualCUI").
 
            DELETE SingleFee.
@@ -781,7 +781,7 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN
           RUN StarEventMakeModifyEventWithMemo(lhSingleFee,
-                                               katun,
+                                               Syst.CUICommon:katun,
                                                "ManualCUI").
 
        RUN local-disp-row.
@@ -1439,8 +1439,8 @@ PROCEDURE cctool:
             liMonthlyLimitType = {&POST_COMP_MONTHLY_LIMIT_TYPE}.
             llNegative = TRUE.
         END.
-        ldUpLimit = fUserLimitAmt(katun,liOneTimeLimitType).
-        ldUpMonthLimit = fUserLimitAmt(katun, liMonthlyLimitType).
+        ldUpLimit = fUserLimitAmt(Syst.CUICommon:katun,liOneTimeLimitType).
+        ldUpMonthLimit = fUserLimitAmt(Syst.CUICommon:katun, liMonthlyLimitType).
 
         IF ldUpLimit < 0 OR ldUpMonthLimit < 0  THEN DO:
            MESSAGE "One time / monthly limit is not defined in your account "
@@ -1585,7 +1585,7 @@ PROCEDURE cctool:
 
          RUN Mm/create_charge_comp.p ({&REQUEST_SOURCE_MANUAL_TMS}, 
                                  MobSub.MsSeq,
-                                 "",  /* katun, */
+                                 "",  /* Syst.CUICommon:katun, */
                                  ldFItemAmt,
                                  lcFeeModel,
                                  0,

@@ -151,7 +151,7 @@ REPEAT:
                           "",
                           "CreditLoss" +
                           " Intrum file (" + icFile +
-                          "), Handler: " + katun,
+                          "), Handler: " + Syst.CUICommon:katun,
                           OUTPUT liVoucher
                           ).
 
@@ -183,7 +183,7 @@ REPEAT:
                                           THEN " "
                                           ELSE "") + 
                                          "Intrum file " + icFile
-                   ClaimHist.Handler   = katun
+                   ClaimHist.Handler   = Syst.CUICommon:katun
                    ClaimHist.ClaimAmt  = ldAmount
 
                    Invoice.ClaimCancel = liCancel.

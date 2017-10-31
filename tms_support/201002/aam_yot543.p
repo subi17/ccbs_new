@@ -1,8 +1,8 @@
 {Syst/testpaa.i}
-katun = "YOT-541".
+Syst.CUICommon:katun = "YOT-541".
 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -41,7 +41,7 @@ repeat:
              Memo.KeyValue  = string(customer.custnum)
              Memo.CustNum   = customer.custnum
              Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-             Memo.CreUser   = katun 
+             Memo.CreUser   = Syst.CUICommon:katun 
              Memo.MemoTitle = "Información del cliente modificada"
              Memo.MemoText  = "Correos nos devuelve la carta. " + 
                               "Inhabilitamos el envío de la misma". 

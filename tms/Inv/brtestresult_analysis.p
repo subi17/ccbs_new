@@ -50,7 +50,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    

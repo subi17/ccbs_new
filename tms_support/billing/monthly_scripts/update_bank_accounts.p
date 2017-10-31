@@ -6,12 +6,12 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {/apps/tms/Func/lib/eventlog.i}
 

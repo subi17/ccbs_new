@@ -19,7 +19,7 @@
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
-   commali.i, katun defined and call fCleanEventObjects after this function */
+   commali.i, Syst.CUICommon:katun defined and call fCleanEventObjects after this function */
 FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    (iiMsSeq AS INT,
     icFixedNumber AS CHAR):

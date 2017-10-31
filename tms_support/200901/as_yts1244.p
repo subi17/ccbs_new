@@ -1,6 +1,6 @@
 {Syst/testpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 {Func/ftopup.i}
 
 session:numeric-format = "european".

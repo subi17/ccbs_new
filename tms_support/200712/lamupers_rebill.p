@@ -49,7 +49,7 @@
                            credit loss posting (makepaym)
             31.12.2002/aam eventlog row for cancel event,
                            delete db-eventlog when run cancelled,
-                           katun instead of lUser (lUser was not assigned)
+                           Syst.CUICommon:katun instead of lUser (lUser was not assigned)
             11.02.2003/aam ChargeType and DelType from customer to invoice 
             21.02.2003/aam BillInterest determines interest billing,
                            BillDblVat allows different vat methods,
@@ -188,7 +188,7 @@
 {Func/ftaxdata.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -1043,7 +1043,7 @@ PROCEDURE pCreateInv:
          liArAccNum  = 0.
 
       /* ROW FOR starting the invoice */
-      fELog(katun,"INVOICE:Started:Customer:" + string(xcustomer.CustNum)).
+      fELog(Syst.CUICommon:katun,"INVOICE:Started:Customer:" + string(xcustomer.CustNum)).
 
       FIND FIRST ttInvSeq NO-ERROR.
       
@@ -1081,7 +1081,7 @@ PROCEDURE pCreateInv:
 
          /* duplicated VAT handling was found */
          IF NOT llAllowDbl AND lDBLVat THEN DO:
-            fELog(katun,"INVOICE:DBLVAT:Customer:" + string(xcustomer.CustNum)).
+            fELog(Syst.CUICommon:katun,"INVOICE:DBLVAT:Customer:" + string(xcustomer.CustNum)).
             fErrorLog(xCustomer.CustNum,
                       "",
                       "DBLVAT").
@@ -2141,7 +2141,7 @@ PROCEDURE pCreateInv:
 
             /* reject reason found, write it to log */
             IF lRejBill THEN DO:    
-                fELog(katun,"INVOICE:" + lcRejReason + 
+                fELog(Syst.CUICommon:katun,"INVOICE:" + lcRejReason + 
                         ":Customer:" + string(xCustomer.CustNum)).
                 fErrorLog(xCustomer.CustNum,
                           lcRejCLI,
@@ -2184,7 +2184,7 @@ PROCEDURE pCancel:
       END.
 
       /* row to external eventlog however */
-      fELog(katun,"INVOICE:" + string(newinv.InvNum) + ":Cancelled").
+      fELog(Syst.CUICommon:katun,"INVOICE:" + string(newinv.InvNum) + ":Cancelled").
 
       DELETE newinv.
    END.
@@ -3856,7 +3856,7 @@ PROCEDURE pInvoiceHeader:
             END.                                           
                
             /* ROW FOR when invoice is created */
-            fELog(katun,"INVOICE:"  + string(lInvNo) + ":Created:" +
+            fELog(Syst.CUICommon:katun,"INVOICE:"  + string(lInvNo) + ":Created:" +
                         "Customer:" + string(Invoice.CustNum)).
 
             IF lReduce NE 0 THEN DO:
@@ -3870,7 +3870,7 @@ PROCEDURE pInvoiceHeader:
                CREATE OPLog.
                ASSIGN OPLog.CustNum    = Invoice.CustNum
                       OPLog.EventDate  = Invoice.InvDate
-                      OPLog.UserCode   = katun
+                      OPLog.UserCode   = Syst.CUICommon:katun
                       OPLog.EventType  = 3
                       OPLog.InvNum     = Invoice.InvNum
                       OPLog.Amt        = 0 - lReduce
@@ -3889,7 +3889,7 @@ PROCEDURE pInvoiceHeader:
                CREATE OPLog.
                ASSIGN OPLog.CustNum   = Invoice.CustNum
                       OPLog.EventDate = Invoice.InvDate
-                      OPLog.UserCode  = katun
+                      OPLog.UserCode  = Syst.CUICommon:katun
                       OPLog.EventType = 11
                       OPLog.InvNum    = Invoice.InvNum
                       OPLog.Amt       = 0 - lAdvRed
@@ -3947,7 +3947,7 @@ PROCEDURE pInvoiceHeader:
                              (IF Customer.CustNum = liCLossCust
                               THEN "Credit loss customer"
                               ELSE "Cleaning run") + 
-                             " Handler: " + katun,
+                             " Handler: " + Syst.CUICommon:katun,
                              OUTPUT liVoucher).
 
                 Invoice.PaymState = 3. 
@@ -3966,7 +3966,7 @@ PROCEDURE pInvoiceHeader:
                              FALSE,
                              FALSE,
                              "",
-                             "Own use  Handler: " + katun,
+                             "Own use  Handler: " + Syst.CUICommon:katun,
                              OUTPUT liVoucher).
             END.
                  
@@ -4020,7 +4020,7 @@ PROCEDURE pInvoiceHeader:
                                      STRING(ttInv.InvAmt).
                
             /* ROW FOR NOT created invoices */
-            fELog(katun,"INVOICE:" + lcRejReason + 
+            fELog(Syst.CUICommon:katun,"INVOICE:" + lcRejReason + 
                         ":Customer:" + string(ttInv.CustNum)).
             fErrorLog(ttInv.CustNum,
                       ttInv.CLI,

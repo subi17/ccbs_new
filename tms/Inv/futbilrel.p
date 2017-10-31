@@ -75,7 +75,7 @@ FIND LAST InvGroup WHERE
 NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN InvGroup[2] = InvGroup.InvGroup.
 
-FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+FIND TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
 lcFile = (IF AVAILABLE TMSUser AND TMSUser.RepDir NE ""
           THEN TMSUser.RepDir 
           ELSE "/tmp") +

@@ -34,7 +34,7 @@ ASSIGN
    MNPProcess.StatusCode  = 0
    MNPProcess.Brand       = Syst.CUICommon:gcBrand
    MNPProcess.MNPType     = 6
-   MNPProcess.UserCode    = katun
+   MNPProcess.UserCode    = Syst.CUICommon:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
 IF fSendMigrationNumberRequest(INPUT TABLE ttMigrationNumberRequest BY-REFERENCE) THEN RETURN "".

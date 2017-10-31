@@ -16,7 +16,7 @@
 {Syst/commpaa.i}
 
 ASSIGN Syst.CUICommon:gcBrand = "1" 
-       katun   = "RetFile".
+       Syst.CUICommon:katun   = "RetFile".
        
 {Func/cparam.i2}
 {Syst/utumaa.i "new"}
@@ -174,7 +174,7 @@ FOR EACH ttFiles:
    /* update log */
    fCreateArplog(ttFiles.PaymFile,
                  ttFiles.PaymCfg,
-                 katun). 
+                 Syst.CUICommon:katun). 
 
    DO TRANS:
       CREATE ActionLog.

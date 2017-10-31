@@ -19,9 +19,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
-
-&SCOPED-DEFINE BrandVarDefined YES
+DEFINE VARIABLE Syst.CUICommon:katun AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE pcTenant       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piOffset       AS INTEGER   NO-UNDO. 

@@ -2,7 +2,7 @@
    Change liBegin and liEnd input values to needed ones 
    MasMovil range specified to 72260 */
 {Syst/commpaa.i}
-katun = "qvantel".
+Syst.CUICommon:katun = "qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 {Func/multitenantfunc.i}

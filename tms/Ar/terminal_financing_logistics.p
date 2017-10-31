@@ -7,7 +7,7 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}

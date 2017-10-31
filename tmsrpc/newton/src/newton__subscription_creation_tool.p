@@ -3,7 +3,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Newton".
+Syst.CUICommon:katun = "Newton".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}

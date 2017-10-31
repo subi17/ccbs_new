@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def var lcres as char no-undo.
 def var ldtactdate as date no-undo.

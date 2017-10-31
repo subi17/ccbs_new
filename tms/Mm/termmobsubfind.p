@@ -21,7 +21,7 @@ DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
 DEFINE INPUT PARAMETER  icValue    AS C NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

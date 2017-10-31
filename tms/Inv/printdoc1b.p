@@ -12,7 +12,7 @@
 {Syst/commpaa.i}
 
 ASSIGN Syst.CUICommon:gcBrand = "1" 
-       katun   = "Cron".
+       Syst.CUICommon:katun   = "Cron".
        
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -247,7 +247,7 @@ IF llDBWrite THEN DO TRANS:
       ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = "" 
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = lcActionID
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = liPrinted
@@ -262,7 +262,7 @@ END.
 ELSE DO:
    PUT STREAM sAction UNFORMATTED
       lcFileType  "|"
-      katun       "|"
+      Syst.CUICommon:katun       "|"
       lcActionID  "|"
       TODAY       "|"
       "Finished"  "|"

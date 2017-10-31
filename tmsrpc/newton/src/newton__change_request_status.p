@@ -34,7 +34,7 @@ IF NOT AVAIL MsRequest THEN RETURN
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Newton".
+Syst.CUICommon:katun = "Newton".
 {Func/msreqfunc.i}
 
 FIND MsReqStatFunc NO-LOCK WHERE

@@ -7,7 +7,7 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 {Func/log.i}
 {Func/ftransdir.i}

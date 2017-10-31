@@ -50,7 +50,7 @@ DEFINE INPUT PARAMETER  iiMsSeq AS INT  NO-UNDO.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -450,9 +450,9 @@ REPEAT WITH FRAME sel:
         liMonthlyLimitType =  {&PREP_CHARGE_MONTHLY_LIMIT_TYPE}.
       END.
       /* one time user limit */
-      ldUpLimit = fUserLimitAmt(katun,liOneTimeLimitType).
+      ldUpLimit = fUserLimitAmt(Syst.CUICommon:katun,liOneTimeLimitType).
       /* monthly user limit */
-      ldUpMonthLimit = fUserLimitAmt(katun,liMonthlyLimitType).
+      ldUpMonthLimit = fUserLimitAmt(Syst.CUICommon:katun,liMonthlyLimitType).
 
       IF ldUpLimit < 0 OR ldUpMonthLimit < 0  THEN DO:
          MESSAGE "One time / monthly limit is not defined in your account or group "
@@ -493,7 +493,7 @@ REPEAT WITH FRAME sel:
               PrePaidRequest.Brand      = Syst.CUICommon:gcBrand
               PrePaidRequest.MsSeq      = iiMsSeq
               PrePaidRequest.CLI        = lcMobCLI
-              PrePaidRequest.UserCode   = katun
+              PrePaidRequest.UserCode   = Syst.CUICommon:katun
               PrePaidRequest.ReqCParam1 = lcBEventId
               PrePaidRequest.TopUpAmt   = ldFItemAmt.
        
@@ -1515,7 +1515,7 @@ PROCEDURE local-UPDATE-record:
                   PrePaidRequest.OrigRequest = bufPP.PPRequest
                   PrePaidRequest.TaxZone     = lcReqZone
                   llNegative                 = TRUE
-                  PrePaidRequest.UserCode    = katun
+                  PrePaidRequest.UserCode    = Syst.CUICommon:katun
                   llTaxable                  = (PrePaidRequest.VatAmt NE 0).
             END.
          END.

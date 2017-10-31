@@ -74,11 +74,11 @@ VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 
-find TmsUser where  TmsUser.UserCode = katun no-lock no-error.
+find TmsUser where  TmsUser.UserCode = Syst.CUICommon:katun no-lock no-error.
 
 IF NOT AVAIL TMSUSER THEN DO:
    MESSAGE 
-   "Unknown UserCode " katun SKIP
+   "Unknown UserCode " Syst.CUICommon:katun SKIP
    VIEW-AS ALERT-BOX.
    NEXT.
 END.

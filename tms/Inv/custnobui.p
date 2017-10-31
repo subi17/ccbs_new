@@ -62,7 +62,7 @@ FORM
        
 ASSIGN ldtDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))
        ldtDate[2] = TODAY
-       lcUser     = katun
+       lcUser     = Syst.CUICommon:katun
        Syst.CUICommon:toimi      = -1
        llMail     = FALSE
        llActive   = FALSE. 

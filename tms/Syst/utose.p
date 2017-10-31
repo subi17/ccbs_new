@@ -61,7 +61,7 @@ form /* toimintonimella hakua varten */
 
 /* allowed tokens */
 FOR FIRST TMSUser NO-LOCK WHERE
-          TMSUser.UserCode = katun,
+          TMSUser.UserCode = Syst.CUICommon:katun,
     FIRST UserGrp OF TMSUser NO-LOCK:
     
     lctokens = UserGrp.ShowTokens + "," + UserGrp.ModifyTokens.

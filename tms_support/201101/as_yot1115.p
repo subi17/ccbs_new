@@ -9,7 +9,7 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun  = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}

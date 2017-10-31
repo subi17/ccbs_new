@@ -49,7 +49,7 @@ pcUserName = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 

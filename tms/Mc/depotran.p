@@ -44,7 +44,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
     ASSIGN
     OPLog.CustNum   = iiCustNum
     OPLog.EventDate = TODAY
-    OPLog.UserCode  = katun
+    OPLog.UserCode  = Syst.CUICommon:katun
     OPLog.EventType = iiType      
     OPLog.InvNum    = Invoice.InvNum
     OPLog.Voucher   = 0

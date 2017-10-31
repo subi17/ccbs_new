@@ -201,7 +201,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             Memo.KeyValue  = STRING(MobSub.MsSeq)
             Memo.CustNum   = MobSub.CustNum
             Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-            Memo.CreUser   = katun 
+            Memo.CreUser   = Syst.CUICommon:katun 
             Memo.MemoTitle = "Periodical Contract Changed"
             Memo.MemoText  = "Contract: " + icDCEvent + CHR(10) + 
                              lcMemoText.

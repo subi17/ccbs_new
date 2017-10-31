@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 /*RUN 201004/tapfilecr_yot661.p("TURTC",4/9/2010,4/9/2010,"",FALSE).*/
 RUN 201004/tapfilecr_yot661.p("TURTC",4/10/2010,4/10/2010,"",FALSE). 

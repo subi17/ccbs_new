@@ -1552,7 +1552,7 @@ PROCEDURE pUpdateDSSLimit:
                IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER MserviceLPool:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.CUICommon:katun,
                                    "").
 
                
@@ -1616,7 +1616,7 @@ PROCEDURE pUpdateDSSLimit:
                IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER MserviceLPool:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.CUICommon:katun,
                                    "").
             END.
           END.

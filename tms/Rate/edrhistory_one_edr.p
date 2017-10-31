@@ -512,7 +512,7 @@ PROCEDURE pInitHistory:
      
       fMobCDRCollect(INPUT "post",
                      INPUT Syst.CUICommon:gcBrand,
-                     INPUT katun,
+                     INPUT Syst.CUICommon:katun,
                      INPUT idaDateSt,
                      INPUT idaDateSt,
                      INPUT 0,

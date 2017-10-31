@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "vikasagr".
+Syst.CUICommon:katun = "vikasagr".
 Syst.CUICommon:gcBrand = "1".
 
 define variable ldenow    as decimal no-undo.

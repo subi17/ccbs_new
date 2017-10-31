@@ -31,7 +31,7 @@ FOR FIRST RequestType NO-LOCK WHERE
           RequestType.InUse:
 
    lcUser = RequestType.UserCode.
-   IF lcUser = "" THEN lcUser = katun.
+   IF lcUser = "" THEN lcUser = Syst.CUICommon:katun.
  
    /* logging on type level */
    IF RequestType.LogOn THEN DO:

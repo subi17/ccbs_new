@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 
 
@@ -41,7 +41,7 @@ repeat:
         Solog.CLI          = termmobSub.Cli 
         Solog.Stat         = 0     /* just created */
         Solog.Brand        = Syst.CUICommon:gcBrand
-        Solog.Users        = katun.
+        Solog.Users        = Syst.CUICommon:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp
         Solog.ActivationTS = ldeActStamp

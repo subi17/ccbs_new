@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 ASSIGN
-   katun = "Cron"
+   Syst.CUICommon:katun = "Cron"
    Syst.CUICommon:gcBrand = "1".
 
 DEF VAR liDone AS INT  NO-UNDO.

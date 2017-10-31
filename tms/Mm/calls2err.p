@@ -142,7 +142,7 @@ DO FOR ActionLog TRANS:
       ActionLog.KeyValue     = STRING(YEAR(cDate2),"9999") + 
                                STRING(MONTH(cDate2),"99") + 
                                STRING(DAY(cDate2),"99")
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "ERRORCLEAN"
       ActionLog.ActionPeriod = YEAR(cDate2) * 100 + 
                                MONTH(cDate2)

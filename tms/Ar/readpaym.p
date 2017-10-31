@@ -350,7 +350,7 @@ FUNCTION fCreateOpLog RETURNS LOGICAL
     OPLog.CreStamp  = op-tstamp
     OPLog.CustNum   = Customer.CustNum
     OPLog.EventDate = ttPayment.PaymDate
-    OPLog.UserCode  = katun
+    OPLog.UserCode  = Syst.CUICommon:katun
     OPLog.EventType = iType      
     OPLog.InvNum    = iInv
     OPLog.Voucher   = ConVno
@@ -371,7 +371,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL
           Memo.KeyValue  = icKeyValue
           Memo.CustNum   = iiCustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = icTitle
           Memo.MemoText  = icMessage.
           Memo.CreStamp  = Func.Common:mMakeTS().
@@ -1400,7 +1400,7 @@ BY ttPayment.POrder:
                                    THEN ttPayment.PaymDate
                                    ELSE TODAY
             ClaimHist.ClaimAmt   = Invoice.InvAmt - Invoice.PaidAmt
-            ClaimHist.Handler    = katun.
+            ClaimHist.Handler    = Syst.CUICommon:katun.
       END.       
    END.
  

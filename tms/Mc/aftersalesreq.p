@@ -248,7 +248,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
    NOT Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
    ASSIGN liRequest = 0
           lcError   = ""
-          katun     = Order.SalesMan WHEN Order.SalesMan > "".
+          Syst.CUICommon:katun     = Order.SalesMan WHEN Order.SalesMan > "".
 
    liRequest = fSubscriptionRequest
                    (INPUT  Order.MSSeq,
@@ -285,7 +285,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                        Order.OrderChannel).
    END. /* ELSE DO: */
 
-   katun = "request".
+   Syst.CUICommon:katun = "request".
 
 END. /* IF Order.OrderType = 2 AND Order.ICC > "" AND */
 

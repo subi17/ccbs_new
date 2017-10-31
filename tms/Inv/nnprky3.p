@@ -352,7 +352,7 @@ IF lcErrFile = "" AND liError NE -1 THEN DO:
                                     ELSE 4
              ITSendLog.EMail      = ""
              ITSendLog.RepType    = "Spec3"
-             ITSendLog.UserCode   = katun.
+             ITSendLog.UserCode   = Syst.CUICommon:katun.
              ITSendLog.SendStamp  = Func.Common:mMakeTS().
    END.
     
@@ -372,7 +372,7 @@ RUN Mc/creasfee.p (CustNum,
               ?,
               "",
               TRUE,
-              katun,
+              Syst.CUICommon:katun,
               "",
               0,
               "",

@@ -271,10 +271,10 @@ PROCEDURE pInitialize:
       sure that right version is deployed */
    IF lcXMLVersion NE lcCodeVersion THEN RETURN "ERROR:Version conflict".
    
-   FIND FIRST TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+   FIND FIRST TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser AND TMSUser.UserName > "" THEN 
       lcTMSUser = TMSUser.UserName.
-   ELSE lcTMSUser = katun.
+   ELSE lcTMSUser = Syst.CUICommon:katun.
 
    /* header texts to temp-table */
    FOR EACH HdrText NO-LOCK WHERE

@@ -27,7 +27,7 @@
 {Func/fdss.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -471,7 +471,7 @@ BROWSE:
                                   STRING(time,"hh:mm:ss") +  "REASON " +
                                   ttSoLog.response
           ttSoLog.stat         = 2       
-          xxSoLog.users        = katun  
+          xxSoLog.users        = Syst.CUICommon:katun  
           xxSoLog.CompletedTS  = 0.
           xxSoLog.Timeslottms  = Func.Common:mMakeTS() .
        

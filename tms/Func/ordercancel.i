@@ -17,7 +17,7 @@
 {Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
 END.
 
@@ -83,7 +83,7 @@ FUNCTION fReleaseSIM RETURNS LOGICAL
       ActionLog.Brand        = Syst.CUICommon:gcBrand  
       ActionLog.TableName    = "Order"  
       ActionLog.KeyValue     = STRING(Order.Orderid)
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "SIMRELEASE"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0
@@ -379,7 +379,7 @@ PROCEDURE pCreateRenewalCreditNote:
              ErrorLog.TableName = "Order"
              ErrorLog.KeyValue  = STRING(Order.OrderId) 
              ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
-             ErrorLog.UserCode  = katun
+             ErrorLog.UserCode  = Syst.CUICommon:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 

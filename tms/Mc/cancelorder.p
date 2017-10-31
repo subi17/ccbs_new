@@ -182,7 +182,7 @@ ELSE DO:
       liReq = fRevertRenewalOrderRequest(
                   Order.MsSeq,
                   Order.OrderId,
-                  katun,
+                  Syst.CUICommon:katun,
                   Func.Common:mMakeTS(),
                   {&REQUEST_SOURCE_ORDER_CANCELLATION},
                   OUTPUT lcResult).

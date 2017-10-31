@@ -347,7 +347,7 @@ PROCEDURE pInitMenu.
    
    /* Get list of available functions 
       a config table needed */
-   IF fTokenRights(katun,"SYST") = "RW" THEN DO:
+   IF fTokenRights(Syst.CUICommon:katun,"SYST") = "RW" THEN DO:
       CREATE ttMenu.
       ASSIGN ttMenu.Module   = "Syst/tmrlimitupd.p"
              ttMenu.ModParam = "1"

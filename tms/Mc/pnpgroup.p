@@ -29,7 +29,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -197,7 +197,7 @@ repeat WITH FRAME sel:
                             ?,
                             "",
                             TRUE,
-                            katun,
+                            Syst.CUICommon:katun,
                             "",
                             0,
                             "",
@@ -885,7 +885,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                              ?,
                              TRUE,  /* clean credit fees also */
                              FALSE,  /* credit singlefee for billed items */
-                             katun,
+                             Syst.CUICommon:katun,
                              "",
                              OUTPUT ldAmt,
                              OUTPUT liCnt).

@@ -32,7 +32,7 @@ ASSIGN
    ukcust = fCParamI("UnknownCustomer").
 
 DO FOR TMSUser:
-   FIND FIRST TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND FIRST TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    exdir = TMSUser.RepDir.
 END.   
 

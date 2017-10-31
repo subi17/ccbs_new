@@ -27,7 +27,7 @@
 {Func/fecgtask.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -169,7 +169,7 @@ repeat WITH FRAME sel:
            ASSIGN
            CustGroup.Brand       = lcBrand
            CustGroup.CustGroup   = INPUT FRAME lis CustGroup.CustGroup
-           CustGroup.CreUser = katun.
+           CustGroup.CreUser = Syst.CUICommon:katun.
            UPDATE CustGroup.CGName
                   CustGroup.EnterTask CustGroup.LeaveTask
                   CustGroup.CreDate CustGroup.CreUser.
@@ -580,7 +580,7 @@ SELAUS:
                  CustGroup.LeaveTask.
 
           ASSIGN
-             CustGroup.ChgUser = katun
+             CustGroup.ChgUser = Syst.CUICommon:katun
              CustGroup.ChgDate = TODAY.
 
           IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustGroup).

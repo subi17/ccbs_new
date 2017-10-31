@@ -122,7 +122,7 @@ FUNCTION fError RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(Invoice.InvNum)
              ErrorLog.ErrorChar = Invoice.ExtInvID
              ErrorLog.ErrorMsg  = icMessage
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    

@@ -331,7 +331,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        "", /* out oper. */
                        STRING(iiTermReason),
                        icSource,
-                       katun,
+                       Syst.CUICommon:katun,
                        iiOrigRequest, /* orig. request */
                        {&TERMINATION_TYPE_FULL},
                        OUTPUT lvcError).

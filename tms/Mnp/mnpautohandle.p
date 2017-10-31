@@ -8,7 +8,7 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "MNP".
+Syst.CUICommon:katun = "MNP".
 Syst.CUICommon:gcBrand = "1".
 
 {Mnp/mnp.i}

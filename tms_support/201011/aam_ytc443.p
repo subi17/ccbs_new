@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 DEF VAR i         AS I  NO-UNDO.
 DEF VAR lii       AS i  NO-UNDO.

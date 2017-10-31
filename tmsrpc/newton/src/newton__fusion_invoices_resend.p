@@ -9,7 +9,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
@@ -42,7 +42,7 @@ IF pcUsername EQ "" THEN RETURN appl_err("empty username").
 
 {newton/src/settenant.i pcTenant}
 
-katun = "VISTA_" + pcUsername.
+Syst.CUICommon:katun = "VISTA_" + pcUsername.
 
 FIND FusionInvoice NO-LOCK WHERE
      FusionInvoice.FuInvNum = piFusionInvNum NO-ERROR.
@@ -74,7 +74,7 @@ IF lcEmail EQ "" OR lcEmail EQ ? THEN
    RETURN appl_err("Email not defined").
 
 liRequest = fEmailSendingRequest(INPUT Func.Common:mMakeTS(),
-                                 INPUT katun,
+                                 INPUT Syst.CUICommon:katun,
                                  INPUT FusionInvoice.Custnum,
                                  INPUT "", /* msisdn */
                                  INPUT lcEmail,

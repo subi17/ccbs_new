@@ -122,7 +122,7 @@ DO WHILE TRUE:
                      STRING(TIME,"HH:MM:SS")                  + 
                      CHR(10)                                   + 
                      "User responsible of this action: "       + 
-                     katun.
+                     Syst.CUICommon:katun.
          
          MESSAGE "Solog handling has been restarted." 
          VIEW-AS ALERT-BOX.
@@ -173,7 +173,7 @@ DO WHILE TRUE:
                      CHR(10)                                + 
                      "Solog handling is currently stopped!" + 
                      CHR(10)                                +
-                     "User responsible of this action: "    + katun.
+                     "User responsible of this action: "    + Syst.CUICommon:katun.
          
          RUN pMailMaintBreak(lcMessage).
 
@@ -223,7 +223,7 @@ DO WHILE TRUE:
                      CHR(10)                                    +
                      "Solog handling is currently stopped!"     +
                      CHR(10)                                    +
-                     "User responsible of this action: "        + katun.         
+                     "User responsible of this action: "        + Syst.CUICommon:katun.         
          RUN pMailMaintBreak(lcMessage).
          
          MESSAGE "SNS backend has been notified of this action"

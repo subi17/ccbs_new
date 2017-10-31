@@ -94,7 +94,7 @@ FOR EACH SubInvoice OF Invoice NO-LOCK WHERE
 
    fMobCDRCollect(INPUT "post",
                   INPUT Syst.CUICommon:gcBrand,
-                  INPUT katun,
+                  INPUT Syst.CUICommon:katun,
                   INPUT IF Invoice.FirstCall NE ?   
                         THEN Invoice.FirstCall
                         ELSE Invoice.FromDate,

@@ -2,7 +2,7 @@
 
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
+Syst.CUICommon:katun = "rafaeldv".
 Syst.CUICommon:gcBrand = "1".
 {Func/service.i}
 

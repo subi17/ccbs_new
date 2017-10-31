@@ -42,11 +42,11 @@ lcStruct = validate_request(pcStruct, "offer_id!,amount,valid_from!,valid_to,dis
  
 IF lcStruct = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
@@ -77,7 +77,7 @@ IF fValidateOfferItem(TABLE ttOfferItem, TRUE, OUTPUT ocError) > 0 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.

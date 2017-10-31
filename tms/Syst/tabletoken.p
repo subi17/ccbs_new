@@ -15,7 +15,7 @@
 {Func/fuserright.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -509,7 +509,7 @@ PROCEDURE local-update-record:
    lTokens = tabletoken.tokencode. 
 
    IF fIsAdminToken(TableToken.TokenCode) THEN DO:
-      IF NOT fIsAdminUser(katun) THEN DO:
+      IF NOT fIsAdminUser(Syst.CUICommon:katun) THEN DO:
          MESSAGE "Table has admin level rights. Modification not allowed"
          VIEW-AS ALERT-BOX INFORMATION.
          RETURN.

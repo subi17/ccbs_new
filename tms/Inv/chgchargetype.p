@@ -36,7 +36,7 @@ IF MsRequest.ReqStat NE 0 THEN DO:
 END.
 
 /* has user got priviliges */
-IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
+IF fTokenRights(Syst.CUICommon:katun,"CCSUPER") NE "RW" THEN DO:
    MESSAGE "You are not authorized to use this function"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.

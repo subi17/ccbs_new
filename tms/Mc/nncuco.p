@@ -61,7 +61,7 @@
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -1280,7 +1280,7 @@ repeat WITH FRAME sel:
                          FFItem.Billed = FALSE:
                    IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                            lhFFItem,
-                                           katun,
+                                           Syst.CUICommon:katun,
                                            "ManualCUI").
                    DELETE FFItem.
                 END. 

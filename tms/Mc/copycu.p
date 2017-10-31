@@ -28,7 +28,7 @@ DEF BUFFER new-Tariff   FOR Tariff.
 DEF BUFFER new-PnpList  FOR PNPList.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

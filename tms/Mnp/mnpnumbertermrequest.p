@@ -66,7 +66,7 @@ DO TRANS:
       MNPProcess.StatusCode  = {&MNP_ST_NEW}
       MNPProcess.Brand       = Syst.CUICommon:gcBrand
       MNPProcess.MNPType     = {&MNP_TYPE_TERMINATION}
-      MNPProcess.UserCode    = katun
+      MNPProcess.UserCode    = Syst.CUICommon:katun
       MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
    CREATE MNPSub.

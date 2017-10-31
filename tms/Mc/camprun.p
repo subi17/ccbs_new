@@ -190,7 +190,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
                                           ldtBegDate,
                                           ?,         /* price from feemodel */
                                           "",               /* contract */
-                                          katun,
+                                          Syst.CUICommon:katun,
                                           "",
                                           0,
                                           "",

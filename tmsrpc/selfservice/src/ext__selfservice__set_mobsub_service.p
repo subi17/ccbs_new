@@ -35,7 +35,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
@@ -113,7 +113,7 @@ lcAppId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcAppId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcAppId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcAppId + "_" + ghAuthLog::EndUserId.
 
 FIND FIRST ServCom NO-LOCK WHERE
            ServCom.Brand = Syst.CUICommon:gcBrand AND
@@ -229,7 +229,7 @@ FOR FIRST SubSer NO-LOCK WHERE
                            (IF Subser.ServCom = "LANG" THEN ""
                             ELSE lcParam),
                            ldActStamp,
-                           katun,
+                           Syst.CUICommon:katun,
                            TRUE,      /* fees */
                            TRUE,      /* sms */
                            "",
@@ -279,7 +279,7 @@ IF pcServiceCode EQ "BB" AND
                            1,
                            lcParam,
                            Func.Common:mMakeTS(),
-                           katun,
+                           Syst.CUICommon:katun,
                            TRUE,      /* fees */
                            TRUE,      /* sms */
                            "",

@@ -378,7 +378,7 @@ repeat WITH FRAME cdr:
          ASSIGN
          eventlog.eventdate  = TODAY
          eventlog.eventtime  = STRING(TIME,"HH:MM:SS")
-         eventlog.usercode   = katun
+         eventlog.usercode   = Syst.CUICommon:katun
          eventlog.action     = 'Check'.
          ASSIGN
          eventlog.KEY        =  reasonT + chr(255) + ttCall.cli + chr(255) +

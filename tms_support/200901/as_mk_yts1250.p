@@ -1,4 +1,4 @@
-{Syst/commpaa.i} katun = "SOG". Syst.CUICommon:gcBrand = "1".
+{Syst/commpaa.i} Syst.CUICommon:katun = "SOG". Syst.CUICommon:gcBrand = "1".
 {Func/fsubser.i}
 {Func/msreqfunc.i}
 
@@ -179,7 +179,7 @@ REPEAT:
       Solog.CLI          = Mobsub.CLI      /* MSISDN                     */
       Solog.Stat         = 0               /* just created               */
       Solog.Brand        = Syst.CUICommon:gcBrand
-      Solog.Users        = katun.
+      Solog.Users        = Syst.CUICommon:katun.
   
    ASSIGN
       Solog.TimeSlotTMS  = lcActStamp
@@ -233,7 +233,7 @@ pause. */
         Solog.CLI          = MobSub.Cli      /* MSISDN                     */
         Solog.Stat         = 0               /* just created               */
         Solog.Brand        = Syst.CUICommon:gcBrand
-        Solog.Users        = katun.
+        Solog.Users        = Syst.CUICommon:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = lcActStamp
         Solog.ActivationTS = lcActStamp

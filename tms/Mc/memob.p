@@ -56,7 +56,7 @@ DEF VAR lcTables     AS CHAR                   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
            memo.HostTable = "Customer"
            Memo.MemoType  = hosttable 
            memo.KeyValue  = STRING(iCustNum)
-           memo.CreUser   = katun
+           memo.CreUser   = Syst.CUICommon:katun
            memo.MemoTitle = INPUT FRAME lis1 memo.MemoTitle.
 
            RUN local-update-record.
@@ -509,7 +509,7 @@ BROWSE:
             ufkey = TRUE. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMemo).
             RUN local-update-record.                                  
-            memo.ChgUser  = katun.
+            memo.ChgUser  = Syst.CUICommon:katun.
             memo.ChgStamp = Func.Common:mMakeTS().
             IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMemo).
          END.

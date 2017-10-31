@@ -14,7 +14,7 @@
 {Func/luhnchecksum.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -678,7 +678,7 @@ PROCEDURE local-UPDATE-record:
                Memo.HostTable = "MobSub"
                Memo.KeyValue  = STRING(SubsTerminal.MsSeq)
                Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-               Memo.CreUser   = katun
+               Memo.CreUser   = Syst.CUICommon:katun
                Memo.MemoTitle = "Informacion del cliente modificada"
                Memo.MemoText  = lcMemoText 
                Memo.CustNum   = MobSub.CustNum.

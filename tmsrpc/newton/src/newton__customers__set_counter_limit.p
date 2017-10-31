@@ -104,7 +104,7 @@ DO ic = 1 TO 2:
 END.
 
 {Syst/commpaa.i}
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 Syst.CUICommon:gcBrand = lcBrand.
 {Func/flimitreq.i}
 

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 {Func/msisdn.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 
 find first msisdn where

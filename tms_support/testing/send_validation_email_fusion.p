@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -70,7 +70,7 @@ FOR EACH ttFusion NO-LOCK:
       ELSE DO:
          liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT katun,
+                                          INPUT Syst.CUICommon:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,
@@ -99,7 +99,7 @@ FOR EACH ttFusion NO-LOCK:
       ELSE DO:
          liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT katun,
+                                          INPUT Syst.CUICommon:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,

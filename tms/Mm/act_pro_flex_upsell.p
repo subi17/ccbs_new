@@ -14,7 +14,7 @@
 {Func/matrix.i}
 
 Syst.CUICommon:gcBrand =  Syst.CUICommon:gcBrand.
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 /*
 "FLEX_500MB_UPSELL"
 "FLEX_5GB_UPSELL"

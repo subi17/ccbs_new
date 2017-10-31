@@ -65,7 +65,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = Payment.PaymDate
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = iiType 
          OPLog.InvNum    = Payment.InvNum
          OPLog.Voucher   = Payment.Voucher
@@ -416,7 +416,7 @@ IF lcMemo > "" THEN DO:
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "TOPUP Payment"
           Memo.MemoText  = lcMemo.
           Memo.CreStamp  = Func.Common:mMakeTS().
@@ -426,7 +426,7 @@ END.
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.

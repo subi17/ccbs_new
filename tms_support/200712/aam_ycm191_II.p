@@ -112,7 +112,7 @@ for each order no-lock where
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "INITIAL TOPUP"
           Memo.MemoText  = lcMemo.
           Memo.CreStamp  = Func.Common:mMakeTS().

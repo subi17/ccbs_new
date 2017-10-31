@@ -88,7 +88,7 @@ m_pref = "".
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/create_eventlog.i}
    {Func/lib/eventlog.i}
@@ -322,7 +322,7 @@ ADD-ROW:
    
            IF llDoEvent THEN fMakeCreateEvent((BUFFER MSISDN:HANDLE),
                                               "",
-                                              katun,
+                                              Syst.CUICommon:katun,
                                               "").
 
            FIND CURRENT MSISDN NO-LOCK.

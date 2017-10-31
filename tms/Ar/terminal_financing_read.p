@@ -7,7 +7,7 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
@@ -200,7 +200,7 @@ REPEAT:
             ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcLogFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.FromDate     = ldaFromDate 
             ActionLog.Todate       = ldaToDate
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}

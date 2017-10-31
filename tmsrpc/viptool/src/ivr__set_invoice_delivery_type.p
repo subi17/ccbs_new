@@ -31,7 +31,7 @@ DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.CUICommon:katun = "IVR_" + ghAuthLog::EndUserId.
    Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
@@ -44,7 +44,7 @@ piDelType = get_int(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun   
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun   
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
@@ -79,7 +79,7 @@ IF Customer.DelType NE piDelType THEN DO:
    IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
       liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.CUICommon:katun,
                                        INPUT MobSub.MsSeq,
                                        INPUT MobSub.CLI,
                                        INPUT Mobsub.Custnum,

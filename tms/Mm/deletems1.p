@@ -160,7 +160,7 @@ IF lcError NE "" THEN DO:
 END.
 
 ASSIGN
-   lcUserCode = katun
+   lcUserCode = Syst.CUICommon:katun
    ldtPContr  = ?.
 
 llPenalty = fIsPenalty(0, Mobsub.MsSeq).

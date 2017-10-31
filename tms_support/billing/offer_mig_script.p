@@ -11,7 +11,7 @@
 
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "Qvantel".
+       Syst.CUICommon:katun   = "Qvantel".
 
 DEFINE VARIABLE liNumEntries    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.

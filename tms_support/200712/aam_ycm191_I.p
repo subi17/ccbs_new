@@ -77,7 +77,7 @@ by order.orderid:
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Brand     = Syst.CUICommon:gcBrand
       Memo.MemoTitle = "Credit Reason"
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum

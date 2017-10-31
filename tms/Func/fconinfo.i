@@ -35,7 +35,7 @@ IF AVAILABLE Company THEN ASSIGN
    lcBTCCAddr[2] = Company.Address3
    lcBTCCAddr[3] = Company.Address4.
 
-FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+FIND TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
 IF AVAILABLE TMSUser THEN 
 ASSIGN lcBTSender = TMSUser.EMail
        lcHSender  = TMSUser.UserName.

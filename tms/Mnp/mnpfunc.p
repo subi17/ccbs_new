@@ -200,7 +200,7 @@ CASE lcSelected:
    END.
    WHEN {&MNP_NT_CANCEL} THEN DO:
       fSendNumberTerminationCancel(MNPProcess.PortRequest).
-      fMakeCreateEvent(lhTable,"",katun,"").
+      fMakeCreateEvent(lhTable,"",Syst.CUICommon:katun,"").
    END.
    WHEN {&MNP_NT_DETAIL} THEN fSendNumberTerminationDetail(MNPProcess.PortRequest).
 

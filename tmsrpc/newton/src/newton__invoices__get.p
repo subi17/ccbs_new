@@ -97,7 +97,7 @@ resp_array = add_array(response_toplevel_id, "").
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 {Func/finvbal.i}
 {Func/fcreditvalid.i}
 {Syst/tmsconst.i}

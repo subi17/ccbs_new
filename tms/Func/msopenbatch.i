@@ -66,7 +66,7 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
                 SOLog.Stat         = 0              /* just created    */
                 Solog.Brand        = Syst.CUICommon:gcBrand 
                 SOLog.CommLine     = lcCommLine
-                SoLog.Users        = katun.
+                SoLog.Users        = Syst.CUICommon:katun.
       END.                                 
    END.                
 

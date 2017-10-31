@@ -11,7 +11,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Newton".
+Syst.CUICommon:katun = "Newton".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE pcArray AS CHARACTER NO-UNDO. 
@@ -64,7 +64,7 @@ END.
 {Syst/eventval.i}
    
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhOrderAccessory AS HANDLE NO-UNDO.
    lhOrderAccessory = BUFFER OrderAccessory:HANDLE.

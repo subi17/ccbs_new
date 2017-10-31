@@ -104,7 +104,7 @@ END.
 
 WHEN 23 THEN DO:
    IF MsRequest.ReqStat = 19 THEN
-      llCanUse = (fTokenRights(katun,"CCSUPER") = "RW").
+      llCanUse = (fTokenRights(Syst.CUICommon:katun,"CCSUPER") = "RW").
       
    IF iiToStatus = 4 OR iiToStatus = 9 THEN DO:
      IF LOOKUP(STRING(MsRequest.ReqStat),"0,3,16,19") = 0 THEN 
@@ -168,7 +168,7 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
          Memo.HostTable = "Order"
          Memo.KeyValue  = STRING(Order.OrderId)
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun
+         Memo.CreUser   = Syst.CUICommon:katun
          Memo.MemoTitle = "Cancelled due to STC cancellation"
          Memo.MemoText  = "".
 

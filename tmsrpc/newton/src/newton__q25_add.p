@@ -190,12 +190,12 @@ IF SingleFee.OrderId > 0 THEN DO:
       RETURN appl_err("Already returned terminal").
 END.
 
-lcOrigKatun = katun.
+lcOrigSyst.CUICommon:katun = Syst.CUICommon:katun.
 /*YPR-3256*/
 IF lcQ25ContractId EQ "" THEN
-   katun = "VISTA_" + lcUsername.
+   Syst.CUICommon:katun = "VISTA_" + lcUsername.
 ELSE 
-   katun = "POS_" + lcUsername.
+   Syst.CUICommon:katun = "POS_" + lcUsername.
 
 /*Request for Q25 extension*/
 liCreated = fPCActionRequest(
@@ -215,7 +215,7 @@ liCreated = fPCActionRequest(
    OUTPUT lcResult).   
    
 IF liCreated = 0 THEN DO:
-   katun = lcOrigKatun.
+   Syst.CUICommon:katun = lcOrigKatun.
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 END.
@@ -311,13 +311,13 @@ IF lcmemo_title > "" THEN DO:
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
-katun = lcOrigKatun.
+Syst.CUICommon:katun = lcOrigKatun.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:

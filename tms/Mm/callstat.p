@@ -119,7 +119,7 @@ tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT "post,pre",
                INPUT Syst.CUICommon:gcBrand,
-               INPUT katun,
+               INPUT Syst.CUICommon:katun,
                INPUT ldaFrom,
                INPUT ldaTo,
                INPUT 0,

@@ -34,14 +34,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF validate_request(pcStruct, "username!,memo!") = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct,"username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username").
 pcMemoStruct = get_struct(pcStruct,"memo").
 pcMemoTitle = get_string(pcMemoStruct,"title").
 pcMemoContent = get_string(pcMemoStruct,"content").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO Common Invoice InvNum piInvNum}
 

@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 ASSIGN
    Syst.CUICommon:gcBrand = "1"
-   katun = "cron".
+   Syst.CUICommon:katun = "cron".
 
 {Func/cparam2.i}
 

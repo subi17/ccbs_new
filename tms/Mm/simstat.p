@@ -16,7 +16,7 @@
 {Mc/lib/tokenchk.i 'SIMStat'}
 
 IF llDoEvent THEN DO:
-   &GLOBAl-DEFINE STAR_EVENT_USER katun
+   &GLOBAl-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

@@ -310,7 +310,7 @@ PROCEDURE pTap3File:
              ErrorLog.KeyValue  = STRING(TODAY,"999999")
              ErrorLog.ErrorChar = ""
              ErrorLog.ErrorMsg  = "Unknown version " + ttTAPFile.Version
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
       NEXT.
    END.

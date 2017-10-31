@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "CRON".
+       Syst.CUICommon:katun   = "CRON".
 {Func/q25functions.i}
 {Func/ftransdir.i}
 

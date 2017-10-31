@@ -73,7 +73,7 @@ DO TRANS:
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
    END.
    ELSE  ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}.

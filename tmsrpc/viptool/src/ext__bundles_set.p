@@ -24,7 +24,7 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
 Syst.CUICommon:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
@@ -270,7 +270,7 @@ ASSIGN
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "Mobile Data Usage Bundle"
       Memo.MemoText  = "External API bundle activation/deactivation"
       Memo.CustNum   = MobSub.CustNum

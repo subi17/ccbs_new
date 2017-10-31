@@ -29,7 +29,7 @@ DEF VAR c        AS c NO-UNDO.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 

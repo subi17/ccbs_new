@@ -719,7 +719,7 @@ PROCEDURE pLogErrors:
                 ErrorLog.TableName = "Invoice"
                 ErrorLog.KeyValue  = ttError.Inv
                 ErrorLog.ActionTS  = ldCurrStamp
-                ErrorLog.UserCode  = katun
+                ErrorLog.UserCode  = Syst.CUICommon:katun
                 ErrorLog.ErrorMsg  = ttError.ErrMsg.
       END.
 

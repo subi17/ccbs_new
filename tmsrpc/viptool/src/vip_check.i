@@ -9,8 +9,5 @@ IF NOT AVAIL vipMSISDN THEN lcVIPError = "Msisdn was not found".
 ELSE IF vipMSISDN.POS NE "VIP" THEN lcVIPError = "Msisdn is not a VIP number".
 
 IF lcVIPError NE "" THEN DO:
-&IF "{&CommVarDef}" EQ "YES" 
-&THEN
-   &ENDIF
    RETURN appl_err(lcVIPError).
 END.

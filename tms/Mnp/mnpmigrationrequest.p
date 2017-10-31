@@ -9,7 +9,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/testpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 {Mnp/mnpmessages.i}
 {Mnp/mnp.i}
 
@@ -44,7 +44,7 @@ ASSIGN
    MNPProcess.StatusCode  = 0
    MNPProcess.Brand       = Syst.CUICommon:gcBrand
    MNPProcess.MNPType     = 5
-   MNPProcess.UserCode    = katun
+   MNPProcess.UserCode    = Syst.CUICommon:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
 IF fSendMigrationRequest(INPUT TABLE ttMigrationRequest BY-REFERENCE) THEN

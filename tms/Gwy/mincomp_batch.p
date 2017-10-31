@@ -18,7 +18,7 @@
 {Syst/commpaa.i}
 
 ASSIGN
-   katun   = "PPMINC"
+   Syst.CUICommon:katun   = "PPMINC"
    Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam2.i}
@@ -284,7 +284,7 @@ PROCEDURE pAdjustBalance:
    CREATE PrePaidRequest.
    ASSIGN
       PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
-      PrePaidRequest.UserCode    = katun
+      PrePaidRequest.UserCode    = Syst.CUICommon:katun
       PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = liMsSeq
       PrePaidRequest.CLI         = lcCLI
@@ -346,7 +346,7 @@ PROCEDURE pAdjustBalance:
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun
+         Memo.CreUser   = Syst.CUICommon:katun
          Memo.MemoTitle = "Minimum Consumption"
          Memo.MemoText  = "Subscription's balance has been charged with " +
             TRIM(STRING(ABS(ROUND(PrePaidRequest.TopUpAmt / 100,2)),
@@ -466,7 +466,7 @@ PROCEDURE pMarkStarted:
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionStatus = liLogStatus
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) 
             ActionLog.ActionChar   = lcError.
@@ -485,7 +485,7 @@ PROCEDURE pMarkStarted:
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionStatus = 0
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
       RELEASE ActionLog.   

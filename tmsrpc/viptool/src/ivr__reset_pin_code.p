@@ -21,7 +21,7 @@ DEF VAR pcPIN AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.CUICommon:katun = "IVR_" + ghAuthLog::EndUserId.
    Syst.CUICommon:gcBrand = "1".
 
 {Syst/eventval.i}
@@ -36,7 +36,7 @@ DEF VAR lhMobSub AS HANDLE NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
 END.
 

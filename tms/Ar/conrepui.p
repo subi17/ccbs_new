@@ -79,7 +79,7 @@ PAUSE 0 NO-MESSAGE.
 ASSIGN llUfkey = FALSE
        Syst.CUICommon:nap     = "1".
        
-IF icUserCode = "" THEN icUserCode = katun.
+IF icUserCode = "" THEN icUserCode = Syst.CUICommon:katun.
 IF idtConDate = ? THEN idtConDate = TODAY.
 
 toimi:

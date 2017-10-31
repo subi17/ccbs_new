@@ -57,7 +57,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* Required Params */
 ASSIGN 
    liMsSeq  = get_pos_int(pcPayTermStruct, "msseq")
-   katun    = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.CUICommon:Syst.CUICommon:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcCurrentPayterm = get_nonempty_string(pcPayTermStruct, "current_payterm")
    lcNewPayterm     = get_nonempty_string(pcPayTermStruct, "new_payterm")
    liPerContractId  = get_int(pcPayTermStruct, "per_contract_id")
@@ -68,7 +68,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
@@ -111,7 +111,7 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0).

@@ -29,7 +29,7 @@ FUNCTION fCheckTMSParam RETURN LOGICAL
    IF pcoParamValue = ? THEN RETURN FALSE. ELSE RETURN TRUE.
 END.
 
-katun = "eka".
+Syst.CUICommon:katun = "eka".
 
 IF NOT fCheckTMSParam(OUTPUT lcInvoiceStatusDir    , "invoicestates") 
    THEN RETURN.

@@ -12,7 +12,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-   katun = "NewtonRPC"
+   Syst.CUICommon:katun = "NewtonRPC"
    Syst.CUICommon:gcBrand = "1".
 {Func/callquery.i}
 
@@ -38,7 +38,7 @@ tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT "edr",
                INPUT Syst.CUICommon:gcBrand,
-               INPUT katun,
+               INPUT Syst.CUICommon:katun,
                INPUT TODAY - 30,
                INPUT TODAY,
                INPUT 0,

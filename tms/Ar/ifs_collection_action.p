@@ -69,7 +69,7 @@ FUNCTION fError RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(liMsSeq)
              ErrorLog.ErrorChar = lcPlainFile
              ErrorLog.ErrorMsg  = lcReadLine + CHR(10) + icMessage
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
@@ -97,7 +97,7 @@ DO TRANS:
       ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "MobSub"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "IFSCOLLECT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.

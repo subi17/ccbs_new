@@ -11,7 +11,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "MNP".
+Syst.CUICommon:katun = "MNP".
 
 {Func/heartbeat.i}
 {Mnp/mnp.i}
@@ -1027,7 +1027,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           MNPSub.NRN,
                           STRING(2),
                           "5", /* automatic script*/
-                          katun,
+                          Syst.CUICommon:katun,
                           0, /* orig. request */
                           lcTermType,
                           OUTPUT ocResult). 

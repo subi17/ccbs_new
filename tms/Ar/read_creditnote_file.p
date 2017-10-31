@@ -9,7 +9,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -189,7 +189,7 @@ PROCEDURE pCreateCreditNote :
           Memo.KeyValue  = string(Invoice.Invnum)
           Memo.CustNum   = Invoice.Custnum 
           Memo.MemoSeq   = next-value(memoseq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = lcMemoTitle
           Memo.MemoText  = lcMemoContent
           Memo.CreStamp  = Func.Common:mMakeTS().

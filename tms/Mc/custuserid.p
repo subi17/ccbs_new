@@ -70,7 +70,7 @@ IF lcDispPwd > "" THEN DO:
              EventLog.Key            = STRING(iiCustNum)
              EventLog.EventDate      = TODAY
              EventLog.EventTime      = STRING(TIME,"hh:mm:ss")
-             EventLog.UserCode       = katun
+             EventLog.UserCode       = Syst.CUICommon:katun
              EventLog.Action         = "View"
              EventLog.EventLogStatus = 5.
       RELEASE EventLog.

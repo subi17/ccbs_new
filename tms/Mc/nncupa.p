@@ -36,7 +36,7 @@ with overlay centered width 80 no-label title " List customers payments "
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    fname = fChkPath(TMSUser.RepDir) + string(CustNum) + "paym.txt".
 END.
 

@@ -44,7 +44,7 @@ PAUSE 0 no-message.
 
 DO FOR TMSUser.
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    fname = TMSUser.RepDir + "/asublist.txt".
 END.
 

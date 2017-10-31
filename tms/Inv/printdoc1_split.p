@@ -311,7 +311,7 @@ PROCEDURE pMarkStarted:
             ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = icFileType
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = lcActionID
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
@@ -325,7 +325,7 @@ PROCEDURE pMarkStarted:
    ELSE DO:
       PUT STREAM sAction UNFORMATTED
          icFileType "|"
-         katun      "|"
+         Syst.CUICommon:katun      "|"
          lcActionID "|"
          idaInvDate "|"
          "Started"  "|"
@@ -703,7 +703,7 @@ PROCEDURE pMarkFinished:
    ELSE DO:
       PUT STREAM sAction UNFORMATTED
          icFileType "|"
-         katun "|"
+         Syst.CUICommon:katun "|"
          lcActionID "|"
          idaInvDate "|"
          "Finished"  "|"

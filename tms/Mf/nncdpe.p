@@ -29,7 +29,7 @@ DEF VAR exPaymFile   AS c  NO-UNDO.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUser.Repdir.
 END.
 
@@ -100,7 +100,7 @@ toimi:
    PUT STREAM excel UNFORMATTED 
      "SUMMARY OF ALL Calls BY DATE/PRODUCT GROUP/PRODUCT".  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
-     "Printed by" tab katun tab TODAY format "99.99.9999".  RUN Syst/uexskip.p(2).
+     "Printed by" tab Syst.CUICommon:katun tab TODAY format "99.99.9999".  RUN Syst/uexskip.p(2).
    DO i = 1 TO num-entries(hdr).
       PUT STREAM excel UNFORMATTED entry(i,hdr) tab.
    END.

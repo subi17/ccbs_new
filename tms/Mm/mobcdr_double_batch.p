@@ -8,7 +8,7 @@
 {Syst/commpaa.i}
 ASSIGN 
    Syst.CUICommon:gcBrand = "1"
-   katun = "cron".
+   Syst.CUICommon:katun = "cron".
 {Syst/eventlog.i}
 {Func/cparam2.i}
 
@@ -61,7 +61,7 @@ DO TRANS:
                                STRING(ldaReadDate,"99.99.9999") +
                                " were marked as doubles."
       ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.FromDate     = ldaReadDate
       ActionLog.ToDate       = ldaReadDate.
       ActionLog.ActionTS     = Func.Common:mMakeTS().

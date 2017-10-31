@@ -139,7 +139,7 @@ DEFINE INPUT PARAMETER iiBRTestQueueID AS INT NO-UNDO.
          BRTestQResult.BRTestQResultID = liResultID
          BRTestQResult.BRTestQueueID = iiBRTestQueueID
          BRTestQResult.TestRunStamp  = ldResultStamp
-         BRTestQResult.UserCode = katun.
+         BRTestQResult.UserCode = Syst.CUICommon:katun.
 
       RELEASE BRTestQueue.
       RELEASE BRTestQResult.

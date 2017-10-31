@@ -42,11 +42,11 @@ lcStruct = validate_request(pcStruct,
  
 IF lcStruct = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 pcId = get_string(pcStruct,"id").
 
@@ -83,7 +83,7 @@ IF AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller already exists: &1", ttReseller.Reseller)).
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhReseller AS HANDLE NO-UNDO.
    lhReseller = BUFFER Reseller:HANDLE.

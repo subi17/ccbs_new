@@ -88,7 +88,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
       Memo.MemoType  = "service"
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
 END FUNCTION.
@@ -116,11 +116,11 @@ IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-katun = pcUser.
+Syst.CUICommon:katun = pcUser.
 IF pcUserLevel EQ "Operator" THEN 
-   cCheckMsBarringKatun = "NewtonAd". 
+   cCheckMsBarringSyst.CUICommon:katun = "NewtonAd". 
 ELSE 
-   cCheckMsBarringKatun = "NewtonCC". 
+   cCheckMsBarringSyst.CUICommon:katun = "NewtonCC". 
 /*YPR-4773*/
 /*Activation is not allowed if fixed line provisioning is pending*/
 IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR 

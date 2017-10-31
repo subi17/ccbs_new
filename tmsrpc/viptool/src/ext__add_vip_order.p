@@ -72,7 +72,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 
@@ -678,7 +678,7 @@ IF pcMobSubBundleType > "" THEN DO:
 END. /* IF pcMobSubBundleType > "" THEN DO: */
 
 /* YTS-2890 */
-fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.CUICommon:katun,"").
 
 add_int(response_toplevel_id, "", liOrderId).
 

@@ -219,7 +219,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                    ErrorLog.TableName = "Invoice"
                    ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")
                    ErrorLog.ErrorMsg  = RETURN-VALUE
-                   ErrorLog.UserCode  = katun.
+                   ErrorLog.UserCode  = Syst.CUICommon:katun.
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
       

@@ -61,7 +61,7 @@ DO TRANS:
       ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.TableName    = "Cron"
       ActionLog.KeyValue     = lcActionID
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
       ActionLog.ActionPeriod = YEAR(iiDate) * 100 + MONTH(iiDate)
       ActionLog.ActionStatus = 0.

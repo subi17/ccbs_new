@@ -259,7 +259,7 @@ PROCEDURE pCreateFile:
          ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = icBank
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionChar   = lcSummary.

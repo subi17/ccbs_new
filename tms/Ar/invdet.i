@@ -339,7 +339,7 @@ PROCEDURE pInvoiceUpdate:
    DEF VAR liDueDate  AS INT  NO-UNDO. 
    DEF VAR lcUpdate   AS CHAR NO-UNDO.
 
-   lcUpdate = fTokenRights(katun,"SYST,BILL").
+   lcUpdate = fTokenRights(Syst.CUICommon:katun,"SYST,BILL").
  
    FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK.
 

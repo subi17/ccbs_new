@@ -17,7 +17,7 @@ DEF VAR lcMemo AS CHAR  NO-UNDO.
 ASSIGN lcMemo = "Agent" + CHR(255) + "TMS".
 
 IF llDoEvent THEN DO FOR Customer:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "rafaeldv".
+Syst.CUICommon:katun = "rafaeldv".
 Syst.CUICommon:gcBrand  = "1".
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 

@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
 DEF VAR ldaDate   AS DATE NO-UNDO.
@@ -43,7 +43,7 @@ FOR FIRST DayCampaign WHERE
                      TRUE,
                      MobSub.MsSeq,
                      "", /* Data bundle id */
-                     katun, /* eventlog.usercode */
+                     Syst.CUICommon:katun, /* eventlog.usercode */
                      "SummerCampaign-PriceChange", /* eventlog.memo */
                      0,
                      OUTPUT ldReqAmt).
@@ -67,7 +67,7 @@ FOR FIRST DayCampaign WHERE
                   STRING(TODAY,"99.99.9999") +  /* memo */
                   "¤" +  DCCLI.DCEvent ,  /* calcobject */
                   FALSE,              /* no messages to screen */
-                  katun,
+                  Syst.CUICommon:katun,
                   "SummerCampaign-PriceChange",
                   0, /* order id */
                   "DCCLI",

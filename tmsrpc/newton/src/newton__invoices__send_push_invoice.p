@@ -23,7 +23,7 @@ IF TRIM(pcUserName) EQ "" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "VISTA_" + pcUserName.
+Syst.CUICommon:katun = "VISTA_" + pcUserName.
 {Syst/tmsconst.i}
 {Func/fcreatereq.i}
 

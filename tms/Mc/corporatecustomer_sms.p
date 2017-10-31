@@ -8,7 +8,7 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "cron".
+Syst.CUICommon:katun = "cron".
 Syst.CUICommon:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fmakesms.i}

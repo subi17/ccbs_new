@@ -324,8 +324,8 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
         /* YTS-7530, this can be removed when TMS is running under user account
         with same group as tmsrpc. Currently using root, planned to be changed
         at begining of 2016. */
-        IF katun EQ "NewtonRPC" THEN DO:
-           lcErrorLog = "/tmp/sendmail_einvoice_error_" + katun + ".log".
+        IF Syst.CUICommon:katun EQ "NewtonRPC" THEN DO:
+           lcErrorLog = "/tmp/sendmail_einvoice_error_" + Syst.CUICommon:katun + ".log".
            OUTPUT TO lcErrorLog.
         END.   
         ELSE
@@ -347,8 +347,8 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
     /* YTS-7530, this can be removed when TMS is running under user account  
        with same group as tmsrpc. Currently using root, planned to be changed
        at begining of 2016. */
-    IF katun EQ "NewtonRPC" THEN
-       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + katun + ".log 2>&1").
+    IF Syst.CUICommon:katun EQ "NewtonRPC" THEN
+       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + Syst.CUICommon:katun + ".log 2>&1").
     ELSE
        UNIX SILENT VALUE(xMailComm + " >> /tmp/sendmail_einvoice.log 2>&1").
 

@@ -12,7 +12,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{Syst/commali.i} /* katun = "eka". */
+{Syst/commali.i} /* Syst.CUICommon:katun = "eka". */
 
 DEF WORKFILE sums
    field accno   as i format "zzz9"
@@ -54,7 +54,7 @@ VIEW-AS ALERT-BOX information.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 

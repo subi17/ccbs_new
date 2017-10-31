@@ -52,7 +52,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = MobSub.Custnum NO-ERROR.

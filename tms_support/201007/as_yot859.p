@@ -1,12 +1,12 @@
 {Syst/commpaa.i}
-katun = "YOT-858".
+Syst.CUICommon:katun = "YOT-858".
 Syst.CUICommon:gcBrand = "1".
 {Func/orderfunc.i}
 {Func/msreqfunc.i}
 {Syst/eventval.i}
 {Func/log.i}
 
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
 
@@ -83,7 +83,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
             ActionLog.Brand        = Syst.CUICommon:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = "SIMRELEASE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 2

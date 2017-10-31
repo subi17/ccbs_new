@@ -11,7 +11,7 @@
 
 ASSIGN 
    Syst.CUICommon:gcBrand = "1" 
-   katun   = "Cron".
+   Syst.CUICommon:katun   = "Cron".
        
 {Syst/eventlog.i}
 
@@ -58,7 +58,7 @@ BY FuncRunQSchedule.StartTS:
             ErrorLog.TableName = "FuncRunQueue"
             ErrorLog.KeyValue  = STRING(FuncRunQueue.FRQueueID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
-            ErrorLog.UserCode  = katun.
+            ErrorLog.UserCode  = Syst.CUICommon:katun.
             ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 

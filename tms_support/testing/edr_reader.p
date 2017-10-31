@@ -11,7 +11,7 @@ Version ......: Yoigo
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "Qvantel"
+   Syst.CUICommon:katun = "Qvantel"
    Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.

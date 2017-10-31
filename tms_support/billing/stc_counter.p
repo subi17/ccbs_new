@@ -11,7 +11,7 @@ Version ......: Yoigo
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "Qvantel"
+   Syst.CUICommon:katun = "Qvantel"
    Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE ldadate AS DATE FORMAT "99.99.9999" NO-UNDO.

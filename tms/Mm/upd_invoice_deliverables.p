@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -51,7 +51,7 @@ ASSIGN
    lcTime      = REPLACE(STRING(TIME,"hh:mm:ss"),":","").
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END. /* IF llDoEvent THEN DO: */
@@ -176,7 +176,7 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
 
             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.CUICommon:katun,
                                              INPUT MobSub.MsSeq,
                                              INPUT MobSub.CLI,
                                              INPUT Mobsub.Custnum,
@@ -408,14 +408,14 @@ PROCEDURE pInvoiceDeliverables:
                  lcMemoContent,
                  lcMemoContent,
                  "Service",
-                 (IF lcChannel > "" THEN lcChannel ELSE katun)).
+                 (IF lcChannel > "" THEN lcChannel ELSE Syst.CUICommon:katun)).
    ELSE
       fLocalMemo("Invoice",
                  STRING(Customer.CustNum),
                  lcMemoContent,
                  lcMemoContent,
                  "",
-                 (IF lcChannel > "" THEN lcChannel ELSE katun)).
+                 (IF lcChannel > "" THEN lcChannel ELSE Syst.CUICommon:katun)).
 
    RETURN "OK".
 

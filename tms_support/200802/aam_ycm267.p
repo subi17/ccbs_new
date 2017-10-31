@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 Syst.CUICommon:gcBrand = "1".
 {Func/cparam.i2}
 {Func/fmakemsreq.i}

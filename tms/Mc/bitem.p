@@ -70,7 +70,7 @@ DEF VAR ldtDate       AS DATE                  NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -587,7 +587,7 @@ BROWSE:
 
            IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                     lhSingleFee,
-                                    katun,
+                                    Syst.CUICommon:katun,
                                     "ManualCUI").
            DELETE SingleFee.
 
@@ -962,13 +962,13 @@ PROCEDURE local-update-record:
          IF new_singlefee AND
             llDoEvent THEN RUN StarEventMakeCreateEventWithMemo(
                                  lhSingleFee,
-                                 katun,
+                                 Syst.CUICommon:katun,
                                  "ManualCUI").
 
          IF NOT new_singlefee AND
             llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
                                  lhSingleFee,
-                                 katun,
+                                 Syst.CUICommon:katun,
                                  "ManualCUI").
       END.
 

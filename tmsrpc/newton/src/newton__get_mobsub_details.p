@@ -111,7 +111,7 @@ IF NOT AVAILABLE MsOwner THEN
    RETURN appl_err(SUBST("MsOwner entry &1 not found", piMsSeq)).
 
 {Syst/commpaa.i}
-katun = "Newton".
+Syst.CUICommon:katun = "Newton".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}

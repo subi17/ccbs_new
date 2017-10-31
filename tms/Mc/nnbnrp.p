@@ -40,7 +40,7 @@ with centered width 80 no-label title "B-number prices" FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    exPaymFile = TMSUser.RepDir + "/bnrprice.txt".
 END.
 

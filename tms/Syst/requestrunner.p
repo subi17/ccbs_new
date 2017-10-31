@@ -10,7 +10,7 @@
 {Syst/commpaa.i}
 ASSIGN
    Syst.CUICommon:gcBrand = "1"
-   katun   = "request".
+   Syst.CUICommon:katun   = "request".
    
 {Func/heartbeat.i}
 {Func/log.i}
@@ -163,7 +163,7 @@ DO WHILE TRUE
       ldCurrent = Func.Common:mMake2DT(ldaSystemDay,TIME).
             
       lcUser = RequestType.UserCode.
-      IF lcUser = "" THEN lcUser = katun.
+      IF lcUser = "" THEN lcUser = Syst.CUICommon:katun.
  
       /* logging on type level */
       IF RequestType.LogOn THEN DO:

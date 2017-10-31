@@ -17,7 +17,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -299,7 +299,7 @@ REPEAT WITH FRAME sel:
         
         /* find, new and delete keys only for Syst group */
         FIND FIRST tmsuser NO-LOCK WHERE
-                   tmsuser.usercode = katun NO-ERROR.
+                   tmsuser.usercode = Syst.CUICommon:katun NO-ERROR.
         
         IF AVAIL tmsuser AND tmsuser.usergroup = "Syst" THEN 
            ASSIGN 

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun   = "OTANOK".
+Syst.CUICommon:katun = "OTANOK".
 
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -501,7 +501,7 @@ PROCEDURE pCreateReq:
    ASSIGN MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
           MsRequest.ReqType    = {&REQTYPE_ICC_CHANGE}
           MsRequest.Brand      = Syst.CUICommon:gcBrand
-          MsRequest.UserCode   = katun
+          MsRequest.UserCode   = Syst.CUICommon:katun
           MsRequest.ActStamp   = Func.Common:mMakeTS()
           MsRequest.ReqStatus  = 20
           MsRequest.CLI        = lcCLI

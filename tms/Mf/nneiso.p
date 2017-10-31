@@ -54,7 +54,7 @@ PAUSE 0 no-message.
 
 DO FOR TMSUser:
    FIND TMSUser where 
-        TMSUser.UserCode = katun
+        TMSUser.UserCode = Syst.CUICommon:katun
    no-lock no-error.
    exPaymFile = TMSUser.RepDir + "/" + "nocalls.txt".
 END.

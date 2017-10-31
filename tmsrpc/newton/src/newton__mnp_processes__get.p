@@ -53,7 +53,7 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "Newton"
+   Syst.CUICommon:katun = "Newton"
       Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mnp/mnp.i}

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {/home/ari/work/fcreditreq_chk.i}
 
 def var lcline as char no-undo.

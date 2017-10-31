@@ -35,7 +35,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUsername) EQ "VISTA_" THEN 
     RETURN appl_err("username is empty").
 
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 
 IF NUM-ENTRIES(pcID,"|") > 1 THEN
    ASSIGN
@@ -54,7 +54,7 @@ IF NOT AVAIL FeeModel THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
 END.
 

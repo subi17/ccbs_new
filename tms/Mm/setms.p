@@ -379,7 +379,7 @@ BY ttSolog.ActStamp:
       Solog.CLI          = MobSub.CLI        /* MSISDN                     */
       Solog.Stat         = 0                 /* just created               */
       Solog.Brand        = Syst.CUICommon:gcBrand 
-      Solog.Users        = katun    
+      Solog.Users        = Syst.CUICommon:katun    
       Solog.MSrequest    = ttSolog.MSrequest.
    
    /* Special handling for Prepaid Bono8 HSDPA, SER-1345  */

@@ -22,7 +22,7 @@ FUNCTION fFeeContract RETURNS CHARACTER
    IF icSalesman = "" THEN DO:
       /* get user's salesman definition */
       FIND UserSman WHERE 
-           UserSman.UserCode = katun AND
+           UserSman.UserCode = Syst.CUICommon:katun AND
            UserSman.Brand    = icBrand NO-LOCK NO-ERROR.
    
       IF AVAILABLE UserSman THEN icSalesman = UserSman.Salesman.

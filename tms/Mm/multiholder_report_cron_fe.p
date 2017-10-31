@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-Katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -126,7 +126,7 @@ DO TRANS:
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -136,7 +136,7 @@ DO TRANS:
       ldCollPeriodStartTS = ActionLog.ActionTS.
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun.
+         ActionLog.UserCode     = Syst.CUICommon:katun.
       
       RELEASE Actionlog.
    END.

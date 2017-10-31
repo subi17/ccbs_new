@@ -302,7 +302,7 @@ REPEAT:
        Memo.KeyValue  = STRING(Order.OrderID)
        Memo.CustNum   = Order.CustNum
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun 
+       Memo.CreUser   = Syst.CUICommon:katun 
        Memo.MemoTitle = lcHeader
        Memo.MemoText  = lcMemo
        Memo.CreStamp  = ldCurrent.

@@ -52,7 +52,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    piInvNum = get_int(pcStruct,"main_invoice")
-   katun = "VISTA_" + get_string(pcStruct,"username")
+   Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username")
    pcReasonGrp = get_string(pcStruct,"reason_category")
    pcReason    = get_string(pcStruct,"reason")
    pcRemark    = get_string(pcStruct,"remark").
@@ -62,7 +62,7 @@ IF LOOKUP("sub_invoices",lcStruct) > 0 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF pcRemark EQ "" THEN RETURN appl_err("remark is empty").
 

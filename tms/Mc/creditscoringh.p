@@ -139,7 +139,7 @@ PROCEDURE pHandleOrder:
       Memo.HostTable = "Order"
       Memo.KeyValue  = STRING(bOrder.OrderId)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "Credit scoring " + (IF llOk THEN "ok" ELSE "fail")
       Memo.MemoText  = lcAnswerCodes.
 

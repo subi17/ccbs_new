@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 
 DEF VAR ldaActDate    AS DATE NO-UNDO.
 DEF VAR liTime        AS INT  NO-UNDO.

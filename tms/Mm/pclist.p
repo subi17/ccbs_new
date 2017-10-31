@@ -22,7 +22,7 @@ DEF INPUT PARAMETER  icKeyType AS CHAR        NO-UNDO.
 DEF INPUT PARAMETER  iiKey AS INT           NO-UNDO.                
 
 if llDoEvent THEN DO:
-    &GLOBAL-DEFINE STAR_EVENT_USER katun
+    &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
     {Func/lib/eventlog.i}
         
     DEF VAR lhDCCLI AS HANDLE NO-UNDO.

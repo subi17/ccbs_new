@@ -534,7 +534,7 @@ IF llFullB AND liError NE -1 THEN DO FOR Memo TRANS:
           Memo.KeyValue  = STRING(CustNum1)
           Memo.CustNum   = CustNum1
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "Full B-Number Report"
           Memo.MemoText  = lcMemo.
           Memo.CreStamp  = Func.Common:mMakeTS().
@@ -586,7 +586,7 @@ IF liPrintTo <= 2 THEN DO:
                                        ELSE 4
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Spec4"
-                ITSendLog.UserCode   = katun.
+                ITSendLog.UserCode   = Syst.CUICommon:katun.
                 ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
        
@@ -614,7 +614,7 @@ RUN Mc/creasfee.p (CustNum1,
               ?,
               "",
               TRUE,
-              katun,
+              Syst.CUICommon:katun,
               "",
               0,
               "",

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def var i as int no-undo.
 def var j as int no-undo.
@@ -38,7 +38,7 @@ function fwritememo returns logic
           Memo.KeyValue  = STRING(iiMsSeq)
           Memo.CustNum   = iiCust
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = lcEvent
           Memo.MemoText  = lcMemo
           Memo.CreStamp  = ldCurrent.

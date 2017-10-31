@@ -10,7 +10,7 @@ liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = TRUE. 
 
 {Func/log.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 fSetLogFileName("/home/anttis/user_paivitys" + 
    STRING(YEAR(TODAY),"9999") +
@@ -147,7 +147,7 @@ FUNCTION fNew RETURNS LOGICAL
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = katun
+         tmspass.creator  = Syst.CUICommon:katun
          tmspass.createts = ldeTS.
    END.
 

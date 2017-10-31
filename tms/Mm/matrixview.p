@@ -114,13 +114,13 @@ END.
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{Syst/commpaa.i} katun = "polkki". Syst.CUICommon:gcBrand = "1".
+{Syst/commpaa.i} Syst.CUICommon:katun = "polkki". Syst.CUICommon:gcBrand = "1".
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

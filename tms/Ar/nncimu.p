@@ -54,7 +54,7 @@
                   16.05.02/aam partial crediting 
                   17.05.02/tk  RUN Mc/memo.p
                   28.05.02/aam userlog removed 
-                  03.06.02/aam katun added to Invoice.Memo
+                  03.06.02/aam Syst.CUICommon:katun added to Invoice.Memo
                   07.06.02/aam use Invoice.OverPaym for overpayment,
                                change the sign also for cinv.VATAmt
                   18.06.02/aam don't update InvNum with F1,
@@ -317,13 +317,13 @@ Syst.CUICommon:cfc = "sel".  RUN Syst/ufcolor.p.
 
 /* crediting limit from user */
 FIND FIRST TMSUser NO-LOCK WHERE
-           TMSUser.UserCode = katun NO-ERROR.
+           TMSUser.UserCode = Syst.CUICommon:katun NO-ERROR.
 IF AVAILABLE TMSUser THEN 
       ldCreditLimit =  fUserLimitAmt(TMSUser.UserCode,
                                      {&CREDIT_NOTE_LIMIT_TYPE}) .
  
 /* release right */
-IF SetTMSUser(katun) 
+IF SetTMSUser(Syst.CUICommon:katun) 
 THEN lcCanRelease = getTMSRight("SYST").
 ELSE lcCanRelease = "".
  

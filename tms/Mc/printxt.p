@@ -450,7 +450,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
                                        THEN "ITOrd"
                                        ELSE "IT")
                                  ELSE "Memo"
-          ITSendLog.UserCode   = katun.
+          ITSendLog.UserCode   = Syst.CUICommon:katun.
           ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 

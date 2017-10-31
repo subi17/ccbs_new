@@ -7,7 +7,7 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
@@ -245,7 +245,7 @@ PROCEDURE pMarkStarted:
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(ldaInvDate) * 100 + MONTH(ldaInvDate) 
             ActionLog.ActionChar   = lcError.
@@ -264,7 +264,7 @@ PROCEDURE pMarkStarted:
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(ldaInvDate) * 100 + MONTH(ldaInvDate).
       RELEASE ActionLog.   

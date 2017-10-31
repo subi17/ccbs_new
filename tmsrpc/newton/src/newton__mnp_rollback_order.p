@@ -21,7 +21,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 {Func/orderchk.i}
 {Func/order.i}
 {Syst/tmsconst.i}
@@ -295,7 +295,7 @@ FOR EACH ttMNPRollback:
                          STRING(ttMNPRollback.RetentionOrderId),"").
 
    /* YTS-2890 */
-   fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+   fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.CUICommon:katun,"").
 END.
 
 add_boolean(response_toplevel_id, "", True).

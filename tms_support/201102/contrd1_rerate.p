@@ -7,7 +7,7 @@ output stream sout to contrd1_rerate.log.
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 DEFINE VARIABLE lcline AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liMsSeq AS INTEGER NO-UNDO. 

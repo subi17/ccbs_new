@@ -262,7 +262,7 @@ REPEAT:
          Memo.KeyValue  = STRING(MobSub.CustNum)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.CUICommon:katun 
          Memo.MemoTitle = lcMemoTitle
          Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) + 
                           ", MSISDN " + lcCLI + 

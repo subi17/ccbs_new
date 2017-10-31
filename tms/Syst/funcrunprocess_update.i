@@ -14,7 +14,7 @@ FUNCTION fProcessErrorLog RETURNS LOGIC
              ErrorLog.TableName = "FuncRunProcess"
              ErrorLog.KeyValue  = STRING(iiFRProcessID)
              ErrorLog.ErrorMsg  = icMessage
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    

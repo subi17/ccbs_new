@@ -15,7 +15,7 @@
 {Func/coinv.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -171,7 +171,7 @@ PROCEDURE pMsCustChange:
          IF liNewInvCust = 0 THEN liNewInvCust = liCreated.
             
          ASSIGN bNewCust.ChgStamp   = Func.Common:mMakeTS()
-                bNewCust.CreUser    = katun
+                bNewCust.CreUser    = Syst.CUICommon:katun
                 bNewCust.InvCust    = liNewInvCust
                 bNewCust.PaymCust   = MobSub.AgrCust
                 bNewCust.RepCust    = bNewCust.CustNum
@@ -570,7 +570,7 @@ PROCEDURE pOwnerChange:
          IF llNewCust THEN DO:
             ASSIGN 
             bNewCust.ChgStamp   = Func.Common:mMakeTS()
-            bNewCust.CreUser    = katun
+            bNewCust.CreUser    = Syst.CUICommon:katun
             bNewCust.PaymCust   = liNewOwner
             bNewCust.AgrCust    = liNewOwner
             bNewCust.RepCust    = bNewCust.CustNum
@@ -736,7 +736,7 @@ PROCEDURE pOwnerChange:
                     /* memo   */
                     STRING(liOldOwner) + " -> " + STRING(liNewOwner),
                     FALSE,          /* no messages to screen */
-                    katun,
+                    Syst.CUICommon:katun,
                     "",
                     0,
                     "",

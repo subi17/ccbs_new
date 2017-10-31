@@ -212,7 +212,7 @@ FUNCTION fCreateMigrationSub RETURNS CHAR
                         INPUT  Order.Cli,
                         INPUT  Order.CustNum,
                         INPUT  1,
-                        INPUT  katun,
+                        INPUT  Syst.CUICommon:katun,
                         INPUT  ldeSwitchTS,
                         INPUT  "CREATE",
                         INPUT  STRING(Order.OrderId),

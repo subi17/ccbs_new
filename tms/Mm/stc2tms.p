@@ -39,7 +39,7 @@ DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 {Func/remfees.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -735,7 +735,7 @@ PROCEDURE pUpdateSubscription:
 
          IF llDoEvent THEN fMakeCreateEvent((BUFFER bOwner:HANDLE),
                                             "",
-                                            katun,
+                                            Syst.CUICommon:katun,
                                             "").
          RELEASE bOwner.
       END.
@@ -1353,7 +1353,7 @@ PROCEDURE pFinalize:
       RUN Mm/barrengine.p(MobSub.MsSeq,
                       "Y_BPSUB=1",
                       {&REQUEST_SOURCE_STC},
-                      katun,               /* creator */
+                      Syst.CUICommon:katun,               /* creator */
                       Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),            /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
@@ -2387,7 +2387,7 @@ PROCEDURE pMultiSimSTC:
       ActionLog.Brand        = Syst.CUICommon:gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "MultiSIMTermination"
       ActionLog.ActionPeriod = YEAR(idtActDate - 1) * 100 +
                                MONTH(idtActDate - 1)
@@ -2483,7 +2483,7 @@ PROCEDURE pCONTM2BarringReset:
       RUN Mm/barrengine.p(MobSub.MsSeq,
                       "#REFRESH",
                       {&REQUEST_SOURCE_STC},
-                      katun,               /* creator */
+                      Syst.CUICommon:katun,               /* creator */
                       Func.Common:mSecOffSet(Func.Common:mMakeTS(),2),            /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
@@ -2515,7 +2515,7 @@ PROCEDURE pCONTM2BarringReset:
          RUN Mm/barrengine.p(MobSub.MsSeq,
                          "Y_BPSUB=1",
                          {&REQUEST_SOURCE_STC},
-                         katun,               /* creator */
+                         Syst.CUICommon:katun,               /* creator */
                          Func.Common:mSecOffSet(Func.Common:mMakeTS(),6),            /* activate */
                          "",                  /* sms */
                          OUTPUT lcError).

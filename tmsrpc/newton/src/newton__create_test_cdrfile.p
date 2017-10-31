@@ -13,7 +13,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mnp/mnpoutchk.i}
 {Syst/commpaa.i}
-katun = "Newton".
+Syst.CUICommon:katun = "Newton".
 Syst.CUICommon:gcBrand = "1".
 
 /*New input parameters*/

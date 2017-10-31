@@ -2,7 +2,7 @@
 /* read msisdn from a list */
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
+Syst.CUICommon:katun = "rafaeldv".
 Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 {Syst/tmsconst.i}

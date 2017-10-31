@@ -104,7 +104,7 @@ IF pcmemoStruct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-katun = "VISTA_" + lcusername.
+Syst.CUICommon:katun = "VISTA_" + lcusername.
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq limsseq}
 
@@ -222,7 +222,7 @@ IF lcmemo_title > "" THEN DO:
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.

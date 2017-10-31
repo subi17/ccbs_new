@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 

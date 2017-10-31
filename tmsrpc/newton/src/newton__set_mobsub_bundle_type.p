@@ -66,7 +66,7 @@ ASSIGN
    pcOldBundle = get_string(pcStruct,"old_bundle")
    pcNewBundle = get_string(pcStruct,"new_bundle")
    pdaActDate = get_date(pcStruct,"date")
-   katun = "VISTA_" + get_string(pcStruct,"username")
+   Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username")
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
       WHEN LOOKUP("upgrade_upsell", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
@@ -103,7 +103,7 @@ FIND FIRST DayCampaign NO-LOCK WHERE
            DayCampaign.DCEvent = pcNewBundle NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 ASSIGN
     lcBONOContracts = fCParamC("BONO_CONTRACTS")
@@ -214,7 +214,7 @@ Func.Common:mWriteMemoWithType("MobSub",                             /* HostTabl
                  "Bono modificado",                    /* MemoTitle */
                  pcMemoContent + " " + pcOldBundle + " --> " + pcNewBundle,  /* MemoText */
                  lcMemoType,                           /* MemoType */
-                 katun).
+                 Syst.CUICommon:katun).
 
 
 lcResultStruct = add_struct(response_toplevel_id, "").

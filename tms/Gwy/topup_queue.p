@@ -12,7 +12,7 @@
 
 ASSIGN
    Syst.CUICommon:gcBrand = "1"
-   katun   = "ATM".
+   Syst.CUICommon:katun   = "ATM".
 
 {Syst/tmsconst.i}
 {Func/barrfunc.i}

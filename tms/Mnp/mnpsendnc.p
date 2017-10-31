@@ -10,7 +10,7 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "MNP"
+   Syst.CUICommon:katun = "MNP"
    Syst.CUICommon:gcBrand = "1".
 {Func/log.i}
 {Func/cparam2.i}

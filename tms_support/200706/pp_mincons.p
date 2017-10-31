@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "snet".
+Syst.CUICommon:katun = "snet".
 
 {Func/ftaxdata.i}
 
@@ -74,7 +74,7 @@ FUNCTION fMinComp RETURNS LOGICAL
       Memo.KeyValue  = STRING(MobSub.MsSeq)
       Memo.CustNum   = MobSub.CustNum
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "Minimum Consumption"
       Memo.MemoText  = "Subscription's balance has been charged with " +
                        string(ldmincons) + 

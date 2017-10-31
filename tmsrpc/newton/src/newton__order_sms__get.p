@@ -29,7 +29,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 {Func/smsmessage.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:

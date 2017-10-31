@@ -29,7 +29,7 @@ with centered width 80 no-label title " ISValue per exchange " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    fname1 = TMSUser.RepDir + "/xor-proj.txt".
    fname2 = TMSUser.RepDir + "/xor-cust.txt".
 END.

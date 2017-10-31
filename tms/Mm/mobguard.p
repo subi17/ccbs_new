@@ -43,7 +43,7 @@ IF reasonc > "0" THEN DO:
    ASSIGN
       eventlog.eventdate  = TODAY
       eventlog.eventtime  = STRING(TIME,"HH:MM:SS")
-      eventlog.usercode   = katun
+      eventlog.usercode   = Syst.CUICommon:katun
       eventlog.action     = 'Check'.
  
    ASSIGN

@@ -93,7 +93,7 @@ PROCEDURE pDelete:
                                   "Started at " + 
                                   REPLACE(STRING(ldtStarted),"/","-")
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.FromDate     = ldaFrom
          ActionLog.ToDate       = ldaTo.
          ActionLog.ActionTS     = Func.Common:mMakeTS().

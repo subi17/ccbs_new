@@ -37,7 +37,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
           ITSendLog.SendMethod = iiSendMethod 
           ITSendLog.EMail      = icEmailAddress
           ITSendLog.RepType    = "ITOrd"
-          ITSendLog.UserCode   = katun.
+          ITSendLog.UserCode   = Syst.CUICommon:katun.
           ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 

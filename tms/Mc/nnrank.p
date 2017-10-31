@@ -86,7 +86,7 @@ viiva3 = fill("-",lev).
 
 /* get default directory name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 

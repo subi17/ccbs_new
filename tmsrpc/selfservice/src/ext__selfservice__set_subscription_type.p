@@ -106,7 +106,7 @@ Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
 ASSIGN pdActivation = Func.Common:mMake2DT(ldaActDate, 0).
 
-katun = "NewtonAd". /* check correct barring */
+Syst.CUICommon:katun = "NewtonAd". /* check correct barring */
 
 IF fValidateMobTypeCh(
    MobSub.Msseq,
@@ -143,7 +143,7 @@ IF lcError > "" THEN DO:
    RETURN appl_err(lcError).
 END.
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
+Syst.CUICommon:katun = fgetAppUserId(INPUT lcApplicationId, 
                       INPUT lcAppEndUserId).
                       
 liRequest = fCTChangeRequest(MobSub.msseq,
@@ -175,7 +175,7 @@ ASSIGN
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "Subscription Type Change"
       Memo.MemoText  = "External API subscription type change " + 
                        MobSub.CLIType + " --> " + pcCliType

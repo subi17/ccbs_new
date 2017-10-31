@@ -13,7 +13,7 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}

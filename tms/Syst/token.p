@@ -15,7 +15,7 @@
 {Func/fuserright.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -85,7 +85,7 @@ view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 
-llAdminUser = fIsAdminUser(katun).
+llAdminUser = fIsAdminUser(Syst.CUICommon:katun).
 
 FIND FIRST token
 /* srule */ NO-LOCK NO-ERROR.

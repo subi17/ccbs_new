@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE oiCustomer AS INTEGER NO-UNDO. 

@@ -50,7 +50,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
                                  ELSE "foo@bar.fi"
           ITSendLog.RepType    = IF AVAILABLE Order THEN "ITOrd"
                                  ELSE "IT"
-          ITSendLog.UserCode   = katun
+          ITSendLog.UserCode   = Syst.CUICommon:katun
           ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 

@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun   = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Func/cparam2.i}
 {Mm/dss_bundle_first_month_fee.i}
 

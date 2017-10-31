@@ -24,7 +24,7 @@ FRAME rajat.
 
 
 FIND FIRST TMSUser NO-LOCK WHERE
-           TMSUser.UserCode = katun NO-ERROR.
+           TMSUser.UserCode = Syst.CUICommon:katun NO-ERROR.
 IF AVAIL TMSUser THEN lcEMail = TMSUser.Email.
 ELSE lcEMail = "".
 

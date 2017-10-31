@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 DEFINE VARIABLE secs AS INTEGER NO-UNDO. 

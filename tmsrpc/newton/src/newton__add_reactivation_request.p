@@ -53,12 +53,12 @@ IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
 liMsSeq  = get_pos_int(pcReacStruct, "msseq").
-katun    = "VISTA_" + get_string(pcReacStruct, "salesman").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcReacStruct, "salesman").
 
 lcMemoTitle = get_string(pcMemoStruct, "title").
 lcMemoContent = get_string(pcMemoStruct, "content").
 
-IF TRIM(katun) EQ "VISTA_" THEN
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 IF LOOKUP("ActStamp", pcReacStruct) GT 0 THEN
@@ -70,7 +70,7 @@ IF ldActStamp = 0 OR ldActStamp = ? THEN
 
 {newton/src/findtenant.i NO ordercanal TermMobSub MsSeq liMsSeq}
 
-lcResult = freacprecheck(INPUT liMsSeq, INPUT katun, INPUT FALSE).
+lcResult = freacprecheck(INPUT liMsSeq, INPUT Syst.CUICommon:katun, INPUT FALSE).
 IF lcResult > "" THEN DO:
    lcResult = REPLACE(lcResult, CHR(10), " ").
    RETURN appl_err(lcResult).
@@ -94,7 +94,7 @@ END. /* IF AVAIL bTermMobSub THEN DO: */
 liMsReq = fReactivationRequest(INPUT liMsSeq,
                                INPUT 0,
                                INPUT ldActStamp,
-                               INPUT katun,
+                               INPUT Syst.CUICommon:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                OUTPUT lcResult).
 IF liMsReq > 0 THEN
@@ -111,7 +111,7 @@ IF lcMemoTitle > "" AND liMsReq > 0 THEN DO:
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(liMsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE TermMobSub THEN TermMobSub.CustNum ELSE 0).

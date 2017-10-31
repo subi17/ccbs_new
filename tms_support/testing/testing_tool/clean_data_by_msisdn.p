@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Func/msisdn.i}
 
 DEF VAR lcminMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".

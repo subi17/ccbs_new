@@ -25,7 +25,7 @@ DEF VAR lcSep       AS CHAR NO-UNDO INIT "|".
 DEF STREAM sLog.
 
 IF (ilFees OR ilFATimes) AND llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -224,7 +224,7 @@ PROCEDURE pRemoveFees:
                EXCLUSIVE-LOCK.
             IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                        lhSingleFee,
-                                       katun,
+                                       Syst.CUICommon:katun,
                                        "RemoveOldEvents").
             DELETE SingleFee.
             

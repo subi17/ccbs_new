@@ -51,7 +51,7 @@ IF NOT AVAILABLE MobSub THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -512,7 +512,7 @@ PROCEDURE pDone.
          RUN Mm/barrengine.p(Mobsub.MsSeq,
                          "#REFRESH",
                          "5",                /* source  */
-                         katun,              /* creator */
+                         Syst.CUICommon:katun,              /* creator */
                          Func.Common:mMakeTS(),
                          "",                 /* SMS */
                          OUTPUT lcResult).

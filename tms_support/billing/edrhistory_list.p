@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "qvantel".
+Syst.CUICommon:katun = "qvantel".
 {edrhistory_changes.i}
 
 DEF VAR i           AS INT  NO-UNDO.

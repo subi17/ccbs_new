@@ -35,7 +35,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 ASSIGN
-   katun = "VISTA_" + Order.Salesman
+   Syst.CUICommon:katun = "VISTA_" + Order.Salesman
    llCloseOrder = FALSE.
   
 /* check that order is from today and coming from POS channel */

@@ -324,7 +324,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
          Solog.CLI          = MobSub.CLI     /* MSISDN                  */
          Solog.Stat         = 0              /* just created             */
          Solog.Brand        = MobSub.Brand  
-         Solog.Users        = katun 
+         Solog.Users        = Syst.CUICommon:katun 
          Solog.TimeSlotTMS  = ldTimeSlotTMS 
          Solog.CreatedTS    = ldTime         /* Created NOW         */
          Solog.ActivationTS = ldTime.        /* Activate NOW         */

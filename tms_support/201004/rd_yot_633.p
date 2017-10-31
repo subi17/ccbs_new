@@ -19,7 +19,7 @@ OUTPUT STREAM sLog TO VALUE(lcLogFile).
 INPUT STREAM sMSISDN FROM VALUE(lcInputFile).
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
+Syst.CUICommon:katun = "rafaeldv".
 Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 

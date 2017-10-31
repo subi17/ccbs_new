@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -576,7 +576,7 @@ PROCEDURE pActContract:
                              bMsRequest.MsRequest = liRequest
                        EXCLUSIVE-LOCK NO-ERROR.
                   IF AVAIL bMsRequest THEN
-                     bMsRequest.ReqCparam4 = katun + "|" + STRING(TODAY,"99-99-9999").
+                     bMsRequest.ReqCparam4 = Syst.CUICommon:katun + "|" + STRING(TODAY,"99-99-9999").
                END. /* IF lcContractID = "SPOTIFY" THEN DO: */
             END. /* ELSE DO: */
          END. /* ELSE DO: */
@@ -861,15 +861,15 @@ PROCEDURE pSTC:
       ELSE
          ldActTS = Func.Common:mMake2DT(ttInputFileContent.ActDate,0).
 
-      /* Set the katun to check correct barring */
-      katun = "NewtonAd".
+      /* Set the Syst.CUICommon:katun to check correct barring */
+      Syst.CUICommon:katun = "NewtonAd".
       /* Various validations */
       IF NOT fValidateMobTypeCh(MobSub.MsSeq,NewCLIType.CLIType,
                                 ldActTS,FALSE,FALSE,0,"",OUTPUT lcError) THEN
       lcRemark = lcRemark + "," + lcError.
 
-      /* Set the katun again with original username */
-      katun = "Qvantel".
+      /* Set the Syst.CUICommon:katun again with original username */
+      Syst.CUICommon:katun = "Qvantel".
       IF fValidateNewCliType(NewCLIType.CLIType,lcDataBundleId,
                              TRUE,OUTPUT lcError) NE 0 THEN
         lcRemark = lcRemark + "," + lcError.
@@ -890,7 +890,7 @@ PROCEDURE pSTC:
                                       "" /* pcSalesman */,
                                       FALSE,
                                       TRUE,
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       0,
                                       {&REQUEST_SOURCE_SCRIPT},
                                       0,

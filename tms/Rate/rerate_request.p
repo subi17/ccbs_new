@@ -163,12 +163,12 @@ PROCEDURE pHandleRequest:
    
    IF llReport AND NOT llReportStarted THEN DO:
       IF VALID-HANDLE(lhSubsRerate) THEN 
-         RUN pInitializeRerateReport IN lhSubsRerate(katun,
+         RUN pInitializeRerateReport IN lhSubsRerate(Syst.CUICommon:katun,
                                                      TODAY,
                                                      TODAY,
                                                      "").
       IF VALID-HANDLE(lhCustRerate) THEN 
-         RUN pInitializeRerateReport IN lhCustRerate(katun,
+         RUN pInitializeRerateReport IN lhCustRerate(Syst.CUICommon:katun,
                                                      TODAY,
                                                      TODAY,
                                                      "").

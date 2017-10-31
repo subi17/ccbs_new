@@ -60,7 +60,7 @@ DEF VAR lcSystUser   AS CHAR                   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -117,7 +117,7 @@ form /* seek Status Code  BY UserCode */
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
-lcSystUser = fTokenRights(katun,"SYST").
+lcSystUser = fTokenRights(Syst.CUICommon:katun,"SYST").
 
 orders = "By Code,By Name,By 3, By 4".
 
@@ -184,7 +184,7 @@ REPEAT WITH FRAME sel:
               memo.Custnum   = iCustnum
               memo.HostTable = HostTable
               memo.KeyValue  = KeyValue
-              memo.CreUser   = katun
+              memo.CreUser   = Syst.CUICommon:katun
               memo.MemoTitle = INPUT FRAME lis1 Memo.MemoTitle
               memo.MemoText = INPUT FRAME lis2 Memo.MemoText
               memo.MemoSeq = NEXT-VALUE(MemoSeq).
@@ -427,7 +427,7 @@ BROWSE:
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       IF katun NE Memo.CreUser AND lcSystUser NE "RW" THEN DO:
+       IF Syst.CUICommon:katun NE Memo.CreUser AND lcSystUser NE "RW" THEN DO:
           MESSAGE "Only creator can delete the memo."
           VIEW-AS ALERT-BOX INFORMATION.
           NEXT. 
@@ -535,7 +535,7 @@ BROWSE:
           Syst.CUICommon:ehto = 0.
 
          /* only owner can change a memo */
-         IF katun NE Memo.CreUser AND lcSystUser NE "RW" THEN Syst.CUICommon:ufk[1] = 0.
+         IF Syst.CUICommon:katun NE Memo.CreUser AND lcSystUser NE "RW" THEN Syst.CUICommon:ufk[1] = 0.
           
          RUN Syst/ufkey.p.
 
@@ -581,7 +581,7 @@ BROWSE:
                ASSIGN
                   Memo.MemoTitle
                   Memo.MemoText.
-               memo.ChgUser  = katun.
+               memo.ChgUser  = Syst.CUICommon:katun.
                memo.ChgStamp = Func.Common:mMakeTS().
                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMemo).
             END.

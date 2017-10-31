@@ -200,7 +200,7 @@ DEF NEW SHARED VAR intsumm AS DE EXTENT 10 NO-UNDO.
 
 IF llDoEvent THEN 
 DO FOR Payment:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -359,7 +359,7 @@ FUNCTION fCreateOptrans RETURNS LOGICAL
    ASSIGN OPLog.CreStamp    = Func.Common:mMakeTS()
           OPLog.CustNum     = Invoice.CustNum
           OPLog.EventDate   = kirjpvm
-          OPLog.UserCode    = katun
+          OPLog.UserCode    = Syst.CUICommon:katun
           OPLog.EventType   = iType
           OPLog.InvNum      = Invoice.InvNum
           OPLog.Voucher     = ConseNo

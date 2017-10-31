@@ -76,7 +76,7 @@ IF pcReqType EQ "bundle_termination" THEN
 IF NUM-ENTRIES(top_array) >= 5 THEN
    plConfirm = get_bool(param_toplevel_id, "5").
 
-katun   = "VISTA_" + get_string(param_toplevel_id, "2").
+Syst.CUICommon:katun = "VISTA_" + get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -96,7 +96,7 @@ END.
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

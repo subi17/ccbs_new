@@ -5,7 +5,7 @@
 
 ASSIGN
    Syst.CUICommon:gcBrand = "1"
-   katun   = "Request".
+   Syst.CUICommon:katun   = "Request".
 
 DEFINE STREAM outfile.
 
@@ -225,7 +225,7 @@ PROCEDURE SocketIO:
                   MsRequest.MSSeq      = MobSub.MSSeq
                   MsRequest.CLI        = MobSub.CLI
                   MsRequest.CustNum    = MobSub.CustNum
-                  MsRequest.UserCode   = katun
+                  MsRequest.UserCode   = Syst.CUICommon:katun
                   MsRequest.ActStamp   = MsRequest.CreStamp
                   MsRequest.ReqType    = 1
                   MsRequest.ReqCParam1 = "PROFILE"

@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun  = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 
 
@@ -28,7 +28,7 @@ FOR EACH msrequest where
 
    RUN checkmsbarring(
          INPUT MobSub.msseq,
-         INPUT katun,
+         INPUT Syst.CUICommon:katun,
          OUTPUT lcBarrComList,
          OUTPUT lcBarrStatus).
  

@@ -14,7 +14,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "cron".
+Syst.CUICommon:katun = "cron".
 {Func/cparam2.i}
 
 DEFINE VARIABLE lcFiles  AS CHARACTER NO-UNDO.

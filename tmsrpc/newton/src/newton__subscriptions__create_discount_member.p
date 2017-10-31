@@ -60,7 +60,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       
@@ -171,7 +171,7 @@ IF ldeAmount <= 0 THEN RETURN appl_err("Invalid Discount amount").
 IF liValidPeriods <= 0 THEN RETURN appl_err("ValidPeriod must be one month at minimum").
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 

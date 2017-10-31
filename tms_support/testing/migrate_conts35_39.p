@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 assign Syst.CUICommon:gcBrand = "1"
-       katun = "Qvantel2".
+       Syst.CUICommon:katun = "Qvantel2".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/matrix.i}
@@ -75,7 +75,7 @@ FOR EACH MobSub WHERE
                                     "CONTS32",
                                     (IF lliSTCflag THEN 20140801 ELSE 20140701),
                                     {&REQUEST_SOURCE_SCRIPT},
-                                    katun,
+                                    Syst.CUICommon:katun,
                                     TRUE,
                                     0,
                                     FALSE,

@@ -16,7 +16,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcustpl.i}
@@ -103,7 +103,7 @@ END.
 
 RUN Mm/create_charge_comp.p( {&REQUEST_SOURCE_EXTERNAL_API} ,
                        liMsSeq,
-                       (IF MobSub.PayType THEN katun ELSE ""), 
+                       (IF MobSub.PayType THEN Syst.CUICommon:katun ELSE ""), 
                        ldAmount,
                        lcEventId,
                        0,

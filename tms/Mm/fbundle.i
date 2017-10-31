@@ -679,7 +679,7 @@ PROCEDURE pAdjustBal:
    CREATE PrePaidRequest.
    ASSIGN
       PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
-      PrePaidRequest.UserCode    = katun
+      PrePaidRequest.UserCode    = Syst.CUICommon:katun
       PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = bMobSub.MsSeq
       PrePaidRequest.CLI         = bMobSub.CLI
@@ -738,7 +738,7 @@ PROCEDURE pAdjustBal:
          Memo.KeyValue  = STRING(bMobSub.MsSeq)
          Memo.CustNum   = bMobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun
+         Memo.CreUser   = Syst.CUICommon:katun
          Memo.MemoTitle = UPPER(icBundle) + " Balance Adjustment"
          Memo.MemoText  = "Subscription's balance has been charged with " +
             TRIM(STRING(ABS(ROUND(PrePaidRequest.TopUpAmt / 100,2)),

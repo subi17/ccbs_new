@@ -150,7 +150,7 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
             liRequest = fEmailInvoiceRequest(
                                  INPUT Func.Common:mMakeTS(),
                                  INPUT TODAY,
-                                 INPUT katun,
+                                 INPUT Syst.CUICommon:katun,
                                  INPUT 0,
                                  INPUT "",
                                  INPUT Customer.CustNum,

@@ -13,7 +13,7 @@
 
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "tmsrpc".
+       Syst.CUICommon:katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 

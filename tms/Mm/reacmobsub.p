@@ -50,7 +50,7 @@ ASSIGN
   ldCurrTS            = Func.Common:mMakeTS().
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSISDN    AS HANDLE    NO-UNDO.
@@ -213,7 +213,7 @@ DO TRANSACTION:
             MSOwner.TSbegin = Func.Common:mSecOffSet(ldCurrTS,1).
          IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                             "",
-                                            katun,
+                                            Syst.CUICommon:katun,
                                             ""). 
       END.      
       ELSE DO:
@@ -302,7 +302,7 @@ DO TRANSACTION:
        RUN Mm/barrengine.p(MobSub.MsSeq,
                         "#REFRESH",
                         {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
-                        katun,               /* creator */
+                        Syst.CUICommon:katun,               /* creator */
                         ldCurrTS,            /* activate */
                         "",                  /* sms */
                         OUTPUT lcResult).

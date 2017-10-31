@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 assign Syst.CUICommon:gcBrand = "1"
-       katun = "Qvantel".
+       Syst.CUICommon:katun = "Qvantel".
 {Syst/eventval.i}
 
 def stream sin.
@@ -16,7 +16,7 @@ DEF VAR liTermPeriod  AS INT  NO-UNDO.
 DEFINE BUFFER bMsRequest     FOR MsRequest.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
 END.
@@ -38,7 +38,7 @@ FUNCTION fDeleteSingleFee RETURNS LOGICAL (INPUT iiTermPeriod AS INT):
          IF llDoEvent THEN
             RUN StarEventMakeDeleteEventWithMemo(
                (BUFFER SingleFee:HANDLE),
-               katun,
+               Syst.CUICommon:katun,
                "YOT-2783").
 
          put stream sout unformatted lcline lcdel "Single Fee deleted successfully with price: " +

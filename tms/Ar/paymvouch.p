@@ -14,7 +14,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -89,11 +89,11 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 /* get all brands that user is entitled to */
-find TmsUser where TmsUser.UserCode = katun no-lock no-error.
+find TmsUser where TmsUser.UserCode = Syst.CUICommon:katun no-lock no-error.
 
 IF NOT AVAIL TMSUSER THEN DO:
    MESSAGE 
-   "Unknown UserCode " katun SKIP
+   "Unknown UserCode " Syst.CUICommon:katun SKIP
    VIEW-AS ALERT-BOX.
    NEXT.
 END.

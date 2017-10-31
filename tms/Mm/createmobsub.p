@@ -100,7 +100,7 @@ DEF BUFFER lbMobSubs       FOR MobSub.
 DEF BUFFER lbPriDSSMobSub  FOR MobSub.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
@@ -518,7 +518,7 @@ IF NOT AVAIL mobsub THEN DO:
               
    IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    IF AVAIL orderfusion THEN
@@ -674,7 +674,7 @@ ELSE DO:
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent (lhMsOwner).
          fMakeCreateEvent((BUFFER bMsOwner:HANDLE),
-                           "",katun, "").
+                           "",Syst.CUICommon:katun, "").
          fCleanEventObjects().
       END.
 
@@ -733,7 +733,7 @@ IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
                  ?,
                  "",    /* memo   */
                  FALSE,           /* no messages to screen */
-                 katun,
+                 Syst.CUICommon:katun,
                  "SubscriptionCreation",
                  0,
                  "",
@@ -751,7 +751,7 @@ RUN Mc/creasfee.p (MobSub.CustNum,
               ?,
               "",    /* memo   */
               FALSE,           /* no messages to screen */
-              katun,
+              Syst.CUICommon:katun,
               "SubscriptionCreation",
               0,
               "",
@@ -1031,7 +1031,7 @@ ELSE lcInitialBarring = "Y_BPSUB=1".
 RUN Mm/barrengine.p(MobSub.MsSeq,
                 lcInitialBarring,
                 "1",                 /* source = subscr. creation  */
-                katun,               /* creator */
+                Syst.CUICommon:katun,               /* creator */
                 Func.Common:mMakeTS(),           /* activate */
                 "",                  /* sms */
                 OUTPUT lcResult).

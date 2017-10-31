@@ -12,7 +12,7 @@
 
 ASSIGN 
    Syst.CUICommon:gcBrand = "1" 
-   katun   = "Cron".
+   Syst.CUICommon:katun   = "Cron".
        
 {Syst/eventlog.i}
 {Syst/dftimetable.i}

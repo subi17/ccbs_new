@@ -166,7 +166,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
              liCReqTime  = TIME.
 
       /* all web requests are scheduled to 1st of next month */
-      IF katun = "WEB" THEN lcCReqTime = "1".
+      IF Syst.CUICommon:katun = "WEB" THEN lcCReqTime = "1".
       
       /* should old type be closed only on last of month 
          -> set request date as the 1st of next month */
@@ -379,7 +379,7 @@ FUNCTION fServiceRequest RETURNS INTEGER
    IF CAN-FIND(FIRST ScUpdRule WHERE
                      ScUpdRule.Brand   = Syst.CUICommon:gcBrand AND
                      ScUpdRule.ServCom = icServCom) AND
-      LOOKUP(katun,"WEB,NEWTON") > 0
+      LOOKUP(Syst.CUICommon:katun,"WEB,NEWTON") > 0
    THEN DO:
    
       liOldValue = IF iiValue > 0 THEN 0 ELSE 1. 

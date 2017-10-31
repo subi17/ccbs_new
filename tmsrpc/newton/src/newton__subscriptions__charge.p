@@ -51,7 +51,7 @@ IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", liMsSeq)).
 
 {Syst/commpaa.i}
-katun = lcUserId.
+Syst.CUICommon:katun = lcUserId.
 Syst.CUICommon:gcBrand = "1". 
 {Syst/tmsconst.i}
 

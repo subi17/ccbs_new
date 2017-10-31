@@ -82,7 +82,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.OperCode    = ttInput.ReceptorCode
          MNPProcess.StatusCode  = {&MNP_ST_ASOL} 
          MNPProcess.StatusReason = ttInput.StatusReason
-         MNPProcess.UserCode    = katun.
+         MNPProcess.UserCode    = Syst.CUICommon:katun.
      
       FOR EACH ttMultipleMSISDN WHERE 
                ttMultipleMSISDN.portrequest = ttInput.portRequest NO-LOCK:

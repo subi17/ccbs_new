@@ -29,7 +29,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
@@ -39,7 +39,7 @@ Syst.CUICommon:gcBrand = "1".
 {Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhTermReturn AS HANDLE NO-UNDO.
    lhTermReturn = BUFFER TermReturn:HANDLE.
@@ -393,8 +393,8 @@ ELSE DO:
       lcMemoText  = lcResult.
 END.
 
-lcOrigKatun = katun.
-katun =  "VISTA_" + lcSalesman.
+lcOrigSyst.CUICommon:katun = Syst.CUICommon:katun.
+Syst.CUICommon:katun =  "VISTA_" + lcSalesman.
 
 IF llCreateMemo THEN
    Func.Common:mWriteMemo("MobSub",
@@ -403,7 +403,7 @@ IF llCreateMemo THEN
                     lcMemoTitle,
                     lcMemoText).
 
-katun = lcOrigKatun.
+Syst.CUICommon:katun = lcOrigKatun.
 
 RELEASE TermReturn.
 

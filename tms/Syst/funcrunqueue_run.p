@@ -28,7 +28,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.TableName = "FuncRunQSchedule"
              ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
@@ -126,7 +126,7 @@ PROCEDURE pInitialize:
             ActionLog.ActionID     = "FRQUEUE" + STRING(iiFRQueueID)
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionTS     = ldStarted
             ActionLog.ActionChar   = 
                "Scheduling: " + STRING(iiFRQScheduleID) + CHR(10) +

@@ -29,7 +29,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 Syst.CUICommon:gcBrand = "1".
 {Func/penaltyfee.i}
 {Func/orderchk.i}

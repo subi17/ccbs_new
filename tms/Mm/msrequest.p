@@ -31,7 +31,7 @@
 {Mc/lib/tokenchk.i 'MsRequest'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -352,7 +352,7 @@ REPEAT WITH FRAME sel:
               MsRequest.MSSeq    = INPUT FRAME lis MsRequest.MSSeq
               MsRequest.CLI      = MobSub.CLI
               MsRequest.CustNum  = MobSub.CustNum
-              MsRequest.UserCode = katun.
+              MsRequest.UserCode = Syst.CUICommon:katun.
               MsRequest.CreStamp = Func.Common:mMakeTS().
 
            RUN local-UPDATE-record.

@@ -33,7 +33,7 @@ DEFINE TEMP-TABLE ttSubInvoice
        INDEX SubInvRow IS PRIMARY UNIQUE SubInvoice InvRow.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -625,7 +625,7 @@ PROCEDURE pFullCreditNote:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = 11 /* Credit invoice (deduction also credited) */
          OPLog.InvNum    = Invoice.InvNum
          /* OPLog.Voucher */
@@ -646,7 +646,7 @@ PROCEDURE pFullCreditNote:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = 4 /* Credit invoice (deduction also credited) */
          OPLog.InvNum    = Invoice.InvNum
          /* OPLog.Voucher */
@@ -739,7 +739,7 @@ PROCEDURE pFullCreditNote:
       Memo.CustNum   = Invoice.CustNum.
       Memo.Memotext  = Func.Common:mGetHdrText(50,Customer.Language) + " " +
                        STRING(Invoice.InvNum) +  
-                       ". Handler: " + katun  +
+                       ". Handler: " + Syst.CUICommon:katun  +
                        ". Reason Note/Jira : " + bCreditInv.xxmemo[1].
 
    /* customer balances */
@@ -784,7 +784,7 @@ PROCEDURE pFullCreditNote:
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum
-      Memo.Memotext  = "Credited by " + katun +
+      Memo.Memotext  = "Credited by " + Syst.CUICommon:katun +
                        ". Reason Note/Jira: " + Invoice.xxmemo[1].
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice). 

@@ -40,7 +40,7 @@
 {Func/barrfunc.i}
 IF llDoEvent THEN DO:
 
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
   {Func/lib/eventlog.i}
       
@@ -442,7 +442,7 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
       IF NOT ok THEN NEXT.
-      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT katun).
+      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT Syst.CUICommon:katun).
    END. /* ELSE IF FRAME-INDEX = 27 AND noMobile THEN DO: */
 
    /* call specification */

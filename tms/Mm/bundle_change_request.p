@@ -38,7 +38,7 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD CLI      AS CHAR.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -407,7 +407,7 @@ PROCEDURE pMultiSimBTC:
       ActionLog.Brand        = Syst.CUICommon:gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "MultiSIMTermination"
       ActionLog.ActionPeriod = YEAR(idaActivationDate - 1) * 100 +
                                MONTH(idaActivationDate - 1)
@@ -680,7 +680,7 @@ PROCEDURE pUpdateSubscription:
          
       IF llDoEvent THEN fMakeCreateEvent((BUFFER bOwner:HANDLE),
                                          "",
-                                         katun,
+                                         Syst.CUICommon:katun,
                                          "").
 
       RELEASE bOwner.

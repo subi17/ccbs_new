@@ -56,7 +56,7 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mnp/mnpoperation.i}
@@ -75,7 +75,7 @@ END.
 IF MNPOperation.ErrorHandled EQ ({&MNP_ERRORHANDLED_NO}) THEN DO:
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun 
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
       {Func/lib/eventlog.i}
       DEF VAR lhMNPOperation AS HANDLE NO-UNDO.
       lhMNPOperation = BUFFER MNPOperation:HANDLE.

@@ -12,7 +12,7 @@
 {Syst/commpaa.i}
 ASSIGN
    Syst.CUICommon:gcBrand = "1"
-   katun   = "laskutus".
+   Syst.CUICommon:katun   = "laskutus".
 
 {Syst/utumaa.i "new"}
 {Ar/invjournal.i}
@@ -213,7 +213,7 @@ PROCEDURE pPrintReport:
                                   "Period: " +
                                   STRING(idtDate1,"99.99.9999") + "-" +
                                   STRING(idtDate2,"99.99.9999")
-             ErrorLog.UserCode  = katun.
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    

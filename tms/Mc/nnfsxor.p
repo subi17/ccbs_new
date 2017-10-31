@@ -92,7 +92,7 @@ DEF TEMP-TABLE w-acct
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCOde = katun no-lock.
+   FIND TMSUser where TMSUser.UserCOde = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 

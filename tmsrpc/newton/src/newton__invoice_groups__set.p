@@ -68,7 +68,7 @@ lcStruct = validate_request(pcStruct,"default,active,subscriptions,username!,rea
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
-katun = pcUserName. 
+Syst.CUICommon:katun = pcUserName. 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
 pcReason = get_string(pcStruct,"reason").
 IF LOOKUP("default",lcStruct) > 0 THEN 
@@ -189,7 +189,7 @@ DO TRANS:
           Memo.HostTable = "Customer" 
           Memo.KeyValue  = STRING(InvoiceTargetGroup.CustNum) 
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "Invoice Target Group Updates"
           Memo.MemoText  = pcReason
           Memo.CustNum   = InvoiceTargetGroup.CustNum. 

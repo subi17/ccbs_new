@@ -34,7 +34,7 @@ FUNCTION fCreateSolog RETURNS INT
       Solog.CLI          = icCLI
       Solog.Stat         = 0
       Solog.Brand        = Syst.CUICommon:gcBrand 
-      Solog.Users        = katun    
+      Solog.Users        = Syst.CUICommon:katun    
       Solog.MSrequest    = 0
       Solog.CommLine    = STRING(liSolog) + " " + icCommLine 
       Solog.TimeSlotTMS = ldeTime.

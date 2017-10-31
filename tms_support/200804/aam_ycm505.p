@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 
 ASSIGN
-   katun   = "cron"
+   Syst.CUICommon:katun   = "cron"
    Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam.i2}
@@ -182,7 +182,7 @@ PROCEDURE pAdjustBalance:
    CREATE PrePaidRequest.
    ASSIGN
       PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
-      PrePaidRequest.UserCode    = katun
+      PrePaidRequest.UserCode    = Syst.CUICommon:katun
       PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = MobSub.MsSeq
       PrePaidRequest.CLI         = MobSub.CLI
@@ -231,7 +231,7 @@ PROCEDURE pAdjustBalance:
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.CUICommon:katun 
          Memo.MemoTitle = "MINUS ADJUSTMENT"
          Memo.MemoText  = "Deducted " + STRING(-1 * ldAmount) + 
                           " eur according to file " + lcPlainFile +

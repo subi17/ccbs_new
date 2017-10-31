@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 
@@ -27,7 +27,7 @@ CREATE Memo.
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "Deactivate Bundle"
       Memo.MemoText  = "Deactivated MDUB2 bundle manually, since it was activated wrongly"
       Memo.CustNum   = MobSub.CustNum

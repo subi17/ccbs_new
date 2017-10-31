@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Mm/requestaction_exec.i}

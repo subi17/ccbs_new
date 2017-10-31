@@ -37,7 +37,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -157,7 +157,7 @@ FUNCTION fCopy2Failed RETURNS LOGICAL.
           Memo.KeyValue  = STRING(DDAuth.AuthId)
           Memo.CustNum   = 0
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "Failed Authorization"
           Memo.MemoText  = HandMsg.
           Memo.CreStamp  = Func.Common:mMakeTS().
@@ -170,8 +170,8 @@ ASSIGN palvtunn   = fCParamC("DDebitServiceCode")
        /* directory for booking list */
        lcRepDir   = fCParamC("RefPrintDir")
        llRejected = FALSE
-       lcCKatun   = katun
-       katun      = "Bank". 
+       lcCKatun   = Syst.CUICommon:katun
+       Syst.CUICommon:katun      = "Bank". 
 
 
 TIEDOSTO:
@@ -595,7 +595,7 @@ tila = FALSE.
 {Syst/utuloste.i}
 
 /* reset normal user */
-katun = lcCKatun.
+Syst.CUICommon:katun = lcCKatun.
 
 /* clean eventlog */
 fCleanEventObjects().

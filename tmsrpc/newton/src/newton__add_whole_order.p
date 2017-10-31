@@ -247,7 +247,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 {Func/orderchk.i}
 {Func/order.i}
 {Syst/tmsconst.i}
@@ -2537,7 +2537,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
 
    ASSIGN liRequest = 0
           lcError   = ""
-          katun     = Order.SalesMan.
+          Syst.CUICommon:katun     = Order.SalesMan.
 
    liRequest =  fSubscriptionRequest
                    (INPUT  Order.MSSeq,
@@ -2571,7 +2571,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                        Order.OrderChannel).
    END. /* ELSE DO: */
 
-   katun = "NewtonRPC".
+   Syst.CUICommon:katun = "NewtonRPC".
 
 END. /* IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" */
  
@@ -2676,7 +2676,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 END.
       
 /* YTS-2890 */
-fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.CUICommon:katun,"").
 fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 

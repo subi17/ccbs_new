@@ -10,7 +10,7 @@ DEF VAR lhBuff             AS HANDLE NO-UNDO.
 DEF VAR lcError            AS CHAR NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
 END.
 

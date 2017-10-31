@@ -1461,7 +1461,7 @@ PROCEDURE pMarkPrinted:
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
                 ITSendLog.SendInfo   = icPrintHouse
-                ITSendLog.UserCode   = katun
+                ITSendLog.UserCode   = Syst.CUICommon:katun
                 ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
@@ -1510,7 +1510,7 @@ PROCEDURE pErrorFile:
                                      THEN ttError.KeyValue
                                      ELSE ttError.Inv
                 ErrorLog.ActionTS  = ldCurrStamp
-                ErrorLog.UserCode  = katun
+                ErrorLog.UserCode  = Syst.CUICommon:katun
                 ErrorLog.ErrorMsg  = ttError.ErrMsg.
       END.          
    END.

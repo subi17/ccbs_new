@@ -83,7 +83,7 @@ for each token no-lock:
      wToken.AdminToken = Token.AdminToken.
 end.
 
-llAdminUser = fIsAdminUser(katun).
+llAdminUser = fIsAdminUser(Syst.CUICommon:katun).
 
 FIND FIRST wtoken no-lock.
 ASSIGN

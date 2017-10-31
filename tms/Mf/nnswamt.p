@@ -54,7 +54,7 @@ with centered width 80 no-label title " calls per exchange " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    fname = TMSUser.RepDir + "/callamt.txt".
 END.
 

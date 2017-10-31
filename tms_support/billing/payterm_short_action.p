@@ -22,7 +22,7 @@
 
 {Syst/commpaa.i}
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "Qvantel".
+       Syst.CUICommon:katun   = "Qvantel".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE ldaBegin AS DATE NO-UNDO.

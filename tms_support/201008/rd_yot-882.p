@@ -8,7 +8,7 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO "yot-882.log".
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
+Syst.CUICommon:katun = "rafaeldv".
 Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 

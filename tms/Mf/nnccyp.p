@@ -39,7 +39,7 @@ def var whitelist  as c  no-undo format "x(40)".
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    whitelist = TMSUser.RepDir + "/".
 END.
 

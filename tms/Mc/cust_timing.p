@@ -26,7 +26,7 @@ END.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -286,7 +286,7 @@ ACTION:
          ASSIGN
            eventlog.eventdate      = TODAY                      
            eventlog.eventtime      = STRING(TIME,"HH:MM:SS")
-           eventlog.usercode       = Katun
+           eventlog.usercode       = Syst.CUICommon:katun
            eventlog.action         = 'Timing'.
          ASSIGN
             eventlog.KEY            = String(Customer.custnum)

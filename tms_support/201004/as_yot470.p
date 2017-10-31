@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 /*
 RUN tapfilecr("",TODAY - 7,TODAY - 7,"",FALSE).

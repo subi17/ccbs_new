@@ -153,7 +153,7 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {Func/femailinvoice.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -1079,7 +1079,7 @@ repeat WITH FRAME sel:
            ASSIGN
               Customer.ChgStamp = Func.Common:mMakeTS()
               Customer.Brand    = lcBrand 
-              Customer.CreUser  = katun
+              Customer.CreUser  = Syst.CUICommon:katun
               Customer.CreDate  = TODAY  
               Customer.CustNum  = INPUT FRAME lis Customer.CustNum
               Customer.InvCust  = Customer.CustNum 
@@ -2410,7 +2410,7 @@ PROCEDURE local-update-fin:
                   liRequest = fEmailInvoiceRequest(
                                        INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.CUICommon:katun,
                                        INPUT 0,
                                        INPUT "",
                                        INPUT Customer.CustNum,
@@ -2478,7 +2478,7 @@ PROCEDURE local-update-fin:
                   Memo.HostTable = "Customer"
                   Memo.KeyValue  = STRING(Customer.CustNum)
                   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                  Memo.CreUser   = katun
+                  Memo.CreUser   = Syst.CUICommon:katun
                   Memo.MemoTitle = "Cambio de cuenta"
                   Memo.MemoText  = "Solicitado por el cliente: Nº de " +
                                    "cuenta: " + Customer.BankAcc + " --> " +

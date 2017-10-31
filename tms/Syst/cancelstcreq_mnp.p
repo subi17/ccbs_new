@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "cron".
+Syst.CUICommon:katun = "cron".
 Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}

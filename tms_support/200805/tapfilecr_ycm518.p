@@ -18,7 +18,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 DEFINE TEMP-TABLE ttRoamCDR LIKE RoamCDR.
 DEFINE TEMP-TABLE ttRoamGPRS LIKE RoamGPRS.
 {/apps/snet/200805/roamtariff2.i}

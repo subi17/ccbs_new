@@ -14,7 +14,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
@@ -73,7 +73,7 @@ FUNCTION fError RETURNS LOGIC
              ErrorLog.TableName = "Customer"
              ErrorLog.KeyValue  = STRING(liCustNum)
              ErrorLog.ActionTS  = ldCurrStamp
-             ErrorLog.UserCode  = katun
+             ErrorLog.UserCode  = Syst.CUICommon:katun
              ErrorLog.ErrorMsg  = icMessage + CHR(10) +
                                   "New bank account: " + lcNewBank.
    END.
@@ -266,7 +266,7 @@ PROCEDURE pFinalize:
                                         " errors occurred"
                                    ELSE "")
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun.
+         ActionLog.UserCode     = Syst.CUICommon:katun.
          ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 

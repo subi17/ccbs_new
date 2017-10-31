@@ -22,7 +22,7 @@
 {Func/fuserright.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -670,7 +670,7 @@ IF icAction NE "view" THEN DO:
       
       /* 'superuser' can skip some rules */
       IF RETURN-VALUE BEGINS "CHECK" AND
-         fTokenRights(katun,"CCSUPER") = "RW"
+         fTokenRights(Syst.CUICommon:katun,"CCSUPER") = "RW"
       THEN DO:
          llOk = FALSE.
          MESSAGE lcError SKIP

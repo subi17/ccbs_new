@@ -202,7 +202,7 @@ DEF TEMP-TABLE ttInv  NO-UNDO
    
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
       
@@ -1194,7 +1194,7 @@ repeat:
                 ITSendLog.SendMethod = 4
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
-                ITSendLog.UserCode   = katun.
+                ITSendLog.UserCode   = Syst.CUICommon:katun.
                 ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  

@@ -305,7 +305,7 @@ ACTION:
                     INPUT  Mobsub.Cli,
                     INPUT  Mobsub.CustNum,
                     INPUT  1,
-                    INPUT  katun,
+                    INPUT  Syst.CUICommon:katun,
                     INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  new-icc,

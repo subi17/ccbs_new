@@ -59,7 +59,7 @@ tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT icCDRType,
                INPUT Syst.CUICommon:gcBrand,
-               INPUT katun,
+               INPUT Syst.CUICommon:katun,
                INPUT dtStartDate,
                INPUT dtEndDate,
                INPUT liCustNum,

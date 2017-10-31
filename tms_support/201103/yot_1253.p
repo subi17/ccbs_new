@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun  = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -7,7 +7,7 @@ Syst.CUICommon:gcBrand = "1".
 {Mnp/mnp.i}
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
       {Func/lib/eventlog.i}
 END.
@@ -93,7 +93,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
             ActionLog.Brand        = Syst.CUICommon:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = "SIMRELEASE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 2

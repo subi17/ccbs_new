@@ -211,7 +211,7 @@ FOR EACH ttPaym,
    lcNewLine.
 
    ASSIGN Payment.ExpStamp = ldTime
-          Payment.ExpUser  = katun
+          Payment.ExpUser  = Syst.CUICommon:katun
           Payment.PaymFile = STRING(liBatch)
           oiDone           = oiDone + 1
           ldTotal          = ldTotal + ttPaym.Amt.

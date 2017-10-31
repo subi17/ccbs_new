@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "cron".
+Syst.CUICommon:katun = "cron".
 
 {Syst/eventlog.i}
 {Func/direct_dbconnect.i}

@@ -106,7 +106,7 @@
 {Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -428,7 +428,7 @@ FUNCTION fInvoiceCopyFee RETURNS LOGICAL.
                   ?,
                  "",
                  TRUE,
-                 katun,
+                 Syst.CUICommon:katun,
                  "",
                  0,
                  "",
@@ -1292,7 +1292,7 @@ PROCEDURE pCancellation.
                    ClaimHist.Memo       = "Claiming cancelled"
                    ClaimHist.ClaimDate  = TODAY
                    ClaimHist.ClaimAmt   = Invoice.InvAmt - Invoice.PaidAmt
-                   ClaimHist.Handler    = katun.
+                   ClaimHist.Handler    = Syst.CUICommon:katun.
                
             MESSAGE "Claiming cancelled!" VIEW-AS ALERT-BOX.
             liClaimCancel = 0.

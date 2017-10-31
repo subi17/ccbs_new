@@ -205,7 +205,7 @@ FUNCTION fCopyDefFatime RETURNS LOGICAL
          FATime.LastPeriod = fFATLastPeriod(FATime.Period,
                                             FatGroup.ValidPeriods).
  
-      fMakeCreateEvent(lhTable,"FtGrp,FatNum",katun,"").
+      fMakeCreateEvent(lhTable,"FtGrp,FatNum",Syst.CUICommon:katun,"").
             
       RELEASE Fatime.
       
@@ -299,7 +299,7 @@ FUNCTION fCreateFatime RETURNS LOGICAL
       FATime.LastPeriod = fFATLastPeriod(FATime.Period,
                                          FatGroup.ValidPeriods).
     
-   fMakeCreateEvent(lhTable,"FtGrp,FatNum",katun,"").
+   fMakeCreateEvent(lhTable,"FtGrp,FatNum",Syst.CUICommon:katun,"").
 
    RELEASE Fatime.
    
@@ -517,7 +517,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
             FATime.LastPeriod = fFATLastPeriod(FATime.Period,
                                                FatGroup.ValidPeriods).
            
-         fMakeCreateEvent(lhTable,"FtGrp,FatNum",katun,"").
+         fMakeCreateEvent(lhTable,"FtGrp,FatNum",Syst.CUICommon:katun,"").
          
          RELEASE Fatime.
       END.

@@ -29,7 +29,7 @@ DEF VAR liInvType     AS INT  NO-UNDO.
 
 
 IF llDoEvent THEN DO FOR SingleFee:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
       
@@ -275,7 +275,7 @@ PROCEDURE pCreateCustomer:
    IF AVAILABLE Customer THEN DO:
       
       ASSIGN Customer.ChgStamp   = Func.Common:mMakeTS()
-             Customer.CreUser    = katun
+             Customer.CreUser    = Syst.CUICommon:katun
              Customer.InvCust    = Customer.CustNum
              Customer.PaymCust   = Customer.CustNum
              Customer.RepCust    = Customer.CustNum

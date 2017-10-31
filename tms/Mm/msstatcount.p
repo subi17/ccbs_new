@@ -2,7 +2,7 @@
 {Func/cparam2.i}
 
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "batch".
+       Syst.CUICommon:katun   = "batch".
 
 DEFINE STREAM osDump.
 DEFINE TEMP-TABLE ttMStat NO-UNDO

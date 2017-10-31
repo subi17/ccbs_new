@@ -44,7 +44,7 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF NUM-ENTRIES(lcStruct) <= 1 THEN RETURN appl_err("Rule condition is missing").
 
-katun = pcUsername.
+Syst.CUICommon:katun = pcUsername.
 
 {newton/src/settenant.i pcTenant}
 
@@ -112,7 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 CREATE MNPRetentionRule.
 BUFFER-COPY ttMNPRetentionRule TO MNPRetentionRule.
 
-IF llDoEvent THEN fMakeCreateEvent((BUFFER MNPRetentionRule:HANDLE),"",katun,"").
+IF llDoEvent THEN fMakeCreateEvent((BUFFER MNPRetentionRule:HANDLE),"",Syst.CUICommon:katun,"").
 
 RELEASE MNPRetentionRule.
 

@@ -149,12 +149,12 @@ PROCEDURE pServerResponse:
 
    IF llRC = FALSE OR ERROR-STATUS:GET-MESSAGE(1) <> '' THEN DO:
       IF NOT SESSION:BATCH THEN DO:
-         IF katun EQ "Service" OR
-            katun EQ "PerCont" OR
-            katun EQ "STC" OR
-            katun EQ "CreFixed" OR
-            katun EQ "CreSub" OR
-            katun EQ "request" THEN
+         IF Syst.CUICommon:katun EQ "Service" OR
+            Syst.CUICommon:katun EQ "PerCont" OR
+            Syst.CUICommon:katun EQ "STC" OR
+            Syst.CUICommon:katun EQ "CreFixed" OR
+            Syst.CUICommon:katun EQ "CreSub" OR
+            Syst.CUICommon:katun EQ "request" THEN
             fLogError(SUBST("TCPGWY: Unable to read response: &1, &2",
                       llRC, ERROR-STATUS:GET-MESSAGE(1))).
          ELSE MESSAGE llRC ERROR-STATUS:GET-MESSAGE(1) VIEW-AS ALERT-BOX.

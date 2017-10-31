@@ -82,10 +82,10 @@ END.
 IF FMItem.Amount >= 0 THEN llNegative = FALSE.  ELSE llNegative = TRUE.
 
  /* fetch user limits for charge and compensation */
-ldChargeLimit = fUserLimitAmt(katun, (IF Mobsub.PayType = TRUE
+ldChargeLimit = fUserLimitAmt(Syst.CUICommon:katun, (IF Mobsub.PayType = TRUE
                       THEN {&PREP_CHARGE_LIMIT_TYPE}
                       ELSE {&POST_CHARGE_LIMIT_TYPE})).
-ldChargeMonthLimit = fUserLimitAmt(katun, (IF Mobsub.PayType = TRUE
+ldChargeMonthLimit = fUserLimitAmt(Syst.CUICommon:katun, (IF Mobsub.PayType = TRUE
                         THEN {&PREP_CHARGE_MONTHLY_LIMIT_TYPE}
                         ELSE {&POST_CHARGE_MONTHLY_LIMIT_TYPE})).
 

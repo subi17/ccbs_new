@@ -40,7 +40,7 @@
 
 {Syst/commpaa.i} 
 Syst.CUICommon:gcBrand = "1".
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 {Func/tmsparam2.i}
 {Inv/billrund.i NEW}
 {Func/faccper.i}

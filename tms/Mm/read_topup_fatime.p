@@ -4,7 +4,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 {Func/ftaxdata.i}
 {Func/ftopup.i}

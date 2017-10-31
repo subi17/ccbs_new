@@ -47,7 +47,7 @@
 {Func/cparam2.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -562,7 +562,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                       ClaimHist.Memo       = "Claiming cancelled"
                       ClaimHist.ClaimDate  = TODAY
                       ClaimHist.ClaimAmt   = Invoice.InvAmt - Invoice.PaidAmt
-                      ClaimHist.Handler    = katun.
+                      ClaimHist.Handler    = Syst.CUICommon:katun.
             END.
          END. 
 

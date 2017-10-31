@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def buffer breq    for msrequest.
 def buffer bupdreq for msrequest.

@@ -252,7 +252,7 @@ IF llPDFPrint THEN DO:
    
    /* mail to user */
    IF iiMail = 2 THEN DO:
-      FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+      FIND TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
       IF AVAILABLE TMSUser THEN lcMailAddr = TMSUser.EMail.
    END. 
       

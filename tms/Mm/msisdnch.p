@@ -354,7 +354,7 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  Mobsub.Cli,
                     INPUT  Mobsub.CustNum,
                     INPUT  liStatusCode,
-                    INPUT  katun,
+                    INPUT  Syst.CUICommon:katun,
                     INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEMSISDN",
                     INPUT  new-cli,

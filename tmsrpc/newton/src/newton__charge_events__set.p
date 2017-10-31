@@ -93,7 +93,7 @@ END.
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:

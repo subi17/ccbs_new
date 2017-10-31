@@ -80,10 +80,10 @@ END.
 
 {Syst/commpaa.i}
 {Syst/eventval.i}
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 Syst.CUICommon:gcBrand = "1".
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
 END.
 
 {Func/flimitreq.i}
@@ -234,7 +234,7 @@ ELSE lcDCEventType = "TERM".
                              STRING(pdaTermContractValidTo), /* field values */
                              FALSE, /* create fees */
                              {&REQUEST_SOURCE_NEWTON} , /* where created */
-                             katun, /* who made the request */
+                             Syst.CUICommon:katun, /* who made the request */
                              lcInfo).
    IF liReq = 0 THEN DO:
         RETURN appl_err("Request to update terminal periodical contract end date: " + lcInfo).

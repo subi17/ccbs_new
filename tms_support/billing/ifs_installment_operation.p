@@ -25,7 +25,7 @@ DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 */
 
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}

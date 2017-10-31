@@ -7,7 +7,7 @@
   VERSION ......: M15
  ---------------------------------------------------------------------- */
 
-DEF OUTPUT PARAMETER katun AS C  NO-UNDO.
+DEF OUTPUT PARAMETER Syst.CUICommon:katun AS C  NO-UNDO.
 
 DEF VAR whoami AS C NO-UNDO.
 
@@ -23,9 +23,9 @@ IF OPSYS = "unix" THEN DO:
    whoami = ENTRY(1,whoami," ").
 
    /* special case: susbtitute UNIX login IF root OR starnet */
-   IF LOOKUP(whoami,"root,starnet") > 0 THEN katun = "eka".
-   ELSE katun = whoami.
+   IF LOOKUP(whoami,"root,starnet") > 0 THEN Syst.CUICommon:katun = "eka".
+   ELSE Syst.CUICommon:katun = whoami.
 END.
-ELSE katun = "".   
+ELSE Syst.CUICommon:katun = "".   
 
 

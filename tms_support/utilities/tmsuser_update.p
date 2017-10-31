@@ -12,7 +12,7 @@ DEFINE VARIABLE lcLine                  AS CHARACTER NO-UNDO.
 DEFINE BUFFER bTMSPass FOR TMSPass.
 
 {Syst/commpaa.i}
-katun = pcUser.
+Syst.CUICommon:katun = pcUser.
 {Func/cparam2.i}
 Syst.CUICommon:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
@@ -140,7 +140,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = katun
+         tmspass.creator  = Syst.CUICommon:katun
          tmspass.createts = ldeTS.
 
       IF lcTemp NE "" THEN DO:

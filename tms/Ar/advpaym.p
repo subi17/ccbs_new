@@ -22,7 +22,7 @@ DEF INPUT  PARAMETER icMemo      AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiVoucher   AS INT  NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
@@ -134,7 +134,7 @@ DO TRANS:
              Memo.KeyValue  = STRING(Payment.Voucher)
              Memo.CustNum   = Payment.CustNum
              Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-             Memo.CreUser   = katun 
+             Memo.CreUser   = Syst.CUICommon:katun 
              Memo.MemoTitle = lcTitle
              Memo.MemoText  = icMemo
              Memo.CreStamp  = ldCurrStamp.
@@ -155,7 +155,7 @@ DO TRANS:
    CREATE OPLog.
    ASSIGN OPLog.CustNum   = Customer.CustNum
           OPLog.EventDate = idtPaymDate
-          OPLog.UserCode  = katun
+          OPLog.UserCode  = Syst.CUICommon:katun
           OPLog.EventType = iiEventType      
           OPLog.InvNum    = 0
           OPLog.Voucher   = oiVoucher

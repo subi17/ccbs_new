@@ -2,7 +2,7 @@
 {Func/cparam2.i}
 
 ASSIGN Syst.CUICommon:gcBrand = "1"
-       katun   = "batch".
+       Syst.CUICommon:katun   = "batch".
 
 DEF VAR lcSpoolPath      AS CHAR NO-UNDO.
        ASSIGN

@@ -40,7 +40,7 @@ DEF WORKFILE worder
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUSer:
-   FIND TMSUSer where TMSUSer.UserCode = katun no-lock.
+   FIND TMSUSer where TMSUSer.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUSer.RepDir.
 END.
 

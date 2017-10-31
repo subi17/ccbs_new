@@ -23,7 +23,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Newton".
+Syst.CUICommon:katun = "Newton".
 
 {Func/fbankdata.i}
 {Func/fctchange.i}
@@ -121,17 +121,17 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF plExtendContract AND plExcludeTermPenalty THEN
    RETURN appl_err("Both 'Contract extension' and 'Penalty exemption' requested").
    
-katun = "VISTA_" + pcSalesman.
+Syst.CUICommon:katun = "VISTA_" + pcSalesman.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 FIND mobsub NO-LOCK WHERE
      mobsub.cli = pcMSISDN NO-ERROR.
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", pcMSISDN)).
 
-/* Set the katun to check correct barring */
-katun = "NewtonAd".
+/* Set the Syst.CUICommon:katun to check correct barring */
+Syst.CUICommon:katun = "NewtonAd".
 
 /* Various validations */
 IF fValidateMobTypeCh(
@@ -152,8 +152,8 @@ IF fValidateMobTypeCh(
      RETURN appl_err("Pro customer validation error: " + lcProValidation).
 
 
-/* Set the katun again with original username */
-katun = "VISTA_" + pcSalesman.
+/* Set the Syst.CUICommon:katun again with original username */
+Syst.CUICommon:katun = "VISTA_" + pcSalesman.
 
 IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
                        INPUT plByPass, OUTPUT lcError) NE 0
@@ -230,7 +230,7 @@ IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
       Memo.HostTable = "MobSub"
       Memo.KeyValue  = STRING(MobSub.MsSeq)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.MemoTitle = pcMemoTitle
       Memo.MemoText  = pcMemoContent
       Memo.CustNum   = MobSub.CustNum

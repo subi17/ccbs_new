@@ -50,7 +50,7 @@ lcStruct = validate_request(pcStruct,"itemizations,delivery_channel,invoice_targ
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 lcMemo = "Agent" + CHR(255) + "VISTA".
 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
@@ -85,7 +85,7 @@ IF pcInvoiceGrouping NE "" AND
    RETURN appl_err(SUBST("Unsupported invoice_target value &1", pcInvoiceGrouping)).
 
 {Syst/eventval.i}
-&GLOBAL-DEFINE STAR_EVENT_USER katun   
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun   
 {Func/lib/eventlog.i}
 DEF VAR lhCustomer AS HANDLE NO-UNDO. 
 lhCustomer = BUFFER Customer:HANDLE.
@@ -104,7 +104,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
          an email to customer to activate the email service */
       liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.CUICommon:katun,
                                        INPUT 0,
                                        INPUT "",
                                        INPUT Customer.Custnum,
@@ -253,7 +253,7 @@ IF pcReason NE '' AND llUpdate THEN DO:
        Memo.HostTable = "Customer" 
        Memo.KeyValue  = STRING(piCustNum) 
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun 
+       Memo.CreUser   = Syst.CUICommon:katun 
        Memo.MemoTitle = "Update Deliverables"
        Memo.MemoText  = pcReason
        Memo.CustNum   = piCustNum. 

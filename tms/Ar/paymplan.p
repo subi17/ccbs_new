@@ -24,7 +24,7 @@
 {Func/fppinv.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -1655,7 +1655,7 @@ PROCEDURE local-UPDATE-record:
                                            ?,
                                            "",          /* memo */
                                            TRUE,        /* messages to screen */
-                                           katun,
+                                           Syst.CUICommon:katun,
                                            "",
                                            0,
                                            "",
@@ -1722,7 +1722,7 @@ PROCEDURE local-UPDATE-record:
                       Memo.KeyValue  = STRING(PaymPlan.PPlanID)
                       Memo.CustNum   = PaymPlan.CustNum
                       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                      Memo.CreUser   = katun 
+                      Memo.CreUser   = Syst.CUICommon:katun 
                       Memo.MemoTitle = "Plan Cancelled"
                       Memo.MemoText  = lcCancelTxt.
                       Memo.CreStamp  = Func.Common:mMakeTS().

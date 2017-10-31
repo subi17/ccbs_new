@@ -668,7 +668,7 @@ REPEAT WITH FRAME Main:
             ActionLog.Brand        = Syst.CUICommon:gcBrand   
             ActionLog.TableName    = "SIMBatch"  
             ActionLog.KeyValue     = STRING(isimBatch)
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = "SIMFILE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionChar   = "Totally " + STRING(tot) +

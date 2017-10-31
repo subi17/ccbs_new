@@ -160,7 +160,7 @@ repeat with frame menu_frame:
 
      assign first_time = false Syst.CUICommon:si-pvm = TODAY.
 
-     find TmsUser where TmsUser.UserCode = katun no-lock.
+     find TmsUser where TmsUser.UserCode = Syst.CUICommon:katun no-lock.
 
      /* set user's default menu level */
      if TmsUser.StartMenu ne "" then do:
@@ -354,7 +354,7 @@ ACTION: repeat:
 
          if mlevel = 1 then do:
             OK = false.
-            message " USER <" + katun + 
+            message " USER <" + Syst.CUICommon:katun + 
                     ">: Are You sure you want to log out?" 
             VIEW-AS ALERT-BOX
             BUTTONS YES-NO 

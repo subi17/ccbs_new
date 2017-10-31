@@ -29,7 +29,7 @@ IF NOT AVAIL TMSCodes THEN
     RETURN appl_err(SUBST("Unknown status code: &1", piBillingPermission)).
 
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}

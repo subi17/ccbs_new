@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 {Func/fdss.i}
 {Func/barrfunc.i}
 
@@ -67,7 +67,7 @@ for each mobsub no-lock where mobsub.paytype = false:
                 MobSub.MsSeq,
                 "UNY_REST",
                 "5",
-                katun,
+                Syst.CUICommon:katun,
                 Func.Common:mMakeTS(),
                 "",
                 OUTPUT lcStatus).

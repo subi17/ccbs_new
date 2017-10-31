@@ -9,7 +9,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
-katun = "MNPAnalyse".
+Syst.CUICommon:katun = "MNPAnalyse".
 Syst.CUICommon:gcBrand = "1".
 
 {Func/barrfunc.i}

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "cron".
+Syst.CUICommon:katun = "cron".
 Syst.CUICommon:gcBrand = "1".
 
 def var ldtdate as date no-undo.

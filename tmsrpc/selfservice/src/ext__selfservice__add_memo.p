@@ -49,7 +49,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = fgetAppUserId(INPUT lcApplicationId,
+Syst.CUICommon:katun = fgetAppUserId(INPUT lcApplicationId,
                       INPUT lcAppEndUserId).
 
 IF pcSalesman EQ "" THEN 

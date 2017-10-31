@@ -208,7 +208,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
    IF llExist THEN DO:
       
       /* web-user can cancel his own request */
-      IF katun BEGINS "WEB" THEN DO:
+      IF Syst.CUICommon:katun BEGINS "WEB" THEN DO:
          IF icParam = "" THEN DO:
             IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0
             THEN FIND FIRST bCreaReq NO-LOCK WHERE
@@ -268,7 +268,7 @@ FUNCTION fCreateRequest RETURNS LOGICAL
    ASSIGN bCreaReq.MsRequest  = NEXT-VALUE(MsRequest)
           bCreaReq.ReqType    = iiReqType
           bCreaReq.Brand      = Syst.CUICommon:gcBrand
-          bCreaReq.UserCode   = (katun + (IF icCreator > ""
+          bCreaReq.UserCode   = (Syst.CUICommon:katun + (IF icCreator > ""
                                          THEN " / " + icCreator 
                                          ELSE ""))
           bCreaReq.ActStamp   = idChgStamp

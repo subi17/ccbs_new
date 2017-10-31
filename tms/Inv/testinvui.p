@@ -357,7 +357,7 @@ toimi:
    END. /* Syst.CUICommon:toimi */
 
 HIDE FRAME lCustNum no-pause.
-fLog("Customer based (lamu3) started  (brand " + Syst.CUICommon:gcBrand + ")",katun).
+fLog("Customer based (lamu3) started  (brand " + Syst.CUICommon:gcBrand + ")", Syst.CUICommon:katun).
 
 ASSIGN ldBegTime = Func.Common:mMakeTS()
        liCustQty = 0.
@@ -404,7 +404,7 @@ IF useFile THEN DO:
 
    END. /* IF SEARCH(lcTestInvInputFile) <> ? THEN DO: */
    ELSE DO:
-      fLog("Problem with CUSTOMER list file (not found?)",katun).
+      fLog("Problem with CUSTOMER list file (not found?)", Syst.CUICommon:katun).
 
    END.
    MESSAGE "Sorting customers and Calls, using predefined CUSTOMER list ".
@@ -532,7 +532,7 @@ ldEndTime = Func.Common:mMakeTS().
 
 
 fLog("Invoice Testing Customer based (testinvui/lamu3) " +
-   "finished (brand " + Syst.CUICommon:gcBrand + ") ",katun).
+   "finished (brand " + Syst.CUICommon:gcBrand + ") ", Syst.CUICommon:katun).
 
 ok = TRUE.
 

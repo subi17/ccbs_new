@@ -40,7 +40,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 19 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -167,7 +167,7 @@ PROCEDURE pChangeMSISDN:
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
@@ -203,7 +203,7 @@ PROCEDURE pChangeMSISDN:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = liLogType 
          OPLog.InvNum    = 0
          OPLog.Voucher   = 0
@@ -220,7 +220,7 @@ PROCEDURE pChangeMSISDN:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = liLogType
          OPLog.InvNum    = 0
          OPLog.Voucher   = 0
@@ -266,7 +266,7 @@ PROCEDURE pChangeMSISDN:
             Memo.HostTable = "MobSub"                
             Memo.KeyValue  = STRING(DCCLI.MsSeq)     
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.CUICommon:katun 
          Memo.Memotitle = "Per.Contract Msisdn Changed" 
          Memo.MemoText  = "Periodical contract msisdn was changed due to " +
                           "subscription msisdn change.".

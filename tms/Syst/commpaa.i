@@ -6,11 +6,6 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-/* otsikoissa näkyvät */
-def new shared var katun   as char format "x(8)".
-
-/* ufkey.p:n tarvitsemat */
-
 on f1 go.
 on f2 BELL.
 on f4 BELL.
@@ -26,4 +21,3 @@ on f21 HELP.
 status INPUT off.
 
 &ENDIF
-

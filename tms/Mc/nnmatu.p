@@ -88,7 +88,7 @@ repeat WITH FRAME rajat:
    WITH FRAME rajat.
 
    IF excel THEN DO:
-      FIND FIRST TMSUser where TMSUser.UserCode = katun no-lock no-error.
+      FIND FIRST TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock no-error.
       assign exPaymFile = TMSUser.RepDir + "/" + "country.txt".
       UPDATE exPaymFile WITH FRAME rajat.
       OUTPUT STREAM excel TO value(exPaymFile).

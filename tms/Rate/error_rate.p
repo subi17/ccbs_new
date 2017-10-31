@@ -28,7 +28,7 @@ IF bbatch THEN ASSIGN
 fFillTT().
 
 liRerateSeq = fRerateLogStart (
-   katun,
+   Syst.CUICommon:katun,
    ?,
    ?,
    "", /* cli */

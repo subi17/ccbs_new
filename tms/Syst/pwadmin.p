@@ -54,7 +54,7 @@ lcPassword = "".
 
 UPDATE lcUsercode lcPassword WITH FRAME loginFrame.
 
-IF lcUsercode NE katun THEN DO:
+IF lcUsercode NE Syst.CUICommon:katun THEN DO:
    MESSAGE "ACCESS DENIED!" VIEW-AS ALERT-BOX ERROR.
    RETURN.
 END.
@@ -145,7 +145,7 @@ REPEAT:
             FIND CURRENT tmspass EXCLUSIVE-LOCK.
             ASSIGN
                tmspass.createts = Func.Common:mMakeTS()
-               tmspass.creator  = katun
+               tmspass.creator  = Syst.CUICommon:katun
                tmspass.password = lcNewPasswd1.
             RELEASE tmspass. 
             MESSAGE "Password changed! User must change it on first login."

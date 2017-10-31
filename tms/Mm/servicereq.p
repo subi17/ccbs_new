@@ -325,7 +325,7 @@ PROCEDURE pServCompUpdate:
          RUN Mm/barrengine.p(MobSub.MsSeq,
                           "#REFRESH",
                           {&REQUEST_SOURCE_SERVICE_CHANGE},
-                          katun,               /* creator */
+                          Syst.CUICommon:katun,               /* creator */
                           Func.Common:mMakeTS(),           /* activate */
                           "",                  /* sms */
                           OUTPUT lcError).
@@ -664,7 +664,7 @@ PROCEDURE pServCompUpdate:
                         ?,
                         "",
                         FALSE,
-                        katun,
+                        Syst.CUICommon:katun,
                         "",
                         0,
                         "",

@@ -23,7 +23,7 @@ DEF VAR liDeliveryType  AS INT  NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId. 
+   Syst.CUICommon:katun = "IVR_" + ghAuthLog::EndUserId. 
    Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 

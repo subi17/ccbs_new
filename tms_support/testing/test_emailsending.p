@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:katun = "NewtonRPC".
 
 DEF VAR lcErrFile AS CHAR NO-UNDO.
 

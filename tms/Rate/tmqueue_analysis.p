@@ -12,7 +12,7 @@
 {Syst/commpaa.i}
 ASSIGN
    Syst.CUICommon:gcBrand = "1"
-   katun   = "Cron".
+   Syst.CUICommon:katun   = "Cron".
    
 {Func/cparam2.i}
 {Func/heartbeat.i}
@@ -125,7 +125,7 @@ FUNCTION fErrorLog RETURNS LOGIC
           ErrorLog.KeyValue  = STRING(iiCustnum)
           ErrorLog.ErrorChar = icCLI
           ErrorLog.ErrorMsg  = icError
-          ErrorLog.UserCode  = katun.
+          ErrorLog.UserCode  = Syst.CUICommon:katun.
           ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.

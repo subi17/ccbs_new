@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun = "YTC-161".
+Syst.CUICommon:katun = "YTC-161".
 {Func/msreqfunc.i}
 
 def stream loki.

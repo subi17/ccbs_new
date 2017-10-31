@@ -32,7 +32,7 @@ pcStruct   = get_struct(param_toplevel_id, "1").
 
 lcstruct = validate_struct(pcStruct,"limit,username!,activationlimit").
 pcUsername = "VISTA_" + get_string(pcStruct, "username").
-katun = pcUsername.
+Syst.CUICommon:katun = pcUsername.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

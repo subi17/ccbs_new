@@ -199,7 +199,7 @@ FOR EACH InvGroup NO-LOCK WHERE
      
     fMobCDRCollect(INPUT "post",
                    INPUT Syst.CUICommon:gcBrand,
-                   INPUT katun,
+                   INPUT Syst.CUICommon:katun,
                    INPUT idtDate1,
                    INPUT idtDate2,
                    INPUT 0,

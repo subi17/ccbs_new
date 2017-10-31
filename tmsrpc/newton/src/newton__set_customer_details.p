@@ -112,7 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
-katun = "VISTA_" + scUser.
+Syst.CUICommon:katun = "VISTA_" + scUser.
 
 /* Local variables */
 DEF VAR lcstruct AS CHAR NO-UNDO.
@@ -496,7 +496,7 @@ IF llCustomerChanged THEN DO:
 
           liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                            INPUT TODAY,
-                                           INPUT katun,
+                                           INPUT Syst.CUICommon:katun,
                                            INPUT 0, /* msseq */
                                            INPUT "", /* cli */
                                            INPUT Customer.CustNum,
@@ -532,7 +532,7 @@ IF llCustomerChanged THEN DO:
 
              liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                               INPUT TODAY,
-                                              INPUT katun,
+                                              INPUT Syst.CUICommon:katun,
                                               INPUT 0, /* msseq */
                                               INPUT "", /* cli */
                                               INPUT Customer.CustNum,
@@ -677,7 +677,7 @@ IF pcMemoTitle NE "" OR
        Memo.HostTable = lcMemoHostTable
        Memo.KeyValue  = STRING(Customer.Custnum)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.CustNum   = Customer.Custnum.
    IF llBankAcctChange THEN
       ASSIGN

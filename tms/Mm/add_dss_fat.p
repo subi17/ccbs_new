@@ -10,7 +10,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun   = "CRON".
+Syst.CUICommon:katun = "CRON".
 {Func/cparam2.i}
 {Func/fdss.i}
 {Func/fcpfat.i}

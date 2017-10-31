@@ -2,7 +2,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-katun = "cron"
+Syst.CUICommon:katun = "cron"
 Syst.CUICommon:gcBrand = "1".
 DEF VAR resp_array AS CHARACTER NO-UNDO.
 DEF VAR resp_struct AS CHARACTER NO-UNDO.

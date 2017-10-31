@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun  = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 DEFINE VARIABLE lcCharValue AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE ldAmount AS DECIMAL NO-UNDO. 

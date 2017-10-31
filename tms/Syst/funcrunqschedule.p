@@ -14,7 +14,7 @@
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -921,7 +921,7 @@ PROCEDURE pUpdateStatus:
                ErrorLog.TableName = "FuncRunQSchedule"
                ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
                ErrorLog.ErrorMsg  = "Queue run stopped manually"
-               ErrorLog.UserCode  = katun.
+               ErrorLog.UserCode  = Syst.CUICommon:katun.
                ErrorLog.ActionTS  = Func.Common:mMakeTS().
 
             FIND FIRST ActionLog WHERE

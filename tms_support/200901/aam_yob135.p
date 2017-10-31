@@ -1,6 +1,6 @@
 {Syst/testpaa.i}
 
-&GLOBAL-DEFINE STAR_EVENT_USER katun
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 {Func/lib/eventlog.i}
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 lhCustomer = BUFFER Customer:HANDLE.

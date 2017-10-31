@@ -233,7 +233,7 @@ ldebegstamp = YEAR(cdate2)  * 10000 +
 fFillTT().
 
 liRerateSeq = fRerateLogStart (
-   katun,
+   Syst.CUICommon:katun,
    cdate1,
    cdate2,
    CLI,

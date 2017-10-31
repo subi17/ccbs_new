@@ -11,7 +11,7 @@
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
    
@@ -103,7 +103,7 @@ IF llUpdateCustContact THEN DO:
          IF AVAILABLE CustContact THEN DO:
             IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                     lhCustContact,
-                                    katun,
+                                    Syst.CUICommon:katun,
                                     lcMemo).
             DELETE CustContact.
          END.
@@ -153,7 +153,7 @@ IF llUpdateCustContact THEN DO:
          IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).
          ELSE RUN StarEventMakeModifyEventWithMemo(
                      lhCustContact,
-                     katun,
+                     Syst.CUICommon:katun,
                      lcMemo).
       END.
 

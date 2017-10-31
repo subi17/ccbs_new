@@ -101,7 +101,7 @@ repeat WITH FRAME rajat:
     
    fMobCDRCollect(INPUT "post",
                   INPUT Syst.CUICommon:gcBrand,
-                  INPUT katun,
+                  INPUT Syst.CUICommon:katun,
                   INPUT pvm1,
                   INPUT pvm2,
                   INPUT iiInvCust,

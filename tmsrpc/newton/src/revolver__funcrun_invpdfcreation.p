@@ -47,7 +47,7 @@ ASSIGN
        lcAddrConfDir = lcAddrConfDir + "funcrunpdfcreation.email"
        lcLogFile     = lcLogFile + "funcrun_pdf_" + lcToday + STRING(TIME) + ".log".
 
-katun = "VISTA_" + pcUserName.
+Syst.CUICommon:katun = "VISTA_" + pcUserName.
 
 OUTPUT STREAM strout TO VALUE (lcLogFile).
 

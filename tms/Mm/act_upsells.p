@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -273,7 +273,7 @@ PROCEDURE pBobCheckUpsell:
                     lcMemoTitle,                          /* MemoTitle */
                     lcMemoText,                           /* MemoText  */
                     "Service",                            /* MemoType  */
-                    katun + "_" + Mobsub.Cli).
+                    Syst.CUICommon:katun + "_" + Mobsub.Cli).
 
    RETURN "OK".
 

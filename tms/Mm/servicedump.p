@@ -16,7 +16,7 @@
 {Func/cparam2.i}
 
 Syst.CUICommon:gcBrand = "1".
-katun = "batch".
+Syst.CUICommon:katun = "batch".
 
 DEF TEMP-TABLE ttService
    FIELD tmsseq    as integer

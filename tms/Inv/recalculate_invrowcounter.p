@@ -97,7 +97,7 @@ PROCEDURE pCollectCDRs:
 
       fMobCDRCollect(INPUT "post",
                      INPUT Syst.CUICommon:gcBrand,
-                     INPUT katun,
+                     INPUT Syst.CUICommon:katun,
                      INPUT InvSeq.FromDate,   
                      INPUT InvSeq.ToDate,
                      INPUT InvSeq.CustNum,

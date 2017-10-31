@@ -98,7 +98,7 @@ ASSIGN
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    fname = TMSUser.RepDir + "/intop.txt".
 END.
 

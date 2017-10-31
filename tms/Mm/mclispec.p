@@ -387,7 +387,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                        ?,
                        "",
                        TRUE,
-                       katun,
+                       Syst.CUICommon:katun,
                        "",
                        0,
                        "",
@@ -410,7 +410,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                                           ELSE 4
                    ITSendLog.EMail      = ""
                    ITSendLog.RepType    = "Spec" + lcRepCodes
-                   ITSendLog.UserCode   = katun.
+                   ITSendLog.UserCode   = Syst.CUICommon:katun.
                    ITSendLog.SendStamp  = Func.Common:mMakeTS().
          END.
          

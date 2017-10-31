@@ -68,7 +68,7 @@ pcCreator     = "VISTA_" + get_string(pcStruct,"username").
 
 IF TRIM(pcCreator) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcCreator.
+Syst.CUICommon:katun = pcCreator.
 
 IF pcIDType = "CIF" THEN
    pcCompany     = get_string(pcStruct,"company").
@@ -126,7 +126,7 @@ IF Order.OldPayType AND pcOldICC EQ "" THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 

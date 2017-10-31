@@ -14,7 +14,7 @@
 {Func/fpaymconfig.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -213,7 +213,7 @@ DO liCount = 1 TO liAccCnt:
       CREATE OPLog.
       ASSIGN OPLog.CustNum   = Payment.CustNum
              OPLog.EventDate = Payment.AccDate
-             OPLog.UserCode  = katun
+             OPLog.UserCode  = Syst.CUICommon:katun
              OPLog.InvNum    = Payment.InvNum
              OPLog.Voucher   = Payment.Voucher
              OPLog.Amt       = -1 * Payment.Posting[liCount]
@@ -237,7 +237,7 @@ IF icMemo > "" THEN DO:
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = lcTitle
           Memo.MemoText  = icMemo
           Memo.CreStamp  = Payment.ImportStamp.

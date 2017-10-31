@@ -19,7 +19,7 @@ SESSION:NUMERIC-FORMAT = "EUROPEAN".
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -231,7 +231,7 @@ REPEAT:
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "Payment Posting"
       Memo.MemoText  = "Based on data delivered in file by Yoigo.".
       Memo.CreStamp  = Func.Common:mMakeTS().

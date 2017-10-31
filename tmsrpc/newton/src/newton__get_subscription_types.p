@@ -29,7 +29,7 @@ DEF VAR lcStatusCode       AS INT  NO-UNDO.
 
 DEF BUFFER bCLIType        FOR CLIType.
 
-ASSIGN katun = "Newton".
+ASSIGN Syst.CUICommon:katun = "Newton".
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 

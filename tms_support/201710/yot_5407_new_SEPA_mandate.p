@@ -17,7 +17,7 @@
 */
 
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Func/fbankdata.i}
@@ -121,7 +121,7 @@ DO:
    DO:
       IF llDoEvent THEN
       DO:
-         &GLOBAL-DEFINE STAR_EVENT_USER katun
+         &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
          {Func/lib/eventlog.i}
          DEF VAR lhMSOwner AS HANDLE NO-UNDO.
          lhMSOwner = BUFFER Msowner:HANDLE.

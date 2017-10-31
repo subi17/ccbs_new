@@ -15,7 +15,7 @@
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -100,7 +100,7 @@ DO TRANS:
       ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "IFSPAYSTAT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
@@ -347,7 +347,7 @@ PROCEDURE pReadEvents:
                 Memo.KeyValue  = STRING(Invoice.InvNum)
                 Memo.CustNum   = Invoice.CustNum
                 Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                Memo.CreUser   = katun
+                Memo.CreUser   = Syst.CUICommon:katun
                 Memo.MemoTitle = "Invoice rejection"
                 Memo.MemoText  = STRING(Invoice.InvNum) +
                                  ": " + lcClaimStatus +

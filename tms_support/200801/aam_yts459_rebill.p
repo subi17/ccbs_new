@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def var lclist     as char no-undo.
 def var lcerr      as char no-undo.

@@ -32,8 +32,8 @@ PROCEDURE pRunRequest:
       liTenantCount = 0. /* only current */
    
    /* user for eventlog */ 
-   ASSIGN lcTMSUser  = katun
-          katun      = icUser
+   ASSIGN lcTMSUser  = Syst.CUICommon:katun
+          Syst.CUICommon:katun      = icUser
           liHandled  = 0.
 
    do liLoop = 0 to liTenantCount:
@@ -90,6 +90,6 @@ PROCEDURE pRunRequest:
             IF MsRequest.ReqStatus = 3 THEN oiErrors = oiErrors + 1.
          END.
    END.
-   katun = lcTMSUser.
+   Syst.CUICommon:katun = lcTMSUser.
    
 END PROCEDURE.

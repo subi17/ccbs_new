@@ -36,7 +36,7 @@ IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
 piMsSeq  = get_pos_int(pcMigrStruct, "msseq").
-katun    = "VISTA_" + get_string(pcMigrStruct, "salesman_id").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcMigrStruct, "salesman_id").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -54,7 +54,7 @@ IF NOT AVAIL Customer THEN
 
 /* Create Reactivation Request */
 liMsReq = fProMigrationRequest(INPUT piMsseq,
-                               INPUT katun,
+                               INPUT Syst.CUICommon:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                0,
                                OUTPUT lcResult).

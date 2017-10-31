@@ -38,7 +38,7 @@ DEF VAR lcApplicationId AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+   Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
    Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
@@ -61,10 +61,10 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun   
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun   
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
@@ -97,7 +97,7 @@ IF Customer.DelType NE piDelType THEN DO:
    IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
       liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.CUICommon:katun,
                                        INPUT MobSub.MsSeq,
                                        INPUT MobSub.CLI,
                                        INPUT Mobsub.Custnum,

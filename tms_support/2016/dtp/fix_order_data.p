@@ -1,10 +1,10 @@
 {Syst/commpaa.i}
-katun  = "talammin".
+Syst.CUICommon:katun = "talammin".
 Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
       {Func/lib/eventlog.i}
 END.
 

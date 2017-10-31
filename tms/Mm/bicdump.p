@@ -28,7 +28,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Qvantel".
+Syst.CUICommon:katun = "Qvantel".
 Syst.CUICommon:gcBrand = "1".
 
 {Func/email.i}

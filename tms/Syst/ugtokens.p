@@ -69,7 +69,7 @@ view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 
-llAdminUser = fIsAdminUser(katun).
+llAdminUser = fIsAdminUser(Syst.CUICommon:katun).
 
 FIND FIRST token
  NO-LOCK NO-ERROR.

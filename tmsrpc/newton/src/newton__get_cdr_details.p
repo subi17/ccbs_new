@@ -14,7 +14,7 @@
  * @fixed_line  cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
 {Syst/commpaa.i}
-katun = "Newton RPC".
+Syst.CUICommon:katun = "Newton RPC".
 Syst.CUICommon:gcBrand = "1".
 
 {Func/cparam2.i}
@@ -439,7 +439,7 @@ EMPTY TEMP-TABLE ttCall.
    
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
                INPUT Syst.CUICommon:gcBrand,
-               INPUT katun,
+               INPUT Syst.CUICommon:katun,
                INPUT pdStartDate,
                INPUT pdEndDate,
                INPUT 0,

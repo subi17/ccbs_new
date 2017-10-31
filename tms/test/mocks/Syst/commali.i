@@ -8,10 +8,6 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-def new shared var katun   as char format "x(8)".
-
-&GLOBAL-DEFINE BrandVarDefined YES
-
 on f1 go.
 on f2 go.
 on f4 go.
@@ -27,5 +23,3 @@ on f21 HELP.
 status INPUT off.
 
 &ENDIF
-
-

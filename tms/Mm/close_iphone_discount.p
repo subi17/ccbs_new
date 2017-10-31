@@ -10,13 +10,13 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-katun   = "CRON".
+Syst.CUICommon:katun = "CRON".
 {Func/cparam2.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

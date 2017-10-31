@@ -23,11 +23,11 @@ DEFINE STREAM sin.
 DEFINE STREAM sout.
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
+Syst.CUICommon:katun = "rafaeldv".
 Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
 END.

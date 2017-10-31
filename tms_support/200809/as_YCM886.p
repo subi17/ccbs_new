@@ -10,7 +10,7 @@ liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = FALSE. 
 
 {Func/log.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 fSetLogFileName("/apps/snet/200809/TMS+user+update+(20080916)_" + 
    STRING(YEAR(TODAY),"9999") +
@@ -147,7 +147,7 @@ FUNCTION fNew RETURNS LOGICAL
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = katun
+         tmspass.creator  = Syst.CUICommon:katun
          tmspass.createts = ldeTS.
    END.
 

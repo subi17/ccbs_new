@@ -72,7 +72,7 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-IF fTokenRights(katun,"SYST") = "" THEN DO:
+IF fTokenRights(Syst.CUICommon:katun,"SYST") = "" THEN DO:
    MESSAGE "Function not allowed"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.

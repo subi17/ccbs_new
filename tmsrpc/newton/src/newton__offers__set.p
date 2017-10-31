@@ -47,7 +47,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 
 {newton/src/settenant.i pcTenant}
 
@@ -132,7 +132,7 @@ IF NOT llEqual THEN DO:
    FIND CURRENT Offer EXCLUSIVE-LOCK.
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun 
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
       {Func/lib/eventlog.i}
       DEF VAR lhOffer AS HANDLE NO-UNDO.
       lhOffer = BUFFER Offer:HANDLE.

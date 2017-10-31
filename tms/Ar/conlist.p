@@ -20,7 +20,7 @@ DEF INPUT PARAMETER idtConDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER iiCustNum  AS INT  NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -206,7 +206,7 @@ REPEAT WITH FRAME sel:
                            TMSUser.UserName.
            END.
            IF icUserCode = "" OR NOT AVAILABLE TMSUser
-           THEN DISPLAY katun @ Contact.UserCode.
+           THEN DISPLAY Syst.CUICommon:katun @ Contact.UserCode.
 
            IF iiCustNum > 0 THEN DO WITH FRAME lis: 
                DISPLAY iiCustNum @ Contact.CustNum. 
@@ -623,7 +623,7 @@ REPEAT WITH FRAME sel:
            
            ASSIGN Contact.ConState = 1
                   Contact.ConDate  = TODAY
-                  Contact.UserCode = katun.
+                  Contact.UserCode = Syst.CUICommon:katun.
                   Contact.ConStamp = Func.Common:mMakeTS().
 
            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhContact).

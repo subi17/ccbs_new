@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "ADDITIONAL_LINES".
+Syst.CUICommon:katun = "ADDITIONAL_LINES".
 Syst.CUICommon:gcBrand = "1".
 
 DEF VAR lcConvergent AS CHAR NO-UNDO. 

@@ -21,7 +21,7 @@ DEFINE VARIABLE lcInvoiceTargetMode AS CHARACTER NO-UNDO.
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
    {Func/create_eventlog.i}
@@ -59,7 +59,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
       
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTargetGroup:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    RELEASE bInvoiceTargetGroup.
@@ -69,7 +69,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
       NOT fPendingEmailActRequest(INPUT bCustomer.Custnum) THEN
       fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                            INPUT TODAY,
-                           INPUT katun,
+                           INPUT Syst.CUICommon:katun,
                            INPUT 0, /* msseq */
                            INPUT "", /* cli */
                            INPUT bCustomer.CustNum,
@@ -341,7 +341,7 @@ FUNCTION _fAddInvoiceTarget RETURNS INT
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTarget:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
    
    RELEASE bInvoiceTarget.

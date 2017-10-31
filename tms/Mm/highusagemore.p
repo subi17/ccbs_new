@@ -74,7 +74,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 5 THEN DO:
       lcEmail = "".
       FIND first tmsuser WHERE 
-                 tmsuser.UserCode = katun NO-LOCK NO-ERROR.
+                 tmsuser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
 
       if avail tmsuser and 
                tmsuser.email ne "" THEN ASSIGN 

@@ -9,7 +9,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun    = "NewtonAd".
+Syst.CUICommon:katun = "NewtonAd".
 Syst.CUICommon:gcBrand  = "1".
 {Syst/tmsconst.i}
 {Func/vasfunc.i}

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 ASSIGN
-   katun = "cron"
+   Syst.CUICommon:katun = "cron"
    Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 

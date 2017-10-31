@@ -1728,7 +1728,7 @@ PROCEDURE pFinalize:
                   IF NOT fTransferDSS(INPUT liCurrDSSMsSeq,
                                       INPUT liDSSMsSeq,
                                       INPUT TODAY,
-                                      INPUT katun,
+                                      INPUT Syst.CUICommon:katun,
                                       INPUT "Contract",
                                       OUTPUT lcError) THEN
                      Func.Common:mWriteMemo("Customer",
@@ -2308,7 +2308,7 @@ PROCEDURE pContractTermination:
 
             fMakeCreateEvent((BUFFER bLimit:HANDLE),
                              "",
-                             katun,
+                             Syst.CUICommon:katun,
                              "").
 
             fUpdateServicelCounterMSID(bLimit.CustNum,

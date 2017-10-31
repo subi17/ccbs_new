@@ -75,7 +75,7 @@ DO TRANS:
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_first_run" SKIP.
@@ -87,7 +87,7 @@ DO TRANS:
       /*Set collection period start time to match the previous period end*/
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ldCollPeriodStartTS    = ActionLog.ActionTS.
       RELEASE Actionlog.
    END.

@@ -43,7 +43,7 @@ DEF VAR lModTokens   AS CHAR                   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -140,7 +140,7 @@ lisaa:
            CREATE UserGrp.
            ASSIGN
            UserGrp.UserGroup   = INPUT FRAME lis UserGrp.UserGroup
-           UserGrp.CreUser = katun.
+           UserGrp.CreUser = Syst.CUICommon:katun.
            UPDATE UserGrp.UGName
                   UserGrp.CreDate UserGrp.CreUser .
            IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhUserGrp).       
@@ -542,7 +542,7 @@ SELAUS:
               FIND CURRENT UserGrp EXCLUSIVE-LOCK.
               IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUserGrp).
               UPDATE UserGrp.UGName.
-               ASSIGN UserGrp.ChgUser = katun
+               ASSIGN UserGrp.ChgUser = Syst.CUICommon:katun
                       UserGrp.ChgDate = TODAY.
 
               IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhUserGrp).

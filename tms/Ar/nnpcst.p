@@ -17,7 +17,7 @@
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
@@ -171,7 +171,7 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
    IF SingleFee.CalcObj > "" AND SingleFee.CalcObj = Invoice.BillRun THEN DO:
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeDeleteEventWithMemo(lhSingleFee,
-                                              katun,
+                                              Syst.CUICommon:katun,
                                               "InvoiceDeletion").
       DELETE SingleFee.
    END. 
@@ -196,7 +196,7 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeModifyEventWithMemo(
             lhSingleFee,
-            katun,
+            Syst.CUICommon:katun,
             "InvoiceDeletion").
    END.
 

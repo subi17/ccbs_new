@@ -88,7 +88,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       
@@ -149,7 +149,7 @@ IF NOT AVAILABLE MsRequest OR
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
 
@@ -886,7 +886,7 @@ PROCEDURE pTerminate:
                    ErrorLog.TableName = "Order"
                    ErrorLog.KeyValue  = STRING(Order.OrderId) 
                    ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
-                   ErrorLog.UserCode  = katun
+                   ErrorLog.UserCode  = Syst.CUICommon:katun
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
 
@@ -1438,7 +1438,7 @@ PROCEDURE pOrderCancellation:
          ActionLog.Brand        = Syst.CUICommon:gcBrand  
          ActionLog.TableName    = "Order"  
          ActionLog.KeyValue     = STRING(Order.Orderid)
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionID     = "SIMRELEASE"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionStatus = 2
@@ -1482,7 +1482,7 @@ PROCEDURE pMultiSIMTermination:
       ActionLog.Brand        = Syst.CUICommon:gcBrand  
       ActionLog.TableName    = "Customer"  
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "MultiSIMTermination"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
@@ -1526,7 +1526,7 @@ PROCEDURE pMultiSIMTermination:
                           "", /* out oper. */
                           STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}),
                           {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                          katun,
+                          Syst.CUICommon:katun,
                           piOrigRequest, /* orig. request */
                           {&TERMINATION_TYPE_FULL},
                           OUTPUT lcError). 

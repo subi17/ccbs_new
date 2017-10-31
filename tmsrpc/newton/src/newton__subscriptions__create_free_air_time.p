@@ -73,7 +73,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 Syst.CUICommon:gcBrand = "1".
 {Func/fixedfee.i}
 {Func/fcounter.i}

@@ -66,13 +66,13 @@ memo.MemoSeq   = NEXT-VALUE(MemoSeq)
 Memo.Custnum   = AgrCust.CustNum
 memo.HostTable = "Customer"
 memo.KeyValue  = STRING(AgrCust.CustNum)
-memo.CreUser   = katun
+memo.CreUser   = Syst.CUICommon:katun
 memo.MemoTitle = "NEW BANK ACCOUNT NUMBER"
 Memo.memotext  = "RequestID" + STRING(msrequest.msrequest) + 
                  " Bank account update:" + msrequest.ReqCparam1.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER AgrCust:HANDLE.

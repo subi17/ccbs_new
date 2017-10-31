@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
 DEFINE VARIABLE ldaBegin AS DATE NO-UNDO.
 DEFINE VARIABLE ldaEnd AS DATE NO-UNDO.

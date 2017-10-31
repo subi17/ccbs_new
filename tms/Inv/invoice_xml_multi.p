@@ -230,7 +230,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                       ErrorLog.TableName = "Invoice"
                       ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")
                       ErrorLog.ErrorMsg  = RETURN-VALUE
-                      ErrorLog.UserCode  = katun.
+                      ErrorLog.UserCode  = Syst.CUICommon:katun.
                       ErrorLog.ActionTS  = Func.Common:mMakeTS().
             END.          
 
@@ -249,7 +249,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                PUT STREAM sLog UNFORMATTED
                   STRING(TODAY,"99.99.9999") SKIP
                   STRING(TIME,"hh:mm:ss") SKIP
-                  katun SKIP
+                  Syst.CUICommon:katun SKIP
                   RETURN-VALUE SKIP.
                OUTPUT STREAM sLog CLOSE.
             END.

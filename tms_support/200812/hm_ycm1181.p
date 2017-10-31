@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-katun = "harrim".
+Syst.CUICommon:katun = "harrim".
 Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 

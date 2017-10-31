@@ -451,7 +451,7 @@ DO TRANS:
       ActionLog.ActionDec    = oiPaymCount
       ActionLog.ActionChar   = lcPlainFile + 
                                IF NOT SESSION:BATCH
-                               THEN ". Created by " + katun
+                               THEN ". Created by " + Syst.CUICommon:katun
                                ELSE "" 
       ActionLog.ActionStatus = 3.
       ActionLog.ActionTS     = Func.Common:mMakeTS().
@@ -494,7 +494,7 @@ IF CAN-FIND(FIRST ttError) THEN DO:
               ErrorLog.TableName = "MsRequest"
               ErrorLog.KeyValue  = STRING(ttError.MsRequest)
               ErrorLog.ActionTS  = ldCurrent
-              ErrorLog.UserCode  = katun
+              ErrorLog.UserCode  = Syst.CUICommon:katun
               ErrorLog.ErrorMsg  = ttError.ErrMsg.
     END.
 

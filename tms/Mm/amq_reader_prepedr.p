@@ -9,7 +9,7 @@
 
 {Syst/commpaa.i}
 Syst.CUICommon:gcBrand = "1".
-Katun = "Cron".
+Syst.CUICommon:katun = "Cron".
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
 {Func/replog_reader.i}
@@ -116,7 +116,7 @@ PROCEDURE pAmqEDRReader:
             ActionLog.ActionID     = "PrepEDR_HPD"
             ActionLog.ActionPeriod = YEAR(ldaReadDate) * 100 + MONTH(ldaReadDate)
             ActionLog.ActionStatus = 2
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionDec    = ldeReadInTS.
       END. /* ELSE DO: */
 

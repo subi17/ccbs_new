@@ -16,7 +16,7 @@
 {Func/log.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -62,7 +62,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
 
          liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT katun,
+                                          INPUT Syst.CUICommon:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,
@@ -96,7 +96,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
 
             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.CUICommon:katun,
                                              INPUT 0, /* msseq */
                                              INPUT "", /* cli */
                                              INPUT Customer.CustNum,
@@ -141,7 +141,7 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
 
             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.CUICommon:katun,
                                              INPUT 0, /* msseq */
                                              INPUT "", /* cli */
                                              INPUT Customer.CustNum,
@@ -238,7 +238,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                     BUFFER bf_MsRequest:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
                     IF NOT AVAIL bf_MsRequest THEN 
                     DO:
-                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" ,katun).
+                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" , Syst.CUICommon:katun).
                         NEXT.
                     END.
 

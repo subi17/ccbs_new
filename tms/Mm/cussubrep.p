@@ -28,7 +28,7 @@ DEF VAR ffnumber   AS CHAR No-UNDO.
 DEF VAR addserv    AS CHAR NO-UNDO.
 DEF VAR filename   AS CHAR NO-UNDO INIT "cust_subs_report.txt".
 
-Find First TMSUser WHERE TMSUser.UserCode = katun no-lock no-error.
+Find First TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun no-lock no-error.
 IF AVAIL TMSUser THEN 
    path = TMSUser.repdir + "/" + filename.
 ELSE 

@@ -63,7 +63,7 @@ pcstruct = get_struct(param_toplevel_id, "3").
 plCreateFee = get_bool(param_toplevel_id, "2").
 pcSalesman = get_string(param_toplevel_id, "1").
 scUser = "VISTA_" + pcSalesman. /* Read from eventlog functions into eventlog.user */
-katun = "VISTA_" + pcSalesman.
+Syst.CUICommon:katun = "VISTA_" + pcSalesman.
 piCustNum = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
