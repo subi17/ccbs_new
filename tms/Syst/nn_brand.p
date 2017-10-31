@@ -246,7 +246,7 @@ ACTION: repeat:
          hide frame f_code-ERGO no-pause.
 
 
-         if Syst.CUICommon:toimi > 0 or length(nap) = 1 then leave.
+         if Syst.CUICommon:toimi > 0 or length(Syst.CUICommon:nap) = 1 then leave.
       end.
 
       if info then do trans:
@@ -262,7 +262,7 @@ ACTION: repeat:
 
       /* in case no function key was hit .. */
       if Syst.CUICommon:toimi = 0 then do on endkey undo, next f_code:
-         if length(nap) > 1 then undo, retry.
+         if length(Syst.CUICommon:nap) > 1 then undo, retry.
          assign f_code = Syst.CUICommon:nap firstc = true.
          pause 0 no-message.
          assign Syst.CUICommon:ufk = 0  Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[2] = 717 Syst.CUICommon:ufk[8] = 8
@@ -275,7 +275,7 @@ ACTION: repeat:
                firstc = false.
             end.
 
-            readkey. nap=keylabel(lastkey).
+            readkey. Syst.CUICommon:nap=keylabel(lastkey).
 
             if Syst.CUICommon:nap = "f8" then do:
                hide frame f_code_search no-pause.

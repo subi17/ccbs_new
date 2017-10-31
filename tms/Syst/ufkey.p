@@ -62,7 +62,7 @@ then do:
                 assign sel_t [ufk_nro]     = substring(MenuText,1,8)
                        sel_t [ufk_nro + 8] = substring(MenuText,9).
              else
-                assign sel_t [ufk_nro]     = string(ufk[ufk_nro]) + " ?"
+                assign sel_t [ufk_nro]     = string(Syst.CUICommon:ufk[ufk_nro]) + " ?"
                        sel_t [ufk_nro + 8] = "".
       end.
    end.

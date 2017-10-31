@@ -83,7 +83,7 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO LOOP, LEAVE LOOP:
              /* onko painettu home */
              if lookup(Syst.CUICommon:nap,"home") > 0  
              then assign nrohaku = true Syst.CUICommon:nap = "enter".
-             APPLY keycode(nap).
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if pgseek = "" THEN LEAVE LOOP.

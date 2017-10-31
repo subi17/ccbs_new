@@ -75,7 +75,7 @@ alku:  repeat WITH FRAME alku:
              READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
              /* onko painettu home */
              if Syst.CUICommon:nap = "home" then assign nrohaku = true Syst.CUICommon:nap = "enter".
-             APPLY keycode(nap).
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if rnhaku = "" THEN LEAVE kierros.

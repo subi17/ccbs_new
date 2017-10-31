@@ -91,7 +91,7 @@ alku:  repeat WITH FRAME alku:
              /* onko painettu home */
              if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN 
              assign nrohaku = true Syst.CUICommon:nap = "enter".
-             APPLY keycode(nap).
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if tuhaku = "" THEN LEAVE LOOP.

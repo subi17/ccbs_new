@@ -95,8 +95,8 @@ END.
 
 DISPLAY liPassWdHistory lcUserCode WITH FRAME passFrame.
  
-ufk = 0.
-ufk[8] = 8.
+Syst.CUICommon:ufk = 0.
+Syst.CUICommon:ufk[8] = 8.
 Syst.CUICommon:ehto = 3.
 
 mainLoop:

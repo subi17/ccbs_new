@@ -65,7 +65,7 @@ END.
 if ticfile = "" OR ticfile = "Mobile OnLine" THEN LEAVE.
 
 
-ufk = 0. Syst.CUICommon:ehto = 3.
+Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3.
 RUN Syst/ufkey.p. PAUSE 0.
 
 message "Are You SURE You want to start reading CDRs into database ?"

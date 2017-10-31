@@ -58,7 +58,7 @@ UPDATE
 WITH FRAME Date.
 PAUSE 0.
 
-ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
 period = year(idate) * 100 + month(idate).
 

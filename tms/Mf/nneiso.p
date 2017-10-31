@@ -64,7 +64,7 @@ Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 UPDATE date1 date2 cust-name excel WITH FRAME haku.
 IF excel THEN UPDATE exPaymFile WITH FRAME haku.
 
-ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 HIDE FRAME haku.
 PAUSE 0 no-message.
 

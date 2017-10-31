@@ -90,7 +90,7 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
              /* onko painettu home */
              if Syst.CUICommon:nap = "home" then assign aakhaku = true Syst.CUICommon:nap = "enter".
              if Syst.CUICommon:nap = "end"  then assign orghaku = true Syst.CUICommon:nap = "enter".
-             APPLY keycode(nap).
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if ashaku = "" THEN LEAVE LOOP.

@@ -84,7 +84,7 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
              /* onko painettu home */
              if lookup(Syst.CUICommon:nap,"home") > 0 THEN 
              assign nro = true Syst.CUICommon:nap = "enter".
-             APPLY keycode(nap).
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if Salesman = "" THEN LEAVE LOOP.
