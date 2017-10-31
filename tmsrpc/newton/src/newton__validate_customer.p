@@ -54,8 +54,7 @@ END.
 
 {Syst/commpaa.i}
 gcBrand = lcBrand.
-lcName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                           BUFFER Customer).
+lcName =  Func.Common:mDispCustName(BUFFER Customer).
 
 add_string(response_toplevel_id,"",lcName).
 

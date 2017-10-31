@@ -25,7 +25,6 @@
 {Syst/utumaa.i "new"}
 {Func/feplstart.i}
 {Inv/eplspec.i}
-{Func/timestamp.i}
 
 assign tuni1 = "nnpura2"
        tuni2 = "".
@@ -225,8 +224,8 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                   CustNum2 = Invoice.CustNum
                   pvm1     = Invoice.FromDate
                   pvm2     = Invoice.ToDate
-                  liPer1   = fMake2DT(Invoice.FirstCall,1)
-                  liPer2   = fMake2DT(Invoice.ToDate,86399)
+                  liPer1   = Func.Common:mMake2DT(Invoice.FirstCall,1)
+                  liPer2   = Func.Common:mMake2DT(Invoice.ToDate,86399)
                   tilak    = 1
                   llUseInv = TRUE.
 
@@ -330,8 +329,8 @@ IF llCover THEN DO:
    IF lcAtil > "" AND liAddress = 3 THEN DO: 
    
       IF NOT llUseInv THEN DO:
-         ASSIGN liPer1 = fMake2DT(pvm1,1)
-                liPer2 = fMake2DT(pvm2,86399).
+         ASSIGN liPer1 = Func.Common:mMake2DT(pvm1,1)
+                liPer2 = Func.Common:mMake2DT(pvm2,86399).
    
          FIND FIRST MsOwner NO-LOCK WHERE
                     MsOwner.Brand   = gcBrand AND
@@ -468,7 +467,7 @@ IF liPrintTo <= 2 THEN DO:
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Spec2"
                 ITSendLog.UserCode   = katun.
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
        
       MESSAGE "Report 2 has been printed."

@@ -302,8 +302,7 @@
                  ELSE IF FRAME-FIELD = "HonTitle" THEN DO:
                  
                     IF INPUT FRAME lis Customer.HonTitle > "" AND 
-                       NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                            "Customer",
+                       NOT Func.Common:mTMSCodeChk("Customer",
                                             "Title",
                                             INPUT INPUT FRAME lis
                                                   Customer.HonTitle)
@@ -316,8 +315,7 @@
                  
                  ELSE IF FRAME-FIELD = "CustIDType" THEN DO:
                  
-                    lcIDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                "Customer",
+                    lcIDType = Func.Common:mTMSCodeName("Customer",
                                                 "CustIDType",
                                                 INPUT INPUT FRAME lis
                                                       Customer.CustIDType).

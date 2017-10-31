@@ -9,7 +9,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/date.i}
 {Func/msreqfunc.i}
 {Gwy/provision.i}
 
@@ -62,7 +61,7 @@ IF bOldType.PayType NE CliType.PayType THEN DO TRANSACTION:
       Solog.Solog = NEXT-VALUE(Solog).
  
    ASSIGN
-      Solog.CreatedTS    = fMakeTS()
+      Solog.CreatedTS    = Func.Common:mMakeTS()
       Solog.MsSeq        = MsRequest.MsSeq    /* Mobile Subscription No.    */
       Solog.CLI          = MsRequest.CLI      /* MSISDN                     */
       Solog.Stat         = 0                  /* just created               */

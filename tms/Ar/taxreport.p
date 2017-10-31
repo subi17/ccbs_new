@@ -105,15 +105,13 @@ FUNCTION fCollectInvoice RETURNS LOGIC:
           FIRST OrderCustomer OF Order NO-LOCK WHERE
                 OrderCustomer.RowType = Order.InvCustRole:
                 
-         ttInv.CustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+         ttInv.CustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
       END.                                     
 
    END.        
           
    IF ttInv.CustName = "" THEN         
-      ttInv.CustName   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                          BUFFER Customer).
+      ttInv.CustName   = Func.Common:mPrintCustName(BUFFER Customer).
 
    DO liCnt = 1 TO 10:
       IF Invoice.VatPerc[liCnt] > 0 AND Invoice.VatAmount[liCnt] NE 0 THEN DO:
@@ -245,8 +243,7 @@ FOR EACH ttTaxZone:
  
       IF LAST-OF(ttInv.InvType) THEN DO:
       
-         lcTypeName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Invoice",
+         lcTypeName = Func.Common:mTMSCodeName("Invoice",
                                        "InvType",
                                        STRING(ttInv.InvType)).
          

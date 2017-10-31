@@ -12,7 +12,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -450,8 +449,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
       END.   
       
       FIND Customer WHERE Customer.CustNum = MobSub.InvCust NO-LOCK NO-ERROR.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       
       llOk = (lcNewLast = "").
       

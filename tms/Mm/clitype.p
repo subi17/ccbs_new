@@ -189,8 +189,7 @@ END FUNCTION.
 FUNCTION fPayTypeName RETURNS LOGIC
    (iiPayType AS INT):
 
-   lcPayType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CLIType",
+   lcPayType = Func.Common:mTMSCodeName("CLIType",
                                 "PayType",
                                 STRING(iiPayType)).
 END FUNCTION.
@@ -198,8 +197,7 @@ END FUNCTION.
 FUNCTION fStatusName RETURNS LOGIC
    (iiStatusCode AS INT):
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "CLIType",
+   lcStatus = Func.Common:mTMSCodeName("CLIType",
                                "StatusCode",
                                STRING(iiStatusCode)).
 END FUNCTION.
@@ -207,8 +205,7 @@ END FUNCTION.
 FUNCTION fWebStatusName RETURNS LOGIC
    (iiStatusCode AS INT):
 
-   lcWebStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "CLIType",
+   lcWebStatus = Func.Common:mTMSCodeName("CLIType",
                                   "WebStatusCode",
                                   STRING(iiStatusCode)).
 END FUNCTION.
@@ -216,8 +213,7 @@ END FUNCTION.
 FUNCTION fLineType RETURNS LOGIC
    (iiLineType AS INT):
 
-   lcLineType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "CLIType",
+   lcLineType = Func.Common:mTMSCodeName("CLIType",
                                   "LineType",
                                   STRING(iiLineType)).
 END FUNCTION.
@@ -225,8 +221,7 @@ END FUNCTION.
 FUNCTION fFixedLineType RETURNS LOGIC
    (iiFixedLineType AS INT):
 
-   lcFixedLineType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "CLIType",
+   lcFixedLineType = Func.Common:mTMSCodeName("CLIType",
                                       "FixedLineType",
                                       STRING(iiFixedLineType)).
 END FUNCTION.
@@ -234,8 +229,7 @@ END FUNCTION.
 FUNCTION fTariffType RETURNS LOGIC
    (iiTariffType AS INT):
 
-   lcTariffType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "CLIType",
+   lcTariffType = Func.Common:mTMSCodeName("CLIType",
                                    "TariffType",
                                     STRING(iiTariffType)).
 END FUNCTION.   
@@ -243,8 +237,7 @@ END FUNCTION.
 FUNCTION fUsageType RETURNS LOGIC
    (iiUsageType AS INT):
 
-   lcUsageType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "CLIType",
+   lcUsageType = Func.Common:mTMSCodeName("CLIType",
                                       "UsageType",
                                       STRING(iiUsageType)).
 END FUNCTION.

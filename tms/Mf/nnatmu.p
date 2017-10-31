@@ -20,7 +20,6 @@
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 /*
@@ -147,7 +146,7 @@ repeat:
                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCLI).
                */
 
-               fSplitTS(lCRStamp, OUTPUT lPrevDate, OUTPUT lPrevTime).
+               Func.Common:mSplitTS(lCRStamp, OUTPUT lPrevDate, OUTPUT lPrevTime).
 
                IF lPrevTime = 0 THEN ASSIGN
                   lPrevDate = lPrevDate - 1
@@ -155,7 +154,7 @@ repeat:
                ELSE ASSIGN 
                   lPrevTime = lPrevTime - 1.
 
-               CLI.clStamp = fHMS2TS(lPrevDate,string(lPrevTime,"hh:mm:ss")).
+               CLI.clStamp = Func.Common:mHMS2TS(lPrevDate,string(lPrevTime,"hh:mm:ss")).
 
                IF CLI.crStamp > CLI.clStamp THEN
                   CLI.crStamp = CLI.clStamp.

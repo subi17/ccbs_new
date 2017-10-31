@@ -10,7 +10,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -111,8 +110,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL.
           
    /* receiver is always the owner */
    IF AVAILABLE OrderCustomer THEN ASSIGN 
-      lcName = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                BUFFER OrderCustomer)
+      lcName = Func.Common:mDispOrderName(BUFFER OrderCustomer)
       lcAddr = OrderCustomer.Address
       lcPost = OrderCustomer.ZipCode + " " + OrderCustomer.PostOffice.
 

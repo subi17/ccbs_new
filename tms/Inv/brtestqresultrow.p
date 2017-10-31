@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'BRTestQResultRow'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -475,8 +474,7 @@ PROCEDURE local-UPDATE-record:
       FIND FIRST Customer WHERE Customer.CustNum = BRTestQResultRow.InvCust
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN
-         lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+         lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
       
       FIND FIRST MobSub WHERE MobSub.MsSeq = BRTestQResultRow.MsSeq 

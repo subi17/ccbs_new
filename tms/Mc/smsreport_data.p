@@ -2,7 +2,6 @@
 ASSIGN
    katun = "cron"
    gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttReport NO-UNDO
@@ -102,7 +101,7 @@ FUNCTION fFixNeg RETURNS INT
 END FUNCTION. 
 
 /* Today Orders */
-ldeBegin = fMake2Dt(TODAY,0).
+ldeBegin = Func.Common:mMake2DT(TODAY,0).
 DEFINE VARIABLE liPrepaidsToday AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPostpaidsToday AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPosSales AS INTEGER NO-UNDO. 
@@ -183,8 +182,8 @@ FOR EACH Order WHERE
 END.
 
 /* Yesterday Orders */
-ldeBegin = fMake2Dt(TODAY - 1,0).
-ldeEnd   = fMake2Dt(TODAY,0).
+ldeBegin = Func.Common:mMake2DT(TODAY - 1,0).
+ldeEnd   = Func.Common:mMake2DT(TODAY,0).
 DEFINE VARIABLE liMGMSalesYesterday AS INTEGER NO-UNDO. 
 
 FOR EACH Order WHERE
@@ -255,8 +254,8 @@ DEFINE VARIABLE liMNPOutTotal     AS INTEGER NO-UNDO.
 DEFINE VARIABLE liOpNumber AS INTEGER NO-UNDO. 
 
 /* Today MNP Out */
-ldeBegin = fMake2Dt(TODAY,0).
-ldeEnd   = fMake2Dt(TODAY + 1,0).
+ldeBegin = Func.Common:mMake2DT(TODAY,0).
+ldeEnd   = Func.Common:mMake2DT(TODAY + 1,0).
 
 FOR EACH msrequest where
          msrequest.brand = gcBrand and 
@@ -292,8 +291,8 @@ FUNCTION fTermSubs RETURNS INT
    DEFINE VARIABLE ldeEnd   AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i        AS INTEGER NO-UNDO. 
 
-   ldeBegin = fMake2Dt(idaDate,0).
-   ldeEnd   = fMake2Dt(idaDate + 1,0).
+   ldeBegin = Func.Common:mMake2DT(idaDate,0).
+   ldeEnd   = Func.Common:mMake2DT(idaDate + 1,0).
    
    FOR EACH MsRequest WHERE 
             MsRequest.Brand = gcBrand AND
@@ -318,7 +317,7 @@ FUNCTION fTermSubs RETURNS INT
 END FUNCTION. 
 
 
-ldeBegin = fMake2Dt(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
+ldeBegin = Func.Common:mMake2DT(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
 DEFINE VARIABLE liPrivatePrepaidNew AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPrivatePrepaidMNP AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPrivatePostpaidNew AS INTEGER NO-UNDO. 

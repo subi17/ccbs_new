@@ -141,8 +141,8 @@ IF NOT AVAIL Offer THEN DO:
    RETURN appl_err("Offer " + ttOfferItem.Offer + " does not exist").
 END.
 
-IF (OfferItem.BeginStamp < fMakeTs() OR 
-   ttOfferItem.BeginStamp < fMakeTs()) AND Offer.FromDate <= TODAY THEN DO: 
+IF (OfferItem.BeginStamp < Func.Common:mMakeTS() OR 
+   ttOfferItem.BeginStamp < Func.Common:mMakeTS()) AND Offer.FromDate <= TODAY THEN DO: 
 
    DEFINE VARIABLE cDeniedChangedInfo AS CHARACTER NO-UNDO. 
    cDeniedChangedInfo = fCheckInvalidChangeWithOldTs(). 
@@ -175,8 +175,8 @@ IF fValidateOfferItem(TABLE ttOfferItem, FALSE, OUTPUT ocError) > 0 THEN DO:
    RETURN appl_err(ocError).
 END.
 
-IF ttOfferItem.EndStamp < fMakeTs() THEN DO:
-   ttOfferItem.EndStamp = fMakeTs().
+IF ttOfferItem.EndStamp < Func.Common:mMakeTS() THEN DO:
+   ttOfferItem.EndStamp = Func.Common:mMakeTS().
    add_timestamp(lcRespStruct, "valid_to", ttOfferItem.EndStamp).
 END.
 

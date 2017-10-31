@@ -21,7 +21,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsubsterminal.i}
@@ -106,7 +105,7 @@ THEN RETURN appl_err("Cannot add more installments").
 liCreated = fPCActionRequest(MobSub.MsSeq,
                              DayCampaign.DCEvent,
                              "act",
-                             fMakeTS(),
+                             Func.Common:mMakeTS(),
                              TRUE, /* create fees */
                              {&REQUEST_SOURCE_NEWTON},
                              "",

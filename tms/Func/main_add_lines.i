@@ -13,7 +13,6 @@
 {Syst/tmsconst.i}
 {Mnp/mnpoutchk.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/fsubstermreq.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
@@ -293,27 +292,27 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
 
    IF icSource EQ {&REQUEST_SOURCE_STC} OR 
       icSource EQ {&REQUEST_SOURCE_BTC} THEN DO:
-      lvdaSecSIMTermDate = fLastDayofMonth(idaTermDate).
+      lvdaSecSIMTermDate = Func.Common:mLastDayOfMonth(idaTermDate).
 
       IF DAY(idaTermDate) <> 1 THEN
          ASSIGN lvdaSecSIMTermDate = lvdaSecSIMTermDate + 1
-                lvdaSecSIMTermDate = fLastDayOfMonth(lvdaSecSIMTermDate).
+                lvdaSecSIMTermDate = Func.Common:mLastDayOfMonth(lvdaSecSIMTermDate).
 
-      lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).          
+      lvdeSecSIMTermStamp = Func.Common:mMake2DT(lvdaSecSIMTermDate,86399).          
    END.
    ELSE IF icSource EQ {&REQUEST_SOURCE_ACC} THEN DO:
       IF DAY(idaTermDate) EQ 1 THEN 
-         lvdaSecSIMTermDate = fLastDayOfMonth(idaTermDate).
+         lvdaSecSIMTermDate = Func.Common:mLastDayOfMonth(idaTermDate).
       ELSE ASSIGN
          lvdaSecSIMTermDate  = ADD-INTERVAL(idaTermDate,1,"months")
-         lvdaSecSIMTermDate  = fLastDayOfMonth(lvdaSecSIMTermDate).
+         lvdaSecSIMTermDate  = Func.Common:mLastDayOfMonth(lvdaSecSIMTermDate).
 
-      lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).
+      lvdeSecSIMTermStamp = Func.Common:mMake2DT(lvdaSecSIMTermDate,86399).
    END.
    ELSE
       ASSIGN lvdaSecSIMTermDate  = ADD-INTERVAL(idaTermDate,1,"months")
-             lvdaSecSIMTermDate  = fLastDayOfMonth(lvdaSecSIMTermDate)
-             lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).
+             lvdaSecSIMTermDate  = Func.Common:mLastDayOfMonth(lvdaSecSIMTermDate)
+             lvdeSecSIMTermStamp = Func.Common:mMake2DT(lvdaSecSIMTermDate,86399).
 
    fInitialiseValues(iiTermReason,
                      fIsYoigoCLI(icCLI),
@@ -337,8 +336,7 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        {&TERMINATION_TYPE_FULL},
                        OUTPUT lvcError).
    IF lviRequest EQ 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(iiMsSeq),
                        iiCustNum,
                        "Multi SIM termination failed",
@@ -484,7 +482,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
          FOR EACH bMsRequest NO-LOCK WHERE
                   bMsRequest.MsSeq = lbMobSub.msseq AND
                   bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                  bMsRequest.ActStamp <= fMakeTS() AND
+                  bMsRequest.ActStamp <= Func.Common:mMakeTS() AND
           LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bCLIType NO-LOCK WHERE
                   bCLIType.Brand = gcBrand AND
@@ -498,7 +496,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
          FOR EACH bMsRequest NO-LOCK WHERE
                   bMsRequest.MsSeq = lbMobSub.MsSeq AND
                   bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
-                  bMsRequest.ActStamp <= fMakeTS() AND
+                  bMsRequest.ActStamp <= Func.Common:mMakeTS() AND
           LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bCLIType NO-LOCK WHERE
                   bCLIType.Brand = gcBrand AND
@@ -509,7 +507,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
 
          IF CAN-FIND (FIRST bMsRequest WHERE
                 bMsRequest.MsSeq = lbMobSub.MsSeq AND
-                bMsRequest.ActStamp <= fMakeTS() AND
+                bMsRequest.ActStamp <= Func.Common:mMakeTS() AND
                 MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                 LOOKUP(STRING(bMsRequest.ReqStatus),
                        {&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT MOBSUB_LOOP.
@@ -584,8 +582,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                                    OUTPUT lcError).
 
       IF oiRequest = 0 THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MsRequest",
+         Func.Common:mWriteMemo("MsRequest",
                           STRING(MsRequest.MsRequest),
                           MsRequest.custnum,
                           "Additional line STC failed",
@@ -714,7 +711,7 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
                           bCLIType.CLIType,
                           "",   /* lcBundleID */
                           "",   /* lcBankAcc = bank code validation is already done in newton */
-                          fMake2Dt(TODAY + 1,0),
+                          Func.Common:mMake2DT(TODAY + 1,0),
                           0,   /* liCreditcheck 0 = Credit check ok */
                           0, /* extend contract 0=no extend_term_contract */
                           ""    /* pcSalesman */,

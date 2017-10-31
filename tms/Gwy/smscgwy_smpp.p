@@ -9,7 +9,6 @@
 
 {Syst/commpaa.i} gcBrand = "1".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Gwy/charset.i}
 {lib/smpp/smpp_defs.i}
 {lib/smpp/smpp_procs.i}
@@ -86,7 +85,7 @@ PROCEDURE pSMSCGWY:
 
    ASSIGN
       liMsgId     = 0
-      ldeTS       = fMakeTS()
+      ldeTS       = Func.Common:mMakeTS()
       lcProcedure = "p" + pcReq.
 
    /* nothing to do ? */
@@ -131,16 +130,16 @@ PROCEDURE pSMSCGWY:
 
       IF NOT llRun THEN DO:
          IF llLoginFail THEN
-              PUT UNFORMATTED fTS2HMS(fMakeTS()) " Login failure: " 
+              PUT UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) " Login failure: " 
                lcResponse  CHR(10).
          ELSE DO:
-              PUT UNFORMATTED fTS2HMS(fMakeTS()) " Nothing to do"  CHR(10).
+              PUT UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) " Nothing to do"  CHR(10).
               lcResponse = "Empty queue".
          END.
       END.
        
      IF llLogoutFail THEN
-        PUT UNFORMATTED fTS2HMS(fMakeTS()) " Logout failure: "
+        PUT UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) " Logout failure: "
            lcLogoutResp  CHR(10).
 
       OUTPUT CLOSE.
@@ -180,7 +179,7 @@ PROCEDURE pCallAlarm:
    
    ASSIGN
       liMax = 0
-      ldeTS = fMakeTS().
+      ldeTS = Func.Common:mMakeTS().
 
    DEFINE BUFFER bufAlarm FOR CallAlarm.
 
@@ -238,12 +237,12 @@ PROCEDURE pCallAlarm:
 
          /* Check possible send time restriction */ 
          IF lcInterval NE "" THEN DO:
-            fSplitTS(input ldeTS,
+            Func.Common:mSplitTS(input ldeTS,
                      output ldActDate,
                      output liActTime).
             IF liActTime < liStart 
                THEN DO: 
-               bufAlarm.ActStamp = fMake2Dt(ldActDate, liStart).
+               bufAlarm.ActStamp = Func.Common:mMake2DT(ldActDate, liStart).
                RELEASE bufAlarm.
                liMax = liMax + 1.
                IF liMax >= 4000 THEN LEAVE SMS_LOOP.
@@ -251,7 +250,7 @@ PROCEDURE pCallAlarm:
             END.
             ELSE IF liActTime > liEnd 
                THEN DO:
-               bufAlarm.ActStamp = fMake2Dt(ldActDate + 1, liStart).
+               bufAlarm.ActStamp = Func.Common:mMake2DT(ldActDate + 1, liStart).
                RELEASE bufAlarm.
                liMax = liMax + 1.
                IF liMax >= 4000 THEN LEAVE SMS_LOOP.
@@ -277,7 +276,7 @@ PROCEDURE pCallAlarm:
             lcResponse = RETURN-VALUE.
 
             OUTPUT TO VALUE(lcLogFile) APPEND.
-            PUT UNFORMATTED fTS2HMS(fMakeTS()) " " CallAlarm.CLI " " 
+            PUT UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " CallAlarm.CLI " " 
                liMsgId ": " lcResponse ":" lietime CHR(10).
             OUTPUT CLOSE.
             
@@ -294,7 +293,7 @@ PROCEDURE pCallAlarm:
          END.
          ELSE bufAlarm.DeliStat = 2.
          
-         bufAlarm.DeliStamp = fMakeTS().
+         bufAlarm.DeliStamp = Func.Common:mMakeTS().
          RELEASE bufAlarm.
       
       END.

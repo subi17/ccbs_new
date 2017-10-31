@@ -8,7 +8,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/barrfunc.i}
 
 DEF OUTPUT PARAMETER oiChecked   AS INT  NO-UNDO.
@@ -40,7 +39,7 @@ DO TRANS:
       ActionLog.ActionChar   = "Handled: " + STRING(oiChecked) + CHR(10) + 
                                " Cancelled: " + STRING(oiCancelled)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN RETURN-VALUE.
@@ -106,8 +105,7 @@ PROCEDURE pCancelCommission:
                              OUTPUT liDone).
 
          IF liDone > 0 THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "COTarg",
+         Func.Common:mWriteMemo("COTarg",
                           STRING(CoTarg.CoTargID),
                           MobSub.InvCust,
                           "FATime Cancelled",

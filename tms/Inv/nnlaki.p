@@ -1195,7 +1195,7 @@ repeat:
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
                 ITSendLog.UserCode   = katun.
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
    END. /* FOR EACH Invoice */

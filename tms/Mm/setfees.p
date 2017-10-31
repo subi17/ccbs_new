@@ -41,7 +41,6 @@
 {Syst/commali.i}
 {Func/nncoit2.i}
 {Func/fcustpl.i}
-{Func/timestamp.i}
 {Func/fmakeservlimit.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'FixedFee'}
@@ -155,8 +154,7 @@ IF avail contract THEN ASSIGN
    enddate   = contract.ToDate.
 
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
-username = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,     
-                            BUFFER Customer).
+username = Func.Common:mDispCustName(BUFFER Customer).
 IF liFeeCust = 0 THEN liFeeCust = Customer.InvCust.                            
 
 FIND BillTarg WHERE 
@@ -319,7 +317,7 @@ IF CoDate = ? THEN CoDate = TODAY.
 
 IF CoDate <= TODAY 
 THEN ldActStamp = 0.
-ELSE ldActStamp = fMake2DT(CoDate,1).
+ELSE ldActStamp = Func.Common:mMake2DT(CoDate,1).
 
 ok = TRUE.
 

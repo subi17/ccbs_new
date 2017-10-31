@@ -14,7 +14,6 @@
 
 {Syst/commpaa.i}
 {Func/excel.i}
-{Func/date.i}
 {Func/cparam2.i}
 
 def var i as i no-undo.
@@ -28,7 +27,7 @@ gcBrand = "1".
 assign 
    lcoutdir   = fCParam("dumpoutgoing","dumpall2.i")
    lcspooldir = fCParam("dumpspool","dumpall2.i")
-   lcFileName = "{1}" + fdatefmt(TODAY,"yyyymmdd") + 
+   lcFileName = "{1}" + Func.Common:mDateFmt(TODAY,"yyyymmdd") + 
                 STRING(TIME,"HH:MM:SS") + ".dump".
    lcFileName = REPLACE(lcFileName,":","").
 

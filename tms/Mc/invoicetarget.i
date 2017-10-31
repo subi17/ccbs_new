@@ -12,7 +12,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/eventval.i}
@@ -68,7 +67,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
    /* Send validation email to customer */
    IF iiDelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} AND
       NOT fPendingEmailActRequest(INPUT bCustomer.Custnum) THEN
-      fEmailInvoiceRequest(INPUT fMakeTS(),
+      fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                            INPUT TODAY,
                            INPUT katun,
                            INPUT 0, /* msseq */

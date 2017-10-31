@@ -20,7 +20,6 @@
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Rate/daycampaign.i}
@@ -464,7 +463,7 @@ PROCEDURE pContractActivation:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -527,14 +526,14 @@ PROCEDURE pContractActivation:
                     MServiceLimit.MsSeq    = MsOwner.MsSeq AND
                     MServiceLimit.DialType = ServiceLimit.DialType AND
                     MServiceLimit.SlSeq    = ServiceLimit.SlSeq AND
-                    MServiceLimit.EndTS   >= fMakeTS() NO-LOCK NO-ERROR.
+                    MServiceLimit.EndTS   >= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
          IF NOT AVAIL MServiceLimit THEN DO:
             RUN pSendSMS(INPUT MsOwner.MsSeq,INPUT 0,INPUT "UpsellTARJ7Failed",
                          INPUT 10,INPUT {&UPSELL_SMS_SENDER},INPUT "").
             fReqStatus(3,"Base data contract is not active").
             RETURN.
          END. /* IF NOT AVAIL MServiceLimit THEN DO: */
-         fSplitTS(MServiceLimit.FromTS,
+         Func.Common:mSplitTS(MServiceLimit.FromTS,
                   OUTPUT ldtPrepActDate,
                   OUTPUT liPrepActTime).
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
@@ -547,7 +546,7 @@ PROCEDURE pContractActivation:
          THEN DO:
       
             ASSIGN ldaPromoStartDate = fCParamDa("PMDUB_PROMO_START_DATE")
-                   ldaPromoActStamp  = fMake2Dt(ldaPromoStartDate,0).
+                   ldaPromoActStamp  = Func.Common:mMake2DT(ldaPromoStartDate,0).
 
             FIND FIRST Order WHERE
                        Order.MsSeq = MsRequest.MsSeq AND
@@ -786,7 +785,7 @@ PROCEDURE pContractActivation:
                         DPMember.HostTable = "MobSub" AND
                         DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
                         DPMember.ValidTo >= ldaResidualFee AND
-                        DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                        DPMember.ValidTo <= Func.Common:mLastDayOfMonth(ldaResidualFee) AND
                         DPMember.ValidTo >= DPMember.ValidFrom:
                    ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
                END.
@@ -905,18 +904,18 @@ PROCEDURE pContractActivation:
          DAY(ldtActDate) <= DAY(ldtPrepActDate) THEN DO:
 
          IF (DAY(ldtActDate) EQ DAY(ldtPrepActDate) OR
-            fLastDayOfMonth(ldtActDate) EQ ldtActDate) AND 
+            Func.Common:mLastDayOfMonth(ldtActDate) EQ ldtActDate) AND 
             liActTime > 36000 THEN
-            ldtEndDate = fLastDayOfMonth(ldtActDate) + 1.
+            ldtEndDate = Func.Common:mLastDayOfMonth(ldtActDate) + 1.
          ELSE ldtEndDate = ldtActDate.
       END.
-      ELSE ldtEndDate = fLastDayOfMonth(ldtActDate) + 1.
+      ELSE ldtEndDate = Func.Common:mLastDayOfMonth(ldtActDate) + 1.
          
-      IF DAY(fLastDayOfMonth(ldtEndDate)) >= DAY(ldtPrepActDate) THEN
+      IF DAY(Func.Common:mLastDayOfMonth(ldtEndDate)) >= DAY(ldtPrepActDate) THEN
          ldtEndDate = DATE(MONTH(ldtEndDate),
                            DAY(ldtPrepActDate),
                            YEAR(ldtEndDate)).
-      ELSE ldtEndDate = fLastDayOfMonth(ldtEndDate). 
+      ELSE ldtEndDate = Func.Common:mLastDayOfMonth(ldtEndDate). 
 
       liEndTime = 36000.
    END.
@@ -925,16 +924,16 @@ PROCEDURE pContractActivation:
       liEndTime = 86399.
 
    IF ldtEndDate >= 12/31/2049 THEN ldEndStamp = 99999999.99999.
-   ELSE ldEndStamp = fMake2Dt(ldtEndDate,liEndTime).
+   ELSE ldEndStamp = Func.Common:mMake2DT(ldtEndDate,liEndTime).
 
-   ldBegStamp = fMake2Dt(ldtFromDate,
+   ldBegStamp = Func.Common:mMake2DT(ldtFromDate,
                          IF ldtFromDate = ldtActDate
                          THEN liActTime
                          ELSE 0).
    
    IF LOOKUP(DayCampaign.DCType,
              {&PERCONTRACT_RATING_PACKAGE},{&DCTYPE_POOL_RATING}) > 0 AND
-      ldBegStamp < fSecOffSet(fMakeTS(),-300) THEN DO:
+      ldBegStamp < Func.Common:mSecOffSet(Func.Common:mMakeTS(),-300) THEN DO:
          IF DAY(TODAY) > 1 OR MONTH(ldtFromDate) NE MONTH(TODAY) THEN 
             llReRate = TRUE.  
    END.   
@@ -1216,8 +1215,7 @@ PROCEDURE pContractActivation:
                 lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
          IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
@@ -1232,8 +1230,7 @@ PROCEDURE pContractActivation:
                                         OUTPUT lcError).
                
             IF liRequest = 0 THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
+               Func.Common:mWriteMemo("MobSub",
                                 STRING(MsRequest.MsSeq),
                                 MsRequest.Custnum,
                                 "CREDIT NOTE CREATION FAILED",
@@ -1252,8 +1249,7 @@ PROCEDURE pContractActivation:
                                OUTPUT lcError).
          /* write possible error to an order memo */
          IF lcError > "" THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.CustNum,
                              "RVTERMDT2 discount creation failed",
@@ -1276,8 +1272,7 @@ PROCEDURE pContractActivation:
 
       /* write possible error to an order memo */
       IF lcError > "" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MsOwner.MsSeq),
                           MsOwner.CustNum,
                           "BONOVOIPCPACT FATIME CREATION FAILED",
@@ -1393,13 +1388,13 @@ PROCEDURE pFinalize:
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
       
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
     
    ASSIGN liPeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate)
-          ldeLastDayofMonthStamp = fMake2Dt(fLastDayOfMonth(ldtActDate),86399)
-          ldeNextMonthStamp      = fMake2Dt((fLastDayOfMonth(ldtActDate) + 1),0).
+          ldeLastDayofMonthStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldtActDate),86399)
+          ldeNextMonthStamp      = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(ldtActDate) + 1),0).
 
    FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
               MsOwner.MsSeq  = MsRequest.MsSeq AND
@@ -1564,29 +1559,29 @@ PROCEDURE pFinalize:
          MsRequest.ReqIParam4 = 1.
       END.
       
-      fSplitTS(MsRequest.UpdateStamp,
+      Func.Common:mSplitTS(MsRequest.UpdateStamp,
                OUTPUT ldtDoneDate,
                OUTPUT liDoneTime).
 
       /* If call is made on last day before 1 hours then create
          re-reate request for last second of current day */
-      IF DAY(ldtDoneDate) = DAY(fLastDayOfMonth(ldtDoneDate)) AND
+      IF DAY(ldtDoneDate) = DAY(Func.Common:mLastDayOfMonth(ldtDoneDate)) AND
          liDoneTime <= (86399 - 3600) THEN DO:
          IF 86399 < (liDoneTime + 14400) THEN
-            ldeRerateActStamp = fMake2DT(ldtDoneDate,86399).
-         ELSE ldeRerateActStamp = fSecOffSet(MsRequest.UpdateStamp,14400).
-      END. /* IF DAY(ldtDoneDate) = DAY(fLastDayOfMonth(ldtDoneDate)) */
+            ldeRerateActStamp = Func.Common:mMake2DT(ldtDoneDate,86399).
+         ELSE ldeRerateActStamp = Func.Common:mSecOffSet(MsRequest.UpdateStamp,14400).
+      END. /* IF DAY(ldtDoneDate) = DAY(Func.Common:mLastDayOfMonth(ldtDoneDate)) */
       /* If call is made before last day then create re-reate
          request with 4 hours delay */
-      ELSE IF DAY(ldtDoneDate) < DAY(fLastDayOfMonth(ldtDoneDate)) THEN
-         ldeRerateActStamp = fSecOffSet(MsRequest.UpdateStamp,14400).
+      ELSE IF DAY(ldtDoneDate) < DAY(Func.Common:mLastDayOfMonth(ldtDoneDate)) THEN
+         ldeRerateActStamp = Func.Common:mSecOffSet(MsRequest.UpdateStamp,14400).
    END. /* IF MsRequest.ReqCparam3 = {&DSS} THEN DO: */
 
    ELSE IF MsRequest.ReqIParam4 = 1 THEN DO:
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtDoneDate,
                OUTPUT liDoneTime).
-      ldeRerateActStamp = fMakeTS().
+      ldeRerateActStamp = Func.Common:mMakeTS().
    END.
       
    /* Prevent creating extra re-rate requests if contract */
@@ -1653,7 +1648,7 @@ PROCEDURE pFinalize:
                             MsOwner.CLIType,        /* CLI Type */
                             0,                      /* order    */
                             MsRequest.ActStamp,
-                            fSecOffSet(MsRequest.ActStamp,-1),
+                            Func.Common:mSecOffSet(MsRequest.ActStamp,-1),
                             NO,                     /* create fees */
                             MsRequest.ReqSource,    /* req.source  */
                             {&REQUEST_ACTIONLIST_ALL}).
@@ -1662,8 +1657,8 @@ PROCEDURE pFinalize:
 
       IF LOOKUP(MsOwner.CLIType,lcAllowedDSS2SubsType) > 0 THEN DO:
 
-         ASSIGN ldCurrTS = (IF MsRequest.ActStamp > fMakeTS() THEN
-                MsRequest.ActStamp ELSE fMakeTS())
+         ASSIGN ldCurrTS = (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                MsRequest.ActStamp ELSE Func.Common:mMakeTS())
                 lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
    
          IF (LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) > 0 OR
@@ -1694,7 +1689,7 @@ PROCEDURE pFinalize:
                                        "CREATE",
                                        "",
                                        "DSS2",
-                                       fSecOffSet(ldCurrTS,180),
+                                       Func.Common:mSecOffSet(ldCurrTS,180),
                                        MsRequest.ReqSource,
                                        "",
                                        TRUE, /* create fees */
@@ -1703,8 +1698,7 @@ PROCEDURE pFinalize:
                                        OUTPUT lcError).
                IF liRequest = 0 THEN
                   /* write possible error to a memo */
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                                    STRING(MsOwner.MsSeq),
                                    MsOwner.Custnum,
                                    "DSS2 activation failed in percontr handling",
@@ -1737,8 +1731,7 @@ PROCEDURE pFinalize:
                                       INPUT katun,
                                       INPUT "Contract",
                                       OUTPUT lcError) THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                               "Customer",
+                     Func.Common:mWriteMemo("Customer",
                                STRING(MsRequest.CustNum),
                                MsRequest.CustNum,
                                MsRequest.ReqCParam3 + " Transfer Failed",
@@ -1863,7 +1856,7 @@ PROCEDURE pFinalize:
          FOR FIRST Order NO-LOCK WHERE
                    Order.MsSeq = MsRequest.MsSeq AND
                    Order.OrderType < 2:
-            fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          END.
       ELSE IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_STC} AND
               MsRequest.OrigRequest > 0 THEN
@@ -1878,8 +1871,8 @@ PROCEDURE pFinalize:
             ELSE RELEASE Order.
 
             IF AVAIL Order THEN 
-               fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
-            ELSE fTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
+               Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            ELSE Func.Common:mTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
          END.
 
       IF ldaOrderDate NE ? AND
@@ -1906,8 +1899,7 @@ PROCEDURE pFinalize:
                                       OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.Custnum,
                              "VOICE100 activation failed",
@@ -2019,14 +2011,14 @@ PROCEDURE pContractTermination:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
    ASSIGN
-      ldeLastDayofMonthStamp = fMake2Dt(fLastDayOfMonth(ldtActDate),86399)
-      ldeNextMonthStamp      = fMake2Dt((fLastDayOfMonth(ldtActDate) + 1),0)
-      ldeNextDayStamp        = fMake2Dt((ldtActDate + 1),0)
+      ldeLastDayofMonthStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldtActDate),86399)
+      ldeNextMonthStamp      = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(ldtActDate) + 1),0)
+      ldeNextDayStamp        = Func.Common:mMake2DT((ldtActDate + 1),0)
       liEndPeriod            = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
 
    IF MsRequest.ReqCParam2 = "recreate" THEN ASSIGN
@@ -2186,7 +2178,7 @@ PROCEDURE pContractTermination:
          IF ServiceLimit.LastMonthCalc = 1 AND 
             LOOKUP(MsRequest.ReqCParam2,"recreate,canc") = 0
          THEN DO:
-            fSplitTS(MServiceLimit.FromTS,
+            Func.Common:mSplitTS(MServiceLimit.FromTS,
                      OUTPUT ldaFromDate,
                      OUTPUT liReqCnt).
    
@@ -2198,10 +2190,10 @@ PROCEDURE pContractTermination:
                TRUNCATE(ldNewEndStamp / 100,0) THEN DO:
                   IF MServiceLimit.FromTS < ldNewEndStamp THEN ASSIGN 
                      llRelativeLast = TRUE
-                     ldNewEndStamp = fMake2Dt(DATE(MONTH(ldtActDate),1,
+                     ldNewEndStamp = Func.Common:mMake2DT(DATE(MONTH(ldtActDate),1,
                                                    YEAR(ldtActDate)) - 1,
                                               86399).
-                  ELSE ldNewEndStamp = fMake2Dt(DATE(MONTH(ldaFromDate),1,
+                  ELSE ldNewEndStamp = Func.Common:mMake2DT(DATE(MONTH(ldaFromDate),1,
                                                    YEAR(ldaFromDate)) - 1,
                                                 86399).
              END.                 
@@ -2227,7 +2219,7 @@ PROCEDURE pContractTermination:
                bLimit.SlSeq    = MServiceLimit.SlSeq AND
                bLimit.EndTS    = ldNewEndStamp)
             THEN LEAVE.
-            ldNewEndStamp = fSecOffSet(ldNewEndStamp,-1). 
+            ldNewEndStamp = Func.Common:mSecOffSet(ldNewEndStamp,-1). 
          END.
 
          IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
@@ -2289,7 +2281,7 @@ PROCEDURE pContractTermination:
             BUFFER-COPY MServiceLimit EXCEPT EndTS MSID TO bLimit.
             ASSIGN
                bLimit.MSID   = NEXT-VALUE(mServiceLimit)
-               bLimit.FromTS = fSecOffSet(ldNewEndStamp,1)
+               bLimit.FromTS = Func.Common:mSecOffSet(ldNewEndStamp,1)
                ldNewEndStamp = ldEndStamp.
 
             DO WHILE TRUE:
@@ -2299,7 +2291,7 @@ PROCEDURE pContractTermination:
                   bLimit.SlSeq    = MServiceLimit.SlSeq AND
                   bLimit.EndTS    = ldNewEndStamp)
                THEN LEAVE.
-               ldNewEndStamp = fSecOffSet(ldNewEndStamp,1). 
+               ldNewEndStamp = Func.Common:mSecOffSet(ldNewEndStamp,1). 
             END.
    
             bLimit.EndTS  = ldNewEndStamp.
@@ -2391,7 +2383,7 @@ PROCEDURE pContractTermination:
          RETURN.
       END.
       
-      fSplitTS(MsRequest.CreStamp,
+      Func.Common:mSplitTS(MsRequest.CreStamp,
                OUTPUT ldtCreDate,
                OUTPUT liActTime).
 
@@ -2669,8 +2661,7 @@ PROCEDURE pContractTermination:
       IF RETURN-VALUE > "" THEN NEXT.
       
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "FixedFee",
+      Func.Common:mWriteMemo("FixedFee",
                  STRING(FixedFee.FFNum),
                  FixedFee.CustNum,
                  "Closed",
@@ -2862,8 +2853,7 @@ PROCEDURE pContractTermination:
                              FALSE, /* mandatory for father request */
                              OUTPUT lcError).
                IF liRequest = 0 THEN
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                                    STRING(bMsRequest.MsSeq),
                                    bMsRequest.Custnum,
                                    "Contract consumption adjustment failed;",
@@ -3065,7 +3055,7 @@ PROCEDURE pMaintainContract:
    /* fee for changing contract */
    IF MsRequest.CreateFees AND DayCampaign.ModifyFeeModel > "" THEN DO:
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtActDate,
                OUTPUT liReqCnt).
                
@@ -3136,7 +3126,7 @@ PROCEDURE pPerContractPIN:
       RETURN.
    END. 
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -3165,8 +3155,8 @@ PROCEDURE pPerContractPIN:
 
       IF lcSMSText > "" THEN DO:                    
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(Customer.CustNum,
                        Customer.SMSNumber,
@@ -3309,14 +3299,14 @@ PROCEDURE pTerminateServicePackage:
       FIND FIRST bPerContract WHERE bPerContract.Brand = gcBrand AND bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
       IF AVAILABLE bPerContract AND LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN 
       DO: 
-         lcBundles = fGetActiveBundle(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1)).
+         lcBundles = fGetActiveBundle(iiMsSeq,Func.Common:mSecOffSet(MsRequest.ActStamp,1)).
          lcBundles = REPLACE(lcBundles,"BONO_VOIP","").
       END.
 
       /* No need to terminate SHAPER and HSDPA if
          ongoing STC/BTC with data bundle */
       IF (lcBundles = "" OR LOOKUP(lcBundles,lcOnlyVoiceContracts) > 0) AND 
-         fBundleWithSTC(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1),FALSE) THEN 
+         fBundleWithSTC(iiMsSeq,Func.Common:mSecOffSet(MsRequest.ActStamp,1),FALSE) THEN 
          RETURN "".
    END.
 
@@ -3393,7 +3383,7 @@ PROCEDURE pContractReactivation:
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -3568,7 +3558,7 @@ PROCEDURE pContractReactivation:
             THEN DO:
                ASSIGN 
                   ddate = fInt2Date(FFItem.Concerns[2],2)
-                  ddate = fLastDayOfMonth(ddate)
+                  ddate = Func.Common:mLastDayOfMonth(ddate)
                   liItemEnd = YEAR(ddate) * 10000 +
                               MONTH(ddate) * 100 +
                               DAY(ddate).
@@ -3750,7 +3740,7 @@ PROCEDURE pContractReactivation:
             ldEndStamp = 99999999.99999
             ldInclAmt  = MServiceLimit.InclAmt.
 
-         fSplitTS(MServiceLimit.FromTS,
+         Func.Common:mSplitTS(MServiceLimit.FromTS,
                   OUTPUT ldtMSActDate,
                   OUTPUT liMSActTime).
 
@@ -3760,8 +3750,8 @@ PROCEDURE pContractReactivation:
          THEN DO:
             IF DAY(ldtMSActDate) > 1 THEN DO: 
                ASSIGN 
-                  ldaPeriodEndDate = fLastDayOfMonth(ldtMSActDate)
-                  ldEndStamp = fMake2DT(ldaPeriodEndDate,86399).
+                  ldaPeriodEndDate = Func.Common:mLastDayOfMonth(ldtMSActDate)
+                  ldEndStamp = Func.Common:mMake2DT(ldaPeriodEndDate,86399).
                IF MServiceLimit.EndTS >= ldEndStamp THEN NEXT. 
              
                /* limit may have been changed on termination */

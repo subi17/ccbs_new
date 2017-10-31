@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 
@@ -39,7 +38,7 @@ RUN Mc/creditscoring.p(
 
 IF liEmployees < 10 THEN liEmployees = 10.
 
-ldeTime = fMakeTS().
+ldeTime = Func.Common:mMakeTS().
 
 FIND FIRST OrderCustomer WHERE 
    OrderCustomer.Brand = gcBrand AND

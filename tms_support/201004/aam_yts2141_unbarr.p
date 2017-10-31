@@ -105,7 +105,7 @@ repeat:
                    "UNY_REST",
                    "9",                /* source  */
                    katun,       /* creator */
-                   fMakeTS() + 0.0012, /* activate, 2min delay */
+                   Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                    "",                 /* SMS */
                    OUTPUT lcResult).
                       

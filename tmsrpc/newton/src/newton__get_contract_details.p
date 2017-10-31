@@ -29,7 +29,6 @@
 {Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF VAR pcTenant     AS CHAR NO-UNDO. 
@@ -117,8 +116,8 @@ END.
 IF pcDate EQ ? THEN pcDate = TODAY - 30.
 
 ASSIGN 
-   lpcDateStamp  = fHMS2TS(pcDate,"00:00:00")
-   ldtTodayStamp = fHMS2TS(TODAY,"23:59:59").
+   lpcDateStamp  = Func.Common:mHMS2TS(pcDate,"00:00:00")
+   ldtTodayStamp = Func.Common:mHMS2TS(TODAY,"23:59:59").
 
 /* Creating temp-table data WITH Terminal return contracts */
 FOR EACH TermReturn NO-LOCK WHERE 
@@ -131,7 +130,7 @@ FOR EACH TermReturn NO-LOCK WHERE
 
    ASSIGN 
       ldtContractDate = ?
-      llgContractDate = fTS2Date(TermReturn.ReturnTS,
+      llgContractDate = Func.Common:mTS2Date(TermReturn.ReturnTS,
                                  ldtContractDate).
    CREATE ttContractDetails.
    ASSIGN 
@@ -182,7 +181,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 
       ASSIGN 
          ldtContractDate = ?
-         llgContractDate = fTS2Date(Order.CrStamp,
+         llgContractDate = Func.Common:mTS2Date(Order.CrStamp,
                                     ldtContractDate).
       CREATE ttContractDetails.
       ASSIGN 
@@ -224,8 +223,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
       
       ASSIGN 
          lcCustName = ""  
-         lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                    BUFFER Customer).
+         lcCustName = Func.Common:mPrintCustName(BUFFER Customer).
 
       gcSubscriptionStruct = add_struct(lcTopArray,"").
       add_string(gcSubscriptionStruct,"cli",ttContractDetails.CLI).
@@ -277,7 +275,7 @@ DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO.
 
       ASSIGN 
          ldtContractDate = ?
-         llgContractDate = fTS2Date(MsRequest.ActStamp,
+         llgContractDate = Func.Common:mTS2Date(MsRequest.ActStamp,
                                     ldtContractDate).
       CREATE ttContractDetails.
       ASSIGN 

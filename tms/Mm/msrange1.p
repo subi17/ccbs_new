@@ -11,7 +11,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/cparam2.i}
 
@@ -227,8 +226,7 @@ REPEAT WITH FRAME range.
 
           DISPLAY lcMsCode.
 
-          lcMSCodeDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                            "MSISDNNumber","Rank", inputMsCode).
+          lcMSCodeDesc = Func.Common:mTMSCodeName("MSISDNNumber","Rank", inputMsCode).
           DISPLAY lcMSCodeDesc.
       END. /* IF FRAME-FIELD = "lcMSCode" AND LOOKUP(... */
 
@@ -246,8 +244,7 @@ REPEAT WITH FRAME range.
             DISPLAY lcMsCode WITH FRAME range.
          END. /* IF lcCode NE "" ... */
          
-         lcMSCodeDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "MSISDNNumber","Rank", lcCode).
+         lcMSCodeDesc = Func.Common:mTMSCodeName("MSISDNNumber","Rank", lcCode).
          
          DISPLAY lcMSCodeDesc. 
       END. /* IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel */
@@ -265,8 +262,7 @@ REPEAT WITH FRAME range.
           inputMsCode2 = TRIM(INPUT lcMsCode).
           lcMsCode = inputMsCode2.
 
-          lcResPosDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                            "MSISDN","POS", inputOsCode).
+          lcResPosDesc = Func.Common:mTMSCodeName("MSISDN","POS", inputOsCode).
 
           DISPLAY lcResPosDesc.
           DISPLAY ocPosCode.
@@ -286,8 +282,7 @@ REPEAT WITH FRAME range.
             DISPLAY ocPosCode WITH FRAME range.
          END. /* IF lcCode NE "" */
          
-         lcResPosDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "MSISDN", "POS", lcCode).
+         lcResPosDesc = Func.Common:mTMSCodeName("MSISDN", "POS", lcCode).
          
          DISPLAY lcResPosDesc. 
       END. /* IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel */
@@ -527,7 +522,7 @@ PROCEDURE MarkRankedMSISDNInRange:
          x-MSISDN.StatusCode  >= iBeginStatus  AND
          x-MSISDN.StatusCode  <= iEndStatus    AND
          x-MSISDN.Brand        = gcBrand       AND 
-         x-MSISDN.ValidTo      > fMakeTS()     AND 
+         x-MSISDN.ValidTo      > Func.Common:mMakeTS()     AND 
          x-MSISDN.pos          = ""
       BREAK BY x-MSISDN.CLI:
          

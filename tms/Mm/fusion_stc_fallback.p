@@ -61,7 +61,7 @@ ELSE IF MobSub.CLIType EQ "CONTSF" THEN DO:
 END.
 ELSE RETURN "Subscription type is not Fusion".
 
-ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY)+ 1).
+ldeSTCTS = Func.Common:mDate2TS(Func.Common:mLastDayOfMonth(TODAY)+ 1).
 
 /* Various validations */
 IF fValidateMobTypeCh(

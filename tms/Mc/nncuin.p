@@ -205,7 +205,7 @@ task:
          PUT STREAM excel UNFORMATTED tab.
       ELSE  
          PUT STREAM excel UNFORMATTED 
-         fDateFMT(Customer.ContrEnd,"dd-mm-yy") tab.
+         Func.Common:mDateFmt(Customer.ContrEnd,"dd-mm-yy") tab.
 
       FOR EACH imth.
          PUT STREAM excel UNFORMATTED

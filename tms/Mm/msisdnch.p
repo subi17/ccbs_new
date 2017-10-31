@@ -12,7 +12,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MSISDN'}
 {Func/fmakemsreq.i}
@@ -111,12 +110,12 @@ FIND FIRST Customer WHERE
            Customer.CustNum = MobSub.CustNum
 NO-LOCK NO-ERROR.
 IF AVAIL Customer THEN lcUserName =
-   DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   Func.Common:mDispCustName(BUFFER Customer).
 
 
 FIND FIRST MSISDN WHERE 
            MSISDN.CLI  = MobSub.CLI AND 
-           MSISDN.ValidTo > fMAkeTS()
+           MSISDN.ValidTo > Func.Common:mMakeTS()
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL msisdn THEN DO:
@@ -197,7 +196,7 @@ REPEAT TRANSACTION WITH FRAME main:
             EXCLUSIVE-LOCK NO-ERROR.
 
             IF NOT AVAIL new-MSISDN OR
-               (new-MSISDN.ValidTo <= fMakeTS() AND 
+               (new-MSISDN.ValidTo <= Func.Common:mMakeTS() AND 
                   new-MSISDN.StatusCode NE 4) THEN DO:
                BELL.
                MESSAGE "MSISDN No." new-CLI "DOES NOT EXIST !".
@@ -210,7 +209,7 @@ REPEAT TRANSACTION WITH FRAME main:
                FIND FIRST active-MSISDN WHERE  
                           active-MSISDN.Brand = gcBrand AND
                           active-MSISDN.CLI = new-CLI  AND
-                          active-MSISDN.ValidTo > fMakeTS() AND
+                          active-MSISDN.ValidTo > Func.Common:mMakeTS() AND
                           recid(active-msisdn) ne recid(new-msisdn)
                NO-LOCK NO-ERROR.
                IF AVAIL active-MSISDN THEN DO:
@@ -273,7 +272,7 @@ REPEAT TRANSACTION WITH FRAME main:
                   ELSE
                      MESSAGE
                         "This Number is quarantined until"
-                        ENTRY(1,fTS2HMS(new-msisdn.validto)," ")
+                        ENTRY(1,Func.Common:mTS2HMS(new-msisdn.validto)," ")
                         "- Use it anyway (Y/N) ?"
                      UPDATE ok.
                   
@@ -283,8 +282,8 @@ REPEAT TRANSACTION WITH FRAME main:
         
                END.
 
-               IF new-MSISDN.ValidFrom < FmakeTS() AND 
-                  new-msisdn.ValidTo > fMakets() THEN DO:
+               IF new-MSISDN.ValidFrom < Func.Common:mMakeTS() AND 
+                  new-msisdn.ValidTo > Func.Common:mMakeTS() THEN DO:
 
                   IF new-msisdn.StatusCode = 0 THEN DO:
               
@@ -356,7 +355,7 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  Mobsub.CustNum,
                     INPUT  liStatusCode,
                     INPUT  katun,
-                    INPUT  fMakeTS(),
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEMSISDN",
                     INPUT  new-cli,
                     INPUT  "", /*for old SIM*/

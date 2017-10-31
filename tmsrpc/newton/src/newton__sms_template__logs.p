@@ -12,7 +12,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcResultStruct AS CHAR NO-UNDO. 
@@ -51,7 +50,7 @@ FOR EACH InvText NO-LOCK WHERE
       add_string(lcResultStruct, "usercode", EventLog.UserCode).
       add_string(lcResultStruct, "keyvalue", InvText.KeyValue).
       add_int(lcResultStruct, "language", InvText.Language).
-      ldeTimeStamp = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+      ldeTimeStamp = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       add_timestamp(lcResultStruct, "timestamp", ldeTimeStamp).
    END.
    FOR EACH RepText NO-LOCK WHERE
@@ -75,7 +74,7 @@ FOR EACH InvText NO-LOCK WHERE
       add_string(lcResultStruct, "usercode", EventLog.UserCode).
       add_string(lcResultStruct, "keyvalue", InvText.KeyValue).
       add_int(lcResultStruct, "language", RepText.Language).
-      ldeTimeStamp = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+      ldeTimeStamp = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       add_timestamp(lcResultStruct, "timestamp", ldeTimeStamp).
       END.
    END.

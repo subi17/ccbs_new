@@ -25,7 +25,6 @@
 {Syst/utumaa.i "new"}
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 assign tuni1 = "accdatll"
        tuni2 = "".
@@ -299,7 +298,7 @@ fELog("REVENUE","Started:" + lcLogLine).
 ASSIGN lcExFile     = lcFileDir + "/" + lcExFile
        lcSapFile    = lcFileDir + "/" + lcSapFile
        ldtStartDate = TODAY
-       ldBegTime    = fMakeTS()
+       ldBegTime    = Func.Common:mMakeTS()
        lcStartTime  = STRING(TIME,"hh:mm:ss").
        
 DISPLAY ldtStartDate lcStartTime WITH FRAME rajat.        
@@ -332,11 +331,10 @@ IF llPaper THEN DO:
     {Syst/tmsreport.i}
 END.
 
-ldEndTime = fMakeTS().
+ldEndTime = Func.Common:mMakeTS().
 
 /* duration */
-liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                             ldBegTime,
+liDurDays = Func.Common:mTSDuration(ldBegTime,
                              ldEndTime,
                              OUTPUT liDurTime).
  

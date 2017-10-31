@@ -15,7 +15,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/fgettxt.i}
 {Func/smsmessage.i}
 
@@ -84,9 +83,9 @@ FUNCTION fParseTimeStamp RETURNS LOGIC
                   substring(icTimeStamp,13,2)) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN RETURN FALSE.
 
-   IF fCheckTime(REPLACE(lcTime,":","")) EQ FALSE THEN RETURN FALSE.
+   IF Func.Common:mCheckTime(REPLACE(lcTime,":","")) EQ FALSE THEN RETURN FALSE.
 
-   odeStamp = fHMS2TS(ldaDate,lcTime).
+   odeStamp = Func.Common:mHMS2TS(ldaDate,lcTime).
    IF odeStamp EQ ? OR odeStamp EQ 0 THEN RETURN FALSE.
 
    RETURN TRUE.
@@ -233,7 +232,7 @@ PROCEDURE pHandleOfferSMSResponse:
       lcCommand      = ENTRY(1,icResponse, " ")
       lcContractID   = RIGHT-TRIM(ENTRY(2,icResponse, " "),".") WHEN 
          NUM-ENTRIES(icResponse," ") >= 2
-      ldeCheckBuffer = fOffSet(fMakeTS(), -90 * 24).
+      ldeCheckBuffer = Func.Common:mOffSet(Func.Common:mMakeTS(), -90 * 24).
 
    IF lcContractID > "" THEN
       /* find order based on contact number */

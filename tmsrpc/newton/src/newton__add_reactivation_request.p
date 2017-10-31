@@ -21,7 +21,6 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Mnp/mnp.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/freacmobsub.i}
 
@@ -67,7 +66,7 @@ IF LOOKUP("ActStamp", pcReacStruct) GT 0 THEN
 
 /* Set Reactivation time */
 IF ldActStamp = 0 OR ldActStamp = ? THEN
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
 {newton/src/findtenant.i NO ordercanal TermMobSub MsSeq liMsSeq}
 

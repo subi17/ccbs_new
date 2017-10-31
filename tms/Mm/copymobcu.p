@@ -12,7 +12,6 @@
                   23.03.04 aam check if customer exists (new-no)
                   18.06.04 tk  creuser and credate
                   10.01.06 aam clean eventlog
-                  24.01.06 jt DYNAMIC-FUNCTION("fDispCustName"  Version ......: M15
 --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
@@ -41,8 +40,7 @@ DEF VAR lcCustName                  AS CHAR NO-UNDO.
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK NO-ERROR.
 PAUSE 0.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 ok = FALSE.
 IF DEBUG THEN 

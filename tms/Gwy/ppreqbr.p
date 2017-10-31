@@ -36,7 +36,6 @@
 {Mc/lib/tokenchk.i 'PrePaidRequest'}
 {Func/xmlfunction.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/matrix.i}
 {Func/ftaxdata.i}
@@ -280,7 +279,7 @@ FUNCTION fTopUpLoaded RETURNS DECIMAL
    DEF VAR ldTS2     AS DEC  NO-UNDO.
    DEF VAR ldLoaded  AS DEC  NO-UNDO.
    
-   fMonthlyStamps(TODAY,
+   Func.Common:mMonthlyStamps(TODAY,
                   OUTPUT ldTS1, 
                   OUTPUT ldTS2).
    
@@ -316,7 +315,7 @@ FUNCTION fMinusRequest RETURNS LOGIC
       PrePaidRequest.CommLine    = "AdjustmentTRequest" 
       PrePaidRequest.Source      = "CC"
       PrePaidRequest.PPStatus    = 99.
-      PrePaidRequest.TSRequest   = fMakeTS().
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS().
 
    RETURN TRUE.
    
@@ -986,7 +985,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-   lcTSRequest = fTS2HMS(PrePaidRequest.TSRequest).
+   lcTSRequest = Func.Common:mTS2HMS(PrePaidRequest.TSRequest).
    
    lcDispResp = STRING((PrePaidRequest.RespCode = 0 OR
                         PrePaidRequest.RespCode = 1 OR
@@ -1063,8 +1062,7 @@ PROCEDURE local-UPDATE-record:
    END.
    
    ASSIGN 
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer)
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer)
       lcTaxZone  = ""
       ldTaxPerc  = 0
       llDirect   = FALSE
@@ -1103,7 +1101,7 @@ PROCEDURE local-UPDATE-record:
    IF llNew THEN DO:
           
       ASSIGN
-         PrePaidRequest.TSRequest = fMakeTS()
+         PrePaidRequest.TSRequest = Func.Common:mMakeTS()
          PrePaidRequest.Request   = "AdjustmentTRequest"    
          PrePaidRequest.CommLine  = "AdjustmentTRequest"     
          PrePaidRequest.Source    =  (IF llNegative THEN "CHARGE" ELSE "COMP" )
@@ -1145,7 +1143,7 @@ PROCEDURE local-UPDATE-record:
    END.
    
    ASSIGN
-      ldCurrTS  = fMakeTS()
+      ldCurrTS  = Func.Common:mMakeTS()
       lcReqZone = lcTaxZone.
  
    FIND TaxZone WHERE TaxZone.TaxZone = lcTaxZone NO-LOCK NO-ERROR.
@@ -1184,19 +1182,17 @@ PROCEDURE local-UPDATE-record:
    RequestUpdate:
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
-      fSplitTS(PrePaidRequest.TSRequest, OUTPUT ldaDate, OUTPUT liTime).
+      Func.Common:mSplitTS(PrePaidRequest.TSRequest, OUTPUT ldaDate, OUTPUT liTime).
 
       ASSIGN
-         lcDone      = fTS2HMS(PrePaidRequest.TsResponse)
+         lcDone      = Func.Common:mTS2HMS(PrePaidRequest.TsResponse)
          lcTime      = REPLACE(STRING(liTime,"hh:mm:ss"),":","")
          ldeTopUpAmt = PrePaidRequest.TopUpAmt  / 100    
          ldeVatAmt   = PrePaidRequest.VatAmt    / 100 
-         lcRespCode  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "PrePaidRequest",
+         lcRespCode  = Func.Common:mTMSCodeName("PrePaidRequest",
                                         "RespCode",
                                         PrePaidRequest.RespCode)
-         lcStatus    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "PrePaidRequest",
+         lcStatus    = Func.Common:mTMSCodeName("PrePaidRequest",
                                         "PPStatus",
                                         STRING(PrePaidRequest.PPStatus)).
  
@@ -1366,14 +1362,14 @@ PROCEDURE local-UPDATE-record:
                   END.
                   
                   ELSE IF FRAME-FIELD = "lcTime" THEN DO:
-                     IF NOT fCheckTime(INPUT INPUT FRAME lis lcTime) THEN DO:
+                     IF NOT Func.Common:mCheckTime(INPUT INPUT FRAME lis lcTime) THEN DO:
                         MESSAGE 
                            "Invalid time: " + INPUT FRAME lis lcTime
                         VIEW-AS ALERT-BOX ERROR.
                         NEXT.
                      END.
                      
-                     ldCheckTS = fHMS2TS(INPUT INPUT FRAME lis ldaDate,
+                     ldCheckTS = Func.Common:mHMS2TS(INPUT INPUT FRAME lis ldaDate,
                                          INPUT INPUT FRAME lis lcTime).
                                           
                      IF ldCheckTS < ldCurrTS THEN DO:
@@ -1405,7 +1401,7 @@ PROCEDURE local-UPDATE-record:
 
              END.
             
-            ldCheckTS = fHMS2TS(ldaDate,lcTime).
+            ldCheckTS = Func.Common:mHMS2TS(ldaDate,lcTime).
             
             IF ldeTopUpAmt * 100 NE PrePaidRequest.TopUpAmt OR
                ldeVatAmt * 100   NE PrePaidRequest.VatAmt   OR
@@ -1413,7 +1409,7 @@ PROCEDURE local-UPDATE-record:
             THEN ASSIGN
                PrePaidRequest.TopUpAmt  = ldeTopUpAmt * 100
                PrePaidRequest.VatAmt    = ldeVatAmt * 100
-               PrePaidRequest.TSRequest = fHMS2TS(ldaDate,lcTime)
+               PrePaidRequest.TSRequest = Func.Common:mHMS2TS(ldaDate,lcTime)
                llChanged                = TRUE.
              
             PrepaidRequest.TaxZone = lcReqZone.

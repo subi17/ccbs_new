@@ -286,8 +286,7 @@ IF odBilled > 0 AND ilCredit THEN DO:
           SingleFee.Contract    = bCloseFee.Contract
           SingleFee.Active      = TRUE
           SingleFee.Amt         = -1 * odBilled.
-          SingleFee.Memo[1]     = DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                                   198,
+          SingleFee.Memo[1]     = Func.Common:mGetHdrText(198,
                                                    Customer.Language).
    
    IF llDoEvent THEN RUN StarEventMakeCreateEventWithMemo(

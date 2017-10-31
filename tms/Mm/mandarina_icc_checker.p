@@ -52,7 +52,7 @@ PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker
 ASSIGN
    lcTableName = "MANDARINA"
    lcActionID  = "Mandarina_ICC_Checker"
-   ldCurrentTimeTS = fMakeTS().
+   ldCurrentTimeTS = Func.Common:mMakeTS().
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
@@ -94,8 +94,8 @@ DO TRANS:
    END.
 END.
 
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-PUT STREAM sICCLog UNFORMATTED "Collection period: " + fTS2HMS(ldCollPeriodStartTS) + " TO " fTS2HMS(ldCollPeriodEndTS) SKIP.
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
+PUT STREAM sICCLog UNFORMATTED "Collection period: " + Func.Common:mTS2HMS(ldCollPeriodStartTS) + " TO " Func.Common:mTS2HMS(ldCollPeriodEndTS) SKIP.
 /* ICC lookup part */
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
@@ -224,14 +224,13 @@ PROCEDURE pRemoveInternetBarring:
                        "Internet=0",        /* Barring */
                        "11",                /* source   */
                        "Sistema",           /* creator  */
-                       fMakeTS(),           /* activate */
+                       Func.Common:mMakeTS(),           /* activate */
                        "",                  /* SMS      */
                        OUTPUT lcResult).
 
    liRequest = INTEGER(lcResult) NO-ERROR.                             
    IF liRequest > 0 THEN DO:   
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                       "Mobsub",
+      Func.Common:mWriteMemoWithType("Mobsub",
                        mobsub.MsSeq,
                        mobsub.CustNum,
                        "OTA Barring desactivado",          /* memo title */

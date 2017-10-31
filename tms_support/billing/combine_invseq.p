@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/date.i}
 {Inv/combine_invseq.i}
 
 DEF VAR idafromdate as date no-undo.
@@ -9,7 +8,7 @@ DEF VAR idatodate as date no-undo.
 
 ASSIGN
    idafromdate = date(month(today), 1, YEAR(TODAY))
-   idatodate = fLastDayOfMonth(today).
+   idatodate = Func.Common:mLastDayOfMonth(today).
 
 DEFINE VARIABLE lcInfo AS CHARACTER NO-UNDO. 
 

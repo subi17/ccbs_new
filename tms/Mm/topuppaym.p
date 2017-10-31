@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -63,7 +62,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
    IF idAmt NE 0 THEN DO:
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = Payment.PaymDate
          OPLog.UserCode  = katun
@@ -384,7 +383,7 @@ IF idVatAmt NE 0 THEN ASSIGN
    Payment.Posting[3] = -1 * idVatAmt.
  
 /* time when posted */
-Payment.ImportStamp = fMakeTS().
+Payment.ImportStamp = Func.Common:mMakeTS().
 
 /* account types */
 DO liCount = 1 TO 3:
@@ -420,7 +419,7 @@ IF lcMemo > "" THEN DO:
           Memo.CreUser   = katun 
           Memo.MemoTitle = "TOPUP Payment"
           Memo.MemoText  = lcMemo.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
    
 END.
 

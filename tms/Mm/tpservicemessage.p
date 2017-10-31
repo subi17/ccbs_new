@@ -11,7 +11,6 @@ DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO.
 DEF INPUT PARAMETER iiServSeq AS INT NO-UNDO.
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttDocs LIKE TPServiceMessage 
   FIELD cCreatedTS AS CHAR
@@ -23,8 +22,8 @@ FUNCTION fCollect RETURNS LOGICAL:
       CREATE ttDocs.
       BUFFER-COPY TPServiceMessage to ttDocs
       ASSIGN  
-          ttDocs.cCreatedTS = fTS2HMS(TPServiceMessage.CreatedTS).
-          ttDocs.cUpdateTS  = fTS2HMS(TPServiceMessage.UpdateTS).
+          ttDocs.cCreatedTS = Func.Common:mTS2HMS(TPServiceMessage.CreatedTS).
+          ttDocs.cUpdateTS  = Func.Common:mTS2HMS(TPServiceMessage.UpdateTS).
    END.
 
    RETURN TRUE.

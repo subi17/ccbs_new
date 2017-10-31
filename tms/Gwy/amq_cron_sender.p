@@ -10,9 +10,7 @@
 gcBrand = "1".
 Katun = "Cron".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/amq.i}
 
 DEF VAR lcActionID        AS CHAR NO-UNDO.
@@ -22,7 +20,7 @@ DEF VAR lcSendStatus      AS CHAR NO-UNDO.
 
 lcTableName = "DMS".
 lcActionID = {&AMQ_RESENDER}.
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 DO TRANS:
 
@@ -74,7 +72,7 @@ FOR EACH AmqMsg WHERE
    END.
    ELSE DO:
       AMQMsg.StatusCode = lcSendStatus.
-      AMQMsg.InsertTS = fMakeTS().
+      AMQMsg.InsertTS = Func.Common:mMakeTS().
    END.
 END.
 

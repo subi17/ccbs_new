@@ -9,7 +9,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INTEGER.
 DEFINE INPUT PARAMETER iiStatNow   AS INTEGER.
@@ -26,7 +25,7 @@ DEF VAR liStampTime AS INTEGER   NO-UNDO.
 DEF VAR Ok          AS LOGICAL   NO-UNDO.
 DEF VAR lcInfo      AS CHARACTER NO-UNDO.
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldtActivate,
          OUTPUT liStampTime).
 

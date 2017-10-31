@@ -10,7 +10,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttSource NO-UNDO
    FIELD PPSource AS CHAR.
@@ -82,8 +81,8 @@ FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
           FMItem.Brand = gcBrand AND
           FMItem.FeeModel = MsRequest.ReqCParam1 AND
           DATETIME(FMItem.ToDate) >= 
-             fTimeStamp2DateTime(MsRequest.CreStamp) AND 
-          DATETIME(FMItem.FromDate) <= fTimeStamp2DateTime(MsRequest.CreStamp),
+             Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp) AND 
+          DATETIME(FMItem.FromDate) <= Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp),
     FIRST BillItem NO-LOCK WHERE 
           BillItem.Brand = gcBrand AND
           BillItem.BillCode = FMItem.BillCode
@@ -100,7 +99,7 @@ FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
    FIND FIRST TMSUser WHERE TMSUser.UserCode = lcCreator NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser THEN lcCreator = TMSUser.UserName.
 
-   fSplitTS (MsRequest.CreStamp,
+   Func.Common:mSplitTS (MsRequest.CreStamp,
              OUTPUT ldDate,
              OUTPUT liTime).
 
@@ -159,9 +158,9 @@ FOR EACH ttSource,
           FMItem.Brand = gcBrand AND
           FMItem.FeeModel = PrePaidRequest.ReqCParam1 AND
           DATETIME(FMItem.ToDate) >= 
-             fTimeStamp2DateTime(PrePaidRequest.TSRequest) AND 
+             Func.Common:mTimeStamp2DateTime(PrePaidRequest.TSRequest) AND 
           DATETIME(FMItem.FromDate) <= 
-             fTimeStamp2DateTime(PrePaidRequest.TSRequest),
+             Func.Common:mTimeStamp2DateTime(PrePaidRequest.TSRequest),
     FIRST BillItem NO-LOCK WHERE 
           BillItem.Brand = gcBrand AND
           BillItem.BillCode = FMItem.BillCode
@@ -178,7 +177,7 @@ FOR EACH ttSource,
    FIND FIRST TMSUser WHERE TMSUser.UserCode = lcCreator NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser THEN lcCreator = TMSUser.UserName.
 
-   fSplitTS (PrePaidRequest.TSRequest,
+   Func.Common:mSplitTS (PrePaidRequest.TSRequest,
              OUTPUT ldDate,
              OUTPUT liTime).
 

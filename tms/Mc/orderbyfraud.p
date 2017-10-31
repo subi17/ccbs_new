@@ -4,7 +4,6 @@
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 {Func/msisdn.i}

@@ -168,8 +168,8 @@ FUNCTION fAddSubInvoices RETURNS LOGICAL
    DEF VAR ldeInvPeriodStart AS DEC NO-UNDO.
    DEF VAR ldeInvPeriodEnd   AS DEC NO-UNDO.
 
-   ASSIGN ldeInvPeriodStart = fMake2Dt(Invoice.FromDate,0)
-          ldeInvPeriodEnd   = fMake2Dt(Invoice.ToDate,86399).
+   ASSIGN ldeInvPeriodStart = Func.Common:mMake2DT(Invoice.FromDate,0)
+          ldeInvPeriodEnd   = Func.Common:mMake2DT(Invoice.ToDate,86399).
 
    lcSubInvoices = add_array(pcStruct,"sub_invoices").
 
@@ -230,45 +230,37 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
         Customer.CustNum = Invoice.CustNum NO-LOCK NO-ERROR.
 
    ASSIGN 
-   lcInvType    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcInvType    = Func.Common:mTMSCodeName("Invoice",
                                    "InvType",
                                    STRING(Invoice.InvType))
                                        
-   lcPrintState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcPrintState = Func.Common:mTMSCodeName("Invoice",
                                    "PrintState",
                                    STRING(Invoice.PrintState))
                  
-   lcClaimState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcClaimState = Func.Common:mTMSCodeName("Invoice",
                                    "ClaimStatus",
                                     Invoice.ClaimStatus)
 
-   lcPaymState  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcPaymState  = Func.Common:mTMSCodeName("Invoice",
                                    "PaymState",
                                    STRING(Invoice.PaymState))
              
-   lcCType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcCType      = Func.Common:mTMSCodeName("Invoice",
                                    "ChargeType",
                                    STRING(Invoice.ChargeType))
 
-   lcDType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcDType      = Func.Common:mTMSCodeName("Invoice",
                                    "DelType",
                                    STRING(Invoice.DelType))
 
-   lcVatUsage   = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcVatUsage   = Func.Common:mTMSCodeName("Invoice",
                                    "VatUsage",
                                    STRING(Invoice.VatUsage))
 
    lcDDState   = IF Invoice.DDBankAcc = ""
                  THEN ""
-                 ELSE DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Invoice",
+                 ELSE Func.Common:mTMSCodeName("Invoice",
                                        "DDState",
                                        STRING(Invoice.DDState))
    lcCrExtID   = "".

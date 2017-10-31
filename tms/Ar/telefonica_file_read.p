@@ -10,7 +10,6 @@
 katun = "Qvantel".
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/email.i}
@@ -111,14 +110,14 @@ REPEAT:
       liNumTF = 0
       liNumErr = 0
       liLineNum = 0
-      ldThisRun = fMakeTS().
+      ldThisRun = Func.Common:mMakeTS().
    
    lcLogFile = lcLogDir + lcFileName + ".LOG". 
    
    RUN pMarkStarted. 
    IF RETURN-VALUE NE "OK" THEN LEAVE FILE_LOOP. 
 
-   fSplitTS(ldThisRun, OUTPUT ldaToday, OUTPUT liTime).
+   Func.Common:mSplitTS(ldThisRun, OUTPUT ldaToday, OUTPUT liTime).
    
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile). 
 
@@ -312,7 +311,7 @@ PROCEDURE pMarkFinished:
          ActionLog.ActionChar   = 
             SUBST("Yoigo+TF: &1, TF: &2, Yoigo: &3, Errors: &4", 
                   liNumYoigoTF, liNumTF, liNumYoigo, liNumErr) + CHR(10) + 
-                  "Finished: " + fTS2HMS(fMakeTS()). 
+                  "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS()). 
    END.
    
 END PROCEDURE.

@@ -252,8 +252,7 @@ PROCEDURE pInitialize:
          lcTarFile = REPLACE(lcTarFile,"#PHOUSE",icPrintHouse)
          lcTarFile = REPLACE(lcTarFile,"#PROC",
                              STRING(iiFRProcessID) + "#BATCH")
-         lcDate    = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                                      idaInvDate,
+         lcDate    = Func.Common:mDateFmt(idaInvDate,
                                      "yyyymmdd")
          lcTarFile = REPLACE(lcTarFile,"#IDATE",lcDate)
          lcTarBatchFile = REPLACE(lcTarFile,"#BATCH",STRING(liTarBatch)).
@@ -325,7 +324,7 @@ PROCEDURE pInitXML:
    lhXML:START-ELEMENT("Batch").
    lhXML:WRITE-DATA-ELEMENT("Company",ynimi).
    lhXML:WRITE-DATA-ELEMENT("Orderer",lcTMSUser).
-   lhXML:WRITE-DATA-ELEMENT("Created",fISOTimeZone(TODAY,TIME)).
+   lhXML:WRITE-DATA-ELEMENT("Created",Func.Common:mISOTimeZone(TODAY,TIME)).
    lhXML:END-ELEMENT("Batch").
 
 END PROCEDURE.
@@ -451,7 +450,7 @@ PROCEDURE pInvoice2XML:
 
       lhXML:WRITE-DATA-ELEMENT("InvoiceID",Invoice.ExtInvID).
       lhXML:START-ELEMENT("InvoiceDate").
-      lhXML:INSERT-ATTRIBUTE("DateTime",fISOTimeZone(Invoice.InvDate, 0)).
+      lhXML:INSERT-ATTRIBUTE("DateTime",Func.Common:mISOTimeZone(Invoice.InvDate, 0)).
       lhXML:WRITE-CHARACTERS(fDispDate(Invoice.InvDate, liLanguage)).
       lhXML:END-ELEMENT("InvoiceDate").      
       lhXML:WRITE-DATA-ELEMENT("DueDate",fDispDate(Invoice.DueDate,
@@ -466,15 +465,13 @@ PROCEDURE pInvoice2XML:
 
       lhXML:WRITE-DATA-ELEMENT("InvoiceType","Normal").
       
-      lcRowText = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+      lcRowText = Func.Common:mTMSCodeName("Invoice",
                                    "DelType",
                                    STRING(Invoice.DelType)).
       IF lcRowText = "" THEN lcRowText = STRING(Invoice.DelType).
       lhXML:WRITE-DATA-ELEMENT("DeliveryType",lcRowText).
 
-      lcRowText = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+      lcRowText = Func.Common:mTMSCodeName("Invoice",
                                    "ChargeType",
                                    STRING(Invoice.ChargeType)).
       IF lcRowText = "" THEN lcRowText = STRING(Invoice.ChargeType).
@@ -803,7 +800,7 @@ PROCEDURE pSubInvoice2XML:
                                      fDispXMLDecimal(ttRow.RowData)).
          END.
          ELSE IF ttRow.RowDur NE 0 THEN DO:
-            lcLine = TRIM(fSec2C(DECIMAL(ttRow.RowDur),10)).
+            lcLine = TRIM(Func.Common:mSec2C(DECIMAL(ttRow.RowDur),10)).
             lhXML:WRITE-DATA-ELEMENT("Duration",lcLine).
          END.   
          /* Show Voice and Data month limit in FLATMFx row*/
@@ -912,7 +909,7 @@ PROCEDURE pSubInvoice2XML:
 
          ASSIGN 
             lcCTName  = ""  
-            ldEventTS = fMake2DT(ttCall.DateSt,ttCall.TimeSt).
+            ldEventTS = Func.Common:mMake2DT(ttCall.DateSt,ttCall.TimeSt).
 
          FIND FIRST ttCLIType WHERE
                     ttCLIType.CLI    = SubInvoice.CLI AND
@@ -985,7 +982,7 @@ PROCEDURE pSubInvoice2XML:
             END.
 
             ELSE IF ttCall.BillDur NE 0 OR ttCall.EventType EQ "CALL" THEN DO:
-               lcLine = TRIM(fSec2MinC(ttCall.BillDur,8)).
+               lcLine = TRIM(Func.Common:mSec2MinC(ttCall.BillDur,8)).
                lhXML:INSERT-ATTRIBUTE("Duration",lcLine).
             END.   
 

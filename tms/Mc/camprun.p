@@ -18,7 +18,6 @@
 {Mc/camprundf.i}
 {Func/fcustpl.i}
 {Func/nncoit2.i}
-{Func/timestamp.i}
 {Func/fmakeservlimit.i}
 {Func/setfees.i}
 
@@ -137,7 +136,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       THEN DO:
          liPer = TRUNCATE(MobSub.ActivationTS / 100,0).
              
-         fSplitTS(MobSub.ActivationTS,
+         Func.Common:mSplitTS(MobSub.ActivationTS,
                   OUTPUT ldtBegDate,
                   OUTPUT liBegTime).
       END.
@@ -145,7 +144,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       IF ldtBegDate = ? THEN DO:
          liPer = TRUNCATE(MsOwner.TsBeg / 100,0).
              
-         fSplitTS(MsOwner.TsBeg,
+         Func.Common:mSplitTS(MsOwner.TsBeg,
                   OUTPUT ldtBegDate,
                   OUTPUT liBegTime).
       END.

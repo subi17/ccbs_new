@@ -7,7 +7,6 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -564,8 +563,7 @@ PROCEDURE local-find-others.
 
    fBIName(ttTerminal.BillCode).
 
-   lcTerminalType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                  "OrderAccessory",
+   lcTerminalType = Func.Common:mTMSCodeName("OrderAccessory",
                                   "TerminalType",
                                   STRING(ttTerminal.TerminalType)).
 
@@ -580,7 +578,7 @@ PROCEDURE local-UPDATE-record:
       CLEAR FRAME lis NO-PAUSE.
       
       ASSIGN
-         lcPurchased   = fTS2HMS(SubsTerminal.PurchaseTS)
+         lcPurchased   = Func.Common:mTS2HMS(SubsTerminal.PurchaseTS)
          lcPerContract = "".
       
       IF SubsTerminal.PerContractID > 0 THEN DO:
@@ -675,7 +673,7 @@ PROCEDURE local-UPDATE-record:
 
          CREATE Memo.
          ASSIGN
-               Memo.CreStamp  = fMakeTS()
+               Memo.CreStamp  = Func.Common:mMakeTS()
                Memo.Brand     = gcBrand
                Memo.HostTable = "MobSub"
                Memo.KeyValue  = STRING(SubsTerminal.MsSeq)

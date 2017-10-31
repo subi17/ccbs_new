@@ -84,8 +84,7 @@ FUNCTION fCustIDType RETURNS LOGICAL
    IF icCustIDType = "" THEN RETURN TRUE.
    
    DO liCnt = 1 TO NUM-ENTRIES(icCustIDType):
-      IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                              "Customer",
+      IF NOT Func.Common:mTMSCodeChk("Customer",
                               "CustIDType",
                               ENTRY(liCnt,icCustIDType))
       THEN RETURN FALSE.

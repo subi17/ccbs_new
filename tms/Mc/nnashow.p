@@ -4,11 +4,10 @@
   APPLICATION ..: nn
   AUTHOR .......: lp
   CREATED ......: 11.09.02
-  MODIFIED .....: 09.10.02 lp DefClStamp instead fMakeTS()
+  MODIFIED .....: 09.10.02 lp DefClStamp instead Func.Common:mMakeTS()
   VERSIO .......:   
   -------------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEF /*NEW*/ shared VAR siirto AS CHAR.
@@ -42,7 +41,7 @@ DEF VAR lclstamp     AS DEC                    NO-UNDO.
 DEF TEMP-TABLE ttcli LIKE CLI.
 DEF BUFFER bufcli FOR CLI.
 
-lclstamp = fMakeTS().
+lclstamp = Func.Common:mMakeTS().
 
 form
     CLI.CLI    
@@ -126,7 +125,7 @@ tulostus:
 
                DISPLAY CLI.CLI 
                        CLI.OwnerName
-                       fTS2HMS(CLI.CrStamp) @ lcFrom
+                       Func.Common:mTS2HMS(CLI.CrStamp) @ lcFrom
                        lhist.
                rtab[FRAME-LINE] = recid(CLI).
                IF jarj = 1 THEN FIND NEXT CLI WHERE
@@ -239,7 +238,7 @@ BROWSE:
                DISPLAY 
                   CLI.CLI
                   CLI.OwnerName
-                  fTS2HMS(CLI.CrStamp) @ lcFrom
+                  Func.Common:mTS2HMS(CLI.CrStamp) @ lcFrom
                   lhist.
                DO i = FRAME-DOWN TO 2 BY -1:
                   rtab[i] = rtab[i - 1].
@@ -280,7 +279,7 @@ BROWSE:
                DISPLAY 
                   CLI.CLI
                   CLI.OwnerName
-                  fTS2HMS(CLI.CrStamp) @ lcFrom
+                  Func.Common:mTS2HMS(CLI.CrStamp) @ lcFrom
                   lhist.
                DO i = 1 TO FRAME-DOWN - 1:
                   rtab[i] = rtab[i + 1].

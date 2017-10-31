@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/fbankdata.i}
 {Syst/eventval.i}
@@ -100,7 +99,7 @@ PROCEDURE pInitialize:
    FIND FIRST Company NO-LOCK.
    ASSIGN 
       lcCompanyID = REPLACE(Company.CompanyID,"-","")
-      ldCurrStamp = fMakeTS()
+      ldCurrStamp = Func.Common:mMakeTS()
       oiRead      = 0
       lcLogFile   = fCParamC("DDBankChgLog")
       lcTransDir  = fCParamC("DDBankChgLogTrans")
@@ -268,7 +267,7 @@ PROCEDURE pFinalize:
                                    ELSE "")
          ActionLog.ActionStatus = 3
          ActionLog.UserCode     = katun.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
    fCleanEventObjects().

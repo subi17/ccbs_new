@@ -10,7 +10,6 @@ Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{Func/timestamp.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".
@@ -80,8 +79,8 @@ DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
    ASSIGN
       lcDetails = lcDetails  + 
                  ENTRY(liTypeLoop,lcTypeDesc) + CHR(10) + "Requests:"
-      ldeDate = (IF liType = 9 THEN fMake2Dt(ldaDate - 1,86399)
-                 ELSE fMake2Dt(ldaDate,0)).
+      ldeDate = (IF liType = 9 THEN Func.Common:mMake2DT(ldaDate - 1,86399)
+                 ELSE Func.Common:mMake2DT(ldaDate,0)).
    
    DO liStatusLoop = 1 TO num-entries(lcStatuses):
 

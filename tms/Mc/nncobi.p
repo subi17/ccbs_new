@@ -14,7 +14,6 @@
                   16.09.03/aam brand
                   24.01.05/aam allow update of last item's concerns[2]
                   30.12.05 /vk allow update of bill period and period dates
-                  24.01.06 jt DYNAMIC-FUNCTION("fDispCustName"
                   06.03.06 /vk asking password also when user pressed ENTER
                   14.11.07 jt  Layout changes in frame sel
                   14.11.07 jt  display M if ffitem has memo
@@ -127,8 +126,7 @@ else prod-name = "!! UNKNOWN !!!".
 
 FIND Customer where Customer.CustNum = FixedFee.CustNum no-lock.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 FIND FIRST FFItem
 where FFItem.FFNum = FFNum no-lock no-error.

@@ -5,7 +5,6 @@
 &GLOBAL-DEFINE OFFER_I YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 DEFINE TEMP-TABLE ttOffer NO-UNDO LIKE Offer.
@@ -268,8 +267,7 @@ FUNCTION fGetOfferItemTypeName RETURNS CHARACTER
 
    DEFINE VARIABLE lcType AS CHARACTER NO-UNDO. 
    IF pcItemType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "OfferItem",
+      lcType = Func.Common:mTMSCodeName("OfferItem",
                                 "ItemType",
                                 pcItemType).
    ELSE lcType = "".
@@ -378,8 +376,7 @@ FUNCTION fCriteriaType RETURNS CHAR
    DEF VAR lcType AS CHARACTER NO-UNDO.
 
    IF icCriteriaType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "OfferCriteria",
+      lcType = Func.Common:mTMSCodeName("OfferCriteria",
                                 "CriteriaType",
                                 icCriteriaType).
    ELSE lcType = "".
@@ -472,13 +469,13 @@ FUNCTION fValidateOfferCriteria RETURNS INT
       END.
 
       IF ttOfferCriteria.BeginStamp NE bOfferCriteria.BeginStamp AND
-         ttOfferCriteria.BeginStamp < fMakeTS() THEN DO:
+         ttOfferCriteria.BeginStamp < Func.Common:mMakeTS() THEN DO:
          ocError = "Cannot set valid from date to past".
          RETURN 1.
       END.
     
       DEFINE VARIABLE deCurTime AS DECIMAL NO-UNDO. 
-      deCurTime = fMakeTs().
+      deCurTime = Func.Common:mMakeTS().
       IF ttOfferCriteria.BeginStamp < deCurTime OR 
          bOfferCriteria.BeginStamp < deCurTime THEN
       DO:

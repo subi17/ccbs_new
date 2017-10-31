@@ -3,7 +3,6 @@
 {Syst/commpaa.i}
 katun = "fakeSolog".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -110,7 +109,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       IF NOT AVAIL SoLog THEN NEXT.
 
       ASSIGN
-         Solog.CompletedTS = fMakeTS()
+         Solog.CompletedTS = Func.Common:mMakeTS()
          Solog.stat        = 2
          SoLog.Response    = "OK (FAKE)".
 
@@ -167,7 +166,7 @@ PROCEDURE pSoLog:
       bufSolog.Stat = 0 THEN DO:
 
        ASSIGN
-            bufSolog.CompletedTS = fMakeTS()
+            bufSolog.CompletedTS = Func.Common:mMakeTS()
             bufSolog.stat        = 2.
 
        IF lcStatus = "OK" THEN bufSoLog.Response = bufSoLog.response + lcStatus.

@@ -34,7 +34,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'singlefee'}
-{Func/timestamp.i}
 
 {Func/fcustpl.i}
 {Syst/eventval.i}
@@ -260,8 +259,7 @@ FUNCTION fValidateMsSeq RETURNS LOGIC
 END FUNCTION.
 
 FIND Customer WHERE Customer.CustNum  = iiCustNum  NO-LOCK NO-ERROR.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.

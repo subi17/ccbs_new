@@ -13,7 +13,6 @@ gcBrand = "1".
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
-{Func/timestamp.i}
 {Func/fixedlinefunc.i}
 
 DEF VAR lcResultArray         AS CHAR NO-UNDO. 
@@ -40,7 +39,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcResultArray = add_array(response_toplevel_id, "").
 
-ASSIGN ldCurrentDateTime = fMakeTS().
+ASSIGN ldCurrentDateTime = Func.Common:mMakeTS().
 
 RUN pAdd_DSS.
 

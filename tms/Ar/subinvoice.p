@@ -9,8 +9,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/func.p}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'SubInvoice'}

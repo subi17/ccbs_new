@@ -12,7 +12,6 @@
 
 {Syst/tmsconst.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/upsellbundle.i}
 
 /*Logic:*
@@ -56,7 +55,7 @@ ASSIGN
    ldCampaignEnd     = fCParamDe("March2017PromoToDate")   /*Dates when order must be done */
    lcUpsell          = "FLEX_UPSELL"      /*Upsell that will be aded in the promo*/
    ldaReadDate       = TODAY
-   ldCurrentTimeTS   = fMakeTS()
+   ldCurrentTimeTS   = Func.Common:mMakeTS()
    lcLogDir          = fCParam("March2017Promo","March2017LogDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
@@ -70,7 +69,7 @@ lcLogFile = lcLogDir + "March2017Promo_hourly_" +
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +
-                                 fTS2HMS(ldCurrentTimeTS) SKIP.
+                                 Func.Common:mTS2HMS(ldCurrentTimeTS) SKIP.
 IF llgSimulate EQ TRUE THEN
    PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
 
@@ -183,7 +182,7 @@ FUNCTION fUpsellForAzul RETURNS CHAR
       fCreateUpsellBundle(iiMsSeq,
                            lcUpsell,
                            {&REQUEST_SOURCE_YOIGO_TOOL},
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            OUTPUT liRequest,
                            OUTPUT lcError).
       IF lcError NE "" THEN RETURN lcError.                    
@@ -230,7 +229,7 @@ DO TRANS:
 END.
 
 /*Actual execution:*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute*/
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute*/
 fCollect(ldCollPeriodStartTS, ldCollPeriodEndTS). /*Select orders that need activation*/
 
 /*Activate upsells*/
@@ -261,6 +260,6 @@ DO TRANS:
 END.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation done " +
-                                 fTS2HMS(fMakeTS()) SKIP.
+                                 Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLogFile CLOSE.
 

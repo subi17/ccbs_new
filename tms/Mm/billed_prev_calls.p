@@ -11,7 +11,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/coinv.i}
 {Func/fvatfact.i}

@@ -25,7 +25,6 @@ ASSIGN gcBrand = "1"
 {Ar/paymtrans.i}
 {Func/farplog.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD PaymFile AS CHAR
@@ -189,7 +188,7 @@ FOR EACH ttFiles:
          ActionLog.ActionChar   = lcInfo + CHR(10) + 
                                   "Old rejections according to YCM-1136"
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 
       /* file without the dir */
       lcPlainFile = ttFiles.PaymFile.

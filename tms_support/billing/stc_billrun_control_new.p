@@ -10,9 +10,7 @@
 {Syst/commpaa.i}
 katun  = "Qvantel".
 gcBrand = "1".
-{Func/date.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/contract_end_date.i}
 {Func/fixedfee.i}
@@ -116,11 +114,11 @@ FUNCTION fGetOrigCLIType RETURNS CHARACTER
 
    IF pdtExtentDate <> ? THEN
       ASSIGN
-         ldTS        = fHMS2TS(pdtExtentDate,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtExtentDate,"00:00:00")
          lcReqParam2 = "update".
    ELSE
       ASSIGN
-         ldTS        = fHMS2TS(pdtValidFrom,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtValidFrom,"00:00:00")
          lcReqParam2 = "act,recreate".
  
    FIND FIRST bufMsRequest WHERE
@@ -220,8 +218,8 @@ IF NOT SESSION:BATCH THEN DO:
       lcDetFile    = fModifyFileName(lcDetFile,ldtInputDate,"USER")
       lcErrors     = fModifyFileName(lcErrors,ldtInputDate,"USER")
       lcMail       = fModifyFileName(lcMail,ldtInputDate,"USER")
-      ldBeginStamp = fHMS2TS(ldtInputDate,"00:00:00")
-      ldEndStamp   = fHMS2TS(ldtInputDate,"23:59:59").
+      ldBeginStamp = Func.Common:mHMS2TS(ldtInputDate,"00:00:00")
+      ldEndStamp   = Func.Common:mHMS2TS(ldtInputDate,"23:59:59").
 END.
 ELSE DO:
    
@@ -232,8 +230,8 @@ ELSE DO:
       lcDetFile    = fModifyFileName(lcDetFile,TODAY,"CRON")
       lcErrors     = fModifyFileName(lcErrors,TODAY,"CRON")
       lcMail       = fModifyFileName(lcMail,TODAY,"CRON")
-      ldBeginStamp = fHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"00:00:00")
-      ldEndStamp   = fMakeTS().
+      ldBeginStamp = Func.Common:mHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"00:00:00")
+      ldEndStamp   = Func.Common:mMakeTS().
 END.
 
 OUTPUT STREAM sErrors TO VALUE(lcErrors).
@@ -278,7 +276,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
          pause 0.
       end.
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtActDate,
                OUTPUT liActTime).
 
@@ -684,7 +682,7 @@ IF SESSION:BATCH AND
    PUT STREAM slog UNFORMATTED
       "Greetings " SKIP(1)
       lcStatusMsg  SKIP(1)
-      "STC Control Report is finished at " + fTS2HMS(fMakeTS()) SKIP
+      "STC Control Report is finished at " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP
       "For period: "  STRING(TODAY - 1,"99.99.9999") " - " STRING(TODAY,"99.99.9999") SKIP(1)
       "Here are the reports:" SKIP
       lcErrors                SKIP

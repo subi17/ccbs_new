@@ -24,7 +24,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i} /* fReqStatus */
 {Func/fmakemsreq.i}
@@ -151,7 +150,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
    WHEN "remove" THEN ASSIGN
       lcAction = "term"
       llCreateFees = TRUE
-      ldePeriodTo = fMakeTS().
+      ldePeriodTo = Func.Common:mMakeTS().
    WHEN "cancel" THEN DO: 
 
       IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
@@ -187,7 +186,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
          liLastUnBilledPeriod = FixedFee.BegPeriod.
 
       ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
-      ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+      ldePeriodTo = Func.Common:mMake2DT(ldaLastUnBilledDate,86399).
 
    END.
    OTHERWISE RETURN appl_err("Incorrect action").

@@ -12,7 +12,6 @@ ASSIGN
    katun   = "fr_daemon".
    
 {Func/heartbeat.i}
-{Func/timestamp.i}
 {Func/log.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
@@ -202,7 +201,7 @@ PROCEDURE pWriteLog:
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionStatus = 3
          ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.ActionChar   = "Started " + 
                                   SUBSTRING(ISO-DATE(idtStarted),1,19) + 
                                   ", " + STRING(iiLoops) + " loops".

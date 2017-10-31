@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'BRTestCriteria'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -99,8 +98,7 @@ WITH  OVERLAY ROW liUpdateRow centered
 FUNCTION fOperator RETURNS LOGIC
    (icOperator AS CHAR):
 
-   lcOperator = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "BRTestCase",
+   lcOperator = Func.Common:mTMSCodeName("BRTestCase",
                                  "RelationalOperator",
                                  icOperator).
    DISP lcOperator WITH FRAME lis.
@@ -736,8 +734,7 @@ PROCEDURE local-UPDATE-record:
                   PAUSE 0.
 
                   IF FRAME-FIELD = "CriteriaTable" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                INPUT "BRTestCriteria",
+                     IF Func.Common:mTMSCodeName(INPUT "BRTestCriteria",
                                 INPUT "CriteriaTable",
                                 INPUT INPUT BRTestCriteria.CriteriaTable) = ""
                      THEN DO:
@@ -748,8 +745,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                                       
                   ELSE IF FRAME-FIELD = "CriteriaField" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                INPUT "BRTestCriteria",
+                     IF Func.Common:mTMSCodeName(INPUT "BRTestCriteria",
                                 INPUT "CField" + 
                                        INPUT BRTestCriteria.CriteriaTable,
                                 INPUT INPUT BRTestCriteria.CriteriaField) = ""
@@ -762,8 +758,7 @@ PROCEDURE local-UPDATE-record:
 
                   ELSE IF FRAME-FIELD = "Setting" THEN DO:
                      IF INPUT FRAME lis BRTestCriteria.Setting > "" AND
-                        DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                INPUT "BRTestCriteria",
+                        Func.Common:mTMSCodeName(INPUT "BRTestCriteria",
                                 INPUT "Setting" + 
                                        INPUT BRTestCriteria.CriteriaTable,
                                 INPUT INPUT BRTestCriteria.Setting) = ""

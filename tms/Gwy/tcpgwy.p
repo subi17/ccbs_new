@@ -13,7 +13,6 @@
 ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/log.i}
 
@@ -80,7 +79,7 @@ ELSE IF ETIME > 3500 THEN DO:
 END.
 
 
-ldeTSNow = fMakeTS().
+ldeTSNow = Func.Common:mMakeTS().
 
 IF llDebug THEN DO:
 

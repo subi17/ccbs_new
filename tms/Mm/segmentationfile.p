@@ -16,7 +16,6 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Syst/eventval.i}
 {Func/email.i}
-{Func/timestamp.i}
 {Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
@@ -199,7 +198,7 @@ PROCEDURE pUpdateSegmentStatus:
          Segmentation.SegmentOffer = icSegmentOffer
          Segmentation.SegmentDate = idaSegmentDate
          Segmentation.SegmentCons = ideSegmentConsumption
-         Segmentation.SegmentCreation = fMakeTS().
+         Segmentation.SegmentCreation = Func.Common:mMakeTS().
    END.
 
    /* nothing to do */
@@ -217,7 +216,7 @@ PROCEDURE pUpdateSegmentStatus:
          Segmentation.SegmentOffer = icSegmentOffer
          Segmentation.SegmentDate = idaSegmentDate
          Segmentation.SegmentCons = ideSegmentConsumption
-         Segmentation.SegmentCreation = fMakeTS().
+         Segmentation.SegmentCreation = Func.Common:mMakeTS().
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSegmentation).
       RELEASE Segmentation.
    END.   

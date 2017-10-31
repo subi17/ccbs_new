@@ -21,7 +21,6 @@ newton__q25_add.p
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -160,17 +159,17 @@ IF TODAY < ldaMonth22Date THEN
 ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
-   ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
+   ldContractActivTS = Func.Common:mMake2DT(ldaMonth24Date,0).
 ELSE IF TODAY >= ldaMonth24Date AND 
         TODAY < ldaMonth25Date THEN 
    ASSIGN
       ldaMonth24Date = TODAY
-      ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+      ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5). /* Handle it immediately */
 /* YDR-2220 Quota 25 prorate request is created after 20th day of 25th month*/
 ELSE 
    ASSIGN
       ldaMonth25Date = TODAY
-      ldContractActivTS = fSecOffSet(fMakeTS(),5)
+      ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5)
       llNewExtension = YES . /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE

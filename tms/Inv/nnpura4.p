@@ -28,7 +28,6 @@
                                  unit price, price apiece & dataamt added
                   16.02.2004/aam cover sheet               
                   14.04.2004/aam index change on mobcdr
-                  23.04.2004/aam use fHideBSub from func.i
                   17.05.2004/aam unit price for vas tickets from netprice
                   15.06.2004/aam functions to nnpura4.i
                   22.06.2004/aam pulses 
@@ -49,7 +48,6 @@
 /* print-linemuuttujat */
 {Syst/utumaa.i}
 {Inv/edefine.i}
-{Inv/nnpura.i}
 {Func/fcurrency.i}
 
 /* xml / pdf */
@@ -640,7 +638,7 @@ BREAK BY ttCall.VATIncl
             fNewPage(0).
             {Inv/nnpura4e.i}
             
-            lcRep4Dur = fSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
+            lcRep4Dur = Func.Common:mSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
             
             PUT STREAM eKirje UNFORMATTED 
             MY-NL
@@ -703,7 +701,7 @@ BREAK BY ttCall.VATIncl
             
             fChgPage(0).
             
-            lcRep4Dur = fSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
+            lcRep4Dur = Func.Common:mSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
             
             PUT STREAM tul 
             SKIP

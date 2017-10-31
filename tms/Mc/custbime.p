@@ -23,8 +23,7 @@ DEF VAR lcRoles   AS CHAR                           NO-UNDO.
 DO FOR Customer:
    FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
    lcName = STRING(Customer.CustNum) + " " +
-            DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                             BUFFER Customer).
+            Func.Common:mDispCustName(BUFFER Customer).
                              
    lcRoles = fCustRoles(BUFFER Customer).                          
 END. 

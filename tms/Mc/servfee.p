@@ -164,8 +164,7 @@ END.
 FUNCTION fServKey RETURNS LOGICAL
    (icServKey  AS CHAR).
    
-   lcKeyName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                lcHelpTable,lcHelpField,icServKey).
+   lcKeyName = Func.Common:mTMSCodeName(lcHelpTable,lcHelpField,icServKey).
    DISPLAY lcKeyName WITH FRAME lis.
    
 END FUNCTION.
@@ -192,10 +191,8 @@ VIEW FRAME sel.
 orders = "By Type  ,".
 
 /* explanations and validations for codes */
-lcServName  = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
-                               "ServFee","ServType").
-lcEventName = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
-                               "ServFee","EventType").
+lcServName  = Func.Common:mTMSCodeList("ServFee","ServType").
+lcEventName = Func.Common:mTMSCodeList("ServFee","EventType").
 
 DO i = 1 TO NUM-ENTRIES(lcServName,CHR(1)):
    ASSIGN 

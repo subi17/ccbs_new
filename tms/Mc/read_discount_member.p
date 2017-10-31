@@ -6,7 +6,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/dpmember.i}
 
@@ -273,7 +272,7 @@ DO TRANS:
       ActionLog.UserCode     = katun
       ActionLog.FromDate     = TODAY
       ActionLog.ToDate       = TODAY.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 IF NOT SESSION:BATCH THEN 

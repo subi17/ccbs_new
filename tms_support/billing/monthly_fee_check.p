@@ -1,9 +1,7 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{Func/date.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE lcOutputFile       AS CHARACTER NO-UNDO.
@@ -43,13 +41,13 @@ DEF STREAM sout.
 DEF STREAM strout.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 ldaFromDate = DATE(MONTH(ldaToDate),1,YEAR(ldaToDate)).
 
-ASSIGN ldeFromStamp = fMake2DT(ldaFromDate,0)
+ASSIGN ldeFromStamp = Func.Common:mMake2DT(ldaFromDate,0)
        liPeriod     = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate).
 
 ASSIGN 
@@ -178,7 +176,7 @@ FOR EACH daycampaign where
 
    ASSIGN lcKey = "1"      + CHR(255) + string(liCustnum) + CHR(255) +
                   "MobSub" + CHR(255) + string(dccli.msseq)
-          ldeActStamp = fmake2dt(dccli.validfrom, 0).
+          ldeActStamp = Func.Common:mMake2DT(dccli.validfrom, 0).
 
    IF AVAIL fixedfee THEN
       lcFFItemKey = string(fixedfee.FFNum) + CHR(255) + string(liPeriod).
@@ -223,7 +221,7 @@ FOR EACH daycampaign where
       avail(eventlog)                           "|"
       avail(beventlog)                          "|"
       lcEventlogDetails                         "|"
-      (IF ldeTerminated > 0 THEN fts2hms(ldeTerminated) ELSE "") skip.
+      (IF ldeTerminated > 0 THEN Func.Common:mTS2HMS(ldeTerminated) ELSE "") skip.
 
 end.
 
@@ -277,7 +275,7 @@ FOR EACH servicelimit NO-LOCK,
    
       release beventlog.
        
-      fsplitts(mservicelimit.fromts, 
+      Func.Common:mSplitTS(mservicelimit.fromts, 
                output ldaContractDate, 
                output liContractTime).
 
@@ -410,7 +408,7 @@ FOR EACH servicelimit NO-LOCK,
          avail(beventlog)                 "|"
          lcEventlogDetails                "|"
         (IF ldeTerminated > 0 THEN 
-            fts2hms(ldeTerminated) 
+            Func.Common:mTS2HMS(ldeTerminated) 
          ELSE "")                         SKIP.
    
       liCount = liCount + 1.

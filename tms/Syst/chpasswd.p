@@ -14,7 +14,6 @@ DEFINE OUTPUT PARAMETER olPasswordChanged AS LOGICAL NO-UNDO.
 
 {Syst/commali.i}
 {Func/fgettxt.i}
-{Func/timestamp.i}
 {Func/tmspass.i}
 
 /* ennakkoilmoitusraja        PassWdExpireNotify INT 
@@ -186,7 +185,7 @@ REPEAT:
                   /* user has not yet filled the history so create new */
                   CREATE tmspass.
                   ASSIGN
-                     tmspass.createts = fMakeTS()
+                     tmspass.createts = Func.Common:mMakeTS()
                      tmspass.usercode = tmsuser.usercode
                      tmspass.creator  = tmsuser.usercode
                      tmspass.password = lcNewPass:SCREEN-VALUE.
@@ -196,7 +195,7 @@ REPEAT:
                   FIND LAST tmspass EXCLUSIVE-LOCK WHERE  
                             tmspass.usercode = tmsuser.usercode.
                   ASSIGN     
-                     tmspass.createts = fMakeTS()
+                     tmspass.createts = Func.Common:mMakeTS()
                      tmspass.creator  = tmsuser.usercode
                      tmspass.password = lcNewPass:SCREEN-VALUE.
                END.

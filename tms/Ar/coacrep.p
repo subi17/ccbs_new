@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/utumaa.i}
-{Func/timestamp.i}
 {Func/fprevoper.i}
 
 DEF TEMP-TABLE ttMark NO-UNDO
@@ -150,7 +149,7 @@ FUNCTION fCollect RETURNS LOGICAL.
          END. 
 
          IF ldActDate > 0 THEN DO:
-            fSplitTs(ldActDate,
+            Func.Common:mSplitTS(ldActDate,
                      OUTPUT ttEvent.ActDate,
                      OUTPUT liTime).
          END.
@@ -163,7 +162,7 @@ FUNCTION fCollect RETURNS LOGICAL.
                    Order.OrderType  < 2:
             ttEvent.OrdChannel = Order.OrderChannel.
                    
-            fSplitTS(Order.CrStamp,
+            Func.Common:mSplitTS(Order.CrStamp,
                      OUTPUT ttEvent.OrdDate,
                      OUTPUT liTime).
          END.

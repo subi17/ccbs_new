@@ -8,7 +8,6 @@
   VERSION ......: TF
   ---------------------------------------------------------------------- */
 {Syst/commali.i} 
-{Func/func.p}
 {Func/fgettxt.i}
 
 DEF INPUT  PARAMETER   msseq  AS INT . 
@@ -73,8 +72,7 @@ END.
 
 FIND Customer OF MobSub NO-LOCK NO-ERROR.
 
-lcname = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+lcname = Func.Common:mDispCustName(BUFFER Customer).
 
 FORM
 SKIP(2)
@@ -164,7 +162,7 @@ REPEAT WITH FRAME lis:
                MobSub.ActivationDate = msisdn.PortingDate.
             ELSE          
             ASSIGN
-               MobSub.activationts   = fmakets()  
+               MobSub.activationts   = Func.Common:mMakeTS()  
                MobSub.ActivationDate = TODAY. 
 
          END.
@@ -308,7 +306,7 @@ REPEAT WITH FRAME lis:
    IF MobSub.ActivationTS NE 0 THEN DO:
 
       PAUSE 0.  MESSAGE "Synchronising System Clocks, wait ...".
-      sogtime = fmakets().
+      sogtime = Func.Common:mMakeTS().
       PAUSE 0.
             
    END.
@@ -328,7 +326,7 @@ REPEAT WITH FRAME lis:
    EXCLUSIVE-LOCK NO-ERROR.
 
    /* Set CURRENT time stamp (usage starts immediately) */
-   ASSIGN MSOwner.TsBegin = fMakeTS()
+   ASSIGN MSOwner.TsBegin = Func.Common:mMakeTS()
           MSOwner.IMSI    = MobSub.IMSI.
 
    /* RUN PROCEDURE which connects sim TO MobSub AND 

@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/fpcmaintreq.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
@@ -70,7 +69,7 @@ IF AVAIL bSubMsRequest THEN DO:
    RETURN.
 END. /* IF AVAIL bSubMsRequest THEN DO: */
 
-fSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
+Func.Common:mSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -267,7 +266,7 @@ PROCEDURE pRevertRenewalOrder:
        IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} THEN DO:
       
           IF DayCampaign.DCEvent EQ {&DCTYPE_INSTALLMENT} THEN
-             fTS2Date(bMsRequest.ActStamp, output ldaRequestDate).
+             Func.Common:mTS2Date(bMsRequest.ActStamp, output ldaRequestDate).
           ELSE ldaRequestDate = 1/1/2000.
 
           FIND FIRST DCCLI NO-LOCK WHERE
@@ -323,8 +322,7 @@ PROCEDURE pRevertRenewalOrder:
                                         FALSE,
                                         OUTPUT lcError).
                 IF liTermRequest = 0 THEN
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "MobSub",
+                   Func.Common:mWriteMemo("MobSub",
                                     STRING(bSubMsRequest.MsSeq),
                                     bSubMsRequest.CustNum,
                                     DayCampaign.DCEvent + " Termination",
@@ -334,9 +332,9 @@ PROCEDURE pRevertRenewalOrder:
              ELSE IF DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} THEN DO:
 
                  ASSIGN
-                 ldaLastDayOfLastMonth = fLastDayOfMonth(
+                 ldaLastDayOfLastMonth = Func.Common:mLastDayOfMonth(
                                          ADD-INTERVAL(DCCLI.ValidFrom, -1, "months"))
-                 ldPeriodTo = fMake2Dt(ldaLastDayOfLastMonth,86399).
+                 ldPeriodTo = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399).
 
                 /* terminate payterm contract */
                 liTermRequest = fPCActionRequest(bSubMsRequest.MsSeq,
@@ -354,8 +352,7 @@ PROCEDURE pRevertRenewalOrder:
                                         "",
                                         OUTPUT lcError).
                 IF liTermRequest = 0 THEN
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "MobSub",
+                   Func.Common:mWriteMemo("MobSub",
                                     STRING(bSubMsRequest.MsSeq),
                                     bSubMsRequest.CustNum,
                                     DayCampaign.DCEvent + " Termination",
@@ -367,7 +364,7 @@ PROCEDURE pRevertRenewalOrder:
              /* Re-activate the previous contract which
                 was terminated due to Renewal Order */
              IF llReCreate THEN DO:
-                fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+                Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
                 ASSIGN ldaTermDate  = ldaTermDate - 1
                        liTermPeriod = YEAR(ldaTermDate) * 100 + MONTH(ldaTermDate).
             
@@ -375,7 +372,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  DayCampaign.DCEvent,
                                                  "reactivate" + (IF liTermRequest > 0 THEN
                                                    ":wait" + STRING(liTermRequest) ELSE ""),
-                                                 fSecOffSet(fMakeTS(),5),
+                                                 Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),
                                                  TRUE,
                                                  {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
                                                  "",
@@ -389,8 +386,7 @@ PROCEDURE pRevertRenewalOrder:
                                                   "",
                                                  OUTPUT lcError).
                 IF liTermRequest = 0 THEN
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "MobSub",
+                   Func.Common:mWriteMemo("MobSub",
                                     STRING(bSubMsRequest.MsSeq),
                                     bSubMsRequest.CustNum,
                                     DayCampaign.DCEvent + " Reactivation",
@@ -404,13 +400,13 @@ PROCEDURE pRevertRenewalOrder:
 
        ELSE IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION}
        THEN DO:
-          fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+          Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
           ASSIGN liTermPeriod = YEAR(ldaTermDate) * 100 + MONTH(ldaTermDate).
 
           liTermRequest = fPCActionRequest(bSubMsRequest.MsSeq,
                                            DayCampaign.DCEvent,
                                            "reactivate",
-                                           fMakeTS(),
+                                           Func.Common:mMakeTS(),
                                            TRUE,
                                            {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
                                            "",
@@ -422,8 +418,7 @@ PROCEDURE pRevertRenewalOrder:
                                            "",
                                            OUTPUT lcError).
           IF liTermRequest = 0 THEN
-             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                              "MobSub",
+             Func.Common:mWriteMemo("MobSub",
                               STRING(bSubMsRequest.MsSeq),
                               bSubMsRequest.CustNum,
                               DayCampaign.DCEvent + " Reactivation",
@@ -440,8 +435,7 @@ PROCEDURE pRevertRenewalOrder:
    /* Q25 */
    RUN pCloseQ25Discount IN THIS-PROCEDURE.
    IF RETURN-VALUE BEGINS "ERROR" THEN
-       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                        "MobSub",
+       Func.Common:mWriteMemo("MobSub",
                         STRING(MobSub.MsSeq),
                         MobSub.CustNum,
                         "Revert renewal order",
@@ -521,8 +515,8 @@ PROCEDURE pCloseQ25Discount:
                DCCLI.ValidTo >= TODAY:
 
          ASSIGN
-            ldeFrom = fmake2dt(dccli.contractdate,0)
-            ldeto = fmake2dt(dccli.contractdate,86399).
+            ldeFrom = Func.Common:mMake2DT(dccli.contractdate,0)
+            ldeto = Func.Common:mMake2DT(dccli.contractdate,86399).
       
          /* extension must originate from the cancelled renewal order. YTS-9378 */
          IF NOT CAN-FIND(FIRST bmsrequest NO-LOCK where
@@ -538,7 +532,7 @@ PROCEDURE pCloseQ25Discount:
             MobSub.MsSeq,
             "RVTERM12",
             "term",
-            fMakeTS(),
+            Func.Common:mMakeTS(),
             TRUE, /* create fees */
             {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
             "",

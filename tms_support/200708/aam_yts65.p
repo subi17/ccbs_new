@@ -88,7 +88,7 @@ by ttorder.crstamp:
              Memo.CreUser   = "ari" 
              Memo.MemoTitle = "Order cancelled"
              Memo.MemoText  = "Double order, YTS-65".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
 
    pause 0.
@@ -138,7 +138,7 @@ by ttorder.crstamp:
              Memo.CreUser   = "ari" 
              Memo.MemoTitle = "Order cancelled"
              Memo.MemoText  = "Double order, YTS-65".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
 
    pause 0.
@@ -215,7 +215,7 @@ by ttorder.crstamp:
              Memo.CreUser   = "ari" 
              Memo.MemoTitle = "Order cancelled"
              Memo.MemoText  = "Double order, YTS-65".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
 
    pause 0.

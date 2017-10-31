@@ -63,8 +63,7 @@ IF NOT AVAIL Invoice THEN RETURN.
 
 find first Customer of Invoice no-lock no-error.
 if not available Customer then return.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
  
 fInitFeeValues().
 

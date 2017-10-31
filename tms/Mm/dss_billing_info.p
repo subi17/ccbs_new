@@ -437,13 +437,13 @@ PROCEDURE local-UPDATE-record:
 
      RUN local-find-others.
 
-     ASSIGN lcMobSubActTS  = fTS2HMS(ttDSSInfo.ActTS)
-            lcBundleFromTS = fTS2HMS(ttDSSInfo.BundleFromTS).
+     ASSIGN lcMobSubActTS  = Func.Common:mTS2HMS(ttDSSInfo.ActTS)
+            lcBundleFromTS = Func.Common:mTS2HMS(ttDSSInfo.BundleFromTS).
 
      IF ttDSSInfo.BundleEndTS = 99999999.99999 THEN
-        lcBundleENDTS  = fTS2HMS(20491231.86399).
+        lcBundleENDTS  = Func.Common:mTS2HMS(20491231.86399).
      ELSE
-        lcBundleENDTS  = fTS2HMS(ttDSSInfo.BundleEndTS).
+        lcBundleENDTS  = Func.Common:mTS2HMS(ttDSSInfo.BundleEndTS).
 
      DISP ttDSSInfo.CLI
           ttDSSInfo.CLIType
@@ -499,9 +499,9 @@ PROCEDURE pGetDSSBillingInfo:
 
    ASSIGN liPeriod     = YEAR(TODAY) * 100 + MONTH(TODAY)
           ldFromDate   = DATE(MONTH(today), 1, YEAR(today))
-          ldToDate     = fLastDayOfMonth(TODAY)
-          ldPeriodFrom = fMake2Dt(ldFromDate,0)
-          ldPeriodTo   = fMake2Dt(ldToDate,86399).
+          ldToDate     = Func.Common:mLastDayOfMonth(TODAY)
+          ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
+          ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399).
 
    /* Check wheather customer is linked with DSS service or not */
    lcBundleId = fGetActiveDSSId(Customer.CustNum,ldPeriodTo).

@@ -10,7 +10,6 @@
   ------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
@@ -90,13 +89,13 @@ IF SEARCH(icFile) = ? THEN RETURN "ERROR:File not found".
 INPUT STREAM sRead FROM VALUE(icFile).
 OUTPUT STREAM sLog TO VALUE(icLogFile) APPEND.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 PUT STREAM sLog UNFORMATTED
    "File: " icFile
    SKIP
    "Started: " 
-   fTS2HMS(ldCurrent)
+   Func.Common:mTS2HMS(ldCurrent)
    SKIP(1).
 
 ASSIGN

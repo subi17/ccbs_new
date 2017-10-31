@@ -14,7 +14,6 @@ ASSIGN
    
 {Func/cparam2.i}
 {Func/files.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_run.i}
 
 DEF VAR ldaInvDate    AS DATE NO-UNDO.

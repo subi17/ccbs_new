@@ -14,7 +14,6 @@
 ASSIGN
    katun = "NewtonRPC"
    gcBrand = "1".
-{Func/date.i}
 {Func/callquery.i}
 
 DEF VAR resp_array AS CHAR NO-UNDO. 
@@ -58,7 +57,7 @@ FOR EACH ttCall NO-LOCK WHERE
          ttCall.MsSeq = MobSub.Msseq AND
          ttCall.ErrorCode = 0:
 
-   ldeEventTime = fMake2Dt(ttCall.DateSt, ttCall.TimeStart).
+   ldeEventTime = Func.Common:mMake2DT(ttCall.DateSt, ttCall.TimeStart).
 
    CASE ttCall.SuccessCode:
       WHEN 1 THEN lcSuccessCode = "OK".

@@ -12,7 +12,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 
@@ -129,7 +128,7 @@ IF CAN-FIND(FIRST ttError) THEN DO:
                            STRING(DAY(TODAY),"99")    + 
                            "_" + STRING(TIME) + ".txt".                    
 
-    ldCurrStamp = fMakeTS().
+    ldCurrStamp = Func.Common:mMakeTS().
                            
     OUTPUT STREAM slog TO VALUE(lcErrFile).
     PUT STREAM slog UNFORMATTED

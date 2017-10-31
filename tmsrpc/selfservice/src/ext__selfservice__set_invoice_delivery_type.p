@@ -41,7 +41,6 @@ ASSIGN
    katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
    gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -96,7 +95,7 @@ IF Customer.DelType NE piDelType THEN DO:
    /* If DelType is Email then set to Email Pending first and send 
       an email to customer to activate the email service */
    IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
-      liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
                                        INPUT katun,
                                        INPUT MobSub.MsSeq,

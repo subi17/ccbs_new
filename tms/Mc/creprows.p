@@ -19,7 +19,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fcurrency.i}
 {Func/cparam2.i}
 {Func/callquery.i}

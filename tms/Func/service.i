@@ -81,7 +81,7 @@ PROCEDURE pChangedBBStatus:
    DEF VAR liRequest               AS  INT  NO-UNDO.
    DEF VAR lcError                 AS  CHAR NO-UNDO.
 
-   IF ideActStamp = 0 OR ideActStamp = ? THEN ideActStamp = fMakeTS().
+   IF ideActStamp = 0 OR ideActStamp = ? THEN ideActStamp = Func.Common:mMakeTS().
 
    FOR FIRST SubSer WHERE
              SubSer.ServCom = "BB"    AND
@@ -103,8 +103,7 @@ PROCEDURE pChangedBBStatus:
                                      FALSE,
                                      OUTPUT lcError).
          IF liRequest = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                             STRING(bMobSub.MsSeq),
                             bMobSub.CustNum,
                             "BB",
@@ -154,8 +153,8 @@ FUNCTION fProfileExtention RETURNS LOGIC
    DEF VAR liValue   AS INT  NO-UNDO. 
    
    IF idtDate = TODAY 
-   THEN ldActTime = fMakeTS().
-   ELSE ldActTime = fMake2Dt(idtDate,10800).
+   THEN ldActTime = Func.Common:mMakeTS().
+   ELSE ldActTime = Func.Common:mMake2DT(idtDate,10800).
 
    /* go through all clitype level packages which are type 2 */
    FOR EACH CTServPac NO-LOCK WHERE
@@ -368,11 +367,11 @@ PROCEDURE pCopyPackage:
    
    IF idtDate = TODAY 
    THEN ASSIGN
-      ldeActTime = fMakeTS()
+      ldeActTime = Func.Common:mMakeTS()
       ldeEndTime = ldeActTime.
    ELSE ASSIGN
-      ldeActTime = fMake2Dt(idtDate,0)
-      ldeEndTime = fMake2Dt(idtDate,86399).
+      ldeActTime = Func.Common:mMake2DT(idtDate,0)
+      ldeEndTime = Func.Common:mMake2DT(idtDate,86399).
 
    EMPTY TEMP-TABLE ttServCom.
    EMPTY TEMP-TABLE ttServAttr.
@@ -622,8 +621,7 @@ PROCEDURE pCopyPackage:
                                                     OUTPUT lcResult).
                         IF liRequest = 0 THEN
                         DO:
-                          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                           "MobSub",
+                          Func.Common:mWriteMemo("MobSub",
                                            STRING(iiMSSeq),
                                            bContSub.CustNum,
                                            "Consumption adjustment failed;",
@@ -812,7 +810,7 @@ PROCEDURE pTerminatePackage:
    /* profile cannot be removed with this */
    IF LOOKUP(icServPac,",*") > 0 THEN RETURN.
    
-   fSplitTS(idEndStamp,
+   Func.Common:mSplitTS(idEndStamp,
             OUTPUT ldaEndDate,
             OUTPUT liEndTime).
             
@@ -952,7 +950,7 @@ PROCEDURE pTerminatePackage:
                                      lcParam,
                                      (IF ttServCom.ServCom = "SHAPER" OR
                                          ttServCom.ServCom = "HSDPA" THEN
-                                         fSecOffSet(idEndStamp,1)
+                                         Func.Common:mSecOffSet(idEndStamp,1)
                                       ElSE idEndStamp),
                                      "",                /* SalesMan */ 
                                      ilSetFees,

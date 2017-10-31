@@ -82,7 +82,7 @@ IF OrderFusion.FixedInstallationTS EQ ? OR
    OrderFusion.FixedInstallationTS EQ 0 THEN
    RETURN "Missing fixed line installation date".
 
-fSplitTS(OrderFusion.FixedInstallationTS,
+Func.Common:mSplitTS(OrderFusion.FixedInstallationTS,
          OUTPUT ldaSTCDate,
          OUTPUT liSTCTime).
 
@@ -92,11 +92,11 @@ IF ldaSTCDate < TODAY THEN ASSIGN
 
 IF fIsiSTCAllowed(MobSub.MsSeq) THEN DO:
    IF mobsub.PayType EQ FALSE THEN
-      ldeSTCTS = fMake2Dt(ldaSTCDate, 0).
-   ELSE ldeSTCTS = fMake2Dt(ldaSTCDate, liSTCTime).
+      ldeSTCTS = Func.Common:mMake2DT(ldaSTCDate, 0).
+   ELSE ldeSTCTS = Func.Common:mMake2DT(ldaSTCDate, liSTCTime).
 END.
 /* TODO: how to handle properly */
-ELSE ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY) + 1).
+ELSE ldeSTCTS = Func.Common:mDate2TS(Func.Common:mLastDayOfMonth(TODAY) + 1).
 
 /* Various validations */
 IF fValidateMobTypeCh(

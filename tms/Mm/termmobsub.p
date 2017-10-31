@@ -21,8 +21,6 @@ DEFINE INPUT PARAMETER icType   AS CHAR NO-UNDO.
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
-{Func/func.p}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Mf/errors.i}
 {Func/fcustbal.i}
@@ -868,7 +866,7 @@ PROCEDURE local-disp-row:
           TermMobsub.CLI 
           TermMobsub.MsSeq
        TermMobsub.AgrCust
-       DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER AgrCustomer) @
+       Func.Common:mDispCustName(BUFFER AgrCustomer) @
           AgrCustomer.Custname 
        AgrCustomer.OrgID
        KillMS.OutOp WHEN AVAIL KillMS 
@@ -968,7 +966,7 @@ PROCEDURE local-find-others.
 
       IF TermMobsub.ActivationTS > 0 THEN                          
          lcInportTime =    "Activated.....: "  + 
-                           STRING(fTS2HMS(TermMobsub.activationTS)).
+                           STRING(Func.Common:mTS2HMS(TermMobsub.activationTS)).
       
       ELSE IF AVAIL msisdn AND msisdn.portingDate ne ? then DO:
          lcINPortTime = "Inporting Time: " +
@@ -983,23 +981,21 @@ PROCEDURE local-find-others.
                                         OUTPUT liSaldoLimit) .
 
       /* saldolimit */ 
-      lcSaldoType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                     "CreditType",
+      lcSaldoType = Func.Common:mTMSCodeName("CreditType",
                                      "CreditType",
                                       STRING(liSaldoType)).
                                                     
-      ldExtraLimit = DYNAMIC-FUNCTION("fChkSaldoAccount" in ghfunc1,
-                                       INPUT TermMobsub.custnum,
+      ldExtraLimit = Func.Common:mChkSaldoAccount(INPUT TermMobsub.custnum,
                                        INPUT TermMobsub.cli, 
                                        INPUT year(today) * 100 + Month(today),
                                        INPUT lcSaldofatime).
       FIND FIRST Msowner WHERE 
                  Msowner.msseq = TermMobsub.MSseq AND
-                 Msowner.tsend LT fmakets() /* needed for partial term */
+                 Msowner.tsend LT Func.Common:mMakeTS() /* needed for partial term */
       USE-INDEX MsSeq NO-LOCK NO-ERROR.
 
       IF AVAIL msowner THEN
-         lcTerMinated  = "TERMINATED....: " + fTS2HMS(msowner.tsend).
+         lcTerMinated  = "TERMINATED....: " + Func.Common:mTS2HMS(msowner.tsend).
       ELSE
          lcTerMinated  = "TERMINATED....: N/A " . 
 
@@ -1059,13 +1055,13 @@ PROCEDURE local-UPDATE-record.
          IMSI.PUK1 WHEN AVAIL IMSI
          IMSI.PUK2 WHEN AVAIL IMSI
 
-         DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER AgrCustomer) 
+         Func.Common:mDispCustName(BUFFER AgrCustomer) 
             WHEN AVAIL AgrCustomer @ AgrCustomer.CustName 
          
-         DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER InvCustomer)
+         Func.Common:mDispCustName(BUFFER InvCustomer)
             WHEN AVAIL InvCustomer @ InvCustomer.CustName 
          
-         DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER UserCustomer)
+         Func.Common:mDispCustName(BUFFER UserCustomer)
             WHEN AVAIL UserCustomer @ UserCustomer.CustName
          
          llFatime

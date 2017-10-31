@@ -62,7 +62,6 @@
 &GLOBAL-DEFINE BrTable UnregPaym
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/faccper.i}
 {Func/fcustbal.i}
@@ -1602,7 +1601,7 @@ PROCEDURE WritePayment:
    IF iiInvNum > 0 THEN 
       FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK.
 
-   ldStamp = fMake2DT(ldtAccDate,IF ldtAccDate > TODAY THEN 3600 ELSE TIME).
+   ldStamp = Func.Common:mMake2DT(ldtAccDate,IF ldtAccDate > TODAY THEN 3600 ELSE TIME).
    
    liRequest = 
       fPaymentWithPostingsRequest(Customer.CustNum,

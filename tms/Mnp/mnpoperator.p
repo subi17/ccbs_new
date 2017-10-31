@@ -10,9 +10,7 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPOperator'} 
-{Func/timestamp.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 

@@ -70,7 +70,7 @@ PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_OTA_bob_s
 ASSIGN 
    lcTableName = "MANDARINA"
    lcActionID  = "file_reading_OTA"
-   ldCurrentTimeTS = fMakeTS(). 
+   ldCurrentTimeTS = Func.Common:mMakeTS(). 
  
 DO TRANS:
    FIND FIRST ActionLog WHERE
@@ -155,8 +155,7 @@ ASSIGN
          NEXT.
       END. 
    
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                       "Mobsub",
+      Func.Common:mWriteMemoWithType("Mobsub",
                         mobsub.MsSeq,
                         mobsub.CustNum,
                         lcMemoTitle,

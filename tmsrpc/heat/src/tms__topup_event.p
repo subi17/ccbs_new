@@ -29,7 +29,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
-{Func/date.i}
 {Func/xmlfunction.i}
 {Func/multitenantfunc.i}
 

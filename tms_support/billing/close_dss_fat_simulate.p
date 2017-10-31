@@ -11,7 +11,6 @@
 gcBrand = "1".
 katun   = "Qvantel".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
 
@@ -50,14 +49,14 @@ ELSE
 
 ASSIGN ldaPromoFromDate  = fCParamDa("DSSPromoFromDate")
        ldaPromoToDate    = fCParamDa("DSSPromoEndDate")
-       ldPromoPeriodFrom = fMake2Dt(ldaPromoFromDate,0)
-       ldPromoPeriodTo   = fMake2Dt(ldaPromoToDate,86399)
+       ldPromoPeriodFrom = Func.Common:mMake2DT(ldaPromoFromDate,0)
+       ldPromoPeriodTo   = Func.Common:mMake2DT(ldaPromoToDate,86399)
        ldaLastDayOfLastMonth = DATE(MONTH(ldaFirstDayOfLastMonth) + 1,1,
                                     YEAR(ldaFirstDayOfLastMonth)) - 1
        liLastMonthPeriod = YEAR(ldaFirstDayOfLastMonth) * 100 +
                            MONTH(ldaFirstDayOfLastMonth)
-       ldPeriodFrom = fMake2Dt(ldaFirstDayOfLastMonth,0)
-       ldPeriodTo   = fMake2Dt(ldaLastDayOfLastMonth,86399)
+       ldPeriodFrom = Func.Common:mMake2DT(ldaFirstDayOfLastMonth,0)
+       ldPeriodTo   = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399)
        lcLogFile    = "/apps/yoigo/tms_support/billing/close_dss_fat_simulate_" +
                       STRING(TODAY,"999999") + "_" + STRING(TIME) + ".txt".
 
@@ -72,7 +71,7 @@ FOR EACH FATime WHERE
          Customer.CustNum = FATime.CustNum NO-LOCK:
 
    /* Check wheather subs. has active DSS service or not */
-   IF fGetActiveSpecificBundle(FATime.MsSeq,fMakeTS(),"DSS") = "" THEN DO:
+   IF fGetActiveSpecificBundle(FATime.MsSeq,Func.Common:mMakeTS(),"DSS") = "" THEN DO:
       Create ttDSSFat.
       ASSIGN ttDSSFat.DSSMsSeq = FATime.MsSeq
              ttDSSFat.CustNum  = FATime.CustNum

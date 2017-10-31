@@ -59,7 +59,7 @@ message lcdir VIEW-AS ALERT-BOX.
    ELSE DO:
       lcOutLine = lcMSISDN + ";La operación se ha realizado con éxito. La solicitud de numeración de migración de numeración móvil ha sido creada con el código ~"00551131170118152200001~".".
    END.
-   lcOutFile = lcResponseDir + "MM_MIGRATION_RESPONSE_BY_MOCK" + REPLACE(STRING(fmakets()),".","").
+   lcOutFile = lcResponseDir + "MM_MIGRATION_RESPONSE_BY_MOCK" + REPLACE(STRING(Func.Common:mMakeTS()),".","").
    OUTPUT STREAM sOut TO VALUE(lcOutFile) APPEND.
 
 END.

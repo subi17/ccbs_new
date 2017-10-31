@@ -123,7 +123,7 @@ PROCEDURE pMsCustChange:
       RETURN. 
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  
@@ -170,7 +170,7 @@ PROCEDURE pMsCustChange:
          IF liNewUser    = 0 THEN liNewUser    = liCreated.
          IF liNewInvCust = 0 THEN liNewInvCust = liCreated.
             
-         ASSIGN bNewCust.ChgStamp   = fMakeTS()
+         ASSIGN bNewCust.ChgStamp   = Func.Common:mMakeTS()
                 bNewCust.CreUser    = katun
                 bNewCust.InvCust    = liNewInvCust
                 bNewCust.PaymCust   = MobSub.AgrCust
@@ -330,15 +330,17 @@ PROCEDURE pMsCustChange:
                                                       ">>>>>>9.99"))).
               
          /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
-
+         Func.Common:mReplaceSMS 
+             ( IF AVAILABLE Customer THEN Customer.CustName ELSE "",
+               Mobsub.CLI,
+               lcSMSText,
+               MsRequest.MsSeq,
+               TODAY,
+               OUTPUT lcSMSText).
 
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(MobSub.CustNum,
                        MobSub.CLI,
@@ -398,7 +400,7 @@ PROCEDURE pOwnerChange:
       RETURN. 
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  
@@ -567,7 +569,7 @@ PROCEDURE pOwnerChange:
          
          IF llNewCust THEN DO:
             ASSIGN 
-            bNewCust.ChgStamp   = fMakeTS()
+            bNewCust.ChgStamp   = Func.Common:mMakeTS()
             bNewCust.CreUser    = katun
             bNewCust.PaymCust   = liNewOwner
             bNewCust.AgrCust    = liNewOwner
@@ -701,15 +703,17 @@ PROCEDURE pOwnerChange:
                                                       ">>>>>>9.99"))).
               
          /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
-
+         Func.Common:mReplaceSMS
+             ( IF AVAILABLE Customer THEN Customer.CustName ELSE "",
+               Mobsub.CLI,
+               lcSMSText,
+               MsRequest.MsSeq,
+               TODAY,
+               OUTPUT lcSMSText).
 
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(liNewOwner,
                        bNewCust.SMSNumber,
@@ -854,8 +858,7 @@ PROCEDURE pMsCustMove:
                bFatime.TransQty = 0.
 
             /* memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+            Func.Common:mWriteMemo("FATime",
                        STRING(bFatime.FatNum),
                        bFatime.CustNum,
                        "User Change",
@@ -865,8 +868,7 @@ PROCEDURE pMsCustMove:
          /* transfer newer fatimes totally */
          ELSE DO:
             /* memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+            Func.Common:mWriteMemo("FATime",
                        STRING(Fatime.FatNum),
                        iiNewUser,
                        "User Change",
@@ -976,8 +978,7 @@ PROCEDURE pMsCustMove:
          ELSE bFixedFee.BegPer = bFFItem.BillPer.
 
          /* memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "FixedFee",
+         Func.Common:mWriteMemo("FixedFee",
                     STRING(bFixedFee.FFNum),
                     bFixedFee.CustNum,
                     "User Change",

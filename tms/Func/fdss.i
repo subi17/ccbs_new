@@ -14,9 +14,7 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/fparse.i}
 {Func/fixedfee.i}
@@ -81,7 +79,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_DSS},
                   idActStamp,
@@ -219,7 +217,7 @@ FUNCTION fGetDSSMsSeqLimitTerm RETURNS LOG (INPUT  iiCustNum   AS INT,
                          bMServiceLimit.CustNum  = MServiceLimit.Custnum AND
                          bMServiceLimit.DialType = MServiceLimit.DialType AND
                          bMServiceLimit.SlSeq    = MServiceLimit.SlSeq    AND
-                         bMServiceLimit.EndTS    = fSecOffSet(MServiceLimit.FromTs,-1) AND
+                         bMServiceLimit.EndTS    = Func.Common:mSecOffSet(MServiceLimit.FromTs,-1) AND
                          bMServiceLimit.FromTs  <= ideBundleTermStamp)) THEN DO:
 
          ASSIGN oiDSSMsSeq  = MServiceLimit.MsSeq
@@ -284,7 +282,7 @@ FUNCTION fGetDSSUsage RETURNS DEC (INPUT iiCustNum    AS INT,
    DEF VAR ldeAmount   AS DEC NO-UNDO.
 
    liPeriod = YEAR(idActDate) * 100 + MONTH(idActDate).
-   ldeActStamp = fHMS2TS(fLastDayOfMonth(idActDate),"23:59:59").
+   ldeActStamp = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idActDate),"23:59:59").
 
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
@@ -327,9 +325,9 @@ FUNCTION fGetTotalDSSUsage RETURNS LOG (INPUT iiCustNum    AS INT,
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
 
    ASSIGN liPeriod = YEAR(idActDate) * 100 + MONTH(idActDate)
-          ldeActStamp = fHMS2TS(fLastDayOfMonth(idActDate),"23:59:59")
+          ldeActStamp = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idActDate),"23:59:59")
           ldaFromDate = DATE(MONTH(idActDate),1,YEAR(idActDate))
-          ldeFromTS   = fHMS2TS(ldaFromDate,"00:00:00").
+          ldeFromTS   = Func.Common:mHMS2TS(ldaFromDate,"00:00:00").
 
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
@@ -408,8 +406,8 @@ FUNCTION fGetOtherBundleUsages RETURNS DEC (INPUT iiCustNum   AS INT,
 
    ASSIGN ldFromDate = fInt2Date(iiPeriod,1)
           ldToDate   = fInt2Date(iiPeriod,2)
-          ldeFromTS  = fMake2Dt(ldFromDate,0)
-          ldeEndTS   = fMake2Dt(ldToDate,86399)
+          ldeFromTS  = Func.Common:mMake2DT(ldFromDate,0)
+          ldeEndTS   = Func.Common:mMake2DT(ldToDate,86399)
           lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
    lcBundleId = fGetActiveDSSId(iiCustNum,ldeEndTS).
@@ -919,7 +917,7 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
    IF icDSSId BEGINS "DSS" THEN
       llDSSNeeded = TRUE.
    IF icDSSId EQ "DSS" THEN DO: 
-      IF NOT fIsDSSActive(INPUT iiCustnum,INPUT fmakets()) THEN
+      IF NOT fIsDSSActive(INPUT iiCustnum,INPUT Func.Common:mMakeTS()) THEN
          llDSSNeeded = FALSE.
    END.
    ELSE IF icDSSId EQ "DSS2" THEN DO:
@@ -1223,7 +1221,7 @@ FUNCTION fTransferDSS RETURNS LOG
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMobSub          FOR MobSub.
 
-   ASSIGN ldMonthEndDate      = fLastDayOfMonth(idActionDate)
+   ASSIGN ldMonthEndDate      = Func.Common:mLastDayOfMonth(idActionDate)
           ldNextMonthFromDate = ldMonthEndDate + 1
           liPeriod            = YEAR(idActionDate) * 100 + MONTH(idActionDate).
 
@@ -1299,7 +1297,7 @@ FUNCTION fTransferDSS RETURNS LOG
           EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq  = iiCurrentDSSMsSeq   AND
                bMServiceLimit.SLSeq  = bServiceLimit.SLSeq AND
-               bMServiceLimit.EndTS  >= fMakeTS() EXCLUSIVE-LOCK:
+               bMServiceLimit.EndTS  >= Func.Common:mMakeTS() EXCLUSIVE-LOCK:
          ASSIGN bMServiceLimit.MsSeq = bMobSub.MsSeq
                 llTransferDSS        = TRUE.
       END. /* FOR EACH bServiceLimit WHERE */
@@ -1421,8 +1419,8 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
       (ProvMsRequest.ReqCparam2 = "" OR
        INDEX(ProvMsRequest.ReqCparam2,"LIMIT") > 0) THEN
       fGetDSSMsSeqLimit(INPUT ProvMsRequest.CustNum,
-                        INPUT (IF ProvMsRequest.ActStamp > fMakeTS() THEN
-                               ProvMsRequest.ActStamp ELSE fMakeTS()),
+                        INPUT (IF ProvMsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                               ProvMsRequest.ActStamp ELSE Func.Common:mMakeTS()),
                         OUTPUT liDSSMsSeq,
                         OUTPUT ldeCurrentDSSLimit,
                         OUTPUT lcDSSBundleId).
@@ -1494,13 +1492,13 @@ PROCEDURE pUpdateDSSLimit:
          MDSSServiceLimit.EndTS >= ideFromTS AND
          MDSSServiceLimit.FromTS <= ideFromTS THEN DO:
             
-         fSplitTS(ideFromTS, output ldaDate, output litime).
+         Func.Common:mSplitTS(ideFromTS, output ldaDate, output litime).
 
          ASSIGN
             ldePoolFromTS = ?
-            ldeFirstSecondOfMonth = fHMS2TS(DATE(MONTH(ldaDate),1,
+            ldeFirstSecondOfMonth = Func.Common:mHMS2TS(DATE(MONTH(ldaDate),1,
                                                  YEAR(ldaDate)), "00:00:00").
-            ldeLastSecondOfMonth = fHMS2TS(fLastDayOfMonth(ldaDate),"23:59:59").
+            ldeLastSecondOfMonth = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(ldaDate),"23:59:59").
          
             /* should not normally happen, means that other bundle has already
                been added to future (older bundle has gone to error) */
@@ -1529,14 +1527,14 @@ PROCEDURE pUpdateDSSLimit:
                ASSIGN
                   ldePoolAmt = MDSSServiceLimit.InclAmt
                   ldePoolFromTS = (IF AVAIL MserviceLPool
-                                   THEN fSecOffSet(MserviceLPool.EndTs,1)
+                                   THEN Func.Common:mSecOffSet(MserviceLPool.EndTs,1)
                                    ELSE MDSSServiceLimit.FromTS).
             END.
 
             FIND FIRST MserviceLPool WHERE
                        MserviceLPool.Custnum = MDSSServiceLimit.Custnum AND
                        MserviceLPool.SLSeq = MDSSServiceLimit.SLSeq AND
-                       MserviceLPool.EndTS = fSecOffSet(ideFromTS,-1) 
+                       MserviceLPool.EndTS = Func.Common:mSecOffSet(ideFromTS,-1) 
             NO-LOCK NO-ERROR.
             IF NOT AVAIL MserviceLPool THEN DO:
                CREATE MServiceLPool.
@@ -1545,7 +1543,7 @@ PROCEDURE pUpdateDSSLimit:
                   MServiceLPool.Custnum = MDSSServiceLimit.Custnum
                   MserviceLPool.SLSeq   = MDSSServiceLimit.SlSeq
                   MserviceLPool.FromTS  = ldePoolFromTS
-                  MserviceLPool.EndTS   = fSecOffSet(ideFromTS,-1)
+                  MserviceLPool.EndTS   = Func.Common:mSecOffSet(ideFromTS,-1)
                   MserviceLPool.LimitAmt = ldePoolAmt.
 
                IF MserviceLPool.EndTS < MserviceLPool.FromTS THEN
@@ -1596,7 +1594,7 @@ PROCEDURE pUpdateDSSLimit:
             USE-INDEX Custnum NO-ERROR.
                   
             ldePoolFromTS = (IF AVAIL MserviceLPool
-                             THEN fSecOffSet(MserviceLPool.EndTs,1)
+                             THEN Func.Common:mSecOffSet(MserviceLPool.EndTs,1)
                              ELSE MDSSServiceLimit.FromTS).
                   
             FIND FIRST MserviceLPool WHERE
@@ -1702,8 +1700,7 @@ PROCEDURE pUpdateDSSNetworkLimit:
                            OUTPUT lcError).
 
    IF liCreated = 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Customer",
+      Func.Common:mWriteMemo("Customer",
                  STRING(iiCustNum),
                  iiCustNum,
                  "Update DSS Network Limit/Quota",
@@ -1756,8 +1753,7 @@ PROCEDURE pUpdateDSSNetwork:
                            OUTPUT lcError).
 
    IF liCreated = 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Customer",
+      Func.Common:mWriteMemo("Customer",
                        STRING(iiCustNum),
                        iiCustNum,
                        "Unable to create " + icAction + " request",
@@ -1786,7 +1782,7 @@ PROCEDURE pUpdateDSSConsumption:
               bMsRequest.MsRequest = iiMainRequest NO-LOCK NO-ERROR.
    IF NOT AVAIL bMsRequest THEN RETURN.
 
-   fSplitTS(bMsRequest.ActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
+   Func.Common:mSplitTS(bMsRequest.ActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
    /* Check whether DSS bundle is active or not for this customer */
    IF NOT fGetTotalDSSUsage(INPUT bMsRequest.CustNum,INPUT ldaActDate,
@@ -1834,8 +1830,7 @@ PROCEDURE pUpdateDSSConsumption:
                         FALSE, /* mandatory for father request */
                         OUTPUT lcError).
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(bMsRequest.MsSeq),
                           bMsRequest.Custnum,
                           "Contract consumption adjustment failed;",

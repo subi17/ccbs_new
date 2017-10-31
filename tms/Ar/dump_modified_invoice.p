@@ -67,11 +67,11 @@ ASSIGN
    lhTable     = BUFFER Invoice:HANDLE
    lcTableName = lhTable:NAME.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liTime).
 
-ldtLastDump = fTimeStamp2DateTime(idLastDump).
+ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
 
 /* collect only those that have been modified since last dump */

@@ -8,7 +8,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/barrfunc.i}
@@ -71,7 +70,7 @@ FUNCTION fError RETURNS LOGIC
              ErrorLog.ErrorChar = lcPlainFile
              ErrorLog.ErrorMsg  = lcReadLine + CHR(10) + icMessage
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -102,7 +101,7 @@ DO TRANS:
       ActionLog.ActionID     = "IFSCOLLECT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
       lrActionID             = RECID(ActionLog).
 END.
 
@@ -165,7 +164,7 @@ PROCEDURE pInitialize:
       lcTransDir     = fCParamC("IFSCollActionLogTrans") 
       lcArcDir       = fCParamC("IFSCollActionArc")
       lcDebitBarrings = fGetBarringsInGroup("Collections")
-      ldToday        = fMake2DT(TODAY,1)
+      ldToday        = Func.Common:mMake2DT(TODAY,1)
       llLogWritten   = FALSE.
 
    IF lcLogFile = ? OR lcLogFile = "" THEN 
@@ -371,7 +370,7 @@ PROCEDURE pSetBarring:
                    icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */
-                   fMakeTS() + 0.0012, /* activate, 2min delay */
+                   Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                    "",                 /* SMS */
                    OUTPUT lcResult).
 
@@ -411,7 +410,7 @@ PROCEDURE pSetBarring:
                          (IF icSetBarring EQ "UN"
                           THEN " released"
                           ELSE " applied")
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
       
       RETURN "OK".
    END.             

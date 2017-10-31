@@ -66,8 +66,8 @@ ASSIGN
    lcDate    = STRING(YEAR(TODAY))       +
                STRING(MONTH(TODAY),"99") +
                STRING(DAY(TODAY),"99")
-   ldFrom    = fmake2dt(ldaInvDate,0)
-   ldTo      = fmake2dt(TODAY,86399) 
+   ldFrom    = Func.Common:mMake2DT(ldaInvDate,0)
+   ldTo      = Func.Common:mMake2DT(TODAY,86399) 
    liFRCount = 0.
    
 DO liCount = 1 TO NUM-ENTRIES(lcPHList):

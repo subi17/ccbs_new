@@ -4,7 +4,6 @@ ASSIGN
    katun   = "cron"
    gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/cparam.i2}
 {Func/xmlfunction.i}
 {Func/fgettxt.i}
@@ -182,7 +181,7 @@ PROCEDURE pAdjustBalance:
     
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
       PrePaidRequest.UserCode    = katun
       PrePaidRequest.Brand       = gcBrand
       PrePaidRequest.MsSeq       = MobSub.MsSeq
@@ -208,7 +207,7 @@ PROCEDURE pAdjustBalance:
    ASSIGN
       PrePaidRequest.Response   = lcXML
       PrePaidRequest.RespCode   = liRespCode
-      PrePaidRequest.TSResponse = fMakeTS().
+      PrePaidRequest.TSResponse = Func.Common:mMakeTS().
 
    /* OK response */
    IF liRespCode = 0 THEN DO:
@@ -237,7 +236,7 @@ PROCEDURE pAdjustBalance:
          Memo.MemoText  = "Deducted " + STRING(-1 * ldAmount) + 
                           " eur according to file " + lcPlainFile +
                           " (YCM-497).".
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
   
       fOK().
     

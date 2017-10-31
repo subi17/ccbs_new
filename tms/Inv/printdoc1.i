@@ -2,13 +2,11 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Inv/printdoc1tt.i}
 {Func/transname.i}
 {Func/ftransdir.i}
 {Func/email.i}
 {Func/fsubser.i}
-{Inv/nnpura.i}
 {Func/customer_address.i}
 {Func/fdestcountry.i}
 {Syst/tmsconst.i}
@@ -634,7 +632,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             FIND FIRST Order NO-LOCK WHERE
                        Order.Brand = gcBrand AND
                        Order.OrderId = FixedFee.OrderID NO-ERROR.
-            IF AVAIL Order THEN fTS2Date(Order.CrStamp, 
+            IF AVAIL Order THEN Func.Common:mTS2Date(Order.CrStamp, 
                                          OUTPUT ldaOrderDate).
          END.
     
@@ -701,11 +699,11 @@ PROCEDURE pGetInvoiceHeaderData:
       ldMaxRow   = 0.
 
    ASSIGN
-      ldFromPer   = fMake2Dt(IF Invoice.FirstCall NE ? 
+      ldFromPer   = Func.Common:mMake2DT(IF Invoice.FirstCall NE ? 
                              THEN Invoice.FirstCall
                              ELSE Invoice.FromDate,0)
-      ldInvoiceFromPer = fMake2Dt(Invoice.FromDate,0)
-      ldToPer     = fMake2DT(Invoice.ToDate,86399).
+      ldInvoiceFromPer = Func.Common:mMake2DT(Invoice.FromDate,0)
+      ldToPer     = Func.Common:mMake2DT(Invoice.ToDate,86399).
 
    /* get customer names, payment terms etc. */
    fSetCustData().
@@ -784,7 +782,7 @@ PROCEDURE pttMSOwner:
    ASSIGN
       olShouldCheckTermination = FALSE
       olPostPreDetected        = FALSE
-      ldeFirst                 = fSecOffSet(ideFirstCall,-1)
+      ldeFirst                 = Func.Common:mSecOffSet(ideFirstCall,-1)
       .
 
 
@@ -893,8 +891,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
          FIND FIRST UserCustomer WHERE 
             UserCustomer.CustNum = SubInvoice.CustNum NO-LOCK NO-ERROR.
          IF AVAILABLE UserCustomer THEN 
-            ttSub.UserName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                              BUFFER UserCustomer).
+            ttSub.UserName = Func.Common:mPrintCustName(BUFFER UserCustomer).
       END.
 
       RUN pttMSOwner(INPUT  SubInvoice.MSSeq,
@@ -965,7 +962,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
             IF ttMSOwner.CLIEvent = "iS"
             THEN lliSTR = TRUE.
             
-            fSplitTS(ttMsOwner.TsBeg,OUTPUT ldaOwnerDate,OUTPUT liOwnerTime).
+            Func.Common:mSplitTS(ttMsOwner.TsBeg,OUTPUT ldaOwnerDate,OUTPUT liOwnerTime).
 
             IF ttMsOwner.CLIEvent = "iSS" THEN DO:
                IF Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL} OR
@@ -973,11 +970,11 @@ PROCEDURE pGetSubInvoiceHeaderData:
                THEN DO:
                   IF ttMSOwner.FusionCLIType
                   THEN ldPeriodFrom = ttMsOwner.TsBeg.
-                  ELSE ldPeriodTo   = fSecOffSet(ttMsOwner.TsBeg,-1).
+                  ELSE ldPeriodTo   = Func.Common:mSecOffSet(ttMsOwner.TsBeg,-1).
                END.
                ELSE DO:
                   IF ttMSOwner.FusionCLIType
-                  THEN ldPeriodTo   = fSecOffSet(ttMsOwner.TsBeg,-1).
+                  THEN ldPeriodTo   = Func.Common:mSecOffSet(ttMsOwner.TsBeg,-1).
                   ELSE ldPeriodFrom = ttMsOwner.TsBeg.
                END.
             END.
@@ -1465,7 +1462,7 @@ PROCEDURE pMarkPrinted:
                 ITSendLog.RepType    = "Inv"
                 ITSendLog.SendInfo   = icPrintHouse
                 ITSendLog.UserCode   = katun
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
       RELEASE Invoice.    
@@ -1493,7 +1490,7 @@ PROCEDURE pErrorFile:
        "Customer"  CHR(9)
        "Error"     lcNewLine.
 
-   ldCurrStamp = fMakeTS().
+   ldCurrStamp = Func.Common:mMakeTS().
     
    FOR EACH ttError TRANS:
       PUT STREAM slog UNFORMATTED

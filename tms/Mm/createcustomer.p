@@ -10,7 +10,6 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}

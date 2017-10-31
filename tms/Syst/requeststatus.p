@@ -174,8 +174,7 @@ REPEAT WITH FRAME sel:
             
            IF INPUT RequestStatus.ReqStat = ? THEN UNDO, LEAVE ADD-ROW.
 
-           lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "MsRequest",
+           lcStatus = Func.Common:mTMSCodeName("MsRequest",
                                        "ReqStatus",
                                        STRING(INPUT FRAME lis 
                                               RequestStatus.ReqStat)).
@@ -632,8 +631,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MsRequest",
+   lcStatus = Func.Common:mTMSCodeName("MsRequest",
                                "ReqStatus",
                                STRING(RequestStatus.ReqStat)).
 END PROCEDURE.

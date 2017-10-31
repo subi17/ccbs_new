@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 
 DEFINE VARIABLE iCLi as int64 no-undo.
@@ -14,7 +13,7 @@ output stream serr to  /apps/snet/200911/as_yot323_2_err.log.
 
 def buffer msisdnbuf for msisdn.
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 
 LOOPPI:
 DO iCli = 633400000 to 633499999:

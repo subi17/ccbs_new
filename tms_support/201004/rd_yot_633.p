@@ -21,12 +21,11 @@ INPUT STREAM sMSISDN FROM VALUE(lcInputFile).
 {Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
-ldTS = fMakeTS().
+ldTS = Func.Common:mMakeTS().
 
 REPEAT:
    IMPORT STREAM sMSISDN UNFORMATTED cCLI.

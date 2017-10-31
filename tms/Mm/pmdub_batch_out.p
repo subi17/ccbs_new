@@ -10,7 +10,6 @@
 {Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{Func/date.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Mm/bundle_first_month_fee.i}
@@ -58,17 +57,17 @@ ASSIGN
    lcOutDir   = fCParam("PrepaidBundle","OutDir")
    lcSpoolDir = fCParam("PrepaidBundle","OutSpoolDir")
    ldeMonthlyFee = fgetPrepaidFeeAmount("PMDUB", TODAY)
-   ldeNow = fMakeTS()
+   ldeNow = Func.Common:mMakeTS()
    ldaCurrMonth = DATE(MONTH(TODAY), 1, YEAR(TODAY))
    ldaFirstMonth = ldaCurrMonth - 1
    ldaFirstMonth = DATE(MONTH(ldaFirstMonth), 1, YEAR(ldaFirstMonth))
-   ldeFirstMonthBegin = fMake2Dt(ldaFirstMonth,0) 
-   ldeFirstMonthEnd = fMake2Dt(fLastDayOfMonth(ldaFirstMonth),86399)
+   ldeFirstMonthBegin = Func.Common:mMake2DT(ldaFirstMonth,0) 
+   ldeFirstMonthEnd = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaFirstMonth),86399)
    liFirstMonthPeriod = YEAR(ldaFirstMonth) * 100 + MONTH(ldaFirstMonth)
-   ldeTodayBegin = fmake2Dt(TODAY,0)
-   ldeTodayEnd = fmake2Dt(TODAY,86399)
-   ldeFirstDayStart = fmake2Dt(ldaCurrMonth,0)
-   ldeFirstDayEnd = fmake2Dt(ldaCurrMonth,86399)
+   ldeTodayBegin = Func.Common:mMake2DT(TODAY,0)
+   ldeTodayEnd = Func.Common:mMake2DT(TODAY,86399)
+   ldeFirstDayStart = Func.Common:mMake2DT(ldaCurrMonth,0)
+   ldeFirstDayEnd = Func.Common:mMake2DT(ldaCurrMonth,86399)
    .
 
 IF NOT lcOutDir > "" OR

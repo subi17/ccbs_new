@@ -605,8 +605,7 @@ PROCEDURE local-find-others.
       OUTPUT lcValueType,
       OUTPUT lcValue). 
 
-      lcLimitType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Limit",
+      lcLimitType = Func.Common:mTMSCodeName("Limit",
                                   "LimitType",
                                   STRING(Limit.LimitType)).
 END PROCEDURE.
@@ -785,7 +784,7 @@ PROCEDURE local-UPDATE-record:
    liMsReq = fLimitRequest(
       ?,         /* msseq */
       piCustnum, /* custum */
-      fMakeTS(), /* act.stamp */ 
+      Func.Common:mMakeTS(), /* act.stamp */ 
       lcMode,    /* create, update */
       ldeValue,  /* new limit values */
       ilNew AND TMRule.LimitSource NE 4, /* default value */ 

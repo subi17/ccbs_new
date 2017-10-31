@@ -2,9 +2,7 @@
 katun = "Cron".
 gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/log.i}
-{Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -61,7 +59,7 @@ PROCEDURE pUpdateStatus:
             liTerminate = fPCActionRequest(TPService.MsSeq,
                                            TPService.Product,
                                            "term",
-                                           fMakeTS(),
+                                           Func.Common:mMakeTS(),
                                            TRUE,   /* create fee */
                                            {&REQUEST_SOURCE_TV_SERVICE_DEACTIVATION},
                                            "",

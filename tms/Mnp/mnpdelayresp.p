@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/tmsconst.i}
@@ -51,7 +50,7 @@ FOR EACH MNPProcess WHERE
 
    liSlotsAfterCreation = fMNPPeriods(
       input MNPProcess.CreatedTS,
-      input fMakeTS(),
+      input Func.Common:mMakeTS(),
       INPUT 0,
       OUTPUT ldaDueDate).
     
@@ -89,8 +88,8 @@ FOR EACH MNPProcess WHERE
       put stream sdump unformatted 
          MNPProcess.PortRequest lcDelimiter
          SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
-         fTS2HMS(MNPProcess.CreatedTS) lcDelimiter
-         fTS2HMS(MNPProcess.PortingTime) lcDelimiter
+         Func.Common:mTS2HMS(MNPProcess.CreatedTS) lcDelimiter
+         Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
          lcProposal lcDelimiter
          MNPProcess.OperCode lcDelimiter
          lcOperName skip.

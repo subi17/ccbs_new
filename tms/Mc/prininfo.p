@@ -12,7 +12,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -131,8 +130,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
           lcPost   = ""
           lcTarget = "".
           
-   lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "InvText",
+   lcTarget = Func.Common:mTMSCodeName("InvText",
                                "AddrTarget",
                                STRING(iiAddress)).
           
@@ -165,8 +163,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
         
    CASE iiAddress:
    WHEN 1 OR WHEN 3 THEN IF AVAILABLE Customer THEN ASSIGN 
-                      lcName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                BUFFER Customer)
+                      lcName = Func.Common:mDispCustName(BUFFER Customer)
                       lcAddr = Customer.Address
                       lcPost = Customer.ZipCode + " " + Customer.PostOffice.
    WHEN 2 THEN IF AVAILABLE Customer THEN ASSIGN 
@@ -176,8 +173,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
                                Customer.IDelPost.
    WHEN 4 OR WHEN 5
    THEN IF AVAILABLE bOwner THEN ASSIGN 
-                      lcName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                BUFFER bOwner)
+                      lcName = Func.Common:mDispCustName(BUFFER bOwner)
                       lcAddr = bOwner.Address
                       lcPost = bOwner.ZipCode + " " + bOwner.PostOffice.
    END CASE.                      

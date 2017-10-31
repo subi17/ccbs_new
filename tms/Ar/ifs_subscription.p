@@ -138,11 +138,11 @@ OUTPUT STREAM sLog TO VALUE(icFile).
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liModTime).
 
-ldtLastDump = fTimeStamp2DateTime(idLastDump).
+ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
 ASSIGN
    lhMobSub     = BUFFER MobSub:HANDLE
@@ -255,7 +255,7 @@ PROCEDURE pModifiedSubscriptions:
                          idLastDump,
                          "fCollectMsOwner").
  
-   ldChkStamp = fOffSet(idLastDump,-3).
+   ldChkStamp = Func.Common:mOffSet(idLastDump,-3).
       
    FOR EACH ttPicked:
    
@@ -444,7 +444,7 @@ PROCEDURE pWrite2File:
    WHEN "TermMobSub" THEN DO:
       FIND FIRST MsOwner WHERE MsOwner.MsSeq = liMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE MsOwner AND MsOwner.TsEnd < 99999999 THEN DO:
-         fSplitTS(MsOwner.TSEnd,
+         Func.Common:mSplitTS(MsOwner.TSEnd,
                   OUTPUT ldaSubsDate,
                   OUTPUT liTime).
          END_DATE = fDate2String(ldaSubsDate).
@@ -476,7 +476,7 @@ PROCEDURE pWrite2File:
    END.
 
    WHEN "Order" THEN DO:
-      fSplitTS(Order.CrStamp,   
+      Func.Common:mSplitTS(Order.CrStamp,   
                OUTPUT ldaActDate,
                OUTPUT liTime).
 
@@ -491,7 +491,7 @@ PROCEDURE pWrite2File:
          
          IF AVAIL OrderTimeStamp THEN DO:
             
-            fSplitTS(OrderTimeStamp.TimeStamp,   
+            Func.Common:mSplitTS(OrderTimeStamp.TimeStamp,   
                      OUTPUT ldaSubsDate,
                      OUTPUT liTime).
             END_DATE = fDate2String(ldaSubsDate).

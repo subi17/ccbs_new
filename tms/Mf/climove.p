@@ -10,7 +10,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER CustNum LIKE Customer.CustNum.
 
@@ -290,7 +289,7 @@ BROWSE:
 
             IF LOOKUP(nap,poisnap) > 0 THEN DO:
                IF FRAME-FIELD = "movetime" AND
-                  NOT fCheckTime(INPUT FRAME frmSetTime movetime) THEN DO:
+                  NOT Func.Common:mCheckTime(INPUT FRAME frmSetTime movetime) THEN DO:
                   MESSAGE 
                      "Invalid time: " + INPUT FRAME frmSetTime movetime 
                   VIEW-AS ALERT-BOX error.
@@ -303,7 +302,7 @@ BROWSE:
 
          END.
 
-         lTimeStamp = fHMS2TS(movedate,movetime).
+         lTimeStamp = Func.Common:mHMS2TS(movedate,movetime).
 
          IF ttCLISer.move = TRUE THEN DO:
 

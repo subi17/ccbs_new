@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Syst/tmsconst.i}
@@ -39,7 +38,7 @@ FOR EACH MNPProcess NO-LOCK WHERE
          MNPProcess.Brand = gcBrand AND
          MNPProcess.MNPType = {&MNP_TYPE_IN} AND
          MNPProcess.StatusCode EQ {&MNP_ST_ACON} AND
-         MNPProcess.PortingTime < fMakeTS(),
+         MNPProcess.PortingTime < Func.Common:mMakeTS(),
    FIRST Order NO-LOCK WHERE
          Order.Brand = gcBrand AND
          Order.OrderId = MNPProcess.OrderId:
@@ -57,7 +56,7 @@ FOR EACH MNPProcess NO-LOCK WHERE
 
    IF AVAIL MsRequest THEN DO:
       /* msrequest actstamp should be same as changeWindowDate */
-      fSplitTS(INPUT  MsRequest.ActStamp,
+      Func.Common:mSplitTS(INPUT  MsRequest.ActStamp,
                OUTPUT ldaDate,
                OUTPUT liSecs).
 

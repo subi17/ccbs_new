@@ -187,8 +187,7 @@ orders = "By Contract  ," +
 
 DO i = 1 TO 3:
    lcCTypeLst = lcCTypeLst + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Contract","ContrType",STRING(i)) + ",".
+                 Func.Common:mTMSCodeName("Contract","ContrType",STRING(i)) + ",".
 END.                                  
 
 IF iiCustNum > 0 

@@ -102,9 +102,9 @@ IF NOT AVAIL NewCLIType THEN
 IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND pcDataBundleId = "" THEN
    RETURN appl_err("Subscription based bundle is missing").
 
-fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
+Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
-ASSIGN pdActivation = fMake2Dt(ldaActDate, 0).
+ASSIGN pdActivation = Func.Common:mMake2DT(ldaActDate, 0).
 
 katun = "NewtonAd". /* check correct barring */
 

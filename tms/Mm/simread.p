@@ -16,8 +16,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/ftmscode.i}
 
 DEF INPUT PARAMETER SIMfile AS CHARACTER NO-UNDO. 
 DEF INPUT PARAMETER ProcessedDir AS CHARACTER NO-UNDO. 
@@ -225,9 +223,9 @@ DO i = 1 TO IFiSpx.Hrowd:
       IF sTPValue = "" THEN
          llSerNbFound = FALSE.
       ELSE DO:
-         lcManCode = fTMSCodeConfigValue("IFiSpx","ManCode",
+         lcManCode = Func.Common:mTMSCodeConfigValue("IFiSpx","ManCode",
                                          SUBSTRING(sTPValue,7,1)).
-         lcSimArt  = fTMSCodeConfigValue("IFiSpx","SimArt",
+         lcSimArt  = Func.Common:mTMSCodeConfigValue("IFiSpx","SimArt",
                                          SUBSTRING(sTPValue,7,2)).
          /* Find actual record */
          FIND FIRST IFiSpx WHERE
@@ -679,7 +677,7 @@ REPEAT WITH FRAME Main:
                "Status: " + STRING(iSimStat) + " " + SIMStat.SSName + CHR(10) +
                "File: " + SIMFile
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED} 
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
          RELEASE ActionLog.   
 
          MESSAGE "Totally" tot "SIM records were successfully loaded" 

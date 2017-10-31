@@ -24,7 +24,6 @@
                   13.04.2004/aam index BillPeriod removed
                   14.06.2005/aam undo creation if billcode = ""
                   01.12.2005/aam hosttable is "customer" not "asiakas"
-                  24.01.2006/jt  DYNAMIC-FUNCTION("fDispCustName")
                   07.08.2006/jt  edded order by billcode
                   30.08.2006/aam find msowner/mobsub also using invcust
   Version ......: M15
@@ -707,8 +706,7 @@ PROCEDURE local-disp-row:
        
        RUN local-find-others.
        
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        SingleFee.Brand 
@@ -844,8 +842,7 @@ PROCEDURE local-update-record:
                       MESSAGE "Unknown customer !".
                       NEXT.
                    END.
-                   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                 BUFFER Customer).
+                   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                    DISP lcCustName.
                 END.
 

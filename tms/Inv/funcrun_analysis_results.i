@@ -105,7 +105,7 @@ DEFINE INPUT PARAMETER iiBRTestQueueID AS INT NO-UNDO.
    DEF VAR liResultID    AS INT  NO-UNDO.
    DEF VAR ldResultStamp AS DEC  NO-UNDO.
 
-   ldResultStamp = fMakeTS().
+   ldResultStamp = Func.Common:mMakeTS().
    FOR FIRST FuncRunExec NO-LOCK WHERE
              FuncRunExec.FRExecID = iiFRExecID:
       ldResultStamp = FuncRunExec.StartTS.

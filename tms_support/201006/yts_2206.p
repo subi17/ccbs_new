@@ -11,7 +11,6 @@ Customer number, MSISDN, STC date, old subs type, new subs type, billig item, nu
 
 */
 
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF VAR ldtInputDate AS DATE NO-UNDO. 
@@ -61,8 +60,8 @@ END FUNCTION.
 
 
 ldtInputDate = DATE(7,1,2010).
-ldBeginStamp = fHMS2TS(ldtInputDate,"00:00:00").
-ldEndStamp = fHMS2TS(ldtInputDate,"23:59:59").
+ldBeginStamp = Func.Common:mHMS2TS(ldtInputDate,"00:00:00").
+ldEndStamp = Func.Common:mHMS2TS(ldtInputDate,"23:59:59").
 
 OUTPUT STREAM sLog TO "yts_2206.log" append.
 

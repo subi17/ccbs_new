@@ -11,7 +11,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 
@@ -74,7 +73,7 @@ CASE MsRequest.ReqStat:
                /* Mandatory unbarring complete, run pending */
                RUN pNew(MsRequest.ReqCParam1,
                         TODAY,
-                        fMakeTs(),
+                        Func.Common:mMakeTS(),
                         /*MobSub.CliType*/ "CONTRD1",
                         MobSub.MsSeq).
 
@@ -92,7 +91,7 @@ CASE MsRequest.ReqStat:
       /* No mandatory requests, handle immediately */ 
       ELSE RUN pNew(MsRequest.ReqCParam1, /*ServPac*/
                         TODAY,
-                        fMakeTs(),
+                        Func.Common:mMakeTS(),
                         /*MobSub.CliType*/ "CONTRD1",
                         MobSub.MsSeq).
    END.
@@ -118,8 +117,8 @@ PROCEDURE pNew:
    DEFINE INPUT PARAMETER icCliType  AS CHAR      NO-UNDO.
    DEFINE INPUT PARAMETER iiMsSeq    AS INTEGER   NO-UNDO. 
    
-   IF idtDate = TODAY THEN ideActTime = fMakeTS().
-   ELSE ideActTime = fMake2Dt(idtDate,10800).
+   IF idtDate = TODAY THEN ideActTime = Func.Common:mMakeTS().
+   ELSE ideActTime = Func.Common:mMake2DT(idtDate,10800).
    
    /* Package from MsRequest */
    FIND FIRST CTServPac NO-LOCK WHERE
@@ -234,8 +233,8 @@ PROCEDURE pDone.
               lcSMSText = REPLACE(lcSMSText,"#MSISDN",MsRequest.CLI).
                 
               /* don't send messages in weird hours */
-              ldSMSStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-              IF ldSMSStamp = ? THEN ldSMSStamp = fMakeTS().
+              ldSMSStamp = Func.Common:mMakeOfficeTS().
+              IF ldSMSStamp = ? THEN ldSMSStamp = Func.Common:mMakeTS().
 
               fMakeSchedSMS(MobSub.CustNum,
                             MobSub.CLI,

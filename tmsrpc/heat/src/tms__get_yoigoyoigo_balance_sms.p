@@ -19,8 +19,8 @@ FUNCTION fReqStat RETURNS LOGICAL
 (iiStat AS INTEGER,
  icMsg AS CHAR):
    ASSIGN
-      bCreaReq.donestamp = fMakeTS()
-      bCreaReq.updatestamp = fMakeTS()
+      bCreaReq.donestamp = Func.Common:mMakeTS()
+      bCreaReq.updatestamp = Func.Common:mMakeTS()
       bCreaReq.reqstatus = iiStat
       bCreaReq.memo = icMsg.
 END FUNCTION. 

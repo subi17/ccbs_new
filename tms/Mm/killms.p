@@ -662,8 +662,7 @@ PROCEDURE local-find-others.
 
      lcName = "".
      IF AVAILABLE Customer THEN 
-        lcName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+        lcName = Func.Common:mDispCustName(BUFFER Customer).
                                   
 END PROCEDURE.
 

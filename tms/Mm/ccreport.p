@@ -2,7 +2,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
 {Func/multitenantfunc.i}
 
@@ -70,11 +69,11 @@ FUNCTION fGetCLIType RETURNS LOGICAL (INPUT piMsSeq  AS INT):
     DEF VAR liFoundOwner  AS INT NO-UNDO.
 
     ASSIGN
-       ldFromPer   = fMake2Dt(IF Invoice.FirstCall NE ?
+       ldFromPer   = Func.Common:mMake2DT(IF Invoice.FirstCall NE ?
                               THEN Invoice.FirstCall
                               ELSE Invoice.FromDate,0)
-       ldToPer     = fMake2DT(Invoice.ToDate,86399)
-       ldInvoiceFrom = fMake2DT(DATE(MONTH(Invoice.Todate),
+       ldToPer     = Func.Common:mMake2DT(Invoice.ToDate,86399)
+       ldInvoiceFrom = Func.Common:mMake2DT(DATE(MONTH(Invoice.Todate),
                                      1,
                                      YEAR(Invoice.ToDate)),0)
        liFoundOwner = 0.
@@ -90,7 +89,7 @@ FUNCTION fGetCLIType RETURNS LOGICAL (INPUT piMsSeq  AS INT):
                bMsOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
     IF AVAIL bMsOwner THEN DO:
 
-       fSplitTS(bMsOwner.TSBeg,OUTPUT ldaDate,OUTPUT liTime).
+       Func.Common:mSplitTS(bMsOwner.TSBeg,OUTPUT ldaDate,OUTPUT liTime).
 
        CREATE ttMsOwner.
        ASSIGN ttMsOwner.MsSeq        = bMsOwner.MsSeq
@@ -157,8 +156,8 @@ END FUNCTION. /* FUNCTION fGetCLIType RETURNS CHARACTER */
 
 ldaPeriodEnd =  DATE(MONTH(idaStart),1,YEAR(idaStart)) - 1.
 ldaPeriodStart = DATE(MONTH(ldaPeriodEnd),1,YEAR(ldaPeriodEnd)).
-ldPeriodFromTS = fHMS2TS(ldaPeriodStart,"00:00:00").
-ldPeriodEndTS = fHMS2TS(ldaPeriodEnd,"23:59:59").
+ldPeriodFromTS = Func.Common:mHMS2TS(ldaPeriodStart,"00:00:00").
+ldPeriodEndTS = Func.Common:mHMS2TS(ldaPeriodEnd,"23:59:59").
 
 IF icRunMode = "test" THEN lcTrans = fCParamC("FRTestRunDir").
 ELSE lcTrans = fCParamC("CCNReportTrans").

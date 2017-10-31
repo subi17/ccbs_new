@@ -11,7 +11,6 @@
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Qvantel".
-{Func/timestamp.i}
 
 DEFINE VARIABLE liTestCount     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liLastSeq       AS INTEGER   NO-UNDO.
@@ -23,7 +22,7 @@ DEFINE BUFFER bGetOfferItem FOR OfferItem.
 
 DEFINE STREAM slog.
 
-ldeCurrStamp = fMakeTS().
+ldeCurrStamp = Func.Common:mMakeTS().
 
 OUTPUT STREAM slog TO "/apps/yoigo/tms_support/testing/offer_ipl8_mig_simulate.xls" append.
 

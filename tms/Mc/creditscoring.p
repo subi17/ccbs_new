@@ -8,8 +8,6 @@ DEFINE OUTPUT PARAMETER pcAnswerCodes AS CHARACTER NO-UNDO.
 
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 
@@ -178,7 +176,7 @@ IF pcActionType EQ "ORDER" THEN DO:
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer AND AVAILABLE Order THEN
    DO:
-      pcFoundingDate = fDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
+      pcFoundingDate = Func.Common:mDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
       
       FIND FIRST OrderAccessory OF Order WHERE
                  OrderAccessory.TerminalType EQ ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
@@ -322,7 +320,7 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
      
    ASSIGN pcCIF          = Customer.OrgId                    /*  1 */
           pcZIP          = Customer.ZIP                      /*  2 */
-          pcFoundingDate = fDateFmt(Customer.FoundationDate, 
+          pcFoundingDate = Func.Common:mDateFmt(Customer.FoundationDate, 
                                     "ddmmyyyy")              /* 3 */
           pcAddress       = Customer.Address                 /* 4 */
           pcRepId         = Customer.OrgId                /* 5 */

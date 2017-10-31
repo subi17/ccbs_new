@@ -206,8 +206,7 @@ FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
 
    IF iiUnit > 0 THEN 
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "Tariff","DataType",STRING(iiUnit)).
+      lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
    ELSE lcUnit = "".
 
    DISPLAY lcUnit WITH FRAME lis.
@@ -441,8 +440,7 @@ repeat WITH FRAME sel:
                   IF INPUT FRAME lis FixedFee.HostTable NE "" THEN DO:
 
                      IF NOT 
-                        DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                         "FixedFee",
+                        Func.Common:mTMSCodeChk("FixedFee",
                                          "HostTable",
                                          INPUT FRAME lis FixedFee.HostTable)
                      THEN DO:

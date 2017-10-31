@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.p}
    
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -580,7 +579,7 @@ PROCEDURE local-find-others.
        FIND MobSub WHERE MobSub.MsSeq = TMQueue.MsSeq NO-LOCK NO-ERROR.
        FIND Customer WHERE Customer.CustNum = TMQueue.CustNum NO-LOCK NO-ERROR.
 
-       IF Avail Customer then username = DYNAMIC-FUNCTION("fDispCustName" IN                        ghFunc1,  BUFFER Customer) .
+       IF Avail Customer then username = Func.Common:mDispCustName(BUFFER Customer) .
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:

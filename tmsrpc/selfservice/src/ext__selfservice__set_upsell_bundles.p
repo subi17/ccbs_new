@@ -76,7 +76,7 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
    previous five minutes from external api */
 IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
                    MsRequest.MsSeq = Mobsub.MsSeq AND
-                   MsRequest.ActStamp > fSecOffSet(fMakeTS(),-300) AND
+                   MsRequest.ActStamp > Func.Common:mSecOffSet(Func.Common:mMakeTS(),-300) AND
                    MsRequest.ReqType = 8 AND
                    MsRequest.ReqCParam3 = pcUpsellId AND
                    MsRequest.ReqSource = {&REQUEST_SOURCE_EXTERNAL_API}
@@ -133,7 +133,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 pcUpsellId,
                                 "act",
-                                fMakeTS(),
+                                Func.Common:mMakeTS(),
                                 TRUE, /* fees */
                                 {&REQUEST_SOURCE_EXTERNAL_API},
                                 "",   /* creator */
@@ -150,7 +150,7 @@ ELSE IF NOT fCreateUpsellBundle(
    MobSub.MsSeq,
    pcUpsellId,
    {&REQUEST_SOURCE_EXTERNAL_API},
-   fMakeTS(),
+   Func.Common:mMakeTS(),
    OUTPUT liRequest,
    OUTPUT lcError) THEN DO:
 
@@ -193,8 +193,7 @@ ELSE IF pcUpsellId = "DSS200_UPSELL" THEN ASSIGN
    lcMemoText  = "Internet compartido - Ampliación 200 MB".
           
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  lcMemoTitle,                          /* MemoTitle */

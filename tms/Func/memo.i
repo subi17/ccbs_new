@@ -2,7 +2,6 @@
 &THEN
 &GLOBAL-DEFINE MEMO_I YES
 
-{Func/timestamp.i}
 
 FUNCTION fCreateMemo RETURNS LOGICAL
    (icHostTable AS CHAR,
@@ -23,7 +22,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL
           Memo.CreUser   = icCreUser 
           Memo.MemoTitle = icTitle
           Memo.MemoText  = icText.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
    RELEASE Memo.
    

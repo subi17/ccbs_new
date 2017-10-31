@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -135,15 +134,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
 
    IF llOrdCust THEN DO:
       liCustNum = Invoice.CustNum.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    END.                                 
  
    ELSE DO:
       liCustNum = Customer.AgrCust.
    
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER bAgrCust).
+      lcCustName = Func.Common:mDispCustName(BUFFER bAgrCust).
    END.                                 
     
    PAUSE 0.

@@ -32,11 +32,9 @@
 katun = "NewtonRPC".
 gcBrand = "1".
 {Func/penaltyfee.i}
-{Func/timestamp.i}
 {Func/orderchk.i}
 {Func/fcustpl.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mnp/mnpoutchk.i}
 {Func/fixedfee.i}
 
@@ -52,7 +50,7 @@ FUNCTION fMatchOfferCriterias RETURN LOGICAL
 
          DEFINE VARIABLE llAllowed AS LOGICAL NO-UNDO INITIAL FALSE.
          DEF VAR ldeNow AS DEC NO-UNDO. 
-         ldeNow = fMakeTS().
+         ldeNow = Func.Common:mMakeTS().
 
          FIND Offer WHERE 
               Offer.Brand = gcBrand AND 
@@ -370,7 +368,7 @@ IF AVAIL SubsTerminal THEN DO:
       THEN llCancelledPrerenove = TRUE.
    END. /* IF Mobsub.PayType = True AND */
    
-   fSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
+   Func.Common:mSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
 
    /* YTS-3465 */
    IF SubsTerminal.PerContractID > 0 THEN DO:

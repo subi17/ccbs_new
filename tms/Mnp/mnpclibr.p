@@ -485,8 +485,7 @@ PROCEDURE local-find-others.
    IF AVAIL TMSCodes THEN lcStatus = TMSCodes.CodeName.
    ELSE lcStatus = "".
    
-   lcMNPType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MNPProcess",
+   lcMNPType = Func.Common:mTMSCodeName("MNPProcess",
                                "MNPType",
                              STRING(ttMNPProcess.MNPType)).
 

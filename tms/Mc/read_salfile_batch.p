@@ -15,7 +15,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/fgettxt.i}
 {Func/smsmessage.i}
 
@@ -172,7 +171,7 @@ PROCEDURE pHandleSALfile:
       FusionMessage.AdditionalInfo = icSALOrderId
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
       FusionMessage.OrderID = INT(icYoigoOrderID)
-      FusionMessage.CreatedTS = fMakeTS()
+      FusionMessage.CreatedTS = Func.Common:mMakeTS()
       FusionMessage.UpdateTS = FusionMessage.CreatedTS
       FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_LOGISTICS} 
       FusionMessage.Source = "MasMovil"

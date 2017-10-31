@@ -124,8 +124,7 @@ FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
    
    IF iiUnit > 0 THEN 
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "Servicelimit","InclUnit",STRING(iiUnit)).
+      lcUnit = Func.Common:mTMSCodeName("Servicelimit","InclUnit",STRING(iiUnit)).
    ELSE lcUnit = "".
     
    DISPLAY lcUnit WITH FRAME lis.

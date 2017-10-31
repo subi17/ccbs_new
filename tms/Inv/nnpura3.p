@@ -68,7 +68,6 @@
 {Func/cparam2.i}
 {Inv/edefine.i}
 
-{Inv/nnpura.i}
 {Func/fdivtxt.i}
 
 def input  parameter CustNum       as int  format "zzzzzz9"   NO-UNDO.
@@ -437,7 +436,7 @@ repeat:
             fChgPage(0).
          END.
 
-         ASSIGN ckestos     = fSec2C(dkestos,10)
+         ASSIGN ckestos     = Func.Common:mSec2C(dkestos,10)
                 ldServPrice = dtopay - dMpmPrice.
                 
          IF llDispMPM
@@ -507,7 +506,7 @@ repeat:
             fChgPage(2).
          END.
 
-         ASSIGN ckestos     = fSec2C(pdkestos,10)
+         ASSIGN ckestos     = Func.Common:mSec2C(pdkestos,10)
                 pdtopay     = round(pdtopay,3)
                 ldServPrice = pdtopay - pdMpmPrice.
 
@@ -592,7 +591,7 @@ repeat:
             fChgPage(2).
          END.
 
-         ASSIGN ckestos     = fSec2C(ydkestos,10)
+         ASSIGN ckestos     = Func.Common:mSec2C(ydkestos,10)
                 liCLIQty    = liCLIQty + 1
                 ldServPrice = ydtopay - ydMpmPrice.
 
@@ -654,7 +653,7 @@ repeat:
       /* Tulostetaan Customer-yhteensA-line */
       IF last-of(Customer.CustNum) THEN DO:
 
-         ASSIGN ckestos     = fSec2C(adkestos,12)
+         ASSIGN ckestos     = Func.Common:mSec2C(adkestos,12)
                 ldServPrice = adtopay - adMpmPrice.
 
          IF epltul THEN DO:

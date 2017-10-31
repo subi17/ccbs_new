@@ -10,7 +10,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
 {Func/replog_reader.i}
@@ -95,8 +94,8 @@ PROCEDURE pAmqCDRReader:
    DEFINE OUTPUT PARAMETER oiHandled AS INTEGER   NO-UNDO.
 
    ASSIGN ldaReadDate  = TODAY
-          ldeReadInTS  = fMake2Dt(ldaReadDate,TIME)
-          ldeCurrStamp = fMakeTS().
+          ldeReadInTS  = Func.Common:mMake2DT(ldaReadDate,TIME)
+          ldeCurrStamp = Func.Common:mMakeTS().
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
@@ -105,8 +104,8 @@ PROCEDURE pAmqCDRReader:
                  ActionLog.TableName = "PrepCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
          ldeReadInTS = ActionLog.ActionDec.
-         fSplitTS(ldeReadInTS,ldaReadDate,liReadTime).
-         IF llStart THEN ASSIGN ActionLog.ActionTS = fMakeTS()
+         Func.Common:mSplitTS(ldeReadInTS,ldaReadDate,liReadTime).
+         IF llStart THEN ASSIGN ActionLog.ActionTS = Func.Common:mMakeTS()
                                 llStart = FALSE.
       END.
       ELSE DO:
@@ -210,7 +209,7 @@ PROCEDURE pStartReader:
    DEF VAR liLoopReader AS INTEGER NO-UNDO. 
    DEF VAR ldeBufferTS  AS DECIMAL NO-UNDO. 
 
-   ldeBufferTS = fsecOffset(fMakeTs(),-20).
+   ldeBufferTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),-20).
 
    Reader:
    DO WHILE idaReadDate <= TODAY:
@@ -276,7 +275,7 @@ PROCEDURE pStartReader:
          ELSE DO:
             IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
                LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-            odeCDRStamp = fsecOffset(odeCDRStamp,-1).
+            odeCDRStamp = Func.Common:mSecOffSet(odeCDRStamp,-1).
             LEAVE Reader.
          END.
 

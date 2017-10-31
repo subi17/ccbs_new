@@ -14,7 +14,6 @@
 
 {Syst/commali.i} 
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPMessage'}
 {Func/xmlfunction.i}
@@ -320,7 +319,7 @@ BROWSE:
         END.
      
         /* must be 1 hour old (does not understand daychange) */
-        IF fMakeTS() - MNPMessage.SentTS < 0.03600 THEN DO:
+        IF Func.Common:mMakeTS() - MNPMessage.SentTS < 0.03600 THEN DO:
            MESSAGE
              "Resend can't be done since original message is not 1 hour old!"
            VIEW-AS ALERT-BOX MESSAGE.
@@ -362,7 +361,7 @@ BROWSE:
         RELEASE bufMessage.
                    
         ASSIGN  
-           MNPMessage.CreatedTS = fMakeTS()
+           MNPMessage.CreatedTS = Func.Common:mMakeTS()
            MNPMessage.StatusCode = 1
            MNPMessage.MsgTurn = MNPMessage.MsgTurn + 1.
         

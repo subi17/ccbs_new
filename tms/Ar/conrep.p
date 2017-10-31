@@ -10,7 +10,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/utumaa.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER icUserCode  AS CHAR  NO-UNDO. 
 DEF INPUT  PARAMETER idtConDate  AS DATE  NO-UNDO.
@@ -122,7 +121,7 @@ BREAK BY Contact.UserCode
 
    FIND Customer OF Contact NO-LOCK NO-ERROR. 
    IF Contact.ConState = 1 THEN DO:
-      fSplitTS(Contact.ConStamp,
+      Func.Common:mSplitTS(Contact.ConStamp,
                OUTPUT ldtConDate,
                OUTPUT liConTime).
       lcConDate = STRING(ldtConDate,"99-99-99") + " " + 

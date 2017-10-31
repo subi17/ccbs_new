@@ -10,8 +10,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 katun = "Qvantel".
-{Func/date.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -132,7 +130,7 @@ PROCEDURE pReadFileAndProcess:
 
         ASSIGN liLoop      = liLoop + 1
                llFileAvail = FALSE
-               ldThisRun   = fMakeTS().
+               ldThisRun   = Func.Common:mMakeTS().
 
         DISP
            liLoop
@@ -154,11 +152,11 @@ PROCEDURE pReadFileAndProcess:
               ldeFileTimeStamp = DECIMAL(ENTRY(NUM-ENTRIES(lcInputFile,"_"),lcInputFile,"_")) NO-ERROR.
 
               /* Handle file after 1 hour so that all requests can be handled */
-              IF ldThisRun < fOffSet(ldeFileTimeStamp,1) THEN 
+              IF ldThisRun < Func.Common:mOffSet(ldeFileTimeStamp,1) THEN 
               DO:
                  PAUSE 10 NO-MESSAGE.
                  NEXT MAIN_LOOP.
-              END. /* IF ldThisRun < fOffSet(ldeFileTimeStamp,1) THEN DO: */
+              END. /* IF ldThisRun < Func.Common:mOffSet(ldeFileTimeStamp,1) THEN DO: */
 
               ASSIGN liLine = 0
                      llFileAvail = TRUE

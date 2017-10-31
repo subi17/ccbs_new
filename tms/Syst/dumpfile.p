@@ -827,8 +827,7 @@ PROCEDURE local-UPDATE-record:
                PAUSE 0.
 
                IF FRAME-FIELD = "FileCategory" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DumpFile",
+                  IF Func.Common:mTMSCodeName("DumpFile",
                                       "FileCategory",
                                       INPUT INPUT DumpFile.FileCategory) = ""
                   THEN DO:
@@ -839,8 +838,7 @@ PROCEDURE local-UPDATE-record:
                END.
 
                ELSE IF FRAME-FIELD = "DumpFormat" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DumpFile",
+                  IF Func.Common:mTMSCodeName("DumpFile",
                                       "DumpFormat",
                                       INPUT INPUT DumpFile.DumpFormat) = ""
                   THEN DO:
@@ -851,8 +849,7 @@ PROCEDURE local-UPDATE-record:
                END.
 
                ELSE IF FRAME-FIELD = "DecimalPoint" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DumpFile",
+                  IF Func.Common:mTMSCodeName("DumpFile",
                                       "DecimalPoint",
                                       INPUT INPUT DumpFile.DecimalPoint) = ""
                   THEN DO:

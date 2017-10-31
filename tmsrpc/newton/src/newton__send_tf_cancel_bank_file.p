@@ -12,7 +12,6 @@
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/terminal_financing.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE pcTenant    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUsername  AS CHARACTER NO-UNDO. 
@@ -43,7 +42,7 @@ IF LOOKUP(pcBankCode,{&TF_BANK_CODES}) EQ 0 THEN
 
 /* Checking if files are sent to certain bank at this month already.
    In case yes, exception is returned. */
-fMonthlyStamps(TODAY, ldeMonthBeg, ldeMonthEnd).
+Func.Common:mMonthlyStamps(TODAY, ldeMonthBeg, ldeMonthEnd).
 IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
          MsRequest.Brand = gcBrand AND
          MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE} AND

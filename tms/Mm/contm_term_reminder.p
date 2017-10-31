@@ -11,7 +11,6 @@
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -38,8 +37,8 @@ DEF BUFFER bMsRequest     FOR MsRequest.
 DEF STREAM Sout.
 
 ASSIGN ldFirstDayOfMonth = DATE(MONTH(TODAY),1,YEAR(TODAY))
-       ldLastDayOfMonth  = fLastDayOfMonth(ldFirstDayOfMonth)
-       ldeFromTS         = fMake2Dt(ldLastDayOfMonth,86399).
+       ldLastDayOfMonth  = Func.Common:mLastDayOfMonth(ldFirstDayOfMonth)
+       ldeFromTS         = Func.Common:mMake2DT(ldLastDayOfMonth,86399).
 
 /* Only Send the SMS 20 or 2 days before of termination date */
 CASE (ldLastDayOfMonth - TODAY):
@@ -74,7 +73,7 @@ FOR EACH MsRequest WHERE
    IF MsRequest.ReqCparam3 <> STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM})
    THEN NEXT TERM_LOOP.
 
-   fSplitTS(MsRequest.ActStamp,OUTPUT ldaTermdate,OUTPUT liTermTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldaTermdate,OUTPUT liTermTime).
 
    /* Only Send the SMS 20 or 2 days before of termination date */
    CASE (ldaTermdate - TODAY):

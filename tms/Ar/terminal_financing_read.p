@@ -10,7 +10,6 @@
 katun = "Qvantel".
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/tsformat.i}
 {Func/ftransdir.i}
@@ -132,7 +131,7 @@ REPEAT:
 
    ASSIGN
       lcLogFileName = lcFileName + "_" + 
-         ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log"
+         ftsformat("yyyymmdd_HHMMss", Func.Common:mMakeTS()) + ".log"
 
    lcErrorLog = lcLogSpoolDir + "BANK_RESPONSE_LOG_" +
          lcBankName + "_" +
@@ -198,7 +197,7 @@ REPEAT:
          ASSIGN
             ActionLog.Brand        = gcBrand
             ActionLog.ActionID     = "TF_READ_" + lcTFBank
-            ActionLog.ActionTS     = fMakeTS()
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcLogFileName
             ActionLog.UserCode     = katun
@@ -468,7 +467,7 @@ PROCEDURE pProcessData:
                           (ttTFPayment.PaytermAmt +
                            ttTFPayment.ResidualAmt) * 100 + 0.05,1).
 
-         fTS2Date(Order.CrStamp, OUTPUT ldaOrderdate).
+         Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderdate).
 
          FIND FIRST TFConf NO-LOCK WHERE
                     TFConf.RVPercentage = ldeRVPerc AND
@@ -582,7 +581,7 @@ PROCEDURE pProcessData:
                 OrderTimeStamp.OrderId = Order.OrderId AND
                 OrderTimeStamp.RowType = {&ORDERTIMESTAMP_DELIVERY}:
          
-         fTs2Date(OrderTimeStamp.TimeStamp, OUTPUT ldaDate).
+         Func.Common:mTS2Date(OrderTimeStamp.TimeStamp, OUTPUT ldaDate).
 
          IF ldaFromDate EQ ? THEN ASSIGN
             ldaFromDate = ldaDate

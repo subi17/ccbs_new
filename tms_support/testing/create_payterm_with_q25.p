@@ -103,7 +103,7 @@ end.
 liRequest = fPCActionRequest(mobsub.msseq, /* subscription id */
                              lcPayterm,
                              "act",
-                             fMake2Dt(ldaActivationDate,0), /* activation_ts */
+                             Func.Common:mMake2DT(ldaActivationDate,0), /* activation_ts */
                              true,
                              "5",
                              "",

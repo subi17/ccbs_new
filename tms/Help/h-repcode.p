@@ -41,8 +41,7 @@ form /* SEEK code */
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
-lcRepCode = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
-                             "MobSub",
+lcRepCode = Func.Common:mTMSCodeList("MobSub",
                              "RepCodes").
                                  
 DO i = 1 TO NUM-ENTRIES(lcRepCode,CHR(1)):

@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -97,7 +96,7 @@ PROCEDURE pDumpRow:
       ROUND(ihCDR::amount,2) lcSep  
       (IF AVAIL MobCDR THEN STRING(MobCDR.BillDur) ELSE "") lcSep
       ihCDR::ErrorCode lcSep
-      (IF AVAIL MobCDR THEN fTS2HMS(MobCDR.ReadinTS) ELSE "") lcSep
+      (IF AVAIL MobCDR THEN Func.Common:mTS2HMS(MobCDR.ReadinTS) ELSE "") lcSep
       icLineType
    SKIP.
 

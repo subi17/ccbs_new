@@ -27,7 +27,7 @@ view-as alert-box.
 
 i = 0.
 
-ldcurrent = fmakets().
+ldcurrent = Func.Common:mMakeTS().
 lcreason  = "2013". 
 
 for each order no-lock where
@@ -73,7 +73,7 @@ by order.orderid:
 
       CREATE Memo.
       ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Brand     = gcBrand
       Memo.MemoTitle = "Credit Reason"

@@ -15,7 +15,6 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 {Syst/commali.i}
-{Func/func.p}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
@@ -158,8 +157,7 @@ repeat WITH FRAME sel:
                          Customer.Custnum = Mobsub.CustNum NO-LOCK NO-ERROR. 
               IF Avail Customer THEN 
               ASSIGN   
-              PNPGroup.name      = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                  BUFFER Customer) .
+              PNPGroup.name      = Func.Common:mDispCustName(BUFFER Customer) .
            END.
            RUN LOCAL-UPDATE-RECORD(true).
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR

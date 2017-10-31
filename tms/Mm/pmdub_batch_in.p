@@ -11,7 +11,6 @@
 katun = "Cron".
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/date.i}
 {Func/ftaxdata.i}
 {Func/xmlfunction.i}
 {Func/ftransdir.i}
@@ -42,7 +41,7 @@ ASSIGN
    lcOutProcDir = fCParam("PrepaidBundle","OutProcDir")
    lcIncomingDir = fCParam("PrepaidBundle","InDir")
    lcDoneDir = fCParam("PrepaidBundle","InProcDir")
-   ldThisRun = fMakeTS().
+   ldThisRun = Func.Common:mMakeTS().
 
 IF NOT lcOutProcDir > "" OR
    NOT lcIncomingDir > "" OR
@@ -239,7 +238,7 @@ PROCEDURE pHandleRow:
               MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Subscription not found".
    
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
    FIND FIRST MServiceLimit WHERE
               MserviceLimit.MsSeq = MobSub.MsSeq AND
               MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -299,7 +298,7 @@ PROCEDURE pCreatePPRequest:
  
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
       PrePaidRequest.UserCode    = katun
       PrePaidRequest.Brand       = gcBrand
       PrePaidRequest.MsSeq       = MsOwner.MsSeq
@@ -314,7 +313,7 @@ PROCEDURE pCreatePPRequest:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.Response    = "" 
       PrePaidRequest.RespCode    = 0
-      PrePaidRequest.TSResponse  = fMakeTS()
+      PrePaidRequest.TSResponse  = Func.Common:mMakeTS()
       PrePaidRequest.PPStatus    = 2.
 
    /* payment for adjustment */

@@ -6,7 +6,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fgettxt.i}
 
@@ -28,7 +27,7 @@ FUNCTION _fCreateCallAlarm RETURNS INTEGER
    IF icCLI EQ ? OR icMessage EQ ? THEN RETURN 0.
    
    IF idtActTime = 0 OR
-      idtActTime = ? THEN idtActTime = fMakeTS().
+      idtActTime = ? THEN idtActTime = Func.Common:mMakeTS().
    
    /* already done */
    FOR FIRST CallAlarm NO-LOCK WHERE
@@ -142,9 +141,9 @@ FUNCTION fSetTSLimit RETURNS DECIMAL
    IF liSeconds < piLimit1 THEN ASSIGN
       pdeTStamp = TRUNC(pdeTStamp,0) + (piLimit1 / 100000).
    ELSE IF liSeconds > piLimit2 THEN DO:
-      fSplitTS(INPUT pdeTStamp, OUTPUT ldaDate, OUTPUT liTime).
+      Func.Common:mSplitTS(INPUT pdeTStamp, OUTPUT ldaDate, OUTPUT liTime).
       ldaDate = ldaDate + 1.
-      pdeTStamp = fMake2Dt(INPUT ldaDate, INPUT piLimit1).
+      pdeTStamp = Func.Common:mMake2DT(INPUT ldaDate, INPUT piLimit1).
    END.
    
    RETURN pdeTStamp.

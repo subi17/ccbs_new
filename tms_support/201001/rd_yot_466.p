@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{Func/timestamp.i}
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE plSimulated AS LOGICAL NO-UNDO. 
@@ -10,7 +9,7 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO 'yot_466.log'.
 
 plSimulated = FALSE.
-ldTS = fMakeTS(). 
+ldTS = Func.Common:mMakeTS(). 
 
 FOR EACH SIMbuf EXCLUSIVE-LOCK WHERE 
          SIMbuf.Brand = gcBrand AND

@@ -26,7 +26,6 @@
 &GLOBAL-DEFINE BrTable MsRequest
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MsRequest'}
@@ -201,8 +200,7 @@ form /* seek  ActStamp */
 FUNCTION fReqStatus RETURNS LOGICAL
    (iiStatus AS INT).
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MsRequest",
+   lcStatus = Func.Common:mTMSCodeName("MsRequest",
                                "ReqStatus",
                                STRING(iiStatus)).
 
@@ -218,7 +216,7 @@ FUNCTION fDispStamp RETURNS CHARACTER
   DEF VAR lcStamp AS CHAR NO-UNDO.
   
   IF idTimeStamp > 0 THEN DO:
-     fSplitTS(idTimeStamp,
+     Func.Common:mSplitTS(idTimeStamp,
               OUTPUT ldtStampDate,
               OUTPUT liStampTime).
      lcStamp = "(" + STRING(ldtStampDate,"99-99-99") + " " +
@@ -355,7 +353,7 @@ REPEAT WITH FRAME sel:
               MsRequest.CLI      = MobSub.CLI
               MsRequest.CustNum  = MobSub.CustNum
               MsRequest.UserCode = katun.
-              MsRequest.CreStamp = fMakeTS().
+              MsRequest.CreStamp = Func.Common:mMakeTS().
 
            RUN local-UPDATE-record.
 
@@ -1235,8 +1233,7 @@ PROCEDURE local-find-others.
     FIND Customer OF MsRequest NO-LOCK NO-ERROR.
 
     IF AVAILABLE Customer THEN    
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
     ELSE lcCustName = "".
           
     IF   MSrequest.OrigRequest > 0 
@@ -1246,13 +1243,13 @@ PROCEDURE local-find-others.
     IF MSRequest.Mandatory = 1 THEN lcMandatory = "MANDATORY".
     ELSE                            lcMandatory = "".
 
-    fSplitTS(MsRequest.ActStamp,
+    Func.Common:mSplitTS(MsRequest.ActStamp,
              OUTPUT ldtActivate,
              OUTPUT liStampTime).
 
     IF MsRequest.DoneStamp = 0 
     THEN ldtHandled = ?.
-    ELSE fSplitTS(MsRequest.DoneStamp,
+    ELSE Func.Common:mSplitTS(MsRequest.DoneStamp,
                   OUTPUT ldtHandled,
                   OUTPUT liStampTime).
     
@@ -1289,8 +1286,7 @@ PROCEDURE local-UPDATE-record:
       THEN lcReqType = RequestType.ReqName.
       ELSE lcReqType = "Unknown".
          
-      lcReqSource = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                     "MsRequest",
+      lcReqSource = Func.Common:mTMSCodeName("MsRequest",
                                      "ReqSource",
                                      MsRequest.ReqSource).
      

@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 
@@ -41,8 +40,8 @@ PROCEDURE pDump:
    DEF VAR ldeTo   AS DEC NO-UNDO. 
 
    ASSIGN
-      ldeFrom = fMake2Dt(TODAY - 1,0).
-      ldeTo   = fMake2Dt(TODAY - 1,86399).
+      ldeFrom = Func.Common:mMake2DT(TODAY - 1,0).
+      ldeTo   = Func.Common:mMake2DT(TODAY - 1,86399).
 
    LOOP:
    FOR EACH OrderTimeStamp WHERE
@@ -72,7 +71,7 @@ PROCEDURE pDumpRetention:
    
    DEF VAR liOrderId AS INT NO-UNDO. 
    DEF VAR ldeNow AS DEC NO-UNDO. 
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
 
    LOOP:
    FOR EACH ActionLog EXCLUSIVE-LOCK USE-INDEX ActionID WHERE
@@ -104,7 +103,7 @@ PROCEDURE pDumpRetention:
                   MNPProcess.MNPSeq = MNPSub.MNPSeq AND
                   MNPProcess.MNPType = 2 AND
                   MNPProcess.CreatedTS < Order.CrStamp NO-LOCK:
-            IF fOffSet(MNPProcess.PortingTime,15 * 24) > ldeNow THEN NEXT LOOP.
+            IF Func.Common:mOffSet(MNPProcess.PortingTime,15 * 24) > ldeNow THEN NEXT LOOP.
          END.
          
          RUN pWriteToFile.
@@ -124,8 +123,8 @@ PROCEDURE pDumpSubTerm:
    DEF VAR liOrderId AS INT NO-UNDO. 
 
    ASSIGN
-      ldeFrom  = fHMS2TS(TODAY - 1,"00:00:00").
-      ldeTo  = fHMS2TS(TODAY - 1,"23:59:59").
+      ldeFrom  = Func.Common:mHMS2TS(TODAY - 1,"00:00:00").
+      ldeTo  = Func.Common:mHMS2TS(TODAY - 1,"23:59:59").
 
    LOOP:
    FOR EACH ActionLog NO-LOCK USE-INDEX ActionID WHERE
@@ -169,7 +168,7 @@ PROCEDURE pWriteToFile:
    IF AVAILABLE EventLog THEN
       ldOperationDate = EventLog.EventDate.
    ELSE
-      fSplitTS(Order.CrStamp,
+      Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldOperationDate,
                OUTPUT liTime).
    IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN DO:

@@ -12,7 +12,6 @@
 katun = "Newton".
 gcBrand = "1".
 {Mc/provmaint.i}
-{Func/timestamp.i}
 
 DEF VAR pcTenant       AS CHAR NO-UNDO.
 DEF VAR pcMsisdn       AS CHAR NO-UNDO. 

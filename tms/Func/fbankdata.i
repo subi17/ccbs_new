@@ -7,7 +7,6 @@
    
 */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/date.i}  
 
@@ -316,7 +315,7 @@ FUNCTION fGetOrderMandateId RETURN LOGICAL
               OrderAction.ItemType  = "Mandate" NO-ERROR.
  
    IF AVAIL OrderAction THEN DO:
-      fSplitTS(Order.CrStamp,ldaDate,liTime).
+      Func.Common:mSplitTS(Order.CrStamp,ldaDate,liTime).
       ASSIGN
          ocMandateId = OrderAction.ItemKey
          odaMandateDate = ldaDate.
@@ -379,7 +378,7 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
                                    mobsub.paytype = FALSE NO-LOCK) THEN
       RETURN FALSE.
 
-   ldeDate = fDate2TS(TODAY - 40).
+   ldeDate = Func.Common:mDate2TS(TODAY - 40).
 
    /* is terminated postpaid subscription during last 40 days */
    FOR EACH MsRequest WHERE MsRequest.Brand = gcBrand AND

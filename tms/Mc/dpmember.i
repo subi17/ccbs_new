@@ -5,7 +5,6 @@
 &GLOBAL-DEFINE DPMEMBER_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
@@ -29,7 +28,7 @@ FUNCTION fCalcDPMemberValidTo RETURNS DATE
    
    ASSIGN
       ldaValidTo = ADD-INTERVAL(idaValidFrom,iiValidPeriods - 1,"months")
-      ldaValidTo = fLastDayOfMonth(ldaValidTo).
+      ldaValidTo = Func.Common:mLastDayOfMonth(ldaValidTo).
       
    RETURN ldaValidTo.   
     

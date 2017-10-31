@@ -6,7 +6,6 @@
 -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/offer.i}
 {Syst/tmsconst.i}
 
@@ -42,7 +41,7 @@ IF Order.Offer = "" THEN DO:
    RETURN "No offer available".
 END.
 
-fSplitTS(Order.CrStamp,
+Func.Common:mSplitTS(Order.CrStamp,
          OUTPUT ldaOfferDate,
          OUTPUT liTime).
    

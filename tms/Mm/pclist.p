@@ -13,7 +13,6 @@
 {Syst/eventval.i}
 {Func/cparam2.i}
 {Rate/daycampaign.i}
-{Func/date.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -227,7 +226,7 @@ PROCEDURE pReadContracts:
    FOR EACH MServiceLimit WHERE
       MServiceLimit.MSSeq = ihmobsub::msseq NO-LOCK:
       
-      ldeSec = fMakeTS().
+      ldeSec = Func.Common:mMakeTS().
       
       FIND FIRST Memo WHERE  
           Memo.Brand     = gcBrand                AND 
@@ -273,12 +272,12 @@ PROCEDURE pReadContracts:
                                  ELSE FALSE)
          .
       
-      fSplitTS(input MServiceLimit.FromTS, output ldaDate, output liSec).
+      Func.Common:mSplitTS(input MServiceLimit.FromTS, output ldaDate, output liSec).
       ttContract.ValidFrom = ldaDate.
       ttContract.ValidFromTime = STRING(liSec,"HH:MM:SS"). 
       IF MServiceLimit.EndTs >= 99999999 THEN ttContract.ValidTo = 12/31/2049.
       ELSE DO:
-         fSplitTS(input MServiceLimit.EndTS, output ldaDate, output liSec).
+         Func.Common:mSplitTS(input MServiceLimit.EndTS, output ldaDate, output liSec).
          ttContract.ValidTo = ldaDate.
          ttContract.ValidToTime = STRING(liSec,"HH:MM:SS"). 
       END.

@@ -11,7 +11,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Qvantel".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/email.i}
 {Syst/tmsconst.i}
@@ -31,7 +30,7 @@ IF AVAIL ActionLog THEN RETURN.
 lcAddrConfDir = fCParamC("RepConfDir").
 
 lcEmailText = "Telefonica file has not been arrived for billing period " +
-              STRING(liPeriod) + " in TMS till now " + fTS2HMS(fMakeTS()) +
+              STRING(liPeriod) + " in TMS till now " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) +
               " .".
 
 /* Send an email to configure list*/

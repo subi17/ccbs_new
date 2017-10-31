@@ -51,7 +51,7 @@ if i > 10 then leave.
                               TRIM(SubSer.ServCom),
                               SubSer.SSStat,
                               SubSer.SSParam,
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               "",
                               FALSE,      /* fees */
                               FALSE,      /* sms */

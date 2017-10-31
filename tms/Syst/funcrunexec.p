@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'FuncRunExec'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -682,9 +681,9 @@ PROCEDURE local-find-others.
        lcEndTime   = "".
        
     IF FuncRunExec.StartTS > 0 THEN 
-       lcStartTime = fTS2HMS(FuncRunExec.StartTS).
+       lcStartTime = Func.Common:mTS2HMS(FuncRunExec.StartTS).
     IF FuncRunExec.EndTS > 0 THEN 
-       lcEndTime = fTS2HMS(FuncRunExec.EndTS).
+       lcEndTime = Func.Common:mTS2HMS(FuncRunExec.EndTS).
 
     IF iiFRQScheduleID > 0 THEN DO:
        lcConfName = "".
@@ -708,8 +707,7 @@ PROCEDURE local-UPDATE-record:
       lcDuration = "".
       IF FuncRunExec.EndTS > FuncRunExec.StartTS AND
          FuncRunExec.StartTS > 0  THEN DO:
-            liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                                         FuncRunExec.StartTS,
+            liDurDays = Func.Common:mTSDuration(FuncRunExec.StartTS,
                                          FuncRunExec.EndTS,
                                          OUTPUT liDurTime).
             lcDuration = (IF liDurDays > 0 

@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 assign gcbrand = "1"
        katun = "Qvantel".
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 def stream sin.
@@ -48,8 +47,7 @@ FUNCTION fDeleteSingleFee RETURNS LOGICAL (INPUT iiTermPeriod AS INT):
          export stream sbak SingleFee.
          DELETE SingleFee.
       END.
-      ELSE DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
+      ELSE Func.Common:mWriteMemo("MobSub",
                             STRING(MobSub.MsSeq),
                             MobSub.CustNum,
                             "Single Fee",
@@ -109,7 +107,7 @@ repeat trans:
       next.
    END.
 
-   fSplitTS(MsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
 
    ASSIGN ldaTermDate  = ldaTermDate - 1
           liTermPeriod = YEAR(ldaTermDate) * 100 + MONTH(ldaTermDate).

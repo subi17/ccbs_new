@@ -11,7 +11,6 @@
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fsendsms.i}
@@ -30,7 +29,7 @@ FOR EACH MsRequest WHERE
          MsRequest.ReqStatus  = 19 AND
          MsRequest.ReqCParam1 = "CREATE" NO-LOCK:
 
-    fSplitTS(MsRequest.ActStamp,ldMsActDate,liMsActTime).
+    Func.Common:mSplitTS(MsRequest.ActStamp,ldMsActDate,liMsActTime).
     IF liConfDays >= (TODAY - ldMsActDate) THEN NEXT.
 
     /* Cancel DSS request */

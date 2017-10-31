@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
 {Func/fvoucher.i}
-{Func/timestamp.i}
 
 def var ldtaxperc  as dec  no-undo.
 def var i          as int  no-undo.
@@ -114,7 +113,7 @@ for each payment no-lock use-index paymtype where
           Memo.MemoText  = "Cancellation for TopUp posting due to " +
                            "unsuccessful TopUp event." + chr(10) +
                            "Cancelled voucher: " + payment.extvoucher.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
     
 end.
    

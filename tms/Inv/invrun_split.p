@@ -12,7 +12,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/files.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
 {Inv/old_unbilled_events.i}
 
@@ -94,8 +93,8 @@ END.
 
 ASSIGN
    liRunAmt    = 10
-   ldPeriodBeg = fMake2Dt(idaDateFrom,0)
-   ldPeriodEnd = fMake2Dt(idaDateTo,86399).
+   ldPeriodBeg = Func.Common:mMake2DT(idaDateFrom,0)
+   ldPeriodEnd = Func.Common:mMake2DT(idaDateTo,86399).
    
 IF iiScreenQty > 0 THEN liRunAmt = iiScreenQty.
 

@@ -4,7 +4,6 @@ input from contrd1_rerate.input.
 
 def stream sout.
 output stream sout to contrd1_rerate.log.
-{Func/date.i}
 
 {Syst/commpaa.i}
 gcBrand = "1".

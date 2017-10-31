@@ -8,7 +8,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mnp/mnpmessages.i}
 {Mnp/mnp.i}
 
@@ -28,7 +27,7 @@ END.
  (may not be a good idea, but it's enough for testing) */
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.FormRequest = MNPProcessFather.FormRequest
    MNPProcess.OrderId     = 0

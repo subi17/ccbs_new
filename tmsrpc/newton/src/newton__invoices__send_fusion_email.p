@@ -30,7 +30,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 katun = "VISTA_" + pcUserName.
 
 liRequestID = fFusionEmailRequest(
-                INPUT fMakeTS(),
+                INPUT Func.Common:mMakeTS(),
                 INPUT pcUserName, /* creator */
                 INPUT ({&REQUEST_SOURCE_NEWTON}),
                 OUTPUT lcError).

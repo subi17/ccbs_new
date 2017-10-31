@@ -18,7 +18,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/coinv.i}
@@ -127,9 +126,9 @@ IF lcAction EQ "canc" THEN DO:
       liLastUnBilledPeriod = FixedFee.BegPeriod.
 
    ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
-   ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+   ldePeriodTo = Func.Common:mMake2DT(ldaLastUnBilledDate,86399).
 END.
-ELSE ldePeriodTo = fMakeTS().
+ELSE ldePeriodTo = Func.Common:mMakeTS().
 
 liCreated = fPCActionRequest(MobSub.MsSeq,
                              DCCLI.DCEvent,

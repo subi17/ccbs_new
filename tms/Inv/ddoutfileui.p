@@ -144,8 +144,7 @@ FUNCTION fTypeName RETURNS LOGIC
    
    IF iiInvType = 0 
    THEN lcInvType = "ALL".
-   ELSE lcInvType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Invoice",
+   ELSE lcInvType = Func.Common:mTMSCodeName("Invoice",
                                      "InvType",
                                      STRING(iiInvType)).
       

@@ -10,7 +10,6 @@
 {Syst/commali.i} 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'InvoiceTarget'}
-{Func/timestamp.i}
 {Mc/invoicetarget.i}
 
 DEF INPUT PARAM iiITGroupID AS INT NO-UNDO.

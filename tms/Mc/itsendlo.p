@@ -19,7 +19,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'ITSendLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -710,13 +709,12 @@ PROCEDURE local-find-others.
        END.
     END.
     ELSE DO:
-       lcText = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "ITSendLog","RepType",ITSendLog.RepType).
+       lcText = Func.Common:mTMSCodeName("ITSendLog","RepType",ITSendLog.RepType).
     END.                                 
 
     FIND Customer WHERE Customer.CustNum = ITSendLog.CustNum NO-LOCK NO-ERROR.
 
-    fSplitTS(ITSendLog.SendStamp,
+    Func.Common:mSplitTS(ITSendLog.SendStamp,
              OUTPUT ldtDate,
              OUTPUT liTime).
 

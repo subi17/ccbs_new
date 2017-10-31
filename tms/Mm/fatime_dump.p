@@ -63,7 +63,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liModified).
 
@@ -103,7 +103,7 @@ IF icDumpMode EQ "modified" THEN DO:
    
       ASSIGN
          lcCreator = EventLog.UserCode
-         ldCreated = fHMS2TS(EventLog.EventDate,EventLog.EventTime).
+         ldCreated = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
 
       RUN pDumpFatime.
 
@@ -135,7 +135,7 @@ FOR EACH FATime NO-LOCK USE-INDEX CLI WHERE
 
       ASSIGN
          lcCreator = EventLog.UserCode
-         ldCreated = fHMS2TS(EventLog.EventDate,EventLog.EventTime).
+         ldCreated = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
    END.
 
    IF ldCreated = 0 THEN NEXT.

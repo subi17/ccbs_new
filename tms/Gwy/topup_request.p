@@ -15,7 +15,6 @@
 
 {Syst/commpaa.i} 
 {Func/xmlfunction.i}
-{Func/timestamp.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
 
@@ -77,7 +76,7 @@ lcNagios = "TopUp:CC TopUps".
 
 fKeepAlive(lcNagios).
 
-lcStarted = fTS2HMS(fMakeTS()).
+lcStarted = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
 DISP lcStarted WITH FRAME frm.
 
@@ -86,11 +85,11 @@ DO WHILE TRUE:
    
    PUT SCREEN ROW 22 "Sending TopUps ....".
 
-   RUN pPPRequests(fMakeTS()).
+   RUN pPPRequests(Func.Common:mMakeTS()).
 
    ASSIGN
       liLoop = liLoop + 1
-      lcNow  = fTS2HMS(fMakeTS()).
+      lcNow  = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
    DISP
       liLoop
@@ -164,7 +163,7 @@ PROCEDURE pPPRequests:
          FIND FIRST bufPP WHERE RECID(bufPP) = RECID(PrePaidRequest) EXCLUSIVE-LOCK.
 
          ASSIGN
-            bufPP.TSResponse = fMakeTS()
+            bufPP.TSResponse = Func.Common:mMakeTS()
             bufPP.Response   = lcXML
             bufPP.RespCode   = liRespCode.
 

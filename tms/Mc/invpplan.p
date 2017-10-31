@@ -24,8 +24,7 @@ ASSIGN lcLetters = "A,B,C,D,E,F"
 /* get names from tmscodes */
 DO liType = 1 TO 3:
    lcMenuc[liType + 1] = " " + ENTRY(liType + 1,lcLetters) + ") " +
-                         DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "PaymPlan",
+                         Func.Common:mTMSCodeName("PaymPlan",
                                           "PPType",
                                           STRING(liType)).
 END.

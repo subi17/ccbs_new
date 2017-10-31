@@ -9,7 +9,6 @@
 {Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/log.i}
 {Func/ftransdir.i}
 {Func/replog_reader.i}
@@ -75,7 +74,7 @@ PROCEDURE pHandleSMSQueue:
    DEF VAR ldeTS AS DEC NO-UNDO. 
    DEF VAR lcMessage AS CHAR NO-UNDO. 
    
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    LOOP:
    FOR EACH SMSMessage EXCLUSIVE-LOCK WHERE
@@ -90,7 +89,7 @@ PROCEDURE pHandleSMSQueue:
          "SMS" + lcDel +
          fNotNull(SMSMessage.MSISDN) + lcDel +
          fNotNull(STRING(SMSMessage.SMSSeq)) + lcDel +
-         fNotNull(STRING(fTimeStamp2DateTime(ldeTS))) + lcDel +
+         fNotNull(STRING(Func.Common:mTimeStamp2DateTime(ldeTS))) + lcDel +
          fNotNull(SMSMessage.DeliMsg) + lcDel + 
          fNotNull(STRING(SMSMessage.MsSeq)) + lcDel +
          fNotNull(SMSMessage.OrigAddress) + lcDel + 
@@ -98,7 +97,7 @@ PROCEDURE pHandleSMSQueue:
 
          
       ASSIGN
-         SMSMessage.DeliStamp = fMakeTS()
+         SMSMessage.DeliStamp = Func.Common:mMakeTS()
          SMSMessage.DeliStat = {&CA_DELISTAT_SENT}.
 
       oiHandled = oiHandled + 1.

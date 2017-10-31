@@ -14,7 +14,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -75,7 +74,7 @@ FUNCTION fLocalMemo RETURNS LOG(icHostTable AS CHAR,
    CREATE Memo.
    ASSIGN
       Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
@@ -175,7 +174,7 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
                                         INPUT "Customer email is changed.").
             END. /* IF icEmail > "" AND Customer.Email <> icEmail THEN DO: */
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
                                              INPUT katun,
                                              INPUT MobSub.MsSeq,
@@ -280,7 +279,7 @@ FUNCTION fSetDetail RETURNS CHAR(INPUT icAction AS CHAR):
                            liAction,
                            (IF liAction = 1 THEN SubSer.SSParam
                             ELSE ""),
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            "",
                            FALSE,      /* fees */
                            FALSE,      /* sms */

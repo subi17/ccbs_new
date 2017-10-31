@@ -163,7 +163,7 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
       
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS() 
+         Memo.CreStamp  = Func.Common:mMakeTS() 
          Memo.Brand     = gcBrand
          Memo.HostTable = "Order"
          Memo.KeyValue  = STRING(Order.OrderId)
@@ -365,7 +365,7 @@ CASE iiToStatus:
       ELSE IF MsRequest.ReqType EQ {&REQTYPE_DSS}   AND
               MsRequest.ReqCparam1 EQ "DELETE"      AND
               iiFromStatus EQ {&REQUEST_STATUS_NEW} AND
-              fIsDSSActive(INPUT MsRequest.CustNum,INPUT fMakeTS())
+              fIsDSSActive(INPUT MsRequest.CustNum,INPUT Func.Common:mMakeTS())
       THEN DO:
 
          IF NOT CAN-FIND(FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq)
@@ -389,7 +389,7 @@ CASE iiToStatus:
 
          IF NOT fCanDSSKeepActive(INPUT MsRequest.CustNum,
                                   INPUT 0, /* don't exclude current subs */
-                                  fMakeTS(),
+                                  Func.Common:mMakeTS(),
                                   INPUT MsRequest.ReqCparam3,
                                   OUTPUT lcError) THEN DO:
             MESSAGE
@@ -533,7 +533,7 @@ ELSE DO:
       THEN ldtTdDate = DATE(1,1,YEAR(TODAY) + 1).
       ELSE ldtTdDate = DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)).
 
-      ldActStamp = fMake2DT(ldtTdDate,3600).
+      ldActStamp = Func.Common:mMake2DT(ldtTdDate,3600).
 
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
@@ -544,8 +544,8 @@ ELSE DO:
       iiFromStatus EQ 19 AND
       MsRequest.ReqType = 0 THEN DO:
    
-      IF MsRequest.ReqDParam1 < fMakeTS() THEN
-         ldeActStamp = fMake2DT(TODAY + 1, 0).
+      IF MsRequest.ReqDParam1 < Func.Common:mMakeTS() THEN
+         ldeActStamp = Func.Common:mMake2DT(TODAY + 1, 0).
       ELSE ldeActStamp = MSrequest.ReqDParam1.
 
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
@@ -593,7 +593,7 @@ PROCEDURE ipMulitSIMTermination:
              FIND FIRST Msowner WHERE
                         Msowner.MsSeq = TermMobsub.MsSeq NO-LOCK NO-ERROR.
              IF AVAIL Msowner THEN
-                fSplitTS(Msowner.TSEnd,
+                Func.Common:mSplitTS(Msowner.TSEnd,
                          OUTPUT ldaSecSIMTermDate,
                          OUTPUT liSecSIMTermTime).
              ELSE ldaSecSIMTermDate = TODAY.
@@ -616,7 +616,7 @@ PROCEDURE ipMulitSIMTermination:
      /* TODO: cannot use this function in this case*/
      /*
       fAdditionalLineSTC(MsRequest.MsRequest,
-                         fMake2Dt(TODAY + 1, 0),
+                         Func.Common:mMake2DT(TODAY + 1, 0),
                          "").
      */
     END. /* ELSE DO: */

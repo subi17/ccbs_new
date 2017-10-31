@@ -11,7 +11,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 def var dfrom as da no-undo.
 def var dto   as da no-undo.
@@ -102,8 +101,8 @@ if keylabel(lastkey) = "f4" then return.
 
 
 assign 
-   fromstamp = fHMS2TS(dfrom,"00:00:00")
-   tostamp = fHMS2TS(dTo,"23:59:59").
+   fromstamp = Func.Common:mHMS2TS(dfrom,"00:00:00")
+   tostamp = Func.Common:mHMS2TS(dTo,"23:59:59").
 
 for each statuscodes.
    assign

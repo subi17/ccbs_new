@@ -1,6 +1,5 @@
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/orderfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
@@ -61,7 +60,7 @@ IF llOK THEN DO:
    BUFFER-COPY order Except Orderid TO BufOrder.
                       
    ASSIGN
-      BufOrder.CrStamp       = fMakeTS()
+      BufOrder.CrStamp       = Func.Common:mMakeTS()
       BufOrder.Orderid       = NEXT-VALUE(OrderId)
       BufOrder.tupas         = 8
       BufOrder.CredOK        = TRUE

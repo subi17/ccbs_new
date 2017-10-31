@@ -10,7 +10,6 @@
 ---------------------------------------------------------------------- */
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -173,7 +172,7 @@ PROCEDURE pCreateFile:
                        Order.OrderId = FixedFee.OrderId NO-ERROR.
 
             IF AVAIL Order AND FixedFee.OrderId > 0 THEN DO:
-               fTS2Date(Order.CrStamp, OUTPUT ldaBankDate).
+               Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaBankDate).
                IF INDEX(Order.OrderChannel, "POS") = 0 THEN
                         ldaBankDate = ldaBankDate + 16.
                IF DAY(ldaBankDate) >= 25 THEN 
@@ -257,7 +256,7 @@ PROCEDURE pCreateFile:
       ASSIGN
          ActionLog.Brand        = gcBrand
          ActionLog.ActionID     = "TF_" + icFileType
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = icBank
          ActionLog.UserCode     = katun
@@ -296,7 +295,7 @@ PROCEDURE pPrintLine:
       FIND FIRST Order WHERE Order.brand = gcBrand AND
                              Order.OrderId = liOrderId NO-ERROR.
       IF AVAIL Order THEN DO:
-         fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+         Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          IF ldaOrderDate >= 5/1/2015 THEN
              lcCodFpago = "0034".
          ELSE

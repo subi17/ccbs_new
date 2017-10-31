@@ -109,7 +109,7 @@ END.
 ASSIGN 
    lcTableName = "MANDARINA"
    lcActionID  = "file_reading_" + lcProcessMode
-   ldCurrentTimeTS = fMakeTS(). 
+   ldCurrentTimeTS = Func.Common:mMakeTS(). 
  
 DO TRANS:
    FIND FIRST ActionLog WHERE
@@ -356,7 +356,7 @@ PROCEDURE pSetInternetBarring:
                                           ELSE "Internet=0"), /* Barring */
                        "11",                /* source   */
                        "Sistema",           /* creator  */
-                       fMakeTS(),           /* activate */
+                       Func.Common:mMakeTS(),           /* activate */
                        "",                  /* SMS      */
                        OUTPUT lcResult).
 
@@ -364,8 +364,7 @@ PROCEDURE pSetInternetBarring:
                                
    IF liRequest > 0 THEN DO:     
 
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "Mobsub",
+   Func.Common:mWriteMemoWithType("Mobsub",
                      mobsub.MsSeq,
                      mobsub.CustNum,
                      (IF lcMode EQ "ON" THEN "OTA Barring activado" 

@@ -10,7 +10,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF VAR lkm       AS i  NO-UNDO.
 def var pvm1      as da no-undo format "99-99-99".
@@ -75,8 +74,8 @@ toimi:
       statother = 0.
    message "Calculating ...".                   
 
-   stamp1 = fHMS2TS(pvm1,"00:00:00").
-   stamp2 = fHMS2TS(pvm2,"23:59:59").
+   stamp1 = Func.Common:mHMS2TS(pvm1,"00:00:00").
+   stamp2 = Func.Common:mHMS2TS(pvm2,"23:59:59").
 
    FOR EACH MSOwner no-lock where
             MSOwner.TsBegin >= stamp1  AND

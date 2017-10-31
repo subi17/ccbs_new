@@ -12,7 +12,6 @@
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Qvantel".
-{Func/timestamp.i}
 
 DEFINE VARIABLE liNumEntries    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.
@@ -28,7 +27,7 @@ DEFINE BUFFER bGetOfferCriteria FOR OfferCriteria.
 
 DEFINE STREAM slog.
 
-ldeCurrStamp = fMakeTS().
+ldeCurrStamp = Func.Common:mMakeTS().
 
 OUTPUT STREAM slog TO "/apps/yoigo/tms_support/billing/offer_mig_ipl_20110810.xls" append.
 
@@ -137,7 +136,7 @@ PROCEDURE pCreateOfferItem:
               OfferItem.VatIncl      = YES
               OfferItem.DispInUI     = YES
               OfferItem.DispOnInvoice = YES NO-ERROR.
-              OfferItem.EndStamp     = fMake2DT(12/31/2049,86399) NO-ERROR.
+              OfferItem.EndStamp     = Func.Common:mMake2DT(12/31/2049,86399) NO-ERROR.
        IF ERROR-STATUS:ERROR THEN
           PUT STREAM slog UNFORMATTED
               icOfferID CHR(9)

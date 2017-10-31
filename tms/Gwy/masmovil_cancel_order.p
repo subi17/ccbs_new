@@ -1,6 +1,5 @@
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/date.i}
 {Func/masmovileif.i}
 {Mc/orderfusion.i}
 {Func/memo.i}
@@ -49,7 +48,7 @@ FIND LAST bFusionMessage NO-LOCK WHERE
           bFusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CANCEL_ORDER}
    USE-INDEX OrderID.
 
-fTS2Date(bFusionMessage.CreatedTS, OUTPUT ldaOrigCancelDate).
+Func.Common:mTS2Date(bFusionMessage.CreatedTS, OUTPUT ldaOrigCancelDate).
 
 lcError = fMasCancel_FixedLineOrder(Order.OrderID,
                                     ldaOrigCancelDate,
@@ -60,7 +59,7 @@ lcError = fMasCancel_FixedLineOrder(Order.OrderID,
 IF lcError EQ "OK" THEN DO:
 
    ASSIGN
-      FusionMessage.UpdateTS = fMakeTS()
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}
       OrderFusion.UpdateTS = FusionMessage.UpdateTS 
@@ -76,7 +75,7 @@ END.
 ELSE DO:
 
    ASSIGN
-      FusionMessage.UpdateTS = fMakeTS()
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.ResponseCode = (IF lcResultCode > "" 
                                     THEN lcResultCode

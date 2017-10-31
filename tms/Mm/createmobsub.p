@@ -23,7 +23,6 @@
 -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/forderstamp.i}
 {Func/ftaxdata.i}
@@ -257,14 +256,14 @@ ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
 AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          ldReqActDate,
          liReqActTime).
 
 IF ldReqActDate = TODAY THEN
    ASSIGN ldeActivationTS = MSRequest.ActStamp.
 ELSE
-   ASSIGN ldeActivationTS = fMake2Dt(TODAY,1).
+   ASSIGN ldeActivationTS = Func.Common:mMake2DT(TODAY,1).
 
 IF Order.CLIType EQ "TARJ5" THEN DO:
 
@@ -293,7 +292,7 @@ IF NOT AVAIL mobsub THEN DO:
    FIND FIRST MSISDN WHERE 
               MSISDN.Brand    = gcBrand    AND 
               MSISDN.CLI      = Order.CLI  AND 
-              MSISDN.ValidTo >= fMakeTS() 
+              MSISDN.ValidTo >= Func.Common:mMakeTS() 
    EXCLUSIVE-LOCK NO-ERROR.
 
    IF NOT AVAIL MSISDN THEN DO:
@@ -373,8 +372,7 @@ IF NOT AVAIL mobsub THEN DO:
       
          /* write possible error to an order memo */
          IF lcError > "" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              msrequest.custnum,
                              "CUSTOMER CONTACT CREATION FAILED",
@@ -491,7 +489,7 @@ IF NOT AVAIL mobsub THEN DO:
       Segmentation.SegmentCode  = "SN"
       Segmentation.SegmentOffer = "OFF"
       Segmentation.SegmentDate  = TODAY
-      Segmentation.SegmentCreation = fMakeTS().
+      Segmentation.SegmentCreation = Func.Common:mMakeTS().
    
    CREATE msowner.
    ASSIGN
@@ -548,8 +546,7 @@ IF NOT AVAIL mobsub THEN DO:
          OUTPUT lcError).
 
       IF lcError NE "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Invoice target creation failed",
@@ -659,7 +656,7 @@ ELSE DO:
               MSOwner.MsSeq   = Mobsub.MsSeq
         USE-INDEX MsSeq NO-ERROR.
 
-   fTs2Date(MSOwner.TSBegin, OUTPUT ldaActDate).
+   Func.Common:mTS2Date(MSOwner.TSBegin, OUTPUT ldaActDate).
 
    IF ldaActDate NE TODAY THEN DO:
 
@@ -670,7 +667,7 @@ ELSE DO:
       CREATE bMsOwner.
       BUFFER-COPY MSOwner EXCEPT TSBegin TSEnd CLIEvent TO bMsOwner.
       ASSIGN
-         MsOwner.TSend = fSecOffSet(ldeActivationTS, -1) 
+         MsOwner.TSend = Func.Common:mSecOffSet(ldeActivationTS, -1) 
          bMsOwner.TSBegin = ldeActivationTS 
          bMsOwner.TSEnd = 99999999.99999.
 
@@ -717,7 +714,7 @@ IF AVAIL OrderCustomer THEN
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
                 "Delivery",
-                fMakeTS()).
+                Func.Common:mMakeTS()).
 
 /* default services */
 RUN Mm/copysp.p(MobSub.MsSeq,
@@ -771,8 +768,7 @@ IF Order.InvNum > 0 THEN
 
 /* write possible error to an order memo */
 IF lcError BEGINS "Error" THEN DO:
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
+   Func.Common:mWriteMemo("Order",
                     STRING(Order.OrderID),
                     MobSub.CustNum,
                     "CASH INVOICE FAILED",
@@ -807,8 +803,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
 
    /* write possible error to an order memo */
    IF lcError > "" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Order",
+      Func.Common:mWriteMemo("Order",
                        STRING(Order.OrderID),
                        MobSub.CustNum,
                        "FATIME CREATION FAILED",
@@ -842,8 +837,7 @@ IF NOT AVAIL OrderAction AND
                     OUTPUT liRequest).
    IF liRequest = 0 THEN
       /* write possible error to a memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.Custnum,
                        "DEFAULT SHAPER ACTIVATION FAILED",
@@ -881,7 +875,7 @@ IF NOT MobSub.PayType THEN DO:
    ASSIGN
       lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
 
-   lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT fMakeTS()).
+   lcBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()).
 
    IF lcBundleId > "" OR
       CAN-FIND(FIRST MsRequest NO-LOCK WHERE
@@ -889,7 +883,7 @@ IF NOT MobSub.PayType THEN DO:
                      MsRequest.ReqType = {&REQTYPE_DSS} AND
                      MsRequest.Custnum = MobSub.CustNum AND
                      MsRequest.ReqCParam1 = "CREATE"    AND
-                     MsRequest.ActStamp <= fMakeTS()    AND
+                     MsRequest.ActStamp <= Func.Common:mMakeTS()    AND
                      LOOKUP(STRING(MsRequest.ReqStatus),"5,6,7,8") > 0)
    THEN DO:
       IF lcBundleId = {&DSS} OR 
@@ -902,7 +896,7 @@ IF NOT MobSub.PayType THEN DO:
                                INPUT "ADD",
                                INPUT "",           /* Optional param list */
                                INPUT MsRequest.MsRequest,
-                               INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
+                               INPUT Func.Common:mSecOffSet(Func.Common:mMakeTS(),180), /* 3 mins delay */
                                INPUT MsRequest.ReqSource,
                                INPUT lcBundleId).        
       ELSE IF llgExtraLine        AND 
@@ -926,7 +920,7 @@ IF NOT MobSub.PayType THEN DO:
                                   INPUT "ADD",
                                   INPUT "",           /* Optional param list */
                                   INPUT MsRequest.MsRequest,
-                                  INPUT fSecOffSet(fMakeTS(),180), /* 3 mins delay */
+                                  INPUT Func.Common:mSecOffSet(Func.Common:mMakeTS(),180), /* 3 mins delay */
                                   INPUT MsRequest.ReqSource,
                                   INPUT lcBundleId).
          END.
@@ -959,8 +953,7 @@ IF NOT MobSub.PayType THEN DO:
                                  OUTPUT lcResult).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(lbMobSub.MsSeq),
                              lbMobSub.Custnum,
                              "Multi SIM DSS activation failed",
@@ -992,7 +985,7 @@ IF NOT MobSub.PayType THEN DO:
                                  "CREATE",
                                  "",
                                  "DSS2",
-                                 fSecOffSet(MobSub.ActivationTS,180),
+                                 Func.Common:mSecOffSet(MobSub.ActivationTS,180),
                                  {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
                                  "",
                                  TRUE, /* create fees */
@@ -1001,8 +994,7 @@ IF NOT MobSub.PayType THEN DO:
                                  OUTPUT lcResult).
             IF liRequest = 0 THEN
                /* write possible error to a memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+               Func.Common:mWriteMemo("MobSub",
                              STRING(MobSub.MsSeq),
                              MobSub.Custnum,
                              "DSS2 activation failed in Mobsub creation",
@@ -1040,7 +1032,7 @@ RUN Mm/barrengine.p(MobSub.MsSeq,
                 lcInitialBarring,
                 "1",                 /* source = subscr. creation  */
                 katun,               /* creator */
-                fMakeTS(),           /* activate */
+                Func.Common:mMakeTS(),           /* activate */
                 "",                  /* sms */
                 OUTPUT lcResult).
 
@@ -1049,8 +1041,7 @@ liRequest = INTEGER(lcResult) NO-ERROR.
 
 IF liRequest = 0 THEN                               
    /* write possible error to a memo */
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+   Func.Common:mWriteMemo("MobSub",
                     STRING(MobSub.MsSeq),
                     MobSub.Custnum,
                     "INITIAL BARRING FAILED",
@@ -1064,7 +1055,7 @@ IF Order.MNPStatus > 0 THEN DO:
          MNPProcess.StatusCode = ({&MNP_ST_ACON}) EXCLUSIVE-LOCK NO-ERROR.
    IF AVAIL MNPProcess THEN DO:
       ASSIGN
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.StatusCode = {&MNP_ST_APOR}.
       FIND CURRENT Order EXCLUSIVE-LOCK.
       Order.MNPStatus = {&MNP_ST_APOR} + 1.
@@ -1133,7 +1124,7 @@ IF CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL} AND
                                 Customer.OrgId,
                                 Order.OrderID)       THEN DO:
 
-   ldLastDate = fLastDayOfMonth(TODAY). 
+   ldLastDate = Func.Common:mLastDayOfMonth(TODAY). 
    
    fTermAdditionalSim(MobSub.MsSeq,
                       MobSub.CLI,
@@ -1145,8 +1136,7 @@ IF CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL} AND
                       OUTPUT lcError).
    
    IF lcError NE "" THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                         STRING(MobSub.MsSeq),
                         MobSub.CustNum,
                        "Additional SIM termination request creation failed",
@@ -1241,7 +1231,7 @@ PROCEDURE pCreateCommission:
       
       IF AVAIL bRefMobSub THEN DO:
          
-         fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
+         Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
 
          FIND bRefCust NO-LOCK WHERE 
             bRefCust.Custnum = bRefMobSub.Custnum NO-ERROR.
@@ -1282,7 +1272,7 @@ PROCEDURE pCreateCommission:
                CoTarg.PromotedCLI   = MobSub.CLI
                CoTarg.OrderId       = Order.OrderId
                CoTarg.CoRuleID      = liRuleId.
-               CoTarg.CreatedTS     = fMakeTS().
+               CoTarg.CreatedTS     = Func.Common:mMakeTS().
 
 
             IF CoRule.CreationSMS NE "" THEN DO: 
@@ -1309,8 +1299,7 @@ PROCEDURE pCreateCommission:
                                           OUTPUT lcResult). 
                         
                   IF liRequest = 0 THEN 
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "CoTarg",
+                     Func.Common:mWriteMemo("CoTarg",
                                       STRING(CoTarg.CoTargID),
                                       0,
                                       "COMMISSION",
@@ -1322,8 +1311,7 @@ PROCEDURE pCreateCommission:
          END. 
          ELSE DO:
             
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              MobSub.CustNum,
                              "COMMISSION CREATION FAILED",
@@ -1361,13 +1349,12 @@ PROCEDURE pCreateCommission:
                CoTarg.COTarg        = STRING(MobSub.MsSeq)
                CoTarg.OrderId       = Order.OrderId
                CoTarg.CoRuleID      = liRuleId.
-               CoTarg.CreatedTS     = fMakeTS().
+               CoTarg.CreatedTS     = Func.Common:mMakeTS().
 
          END. 
          ELSE DO:
             
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                           "Order",
+            Func.Common:mWriteMemo("Order",
                            STRING(Order.OrderID),
                            MobSub.CustNum,
                            "COMMISSION CREATION FAILED",
@@ -1378,8 +1365,7 @@ PROCEDURE pCreateCommission:
       END.
       ELSE DO:
 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           MobSub.CustNum,
                           "COMMISSION CREATION FAILED",

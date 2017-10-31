@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/forderstamp.i}
-{Func/timestamp.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT PARAMETER idLastDump       AS DEC  NO-UNDO.
@@ -56,7 +55,7 @@ DEF VAR liLastDumpTime AS INT NO-UNDO.
 DEF VAR lcLastDumpTime AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 
-fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
 
 lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
  

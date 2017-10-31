@@ -129,7 +129,6 @@
 {Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/order.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
@@ -177,7 +176,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 FIND FIRST DMS NO-LOCK WHERE
            DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
            DMS.HostId EQ Order.OrderId AND
-           DMS.StatusTS < fMakeTS() NO-ERROR.
+           DMS.StatusTS < Func.Common:mMakeTS() NO-ERROR.
 IF AVAIL DMS THEN DO:
    lcDmsStatusCode = DMS.StatusCode.
    lcDmsStatusDesc = DMS.StatusDesc.
@@ -234,8 +233,8 @@ FOR EACH DCCLI NO-LOCK WHERE
           bMsRequest.MsSeq       = DCCLI.MsSeq AND
           bMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} AND
           bMsRequest.ReqStat     = 2 AND
-          bMsRequest.ActStamp   >= fMake2Dt(DCCLI.ValidFrom,0) AND
-          bMsRequest.ActStamp   <= fMake2Dt(DCCLI.ValidFrom,86399) AND
+          bMsRequest.ActStamp   >= Func.Common:mMake2DT(DCCLI.ValidFrom,0) AND
+          bMsRequest.ActStamp   <= Func.Common:mMake2DT(DCCLI.ValidFrom,86399) AND
           bMsRequest.Reqcparam3  = "RVTERM12",
     FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
           SingleFee.Brand        = gcBrand AND

@@ -8,7 +8,6 @@
 
 {Syst/commali.i}
 {Func/callquery.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiInvCust   AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiMsSeq     AS INT  NO-UNDO.
@@ -170,7 +169,7 @@ PROCEDURE pLogAction:
                                   "InvCust: " + STRING(iiInvCust) + ", " + 
                                   "MsSeq: " + STRING(iiMsSeq)
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE. 

@@ -139,8 +139,7 @@ FORM
 FUNCTION fServTypeName RETURNS LOGIC
    (iiServType AS INT):
    
-   lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                             "CTServPac",
+   lcType = Func.Common:mTMSCodeName("CTServPac",
                              "ServType", 
                              STRING(iiServType)).
 END FUNCTION.

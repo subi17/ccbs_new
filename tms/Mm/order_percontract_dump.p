@@ -6,7 +6,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
@@ -105,7 +104,7 @@ OUTPUT STREAM sFile TO VALUE(icFile).
 
 IF icDumpMode EQ "modified" THEN DO:
 
-   fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+   Func.Common:mSplitTS(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
    lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
 
    FOR EACH EventLog NO-LOCK where

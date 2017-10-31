@@ -244,8 +244,7 @@ PROCEDURE local-disp-row:
 
     IF iiFilterType = 3 THEN 
        lcKey = lcKey + " " + 
-               DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "Invoice",
+               Func.Common:mTMSCodeName("Invoice",
                                 "InvType",
                                 ttFilter.FCharKey).
 

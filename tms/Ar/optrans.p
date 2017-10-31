@@ -8,7 +8,6 @@
                   03.03.03 tk  tokens
                   06.08.04/aam use new indexes
                   02.01.06/aam values from TMSCodes
-                  24.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
                   27.08.07/aam Info
   Version ......: M15
   ---------------------------------------------------------------------- */
@@ -100,8 +99,7 @@ form /* seek BROWSE  BY EventDate */
 
 FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
 
-lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                BUFFER Customer).
+lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
@@ -121,8 +119,7 @@ ELSE DO:
    RETURN.
 END.
 
-lcTypes = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
-                           "OpLog",
+lcTypes = Func.Common:mTMSCodeList("OpLog",
                            "EventType").
                               
 DO i = 1 TO NUM-ENTRIES(lcTypes,CHR(1)):
@@ -501,8 +498,7 @@ PROCEDURE local-update-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
       
-      lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                      BUFFER Customer).
+      lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
       DISPLAY
         lcCustName
         OPLog.EventDate

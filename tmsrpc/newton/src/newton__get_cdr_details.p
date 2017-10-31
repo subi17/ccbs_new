@@ -17,7 +17,6 @@
 katun = "Newton RPC".
 gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fdestcountry.i}
 {Func/callquery.i}
@@ -125,7 +124,7 @@ END. /* IF pcUserName EQ "miyoigo" THEN DO: */
 lcNonCombinedData = fCParamC("NON_COMBINED_DATA_ROWS").
 
 ASSIGN ldaFirstDay = DATE(MONTH(pdStartDate),1,YEAR(pdStartDate))
-       ldaLastDay  = fLastDayOfMonth(pdEndDate).
+       ldaLastDay  = Func.Common:mLastDayOfMonth(pdEndDate).
 
 fGetMsOwnerTempTable(MobSub.Custnum,ldaFirstDay,ldaLastDay,
                      TRUE,MobSub.PayType).
@@ -509,7 +508,7 @@ END.
 /* Create CallScanner record from XML-RPC query */
 CREATE CallScanner.
 ASSIGN
-   CallScanner.TMSTime     = fmakeTS()
+   CallScanner.TMSTime     = Func.Common:mMakeTS()
    CallScanner.UserCode    = pcUserName 
    CallScanner.SystemID    = "XFERA_WEB" 
    CallScanner.EventType   = "CLI"

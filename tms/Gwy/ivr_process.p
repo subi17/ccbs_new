@@ -1,6 +1,5 @@
     
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/heartbeat.i}
 {Func/fgettxt.i}
@@ -29,7 +28,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       liLang      = 1
       lcAlarmMess = fGetTxt(INPUT "SMS", pcAction, TODAY, liLang)
       lcAlarmMess = REPLACE(lcAlarmMess,"#TOPUP", TRIM(STRING(pdeAmt / 100,">>>99.99")))
-      ldeActStamp = fMakeTS().
+      ldeActStamp = Func.Common:mMakeTS().
    
    CREATE CallAlarm.
    ASSIGN
@@ -76,7 +75,7 @@ FRAME frmMain .
 
 ASSIGN
    liLoop   = 0
-   lcTime1  = fTS2HMS(fMakeTS())
+   lcTime1  = Func.Common:mTS2HMS(Func.Common:mMakeTS())
    lcTime2  = lcTime1
    lcNagios = "ivrh:IVR Handler".
 
@@ -86,7 +85,7 @@ liNagios = fKeepAlive(lcNagios).
 LOOP:
 REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
    
-   lcTime2  = fTS2HMS(fMakeTS()).
+   lcTime2  = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
   
    DISPLAY
       lcTime1

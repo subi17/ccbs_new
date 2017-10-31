@@ -608,35 +608,29 @@ PROCEDURE local-find-others.
       lcDialtype = IF AVAILABLE DialType THEN DialType.DTName
                    ELSE "Unknown".
                                  
-   lcPulses      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TCC",
+   lcPulses      = Func.Common:mTMSCodeName("TCC",
                                     "Pulses",
                                     STRING(TCC.Pulses)).
 
-   lcTCCRule     = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TCC",
+   lcTCCRule     = Func.Common:mTMSCodeName("TCC",
                                     "TCCRule",
                                     STRING(TCC.TCCRule)).
 
-   lcTCCPayer    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TCC",
+   lcTCCPayer    = Func.Common:mTMSCodeName("TCC",
                                     "TCCPayer",
                                     STRING(TCC.TCCPayer)).
 
    IF AVAILABLE BDest THEN 
-   lcDestType    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "BDest",
+   lcDestType    = Func.Common:mTMSCodeName("BDest",
                                     "BDestType",
                                     STRING(BDest.DestType)).
    ELSE lcDestType = "".                                 
 
-   lcTariffRule  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TCC",
+   lcTariffRule  = Func.Common:mTMSCodeName("TCC",
                                     "TariffRule",
                                     STRING(TCC.TariffRule)).
 
-   lcTrafficType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TCC",
+   lcTrafficType = Func.Common:mTMSCodeName("TCC",
                                     "TrafficType",
                                     STRING(TCC.TrafficType)).
 
@@ -706,8 +700,7 @@ PROCEDURE local-UPDATE-record:
                    lcTCCRule = "".
                 ELSE DO: 
                    lcTCCRule = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "TCC",
+                      Func.Common:mTMSCodeName("TCC",
                                        "TCCRule",
                                        STRING(INPUT TCC.TCCRule)).
                    IF lcTCCRule = "" THEN DO:
@@ -725,8 +718,7 @@ PROCEDURE local-UPDATE-record:
                    lcPulses = "".
                 ELSE DO: 
                    lcPulses = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "TCC",
+                      Func.Common:mTMSCodeName("TCC",
                                        "Pulses",
                                        STRING(INPUT TCC.Pulses)).
                    IF lcPulses = "" THEN DO:
@@ -744,8 +736,7 @@ PROCEDURE local-UPDATE-record:
                    lcTariffRule = "".
                 ELSE DO: 
                    lcTariffRule = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "TCC",
+                      Func.Common:mTMSCodeName("TCC",
                                        "TariffRule",
                                        STRING(INPUT TCC.TariffRule)).
                    IF lcTariffRule = "" THEN DO:
@@ -764,8 +755,7 @@ PROCEDURE local-UPDATE-record:
                    lcTCCPayer = "".
                 ELSE DO: 
                    lcTCCPayer = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "TCC",
+                      Func.Common:mTMSCodeName("TCC",
                                        "TCCPayer",
                                        STRING(INPUT TCC.TCCPayer)).
                    IF lcTCCPayer = "" THEN DO:
@@ -785,8 +775,7 @@ PROCEDURE local-UPDATE-record:
                    lcTrafficType = "".
                 ELSE DO: 
                    lcTrafficType = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "TCC",
+                      Func.Common:mTMSCodeName("TCC",
                                        "TrafficType",
                                        STRING(INPUT TCC.TrafficType)).
                    IF lcTrafficType = "" THEN DO:

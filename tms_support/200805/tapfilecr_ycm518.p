@@ -36,7 +36,6 @@ DEFINE INPUT PARAMETER plTest     AS LOGICAL   NO-UNDO.
 */
 
 
-{Func/timestamp.i}
 
 DEFINE STREAM sCDR.
 

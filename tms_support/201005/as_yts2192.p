@@ -44,7 +44,7 @@ END.
 fSetOrderStatus(Order.OrderId,"7").
 
 ASSIGN         
-   MNPProcess.UpdateTS = fMakeTS()
+   MNPProcess.UpdateTS = Func.Common:mMakeTS()
    MNPProcess.StatusCode = {&MNP_ST_ACAN}
    MNPProcess.statusreason = "CANC_ABONA".
    Order.MNPStatus = MNPProcess.StatusCode + 1.

@@ -63,8 +63,7 @@ FUNCTION fGetCLIs RETURNS LOGICAL
 
              ASSIGN wCLI.CustNum = MSOwner.CustNum
                     wCLI.OwnerID = RECID(MSOwner)
-                    wCLI.Owner   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                    BUFFER bCLICust).
+                    wCLI.Owner   = Func.Common:mDispCustName(BUFFER bCLICust).
          END.
 
 

@@ -14,7 +14,6 @@ ASSIGN gcBrand = "1"
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.

@@ -12,7 +12,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OfferCriteria'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -99,8 +98,7 @@ FUNCTION fCriteriaType RETURNS LOGIC
    (icCriteriaType AS CHAR):
 
    IF icCriteriaType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "OfferCriteria",
+      lcType = Func.Common:mTMSCodeName("OfferCriteria",
                                 "CriteriaType",
                                 icCriteriaType).
    ELSE lcType = "".
@@ -128,7 +126,7 @@ IF AVAILABLE OfferCriteria THEN ASSIGN
    Memory       = recid(OfferCriteria)
    must-print   = TRUE
    must-add     = FALSE
-   ldDefFrom    = fMake2DT(TODAY,0).
+   ldDefFrom    = Func.Common:mMake2DT(TODAY,0).
 ELSE DO:
    IF lcRight NE "RW" THEN DO:
       MESSAGE "No criteria available!" VIEW-AS ALERT-BOX INFORMATION.
@@ -138,7 +136,7 @@ ELSE DO:
       Memory       = ?
       must-print   = FALSE
       must-add     = FALSE
-      ldDefFrom    = fMake2DT(Offer.FromDate,0).
+      ldDefFrom    = Func.Common:mMake2DT(Offer.FromDate,0).
 END.
 
 LOOP:
@@ -170,7 +168,7 @@ REPEAT WITH FRAME sel:
               OfferCriteria.OfferCriteriaID = NEXT-VALUE(OfferCriteriaSeq)
               OfferCriteria.Offer   = icOffer
               OfferCriteria.BeginStamp = ldDefFrom.
-              OfferCriteria.EndStamp   = fMake2DT(12/31/2049,86399).
+              OfferCriteria.EndStamp   = Func.Common:mMake2DT(12/31/2049,86399).
 
            RUN local-UPDATE-record.
 
@@ -580,10 +578,10 @@ PROCEDURE local-find-others.
 
    DEF VAR liTime AS INT NO-UNDO.
    
-   fSplitTS(OfferCriteria.BeginStamp,
+   Func.Common:mSplitTS(OfferCriteria.BeginStamp,
              OUTPUT ldtFromDate,
              OUTPUT liTime).
-   fSplitTS(OfferCriteria.EndStamp,
+   Func.Common:mSplitTS(OfferCriteria.EndStamp,
             OUTPUT ldtToDate,
             OUTPUT liTime).
             
@@ -596,8 +594,8 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       ASSIGN
-         lcBegin = fTS2HMS(OfferCriteria.BeginStamp)
-         lcEnd   = fTS2HMS(OfferCriteria.EndStamp).
+         lcBegin = Func.Common:mTS2HMS(OfferCriteria.BeginStamp)
+         lcEnd   = Func.Common:mTS2HMS(OfferCriteria.EndStamp).
      
       fCriteriaType(OfferCriteria.CriteriaType).
          

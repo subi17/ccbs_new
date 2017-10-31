@@ -1,6 +1,5 @@
 {Syst/commpaa.i} katun = "SOG". gcbrand = "1".
 {Func/fsubser.i}
-{Func/timestamp.i}
 
 def stream slog.
 output stream slog to /apps/snet/200901/as_yts1250.log.
@@ -42,7 +41,7 @@ REPEAT:
    ASSIGN lcPayType = "PREPAID"
          lcProfile = "2".
 
-   lcActStamp = fMakeTS().
+   lcActStamp = Func.Common:mMakeTS().
 
    lcCommline = " CREATE,MSISDN=34" + MobSub.Cli + ",ICC=" + 
                 Imsi.ICC + ",IMSI=" + Imsi.IMSI + 

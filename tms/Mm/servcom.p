@@ -726,13 +726,11 @@ PROCEDURE local-UPDATE-record:
 
       llCloseTime = (ServCom.CloseTime = 1).
 
-      lcActType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                  "ServCom",
+      lcActType = Func.Common:mTMSCodeName("ServCom",
                                   "ActType",
                                   STRING(ServCom.ActType)).
 
-      lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                  "ServCom",
+      lcTarget = Func.Common:mTMSCodeName("ServCom",
                                   "Target",
                                   STRING(ServCom.Target)).
       DISP 
@@ -797,8 +795,7 @@ PROCEDURE local-UPDATE-record:
                                OUTPUT lcCode).
               
                 IF lcCode ne "" AND lcCode NE ? THEN DO:
-                   lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                               "ServCom",
+                   lcTarget = Func.Common:mTMSCodeName("ServCom",
                                                "Target",
                                                lcCode).
                    DISPLAY INTEGER(lcCode) ;& ServCom.Target
@@ -976,8 +973,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "Target" THEN DO:
 
                    IF NOT 
-                   DYNAMIC-FUNCTION("fTMSCodeChk" in ghFunc1,
-                                    "ServCom",
+                   Func.Common:mTMSCodeChk("ServCom",
                                     "Target",
                                     STRING(INPUT FRAME lis ServCom.Target))
                    THEN DO:
@@ -987,8 +983,7 @@ PROCEDURE local-UPDATE-record:
                    END.
 
                    lcTarget = 
-                   DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                    "ServCom",
+                   Func.Common:mTMSCodeName("ServCom",
                                     "Target",
                                     STRING(INPUT FRAME lis ServCom.Target)).
 

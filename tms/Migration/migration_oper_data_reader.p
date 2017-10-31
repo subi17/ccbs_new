@@ -14,7 +14,6 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
@@ -71,7 +70,7 @@ DEFINE TEMP-TABLE ttRootlevel NO-UNDO SERIALIZE-NAME ""
 ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_oper_data_reader"
-   ldCurrentTimeTS = fMakeTS()
+   ldCurrentTimeTS = Func.Common:mMakeTS()
    lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
 
@@ -101,7 +100,7 @@ lcLogFile = lcLogDir + "MM_MIGRATION_FINAL_DATA__" + lcTimePart + ".log".
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration filefinal data reading starts " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration filefinal data reading starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 /*Ensure that multiple instances of the program are not running*/
 DO TRANS:
@@ -113,7 +112,7 @@ DO TRANS:
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
       PUT STREAM sLog UNFORMATTED
-         "File processing alrady ongoing " + fTS2HMS(fMakeTS()) SKIP.
+         "File processing alrady ongoing " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
       OUTPUT STREAM sLog CLOSE.
       QUIT.
    END.
@@ -137,7 +136,7 @@ lcErr = fInitMigrationMQ("oper_data_reader").
 IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
    "MQ error. Operational data file will be skipped: " + lcErr +
-      fTS2HMS(fMakeTS()) SKIP.
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 END.
 ELSE DO:
@@ -176,7 +175,7 @@ DO TRANS:
 END.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration finalization file handling done " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration finalization file handling done " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 
 /*Precheck functions. Function returns text in case of error.*/
@@ -302,7 +301,7 @@ FUNCTION fSetMigrationBarring RETURNS CHAR
                        icCommand,
                        {&REQUEST_SOURCE_MIGRATION},
                        "",
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        "",
                        OUTPUT lcStat).
 
@@ -342,7 +341,7 @@ FUNCTION fSetMigrationUpsell RETURNS CHAR
        fCreateUpsellBundle(iiMsSeq,
                            icCommand,
                            {&REQUEST_SOURCE_MIGRATION},
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            OUTPUT liReq,
                            OUTPUT lcError).
        IF lcError NE "" THEN DO:
@@ -372,7 +371,7 @@ FUNCTION fSetMigrationUpsells RETURNS CHAR
           fCreateUpsellBundle(iiMsSeq,
                               lcUpsell,
                               {&REQUEST_SOURCE_MIGRATION},
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               OUTPUT liReq,
                               OUTPUT lcError).
           IF lcError NE "" THEN DO:
@@ -472,7 +471,7 @@ FUNCTION fSetMigrationBonos RETURNS CHAR
        liRequest = fPCActionRequest(iiMsSeq,
                                 icCommand,
                                 "act",
-                                fMakeTS(),
+                                Func.Common:mMakeTS(),
                                 TRUE,    /* fees */
                                 {&REQUEST_SOURCE_MIGRATION},
                                 "",   /* creator */
@@ -667,7 +666,7 @@ PROCEDURE pReadInputJSON:
    IF ilgSimulate EQ TRUE THEN lcMode = "Simulation".
 
    PUT STREAM sLog UNFORMATTED
-      "List collection starts " + fTS2HMS(fMakeTS()) + 
+      "List collection starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) + 
       "Mode: " + lcMode SKIP.
 
 
@@ -754,7 +753,7 @@ PROCEDURE pReadInputJSON:
    END.
 
    PUT STREAM sLog UNFORMATTED
-      "Collection done " + fTS2HMS(fMakeTS()) SKIP.
+      "Collection done " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    RETURN "".   
 END.
 

@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/files.i}
 {Syst/funcrunprocess_update.i}
 {Syst/funcrun_replica.i}
@@ -199,9 +198,9 @@ PROCEDURE pInitialize:
 
    ASSIGN
       liInvCnt   = 0 
-      ldThisRun  = fMakeTS()
-      lcStarted  = fTS2HMS(ldThisRun)
-      ldCheckRun = fOffSet(ldThisRun,-72).
+      ldThisRun  = Func.Common:mMakeTS()
+      lcStarted  = Func.Common:mTS2HMS(ldThisRun)
+      ldCheckRun = Func.Common:mOffSet(ldThisRun,-72).
       
    RETURN "".    
 
@@ -358,7 +357,7 @@ PROCEDURE pWaitForInvoiceRun:
                             ActionLog.ActionStatus = 0)
       THEN LEAVE.
 
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
      
       IF SESSION:BATCH THEN DO:
          RUN pMarkFinished.

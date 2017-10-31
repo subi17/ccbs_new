@@ -25,7 +25,6 @@ katun = "Qvantel".
 gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -77,7 +76,7 @@ FUNCTION fDumpArecRejections RETURNS LOGICAL
          ldeEventTS  = 0
          liOrderID   = INT(ENTRY(2, EventLog.key,CHR(255))) 
          lcFieldName = ENTRY(1, EventLog.Datavalues,CHR(255))
-         ldeEventTS  = fHMS2TS(EventLog.EventDate,EventLog.EventTime) NO-ERROR.  
+         ldeEventTS  = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime) NO-ERROR.  
             
       IF EventLog.UserCode = "MNP"      AND 
          lcFieldName       = "CurrOper" THEN DO:
@@ -138,7 +137,7 @@ EMPTY TEMP-TABLE ttDumpData.
 IF icDumpMode EQ "Full" THEN 
    idLastDump = 20160322.0000.
 
-fSplitTS(idLastDump, 
+Func.Common:mSplitTS(idLastDump, 
          OUTPUT ldaDumpDate, 
          OUTPUT liDumpTime).
 

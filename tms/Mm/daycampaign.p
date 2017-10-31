@@ -157,8 +157,7 @@ FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT):
 
    IF iiUnit > 0 THEN
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "DayCampaign",
+      lcUnit = Func.Common:mTMSCodeName("DayCampaign",
                                 "InclUnit",
                                 STRING(iiUnit)).
    ELSE lcUnit = "".
@@ -171,8 +170,7 @@ END FUNCTION.
 FUNCTION fDurUnit RETURNS LOGIC
    (iiDurUnit AS INT):
    
-   lcDurUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "DayCampaign",
+   lcDurUnit = Func.Common:mTMSCodeName("DayCampaign",
                                 "DurUnit",
                                 STRING(iiDurUnit)).
    DISP lcDurUnit WITH FRAME lis.
@@ -182,8 +180,7 @@ END FUNCTION.
 FUNCTION fDurType RETURNS LOGIC
    (iiDurType AS INT):
    
-   lcDurType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "DayCampaign",
+   lcDurType = Func.Common:mTMSCodeName("DayCampaign",
                                 "DurType",
                                 STRING(iiDurType)).
    DISP lcDurType WITH FRAME lis.
@@ -193,8 +190,7 @@ END FUNCTION.
 FUNCTION fEffective RETURNS LOGIC
    (iiEffective AS INT):
    
-   lcEffective = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "DayCampaign",
+   lcEffective = Func.Common:mTMSCodeName("DayCampaign",
                                   "Effective",
                                   STRING(iiEffective)).
    DISP lcEffective WITH FRAME lis.
@@ -204,8 +200,7 @@ END FUNCTION.
 FUNCTION fTermFeeCalc RETURNS LOGIC
    (iiTermFeeCalc AS INT):
    
-   lcTermFeeCalc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "DayCampaign",
+   lcTermFeeCalc = Func.Common:mTMSCodeName("DayCampaign",
                                     "TermFeeCalc",
                                     STRING(iiTermFeeCalc)).
    DISP lcTermFeeCalc WITH FRAME fFees.
@@ -229,8 +224,7 @@ END FUNCTION.
 FUNCTION fStatusName RETURNS LOGIC
    (iiStatusCode AS INT):
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "CLIType",
+   lcStatus = Func.Common:mTMSCodeName("CLIType",
                                "WebStatusCode",
                                STRING(iiStatusCode)).
 

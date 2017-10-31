@@ -18,7 +18,6 @@ FIND FIRST mnpprocess where
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/timestamp.i}
 {Mnp/mnp.i}
 
 FUNCTION fNewXML RETURNS CHAR 
@@ -58,11 +57,11 @@ FUNCTION fNewXML RETURNS CHAR
    ELSE lcOper = order.curroper.
 
    ldChgDate = fMNPChangeWindowDate(
-      fMakeTS(),
+      Func.Common:mMakeTS(),
       Order.OrderChannel,
       OrderCustomer.Region).
 
-   ldeChgStamp = fMake2Dt(ldChgDate,10800).
+   ldeChgStamp = Func.Common:mMake2DT(ldChgDate,10800).
 
    CREATE SAX-WRITER lhSAX.
 
@@ -100,8 +99,8 @@ FUNCTION fNewXML RETURNS CHAR
    lhSAX:INSERT-ATTRIBUTE("icc-idStart",substr(Order.OldICC,1,19)).
    lhSAX:INSERT-ATTRIBUTE("icc-idEnd",substr(Order.OldICC,1,19)).
    lhSAX:INSERT-ATTRIBUTE("nrn","741111").
-   lhSAX:WRITE-DATA-ELEMENT("requestedDate",STRING(fUTCTime(Order.CrStamp))).
-   lhSAX:WRITE-DATA-ELEMENT("changeWindowDate",STRING(fUTCTime(ldeChgStamp))).
+   lhSAX:WRITE-DATA-ELEMENT("requestedDate",STRING(Func.Common:mUTCTime(Order.CrStamp))).
+   lhSAX:WRITE-DATA-ELEMENT("changeWindowDate",STRING(Func.Common:mUTCTime(ldeChgStamp))).
    lhSAX:END-ELEMENT("portabilityData").
    lhSAX:WRITE-DATA-ELEMENT("opDonor",lcOper).
    lhSAX:WRITE-DATA-ELEMENT("opReceiver","YOI").
@@ -196,7 +195,7 @@ repeat:
   TO MNPMessage.
 
   ASSIGN
-     MNPMessage.CreatedTS = fMakeTS()
+     MNPMessage.CreatedTS = Func.Common:mMakeTS()
      MNPMessage.StatusCode = 1
      MNPMessage.XMLMessage = lcNewXML
      MNPMessage.MsgTurn = MNPMessage.MsgTurn + 1.

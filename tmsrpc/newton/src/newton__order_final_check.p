@@ -13,7 +13,6 @@
 katun = "NewtonRPC".
 gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/orderchk.i}
 
 /* Input parameters */

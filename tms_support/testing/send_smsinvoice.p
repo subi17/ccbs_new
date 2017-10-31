@@ -93,7 +93,7 @@ repeat:
                      MobSub.CLI,
                      44,
                      lcSMSReplacedText,
-                     fMakeTS(),
+                     Func.Common:mMakeTS(),
                      "622",
                      "36000-75600").
       IF AVAIL CallAlarm THEN RELEASE CallAlarm. 

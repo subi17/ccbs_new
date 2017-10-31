@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE BrTable MsRequest
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -187,7 +186,7 @@ FUNCTION fDispStamp RETURNS CHARACTER
   DEF VAR lcStamp AS CHAR NO-UNDO.
   
   IF idTimeStamp > 0 THEN DO:
-     fSplitTS(idTimeStamp,
+     Func.Common:mSplitTS(idTimeStamp,
               OUTPUT ldtStampDate,
               OUTPUT liStampTime).
      lcStamp = "(" + STRING(ldtStampDate,"99-99-99") + " " +
@@ -201,8 +200,7 @@ END FUNCTION.
 
 DO i = 1 TO 17:
    lcStatusLst = lcStatusLst + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "MsRequest",
+                 Func.Common:mTMSCodeName("MsRequest",
                                   "ReqStatus",
                                   STRING(i - 1)) + ",". 
 END.
@@ -294,7 +292,7 @@ REPEAT WITH FRAME sel:
            MsRequest.CLI      = MobSub.CLI
            MsRequest.CustNum  = MobSub.CustNum
            MsRequest.UserCode = katun.
-           MsRequest.CreStamp = fMakeTS().
+           MsRequest.CreStamp = Func.Common:mMakeTS().
 
            RUN local-UPDATE-record.
 
@@ -1013,14 +1011,13 @@ PROCEDURE local-find-others.
     FIND Customer OF MsRequest NO-LOCK NO-ERROR.
 
     IF AVAILABLE Customer THEN    
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
     ELSE lcCustName = "".
                 
     lcNewName = ENTRY(1,MsRequest.ReqCParam1,";") + " " + 
                 ENTRY(2,MsRequest.ReqCParam1,";").
                 
-    fSplitTS(MsRequest.ActStamp,
+    Func.Common:mSplitTS(MsRequest.ActStamp,
              OUTPUT ldtActivate,
              OUTPUT liStampTime).
     
@@ -1347,7 +1344,7 @@ PROCEDURE local-UPDATE-record:
             MsRequest.ReqStatus = 16.
             
             /* set activation to now (if not scheduled into future) */
-            ldCurrStamp = fMakeTS().
+            ldCurrStamp = Func.Common:mMakeTS().
             IF MsRequest.ActStamp < ldCurrStamp 
             THEN  MsRequest.ActStamp = ldCurrStamp.
       

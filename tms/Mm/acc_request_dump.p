@@ -62,7 +62,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
          
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -108,7 +108,7 @@ FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
       BY EventLog.EventDate DESC
       BY EventLog.EventTime DESC:
       
-         ldModified = fHMS2TS(EventLog.EventDate,EventLog.EventTime).
+         ldModified = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
          IF ldModified >= MsRequest.DoneStamp THEN DO:
             lcModifier = EventLog.UserCode.
             LEAVE.

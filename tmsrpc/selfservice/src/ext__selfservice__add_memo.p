@@ -57,8 +57,7 @@ IF pcSalesman EQ "" THEN
 ELSE 
    lcUser = pcSalesman.
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  pcMemoTitle,                          /* MemoTitle */

@@ -8,7 +8,6 @@
   ------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/email.i}
 {Func/fmakesms.i}
 
@@ -33,7 +32,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -138,7 +137,7 @@ PROCEDURE pSendSMS:
    DEF VAR liNumber  AS INT  NO-UNDO.
    DEF VAR ldCurrent AS DEC  NO-UNDO.
    
-   ldCurrent = fMakeTS().
+   ldCurrent = Func.Common:mMakeTS().
    
    DO liNumber = 1 TO NUM-ENTRIES(icSMSNumber):
    

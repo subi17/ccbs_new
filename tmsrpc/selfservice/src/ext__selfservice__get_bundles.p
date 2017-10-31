@@ -22,7 +22,6 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/matrix.i}
 {Func/fdss.i}
@@ -64,7 +63,7 @@ IF fMatrixAnalyse(gcBrand,
    RETURN appl_err("Bundle is not allowed for this subscription type").
 END.
 
-ASSIGN ldEndStamp = fMake2Dt(fLastDayOfMonth(TODAY),86399)
+ASSIGN ldEndStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399)
        liStatus   = 0. /* deactivated */
 
 /* if exist any MDUB valid to the future then service is activated */   

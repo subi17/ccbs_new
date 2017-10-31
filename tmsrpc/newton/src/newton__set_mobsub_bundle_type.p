@@ -19,7 +19,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fdss.i}
@@ -120,7 +119,7 @@ IF NOT fValidateBTC
     OUTPUT lcError)
    THEN RETURN appl_err(lcError). 
 
-ldActStamp = fMake2Dt(pdaActDate,
+ldActStamp = Func.Common:mMake2DT(pdaActDate,
                       IF pdaActDate = TODAY
                       THEN TIME
                       ELSE 0).
@@ -170,22 +169,21 @@ IF llUpgradeUpsell THEN DO:
         NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSCodes THEN
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.CustNum,
                        "Upgrade Upsell Creation Failed",
                        "Upgrade Upsell Limit is not configured in TMS for " +
                        pcOldBundle + "TO" + pcNewBundle).
    ELSE DO:
-      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT fMakeTS()) THEN
+      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()) THEN
          lcUpgradeUpsell = "DSS_UPSELL_UPGRADE".
       ELSE lcUpgradeUpsell = "UPGRADE_UPSELL".
 
       liUpsellCreated = fPCActionRequest(MobSub.MsSeq,
                                          lcUpgradeUpsell, 
                                          "act",
-                                         fMakeTS(),
+                                         Func.Common:mMakeTS(),
                                          TRUE,   /* create fee */
                                          {&REQUEST_SOURCE_BTC},
                                          "",
@@ -197,8 +195,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Upgrade Upsell Creation Failed",
@@ -211,8 +208,7 @@ IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 OR LOOKUP(pcNewBundle,lcVoiceBundles)
 ELSE
    lcMemoType  = "MobSub".
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  "Bono modificado",                    /* MemoTitle */

@@ -10,7 +10,6 @@ liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = FALSE. 
 
 {Func/log.i}
-{Func/date.i}
 katun = "anttis".
 
 fSetLogFileName("/apps/snet/200809/TMS+user+update+(20080916)_" + 
@@ -65,7 +64,7 @@ FUNCTION fNew RETURNS LOGICAL
    DEFINE VARIABLE lcTemp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE liUsernum AS INTEGER NO-UNDO. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    fLog(icLine,"fAdd").   
    
@@ -173,7 +172,7 @@ FUNCTION fModify RETURNS LOGICAL
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i AS INTEGER NO-UNDO. 
    DEFINE VARIABLE llModified AS LOGICAL NO-UNDO INIT FALSE. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
    fLog(icLine,"fModify").   
 
    lcUsercode = ENTRY(3,icLine,lcDelim).

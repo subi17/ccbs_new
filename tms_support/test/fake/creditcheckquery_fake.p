@@ -2,7 +2,6 @@
 {Func/xmlfunction.i}
 {Func/mathfunction.i}
 {Func/msreqfunc.i}
-{Func/timestamp.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.

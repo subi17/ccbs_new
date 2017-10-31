@@ -9,7 +9,6 @@
 {Syst/commali.i} 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'DPMember'}
-{Func/date.i}
 {Mc/dpmember.i}
 {Syst/tmsconst.i}
 
@@ -121,8 +120,7 @@ FORM
 FUNCTION fDispHostTable RETURNS LOGIC
    (icHostTable AS INT):
 
-   lcHostTable = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "DPMember",
+   lcHostTable = Func.Common:mTMSCodeName("DPMember",
                                   "HostTable",
                                   STRING(icHostTable)).
                                   
@@ -666,8 +664,7 @@ PROCEDURE local-find-others.
    WHEN "Customer" THEN DO:
       FIND FIRST Customer WHERE Customer.CustNum = liKeyValue NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-         lcMember = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+         lcMember = Func.Common:mDispCustName(BUFFER Customer).
    END.
    WHEN "MobSub" THEN DO:
       FIND FIRST MobSub WHERE MobSub.MsSeq = liKeyValue NO-LOCK NO-ERROR.

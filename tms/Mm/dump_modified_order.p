@@ -84,7 +84,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -92,8 +92,8 @@ ASSIGN
    lhCollect   = BUFFER ttOrder:HANDLE
    lhTable     = BUFFER Order:HANDLE
    lcKeyFields = fEventKeyFields(lhTable)
-   ldtLastDump = fTimeStamp2DateTime(idLastDump)
-   ldCrStamp   = fMakeTS().
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump)
+   ldCrStamp   = Func.Common:mMakeTS().
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 

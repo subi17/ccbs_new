@@ -33,7 +33,7 @@ FOR EACH msrequest where
    /* day campaign id */
    lcDCEvent = MsRequest.ReqCParam3.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 

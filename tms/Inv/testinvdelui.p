@@ -18,7 +18,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
 {Func/finvnum.i}
-{Func/timestamp.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot delete invoices ! " VIEW-AS ALERT-BOX.

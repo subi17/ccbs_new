@@ -9,7 +9,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/sog.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MSOwner'}
@@ -296,7 +295,7 @@ ACTION:
             EventLog.TimingDate     = ldaTimingDate
             EventLog.TimingTime     = ldaTimingTime.
          ASSIGN
-            EventLog.TimingTS       =  fHMS2TS(INPUT EventLog.TimingDate,
+            EventLog.TimingTS       =  Func.Common:mHMS2TS(INPUT EventLog.TimingDate,
             
                                  INPUT STRING(truncate(EventLog.TimingTime,0)
                                  ,"99") +

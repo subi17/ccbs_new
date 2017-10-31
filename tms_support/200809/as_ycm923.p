@@ -16,7 +16,7 @@ FOR EACH m2 WHERE
       m2.validto < 99999999 AND
       lookup(m2.pos,"CC,POS,TELEM,Webshop") > 0 then do:
       
-      fSplitTS(m2.validto, output ldDate, output secs). 
+      Func.Common:mSplitTS(m2.validto, output ldDate, output secs). 
       
       
       IF TODAY - ldDate > 90 THEN DO:

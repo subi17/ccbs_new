@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'BRTestQResult'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -85,7 +84,7 @@ WITH  OVERLAY ROW liUpdateRow centered
 FUNCTION fRunStamp RETURNS LOGIC
    (idRunStamp AS DEC):
 
-   IF idRunStamp > 0 THEN lcRunStamp = fTS2HMS(idRunStamp).
+   IF idRunStamp > 0 THEN lcRunStamp = Func.Common:mTS2HMS(idRunStamp).
    ELSE lcRunStamp = "".
    
 END FUNCTION.

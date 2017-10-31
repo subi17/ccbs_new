@@ -10,7 +10,6 @@ ASSIGN
    gcBrand = "1"
    katun = "cron".
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEF VAR liMarked    AS INT  NO-UNDO.
@@ -65,7 +64,7 @@ DO TRANS:
       ActionLog.UserCode     = katun
       ActionLog.FromDate     = ldaReadDate
       ActionLog.ToDate       = ldaReadDate.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 QUIT.

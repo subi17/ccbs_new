@@ -8,7 +8,6 @@
 --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 
 DEF INPUT PARAMETER  HostTable LIKE memo.HostTable  NO-UNDO.
@@ -76,13 +75,13 @@ RUN Syst/ufile1.p(INPUT HostTable, OUTPUT db-name, OUTPUT tabLbl).
 FIND TMSUser WHERE TMSUser.UserCode = memo.CreUser NO-LOCK NO-ERROR.
 IF AVAIL TMSUser THEN cru-name = TMSUser.UserName.
 ELSE cru-name = "? UNKNOWN USER ?".
-CrTime = fTS2hms(memo.CreStamp).
+CrTime = Func.Common:mTS2HMS(memo.CreStamp).
 
 IF memo.ChgUser NE "" THEN DO:
    FIND TMSUser WHERE TMSUser.UserCode = memo.ChgUser NO-LOCK NO-ERROR.
    IF AVAIL TMSUser THEN mou-name = TMSUser.UserName.
    ELSE mou-name = "? UNKNOWN USER ?".
-   mo-time = fTS2hms(memo.ChgStamp).
+   mo-time = Func.Common:mTS2HMS(memo.ChgStamp).
 END.
 
 MemoTitle = "Memo belongs to   " + tabLbl + " '" + KeyValue + "'".

@@ -178,7 +178,7 @@ WITH CENTERED ROW 10 SIDE-LABELS
      FRAME fQty.
 
 ASSIGN 
-   lcStarted = fTS2HMS(fMakeTS())
+   lcStarted = Func.Common:mTS2HMS(Func.Common:mMakeTS())
    liWaitSeconds = fCParamI("TriggerRerateDelay").
 IF liWaitSeconds = ? THEN liWaitSeconds = 600.   
 
@@ -240,7 +240,7 @@ DO WHILE TRUE:
    END.                          
    
    IF liInterval > 0 THEN DO:
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
       latestcli = "". lrrecid = ?.
 
       IF iiFrProcessID = 0 THEN DO:

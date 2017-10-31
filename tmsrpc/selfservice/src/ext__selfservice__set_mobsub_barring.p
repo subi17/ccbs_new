@@ -29,7 +29,6 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/barrfunc.i}
 {Func/fexternalapi.i}
 {Func/transname.i}
@@ -155,7 +154,7 @@ RUN Mm/barrengine.p(MobSub.MsSeq,
                  {&REQUEST_SOURCE_EXTERNAL_API},
                  (IF lcApplicationId EQ "701" THEN "Collection"
                   ELSE ""),
-                 fMakeTS(),
+                 Func.Common:mMakeTS(),
                  "",
                  OUTPUT lcStatus).
 
@@ -179,8 +178,7 @@ IF liReq > 0 THEN DO:
                                 pcBCode,
                                 5, /*en*/
                                 TODAY).
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+      Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum */
                     "Collection Action",                  /* MemoTitle */
@@ -198,8 +196,7 @@ IF liReq > 0 THEN DO:
                                 pcBCode,
                                 1, /*es*/
                                 TODAY).
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+      Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum */
                     "Bloqueo modificado",                 /* MemoTitle */

@@ -9,7 +9,6 @@
   VERSIO .......: SCRUNKO3, (23.10.96)
   --------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -750,8 +749,8 @@ DO TRANSAction:
             Presel.Orderer  = ordere
             Presel.AuthNo   = authn
             Presel.AuthDate = authdat.
-            Presel.CrStamp = fMakeTS().
-            Presel.ChStamp = fMakeTS().
+            Presel.CrStamp = Func.Common:mMakeTS().
+            Presel.ChStamp = Func.Common:mMakeTS().
 
       END. /* FOR EACH */
    END.  /* IF DO ALL */ 
@@ -794,8 +793,8 @@ DO TRANSAction:
        Presel.Orderer  = ordere
        Presel.AuthNo   = authn
        Presel.AuthDate = authdat.
-       Presel.CrStamp = fMakeTS().
-       Presel.ChStamp = fMakeTS().
+       Presel.CrStamp = Func.Common:mMakeTS().
+       Presel.ChStamp = Func.Common:mMakeTS().
 
    END. /* FOR EACH psel */
  END. /* ELSE */

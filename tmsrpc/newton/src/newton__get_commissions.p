@@ -22,7 +22,6 @@
                 period;date;period (year, month) of FAT
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/date.i}
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 
 /* Input parameters */

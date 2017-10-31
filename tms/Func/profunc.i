@@ -427,7 +427,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.
 
    /* set activation time */
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_PRO_MIGRATION},
                   ldActStamp,
@@ -479,7 +479,7 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
                         fgetActiveReplacement(bMobsub.clitype),
                         "", /* lcBundleID */
                         "", /*bank code validation is already done */
-                        fmakets(),
+                        Func.Common:mMakeTS(),
                         0,  /* 0 = Credit check ok */
                         0, /* extend contract */
                         "" /* pcSalesman */,

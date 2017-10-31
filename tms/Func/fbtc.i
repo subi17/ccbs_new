@@ -54,7 +54,7 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    /* double check (duplicate RPC call) */
    ocResult = fChkRequest(iiMsSeq,
@@ -147,7 +147,7 @@ FUNCTION fIsBTCBundleAllowed RETURNS LOGIC
    DEF VAR lcCONTSContracts AS CHAR NO-UNDO.
    DEF VAR lcCONTSFContracts AS CHAR NO-UNDO.
 
-   ldActStamp = fMake2Dt(pdaActDate,0).
+   ldActStamp = Func.Common:mMake2DT(pdaActDate,0).
   
    IF pcOldBundle = "" OR pcNewBundle = "" OR 
       pcOldBundle = pcNewBundle THEN DO:
@@ -323,7 +323,7 @@ FUNCTION fValidateBTC RETURNS LOGICAL
          IF AVAIL MNPProcess THEN DO:
 
             IF 1 > fMNPPeriods(
-               input fMakeTS(),
+               input Func.Common:mMakeTS(),
                input MNPProcess.PortingTime,
                INPUT 0,
                OUTPUT ldaDueDate) THEN DO: 

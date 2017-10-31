@@ -14,7 +14,6 @@
 
 {Syst/commali.i}
 {Func/refcode.i}
-{Func/timestamp.i}
 {Mm/fbundle.i}
 {Mc/offer.i}
 {Func/fbankdata.i}
@@ -389,8 +388,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
                          OUTPUT lcErr).
             odInvtot = ldInvTot.
             IF lcErr <> "" THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(Order.OrderID),
                                 0,
                                 "Confirmation Email Cash Invoice Data Failed",
@@ -1056,7 +1054,7 @@ PROCEDURE pGetLEGALFINANCING:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrder,
                OUTPUT liOrderTime).
 
@@ -1116,7 +1114,7 @@ PROCEDURE pGetORDER_DATE:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    olgErr = FALSE.
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrderDate,
                OUTPUT liOrderTime).
 
@@ -1197,15 +1195,15 @@ PROCEDURE pGetDELIVERY_DATE:
                   ELSE "Si es nueva numeración fija, de 9-10 días y de 12-17 días si es portabilidad").
    ELSE IF Order.OrderType = 1 THEN DO:
       IF Order.PortingDate <> ? THEN
-         ldePortingTime = fMake2Dt(Order.PortingDate,0).
+         ldePortingTime = Func.Common:mMake2DT(Order.PortingDate,0).
       IF AVAIL OrderAccessory THEN
          lcProduct = "T".
       ELSE
          lcProduct = "S".
 
-      IF ldePortingTime <= fMakeTS() THEN
+      IF ldePortingTime <= Func.Common:mMakeTS() THEN
          ldamnp = fmnpchangewindowdate(
-                             fmakets(),
+                             Func.Common:mMakeTS(),
                              order.orderchannel,
                              lcDelRegion,
                              lcProduct,
@@ -1214,7 +1212,7 @@ PROCEDURE pGetDELIVERY_DATE:
       ELSE ldaMNP = Order.PortingDate.
       ldaDate = ldaMNP - 1.
       ldaDate = fMNPHoliday(ldaDate,FALSE).
-      lcResult = fDateFmt(ldaDate,"dd/mm/yy").
+      lcResult = Func.Common:mDateFmt(ldaDate,"dd/mm/yy").
    END.
    ELSE DO:
       IF lcDelRegion > "" THEN CASE lcDelRegion:
@@ -1246,7 +1244,7 @@ PROCEDURE pGetDELIVERY_DATE:
          ldaDate = ldaDate + 1.
          ldaDate = fMNPHoliday(ldaDate,TRUE).
       END.
-      lcResult = fDateFmt(ldaDate,"dd/mm/yy").
+      lcResult = Func.Common:mDateFmt(ldaDate,"dd/mm/yy").
    END.
 
 END. /*GetDELIVERY_DATE*/
@@ -1279,16 +1277,16 @@ PROCEDURE pGetMNP_DATE:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.PortingDate <> ? THEN
-      ldePortingTime = fMake2Dt(Order.PortingDate,0).
+      ldePortingTime = Func.Common:mMake2DT(Order.PortingDate,0).
 
    IF AVAIL OrderAccessory THEN
       lcProduct = "T".
    ELSE
       lcProduct = "S".
 
-   IF ldePortingTime <= fMakeTS() THEN
+   IF ldePortingTime <= Func.Common:mMakeTS() THEN
       ldamnp = fmnpchangewindowdate(
-                          fmakets(),
+                          Func.Common:mMakeTS(),
                           order.orderchannel,
                           lcDelRegion,
                           lcProduct,
@@ -1754,7 +1752,7 @@ PROCEDURE pGetTOTAL_FEE:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrder,
                OUTPUT liOrderTime).
    ldeRVPerc = TRUNC(ldeFinalFee /
@@ -1871,7 +1869,7 @@ PROCEDURE pGetCTNAME:
       lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
       lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
             OUTPUT ldtOrder,
             OUTPUT liTime).
    ldeTaxPerc = fRegionTaxPerc(OrderCustomer.Region,
@@ -1966,7 +1964,7 @@ PROCEDURE pGetCTNAME:
       DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
       DEFINE VARIABLE ldDiscValue  AS DEC  NO-UNDO.
 
-      llgOrderDate = fSplitTS(Order.CrStamp,
+      llgOrderDate = Func.Common:mSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
                               OUTPUT ldiOrderDate).
       

@@ -12,7 +12,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'RerateLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -572,7 +571,7 @@ PROCEDURE local-find-others.
    DEF VAR ldaDate AS DATE NO-UNDO.
    DEF VAR liTime  AS INT  NO-UNDO. 
    
-   fSplitTS(RerateLog.Started,
+   Func.Common:mSplitTS(RerateLog.Started,
             OUTPUT ldaDate,
             OUTPUT liTime).
    lcStarted = STRING(liTime,"hh:mm:ss").         
@@ -586,14 +585,13 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
 
       ASSIGN
-         lcStartTime = fTS2HMS(RerateLog.Started)
-         lcEndTime   = fTS2HMS(RerateLog.Ended).
+         lcStartTime = Func.Common:mTS2HMS(RerateLog.Started)
+         lcEndTime   = Func.Common:mTS2HMS(RerateLog.Ended).
          
       FIND FIRST Customer WHERE Customer.CustNum = RerateLog.InvCust 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
       
       DISP 

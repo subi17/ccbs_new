@@ -10,7 +10,6 @@
 */
    
 {Syst/commali.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
@@ -138,7 +137,7 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
 END FUNCTION.
 
 
-ldCurrTS = fMakeTS().
+ldCurrTS = Func.Common:mMakeTS().
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSRequest = iiMSRequest
@@ -233,7 +232,7 @@ PROCEDURE pTerminate:
       RETURN "ERROR".
    END.
 
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
 
    ASSIGN
       llOutport      = (MsRequest.ReqCParam2 NE "")
@@ -245,8 +244,8 @@ PROCEDURE pTerminate:
       lcTerminationType = MsRequest.ReqCParam6 WHEN MsRequest.ReqCParam6 NE ""
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
-   ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
-          ldeMonthEndTS  = fMake2DT(ldMonthEndDate,86399)
+   ASSIGN ldMonthEndDate = Func.Common:mLastDayOfMonth(ldaKillDate)
+          ldeMonthEndTS  = Func.Common:mMake2DT(ldMonthEndDate,86399)
           liPeriod       = YEAR(ldaKillDate) * 100 + MONTH(ldaKillDate).
 
    FIND FIRST MobSub WHERE
@@ -291,7 +290,7 @@ PROCEDURE pTerminate:
          MSISDN.StatusCode = liMsisdnStat.
          MSISDN.CustNum    = 0.
          ASSIGN
-            MSISDN.ValidTo    = fDate2TS(TODAY + liQuarTime) + (time / 100000)
+            MSISDN.ValidTo    = Func.Common:mDate2TS(TODAY + liQuarTime) + (time / 100000)
                                 WHEN liQuarTime >= 0
             MSISDN.ValidTo    = 99999999.99999 WHEN liQuarTime = -1.
 
@@ -323,7 +322,7 @@ PROCEDURE pTerminate:
 /* COFF check */
    FIND FIRST MSOwner WHERE 
               MSOwner.CLI    = MobSub.CLI AND
-              MSOwner.TsEnd >= fHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
+              MSOwner.TsEnd >= Func.Common:mHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
    EXCLUSIVE-LOCK NO-ERROR.
 
    /* TimeStamp  */
@@ -405,7 +404,7 @@ PROCEDURE pTerminate:
    IF MobSub.MultiSIMID > 0 THEN RUN pMultiSIMTermination(iiMSRequest).
    
    ASSIGN ldeActStamp = 0
-          ldeActStamp = fHMS2TS(TODAY + 1,"").
+          ldeActStamp = Func.Common:mHMS2TS(TODAY + 1,"").
 
    fAdditionalLineSTC(iiMSRequest,
                      ldeActStamp,
@@ -674,7 +673,7 @@ PROCEDURE pTerminate:
                           "term",
                           IF ttContract.ActTS > 0
                           THEN ttContract.ActTS
-                          ELSE fSecOffSet(ldCurrTS,60),
+                          ELSE Func.Common:mSecOffSet(ldCurrTS,60),
                           llCreateFee,             /* create fees */
                           {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                           "",
@@ -803,7 +802,7 @@ PROCEDURE pTerminate:
          END.
 
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.StatusCode = ({&MNP_ST_APOR}).
       END.
          
@@ -888,7 +887,7 @@ PROCEDURE pTerminate:
                    ErrorLog.KeyValue  = STRING(Order.OrderId) 
                    ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
                    ErrorLog.UserCode  = katun
-                   ErrorLog.ActionTS  = fMakeTS().
+                   ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
 
          RUN pCreatePaytermCreditNote(Order.OrderId).
@@ -898,8 +897,7 @@ PROCEDURE pTerminate:
          IF Order.InvNum > 0 THEN DO:
             lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
             IF lcResult > "" THEN
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                               "MobSub",
+                Func.Common:mWriteMemo("MobSub",
                                STRING(MobSub.MsSeq),
                                MobSub.Custnum,
                                "CREDIT NOTE CREATION FAILED",
@@ -943,13 +941,12 @@ PROCEDURE pTerminate:
                Order.MsSeq,
                Order.OrderId,
                "CANCEL",
-               fMakeTS(),
+               Func.Common:mMakeTS(),
                {&REQUEST_SOURCE_ORDER_CANCELLATION},
                OUTPUT lcResult).
 
             IF lcResult > "" THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(Order.OrderID),
                                 0,
                                 "Logistics cancel failed",
@@ -1002,8 +999,7 @@ PROCEDURE pTerminate:
 
             fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
             
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Order",
+            Func.Common:mWriteMemo("Order",
                  STRING(Order.OrderID),
                  Order.CustNum,
                  "Order handling stopped",
@@ -1013,8 +1009,7 @@ PROCEDURE pTerminate:
          ELSE DO:
             RUN Mc/fusion_order_cancel.p(Order.OrderID).
             IF NOT RETURN-VALUE BEGINS "OK" THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
+               Func.Common:mWriteMemo("Order",
                     STRING(Order.OrderID),
                     Order.CustNum,
                     "Convergent order closing failed",
@@ -1050,17 +1045,17 @@ PROCEDURE pTerminate:
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      MobSub.MsSeq,
-                     fLastDayOfMonth(TODAY),
+                     Func.Common:mLastDayOfMonth(TODAY),
                      FALSE).
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
                      MobSub.MsSeq,
-                     fLastDayOfMonth(TODAY),
+                     Func.Common:mLastDayOfMonth(TODAY),
                      FALSE).
       
       /* Additional Line with mobile only ALFMO-5 */
       IF MONTH(MobSub.ActivationDate) = MONTH(TODAY) AND 
          YEAR(MobSub.ActivationDate) = YEAR(TODAY) THEN
-         ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+         ASSIGN ldtCloseDate = Func.Common:mLastDayOfMonth(TODAY).
       ELSE IF MONTH(MobSub.ActivationDate) < MONTH(TODAY) OR
            YEAR(MobSub.ActivationDate) < YEAR(TODAY) THEN
          ASSIGN ldtCloseDate = TODAY.
@@ -1087,8 +1082,8 @@ PROCEDURE pTerminate:
       /* YDR-2495 Auto STC for Convergent After Mobile Line Termination to Fixed Line  */
       liRequest = fConvFixedSTCReq(MobSub.CLIType,
                                    MobSub.MsSeq,
-                                   IF llOutport THEN fMake2Dt(TODAY + 5,0)
-                                   ELSE fMake2Dt(TODAY + 1,0),
+                                   IF llOutport THEN Func.Common:mMake2DT(TODAY + 5,0)
+                                   ELSE Func.Common:mMake2DT(TODAY + 1,0),
                                    {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                    MsRequest.MsRequest).
    END.      
@@ -1180,7 +1175,7 @@ PROCEDURE pTerminate:
          fCloseAddLineDiscount(bMobSub.CustNum,
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
-                               fLastDayOfMonth(TODAY)).
+                               Func.Common:mLastDayOfMonth(TODAY)).
       END.
    END.
 
@@ -1270,8 +1265,7 @@ PROCEDURE pTerminate:
                   IF llDelete THEN
                   DO:            
                      DELETE OrderAction.
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "Order",
+                     Func.Common:mWriteMemo("Order",
                                       STRING(bOrder.OrderID),
                                       0,
                                       "ADDLINE DISCOUNT ORDERACTION REMOVED",
@@ -1290,7 +1284,7 @@ PROCEDURE pTerminate:
           /* Additional Line with mobile only ALFMO-5 */
          IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) AND 
             YEAR(bMobSub.ActivationDate) = YEAR(TODAY) THEN
-            ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+            ASSIGN ldtCloseDate = Func.Common:mLastDayOfMonth(TODAY).
          ELSE IF MONTH(bMobSub.ActivationDate) < MONTH(TODAY) OR
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
@@ -1390,8 +1384,7 @@ PROCEDURE pOrderCancellation:
    IF Order.InvNum > 0 THEN DO:
       lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
       IF lcResult > "" THEN
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                         "MobSub",
+          Func.Common:mWriteMemo("MobSub",
                          STRING(MobSub.MsSeq),
                          MobSub.Custnum,
                          "CREDIT NOTE CREATION FAILED",
@@ -1408,7 +1401,7 @@ PROCEDURE pOrderCancellation:
          CREATE ActionLog.
          ASSIGN ActionLog.Brand     = gcBrand
                 ActionLog.ActionID  = "OrderCancel"
-                ActionLog.ActionTS  = fMakeTS()
+                ActionLog.ActionTS  = Func.Common:mMakeTS()
                 ActionLog.TableName = "Order"
                 ActionLog.KeyValue  = STRING(Order.OrderId)
                 ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}.
@@ -1441,7 +1434,7 @@ PROCEDURE pOrderCancellation:
                                 
       CREATE ActionLog.
       ASSIGN
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.Brand        = gcBrand  
          ActionLog.TableName    = "Order"  
          ActionLog.KeyValue     = STRING(Order.Orderid)
@@ -1485,7 +1478,7 @@ PROCEDURE pMultiSIMTermination:
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.Brand        = gcBrand  
       ActionLog.TableName    = "Customer"  
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
@@ -1512,8 +1505,8 @@ PROCEDURE pMultiSIMTermination:
       NOT fIsMNPOutOngoing(INPUT lbMobSub.CLI) THEN DO:
 
       ASSIGN ldaSecSIMTermDate  = ADD-INTERVAL(TODAY, 1,"months")
-             ldaSecSIMTermDate  = fLastDayOfMonth(ldaSecSIMTermDate)
-             ldeSecSIMTermStamp = fMake2Dt(ldaSecSIMTermDate,86399).
+             ldaSecSIMTermDate  = Func.Common:mLastDayOfMonth(ldaSecSIMTermDate)
+             ldeSecSIMTermStamp = Func.Common:mMake2DT(ldaSecSIMTermDate,86399).
 
       fInitialiseValues(
          {&SUBSCRIPTION_TERM_REASON_MULTISIM},
@@ -1613,7 +1606,7 @@ PROCEDURE pChangeDelType:
          delivery type and delivery status for invoices generated AND but not delivered */
       IF DAY(TODAY) = 1 THEN
       DO:
-         ASSIGN ldeStartTime = fMake2Dt(TODAY,0)
+         ASSIGN ldeStartTime = Func.Common:mMake2DT(TODAY,0)
                 llgStarted   = FALSE
                 llgInvDate   = FALSE
                 llgInvType   = FALSE. 

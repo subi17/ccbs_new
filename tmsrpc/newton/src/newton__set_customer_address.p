@@ -33,7 +33,6 @@
 
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 
 /* Input parameters */

@@ -5,7 +5,6 @@
    
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderchk.i}
 {Func/orderfunc.i}
@@ -200,8 +199,7 @@ IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
                                            OUTPUT lcError).
 
       IF lcError NE "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           0,
                           "Masmovil message creation failed",
@@ -230,8 +228,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
 
    fSetOrderStatus(Order.OrderId,"4").
 
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
+   Func.Common:mWriteMemo("Order",
                     STRING(Order.OrderID),
                     0,
                     "Order exists with same MSISDN",

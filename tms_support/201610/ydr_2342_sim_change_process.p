@@ -3,7 +3,6 @@ gcBrand = "1".
 katun   = "OTANOK".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 
 DEF STREAM sIn.
@@ -479,7 +478,7 @@ PROCEDURE pCreateReq:
                           bOldOrder.MsSeq = SIM.MsSeq
                     NO-LOCK USE-INDEX MsSeq NO-ERROR.
                IF AVAIL bOldOrder AND
-                  fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                  Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                THEN NEXT.
             END.
 
@@ -503,19 +502,18 @@ PROCEDURE pCreateReq:
           MsRequest.ReqType    = {&REQTYPE_ICC_CHANGE}
           MsRequest.Brand      = gcBrand
           MsRequest.UserCode   = katun
-          MsRequest.ActStamp   = fMakeTS()
+          MsRequest.ActStamp   = Func.Common:mMakeTS()
           MsRequest.ReqStatus  = 20
           MsRequest.CLI        = lcCLI
           MsRequest.MsSeq      = liMsSeq
           MsRequest.CustNum    = liCustNum
-          MsRequest.CreStamp   = fMakeTS()
+          MsRequest.CreStamp   = Func.Common:mMakeTS()
           MsRequest.ReqCParam1 = "CHANGEICC"
           MsRequest.ReqCParam2 = lcICC
           MsRequest.ReqSource  = {&REQUEST_SOURCE_SCRIPT}
           .
    
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+   Func.Common:mWriteMemo("MobSub",
                     STRING(liMsSeq),
                     liCustNum,
                     "Cambio de número ICC",
@@ -530,7 +528,7 @@ END PROCEDURE.
 
 PROCEDURE pLO:
 
-lcFileName = "/store/riftp/logistics/icc/spool/nrm_" + fDateFMT(TODAY,"ddmmyyyy") + 
+lcFileName = "/store/riftp/logistics/icc/spool/nrm_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
              REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
 OUTPUT STREAM sICC TO VALUE(lcFileName).
 iLargestId = 1.

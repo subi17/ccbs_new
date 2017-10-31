@@ -13,8 +13,6 @@ katun = "cron".
 gcbrand = "1".
 
 {Syst/eventlog.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/cparam.i2}
 {Func/xmlfunction.i}
 {Func/tsformat.i}
@@ -35,7 +33,7 @@ FUNCTION fFormatTS RETURNS CHAR
 (its AS dec):
    def var ldadate as date no-undo.
    def var liTime as i no-undo.
-   fSplitTS(its,ldaDate,liTime).
+   Func.Common:mSplitTS(its,ldaDate,liTime).
    RETURN
       STRING(YEAR(ldadate),"9999") +
       STRING(MONTH(ldadate),"99") +
@@ -56,15 +54,15 @@ ASSIGN
    session:numeric-format = "AMERICAN"
    lcoutdir   =  fCParam("dumpoutgoing","topupdump.p") 
    lcspooldir =  fCParam("dumpspool","topupdump.p")
-   lcfilename = "top_up_information_ccbs_" + STRING(fdatefmt(ldaBegin,"yyyymmdd")) + "-" + STRING(fdatefmt(ldaEnd,"yyyymmdd")) + ".dat". 
+   lcfilename = "top_up_information_ccbs_" + STRING(Func.Common:mDateFmt(ldaBegin,"yyyymmdd")) + "-" + STRING(Func.Common:mDateFmt(ldaEnd,"yyyymmdd")) + ".dat". 
 
 OUTPUT STREAM excel TO VALUE(lcspooldir + lcfilename).
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
 FOR EACH PrepaidRequest NO-LOCK WHERE
          PrepaidRequest.Brand = gcBrand AND
-         PrepaidRequest.TSRequest > fMake2dt(ldaBegin,1800) AND
-         PrepaidRequest.TSRequest < fMake2dt(ldaEnd + 1, 1799):
+         PrepaidRequest.TSRequest > Func.Common:mMake2DT(ldaBegin,1800) AND
+         PrepaidRequest.TSRequest < Func.Common:mMake2DT(ldaEnd + 1, 1799):
    
    IF Prepaidrequest.Source EQ "ATM" THEN DO:
       ASSIGN   

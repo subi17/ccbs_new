@@ -1,4 +1,3 @@
-{Func/date.i}
 {Syst/commpaa.i}
 {Func/cparam2.i}
 

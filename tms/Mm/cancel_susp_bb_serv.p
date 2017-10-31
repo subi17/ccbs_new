@@ -11,7 +11,6 @@
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
@@ -67,14 +66,14 @@ FOR EACH  MobSub WHERE
              MsRequest.ReqStatus  = {&REQUEST_STATUS_DONE} NO-LOCK
              BY MsRequest.UpdateStamp DESC:
         IF MsRequest.ReqIParam1 = 2 THEN DO:
-           fSplitTS(MsRequest.ActStamp, ldMsEndDate, liMsEndTime).
+           Func.Common:mSplitTS(MsRequest.ActStamp, ldMsEndDate, liMsEndTime).
            IF liConfDays >= (TODAY - ldMsEndDate) THEN LEAVE.
 
            liReq = fServiceRequest(INPUT MobSub.MsSeq,
                                    INPUT "BB",
                                    INPUT 0,                 /* deactivate  */
                                    INPUT "",
-                                   INPUT fMakeTS(),
+                                   INPUT Func.Common:mMakeTS(),
                                    INPUT "",                /* SalesMan */
                                    INPUT FALSE,             /* Set fees */
                                    INPUT FALSE,             /* SMS      */

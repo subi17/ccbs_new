@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.

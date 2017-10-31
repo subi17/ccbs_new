@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand  = "1".
-{Func/date.i}
 {Func/msreqfunc.i}
 
 input from Bono8_promotion.csv.
@@ -88,7 +87,7 @@ repeat:
 
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Brand     = gcBrand
       Memo.MemoTitle = "Bono 8 campaign May 2010"

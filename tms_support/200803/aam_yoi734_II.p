@@ -1,5 +1,4 @@
 {Syst/testpaa.i}
-{Func/timestamp.i}
 katun = "ari".
 
 def var i as int no-undo.
@@ -25,7 +24,7 @@ lcmemo =
    "update due to Yoigo's CONTRATO1 tariff plan change 1st of March 2008.".
 
 assign
-   ldcurrent = fmakets()
+   ldcurrent = Func.Common:mMakeTS()
    lcevent   = "YOIGOYOIGO".
 
 
@@ -64,7 +63,7 @@ for each mobsub no-lock where
    by msowner.tsend desc:
       
       if msowner.clitype ne mobsub.clitype then do:
-         fsplitts(msowner.tsend,
+         Func.Common:mSplitTS(msowner.tsend,
                   output ldtbeg,
                   output litime).
          leave.         

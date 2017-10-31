@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
 gcbrand = "1".
 katun = "ari".
-{Func/timestamp.i}
 {Func/ftopup.i}
 
 session:numeric-format = "european".

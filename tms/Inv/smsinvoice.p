@@ -186,7 +186,7 @@ FOR EACH Invoice WHERE
                         MobSub.CLI,
                         44,
                         lcSMSReplacedText,
-                        fMakeTS(),
+                        Func.Common:mMakeTS(),
                         "Fact. Yoigo",
                         STRING(lIniSeconds) + "-" + STRING(lEndSeconds)).
 

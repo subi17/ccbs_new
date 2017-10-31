@@ -41,7 +41,7 @@ repeat:
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
                       katun,             /* creator */
-                      fMakeTS() + 0.0012,  /* activate */
+                      Func.Common:mMakeTS() + 0.0012,  /* activate */
                       "",                 /* sms-text */
                       OUTPUT lcResult).
 

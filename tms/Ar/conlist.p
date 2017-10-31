@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Contact'}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/cparam2.i}
 {Func/finvbal.i}
@@ -625,7 +624,7 @@ REPEAT WITH FRAME sel:
            ASSIGN Contact.ConState = 1
                   Contact.ConDate  = TODAY
                   Contact.UserCode = katun.
-                  Contact.ConStamp = fMakeTS().
+                  Contact.ConStamp = Func.Common:mMakeTS().
 
            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhContact).
 
@@ -936,7 +935,7 @@ PROCEDURE local-UPDATE-record:
 
       FIND TMSUser WHERE TMSUser.UserCode = Contact.UserCode NO-LOCK NO-ERROR.
       
-      fSplitTS(Contact.ConStamp,
+      Func.Common:mSplitTS(Contact.ConStamp,
                OUTPUT ldtStampDate,
                OUTPUT liStampTime).
       lcDispStamp = STRING(ldtStampDate,"99-99-99") + " " +

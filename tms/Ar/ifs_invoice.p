@@ -11,7 +11,6 @@
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
 {Func/finvbal.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 
@@ -124,7 +123,7 @@ FUNCTION fError RETURNS LOGIC
              ErrorLog.ErrorChar = Invoice.ExtInvID
              ErrorLog.ErrorMsg  = icMessage
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -448,8 +447,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    
    ASSIGN
       lcSalesman   = "XX"
-      ldFromPeriod = fMake2Dt(Invoice.FromDate,0)
-      ldToPeriod   = fMake2Dt(Invoice.ToDate,86399).
+      ldFromPeriod = Func.Common:mMake2DT(Invoice.FromDate,0)
+      ldToPeriod   = Func.Common:mMake2DT(Invoice.ToDate,86399).
   
    EMPTY TEMP-TABLE ttSub.
    
@@ -605,7 +604,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
              ldOperationDate = EventLog.EventDate.
 
           IF ldOperationDate = ? THEN
-             fSplitTS(Order.CrStamp,
+             Func.Common:mSplitTS(Order.CrStamp,
                       OUTPUT ldOperationDate,
                       OUTPUT ldOperationTime).
 

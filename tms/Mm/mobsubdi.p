@@ -31,7 +31,6 @@
 
 {Syst/commali.i} 
 {Syst/tmsconst.i}
-{Func/func.p}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OrdStat'}
 {Syst/eventval.i}
@@ -120,8 +119,7 @@ ELSE DO:
    ELSE RETURN.
 END.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                     ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE                    lcUserName = "".
 
 
@@ -345,7 +343,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 20 AND (NOT noMobile OR llPartial) THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "dccli") THEN NEXT. 
 
-      lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum, INPUT fMakeTS()).
+      lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum, INPUT Func.Common:mMakeTS()).
       IF lcDSSBundleId = "DSS2" THEN
          lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
 

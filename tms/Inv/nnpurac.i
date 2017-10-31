@@ -204,8 +204,7 @@ FUNCTION fCLIOwner RETURNS LOGICAL
          ASSIGN wCLI.CLI     = icCLI
                 wCLI.CustNum = MSOwner.CustNum
                 wCLI.OwnerID = RECID(MSOwner).
-                wCLI.Owner   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                BUFFER xCustomer).
+                wCLI.Owner   = Func.Common:mDispCustName(BUFFER xCustomer).
       END.                       
    END.
 
@@ -300,8 +299,7 @@ FUNCTION fCustHeader RETURNS LOGICAL.
    FIND FIRST xCustomer WHERE xCustomer.CustNum = liCallCust
       NO-LOCK NO-ERROR.
    IF AVAILABLE xCustomer THEN 
-      SAsNimi = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER xCustomer).
+      SAsNimi = Func.Common:mDispCustName(BUFFER xCustomer).
 
    /* Haetaan laskutusCustomer */
    ASSIGN LAsNimi   = otsi[18]
@@ -309,8 +307,7 @@ FUNCTION fCustHeader RETURNS LOGICAL.
    FIND FIRST xCustomer WHERE xCustomer.CustNum = liInvCust
       NO-LOCK NO-ERROR.
    IF AVAILABLE xCustomer THEN ASSIGN 
-      LAsNimi   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                   BUFFER xCustomer)
+      LAsNimi   = Func.Common:mPrintCustName(BUFFER xCustomer)
       llVatUsed = (xCustomer.VatUsage < 3). 
 
    RETURN TRUE. 

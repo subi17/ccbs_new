@@ -17,7 +17,6 @@
 &GLOBAL-DEFINE BrTable Memo
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/memob.i}
 
@@ -175,7 +174,7 @@ REPEAT WITH FRAME sel:
            memo.MemoSeq = NEXT-VALUE(MemoSeq).
 
            ASSIGN 
-           memo.CreStamp  = fMakeTS()
+           memo.CreStamp  = Func.Common:mMakeTS()
            memo.Custnum   = iCustnum
            memo.HostTable = "Customer"
            Memo.MemoType  = hosttable 
@@ -511,7 +510,7 @@ BROWSE:
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMemo).
             RUN local-update-record.                                  
             memo.ChgUser  = katun.
-            memo.ChgStamp = fMakeTS().
+            memo.ChgStamp = Func.Common:mMakeTS().
             IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMemo).
          END.
          IF toimi = 8 THEN RUN local-find-others.
@@ -717,7 +716,7 @@ PROCEDURE local-find-others.
                
    IF AVAIL Customer THEN lcCustName = Customer.CustName.
    ELSE                   lcCustName = "".            
-   CommitDate = fTS2HMS(memo.CreStamp).
+   CommitDate = Func.Common:mTS2HMS(memo.CreStamp).
 END PROCEDURE.
 
 PROCEDURE local-update-record:
@@ -748,11 +747,11 @@ PROCEDURE about-memo:
 
     IF memo.ChgStamp NE 0 THEN
     modtext =   "and modified by user " + memo.ChgUser + 
-                " at " + fTS2HMS(memo.ChgStamp).
+                " at " + Func.Common:mTS2HMS(memo.ChgStamp).
 
     MESSAGE
     "Memo '" + memo.MemoTitle + "'" SKIP
-    "was created by user" memo.CreUser "at" fTS2HMS(memo.CreStamp) SKIP
+    "was created by user" memo.CreUser "at" Func.Common:mTS2HMS(memo.CreStamp) SKIP
     modtext
     VIEW-AS ALERT-BOX TITLE " ABOUT ". 
 

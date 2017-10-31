@@ -8,7 +8,6 @@
   MODIFIED .....: 05.04.00 jpo Bbatch session
                   14.10.02 jr  Removed BillLevel
                   04.01.05 aam Balance from SubSer
-                  26.01.06 jt  lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN                                             ghFunc1, BUFFER Customer).
   Version ......: M15
   ------------------------------------------------------ */
 

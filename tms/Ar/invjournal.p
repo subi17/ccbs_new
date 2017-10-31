@@ -364,8 +364,7 @@ BY Invoice.ExtInvID:
               FIRST OrderCustomer OF Order NO-LOCK WHERE
                     OrderCustomer.RowType = Order.InvCustRole:
                 
-             lcCustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+             lcCustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
           END.                                     
 
        END.        

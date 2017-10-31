@@ -13,7 +13,6 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventlog.i}
 {Syst/eventval.i}
 
@@ -95,7 +94,7 @@ REPEAT:
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
       END.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
@@ -134,7 +133,7 @@ REPEAT:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liErrors) + 
                                   " Succesful: " + STRING(liRead - liErrors) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    

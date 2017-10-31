@@ -9,15 +9,12 @@
    
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Func/matrix.i}
 {Func/transname.i}
 {Func/ftaxdata.i}
 {Func/xmlfunction.i}
-{Func/date.i}
 {Func/fdss.i}
 {Mm/bundle_type.i}
 
@@ -296,7 +293,7 @@ FUNCTION fGetCurrentTariff RETURNS CHAR
          ldeActStamp = MsOwner.TSBegin.
       END.
       IF ldeActStamp > 0 THEN
-         fSplitTS(ldeActStamp, OUTPUT odaActDate, OUTPUT liTime).
+         Func.Common:mSplitTS(ldeActStamp, OUTPUT odaActDate, OUTPUT liTime).
 
       RETURN MobSub.CLIType.
    END. /* IF lcTariffContract = "" THEN DO: */
@@ -310,17 +307,17 @@ FUNCTION fGetCurrentTariff RETURNS CHAR
       IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}
       THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp, OUTPUT odaActDate, OUTPUT liTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT odaActDate, OUTPUT liTime).
       RETURN MsRequest.ReqCparam3.
    END.
    
    FOR EACH MServiceLimit NO-LOCK WHERE
             MServiceLimit.MsSeq   = MobSub.MsSeq AND
-            MServiceLimit.EndTS  >= fMakeTS(), 
+            MServiceLimit.EndTS  >= Func.Common:mMakeTS(), 
       FIRST ServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq AND
             ServiceLimit.GroupCode = lcTariffContract:
-      fSplitTS(MServiceLimit.FromTS, OUTPUT odaActDate, OUTPUT liTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS, OUTPUT odaActDate, OUTPUT liTime).
       RETURN ServiceLimit.GroupCode.
    END.
    
@@ -360,7 +357,7 @@ FUNCTION fGetCurrentBundle RETURNS CHAR
    (iiMsSeq AS INT):
 
    RETURN fGetActiveBundle(iiMsSeq,
-                           fMakeTS()).
+                           Func.Common:mMakeTS()).
 END FUNCTION.
 
 FUNCTION fIsBonoVoIPAllowed RETURNS LOGICAL
@@ -543,10 +540,10 @@ FUNCTION fBundleWithSTC RETURNS LOG
    DEF VAR lcNativeVOIPTariffs AS CHAR NO-UNDO.
    DEF VAR lcNativeVoipBundles AS CHAR NO-UNDO. 
 
-   fSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
+   Func.Common:mSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
 
    IF liReqTime > 0 THEN
-      ideActStamp = fMake2Dt(ldaReqDate + 1,0).
+      ideActStamp = Func.Common:mMake2DT(ldaReqDate + 1,0).
 
    ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
           lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
@@ -601,10 +598,10 @@ FUNCTION fBundleWithSTCCustomer RETURNS LOG
    DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 
-   fSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
+   Func.Common:mSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
 
    IF liReqTime > 0 THEN
-      ideActStamp = fMake2Dt(ldaReqDate + 1,0).
+      ideActStamp = Func.Common:mMake2DT(ldaReqDate + 1,0).
 
    ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
           lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
@@ -681,7 +678,7 @@ PROCEDURE pAdjustBal:
  
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
       PrePaidRequest.UserCode    = katun
       PrePaidRequest.Brand       = gcBrand
       PrePaidRequest.MsSeq       = bMobSub.MsSeq
@@ -715,7 +712,7 @@ PROCEDURE pAdjustBal:
    ASSIGN
       PrePaidRequest.Response   = lcXML
       PrePaidRequest.RespCode   = liRespCode
-      PrePaidRequest.TSResponse = fMakeTS().
+      PrePaidRequest.TSResponse = Func.Common:mMakeTS().
 
    /* OK response */
    IF liRespCode <= 2 THEN DO:
@@ -735,7 +732,7 @@ PROCEDURE pAdjustBal:
 
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS()
+         Memo.CreStamp  = Func.Common:mMakeTS()
          Memo.Brand     = gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(bMobSub.MsSeq)

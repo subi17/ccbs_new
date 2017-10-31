@@ -62,8 +62,7 @@ FOR EACH BRTestQResultRow NO-LOCK WHERE
    FIND FIRST Customer WHERE Customer.CustNum = BRTestQResultRow.InvCust
          NO-LOCK NO-ERROR.
    IF AVAILABLE Customer THEN
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = BRTestQResultRow.MsSeq
       NO-LOCK NO-ERROR.

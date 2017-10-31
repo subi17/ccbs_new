@@ -67,8 +67,7 @@ FUNCTION fAddOrder RETURN LOGICAL:
          OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
     IF AVAIL OrderCustomer THEN DO:
        DEFINE VARIABLE lcAgrCustName AS CHARACTER NO-UNDO. 
-       lcAgrCustName = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                         BUFFER OrderCustomer).
+       lcAgrCustName = Func.Common:mDispOrderName(BUFFER OrderCustomer).
        add_string(order_struct,"name",lcAgrCustName).
        add_string(order_struct,"customer_id",OrderCustomer.CustID).
     END.

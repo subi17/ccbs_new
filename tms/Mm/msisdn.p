@@ -39,10 +39,8 @@ DEF  INPUT PARAMETER   iiStatusCode LIKE MSISDN.StatusCode NO-UNDO.
 {Syst/commali.i}
 {Func/msisdn.i}
 {Syst/eventval.i} 
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
-{Func/freplacesms.i}
 {Syst/tmsconst.i}
 
 DEF /* SHARED */ VAR siirto AS char.
@@ -129,7 +127,7 @@ ELSE IF iiStatusCode > 0 THEN DO:
    disp " Please wait... " with frame frWait overlay row 7 centered.
    pause 0.
    
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
    FOR EACH msisdn where
       msisdn.brand = gcBrand and
       msisdn.statuscode = iiStatusCode and
@@ -300,7 +298,7 @@ ADD-ROW:
            CREATE ttMSISDN.
            BUFFER-COPY bttMSISDN EXCEPT ValidFrom TO ttMSISDN.
            ASSIGN
-              ttMSISDN.ValidFrom = fMakeTS().
+              ttMSISDN.ValidFrom = Func.Common:mMakeTS().
 
            RUN local-update-record.
 
@@ -912,7 +910,7 @@ PROCEDURE local-find-others.
         msclass.MCCode = ttMSISDN.MCCode no-lock no-error.
    
    find Customer of ttMSISDN no-lock no-error.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    find msstat  of ttMSISDN no-lock no-error.
    
@@ -969,8 +967,8 @@ PROCEDURE local-update-record:
 
       DISP
          ttMSISDN.cli
-         fTS2HMS(ttMSISDN.ValidFrom) @ lcValidFrom 
-         fTS2HMS(ttMSISDN.Validto)   @ lcValidTo
+         Func.Common:mTS2HMS(ttMSISDN.ValidFrom) @ lcValidFrom 
+         Func.Common:mTS2HMS(ttMSISDN.Validto)   @ lcValidTo
          lcMSISDNType
          ttMSISDN.CustNum
          ttMSISDN.ActionDate

@@ -12,7 +12,6 @@ ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Inv/printdoc1tt.i}
 {Func/email.i}
@@ -58,7 +57,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -109,7 +108,7 @@ FUNCTION fCreateActionLog RETURNS LOGICAL
          ActionLog.ActionStatus = IF RETURN-VALUE BEGINS "ERROR:"
                                   THEN 1
                                   ELSE 2.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.   
 END FUNCTION.
 
@@ -180,7 +179,7 @@ PROCEDURE pInitialize:
 
    ASSIGN 
       llLast    = FALSE
-      ldStarted = fMakeTS().
+      ldStarted = Func.Common:mMakeTS().
 
    FOR FIRST FuncRunProcess NO-LOCK WHERE
              FuncRunProcess.FRProcessID = liFRProcessID,
@@ -256,8 +255,7 @@ PROCEDURE pPrintInvoices:
    /* invoice date to file name */   
    IF ldaNameDate NE ? THEN DO:
    
-      lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                                ldaNameDate,
+      lcDate = Func.Common:mDateFmt(ldaNameDate,
                                 "yyyymmdd").
       lcPrintFile = REPLACE(lcPrintFile,"#IDATE",lcDate).
    END.
@@ -299,9 +297,8 @@ PROCEDURE pPrintInvoices:
                        OUTPUT liPrinted). 
 
    ASSIGN 
-      ldFinished  = fMakeTS()
-      liDurDays   = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                     ldStarted,
+      ldFinished  = Func.Common:mMakeTS()
+      liDurDays   = Func.Common:mTSDuration(ldStarted,
                                      ldFinished,
                                      OUTPUT liDurTime)
       lcActionID  = IF lcFileType BEGINS "XML"
@@ -336,7 +333,7 @@ PROCEDURE pPrintInvoices:
          ActionLog.ActionStatus = IF RETURN-VALUE BEGINS "ERROR:"
                                   THEN 1
                                   ELSE 2.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
    /*YTS-9144 changes done to send message to activemq only if it is a last process of the execution*/

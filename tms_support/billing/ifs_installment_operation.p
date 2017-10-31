@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 
 &SCOPED-DEFINE BANK_CODE "0049"
 
@@ -30,7 +29,6 @@ katun = "Qvantel".
 gcBrand = "1".
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 
 &SCOPED-DEFINE BANK_CODE "0049"
 
@@ -143,13 +141,13 @@ PROCEDURE pCollectActivations:
    /* check from last 20 days if there are ones that have been completed
       yesterday */
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaFrom,0)
-      ldTo    = fMake2Dt(ldaTo,86399)
-      ldCheck = fMake2Dt(ldaFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    RequestLoop:
@@ -218,7 +216,7 @@ PROCEDURE pCollectActivations:
       ELSE IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER}
       THEN NEXT RequestLoop.
       
-      fSplitTs(MsRequest.actstamp, output ldaActDate, output litime).
+      Func.Common:mSplitTS(MsRequest.actstamp, output ldaActDate, output litime).
 
       FF_LOOP:
       FOR FIRST DCCLI NO-LOCK WHERE
@@ -309,13 +307,13 @@ PROCEDURE pCollectACC:
    /* check from last 20 days if there are ones that have been completed
       yesterday */
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaFrom,0)
-      ldTo    = fMake2Dt(ldaTo,86399)
-      ldCheck = fMake2Dt(ldaFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    FOR EACH msrequest NO-LOCK where
@@ -333,9 +331,9 @@ PROCEDURE pCollectACC:
          LEAVE.
       END.
       
-      ldeendtime = fSecOffset(msrequest.actstamp,-1).
+      ldeendtime = Func.Common:mSecOffSet(msrequest.actstamp,-1).
 
-      fSplitTs(msrequest.actstamp, output ldaACCDate, output liTime).
+      Func.Common:mSplitTS(msrequest.actstamp, output ldaACCDate, output liTime).
       
       find msowner where
            msowner.msseq = msrequest.msseq and
@@ -392,7 +390,7 @@ PROCEDURE pCollectACC:
               ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                              1,
                              INT(FixedFee.EndPeriod / 100))
-              ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+              ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
               llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                   {&TF_STATUSES_BANK}) > 0).
 
@@ -510,13 +508,13 @@ PROCEDURE pCollectTerminations:
    IF icDumpMode = "modified" THEN ASSIGN
       ldaTo   = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
       ldaFrom = DATE(MONTH(ldaTo),1,YEAR(ldaTo))
-      ldFrom  = fMake2Dt(ldaFrom,0)
-      ldTo    = fMake2Dt(ldaTo,86399)
-      ldCheck = fMake2Dt(ldaFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    RequestLoop:
@@ -554,7 +552,7 @@ PROCEDURE pCollectTerminations:
          THEN NEXT.
       END.
 
-      fSplitTS(MsRequest.DoneStamp,
+      Func.Common:mSplitTS(MsRequest.DoneStamp,
                OUTPUT ldaDoneDate,
                OUTPUT liDoneTime).
 
@@ -578,13 +576,13 @@ PROCEDURE pCollectTerminations:
                    bSubMsRequest.ReqStatus   = 2 AND
                    bSubMsRequest.ReqCparam3  = MsRequest.ReqCparam3 NO-LOCK:
 
-            fSplitTS(bSubMsRequest.DoneStamp,
+            Func.Common:mSplitTS(bSubMsRequest.DoneStamp,
                      OUTPUT ldaRenewalDoneDate,
                      OUTPUT liRenewalTime).
             IF ldaRenewalDoneDate = ldaDoneDate THEN NEXT RequestLoop.
          END. /* FOR FIRST bMainMsRequest NO-LOCK WHERE */
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldaActDate,
                OUTPUT liTime).
 
@@ -624,7 +622,7 @@ PROCEDURE pCollectTerminations:
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
 

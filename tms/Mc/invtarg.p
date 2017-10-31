@@ -22,7 +22,6 @@
                   18.11.03/aam show discounts (dpconf, F3)
                   01.12.03/aam check that chosen rateplan has valid pricelists
                   14.12.05/aam BTName removed
-                  24.01.06/jt  DYNAMIC-FUNCTION("fDispCustName"
   Version ......: M15
   ---------------------------------------------------------------------- */
 
@@ -108,8 +107,7 @@ form /* seek Invoicing Target  BY  BillTarget */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND  Customer where Customer.CustNum = CustNum no-lock.
-lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 

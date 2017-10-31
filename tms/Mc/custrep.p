@@ -170,8 +170,7 @@ REPEAT WITH FRAME crit:
                      NEXT.
                   END.
                   ELSE DO:
-                     lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                    BUFFER Customer).                               DISP lcCustName @ RCName.
+                     lcCustName = Func.Common:mDispCustName(BUFFER Customer).                               DISP lcCustName @ RCName.
                   END.
                END.   
                ELSE DISP "ALL" @ RCName.   

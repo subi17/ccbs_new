@@ -12,7 +12,6 @@
 gcBrand = "1".
 katun   = "Qvantel".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fdss.i}
 
 DEF VAR lcSimulate               AS CHAR NO-UNDO.
@@ -83,9 +82,9 @@ ASSIGN
    ldaFromDate      = ldaPromoFromDate.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 IF ldaToDate > ldaPromoToDate THEN DO:
    MESSAGE "Promotion period has been expired. FAT will not be created."
@@ -94,9 +93,9 @@ IF ldaToDate > ldaPromoToDate THEN DO:
 END.
 
 ASSIGN
-   ldPeriodFrom     = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo       = fMake2Dt(ldaToDate,86399)
-   ldNextMonthStamp = fMake2Dt((ldaToDate + 1),0)
+   ldPeriodFrom     = Func.Common:mMake2DT(ldaFromDate,0)
+   ldPeriodTo       = Func.Common:mMake2DT(ldaToDate,86399)
+   ldNextMonthStamp = Func.Common:mMake2DT((ldaToDate + 1),0)
    liPeriod         = YEAR(ldaToDate) * 100 + MONTH(ldaToDate).
 
 message ldaPromoFromDate skip ldaPromoToDate SKIP ldPeriodTo skip ldNextMonthStamp skip lcSimulate view-as alert-box.

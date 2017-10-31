@@ -51,7 +51,7 @@ for each order no-lock where
       
          ldstamp = MobSub.ActivationTS.
          if ldstamp = 0 then 
-            ldstamp = fmake2dt(mobsub.activationdate,0).
+            ldstamp = Func.Common:mMake2DT(mobsub.activationdate,0).
          
          liRequest = fPCActionRequest(MobSub.MsSeq,
                                       lcTermContr,
@@ -64,8 +64,7 @@ for each order no-lock where
                                        
          IF liRequest = 0 THEN DO:                              
             /* write possible error to an order memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              0,
                              "PERIODICAL CONTRACT CREATION FAILED",

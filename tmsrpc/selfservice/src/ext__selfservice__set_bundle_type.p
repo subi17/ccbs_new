@@ -26,7 +26,6 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/date.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fexternalapi.i}
@@ -69,9 +68,9 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
 
 katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
-fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
+Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
-ASSIGN pdActivation            = fMake2Dt(ldaActDate, 0)
+ASSIGN pdActivation            = Func.Common:mMake2DT(ldaActDate, 0)
        lcAllowedBONOContracts  = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcAllowedCONTSContracts = fCParamC("ALLOWED_CONTS_CONTRACTS").
 
@@ -121,8 +120,7 @@ IF lcBundleType = "BONO" THEN
 ELSE
    lcMemoType = "MobSub".
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  "Bono modificado",                    /* MemoTitle */

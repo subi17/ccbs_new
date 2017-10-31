@@ -16,7 +16,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Func/coinv.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
@@ -246,7 +245,7 @@ PROCEDURE ip_CrtSingleFee:
        IF lcMemoText > "" THEN DO:
           CREATE Memo.
           ASSIGN
-              Memo.CreStamp  = fMakeTS()
+              Memo.CreStamp  = Func.Common:mMakeTS()
               Memo.Brand     = gcBrand
               Memo.HostTable = "SingleFee"
               Memo.CustNum   = MobSub.CustNum

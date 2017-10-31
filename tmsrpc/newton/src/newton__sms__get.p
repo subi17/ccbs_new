@@ -50,8 +50,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "msisdn", CallAlarm.CLI).
    add_int(lcResultStruct,"type",CallAlarm.CreditType).
-   lcCreditName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "CallAlarm",
+   lcCreditName = Func.Common:mTMSCodeName("CallAlarm",
                                    "CreditType",
                                    STRING(CallAlarm.CreditType)).
    add_string(lcResultStruct,"type_name",lcCreditName).

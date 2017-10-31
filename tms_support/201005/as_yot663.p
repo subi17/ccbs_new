@@ -41,7 +41,7 @@ repeat:
          find current mnpprocess EXCLUSIVE-LOCK.
          assign
             mnpprocess.statuscode = 7
-            mnpprocess.updatets = fMakeTS()
+            mnpprocess.updatets = Func.Common:mMakeTS()
             mnpprocess.statusreason = "CANC_TECNI".
       end.
       next.
@@ -53,7 +53,7 @@ repeat:
          find current mnpprocess EXCLUSIVE-LOCK.
          assign
             mnpprocess.statuscode = 7
-            mnpprocess.updatets = fMakeTS()
+            mnpprocess.updatets = Func.Common:mMakeTS()
             mnpprocess.statusreason = "CANC_TECNI".
       end.
       next.
@@ -70,7 +70,7 @@ repeat:
          find current mnpprocess EXCLUSIVE-LOCK.
          assign
             mnpprocess.statuscode = 7
-            mnpprocess.updatets = fMakeTS()
+            mnpprocess.updatets = Func.Common:mMakeTS()
             mnpprocess.statusreason = "CANC_TECNI".
       end.
       next.
@@ -84,7 +84,7 @@ repeat:
       find current mnpprocess EXCLUSIVE-LOCK.
       assign
          mnpprocess.statuscode = 7
-         mnpprocess.updatets = fMakeTS()
+         mnpprocess.updatets = Func.Common:mMakeTS()
          mnpprocess.statusreason = "CANC_TECNI"
          order.mnpstatus = 8.
   end.

@@ -9,7 +9,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
@@ -105,7 +104,7 @@ DO TRANS:
       ActionLog.ActionID     = "IFSPAYSTAT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
       lrActionID             = RECID(ActionLog).
 END.
 
@@ -174,7 +173,7 @@ PROCEDURE pInitialize:
       lcTransDir = fCParamC("IFSPaymStatusLogTrans")
       lcArcDir   = fCParamC("IFSPaymStatusArc")
       liBankAcc  = fCParamI("BankAcc")
-      ldToday    = fMake2DT(TODAY,1).
+      ldToday    = Func.Common:mMake2DT(TODAY,1).
 
    IF lcLogFile = ? OR lcLogFile = "" THEN 
       lcLogFile = "/tmp/IFS_paymstatus_#DATE.log".
@@ -338,8 +337,7 @@ PROCEDURE pReadEvents:
       /* YDR-1665 */
       IF lcClaimStatus BEGINS "1." THEN DO:
 
-         lcRejectionDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                            "Invoice",
+         lcRejectionDesc = Func.Common:mTMSCodeName("Invoice",
                                             "ClaimStatus",
                                             lcClaimStatus).
 
@@ -354,7 +352,7 @@ PROCEDURE pReadEvents:
                 Memo.MemoText  = STRING(Invoice.InvNum) +
                                  ": " + lcClaimStatus +
                                  "; " + lcRejectionDesc.
-                Memo.CreStamp  = fMakeTS().
+                Memo.CreStamp  = Func.Common:mMakeTS().
       END.
 
       RUN pUpdateStatus(Invoice.InvNum,

@@ -14,7 +14,6 @@
 
 {Syst/commali.i}
 
-{Func/date.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'cotarg'}
@@ -490,18 +489,16 @@ PROCEDURE local-find-others.
 
    END CASE.       
    
-   lcCommStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "CoTarg",
+   lcCommStatus = Func.Common:mTMSCodeName("CoTarg",
                                "CommStatus",
                                STRING(COTarg.CommStatus)).
    
-   lcstatusreason = dynamic-function("ftmscodename" in ghfunc1,
-                               "cotarg",
+   lcstatusreason = Func.Common:mTMSCodeName("cotarg",
                                "statusreason",
                                string(cotarg.statusreason)).
    
-   lcCreated = fTS2HMS(COTarg.CreatedTS).
-   lcHandled = fTS2HMS(COTarg.HandledTS).
+   lcCreated = Func.Common:mTS2HMS(COTarg.CreatedTS).
+   lcHandled = Func.Common:mTS2HMS(COTarg.HandledTS).
       
    FIND CORule WHERE
       CORule.Brand = gcBrand AND

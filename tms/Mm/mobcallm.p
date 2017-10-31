@@ -8,7 +8,6 @@
   Version ......: SCRUNKO4 (10.06.99)
                   21.03.03 jp xbsub.i
                   25.03.03 jp xbsub.i -> func.i
-                  21.05.03 jp fhidebsub needs 5 parameter
                   05.06.03 tk added custnum to every find
                   24.06.03 tk token
                   10.02.06/aam use MobCDR.CustNum when getting CustName

@@ -2,7 +2,6 @@
 katun = "anttis".
 gcBrand = "1".
 
-{Func/timestamp.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCommLine AS CHARACTER NO-UNDO. 
@@ -45,7 +44,7 @@ repeat:
          ttCLI.clitype = trim(entry(2,lcLine,"|")).
    end.
 end.
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 FILE_LOOP:
 FOR EACH ttCli NO-LOCK:

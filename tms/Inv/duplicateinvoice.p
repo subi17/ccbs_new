@@ -35,7 +35,7 @@ IF lcSpoolDir = ? OR TRIM(lcSpoolDir) = "" OR
    RETURN.
 END.
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
       
 DUP_REQ_LOOP:      
 FOR EACH MsRequest WHERE

@@ -9,7 +9,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttDocs LIKE FusionMessage 
   FIELD cCreatedTS AS CHAR
@@ -23,9 +22,9 @@ FUNCTION fCollect RETURNS LOGICAL
             FusionMessage.OrderID EQ  iiOrderId:
       CREATE ttDocs.
       BUFFER-COPY FusionMessage to ttDocs.
-      ttDocs.cCreatedTS =  fTS2HMS(FusionMessage.createdTS).
-      ttDocs.cFixedStatusTS = fTS2HMS(FusionMessage.FixedStatusTS).
-      ttDocs.cUpdateTS = fTS2HMS(FusionMessage.UpdateTS).
+      ttDocs.cCreatedTS =  Func.Common:mTS2HMS(FusionMessage.createdTS).
+      ttDocs.cFixedStatusTS = Func.Common:mTS2HMS(FusionMessage.FixedStatusTS).
+      ttDocs.cUpdateTS = Func.Common:mTS2HMS(FusionMessage.UpdateTS).
    END.
 
 END FUNCTION.

@@ -1,5 +1,4 @@
 {Syst/testpaa.i}
-{Func/func.p}
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 {Func/lib/eventlog.i}

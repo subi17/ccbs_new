@@ -194,8 +194,7 @@ form /* seek  */
 FUNCTION fBasisType RETURNS LOGICAL
    (iiType AS INT):
 
-   lcBasis = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "CoRule",
+   lcBasis = Func.Common:mTMSCodeName("CoRule",
                               "BasisType",
                               STRING(iiType)).
                               
@@ -205,8 +204,7 @@ END FUNCTION.
 FUNCTION fCommPoint RETURNS LOGICAL
    (iiPoint AS INT).
 
-   lcPoint = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "CoRule",
+   lcPoint = Func.Common:mTMSCodeName("CoRule",
                               "CommPoint",
                               STRING(iiPoint)).
     
@@ -232,8 +230,7 @@ END FUNCTION.
 FUNCTION fPayType RETURNS LOGICAL
    (iiType AS INT):
 
-   lcPayType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CLIType",
+   lcPayType = Func.Common:mTMSCodeName("CLIType",
                                 "PayType",
                                 STRING(iiType)).
                               
@@ -242,8 +239,7 @@ END FUNCTION.
 FUNCTION fRuleType RETURNS LOGICAL
    (iiType AS INT):
 
-   lcRuleType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "CoRule",
+   lcRuleType = Func.Common:mTMSCodeName("CoRule",
                                  "RuleType",
                                  STRING(iiType)).
                               
@@ -1124,8 +1120,7 @@ PROCEDURE local-UPDATE-record:
  
                ELSE IF FRAME-FIELD = "PPReqPrefix" THEN DO:
                   IF INPUT CoRule.PPReqPrefix > "" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         "PrepaidRequest",
+                     IF Func.Common:mTMSCodeName("PrepaidRequest",
                                          "PPReqPrefix",
                                          INPUT INPUT CoRule.PPReqPrefix) = ""
                      THEN DO:
@@ -1138,8 +1133,7 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF FRAME-FIELD = "PPSource" THEN DO:
                   IF INPUT CoRule.PPSource > "" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         "PrepaidRequest",
+                     IF Func.Common:mTMSCodeName("PrepaidRequest",
                                          "Source",
                                          INPUT INPUT CoRule.PPSource) = ""
                      THEN DO:

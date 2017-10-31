@@ -22,7 +22,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-{Func/timestamp.i}
 {Func/dataformat.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".

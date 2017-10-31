@@ -46,10 +46,10 @@ FUNCTION fGenerateFileName RETURNS CHAR
 END.
 
 ASSIGN 
-   lcCurrentPeriod = SUBSTRING(STRING(fMakeTS()),1,6)
+   lcCurrentPeriod = SUBSTRING(STRING(Func.Common:mMakeTS()),1,6)
    lcTableName = {&GB_ACTION_GROUP_NAME}
    lcActionID = {&GB_REFUND_HANDLER}
-   ldCurrentTimeTS = fMakeTS().
+   ldCurrentTimeTS = Func.Common:mMakeTS().
 
 fInitGBParameters().
 

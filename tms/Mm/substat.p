@@ -10,7 +10,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}       
-{Func/timestamp.i}
 {Func/finvbal.i}
 {Mm/subscription_status3.i}
 {Func/email.i}
@@ -182,7 +181,7 @@ end.
          
          CREATE CallAlarm.
          ASSIGN
-            CallAlarm.ActStamp   = fmakets()
+            CallAlarm.ActStamp   = Func.Common:mMakeTS()
             CallAlarm.CLSeq      = 1
             CallAlarm.CASeq      = 1
             CallAlarm.CustNo     = ttChange.CustNum

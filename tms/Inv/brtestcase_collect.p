@@ -11,10 +11,8 @@ DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/finvnum.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/ftaxdata.i}
 {Inv/old_unbilled_events.i}
@@ -126,7 +124,7 @@ FUNCTION fGetTaggedDate RETURNS DATE
    WHEN "#BillPeriodEnd" THEN ldaResult = idaPeriodEnd.
    WHEN "#CurrMonthBeg" THEN ldaResult = DATE(MONTH(TODAY),1,YEAR(TODAY)).
    WHEN "#CurrMonthEnd" THEN 
-      ldaResult = fLastDayOfMonth(DATE(MONTH(TODAY),1,YEAR(TODAY))).
+      ldaResult = Func.Common:mLastDayOfMonth(DATE(MONTH(TODAY),1,YEAR(TODAY))).
    WHEN "#PrevMonthBeg" THEN 
       ldaResult = ADD-INTERVAL(DATE(MONTH(TODAY),1,YEAR(TODAY)),-1,"month").
    WHEN "#PrevMonthEnd" THEN ldaResult = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
@@ -174,7 +172,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 
 END FUNCTION.
@@ -320,8 +318,8 @@ PROCEDURE pInitCriteria:
              ", case " + STRING(iiBRTestCaseID).
 
    ASSIGN 
-      ttCriteria.PeriodBeg = fMake2DT(ttCriteria.BegDate,0)
-      ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
+      ttCriteria.PeriodBeg = Func.Common:mMake2DT(ttCriteria.BegDate,0)
+      ttCriteria.PeriodEnd = Func.Common:mMake2DT(ttCriteria.EndDate,86399).
             
    /* get some periodical contract related data ready */ 
    IF ttCriteria.CriteriaTable = "DayCampaign" THEN DO:
@@ -392,8 +390,8 @@ PROCEDURE pInitMobCDR:
       ttCriteria.EndDate = MAX(ttCriteria.EndDate,ttField.EndDate).
 
    ASSIGN 
-      ttCriteria.PeriodBeg = fMake2DT(ttCriteria.BegDate,0)
-      ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
+      ttCriteria.PeriodBeg = Func.Common:mMake2DT(ttCriteria.BegDate,0)
+      ttCriteria.PeriodEnd = Func.Common:mMake2DT(ttCriteria.EndDate,86399).
        
    RETURN "".
    
@@ -452,8 +450,8 @@ PROCEDURE pInitInvRowCounter:
       ttCriteria.EndDate = MAX(ttCriteria.EndDate,ttField.EndDate).
 
    ASSIGN 
-      ttCriteria.PeriodBeg = fMake2DT(ttCriteria.BegDate,0)
-      ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
+      ttCriteria.PeriodBeg = Func.Common:mMake2DT(ttCriteria.BegDate,0)
+      ttCriteria.PeriodEnd = Func.Common:mMake2DT(ttCriteria.EndDate,86399).
  
    RETURN "".
    
@@ -714,7 +712,7 @@ PROCEDURE pCheckDayCampaign:
    END.          
    
    ELSE DO:
-      ldaNextPeriod = fMake2DT(ttCriteria.EndDate + 1,0).
+      ldaNextPeriod = Func.Common:mMake2DT(ttCriteria.EndDate + 1,0).
       
       CheckMLimit:
       FOR EACH ttServiceLimit NO-LOCK WHERE 
@@ -756,7 +754,7 @@ PROCEDURE pCheckDayCampaign:
          END.
 
          WHEN "Active" THEN
-            IF MServiceLimit.EndTS > fMakeTS() THEN DO:
+            IF MServiceLimit.EndTS > Func.Common:mMakeTS() THEN DO:
                olMatch = TRUE.
                LEAVE CheckMLimit.
             END.

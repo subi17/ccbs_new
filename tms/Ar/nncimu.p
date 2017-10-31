@@ -102,7 +102,6 @@
   --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/faccper.i}
 {Func/fbankday.i}
 {Ar/nnpcst.i}
@@ -279,8 +278,7 @@ FUNCTION fDispReasonDesc RETURNS LOGIC
    (icReason AS CHAR):
 
    IF icReason > "" THEN 
-      lcReasonDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "CreditNote",
+      lcReasonDesc = Func.Common:mTMSCodeName("CreditNote",
                                       "Reason",
                                       icReason).
    ELSE lcReasonDesc = "".
@@ -306,8 +304,7 @@ FUNCTION fDispReasonGrpDesc RETURNS LOGIC
    (icGrp AS CHAR):
 
    IF icGrp > "" THEN 
-      lcReasonGrpDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         "CreditNote",
+      lcReasonGrpDesc = Func.Common:mTMSCodeName("CreditNote",
                                          "ReasonGrp",
                                          icGrp).
    ELSE lcReasonGrpDesc = "".
@@ -452,8 +449,7 @@ repeat WITH FRAME rajat:
    END.
 
    FIND Customer of Invoice no-lock.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    DISP Customer.CustNum lcCustName Customer.InvGroup.
 
    IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN llAllowRel = FALSE.
@@ -703,7 +699,7 @@ repeat WITH FRAME rajat:
    IF liActTime < TIME AND hInvDate = TODAY THEN hInvDate = hInvDate + 1.
    
    /* requests will be run in the evening of given date */
-   ldActStamp = fMake2DT(hInvDate,
+   ldActStamp = Func.Common:mMake2DT(hInvDate,
                          liActTime).
 
    /* make a request */
@@ -724,7 +720,7 @@ repeat WITH FRAME rajat:
    IF lii > 0 THEN DO:
       MESSAGE "Request ID for credit note is" lii SKIP
               "It will be activated on" 
-              fTS2Hms(ldActStamp)
+              Func.Common:mTS2HMS(ldActStamp)
       VIEW-AS ALERT-BOX 
       TITLE " REQUEST CREATED ".
    END.

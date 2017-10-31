@@ -24,7 +24,6 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OrdStat'}
-{Func/timestamp.i}
 {Mf/errors.i}
 {Func/fcustbal.i}
 {Syst/eventval.i}
@@ -1011,10 +1010,10 @@ PROCEDURE local-disp-row:
        DISPLAY 
           Mobsub.CLI
           MobSub.MsSeq
-          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER UserCustomer)
+          Func.Common:mDispCustName(BUFFER UserCustomer)
              WHEN AVAIL UserCustomer @ UserCustomer.CustName
           Mobsub.AgrCust
-          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER AgrCustomer)
+          Func.Common:mDispCustName(BUFFER AgrCustomer)
              WHEN AVAIL AgrCustomer @ AgrCustomer.Custname 
           AgrCustomer.OrgID WHEN AVAIL AgrCustomer
           llmemo
@@ -1108,7 +1107,7 @@ PROCEDURE local-find-others.
 
       IF Mobsub.ActivationTS > 0 THEN                          
          lcInportTime =    "Activated.....: "  + 
-                           STRING(fTS2HMS(mobsub.activationTS)).
+                           STRING(Func.Common:mTS2HMS(mobsub.activationTS)).
       
       ELSE IF AVAIL msisdn AND msisdn.portingDate ne ? then DO:
          lcINPortTime = "Inporting Time: " +
@@ -1123,13 +1122,11 @@ PROCEDURE local-find-others.
                                         OUTPUT liSaldoLimit) .
 
       /* saldolimit */ 
-      lcSaldoType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                     "CreditType",
+      lcSaldoType = Func.Common:mTMSCodeName("CreditType",
                                      "CreditType",
                                       STRING(liSaldoType)).
                                                     
-      ldExtraLimit = DYNAMIC-FUNCTION("fChkSaldoAccount" in ghfunc1,
-                                       INPUT Mobsub.custnum,
+      ldExtraLimit = Func.Common:mChkSaldoAccount(INPUT Mobsub.custnum,
                                        INPUT Mobsub.cli,
                                        INPUT year(today) * 100 + Month(today),
                                        INPUT lcSaldofatime).
@@ -1160,7 +1157,7 @@ PROCEDURE local-find-others.
       /* Display DSS related information */
       IF NOT MobSub.PayType AND
          fGetDSSMsSeqLimit(INPUT  MobSub.CustNum,
-                           INPUT  fMakeTS(),
+                           INPUT  Func.Common:mMakeTS(),
                            OUTPUT liDSSMsSeq,
                            OUTPUT ldeDSSLimit,
                            OUTPUT lcBundleId) THEN DO:
@@ -1226,13 +1223,13 @@ PROCEDURE local-UPDATE-record.
       IMSI.PUK1 WHEN AVAIL IMSI
       IMSI.PUK2 WHEN AVAIL IMSI
       
-      DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER AgrCustomer)
+      Func.Common:mDispCustName(BUFFER AgrCustomer)
          WHEN AVAIL AgrCustomer @ AgrCustomer.CustName 
       
-      DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER InvCustomer)
+      Func.Common:mDispCustName(BUFFER InvCustomer)
          WHEN AVAIL InvCustomer @ InvCustomer.CustName 
       
-      DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER UserCustomer)
+      Func.Common:mDispCustName(BUFFER UserCustomer)
          WHEN AVAIL UserCustomer @ UserCustomer.CustName
       
       MObsub.Salesman

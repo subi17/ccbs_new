@@ -54,7 +54,7 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
                             Solog.CommLine = lcCommLine)
       THEN DO:
       
-         ldCurrTime = fMakeTS().
+         ldCurrTime = Func.Common:mMakeTS().
       
          CREATE SOLog.
          ASSIGN SOlog.Solog        = NEXT-VALUE(Solog)

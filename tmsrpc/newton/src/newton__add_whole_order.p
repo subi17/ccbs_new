@@ -248,7 +248,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{Func/date.i}
 {Func/orderchk.i}
 {Func/order.i}
 {Syst/tmsconst.i}
@@ -1272,7 +1271,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.CustomerType       = lcFixedLineCustomerType
       OrderFusion.FixedMNPTime       = lcFixedLineMNPTime
       OrderFusion.FixedCurrOper      = lcFixedLineMNPOldOperName
-      OrderFusion.UpdateTS           = fMakeTS()
+      OrderFusion.UpdateTS           = Func.Common:mMakeTS()
       OrderFusion.FixedCurrOperCode  = lcFixedLineMNPOldOperCode
       OrderFusion.SerialNumber       = lcFixedLineSerialNbr
       OrderFusion.ADSLLinkState      = lcFixedLineAdslLinkState
@@ -2052,7 +2051,7 @@ If pcMandateId > "" THEN
                       pcMandateId,
                       "").
 
-fSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
+Func.Common:mSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 
 /* YBP-547 */
 /* Apply discount to the subscription */
@@ -2324,7 +2323,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
                             OUTPUT ldeSMSStamp).
                
          IF lcRenoveSMSText > "" THEN DO:
-            ldeSMSStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
+            ldeSMSStamp = Func.Common:mMakeOfficeTS().
             fMakeSchedSMS(Order.CustNum,
                           Order.CLI,
                           {&SMSTYPE_AFTER_SALES_ORDER},
@@ -2546,7 +2545,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     INPUT  Order.CustNum,
                     INPUT  1,
                     INPUT  "",
-                    INPUT  fMakeTS(),
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
                     "",
@@ -2565,8 +2564,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
    ELSE DO:
       fUpdateSIM().
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MsRequest",
+      Func.Common:mWriteMemo("MsRequest",
                        STRING(liRequest),
                        Order.CustNum,
                        "ICC TYPE CHANGE AUTO",

@@ -580,8 +580,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 END PROCEDURE.
 
 

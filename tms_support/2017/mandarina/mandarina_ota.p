@@ -44,8 +44,7 @@ REPEAT:
       NEXT.
    END.  
 
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "Mobsub",
+   Func.Common:mWriteMemoWithType("Mobsub",
                      mobsub.MsSeq,
                      mobsub.CustNum,
                      lcMemoTitle,

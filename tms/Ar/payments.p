@@ -42,7 +42,6 @@
 &GLOBAL-DEFINE BrTable Payment
 
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'payment'}
 {Syst/eventval.i}
@@ -968,19 +967,17 @@ PROCEDURE local-update-record:
       THEN Accname[i] = Account.AccName.
       ELSE Accname[i] = "".
 
-      lcTypeName[i] = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Account",
+      lcTypeName[i] = Func.Common:mTMSCodeName("Account",
                                        "AccType",
                                        STRING(Payment.AccType[i])).
    end.
 
-   lcPaymType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Payment",
+   lcPaymType = Func.Common:mTMSCodeName("Payment",
                                  "PaymType",
                                  STRING(Payment.PaymType)).
                                  
    IF Payment.ImportStamp > 0 THEN DO:
-      fSplitTS(Payment.ImportStamp,
+      Func.Common:mSplitTS(Payment.ImportStamp,
                OUTPUT ldtDate,
                OUTPUT liTime).
       lcCreated = STRING(ldtDate,"99-99-99") + " " +

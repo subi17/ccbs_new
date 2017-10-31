@@ -28,7 +28,7 @@ katun = "VISTA_" + pcUserName.
 {newton/src/settenant.i pcTenant}
 
 liRequestID = fSMSInvoiceRequest
-    (fMakeTS(),  /* when request should be handled */
+    (Func.Common:mMakeTS(),  /* when request should be handled */
     DATE(MONTH(TODAY),1,YEAR(TODAY)),
     "", /* creator */
     ({&REQUEST_SOURCE_NEWTON}),

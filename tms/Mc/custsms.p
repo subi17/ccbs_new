@@ -8,7 +8,6 @@
  ============================================================================*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -57,8 +56,7 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 MAIN:
 REPEAT WITH FRAME main:
@@ -152,7 +150,7 @@ ACTION:
          IF NOT ok THEN NEXT Action.
 
          CREATE CallAlarm.
-         CallAlarm.ActStamp = fmakets().
+         CallAlarm.ActStamp = Func.Common:mMakeTS().
          ASSIGN
             CallAlarm.CLSeq    = 0
             CallAlarm.CASeq    = NEXT-VALUE(CallAlarm)

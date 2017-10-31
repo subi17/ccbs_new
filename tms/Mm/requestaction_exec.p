@@ -76,10 +76,10 @@ ELSE ASSIGN
    lcMemoTable = "Customer"
    lcMemoKey   = STRING(liCustNum).
 
-IF idActStamp  = 0 THEN idActStamp  = fMakeTS().
+IF idActStamp  = 0 THEN idActStamp  = Func.Common:mMakeTS().
 IF idTermStamp = 0 THEN idTermStamp = idActStamp.
 
-fSplitTS(idActStamp,
+Func.Common:mSplitTS(idActStamp,
          OUTPUT ldaReqDate,
          OUTPUT liReqTime).
 
@@ -239,7 +239,7 @@ PROCEDURE pPeriodicalContract:
       END.
 
       IF iiOrderID > 0 AND Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
-         IF Order.OrderChannel BEGINS "Retention" THEN ldContrStamp = fMakeTS().
+         IF Order.OrderChannel BEGINS "Retention" THEN ldContrStamp = Func.Common:mMakeTS().
          ELSE ldContrStamp = Order.CrStamp.
       END.
       ELSE ldContrStamp = idActStamp.
@@ -272,12 +272,12 @@ PROCEDURE pPeriodicalContract:
       lcBundleId = ttAction.ActionKey.
       FIND MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
       IF AVAIL Mobsub AND lcBundleId MATCHES "FLEX*UPSELL" AND
-         fGetDSSId(mobsub.custnum, fmakets()) > "" THEN
+         fGetDSSId(mobsub.custnum, Func.Common:mMakeTS()) > "" THEN
          lcBundleId = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
                                            fGetDSSId(mobsub.custnum,
-                                           fmakets()),
+                                           Func.Common:mMakeTS()),
                                            lcBundleId,
-                                           fmakets()). 
+                                           Func.Common:mMakeTS()). 
 
       /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
       /*TODO remove after FTERM8 campaign period.*/
@@ -301,8 +301,8 @@ PROCEDURE pPeriodicalContract:
       /* Temporary check due to ongoing orders created before 5.6.2017
          TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
       IF ttAction.ActionKey EQ "VOICE200" AND
-         ( (NOT AVAILABLE Order AND fTSToDate(bOrigRequest.CreStamp) < RequestAction.ValidFrom) OR /* normal STC */
-           (AVAILABLE Order AND fTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
+         ( (NOT AVAILABLE Order AND Func.Common:mTSToDate(bOrigRequest.CreStamp) < RequestAction.ValidFrom) OR /* normal STC */
+           (AVAILABLE Order AND Func.Common:mTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
       THEN liRequest = 1.
       ELSE liRequest = fPCActionRequest(liMsSeq,
                                    lcBundleId,
@@ -327,7 +327,7 @@ PROCEDURE pPeriodicalContract:
       IF RequestAction.ReqType = 46 AND
          ttAction.ActionKey = "RVTERM12" THEN RETURN.
 
-      fSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+      Func.Common:mSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
       
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) = 0 THEN DO:
          IF DayCampaign.DCType NE {&DCTYPE_INSTALLMENT} THEN DO:
@@ -557,7 +557,7 @@ PROCEDURE pPeriodicalContract:
                  MobSub.MsSeq = liMsSeq NO-ERROR.
       IF NOT AVAIL MobSub THEN RETURN.
       
-      fSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+      Func.Common:mSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
       
       FIND FIRST bDCCLI WHERE 
                  bDCCLI.Brand   = gcBrand AND
@@ -620,14 +620,12 @@ PROCEDURE pPeriodicalContract:
    /* write possible error to a memo */
    IF liRequest = 0 THEN DO:
       
-      lcActionName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "RequestAction",
+      lcActionName = Func.Common:mTMSCodeName("RequestAction",
                            "Action",
                            STRING(RequestAction.Action)).
       IF NOT lcActionName > "" THEN lcActionName = STRING(RequestAction.Action).
                     
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       lcMemoTable,
+      Func.Common:mWriteMemo(lcMemoTable,
                        lcMemoKey,
                        liCustNum,
                        "PERIODICAL CONTRACT " + 
@@ -701,8 +699,7 @@ PROCEDURE pServicePackage:
          
       IF liRequest = 0 THEN DO:                              
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          lcMemoTable,
+         Func.Common:mWriteMemo(lcMemoTable,
                           lcMemoKey,
                           liCustNum,
                           "SERVICE PACKAGE ACTIVATION FAILED",
@@ -744,7 +741,7 @@ PROCEDURE pServicePackage:
                                          ELSE SubSer.SSParam),
                                         (IF SubSer.ServCom = "BB" AND
                                          DAY(ldaReqDate) <> 1 THEN
-                                         fSecOffSet(idActStamp,1)
+                                         Func.Common:mSecOffSet(idActStamp,1)
                                          ELSE idActStamp),
                                         "",
                                         FALSE,      /* fees */
@@ -757,8 +754,7 @@ PROCEDURE pServicePackage:
                  
             IF liRequest = 0 THEN DO:                              
                /* write possible error to a memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                lcMemoTable,
+               Func.Common:mWriteMemo(lcMemoTable,
                                 lcMemoKey,
                                 liCustNum,
                                 "SERVICE PACKAGE DEACTIVATION FAILED",
@@ -800,8 +796,7 @@ PROCEDURE pServicePackage:
                                      OUTPUT lcResult).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             lcMemoTable,
+            Func.Common:mWriteMemo(lcMemoTable,
                              lcMemoKey,
                              liCustNum,
                              "SERVICE PACKAGE UPDATE FAILED",
@@ -873,8 +868,7 @@ PROCEDURE pServiceRequest:
                                   OUTPUT lcResult).
       IF liRequest = 0 THEN
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          lcMemoTable,
+         Func.Common:mWriteMemo(lcMemoTable,
                           lcMemoKey,
                           liCustNum,
                           "SERVICE REQUEST CREATION FAILED",
@@ -903,8 +897,7 @@ PROCEDURE pBarring:
          
       IF liRequest = 0 THEN DO:                              
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          lcMemoTable,
+         Func.Common:mWriteMemo(lcMemoTable,
                           lcMemoKey,
                           liCustNum,
                           "BARRING FAILED",

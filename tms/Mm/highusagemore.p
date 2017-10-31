@@ -13,7 +13,6 @@
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 DEF INPUT PARAMETER iinvseq  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icli     AS CHAR NO-UNDO.
 
@@ -93,7 +92,7 @@ DO WHILE TRUE:
       
       
       
-      RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),   
+      RUN Mm/highusagerep.p(INPUT Func.Common:mMake2DT(INPUT today - 90, INPUT 0),   
                              lcEmail,
                              int(siirto)).
    END.

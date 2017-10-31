@@ -41,8 +41,7 @@ form /* SEEK code */
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
-lcPaymSrc = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
-                             "Payment",
+lcPaymSrc = Func.Common:mTMSCodeList("Payment",
                              "PaymSrc").
                                  
 DO i = 1 TO NUM-ENTRIES(lcPaymSrc,CHR(1)):

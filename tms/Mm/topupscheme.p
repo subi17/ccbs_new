@@ -101,8 +101,7 @@ FORM
 FUNCTION fPrefixName RETURNS LOGIC
    (icPrefix AS CHAR):
    
-   lcPrefix = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "PrepaidRequest",
+   lcPrefix = Func.Common:mTMSCodeName("PrepaidRequest",
                                "PPReqPrefix",
                                icPrefix).
    DISPLAY lcPrefix WITH FRAME lis.
@@ -112,8 +111,7 @@ END FUNCTION.
 FUNCTION fSourceName RETURNS LOGIC
    (icSource AS CHAR):
    
-   lcSource = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "PrepaidRequest",
+   lcSource = Func.Common:mTMSCodeName("PrepaidRequest",
                                "Source",
                                icSource).
    DISPLAY lcSource WITH FRAME lis.

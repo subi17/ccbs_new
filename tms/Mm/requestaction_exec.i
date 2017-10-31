@@ -5,7 +5,6 @@
 &GLOBAL-DEFINE frequestaction YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mm/fbundle.i}
@@ -44,11 +43,11 @@ FUNCTION fGetPerContractActivation RETURNS DEC
       clitype is considered as reference tariff */
    IF bDCCLI.RenewalDate <> ? THEN 
       ASSIGN 
-         ldActivated = fMake2Dt(bDCCLI.RenewalDate,0)
+         ldActivated = Func.Common:mMake2DT(bDCCLI.RenewalDate,0)
          lcReqParam2 = "update".
    ELSE     
       ASSIGN 
-         ldActivated = fMake2Dt(bDCCLI.ValidFrom,0)
+         ldActivated = Func.Common:mMake2DT(bDCCLI.ValidFrom,0)
          lcReqParam2 = "act,recreate".
 
    /* must use request handling time instead of contract begin time, YBU-991 */
@@ -96,7 +95,7 @@ FUNCTION fGetOriginalCLIType RETURNS CHAR
 
    IF AVAIL bOrigOwner THEN DO:
       lcOrigCLIType = bOrigOwner.CLIType.
-      fSplitTS(bOrigOwner.TSBeg,
+      Func.Common:mSplitTS(bOrigOwner.TSBeg,
                OUTPUT ldaActivated,
                OUTPUT liTime).
    END.
@@ -151,7 +150,7 @@ FUNCTION fGetOriginalBundle RETURNS CHAR
    ELSE liOffSet = 3.
 
    /* activated during the first hours after subscription activation */
-   ldActEnd    = fOffSet(ldActivated,liOffSet).
+   ldActEnd    = Func.Common:mOffSet(ldActivated,liOffSet).
       
    /* Note: It should return only IPL or FLAT Tariff Basic Bundle */
    FOR EACH bBundleRequest NO-LOCK WHERE
@@ -166,7 +165,7 @@ FUNCTION fGetOriginalBundle RETURNS CHAR
                lcCONTSContracts + "," +
                lcCONTSFContracts) > 0
       BY bBundleRequest.DoneStamp DESC:
-      fSplitTS(bBundleRequest.DoneStamp,
+      Func.Common:mSplitTS(bBundleRequest.DoneStamp,
                OUTPUT odaActivated,
                OUTPUT liTime).
       RETURN bBundleRequest.ReqCParam3.

@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fapvat.i}
 {Func/fcpfat.i}

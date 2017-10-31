@@ -19,7 +19,6 @@
                                  ClaimDate & ClaimQty,
                                  get CommPaid amounts according TO
                                  Payment.AcChargeType
-                  24.10.2002 aam fTMSCodeName()
                   12.11.2002 jr "nnlaki" => "invoice" in memo
                   18.11.02 lp - F9 for ClaimCancel and ClaimState
                               - Cash Discount and Demanded at ->UPDATE
@@ -40,7 +39,6 @@
   ---------------------------------------------------------------------------*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'invoice'}
@@ -186,8 +184,7 @@ FRAME oso.
 FUNCTION fClaimStateName RETURNS LOGIC
    (idClaimState AS DEC).
    
-   lcState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "Invoice",
+   lcState = Func.Common:mTMSCodeName("Invoice",
                               "ClaimState",
                               REPLACE(STRING(idClaimState),",",".")).
    DISPLAY lcState WITH FRAME Invoice.
@@ -202,32 +199,26 @@ liDueDate = fCParamI("DueDateTrans").
 /* get invoice types and payment states */
 DO xi = 0 TO 5:
    lcPaymState = lcPaymState + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","PaymState",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","PaymState",STRING(xi)) +
                  lcSep.
    lcSTypeLst  = lcSTypeLst + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","SpecDel",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","SpecDel",STRING(xi)) +
                  lcSep.
 END.
 
 DO xi = 1 TO 9:
    lcInvType   = lcInvType + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","InvType",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","InvType",STRING(xi)) +
                  lcSep.
    lcCancelLst = lcCancelLst + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","ClaimCancel",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","ClaimCancel",STRING(xi)) +
                  lcSep.
    IF xi <= 4 THEN DO:
       lcChargeTypeLst = lcChargeTypeLst + 
-                   DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Invoice","ChargeType",STRING(xi)) +
+                   Func.Common:mTMSCodeName("Invoice","ChargeType",STRING(xi)) +
                    lcSep.
       lcDelTypeLst = lcDelTypeLst + 
-                   DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Invoice","DelType",STRING(xi)) +
+                   Func.Common:mTMSCodeName("Invoice","DelType",STRING(xi)) +
                    lcSep.
    END.                  
 END.

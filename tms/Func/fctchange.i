@@ -14,7 +14,6 @@
 &THEN
 &GLOBAL-DEFINE fctchange YES
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fctserval.i}
 {Func/matrix.i}
@@ -194,9 +193,9 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    DEFINE BUFFER NewCLIType  FOR CLIType.
    DEF BUFFER MNPProcess FOR MNPProcess.
 
-   IF ideSTCtamp EQ ? THEN ideSTCtamp = fMakeTS().
+   IF ideSTCtamp EQ ? THEN ideSTCtamp = Func.Common:mMakeTS().
 
-   fSplitTS(ideSTCtamp, OUTPUT ldaSTCDate, OUTPUT liTime). 
+   Func.Common:mSplitTS(ideSTCtamp, OUTPUT ldaSTCDate, OUTPUT liTime). 
 
    FIND FIRST mobsub NO-LOCK WHERE
               mobsub.msseq = iiMsSeq NO-ERROR.
@@ -281,7 +280,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       IF AVAIL MNPProcess THEN DO:
 
          IF 1 > fMNPPeriods(
-            input fMakeTS(),
+            input Func.Common:mMakeTS(),
             input MNPProcess.PortingTime,
             INPUT 0,
             OUTPUT ldaDueDate) THEN DO: 
@@ -482,7 +481,7 @@ FUNCTION fGetCLITypeAtTermDiscount RETURNS CHAR
 
    DEF BUFFER MsOwner FOR MsOwner.
    
-   ASSIGN ldTS = fHMS2TS(pbDCCLI.ValidFrom,"23:59:59")
+   ASSIGN ldTS = Func.Common:mHMS2TS(pbDCCLI.ValidFrom,"23:59:59")
           lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
    
    FIND FIRST MsOwner WHERE

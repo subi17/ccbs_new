@@ -18,7 +18,6 @@
 {Syst/utumaa.i "new"}
 {Func/feplstart.i}
 {Inv/eplspec.i}
-{Func/timestamp.i}
 
 assign tuni1 = "nnpura3"
        tuni2 = "".
@@ -192,8 +191,8 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                   CustNum = Invoice.CustNum
                   pvm1    = Invoice.FromDate
                   pvm2    = Invoice.ToDate
-                  liPer1  = fMake2DT(Invoice.FirstCall,1)
-                  liPer2  = fMake2DT(Invoice.ToDate,86399)
+                  liPer1  = Func.Common:mMake2DT(Invoice.FirstCall,1)
+                  liPer2  = Func.Common:mMake2DT(Invoice.ToDate,86399)
                   tilak   = 1.
 
                   DISPLAY pvm1 pvm2 WITH FRAME rajat.
@@ -354,7 +353,7 @@ IF lcErrFile = "" AND liError NE -1 THEN DO:
              ITSendLog.EMail      = ""
              ITSendLog.RepType    = "Spec3"
              ITSendLog.UserCode   = katun.
-             ITSendLog.SendStamp  = fMakeTS().
+             ITSendLog.SendStamp  = Func.Common:mMakeTS().
    END.
     
    MESSAGE "Report 3 has been printed."

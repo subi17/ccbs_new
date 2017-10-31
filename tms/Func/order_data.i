@@ -11,7 +11,6 @@
 &GLOBAL-DEFINE ORDER_DATA_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Mm/fbundle.i}
 {Func/transname.i}
@@ -81,7 +80,7 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
               OrderCustomer.RowType = 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
 
-   fTs2Date(Order.Crstamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.Crstamp, OUTPUT ldaOrderDate).
 
    IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN
       lcTariff = fGetDataBundleInOrderAction(Order.OrderID,Order.CLIType).
@@ -166,7 +165,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
               Order.Orderid = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
-   fTs2Date(Order.Crstamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.Crstamp, OUTPUT ldaOrderDate).
 
    ldeDeferredPayment = fGetOfferDeferredPayment(Order.Offer,
                               Order.CrStamp,
@@ -193,8 +192,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
 
       IF lcBankCode EQ "" THEN lcBankCode = "0000".
 
-      ocBankName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "FixedFee",
+      ocBankName = Func.Common:mTMSCodeName("FixedFee",
                                     "TFBank",
                                     lcBankCode).
 

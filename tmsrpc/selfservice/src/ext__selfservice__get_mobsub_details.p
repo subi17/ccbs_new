@@ -45,7 +45,6 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fixedfee.i}

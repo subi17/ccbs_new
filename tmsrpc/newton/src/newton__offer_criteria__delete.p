@@ -10,7 +10,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
@@ -45,7 +44,7 @@ FIND OfferCriteria WHERE OfferCriteria.OfferCriteriaId = liId NO-LOCK NO-ERROR.
 IF NOT AVAIL OfferCriteria THEN 
    RETURN appl_err(SUBST("OfferCriteria &1 not found", pcId)).
 
-IF OfferCriteria.BeginStamp < fMakeTs() THEN 
+IF OfferCriteria.BeginStamp < Func.Common:mMakeTS() THEN 
    RETURN appl_err("Cannot delete active or history data").
 
 FIND CURRENT OfferCriteria EXCLUSIVE-LOCK.

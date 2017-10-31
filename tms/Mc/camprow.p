@@ -148,8 +148,7 @@ END FUNCTION.
 
 DO i = 1 TO 5:
    lcTypeLst = lcTypeLst +
-               DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CampRow","CRowType",STRING(i)) + ",".
+               Func.Common:mTMSCodeName("CampRow","CRowType",STRING(i)) + ",".
 END.
 
 lcHelpProg = "Help/nnplse.p,Help/h-dplan.p,Help/h-fatgroup.p,Help/h-bevent.p,Help/h-bevent.p".

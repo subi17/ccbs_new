@@ -598,8 +598,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    IF invoicetargetgroup.DelType <> ? THEN
-      lcDelType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+      lcDelType = Func.Common:mTMSCodeName("Invoice",
                                    "DelType",
                                    STRING(invoicetargetgroup.DelType)).
    ELSE lcDelType = "".

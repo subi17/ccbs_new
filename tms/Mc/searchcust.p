@@ -90,8 +90,7 @@ IF icCriteria BEGINS "ORGID" OR
        assign
           ttCustomer.CustNum  = Customer.Custnum.
           ttCustomer.OrgID    = Customer.OrgID.
-          ttCustomer.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                 BUFFER Customer).
+          ttCustomer.CustName = Func.Common:mDispCustName(BUFFER Customer).
    END.                         
 end.
 
@@ -107,8 +106,7 @@ for each Customer no-lock where
          ttCustomer.OrgID    = Customer.OrgID.
       
       ASSIGN
-         ttCustomer.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+         ttCustomer.CustName = Func.Common:mDispCustName(BUFFER Customer).
 END.
 
 ELSE IF icCriteria BEGINS "InvCust" THEN 
@@ -138,8 +136,7 @@ for each customer no-lock where
       ttCustomer.OrgID    = Customer.OrgID.
 
    ASSIGN
-      ttCustomer.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                             BUFFER Customer).
+      ttCustomer.CustName = Func.Common:mDispCustName(BUFFER Customer).
                                      
 end.
 

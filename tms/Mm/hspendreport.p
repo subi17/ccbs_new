@@ -9,10 +9,9 @@
 ------------------------------------------------------ */
 {Syst/commpaa.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 gcbrand = "1".
 katun = "cron".
              
-RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),"",0).
+RUN Mm/highusagerep.p(INPUT Func.Common:mMake2DT(INPUT today - 90, INPUT 0),"",0).
 

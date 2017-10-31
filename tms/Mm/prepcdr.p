@@ -8,7 +8,6 @@
                   24.03.00 jpo f5- Roaming view
                   21.03.03 jp xbsub
                   25.03.03 jp xbsub -> func.i
-                  26.01.06 jt UserName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer)
                   25.01.07 kl beta for invoicable mobcdrs
 
   Version ......: SCRUNKO4 (10.06.99)
@@ -16,7 +15,6 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.p}
 
 DEFINE TEMP-TABLE ttCall LIKE MobCDR.
 
@@ -479,8 +477,7 @@ PROCEDURE local-disp-row:
        Customer.CustName    WHEN AVAIL Customer
        username
        PrepCDR.CLI
-       DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-          PrepCDR.gsmbnr,
+       Func.Common:mHideBSub(PrepCDR.gsmbnr,
           PrepCDR.custnum,
           PrepCDR.bdest,
           PrepCDR.BType,
@@ -493,8 +490,7 @@ PROCEDURE local-find-others.
        FIND MobSub WHERE MobSub.MsSeq = PrepCDR.MsSeq NO-LOCK NO-ERROR.
        IF AVAIL MobSub THEN DO:
           FIND Customer OF MobSub NO-LOCK NO-ERROR.      
-          UserName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                       BUFFER Customer). 
+          UserName = Func.Common:mDispCustName(BUFFER Customer). 
        END.
        ELSE DO:
           UserName = "!! UNKNOWN !!".

@@ -185,8 +185,7 @@ FUNCTION fTypeName RETURNS CHARACTER
 
    IF icType = "" THEN RETURN "".
 
-   ELSE RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "InvText","InfoType",icType).
+   ELSE RETURN Func.Common:mTMSCodeName("InvText","InfoType",icType).
 
 END FUNCTION.
 
@@ -195,8 +194,7 @@ FUNCTION fAddrTarget RETURNS CHARACTER
 
    IF iiAddress = 0 THEN RETURN "".
 
-   ELSE RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "InvText","AddrTarget",STRING(iiAddress)).
+   ELSE RETURN Func.Common:mTMSCodeName("InvText","AddrTarget",STRING(iiAddress)).
 
 END FUNCTION.
 

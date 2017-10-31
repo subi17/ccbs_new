@@ -4,8 +4,7 @@
   APPLICATION ..: TMS
   AUTHOR .......: mvi
   CREATED ......: 25.05.05
-  CHANGED ......: 26.01.06 jt nam = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                   BUFFER Customer).
+  CHANGED ......: 26.01.06 jt nam = Func.Common:mDispCustName(BUFFER Customer).
                                          
   VERSION ......: TF
   ---------------------------------------------------------------------- */
@@ -35,8 +34,7 @@ FIND Customer OF MobSub.
 
 DEF VAR nam AS C NO-UNDO.
 
-nam = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+nam = Func.Common:mDispCustName(BUFFER Customer).
                                        
 
 DEF VAR msstatus LIKE mobsub.msstatus NO-UNDO FORMAT ">9".

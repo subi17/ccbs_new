@@ -261,8 +261,7 @@ DISP
              "!! UNKNOWN !!"   WHEN NOT AVAIL invcust @ invcust.CustName  Time-E
  ttCall.CLI
 
- DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-          ttCall.gsmbnr,
+ Func.Common:mHideBSub(ttCall.gsmbnr,
           ttCall.custnum,
           ttCall.bdest,
           ttCall.BType,
@@ -362,8 +361,7 @@ repeat WITH FRAME cdr:
 
    ELSE if toimi = 7 THEN DO:
          
-         bsub = DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-                  ttCall.Gsmbnr,
+         bsub = Func.Common:mHideBSub(ttCall.Gsmbnr,
                   ttCall.custnum,
                   ttCall.bdest,
                   ttCall.BType,

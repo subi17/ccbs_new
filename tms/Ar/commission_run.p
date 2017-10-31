@@ -9,7 +9,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftaxdata.i}
 {Func/fcpfat.i}
@@ -82,7 +81,7 @@ DO TRANS:
       ActionLog.ActionChar   = "Handled: " + STRING(oiChecked) + CHR(10) + 
                                " Activated: " + STRING(oiActivated)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN RETURN-VALUE.
@@ -144,7 +143,7 @@ PROCEDURE pCalculateCommission:
       
       /* pending time has expired */
       IF CoRule.MaxPendingDays > 0 THEN DO:
-         fSplitTS(CoTarg.CreatedTS,
+         Func.Common:mSplitTS(CoTarg.CreatedTS,
                   OUTPUT ldtCreated,
                   OUTPUT liCnt).
 
@@ -330,7 +329,7 @@ PROCEDURE pCalculateCommission:
       EMPTY TEMP-TABLE ttAmount.
       
       ASSIGN
-         ldStamp     = fMakeTS()
+         ldStamp     = Func.Common:mMakeTS()
          ldTotAmount = CoRule.CommAmount.
 
       /* divide amount to be paid into instalments */
@@ -349,13 +348,13 @@ PROCEDURE pCalculateCommission:
          /* first instalment is paid immediately, next ones on 1st of 
             each month */
          IF liCnt < CoRule.CoNoInst THEN DO:
-            fSplitTS(ldStamp,
+            Func.Common:mSplitTS(ldStamp,
                      OUTPUT ldtDate,
                      OUTPUT liTime).
             IF MONTH(ldtDate) = 12 
             THEN ldtDate = DATE(1,1,YEAR(ldtDate) + 1).
             ELSE ldtDate = DATE(MONTH(ldtDate) + 1,1,YEAR(ldtDate)).
-            ldStamp = fMake2DT(ldtDate,3600).
+            ldStamp = Func.Common:mMake2DT(ldtDate,3600).
          END.
       END.
 
@@ -410,7 +409,7 @@ PROCEDURE pCreateFat:
    DO TRANS: 
       FOR EACH ttAmount:      
 
-         fSplitTS(ttAmount.ActStamp,
+         Func.Common:mSplitTS(ttAmount.ActStamp,
                   OUTPUT ldtDate,
                   OUTPUT liTime).
                
@@ -567,8 +566,7 @@ PROCEDURE pSendSMS:
          
    /* failing of sms doesn't affect the status of the actual commission */
    IF liRequest = 0 THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "CoTarg",
+      Func.Common:mWriteMemo("CoTarg",
                        STRING(CoTarg.CoTargID),
                        0,
                        "COMMISSION",

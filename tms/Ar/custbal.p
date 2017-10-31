@@ -8,7 +8,6 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -454,8 +453,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    
-   lcBalType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CustBal",
+   lcBalType = Func.Common:mTMSCodeName("CustBal",
                                 "BalType",
                                 ttCustBal.BalType).
 END PROCEDURE.

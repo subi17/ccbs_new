@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/ftaxdata.i}
 {Func/ftopup.i}
 {Func/cparam2.i}
@@ -41,7 +40,7 @@ FIND FIRST Order WHERE Order.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 /* special cases */
 IF AVAILABLE Order THEN DO:
 
-   fSplitTS(Order.CrStamp, 
+   Func.Common:mSplitTS(Order.CrStamp, 
             OUTPUT ldaOrderDate, 
             OUTPUT liTime).
 

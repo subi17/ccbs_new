@@ -26,7 +26,6 @@
 
 {Syst/commali.i} 
 {Func/tmsparam2.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'bdest'}
@@ -157,8 +156,7 @@ WITH
 
 FUNCTION fDestType RETURNS CHAR
    (iiDestType AS INT):
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "BDest",
+   RETURN Func.Common:mTMSCodeName("BDest",
                            "BDestType",
                            STRING(iiDestType)).
 END.
@@ -166,8 +164,7 @@ END.
 FUNCTION fBDestClass RETURNS CHAR
   (iiClass AS INT):
 
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "BDest",
+   RETURN Func.Common:mTMSCodeName("BDest",
                            "BDestClass",
                            STRING(iiClass)).
 END.

@@ -1,8 +1,6 @@
 &GLOBAL-DEFINE BrandVarDefined Yes
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
-{Func/func.p}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -111,8 +109,8 @@ for each invoice no-lock use-index invType where
     end.
 
     assign
-       ldfromper = fmake2dt(invoice.fromdate,1)
-       ldtoper   = fmake2dt(invoice.todate,86399).
+       ldfromper = Func.Common:mMake2DT(invoice.fromdate,1)
+       ldtoper   = Func.Common:mMake2DT(invoice.todate,86399).
 
     if licustqty > 0 then do:
        create ttcust.

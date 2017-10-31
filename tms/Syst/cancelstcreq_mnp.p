@@ -1,9 +1,7 @@
 {Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
-{Func/date.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 
@@ -21,7 +19,7 @@ ASSIGN
    lcToday    = STRING(YEAR(TODAY),"9999") +
                 STRING(MONTH(TODAY),"99")  +
                 STRING(DAY(TODAY),"99")
-   ldeTodayStamp = fMake2DT(TODAY + 1,7200)
+   ldeTodayStamp = Func.Common:mMake2DT(TODAY + 1,7200)
    lcLogDir     = fCParam("CancelSTC","LogDir")
    lcLogDir     = lcLogDir + "CancelStcReq_MNP_" + lcToday + ".log".
 
@@ -43,7 +41,7 @@ FOR EACH bMNPRequest NO-LOCK WHERE
          bMNPRequest.Reqcparam3 = STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
          bMNPRequest.ActStamp   = ldeTodayStamp :
 
-   fTS2Date(bMNPRequest.ActStamp,ldtMNPDate).
+   Func.Common:mTS2Date(bMNPRequest.ActStamp,ldtMNPDate).
 
    FIND FIRST MsRequest NO-LOCK WHERE
               MsRequest.Brand     = gcBrand                             AND
@@ -57,7 +55,7 @@ FOR EACH bMNPRequest NO-LOCK WHERE
    FIND FIRST MobSub NO-LOCK where 
               MobSub.MsSeq eq MsRequest.MsSeq NO-ERROR.
 
-   fTS2Date(MsRequest.ActStamp,ldtSTCDate).
+   Func.Common:mTS2Date(MsRequest.ActStamp,ldtSTCDate).
 
    IF ldtMNPDate NE ldtSTCDate THEN NEXT.
 

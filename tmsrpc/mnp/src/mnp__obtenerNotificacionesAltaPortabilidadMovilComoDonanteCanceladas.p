@@ -156,7 +156,7 @@ FOR EACH ttInput NO-LOCK:
             bMNPProcess.StatusCode = {&MNP_ST_BDET} EXCLUSIVE-LOCK:
 
          ASSIGN
-            bMNPProcess.UpdateTS = fMakeTS()
+            bMNPProcess.UpdateTS = Func.Common:mMakeTS()
             bMNPProcess.StatusCode = {&MNP_ST_BNOT}.
          RELEASE bMNPProcess.
       END.
@@ -189,7 +189,7 @@ FOR EACH ttInput NO-LOCK:
                   FIND FIRST Msowner WHERE
                              Msowner.MsSeq = TermMobsub.MsSeq NO-LOCK NO-ERROR.
                   IF AVAIL Msowner THEN
-                     fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+                     Func.Common:mSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
                               OUTPUT liSecSIMTermTime).
                   ELSE ldaSecSIMTermDate = TODAY.
                END. /* ELSE DO: */

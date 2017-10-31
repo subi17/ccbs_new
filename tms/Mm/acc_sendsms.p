@@ -8,7 +8,6 @@
 
 {Syst/commali.i}
 {Func/msreqfunc.i}
-{Func/fhdrtext.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 DEF INPUT PARAMETER iiCustNum   AS INT  NO-UNDO.
@@ -42,7 +41,7 @@ IF icText BEGINS "HT:" THEN DO:
    liHdrText = 0.
    liHdrText = INTEGER(ENTRY(2,icText,":")) NO-ERROR.
    IF liHdrText > 0 THEN 
-      icText = fGetHdrText(liHdrText,Customer.Language).
+      icText = Func.Common:mGetHdrText(liHdrText,Customer.Language).
    ELSE icText = "".   
 END.
 
@@ -56,23 +55,26 @@ ASSIGN
    lcSMSText  = REPLACE(lcSMSText,"#Description",icText).
            
 /* tags */
-IF AVAILABLE MobSub THEN 
-   fReplaceSMS(lcSMSText,
+IF AVAILABLE MobSub THEN
+Func.Common:mReplaceSMS 
+             ( Customer.CustName,
+               Mobsub.CLI,
+               lcSMSText,
                MsRequest.MsSeq,
                TODAY,
                OUTPUT lcSMSText).
 
 /* send notification on previous night at 19 */
 IF icMessage = "PreviousDay" AND MsRequest.ReqDParam1 NE 0 THEN DO:
-   fSplitTS(MsRequest.ReqDParam1,
+   Func.Common:mSplitTS(MsRequest.ReqDParam1,
             OUTPUT ldaFinalDay,
             OUTPUT liReqCnt).
-   ldReqStamp = fMake2DT(ldaFinalDay - 1,68400).         
+   ldReqStamp = Func.Common:mMake2DT(ldaFinalDay - 1,68400).         
 END.
    
 ELSE DO:
-   ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-   IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+   ldReqStamp = Func.Common:mMakeOfficeTS().
+   IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 END.
    
 liCreated = fMakeSchedSMS(iiCustNum,

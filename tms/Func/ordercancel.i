@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Syst/eventval.i} 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fcreditvalid.i}
 {Func/fcreditreq.i}
 
@@ -80,7 +79,7 @@ FUNCTION fReleaseSIM RETURNS LOGICAL
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.Brand        = gcBrand  
       ActionLog.TableName    = "Order"  
       ActionLog.KeyValue     = STRING(Order.Orderid)
@@ -252,8 +251,7 @@ PROCEDURE pCreditInstallment:
                               "",
                               OUTPUT lcError).
       IF liReq = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(liMsSeq),
                           FixedFee.Custnum,
                           "CREDIT NOTE CREATION FAILED",
@@ -334,8 +332,7 @@ PROCEDURE pCreatePaytermCreditNote:
                               "",
                               OUTPUT lcError).
       IF liReq = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(Order.MsSeq),
                           Order.Custnum,
                           "CREDIT NOTE CREATION FAILED",
@@ -383,7 +380,7 @@ PROCEDURE pCreateRenewalCreditNote:
              ErrorLog.KeyValue  = STRING(Order.OrderId) 
              ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
              ErrorLog.UserCode  = katun
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 
    FIND FIRST FixedFee NO-LOCK WHERE
@@ -488,8 +485,7 @@ PROCEDURE pCreateRenewalCreditNote:
                               "",
                               OUTPUT lcError).
       IF liReq = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "CREDIT NOTE CREATION FAILED",

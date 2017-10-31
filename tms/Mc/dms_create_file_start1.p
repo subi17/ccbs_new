@@ -13,7 +13,6 @@
 gcBrand = "1".
 Katun = "Cron".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/dms.i}
@@ -33,7 +32,7 @@ DEF VAR lcLogFile1        AS CHAR NO-UNDO.
 
 lcTableName = "DMS".
 lcActionID = {&DMS_HIGH_FREQ_FILE_CREATOR}.
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 /*Is feature active:*/
 IF fDMSOnOff() NE TRUE THEN RETURN.
@@ -95,7 +94,7 @@ DO TRANS:
 END.
 
 /*Execute read operation and assign new period end time to actionlog.*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60).
 /* Case type numbers:            1, 2, 3, 4, 5, 6, 9, 10 */
 RUN Mc/dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8",
                           {&DMS_CASE_TYPE_ID_ORDER_ACT},

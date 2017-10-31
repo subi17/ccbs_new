@@ -18,7 +18,7 @@ assign
 create memo.
 
 ASSIGN
-   memo.CreStamp  = fmakeTS()
+   memo.CreStamp  = Func.Common:mMakeTS()
    memo.MemoSeq   = NEXT-VALUE(MemoSeq)
    Memo.Custnum   = TERMMobSub.CustNum
    memo.HostTable = "MobSub"

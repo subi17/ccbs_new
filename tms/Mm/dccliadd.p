@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/upsellbundle.i}
@@ -88,8 +87,7 @@ END.
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
 
 ASSIGN
-   lcCustName   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer)
+   lcCustName   = Func.Common:mDispCustName(BUFFER Customer)
    ldtContrDate = TODAY
    llCreateFees = FALSE
    llContrSource = TRUE
@@ -227,7 +225,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
    ELSE IF toimi = 5 THEN DO:
 
-      ldActStamp = fMake2Dt(ldtContrDate,
+      ldActStamp = Func.Common:mMake2DT(ldtContrDate,
                             IF ldtContrDate = TODAY
                             THEN TIME
                             ELSE 0).
@@ -315,7 +313,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          END. /* IF fOngoingDSSAct(INPUT MobSub.CustNum) THEN DO: */
          IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
                               INPUT  MobSub.MsSeq,
-                              INPUT  fMakeTS(),
+                              INPUT  Func.Common:mMakeTS(),
                               INPUT  {&DSS},
                               INPUT  "",
                               OUTPUT ldeCurrMonthLimit,
@@ -331,7 +329,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                  "CREATE",
                                  lcResult,
                                  lcDCEvent,
-                                 fMakeTS(),
+                                 Func.Common:mMakeTS(),
                                  {&REQUEST_SOURCE_MANUAL_TMS},
                                  "",
                                  llCreateFees,
@@ -343,7 +341,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          fCreateUpsellBundle(MobSub.MsSeq,
                              lcDCEvent,
                              {&REQUEST_SOURCE_MANUAL_TMS},
-                             fMakeTS(),
+                             Func.Common:mMakeTS(),
                              OUTPUT liCreated,
                              OUTPUT lcError).
       ELSE DO:

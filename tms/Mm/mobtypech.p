@@ -32,7 +32,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
 {Func/cparam2.i}
@@ -144,8 +143,7 @@ FIND FIRST CLIType WHERE
            CLIType.Clitype = MobSub.CliType  AND
            CliType.Brand   = gcBrand NO-LOCK NO-ERROR.
            
-lcAgrCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Agrcust).
+lcAgrCustName = Func.Common:mDispCustName(BUFFER Agrcust).
 
 ASSIGN lcBONOContracts       = fCParamC("BONO_CONTRACTS")
        lcBundleCLITypes      = fCParamC("BUNDLE_BASED_CLITYPES").
@@ -232,7 +230,7 @@ ASSIGN
    liCreditCheck = 1
    new-ts-time   = FTime2Dec(time).
 
-fSplitTS(Mobsub.ActivationTS, OUTPUT odtDate, oiTime).
+Func.Common:mSplitTS(Mobsub.ActivationTS, OUTPUT odtDate, oiTime).
 
 liAge = today - odtDate.
 
@@ -248,8 +246,7 @@ END.
 FIND FIRST UserCustomer WHERE 
            UserCustomer.Custnum = Mobsub.Custnum NO-LOCK NO-ERROR.
            
-IF Avail UserCustomer THEN UserName =  DYNAMIC-FUNCTION("fDispCustName" IN 
-                                       ghFunc1, BUFFER UserCustomer).
+IF Avail UserCustomer THEN UserName = Func.Common:mDispCustName(BUFFER UserCustomer).
 ELSE UserName = "".                                       
 
 /* is there a time limit for scheduling (on old type) */

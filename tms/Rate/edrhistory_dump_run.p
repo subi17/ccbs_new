@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Syst/eventlog.i}
 {Func/direct_dbconnect.i}

@@ -56,7 +56,6 @@
                   17.02.2004/aam cover sheet
                   06.04.2004/aam no sub-totals or totals
                   14.04.2004/aam index change on mobcdr
-                  23.04.2004/aam use fHideBSub from func.i
   VERSION ......: M15
   ------------------------------------------------------ */
 
@@ -66,7 +65,6 @@
 /* print-linemuuttujat */
 {Syst/utumaa.i}
 {Inv/edefine.i}
-{Inv/nnpura.i}
 {Func/fdivtxt.i}
 
 /* xml / pdf */
@@ -132,14 +130,6 @@ DEF TEMP-TABLE ttCall NO-UNDO
    FIELD BType      AS INT  
    FIELD VatIncl    AS LOG 
    INDEX CallCust VatIncl CallCust CLI BillCode CCN.
-
-/* Is this  a PNP number */
-FUNCTION fIsPNP RETURNS LOGICAL
-  (INPUT  iCustNum AS INT,
-   INPUT  iBSub    AS CHAR).
- 
-   RETURN FALSE.
-END.   
 
    
 FUNCTION fCollFixCDR RETURNS LOGICAL.
@@ -632,11 +622,10 @@ BREAK BY ttCall.VatIncl
       btilnro = ttCall.BSub.
       if btilnro begins "00000" THEN btilnro = substr(btilnro,6).
 
-      ckestos = fSec2C(ttCall.Duration,12).
+      ckestos = Func.Common:mSec2C(ttCall.Duration,12).
 
       /* Modify BSUB FOR reporting: fXBSub uses {&country} */
-      btilnro = DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-                                 ttcall.bsub,
+      btilnro = Func.Common:mHideBSub(ttcall.bsub,
                                  ttcall.callcust,
                                  ttcall.bdest,
                                  ttCall.BType,
@@ -701,7 +690,7 @@ BREAK BY ttCall.VatIncl
       /* Tulostetaan Customer-yhteensa-line */
       IF last-of(ttCall.CallCust) THEN DO:
          
-         ckestos = fSec2C((ACCUM TOTAL BY ttCall.CallCust ttCall.Duration),12).
+         ckestos = Func.Common:mSec2C((ACCUM TOTAL BY ttCall.CallCust ttCall.Duration),12).
 
          IF epltul THEN DO:
          END.

@@ -4,7 +4,6 @@
 
 {Syst/commali.i}
 {Func/tmsparam4.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/amq.i}
@@ -64,7 +63,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
    ELSE IF NOT AVAIL DMS THEN DO:
       CREATE DMS.
       ASSIGN DMS.DMSID    = NEXT-VALUE(DMS)
-             DMS.StatusTS = fMakeTS().
+             DMS.StatusTS = Func.Common:mMakeTS().
    END.
 
    ASSIGN DMS.DmsExternalID = icDmsExternalID WHEN icDmsExternalID NE ""
@@ -105,7 +104,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
       IF NOT AVAIL DMSDoc THEN DO:
          CREATE DMSDoc.
          ASSIGN DMSDoc.DMSID       = DMS.DMSID
-                DMSDoc.DocStatusTS = fMakeTS().
+                DMSDoc.DocStatusTS = Func.Common:mMakeTS().
       END.
 
       ASSIGN DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)

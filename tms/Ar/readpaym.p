@@ -372,7 +372,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL
           Memo.CreUser   = katun 
           Memo.MemoTitle = icTitle
           Memo.MemoText  = icMessage.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
 END FUNCTION.
    
@@ -968,8 +968,7 @@ BY ttPayment.POrder:
      OTHERWISE   x-acct[2] = Invoice.ARAccNum.
      END CASE.
 
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       
       CREATE Payment.
       
@@ -1012,7 +1011,7 @@ BY ttPayment.POrder:
       IF ldCredLoss > 0 AND x-amt[10] + x-amt[11] NE 0
       THEN Payment.PaymType = 2.
 
-      Payment.ImportStamp = fMakeTS().
+      Payment.ImportStamp = Func.Common:mMakeTS().
 
       if err = 0 OR err = -3 then assign 
          Payment.InvNum   = Invoice.InvNum
@@ -1385,7 +1384,7 @@ BY ttPayment.POrder:
             Invoice.ClaimState = 1 + INTEGER(ttPayment.ErrorCode) / 10
             Invoice.ClaimStatus = REPLACE(STRING(Invoice.ClaimState),",",".")
             Invoice.DDState    = 2
-            Invoice.ClaimStamp = fMakeTS().
+            Invoice.ClaimStamp = Func.Common:mMakeTS().
                
          CREATE ClaimHist.
          ASSIGN 
@@ -1463,8 +1462,7 @@ BY ttPayment.POrder:
        
        IF (err LE 0 OR err = 11) AND AVAILABLE Customer THEN DO:
           IF err = 11 THEN 
-             lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                           BUFFER Customer).
+             lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
           lcPrintLine = lcPrintLine + " " + 
                         STRING(Customer.CustNum,"zzzzzzz9") + " " +

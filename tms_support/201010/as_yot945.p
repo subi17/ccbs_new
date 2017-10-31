@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/date.i}
 
 find daycampaign where
      daycampaign.dcevent = "SMSFREEOCT10" no-lock.
@@ -20,7 +19,7 @@ repeat:
 etime(true).
 
 DEFINE VARIABLE ldeBegin AS DECIMAL NO-UNDO. 
-ldeBegin = fMakeTS().
+ldeBegin = Func.Common:mMakeTS().
 
 do trans:
 
@@ -87,5 +86,5 @@ end. /* trans */
 end.
 
 DEFINE VARIABLE ldeEnd AS DECIMAL NO-UNDO. 
-ldeEnd = fMakeTS().
+ldeEnd = Func.Common:mMakeTS().
 

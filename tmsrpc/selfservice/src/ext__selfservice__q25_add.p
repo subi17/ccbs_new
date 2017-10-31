@@ -11,7 +11,6 @@ external_selfservice__q25_add.p
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -65,7 +64,7 @@ ASSIGN
       month and last day of current month + 2 */
    ldaQ25PeriodStartDate    = DATE(MONTH(TODAY),1, YEAR(TODAY)) - 1
    ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, 2, 'months':U)
-   ldaQ25PeriodEndDate    = fLastDayOfMonth(ldaQ25PeriodEndDate).
+   ldaQ25PeriodEndDate    = Func.Common:mLastDayOfMonth(ldaQ25PeriodEndDate).
 
 /* Find original installment contract */   
 FIND DCCLI NO-LOCK WHERE
@@ -116,10 +115,10 @@ IF TODAY < ldaMonth22Date THEN
 ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
-   ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
+   ldContractActivTS = Func.Common:mMake2DT(ldaMonth24Date,0).
 ELSE ASSIGN
    ldaMonth24Date = TODAY
-   ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+   ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5). /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND

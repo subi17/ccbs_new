@@ -256,8 +256,7 @@ PROCEDURE pCreditSingleFee:
           SingleFee.Contract   = icContract
           SingleFee.Active     = TRUE
           SingleFee.Amt        = idAmt.
-          SingleFee.Memo[1]    = DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                                  187,
+          SingleFee.Memo[1]    = Func.Common:mGetHdrText(187,
                                                   Customer.Language).
 
    fMakeCreateEvent((BUFFER SingleFee:HANDLE),"",icUserCode,icMemo).

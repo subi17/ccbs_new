@@ -59,7 +59,7 @@ REPEAT:
       ASSIGN ldeTimeStamp = fGetOrderStamp(Order.OrderId,"Close").
       IF ldeTimeStamp eq 0 THEN NEXT.
 
-      llgClose = fTS2Date(ldeTimeStamp, OUTPUT ldtCloseDate).
+      llgClose = Func.Common:mTS2Date(ldeTimeStamp, OUTPUT ldtCloseDate).
       IF llgClose EQ FALSE THEN NEXT.
 
       IF Order.OrderChannel BEGINS "Retention"  AND

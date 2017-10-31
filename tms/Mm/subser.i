@@ -56,7 +56,7 @@ INPUT idaSSDate AS DATE):
                                  icServCom,
                                  iiSSStat).
    IF ldeActStamp > 0 THEN DO:
-      fSplitTS(ldeActStamp,
+      Func.Common:mSplitTS(ldeActStamp,
                OUTPUT ldtActDate,
                OUTPUT liActSec).
 

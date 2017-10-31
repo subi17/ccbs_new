@@ -12,7 +12,6 @@
 
 {Syst/commpaa.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Inv/billrund.i NEW}
 {Func/ftransdir.i}
 
@@ -45,7 +44,7 @@ ASSIGN
    katun        = 'cron'
    lcInvRunFile = SESSION:PARAM
    lcTransDir   = fCParamC("SplitInvRunArc")
-   ldeBegTime   = fMakeTS()
+   ldeBegTime   = Func.Common:mMakeTS()
    ldaDueDate   = ?.
 
 RUN Inv/lamupers.p PERSISTENT SET lhHandle.
@@ -142,7 +141,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
       CREATE ActionLog.
    
       ASSIGN
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.Brand        = gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
@@ -170,10 +169,9 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
                               "*" + lcBillRun,
                               FALSE).
 
-   ldeEndTime = fMakeTS().
+   ldeEndTime = Func.Common:mMakeTS().
 
-   liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                ldeBegTime,
+   liDurDays = Func.Common:mTSDuration(ldeBegTime,
                                 ldeEndTime,
                                 OUTPUT liDurTime).
 
@@ -211,7 +209,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
          CREATE ActionLog.
    
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.Brand        = gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun

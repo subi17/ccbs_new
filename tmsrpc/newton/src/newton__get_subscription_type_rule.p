@@ -26,8 +26,6 @@ katun = "Newton".
 gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fixedfee.i}
 {Mm/fbundle.i}
@@ -129,9 +127,9 @@ ELSE pcTariffBundle = "".
 
 ASSIGN
    ldaSTCDates[1] = TODAY + 1
-   ldaSTCDates[2] = fLastDayOfMonth(TODAY) + 1
-   ldeNextMonthTS = fMake2DT(ldaSTCDates[2],0)
-   ldeEndTS       = fMake2DT(fLastDayOfMonth(TODAY),86399).
+   ldaSTCDates[2] = Func.Common:mLastDayOfMonth(TODAY) + 1
+   ldeNextMonthTS = Func.Common:mMake2DT(ldaSTCDates[2],0)
+   ldeEndTS       = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
 lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
 
@@ -248,11 +246,11 @@ FUNCTION fGetReferenceTariff RETURNS CHARACTER
 
    IF pdtExtentDate <> ? THEN
       ASSIGN
-         ldTS        = fHMS2TS(pdtExtentDate,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtExtentDate,"00:00:00")
          lcReqParam2 = "update".
    ELSE
       ASSIGN
-         ldTS        = fHMS2TS(pdtValidFrom,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtValidFrom,"00:00:00")
          lcReqParam2 = "act,recreate".
 
    FIND FIRST bufMsRequest WHERE
@@ -599,7 +597,7 @@ IF NOT MobSub.PayType THEN DO:
    END.
 
    /* Check DSS availability */
-   lcDSSBundleId = fGetActiveDSSId(MobSub.CustNum,fMakeTS()).
+   lcDSSBundleId = fGetActiveDSSId(MobSub.CustNum,Func.Common:mMakeTS()).
    IF lcDSSBundleId > "" AND
       NOT fOngoingDSSTerm(MobSub.CustNum,ldeEndTS) THEN DO:
       IF lcDSSBundleId = "DSS2" THEN DO:

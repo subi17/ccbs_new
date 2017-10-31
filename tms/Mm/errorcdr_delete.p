@@ -7,7 +7,6 @@
 ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEF INPUT  PARAMETER idaFromDate AS DATE NO-UNDO.
@@ -97,7 +96,7 @@ PROCEDURE pDelete:
          ActionLog.UserCode     = katun
          ActionLog.FromDate     = ldaFrom
          ActionLog.ToDate       = ldaTo.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
 END PROCEDURE.

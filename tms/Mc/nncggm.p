@@ -20,7 +20,6 @@
 
 {Syst/eventval.i}
 {Func/fecgtask.i}
-{Func/timestamp.i}
 
 DEF BUFFER rcust FOR Customer.
 DEF BUFFER new-cgmember FOR CGMember.
@@ -659,7 +658,7 @@ Customer:
 
         IF lcCLIType NE "" THEN DO:
 
-           ASSIGN ldStamp = fMake2DT(TODAY,TIME)
+           ASSIGN ldStamp = Func.Common:mMake2DT(TODAY,TIME)
                   llFound = FALSE.
 
            IF LOOKUP("Fixed",lcCLIType) > 0 AND

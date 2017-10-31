@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mnp/mnpmessages.i}
 {Mnp/mnp.i}
 {Syst/tmsconst.i}
@@ -24,7 +23,7 @@ DEF VAR ldeNow AS DECIMAL NO-UNDO.
 DEF VAR lcStatuses AS CHARACTER NO-UNDO. 
 DEF VAR lcTenant   AS CHARACTER NO-UNDO.
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
    
 FIND msisdn where
      msisdn.brand = gcBrand and
@@ -61,7 +60,7 @@ DO TRANS:
 
    CREATE MNPProcess.
    ASSIGN 
-      MNPProcess.CreatedTS   = fMakeTS()
+      MNPProcess.CreatedTS   = Func.Common:mMakeTS()
       MNPProcess.MNPSeq      = next-value(m2mrequest)
       MNPProcess.FormRequest = lcFormRequest 
       MNPProcess.StatusCode  = {&MNP_ST_NEW}

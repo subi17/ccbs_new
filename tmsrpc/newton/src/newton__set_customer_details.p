@@ -66,7 +66,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fbankdata.i}
 
 /* Input parameters */
@@ -172,8 +171,7 @@ ASSIGN
     ldBirthDay         = customer.BirthDay
     liChargeType       = customer.ChargeType.
 
-lcCustomerData[23] = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+lcCustomerData[23] = Func.Common:mTMSCodeName("Invoice",
                                       "DelType",
                                       STRING(Customer.DelType)).
 
@@ -496,7 +494,7 @@ IF llCustomerChanged THEN DO:
                                 INPUT Customer.Custnum,
                                 INPUT "Customer email address is changed").
 
-          liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+          liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                            INPUT TODAY,
                                            INPUT katun,
                                            INPUT 0, /* msseq */
@@ -532,7 +530,7 @@ IF llCustomerChanged THEN DO:
                               INPUT Customer.Custnum,
                               INPUT "Customer email address is changed").
 
-             liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                               INPUT TODAY,
                                               INPUT katun,
                                               INPUT 0, /* msseq */

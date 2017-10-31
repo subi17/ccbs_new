@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'FuncRunParam'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -620,8 +619,7 @@ PROCEDURE local-UPDATE-record:
                   PAUSE 0.
 
                   IF FRAME-FIELD = "ParamType" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         INPUT "FuncRunParam",
+                     IF Func.Common:mTMSCodeName(INPUT "FuncRunParam",
                                          INPUT "ParamType",
                                          INPUT INPUT FuncRunParam.ParamType)
                         = "" THEN DO:
@@ -634,8 +632,7 @@ PROCEDURE local-UPDATE-record:
                      IF CAN-FIND (FIRST TMSCodes NO-LOCK WHERE
                                         TMSCodes.TableName = "FuncRunParam" AND
                                         TMSCodes.FieldName = FuncRunParam.ParamName) THEN
-                        IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                            INPUT "FuncRunParam",
+                        IF Func.Common:mTMSCodeName(INPUT "FuncRunParam",
                                             INPUT FuncRunParam.ParamName,
                                             INPUT INPUT FuncRunParam.DefaultValue)
                            = "" THEN DO:

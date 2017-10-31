@@ -17,7 +17,6 @@
 {Syst/commpaa.i}
 katun = "MNP-ADAPTER".
 gcBrand = "1".
-{Func/date.i}
 {Mnp/mnp.i}
 {Func/xmlfunction.i}
 {Func/msreqfunc.i}

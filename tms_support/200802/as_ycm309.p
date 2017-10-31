@@ -3,7 +3,6 @@ DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
 katun = "cron".
 gcbrand = "1".
 
-{Func/date.i}
 {Func/xmlfunction.i}
 {Func/tsformat.i}
 

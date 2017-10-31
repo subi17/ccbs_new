@@ -12,7 +12,6 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Syst/eventval.i}
 {Func/email.i}
-{Func/timestamp.i}
 
 /* files and dirs */
 DEF VAR lcLine AS CHAR NO-UNDO.
@@ -73,7 +72,7 @@ REPEAT:
    liYear  = INT(SUBSTRING(lcFileName,9,4)).
    liMonth = INT(SUBSTRING(lcFileName,13,2)).
    liDay   = INT(SUBSTRING(lcFileName,15,2)).
-   ldReadTS = fHMS2TS(DATE(liMonth,liDay,liYear),"00:00:00").
+   ldReadTS = Func.Common:mHMS2TS(DATE(liMonth,liDay,liYear),"00:00:00").
 
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".

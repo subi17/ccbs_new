@@ -9,7 +9,6 @@
 /* &GLOBAL-DEFINE BrTable Order */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 
 DEFINE TEMP-TABLE ttOrder NO-UNDO
@@ -347,7 +346,7 @@ END PROCEDURE.
 
 PROCEDURE local-disp-row:
 
-       lcTimeStamp  = fTS2HMS(ttOrder.TimeStamp).
+       lcTimeStamp  = Func.Common:mTS2HMS(ttOrder.TimeStamp).
        
        CLEAR FRAME sel NO-PAUSE.
        

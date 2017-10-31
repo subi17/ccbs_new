@@ -1007,8 +1007,7 @@ BY wInvoice.InvNum:
                END.
                ELSE IF xCount = 1 THEN NEXT. 
  
-               lcCLIName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                            BUFFER bCLICust).
+               lcCLIName = Func.Common:mPrintCustName(BUFFER bCLICust).
 
                /* start a new letter */
                IF xCount = 2 THEN ASSIGN 
@@ -1064,7 +1063,7 @@ BY wInvoice.InvNum:
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
                 ITSendLog.UserCode   = katun.
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
    END. 

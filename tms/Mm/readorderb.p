@@ -17,7 +17,6 @@ ASSIGN gcBrand = "1"
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER icFileType AS CHAR NO-UNDO.
 
@@ -115,7 +114,7 @@ FOR EACH ttFiles:
                                   " Errors: " + STRING(liError) + 
                                   " Succesful: " + STRING(liRead - liError)
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 
       /* file without the dir */
       lcPlainFile = ttFiles.OrderFile.

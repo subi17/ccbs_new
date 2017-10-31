@@ -95,8 +95,7 @@ FUNCTION fGroupType RETURNS LOGIC
    (iiGroupType AS INT):
 
    IF iiGroupType > 0 THEN 
-      lcGroupType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "BDestConf",
+      lcGroupType = Func.Common:mTMSCodeName("BDestConf",
                                      "GroupType",
                                      STRING(iiGroupType)).
    ELSE lcGroupType = "".

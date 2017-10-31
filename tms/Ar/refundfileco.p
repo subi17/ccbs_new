@@ -102,8 +102,7 @@ FOR EACH ttAccDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttAccDate.AccDate,
+   lcDate = Func.Common:mDateFmt(ttAccDate.AccDate,
                              "yyyymmdd").
    lcFile = REPLACE(lcFile,"#DATE",lcDate).
 

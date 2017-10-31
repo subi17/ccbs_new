@@ -73,7 +73,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 pcUpsellId,
                                 "act",
-                                fMakeTS(),
+                                Func.Common:mMakeTS(),
                                 TRUE, /* fees */
                                 {&REQUEST_SOURCE_EXTERNAL_API},
                                 "",   /* creator */
@@ -90,7 +90,7 @@ ELSE IF NOT fCreateUpsellBundle(
    MobSub.MsSeq,
    pcUpsellId,
    {&REQUEST_SOURCE_EXTERNAL_API},
-   fMakeTS(),
+   Func.Common:mMakeTS(),
    OUTPUT liRequest,
    OUTPUT lcError) THEN DO:
 

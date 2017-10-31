@@ -14,7 +14,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/fvatfact.i}
 {Func/excel.i}
 {Func/coinv.i}
@@ -52,7 +51,7 @@ assign
    lcOdir     =  fCparam("dumpoutgoing","calldump.p")
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idadate 
-   filename   = "calls" + fDateFmt(ldate1,"yyyymmdd") + ".dump"
+   filename   = "calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + ".dump"
    ldate1     = idadate - 1
    ldate2     = ldate1
    numform    = session:numeric-format

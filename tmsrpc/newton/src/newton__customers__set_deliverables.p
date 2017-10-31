@@ -102,7 +102,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
 
       /* If DelType is Email then set to Email Pending first and send
          an email to customer to activate the email service */
-      liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
                                        INPUT katun,
                                        INPUT 0,
@@ -211,7 +211,7 @@ DO liCount = 0 TO get_paramcount(pcItemsArray) - 1:
                                   SubSer.ServCom,
                                   piStatus).
    IF ldActStamp > 0 THEN DO:
-      fSplitTS(ldActStamp,
+      Func.Common:mSplitTS(ldActStamp,
                OUTPUT ldtReqActDate,
                OUTPUT liRequest).
 
@@ -219,13 +219,13 @@ DO liCount = 0 TO get_paramcount(pcItemsArray) - 1:
          (DAY(ldtReqActDate) = 1 AND liRequest < TIME - 120 AND
           DAY(SubSer.SSDate) NE 1)
       THEN .
-      ELSE ldActStamp = fMakeTS().
+      ELSE ldActStamp = Func.Common:mMakeTS().
    END.
-   ELSE ldActStamp = fMakeTS().
+   ELSE ldActStamp = Func.Common:mMakeTS().
 
    IF ldtReqActDate = TODAY
-   THEN ldActStamp = fMakeTS().
-   ELSE ldActStamp = fMake2DT(ldtReqActDate,1).
+   THEN ldActStamp = Func.Common:mMakeTS().
+   ELSE ldActStamp = Func.Common:mMake2DT(ldtReqActDate,1).
 
    liRequest = fServiceRequest(SubSer.MsSeq,
                            Subser.ServCom,

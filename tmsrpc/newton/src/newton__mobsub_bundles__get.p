@@ -19,7 +19,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
@@ -51,8 +50,8 @@ DEF VAR liActAllowed    AS INT  NO-UNDO INIT 1.
 
 DEFINE BUFFER bMsRequest  FOR MsRequest.
 
-ASSIGN ldEndDate  = fLastDayOfMonth(TODAY)
-       ldEndStamp = fMake2Dt(ldEndDate,86399).
+ASSIGN ldEndDate  = Func.Common:mLastDayOfMonth(TODAY)
+       ldEndStamp = Func.Common:mMake2DT(ldEndDate,86399).
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 pcIDArray = get_array(param_toplevel_id, "0").
@@ -70,7 +69,7 @@ FUNCTION fGetMDUBStatus RETURNS INT (
    DEF BUFFER MServiceLimit FOR MServiceLimit.
    liStat= 0. /* desactivated */ 
 
-   llUpComingDataBundle = fBundleWithSTC(Mobsub.MsSeq,fSecOffSet(ldEndStamp,1),FALSE).
+   llUpComingDataBundle = fBundleWithSTC(Mobsub.MsSeq,Func.Common:mSecOffSet(ldEndStamp,1),FALSE).
     
    /* Activated */
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
@@ -133,7 +132,7 @@ FUNCTION fGetMDUBStatus RETURNS INT (
            fGetActiveDataBundle(Mobsub.MsSeq,ldEndStamp) = "" AND
            NOT llUpComingDataBundle THEN DO:
       IF (Mobsub.TariffBundle <> "CONTS15" AND Mobsub.CLIType <> "CONTM2") OR
-         fGetActiveDSSId(MobSub.CustNum,fSecOffSet(ldEndStamp,1)) <> "DSS2"
+         fGetActiveDSSId(MobSub.CustNum,Func.Common:mSecOffSet(ldEndStamp,1)) <> "DSS2"
       THEN liStat = 2. /* cancelled ongoing */
    END.
 

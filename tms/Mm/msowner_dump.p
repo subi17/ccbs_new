@@ -106,13 +106,13 @@ DEF VAR liEventTime AS INT NO-UNDO.
 DEF VAR ldeToday AS DEC NO-UNDO.
 DEF VAR ldeLastDump AS DEC NO-UNDO.
 
-ldeToday = fHMS2TS(TODAY, "00:00:00").
+ldeToday = Func.Common:mHMS2TS(TODAY, "00:00:00").
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaEventDate,
          OUTPUT liEventTime).
 
-ldeLastDump = fHMS2TS(ldaEventDate, "00:00:00").
+ldeLastDump = Func.Common:mHMS2TS(ldaEventDate, "00:00:00").
 
 IF icDumpMode = "Full" THEN DO:
    FOR EACH MsOwner NO-LOCK WHERE

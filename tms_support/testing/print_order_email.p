@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -48,7 +47,7 @@ FIND FIRST Order WHERE
    Order.Brand = "1" and
    Order.OrderId = 10048718 NO-LOCK NO-ERROR.
 */
-fSplitTS(Order.CrStamp,
+Func.Common:mSplitTS(Order.CrStamp,
          OUTPUT ldtDate,
          OUTPUT liTime).
 

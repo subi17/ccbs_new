@@ -2,7 +2,6 @@
 gcbrand = "1".
 katun = "Qvantel".
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Inv/printdoc1tt.i}
 
 def stream sInputFile.
@@ -68,7 +67,7 @@ DO WHILE TRUE
     EMPTY TEMP-TABLE ttInputFileContent.
     EMPTY TEMP-TABLE ttInvoice.
 
-    ASSIGN ldThisRun = fMakeTS()
+    ASSIGN ldThisRun = Func.Common:mMakeTS()
            liPrinted = 0
            liTotalInvoices = liTotalInvoices + liInvCount
            liInvCount = 0.

@@ -11,7 +11,6 @@
 gcBrand = "1".
 Katun = "Cron".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/dms.i}
@@ -36,7 +35,7 @@ DEF VAR lcDelim           AS CHAR NO-UNDO INIT ";".
 
 lcTableName = "Multiholder".
 lcActionID = "Multiholder_collector_cron".
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 
 
@@ -144,7 +143,7 @@ DO TRANS:
 END.
 
 /*Execute read operation and assign new period end time to actionlog.*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60).
 
 /*Actual collection*/
 fReport(ldCollPeriodStartTS, ldCollPeriodEndTS).

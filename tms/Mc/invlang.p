@@ -649,8 +649,7 @@ si-recid = xrecid.
 
 PROCEDURE local-find-others:
 
-   itname = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                             "RepText",
+   itname = Func.Common:mTMSCodeName("RepText",
                              "TextType",
                              RepText.TextType).
 

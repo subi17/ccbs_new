@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fcustchangereq.i}
 {Func/fcustdata.i}
@@ -245,8 +244,7 @@ FUNCTION fNewCustName2 RETURNS LOGIC:
       FIND bCustName WHERE bCustName.CustNum = liNewCust2 
          NO-LOCK NO-ERROR.
       IF AVAILABLE bCustName THEN 
-         lcNewCustName2 = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,  
-                                           BUFFER bCustName).
+         lcNewCustName2 = Func.Common:mDispCustName(BUFFER bCustName).
    END.
    ELSE lcNewCustName2 = lcNewLast + " " + lcNewFirst.
 
@@ -320,8 +318,7 @@ END.
 FIND bCustName WHERE bCustName.CustNum = Customer.AgrCust 
    NO-LOCK NO-ERROR.
 IF AVAILABLE bCustName THEN 
-   lcAgrCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,  
-                                    BUFFER bCustName).
+   lcAgrCustName = Func.Common:mDispCustName(BUFFER bCustName).
 
 liPrev = -1.                  
 
@@ -398,8 +395,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
    FIND bCustName WHERE bCustName.CustNum = liCustNum2 
       NO-LOCK NO-ERROR.
    IF AVAILABLE bCustName THEN 
-      lcCustName2 = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,  
-                                     BUFFER bCustName).
+      lcCustName2 = Func.Common:mDispCustName(BUFFER bCustName).
 
    fNewCustName2().
   
@@ -881,8 +877,8 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
-      THEN ldChgStamp = fMakeTS().
-      ELSE ldChgStamp = fMake2DT(ldtChgDate,
+      THEN ldChgStamp = Func.Common:mMakeTS().
+      ELSE ldChgStamp = Func.Common:mMake2DT(ldtChgDate,
                                  INTEGER(TRUNCATE(ldChgTime,0) * 3600 +
                                          (ldChgTime - TRUNCATE(ldChgTime,0))
                                           * 100 * 60)).

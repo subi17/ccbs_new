@@ -11,7 +11,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fcpfat.i}
 
 DEF INPUT  PARAMETER iiCustNum     AS INT  NO-UNDO.  

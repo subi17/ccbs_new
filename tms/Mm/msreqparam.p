@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 
@@ -513,7 +512,7 @@ PROCEDURE pTimeStamp:
    ldStamp = DECIMAL(icValue) NO-ERROR.
    
    IF ldStamp > 0 THEN 
-      ocDescription = fTS2HMS(ldStamp).
+      ocDescription = Func.Common:mTS2HMS(ldStamp).
    
 END PROCEDURE.
 
@@ -523,8 +522,7 @@ PROCEDURE pTMSCodes:
    DEF INPUT  PARAMETER icParam       AS CHAR NO-UNDO EXTENT 5.
    DEF OUTPUT PARAMETER ocDescription AS CHAR NO-UNDO.
  
-   ocDescription = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    icParam[1],
+   ocDescription = Func.Common:mTMSCodeName(icParam[1],
                                     icParam[2],
                                     icValue).
  
@@ -543,8 +541,7 @@ PROCEDURE pCustName:
    IF liCustNum > 0 THEN DO:
       FIND Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-         ocDescription = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER Customer).
+         ocDescription = Func.Common:mDispCustName(BUFFER Customer).
    END.
    
 END PROCEDURE.

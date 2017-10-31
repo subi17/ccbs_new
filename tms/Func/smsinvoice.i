@@ -75,7 +75,7 @@ DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 
    /* Time of request */
-   fSplitTS(idactstamp, lButtonDate, lButtonSeconds).
+   Func.Common:mSplitTS(idactstamp, lButtonDate, lButtonSeconds).
 
    /* ie. "32400-79200" Send between 9:00-22:00 YOT-4130 */
    lcSMSSchedule = fCParamC("SMSSchedule").
@@ -99,13 +99,13 @@ DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
    IF (lButtonSeconds > lEndSeconds) THEN
    DO:
       lButtonDate = ADD-INTERVAL (lButtonDate, 1, "days").
-      idactstamp = fHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+      idactstamp = Func.Common:mHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
    END.
    ELSE
    /* If is too early, schedule to start when window opens */
    IF (lButtonSeconds < lIniSeconds) THEN
    DO:
-      idactstamp = fHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+      idactstamp = Func.Common:mHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
    END.
    
    if not fSMSInvoiceValidate(

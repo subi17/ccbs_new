@@ -313,8 +313,7 @@ liRequest = fMSCustChangeRequest(
 IF liRequest = 0 THEN
    RETURN appl_err("Request could not be done; " + lcError).
 
-DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "customer",
+Func.Common:mWriteMemo("customer",
                  STRING(Mobsub.AgrCust),
                  MobSub.AgrCust,
                  pcMemoTitle,

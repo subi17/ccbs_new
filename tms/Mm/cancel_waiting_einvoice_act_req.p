@@ -12,7 +12,6 @@
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Cron".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -38,7 +37,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.ReqType    = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_CONFIRMATION_PENDING}:
 
-    fSplitTS(MsRequest.UpdateStamp,ldMsActDate,liMsActTime).
+    Func.Common:mSplitTS(MsRequest.UpdateStamp,ldMsActDate,liMsActTime).
     IF liConfDays >= (TODAY - ldMsActDate) THEN NEXT.
 
     FIND Customer NO-LOCK WHERE

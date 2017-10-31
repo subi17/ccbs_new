@@ -35,7 +35,7 @@ DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
 
 lcTableName = "DMS".
 lcActionID = {&DMS_CASEFILE_READER}.
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 ASSIGN
    lcIncDir   = fCParam("DMS","TMS_IncDir")

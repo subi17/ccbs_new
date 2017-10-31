@@ -12,10 +12,8 @@
 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPProcess'}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -406,7 +404,7 @@ PROCEDURE local-disp-row:
       mnpsub.cli
       mnpsub.icc
       mnpsub.msseq
-      fTS2HMS(mnpsub.portingtime) format "x(19)" @ mnpsub.portingtime
+      Func.Common:mTS2HMS(mnpsub.portingtime) format "x(19)" @ mnpsub.portingtime
    WITH FRAME sel.
 
 END PROCEDURE.

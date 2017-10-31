@@ -72,8 +72,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       FIND FIRST Customer WHERE 
          Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-         lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+         lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    END.
 
    PAUSE 0.
@@ -131,8 +130,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                         MESSAGE "Unknown customer".
                         NEXT.
                      END.
-                     lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                   BUFFER Customer).
+                     lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                      DISP lcCustName WITH FRAME fCrit.
                   END.
                END.

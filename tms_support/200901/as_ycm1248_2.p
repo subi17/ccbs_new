@@ -47,7 +47,7 @@ FOR EACH mobsub where mobsub.brand = "1" NO-LOCK:
                                     TRIM(SubSer.ServCom),
                                     SubSer.SSStat,
                                     SubSer.SSParam,
-                                    fMakeTS(),
+                                    Func.Common:mMakeTS(),
                                     "",
                                     FALSE,      /* fees */
                                     FALSE,      /* sms */

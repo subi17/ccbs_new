@@ -9,7 +9,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -94,8 +93,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
           lcPost   = ""
           lcTarget = "".
           
-   lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "InvText",
+   lcTarget = Func.Common:mTMSCodeName("InvText",
                                "AddrTarget",
                                STRING(iiAddress)).
            

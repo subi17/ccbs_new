@@ -12,7 +12,6 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 ASSIGN
    katun = "MNP"
    gcBrand = "1".
-{Func/timestamp.i}
 {Func/log.i}
 {Func/cparam2.i}
 {Mnp/mnp.i}
@@ -212,7 +211,7 @@ PROCEDURE pSendXML:
       COPY-LOB lcResponseBody TO MNPOperation.XMLResponse.
    
    ASSIGN
-      MNPOperation.SentTS = fMakeTS()
+      MNPOperation.SentTS = Func.Common:mMakeTS()
       MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}. /* Waiting for response handling */
    
    liSent = liSent + 1.

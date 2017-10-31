@@ -21,7 +21,6 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/upsellbundle.i}
-{Func/date.i}
 {Func/msreqfunc.i}
 {Func/fsendsms.i}
 {Func/fdss.i}
@@ -76,9 +75,9 @@ FUNCTION fSetMDUB RETURNS INT
           lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")
           lcOnlyVoiceContracts   = fCParamC("ONLY_VOICE_CONTRACTS")
           lcDataBundleCLITypes   = fCParamC("DATA_BUNDLE_BASED_CLITYPES")
-          ldeActStamp            = fMakeTS().
+          ldeActStamp            = Func.Common:mMakeTS().
 
-   fSplitTs(ldeActStamp,output ldaActDate, output liTime).
+   Func.Common:mSplitTS(ldeActStamp,output ldaActDate, output liTime).
 
    CASE piAction :
       /* termination */
@@ -220,7 +219,7 @@ FUNCTION fSetMDUB RETURNS INT
    IF ocError NE "" THEN RETURN liReturnValue.
 
    IF piAction = 0 THEN
-      ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
+      ldeActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaActDate),86399).
 
    IF pcBundleId = {&DSS} THEN DO:
       IF piAction = 0 THEN
@@ -391,7 +390,7 @@ DO:
    fCreateUpsellBundle(piMsSeq,
                        pcBundleId,
                        {&REQUEST_SOURCE_NEWTON},
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError).
 
@@ -427,8 +426,7 @@ DO:
    lcReturnValue = "activations".
 END.
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum   */
                  lcMemoTitle,                          /* MemoTitle */

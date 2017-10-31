@@ -3,8 +3,6 @@
 
 &GLOBAL-DEFINE fGetTxt YES
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 
 FUNCTION fGetSmsTS RETURNS DECIMAL.
@@ -15,15 +13,15 @@ FUNCTION fGetSmsTS RETURNS DECIMAL.
    DEF VAR ldeNewStamp  AS DE NO-UNDO FORMAT "99999999.99999".  
 
    ASSIGN
-      ldeCurrentTS = fmakets()
+      ldeCurrentTS = Func.Common:mMakeTS()
       ldeSeconds   = ldeCurrentTS - (INT(SUBSTRING(STRING(ldeCurrentTS),1,8)))
       liCompare    = ldeSeconds * 100000.
 
    IF    liCompare < 10  * 3600 THEN DO:
-      ldeNewStamp = fmake2Dt(today, 10 * 3600).
+      ldeNewStamp = Func.Common:mMake2DT(today, 10 * 3600).
    END.
    ELSE  IF liCompare > 21 * 3600 THEN DO:
-      ldeNewStamp = fmake2Dt(today + 1, 10 * 3600).
+      ldeNewStamp = Func.Common:mMake2DT(today + 1, 10 * 3600).
    END.   
    ELSE DO:
       ldeNewstamp = ldeCurrentTS.
@@ -148,7 +146,7 @@ FUNCTION fGetSMSTxt RETURNS CHAR
    
    IF lcText > "" THEN CASE lcSendRule:
       WHEN {&SMS_SENDRULE_24H} OR WHEN {&SMS_SENDRULE_24H_EXCEPT_LAST_DAY} 
-         THEN odeSendTime = fmakets().
+         THEN odeSendTime = Func.Common:mMakeTS().
       WHEN {&SMS_SENDRULE_OFFICEH} OR WHEN {&SMS_SENDRULE_OFFICEH_EXCEPT_LAST_DAY}
          THEN odeSendTime = fGetSMSTS().
       OTHERWISE odeSendTime = fGetSMSTS().

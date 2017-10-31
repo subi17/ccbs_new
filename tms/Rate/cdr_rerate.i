@@ -14,7 +14,6 @@
 &GLOBAL-DEFINE CDR_RERATE_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 
 DEF STREAM sRerateRep.
@@ -51,7 +50,7 @@ FUNCTION fRerateLogStart RETURNS INT
    
    ASSIGN
       liRerateID = NEXT-VALUE(RerateSeq).
-      lcStarted = fTS2HMS(fMakeTS()).
+      lcStarted = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
    lcReport = 
       "Re-rate report" + CHR(10) + CHR(10) + 
@@ -90,7 +89,7 @@ FUNCTION fRerateLogStart RETURNS INT
       ActionLog.FromDate = idtFrom
       ActionLog.ToDate = idtTo.
    
-   ActionLog.ActionTS = fMakeTS().
+   ActionLog.ActionTS = Func.Common:mMakeTS().
    
    RELEASE ActionLog.
 
@@ -143,7 +142,7 @@ FUNCTION fRerateLogFinish RETURNS INT
    IF NOT AVAIL ActionLog THEN RETURN 1.
    
    ASSIGN
-      lcEnded = fTS2HMS(fMakeTS())
+      lcEnded = Func.Common:mTS2HMS(Func.Common:mMakeTS())
       ActionLog.ActionChar =
          REPLACE(ActionLog.ActionChar, "#ENDDATE", ENTRY(1, lcEnded, " "))
       ActionLog.ActionChar = 

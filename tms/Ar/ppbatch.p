@@ -204,8 +204,7 @@ END.
 
 DO i = 0 TO 5:
    lcStatusLst = lcStatusLst + 
-                DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "PPBatch","PBStatus",STRING(i)) + ",". 
+                Func.Common:mTMSCodeName("PPBatch","PBStatus",STRING(i)) + ",". 
 END.
 
 FIND PaymPlan WHERE 

@@ -11,7 +11,6 @@ Version ......: yoigo
 katun = "Cron".
 gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 
 DEF VAR liEnd AS INT NO-UNDO.
 DEF VAR i AS INT NO-UNDO.
@@ -56,5 +55,5 @@ IF liDeleted > 0 THEN DO TRANS:
       ActionLog.ActionChar   = "Number of deleted MNP attachments: " + 
                                STRING(liDeleted)
       ActionLog.ActionStatus = 3
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.

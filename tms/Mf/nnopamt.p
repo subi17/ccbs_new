@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i}
 
 DEF TEMP-TABLE calls
    FIELD io         AS lo
@@ -178,8 +177,8 @@ task:
 OUTPUT STREAM excel TO value(fname).
 
 ASSIGN
-   cday1 = fDateFmt(date1,"yyyy-mm-dd") 
-   cday2 = fDateFmt(date1,"yyyy-mm-dd").
+   cday1 = Func.Common:mDateFmt(date1,"yyyy-mm-dd") 
+   cday2 = Func.Common:mDateFmt(date1,"yyyy-mm-dd").
 
 PUT STREAM excel UNFORMATTED
   "Operator " + Operator + " - " + Operator.OperName + " calls between " 

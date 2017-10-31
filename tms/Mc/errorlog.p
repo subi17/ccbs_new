@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'ErrorLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -672,7 +671,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-    fSplitTS(ErrorLog.ActionTS,
+    Func.Common:mSplitTS(ErrorLog.ActionTS,
              OUTPUT ldtDate,
              OUTPUT liTime).
 

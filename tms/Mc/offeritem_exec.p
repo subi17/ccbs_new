@@ -8,7 +8,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/ftaxdata.i}
 {Mc/offer.i}
 {Func/ftopup.i}
@@ -58,7 +57,7 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
    FIND FIRST msowner where
               msowner.msseq = MobSub.msseq USE-INDEX MsSeq NO-LOCK NO-ERROR.
    IF AVAIL msowner THEN ideActStamp = msowner.tsbegin.
-   IF ideActStamp <= Order.Crstamp THEN ideActStamp = fMakeTS().
+   IF ideActStamp <= Order.Crstamp THEN ideActStamp = Func.Common:mMakeTS().
 END.
 
 /* YDR-123 */
@@ -71,7 +70,7 @@ FOR FIRST MsRequest NO-LOCK WHERE
    ldOfferStamp = MsRequest.ActStamp.
 END.
 
-fSplitTS(ldOfferStamp,
+Func.Common:mSplitTS(ldOfferStamp,
          OUTPUT ldaOfferDate,
          OUTPUT liTime).
    
@@ -140,8 +139,7 @@ FOR EACH OfferItem NO-LOCK WHERE
 
    /* don't abort if an error occurred */
    IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.AgrCust,
                        "Offer " + OfferItem.ItemType,
@@ -265,10 +263,10 @@ PROCEDURE pPeriodicalContract:
      LOOKUP(DayCampaign.DCType,"3,5") > 0 THEN llCreateFees = TRUE.
    ELSE llCreateFees = (DayCampaign.FeeModel > "").
 
-   ldContrStamp = (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
+   ldContrStamp = (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN Func.Common:mMakeTS()
                    ELSE IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN ideActStamp 
                    ELSE IF Order.OrderChannel BEGINS "Retention"
-                   THEN fMakeTS()
+                   THEN Func.Common:mMakeTS()
                    ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT}
                    THEN Order.CrStamp ELSE ideActStamp).
 
@@ -331,7 +329,7 @@ PROCEDURE pPeriodicalContract:
                  bOfferItem.BeginStamp <= ldOfferStamp AND
                  LOOKUP(bOfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 NO-ERROR.
       IF AVAIL bOfferItem THEN DO:
-         fSplitTS(ldContrStamp,OUTPUT ldaContrDate,OUTPUT liContrTime).
+         Func.Common:mSplitTS(ldContrStamp,OUTPUT ldaContrDate,OUTPUT liContrTime).
 
          IF DAY(ldaContrDate) <> 1 THEN
             ldaDiscountEndDate = fcontract_end_date(OfferItem.ItemKey,
@@ -384,7 +382,7 @@ PROCEDURE pServicePackage:
          lcPostpaidDataBundles + "," + lcPrePaidDataBundles + ",CONTS15") > 0) AND
          LOOKUP(MobSub.CLIType,lcDataBundleCLITypes) = 0 AND
          fGetActOngoingDataBundles(INPUT Mobsub.MsSeq,
-                                   INPUT fMakeTS()) = ""
+                                   INPUT Func.Common:mMakeTS()) = ""
       THEN RETURN "ERROR: BB service can not be activated since no data bundle active".
 
    END. /* IF OfferItem.ItemKey = "BB" THEN DO: */
@@ -394,7 +392,7 @@ PROCEDURE pServicePackage:
                                OfferItem.ItemKey,
                                1,
                                "3",
-                               fMakeTS(),
+                               Func.Common:mMakeTS(),
                                "",
                                TRUE,      /* fees */
                                TRUE,      /* sms */

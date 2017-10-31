@@ -139,8 +139,7 @@ FUNCTION fDispDoc1 RETURNS LOGIC
    
    lcDoc1Name = "".
    IF icDoc1 > "" THEN DO:
-      lcDoc1Name = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Doc1",
+      lcDoc1Name = Func.Common:mTMSCodeName("Doc1",
                                     "SummaryGroup",
                                     icDoc1).
    END.

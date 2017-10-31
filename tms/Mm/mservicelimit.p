@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}                    
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Mc/lib/tokenlib.i}
 
@@ -111,8 +110,7 @@ FUNCTION fDispUnit2 RETURNS LOGICAL
    (iiUnit AS INT).
    
      IF iiUnit > 0 THEN
-            lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-         "Tariff","DataType",STRING(iiUnit)).
+            lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
      ELSE lcUnit = "".
     
      DISPLAY lcUnit WITH FRAME servicelimit.
@@ -133,8 +131,7 @@ form /*  search WITH FIELD mservicelimit */
 FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
    IF iiUnit > 0 THEN
-   lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-           
+   lcUnit = Func.Common:mTMSCodeName(
    "Servicelimit","InclUnit",STRING(iiUnit)).
    ELSE lcUnit = "".
    DISPLAY lcUnit WITH FRAME lis.
@@ -454,7 +451,7 @@ BROWSE:
        FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-LINE] 
        no-lock.
        
-       IF mserviceLimit.endTS < fmakets() THEN DO:
+       IF mserviceLimit.endTS < Func.Common:mMakeTS() THEN DO:
           MESSAGE
           "Service Limit allready closed!"
           VIEW-AS ALERT-BOX.
@@ -487,10 +484,10 @@ BROWSE:
               EACH xxservicelimit WHERE 
                    xxservicelimit.slseq = servicelimit.slseq  AND 
                    xxservicelimit.msseq = mservicelimit.msseq AND 
-                   xxservicelimit.endTS > fmakeTS() .
+                   xxservicelimit.endTS > Func.Common:mMakeTS() .
 
              ASSIGN 
-                xxservicelimit.endTS = fmakeTS()
+                xxservicelimit.endTS = Func.Common:mMakeTS()
                 lii = lii +  1.
           END.
        
@@ -602,8 +599,8 @@ no-lock.
             mservicelimit.InclAmt
             mservicelimit.FromTS
             mservicelimit.endTS
-            fTs2hms(mservicelimit.FromTS)  @ lcvalidfrom
-            fTs2hms(mservicelimit.endTS)   @ lcvalidto
+            Func.Common:mTS2HMS(mservicelimit.FromTS)  @ lcvalidfrom
+            Func.Common:mTS2HMS(mservicelimit.endTS)   @ lcvalidto
             WITH FRAME lis.
             
             fDispUnit(mServiceLimit.InclUnit).
@@ -843,9 +840,9 @@ PROCEDURE LOCAL-FIND-OTHER.
    IF AVAIL dialtype THEN lctype = dialtype.dtname.
    ELSE lctype = "".
 
-   lcvalid =  fTs2hms(mservicelimit.FromTS) + "-" .
+   lcvalid =  Func.Common:mTS2HMS(mservicelimit.FromTS) + "-" .
    IF mservicelimit.EndTS < 99999999 THEN 
-   lcvalid = lcvalid +  fTs2hms(mservicelimit.EndTS).
+   lcvalid = lcvalid +  Func.Common:mTS2HMS(mservicelimit.EndTS).
 
    FIND FIRST servicelimit WHERE
               ServiceLimit.slseq = Mservicelimit.slseq AND 
@@ -868,8 +865,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       mservicelimit.InclAmt 
       mservicelimit.fromts
       mservicelimit.endts
-      fTs2hms(mservicelimit.FromTS)  @ lcvalidfrom
-      fTs2hms(mservicelimit.endTS)   @ lcvalidto
+      Func.Common:mTS2HMS(mservicelimit.FromTS)  @ lcvalidfrom
+      Func.Common:mTS2HMS(mservicelimit.endTS)   @ lcvalidto
    with frame lis. 
 
    fDispUnit(mServiceLimit.InclUnit).
@@ -906,11 +903,11 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          IF lookup(nap,poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "fromts" THEN DO:
-               disp fTs2hms(input input mservicelimit.FromTS)  @ lcvalidfrom.
+               disp Func.Common:mTS2HMS(input input mservicelimit.FromTS)  @ lcvalidfrom.
             END.
 
             ELSE IF FRAME-FIELD = "endts" THEN DO:
-               disp fTs2hms(input mservicelimit.endts)  @ lcvalidto.
+               disp Func.Common:mTS2HMS(input mservicelimit.endts)  @ lcvalidto.
             END.
 
             ELSE IF FRAME-FIELD = "servicelimit" THEN DO:

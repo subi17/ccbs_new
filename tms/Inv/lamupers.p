@@ -7,7 +7,6 @@
 {Syst/tmsconst.i}
 {Func/fixedfee.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fapvat.i}
 {Inv/billrund.i {1}}
 {Func/fcustbal.i}
@@ -440,7 +439,7 @@ FUNCTION fErrorLog RETURNS LOGIC
           ErrorLog.ErrorMsg  = icError + CHR(10) + 
                                "Target group: " + STRING(iiITGroupID)
           ErrorLog.UserCode  = katun
-          ErrorLog.ActionTS  = fMakeTS().
+          ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.
 
@@ -1030,8 +1029,8 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
 
    DEF BUFFER MsOwner FOR MsOwner.
 
-   idFromPer = fMake2Dt(idaFromPer,0).
-   idToPer = fMake2Dt(idaToPer,86399).
+   idFromPer = Func.Common:mMake2DT(idaFromPer,0).
+   idToPer = Func.Common:mMake2DT(idaToPer,86399).
 
    FOR EACH ttSubInv NO-LOCK WHERE
             ttSubInv.ITGroup = iiITGroup:
@@ -1121,8 +1120,8 @@ PROCEDURE pCreateInv:
    ASSIGN ldtBSDate     = TODAY
           liBSTime      = TIME
           liLastCreated = 0
-          ldBillPer[1]  = fMake2Dt(idaFromDate,0)
-          ldBillPer[2]  = fMake2Dt(idaToDate,86399)
+          ldBillPer[1]  = Func.Common:mMake2DT(idaFromDate,0)
+          ldBillPer[2]  = Func.Common:mMake2DT(idaToDate,86399)
           liBillPer     = TRUNCATE(ldBillPer[1] / 100,0)
           llSetExtInvID = ilSetExtID WHEN ilSetExtID NE ?.
 
@@ -1268,7 +1267,7 @@ PROCEDURE pCreateInv:
                            idaToDate,
                            FALSE,    /* wait for other possible subrequests */
                            TRUE,     /* do double check */
-                           fMake2Dt(TODAY + 2,1800),       /* activate */
+                           Func.Common:mMake2DT(TODAY + 2,1800),       /* activate */
                            "",      /* creator */
                            {&REQUEST_SOURCE_BILLING},     /* source */
                            0,
@@ -1488,10 +1487,10 @@ PROCEDURE pCreateInv:
 
             lcMobRep = "".
             
-             ASSIGN ldFromPer = fMake2Dt(IF ttCLI.FromDate NE ?
+             ASSIGN ldFromPer = Func.Common:mMake2DT(IF ttCLI.FromDate NE ?
                                          THEN ttCLi.FromDate
                                          ELSE ldaFirstCall,86399)
-                    ldToPer   = fMake2Dt(IF ttCLI.ToDate NE ?
+                    ldToPer   = Func.Common:mMake2DT(IF ttCLI.ToDate NE ?
                                          THEN ttCLI.ToDate
                                          ELSE idaToDate,0). 
                                      /* use 0 -> get owner of last full day */
@@ -2833,9 +2832,9 @@ PROCEDURE pMinimumConsumption:
          IF AVAIL ttInvSplit THEN DO:
             IF liLoop EQ 1 THEN ASSIGN
                ldePeriodBeg = idePeriodBeg
-               ldePeriodEnd = fMake2Dt(ttInvSplit.SplitDate - 1, 86399).
+               ldePeriodEnd = Func.Common:mMake2DT(ttInvSplit.SplitDate - 1, 86399).
             ELSE ASSIGN
-               ldePeriodBeg = fMake2Dt(ttInvSplit.SplitDate,0)
+               ldePeriodBeg = Func.Common:mMake2DT(ttInvSplit.SplitDate,0)
                ldePeriodEnd = idePeriodEnd.
          END.
          ELSE ASSIGN
@@ -3600,7 +3599,7 @@ PROCEDURE pInvoiceHeader:
    
    ASSIGN 
       lCurRate   = fCurrRate(Customer.Currency,idaInvDate)
-      ldeToTS    = fMake2Dt(idaToDate + 1, 0)
+      ldeToTS    = Func.Common:mMake2DT(idaToDate + 1, 0)
       ldTotalInv = 0
       liAgrCust  = 0.
    
@@ -3659,7 +3658,7 @@ PROCEDURE pInvoiceHeader:
 
             IF AVAIL ttInvSplit THEN DO:
 
-               ldeSplitTS = fMake2Dt(ttInvSplit.SplitDate, 0).
+               ldeSplitTS = Func.Common:mMake2DT(ttInvSplit.SplitDate, 0).
 
                FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
                          MSOwner.MsSeq   = ttRowVat.MsSeq AND
@@ -4141,7 +4140,7 @@ PROCEDURE pInvoiceHeader:
 
       /* update the rest of the fields */
       ASSIGN 
-         ttInv.ChgStamp     = fMakeTS()
+         ttInv.ChgStamp     = Func.Common:mMakeTS()
          ttInv.Brand        = Customer.Brand 
          ttInv.InvDate      = idaInvDate
          ttInv.FirstCall    = MIN(ldaFirstCall,idaFromDate)
@@ -4254,9 +4253,7 @@ PROCEDURE pInvoiceHeader:
          NO-LOCK NO-ERROR.
          IF AVAILABLE OrderCustomer THEN DO:
             ASSIGN 
-               ttInv.IDelName    = DYNAMIC-FUNCTION("fPrintOrderName"
-                                                       IN ghFunc1,
-                                                    BUFFER OrderCustomer)
+               ttInv.IDelName    = Func.Common:mPrintOrderName(BUFFER OrderCustomer)
                ttInv.IDelAddr    = OrderCustomer.Address
                ttInv.IDelZipCode = OrderCustomer.ZipCode
                ttInv.IDelPost    = OrderCustomer.PostOffice.
@@ -4278,9 +4275,7 @@ PROCEDURE pInvoiceHeader:
          NO-LOCK NO-ERROR.
          IF AVAILABLE OrderCustomer THEN DO:
             ASSIGN 
-               ttInv.CustName    = DYNAMIC-FUNCTION("fPrintOrderName"
-                                                       IN ghFunc1,
-                                                    BUFFER OrderCustomer)
+               ttInv.CustName   = Func.Common:mPrintOrderName(BUFFER OrderCustomer)
                ttInv.Address    = OrderCustomer.Address
                ttInv.PostOffice = OrderCustomer.ZipCode + " " + 
                                   OrderCustomer.PostOffice.
@@ -4309,8 +4304,7 @@ PROCEDURE pInvoiceHeader:
          ttInv.IDelCountry = Customer.IDelCountry                        
          ttInv.FirstName   = Customer.FirstName
          ttInv.SurName2    = Customer.SurName2
-         ttInv.CustName    = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                              BUFFER Customer).
+         ttInv.CustName    = Func.Common:mPrintCustName(BUFFER Customer).
             
       /* for VAS invoice take ar-account from operator */
       IF liVASAcc > 0 THEN ttInv.ARAccNum = liVASAcc.
@@ -4535,7 +4529,7 @@ PROCEDURE pInvoiceHeader:
                    OPLog.SubInvNum = 0
                    OPLog.CLI       = ttCustBal.CLI
                    OPLog.Amt       = -1 * ttCustBal.Used.
-                   OPLog.CreStamp  = fMakeTS().
+                   OPLog.CreStamp  = Func.Common:mMakeTS().
          END.
          
          /* interest event */
@@ -4558,7 +4552,7 @@ PROCEDURE pInvoiceHeader:
                 Memo.CreUser   = katun
                 Memo.MemoTitle = "Minimum Amount Limit Ignored"
                 Memo.MemoText  = "Reason: " + STRING(liIgnoMin)
-                Memo.CreStamp  = fMakeTS().
+                Memo.CreStamp  = Func.Common:mMakeTS().
       END.
  
       /* update accounts */
@@ -5040,7 +5034,7 @@ PROCEDURE pInvoiceSplit:
 
       /* Check iSTC from non-fusion to fusion or vice-versa */
 
-      fSplitTS(MsOwner.TsBeg,OUTPUT ldaMsOwnerFromDate,
+      Func.Common:mSplitTS(MsOwner.TsBeg,OUTPUT ldaMsOwnerFromDate,
                OUTPUT liMsOwnerFromTime).
       
       liITGroupID = fGetInvoiceTargetGroup(MsOwner.MsSeq,

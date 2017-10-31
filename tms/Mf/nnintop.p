@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i}
 
 DEF TEMP-TABLE Calls
    FIELD CCN        AS i
@@ -263,8 +262,8 @@ END.
 OUTPUT STREAM excel TO value(fname).
 
 ASSIGN
-   cday1 = fDateFmt(date1,"yyyy-mm-dd") 
-   cday2 = fDateFmt(date2,"yyyy-mm-dd").
+   cday1 = Func.Common:mDateFmt(date1,"yyyy-mm-dd") 
+   cday2 = Func.Common:mDateFmt(date2,"yyyy-mm-dd").
 
 if Operator ne "" THEN 
    PUT STREAM excel UNFORMATTED 

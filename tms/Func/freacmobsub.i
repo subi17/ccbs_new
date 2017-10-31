@@ -11,7 +11,6 @@
 &THEN
 &GLOBAL-DEFINE fcreamobsub YES
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fcreatereq.i}
 {Func/fixedlinefunc.i}
 {Func/cparam2.i}
@@ -78,7 +77,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
       "There is already a scheduled reactivation request"             + CHR(10) +
       "for Mobile Subscription " + bTermMobSub.CLI                    + CHR(10) +
       "Saved by user '" + bMsReacReq.UserCode + "'"                   + CHR(10) +
-      "Proposed time of reactivation " + fTS2HMS(bMsReacReq.ActStamp) + CHR(10) +
+      "Proposed time of reactivation " + Func.Common:mTS2HMS(bMsReacReq.ActStamp) + CHR(10) +
       "Status " + STRING(bMsReacReq.ReqStatus).
    
    FIND FIRST bMsowner WHERE 
@@ -86,7 +85,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF NOT AVAILABLE bMsowner THEN
       RETURN "MsOwner record not found".
 
-   fSplitTS(INPUT bMsowner.tsend, OUTPUT ldTermDate, OUTPUT liTermTime).
+   Func.Common:mSplitTS(INPUT bMsowner.tsend, OUTPUT ldTermDate, OUTPUT liTermTime).
    IF today > (ldTermDate + liReacDays) AND NOT ilSkipCheck THEN DO:
       /* YOT-4715, reactivation over 30 days was not possible */
       ASSIGN liReactMsseq = fCParamI("ReactMsseq").

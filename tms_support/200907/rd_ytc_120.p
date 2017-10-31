@@ -3,7 +3,6 @@
 katun = "rafaeldv".
 gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 
 DEFINE VARIABLE cOutputFile AS CHARACTER NO-UNDO INITIAL "ytc_121_4.output".
@@ -32,8 +31,8 @@ ldate2 = DATE(07,22,2009).
 lcTimeInit = "00:00:00". /*"09:54:00". */
 lcTimeEnd =  "24:59:59". /*"15:56:00". */
 
-ldBegin = fHMS2TS(ldate,lcTimeInit).
-ldEnd = fHMS2TS(ldate2,lcTimeEnd).
+ldBegin = Func.Common:mHMS2TS(ldate,lcTimeInit).
+ldEnd = Func.Common:mHMS2TS(ldate2,lcTimeEnd).
 
  
 FOR EACH PrepaidRequest NO-LOCK WHERE 
@@ -56,7 +55,7 @@ FOR EACH PrepaidRequest NO-LOCK WHERE
         DO FOR bufPP:
            FIND FIRST bufPP WHERE RECID(bufPP) = RECID(PrePaidRequest) EXCLUSIVE-LOCK.
            ASSIGN
-                bufPP.TSResponse = fMakeTS()
+                bufPP.TSResponse = Func.Common:mMakeTS()
                 bufPP.Response   = lcXML
                 bufPP.RespCode   = liRespCode.
         END.

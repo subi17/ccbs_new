@@ -40,7 +40,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'SOLog'}
 {Func/sog.i}
-{Func/timestamp.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -595,8 +594,7 @@ PROCEDURE local-find-others.
      FIND Customer WHERE Customer.CustNum = MSISDN.CustNum   NO-LOCK NO-ERROR.
      
      IF AVAIL Customer THEN
-     lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER Customer).
+     lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
      FIND MobSub  WHERE MobSub.MsSeq  = SOLog.MsSeq    NO-LOCK NO-ERROR.
 

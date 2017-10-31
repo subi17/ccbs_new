@@ -16,7 +16,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Inv/billrund.i NEW}
 {Func/multitenantfunc.i}
 
@@ -67,7 +66,7 @@ ASSIGN
    lcOutDir        = fCParam("TestInvoices","OutDir")
    lcFuncRunQAllow = fCParam("TestInvoices","FuncRunConfigList")
    ldtFromDate     = DATE((MONTH(TODAY)), 1 , YEAR(TODAY))
-   ldtToDate       = fLastDayOfMonth(TODAY)
+   ldtToDate       = Func.Common:mLastDayOfMonth(TODAY)
    liFeePeriod     = INTEGER(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
 
 RUN Inv/lamupers.p PERSISTENT SET lhandle.

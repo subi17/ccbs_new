@@ -14,7 +14,6 @@
 
 {Syst/commali.i} 
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPOperation'}
 {Func/xmlfunction.i}
@@ -545,7 +544,7 @@ PROCEDURE local-disp-row:
        DISPLAY 
           MNPOperation.MessageType
           lcReqType         
-          fTS2HMS(MNPOperation.CreatedTS) FORMAT "x(20)" @ MNPOperation.CreatedTS
+          Func.Common:mTS2HMS(MNPOperation.CreatedTS) FORMAT "x(20)" @ MNPOperation.CreatedTS
           MNPOperation.StatusCode
        WITH FRAME sel.
 END PROCEDURE.
@@ -556,8 +555,7 @@ PROCEDURE local-find-others.
       lcReqType   = "TMS" WHEN MNPOperation.Sender = 1
       lcReqType   = "MNP-ADAPT" WHEN MNPOperation.Sender = 2.
    
-   lcMNPStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MNPMessage",
+   lcMNPStatus = Func.Common:mTMSCodeName("MNPMessage",
                                "StatusCode",
                              STRING(MNPOperation.StatusCode)).
 
@@ -580,8 +578,8 @@ PROCEDURE local-UPDATE-record:
       DISP
          MNPOperation.MessageType 
          lcReqType
-         fTS2HMS(MNPOperation.CreatedTS) format "x(20)" @ MNPOperation.CreatedTS
-         fTS2HMS(MNPOperation.SentTS) format "x(20)" @ MNPOperation.SentTS
+         Func.Common:mTS2HMS(MNPOperation.CreatedTS) format "x(20)" @ MNPOperation.CreatedTS
+         Func.Common:mTS2HMS(MNPOperation.SentTS) format "x(20)" @ MNPOperation.SentTS
          (STRING(MNPOperation.StatusCode) + " " + lcMNPStatus) FORMAT "x(30)"
             @ MNPOperation.StatusCode
          MNPOperation.MNPSeq 

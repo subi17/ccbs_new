@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
@@ -48,7 +47,7 @@ DEF TEMP-TABLE ttContract NO-UNDO
 
 ASSIGN 
   lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes")
-  ldCurrTS            = fMakeTS().
+  ldCurrTS            = Func.Common:mMakeTS().
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -211,7 +210,7 @@ DO TRANSACTION:
             MSOwner.cli = TermMobsub.cli
             MSowner.imsi = TermMobsub.imsi
             MSOwner.clievent = "T"
-            MSOwner.TSbegin = fSecOffSet(ldCurrTS,1).
+            MSOwner.TSbegin = Func.Common:mSecOffSet(ldCurrTS,1).
          IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                             "",
                                             katun,
@@ -312,8 +311,7 @@ DO TRANSACTION:
        liRequest = INTEGER(lcResult) NO-ERROR.
        /* Write possible error to a memo */
        IF liRequest = 0 OR liRequest = ? THEN
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                     "MobSub",
+          Func.Common:mWriteMemo("MobSub",
                      STRING(Mobsub.MsSeq),
                      Mobsub.CustNum,
                      "Barring and suspension",
@@ -341,8 +339,7 @@ DO TRANSACTION:
                                   OUTPUT lcError).
       /* Write possible error to a memo */
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(Mobsub.MsSeq),
                           Mobsub.CustNum,
                           SubSer.ServCom + " Service Reactivation",
@@ -380,8 +377,7 @@ DO TRANSACTION:
                                       OUTPUT lcError).
           /* Write possible error to a memo */
           IF liRequest = 0 THEN
-             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                        "MobSub",
+             Func.Common:mWriteMemo("MobSub",
                         STRING(Mobsub.MsSeq),
                         Mobsub.CustNum,
                         "BB Service Reactivation",
@@ -447,8 +443,7 @@ DO TRANSACTION:
 
                     /* Write possible error to a memo */
                     IF liRequest = 0 THEN
-                       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                        "MobSub",
+                       Func.Common:mWriteMemo("MobSub",
                                         STRING(Mobsub.MsSeq),
                                         Mobsub.CustNum,
                                         DCServicePackage.ServPac +
@@ -550,7 +545,7 @@ DO TRANSACTION:
                                  "CREATE",
                                  "",
                                  "DSS2",
-                                 fSecOffSet(ldCurrTS,180),
+                                 Func.Common:mSecOffSet(ldCurrTS,180),
                                  {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                                  "",
                                  TRUE, /* create fees */
@@ -559,8 +554,7 @@ DO TRANSACTION:
                                  OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MobSub.MsSeq),
                              MobSub.Custnum,
                              "DSS2 activation failed",
@@ -581,8 +575,7 @@ DO TRANSACTION:
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                     STRING(Mobsub.MsSeq),
                     Mobsub.CustNum,
                     "Periodical Contract",
@@ -604,7 +597,7 @@ DO TRANSACTION:
                      "CREATE",
                      lcDSSResult,
                      ttContract.DCEvent,
-                     fSecOffSet(MsRequest.ActStamp,180),
+                     Func.Common:mSecOffSet(MsRequest.ActStamp,180),
                      {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                      "",
                      TRUE,
@@ -628,8 +621,7 @@ DO TRANSACTION:
                        "",
                        OUTPUT lcError).
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                  STRING(Mobsub.MsSeq),
                  Mobsub.CustNum,
                  "Periodical Contract",
@@ -658,8 +650,7 @@ DO TRANSACTION:
                        OUTPUT liRequest).
       IF liRequest = 0 THEN
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "DEFAULT SHAPER ACTIVATION FAILED",
@@ -678,7 +669,7 @@ DO TRANSACTION:
                                INPUT "ADD",
                                INPUT "",        /* Optional param list */
                                INPUT MsRequest.MsRequest,
-                               INPUT fSecOffSet(ldCurrTS,180),
+                               INPUT Func.Common:mSecOffSet(ldCurrTS,180),
                              INPUT {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                                INPUT lcBundleId).
    END. /* IF NOT MobSub.PayType THEN DO: */
@@ -744,8 +735,7 @@ DO TRANSACTION:
       
       IF liRequest = 0 THEN                               
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "Voicemail language change failed",
@@ -899,7 +889,7 @@ DO TRANSACTION:
             FIND FIRST Msowner WHERE 
                        Msowner.MsSeq = TermMobsub.MsSeq NO-LOCK NO-ERROR.
             IF AVAIL Msowner THEN
-               fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+               Func.Common:mSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
                         OUTPUT liSecSIMTermTime).
             ELSE ldaSecSIMTermDate = TODAY.
          END. /* ELSE DO: */
@@ -925,7 +915,7 @@ DO TRANSACTION:
 
       FOR FIRST MsRequest NO-LOCK WHERE
                 MsRequest.MsSeq = MobSub.MsSeq AND
-                MsRequest.ActStamp > fMakeTS() AND
+                MsRequest.ActStamp > Func.Common:mMakeTS() AND
                 MsRequest.Reqtype = 0 AND
                 MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
          LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0:
@@ -1039,7 +1029,7 @@ PROCEDURE pRecoverSTC PRIVATE:
    IF NOT AVAILABLE bMSRequestSTC THEN RETURN.
 
    /* Calculate new STC/BTC activation time */
-   IF bMSRequestSTC.ActStamp > fMakeTS() THEN
+   IF bMSRequestSTC.ActStamp > Func.Common:mMakeTS() THEN
       ldeSTCStamp = bMSRequestSTC.ActStamp.
    ELSE IF (CAN-FIND(FIRST CLIType WHERE   
                           CLIType.CLIType EQ bMSRequestSTC.ReqCparam1 AND
@@ -1048,9 +1038,9 @@ PROCEDURE pRecoverSTC PRIVATE:
                           CLIType.CLIType EQ bMSRequestSTC.ReqCparam2 AND
                           CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}))
       OR DAY(TODAY) EQ 1 THEN DO:
-      ldeSTCStamp = fMake2Dt(TODAY,0).
+      ldeSTCStamp = Func.Common:mMake2DT(TODAY,0).
    END.
-   ELSE ldeSTCStamp = fMake2Dt(fLastDayOfMonth(TODAY) + 1,0).
+   ELSE ldeSTCStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY) + 1,0).
 
    /*  create a new request with the same input parameters */
    IF bMSRequestSTC.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
@@ -1097,8 +1087,7 @@ PROCEDURE pRecoverSTC PRIVATE:
 
    IF liRequest EQ 0 THEN                               
       /* write possible error to a memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(bMobSub.MsSeq),
                        bMobSub.Custnum,
                        "Subscription reactivation: STC/BTC recovery failed",

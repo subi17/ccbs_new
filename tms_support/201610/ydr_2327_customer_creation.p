@@ -71,8 +71,7 @@ REPEAT TRANSACTION:
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
             IF lcError > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(OrderCustomer.OrderID),
                                 liCustomer,
                                 "CUSTOMER CONTACT CREATION FAILED",

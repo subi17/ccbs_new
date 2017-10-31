@@ -210,8 +210,7 @@ FUNCTION fDispFATType RETURNS LOGICAL.
 
    lcFATType = "".
    IF FATime.FATType <= 3 THEN 
-   lcFATType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "FATGroup",
+   lcFATType = Func.Common:mTMSCodeName("FATGroup",
                                 "FATType",
                                 STRING(FATime.FATType)).
 
@@ -221,8 +220,7 @@ END FUNCTION.
 
 FUNCTION fDispQtyUnit RETURNS LOGICAL.
 
-   lcQtyUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "FatGroup",
+   lcQtyUnit = Func.Common:mTMSCodeName("FatGroup",
                                  "QtyUnit",
                                  FATime.QtyUnit).
 
@@ -971,8 +969,7 @@ PROCEDURE local-find-others.
           FIND FIRST Customer  WHERE 
                      Customer.CustNum = FATime.Payer NO-LOCK NO-ERROR.
           IF AVAIL Customer  THEN 
-             payername = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER Customer).
+             payername = Func.Common:mDispCustName(BUFFER Customer).
           ELSE payername = "Unknown".
        END.
        ELSE payername = "FreeOfCharge".
@@ -987,8 +984,7 @@ PROCEDURE local-find-others.
           no-lock no-error.
 
           IF AVAIL Customer THEN 
-             CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                         BUFFER Customer).
+             CustName = Func.Common:mDispCustName(BUFFER Customer).
        END.
        ELSE IF FATime.CLI = "DEF" THEN CustName = "Default".
        

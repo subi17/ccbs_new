@@ -22,7 +22,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fprevoper.i}
 
 DEF INPUT  PARAMETER icInvGroup   AS CHAR NO-UNDO.
@@ -368,13 +367,13 @@ FUNCTION fCLIDates RETURNS LOGICAL
    (idBeg AS DEC,
     idEnd AS DEC).
     
-   fSplitTS(idBeg,
+   Func.Common:mSplitTS(idBeg,
             OUTPUT ldtBegDate,
             OUTPUT ldtTime). 
    
    IF idEnd >= 999999 
    THEN ldtEndDate = 12/31/2050.
-   ELSE fSplitTS(idEnd,
+   ELSE Func.Common:mSplitTS(idEnd,
                  OUTPUT ldtEndDate,
                  OUTPUT ldtTime). 
     
@@ -421,7 +420,7 @@ FUNCTION fCheckCLIDays RETURNS LOGICAL
    
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF AVAILABLE MobSub AND MobSub.ActivationTS > 0 THEN DO:
-      fSplitTS(MobSub.ActivationTS,
+      Func.Common:mSplitTS(MobSub.ActivationTS,
                OUTPUT ldtActDate,
                OUTPUT liTime).               
    END. 
@@ -429,7 +428,7 @@ FUNCTION fCheckCLIDays RETURNS LOGICAL
                   Solog.MsSeq = iiMsSeq AND
                   Solog.Stat  = 2       AND
                   Solog.CommLine BEGINS "CR":
-      fSplitTS(Solog.CompletedTS,
+      Func.Common:mSplitTS(Solog.CompletedTS,
                OUTPUT ldtActDate,
                OUTPUT liTime).               
    END.
@@ -693,8 +692,8 @@ DO ldtDate = idtDate1 TO idtDate2:
    END.
 END.
 
-ASSIGN liPeriod[1] = fHMS2TS(idtDate1,"00:00:00")
-       liPeriod[2] = fHMS2TS(idtDate2,"23:59:59").
+ASSIGN liPeriod[1] = Func.Common:mHMS2TS(idtDate1,"00:00:00")
+       liPeriod[2] = Func.Common:mHMS2TS(idtDate2,"23:59:59").
 
 /* delete all previous events if wanted */
 IF idtDelete NE ? THEN 
@@ -952,8 +951,8 @@ FOR EACH CoRule NO-LOCK WHERE
                             STRING(Invoice.InvNum))
             THEN NEXT.
 
-            ASSIGN liInvPer[1] = fHMS2TS(Invoice.FirstCall,"00:00:00")
-                   liInvPer[2] = fHMS2TS(Invoice.ToDate,"23:59:59").
+            ASSIGN liInvPer[1] = Func.Common:mHMS2TS(Invoice.FirstCall,"00:00:00")
+                   liInvPer[2] = Func.Common:mHMS2TS(Invoice.ToDate,"23:59:59").
                    
             FOR EACH ttBasis:
                 ttBasis.CommBase = 0.

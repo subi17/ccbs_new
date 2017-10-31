@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i}
 {Func/tmsparam2.i}
 
 DEF TEMP-TABLE Calls
@@ -127,8 +126,8 @@ task:
    OUTPUT STREAM excel TO value(fname).
 
    ASSIGN
-      cday1 = fDateFmt(date1,"yyyy-mm-dd")
-      cday2 = fDateFmt(date2,"yyyy-mm-dd").
+      cday1 = Func.Common:mDateFmt(date1,"yyyy-mm-dd")
+      cday2 = Func.Common:mDateFmt(date2,"yyyy-mm-dd").
 
    PUT STREAM excel UNFORMATTED
       "Prefix traffic between " 

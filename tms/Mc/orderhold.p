@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 {Mc/orderfusion.i}
@@ -74,7 +73,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION} THEN DO:
       ActionLog.KeyValue = STRING(Order.OrderID)
       ActionLog.ActionId = "RESIGNATION"
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
-      ActionLog.ActionTS = fMakeTS().
+      ActionLog.ActionTS = Func.Common:mMakeTS().
 END.
 
 /* release fusion company order */
@@ -175,8 +174,7 @@ IF lcNewOrderStatus > "" THEN DO:
                                             OUTPUT lcError).
       
          IF lcError NE "" THEN 
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              0,
                              "Masmovil message creation failed",

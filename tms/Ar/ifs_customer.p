@@ -113,12 +113,12 @@ ASSIGN /* constant values */
    
 OUTPUT STREAM sLog TO VALUE(icFile).
 
-fSplitTS(idLastDump,    
+Func.Common:mSplitTS(idLastDump,    
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
 ASSIGN
-   ldtLastDump = fTimeStamp2DateTime(idLastDump)
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump)
    lhTable     = BUFFER CUSTOMER:HANDLE
    /* customers that are not transferred to sap */
    lcCustDenied = fCParamC("AgrCustNoTransfer").

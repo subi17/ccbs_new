@@ -168,7 +168,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                      INPUT Customer.Custnum,
                                      INPUT "Customer email address is changed").
 
-                  liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+                  liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                    INPUT TODAY,
                                                    INPUT katun,
                                                    INPUT 0, /* msseq */
@@ -208,7 +208,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                      INPUT Customer.Custnum,
                                      INPUT "Customer email address is changed").
 
-                     liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+                     liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                       INPUT TODAY,
                                                       INPUT katun,
                                                       INPUT 0, /* msseq */

@@ -10,7 +10,6 @@
 
 {Syst/testpaa.i}
 katun = "anttis".
-{Func/timestamp.i}
 {Mnp/mnpmessages.i}
 {Mnp/mnp.i}
 
@@ -38,7 +37,7 @@ ASSIGN
 
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.FormRequest = lcFormRequest
    MNPProcess.OrderId     = 0

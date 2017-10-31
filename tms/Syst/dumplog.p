@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'DumpLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -106,8 +105,7 @@ form /* seek  DumpLog */
 FUNCTION fStatusName RETURNS LOGICAL
    (INPUT iiStatus AS INT):
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "ActionLog",
+   lcStatus = Func.Common:mTMSCodeName("ActionLog",
                                "ActionStatus",
                                STRING(iiStatus)).
    DISP lcStatus WITH FRAME lis.
@@ -391,7 +389,7 @@ IF iiDumpID > 0 THEN DO:
    END.
    ELSE
       FIND FIRST DumpLog USE-INDEX CreateStart WHERE
-                 DumpLog.CreateStart <= fMakeTS().
+                 DumpLog.CreateStart <= Func.Common:mMakeTS().
 
 END PROCEDURE.
 
@@ -405,7 +403,7 @@ PROCEDURE LOCAL-FIND-LAST:
    END.
    ELSE
       FIND LAST DumpLog USE-INDEX CreateStart WHERE
-                DumpLog.CreateStart <= fMakeTS().
+                DumpLog.CreateStart <= Func.Common:mMakeTS().
  
 END PROCEDURE.
 
@@ -419,7 +417,7 @@ PROCEDURE LOCAL-FIND-NEXT:
    END.
    ELSE
       FIND NEXT DumpLog USE-INDEX CreateStart WHERE
-                DumpLog.CreateStart <= fMakeTS().
+                DumpLog.CreateStart <= Func.Common:mMakeTS().
  
 END PROCEDURE.
 
@@ -433,7 +431,7 @@ PROCEDURE LOCAL-FIND-PREV:
    END.
    ELSE
       FIND PREV DumpLog USE-INDEX CreateStart WHERE
-                DumpLog.CreateStart <= fMakeTS().
+                DumpLog.CreateStart <= Func.Common:mMakeTS().
  
 END PROCEDURE.
 
@@ -458,7 +456,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-    fSplitTS(DumpLog.CreateStart,
+    Func.Common:mSplitTS(DumpLog.CreateStart,
              OUTPUT ldtDate,
              OUTPUT liTime).
 
@@ -478,10 +476,10 @@ PROCEDURE local-UPDATE-record:
          lcTime = STRING(ldtDate,"99-99-99") + " " + STRING(liTime,"hh:mm:ss")
          lcInfo = ""
          lcCreateStart = (IF DumpLog.CreateStart > 0
-                          THEN fTS2HMS(DumpLog.CreateStart)
+                          THEN Func.Common:mTS2HMS(DumpLog.CreateStart)
                           ELSE "")
          lcCreateEnd = (IF DumpLog.CreateEnd > 0
-                        THEN fTS2HMS(DumpLog.CreateEnd)
+                        THEN Func.Common:mTS2HMS(DumpLog.CreateEnd)
                         ELSE "").
       
       DISP 

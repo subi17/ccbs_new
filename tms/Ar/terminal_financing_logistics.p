@@ -11,7 +11,6 @@ katun = "Qvantel".
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 DEFINE TEMP-TABLE ttDelivery NO-UNDO
    FIELD LoStatus AS INTEGER
@@ -123,7 +122,7 @@ FUNCTION fCancelOrder RETURNS LOGICAL
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 +
                                MONTH(TODAY)
       ActionLog.ActionStatus = 3
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 
    RELEASE ActionLog.
 

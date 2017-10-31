@@ -1,6 +1,5 @@
 /* common functions to counters */
 
-{Func/timestamp.i}
 /* update/create the counter */
 FUNCTION fUpdateCounter RETURN LOGICAL 
          ( INPUT pcHostTable   AS CHAR,
@@ -21,7 +20,7 @@ FUNCTION fUpdateCounter RETURN LOGICAL
  IF AVAIL Counter THEN 
     FIND CURRENT Counter EXCLUSIVE-LOCK .
  ELSE DO:
-    ldTS = fMakeTS().
+    ldTS = Func.Common:mMakeTS().
     CREATE Counter. 
     ASSIGN Counter.CounterSeq = NEXT-VALUE(CounterSeq)
            Counter.Brand = gcBrand

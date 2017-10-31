@@ -73,7 +73,7 @@ FUNCTION fSMSNotify RETURN CHARACTER
                         ENTRY(i,lcSMSAddr,","),
                         44,
                         icType + " Invoice " + icSMSReplacedText,
-                        fMakeTS(),
+                        Func.Common:mMakeTS(),
                         "Fact. Yoigo",
                         STRING(iIniSeconds) + "-" + STRING(iEndSeconds)).
 

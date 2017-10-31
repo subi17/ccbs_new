@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/filltemptable.i}
 {Func/cparam2.i}
 {Syst/host.i}
@@ -594,7 +593,7 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
       FOR EACH ttCli .
          CREATE CallScanner .
          ASSIGN
-            CallScanner.TMSTime     = fmakeTS()
+            CallScanner.TMSTime     = Func.Common:mMakeTS()
             CallScanner.UserCode    = icUser
             CallScanner.SystemID    = "XFERA_CUI" 
             CallScanner.EventType   = lcQueryCase

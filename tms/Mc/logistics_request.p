@@ -60,8 +60,7 @@ IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
                   bMsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
                   bMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
                   bMsRequest.ReqIParam1 = Order.OrderId NO-LOCK) THEN
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
+   Func.Common:mWriteMemo("Order",
                     STRING(Order.OrderID),
                     0,
                     "Logistic Request",
@@ -87,7 +86,7 @@ IF RETURN-VALUE BEGINS "NW_ERROR" THEN DO:
 
    IF liCount < 5 THEN DO:
       FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-      MsRequest.ActStamp = fOffSet(fMakeTS(), 1).
+      MsRequest.ActStamp = Func.Common:mOffSet(Func.Common:mMakeTS(), 1).
       fReqStatus(0,RETURN-VALUE).
    END.
    ELSE fReqError(RETURN-VALUE). 

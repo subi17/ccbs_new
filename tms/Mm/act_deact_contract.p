@@ -13,7 +13,6 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventlog.i}
 {Func/fmakemsreq.i}
 {Func/mdub.i}
@@ -85,7 +84,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
    CASE icAction:
       WHEN "1" THEN DO:
 
-         ldeActStamp = fMakeTS().
+         ldeActStamp = Func.Common:mMakeTS().
 
          IF fMatrixAnalyse(gcBrand,
                            "PERCONTR",
@@ -111,7 +110,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
          /* YPR */
          IF icContract EQ "VOICE3000" THEN DO:
             
-            ldeFirstSecond = fMake2Dt(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
+            ldeFirstSecond = Func.Common:mMake2DT(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
 
             FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
                        MsOwner.MsSeq = Mobsub.MsSeq NO-ERROR.
@@ -146,8 +145,8 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                                      icContract) = "" THEN
             RETURN "ERROR:Contract termination is not allowed".
    
-         ASSIGN ldEndDate   = fLastDayOfMonth(TODAY)
-                ldeActStamp = fMake2Dt(ldEndDate,86399).
+         ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(TODAY)
+                ldeActStamp = Func.Common:mMake2DT(ldEndDate,86399).
 
       END. /* WHEN "0" THEN DO: */
    END CASE. /* CASE icAction: */
@@ -190,7 +189,7 @@ FUNCTION fHandleService RETURNS CHAR(INPUT icService AS CHAR,
    DEF VAR lcParam     AS CHAR NO-UNDO.
 
    DEFINE VARIABLE ldeActStamp AS DECIMAL NO-UNDO. 
-   ldeActStamp = fMakeTS().
+   ldeActStamp = Func.Common:mMakeTS().
 
    CASE icAction:
       WHEN "1" THEN DO:
@@ -289,7 +288,7 @@ REPEAT:
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
       END.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
@@ -328,7 +327,7 @@ REPEAT:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liErrors) + 
                                   " Succesful: " + STRING(liRead - liErrors) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    

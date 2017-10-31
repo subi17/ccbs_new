@@ -47,6 +47,6 @@ for first order exclusive-lock where
           Memo.CreUser   = "ari" 
           Memo.MemoTitle = "Order cancelled"
           Memo.MemoText  = "Double icc, YTS-93".
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
    
 end.

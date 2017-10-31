@@ -11,7 +11,6 @@
 katun = "Cron".
 gcBrand = "1".
 
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/tmsconst.i}
@@ -352,7 +351,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
       FIRST MNPDetails NO-LOCK WHERE
             MNPDetails.mnpseq = MNPProcess.mnpseq:
 
-      IF mnpdetails.statuslimitts < fMakeTS() THEN NEXT MNP_LOOP.
+      IF mnpdetails.statuslimitts < Func.Common:mMakeTS() THEN NEXT MNP_LOOP.
       /* IF mnpdetails.custidtype EQ "CIF" THEN NEXT MNP_LOOP. 
       Commented out YOT-4095 */
    
@@ -381,7 +380,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
                      bMNPProcess.MNPSeq = bMNPSub.MNPSeq AND
                      bMNPProcess.MNPType = {&MNP_TYPE_OUT} AND
                      bMNPProcess.MNPSeq NE MNPProcess.MNPSeq.
-               IF bMNPProcess.CreatedTS > fOffSetTS(liExcludeOffset) THEN DO:
+               IF bMNPProcess.CreatedTS > Func.Common:mOffSetTS(liExcludeOffset) THEN DO:
                   PUT STREAM sExclude UNFORMATTED
                      MobSub.CLI ";R1"
                      SKIP.
@@ -395,7 +394,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             /* YOT-2301 - Exclude all data subs. and segmentation code with SN */
             IF LOOKUP(MobSub.CLIType,"CONTRD,CONTD,TARJRD1") > 0 OR
                Segmentation.SegmentCode = "SN" AND
-               MobSub.ActivationTS > fOffSetTS(liExcludeOffSet) THEN DO:
+               MobSub.ActivationTS > Func.Common:mOffSetTS(liExcludeOffSet) THEN DO:
                PUT STREAM sExclude UNFORMATTED
                   MobSub.CLI ";R3"
                   SKIP.
@@ -662,8 +661,8 @@ PROCEDURE pFileDump:
          
          put stream sout unformatted 
             mobsub.cli "|"
-            fts2hms(mnpprocess.CreatedTS) "|"
-            fts2hms(mnpprocess.portingtime) "|"
+            Func.Common:mTS2HMS(mnpprocess.CreatedTS) "|"
+            Func.Common:mTS2HMS(mnpprocess.portingtime) "|"
             lcopername "|"
             mobsub.clitype "|"
             customer.firstname "|"

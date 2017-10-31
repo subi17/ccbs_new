@@ -12,7 +12,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'EDRHistory'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -533,8 +532,7 @@ PROCEDURE local-UPDATE-record:
       FIND FIRST Customer WHERE Customer.CustNum = EDRHistory.InvCust 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
       
       FIND FIRST BillItem WHERE

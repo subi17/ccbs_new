@@ -38,7 +38,7 @@ FOR EACH msisdnBuf NO-LOCK WHERE
    IF FIRST-OF(msisdnBuf.cli) AND 
       (msisdnBuf.statuscode = 4 OR msisdnBuf.statuscode = 15) THEN DO:
 
-      fSplitTS(msisdnBuf.validFrom, output ldDate, output secs).
+      Func.Common:mSplitTS(msisdnBuf.validFrom, output ldDate, output secs).
 
       IF msisdnBuf.StatusCode = 4 THEN liQuarTime = 90. ELSE liQuarTime = 10.
 

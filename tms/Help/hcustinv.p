@@ -57,8 +57,7 @@ WITH CENTERED OVERLAY scroll 1 10 DOWN ROW 3
     FRAME sel.
 
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.

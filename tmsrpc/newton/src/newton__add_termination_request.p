@@ -19,7 +19,6 @@
 
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/fsubstermreq.i}
 {Mm/fbundle.i}
 {Func/msisdn_prefix.i}
@@ -208,10 +207,10 @@ liReq = fTerminationRequest(
 
 IF liReq > 0 THEN DO:
 
-   fTS2Date(pdeKillTS, OUTPUT ldaTermDate).
+   Func.Common:mTS2Date(pdeKillTS, OUTPUT ldaTermDate).
 
    fAdditionalLineSTC(liReq,
-                      fMake2Dt(ldaTermDate + 1, 0),
+                      Func.Common:mMake2DT(ldaTermDate + 1, 0),
                       "DELETE").
    
    add_boolean(response_toplevel_id, "", true).

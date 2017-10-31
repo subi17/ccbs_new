@@ -3,14 +3,12 @@
   FUNCTION .....: create an advance payment to customer
   APPLICATION ..: TMS
   CREATED ......: 02.01.06/aam 
-  MODIFIED .....: 24.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/fcustbal.i}
-{Func/timestamp.i}
 {Func/fapvat.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
@@ -74,7 +72,7 @@ IF iiEventType = 0 THEN iiEventType = 10.
 /* Get the voucher no. */
 oiVoucher = fGetIntVoucher().
 
-ldCurrStamp = fMakeTS().
+ldCurrStamp = Func.Common:mMakeTS().
 
 DO TRANS: 
 
@@ -99,8 +97,7 @@ DO TRANS:
            Payment.AccNum[2]   = liAPAccNum
            Payment.Posting[2]  = -1 * idAmount.
  
-   Payment.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+   Payment.CustName = Func.Common:mDispCustName(BUFFER Customer).
  
    /* vat */
    IF Customer.VATUsage < 3 THEN ASSIGN 

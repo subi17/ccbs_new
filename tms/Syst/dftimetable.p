@@ -11,7 +11,6 @@
 {Syst/commali.i} 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'DFTimeTable'}
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
@@ -101,7 +100,7 @@ FUNCTION fLastRun RETURNS LOGIC
    (idLastRun AS DEC):
 
    IF idLastRun > 0 THEN 
-      lcLastRun = fTS2HMS(idLastRun).
+      lcLastRun = Func.Common:mTS2HMS(idLastRun).
    ELSE lcLastRun = "".
    
 END FUNCTION.
@@ -110,7 +109,7 @@ FUNCTION fOngoing RETURNS LOGIC
    (idOngoing AS DEC):
 
    IF idOngoing > 0 THEN 
-      lcOngoing = fTS2HMS(idOngoing).
+      lcOngoing = Func.Common:mTS2HMS(idOngoing).
    ELSE lcOngoing = "".
    
 END FUNCTION.

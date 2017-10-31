@@ -96,8 +96,8 @@ FIND FIRST OfferItem WHERE
            OfferItem.Offer = Offer.Offer AND
            OfferItem.ItemType = "PerContract" AND
            OfferItem.ItemKey BEGINS "PAYTERM" AND
-           OfferItem.BeginStamp <= fMakeTS() AND
-           OfferItem.EndStamp >= fMakeTS() NO-LOCK NO-ERROR.
+           OfferItem.BeginStamp <= Func.Common:mMakeTS() AND
+           OfferItem.EndStamp >= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
 FIND FIRST bOfferItem WHERE
            bOfferItem.Brand = gcBrand AND
@@ -120,7 +120,7 @@ END. /* IF AVAIL(OfferItem) AND AVAIL(bOfferItem) THEN DO: */
 IF pcIMEI > "" THEN DO:
    
    liTermOfferItemID = fGetTerminalOfferItemId(Offer.Offer, 
-                        {&BITEM_GRP_TERMINAL}, fMakeTS()).
+                        {&BITEM_GRP_TERMINAL}, Func.Common:mMakeTS()).
    IF liTermOfferItemID = 0 THEN
       RETURN appl_err("Terminal not found from offer " + Offer.Offer).
    
@@ -137,8 +137,8 @@ FOR EACH bOfferItem NO-LOCK WHERE
          bOfferItem.Brand = gcBrand AND
          bOfferItem.Offer = Offer.Offer AND
          bOfferItem.ItemType = "PerContract" AND
-         bOfferItem.EndStamp >= fMakeTS() AND
-         bOfferItem.BeginStamp <= fMakeTS() USE-INDEX ItemType,
+         bOfferItem.EndStamp >= Func.Common:mMakeTS() AND
+         bOfferItem.BeginStamp <= Func.Common:mMakeTS() USE-INDEX ItemType,
    FIRST DayCampaign NO-LOCK WHERE
          DayCampaign.Brand = gcBrand AND
          DayCampaign.DcEvent = bOfferItem.ItemKey AND

@@ -19,7 +19,6 @@
 gcBrand = "1".
 {Func/callquery.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/upsellbundle.i}
 {Func/tarj6.i}
@@ -160,11 +159,11 @@ tthCDR = TEMP-TABLE ttCDR:HANDLE.
 
 ASSIGN
    first_of_month = DATE(MONTH(TODAY),1,YEAR(TODAY))
-   ldaLastDay     = fLastDayOfMonth(TODAY)
+   ldaLastDay     = Func.Common:mLastDayOfMonth(TODAY)
    liPeriod       = YEAR(TODAY) * 100 + MONTH(TODAY)
-   ldPeriodFrom   = fMake2Dt(first_of_month,0)
-   ldPeriodTo     = fMake2Dt(ldaLastDay,86399)
-   ldeCurrentTS   = fMakeTS().
+   ldPeriodFrom   = Func.Common:mMake2DT(first_of_month,0)
+   ldPeriodTo     = Func.Common:mMake2DT(ldaLastDay,86399)
+   ldeCurrentTS   = Func.Common:mMakeTS().
 
 main_level_struct = add_struct(response_toplevel_id, "").
    
@@ -182,7 +181,7 @@ IF NOT MobSub.PayType THEN DO:
               MsOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
    IF AVAIL MSOwner AND MsOwner.TsBeg >= ldPeriodFrom AND
       MsOwner.TsBeg <= ldPeriodTo THEN DO:
-      fSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
+      Func.Common:mSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
       lliSTC = TRUE.
    END.
 END.
@@ -232,7 +231,7 @@ FOR EACH ttCDR NO-LOCK WHERE
          ttMsOwner.ToDate   >= ttCDR.DateSt NO-LOCK:
 
    IF ttMsOwner.PayType EQ TRUE THEN DO:
-      ldeCDRts = fMake2Dt(ttCDR.DateSt,ttCDR.TimeStart).
+      ldeCDRts = Func.Common:mMake2DT(ttCDR.DateSt,ttCDR.TimeStart).
 
       IF NOT ttMsOwner.PeriodFrom <= ldeCDRts AND 
              ttMsOwner.PeriodTo   >= ldeCDRts THEN
@@ -411,7 +410,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          SingleFee.CalcObj EQ "RVTERM" AND
          SingleFee.SourceTable = "DCCLI" THEN DO:
          ASSIGN         
-            ldaToDate = fLastDayOfMonth(TODAY)
+            ldaToDate = Func.Common:mLastDayOfMonth(TODAY)
             ldaFromDate = date(month(ldaToDate),1,year(ldaToDate)).
 
          IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE

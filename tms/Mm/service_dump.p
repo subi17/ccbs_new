@@ -1,5 +1,4 @@
 {Syst/commpaa.i}
-{Func/timestamp.i}
 gcbrand = "1".
 katun = "cron".
 

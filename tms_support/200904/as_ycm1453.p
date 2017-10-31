@@ -55,7 +55,7 @@ repeat:
       output liQuarTime
    ).
 
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
   
    if msisdn.statuscode ne liMsisdnStat then do:
       put stream slog unformatted msisdn.cli "|" 

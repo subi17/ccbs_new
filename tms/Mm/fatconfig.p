@@ -10,7 +10,6 @@
 &GLOBAL-DEFINE BrTable FATConfig
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -97,8 +96,7 @@ WITH  OVERLAY ROW 6 CENTERED
 FUNCTION fTypeName RETURNS CHARACTER
    (iiConfType AS INT).
 
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "FATConfig",
+   RETURN Func.Common:mTMSCodeName("FATConfig",
                            "ConfType",
                            STRING(iiConfType)).
 END FUNCTION.
@@ -108,8 +106,7 @@ FUNCTION fTargName RETURNS CHARACTER
 
    IF icConfTarg = "" THEN RETURN "".
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "FATConfig",
+   RETURN Func.Common:mTMSCodeName("FATConfig",
                            "ConfTarget",
                            icConfTarg).
 END FUNCTION.

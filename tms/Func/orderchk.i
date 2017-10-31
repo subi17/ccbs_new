@@ -119,7 +119,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
         THEN DO:
            /* YDR-1532 */
            IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
-              fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+              Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
               IF INTERVAL(TODAY, ldaOrderDate, "months") >= 24 THEN NEXT.
            END.
            oiActOrderCount = oiActOrderCount + 1.

@@ -76,7 +76,6 @@ katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Syst/tmsconst.i}
 
-{Func/date.i}
 {Func/orderchk.i}
 {Func/order.i}
 {Func/create_eventlog.i}

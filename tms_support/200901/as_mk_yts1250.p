@@ -1,6 +1,5 @@
 {Syst/commpaa.i} katun = "SOG". gcbrand = "1".
 {Func/fsubser.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 
 DEF BUFFER provMSREquest FOR MSRequest.
@@ -164,7 +163,7 @@ REPEAT:
          lcProfile = "2"
          llPayType = TRUE.
 
-   lcActStamp = fMakeTS().
+   lcActStamp = Func.Common:mMakeTS().
    
    FIND FIRST Order WHERE 
               Order.MSSeq = MobSub.MSSeq AND

@@ -22,7 +22,6 @@
 {csvfuntion.i}
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 gcBrand = "1".
 
@@ -307,7 +306,7 @@ PROCEDURE pTap3File:
              ErrorLog.ErrorChar = ""
              ErrorLog.ErrorMsg  = "Unknown version " + ttTAPFile.Version
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
       NEXT.
    END.
 

@@ -9,7 +9,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/finvnum.i}
 {Syst/funcrunprocess_update.i}
 
@@ -82,7 +81,7 @@ FUNCTION fError RETURNS LOGIC
                               " Nbr: " + STRING(Invoice.InvNum)
          ErrorLog.ErrorChar = Invoice.ExtInvID
          ErrorLog.UserCode  = katun.
-         ErrorLog.ActionTS  = fMakeTS().
+         ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
  
 END FUNCTION.
@@ -141,15 +140,15 @@ END FUNCTION.
 ASSIGN
    llRenumber   = FALSE
    liRenumbered = 0
-   ldThisRun    = fMakeTS().
+   ldThisRun    = Func.Common:mMakeTS().
 
 /* if numbering of new invoices required, then make sure that there are not
    any billing runs active */
 IF iiAction = 2 THEN DO:
 
    ASSIGN
-      lcStarted  = fTS2HMS(ldThisRun)
-      ldCheckRun = fOffSet(ldThisRun,-72).
+      lcStarted  = Func.Common:mTS2HMS(ldThisRun)
+      ldCheckRun = Func.Common:mOffSet(ldThisRun,-72).
 
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
@@ -191,7 +190,7 @@ IF iiAction = 2 THEN DO:
          RETURN "ERROR:Billing run ongoing".
       END.
          
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
    
       PAUSE 0.
       DISPLAY lcStarted lcCurrent WITH FRAME fWait.

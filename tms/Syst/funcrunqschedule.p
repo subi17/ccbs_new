@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'FuncRunQSchedule'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
@@ -583,9 +582,9 @@ PROCEDURE local-find-others.
        lcDoneTime = "".
        
     IF FuncRunQSchedule.StartTS > 0 THEN 
-       lcStartTime = fTS2HMS(FuncRunQSchedule.StartTS).
+       lcStartTime = Func.Common:mTS2HMS(FuncRunQSchedule.StartTS).
     IF FuncRunQSchedule.DoneTS > 0 THEN 
-       lcDoneTime = fTS2HMS(FuncRunQSchedule.DoneTS).
+       lcDoneTime = Func.Common:mTS2HMS(FuncRunQSchedule.DoneTS).
 
 END PROCEDURE.
 
@@ -604,7 +603,7 @@ PROCEDURE local-UPDATE-record:
          lcUpdStartTime = "".
          
       IF FuncRunQSchedule.StartTS > 0 THEN DO:
-         fSplitTS(FuncRunQSchedule.StartTS,
+         Func.Common:mSplitTS(FuncRunQSchedule.StartTS,
                   OUTPUT ldaUpdStartDate,
                   OUTPUT liTime).
          lcUpdStartTime = SUBSTRING(STRING(liTime,"hh:mm:ss"),1,5).
@@ -742,7 +741,7 @@ PROCEDURE local-UPDATE-record:
                IF NUM-ENTRIES(INPUT lcUpdStartTime,":") > 1 THEN 
                   liTime = liTime + 
                            INTEGER(ENTRY(2,INPUT lcUpdStartTime,":")) * 60.
-               FuncRunQSchedule.StartTS = fMake2DT(ldaUpdStartDate,     
+               FuncRunQSchedule.StartTS = Func.Common:mMake2DT(ldaUpdStartDate,     
                                               liTime).
             END.
             
@@ -894,7 +893,7 @@ PROCEDURE pUpdateStatus:
             CREATE FuncRunExecLog.
             ASSIGN 
                FuncRunExecLog.FRExecID    = FuncRunExec.FRExecID
-               FuncRunExecLog.StatusStamp = fMakeTS()
+               FuncRunExecLog.StatusStamp = Func.Common:mMakeTS()
                FuncRunExecLog.FRStatus    = FuncRunExec.RunState.
                
             IF lcChangeState NE "Initialized" THEN 
@@ -912,7 +911,7 @@ PROCEDURE pUpdateStatus:
          FIND CURRENT FuncRunQSchedule EXCLUSIVE-LOCK.
          ASSIGN 
             FuncRunQSchedule.RunState = lcNewState
-            FuncRunQSchedule.DoneTS   = fMakeTS().
+            FuncRunQSchedule.DoneTS   = Func.Common:mMakeTS().
          
          IF lcNewState = "Cancelled" THEN DO:   
             CREATE ErrorLog.
@@ -923,7 +922,7 @@ PROCEDURE pUpdateStatus:
                ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
                ErrorLog.ErrorMsg  = "Queue run stopped manually"
                ErrorLog.UserCode  = katun.
-               ErrorLog.ActionTS  = fMakeTS().
+               ErrorLog.ActionTS  = Func.Common:mMakeTS().
 
             FIND FIRST ActionLog WHERE
                  ActionLog.Brand     = gcBrand AND

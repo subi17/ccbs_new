@@ -40,7 +40,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO TRANS:
       ErrorLog.ErrorMsg  = RETURN-VALUE
       ErrorLog.ErrorChar = ""
       ErrorLog.UserCode  = katun.
-      ErrorLog.ActionTS  = fMakeTS().
+      ErrorLog.ActionTS  = Func.Common:mMakeTS().
 END.
 
 fELog("REMOVE_OLD_UNBILLED_EVENTS","Stopped:" + STRING(liEvents)).

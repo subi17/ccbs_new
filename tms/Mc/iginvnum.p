@@ -8,7 +8,6 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -90,8 +89,7 @@ form /* seek  IgInvNum */
 FUNCTION fTypeName RETURNS CHARACTER
    (iiInvType AS INT):
 
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "Invoice",
+   RETURN Func.Common:mTMSCodeName("Invoice",
                            "InvType",
                            STRING(iiInvType)).
    

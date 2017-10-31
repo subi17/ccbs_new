@@ -13,7 +13,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{Func/timestamp.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 

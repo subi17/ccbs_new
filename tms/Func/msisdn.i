@@ -10,7 +10,6 @@
 &GLOBAL-DEFINE MSISDN_I YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF VAR m_pref  AS C NO-UNDO FORMAT "x(3)".
 
@@ -173,7 +172,7 @@ FUNCTION fMakeMsidnHistoryTS RETURNS LOG
    FIND FIRST HistMSISDN WHERE 
               RECID(HistMSISDN) = irREcID EXCLUSIVE-LOCK.
           
-   IF idTimeStamp = 0 OR idTimeStamp = ? THEN idTimeStamp = fMakeTS().
+   IF idTimeStamp = 0 OR idTimeStamp = ? THEN idTimeStamp = Func.Common:mMakeTS().
    
    ASSIGN HistMSISDN.ValidTo = idTimeStamp.
 
@@ -182,7 +181,7 @@ FUNCTION fMakeMsidnHistoryTS RETURNS LOG
    /* make sure that there is atleast 1 second gap between rows */
    REPEAT:
       /* do this first so that ldtnewdate is available for ActionDate */
-      fSplitTS(ldNewFrom,
+      Func.Common:mSplitTS(ldNewFrom,
                OUTPUT ldtNewDate,
                OUTPUT liNewTime).
 
@@ -197,7 +196,7 @@ FUNCTION fMakeMsidnHistoryTS RETURNS LOG
          liNewTime  = 1.
       ELSE liNewTime = liNewTime + 1.
       
-      ldNewFrom = fMake2Dt(ldtNewDate,liNewTime).
+      ldNewFrom = Func.Common:mMake2DT(ldtNewDate,liNewTime).
    END.
    
    CREATE MSISDN.
@@ -213,7 +212,7 @@ FUNCTION fMakeMsidnHistory RETURNS CHAR
    (INPUT   irRecID AS RECID):
    
    fMakeMsidnHistoryTS(irRecid,
-                       fMakeTS()). 
+                       Func.Common:mMakeTS()). 
 END FUNCTION.
 
 &ENDIF

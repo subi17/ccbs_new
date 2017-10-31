@@ -14,7 +14,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
-{Func/func.p}
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
@@ -529,8 +528,7 @@ PROCEDURE local-disp-row:
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        Customer.CustNum 
-       DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer) @
+       Func.Common:mDispCustName(BUFFER Customer) @
                                  Customer.CustName
        Customer.OrgID
        Liqty

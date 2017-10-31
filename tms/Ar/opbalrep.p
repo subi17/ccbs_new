@@ -6,7 +6,6 @@
   CREATED ......: 06.03.03
   MODIFIED .....: 12.09.03/aam brand
                   02.01.06/aam values from TMSCodes  
-                  24.01.06/DYNAMIC-FUNCTION("fDispCustName"
   VERSION ......: M15
   ------------------------------------------------------ */
 
@@ -94,8 +93,7 @@ ASSIGN rl = 8.
 CustCollect:
 FOR EACH Customer WHERE
          Customer.Brand = gcBrand USE-INDEX CustNum NO-LOCK:
-    lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer).
+    lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                
     ldOPAmt = fGetCustBal(Customer.CustNum,"TOTAL","OP").
     IF ldOpAmt = 0 THEN NEXT. 
@@ -150,8 +148,7 @@ FOR EACH Customer WHERE
     FIRST OPLog NO-LOCK WHERE
           RECID(OPLog) = ttBal.OPLog:
 
-       lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "OpLog",
+       lcType = Func.Common:mTMSCodeName("OpLog",
                                  "EventType",
                                  STRING(OPLog.EventType)).
 

@@ -31,7 +31,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MSOwner'}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR .
 
@@ -544,11 +543,11 @@ BROWSE:
               IF NOT fChkTime(INPUT-OUTPUT lcEndTime) THEN NEXT. 
               
               /* update actual time stamps */  
-              MSOwner.TSBegin = fHMS2TS(ldtBegDate,lcBegTime).
+              MSOwner.TSBegin = Func.Common:mHMS2TS(ldtBegDate,lcBegTime).
               
               IF ldtEndDate >= 12/31/2050
               THEN MsOwner.TSEnd = 99999999.99999.
-              ELSE MSOwner.TSEnd = fHMS2TS(ldtEndDate,lcEndTime).
+              ELSE MSOwner.TSEnd = Func.Common:mHMS2TS(ldtEndDate,lcEndTime).
            
               IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOwner).
               
@@ -667,13 +666,13 @@ PROCEDURE local-find-others.
    FIND Customer WHERE 
         Customer.CustNum   = MSOwner.CustNum NO-LOCK NO-ERROR.
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    FIND CLIType where 
         CliType.Brand   = gcBrand  AND 
         CLIType.Clitype = MSOwner.Clitype NO-LOCK NO-ERROR.  
 
-   fSplitTS(MsOwner.TsBeg,
+   Func.Common:mSplitTS(MsOwner.TsBeg,
             OUTPUT ldtBegDate,
             OUTPUT liBegTime).
             
@@ -681,7 +680,7 @@ PROCEDURE local-find-others.
       ldtEndDate = 12/31/2054
       liEndTime  = 86399.
    ELSE DO:
-      fSplitTS(MsOwner.TsEnd,
+      Func.Common:mSplitTS(MsOwner.TsEnd,
                OUTPUT ldtEndDate,
                OUTPUT liEndTime).
    END. 
@@ -716,13 +715,11 @@ PROCEDURE local-UPDATE-record:
       
       FIND bCustomer WHERE bCustomer.CustNum = MsOwner.AgrCust NO-LOCK.
       IF AVAILABLE bCustomer THEN
-         lcAgrName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                      BUFFER bCustomer).
+         lcAgrName = Func.Common:mDispCustName(BUFFER bCustomer).
 
       FIND bCustomer WHERE bCustomer.CustNum = MsOwner.InvCust NO-LOCK.
       IF AVAILABLE bCustomer THEN
-         lcInvName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                      BUFFER bCustomer).
+         lcInvName = Func.Common:mDispCustName(BUFFER bCustomer).
       
               
       DISP 

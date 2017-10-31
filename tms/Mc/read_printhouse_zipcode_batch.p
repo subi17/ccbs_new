@@ -13,7 +13,6 @@ ASSIGN gcBrand = "1"
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liRead      AS INT  NO-UNDO. 

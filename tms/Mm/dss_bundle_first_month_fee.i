@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE dss_bundle_first_month_fee YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fdss.i}
 {Mm/bundle_first_month_fee.i}
@@ -57,8 +56,8 @@ PROCEDURE pGetDSSLinkedSubsFee:
 
    ASSIGN ldFromDate   = fInt2Date(iiPeriod,1)
           ldToDate     = fInt2Date(iiPeriod,2)
-          ldPeriodFrom = fMake2Dt(ldFromDate,0)
-          ldPeriodTo   = fMake2Dt(ldToDate,86399).
+          ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
+          ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399).
           
    ldeDSSUsage = fGetDSSUsage(INPUT iiInvCust,
                               INPUT ldFromDate,

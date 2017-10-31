@@ -17,7 +17,6 @@ katun = pcUser.
 gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 {Func/log.i}
-{Func/date.i}
 
 fSetLogFileName(pcLogFile).
 fSetLogEntryTypes(fGetValidLogEntryTypes()).
@@ -67,7 +66,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
    DEFINE VARIABLE lcTemp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE liUsernum AS INTEGER NO-UNDO. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    fLog(icLine,"fAdd").   
    
@@ -182,7 +181,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i AS INTEGER NO-UNDO. 
    DEFINE VARIABLE llModified AS LOGICAL NO-UNDO INIT FALSE. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
    fLog(icLine,"fModify").   
 
    lcUsercode = ENTRY(3,icLine,lcDelim).

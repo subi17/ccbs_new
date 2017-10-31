@@ -69,7 +69,6 @@
 &GLOBAL-DEFINE BrTable Invoice
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -746,8 +745,7 @@ PROCEDURE local-disp-row:
    FIND Customer where Customer.CustNum = Invoice.CustNum
    no-lock no-error.
    IF AVAILABLE Customer THEN 
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    ELSE lcCustName = "".                                 
 
    FIND FIRST memo WHERE

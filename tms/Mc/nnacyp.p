@@ -65,8 +65,7 @@ def var ok         as log format "Yes/No"    NO-UNDO.
 FUNCTION paiv RETURNS CHARACTER(AccType AS INTEGER).
   ac-type-name = "".
   IF AccType > 0 THEN DO:
-     ac-type-name = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Account",                                
+     ac-type-name = Func.Common:mTMSCodeName("Account",                                
                                      "AccType",
                                      STRING(AccType)).
   END.  

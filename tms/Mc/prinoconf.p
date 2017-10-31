@@ -12,7 +12,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -52,7 +51,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
           ITSendLog.RepType    = IF AVAILABLE Order THEN "ITOrd"
                                  ELSE "IT"
           ITSendLog.UserCode   = katun
-          ITSendLog.SendStamp  = fMakeTS().
+          ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 
 FIND Order WHERE
@@ -74,7 +73,7 @@ IF LOOKUP(Order.OrderChannel,"pos,vip,gift,yoigo,renewal_pos," +
 
 IF Order.CLI = "" THEN RETURN "ERROR:MSISDN not defined".
 
-fSplitTS(Order.CrStamp,
+Func.Common:mSplitTS(Order.CrStamp,
          OUTPUT ldtDate,
          OUTPUT liTime).
 

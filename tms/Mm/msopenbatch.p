@@ -15,7 +15,6 @@
 ============================================================================*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fsubser.i}
 {Func/msopenbatch.i}
 

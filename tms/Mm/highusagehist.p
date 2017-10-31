@@ -10,7 +10,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
 {Syst/eventval.i}
@@ -518,10 +517,10 @@ PROCEDURE local-find-others.
               Customer.Custnum = Msowner.CustNum NO-LOCK NO-ERROR.
               
    IF avail Customer THEN 
-   Username = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   Username = Func.Common:mDispCustName(BUFFER Customer).
    
-   lcCreated = "(" + fTS2HMS(HighUsage.crstamp) + ")".     
-   lcChanged = "(" + fTS2HMS(HighUsage.chstamp) + ")" .               
+   lcCreated = "(" + Func.Common:mTS2HMS(HighUsage.crstamp) + ")".     
+   lcChanged = "(" + Func.Common:mTS2HMS(HighUsage.chstamp) + ")" .               
 
    FIND FIRST TMSCodes WHERE
               TMSCodes.TableName = "HighUsage"      AND

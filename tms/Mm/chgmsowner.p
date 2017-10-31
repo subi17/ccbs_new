@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fcustdata.i}
 {Func/finvtxt.i}
@@ -466,8 +465,7 @@ END FUNCTION.
 FUNCTION fChkTitle RETURNS LOGICAL
    (icTitle AS CHAR):
 
-   IF DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                       "Customer",
+   IF Func.Common:mTMSCodeName("Customer",
                        "Title",
                        icTitle) = "" 
    THEN RETURN FALSE.
@@ -531,8 +529,8 @@ FUNCTION fUpdateRequest RETURNS LOGIC:
    FIND CURRENT MsRequest EXCLUSIVE-LOCK.
          
    IF ldtChgDate = ? 
-   THEN ldChgStamp = fMakeTS().
-   ELSE ldChgStamp = fMake2DT(ldtChgDate,liTime).
+   THEN ldChgStamp = Func.Common:mMakeTS().
+   ELSE ldChgStamp = Func.Common:mMake2DT(ldtChgDate,liTime).
                                             
    ASSIGN 
       MsRequest.ReqIParam1 = liNewCust1 
@@ -940,8 +938,8 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
-      THEN ldChgStamp = fMakeTS().
-      ELSE ldChgStamp = fMake2DT(ldtChgDate,liChgHour * 3600 + 
+      THEN ldChgStamp = Func.Common:mMakeTS().
+      ELSE ldChgStamp = Func.Common:mMake2DT(ldtChgDate,liChgHour * 3600 + 
                                             liChgMin * 60).
        
       /* create the request */ 
@@ -1087,7 +1085,7 @@ PROCEDURE pInitialize:
 
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtChgDate,
                OUTPUT liTime).
           

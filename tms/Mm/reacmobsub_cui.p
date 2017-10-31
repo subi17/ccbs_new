@@ -11,7 +11,6 @@
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Mnp/mnp.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/freacmobsub.i}
 
@@ -54,7 +53,7 @@ END. /* IF AVAIL bTermMobSub THEN DO: */
 
 /* Set Reactivation time */
 IF ldActStamp = 0 OR ldActStamp = ? THEN
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
 /* Create Reactivation Request */
 liMsReq = fReactivationRequest(INPUT iiMsSeq,

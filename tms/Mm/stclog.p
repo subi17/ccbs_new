@@ -35,13 +35,13 @@ ASSIGN
    session:numeric-format = "AMERICAN"
    ldtStartD = TODAY - 6 - w 
    ldtEndD = TODAY - w 
-   ldIndexFind = fMake2Dt(ldtStartD - 60,0)
+   ldIndexFind = Func.Common:mMake2DT(ldtStartD - 60,0)
    lcoutdir   =  fCParam("dumpoutgoing","stclog.p") 
    lcspooldir =  fCParam("dumpspool","stclog.p")
    /* This report will be named by the date interval of dump. */
    lcFileName = "stc_balances_" + 
-   fDateFMT(ldtStartD, "YYYYMMDD") + "_" +
-   fDateFMT(ldtEndD, "YYYYMMDD") + ".txt".
+   Func.Common:mDateFmt(ldtStartD, "YYYYMMDD") + "_" +
+   Func.Common:mDateFmt(ldtEndD, "YYYYMMDD") + ".txt".
 
 OUTPUT STREAM excel TO VALUE(lcspooldir + lcfilename).
 
@@ -50,8 +50,8 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.ReqType = 0 AND
          MsRequest.ReqStatus = 2 AND
          MsRequest.ActStamp >= ldIndexFind AND
-         MsRequest.DoneStamp >= fMake2dt(ldtStartD,0) AND 
-         MsRequest.DoneStamp < fMake2dt(ldtEndD + 1, 0):
+         MsRequest.DoneStamp >= Func.Common:mMake2DT(ldtStartD,0) AND 
+         MsRequest.DoneStamp < Func.Common:mMake2DT(ldtEndD + 1, 0):
 
    FIND FIRST bOldType WHERE
               bOldType.Brand = gcBrand AND

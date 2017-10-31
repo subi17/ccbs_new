@@ -3,7 +3,6 @@
 
 {Syst/commali.i}
 {Func/callquery.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiInvSeq  AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents  AS INT  NO-UNDO.

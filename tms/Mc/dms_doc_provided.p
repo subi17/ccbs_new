@@ -12,10 +12,8 @@
 gcBrand = "1".
 Katun = "Cron".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/dms.i}
-{Func/date.i}
 
 DEF VAR ldaReadDate       AS DATE NO-UNDO.
 DEF VAR lcLogDir          AS CHAR NO-UNDO.
@@ -33,7 +31,7 @@ DEF STREAM sLogFile.
 
 lcTableName = "DMS".
 lcActionID = {&DMS_REMINDER_SENDER}.
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 /*iiDays: how many days are between today and the selected date
 For example
@@ -43,9 +41,9 @@ FUNCTION fGetDateRange RETURNS CHAR
     OUTPUT odStart AS DECIMAL,
     OUTPUT odEnd AS DECIMAL):
    DEF VAR ldNow AS DECIMAL.
-   ldNow = fDate2TS(TODAY).
-   odStart = fOffset(ldNow, -24 * (iiDays + 1)).
-   odEnd = fOffset(ldNow, -24 * (iiDays )).
+   ldNow = Func.Common:mDate2TS(TODAY).
+   odStart = Func.Common:mOffSet(ldNow, -24 * (iiDays + 1)).
+   odEnd = Func.Common:mOffSet(ldNow, -24 * (iiDays )).
 
 END.
 
@@ -114,7 +112,7 @@ ASSIGN
 
 
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile1) APPEND.
-fLogLine("","DMS Reminder creation starts " + fTS2HMS(fMakeTS())).
+fLogLine("","DMS Reminder creation starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS())).
 
 /*define time range for getting the requested entries*/
 liNoDocProvidedPeriod = fCParamI("DMS_doc_no_provided_time").
@@ -139,7 +137,7 @@ FOR EACH DMS NO-LOCK WHERE
      fLogLine("","Msg sending status " + lcErr).
    END.
 END.
-     fLogLine("","DMS Reminder creation ends " + fTS2HMS(fMAkeTS())).
+     fLogLine("","DMS Reminder creation ends " + Func.Common:mTS2HMS(Func.Common:mMakeTS())).
 
 OUTPUT STREAM sLogFile CLOSE.
 

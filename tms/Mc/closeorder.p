@@ -8,7 +8,6 @@
    
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -284,7 +283,7 @@ FOR EACH MNPProcess WHERE
    MNPProcess.MNPType = {&MNP_TYPE_IN} AND
    MNPProcess.StatusCode = {&MNP_ST_AREC} EXCLUSIVE-LOCK:
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}.
 END.
 

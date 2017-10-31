@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
 {Func/cparam.i2}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -101,7 +100,7 @@ for each order no-lock where
        Payment.AccType[2] = 20.
        
    /* time when posted */
-   Payment.ImportStamp = fMakeTS().
+   Payment.ImportStamp = Func.Common:mMakeTS().
 
    IF lcMemo > "" THEN DO:
    
@@ -116,7 +115,7 @@ for each order no-lock where
           Memo.CreUser   = katun 
           Memo.MemoTitle = "INITIAL TOPUP"
           Memo.MemoText  = lcMemo.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
    
    END.
 

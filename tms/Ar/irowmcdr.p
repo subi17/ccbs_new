@@ -16,7 +16,6 @@
                   17.03.05 aam  ignore prefix "151",
                                 find invoice instead of invseq with iiInvNum
                   15.12.05 aam  username removed (= custname)
-                  24.01.06 jt   DYNAMIC-FUNCTION("fDispCustName"
   Version ......: M15
   ---------------------------------------------------------------------- */
 
@@ -453,8 +452,7 @@ END PROCEDURE.
 
 PROCEDURE local-disp-row:
        RUN local-find-others.
-       lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                      BUFFER Customer).
+       lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        MobCDR.DateSt
@@ -463,8 +461,7 @@ PROCEDURE local-disp-row:
        lcCustName    WHEN AVAIL Customer
        MobCDR.CLI
        MobCDR.BillCode
-       DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-          mobcdr.gsmbnr,
+       Func.Common:mHideBSub(mobcdr.gsmbnr,
           mobcdr.custnum,
           mobcdr.bdest,
           MobCDR.BType,

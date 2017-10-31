@@ -4,7 +4,6 @@
 -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
@@ -55,7 +54,7 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
    FIND FIRST msowner where
               msowner.msseq = MobSub.msseq USE-INDEX MsSeq NO-LOCK NO-ERROR.
    IF AVAIL msowner THEN ideActStamp = msowner.tsbegin.
-   IF ideActStamp <= Order.Crstamp THEN ideActStamp = fMakeTS().
+   IF ideActStamp <= Order.Crstamp THEN ideActStamp = Func.Common:mMakeTS().
 END.
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
@@ -116,8 +115,7 @@ FOR EACH OrderAction NO-LOCK WHERE
 
    /* don't abort if an error occurred */
    IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.AgrCust,
                        "OrderAction " + OrderAction.ItemType,
@@ -140,8 +138,7 @@ FOR EACH OrderAction NO-LOCK WHERE
 
    /* don't abort if an error occurred */
    IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Customer",
+      Func.Common:mWriteMemo("Customer",
                        STRING(MobSub.CustNum),
                        MobSub.AgrCust,
                        "OrderAction " + OrderAction.ItemType,
@@ -157,18 +154,17 @@ FOR EACH OrderAction EXCLUSIVE-LOCK WHERE
          OrderAction.ItemType = "BundleItem" AND
          OrderAction.ItemKey MATCHES "FLEX*UPSELL":
 
-   IF fGetDSSId(mobsub.custnum, fmakets()) > "" THEN
+   IF fGetDSSId(mobsub.custnum, Func.Common:mMakeTS()) > "" THEN
       OrderAction.ItemKey = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
                                                  fGetDSSId(mobsub.custnum, 
-                                                 fmakets()),
+                                                 Func.Common:mMakeTS()),
                                                  OrderAction.ItemKey, 
-                                                 fmakets()).
+                                                 Func.Common:mMakeTS()).
    RUN pPeriodicalContract.
 
    /* don't abort if an error occurred */
    IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Customer",
+      Func.Common:mWriteMemo("Customer",
                        STRING(MobSub.CustNum),
                        MobSub.AgrCust,
                        "OrderAction " + OrderAction.ItemType,
@@ -229,9 +225,9 @@ PROCEDURE pPeriodicalContract:
    ELSE llCreateFees = (DayCampaign.FeeModel > "").
 
    ldeContractActStamp = 
-                 (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
+                 (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN Func.Common:mMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN ideActStamp
-                  ELSE IF Order.OrderChannel BEGINS "Retention" THEN fMakeTS()
+                  ELSE IF Order.OrderChannel BEGINS "Retention" THEN Func.Common:mMakeTS()
                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ideActStamp).
 
@@ -239,10 +235,10 @@ PROCEDURE pPeriodicalContract:
    IF OrderAction.ItemKey = {&PMDUB} AND
       icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
       ASSIGN ldaPMDUBPromoStartDate = fCParamDa("PMDUB_PROMO_START_DATE")
-             ldePMDUBPromoActStamp  = fMake2Dt(ldaPMDUBPromoStartDate,0).
+             ldePMDUBPromoActStamp  = Func.Common:mMake2DT(ldaPMDUBPromoStartDate,0).
 
       IF ldeContractActStamp >= ldePMDUBPromoActStamp THEN
-         ldeContractActStamp = fSecOffSet(ldeContractActStamp,300).
+         ldeContractActStamp = Func.Common:mSecOffSet(ldeContractActStamp,300).
    END. /* IF OrderAction.ItemKey = {&PMDUB} AND */
    
    IF OrderAction.ItemKey = {&DSS} THEN DO:
@@ -250,7 +246,7 @@ PROCEDURE pPeriodicalContract:
          RETURN "ERROR:DSS activation request is ongoing.".
       ELSE IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
                                 INPUT  MobSub.MsSeq,
-                                INPUT  fMakeTS(),
+                                INPUT  Func.Common:mMakeTS(),
                                 INPUT  OrderAction.ItemKey,
                                 INPUT  "",
                                 OUTPUT ldeCurrMonthLimit,
@@ -385,7 +381,7 @@ PROCEDURE pService:
                               SubSer.ServCom,
                               1, /* activate */
                               "", /* params */
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
@@ -400,7 +396,7 @@ PROCEDURE pService:
                               OrderAction.ItemKey,
                               1, /* activate */
                               "", /* params */
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
@@ -476,7 +472,7 @@ PROCEDURE pDiscountPlan:
       ASSIGN
       ldate              = ADD-INTERVAL(MobSub.TariffActDate,5,"months")
       DPMember.ValidFrom = MobSub.TariffActDate
-      DPMember.ValidTo   = fLastDayOfMonth(lDate)      
+      DPMember.ValidTo   = Func.Common:mLastDayOfMonth(lDate)      
       DPMember.DiscValue = DPRate.DiscValue.
    END.
 
@@ -547,9 +543,9 @@ PROCEDURE pQ25Extension:
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
 
    IF TODAY < ldaDate THEN
-      ldeContractActStamp = fMake2dt(ldaDate,0).
+      ldeContractActStamp = Func.Common:mMake2DT(ldaDate,0).
    ELSE ASSIGN
-      ldeContractActStamp = fSecOffset(fMakeTS(),5)
+      ldeContractActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5)
       ldaDate = TODAY.
 
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN

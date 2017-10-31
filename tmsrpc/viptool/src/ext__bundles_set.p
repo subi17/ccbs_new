@@ -87,7 +87,7 @@ IF fMatrixAnalyse(gcBrand,
    RETURN appl_err("Bundle is not supported").
 END.
    
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 CASE pcActionValue :
    /* termination */
@@ -180,8 +180,8 @@ IF pcBundleId = {&PMDUB} AND liActionValue = 1 THEN DO:
 END. /* IF pcBundleId = {&PMDUB} AND */
 
 IF liActionValue = 0 THEN DO:
-   fSplitTs(ldeActStamp, output ldaActDate, output liTime).
-   ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
+   Func.Common:mSplitTS(ldeActStamp, output ldaActDate, output liTime).
+   ldeActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaActDate),86399).
 END.
 
 IF pcBundleId = {&DSS} THEN DO:

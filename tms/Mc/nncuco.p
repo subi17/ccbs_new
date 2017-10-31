@@ -272,8 +272,7 @@ FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
 
    IF iiUnit > 0 THEN 
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "Tariff","DataType",STRING(iiUnit)).
+      lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
    ELSE lcUnit = "".
 
    RETURN (iiUnit = 0 OR (iiUnit > 0 AND lcUnit > "")). 
@@ -300,8 +299,7 @@ END.
 FIND Customer NO-LOCK where 
      Customer.CustNum = CustNum .
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 
 
@@ -1112,8 +1110,7 @@ repeat WITH FRAME sel:
                     FixedFee.HostTable = "").
        
        FIND Customer WHERE Customer.CustNum = FixedFee.CustNum NO-LOCK.
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
        IF FixedFee.TFBank > "" THEN 
          lcFinancedResult = "(" + FixedFee.TFBank + ")".

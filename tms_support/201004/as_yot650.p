@@ -65,7 +65,7 @@ repeat:
 
             CREATE ActionLog.
             ASSIGN
-               ActionLog.ActionTS     = fMakeTS()
+               ActionLog.ActionTS     = Func.Common:mMakeTS()
                ActionLog.Brand        = gcBrand  
                ActionLog.TableName    = "Order"  
                ActionLog.KeyValue     = STRING(Order.Orderid)
@@ -90,7 +90,7 @@ repeat:
    END.
 
    ASSIGN         
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.statusreason = "CANC_TECNI" WHEN MNPProcess.StatusReason EQ ""
       MNPProcess.StatusCode = {&MNP_ST_ACAN}. 
 end.

@@ -16,7 +16,6 @@
 {Func/fcustpl.i}
 {Func/ftaxdata.i}
 {Func/transname.i}
-{Func/timestamp.i}
 {Mc/offer.i}
 {Func/orderfunc.i}
 
@@ -257,7 +256,7 @@ PROCEDURE pMakeCashInvoice:
       RETURN.
    END.
 
-   fSplitTS(INPUT Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
+   Func.Common:mSplitTS(INPUT Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
 
    /* not for pos,pre-activated and vip  */
    IF LOOKUP(Order.OrderChannel,
@@ -513,7 +512,7 @@ PROCEDURE pUseFeeModel:
                    ErrorLog.ErrorChar = lcTerminal 
                    ErrorLog.ErrorMsg  = "Terminal fee model was not found"
                    ErrorLog.UserCode  = katun.
-                   ErrorLog.ActionTS  = fMakeTS().
+                   ErrorLog.ActionTS  = Func.Common:mMakeTS().
              ocError = "Terminal fee model was not found".
              RETURN "ERROR:" + ocError.
          END.
@@ -788,7 +787,7 @@ PROCEDURE pSingleFee:
                                         ", discount=" + STRING(ldTermDiscAmt) +
                                         ", campaign=" + Order.Campaign
                    ErrorLog.UserCode  = katun.
-                   ErrorLog.ActionTS  = fMakeTS().
+                   ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
          
          ldTermDiscAmt = idAmount.

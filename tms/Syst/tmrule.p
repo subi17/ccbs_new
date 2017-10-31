@@ -131,8 +131,7 @@ FORM
 FUNCTION fLimitSourceName RETURNS LOGIC
    (iiLimitSource AS INT):
 
-   lcSrcName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "TMRule",
+   lcSrcName = Func.Common:mTMSCodeName("TMRule",
                                  "LimitSource",
                                  STRING(iiLimitSource)).
                                  
@@ -142,8 +141,7 @@ END FUNCTION.
 FUNCTION fCounterAmount RETURNS LOGIC
    (icCounterAmount AS CHAR):
 
-   lcCounterAmount = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "TMRule",
+   lcCounterAmount = Func.Common:mTMSCodeName("TMRule",
                                       "CounterAmount",
                                       icCounterAmount).
                                  
@@ -154,8 +152,7 @@ END FUNCTION.
 FUNCTION fCounterPeriodName RETURNS LOGIC
    (iiCounterPeriod AS INT):
 
-   lcPeriodName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "TMRule",
+   lcPeriodName = Func.Common:mTMSCodeName("TMRule",
                                    "CounterPeriod",
                                    STRING(iiCounterPeriod)).
                                  
@@ -165,8 +162,7 @@ END FUNCTION.
 FUNCTION fLimitCompareName RETURNS LOGIC
    (iiLimitCompare AS INT):
 
-   lcLimitCompare = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "TMRule",
+   lcLimitCompare = Func.Common:mTMSCodeName("TMRule",
                                      "LimitCompare",
                                      STRING(iiLimitCompare)).
                                  
@@ -176,8 +172,7 @@ END FUNCTION.
 FUNCTION fCounterTypeName RETURNS LOGIC
    (iiCounterType AS INT):
 
-   lcCounterType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TMRule",
+   lcCounterType = Func.Common:mTMSCodeName("TMRule",
                                     "CounterType",
                                     STRING(iiCounterType)).
                                  
@@ -187,8 +182,7 @@ END FUNCTION.
 FUNCTION fPayTypeName RETURNS LOGIC
    (iiPayType AS INT):
 
-   lcPayType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "CLIType",
+   lcPayType = Func.Common:mTMSCodeName("CLIType",
                                  "PayType",
                                  STRING(iiPayType)).
                                  
@@ -198,8 +192,7 @@ END FUNCTION.
 FUNCTION fTicketTypeName RETURNS LOGIC
    (iiTicketType AS INT):
 
-   lcTicketType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "TMRule",
+   lcTicketType = Func.Common:mTMSCodeName("TMRule",
                                  "TicketType",
                                  STRING(iiTicketType)).
                                  
@@ -993,8 +986,7 @@ PROCEDURE pUpdate:
             
             IF FRAME-FIELD = "TicketType" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "TicketType",
                                        STRING(INPUT TMRule.TicketType))
                THEN DO:
@@ -1008,8 +1000,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "PayType" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "CLIType",
+               IF NOT Func.Common:mTMSCodeChk("CLIType",
                                        "PayType",
                                        STRING(INPUT TMRule.PayType))
                THEN DO:
@@ -1023,8 +1014,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "CounterAmount" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "CounterAmount",
                                        INPUT INPUT TMRule.CounterAmount)
                THEN DO:
@@ -1038,8 +1028,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "LimitSource" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "LimitSource",
                                        STRING(INPUT TMRule.LimitSource))
                THEN DO:
@@ -1057,8 +1046,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "CounterPeriod" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "CounterPeriod",
                                        STRING(INPUT TMRule.CounterPeriod))
                THEN DO:
@@ -1072,8 +1060,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "CounterType" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "CounterType",
                                        STRING(INPUT TMRule.CounterType))
                THEN DO:
@@ -1087,8 +1074,7 @@ PROCEDURE pUpdate:
 
             ELSE IF FRAME-FIELD = "LimitCompare" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "LimitCompare",
                                        STRING(INPUT TMRule.LimitCompare))
                THEN DO:

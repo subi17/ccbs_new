@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}

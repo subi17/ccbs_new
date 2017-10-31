@@ -8,7 +8,6 @@
  ============================================================================*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER  iiMSSeq AS INT    NO-UNDO.
 
@@ -31,8 +30,7 @@ FIND Customer WHERE
      Customer.CustNum = mobsub.CustNum NO-LOCK NO-ERROR.
 
 ASSIGN 
-   lcUserName = DYNAMIC-FUNCTION("fDispCustName" IN
-                ghFunc1, BUFFER Customer).
+   lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 form 
 skip(1)
 
@@ -157,7 +155,7 @@ ACTION:
          IF NOT ok THEN NEXT Action.
 
          CREATE CallAlarm.
-         CallAlarm.ActStamp = fmakets().
+         CallAlarm.ActStamp = Func.Common:mMakeTS().
          ASSIGN
             CallAlarm.CLSeq    = 0
             CallAlarm.CASeq    = NEXT-VALUE(CallAlarm)

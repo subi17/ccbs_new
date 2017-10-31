@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'FuncRunProcess'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -577,11 +576,11 @@ PROCEDURE local-find-others.
        lcShortLastTime = "".
        
     IF FuncRunProcess.StartTS > 0 THEN 
-       lcStartTime = fTS2HMS(FuncRunProcess.StartTS).
+       lcStartTime = Func.Common:mTS2HMS(FuncRunProcess.StartTS).
     IF FuncRunProcess.EndTS > 0 THEN 
-       lcEndTime = fTS2HMS(FuncRunProcess.EndTS).
+       lcEndTime = Func.Common:mTS2HMS(FuncRunProcess.EndTS).
     IF FuncRunProcess.LastTS > 0 THEN 
-       lcLastTime = fTS2HMS(FuncRunProcess.LastTS).
+       lcLastTime = Func.Common:mTS2HMS(FuncRunProcess.LastTS).
 
     IF lcLastTime > "" THEN 
        lcShortLastTime = ENTRY(2,lcLastTime," ").
@@ -600,8 +599,7 @@ PROCEDURE local-UPDATE-record:
       lcDuration = "".
       IF FuncRunProcess.EndTS > FuncRunProcess.StartTS AND
          FuncRunProcess.StartTS > 0  THEN DO:
-            liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                                         FuncRunProcess.StartTS,
+            liDurDays = Func.Common:mTSDuration(FuncRunProcess.StartTS,
                                          FuncRunProcess.EndTS,
                                          OUTPUT liDurTime).
             lcDuration = (IF liDurDays > 0 

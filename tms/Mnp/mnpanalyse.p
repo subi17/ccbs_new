@@ -15,7 +15,6 @@ gcBrand = "1".
 {Func/barrfunc.i}
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/timestamp.i}
 {Func/heartbeat.i}
 {Func/multitenantfunc.i}
 
@@ -99,7 +98,7 @@ PROCEDURE pMNPAnalyse:
    DEFINE VARIABLE llIsPrepaid AS LOGICAL NO-UNDO. 
 
    /* just to make sure that MNP NC state is updated after reading in to tms */
-   ldeCreated = fSecOffSet(fMakeTS(),-10).
+   ldeCreated = Func.Common:mSecOffSet(Func.Common:mMakeTS(),-10).
 
    MNPPROCESS_LOOP:
    FOR EACH MNPProcess WHERE
@@ -222,7 +221,7 @@ PROCEDURE pMNPAnalyse:
                IF AVAIL bMNPProcess THEN 
                DO:
                   ASSIGN
-                     bMNPProcess.UpdateTS = fMakeTS()
+                     bMNPProcess.UpdateTS = Func.Common:mMakeTS()
                      bMNPProcess.StatusCode = {&MNP_ST_BDET}.
                   RELEASE bMNPProcess.
                END.

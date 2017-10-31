@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Func/barrfunc.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsSeq   AS INTEGER    NO-UNDO.
 
@@ -278,7 +277,7 @@ REPEAT WITH FRAME frTop:
                   lcBCommand,
                   {&REQUEST_SOURCE_MANUAL_TMS},
                   "",
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   "",
                   OUTPUT lcSetStatus).
                
@@ -290,7 +289,7 @@ REPEAT WITH FRAME frTop:
                   IF lcBarringMemoText > "" THEN DO:
                      CREATE Memo.
                      ASSIGN
-                       Memo.crestamp  = fMakeTS()
+                       Memo.crestamp  = Func.Common:mMakeTS()
                        Memo.Brand     = gcBrand
                        Memo.creuser   = katun
                        Memo.memoseq   = NEXT-VALUE(memoseq)   
@@ -514,7 +513,7 @@ PROCEDURE pInitMenu.
       USE-INDEX MsSeq NO-ERROR.
 
       IF AVAIL Barring THEN
-         lcEventTS = fTs2HMS(Barring.EventTS).
+         lcEventTS = Func.Common:mTS2HMS(Barring.EventTS).
       ELSE lcEventTS = "".
 
       CREATE ttBarrings.

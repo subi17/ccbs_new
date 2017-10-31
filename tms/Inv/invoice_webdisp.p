@@ -10,7 +10,6 @@
 
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER idaInvDate AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType  AS INT  NO-UNDO.
@@ -76,7 +75,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          ActionLog.ActionChar   = 'Web display permit marked as "' +
                                   STRING(ilDisplay,"allowed/denied") + '" to ' +
                                   STRING(oiMarked) + " invoices."
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 END.
 
@@ -88,7 +87,7 @@ IF oiMarked > 0 THEN DO TRANS:
       ActionLog.ActionChar   = 'Web display permit marked as "' + 
                                STRING(ilDisplay,"allowed/denied") + '" to ' +
                                STRING(oiMarked) + " invoices."
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
          
    RELEASE ActionLog.   
 END.

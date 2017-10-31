@@ -13,7 +13,6 @@ ASSIGN
    katun   = "request".
    
 {Func/heartbeat.i}
-{Func/timestamp.i}
 {Func/log.i}
 {Syst/requestrunner.i}
 
@@ -161,7 +160,7 @@ DO WHILE TRUE
 
       /* current time for getting scheduled requests */
       IF TODAY > ldaSystemDay THEN ldaSystemDay = TODAY.
-      ldCurrent = fMake2DT(ldaSystemDay,TIME).
+      ldCurrent = Func.Common:mMake2DT(ldaSystemDay,TIME).
             
       lcUser = RequestType.UserCode.
       IF lcUser = "" THEN lcUser = katun.

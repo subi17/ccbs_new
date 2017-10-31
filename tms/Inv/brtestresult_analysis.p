@@ -8,10 +8,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/finvnum.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/ftaxdata.i}
 
@@ -53,7 +51,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.

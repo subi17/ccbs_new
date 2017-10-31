@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -234,8 +233,7 @@ FOR EACH ttDueDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttDueDate.DueDate,
+   lcDate = Func.Common:mDateFmt(ttDueDate.DueDate,
                              "yyyymmdd").
    ASSIGN 
       lcFileXml = REPLACE(lcFileXml,"#DDATE",lcDate)
@@ -298,7 +296,7 @@ DO TRANS:
       ActionLog.ActionChar   = " Files: " + STRING(oiFileCount) + CHR(10) +
                                " Invoices: " + STRING(oiInvCount)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN ocError.

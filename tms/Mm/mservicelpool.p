@@ -8,8 +8,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
-{Func/timestamp.i}
  
 DEF INPUT PARAM iiMSSeq as INT  no-undo.
 DEF INPUT PARAM iiSlSeq AS INT NO-UNDO.
@@ -19,8 +17,8 @@ DEF INPUT PARAM idaValidTo AS DATE NO-UNDO.
 DEFINE VARIABLE ldeEndTS AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE ldeFromTS AS DECIMAL NO-UNDO. 
 
-ldeEndTS = fMake2Dt(idaValidTo,86399).
-ldeFromTs = fMake2Dt(idaValidFrom,0).
+ldeEndTS = Func.Common:mMake2DT(idaValidTo,86399).
+ldeFromTs = Func.Common:mMake2DT(idaValidFrom,0).
 
 def /* new */ shared var siirto AS char.
 
@@ -426,8 +424,8 @@ PROCEDURE local-disp-row:
     CLEAR FRAME sel NO-PAUSE.
 
     DEFINE VARIABLE liTime AS INTEGER NO-UNDO. 
-    lcFromTS = fTS2HMS(mservicelpool.fromts).
-    lcEndTs = fTS2HMS(mservicelpool.endts).
+    lcFromTS = Func.Common:mTS2HMS(mservicelpool.fromts).
+    lcEndTs = Func.Common:mTS2HMS(mservicelpool.endts).
 
     DISPLAY 
        MServiceLPool.MsSeq

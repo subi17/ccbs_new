@@ -19,7 +19,6 @@
 /* NOTE: There's Web side error translations for this RPC. YBU-3023 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/timestamp.i}
 
 DEF VAR lhBuff AS HANDLE NO-UNDO.
 DEF VAR piOrderId AS INTEGER NO-UNDO. 

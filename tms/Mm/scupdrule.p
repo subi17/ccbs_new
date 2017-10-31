@@ -10,7 +10,6 @@
 &GLOBAL-DEFINE BrTable ScUpdRule
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}

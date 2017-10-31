@@ -125,8 +125,7 @@ FUNCTION fActionDesc RETURNS CHAR
    
    IF iiAction = 0 THEN RETURN "".
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "RequestAction",
+   RETURN Func.Common:mTMSCodeName("RequestAction",
                            "Action",
                            STRING(iiAction)).
 END FUNCTION.
@@ -136,8 +135,7 @@ FUNCTION fActionTypeDesc RETURNS CHAR
    
    IF icActionType = "" THEN RETURN "".
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "RequestAction",
+   RETURN Func.Common:mTMSCodeName("RequestAction",
                            "ActionType",
                            icActionType).
 END FUNCTION.
@@ -145,8 +143,7 @@ END FUNCTION.
 FUNCTION fPayType RETURNS CHAR
    (INPUT iiPayType AS INT):
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "CLIType",
+   RETURN Func.Common:mTMSCodeName("CLIType",
                            "PayType",
                            STRING(iiPayType)).
 END FUNCTION.

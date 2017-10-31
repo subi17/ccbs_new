@@ -11,7 +11,6 @@
                   04.12.03/aam delete, eventlog
                   30.01.04/aam input CustNum,
                                editor for memo
-                  24.01.06/jt  DYNAMIC-FUNCTION("fDispCustName"
                   16.06.06/aam ClaimState instead of Claim and ClaimQty
                   24.05.07/aam Invoice.ExtInvID
   Version ......: M15
@@ -736,8 +735,7 @@ PROCEDURE local-find-others.
        lcExtInvID = "".
        
     IF AVAILABLE Customer 
-    THEN lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+    THEN lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
     FIND Invoice WHERE Invoice.InvNum = ClaimHist.InvNum NO-LOCK NO-ERROR.
     IF AVAILABLE Invoice THEN lcExtInvID = Invoice.ExtInvID.

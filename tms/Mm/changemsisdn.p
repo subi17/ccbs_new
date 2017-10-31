@@ -83,7 +83,7 @@ PROCEDURE pChangeMSISDN:
 
    FIND FIRST new-MSISDN WHERE
               new-MSISDN.CLI = MSRequest.ReqCParam2  AND 
-              new-MSISDN.ValidTo > fMakeTS() No-LOCK NO-ERROR.
+              new-MSISDN.ValidTo > Func.Common:mMakeTS() No-LOCK NO-ERROR.
 
    IF NOT AVAIL new-MSISDN THEN DO:
       fReqError("Unknown new msisdn number:" +  MSRequest.ReqCParam2).
@@ -109,11 +109,11 @@ PROCEDURE pChangeMSISDN:
    FIND FIRST Old-MSOWner WHERE 
               Old-MSOWNER.MSSEQ  = Mobsub.MSSeq AND 
               Old-MSOWNER.CLI    = Mobsub.CLI   AND 
-              Old-MSOwner.TSEND >= FMakeTS() EXCLUSIVE-LOCK NO-ERROR.
+              Old-MSOwner.TSEND >= Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
 
    FIND FIRST MSISDN WHERE 
               MSISDN.CLI  = MobSub.CLI AND 
-              MSISDN.ValidTo > fMakeTS() EXCLUSIVE-LOCK NO-ERROR.
+              MSISDN.ValidTo > Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
 
    FIND FIRST MSRange WHERE 
               MSRange.Brand    = gcBrand    AND 
@@ -125,7 +125,7 @@ PROCEDURE pChangeMSISDN:
    /* What Happens TO old msowner */
    IF AVAIL Old-MSOwner THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
-      ASSIGN Old-MSOwner.TsEnd = FMakeTS().
+      ASSIGN Old-MSOwner.TsEnd = Func.Common:mMakeTS().
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
   
@@ -154,7 +154,7 @@ PROCEDURE pChangeMSISDN:
    CREATE MSOwner.
    BUFFER-COPY old-Msowner except CLI CLIEvent TO Msowner.
    ASSIGN
-      MSOwner.TsBegin     = FMakeTS()
+      MSOwner.TsBegin     = Func.Common:mMakeTS()
       MSOwner.CLI         = new-MSISDN.CLI
       MSOwner.CustNum     = Mobsub.CustNum
       MSOwner.BillTarget  = Mobsub.BillTarget
@@ -200,7 +200,7 @@ PROCEDURE pChangeMSISDN:
 
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
          OPLog.UserCode  = katun
@@ -217,7 +217,7 @@ PROCEDURE pChangeMSISDN:
 
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
          OPLog.UserCode  = katun
@@ -261,7 +261,7 @@ PROCEDURE pChangeMSISDN:
       
          CREATE Memo.
          ASSIGN
-            Memo.CreStamp  = fMakeTs() 
+            Memo.CreStamp  = Func.Common:mMakeTS() 
             Memo.Brand     = gcBrand                 
             Memo.HostTable = "MobSub"                
             Memo.KeyValue  = STRING(DCCLI.MsSeq)     
@@ -288,7 +288,7 @@ PROCEDURE pChangeMSISDN:
                              "HSDPA",
                              1,
                              "",
-                             fMakeTS(),
+                             Func.Common:mMakeTS(),
                              "",                /* SalesMan */ 
                              FALSE,             /* fees */
                              FALSE,             /* SMS */ 

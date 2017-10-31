@@ -5,7 +5,6 @@
 */   
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -125,11 +124,10 @@ IF iiInvNum > 0 THEN ASSIGN
    Payment.DueDate  = bPaidInv.DueDate.
    
 ELSE
-   Payment.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+   Payment.CustName = Func.Common:mDispCustName(BUFFER Customer).
 
 /* created stamp */
-Payment.ImportStamp = fMakeTS().
+Payment.ImportStamp = Func.Common:mMakeTS().
 
 lcPref = "".
 

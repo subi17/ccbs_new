@@ -41,7 +41,6 @@
                   15.09.03 aam  brand
                   01.04.04 aam  PaymFile as criteria ("batch")
                   04.05.04 aam  account with 6 digits
-                  21.12.05 aam  check payment source with fTMSCodeChk 
                   05.01.06 aam  longer format for amounts
   Version ......: M15
   ---------------------------------------------------------------------- */
@@ -372,8 +371,7 @@ toimi:
                      ASSIGN FRAME options PaymSrc.
                      IF PaymSrc NE "ALL" THEN DO:
                         DO i = 1 TO NUM-ENTRIES(PaymSrc):
-                           IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                                   "Payment",
+                           IF NOT Func.Common:mTMSCodeChk("Payment",
                                                    "PaymSrc",
                                                    ENTRY(i,PaymSrc))
                            THEN DO:

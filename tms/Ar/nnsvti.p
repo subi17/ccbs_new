@@ -20,7 +20,6 @@
                   28.05.2004/aam SMS
                   10.08.2004/aam bank account from param DDebitBankAccount
                   29.11.2005/aam output file to Invoice.DDFile
-                  24.01.2006/jt  DYNAMIC-FUNCTION("fDispCustName"
  VERSION .......: M15
  ============================================================================*/
 
@@ -29,7 +28,6 @@
 {Func/refcode.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Func/fbankday.i}
 {Func/frefnum.i}
 {Func/fmakesms.i}
@@ -539,8 +537,7 @@ FOR EACH ttBankAcc:
             Invoice.InvNum = ttInv.InvNum,
       FIRST Customer OF Invoice NO-LOCK:
       
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                        
       /* check how many bank days are left before due date,
          minimum is 4 bank days */
@@ -679,7 +676,7 @@ FOR EACH ttBankAcc:
                         Customer.SMSNumber,
                         8,
                         lcTxt,
-                        fMakeTS()).
+                        Func.Common:mMakeTS()).
       END.
 
    END.  /* foreach ttInv */

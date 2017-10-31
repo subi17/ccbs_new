@@ -29,7 +29,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 katun = "VISTA_" + pcUserName.
 
 liRequestID = fSendeInvoiceRequest(
-                      INPUT fMakeTS(),
+                      INPUT Func.Common:mMakeTS(),
                       INPUT DATE(MONTH(TODAY),1,YEAR(TODAY)),
                       INPUT pcUserName, /* creator */
                       INPUT ({&REQUEST_SOURCE_NEWTON}),

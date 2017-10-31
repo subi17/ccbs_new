@@ -10,7 +10,6 @@
   ------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/func.p}
 
 def shared var siirto as char. 
 DEF INPUT PARAMETER ictarget   AS CHAR NO-UNDO.
@@ -261,8 +260,10 @@ BROWSE:
 
             lddate = today.
 
-           fReplaceSMS 
-             (INPUT invtext.invtext, iimsseq , lddate, OUTPUT siirto).   
+           Func.Common:mReplaceSMS
+             ( Customer.CustName,
+               IF AVAILABLE MobSub THEN Mobsub.CLI ELSE "",
+               invtext.invtext, iimsseq , lddate, OUTPUT siirto).   
 
            MESSAGE
            "Approve pre-defined text?" SKIP(1 )

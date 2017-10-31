@@ -7,7 +7,6 @@
  *
  *-----------------------------------------------------------------*/
 {Syst/commpaa.i}
-{Func/timestamp.i}
 
 DEF VAR sid LIKE solog.solog.
 DEF VAR sologi AS C NO-UNDO.
@@ -190,10 +189,10 @@ END.
 PROCEDURE local-disp:
    ASSIGN
        stat = solog.stat
-       timesl = fts2hms(solog.timeslottms)
-       crtime = fts2hms(solog.createdts)
-       actime = fts2hms(solog.activationts)
-       cotime = fts2hms(solog.completedts)
+       timesl = Func.Common:mTS2HMS(solog.timeslottms)
+       crtime = Func.Common:mTS2HMS(solog.createdts)
+       actime = Func.Common:mTS2HMS(solog.activationts)
+       cotime = Func.Common:mTS2HMS(solog.completedts)
        commli = solog.commline
        cli = solog.cli
        sologi = STRING(solog.solog)

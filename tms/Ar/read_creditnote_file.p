@@ -15,7 +15,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/fcreditreq.i}
 {Func/multitenantfunc.i}
 
@@ -193,7 +192,7 @@ PROCEDURE pCreateCreditNote :
           Memo.CreUser   = katun 
           Memo.MemoTitle = lcMemoTitle
           Memo.MemoText  = lcMemoContent
-          Memo.CreStamp  = fmakets().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
    RETURN "OK".
 

@@ -23,7 +23,6 @@ DEFINE VARIABLE gcBrand AS CHARACTER INIT "1" NO-UNDO.
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
 
 &SCOPED-DEFINE BrandVarDefined YES
-{Func/func.p}
 
 DEFINE VARIABLE pcTenant       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piOffset       AS INTEGER   NO-UNDO. 
@@ -48,7 +47,7 @@ DEF VAR lhMsRequest AS HANDLE NO-UNDO.
 FUNCTION fAddCustomerData RETURN LOGICAL:
    FIND Customer WHERE Customer.CustNum = lhMsRequest::CustNum NO-LOCK NO-ERROR.
    IF AVAIL Customer THEN DO:
-      add_string(request_struct, "name", fDispCustName(BUFFER Customer)). 
+      add_string(request_struct, "name", Func.Common:mDispCustName(BUFFER Customer)). 
       add_int(request_struct,"customer_number",Customer.CustNum).
    END.
    RETURN TRUE.

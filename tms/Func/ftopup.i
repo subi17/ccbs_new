@@ -11,7 +11,6 @@
 -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 FUNCTION fCreateTopUpRequest RETURNS INTEGER
    (iiMsSeq      AS INT,
@@ -29,7 +28,7 @@ FUNCTION fCreateTopUpRequest RETURNS INTEGER
    DEFINE VARIABLE liReturn    AS INTEGER   NO-UNDO.
 
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
       
    DO WHILE TRUE:
       liReturn = NEXT-VALUE(PrePaidReq).

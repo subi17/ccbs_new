@@ -9,7 +9,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fcustbal.i}
 {Func/fbankdata.i}
@@ -96,8 +95,7 @@ IF LENGTH(lcBankAcc) > 10 THEN
                SUBSTRING(lcBankAcc,13,2) + " " +
                SUBSTRING(lcBankAcc,15). 
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                               
 PAUSE 0.
 DISP Customer.CustNum
@@ -193,7 +191,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          ldtDate = ldtDate + 1
          liTime  = liTime - 86400.
          
-      ldActStamp = fMake2Dt(ldtDate,liTime).
+      ldActStamp = Func.Common:mMake2DT(ldtDate,liTime).
       
       liRequest = 
          fManualPaymentRequest(Customer.CustNum,
@@ -215,7 +213,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       ELSE 
          MESSAGE "Request ID for manual payment is" liRequest SKIP
                  "It will be activated on" 
-                 fTS2Hms(ldActStamp)
+                 Func.Common:mTS2HMS(ldActStamp)
          VIEW-AS ALERT-BOX 
          TITLE " REQUEST CREATED ".
            

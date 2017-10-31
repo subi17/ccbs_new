@@ -89,7 +89,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
 
          CREATE ActionLog.
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.Brand        = gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
@@ -114,7 +114,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
       
       fMNPCallAlarm(
           lcSMS,
-          fMakeTS(),
+          Func.Common:mMakeTS(),
           MNPProcess.FormRequest,
           Order.CLI,
           Order.CustNum,
@@ -130,7 +130,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
       END.
 
       ASSIGN         
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
          MNPProcess.StatusCode = {&MNP_ST_ACAN}
          Order.MNPStatus = MNPProcess.StatusCode + 1.

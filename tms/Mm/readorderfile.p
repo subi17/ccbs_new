@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
@@ -90,13 +89,13 @@ ASSIGN
 INPUT STREAM sRead FROM VALUE(icFile).
 OUTPUT STREAM sLog TO VALUE(icLogFile) APPEND.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 PUT STREAM sLog UNFORMATTED
    "File: " icFile
    SKIP
    "Started: " 
-   fTS2HMS(ldCurrent)
+   Func.Common:mTS2HMS(ldCurrent)
    SKIP.
 
 ASSIGN

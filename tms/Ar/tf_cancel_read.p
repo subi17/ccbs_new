@@ -10,7 +10,6 @@
 katun = "Qvantel".
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/tsformat.i}
 {Func/ftransdir.i}
@@ -138,7 +137,7 @@ REPEAT:
       ASSIGN
          ActionLog.Brand        = gcBrand
          ActionLog.ActionID     = "TF_CREAD_" + lcTFBank
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFilename
          ActionLog.UserCode     = katun

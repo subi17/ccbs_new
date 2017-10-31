@@ -26,7 +26,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 
 &SCOPED-DEFINE SEARCH_LIMIT 1000
 
@@ -153,17 +152,17 @@ PROCEDURE pAddResultsArray:
       StartTime changed to get equal implementation */
    IF DumpLog.DumpLogStatus = 0 THEN
       ASSIGN
-         ldtStarted = fTimeStamp2DateTime(Dumplog.CreateStart)
-         ldtNow = fTimeStamp2DateTime(fMakeTS())
+         ldtStarted = Func.Common:mTimeStamp2DateTime(Dumplog.CreateStart)
+         ldtNow = Func.Common:mTimeStamp2DateTime(Func.Common:mMakeTS())
          liElapsed = INT(ldtNow - ldtStarted) / 1000
          lcEndTime = STRING(liElapsed,"HH:MM:SS").
    ELSE DO:
       IF DumpLog.CreateEnd NE 00000000.00000 THEN DO:
          ASSIGN
-            ldtStarted = fTimeStamp2DateTime(Dumplog.CreateStart)
-            ldtEnded = fTimeStamp2DateTime(Dumplog.CreateEnd)
+            ldtStarted = Func.Common:mTimeStamp2DateTime(Dumplog.CreateStart)
+            ldtEnded = Func.Common:mTimeStamp2DateTime(Dumplog.CreateEnd)
             liDiffer = INT(ldtEnded - ldtStarted) / 1000
-            lcEndTime = fTS2HMS(DumpLog.CreateEnd)
+            lcEndTime = Func.Common:mTS2HMS(DumpLog.CreateEnd)
             lcEndTime = REPLACE(lcEndTime,".","-").
          IF liDiffer > 0 THEN
             lcDiffer = STRING(liDiffer,"HH:MM:SS").
@@ -172,7 +171,7 @@ PROCEDURE pAddResultsArray:
       END.
       ELSE DO:
          ASSIGN
-            ldtStarted = fTimeStamp2DateTime(Dumplog.CreateStart)
+            ldtStarted = Func.Common:mTimeStamp2DateTime(Dumplog.CreateStart)
             lcEndTime = ""
             lcDiffer = "".
       END.
@@ -180,7 +179,7 @@ PROCEDURE pAddResultsArray:
    END.
 
    ASSIGN
-      lcStartTime = fTS2HMS(DumpLog.CreateStart)
+      lcStartTime = Func.Common:mTS2HMS(DumpLog.CreateStart)
       lcStartTime = REPLACE(lcStartTime,".","-").
 
    dump_struct = add_struct(resp_array, "").

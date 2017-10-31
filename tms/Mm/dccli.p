@@ -15,7 +15,6 @@
 {Syst/eventval.i}
 {Func/cparam2.i}
 {Rate/daycampaign.i}
-{Func/timestamp.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}

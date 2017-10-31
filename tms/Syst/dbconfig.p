@@ -107,8 +107,7 @@ FUNCTION fDispState RETURNS CHAR
 
    DEF VAR lcValue AS CHAR NO-UNDO.   
    
-   lcValue = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "DBConfig",
+   lcValue = Func.Common:mTMSCodeName("DBConfig",
                               "DBState",
                               STRING(iiState)).
    

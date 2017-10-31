@@ -97,15 +97,12 @@ FUNCTION fPickCustomer RETURNS LOGICAL
              ttCustomer.Address    = Customer.Address
              ttCustomer.PostOffice = Customer.PostOffice
              ttCustomer.InvCust    = Customer.InvCust.
-             ttCustomer.CustName   = DYNAMIC-FUNCTION("fDispCustName" 
-                                                         IN ghFunc1,
-                                                      BUFFER Customer).
+             ttCustomer.CustName   = Func.Common:mDispCustName(BUFFER Customer).
       IF Customer.InvCust NE Customer.CustNum THEN DO:
          FIND bInvCust WHERE bInvCust.CustNum = Customer.InvCust 
             NO-LOCK NO-ERROR.
          IF AVAILABLE bInvCust THEN 
-            ttCustomer.ICName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                 BUFFER bInvCust).
+            ttCustomer.ICName = Func.Common:mDispCustName(BUFFER bInvCust).
       END.           
       ELSE ttCustomer.ICName = ttCustomer.CustName.
    END.

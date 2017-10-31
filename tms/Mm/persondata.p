@@ -74,8 +74,7 @@ FIND FIRST Customer where
            Customer.CustNum = liCustNum
 NO-LOCK NO-ERROR.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                             ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE lcUserName = "".
 
 DO WHILE TRUE:

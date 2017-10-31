@@ -62,13 +62,13 @@ OUTPUT STREAM sLog TO VALUE(icFile).
 IF icDumpMode = "modified" THEN ASSIGN
    ldaTo   = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
    ldaFrom = DATE(MONTH(ldaTo),1,YEAR(ldaTo))
-   ldFrom  = fMake2Dt(ldaFrom,0)
-   ldTo    = fMake2Dt(ldaTo,86399)
-   ldCheck = fMake2Dt(ldaFrom - 20,0).
+   ldFrom  = Func.Common:mMake2DT(ldaFrom,0)
+   ldTo    = Func.Common:mMake2DT(ldaTo,86399)
+   ldCheck = Func.Common:mMake2DT(ldaFrom - 20,0).
 /* take all */
 ELSE ASSIGN
-   ldFrom  = fMake2Dt(2/1/10,0)
-   ldTo    = fMake2Dt(TODAY - 1,86399)
+   ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+   ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
    ldCheck = ldFrom.
 
 
@@ -92,7 +92,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       LEAVE.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldaActDate,
             OUTPUT liTime).
 

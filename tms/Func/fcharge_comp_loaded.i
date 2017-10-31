@@ -2,7 +2,6 @@
 
 /* return the amount of charge or compensation for a mobsub */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 FUNCTION fMonthLoaded RETURN DECIMAL 
@@ -12,7 +11,7 @@ FUNCTION fMonthLoaded RETURN DECIMAL
    DEF VAR ldTS2     AS DEC  NO-UNDO.
    DEF VAR ldLoaded  AS DEC  NO-UNDO.
   
-   fMonthlyStamps(TODAY,
+   Func.Common:mMonthlyStamps(TODAY,
                   OUTPUT ldTS1, 
                   OUTPUT ldTS2).
    

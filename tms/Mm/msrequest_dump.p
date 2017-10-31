@@ -77,11 +77,11 @@ PROCEDURE pInitialize:
                      DFField.DFField.
    END.
          
-   fSplitTS(idLastDump,
+   Func.Common:mSplitTS(idLastDump,
             OUTPUT ldaModified,
             OUTPUT liCnt).
 
-   ldtLastDump = fTimeStamp2DateTime(idLastDump).
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
    ASSIGN
       lhTable     = BUFFER MsRequest:HANDLE
@@ -97,11 +97,11 @@ PROCEDURE pInitialize:
    END.
 
    IF icDumpMode = "Full" THEN DO:
-      ldFromStamp = fMake2Dt(TODAY - 65,0).
+      ldFromStamp = Func.Common:mMake2DT(TODAY - 65,0).
       IF idLastDump = 0 THEN
-         idLastdump = fMake2Dt(TODAY - 65,0).
+         idLastdump = Func.Common:mMake2DT(TODAY - 65,0).
    END.
-   ELSE ldFromStamp = fMake2Dt(TODAY - 30,0).
+   ELSE ldFromStamp = Func.Common:mMake2DT(TODAY - 30,0).
    
    OUTPUT STREAM sFile TO VALUE(icFile).
 

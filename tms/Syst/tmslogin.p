@@ -21,7 +21,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{Func/date.i}
 
 DEFINE VARIABLE liPassValidDays AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPassNotifyDays AS INTEGER NO-UNDO. 
@@ -167,7 +166,7 @@ do with frame login:
             IF UserGrp.PasswordExpires THEN DO:
 
                /* check if password has expired */ 
-               fSplitTS(TMSPass.CreateTS,liTempDate,liTempTime).
+               Func.Common:mSplitTS(TMSPass.CreateTS,liTempDate,liTempTime).
                IF TODAY - liTempDate > liPassValidDays THEN DO:
                   /* force user to change password */
                   RUN Syst/chpasswd.p(OUTPUT olPasswordChanged).

@@ -649,7 +649,7 @@ BROWSE:
               xxMSISDN.CLI       <= MSRange.CLITo   AND
               xxMSISDN.CustNum    = MSRange.CustNum AND 
               xxMSISDN.POS        = MSRANGE.Salesman AND 
-              xxMSISDN.ValidTo   >= fmakeTS()        AND 
+              xxMSISDN.ValidTo   >= Func.Common:mMakeTS()        AND 
               xxMSISDN.StatusCode = 1                
               BREAK BY xxMSISDN.CLI:
 

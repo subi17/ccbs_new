@@ -360,8 +360,7 @@ ELSE icFile = REPLACE(icFile,"#IGRP","ALL").
 /* invoice date to file name */   
 IF ldtNameDate NE ? THEN DO:
    
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ldtNameDate,
+   lcDate = Func.Common:mDateFmt(ldtNameDate,
                              "yyyymmdd").
    icFile = REPLACE(icFile,"#IDATE",lcDate).
 END.

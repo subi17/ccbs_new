@@ -26,7 +26,6 @@
 &GLOBAL-DEFINE Brtable Invoice
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}

@@ -5,7 +5,6 @@ katun = "anttis".
 {Func/coinv.i}
 {Func/fmakemsreq.i}
 {Func/msisdn.i}
-{Func/timestamp.i}
 {Func/ftmrlimit.i}
 
 def var lcline     as char no-undo.
@@ -65,7 +64,7 @@ FUNCTION fLocalMakeMsidnHistory RETURNS CHAR
                       MSISDN.ValidFrom = ldNewFrom)
       THEN LEAVE.
 
-      fSplitTS(ldNewFrom,
+      Func.Common:mSplitTS(ldNewFrom,
                OUTPUT ldtNewDate,
                OUTPUT liNewTime).
       IF liNewTime >= 86400 THEN ASSIGN
@@ -73,7 +72,7 @@ FUNCTION fLocalMakeMsidnHistory RETURNS CHAR
          liNewTime  = 1.
       ELSE liNewTime = liNewTime + 1.
       
-      ldNewFrom = fMake2Dt(ldtNewDate,liNewTime).
+      ldNewFrom = Func.Common:mMake2DT(ldtNewDate,liNewTime).
    END.
    
    CREATE MSISDN.
@@ -242,7 +241,7 @@ PROCEDURE pOwnerChange:
       RETURN.
    END. 
  
-   fSplitTS(ldActStamp,
+   Func.Common:mSplitTS(ldActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  

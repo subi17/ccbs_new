@@ -10,7 +10,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
 {Func/replog_reader.i}
@@ -94,8 +93,8 @@ PROCEDURE pAmqCDRReader:
    DEFINE OUTPUT PARAMETER oiHandled AS INTEGER   NO-UNDO.
 
    ASSIGN ldaReadDate  = TODAY
-          ldeReadInTS  = fMake2Dt(ldaReadDate,TIME)
-          ldeCurrStamp = fMakeTS().
+          ldeReadInTS  = Func.Common:mMake2DT(ldaReadDate,TIME)
+          ldeCurrStamp = Func.Common:mMakeTS().
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
@@ -104,8 +103,8 @@ PROCEDURE pAmqCDRReader:
                  ActionLog.TableName = "MobCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
          ldeReadInTS = ActionLog.ActionDec.
-         fSplitTS(ldeReadInTS,ldaReadDate,liReadTime).
-         IF llStart THEN ASSIGN ActionLog.ActionTS = fMakeTS()
+         Func.Common:mSplitTS(ldeReadInTS,ldaReadDate,liReadTime).
+         IF llStart THEN ASSIGN ActionLog.ActionTS = Func.Common:mMakeTS()
                                 llStart = FALSE.
       END.
       ELSE DO:
@@ -134,7 +133,7 @@ PROCEDURE pAmqCDRReader:
 
    RUN pStartReader(ldaReadDate,
                     liReadTime,
-                    fTimeStamp2DateTime(ldeCurrStamp),
+                    Func.Common:mTimeStamp2DateTime(ldeCurrStamp),
                     FALSE,
                     OUTPUT oiHandled,
                     INPUT-OUTPUT ldeCDRStamp).
@@ -156,7 +155,7 @@ PROCEDURE pAmqCDRReader:
       IF NOT RETURN-VALUE BEGINS "ERROR" THEN
          RUN pStartReader(ldaReadDate,
                           liReadTime,
-                          fTimeStamp2DateTime(ldeCurrStamp),
+                          Func.Common:mTimeStamp2DateTime(ldeCurrStamp),
                           TRUE,
                           OUTPUT oiHandled,
                           INPUT-OUTPUT ldeCDRStamp).
@@ -268,12 +267,12 @@ PROCEDURE pStartReader:
          ELSE DO:
             IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
                LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-            odeCDRStamp = fsecOffset(odeCDRStamp,-1).
+            odeCDRStamp = Func.Common:mSecOffSet(odeCDRStamp,-1).
             LEAVE Reader.
          END.
 
          IF NOT llOldDB THEN
-            odeCDRStamp = fMake2Dt(EDRHistory.UpdateDate,EDRHistory.UpdateTime).
+            odeCDRStamp = Func.Common:mMake2DT(EDRHistory.UpdateDate,EDRHistory.UpdateTime).
 
          /* Treshold value */
          IF oiCount >= 5000 THEN LEAVE Reader.

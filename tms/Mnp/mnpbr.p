@@ -13,7 +13,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPProcess'}
 {Func/fcustdata.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
@@ -657,8 +656,7 @@ PROCEDURE local-find-others.
       IF AVAIL TMSCodes THEN lcState = TMSCodes.CodeName.
    END.
    
-   lcMNPType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MNPProcess",
+   lcMNPType = Func.Common:mTMSCodeName("MNPProcess",
                                "MNPType",
                              STRING(MNPProcess.MNPType)).
 
@@ -698,8 +696,8 @@ PROCEDURE local-UPDATE-record:
       MNPProcess.FormRequest
       MNPProcess.PortRequest
       MNPProcess.StatusCode
-      fTS2HMS(MNPProcess.CreatedTS) FORMAT "x(20)" @ MNPProcess.CreatedTS
-      fTS2HMS(MNPProcess.UpdateTS) FORMAT "x(20)" @ MNPProcess.UpdateTS
+      Func.Common:mTS2HMS(MNPProcess.CreatedTS) FORMAT "x(20)" @ MNPProcess.CreatedTS
+      Func.Common:mTS2HMS(MNPProcess.UpdateTS) FORMAT "x(20)" @ MNPProcess.UpdateTS
       MNPProcess.MNPSeq
       MNPProcess.MNPType lcMNPType
       lcStatus

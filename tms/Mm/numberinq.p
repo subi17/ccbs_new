@@ -16,7 +16,6 @@
 {Func/fctserval.i}
 {Func/ffeecont.i}
 {Func/service.i}
-{Func/timestamp.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
 {Func/fnumberinq.i}
@@ -140,8 +139,7 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-lcUser = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                          BUFFER Customer).
+lcUser = Func.Common:mDispCustName(BUFFER Customer).
        
 PAUSE 0.
 DISP MobSub.CLI lcUser WITH FRAME fInquiry.
@@ -369,7 +367,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
    
    ELSE IF toimi = 5 THEN DO:
 
-      ldCurrStamp = fMakeTS().
+      ldCurrStamp = Func.Common:mMakeTS().
       
       /* if number is public atleast 1st channel must be active */
       IF NOT llSecret AND NOT llDAED THEN DO:

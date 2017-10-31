@@ -94,8 +94,7 @@ view FRAME sel.
 FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
    IF iiUnit > 0 THEN
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-               "DayCampaign","InclUnit",STRING(iiUnit)).
+      lcUnit = Func.Common:mTMSCodeName("DayCampaign","InclUnit",STRING(iiUnit)).
    ELSE lcUnit = "".
    DISPLAY lcUnit WITH FRAME lis.
    RETURN (iiUnit = 0 OR (iiUnit > 0 AND lcUnit > "")).
@@ -106,8 +105,7 @@ FUNCTION fDispUnit2 RETURNS LOGICAL
    (iiUnit AS INT).
    
    IF iiUnit > 0 THEN
-   lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-   "Tariff","DataType",STRING(iiUnit)).
+   lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
    ELSE lcUnit = "".
                                   
    DISPLAY lcUnit   WITH FRAME lis.

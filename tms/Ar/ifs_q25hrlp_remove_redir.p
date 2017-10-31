@@ -33,7 +33,7 @@ DEF STREAM sLog.
 ASSIGN 
    lcTableName = "HRLP"
    lcActionID = {&Q25_HRLP_REMOVE_READER}
-   ldCurrentTimeTS = fMakeTS().
+   ldCurrentTimeTS = Func.Common:mMakeTS().
 fInitHRLPParameters().
 
 DO TRANS:

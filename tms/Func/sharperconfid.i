@@ -4,7 +4,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 FUNCTION fGetShaperConfId RETURN CHAR
@@ -30,11 +29,11 @@ FUNCTION fGetShaperConfId RETURN CHAR
 
    IF idtDate = TODAY
    THEN ASSIGN
-      ldeActTime = fMakeTS()
+      ldeActTime = Func.Common:mMakeTS()
       ldeEndTime = ldeActTime.
    ELSE ASSIGN
-      ldeActTime = fMake2Dt(idtDate,0)
-      ldeEndTime = fMake2Dt(idtDate,86399).
+      ldeActTime = Func.Common:mMake2DT(idtDate,0)
+      ldeEndTime = Func.Common:mMake2DT(idtDate,86399).
 
    DEFINE VARIABLE lcBONOContracts AS CHARACTER NO-UNDO.
 

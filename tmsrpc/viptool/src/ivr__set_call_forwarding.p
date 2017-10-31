@@ -82,7 +82,7 @@ liRequest = fServiceRequest(MobSub.MsSeq,
                             Subser.ServCom,
                             3,
                             lcSetting,
-                            fMakeTS(),
+                            Func.Common:mMakeTS(),
                             "",     /* salesman */
                             FALSE,  /* fees */
                             FALSE,  /* sms */

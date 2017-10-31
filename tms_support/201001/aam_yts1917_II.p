@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 gcbrand = "1".
 katun = "ari".
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:

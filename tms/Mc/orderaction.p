@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OrderAction'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 IF llDoEvent THEN DO:
@@ -84,8 +83,7 @@ FUNCTION fItemType RETURNS LOGIC
    (icItemType AS CHAR):
 
    IF icItemType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "OfferItem",
+      lcType = Func.Common:mTMSCodeName("OfferItem",
                                 "ItemType",
                                 icItemType).
    ELSE lcType = "".

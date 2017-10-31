@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
@@ -211,7 +210,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                    ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")
                    ErrorLog.ErrorMsg  = RETURN-VALUE
                    ErrorLog.UserCode  = katun.
-                   ErrorLog.ActionTS  = fMakeTS().
+                   ErrorLog.ActionTS  = Func.Common:mMakeTS().
             RETURN RETURN-VALUE.       
         END.
 

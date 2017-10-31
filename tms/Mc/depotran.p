@@ -13,7 +13,6 @@
 {Func/cparam2.i}
 {Func/fcustbal.i}
 {Func/finvbal.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiOrder AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER ocError AS CHAR NO-UNDO. 
@@ -195,7 +194,7 @@ DO TRANS:
               STRING(Invoice.InvNum)).
 
    /* same stamp for both log events */
-   ldStamp = fMakeTS().
+   ldStamp = Func.Common:mMakeTS().
 
    /* reduce deposit from general customer */
    fCustBal(liOldCust,

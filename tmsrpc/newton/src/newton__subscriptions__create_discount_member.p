@@ -17,7 +17,6 @@
 gcbrand = "1".
 {Mc/dpmember.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fcounter.i}
 {Func/fixedlinefunc.i}
 
@@ -56,7 +55,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
    CREATE Memo.
    ASSIGN
       Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
@@ -280,7 +279,7 @@ IF DiscountPlan.DPUnit = "Percentage" THEN
 ELSE ldeMaxAmount = ldeAmount.
  
 /* check monthly limits */
-fMonthlyStamps(TODAY,
+Func.Common:mMonthlyStamps(TODAY,
                OUTPUT ldeMonthFrom,
                OUTPUT ldeMonthTo). 
 

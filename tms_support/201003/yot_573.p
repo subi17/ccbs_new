@@ -2,7 +2,6 @@
 {Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Syst/tmsconst.i}
 
@@ -44,7 +43,7 @@ FUNCTION fIsGoldNumber RETURNS LOGICAL:
    RETURN llGold. 
 END FUNCTION.
 
-ldTS = fMakeTS(). 
+ldTS = Func.Common:mMakeTS(). 
 lcSimulated = FALSE.
 OUTPUT STREAM sLog TO "yot_573.log".
 

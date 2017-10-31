@@ -14,7 +14,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/setfees.i} 
 {Syst/eventval.i}
 {Func/ffeecont.i}
@@ -67,8 +66,8 @@ IF liTextPos = 2 AND ENTRY(2,icFeeMemo,"¤") = "Postpone" THEN
    llPostpone = TRUE.
 
 ASSIGN
-   ldFromStamp = fMake2Dt(idtDate,0)
-   ldToStamp   = fMake2Dt(idtDate,86399).
+   ldFromStamp = Func.Common:mMake2DT(idtDate,0)
+   ldToStamp   = Func.Common:mMake2DT(idtDate,86399).
       
 IF iiMSSeq > 0 THEN DO:
    IF iiCustNum > 0 THEN DO:
@@ -157,8 +156,7 @@ FOR FIRST ServFee NO-LOCK WHERE
    liText = INTEGER(ServFee.InvInfo) NO-ERROR.
    IF liText > 0 THEN DO:
       icMemo = icMemo + (IF icMemo > "" THEN "¤" ELSE "") + 
-               DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                liText,
+               Func.Common:mGetHdrText(liText,
                                 Customer.Language).
    END.
       

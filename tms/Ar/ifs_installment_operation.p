@@ -10,7 +10,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/coinv.i}
 {Func/multitenantfunc.i}
@@ -89,7 +88,7 @@ FUNCTION fGetChannel RETURNS CHAR
                  dccli.msseq = int(fixedfee.keyvalue) NO-ERROR.
       IF NOT AVAIL DCCLI THEN RETURN "".
 
-      ldeActTS = fmake2dt(MIN(dccli.contractdate,dccli.validfrom), 86399).
+      ldeActTS = Func.Common:mMake2DT(MIN(dccli.contractdate,dccli.validfrom), 86399).
       
       FIND msrequest NO-LOCK where
            msrequest.msseq = dccli.msseq and
@@ -536,13 +535,13 @@ PROCEDURE pCollectACC:
    /* check from last 20 days if there are ones that have been completed
       yesterday */
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
@@ -561,10 +560,10 @@ PROCEDURE pCollectACC:
          LEAVE.
       END.
       
-      ldeendtime = fSecOffset(msrequest.actstamp,-1).
+      ldeendtime = Func.Common:mSecOffSet(msrequest.actstamp,-1).
       lcMemo = "".
 
-      fSplitTs(msrequest.actstamp, output ldaACCDate, output liTime).
+      Func.Common:mSplitTS(msrequest.actstamp, output ldaACCDate, output liTime).
       
       find msowner where
            msowner.msseq = msrequest.msseq and
@@ -679,7 +678,7 @@ PROCEDURE pCollectACC:
               ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                              1,
                              INT(FixedFee.EndPeriod / 100))
-              ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+              ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
               llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                   {&TF_STATUSES_BANK}) > 0).
 
@@ -834,13 +833,13 @@ PROCEDURE pCollectInstallmentContractChanges:
    DEF BUFFER bTermDCCLI FOR DCCLI.
 
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
@@ -880,7 +879,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          NEXT.
       END.
       
-      fTS2Date(bTermRequest.ActStamp,
+      Func.Common:mTS2Date(bTermRequest.ActStamp,
                OUTPUT ldaActDate).
 
       FIND bTermDCCLI WHERE
@@ -889,7 +888,7 @@ PROCEDURE pCollectInstallmentContractChanges:
            bTermDCCLI.PerContractID = bTermRequest.ReqIParam3 AND
            bTermDCCLI.TermDate      = ldaActDate NO-LOCK NO-ERROR.
 
-      fTS2Date(bActRequest.ActStamp,
+      Func.Common:mTS2Date(bActRequest.ActStamp,
                OUTPUT ldaActDate).
       
       FIND bActDCCLI WHERE
@@ -980,12 +979,12 @@ PROCEDURE pCollectInstallmentContractChanges:
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
 
         IF FixedFee.BegDate > ldFeeEndDate THEN 
-           fTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
+           Func.Common:mTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
          
          IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
@@ -1138,13 +1137,13 @@ PROCEDURE pCollectReactivations:
 
    /* use action log from/to dates */
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
@@ -1167,7 +1166,7 @@ PROCEDURE pCollectReactivations:
          LEAVE.
       END.
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldaReacDate,
                OUTPUT liDoneTime).
 
@@ -1274,7 +1273,7 @@ PROCEDURE pCollectReactivations:
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
             
@@ -1316,7 +1315,7 @@ PROCEDURE pCollectReactivations:
                   (IF FixedFee.BegDate < DATE(MONTH(ldaReacDate),
                                               1,
                                               YEAR(ldaReacDate))
-                   THEN fLastDayOfMonth(ADD-INTERVAL(ldaReacDate,-1,"months"))
+                   THEN Func.Common:mLastDayOfMonth(ADD-INTERVAL(ldaReacDate,-1,"months"))
                    ELSE ldaReacDate)
                ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
                ttInstallment.ResidualAmount = ldResidual
@@ -1391,13 +1390,13 @@ PROCEDURE pCollectInstallmentCancellations:
    DEF BUFFER bFixedFee FOR FixedFee.
 
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 63,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 63,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
@@ -1444,7 +1443,7 @@ PROCEDURE pCollectInstallmentCancellations:
                     {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION})) > 0)
          THEN NEXT.
       
-      fTS2Date(MsRequest.ActStamp,
+      Func.Common:mTS2Date(MsRequest.ActStamp,
                OUTPUT ldaActDate).
 
       FIND bTermDCCLI WHERE
@@ -1556,7 +1555,7 @@ PROCEDURE pCollectInstallmentCancellations:
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
 

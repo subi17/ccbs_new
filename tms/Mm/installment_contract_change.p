@@ -8,7 +8,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
 {Func/fcreditreq.i}
@@ -32,7 +31,7 @@ IF NOT AVAIL MsRequest THEN
 
 liOrigStatus = MsRequest.ReqStatus.
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldaActivationDate,
          OUTPUT liActivationTime).
 
@@ -140,8 +139,8 @@ PROCEDURE pInstallmentContractChange:
                                      1,YEAR(ldaLastUnBilledDate)).
 
    ASSIGN
-      ldaLastDayOfLastMonth = fLastDayOfMonth(ldaFirstDayOfLastMonth)
-      ldPeriodTo = fMake2Dt(ldaLastDayOfLastMonth,86399).
+      ldaLastDayOfLastMonth = Func.Common:mLastDayOfMonth(ldaFirstDayOfLastMonth)
+      ldPeriodTo = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399).
    
    /* Terminate current payterm contract */
    liTermReq = fPCActionRequest(MobSub.MsSeq,

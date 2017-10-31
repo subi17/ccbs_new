@@ -14,7 +14,6 @@
 
 &GLOBAL-DEFINE orderfunc YES
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}
@@ -80,7 +79,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
                      liRequest = fConvFixedSTCReq(bfOrder.CLIType,
                                                   bfOrder.MsSeq,
-                                                  fMake2Dt(TODAY + 1,0),
+                                                  Func.Common:mMake2DT(TODAY + 1,0),
                                                   {&REQUEST_SOURCE_ORDER_CANCELLATION},
                                                   0).
                END.
@@ -102,7 +101,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                IF AVAIL OrderFusion THEN DO:
                   ASSIGN
                      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
-                     OrderFusion.UpdateTS = fMakeTS().
+                     OrderFusion.UpdateTS = Func.Common:mMakeTS().
                   RELEASE OrderFusion.
                END.
 
@@ -129,7 +128,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                               MSISDN.StatusCode = {&MSISDN_ST_MNP_OUT_YOIGO}.
                            ELSE MSISDN.StatusCode = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
                            MSISDN.CustNum = 0.
-                           MSISDN.ValidTo = fMakeTS().
+                           MSISDN.ValidTo = Func.Common:mMakeTS().
                         END.
 
                         ASSIGN
@@ -160,7 +159,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                   IF FusionMessage.MessageStatus NE {&FUSIONMESSAGE_STATUS_HANDLED} THEN
                      ASSIGN
-                        FusionMessage.UpdateTS = fMakeTS()
+                        FusionMessage.UpdateTS = Func.Common:mMakeTS()
                         FusionMessage.FixedStatusDesc = "Order closed"
                         FusionMessage.messageStatus = 
                            {&FUSIONMESSAGE_STATUS_CANCELLED}.
@@ -174,13 +173,12 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      bfOrder.MsSeq,
                      bfOrder.OrderId,
                      "CANCEL",
-                     fMakeTS(),
+                     Func.Common:mMakeTS(),
                      {&REQUEST_SOURCE_ORDER_CANCELLATION},
                      OUTPUT lcResult).
 
                   IF lcResult > "" THEN 
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "Order",
+                     Func.Common:mWriteMemo("Order",
                                       STRING(bfOrder.OrderID),
                                       0,
                                       "Logistics cancel failed",
@@ -201,7 +199,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      ASSIGN
                         ActionLog.Brand     = gcBrand
                         ActionLog.ActionID  = "OrderCancelRetention"
-                        ActionLog.ActionTS  = fMakeTS()
+                        ActionLog.ActionTS  = Func.Common:mMakeTS()
                         ActionLog.TableName = "Order"
                         ActionLog.KeyValue  = STRING(bfOrder.OrderId)
                         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}.
@@ -537,8 +535,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
 
                IF llgDeleteAction THEN DO:
                   DELETE labOrderAction.
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(labOrder.OrderID),
                                    0,
                                    "ADDLINE DISCOUNT ORDERACTION REMOVED",
@@ -607,7 +604,7 @@ FUNCTION fCreateNewTPService RETURNS INTEGER
             TPService.ServStatus = icStatus
             TPService.Offer      = icOffer
             TPService.UserCode   = icUser
-            TPService.CreatedTS  = fMakeTS()
+            TPService.CreatedTS  = Func.Common:mMakeTS()
             TPService.UpdateTS   = TPService.CreatedTS.
 
         IF icOperation = {&TYPE_DEACTIVATION} THEN 
@@ -643,12 +640,12 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
        TPServiceMessage.MessageSeq    = NEXT-VALUE(TPServiceMessageSeq)
        TPServiceMessage.Source        = icSource
        TPServiceMessage.MessageStatus = icStatus
-       TPServiceMessage.CreatedTS     = fMakeTS()
+       TPServiceMessage.CreatedTS     = Func.Common:mMakeTS()
        TPServiceMessage.UpdateTS      = TPServiceMessage.CreatedTS.
 
     ASSIGN   
        TPService.ServStatus           = icStatus
-       TPService.UpdateTS             = fMakeTS().
+       TPService.UpdateTS             = Func.Common:mMakeTS().
 
     RETURN TRUE.   
 

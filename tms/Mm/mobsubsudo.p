@@ -24,8 +24,7 @@ FIND MobSub  WHERE MobSub.Msseq = msseq NO-LOCK NO-ERROR.
 
 FIND Customer where Customer.CustNum = MobSub.AgrCust no-lock no-error.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                     ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName =  Func.Common:mDispCustName(BUFFER Customer).
 ELSE                    lcUserName = "".
                                      
 

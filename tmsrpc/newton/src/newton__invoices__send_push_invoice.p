@@ -53,7 +53,7 @@ IF AVAIL MsRequest THEN
    RETURN appl_err("Push notification request for current month is ongoing").
 
 fCreateRequest(({&REQTYPE_PUSH_INVOICE}),
-                 fMakeTS(),
+                 Func.Common:mMakeTS(),
                  "",
                  false,     /* fees */
                  false).    /* send sms */

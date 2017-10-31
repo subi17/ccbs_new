@@ -1,6 +1,5 @@
     
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/heartbeat.i}
 
@@ -159,7 +158,7 @@ PROCEDURE SocketIO:
    lcRequest = GET-STRING(lmData,1).
 
    OUTPUT TO /scratch/nagios/tms/ivr/ivr_request.xml APPEND.
-   PUT CONTROL "NEW MESSAGE: " fTS2HMS(fMakeTS()) CHR(10) lcRequest CHR(10).
+   PUT CONTROL "NEW MESSAGE: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcRequest CHR(10).
    OUTPUT CLOSE.
 
    /* take away newline characters */
@@ -174,7 +173,7 @@ PROCEDURE SocketIO:
 
          ASSIGN
             liLoop  = liLoop + 1
-            lcTime2 = fTS2HMS(fMakeTS())
+            lcTime2 = Func.Common:mTS2HMS(Func.Common:mMakeTS())
             lcCLI   = fGetRPCNodeValue(lcXML,"Subscriber").
          
          DISP liLoop lcTime2 WITH FRAME frmMain.
@@ -191,7 +190,7 @@ PROCEDURE SocketIO:
          IF NOT AVAIL PrePaidRequest THEN DO TRANSACTION:
       
             CREATE PrePaidRequest.
-            PrePaidRequest.TSRequest = fMakeTS().
+            PrePaidRequest.TSRequest = Func.Common:mMakeTS().
 
             ASSIGN
                PrePaidRequest.CLI       = lcCLI
@@ -311,7 +310,7 @@ PROCEDURE pResponse:
    SET-SIZE(lmXML) = 0.
 
    OUTPUT TO /scratch/nagios/tms/ivr/ivr_response.xml APPEND.
-   PUT CONTROL "NEW RESPONSE: " + fTS2HMS(fMakeTS()) CHR(10) lcXML CHR(10).
+   PUT CONTROL "NEW RESPONSE: " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcXML CHR(10).
    OUTPUT CLOSE.
 
    RETURN lcXML.

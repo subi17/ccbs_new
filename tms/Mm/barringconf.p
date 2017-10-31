@@ -608,8 +608,7 @@ PROCEDURE local-UPDATE-record:
          WITH FRAME lis.
 
          /*IF BarringConf.BarringStatus NE "" /*AND
-            NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                 "BarringConf",
+            NOT Func.Common:mTMSCodeChk("BarringConf",
                                  "FraudGroup",
                                  BarringConf.BarringStatus)*/
          THEN DO:

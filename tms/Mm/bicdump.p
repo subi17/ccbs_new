@@ -34,11 +34,9 @@ gcBrand = "1".
 {Func/email.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Func/fbankdata.i}
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/customer_address.i}
 
 
@@ -61,7 +59,7 @@ DEF VAR liDumpTime AS INT NO-UNDO.
 DEF VAR lcClause AS CHAR NO-UNDO. 
 DEF VAR lcReason AS CHARACTER NO-UNDO. 
 
-fSplitTS(idLastDump, OUTPUT ldaDumpDate, OUTPUT liDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaDumpDate, OUTPUT liDumpTime).
 
 ASSIGN
    lcMail = "/scratch/log/bic_missing/mail.txt"

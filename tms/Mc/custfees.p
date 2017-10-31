@@ -19,7 +19,6 @@
 {Syst/commali.i}
 {Func/nncoit2.i}
 {Func/fcustpl.i}
-{Func/timestamp.i}
 {Func/fmakeservlimit.i}
 {Func/setfees.i}
 {Syst/eventval.i}

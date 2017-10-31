@@ -93,7 +93,7 @@ PROCEDURE pReadFileAndProcess:
 
         ASSIGN liLoop      = liLoop + 1
                llFileAvail = FALSE
-               ldThisRun   = fMakeTS().
+               ldThisRun   = Func.Common:mMakeTS().
 
         INPUT STREAM sFile THROUGH VALUE("ls -1 " + lcInIncomingDir + "/*.RPT").
 

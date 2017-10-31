@@ -55,7 +55,7 @@ DEF STREAM sFile.
 
 ASSIGN
    lcNumeric = SESSION:NUMERIC-FORMAT
-   ldCurrent = fMakeTS().
+   ldCurrent = Func.Common:mMakeTS().
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = icDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN DO:
@@ -79,7 +79,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
          
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -106,7 +106,7 @@ IF icDumpMode = "full" THEN
 MSISDNFullLoop:
 FOR EACH MSISDN NO-LOCK USE-INDEX CLI WHERE
          MSISDN.Brand = gcBrand AND
-         MSISDN.ValidTo >= fMake2DT(TODAY,0)
+         MSISDN.ValidTo >= Func.Common:mMake2DT(TODAY,0)
 BREAK BY MSISDN.CLI
       BY MSISDN.ValidFrom DESC
    ON QUIT UNDO, RETRY
@@ -135,7 +135,7 @@ ELSE DO:
        EACH MSISDN NO-LOCK USE-INDEX StatusCode WHERE
             MSISDN.Brand = gcBrand AND
             MSISDN.StatusCode = ttStatus.StatusCode AND
-            MSISDN.ValidTo   >= fMake2Dt(ldaModified,0)
+            MSISDN.ValidTo   >= Func.Common:mMake2DT(ldaModified,0)
    BREAK BY MSISDN.CLI
          BY MSISDN.ValidFrom DESC
       ON QUIT UNDO, RETRY

@@ -59,7 +59,7 @@ FOR EACH MobSub NO-LOCK WHERE
          IMSI.ICC = MobSub.ICC:
 
    PUT stream tul UNFORMATTED
-      DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer)
+      Func.Common:mDispCustName(BUFFER Customer)
       MobSub.CLI tab
       IMSI.PIN1 tab
       IMSI.PIN2 tab

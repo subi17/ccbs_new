@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
@@ -62,7 +61,7 @@ FIND bMsRequest NO-LOCK WHERE
 
 CREATE memo.
 ASSIGN
-memo.CreStamp  = fMakeTS()
+memo.CreStamp  = Func.Common:mMakeTS()
 memo.MemoSeq   = NEXT-VALUE(MemoSeq)
 Memo.Custnum   = AgrCust.CustNum
 memo.HostTable = "Customer"
@@ -135,7 +134,7 @@ THEN DO:
            FALSE,               /* Fees */
            FALSE,               /* SendSMS */
            bMSRequest.UserCode,
-           fMakeTS(),
+           Func.Common:mMakeTS(),
            "CREDITCHECK",
            "",
            33,

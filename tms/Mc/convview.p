@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 DEF VAR lcUpdateTS AS CHAR NO-UNDO.
 DEF VAR lcInstallationTime AS CHAR NO-UNDO.
@@ -66,9 +65,9 @@ PAUSE 0 NO-MESSAGE.
 /*VIEW FRAME fData. */
 /*CLEAR FRAME fData NO-PAUSE.*/
    ASSIGN
-   lcUpdateTS = fTS2HMS(OrderFusion.UpdateTS)
-   lcInstallationTime = fTS2HMS(OrderFusion.FixedInstallationTS)
-   lcFixedTime = fTS2HMS(OrderFusion.FixedStatusTS).
+   lcUpdateTS = Func.Common:mTS2HMS(OrderFusion.UpdateTS)
+   lcInstallationTime = Func.Common:mTS2HMS(OrderFusion.FixedInstallationTS)
+   lcFixedTime = Func.Common:mTS2HMS(OrderFusion.FixedStatusTS).
 
 
 DISP OrderFusion.OrderID

@@ -104,7 +104,7 @@ IF fValidateOfferCriteria(TABLE ttOfferCriteria, FALSE, OUTPUT ocError) > 0 THEN
    RETURN appl_err(ocError).
 END.
 
-ldeNowTS = fMakeTS().
+ldeNowTS = Func.Common:mMakeTS().
 
 lcRespStruct = add_struct(response_toplevel_id, "").
 

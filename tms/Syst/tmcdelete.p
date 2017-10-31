@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER idtBreakDate AS DATE NO-UNDO.
 
@@ -94,7 +93,7 @@ DO TRANS:
       ActionLog.UserCode     = "Cron"
       ActionLog.FromDate     = ldtFrom
       ActionLog.ToDate       = ldtTo.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 fELog("MONTHLY","TMCounterDeleteStopped:" + STRING(liQty)).

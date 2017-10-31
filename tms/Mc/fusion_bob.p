@@ -15,7 +15,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -275,7 +274,7 @@ PROCEDURE pUpdateFusionOrder:
             FIND FIRST MsRequest NO-LOCK WHERE
                        MsRequest.MsSeq = Order.MsSeq AND
                        MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                       MsRequest.Actstamp > fMakeTs() AND
+                       MsRequest.Actstamp > Func.Common:mMakeTS() AND
                        MsRequest.ReqIParam2 = Order.OrderID NO-ERROR.
             IF NOT AVAIL MsRequest OR MsRequest.ReqStatus EQ 4
                THEN fSetOrderStatus(Order.OrderID,"7").
@@ -346,7 +345,7 @@ PROCEDURE pUpdateFusionOrder:
             OUTPUT liQuarTime).
          liReq = fTerminationRequest(
                         Order.MsSeq,
-                        fSecOffSet(fMakeTS(),5), /* when request handled */
+                        Func.Common:mSecOffSet(Func.Common:mMakeTS(),5), /* when request handled */
                         liMsisdnStat, /* msisdn status code: available */
                         liSimStat, /* sim status code : available */
                         liQuarTime, /* quarantie time */
@@ -376,7 +375,7 @@ PROCEDURE pUpdateFusionOrder:
       OrderFusion.FixedStatus    = UPPER(pcFixedStatus) WHEN pcFixedStatus > ""
       OrderFusion.FixedSubStatus = pcFixedSubStatus WHEN pcFixedSubStatus > ""
       OrderFusion.ExternalTicket = pcExternalTicket WHEN pcExternalTicket > ""
-      OrderFusion.UpdateTS       = fMakeTS().
+      OrderFusion.UpdateTS       = Func.Common:mMakeTS().
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderFusion).
 

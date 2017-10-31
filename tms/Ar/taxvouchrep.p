@@ -126,15 +126,13 @@ FUNCTION fCollectPayment RETURNS LOGIC:
           FIRST OrderCustomer OF Order NO-LOCK WHERE
                 OrderCustomer.RowType = Order.InvCustRole:
                 
-         ttPaym.CustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+         ttPaym.CustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
       END.                                     
 
    END.        
           
    IF ttPaym.CustName = "" THEN         
-      ttPaym.CustName   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                          BUFFER Customer).
+      ttPaym.CustName   = Func.Common:mPrintCustName(BUFFER Customer).
 
    
    IF NOT CAN-FIND(FIRST ttTaxZone WHERE ttTaxZone.TaxZone = ttPaym.TaxZone)
@@ -254,8 +252,7 @@ FOR EACH ttTaxZone:
       
       IF LAST-OF(ttPaym.PaymType) THEN DO:
       
-         lcTypeName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Payment",
+         lcTypeName = Func.Common:mTMSCodeName("Payment",
                                        "PaymType",
                                        STRING(ttPaym.PaymType)).
          

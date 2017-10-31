@@ -69,9 +69,9 @@ IF pcRegion = "" OR pcRegion = ? THEN
 IF pcProduct NE "T" AND pcProduct NE "S" AND pcProduct NE "" THEN
    RETURN appl_err("Invalid MNP product code, expecting T/S/Empty").
    
-ldeCurrentTime = fMake2DT(TODAY,28800).
-IF ldeCurrentTime < fMakeTS() THEN
-   ldeCurrentTime = fMakeTS().
+ldeCurrentTime = Func.Common:mMake2DT(TODAY,28800).
+IF ldeCurrentTime < Func.Common:mMakeTS() THEN
+   ldeCurrentTime = Func.Common:mMakeTS().
 
 {newton/src/settenant.i pcTenant}
 

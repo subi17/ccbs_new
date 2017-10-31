@@ -252,7 +252,7 @@ add-new:
             /* create TMSPass entry now */
             CREATE tmspass.
             ASSIGN
-               tmspass.createts = fmakets()
+               tmspass.createts = Func.Common:mMakeTS()
                tmspass.usercode = tmsuser.usercode
                tmspass.creator = katun
                tmspass.password = tmsuser.password.

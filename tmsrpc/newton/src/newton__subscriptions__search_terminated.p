@@ -22,7 +22,6 @@
 katun = "Newton".
 gcBrand = "1".
 {newton/src/json_key.i}
-{Func/timestamp.i}
 {Mm/fbundle.i}
 
 /* Input parameters */
@@ -94,7 +93,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
          lcBundle = TermMobsub.TariffBundle.
       ELSE
          lcBundle = fGetTerminatedSpecificBundle(TermMobsub.MsSeq,
-                                                 fMakeTS(),
+                                                 Func.Common:mMakeTS(),
                                                  TermMobsub.CliType).
    END.
 
@@ -119,7 +118,7 @@ FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
-   fSplitTS(msowner.tsend, output ldaDate, output liTime).
+   Func.Common:mSplitTS(msowner.tsend, output ldaDate, output liTime).
    IF TODAY - ldaDate > 180 AND NOT plAdmin THEN RETURN FALSE.
 
    RETURN TRUE.

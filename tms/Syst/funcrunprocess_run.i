@@ -2,7 +2,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttFunctionParam NO-UNDO
    FIELD ParamSeq  AS INT  
@@ -101,7 +100,7 @@ PROCEDURE pInitializeFuncRunProcess:
       FIND CURRENT FuncRunProcess EXCLUSIVE-LOCK.
       ASSIGN
          FuncRunProcess.ProcessID = _MyConnection._MyConn-Pid
-         FuncRunProcess.StartTS   = fMakeTS()
+         FuncRunProcess.StartTS   = Func.Common:mMakeTS()
          FuncRunProcess.RunState  = "Running".
    END.
     
@@ -125,7 +124,7 @@ PROCEDURE pFinalizeFuncRunProcess:
    DO TRANS:
       FIND CURRENT FuncRunProcess EXCLUSIVE-LOCK.
       ASSIGN
-         FuncRunProcess.EndTS     = fMakeTS()
+         FuncRunProcess.EndTS     = Func.Common:mMakeTS()
          FuncRunProcess.RunState  = "Finished"
          FuncRunProcess.Processed = iiProcessed.
          
@@ -150,7 +149,7 @@ PROCEDURE pCancelFuncRunProcess:
              ErrorLog.KeyValue  = STRING(iiFRProcessID)
              ErrorLog.ErrorMsg  = icMessage
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
     
    IF NOT AVAILABLE FuncRunProcess THEN 
@@ -162,7 +161,7 @@ PROCEDURE pCancelFuncRunProcess:
    DO TRANS:
       FIND CURRENT FuncRunProcess EXCLUSIVE-LOCK.
       ASSIGN
-         FuncRunProcess.EndTS    = fMakeTS()
+         FuncRunProcess.EndTS    = Func.Common:mMakeTS()
          FuncRunProcess.RunState = "Cancelled".
       RELEASE FuncRunProcess.
    END.

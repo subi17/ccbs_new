@@ -21,7 +21,6 @@
 {Func/fxmlfile.i}
 {Inv/pdfinvdf.i}
 {Func/invotxtp.i} 
-{Func/timestamp.i}
 {Func/finvbal.i}
 {Func/fdivtxt.i}
 
@@ -379,7 +378,7 @@ IF iiSendMail > 0 THEN DO:
                                                 ELSE "PDFInv")
                                           ELSE "PDFCLISpec"
                    ITSendLog.UserCode   = katun.
-                   ITSendLog.SendStamp  = fMakeTS().
+                   ITSendLog.SendStamp  = Func.Common:mMakeTS().
                          
          END.
          

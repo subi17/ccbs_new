@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
 katun = "snet".
 
-{Func/timestamp.i}
 {Func/ftaxdata.i}
 
 def stream sread.
@@ -116,7 +115,7 @@ repeat:
          
          RUN Gwy/balancequery.p(lccli).
          
-         fMinComp(lccli,fMakeTS(),DECIMAL(RETURN-VALUE)).
+         fMinComp(lccli,Func.Common:mMakeTS(),DECIMAL(RETURN-VALUE)).
 
       END.
 

@@ -14,9 +14,7 @@ ASSIGN
    
 {Func/cparam2.i}
 {Func/files.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_run.i}
-{Func/date.i}
 {Inv/chk_cdr_invrowcounter.i}
 
 DEF VAR liCounterCnt  AS INT  NO-UNDO.
@@ -47,7 +45,7 @@ IF NOT AVAILABLE FuncRunProcess THEN DO:
    QUIT.
 END.   
 
-ldaPeriodEnd = fLastDayOfMonth(TODAY).
+ldaPeriodEnd = Func.Common:mLastDayOfMonth(TODAY).
 
 RUN pGetFeeds.
 

@@ -13,7 +13,6 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 gcBrand = "1".
 katun = "MNP".
 
-{Func/timestamp.i}
 {Func/heartbeat.i}
 {Mnp/mnp.i}
 {Func/cparam2.i}
@@ -343,7 +342,7 @@ PROCEDURE pHandleQueue:
                                    BUFFER MNPProcess,
                                    OUTPUT lcPortCode) THEN DO:
                ASSIGN
-                  MNPProcess.UpdateTS = fMakeTS()
+                  MNPProcess.UpdateTS = Func.Common:mMakeTS()
                   MNPProcess.StatusCode = {&MNP_ST_AREC}
                   MNPProcess.StatusReason = lcResponseCode
                   MessageBuf.StatusCode = {&MNP_MSG_HANDLED}
@@ -568,7 +567,7 @@ PROCEDURE pHandleQueue:
          END.
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_ASOL}
@@ -624,7 +623,7 @@ PROCEDURE pHandleQueue:
             msisdn.brand = gcBrand and
             msisdn.cli = MNPSub.CLI AND
             msisdn.statuscode = {&MSISDN_ST_WAITING_RETURN} and
-            msisdn.validto > fMakeTS() NO-LOCK NO-ERROR.
+            msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
          IF NOT AVAIL msisdn THEN DO:
             lcResponseDesc = "MSISDN was not found or it is in wrong status".
@@ -634,7 +633,7 @@ PROCEDURE pHandleQueue:
          END.
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_BNOT}.
@@ -677,7 +676,7 @@ PROCEDURE pHandleQueue:
          END.
 
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.StatusCode = {&MNP_ST_BCAN}.
       END.
@@ -692,7 +691,7 @@ PROCEDURE pHandleQueue:
       WHEN "crearSolicitudNumeracionMigracionNumeracionMovil" THEN DO:
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_NENV}.
@@ -702,7 +701,7 @@ PROCEDURE pHandleQueue:
       WHEN "crearSolicitudMigracionNumeracionMovil" THEN DO:
       
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_MENV}.
@@ -712,7 +711,7 @@ PROCEDURE pHandleQueue:
       WHEN "finalizarSolicitudMigracionNumeracionMovil" THEN DO:
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.StatusCode = {&MNP_ST_MFIN}.
       END.
@@ -762,7 +761,7 @@ PROCEDURE pHandleQueue:
                     NO-LOCK NO-ERROR.
 
             fMNPCallAlarm("MNPCancelPropose",
-                      fMakeTs(),
+                      Func.Common:mMakeTS(),
                       MNPProcess.FormRequest,
                       MNPSub.CLI,
                       (IF AVAIL MobSub THEN MobSub.Custnum ELSE 0),
@@ -903,7 +902,7 @@ PROCEDURE pHandleQueue:
             
             fMNPCallAlarm(
                 lcSMS,
-                fMakeTS(),
+                Func.Common:mMakeTS(),
                 MNPProcess.FormRequest,
                 Order.CLI,
                 Order.CustNum,
@@ -919,7 +918,7 @@ PROCEDURE pHandleQueue:
          END.
       
          ASSIGN         
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.StatusCode = {&MNP_ST_ACAN}
             Order.MNPStatus = MNPProcess.StatusCode + 1.
@@ -1037,16 +1036,16 @@ PROCEDURE pHandleFromASOL2ACON:
          fErrorHandle(ocResult). 
       ELSE DO:
 
-         fTS2Date(MNPSub.PortingTime, OUTPUT ldaMNPDate).
+         Func.Common:mTS2Date(MNPSub.PortingTime, OUTPUT ldaMNPDate).
 
          fAdditionalLineSTC(liTermReqId,
-                            fMake2Dt(ldaMNPDate, 0),
+                            Func.Common:mMake2DT(ldaMNPDate, 0),
                             "MNP").
       END.
    END.
    
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
       MNPProcess.StatusCode = {&MNP_ST_ACON}.
    
@@ -1072,7 +1071,7 @@ PROCEDURE pHandleFromASOL2AREC:
             bMNPProcess.StatusCode = {&MNP_ST_BDET} EXCLUSIVE-LOCK:
 
          ASSIGN
-            bMNPProcess.UpdateTS = fMakeTS()
+            bMNPProcess.UpdateTS = Func.Common:mMakeTS()
             bMNPProcess.StatusCode = {&MNP_ST_BNOT}.
          RELEASE bMNPProcess.
       END.
@@ -1091,7 +1090,7 @@ PROCEDURE pHandleFromASOL2AREC:
    END.
    
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
       MNPProcess.StatusCode = {&MNP_ST_AREC}.
 

@@ -14,7 +14,6 @@ ASSIGN
    katun   = "Cron".
        
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD RunState AS CHAR.
@@ -56,7 +55,7 @@ BY FuncRunExec.FRExecID:
             ErrorLog.KeyValue  = STRING(FuncRunExec.FRExecID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
             ErrorLog.UserCode  = katun.
-            ErrorLog.ActionTS  = fMakeTS().
+            ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 
    END.   

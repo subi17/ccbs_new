@@ -93,7 +93,7 @@ gcbrand = "1".
     RETURN appl_err("Invalid period").
 END.
  /* check monthly limits */
- fMonthlyStamps(TODAY,
+ Func.Common:mMonthlyStamps(TODAY,
                 ldTS1,
                 ldTS2). 
  FOR EACH Counter NO-LOCK WHERE 

@@ -477,8 +477,7 @@ PROCEDURE local-find-others.
    lcBrandName = IF AVAILABLE Brand     
                  THEN Brand.BRName
                  ELSE "".
-   lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                             "Payment",
+   lcType = Func.Common:mTMSCodeName("Payment",
                              "VoucherType",
                              STRING(ttPaymVouch.VoucherType)).
 END PROCEDURE.

@@ -16,7 +16,6 @@
 {Syst/commali.i}
 {Func/fsubser.i}
 {Syst/eventval.i}
-{Func/func.p}
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -631,7 +630,7 @@ PROCEDURE local-find-others.
         mobsub.CLI = CallLimit.CLI NO-LOCK NO-ERROR.
 
    IF avail mobsub then 
-   Username = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   Username = Func.Common:mDispCustName(BUFFER Customer).
 
 FIND FIRST TMSCodes WHERE
            TMSCodes.TableName = "CallLimit" AND
@@ -740,7 +739,7 @@ PROCEDURE local-update-record:
                    END.
                    ELSE DO:
                       DISP 
-                      DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER                       Customer) @  username
+                      Func.Common:mDispCustName(BUFFER Customer) @  username
                       with frame lis.
                    END.   
                 END.

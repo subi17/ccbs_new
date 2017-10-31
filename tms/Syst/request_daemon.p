@@ -12,7 +12,6 @@ ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{Func/timestamp.i}
 {Func/log.i}
 {Func/cparam2.i}
 
@@ -35,7 +34,7 @@ FOR EACH RequestType NO-LOCK WHERE
                         MsRequest.Brand     EQ gcBrand               AND
                         MsRequest.ReqType   EQ RequestType.ReqType   AND
                         MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
-                        MsRequest.ActStamp  <= fMakeTS())            THEN 
+                        MsRequest.ActStamp  <= Func.Common:mMakeTS())            THEN 
          llgRequest = TRUE.                  
 
    END.
@@ -63,7 +62,7 @@ FOR EACH RequestType NO-LOCK WHERE
                MsRequest.Brand     EQ gcBrand               AND
                MsRequest.ReqType   EQ RequestType.ReqType   AND 
                MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
-               MsRequest.ActStamp <= fMakeTS()
+               MsRequest.ActStamp <= Func.Common:mMakeTS()
             BY MsRequest.ActStamp 
             BY MsRequest.MsRequest:
 

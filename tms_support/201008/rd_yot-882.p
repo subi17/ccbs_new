@@ -10,12 +10,11 @@ OUTPUT STREAM sLog TO "yot-882.log".
 {Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEF BUFFER bmsisdn FOR msisdn.
-ldTS = fMakeTS().
+ldTS = Func.Common:mMakeTS().
 llSimulated = FALSE. 
 
 FOR EACH bMSISDN NO-LOCK WHERE

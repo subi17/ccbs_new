@@ -10,7 +10,6 @@
 ------------------------------------------------------------------------ */
    
 {Syst/commali.i}
-{Func/func.p}
 {Func/email.i}
 {Func/cparam2.i}
 {Mm/cdrvar.i}
@@ -18,7 +17,6 @@
 {Rate/chkbal2.i}
 {Rate/mobol_tt.i}
 {Func/fmakeservice.i}
-{Func/timestamp.i}
 {Func/fsubser.i}
 {Func/fservlimit.i}
 {Rate/onlinevar.i}
@@ -661,7 +659,7 @@ DO TRANS:
       ASSIGN
          ttCall.ReadDate  = TODAY
          ttCall.ReadTime  = TIME
-         ttCall.ReadInTS  = fMake2Dt(ttCall.ReadDate, ttCall.ReadTime)
+         ttCall.ReadInTS  = Func.Common:mMake2DT(ttCall.ReadDate, ttCall.ReadTime)
          ldtTMSTime       = NOW
          TTCall.custNum   = liunkcust
          amt2 = amt2 + 1

@@ -18,7 +18,6 @@ katun = "Newton".
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Mc/provmaint.i}
-{Func/timestamp.i}
 {Func/tmsparam4.i}
 
 DEF VAR custcat_struct AS CHAR NO-UNDO. 
@@ -121,7 +120,7 @@ ELSE DO:
                    "Phone: " + pcPhone + CHR(10) +
                    "Email: " +  pcEmail.
 
-      fUpdateMaintBreak(fMakeTs(),fMakeTs(),liValue).
+      fUpdateMaintBreak(Func.Common:mMakeTS(),Func.Common:mMakeTS(),liValue).
       RUN pMailMaintBreak(lcEmail).
    END.
 END.

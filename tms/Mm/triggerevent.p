@@ -9,7 +9,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Mobsub'}

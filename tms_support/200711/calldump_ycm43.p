@@ -13,7 +13,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/fvatfact.i}
 {Func/excel.i}
 {Func/coinv.i}
@@ -50,7 +49,7 @@ assign
    lcOdir   =  "/store/riftp/dumpfiles/calls/outgoing/" 
    lcSdir   =  "/store/riftp/dumpfiles/calls/spool/"
    ldate1   = idaDay 
-   filename = "calls" + fDateFmt(ldate1,"yyyymmdd") + ".dump"
+   filename = "calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + ".dump"
    ldate1   = idaDay - 1
    ldate2   = idaDay
    numform  = session:numeric-format

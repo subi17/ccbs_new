@@ -36,7 +36,7 @@ output stream sout to value(lcOutputFile).
 
 ASSIGN
    ldaDate = DATE(MONTH(ldaDate),1,YEAR(ldaDate))
-   ldaLastDayOfMonth = fLastDayOfMOnth(ldaDate)
+   ldaLastDayOfMonth = Func.Common:mLastDayOfMonth(ldaDate)
    liFrom = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + DAY(ldaDate)
    liTo = liFrom + 1.
 

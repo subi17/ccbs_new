@@ -10,7 +10,6 @@
 &GLOBAL-DEFINE TraceLog NO
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/coinv.i}
@@ -267,8 +266,8 @@ PROCEDURE pInitialize:
                                       STRING(ilDetails,"detailed/summary"))
       ldaFromPeriod  = fInt2Date(iiPeriod,1)
       ldaToPeriod    = fInt2Date(iiPeriod,2)
-      ldFromPeriod   = fMake2DT(ldaFromPeriod,0)
-      ldToPeriod     = fMake2DT(ldaToPeriod,86399).
+      ldFromPeriod   = Func.Common:mMake2DT(ldaFromPeriod,0)
+      ldToPeriod     = Func.Common:mMake2DT(ldaToPeriod,86399).
 
    IF NUM-ENTRIES(lcFile,"/") > 1 THEN ASSIGN
       lcPlainFile = ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/")

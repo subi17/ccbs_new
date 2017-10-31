@@ -11,7 +11,6 @@
 */
 
 {newton/src/flistrpc.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE pcUsername AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcEvent AS CHARACTER NO-UNDO. 

@@ -11,7 +11,6 @@
 {Syst/testpaa.i}
 {Func/excel.i}
 {Func/email.i}
-{Func/timestamp.i}
 
 DEF VAR Reseller  LIKE Reseller.Reseller NO-UNDO.
 DEF VAR dFrom     AS DATE FORMAT "99-99-99" NO-UNDO.
@@ -139,8 +138,8 @@ end.
 if keylabel(lastkey) = "f4" then return.
 
 ASSIGN 
-   FromStamp = fHMS2TS(dFrom,"00:00:00")
-   ToStamp   = fHMS2TS(dTo,"23:59:59").
+   FromStamp = Func.Common:mHMS2TS(dFrom,"00:00:00")
+   ToStamp   = Func.Common:mHMS2TS(dTo,"23:59:59").
 
 output stream excel to /tmp/posrep.txt.
 
@@ -191,7 +190,7 @@ FOR EACH Reseller NO-LOCK WHERE
    put stream excel unformatted
       Reseller.Reseller      tab
       Salesman.Salesman      tab
-      fTS2HMS(Order.CrStamp) tab
+      Func.Common:mTS2HMS(Order.CrStamp) tab
       Order.OrderId          tab
       lcStatus               tab
       OrderCustomer.SurName1 + " " + OrderCustomer.Firstname tab

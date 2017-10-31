@@ -7,7 +7,6 @@
                    09.11.04/aam skip products listed in parameter SpecSkipProd
                    12.04.05/aam new columns -> more lcRep4Headers
                    04.08.05/aam use MobCDR.MPMAmt for mpm
-                   18.01.06/aam fDispCustName()
 */
 
 DEF VAR liRep4Lang        AS INT  NO-UNDO.
@@ -67,8 +66,7 @@ FUNCTION fRep4CustHeader RETURNS LOGICAL
    liRepCust  = Customer.RepCust
    liRep4Lang = Customer.Language
    erisivu    = INDEX(Customer.RepCodes,"-") > 0
-   sasnimi    = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer)
+   sasnimi    = Func.Common:mDispCustName(BUFFER Customer)
    lasnimi    = sasnimi.
 
    IF liRepCust NE Customer.CustNum THEN DO:
@@ -82,8 +80,7 @@ FUNCTION fRep4CustHeader RETURNS LOGICAL
       FIND FIRST xCustomer WHERE xCustomer.CustNum = liInvCust
       NO-LOCK NO-ERROR.
       IF AVAILABLE xCustomer THEN 
-         lasnimi = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER xCustomer).
+         lasnimi = Func.Common:mDispCustName(BUFFER xCustomer).
       ELSE lasnimi = "".
    END.
    
@@ -148,14 +145,6 @@ FUNCTION fRep4CustHeader RETURNS LOGICAL
    RETURN TRUE. 
 
 END FUNCTION.
-
-/* Is this  a PNP number */
-FUNCTION fIsPNP RETURNS LOGICAL
-  (INPUT  iCustNum AS INT,
-   INPUT  iBSub    AS CHAR).
- 
-   RETURN FALSE.
-END.   
 
 FUNCTION fVatIncl RETURNS LOGICAL
    (ilCallIncl AS LOG,
@@ -435,7 +424,7 @@ FUNCTION fRep4SetPrintValues RETURNS LOGICAL
 
    ASSIGN 
    /* duration into hh:mm format */
-   lcRep4Dur     = fSec2C(idDur,10)
+   lcRep4Dur     = Func.Common:mSec2C(idDur,10)
    /* data amounts to Kb */
    liRep4DataAmt = INT(idDataAmt / 1024).
 END.
@@ -448,8 +437,7 @@ FUNCTION fRep4SetLineValues RETURNS LOGICAL
 
    IF NOT ilFullBNumber THEN
           /* Modify BSUB FOR reporting: fXBSub uses {&country} */
-   lcRep4BSub = DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-                                 ttcall.bsub,
+   lcRep4BSub = Func.Common:mHideBSub(ttcall.bsub,
                                  ttcall.callcust,
                                  ttcall.bdest,
                                  ttCall.BType,

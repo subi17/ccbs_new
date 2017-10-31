@@ -35,7 +35,7 @@ do i = 1 to num-entries(lcCLis, " "):
                      "UN" + lcBarrStatus,
                      "5",           /* source  */
                      "YDR-8",       /* creator */
-                     fMakeTS() + 0.0012, /* activate, 2min delay */
+                     Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                      "",                 /* SMS */
                      OUTPUT lcResult).
       put stream slog mobsub.cli " " lcBarrStatus " " lcResult skip.

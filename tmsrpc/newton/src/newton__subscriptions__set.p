@@ -129,26 +129,26 @@ FUNCTION fSetSMSBundle RETURN CHARACTER
                                   1).
 
     IF ldActStamp > 0 THEN DO:
-         fSplitTS(ldActStamp,
+         Func.Common:mSplitTS(ldActStamp,
                   OUTPUT ldtActDate,
                   OUTPUT liReq).
          IF ldtActDate > SubSer.SSDate OR
                (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
                 DAY(SubSer.SSDate) NE 1)
          THEN .
-         ELSE ldActStamp = fMakeTS().
+         ELSE ldActStamp = Func.Common:mMakeTS().
     END.
-    ELSE ldActStamp = fMakeTS().
+    ELSE ldActStamp = Func.Common:mMakeTS().
 
     IF ldtActDate = TODAY
-    THEN ldActStamp = fMakeTS().
-    ELSE ldActStamp = fMake2DT(ldtActDate,1).
+    THEN ldActStamp = Func.Common:mMakeTS().
+    ELSE ldActStamp = Func.Common:mMake2DT(ldtActDate,1).
         
 
     /* pick up monthly amount of SMSBundle given 
        to this mobsub 
     */
-    fMonthlyStamps(TODAY,
+    Func.Common:mMonthlyStamps(TODAY,
                    ldTS1,
                    ldTS2). 
     ldMonthAmt = fGetCounterAmt("MobSub",

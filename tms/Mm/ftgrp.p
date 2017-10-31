@@ -128,8 +128,7 @@ FUNCTION fDispFATType RETURNS LOGICAL.
 
    lcFATType = "".
    IF FATGroup.FATType <= 3 THEN 
-   lcFATType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "FatGroup",
+   lcFATType = Func.Common:mTMSCodeName("FatGroup",
                                 "FATType",
                                 STRING(FATGroup.FATType)).
 
@@ -141,8 +140,7 @@ FUNCTION fDispFATTarget RETURNS LOGICAL.
 
    lcFATTarget = "".
    IF FATGroup.FATTarget <= "3" THEN 
-   lcFATTarget = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "FatGroup",
+   lcFATTarget = Func.Common:mTMSCodeName("FatGroup",
                                   "FATTarget",
                                   FATGroup.FATTarget).
 
@@ -152,8 +150,7 @@ END FUNCTION.
 
 FUNCTION fDispQtyUnit RETURNS LOGICAL.
 
-   lcQtyUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "FatGroup",
+   lcQtyUnit = Func.Common:mTMSCodeName("FatGroup",
                                  "QtyUnit",
                                  FATGroup.QtyUnit).
 

@@ -9,7 +9,6 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 katun    = "NewtonAd".
@@ -61,7 +60,7 @@ RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcCommand,
                  {&REQUEST_SOURCE_NEWTON},
                  "",
-                 fMakeTS(),
+                 Func.Common:mMakeTS(),
                  "",
                  OUTPUT lcSetStatus).
 

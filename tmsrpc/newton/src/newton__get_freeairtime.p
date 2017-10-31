@@ -29,7 +29,6 @@
 gcBrand = "1".
 katun = "NewtonRPC".
 
-{Func/date.i}
 {Func/fixedfee.i}
 
 /* Input parameters */
@@ -106,7 +105,7 @@ FOR EACH DPMember NO-LOCK WHERE
    DO liCount = 0 to liNumberOfMonths:
       ASSIGN ldaFromDate = ADD-INTERVAL(DPMember.ValidFrom,liCount,"months")
              ldaFromDate = DATE(MONTH(ldaFromDate),1,YEAR(ldaFromDate))
-             ldaToDate   = fLastDayOfMonth(ldaFromDate).
+             ldaToDate   = Func.Common:mLastDayOfMonth(ldaFromDate).
       RUN pAddStructDiscount(INPUT ldaFromDate,INPUT ldaToDate).
    END. /* DO ind = 0 to liNumberOfMonths: */
 END. /* FOR EACH DPMember NO-LOCK WHERE */
@@ -127,7 +126,7 @@ FOR EACH MobSub WHERE
       DO liCount = 0 to liNumberOfMonths:
          ASSIGN ldaFromDate = ADD-INTERVAL(DPMember.ValidFrom,liCount,"months")
                 ldaFromDate = DATE(MONTH(ldaFromDate),1,YEAR(ldaFromDate))
-                ldaToDate   = fLastDayOfMonth(ldaFromDate).
+                ldaToDate   = Func.Common:mLastDayOfMonth(ldaFromDate).
          RUN pAddStructDiscount(INPUT ldaFromDate,INPUT ldaToDate).
       END. /* DO ind = 0 to liNumberOfMonths: */
    END. /* FOR EACH DPMember NO-LOCK WHERE */

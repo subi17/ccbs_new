@@ -11,8 +11,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Func/fctchange.i}
 
 def shared var siirto as char.
@@ -44,7 +42,7 @@ FIND FIRST CLIType WHERE
            CLIType.CLIType = icNewCLIType NO-LOCK NO-ERROR.
 
 ASSIGN ldaSTCDates[1] = TODAY + 1
-       ldaSTCDates[2] = fLastDayOfMonth(TODAY) + 1.
+       ldaSTCDates[2] = Func.Common:mLastDayOfMonth(TODAY) + 1.
 
 /* Only postpaid to postpaid */
 IF NOT (CLIType.PayType = 2 OR bMobsub.PayType = TRUE) AND

@@ -122,8 +122,7 @@ FORM
 FUNCTION fPaymTypeName RETURNS LOGIC
    (iiPaymType AS INT):
    
-   lcPaymTypeName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Payment",
+   lcPaymTypeName = Func.Common:mTMSCodeName("Payment",
                                      "PaymType",
                                      STRING(iiPaymType)).
 END FUNCTION.
@@ -142,8 +141,7 @@ FUNCTION fDispPaymSrcName RETURNS LOGIC
    
    IF icPaymSrc = "" THEN lcPaymSrcName = "".
    ELSE DO:
-      lcPaymSrcName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Payment",
+      lcPaymSrcName = Func.Common:mTMSCodeName("Payment",
                                        "PaymSrc",
                                        icPaymSrc).
       IF lcPaymSrcName = "" THEN lcPaymSrcName = ?.

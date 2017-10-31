@@ -136,8 +136,7 @@
             23.11.2005/aam new parameters to pCreateInv from pDepositInv
             30.11.2005/aam vat handling for adv.payment type fat rows  
             02.12.2005/aam check fatime.period before using it 
-            18.01.2006/aam qty for fat rows always 1,
-                           fPrintCustName()
+            18.01.2006/aam qty for fat rows always 1
             06.02.2006/jp  ttServiceCounter
             28.04.2006/aam new fat logic (priority,fatperc),
                            ttEventCust
@@ -174,7 +173,6 @@
 {Syst/country.i}
 {Func/fixedfee.i}
 {Func/cparam.i2}
-{Func/timestamp.i}
 {Func/fapvat.i}
 {Inv/billrund.i {1}}
 {Func/fcustbal.i}
@@ -551,7 +549,7 @@ FUNCTION fErrorLog RETURNS LOGIC
           ErrorLog.KeyValue  = STRING(iiCustnum)
           ErrorLog.ErrorChar = icCLI
           ErrorLog.ErrorMsg  = icError.
-          ErrorLog.ActionTS  = fMakeTS().
+          ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.
 
@@ -880,8 +878,8 @@ PROCEDURE pCreateInv:
    ASSIGN ldtBSDate     = TODAY
           liBSTime      = TIME
           liLastCreated = 0
-          ldBillPer[1]  = fMake2Dt(pDate1,0)
-          ldBillPer[2]  = fMake2Dt(pDate2,86399).
+          ldBillPer[1]  = Func.Common:mMake2DT(pDate1,0)
+          ldBillPer[2]  = Func.Common:mMake2DT(pDate2,86399).
 
    HIDE MESSAGE no-pause.
    PAUSE 0.
@@ -1126,10 +1124,10 @@ PROCEDURE pCreateInv:
 
             lcMobRep = "".
             
-             ASSIGN ldFromPer = fMake2Dt(IF ttCLI.FromDate NE ?
+             ASSIGN ldFromPer = Func.Common:mMake2DT(IF ttCLI.FromDate NE ?
                                          THEN ttCLi.FromDate
                                          ELSE poDate,86399)
-                    ldToPer   = fMake2Dt(IF ttCLI.ToDate NE ?
+                    ldToPer   = Func.Common:mMake2DT(IF ttCLI.ToDate NE ?
                                          THEN ttCLI.ToDate
                                          ELSE pDate2,0) /* use 0 -> get owner
                                                         of last full day */.
@@ -1662,8 +1660,8 @@ PROCEDURE pCreateInv:
                   ldtTo   = pDate2.
                     
                ASSIGN     
-                  ldFromPer = fMake2Dt(ldtFrom,0)
-                  ldToPer   = fMake2Dt(ldtTo,86399)
+                  ldFromPer = Func.Common:mMake2DT(ldtFrom,0)
+                  ldToPer   = Func.Common:mMake2DT(ldtTo,86399)
                   ldeTerm   = 99999999.99999
                   ldMinCons = 0
                   lcMinItem = "".
@@ -2439,7 +2437,7 @@ PROCEDURE pFixCDR:
          /* webspeed calculations: CLI */
          lCLI = "".
          /* 1: a known freephone number */
-         lD2D = fHMS2TS(FixCDR.Date,string(FixCDR.TimeStart,"hh:mm:ss")).
+         lD2D = Func.Common:mHMS2TS(FixCDR.Date,string(FixCDR.TimeStart,"hh:mm:ss")).
          FIND FIRST BDestHist where
                     BDestHist.Brand   = gcBrand        AND 
                     BDestHist.BDest   = FixCDR.BDest   AND
@@ -3217,7 +3215,7 @@ PROCEDURE pInvoiceHeader:
          liMsSeq = ttRowVat.MsSeq.
 
          CREATE ttInv.
-         ASSIGN ttInv.ChgStamp     = fMakeTS()
+         ASSIGN ttInv.ChgStamp     = Func.Common:mMakeTS()
                 ttInv.Brand        = Customer.Brand 
                 ttInv.InvNum       = lISeq
                 ttInv.InvSeq       = lISeq
@@ -3328,9 +3326,7 @@ PROCEDURE pInvoiceHeader:
             NO-LOCK NO-ERROR.
             IF AVAILABLE OrderCustomer THEN DO:
                ASSIGN 
-                  ttInv.IDelName    = DYNAMIC-FUNCTION("fPrintOrderName"
-                                                          IN ghFunc1,
-                                                       BUFFER OrderCustomer)
+                  ttInv.IDelName    = Func.Common:mPrintOrderName(BUFFER OrderCustomer)
                   ttInv.IDelAddr    = OrderCustomer.Address
                   ttInv.IDelZipCode = OrderCustomer.ZipCode
                   ttInv.IDelPost    = OrderCustomer.PostOffice.
@@ -3352,9 +3348,7 @@ PROCEDURE pInvoiceHeader:
             NO-LOCK NO-ERROR.
             IF AVAILABLE OrderCustomer THEN DO:
                ASSIGN 
-               ttInv.CustName    = DYNAMIC-FUNCTION("fPrintOrderName"
-                                                       IN ghFunc1,
-                                                    BUFFER OrderCustomer)
+               ttInv.CustName   = Func.Common:mPrintOrderName(BUFFER OrderCustomer)
                ttInv.Address    = OrderCustomer.Address
                ttInv.PostOffice = OrderCustomer.ZipCode + " " + 
                                   OrderCustomer.PostOffice.
@@ -3383,8 +3377,7 @@ PROCEDURE pInvoiceHeader:
             ttInv.IDelCountry = Customer.IDelCountry                        
             ttInv.FirstName   = Customer.FirstName
             ttInv.SurName2    = Customer.SurName2
-            ttInv.CustName    = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                                 BUFFER Customer).
+            ttInv.CustName    = Func.Common:mPrintCustName(BUFFER Customer).
 
          /* check that due date is a regular day */
          ttInv.DueDate = fChkDueDate(ttInv.DueDate).

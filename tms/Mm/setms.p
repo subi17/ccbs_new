@@ -20,7 +20,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mm/barrgrp.i}
@@ -107,7 +106,7 @@ DEF TEMP-TABLE ttDone NO-UNDO
    INDEX ServCom ServCom.
 
    
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 rc = -1.
 
@@ -243,7 +242,7 @@ IF ServCom.ActType = 0 THEN DO:
      IF MsRequest.ReqCParam2 = "VOIP_ADD" OR
         MsRequest.ReqCParam2 = "VOIP_REMOVE" THEN DO:
 
-        fSplitTS(MsRequest.ActStamp,
+        Func.Common:mSplitTS(MsRequest.ActStamp,
                  OUTPUT ldaActiveDate,
                  OUTPUT liActiveTime).
 
@@ -290,7 +289,7 @@ IF ServCom.ActType = 0 THEN DO:
 
      ELSE IF AVAILABLE bMsRequest THEN DO:
 
-        fSplitTS(bMsRequest.ActStamp,
+        Func.Common:mSplitTS(bMsRequest.ActStamp,
                  OUTPUT ldaActiveDate,
                  OUTPUT liActiveTime).
 
@@ -556,7 +555,7 @@ BY ttSolog.ActStamp:
       "Service order request #" string(Solog.Solog) 
       "has been saved to the system."                             SKIP(1)
       "This activation request is scheduled and will be sent to "  SKIP
-      "activation server" fTS2HMS(Solog.TimeSlotTMS) "."             
+      "activation server" Func.Common:mTS2HMS(Solog.TimeSlotTMS) "."             
       VIEW-AS ALERT-BOX TITLE "Service Order Request".  
 
 END.

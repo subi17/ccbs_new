@@ -4,7 +4,6 @@
 {Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Syst/tmsconst.i}
 

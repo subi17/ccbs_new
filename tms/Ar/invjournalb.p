@@ -14,7 +14,6 @@ ASSIGN
    gcBrand = "1"
    katun   = "laskutus".
 
-{Func/date.i}
 {Syst/utumaa.i "new"}
 {Ar/invjournal.i}
 {Func/cparam2.i}
@@ -76,7 +75,7 @@ IF lcParam NE "" THEN DO:
          INT(SUBSTRING(lcParam,1,4))) NO-ERROR.
 
       IF ERROR-STATUS:ERROR THEN ok = false.
-      ldtInvDate[2] = fLastDayOfMonth(ldtInvDate[1]).
+      ldtInvDate[2] = Func.Common:mLastDayOfMonth(ldtInvDate[1]).
 
    END.
 
@@ -111,7 +110,7 @@ ELSE DO:
    ELSE DO:
       ldTmpDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
       ldtInvDate[1] = DATE(MONTH(ldTmpDate),16,YEAR(ldTmpDate)).
-      ldtInvDate[2] = fLastDayOfMonth(ldTmpDate). 
+      ldtInvDate[2] = Func.Common:mLastDayOfMonth(ldTmpDate). 
    END.
 END.
 
@@ -215,7 +214,7 @@ PROCEDURE pPrintReport:
                                   STRING(idtDate1,"99.99.9999") + "-" +
                                   STRING(idtDate2,"99.99.9999")
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
    ELSE DO TRANS:
@@ -237,7 +236,7 @@ PROCEDURE pPrintReport:
                                   STRING(idtDate1,"99.99.9999") + "-" +
                                   STRING(idtDate2,"99.99.9999")
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 
       /* file without the dir */
       lcPlainFile = lcFile.

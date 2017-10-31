@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 
@@ -106,7 +105,7 @@ FIND FIRST DayCampaign WHERE
            DayCampaign.DCEvent = icDCEvent NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DayCampaign THEN RETURN.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 /* service package */
 IF DayCampaign.DCType = "1" OR INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN DO:
@@ -121,7 +120,7 @@ IF DayCampaign.DCType = "1" OR INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN DO:
             ServiceLimit.SLSeq     = MServiceLimit.SLSeq  AND
             ServiceLimit.GroupCode = icDCEvent:
 
-      fSplitTS(MServiceLimit.FromTS,
+      Func.Common:mSplitTS(MServiceLimit.FromTS,
                OUTPUT ldtDate,
                OUTPUT liTime).
                
@@ -181,8 +180,7 @@ BY Invoice.ToDate DESC:
 END.
           
 ASSIGN
-   lcCustName   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer)
+   lcCustName   = Func.Common:mDispCustName(BUFFER Customer)
    ldtTermDate = TODAY
    toimi        = -1.
 
@@ -271,7 +269,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
       IF NOT llOk THEN NEXT.
  
-      ldActStamp = fMake2Dt(ldtTermDate,
+      ldActStamp = Func.Common:mMake2DT(ldtTermDate,
                             IF ldtTermDate = TODAY
                             THEN TIME
                             ELSE 86399).
@@ -306,7 +304,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             Memo.MemoTitle = "Periodical Contract Terminated"
             Memo.MemoText  = "Contract: " + icDCEvent + CHR(10) + 
                              lcMemoText.
-            Memo.CreStamp  = fMakeTS().
+            Memo.CreStamp  = Func.Common:mMakeTS().
          
          MESSAGE "Request was created with ID" liCreated
          VIEW-AS ALERT-BOX INFORMATION.

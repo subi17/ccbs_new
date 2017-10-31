@@ -176,8 +176,7 @@ BY Contract.ToDate DESC:
 
    fCheckPage(0).
 
-   ASSIGN lcContrType = DYNAMIC-FUNCTION ("fTMSCodeName" in ghfunc1,
-                                          "Contract",
+   ASSIGN lcContrType = Func.Common:mTMSCodeName("Contract",
                                           "ContrType",
                                           STRING(Contract.ContrType))
           ldBilled    = 0.                                          

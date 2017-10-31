@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/msreqfunc.i}
@@ -76,8 +75,8 @@ DEF BUFFER bMsRequest FOR MsRequest.
 
 /* previous week from sunday to saturday */
 ASSIGN
-   ldeTsFrom         = fMake2Dt(MsRequest.ReqDtParam1,0)
-   ldeTsTo           = fMake2Dt(MsRequest.ReqDtParam2,86399)
+   ldeTsFrom         = Func.Common:mMake2DT(MsRequest.ReqDtParam1,0)
+   ldeTsTo           = Func.Common:mMake2DT(MsRequest.ReqDtParam2,86399)
    liCurrentPeriod   = YEAR(TODAY) * 100 + MONTH(TODAY)
    lcTFBank          = MsRequest.ReqCParam1
    lcRootDir         = fCParam("TermFinance","OutRootDir")
@@ -147,7 +146,7 @@ FUNCTION fErrorLog RETURN LOGICAL(
    liErrors = liErrors + 1.
 
    PUT STREAM sErr UNFORMATTED
-      fTS2HMS(fMakeTS()) ":"
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":"
       iiOrderId ":" icErrorText skip.
 
 END.
@@ -201,7 +200,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
 
    EMPTY TEMP-TABLE ttOrderCustomer NO-ERROR.
 
-   fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
 
    IF FixedFee.BillCode EQ "RVTERM" THEN DO:
 

@@ -97,7 +97,6 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -686,8 +685,7 @@ ELSE ASSIGN
 
 IF AVAILABLE Customer THEN DO:
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    IF LENGTH(lcCustName) > 50 THEN 
       lcCustName = SUBSTRING(lcCustName,1,50).
       

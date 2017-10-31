@@ -14,7 +14,7 @@ find order where
 assign
    mnpprocess.statuscode = 7
    mnpprocess.statusreason = "CANC_TECNI"
-   mnpprocess.updatets = fMakeTS()
+   mnpprocess.updatets = Func.Common:mMakeTS()
    order.mnpstatus = 8.
 
 fSetOrderStatus(order.orderid, "7"). 

@@ -10,7 +10,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/heartbeat.i}
 {Func/log.i}
 {Syst/tmsconst.i}
@@ -411,7 +410,7 @@ PROCEDURE pSendROIHistory:
       fLog( "ROI History, ERROR Creating message: " + gc_xmlrpc_error,"NW_ERR"). 
       PUT SCREEN ROW 23 COL 4  "ERROR Creating message " + gc_xmlrpc_error.
       /* save the exception in the ErrorLog */
-      ldTS = fMakeTS().
+      ldTS = Func.Common:mMakeTS().
       CREATE ErrorLog.
       ASSIGN ErrorLog.Brand = gcBrand
              ErrorLog.TableName = "Order"
@@ -465,7 +464,7 @@ PROCEDURE pSendROIHistory:
    END.
    ELSE DO:
       /* save the exception in the ErrorLog */
-      ldTS = fMakeTS().
+      ldTS = Func.Common:mMakeTS().
       CREATE ErrorLog.
       ASSIGN ErrorLog.Brand = gcBrand
              ErrorLog.TableName = "Order"

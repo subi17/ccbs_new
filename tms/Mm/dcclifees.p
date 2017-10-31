@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fpcmaintreq.i}
 
@@ -112,8 +111,7 @@ FIND FIRST DayCampaign WHERE
 IF NOT AVAILABLE DayCampaign THEN RETURN.
       
 ASSIGN
-   lcCustName   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer)
+   lcCustName   = Func.Common:mDispCustName(BUFFER Customer)
    llCreateFees = DCCLI.CreateFees
    toimi        = -1.
 
@@ -207,7 +205,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             Memo.MemoTitle = "Periodical Contract Changed"
             Memo.MemoText  = "Contract: " + icDCEvent + CHR(10) + 
                              lcMemoText.
-            Memo.CreStamp  = fMakeTS().
+            Memo.CreStamp  = Func.Common:mMakeTS().
          
          MESSAGE "Request was created with ID" liCreated
          VIEW-AS ALERT-BOX INFORMATION.

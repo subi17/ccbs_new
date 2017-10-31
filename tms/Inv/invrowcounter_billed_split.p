@@ -6,9 +6,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Syst/funcrun_replica.i}
 
@@ -70,7 +68,7 @@ PROCEDURE pCollectInvoices:
    DEF VAR ldaDate  AS DATE NO-UNDO.
    
    ASSIGN 
-      ldaDate = fLastDayOfMonth(TODAY)
+      ldaDate = Func.Common:mLastDayOfMonth(TODAY)
       liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
 
    InvoiceSelect:

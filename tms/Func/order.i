@@ -13,7 +13,6 @@
 {Func/femailinvoice.i}
 {Func/profunc.i}
 {Func/custfunc.i}
-{Func/timestamp.i}
 {Func/log.i}
 
 IF llDoEvent THEN DO:
@@ -61,7 +60,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
                           INPUT Customer.Custnum,
                           INPUT "Customer email address is changed").
 
-         liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+         liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
                                           INPUT katun,
                                           INPUT 0, /* msseq */
@@ -95,7 +94,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
                                 INPUT Customer.Custnum,
                                 INPUT "Customer email address is changed").
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
                                              INPUT katun,
                                              INPUT 0, /* msseq */
@@ -140,7 +139,7 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
                ASSIGN Customer.Email = OrderCustomer.EMail
                       llEmailChange  = TRUE.
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
                                              INPUT katun,
                                              INPUT 0, /* msseq */
@@ -205,7 +204,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
     DEF VARIABLE ldeCurrentTime AS DECIMAL NO-UNDO.
 
-    ASSIGN ldeCurrentTime = fMakeTS().
+    ASSIGN ldeCurrentTime = Func.Common:mMakeTS().
 
     FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = gcBrand                                      AND 
                                 bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
@@ -245,8 +244,8 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
                     ASSIGN 
                         bf_MsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
-                        bf_MsRequest.UpdateStamp = fMakeTS()
-                        bf_MsRequest.DoneStamp   = fMakeTS()
+                        bf_MsRequest.UpdateStamp = Func.Common:mMakeTS()
+                        bf_MsRequest.DoneStamp   = Func.Common:mMakeTS()
                         bf_MsRequest.Memo        = bf_MsRequest.Memo + 
                                                    (IF bf_MsRequest.Memo > "" THEN ", " ELSE "") + 
                                                    "Non-pro order#" + STRING(iiOrder) + " for ACCed customer is handled. That means ACCed customer " + 

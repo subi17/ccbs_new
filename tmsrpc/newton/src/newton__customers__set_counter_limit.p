@@ -112,7 +112,7 @@ gcBrand = lcBrand.
 liMsReq = fLimitRequest(
           ?,           /* msseq */
           piCustnum,   /* custum */
-          fMakeTS(),   /* act.stamp */ 
+          Func.Common:mMakeTS(),   /* act.stamp */ 
           lcMode,    /* create, update */
           ldValue,  /* new limit values */
           FALSE,       /* default value */ 

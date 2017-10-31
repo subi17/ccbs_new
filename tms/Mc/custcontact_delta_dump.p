@@ -53,7 +53,7 @@ DEF VAR liLastDumpTime AS INT NO-UNDO.
 DEF VAR lcLastDumpTime AS CHAR NO-UNDO.
 DEF VAR liCustNum AS INT NO-UNDO.
 
-fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
 
 lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
 

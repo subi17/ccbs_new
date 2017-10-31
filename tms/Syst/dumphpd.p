@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'DumpHPD'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 

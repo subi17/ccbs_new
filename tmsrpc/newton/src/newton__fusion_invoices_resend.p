@@ -73,7 +73,7 @@ END.
 IF lcEmail EQ "" OR lcEmail EQ ? THEN
    RETURN appl_err("Email not defined").
 
-liRequest = fEmailSendingRequest(INPUT fMakeTS(),
+liRequest = fEmailSendingRequest(INPUT Func.Common:mMakeTS(),
                                  INPUT katun,
                                  INPUT FusionInvoice.Custnum,
                                  INPUT "", /* msisdn */

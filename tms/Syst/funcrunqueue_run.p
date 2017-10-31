@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/eventlog.i}
 
 DEF INPUT  PARAMETER iiFRQueueID     AS INT  NO-UNDO.
@@ -30,7 +29,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
              ErrorLog.ErrorMsg  = icError
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -95,7 +94,7 @@ PROCEDURE pInitialize:
    
       ASSIGN
          lcActionKey = STRING(iiFRQScheduleID)
-         ldStarted   = fMakeTS().              
+         ldStarted   = Func.Common:mMakeTS().              
 
       /* already running */
       IF CAN-FIND(FIRST ActionLog WHERE
@@ -239,7 +238,7 @@ PROCEDURE pCancelQueue:
          EXCLUSIVE-LOCK.
       ASSIGN
          FuncRunQSchedule.RunState = "Cancelled"
-         FuncRunQSchedule.DoneTS   = fMakeTS().
+         FuncRunQSchedule.DoneTS   = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE.
@@ -283,7 +282,7 @@ PROCEDURE pFinalize:
       
       FIND CURRENT FuncRunQSchedule EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunQSchedule.DoneTS   = fMakeTS()
+         FuncRunQSchedule.DoneTS   = Func.Common:mMakeTS()
          FuncRunQSchedule.RunState = "Finished".
 
    END.

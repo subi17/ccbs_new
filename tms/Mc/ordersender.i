@@ -36,8 +36,7 @@
 
                   fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_ERROR}).
                   
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(Order.OrderID),
                                    0,
                                    "FIXED LINE ACTIVATION FAILED",
@@ -65,8 +64,7 @@
                   llOrdStChg = fSetOrderStatus(Order.OrderId,
                                                {&ORDER_STATUS_ERROR}).
 
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(Order.OrderID),
                                    0,
                                    "FIXED LINE ACTIVATION FAILED",
@@ -278,7 +276,7 @@
                               NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
                               IF AVAIL bOldOrder AND
-                                fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                                Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                                 THEN NEXT.
                            END.
 
@@ -385,7 +383,7 @@
                                          bOldOrder.MsSeq = bSIM.MsSeq
                                    NO-LOCK USE-INDEX MsSeq NO-ERROR.
                               IF AVAIL bOldOrder AND
-                                 fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                                 Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                               THEN NEXT.
                            END.
 
@@ -430,14 +428,13 @@
                      Order.MsSeq,
                      Order.OrderId,
                      katun,
-                     fMakeTS(),
+                     Func.Common:mMakeTS(),
                      "7",
                      OUTPUT ocResult
                      ).
                    
                   IF ocResult > "" THEN DO:
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "Order",
+                     Func.Common:mWriteMemo("Order",
                                       STRING(Order.OrderID),
                                       0,
                                       "After Sales Request creation failed",
@@ -460,8 +457,7 @@
                   llOrdStChg = fSetOrderStatus(Order.OrderId,"12").
                ELSE DO:
                   /* YBP-598 */ 
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(Order.OrderID),
                                    0,
                                    "STC request creation failed",
@@ -488,8 +484,7 @@
              IF order.CLI = "" THEN DO:
 
                    /* YBP-599 */ 
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
+                   Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
                                     "MSISDN",
@@ -505,8 +500,7 @@
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). 
 
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "MSISDN",
@@ -548,8 +542,7 @@
 
                    llOrdStChg = fSetOrderStatus(Order.OrderId,"2").  /* error */
                    /* YBP-603 */ 
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
+                   Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
                                     "Order Process Error",
@@ -569,8 +562,7 @@
                       /* YBP-605 */
                       llOrdStChg = fSetOrderStatus(Order.OrderId,"4"). /* in control */
                       /* YBP-605 */
-                      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                       "Order",
+                      Func.Common:mWriteMemo("Order",
                                        STRING(Order.OrderID),
                                        0,
                                        "ICC In Use",
@@ -587,8 +579,7 @@
                 /* YBP-608 */
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"4").
                 /* YBP-609 */
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "CLI Type",
@@ -604,8 +595,7 @@
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* ERROR */
                 /* YBP-610 */
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "CLI Type",
@@ -620,8 +610,7 @@
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */
                 /* YBP-611 */
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "Subscription",
@@ -649,8 +638,7 @@
                 RUN Mc/prinoconf.p (Order.OrderID).
                 
                 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
+                   Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
                                     "Order Confirmation Failed",
@@ -718,7 +706,7 @@
                          NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
                          IF AVAIL bOldOrder AND
-                           fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                           Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                            THEN NEXT.
                       END.
 
@@ -762,7 +750,7 @@
                 CREATE MSISDN.
                 ASSIGN
                    MSISDN.ActionDate = TODAY 
-                   msisdn.ValidFrom  = fmakeTS()
+                   msisdn.ValidFrom  = Func.Common:mMakeTS()
                    Msisdn.cli        = order.cli 
                    Msisdn.StatusCode = 22
                    MSISDN.MSSeq      = Order.MSSeq
@@ -807,7 +795,7 @@
                    SimDeliveryHist.OrderID    = Order.OrderID
                    SimDeliveryHist.MSSeq      = Order.MSSeq 
                    SimDeliveryHist.StatusCode = 2.
-                   SimDeliveryHist.TimeStamp = fMakeTS().
+                   SimDeliveryHist.TimeStamp = Func.Common:mMakeTS().
              END.
              END. /* IF NOT llReserveSimAndMsisdn THEN DO: */
              
@@ -832,7 +820,7 @@
                    ldeSwitchTS = MNPSub.PortingTime.      
                 END.
              END.
-             ELSE ldeSwitchTS = fMakeTS().
+             ELSE ldeSwitchTS = Func.Common:mMakeTS().
 
              
              IF Order.OrderType = 3 THEN
@@ -862,8 +850,7 @@
              IF ocResult > "" THEN DO:
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */
 
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "ACTIVATION FAILED",

@@ -641,8 +641,7 @@ PROCEDURE local-update-record:
       
       FIND Customer WHERE Customer.CustNum = MsOwner.CustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer 
-      THEN lcUserName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                         BUFFER Customer).
+      THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcUserName = "".
    
       FIND BillTarg WHERE 

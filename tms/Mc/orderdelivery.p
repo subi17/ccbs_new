@@ -9,7 +9,6 @@
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
-{Func/timestamp.i}
 {Func/transname.i}
 {Syst/tmsconst.i}
 

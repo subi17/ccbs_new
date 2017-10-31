@@ -8,7 +8,6 @@ Version ......: yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
@@ -55,7 +54,7 @@ FUNCTION fTS2ModifiedHMS RETURNS CHARACTER
    DEFINE VARIABLE tme AS INTEGER NO-UNDO. 
    DEFINE VARIABLE lcStamp AS CHARACTER NO-UNDO. 
 
-   fSplitTS(ideTimeStamp, OUTPUT dte, OUTPUT tme).
+   Func.Common:mSplitTS(ideTimeStamp, OUTPUT dte, OUTPUT tme).
    lcStamp = STRING(TRUNCATE(ideTimeStamp,0)).
    lcStamp = STRING(lcStamp,"9999-99-99") + " " + STRING(tme,"HH:MM:SS").
    RETURN lcStamp.
@@ -433,7 +432,7 @@ PROCEDURE pMNPOutKPI:
               msrequest.msseq = mnpsub.msseq and
               msrequest.reqtype = 18 and
               msrequest.actstamp >= mnpprocess.portingtime and
-              msrequest.actstamp < fsecoffset(mnpprocess.portingtime, 600) 
+              msrequest.actstamp < Func.Common:mSecOffSet(mnpprocess.portingtime, 600) 
          use-index msseq no-error.
          
          IF AVAIL msrequest then do:

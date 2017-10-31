@@ -11,7 +11,6 @@
 katun = "cron".
 gcBrand = "1".
 {Func/fgettxt.i}
-{Func/timestamp.i}
 {Func/fmakesms.i}
 {Func/transname.i}
 {Mm/fbundle.i}
@@ -51,9 +50,9 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
    DEFINE VARIABLE ldeTs    AS DECIMAL NO-UNDO.
    DEFINE VARIABLE liStatus AS INT  NO-UNDO.
 
-   fSplitTS(fMakeTs(), OUTPUT ldaDate, OUTPUT liTime).
+   Func.Common:mSplitTS(Func.Common:mMakeTS(), OUTPUT ldaDate, OUTPUT liTime).
    ldaDate = ldaDate - 1.
-   ldeTs = fMake2Dt(ldaDate, liTime).
+   ldeTs = Func.Common:mMake2DT(ldaDate, liTime).
    
    DO liStatus = 1 TO 99:
 

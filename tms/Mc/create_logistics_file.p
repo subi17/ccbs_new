@@ -15,7 +15,6 @@ katun = "Cron".
 gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/fwebuser.i}
 {Func/transname.i}
 {Func/ftaxdata.i}
@@ -95,13 +94,13 @@ ASSIGN
    lcContractsDir     = fCParam("Logistics","ContractsDir")
    lcContractsOutDir  = fCParam("Logistics","ContractsOutDir")
    lcErrorLogDir      = fCParam("Logistics","DextraErrorLogDir")
-   lcFileName         = lcBrand + "_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+   lcFileName         = lcBrand + "_ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt"
    lcContractTARFile  = lcTARSpoolDir +
-                        lcBrand + "_contracts_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") +
+                        lcBrand + "_contracts_ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") +
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".tar"
    lcErrorLogFileName = lcErrorLogDir +
-                        lcBrand + "_error_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+                        lcBrand + "_error_ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log"
    lcBundleCLITypes   = fCParamC("BUNDLE_BASED_CLITYPES")
    ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
@@ -444,7 +443,7 @@ FUNCTION fDelivSIM RETURNS LOG
       IF AVAIL MNPSub THEN DO:
          IF MNPSub.PortingTime NE 0 THEN DO:
             ASSIGN
-               lcMNPTime = fTS2HMS(MNPSub.PortingTime)
+               lcMNPTime = Func.Common:mTS2HMS(MNPSub.PortingTime)
                lcMNPTime = REPLACE(lcMNPTime," ","")
                lcMNPTime = REPLACE(lcMNPTime,".","")
                lcMNPTime = REPLACE(lcMNPTime,":","")
@@ -455,7 +454,7 @@ FUNCTION fDelivSIM RETURNS LOG
       END.
    END.
 
-   fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
+   Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
    lcOrderDate = STRING(ldaOrderDate,"99999999").
 
    FIND FIRST AgreeCustomer WHERE
@@ -480,8 +479,7 @@ FUNCTION fDelivSIM RETURNS LOG
                        OUTPUT lcError).
 
          IF lcError BEGINS "Error" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              0,
                              "CASH INVOICE FAILED",
@@ -1443,7 +1441,7 @@ FUNCTION fDelivDevice RETURNS LOG
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
    END CASE.
-   fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
+   Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
    lcOrderDate = STRING(ldaOrderDate,"99999999").
 
    liRowNum = liRowNum + 1.
@@ -1534,7 +1532,7 @@ FOR EACH Stock NO-LOCK,
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND
-      fOffSet(Order.CrStamp, 24 * liNewDelay) > fMakeTS() THEN NEXT.
+      Func.Common:mOffSet(Order.CrStamp, 24 * liNewDelay) > Func.Common:mMakeTS() THEN NEXT.
 
    IF fDelivSIM( SIM.ICC ) THEN DO:
    
@@ -1581,14 +1579,13 @@ FOR EACH Order NO-LOCK WHERE
                xOrder.MsSeq,
                xOrder.OrderId,
                katun,
-               fMakeTS(),
+               Func.Common:mMakeTS(),
                "7",
                OUTPUT ocResult
                ).
 
             IF ocResult > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(xOrder.OrderID),
                                 0,
                                 "After Sales Request creation failed - LO",
@@ -1619,14 +1616,14 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
    IF NOT AVAIL Order OR INDEX(Order.orderchannel, "pos") > 0 THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
 
    IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.FixedStatusDesc = "Invalid order status"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
@@ -1639,7 +1636,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
       OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED}
       THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.FixedStatusDesc = "Pending fixed line cancellation"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
@@ -1650,12 +1647,12 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
    IF fDelivDevice("Router") THEN ASSIGN
-      FusionMessage.UpdateTS = fMakeTS()
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.
 
@@ -1725,8 +1722,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
             IF lcError > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(OrderCustomer.OrderID),
                                 oiCustomer,
                                 "CUSTOMER CONTACT CREATION FAILED",
@@ -1838,7 +1834,7 @@ IF llCreateErrLogFile AND
 
       OUTPUT STREAM sErr TO VALUE(lcErrorLogFileName).
       PUT STREAM sErr UNFORMATTED
-          "Dextra file is finished at " + fTS2HMS(fMakeTS()) SKIP
+          "Dextra file is finished at " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP
           "Errors occurred! See the attached log file" SKIP(1).
       OUTPUT STREAM sErr CLOSE.
 

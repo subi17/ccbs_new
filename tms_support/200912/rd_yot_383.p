@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand  = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
@@ -11,7 +10,7 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO 'yot_383.log'.
 
 plSimulated = FALSE.
-ldTS = fMakeTS(). 
+ldTS = Func.Common:mMakeTS(). 
 
 FOR EACH MSISDNbuf NO-LOCK WHERE 
          MSISDNbuf.Brand = gcBrand AND

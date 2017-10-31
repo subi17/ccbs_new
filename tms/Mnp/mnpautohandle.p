@@ -15,7 +15,6 @@ gcBrand = "1".
 {Mnp/mnpmessages.i}
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
@@ -30,7 +29,7 @@ lcLogDir = fCParam("MNP","MNPLogDir").
 fSetLogFileName(lcLogDir + "mnpautohandle.log").
 
 /* 6 hours ahead */
-ldeNow = fOffSetTS(6). 
+ldeNow = Func.Common:mOffSetTS(6). 
 
 HANDLE_LOOP:
 FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE

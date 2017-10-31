@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
@@ -140,7 +139,7 @@ IF lcBankNumber ne "" AND
                    FALSE,               /* Fees */
                    FALSE,               /* SendSMS */ 
                    MSRequest.UserCode,
-                   fMakeTS(),                    
+                   Func.Common:mMakeTS(),                    
                    "BANKNUMBER",
                    lcBankNumber,
                    24,
@@ -150,8 +149,7 @@ IF lcBankNumber ne "" AND
 
    IF liReq EQ 0 THEN
       /* write possible error to an order memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-        "MobSub",
+      Func.Common:mWriteMemo("MobSub",
         STRING(MobSub.MsSeq),
         MobSub.Custnum,
         "BANK ACCOUNT CHANGE REQUEST FAILED",
@@ -173,7 +171,7 @@ IF liCreditCheck EQ 1 AND
            FALSE,               /* Fees */
            FALSE,               /* SendSMS */
            MSRequest.UserCode,
-           fMakeTS(),
+           Func.Common:mMakeTS(),
            "CREDITCHECK",
            "",
            33,
@@ -183,8 +181,7 @@ IF liCreditCheck EQ 1 AND
    
    IF liReq EQ 0 THEN
       /* write possible error to an order memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-        "MobSub",
+      Func.Common:mWriteMemo("MobSub",
         STRING(MobSub.MsSeq),
         MobSub.custnum,
         "CREDIT CHECK REQUEST FAILED",

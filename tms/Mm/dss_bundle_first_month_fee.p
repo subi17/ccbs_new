@@ -36,8 +36,8 @@ DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 /******** Main start ********/
 
 ASSIGN
-   ldPeriodFrom    = fMake2Dt(idaFromDate,0)
-   ldPeriodTo      = fMake2Dt(idaToDate,86399)
+   ldPeriodFrom    = Func.Common:mMake2DT(idaFromDate,0)
+   ldPeriodTo      = Func.Common:mMake2DT(idaToDate,86399)
    liPeriod        = YEAR(idaToDate) * 100 + MONTH(idaToDate)
    lcIPLContracts  = fCParamC("IPL_CONTRACTS")
    lcBONOContracts = fCParamC("BONO_CONTRACTS")
@@ -78,7 +78,7 @@ IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
          ActionLog.UserCode     = katun
          ActionLog.FromDate     = idaFromDate
          ActionLog.ToDate       = idaToDate.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN "".

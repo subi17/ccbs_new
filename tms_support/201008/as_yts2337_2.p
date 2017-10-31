@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 
 DEFINE STREAM sout.

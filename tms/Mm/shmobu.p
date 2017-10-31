@@ -48,8 +48,7 @@ DO WITH FRAME subs:
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    FIND Country WHERE Country.Country = Customer.Country NO-LOCK NO-ERROR.
 
    DISP

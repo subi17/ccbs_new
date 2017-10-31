@@ -12,7 +12,6 @@
 {Syst/commali.i}
 {Func/email.i}
 {Func/tmsparam2.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustNum AS INT. 
@@ -115,7 +114,7 @@ FUNCTION fSendText RETURNS LOGICAL.
              ITSendLog.EMail      = xMailAddr
              ITSendLog.RepType    = "IT"
              ITSendLog.UserCode   = katun.
-             ITSendLog.SendStamp  = fMakeTS().
+             ITSendLog.SendStamp  = Func.Common:mMakeTS().
              
       OS-DELETE VALUE(lcFile).
 

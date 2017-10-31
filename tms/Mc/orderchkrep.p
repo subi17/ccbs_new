@@ -4,7 +4,6 @@ jl
 */
 
 {Syst/commpaa.i}
-{Func/date.i}
 {Func/cparam2.i}
 
 ASSIGN
@@ -21,7 +20,7 @@ DEF VAR lcSpoolDir   AS CHAR NO-UNDO.
 ASSIGN
    lcSpoolDir = fCParam("DUMPSPOOL","orderchkrep.p")
    lcOutDir   = fCParam("DUMPOUTGOING","orderchkrep.p")
-   lcFileName = "CHECKLIST" + fdatefmt(TODAY,"yyyymmdd") + ".dump".
+   lcFileName = "CHECKLIST" + Func.Common:mDateFmt(TODAY,"yyyymmdd") + ".dump".
 
 OUTPUT STREAM sLog TO VALUE(lcSpoolDir + lcfilename).
 

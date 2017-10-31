@@ -11,7 +11,6 @@
 gcBrand = "1".
 katun   = "Qvantel".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Mm/dss_bundle_first_month_fee.i}
 
 DEF VAR ldPeriodFrom    AS DEC  NO-UNDO.
@@ -103,8 +102,8 @@ ASSIGN liPeriod = INT(lcPeriod)
 ASSIGN
    ldaFromDate    = fInt2Date(liPeriod,1)
    ldaToDate      = fInt2Date(liPeriod,2)
-   ldPeriodFrom   = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo     = fMake2Dt(ldaToDate,86399)
+   ldPeriodFrom   = Func.Common:mMake2DT(ldaFromDate,0)
+   ldPeriodTo     = Func.Common:mMake2DT(ldaToDate,86399)
    lcALLHSDPABDest = fCParamC("ALL_HSDPA_BDEST").
 
 RUN pGetAllCustomersSubscriptions.
@@ -155,14 +154,14 @@ FOR EACH ttDSSInfo NO-LOCK BREAK BY ttDSSInfo.CustNum:
              lcCLIList           = ""
              liTotalPostSubs     = 0.
 
-   ASSIGN lcMobSubActTS  = fTS2HMS(ttDSSInfo.SubActTS)
-          lcMobSubEndTS  = fTS2HMS(ttDSSInfo.SubEndTS)
-          lcBundleFromTS = fTS2HMS(ttDSSInfo.BundleFromTS).
+   ASSIGN lcMobSubActTS  = Func.Common:mTS2HMS(ttDSSInfo.SubActTS)
+          lcMobSubEndTS  = Func.Common:mTS2HMS(ttDSSInfo.SubEndTS)
+          lcBundleFromTS = Func.Common:mTS2HMS(ttDSSInfo.BundleFromTS).
 
      IF ttDSSInfo.BundleEndTS = 99999999.99999 THEN
-        lcBundleEndTS  = fTS2HMS(20491231.86399).
+        lcBundleEndTS  = Func.Common:mTS2HMS(20491231.86399).
      ELSE
-        lcBundleEndTS  = fTS2HMS(ttDSSInfo.BundleEndTS).
+        lcBundleEndTS  = Func.Common:mTS2HMS(ttDSSInfo.BundleEndTS).
 
    IF ttDSSInfo.BundleId = {&DSS} THEN
       ASSIGN ldeTotalDSSLimit = ttDSSInfo.BundleLimitinMB
@@ -600,7 +599,7 @@ PROCEDURE pGetCustomerSubscriptions:
              ttDSSInfo.BilledBundleFee = FFItem.Amt.
 
           IF ttDSSInfo.BundleId = {&DSS} THEN DO:
-             fSplitTS(DEC(FFItem.Concerns[1]), OUTPUT ldFFItemStartDate,
+             Func.Common:mSplitTS(DEC(FFItem.Concerns[1]), OUTPUT ldFFItemStartDate,
                       OUTPUT liFFItemStartTime).
              ldeFeeAmt = fCalcProportionalFeeDSS(INPUT FixedFee.Amt,
                                                  INPUT ldFFItemStartDate,

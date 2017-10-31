@@ -63,14 +63,14 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
          
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
 ASSIGN
    lhTable     = BUFFER PrepaidRequest:HANDLE
    lcKeyFields = fEventKeyFields(lhTable)
-   ldCurrent   = fMakeTS().
+   ldCurrent   = Func.Common:mMakeTS().
 
 IF icDumpMode = "Modified" THEN ldFromStamp = idLastDump.
 ELSE ldFromStamp = 20060101.

@@ -14,9 +14,7 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fcreatereq.i}
 {Func/msreqfunc.i}
 {Func/fgettxt.i}
@@ -50,8 +48,8 @@ FUNCTION fCancelPendingEmailActRequest RETURNS LOG (INPUT iiCustnum AS INT,
         EXCLUSIVE-LOCK NO-ERROR.
    IF AVAIL bMsRequest THEN
       ASSIGN bMsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
-             bMsRequest.UpdateStamp = fMakeTS()
-             bMsRequest.DoneStamp   = fMakeTS()
+             bMsRequest.UpdateStamp = Func.Common:mMakeTS()
+             bMsRequest.DoneStamp   = Func.Common:mMakeTS()
              bMsRequest.Memo        = bMsRequest.Memo + 
                                       (IF bMsRequest.Memo > ""
                                        THEN ", " ELSE "") + icMemo.
@@ -214,9 +212,9 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
-   idActStamp = fSecOffSet(idActStamp,120). /* 2 mins delay */
+   idActStamp = Func.Common:mSecOffSet(idActStamp,120). /* 2 mins delay */
 
    ocResult = fChkRequest(iiCustNum,
                           {&REQTYPE_ACTIVATE_EMAIL_INVOICE},

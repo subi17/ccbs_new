@@ -142,8 +142,7 @@ END FUNCTION.
 FUNCTION fSubject RETURNS LOGIC
    (icSubject AS CHAR):
 
-   lcSubject = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "DiscountPlan",
+   lcSubject = Func.Common:mTMSCodeName("DiscountPlan",
                                    "Subject",
                                    icSubject).
    DISPLAY lcSubject WITH FRAME lis.
@@ -155,8 +154,7 @@ END FUNCTION.
 FUNCTION fDPUnit RETURNS LOGIC
    (icDPUnit AS CHAR):
 
-   lcSubject = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "DiscountPlan",
+   lcSubject = Func.Common:mTMSCodeName("DiscountPlan",
                                    "DPUnit",
                                    icDPUnit).
    DISPLAY lcDPUnit WITH FRAME lis.
@@ -862,8 +860,7 @@ PROCEDURE local-UPDATE-record:
                PAUSE 0.
 
                IF FRAME-FIELD = "Subject" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DiscountPlan",
+                  IF Func.Common:mTMSCodeName("DiscountPlan",
                                       "Subject",
                                       INPUT INPUT DiscountPlan.Subject) = ""
                   THEN DO:
@@ -874,8 +871,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ELSE IF FRAME-FIELD = "DPUnit" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DiscountPlan",
+                  IF Func.Common:mTMSCodeName("DiscountPlan",
                                       "DPUnit",
                                       INPUT INPUT DiscountPlan.DPUnit) = ""
                   THEN DO:

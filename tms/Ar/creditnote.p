@@ -19,7 +19,6 @@
 {Func/fbankday.i}
 {Ar/nnpcst.i}
 {Func/finvnum.i}
-{Func/fhdrtext.i}
 {Func/frefundreq.i}
 {Func/finvoiceacc.i}
 {Func/fcreditvalid.i}
@@ -255,7 +254,7 @@ PROCEDURE pFullCreditNote:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtCreditDate,
             OUTPUT liReqCnt).
             
@@ -297,7 +296,7 @@ PROCEDURE pFullCreditNote:
       IF liDDCancel = ? THEN liDDCancel = 0.
       
       /* don't activate before cancellation time after due date has passed */
-      ldActStamp = fMake2DT(MAX(TODAY,Invoice.DueDate + liDDCancel + 1),
+      ldActStamp = Func.Common:mMake2DT(MAX(TODAY,Invoice.DueDate + liDDCancel + 1),
                             100).
           
       /* payment for dd-invoices will be done on due date */
@@ -442,7 +441,7 @@ PROCEDURE pFullCreditNote:
    bCreditInv.ExtInvID = lcExtInvID.
       
    BUFFER-COPY Invoice EXCEPT InvNum ExtInvID TO bCreditInv.
-   bCreditInv.ChgStamp = fMakeTS().
+   bCreditInv.ChgStamp = Func.Common:mMakeTS().
  
    InvNum:
    REPEAT:
@@ -623,7 +622,7 @@ PROCEDURE pFullCreditNote:
 
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
          OPLog.UserCode  = katun
@@ -644,7 +643,7 @@ PROCEDURE pFullCreditNote:
       /* Make a OPLog record */
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
          OPLog.UserCode  = katun
@@ -730,7 +729,7 @@ PROCEDURE pFullCreditNote:
    /* credit invoice memo */
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
       Memo.Brand     = gcBrand
       Memo.MemoTitle = "Credited"
@@ -738,7 +737,7 @@ PROCEDURE pFullCreditNote:
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(bCreditInv.InvNum)
       Memo.CustNum   = Invoice.CustNum.
-      Memo.Memotext  = fGetHdrText(50,Customer.Language) + " " +
+      Memo.Memotext  = Func.Common:mGetHdrText(50,Customer.Language) + " " +
                        STRING(Invoice.InvNum) +  
                        ". Handler: " + katun  +
                        ". Reason Note/Jira : " + bCreditInv.xxmemo[1].
@@ -777,7 +776,7 @@ PROCEDURE pFullCreditNote:
    
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Brand     = gcBrand
       Memo.MemoTitle = "Credited"

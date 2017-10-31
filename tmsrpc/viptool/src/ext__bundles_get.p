@@ -17,7 +17,6 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/matrix.i}
@@ -40,7 +39,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-ASSIGN ldEndStamp = fMake2Dt(fLastDayOfMonth(TODAY),86399)
+ASSIGN ldEndStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399)
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
 IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
@@ -128,7 +127,7 @@ ELSE IF pcBundleId = "BONO_VOIP" AND
         fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundleId) > "" AND
         fGetActiveDataBundle(Mobsub.MsSeq,ldEndStamp) = "" THEN DO:
    IF (Mobsub.TariffBundle <> "CONTS15" AND Mobsub.CLIType <> "CONTM2") OR
-      fGetActiveDSSId(MobSub.CustNum,fSecOffSet(ldEndStamp,1)) <> "DSS2"
+      fGetActiveDSSId(MobSub.CustNum,Func.Common:mSecOffSet(ldEndStamp,1)) <> "DSS2"
    THEN liStatus = 2. /* cancelled ongoing */
 END.
 

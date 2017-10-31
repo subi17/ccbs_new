@@ -6,7 +6,6 @@
 
 &GLOBAL-DEFINE mdub YES
 
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
 {Syst/tmsconst.i}
@@ -16,8 +15,8 @@
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 
-ASSIGN ldaNextMonthActDate = (fLastDayOfMonth(TODAY) + 1)
-       ldNextMonthActStamp = fMake2Dt(ldaNextMonthActDate,0).
+ASSIGN ldaNextMonthActDate = (Func.Common:mLastDayOfMonth(TODAY) + 1)
+       ldNextMonthActStamp = Func.Common:mMake2DT(ldaNextMonthActDate,0).
 
 FUNCTION fGetActiveMDUB RETURNS CHAR 
    (INPUT icType       AS CHAR,
@@ -32,7 +31,7 @@ FUNCTION fGetActiveMDUB RETURNS CHAR
           liNumEntries    = NUM-ENTRIES(lcBONOContracts).
 
    IF ideActStamp = 0 OR ideActStamp = ? THEN
-      ideActStamp = fMakeTS().
+      ideActStamp = Func.Common:mMakeTS().
 
    DO i = 1 TO liNumEntries:
       lcBundle = ENTRY(i,lcBONOContracts).
@@ -113,7 +112,7 @@ FUNCTION fAllowMDUBActivation RETURNS LOGICAL
    lcBONOContracts = fCParamC(icType + "BONO_CONTRACTS").
 
    /* should not exist any MDUB valid to the future */
-   IF fGetActiveMDUB(icType, INPUT fMakeTS()) > "" THEN RETURN FALSE.
+   IF fGetActiveMDUB(icType, INPUT Func.Common:mMakeTS()) > "" THEN RETURN FALSE.
    /* should not exist any pending request for MDUB */
    IF fPendingMDUBActReq(icType) THEN RETURN FALSE.
    /* check service package definition exist for SHAPER and HSDPA */
@@ -225,7 +224,7 @@ FUNCTION fTerminateMDUBService RETURNS LOGICAL
    DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldTermTS AS DECIMAL NO-UNDO.
    
-   ldTermTS = fHMS2TS(fLastDayOfMonth(idtReqDate) ,"23:59:59").
+   ldTermTS = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idtReqDate) ,"23:59:59").
 
    FOR FIRST ServPac NO-LOCK WHERE
              ServPac.Brand   = gcBrand AND
@@ -274,7 +273,7 @@ FUNCTION fTerminateMDUBPerContract RETURNS LOGICAL
    DEFINE VARIABLE ldTermTS AS DECIMAL NO-UNDO.
 
    /* define termination request stamp  */ 
-   ldTS = fMakeTS().
+   ldTS = Func.Common:mMakeTS().
 
    FOR EACH MServiceLimit NO-LOCK WHERE
             MServiceLimit.MSSeq = MobSub.MsSeq AND
@@ -287,7 +286,7 @@ FUNCTION fTerminateMDUBPerContract RETURNS LOGICAL
    END.
    IF NOT llDo THEN RETURN TRUE. /* nothing has to be done */ 
           
-   ldTermTS = fHMS2TS(fLastDayOfMonth(idtReqDate) ,"23:59:59").
+   ldTermTS = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idtReqDate) ,"23:59:59").
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 icPerContract,
@@ -314,7 +313,7 @@ FUNCTION fMDUBFixedFeeAmt RETURNS DECIMAL
    DEFINE VARIABLE liOrderTime AS INTEGER NO-UNDO. 
    DEFINE VARIABLE ldAmt AS DECIMAL NO-UNDO.
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
             OUTPUT ldaOrderDate,
             OUTPUT liOrderTime).
  

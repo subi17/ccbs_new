@@ -13,11 +13,9 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 {Func/transname.i}
-{Func/fhdrtext.i}
 {Inv/ddoutfilett.i}
 {Func/customer_address.i}
 {Syst/funcrunprocess_update.i}
@@ -221,7 +219,7 @@ PROCEDURE pInitialize:
    DO liPCnt = 1 TO EXTENT(lcBaseHeader):
       IF liPCnt >= 15 THEN liPos = 435 + liPcnt.
       ELSE liPos = 350 + liPCnt.
-      lcBaseHeader[liPCnt] = fGetHdrText(liPos,1).
+      lcBaseHeader[liPCnt] = Func.Common:mGetHdrText(liPos,1).
    END.
 
    lcBaseTaxZone = fGetItemName(gcBrand,
@@ -342,7 +340,7 @@ PROCEDURE pPrintInvoices:
          ELSE DO:
             IF liPCnt >= 15 THEN liPos = 435 + liPCnt.
             ELSE liPos = 350 + liPCnt.
-            lcHeader[liPCnt] = fGetHdrText(liPos,Customer.Language).
+            lcHeader[liPCnt] = Func.Common:mGetHdrText(liPos,Customer.Language).
          END.   
       END.
 
@@ -580,7 +578,7 @@ PROCEDURE pLogErrors:
                              STRING(DAY(TODAY),"99")    + 
                              "_" + STRING(TIME) + ".txt".                    
 
-      ldCurrStamp = fMakeTS().
+      ldCurrStamp = Func.Common:mMakeTS().
                            
       OUTPUT STREAM slog TO VALUE(lcErrFile).
       PUT STREAM slog UNFORMATTED

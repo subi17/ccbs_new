@@ -18,7 +18,6 @@ ASSIGN
    gcBrand = "1".
 {Syst/eventval.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 {Func/scheduled_dumps.i}
 
 
@@ -52,7 +51,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
 
-fSplitTS(fmakeTS(),ldate,litime).
+Func.Common:mSplitTS(Func.Common:mMakeTS(),ldate,litime).
 /* Search by ID */
 fDumpEventList(TODAY + 62,TODAY, liDumpId).
 FOR EACH ttEvent NO-LOCK:
@@ -69,7 +68,7 @@ PROCEDURE pAddResultsArray:
    add_string(dump_struct,"mode", ttEvent.DumpMode).
    lcDay = ENTRY(ttEvent.EventDay, lcWeekDays).
    add_string(dump_struct,"day", lcDay).
-   ldeDumpTime = fMake2Dt(ttEvent.EventDate, ttEvent.EventTime).
+   ldeDumpTime = Func.Common:mMake2DT(ttEvent.EventDate, ttEvent.EventTime).
    add_timestamp(dump_struct,"timestamp", ldeDumpTime).
    add_string(dump_struct,"duration", ttEvent.AveDuration).
 END PROCEDURE. /* PROCEDURE pAddResultsArray: */

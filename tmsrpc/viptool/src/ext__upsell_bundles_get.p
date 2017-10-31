@@ -41,7 +41,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-ldeCurrentTS = fMakeTS().
+ldeCurrentTS = Func.Common:mMakeTS().
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 

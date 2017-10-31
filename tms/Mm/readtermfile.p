@@ -4,7 +4,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fsubstermreq.i}
 {Func/msisdn_prefix.i}
@@ -76,7 +75,7 @@ INPUT STREAM sRead FROM VALUE(icFile).
 OUTPUT STREAM sLog TO VALUE(icLogFile) APPEND.
 
 ASSIGN
-   ldCurrent  = fMakeTS()
+   ldCurrent  = Func.Common:mMakeTS()
    liMaxDates = fCParamI("SubsTermMaxDates").
 
 IF liMaxDates = ? THEN liMaxDates = 0.
@@ -85,7 +84,7 @@ PUT STREAM sLog UNFORMATTED
    "File: " icFile
    SKIP
    "Started: " 
-   fTS2HMS(ldCurrent)
+   Func.Common:mTS2HMS(ldCurrent)
    SKIP.
 
 ASSIGN
@@ -214,7 +213,7 @@ REPEAT:
              STRING(liMaxDates) + " days").
       NEXT.
    END.
-   ASSIGN ldKillStamp = fMake2DT(ldtTermDate,liTermTime).
+   ASSIGN ldKillStamp = Func.Common:mMake2DT(ldtTermDate,liTermTime).
    fCheckKillTS(INT(lcReason),ldKillStamp, OUTPUT lcError).
    IF lcError NE "" THEN DO:
       fError(lcError).
@@ -251,7 +250,7 @@ REPEAT:
    END.
          
    fAdditionalLineSTC(liRequest,
-                      fMake2Dt(ldtTermDate + 1, 0),
+                      Func.Common:mMake2DT(ldtTermDate + 1, 0),
                       "DELETE").
 
    /* Do not create memos for preactivated dummy customer */ 

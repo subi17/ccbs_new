@@ -241,8 +241,7 @@ IF Customer.Custnum EQ Customer.AgrCust THEN DO:
 END.
 
 
-lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "Invoice",
+lcDType = Func.Common:mTMSCodeName("Invoice",
                            "DelType",
                            STRING(Customer.DelType)).
 add_string(top_struct,"delivery_channel",lcDType).

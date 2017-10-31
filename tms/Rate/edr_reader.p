@@ -7,7 +7,6 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Rate/onlinereader_oldcdr.i}
 {Func/detailseq.i}
@@ -182,7 +181,7 @@ DO WHILE TRUE WITH FRAME clog:
    IF callrec begins "#" THEN DO:
       IF lcErrorLogFile > "" THEN DO:
          OUTPUT STREAM sErrorFile to VALUE(lcErrorLogFile) APPEND.
-         PUT STREAM sErrorFile UNFORMATTED fTS2HMS(fMakeTS()) ": " callrec SKIP.
+         PUT STREAM sErrorFile UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) ": " callrec SKIP.
          OUTPUT STREAM sErrorFile CLOSE.
       END.
       NEXT EDR_LOOP.
@@ -226,7 +225,7 @@ DO WHILE TRUE WITH FRAME clog:
          lcStartDate       = ENTRY(ttCSVPos.EventDate,lcCDR,"|")
          lcStartTime       = ENTRY(ttCSVPos.EventTime,lcCDR,"|")
          ttEDR.dtlseq      = fStreamSequence(INPUT ttEDR.datest, liStream)
-         ttEDR.ReadInTS    = fMakeTS()
+         ttEDR.ReadInTS    = Func.Common:mMakeTS()
          ttEDR.ReadDate    = TODAY
          ttEDR.ReadTime    = TIME 
          ttEDR.SubscriberFee = DEC(ENTRY(ttCSVPos.SubscriberFee,lcCDR,"|"))

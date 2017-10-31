@@ -1,6 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Func/cparam2.i}
 
 DEFINE VARIABLE lcOperator  AS CHARACTER NO-UNDO.
@@ -100,7 +98,7 @@ FUNCTION fNagios RETURNS LOGICAL
       lcCommand     = ENTRY(1,pcCommand,":")
       lcDescription = ENTRY(2,pcCommand,":") WHEN
                       NUM-ENTRIES(pcCommand,":") > 1
-      lcTimeStamp   = fTS2HMS(fOffSetTS(liOffSet))
+      lcTimeStamp   = Func.Common:mTS2HMS(Func.Common:mOffSetTS(liOffSet))
       lcTimeStamp   = SUBSTR(lcTimeStamp,7,4)  +
                       SUBSTR(lcTimeStamp,4,2)  +
                       SUBSTR(lcTimeStamp,1,2)  +
@@ -149,19 +147,19 @@ FUNCTION fKeepAlive RETURNS INTEGER
       CREATE ttNagios.
       ASSIGN
          ttNagios.tcCommand = lcCommand
-         ttNagios.tdeTS1    = fOffSetTS(0).
+         ttNagios.tdeTS1    = Func.Common:mOffSetTS(0).
 
       fNagios(pcCommand).
    END.
    
-   ttNagios.tdeTS2 = fOffSetTS(liOffSet).
+   ttNagios.tdeTS2 = Func.Common:mOffSetTS(liOffSet).
 
    IF ttNagios.tdeTS2 - ttNagios.tdeTS1 > ldeAlarmLimit THEN DO:
    
       fNagios(pcCommand).
 
       ASSIGN
-         ttNagios.tdeTS1 = fOffSetTS(0)
+         ttNagios.tdeTS1 = Func.Common:mOffSetTS(0)
          ttNagios.tdeTS2 = ttNagios.tdeTS1.
 
    END.

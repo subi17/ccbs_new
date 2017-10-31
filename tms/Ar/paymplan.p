@@ -22,7 +22,6 @@
 {Mc/lib/tokenchk.i 'PaymPlan'}
 {Func/fpaymplan.i}
 {Func/fppinv.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -331,12 +330,10 @@ END FUNCTION.
 
 DO i = 1 TO 7:
    lcStatusLst = lcStatusLst + 
-                DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "PaymPlan","PPStatus",STRING(i)) + ",". 
+                Func.Common:mTMSCodeName("PaymPlan","PPStatus",STRING(i)) + ",". 
    IF i <= 3 THEN 
    lcTypeLst = lcTypeLst + 
-                DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "PaymPlan","PPType",STRING(i)) + ",". 
+                Func.Common:mTMSCodeName("PaymPlan","PPType",STRING(i)) + ",". 
 END.
 
 liBankDays = fCParamI("PPBankDays").
@@ -800,8 +797,7 @@ REPEAT WITH FRAME sel:
 
        IF liCustNum > 0 THEN DO:
           FIND Customer WHERE Customer.CustNum = liCustNum NO-LOCK.
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
           lcOrdCustName = lcCustName.                              
           DISPLAY liCustNum lcCustName WITH FRAME fCreate.
        END.
@@ -842,8 +838,7 @@ REPEAT WITH FRAME sel:
                         Customer.CustNum = INPUT FRAME fCreate liCustNum 
                    NO-LOCK NO-ERROR.
                    IF AVAILABLE Customer THEN DO:
-                      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                    BUFFER Customer).
+                      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                    
                       DISPLAY lcCustName WITH FRAME fCreate.
                       
@@ -855,9 +850,7 @@ REPEAT WITH FRAME sel:
                               bAgrCust.CustNum = Customer.AgrCust NO-LOCK.
                          ASSIGN 
                             liOrdCustNum  = Customer.AgrCust
-                            lcOrdCustName = DYNAMIC-FUNCTION("fDispCustName"
-                                                             IN ghFunc1,
-                                                             BUFFER bAgrCust).
+                            lcOrdCustName = Func.Common:mDispCustName(BUFFER bAgrCust).
                       END.
                    
                       DISPLAY liOrdCustNum lcOrdCustName WITH FRAME fCreate.  
@@ -882,8 +875,7 @@ REPEAT WITH FRAME sel:
                   bAgrCust.CustNum = Customer.AgrCust NO-LOCK.
              ASSIGN 
                 liOrdCustNum  = Customer.AgrCust
-                lcOrdCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                 BUFFER bAgrCust).
+                lcOrdCustName = Func.Common:mDispCustName(BUFFER bAgrCust).
           END.
                    
           DISPLAY liOrdCustNum lcOrdCustName WITH FRAME fCreate.  
@@ -1285,8 +1277,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
     FIND Customer OF PaymPlan NO-LOCK NO-ERROR. 
-    lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+    lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                         
     fPPStatus(PaymPlan.PPStatus,FALSE).
     fPPType(PaymPlan.PPType,FALSE).
@@ -1328,8 +1319,7 @@ PROCEDURE local-UPDATE-record:
          lcOrdCustName = "".
          IF PaymPlan.Orderer > 0 THEN DO:
             FIND Customer WHERE Customer.CustNum = PaymPlan.Orderer NO-LOCK.
-            lcOrdCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                             BUFFER Customer).
+            lcOrdCustName = Func.Common:mDispCustName(BUFFER Customer).
          END.
    
          DISP PaymPlan.PPStatus lcType 
@@ -1735,7 +1725,7 @@ PROCEDURE local-UPDATE-record:
                       Memo.CreUser   = katun 
                       Memo.MemoTitle = "Plan Cancelled"
                       Memo.MemoText  = lcCancelTxt.
-                      Memo.CreStamp  = fMakeTS().
+                      Memo.CreStamp  = Func.Common:mMakeTS().
             
                MESSAGE "Plan has been marked to status 4"
                VIEW-AS ALERT-BOX

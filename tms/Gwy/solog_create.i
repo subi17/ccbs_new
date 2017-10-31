@@ -12,7 +12,6 @@
 &GLOBAL-DEFINE SOLOG_CREATE_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 
 FUNCTION fCreateSolog RETURNS INT
    (  INPUT iiMsSeq AS INT,
@@ -23,7 +22,7 @@ FUNCTION fCreateSolog RETURNS INT
    DEF VAR ldeTime AS DEC NO-UNDO. 
 
    ASSIGN
-      ldeTime = fMakeTS()
+      ldeTime = Func.Common:mMakeTS()
       liSolog = NEXT-VALUE(Solog).
 
    CREATE Solog.

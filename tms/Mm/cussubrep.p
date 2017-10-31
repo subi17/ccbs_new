@@ -186,7 +186,7 @@ toimi:
          PUT STREAM excel UNFORMATTED
          "*"                                       MY-NL
          "MSISDN:"            TAB mobsub.CLI   TAB 
-         DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer)
+         Func.Common:mDispCustName(BUFFER Customer)
          MY-NL
          
          "Activation date"    TAB mobsub.ActivationDate 

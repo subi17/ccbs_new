@@ -13,7 +13,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
 {Syst/eventval.i}
@@ -830,8 +829,8 @@ PROCEDURE local-find-others.
    
    FIND customer where customer.custnum = invseq.custnum no-lock no-error.
    Username = lcCustName.
-   lcCreated = "(" + fTS2HMS(HighUsage.crstamp) + ")".     
-   lcChanged = "(" + fTS2HMS(HighUsage.chstamp) + ")" .               
+   lcCreated = "(" + Func.Common:mTS2HMS(HighUsage.crstamp) + ")".     
+   lcChanged = "(" + Func.Common:mTS2HMS(HighUsage.chstamp) + ")" .               
 
    FIND FIRST TMSCodes WHERE
               TMSCodes.TableName = "HighUsage"      AND
@@ -859,7 +858,7 @@ PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
       FIND customer where customer.custnum = invseq.custnum no-lock no-error.
-      IF AVAIL Customer Then lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN                                           ghFunc1, BUFFER Customer).
+      IF AVAIL Customer Then lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                        
       DISP
       InvSeq.CustNum   

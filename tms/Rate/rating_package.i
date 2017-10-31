@@ -818,21 +818,21 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
             IF NOT AVAIL MServiceLimit THEN DO:
                
-               fSplitTS(CallTimeStamp,
+               Func.Common:mSplitTS(CallTimeStamp,
                         OUTPUT ldtDate,
                         OUTPUT liTime).
                
-               ldeEndTS = fMake2Dt(ldtDate,86399).
+               ldeEndTS = Func.Common:mMake2DT(ldtDate,86399).
                
                FIND LAST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq    = MSOwner.MsSeq AND
                          MServiceLimit.DialType = liDialType AND
                          MServiceLimit.SlSeq   = ttServiceLimit.SlSeq AND
                          MServiceLimit.EndTS <= ldeEndTS AND
-                         MServiceLimit.FromTS >= fMake2Dt(ldtDate,0)
+                         MServiceLimit.FromTS >= Func.Common:mMake2DT(ldtDate,0)
                USE-INDEX MsSeq NO-ERROR.
                IF AVAIL MServiceLimit THEN
-                  ldeEndTS = fSecOffSet(MServiceLimit.EndTS,-1).
+                  ldeEndTS = Func.Common:mSecOffSet(MServiceLimit.EndTS,-1).
 
                CREATE mServiceLimit.
                ASSIGN
@@ -843,7 +843,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   mServiceLimit.DialType = ttServiceLimit.DialType          
                   mServiceLimit.InclUnit = ttServiceLimit.InclUnit
                   mServiceLimit.InclAmt  = ttServiceLimit.InclAmt
-                  mServiceLimit.FromTS   = fMake2Dt(ldtDate,0)
+                  mServiceLimit.FromTS   = Func.Common:mMake2DT(ldtDate,0)
                   mServiceLimit.EndTS    = ldeEndTS NO-ERROR.
                IF ERROR-STATUS:ERROR THEN DELETE mServiceLimit.
                ELSE IF llDoEvent THEN 

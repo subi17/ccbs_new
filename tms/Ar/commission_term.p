@@ -168,8 +168,7 @@ PROCEDURE pTerminateFAT:
        
       olTerminated = TRUE.
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+      Func.Common:mWriteMemo("FATime",
                        STRING(FATime.FatNum),
                        FATime.CustNum,
                        "Cancelled",
@@ -203,8 +202,7 @@ PROCEDURE pTerminateTopUp:
       
       olTerminated = TRUE.
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "PrepaidRequest",
+      Func.Common:mWriteMemo("PrepaidRequest",
                        STRING(PrepaidRequest.PPRequest),
                        iiCustNum,
                        "Cancelled",

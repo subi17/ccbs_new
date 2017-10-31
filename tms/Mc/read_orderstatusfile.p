@@ -19,7 +19,6 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Func/email.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
@@ -317,7 +316,7 @@ PROCEDURE pUpdateOrderStatus:
 
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS() 
+         Memo.CreStamp  = Func.Common:mMakeTS() 
          Memo.Brand     = gcBrand 
          Memo.HostTable = "Order" 
          Memo.KeyValue  = STRING(Order.OrderId) 

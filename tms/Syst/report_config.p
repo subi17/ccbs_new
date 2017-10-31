@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'ReportConfRow'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -103,8 +102,7 @@ FUNCTION fRowType RETURNS LOGIC
    (icRowType AS CHAR):
 
    IF icRowType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "ttConfig",
+      lcType = Func.Common:mTMSCodeName("ttConfig",
                                 "RowType",
                                 icRowType).
    ELSE lcType = "".

@@ -141,7 +141,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
    CASE pcReqType:
       WHEN "subscription_type" THEN
          IF fChkReqStatusChange(4) EQ TRUE AND 
-            MsRequest.ActStamp > fMakeTs() THEN DO:
+            MsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
             /* cancel possible renewal pos stc order */
             FIND FIRST Order WHERE
                Order.MsSeq = MsRequest.MsSeq AND
@@ -205,7 +205,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
                                 Msowner.MsSeq = TermMobsub.MsSeq
                           NO-LOCK NO-ERROR.
                      IF AVAIL Msowner THEN
-                        fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+                        Func.Common:mSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
                                  OUTPUT liSecSIMTermTime).
                      ELSE ldaSecSIMTermDate = TODAY.
                   END. /* ELSE DO: */

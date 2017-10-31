@@ -34,7 +34,7 @@ for each msowner no-lock where
       */
            
 
-      fsplitts(msrequest.actstamp,
+      Func.Common:mSplitTS(msrequest.actstamp,
                output ldtdate,
                output i).
          

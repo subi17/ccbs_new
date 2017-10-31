@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'ActionLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
@@ -142,8 +141,7 @@ form /* seek  ActionLog */
 FUNCTION fStatusName RETURNS LOGICAL
    (INPUT iiStatus AS INT):
    
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "ActionLog",
+   lcStatus = Func.Common:mTMSCodeName("ActionLog",
                                "ActionStatus",
                                STRING(iiStatus)).
                                
@@ -707,7 +705,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-    fSplitTS(ActionLog.ActionTS,
+    Func.Common:mSplitTS(ActionLog.ActionTS,
              OUTPUT ldtDate,
              OUTPUT liTime).
 
@@ -740,8 +738,7 @@ PROCEDURE local-UPDATE-record:
          FIND Customer WHERE Customer.CustNum = ActionLog.CustNum 
             NO-LOCK NO-ERROR.
          IF AVAILABLE Customer THEN 
-            lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER Customer).
+            lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       END.
       
       DISP 

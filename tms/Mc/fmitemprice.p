@@ -62,7 +62,7 @@ PROCEDURE pFMItemPrice:
    /* starting date for new billing event row */
    ldtFromDate = MsRequest.ReqDtParam1.
    IF ldtFromDate = ? THEN DO: 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtFromDate,
                OUTPUT liTime).
    END.

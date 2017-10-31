@@ -15,7 +15,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/profunc.i}
 

@@ -78,8 +78,7 @@ repeat trans:
       RUN StarEventMakeModifyEvent(lhCustomer).
 
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "customer",
+      Func.Common:mWriteMemo("customer",
                  STRING(Customer.CustNum),
                  Customer.CustNum,
                  "Cuenta EVO caducada",

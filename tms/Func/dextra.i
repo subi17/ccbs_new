@@ -11,7 +11,6 @@
 &GLOBAL-DEFINE DEXTRA_I YES
 {Syst/commali.i}
 {Func/fgettxt.i}
-{Func/date.i}
 {Func/fmakesms.i}
 {Syst/tmsconst.i}
 {Func/fcreatereq.i}
@@ -133,7 +132,7 @@ FUNCTION fLogisticsRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_LOGISTICS},
                   idActStamp,

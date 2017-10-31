@@ -156,8 +156,7 @@ FUNCTION fTypeName RETURNS LOGIC
    
    IF iiInvType = 0 
    THEN lcInvType = "ALL".
-   ELSE lcInvType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Invoice",
+   ELSE lcInvType = Func.Common:mTMSCodeName("Invoice",
                                      "InvType",
                                      STRING(iiInvType)).
       
@@ -170,8 +169,7 @@ FUNCTION fDelTypeName RETURNS LOGIC
    
    IF iiDelType = 0 
    THEN lcDelType = "ALL".
-   ELSE lcDelType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Invoice",
+   ELSE lcDelType = Func.Common:mTMSCodeName("Invoice",
                                      "DelType",
                                      STRING(iiDelType)).
       

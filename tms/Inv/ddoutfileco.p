@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 
@@ -100,7 +99,7 @@ FUNCTION fParseDDFileName RETURNS LOGICAL (
 
    IF ERROR-STATUS:ERROR THEN RETURN FALSE.
 
-   IF NOT fTs2Date(ldeDueDate, OUTPUT odaDueDate) THEN RETURN FALSE. 
+   IF NOT Func.Common:mTS2Date(ldeDueDate, OUTPUT odaDueDate) THEN RETURN FALSE. 
 
    RETURN TRUE.
 END.
@@ -427,8 +426,7 @@ FOR EACH ttDueDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttDueDate.DueDate,
+   lcDate = Func.Common:mDateFmt(ttDueDate.DueDate,
                              "yyyymmdd").
    ASSIGN 
       lcFileXml = REPLACE(lcFileXml,"#DDATE",lcDate)
@@ -473,7 +471,7 @@ DO TRANS:
       ActionLog.ActionChar   = " Files: " + STRING(oiFileCount) + CHR(10) +
                                " Invoices: " + STRING(oiInvCount)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN ocError.

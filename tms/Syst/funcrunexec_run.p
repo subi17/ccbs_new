@@ -8,7 +8,6 @@
   ------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/log.i}
 {Syst/eventlog.i}
 {Func/multitenantfunc.i}
@@ -55,7 +54,7 @@ FUNCTION fErrorLog RETURNS LOGIC
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
              ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -160,7 +159,7 @@ PROCEDURE pLaunchProcesses:
       FIND FIRST FuncRunExec WHERE FuncRunExec.FRExecID = iiFRExecID
          EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunExec.StartTS  = fMakeTS()
+         FuncRunExec.StartTS  = Func.Common:mMakeTS()
          FuncRunExec.RunState = "Running".
 
       CREATE FuncRunExecLog.
@@ -212,7 +211,7 @@ PROCEDURE pLaunchProcesses:
          FuncRunProcess.RunCommand  = REPLACE(FuncRunProcess.RunCommand,
                                             "#TENANT",
                                              STRING(lcTenant))
-         FuncRunProcess.StartTS     = fMakeTS().
+         FuncRunProcess.StartTS     = Func.Common:mMakeTS().
                        
       /* run here or in another host */
       FOR FIRST FuncRunResult NO-LOCK USE-INDEX FRExecID WHERE
@@ -235,7 +234,7 @@ PROCEDURE pLaunchProcesses:
       FIND FIRST FuncRunExec WHERE FuncRunExec.FRExecID = iiFRExecID
          EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunExec.EndTS    = fMakeTS()
+         FuncRunExec.EndTS    = Func.Common:mMakeTS()
          FuncRunExec.RunState = "Finished"
          lcMessage            = "No processes were started".
       
@@ -324,7 +323,7 @@ PROCEDURE pFinalize:
       
       FIND CURRENT FuncRunExec EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunExec.EndTS    = fMakeTS()
+         FuncRunExec.EndTS    = Func.Common:mMakeTS()
          FuncRunExec.RunState = IF llCancelled 
                                 THEN "Cancelled" 
                                 ELSE "Finished".

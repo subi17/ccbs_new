@@ -25,7 +25,7 @@ REPEAT:
       /*Accept only activation files*/
       IF NOT lcFileName BEGINS "es_yoigo-" THEN NEXT.
       /*do not move file that is generated today*/
-      IF lcFilename MATCHES("*" + STRING(INT(fMakeTS())) + "*") THEN NEXT.
+      IF lcFilename MATCHES("*" + STRING(INT(Func.Common:mMakeTS())) + "*") THEN NEXT.
       /*check date*/
 
    END.

@@ -7,7 +7,6 @@ gcBrand = "1".
 
 {Func/xmlfunction.i}
 {Mm/msbalance.i}
-{Func/date.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
@@ -233,7 +232,7 @@ fRPCStruct("Start",lcStruct,lhSAXWriter).
 
 def stream slog.
 output stream slog to /tmp/air_queries.log append.
-put stream slog unformatted lcCLI ":" fts2hms(fmakets()) ":" lcMethodRequest skip
+put stream slog unformatted lcCLI ":" Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":" lcMethodRequest skip
    pcRequest skip(2).
 output stream slog close.
 

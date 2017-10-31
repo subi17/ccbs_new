@@ -12,7 +12,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 {Func/msreqfunc.i}
@@ -148,8 +147,7 @@ ASSIGN lcRefAmt      = " / " + STRING(iiPaymCount)
        /* yoigo cif */
        lcCompanyID   = REPLACE(Company.CompanyID,"-","")
        lcSuffix      = "001"    
-       lcDescription = DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                        301,
+       lcDescription = Func.Common:mGetHdrText(301,
                                         1).
 
 /* transfer directory given */
@@ -250,8 +248,7 @@ IF iiPaymCount > 0 THEN DO:
 
       /* customer name and address data */
       ASSIGN 
-         lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                       BUFFER Customer)
+         lcCustName = Func.Common:mPrintCustName(BUFFER Customer)
          lcAddress  = Customer.Address
          lcZipCode  = Customer.ZipCode 
          lcPost     = Customer.PostOffice.
@@ -428,7 +425,7 @@ OUTPUT STREAM sFile CLOSE.
 
 HIDE FRAME fPrint NO-PAUSE.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 /* mark requests */
 FOR EACH ttRequest WHERE
@@ -457,7 +454,7 @@ DO TRANS:
                                THEN ". Created by " + katun
                                ELSE "" 
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 /* move the new file to the actual transfer directory */

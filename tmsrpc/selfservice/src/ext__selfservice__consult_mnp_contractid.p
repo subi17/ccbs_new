@@ -24,7 +24,6 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
        gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -90,7 +89,7 @@ FOR EACH Order WHERE
    IF liCount >= 3 THEN LEAVE.
    liTotalCount = liTotalCount + 1.
 
-   fSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
+   Func.Common:mSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
    IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} THEN
@@ -98,7 +97,7 @@ FOR EACH Order WHERE
       ELSE
          ldeOrderStamp = fGetOrderStamp(Order.OrderId,"Close").
 
-      fSplitTS(ldeOrderStamp,ldFinalOrderDate,liFinalOrderTime).
+      Func.Common:mSplitTS(ldeOrderStamp,ldFinalOrderDate,liFinalOrderTime).
 
       IF ldFinalOrderDate <> ? THEN DO:
          IF ldFinalOrderDate < (TODAY - 30) THEN NEXT.
@@ -180,7 +179,7 @@ IF pcDelType = "SMS" THEN DO:
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:
-   liRequest = fEmailSendingRequest(INPUT fMakeTS(),
+   liRequest = fEmailSendingRequest(INPUT Func.Common:mMakeTS(),
                                     INPUT katun,
                                     INPUT 0, /* custnum */
                                     INPUT pcCLI,

@@ -16,7 +16,6 @@
                         30.06.04/aam header9 to reminder
                         26.10.04/aam new parameter to nnpura4: full b-numbers
                         14.12.05/aam username from customer, not msowner
-                        18.01.06/aam use fPrintCustName()
                         22.06.06/aam next due date not printed for end invoices
                         07.08.06/aam letterclass to nnpura3/4
                         20.11.06/aam new db structure (ordercustomer)
@@ -32,9 +31,7 @@
 {Func/feplform.i}
 &ENDIF
 {Func/transname.i}
-{Func/timestamp.i}
 {Func/invotxtp.i}
-{Func/ftmscode.i}
 {Func/fcustbal.i}
 {Func/frefnum.i}
 {Func/fdivtxt.i}
@@ -198,8 +195,7 @@ FUNCTION fSetHeaders RETURNS LOGICAL
                    OrderCustomer.RowType = 1:
 
             ASSIGN 
-               lcCustName = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                             BUFFER OrderCustomer)
+               lcCustName = Func.Common:mDispOrderName(BUFFER OrderCustomer)
                lcCoName   = ""
                lcAddress  = OrderCustomer.Address
                lcPost     = OrderCustomer.ZipCode + " " + 
@@ -217,8 +213,7 @@ FUNCTION fSetHeaders RETURNS LOGICAL
                    OrderCustomer.OrderID = Order.OrderID AND
                    OrderCustomer.RowType = Order.UserRole:
 
-            lcTagUser = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                         BUFFER OrderCustomer).
+            lcTagUser = Func.Common:mDispOrderName(BUFFER OrderCustomer).
          END.                                
       END.
       
@@ -235,17 +230,14 @@ FUNCTION fSetHeaders RETURNS LOGICAL
                 bAgrCust.CustNum = Customer.AgrCust:
 
                 /* receiver is always the owner */
-         ASSIGN lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                               BUFFER bAgrCust)
+         ASSIGN lcCustName = Func.Common:mPrintCustName(BUFFER bAgrCust)
                 lcCoName   = bAgrCust.COName
                 lcAddress  = bAgrCust.Address
                 lcPost     = bAgrCust.ZipCode + " " + bAgrCust.PostOffice
                 lcCountry  = bAgrCust.Country
                 lcTagCLI   = MsOwner.CLI
-                lcTagUser  = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                              BUFFER Customer)
-                lcTagOwner = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                              BUFFER bAgrCust).
+                lcTagUser  = Func.Common:mDispCustName(BUFFER Customer)
+                lcTagOwner = Func.Common:mDispCustName(BUFFER bAgrCust).
       END.       
    END.
    
@@ -254,8 +246,7 @@ FUNCTION fSetHeaders RETURNS LOGICAL
 
       /* delivery address */
       IF Customer.IDelName = "" THEN ASSIGN 
-         lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                       BUFFER Customer)
+         lcCustName = Func.Common:mPrintCustName(BUFFER Customer)
          lcCoName   = Customer.COName
          lcAddress  = Customer.Address
          lcPost     = Customer.ZipCode + " " + Customer.PostOffice
@@ -271,11 +262,9 @@ FUNCTION fSetHeaders RETURNS LOGICAL
          FIND bAgrCust WHERE bAgrCust.CustNum = Customer.AgrCust 
          NO-LOCK NO-ERROR.
          IF AVAILABLE bAgrCust THEN 
-            lcTagOwner = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER bAgrCust).
+            lcTagOwner = Func.Common:mDispCustName(BUFFER bAgrCust).
       END.
-      ELSE lcTagOwner = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                         BUFFER Customer).
+      ELSE lcTagOwner = Func.Common:mDispCustName(BUFFER Customer).
       
       lcConnPer = Customer.Contact.
       
@@ -738,7 +727,7 @@ FUNCTION fVatUsageTitle RETURNS CHARACTER
    
    IF iiVatUsage >= 3 AND
       iiVatUsage <= 4
-   THEN RETURN fTMSCodeName("Invoice",
+   THEN RETURN Func.Common:mTMSCodeName("Invoice",
                             "VatUsage",
                             STRING(iiVatUsage)).
    ELSE RETURN "". 

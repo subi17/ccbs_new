@@ -50,7 +50,6 @@ gcBrand = "1".
 {Func/flimitreq.i}
 {Mm/fbundle.i}
 {newton/src/get_memos.i}
-{Func/timestamp.i}
 {Func/msisdn_prefix.i}
 
 DEF VAR plAdmin AS LOG NO-UNDO.
@@ -64,11 +63,11 @@ FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
    
    FIND FIRST Msowner WHERE 
               Msowner.msseq EQ iiMsSeq AND
-              Msowner.tsend LT fmakets()
+              Msowner.tsend LT Func.Common:mMakeTS()
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
-   fSplitTS(msowner.tsend, output ldaDate, output liTime).
+   Func.Common:mSplitTS(msowner.tsend, output ldaDate, output liTime).
    IF TODAY - ldaDate > 180 AND NOT plAdmin THEN RETURN FALSE.
 
    RETURN TRUE.
@@ -147,7 +146,7 @@ IF LOOKUP(TermMobsub.CLIType,lcBundleCLITypes) > 0 THEN DO:
       lcDataBundle = TermMobsub.TariffBundle.
    ELSE
       lcDataBundle = fGetTerminatedSpecificBundle(TermMobsub.MsSeq,
-                                                  fMakeTS(),
+                                                  Func.Common:mMakeTS(),
                                                   TermMobsub.CliType).
 END. /* IF LOOKUP(TermMobsub.CLIType,lcBundleCLITypes) > 0 THEN DO: */
 
@@ -186,10 +185,10 @@ END.
 
 FIND FIRST Msowner WHERE 
            Msowner.msseq EQ TermMobsub.MSseq AND
-           Msowner.tsend LT fmakets()
+           Msowner.tsend LT Func.Common:mMakeTS()
 NO-LOCK USE-INDEX MsSeq NO-ERROR.
 IF AVAIL msowner THEN DO:
-   fSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).
+   Func.Common:mSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).
    add_datetime(resp_struct, "termination_date", ldaTermDate).
 END.
 

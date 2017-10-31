@@ -14,7 +14,6 @@ ASSIGN
    katun   = "Cron".
        
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD RunState AS CHAR.
@@ -23,7 +22,7 @@ DEF VAR lcOrigState AS CHAR NO-UNDO.
 DEF VAR liHandled   AS INT  NO-UNDO.
 DEF VAR ldCurrent   AS DEC  NO-UNDO.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 CREATE ttStatus.
 ttStatus.RunState = "Scheduled".
@@ -60,7 +59,7 @@ BY FuncRunQSchedule.StartTS:
             ErrorLog.KeyValue  = STRING(FuncRunQueue.FRQueueID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
             ErrorLog.UserCode  = katun.
-            ErrorLog.ActionTS  = fMakeTS().
+            ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 
    END.   

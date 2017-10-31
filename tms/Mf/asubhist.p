@@ -14,7 +14,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR.
 
@@ -349,7 +348,7 @@ DELETE PROCEDURE pHandle.
 
 PROCEDURE LOCAL-DISP-ALL: 
 
-   lcTo = fTS2HMS(CLI.clStamp). 
+   lcTo = Func.Common:mTS2HMS(CLI.clStamp). 
    IF CLI.clStamp GE lclstamp THEN lcTo = "UNTIL FURTHER". 
 
    FIND FIRST Customer WHERE 
@@ -360,7 +359,7 @@ PROCEDURE LOCAL-DISP-ALL:
       CLI.CustNum 
       Customer.CustName 
       CLI.Owner  
-      fTS2HMS(CLI.crStamp) @ lcfrom  
+      Func.Common:mTS2HMS(CLI.crStamp) @ lcfrom  
       lcto 
    WITH FRAME SEL. 
 

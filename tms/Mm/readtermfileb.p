@@ -18,7 +18,6 @@ ASSIGN gcBrand = "1"
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
@@ -111,7 +110,7 @@ FOR EACH ttFiles:
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
          ActionLog.ActionStatus = 0
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
    RUN Mm/readtermfile.p (ttFiles.TermFile,
@@ -129,7 +128,7 @@ FOR EACH ttFiles:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liError) + 
                                   " Succesful: " + STRING(liRead - liError) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    

@@ -13,7 +13,6 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventlog.i}
 {Func/fmakemsreq.i}
 {Func/upsellbundle.i}
@@ -100,7 +99,7 @@ REPEAT:
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
       END.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
@@ -112,11 +111,11 @@ REPEAT:
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
 
-   ASSIGN ldEndDate   = fLastDayOfMonth(TODAY)
-          ldEndStamp  = fMake2Dt(ldEndDate,86399)
-          ldeActStamp = fMakeTS().
+   ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(TODAY)
+          ldEndStamp  = Func.Common:mMake2DT(ldEndDate,86399)
+          ldeActStamp = Func.Common:mMakeTS().
 
-   fSplitTs(ldeActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
+   Func.Common:mSplitTS(ldeActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
    LINE_LOOP:
    REPEAT:
@@ -145,7 +144,7 @@ REPEAT:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liErrors) + 
                                   " Succesful: " + STRING(liRead - liErrors) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    
@@ -189,7 +188,7 @@ PROCEDURE pBobCheckUpsell:
    IF NOT AVAIL MobSub OR MobSub.PayType = TRUE THEN 
       RETURN "ERROR:TARJ contract or Invalid MSISDN".
       
-   lcDssId = fGetActiveDSSId(MobSub.CustNum,fMakeTS()).
+   lcDssId = fGetActiveDSSId(MobSub.CustNum,Func.Common:mMakeTS()).
  
    IF lcDssID EQ "" AND 
       lcUpsell BEGINS "DSS" THEN 
@@ -238,7 +237,7 @@ PROCEDURE pBobCheckUpsell:
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
                        {&REQUEST_SOURCE_YOIGO_TOOL},
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
 
@@ -268,8 +267,7 @@ PROCEDURE pBobCheckUpsell:
    END CASE.
       
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+   Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum   */
                     lcMemoTitle,                          /* MemoTitle */

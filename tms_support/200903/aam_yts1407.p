@@ -17,7 +17,6 @@
 katun = "cron".
 gcBrand = "1".
 
-{Func/date.i}
 {Func/fvatfact.i}
 {Func/excel.i}
 {Func/coinv.i}
@@ -70,7 +69,7 @@ ldate1 = 2/12/9.
 assign
    lcOdir     =  fCparam("dumpoutgoing","calldump.p")
    lcSdir     =  fCParam("dumpspool","calldump.p")
-   filename   = "calls" + fDateFmt(ldate1,"yyyymmdd") + "_re.dump"
+   filename   = "calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + "_re.dump"
    /*
    ldate1     = idaDate - 1
    */

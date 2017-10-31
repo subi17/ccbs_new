@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 
@@ -64,17 +63,16 @@ END.
 
 FIND Customer WHERE Customer.CustNum = MobSub.InvCust NO-LOCK.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                               
 /* activation time for odi requests */
 ldODITime = fCParamDE("ODIRequestAct").
 IF ldODITime = ? OR ldOdiTime = 0 THEN ldODITime = 12.
-ldODIStamp = fMake2Dt(TODAY,
+ldODIStamp = Func.Common:mMake2DT(TODAY,
                       INTEGER(TRUNCATE(ldODITime,0) * 3600 + 
                               100 * (ldODITime - TRUNCATE(ldODITime,0)) * 60)).
 
-lcActTime = fTS2HMS(ldODIStamp).
+lcActTime = Func.Common:mTS2HMS(ldODIStamp).
 
 PAUSE 0.
 DISPLAY MobSub.CLI

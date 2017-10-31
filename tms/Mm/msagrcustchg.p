@@ -17,7 +17,6 @@
 {Func/fwebuser.i}
 {Func/fmakemsreq.i}
 {Func/msisdn.i}
-{Func/timestamp.i}
 {Func/ftmrlimit.i}
 {Func/fcustdata.i}
 {Mm/msagrcustchg.i}
@@ -122,7 +121,7 @@ PROCEDURE pFinalize:
    DEFINE VARIABLE liPayType       AS INT     NO-UNDO.
    DEFINE VARIABLE ldaToDate       AS DATE    NO-UNDO.
 
-   fSplitTs (INPUT  ldReqAct, 
+   Func.Common:mSplitTS (INPUT  ldReqAct, 
              OUTPUT ldaFromDate, 
              OUTPUT liTime).
    IF DAY(ldaFromDate) NE 1 THEN 
@@ -289,7 +288,7 @@ PROCEDURE pOwnerChange:
         bOldCustCat.Brand = gcBrand AND
         bOldCustCat.Category = Customer.Category NO-ERROR.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -604,7 +603,7 @@ PROCEDURE pOwnerChange:
                                 INPUT bNewCust.Custnum,
                                 INPUT "Customer email address is changed").
 
-               liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+               liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                 INPUT TODAY,
                                                 INPUT katun,
                                                 INPUT 0, /* msseq */
@@ -646,7 +645,7 @@ PROCEDURE pOwnerChange:
          
          IF llNewCust THEN DO:
             ASSIGN 
-            bNewCust.ChgStamp   = fMakeTS()
+            bNewCust.ChgStamp   = Func.Common:mMakeTS()
             bNewCust.CreUser    = katun
             bNewCust.PaymCust   = liNewOwner
             bNewCust.AgrCust    = liNewOwner
@@ -856,8 +855,7 @@ PROCEDURE pOwnerChange:
 
                /* memo */
                IF lcInfo > "" THEN
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                        STRING(bMobSub.MsSeq),
                        bMobSub.CustNum,
                        "ACC Failed",
@@ -1017,8 +1015,7 @@ PROCEDURE pMsCustMove:
                bFatime.TransQty = 0.
 
             /* memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+            Func.Common:mWriteMemo("FATime",
                        STRING(bFatime.FatNum),
                        bFatime.CustNum,
                        "User Change",
@@ -1028,8 +1025,7 @@ PROCEDURE pMsCustMove:
          /* transfer newer fatimes totally */
          ELSE DO:
             /* memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+            Func.Common:mWriteMemo("FATime",
                        STRING(Fatime.FatNum),
                        iiNewUser,
                        "User Change",
@@ -1198,8 +1194,7 @@ PROCEDURE pMsCustMove:
          ELSE bFixedFee.BegPer = bFFItem.BillPer.
 
          /* memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "FixedFee",
+         Func.Common:mWriteMemo("FixedFee",
                     STRING(bFixedFee.FFNum),
                     bFixedFee.CustNum,
                     "User Change",
@@ -1264,7 +1259,7 @@ PROCEDURE pMsCustMove:
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
 
    ASSIGN ldEndStamp    = MsOwner.TSEnd
-          MsOwner.TSEnd = fSecOffSet(MsRequest.ActStamp,-1).
+          MsOwner.TSEnd = Func.Common:mSecOffSet(MsRequest.ActStamp,-1).
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
           
@@ -1282,7 +1277,7 @@ PROCEDURE pMsCustMove:
                      CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN DO:
 
       /* Create Mandate for Subscription and store it into MsOwner */
-      fSplitTS(MsRequest.CreStamp, OUTPUT ldaDate, OUTPUT liManTime).
+      Func.Common:mSplitTS(MsRequest.CreStamp, OUTPUT ldaDate, OUTPUT liManTime).
    
       IF NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 35 AND
          LENGTH(ENTRY(35,MsRequest.ReqCParam1,";")) EQ 30 THEN
@@ -1386,8 +1381,7 @@ PROCEDURE pMsCustMove:
        OUTPUT lcError).
    
    IF lcError NE "" THEN 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                  STRING(MobSub.MsSeq),
                  MobSub.CustNum,
                  "User Change",
@@ -1408,7 +1402,7 @@ PROCEDURE pCreditCheck:
                           FALSE, /* Fees */
                           FALSE, /* SendSMS */
                           MSRequest.UserCode,
-                          fMakeTS(),
+                          Func.Common:mMakeTS(),
                           "CREDITCHECK",
                           "",
                           33,
@@ -1462,15 +1456,15 @@ PROCEDURE pUpdateDSSAccount:
    /* No action if paytype is prepaid */
    IF MobSub.PayType THEN RETURN.
 
-   fSplitTS(INPUT ideActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+   Func.Common:mSplitTS(INPUT ideActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
 
    /* end old bundles to the end of previous month */
    IF DAY(ldtActDate) = 1 THEN
-      ASSIGN ldeEndStamp = fMake2DT(ldtActDate - 1,86399)
+      ASSIGN ldeEndStamp = Func.Common:mMake2DT(ldtActDate - 1,86399)
              ldEndDate   = (ldtActDate - 1).
    ELSE
-      ASSIGN ldEndDate   = fLastDayOfMonth(ldtActDate)
-             ldeEndStamp = fMake2DT(ldEndDate,86399).
+      ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(ldtActDate)
+             ldeEndStamp = Func.Common:mMake2DT(ldEndDate,86399).
 
    /* If ongoing DSS termination request then return */
    llOngoingDSSTermOnOLD = fOngoingDSSTerm(INPUT iiOldCustNum,
@@ -1539,7 +1533,7 @@ PROCEDURE pUpdateDSSAccount:
       NOT fOngoingDSSAct(iiNewCustnum) AND
       fIsDSSAllowed(INPUT  MobSub.CustNum,
                     INPUT  MobSub.MsSeq,
-                    INPUT  (IF ideActStamp < fMakeTS() THEN fMakeTS()
+                    INPUT  (IF ideActStamp < Func.Common:mMakeTS() THEN Func.Common:mMakeTS()
                             ELSE ideActStamp),
                     INPUT {&DSS},
                     INPUT  "",
@@ -1595,8 +1589,7 @@ PROCEDURE pUpdateDSSAccount:
          END.
       END.
       ELSE
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Customer",
+         Func.Common:mWriteMemo("Customer",
                     STRING(iiNewCustnum),
                     iiOldCustNum,
                     "DSS Bundle Activation Failed",
@@ -1636,8 +1629,7 @@ PROCEDURE pUpdateDSSAccount:
                             OUTPUT lcError) THEN DO:
                llDSSTransferred = TRUE.
 
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Customer",
+               Func.Common:mWriteMemo("Customer",
                           STRING(iiOldCustNum),
                           iiOldCustNum,
                           "DSS Bundle/UPSELL",
@@ -1646,8 +1638,7 @@ PROCEDURE pUpdateDSSAccount:
                           STRING(liOldDSSMsSeq)).
             END. /* IF fTransferDSS(INPUT MobSub.MsSeq,INPUT liDSSMsSeq, */
             ELSE
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Customer",
+               Func.Common:mWriteMemo("Customer",
                        STRING(iiOldCustNum),
                        iiOldCustNum,
                        "DSS Bundle/UPSELL Transfer Failed",
@@ -1822,7 +1813,7 @@ PROCEDURE pUpdateDSS2Account:
    
    IF LOOKUP(MobSub.CLIType,lcDSS2SubsType) = 0 THEN RETURN.
    
-   ldeCurrTS = fMakeTS().
+   ldeCurrTS = Func.Common:mMakeTS().
 
    IF fIsDSSActive(MobSub.Custnum,
                    (IF ideActStamp > ldeCurrTS
@@ -1853,8 +1844,7 @@ PROCEDURE pUpdateDSS2Account:
                            OUTPUT lcError).
    IF liRequest = 0 THEN
       /* write possible error to a memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.Custnum,
                        "DSS2 activation failed",
@@ -1947,7 +1937,7 @@ PROCEDURE pHandleAdditionalLines:
                  THEN CustomerReport.TownCode ELSE ""),
                  "",
                 OUTPUT lcInfo).
-      fSplitTS(ideActStamp, OUTPUT ldaACCDate, OUTPUT liTime).
+      Func.Common:mSplitTS(ideActStamp, OUTPUT ldaACCDate, OUTPUT liTime).
 
    END.
 
@@ -1992,8 +1982,7 @@ PROCEDURE pHandleAdditionalLines:
          
             IF lcInfo > "" THEN
                /* memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+               Func.Common:mWriteMemo("MobSub",
                           STRING(bMobSub.MsSeq),
                           bMobSub.CustNum,
                           "Additional SIM ACC failed",

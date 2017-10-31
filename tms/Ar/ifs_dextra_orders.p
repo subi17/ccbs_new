@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 

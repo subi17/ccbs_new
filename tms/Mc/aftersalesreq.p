@@ -96,8 +96,7 @@ END.
 RUN Mc/prinoconf.p (Order.OrderID).
 
 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                  "Order",
+   Func.Common:mWriteMemo("Order",
                   STRING(Order.OrderID),
                   0,
                   "Order Confirmation Failed",
@@ -137,13 +136,13 @@ IF Order.SMSType = 1 THEN DO:
                        Order.CLI,
                        41,
                        lcRenoveSMSText,
-                       fMakeTS()).
+                       Func.Common:mMakeTS()).
       END.
    END.
 END.
 
-fSplitTS(Order.CRStamp, OUTPUT ldaDate, OUTPUT liTime). 
-ldeTermTS = fMake2Dt(ldaDate - 1, 0).
+Func.Common:mSplitTS(Order.CRStamp, OUTPUT ldaDate, OUTPUT liTime). 
+ldeTermTS = Func.Common:mMake2DT(ldaDate - 1, 0).
 
 /* terminals, do this before periodical contract creation */
 fCreateSubsTerminal(BUFFER Order).
@@ -173,8 +172,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
 
    /* write possible error to an order memo */
    IF lcError > "" THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Order",
+      Func.Common:mWriteMemo("Order",
                        STRING(Order.OrderID),
                        MobSub.CustNum,
                        "FATIME CREATION FAILED",
@@ -235,8 +233,7 @@ IF OrderCustomer.CustID = "CIF" THEN DO:
 
       /* write possible error to an order memo */
       IF lcError > "" THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           oiCustomer,
                           "CUSTOMER CONTACT CREATION FAILED",
@@ -259,7 +256,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                     INPUT  Order.CustNum,
                     INPUT  1,
                     INPUT  "",
-                    INPUT  fMakeTS(),
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
                     INPUT  "", /*for old SIM*/ 
@@ -270,8 +267,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                     INPUT  {&REQUEST_SOURCE_RENEWAL},
                     OUTPUT lcError).
    IF liRequest = 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Order",
+      Func.Common:mWriteMemo("Order",
                        STRING(Order.OrderID),
                        Order.CustNum,
                        "ICC change request creation failed",
@@ -282,8 +278,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
       MsRequest.ReqSource = {&REQUEST_SOURCE_ICC_CHANGE_AUTO}.
       fReqStatus(19,"").
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MsRequest",
+      Func.Common:mWriteMemo("MsRequest",
                        STRING(liRequest),
                        Order.CustNum,
                        "ICC TYPE CHANGE AUTO",
@@ -297,7 +292,7 @@ END. /* IF Order.OrderType = 2 AND Order.ICC > "" AND */
 IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
    fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                   MobSub.MsSeq,
-                  fLastDayOfMonth(TODAY),
+                  Func.Common:mLastDayOfMonth(TODAY),
                   FALSE).
 END.
 

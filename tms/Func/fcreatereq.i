@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE fcreatereq YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF BUFFER bReqSub   FOR MobSub.
@@ -261,7 +260,7 @@ FUNCTION fCreateRequest RETURNS LOGICAL
 
    DEF VAR llSubsRequest AS LOG NO-UNDO. 
 
-   IF idChgStamp = 0 THEN idChgStamp = fMakeTS().
+   IF idChgStamp = 0 THEN idChgStamp = Func.Common:mMakeTS().
    llSubsRequest = (LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) = 0 AND 
                     AVAILABLE bReqSub).
 
@@ -279,7 +278,7 @@ FUNCTION fCreateRequest RETURNS LOGICAL
           bCreaReq.MsSeq      = bReqSub.MsSeq WHEN llSubsRequest
           bCreaReq.CLI        = bReqSub.CLI WHEN llSubsRequest
           bCreaReq.CustNum    = bReqSub.CustNum WHEN llSubsRequest
-          bCreaReq.CreStamp   = fMakeTS().
+          bCreaReq.CreStamp   = Func.Common:mMakeTS().
 
 END FUNCTION.
 

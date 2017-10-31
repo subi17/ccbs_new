@@ -8,7 +8,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/timestamp.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/eventval.i}
@@ -45,7 +44,7 @@ FIND OfferItem WHERE OfferItem.OfferItemId = liId NO-LOCK NO-ERROR.
 IF NOT AVAIL OfferItem THEN 
    RETURN appl_err(SUBST("OfferItem &1 not found", pcId)).
 
-IF OfferItem.BeginStamp < fMakeTs() THEN 
+IF OfferItem.BeginStamp < Func.Common:mMakeTS() THEN 
    RETURN appl_err("Cannot delete active or history data").
 
 FIND CURRENT OfferItem EXCLUSIVE-LOCK.

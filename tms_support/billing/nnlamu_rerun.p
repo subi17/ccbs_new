@@ -6,7 +6,6 @@ katun = "ari".
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
 {Func/finvnum.i}
-{Func/timestamp.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
@@ -266,7 +265,7 @@ PUT STREAM sTimeLog UNFORMATTED
    SKIP.
 OUTPUT STREAM sTimeLog CLOSE.
 
-ASSIGN ldBegTime = fMakeTS()
+ASSIGN ldBegTime = Func.Common:mMakeTS()
        liCustQty = 0.
 
 /* We make it THRU ALL the Calls, what we wanted TO handle */
@@ -389,11 +388,10 @@ RUN pCreateInv in pHandle(invDte,
 HIDE MESSAGE NO-PAUSE.
 PAUSE 0.
 
-ldEndTime = fMakeTS().
+ldEndTime = Func.Common:mMakeTS().
 
 /* duration */
-liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                             ldBegTime,
+liDurDays = Func.Common:mTSDuration(ldBegTime,
                              ldEndTime,
                              OUTPUT liDurTime).
                         
@@ -405,7 +403,7 @@ OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
    "Customer based (lamu3) finished (brand " gcBrand 
    " group " InvGroup "): " 
-   fTS2HMS(ldEndTime)
+   Func.Common:mTS2HMS(ldEndTime)
    "|Dur: " 
       (IF liDurDays > 0 
        THEN STRING(liDurDays) + " days and"
@@ -455,7 +453,7 @@ IF ok AND lQty > 0 THEN DO:
           ActionLog.ActionDec    = lQty
           ActionLog.ActionChar   = lcMessage
           ActionLog.ActionStatus = 2.
-          ActionLog.ActionTS     = fMakeTS().
+          ActionLog.ActionTS     = Func.Common:mMakeTS().
     END.
     
     MESSAGE lcMessage

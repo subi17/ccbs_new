@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
@@ -28,7 +27,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    DEF BUFFER MsOwner FOR MsOwner.
    DEF BUFFER bNewMsowner FOR Msowner.
 
-   ldUpdateTS = fMakeTS().
+   ldUpdateTS = Func.Common:mMakeTS().
    FIND FIRST MSOwner WHERE 
               MSOwner.MsSeq  = iiMsSeq AND
               MSOwner.TsEnd >= ldUpdateTS
@@ -54,7 +53,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
       bNewMsowner.CLI = icFixedNumber
       bNewMsowner.imsi = ""
       bNewMsowner.CliEvent = "F"
-      bNewMsowner.tsbegin = fSecOffSet(ldUpdateTS,1)
+      bNewMsowner.tsbegin = Func.Common:mSecOffSet(ldUpdateTS,1)
       bNewMsowner.TsEnd = 99999999.99999.
 
    IF llDoEvent THEN DO:

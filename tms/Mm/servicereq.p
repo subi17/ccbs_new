@@ -74,7 +74,7 @@ PROCEDURE pServCompSolog:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
@@ -116,7 +116,7 @@ PROCEDURE pServCompSolog:
       /* remove fees concerning this service */
       RUN pDelFixedFee("",
                        ServCom.FeeModel,
-                       fLastDayOfMonth(ldtActDate),
+                       Func.Common:mLastDayOfMonth(ldtActDate),
                        ?,
                        TRUE,  /* clean credit fees also */
                        FALSE,  /* credit singlefee for billed items */
@@ -164,7 +164,7 @@ PROCEDURE pServAttrSolog:
    ASSIGN lcServCom  = ENTRY(1,MsRequest.ReqCParam1,".")
           lcServAttr = ENTRY(2,MsRequest.ReqCParam1,".").
    
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
@@ -285,7 +285,7 @@ PROCEDURE pServCompUpdate:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -326,7 +326,7 @@ PROCEDURE pServCompUpdate:
                           "#REFRESH",
                           {&REQUEST_SOURCE_SERVICE_CHANGE},
                           katun,               /* creator */
-                          fMakeTS(),           /* activate */
+                          Func.Common:mMakeTS(),           /* activate */
                           "",                  /* sms */
                           OUTPUT lcError).
 
@@ -334,8 +334,7 @@ PROCEDURE pServCompUpdate:
          liRequest = INTEGER(lcError) NO-ERROR.
          /* Write possible error to a memo */
          IF liRequest = 0 OR liRequest = ? THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(Mobsub.MsSeq),
                              Mobsub.CustNum,
                              "Barring and suspension",
@@ -385,7 +384,7 @@ PROCEDURE pServCompUpdate:
           llReRate       = FALSE
           lcSMSTxt       = "".
 
-   ldCurrStamp = fMakeTS().
+   ldCurrStamp = Func.Common:mMakeTS().
 
    /* Note: Consider 2 (suspend status) as Close status for BB service */
    IF SubSer.ServCom = "BB" THEN DO:
@@ -822,10 +821,13 @@ PROCEDURE pServCompUpdate:
             lcSMSText = REPLACE(lcSMSText,"#REQDATE",STRING(ldtActDate,
                                                             "99.99.9999")). 
          /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
+         Func.Common:mReplaceSMS
+             ( Customer.CustName,
+               Mobsub.CLI,
+               lcSMSText,
+               MsRequest.MsSeq,
+               TODAY,
+               OUTPUT lcSMSText).
 
          fMakeSchedSMS2(MobSub.CustNum,
                        MobSub.CLI,
@@ -865,7 +867,7 @@ PROCEDURE pServCompUpdate:
              Memo.MemoType  = "service"
              Memo.MemoTitle = "Collection Action"
              Memo.MemoText  = MsRequest.ReqCParam1 + " applied"
-             Memo.CreStamp  = fMakeTS().         
+             Memo.CreStamp  = Func.Common:mMakeTS().         
    END.       
             
    /* request handled succesfully */   
@@ -902,7 +904,7 @@ PROCEDURE pServAttrUpdate:
    ASSIGN lcServCom  = ENTRY(1,MsRequest.ReqCParam1,".")
           lcServAttr = ENTRY(2,MsRequest.ReqCParam1,".").
    
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
@@ -1002,8 +1004,8 @@ PROCEDURE pServAttrUpdate:
              
          /* don't send messages before 8 am. */
          IF TIME > 28800
-         THEN ldReqStamp = fMakeTS().
-         ELSE ldReqStamp = fMake2DT(TODAY,28800).                    
+         THEN ldReqStamp = Func.Common:mMakeTS().
+         ELSE ldReqStamp = Func.Common:mMake2DT(TODAY,28800).                    
              
          fMakeSchedSMS(MobSub.CustNum,
                        MobSub.CLI,

@@ -12,10 +12,8 @@
 {Func/cparam2.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPCal'}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Mnp/mnp.i}

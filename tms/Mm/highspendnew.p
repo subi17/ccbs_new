@@ -21,7 +21,6 @@
 
 {Syst/commali.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/callquery.i}
@@ -116,7 +115,7 @@ ASSIGN
 IF liCreateReq = ? THEN liCreateReq = 0.   
    
 IF ldODITime = ? OR ldOdiTime = 0 THEN ldODITime = 12.
-ldODIStamp = fMake2Dt(TODAY,
+ldODIStamp = Func.Common:mMake2DT(TODAY,
                       INTEGER(TRUNCATE(ldODITime,0) * 3600 + 
                               100 * (ldODITime - TRUNCATE(ldODITime,0)) * 60)).
 
@@ -388,10 +387,10 @@ FOR EACH ttMobSub NO-LOCK,
             highusage.HiUsageStatus    = 0.
       
          ASSIGN
-            highusage.CrStamp          = fmakets().
+            highusage.CrStamp          = Func.Common:mMakeTS().
        
          ASSIGN
-            highusage.ChStamp          = fmakets()
+            highusage.ChStamp          = Func.Common:mMakeTS()
             highusage.Category         = ttMobSub.cat
             highusage.Date             = today
             highusage.date%            = 0
@@ -407,7 +406,7 @@ FOR EACH ttMobSub NO-LOCK,
                                 
             highusage.dategrow = ttHighUsage.price - highusage.Amount.                     
          ASSIGN 
-            highusage.ChStamp          = fmakets()
+            highusage.ChStamp          = Func.Common:mMakeTS()
             highusage.Qty              = ttHighUsage.kpl
             highusage.Duration         = ttHighUsage.dur
             highusage.Amount           = ttHighUsage.price.
@@ -456,7 +455,7 @@ FOR EACH ttTotalCLI,
                 ErrorLog.KeyValue  = STRING(MobSub.MsSeq)
                 ErrorLog.ErrorMsg  = "Creation failed: " + lcResult
                 ErrorLog.UserCode  = katun.
-                ErrorLog.ActionTS  = fMakeTS().
+                ErrorLog.ActionTS  = Func.Common:mMakeTS().
          
       END.
                            

@@ -10,7 +10,6 @@ def var gcBrand AS CHARACTER NO-UNDO initial "1".
 def stream slog.
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 pause 0.
 update
@@ -40,8 +39,8 @@ pause 0.
 disp j format ">>>>>>9" label "Found"
 with overlay row 10 centered side-labels frame fqty.
    
-ldtBegin = fHMS2TS(ldaBegin,"00:00:00").
-ldtEnd = fHMS2TS(ldaEnd,"23:59:59").
+ldtBegin = Func.Common:mHMS2TS(ldaBegin,"00:00:00").
+ldtEnd = Func.Common:mHMS2TS(ldaEnd,"23:59:59").
 
 
 FOR EACH MsRequest NO-LOCK WHERE
@@ -58,8 +57,8 @@ FOR EACH MsRequest NO-LOCK WHERE
        MsRequest.cli   chr(9)
        MsRequest.ReqCParam3 chr(9)
        MSRequest.ReqStatus chr(9) 
-       fTS2HMS(MsRequest.ActStamp) chr(9) 
-       fTS2HMS(MsRequest.DoneStamp) skip.
+       Func.Common:mTS2HMS(MsRequest.ActStamp) chr(9) 
+       Func.Common:mTS2HMS(MsRequest.DoneStamp) skip.
 END. 
 
 

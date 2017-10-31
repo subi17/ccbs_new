@@ -107,8 +107,7 @@ WITH  OVERLAY ROW 2 centered
 FUNCTION fDispValueType RETURNS LOGIC
    (iiValueType AS INT):
 
-   lcValueType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "TMRLimit",
+   lcValueType = Func.Common:mTMSCodeName("TMRLimit",
                                   "ValueType",
                                   STRING(iiValueType)).
                                   
@@ -760,8 +759,7 @@ PROCEDURE local-UPDATE-record:
                END.
             
                ELSE IF FRAME-FIELD = "ValueType" THEN DO:
-                  IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                          "TMRLimit",
+                  IF NOT Func.Common:mTMSCodeChk("TMRLimit",
                                           "ValueType",
                                           STRING(INPUT TMRLimit.ValueType))
                   THEN DO:

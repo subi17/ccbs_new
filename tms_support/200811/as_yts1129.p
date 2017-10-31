@@ -48,8 +48,7 @@ do i = 1 to num-entries(orders, " ")with frame a:
 
    /* write possible error to an order memo */
    IF lcError BEGINS "Error" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
+      Func.Common:mWriteMemo("Order",
                     STRING(Order.OrderID),
                     (if avail mobsub then MobSub.CustNum else 0),
 

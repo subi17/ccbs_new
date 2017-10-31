@@ -5,7 +5,6 @@ katun = "anttis".
 {Func/coinv.i}
 {Func/fmakemsreq.i}
 {Func/msisdn.i}
-{Func/timestamp.i}
 {Func/ftmrlimit.i}
 
 def var lcline     as char no-undo.
@@ -177,7 +176,7 @@ PROCEDURE pOwnerChange:
       RETURN.
    END. 
  
-   fSplitTS(MobSub.activationts,
+   Func.Common:mSplitTS(MobSub.activationts,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  

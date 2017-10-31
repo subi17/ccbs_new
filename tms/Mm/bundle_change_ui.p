@@ -8,7 +8,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
@@ -313,7 +312,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
       IF NOT llOk THEN NEXT.
  
-      ldActStamp = fMake2Dt(ldaChangeDate,
+      ldActStamp = Func.Common:mMake2DT(ldaChangeDate,
                             IF ldaChangeDate = TODAY
                             THEN TIME
                             ELSE 0).
@@ -361,10 +360,9 @@ PROCEDURE pInitialize:
    FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
  
    ASSIGN 
-      ldCurrent     = fMakeTS()
+      ldCurrent     = Func.Common:mMakeTS()
       llCreateFees  = FALSE
-      lcCustName    = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer)
+      lcCustName    = Func.Common:mDispCustName(BUFFER Customer)
       ldaChangeDate = IF MONTH(TODAY) = 12 
                       THEN DATE(1,1,YEAR(TODAY) + 1)
                       ELSE DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)).

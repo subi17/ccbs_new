@@ -21,7 +21,6 @@ katun = "Qvantel".
 gcBrand = "1".
 {Syst/eventval.i}
 {Func/fbankdata.i}
-{Func/timestamp.i}
 {Func/create_eventlog.i}
 
 DEFINE VARIABLE idaOrderDate AS DATE      NO-UNDO.
@@ -82,8 +81,8 @@ END.
 
 ASSIGN
    ldaDate    = TODAY
-   ldenowTS   = fMakeTS()
-   ldeOldTS   = fSecOffSet(ldenowTS,-1).
+   ldenowTS   = Func.Common:mMakeTS()
+   ldeOldTS   = Func.Common:mSecOffSet(ldenowTS,-1).
       
 fCalculateMandate(Order.MsSeq, ldaDate, iiCustNum, OUTPUT lcMandate).
 

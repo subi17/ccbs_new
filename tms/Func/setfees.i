@@ -220,7 +220,7 @@ FUNCTION fMakeSetfees RETURNS INTEGER
 
    IF idaValidFrom <= TODAY 
    THEN ldActStamp = 0.
-   ELSE ldActStamp = fMake2DT(idaValidFrom,1).
+   ELSE ldActStamp = Func.Common:mMake2DT(idaValidFrom,1).
 
    IF iiOrderId > 0
    THEN lcFinancedResult = fOrderContainsFinancedTerminal(iiOrderId,icCalcObj).

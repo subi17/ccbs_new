@@ -21,7 +21,6 @@
 {Syst/commali.i}
 {Func/cparam.i2}
 
-{Func/timestamp.i}
 
 gcBrand = "1".
 

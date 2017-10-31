@@ -538,8 +538,7 @@ PROCEDURE local-find-others.
       OUTPUT lcValueType,
       OUTPUT lcValue). 
 
-   lcValueType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "Limit",
+   lcValueType = Func.Common:mTMSCodeName("Limit",
                                lcLimitType,
                                STRING(Limit.LimitAmt)).
 
@@ -560,8 +559,7 @@ PROCEDURE local-UPDATE-record:
    IF AVAIL Limit THEN ldeValue = Limit.LimitAmt.
    ELSE ldeValue = 0.
 
-   lcValueDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-               "Limit",
+   lcValueDesc = Func.Common:mTMSCodeName("Limit",
                "Billing Permission",
                STRING(ldeValue)).
 
@@ -610,8 +608,7 @@ PROCEDURE local-UPDATE-record:
          
          IF ldeValue ENTERED THEN DO:
             
-            lcValueDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                        "Limit",
+            lcValueDesc = Func.Common:mTMSCodeName("Limit",
                         lcLimitType,
                         STRING(INPUT ldeValue)).
             

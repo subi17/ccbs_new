@@ -10,7 +10,6 @@
 DEF INPUT PARAMETER iiMsSeq  AS INT NO-UNDO.
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF VAR xrecid         AS RECID                           init ?.
 DEF VAR FIRSTrow       AS INT                    NO-UNDO  init 0.
@@ -268,8 +267,8 @@ REPEAT WITH FRAME sel:
         PAUSE 0. 
         
         ASSIGN
-            lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
+            lcCreatedTS = Func.Common:mTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS = Func.Common:mTS2HMS(TPService.UpdateTS).
 
         DISP TPService.MsSeq
              TPService.ServSeq
@@ -376,7 +375,7 @@ PROCEDURE local-disp-row:
     
     CLEAR FRAME sel NO-PAUSE.
     
-    ASSIGN lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
+    ASSIGN lcUpdatedTS = Func.Common:mTS2HMS(TPService.UpdateTS).
 
     DISPLAY 
        TPService.Product

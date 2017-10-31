@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/fcreatereq.i}
 
 FUNCTION fValidateBankFileRequest RETURNS LOG (
@@ -45,7 +44,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
 
       IF MsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN NEXT. 
 
-      fSplitTS(MsRequest.Actstamp, output odaLastDump, output litime).
+      Func.Common:mSplitTS(MsRequest.Actstamp, output odaLastDump, output litime).
 
       IF odaLastDump >= TODAY THEN DO:
          ocError = "Already done".
@@ -79,7 +78,7 @@ FUNCTION fCreateBankFileRequest RETURNS INTEGER
       OUTPUT ldaLastDump) THEN RETURN 0.
 
    fCreateRequest(({&REQTYPE_TERMINAL_FINANCE_BANK_FILE}),
-                  fmakets(),
+                  Func.Common:mMakeTS(),
                   iccreator,
                   FALSE,      /* fees */
                   FALSE).    /* send sms */
@@ -215,7 +214,7 @@ FUNCTION fCreateTFBankFileRequest RETURNS INTEGER
       OUTPUT ldaLastDump) THEN RETURN 0.
 
    fCreateRequest(({&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE}),
-                  fmakets(),
+                  Func.Common:mMakeTS(),
                   iccreator,
                   FALSE,      /* fees */
                   FALSE).    /* send sms */

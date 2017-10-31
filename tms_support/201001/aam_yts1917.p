@@ -1,13 +1,11 @@
 {Syst/commpaa.i}
 gcbrand = "1".
 katun = "ari".
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/faccper.i}
 {Func/fcustbal.i}
 {Func/fcustcnt.i}
 {Func/finvnum.i}
-{Func/fhdrtext.i}
 {Func/finvoiceacc.i}
 
 IF llDoEvent THEN DO:
@@ -253,7 +251,7 @@ PROCEDURE pCreditNote:
    bCreditInv.ExtInvID = lcExtInvID.
       
    BUFFER-COPY Invoice EXCEPT InvNum ExtInvID TO bCreditInv.
-   bCreditInv.ChgStamp = fMakeTS().
+   bCreditInv.ChgStamp = Func.Common:mMakeTS().
  
    InvNum:
    REPEAT:
@@ -354,7 +352,7 @@ PROCEDURE pCreditNote:
    /* credit invoice memo */
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
       Memo.Brand     = gcBrand
       Memo.MemoTitle = "Credited"
@@ -362,7 +360,7 @@ PROCEDURE pCreditNote:
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(bCreditInv.InvNum)
       Memo.CustNum   = Invoice.CustNum.
-      Memo.Memotext  = fGetHdrText(50,Customer.Language) + " " +
+      Memo.Memotext  = Func.Common:mGetHdrText(50,Customer.Language) + " " +
                        STRING(Invoice.InvNum) +  
                        ", YTS-1916. Handler: " + katun.
 
@@ -394,7 +392,7 @@ PROCEDURE pCreditNote:
 
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Brand     = gcBrand
       Memo.MemoTitle = "Credited"

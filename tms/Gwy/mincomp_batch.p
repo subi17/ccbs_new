@@ -21,7 +21,6 @@ ASSIGN
    katun   = "PPMINC"
    gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/tmsparam4.i}
 {Func/xmlfunction.i}
@@ -224,7 +223,7 @@ REPEAT:
             IF liAdjBal > 0 THEN RUN pAdjustBalance.
             /* nothing could be done */
             ELSE DO:
-               ldeTS = fMakeTS().
+               ldeTS = Func.Common:mMakeTS().
                liNoBal = liNoBal + 1.
 
                CREATE TopUpQueue.
@@ -284,7 +283,7 @@ PROCEDURE pAdjustBalance:
     
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
       PrePaidRequest.UserCode    = katun
       PrePaidRequest.Brand       = gcBrand
       PrePaidRequest.MsSeq       = liMsSeq
@@ -303,7 +302,7 @@ PROCEDURE pAdjustBalance:
    RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
    
    IF lcXML > "" AND NOT lcXML BEGINS "ERR:" THEN
       liRespCode = INT(fGetRPCNodeValue(lcXML,"responseCode")) NO-ERROR.
@@ -341,7 +340,7 @@ PROCEDURE pAdjustBalance:
          
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS()
+         Memo.CreStamp  = Func.Common:mMakeTS()
          Memo.Brand     = gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
@@ -392,7 +391,7 @@ PROCEDURE pMarkStarted:
    llRerunAllowed = (fCParamI("MinConsRerunAllowed") eq 1).
       
    ASSIGN    
-      ldThisRun  = fMakeTS()
+      ldThisRun  = Func.Common:mMakeTS()
       ldaPrevMonth = ADD-INTERVAL(TODAY, -1, "months").
       lcExpectedFileName = "yoigo_MCP_TMSIN_" +
          STRING(MONTH(ldaPrevMonth),"99") + "-" +
@@ -508,7 +507,7 @@ PROCEDURE pMarkFinished:
    EXCLUSIVE-LOCK:
       ASSIGN 
         ActionLog.ActionStatus = 2
-        ActionLog.ActionDec = fMakeTS().
+        ActionLog.ActionDec = Func.Common:mMakeTS().
         ActionLog.ActionChar   = SUBST("TOTAL: &1, AIR OK: &2, AIR ERROR: &3, SMS SENT: &4, NO BAL: &5 NOT TARJ: &6 ", liTotal, liAIROk, liAIRErr, liSMS, liNoBal, liNotTarj).
    END.
    

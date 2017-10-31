@@ -152,7 +152,7 @@ PROCEDURE pUnbarrPrepaid:
                       lcUnBarring,
                       {&REQUEST_SOURCE_SCRIPT}, /* source  */
                       "", /* creator */
-                      fMakeTS(), /* activate */
+                      Func.Common:mMakeTS(), /* activate */
                       "", /* SMS */
                       OUTPUT lcResult).
 
@@ -162,8 +162,7 @@ PROCEDURE pUnbarrPrepaid:
    ELSE RETURN.
 
    /* write possible error to a memo */
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                "MobSub",
+   Func.Common:mWriteMemo("MobSub",
                 STRING(MobSub.MsSeq),
                 MobSub.Custnum,
                 "Fallo la retirada automatica del barring Y_HURP",

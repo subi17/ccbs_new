@@ -5,7 +5,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventval.i} 
 
 DEF INPUT  PARAMETER iiInvCust    AS INT  NO-UNDO.
@@ -358,7 +357,7 @@ PROCEDURE pLogAction:
          ActionLog.ActionDec    = 0
          ActionLog.ActionChar   = lcResult
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE. 

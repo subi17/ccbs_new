@@ -14,7 +14,7 @@ define stream sreport.
 output stream slog to "/apps/yoigo/tms_support/201102/yot_1186_change.log".
 output stream sreport to "/apps/yoigo/tms_support/201102/yot_1186_change.xls".
 
-ldenow = fmakets().
+ldenow = Func.Common:mMakeTS().
 
 each_loop:
 for each msisdnnumber where

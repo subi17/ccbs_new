@@ -14,7 +14,6 @@
                   03.03.03 tk tokens            
   Version ......: M15
   -------------------------------------------------------------------------- */
-{Func/timestamp.i}
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'cli'}
@@ -49,7 +48,7 @@ DEF VAR begTimeI   AS INT                 NO-UNDO.
 DEF VAR endTimeI   AS INT                 NO-UNDO.
 DEF BUFFER bufcli FOR CLI.
 
-dstamp = fMakeTS().
+dstamp = Func.Common:mMakeTS().
 
 form
    CLI.CLI
@@ -384,7 +383,7 @@ BROWSE:
             CLI.Active.
          IF ok THEN DO:
 
-            CLI.ClStamp = fMakeTS().
+            CLI.ClStamp = Func.Common:mMakeTS().
        /*    DELETE CLI. */
 
             /* in the LAST record was deleted ? */
@@ -413,9 +412,9 @@ BROWSE:
          RUN Syst/ufkey.p.
          cfc = "lis". RUN Syst/ufcolor.p.
 
-         fSplitTS(INPUT CLI.CrStamp, OUTPUT begDay, OUTPUT begTimeI).
+         Func.Common:mSplitTS(INPUT CLI.CrStamp, OUTPUT begDay, OUTPUT begTimeI).
          begTime = STRING(begtimeI,"hh:mm:ss").
-         fSplitTS(INPUT CLI.ClStamp, OUTPUT endDay, OUTPUT endTimeI).
+         Func.Common:mSplitTS(INPUT CLI.ClStamp, OUTPUT endDay, OUTPUT endTimeI).
          endTime = STRING(endTimeI,"hh:mm:ss").
 
          DISP 

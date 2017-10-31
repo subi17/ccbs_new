@@ -26,7 +26,7 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
    IF liPrintXML NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
       OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_xml_" + 
-      REPLACE(STRING(fmakets()), ".", "_") +
+      REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
          string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
@@ -175,10 +175,10 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    END.
    ELSE
       RETURN "ERROR: Not allowed CLITYPE " + Order.CliType.
-   IF fTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
+   IF Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
-   IF fTS2Date(Order.CrStamp, OUTPUT ldaSellDate) EQ FALSE THEN
+   IF Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaSellDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
    lcOutputStruct = add_struct(param_toplevel_id, "").

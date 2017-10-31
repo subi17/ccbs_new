@@ -15,7 +15,6 @@
                   01.10.03/tk  ask what to copy,
                                copy PNP numbers + Customer's prices
                   23.01.04/aam AgrCust             
-                  24.01.06/jt  DYNAMIC-FUNCTION("fDispCustName",
                   
   Version ......: M15
   --------------------------------------------------------------------------- */
@@ -69,8 +68,7 @@ FRAME valinta.
 
 FIND Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 PAUSE 0.
 

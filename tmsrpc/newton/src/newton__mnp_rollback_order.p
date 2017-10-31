@@ -22,11 +22,9 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{Func/date.i}
 {Func/orderchk.i}
 {Func/order.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/create_eventlog.i}
 {Mm/fbundle.i}
 
@@ -102,7 +100,7 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.Source          = "newton"
       Order.OrderChannel    = pcChannel 
       Order.OrdererIP       = pcOrderIP
-      Order.CrStamp         = fMakeTS() 
+      Order.CrStamp         = Func.Common:mMakeTS() 
       Order.InvCustRole     = 1
       Order.UserRole        = 1
       Order.StatusCode      = "3"

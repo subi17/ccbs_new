@@ -30,7 +30,6 @@
 DEFINE INPUT PARAMETER piMsSeq LIKE MobSub.MsSeq.
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
 {Func/fsubstermreq.i}
@@ -183,17 +182,17 @@ FIND FIRST AgrCustomer WHERE
 NO-LOCK NO-ERROR.
 
 IF Avail UsrCustomer THEN
-   lcUsrName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER UsrCustomer).
+   lcUsrName = Func.Common:mDispCustName(BUFFER UsrCustomer).
 ELSE
    lcUsrName = "".
 
 IF Avail InvCustomer THEN
-   lcInvName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER InvCustomer).
+   lcInvName = Func.Common:mDispCustName(BUFFER InvCustomer).
 ELSE
    lcInvName = "".
 
 IF Avail AgrCustomer THEN
-   lcAgrName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER AgrCustomer).
+   lcAgrName = Func.Common:mDispCustName(BUFFER AgrCustomer).
 ELSE
    lcAgrName = "".
 
@@ -281,8 +280,7 @@ REPEAT WITH FRAME main:
                END.
                
                liOrderer = INT(lcCode). 
-               lcOrderer = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                              "MsRequest",
+               lcOrderer = Func.Common:mTMSCodeName("MsRequest",
                               "TermReason",
                               lcCode).
            
@@ -394,12 +392,10 @@ REPEAT WITH FRAME main:
                
                ASSIGN
                   ldtKillDate    = TODAY
-                  lcMsisdnStat   = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "MSISDN",
+                  lcMsisdnStat   = Func.Common:mTMSCodeName("MSISDN",
                            "StatusCode",
                            STRING(liMSISDNStat))
-                  lcSimStat      = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "SIM",
+                  lcSimStat      = Func.Common:mTMSCodeName("SIM",
                            "SimStat",
                            STRING(liSimStat)).
                
@@ -443,8 +439,7 @@ REPEAT WITH FRAME main:
                NEXT.
             END.
             
-            lcSimStat = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                        "SIM",
+            lcSimStat = Func.Common:mTMSCodeName("SIM",
                         "SimStat",
                         STRING(INPUT liSimStat)).
             DISPLAY lcSimStat WITH FRAME MAIN.
@@ -494,8 +489,7 @@ REPEAT WITH FRAME main:
                NEXT.
             END.
             
-            lcMsisdnStat = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                        "MSISDN",
+            lcMsisdnStat = Func.Common:mTMSCodeName("MSISDN",
                         "StatusCode",
                         STRING(INPUT liMSISDNStat)).
             DISPLAY lcMSISDNStat WITH FRAME MAIN.
@@ -780,7 +774,7 @@ REPEAT WITH FRAME main:
                12/31/2049).
 
          fAdditionalLineSTC(liMsReq,
-                            fMake2Dt(ldtKillDate + 1, 0),
+                            Func.Common:mMake2DT(ldtKillDate + 1, 0),
                             "DELETE").
          MESSAGE
             "Request ID for subscription termination is:" liMsReq

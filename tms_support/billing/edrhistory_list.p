@@ -2,7 +2,6 @@
 gcBrand = "1".
 katun = "qvantel".
 {edrhistory_changes.i}
-{Func/timestamp.i}
 
 DEF VAR i           AS INT  NO-UNDO.
 DEF VAR ldaFromDate AS DATE NO-UNDO.
@@ -156,8 +155,8 @@ HIDE FRAME fLog NO-PAUSE.
 IF ldaFromDate = ? OR ldaToDate = ? OR lcFile = "" THEN RETURN.
 
 ASSIGN
-   ldFrom = fMake2DT(ldaFromDate,0)
-   ldTo   = fMake2DT(ldaToDate,86399).
+   ldFrom = Func.Common:mMake2DT(ldaFromDate,0)
+   ldTo   = Func.Common:mMake2DT(ldaToDate,86399).
                             
 FOR EACH EDRHistory NO-LOCK WHERE
          EDRHistory.Brand = "1" AND

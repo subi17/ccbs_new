@@ -10,7 +10,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER olCreated AS LOG  NO-UNDO. 
@@ -275,7 +274,7 @@ PROCEDURE pCreateCustomer:
    FIND Customer WHERE Customer.CustNum = liDefCust EXCLUSIVE-LOCK NO-ERROR.
    IF AVAILABLE Customer THEN DO:
       
-      ASSIGN Customer.ChgStamp   = fMakeTS()
+      ASSIGN Customer.ChgStamp   = Func.Common:mMakeTS()
              Customer.CreUser    = katun
              Customer.InvCust    = Customer.CustNum
              Customer.PaymCust   = Customer.CustNum

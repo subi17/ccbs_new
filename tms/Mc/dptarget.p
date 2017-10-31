@@ -651,8 +651,7 @@ PROCEDURE local-UPDATE-record:
                PAUSE 0.
 
                IF FRAME-FIELD = "TargetTable" THEN DO:
-                  IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                          "DPTarget",
+                  IF NOT Func.Common:mTMSCodeChk("DPTarget",
                                           "TargetTable",
                                           INPUT INPUT DPTarget.TargetTable)
                   THEN DO:

@@ -16,7 +16,6 @@ ASSIGN gcBrand = "1"
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR liFiles    AS INT  NO-UNDO.

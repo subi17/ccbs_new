@@ -10,7 +10,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}  /*qupd = TRUE.*/
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'presel'}
 
@@ -649,8 +648,8 @@ PROCEDURE local-update-record:
          Presel.CustName = asnimi.
          */
          /* Timestamps */
-         Presel.CrStamp = fMakeTS().
-         Presel.ChStamp = fMakeTS().
+         Presel.CrStamp = Func.Common:mMakeTS().
+         Presel.ChStamp = Func.Common:mMakeTS().
       END.
       ELSE PAUSE.
       LEAVE.

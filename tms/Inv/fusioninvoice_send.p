@@ -63,7 +63,7 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 /* Email Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        ldaDateFrom   = MsRequest.ReqDtParam1
-       ldaInvDateTo  = fLastDayOfMonth(ldaDateFrom)
+       ldaInvDateTo  = Func.Common:mLastDayOfMonth(ldaDateFrom)
        xMailFrom     = fCparam("EIF","EmailFromAddress")
        lcEmailFile   = fCparam("EIF","EmailFile")
        lcTransDir    = fCParam("EIF","MailArcDir")
@@ -148,7 +148,7 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
          END.
          ELSE DO:
             liRequest = fEmailInvoiceRequest(
-                                 INPUT fMakeTS(),
+                                 INPUT Func.Common:mMakeTS(),
                                  INPUT TODAY,
                                  INPUT katun,
                                  INPUT 0,

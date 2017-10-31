@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Mc/camprundf.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiCustNum1    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiCustNum2    AS INT  NO-UNDO.
@@ -22,8 +21,8 @@ DEF VAR liCount AS INT  NO-UNDO.
 DEF VAR liPer1  AS INT  NO-UNDO.
 DEF VAR liPer2  AS INT  NO-UNDO.
 
-ASSIGN liPer1 = fMake2Dt(idtDate1,0)
-       liPer2 = fMake2Dt(idtDate2,86399).
+ASSIGN liPer1 = Func.Common:mMake2DT(idtDate1,0)
+       liPer2 = Func.Common:mMake2DT(idtDate2,86399).
 
 EMPTY TEMP-TABLE ttCust.
 

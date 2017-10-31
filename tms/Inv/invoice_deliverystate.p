@@ -10,7 +10,6 @@
 
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.
@@ -72,7 +71,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          ActionLog.ActionChar   = "Delivery state " + STRING(iiState) +
                                   " marked to " + STRING(oiMarked) +
                                   " invoices."
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
 END.
@@ -84,7 +83,7 @@ IF oiMarked > 0 THEN DO TRANS:
       ActionLog.ActionChar   = "Delivery state " + STRING(iiState) +
                                " marked to " + STRING(oiMarked) + 
                                " invoices."
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
          
    RELEASE ActionLog.   
 END.

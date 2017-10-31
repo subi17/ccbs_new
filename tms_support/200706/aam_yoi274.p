@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
 katun = "ari".
 
-{Func/timestamp.i}
 
 def stream sread.
 input stream sread from /apps/snet/200706/clitype_change_yoi274.txt.
@@ -22,7 +21,7 @@ ldtcurr = 6/20/7.
 
 def buffer bowner for msowner.
 
-ldchg = fmake2dt(ldtcurr,28800).
+ldchg = Func.Common:mMake2DT(ldtcurr,28800).
 
 
 repeat:

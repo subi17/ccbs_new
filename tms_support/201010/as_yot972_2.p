@@ -1,10 +1,9 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 
 def buffer msisdnBuf for msisdn.
 

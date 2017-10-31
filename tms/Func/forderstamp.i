@@ -6,7 +6,6 @@
 
    mark and read order time stamps 
 */
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 /* change possible descriptive type to an integer key */
@@ -70,7 +69,7 @@ FUNCTION fMarkOrderStamp RETURNS LOGICAL
    END. 
 
    /* use current time if not given */ 
-   IF idStamp = 0 THEN idStamp = fMakeTS().
+   IF idStamp = 0 THEN idStamp = Func.Common:mMakeTS().
    
    OrderTimeStamp.TimeStamp = idStamp.    
 

@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
 katun = "ari".
 
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
@@ -50,7 +49,7 @@ for each order no-lock use-index stamp where
    i = i + 1.
    pause 0.
    disp i  format ">>>>9" 
-        fts2hms(order.crstamp) format "x(20)"
+        Func.Common:mTS2HMS(order.crstamp) format "x(20)"
         binvoice.invamt
         order.statuscode
         string(order.mnpstatus > 0,"mnp/new")

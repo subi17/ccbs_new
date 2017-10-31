@@ -33,7 +33,6 @@ katun = "NewtonRPC".
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Mc/dpmember.i}
 {Func/coinv.i}
 {Func/msreqfunc.i}
@@ -126,7 +125,7 @@ ASSIGN
    lcQ25ContractId   = get_string(pcQ25Struct,"q25_contract_id") WHEN
                        LOOKUP("q25_contract_id", lcQ25Struct) > 0  
    lcReturnChannel   = get_string(pcQ25Struct,"return_channel")                 
-   ldReturnTS        = fMakeTS().
+   ldReturnTS        = Func.Common:mMakeTS().
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -207,7 +206,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
 
    ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom,22,"months":U).
    ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
-   ldeMonth22 = fMake2Dt(ldaMonth22,0).
+   ldeMonth22 = Func.Common:mMake2DT(ldaMonth22,0).
 
    IF ldaMonth22 > TODAY THEN
       RETURN appl_err("Installment contract has been active less than 22 months").
@@ -307,8 +306,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
              lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
       IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
@@ -399,8 +397,7 @@ lcOrigKatun = katun.
 katun =  "VISTA_" + lcSalesman.
 
 IF llCreateMemo THEN
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+   Func.Common:mWriteMemo("MobSub",
                     STRING(Order.MsSeq),
                     Order.CustNum,
                     lcMemoTitle,

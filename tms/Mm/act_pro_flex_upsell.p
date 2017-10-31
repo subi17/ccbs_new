@@ -10,7 +10,6 @@
 /*YPRO-88*/
 {Syst/tmsconst.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/upsellbundle.i}
 {Func/matrix.i}
 
@@ -56,18 +55,18 @@ END.
 
 FUNCTION fMonthStart RETURNS DECIMAL:
    DEF VAR ldeCurr AS DECIMAL NO-UNDO.
-   ldeCurr =  INT( fMakeTS() / 100) * 100  .
+   ldeCurr =  INT( Func.Common:mMakeTS() / 100) * 100  .
    RETURN ldeCurr + 1.
 
 END.
 FUNCTION fPrevMonthEnd RETURNS DECIMAL:
    DEF VAR ldeCurr AS DECIMAL NO-UNDO.
-   ldeCurr = (INT( fMakeTS() / 100) * 100) + 1.
-   RETURN fSecOffSet(ldeCurr,-1). /*mont change - 2 secs*/
+   ldeCurr = (INT( Func.Common:mMakeTS() / 100) * 100) + 1.
+   RETURN Func.Common:mSecOffSet(ldeCurr,-1). /*mont change - 2 secs*/
 END.
 
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 ldeActTime = fMonthStart().
 ldeCheckMoment = fPrevMonthEnd().
 lcLogDir = fCParam("UpsellCron","UpsellLog").

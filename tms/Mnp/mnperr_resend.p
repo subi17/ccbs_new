@@ -12,7 +12,6 @@ katun = "MNPResend".
 gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Func/log.i}

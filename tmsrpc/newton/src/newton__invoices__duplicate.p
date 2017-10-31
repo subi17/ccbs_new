@@ -14,7 +14,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/duplicate_invoice.i}
 {Syst/tmsconst.i}
 
@@ -57,8 +56,7 @@ IF liRequestID = 0 THEN DO:
    RETURN appl_err(lcError).
 END.
 
-DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Invoice",
+Func.Common:mWriteMemo("Invoice",
                  STRING(Invoice.InvNum),
                  Invoice.Custnum,
                  pcMemoTitle,

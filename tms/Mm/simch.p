@@ -14,7 +14,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'SIM'}
 {Func/fmakemsreq.i}
@@ -150,13 +149,12 @@ FIND UserCustomer WHERE
      UserCustomer.CustNum = Mobsub.CustNum
 NO-LOCK NO-ERROR.
            
-IF Avail UserCustomer THEN UserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                       ghFunc1, BUFFER UserCustomer).
+IF Avail UserCustomer THEN UserName = Func.Common:mDispCustName(BUFFER UserCustomer).
 ELSE UserName = "".
 
 FIND LAST MSISDN   WHERE 
      MSISDN.CLI    = MobSub.CLI  AND 
-     MSISDN.ValidTo > fMakeTS()
+     MSISDN.ValidTo > Func.Common:mMakeTS()
 NO-LOCK NO-ERROR.
 IF NOT avail msisdn THEN DO:
     MESSAGE 
@@ -308,7 +306,7 @@ ACTION:
                     INPUT  Mobsub.CustNum,
                     INPUT  1,
                     INPUT  katun,
-                    INPUT  fMakeTS(),
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  new-icc,
                     INPUT  "", /*for old SIM*/

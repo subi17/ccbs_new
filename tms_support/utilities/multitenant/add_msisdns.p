@@ -4,7 +4,6 @@
 {Syst/commpaa.i}
 katun = "qvantel".
 gcbrand = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/multitenantfunc.i}
 /* Create free MSISDNs starting from begin to end. */
@@ -164,7 +163,7 @@ define variable ldenow    as decimal no-undo.
 define stream slog.
 output stream slog to "added_msisdns.log" append.
 
-ldenow = fmakets().
+ldenow = Func.Common:mMakeTS().
 DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE ld AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcMSISDN AS CHARACTER NO-UNDO.

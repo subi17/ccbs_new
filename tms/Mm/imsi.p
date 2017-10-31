@@ -19,7 +19,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'imsi'}
 {Syst/eventval.i} 
-{Func/func.p}
 
 DEF INPUT PARAMETER ICC LIKE SIM.ICC NO-UNDO.
 
@@ -571,8 +570,7 @@ PROCEDURE local-disp-row:
        DISPLAY
        IMSI.IMSI
        IMSI.CustNum
-       DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer) when  AVAIL Customer
+       Func.Common:mDispCustName(BUFFER Customer) when  AVAIL Customer
        "" when NOT AVAIL Customer @ Customer.CustName
        IMSI.PIN1
        IMSI.PIN2
@@ -599,8 +597,7 @@ PROCEDURE local-UPDATE-record:
        RUN local-find-others.
        DISP
           IMSI.CustNum
-          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                           BUFFER Customer) WHEN  AVAIL Customer
+          Func.Common:mDispCustName(BUFFER Customer) WHEN  AVAIL Customer
           BillTarg.BillTarget   WHEN  AVAIL BillTarg
           IMSI.PIN1
           IMSI.PIN2

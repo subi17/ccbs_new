@@ -48,7 +48,6 @@
 {Syst/eventval.i}
 {Func/msisdn.i}
 {Func/service.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttSubSer NO-UNDO
    LIKE SubSer.

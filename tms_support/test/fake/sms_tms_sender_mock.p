@@ -1,6 +1,5 @@
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
@@ -16,7 +15,7 @@ ELSE DO:
             CallAlarm.delistat EQ {&CA_DELISTAT_NEW} AND
             CallAlarm.delitype EQ 1 /* SMS */:
       ASSIGN
-         CallAlarm.delistamp = fmakets()
+         CallAlarm.delistamp = Func.Common:mMakeTS()
          CallAlarm.delistat = {&CA_DELISTAT_SENT}.
    END.         
             

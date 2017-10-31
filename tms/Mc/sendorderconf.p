@@ -13,7 +13,6 @@ gcBrand = "1".
 /*{Syst/utumaa.i new }*/
 /*{Inv/edefine.i new}*/
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAM iiOrderId AS INT NO-UNDO.
 DEF INPUT PARAM icEmailAddress AS CHAR NO-UNDO.
@@ -39,7 +38,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
           ITSendLog.EMail      = icEmailAddress
           ITSendLog.RepType    = "ITOrd"
           ITSendLog.UserCode   = katun.
-          ITSendLog.SendStamp  = fMakeTS().
+          ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 
 /*

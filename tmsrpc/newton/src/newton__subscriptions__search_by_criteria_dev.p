@@ -31,7 +31,6 @@ katun = "Newton".
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
 {Func/fdss.i}
-{Func/timestamp.i}
 {Func/orderchk.i}
 
 /* Input parameters */
@@ -252,7 +251,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
          THEN llCancelledPrerenove = TRUE.
       END. /* IF Mobsub.PayType = True AND */   
    
-      fSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
+      Func.Common:mSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
    
       IF SubsTerminal.PerContractID > 0 THEN 
       DO:
@@ -512,7 +511,7 @@ FOR EACH MobSub NO-LOCK WHERE
                LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0
            BY Order.CrStamp DESC:
        
-          fSplitTS(Order.CrStamp, 
+          Func.Common:mSplitTS(Order.CrStamp, 
                    OUTPUT ldtOrderDate,
                    OUTPUT liOrderTime).
           
@@ -569,10 +568,10 @@ FOR EACH MobSub NO-LOCK WHERE
       lcOtherBundle = ENTRY(liCount,pcOtherBundles).
       CASE lcOtherBundle:
          WHEN "BONO_VOIP" THEN
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,fMakeTS(),lcOtherBundle) = ""
+            IF fGetActiveSpecificBundle(Mobsub.MsSeq,Func.Common:mMakeTS(),lcOtherBundle) = ""
             THEN NEXT EACH_MOBSUB.
          WHEN "DSS" THEN
-            IF NOT fIsDSSActive(MobSub.CustNum,fMakeTS()) THEN NEXT EACH_MOBSUB.
+            IF NOT fIsDSSActive(MobSub.CustNum,Func.Common:mMakeTS()) THEN NEXT EACH_MOBSUB.
          OTHERWISE NEXT.
       END. /* CASE lcOtherBundle: */
    END. /* DO liCount = 1 TO liNumberOfBundles: */

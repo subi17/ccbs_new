@@ -7,7 +7,6 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Func/cparam.i2}
 {Syst/eventval.i}
 /* {Func/fwebuser.i} */ 

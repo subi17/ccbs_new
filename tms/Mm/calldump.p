@@ -17,7 +17,6 @@
 katun = "cron".
 gcBrand = "1".
 
-{Func/date.i}
 {Func/fvatfact.i}
 {Func/excel.i}
 {Func/coinv.i}
@@ -75,7 +74,7 @@ assign
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idaDate
    filename   = CAPS(Syst.Parameters:Tenant) +
-                "_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+                "_calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1

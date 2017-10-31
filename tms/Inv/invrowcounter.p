@@ -582,8 +582,7 @@ PROCEDURE local-UPDATE-record:
       FIND FIRST Customer WHERE Customer.CustNum = InvRowCounter.InvCust
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-         lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+         lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
 
       DISP 

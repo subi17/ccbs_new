@@ -15,7 +15,6 @@ ASSIGN
    katun   = "Cron".
        
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Syst/dftimetable.i}
 {Func/cparam2.i}
 {Syst/host.i}
@@ -67,9 +66,9 @@ FUNCTION fMarkTimeTable RETURNS LOGIC
       FIND bTimeTable WHERE RECID(bTimeTable) = irTimeTable EXCLUSIVE-LOCK.
       CASE icAction:
       WHEN "done"   THEN ASSIGN
-         bTimeTable.LastRun = fMakeTS()
+         bTimeTable.LastRun = Func.Common:mMakeTS()
          bTimeTable.Ongoing = 0.
-      WHEN "pick" THEN bTimeTable.Ongoing = fMakeTS().
+      WHEN "pick" THEN bTimeTable.Ongoing = Func.Common:mMakeTS().
       WHEN "stop" THEN bTimeTable.Ongoing = 0.
       END CASE.
       RELEASE bTimeTable.
@@ -140,14 +139,14 @@ FOR EACH DumpFile NO-LOCK WHERE
       fAnalyseTimeTable(TODAY - 30,TODAY).
 
       IF DFTimeTable.LastRun > 0 THEN DO:
-         fSplitTS(DFTimeTable.LastRun,
+         Func.Common:mSplitTS(DFTimeTable.LastRun,
                   OUTPUT ldaLastRun,
                   OUTPUT liLastRun).
       END.
       ELSE ldaLastRun = ?.
         
       IF DFTimeTable.Ongoing > 0 THEN DO:
-         fSplitTS(DFTimeTable.Ongoing,
+         Func.Common:mSplitTS(DFTimeTable.Ongoing,
                   OUTPUT ldaOngoing,
                   OUTPUT liOngoing).
                          
@@ -218,7 +217,7 @@ IF llQuery THEN DO:
    lcQueryLog = fCParamC("TimeTableQueryLog").
    IF lcQueryLog = ? THEN lcQueryLog = "/tmp/timetable_query.log".
 
-   lcNow = fISOTimeZone(ldaDumpDate,liCurrent).
+   lcNow = Func.Common:mISOTimeZone(ldaDumpDate,liCurrent).
    
    OUTPUT STREAM sLog TO VALUE(lcQueryLog).
    
@@ -230,12 +229,12 @@ IF llQuery THEN DO:
    BY ttDump.DumpTime:
    
       IF DFTimeTable.LastRun > 0 THEN DO:
-         fSplitTS(DFTimeTable.LastRun,
+         Func.Common:mSplitTS(DFTimeTable.LastRun,
                   OUTPUT ldaLastRun,
                   OUTPUT liLastRun).
-         lcLastRun = fISOTimeZone(ldaLastRun,liLastRun).
+         lcLastRun = Func.Common:mISOTimeZone(ldaLastRun,liLastRun).
       END.
-      ELSE lcLastRun = fISOTimeZone(DATE(1,1,2007),0).
+      ELSE lcLastRun = Func.Common:mISOTimeZone(DATE(1,1,2007),0).
                
       PUT STREAM sLog UNFORMATTED 
          DumpFile.DumpID       " " 

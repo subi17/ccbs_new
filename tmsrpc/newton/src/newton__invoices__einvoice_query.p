@@ -16,7 +16,6 @@ ASSIGN gcBrand = "1"
        katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 DEF VAR pcTenant       AS CHAR  NO-UNDO.
 DEF VAR pcStruct       AS CHAR  NO-UNDO. 
@@ -66,7 +65,7 @@ IF lcSaltKey = "" OR lcSaltKey = ? THEN
 ASSIGN liYear   = INT(SUBSTRING(STRING(piPeriod),1,4))
        liMonth  = INT(SUBSTRING(STRING(piPeriod),5,2))
        ldaDate  = DATE(liMonth,1,liYear)
-       ldeEndStamp = fMake2Dt(ldaDate,0).
+       ldeEndStamp = Func.Common:mMake2DT(ldaDate,0).
 
 FIND FIRST Customer WHERE
            Customer.Brand = gcBrand AND

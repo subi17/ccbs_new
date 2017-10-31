@@ -10,7 +10,6 @@
 gcBrand = "1".
 katun = "Qvantel".
 
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
@@ -150,13 +149,13 @@ FUNCTION fCheckMSISDN RETURNS LOG (INPUT iiStatus_MSISDN AS INT,
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
                  MSISDN.Brand = gcBrand AND
                  MSISDN.CLI   = icUsedMSISDN AND   /* Search with given MSISDN number */
-                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    ELSE DO: /* Find first free */
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
                  MSISDN.Brand = gcBrand AND
-                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    IF NOT AVAILABLE MSISDN THEN
@@ -276,7 +275,7 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
       ASSIGN
          Order.Brand           = gcBrand
          Order.OrderId         = NEXT-VALUE(OrderId)
-         Order.CrStamp         = fMakeTS()
+         Order.CrStamp         = Func.Common:mMakeTS()
          Order.StatusCode      = "1"
          Order.CLI             = MSISDN.CLI
          Order.CLIType         = lcCLIType
@@ -452,7 +451,7 @@ PROCEDURE pActBono:
           NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fMakeTS()
+             ldActTS  = Func.Common:mMakeTS()
              lcRemark = ""
              liSubCount = liSubCount + 1
              liBonoCount = liBonoCount + 1.
@@ -531,7 +530,7 @@ PROCEDURE pActContract:
           NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fMakeTS()
+             ldActTS  = Func.Common:mMakeTS()
              lcRemark = ""
              liContractCount = 0
              liSubCount = liSubCount + 1.
@@ -614,7 +613,7 @@ PROCEDURE pDeactContract:
           NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
+             ldActTS  = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120) /* 2 mins gap */
              lcRemark = ""
              liSubCount = liSubCount + 1.
 
@@ -626,14 +625,14 @@ PROCEDURE pDeactContract:
             liRequest    = 0
             llError      = FALSE
             lcError      = ""
-            ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
+            ldActTS  = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120) /* 2 mins gap */
             lcContractID = ENTRY(liContractCount,ttInputFileContent.TestList).
 
          IF lcContractID = "BONO" THEN DO:
             lcContractID = fGetCurrentSpecificBundle(INPUT ttSubscription.MsSeq,
                                                      INPUT "BONO").
 
-            ldActTS = fMake2Dt(fLastDayOfMonth(TODAY),86399).
+            ldActTS = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
             IF lcContractID = "" THEN DO:
                FIND FIRST OrderAction WHERE
@@ -653,7 +652,7 @@ PROCEDURE pDeactContract:
             lcRemark = lcRemark + "," + lcContractID.
 
             IF LOOKUP(lcContractID,"DSS,BONO_VOIP,SPOTIFY") > 0 THEN
-               ldActTS = fMake2Dt(fLastDayOfMonth(TODAY),86399).
+               ldActTS = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
             /* terminate periodical contract */
             liRequest = fPCActionRequest(ttSubscription.MsSeq,
@@ -713,9 +712,9 @@ PROCEDURE pService:
              liSubCount = liSubCount + 1.
 
       IF icAction = "Activation" THEN
-         ldActTS = fMakeTS().
+         ldActTS = Func.Common:mMakeTS().
       ELSE
-         ldActTS = fSecOffSet(fMakeTS(),120). /* 2 mins gap */
+         ldActTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120). /* 2 mins gap */
 
       IF liSubCount = 1 THEN
          PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
@@ -858,9 +857,9 @@ PROCEDURE pSTC:
 
       IF ttInputFileContent.ActDate = ? OR lcNewCLIType BEGINS "TARJ" OR
          MobSub.CLIType BEGINS "TARJ" THEN
-         ldActTS = fMake2Dt((fLastDayOfMonth(TODAY) + 1),0).
+         ldActTS = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(TODAY) + 1),0).
       ELSE
-         ldActTS = fMake2Dt(ttInputFileContent.ActDate,0).
+         ldActTS = Func.Common:mMake2DT(ttInputFileContent.ActDate,0).
 
       /* Set the katun to check correct barring */
       katun = "NewtonAd".
@@ -990,11 +989,11 @@ PROCEDURE pBTC:
                    lcRemark   = lcRemark + "," + lcErrorMsg.
 
          IF ttInputFileContent.ActDate = ? OR lcBundleType = "BONO" THEN
-            ldaActDate = (fLastDayOfMonth(TODAY) + 1).
+            ldaActDate = (Func.Common:mLastDayOfMonth(TODAY) + 1).
          ELSE
             ldaActDate = ttInputFileContent.ActDate.
 
-         ldActTS = fMake2Dt(ldaActDate,0).
+         ldActTS = Func.Common:mMake2DT(ldaActDate,0).
 
          IF lcErrorMsg = ""  AND
             NOT fValidateBTC(MobSub.MsSeq,

@@ -21,7 +21,6 @@
 
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fuserright.i}            
 {Func/finvbal.i}
@@ -221,50 +220,42 @@ PROCEDURE pInvoiceDetails:
    FIND Customer WHERE 
         Customer.CustNum = Invoice.CustNum NO-LOCK NO-ERROR.
 
-   ASSIGN lcInvType    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+   ASSIGN lcInvType    = Func.Common:mTMSCodeName("Invoice",
                                           "InvType",
                                           STRING(Invoice.InvType))
                                        
-          lcPrintState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcPrintState = Func.Common:mTMSCodeName("Invoice",
                                           "PrintState",
                                           STRING(Invoice.PrintState))
           
-          lcIFSState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "Invoice",
+          lcIFSState = Func.Common:mTMSCodeName("Invoice",
                                         "DeliveryState",
                                         STRING(Invoice.DeliveryState))
                  
-          lcClaimDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcClaimDesc = Func.Common:mTMSCodeName("Invoice",
                                           "ClaimStatus",
                                           Invoice.ClaimStatus)
                                           
-          lcPaymState  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcPaymState  = Func.Common:mTMSCodeName("Invoice",
                                           "PaymState",
                                           STRING(Invoice.PaymState))
           
-          lcCType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcCType      = Func.Common:mTMSCodeName("Invoice",
                                           "ChargeType",
                                           STRING(Invoice.ChargeType))
 
-          lcDType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcDType      = Func.Common:mTMSCodeName("Invoice",
                                           "DelType",
                                           STRING(Invoice.DelType))
 
-          lcVatUsage   = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcVatUsage   = Func.Common:mTMSCodeName("Invoice",
                                           "VatUsage",
                                           STRING(Invoice.VatUsage))
 
           lcCurrency   = Invoice.Currency
           ldUnPaid     = fInvBal(BUFFER Invoice,TODAY).
 
-   fSplitTS(Invoice.ChgStamp,
+   Func.Common:mSplitTS(Invoice.ChgStamp,
             OUTPUT ldtStampDate,
             OUTPUT liDetCount).
             
@@ -273,8 +264,7 @@ PROCEDURE pInvoiceDetails:
           lcDDState   = IF Invoice.DDBankAcc = ""
                         THEN ""
                         ELSE (string(invoice.ddstate) + " " +
-                             DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                              "Invoice",
+                             Func.Common:mTMSCodeName("Invoice",
                                               "DDState",
                                               STRING(Invoice.DDState)))
           lcCrExtID   = "".
@@ -417,8 +407,7 @@ PROCEDURE pInvoiceUpdate:
                         VIEW-AS ALERT-BOX ERROR.
                         NEXT.
                      END. /* IF LOOKUP(lcCode,SUBST("&1,&2,&3", */
-                     lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                "Invoice",
+                     lcDType = Func.Common:mTMSCodeName("Invoice",
                                                 "DelType",
                                                 lcCode).
 
@@ -435,8 +424,7 @@ PROCEDURE pInvoiceUpdate:
                                  OUTPUT lcCode).
 
                   IF lcCode ne "" AND lcCode NE ? THEN DO:
-                     lcPrintState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                     "Invoice",
+                     lcPrintState = Func.Common:mTMSCodeName("Invoice",
                                                      "PrintState",
                                                      lcCode).
 
@@ -452,8 +440,7 @@ PROCEDURE pInvoiceUpdate:
                                  OUTPUT lcCode).
 
                   IF lcCode ne "" AND lcCode NE ? THEN DO:
-                     lcIFSState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                     "Invoice",
+                     lcIFSState = Func.Common:mTMSCodeName("Invoice",
                                                      "DeliveryState",
                                                      lcCode).
 
@@ -471,8 +458,7 @@ PROCEDURE pInvoiceUpdate:
 
                IF FRAME-FIELD = "DelType" THEN DO:
                 
-                  lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                             "Invoice",
+                  lcDType = Func.Common:mTMSCodeName("Invoice",
                                              "DelType",
                                              STRING(INPUT Invoice.DelType)).
                                           
@@ -488,8 +474,7 @@ PROCEDURE pInvoiceUpdate:
                ELSE IF FRAME-FIELD = "PrintState" THEN DO:
 
                   lcPrintState = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+                     Func.Common:mTMSCodeName("Invoice",
                                       "PrintState",
                                       STRING(INPUT Invoice.PrintState)).
                                           
@@ -505,8 +490,7 @@ PROCEDURE pInvoiceUpdate:
                ELSE IF FRAME-FIELD = "DeliveryState" THEN DO:
 
                   lcIFSState = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+                     Func.Common:mTMSCodeName("Invoice",
                                       "DeliveryState",
                                       STRING(INPUT Invoice.DeliveryState)).
                                           

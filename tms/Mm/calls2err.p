@@ -9,7 +9,6 @@
  ============================================================================*/
          
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Rate/error_codes.i}
 
 DEF STREAM msg.
@@ -100,7 +99,7 @@ WITH FRAME main  EDITING:
    END. /* Action */      
 END. /* bbatch */
 
-lcStart = fTS2HMS(fMakeTS()).
+lcStart = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
 FOR EACH MobError NO-LOCK WHERE 
          MobERror.MobError >     0 .
@@ -132,12 +131,12 @@ END.
 
 DO FOR ActionLog TRANS:
 
-   lcEnd = fTS2HMS(fMakeTS()).
+   lcEnd = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
     
    CREATE ActionLog.
    
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.Brand        = gcBrand
       ActionLog.TableName    = "MobCDR"
       ActionLog.KeyValue     = STRING(YEAR(cDate2),"9999") + 

@@ -1,6 +1,5 @@
     
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/heartbeat.i}
 {Func/fgettxt.i}
@@ -31,7 +30,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       liLang      = 1
       lcAlarmMess = fGetTxt(INPUT "SMS", pcAction, TODAY, liLang)
       lcAlarmMess = REPLACE(lcAlarmMess,"#TOPUP", TRIM(STRING(pdeAmt / 100,">>>99.99")))
-      ldeActStamp = fMakeTS().
+      ldeActStamp = Func.Common:mMakeTS().
    
    CREATE CallAlarm.
    ASSIGN
@@ -210,7 +209,7 @@ PROCEDURE SocketIO:
    lcRequest = GET-STRING(lmData,1).
 
 OUTPUT TO /scratch/nagios/tms/ivr/ivr_request.xml APPEND.
-PUT CONTROL "NEW MESSAGE: " fTS2HMS(fMakeTS()) CHR(10) lcRequest CHR(10).
+PUT CONTROL "NEW MESSAGE: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcRequest CHR(10).
 OUTPUT CLOSE.
 
    /* take away newline characters */
@@ -249,7 +248,7 @@ OUTPUT CLOSE.
          DO TRANSACTION:
       
             CREATE PrePaidRequest.
-            PrePaidRequest.TSRequest = fMakeTS().
+            PrePaidRequest.TSRequest = Func.Common:mMakeTS().
 
             ASSIGN
                PrePaidRequest.CLI       = fGetRPCNodeValue(lcXML,"Subscriber")
@@ -391,7 +390,7 @@ OUTPUT CLOSE.
       IF llRC = FALSE OR ERROR-STATUS:GET-MESSAGE(1) <> '' THEN DO:
          lcResponse = 'Unable To Write Response Bytes'.
          OUTPUT TO /scratch/nagios/tms/ivr/ivr_response_errors.txt APPEND.
-         PUT UNFORMATTED lcResponse  ": " fTS2HMS(fMakeTS()) " " lcCLI CHR(10).
+         PUT UNFORMATTED lcResponse  ": " Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " lcCLI CHR(10).
          OUTPUT CLOSE.
       END.
    
@@ -404,7 +403,7 @@ OUTPUT CLOSE.
 
          CREATE SoLog.
          ASSIGN
-            SoLog.CreatedTS         = fMakeTS()
+            SoLog.CreatedTS         = Func.Common:mMakeTS()
             SoLog.CLI               = PrePaidRequest.CLI
             SoLog.ActivationTS      = SoLog.CreatedTS
             SoLog.CompletedTS       = SoLog.CreatedTS
@@ -470,7 +469,7 @@ PROCEDURE pResponse:
    SET-SIZE(lmXML) = 0.
 
 OUTPUT TO /scratch/nagios/tms/ivr/ivr_response.xml APPEND.
-PUT CONTROL "NEW RESPONSE: " + fTS2HMS(fMakeTS()) CHR(10) lcXML CHR(10).
+PUT CONTROL "NEW RESPONSE: " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcXML CHR(10).
 OUTPUT CLOSE.
 
    RETURN lcXML.

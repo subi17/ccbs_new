@@ -8,11 +8,9 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mnp/mnp.i}
 {Mnp/mnpmessages.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mm/fbundle.i}
 {Func/multitenantfunc.i}
 
@@ -72,7 +70,7 @@ IF NOT AVAIL MNPOperator THEN
               MNPOperator.Active = False
    NO-LOCK NO-ERROR.
 
-ldeToday = fDate2TS(TODAY).
+ldeToday = Func.Common:mDate2TS(TODAY).
 
 IF AVAIL MNPOperator THEN DO:
 
@@ -102,7 +100,7 @@ FOR EACH MNPProcess WHERE
    MNPProcess.MNPType = {&MNP_TYPE_IN} AND
    MNPProcess.StatusCode = {&MNP_ST_AREC} EXCLUSIVE-LOCK:
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}. /* closed */
 END.
 
@@ -118,7 +116,7 @@ FOR EACH MNPProcess where
               MNPOperation.statuscode = {&MNP_MSG_NC}
    NO-LOCK NO-ERROR.
    IF AVAIL MNPOperation THEN ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}
       MNPProcess.StatusReason = MNPOperation.ErrorCode.
 END.
@@ -138,7 +136,7 @@ IF lcTariffType = "" THEN
    lcTariffType = Order.CLIType.
 
 ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
-            fMakeTS(),
+            Func.Common:mMakeTS(),
             /* todo: can be removed after deplo */
             (IF Order.OrderType = 3 AND
                 Order.OrderChannel NE "inversa"
@@ -152,11 +150,11 @@ ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
 IF Order.PortingDate <> ? THEN
    IF ldChgDate < Order.PortingDate THEN /* Porting date in the future, use that */
       ldChgDate = Order.PortingDate.
-ldeChgStamp = fMake2Dt(ldChgDate,7200).
+ldeChgStamp = Func.Common:mMake2DT(ldChgDate,7200).
 
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.OrderId     = Order.OrderId
    MNPProcess.FormRequest = lcFormRequest

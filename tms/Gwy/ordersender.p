@@ -15,7 +15,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/heartbeat.i}

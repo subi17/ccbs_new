@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{Func/date.i}
 {Func/mdub.i}
 
 input from yot_1051.input.
@@ -43,7 +42,7 @@ repeat trans:
    find first mservicelimit where
       mservicelimit.msseq = mobsub.msseq and
       mservicelimit.slseq = 10 and
-      endts > fmakeTS() NO-LOCK no-error.
+      endts > Func.Common:mMakeTS() NO-LOCK no-error.
    IF AVAIL mservicelimit then do:
    END.
    else do:

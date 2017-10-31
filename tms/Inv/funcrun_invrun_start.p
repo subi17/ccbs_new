@@ -12,7 +12,6 @@ DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
 {Syst/commpaa.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Inv/billrund.i NEW}
 {Syst/funcrunprocess_run.i}
 {Syst/funcrunprocess_update.i}
@@ -65,7 +64,7 @@ PROCEDURE pInitialize:
    ASSIGN
       gcBrand      = '1'
       katun        = 'cron'
-      ldeBegTime   = fMakeTS()
+      ldeBegTime   = Func.Common:mMakeTS()
       ldaEBADueDate = ?
       ldaIberPayDueDate = ?.
 
@@ -168,7 +167,7 @@ PROCEDURE pCreateInvoices:
       CREATE ActionLog.
    
       ASSIGN
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.Brand        = gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
@@ -209,10 +208,9 @@ PROCEDURE pFinalize:
    DEF INPUT PARAMETER icProcessError AS CHAR NO-UNDO.
     
 
-   ldeEndTime = fMakeTS().
+   ldeEndTime = Func.Common:mMakeTS().
 
-   liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                ldeBegTime,
+   liDurDays = Func.Common:mTSDuration(ldeBegTime,
                                 ldeEndTime,
                                 OUTPUT liDurTime).
 
@@ -251,7 +249,7 @@ PROCEDURE pFinalize:
          CREATE ActionLog.
    
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.Brand        = gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun

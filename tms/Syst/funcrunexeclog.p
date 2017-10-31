@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'FuncRunExecLog'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -422,7 +421,7 @@ PROCEDURE local-find-others.
     lcTime = "".
        
     IF FuncRunExecLog.StatusStamp > 0 THEN 
-       lcTime = fTS2HMS(FuncRunExecLog.StatusStamp).
+       lcTime = Func.Common:mTS2HMS(FuncRunExecLog.StatusStamp).
        
 END PROCEDURE.
 

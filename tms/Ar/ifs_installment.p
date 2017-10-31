@@ -56,13 +56,13 @@ OUTPUT STREAM sLog TO VALUE(icFile).
 /* check from last 20 days if there are ones that have been completed 
    yesterday */
 IF icDumpMode = "modified" THEN ASSIGN
-   ldFrom  = fMake2Dt(TODAY - 1,0)
-   ldTo    = fMake2Dt(TODAY - 1,86399)
-   ldCheck = fMake2Dt(TODAY - 20,0).
+   ldFrom  = Func.Common:mMake2DT(TODAY - 1,0)
+   ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
+   ldCheck = Func.Common:mMake2DT(TODAY - 20,0).
 /* take all */
 ELSE ASSIGN
-   ldFrom  = fMake2Dt(2/1/10,0)
-   ldTo    = fMake2Dt(TODAY - 1,86399)
+   ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+   ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
    ldCheck = ldFrom.
 
 

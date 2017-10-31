@@ -96,7 +96,7 @@ CASE pcOperation:
          END.
       
          ASSIGN         
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.StatusCode = {&MNP_ST_ACAN}
             MNPProcess.StatusReason = pcParam
             Order.MNPStatus = MNPProcess.StatusCode + 1.
@@ -123,7 +123,7 @@ CASE pcOperation:
             liPeriods = 1.
 
             IF liPeriods > fMNPPeriods(
-               input fMakeTS(),
+               input Func.Common:mMakeTS(),
                input MNPProcess.PortingTime,
                INPUT 0,
                OUTPUT ldaDueDate) THEN
@@ -219,7 +219,7 @@ CASE pcOperation:
       liPeriods = 1. /* YDR-115 */
 
       IF liPeriods > fMNPPeriods(
-         input fMakeTS(),
+         input Func.Common:mMakeTS(),
          input MNPProcess.PortingTime,
          INPUT 0,
          OUTPUT ldaDueDate) THEN

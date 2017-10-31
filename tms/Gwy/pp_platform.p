@@ -1,6 +1,5 @@
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Gwy/airnodes.i}
 
@@ -72,7 +71,7 @@ DO TRANSACTION:
       NO-LOCK NO-ERROR.
 
       OUTPUT TO /scratch/nagios/tms/ivr/ivr_pp_locked.txt APPEND.
-      PUT UNFORMATTED "New TopUp: " fTS2HMS(fMakeTS()) " " PrePaidRequest.CLI CHR(10) lcResponse CHR(10).
+      PUT UNFORMATTED "New TopUp: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " PrePaidRequest.CLI CHR(10) lcResponse CHR(10).
       OUTPUT CLOSE.
 
    END.
@@ -201,7 +200,7 @@ PROCEDURE pHeader:
             ttUCIP.ttFormat = "string".
          WHEN 4 THEN ASSIGN
             ttUCIP.ttName            = "originTimeStamp"
-            ttUCIP.ttValue           = fISO860(PrePaidRequest.TSRequest)
+            ttUCIP.ttValue           = Func.Common:mISO860(PrePaidRequest.TSRequest)
             ttUCIP.ttFormat          = "dateTime.iso8601".
          WHEN 5 THEN ASSIGN
             ttUCIP.ttName   = "subscriberNumber"
@@ -299,7 +298,7 @@ PROCEDURE pRefillTRequest:
 
    /* TODO: PaymentProfileID = 4 not supported yet */
    /*
-   ldeTime = fMakeTS().
+   ldeTime = Func.Common:mMakeTS().
 
    FIND FIRST MSOwner WHERE
               MSOwner.CLI = PrepaidRequest.CLI AND

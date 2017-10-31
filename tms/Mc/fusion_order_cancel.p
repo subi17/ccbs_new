@@ -1,7 +1,6 @@
 {Syst/commali.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fixedlinefunc.i}
 {Mc/orderfusion.i}
 
@@ -55,7 +54,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
-      OrderFusion.UpdateTS = fMakeTS().
+      OrderFusion.UpdateTS = Func.Common:mMakeTS().
    
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhBuff).
 

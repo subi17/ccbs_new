@@ -15,7 +15,6 @@
                   20.12.2005/aam iiCustNum,
                                  F4 text removed
                   12.01.2006/aam calculate interest amount in update
-                  24.01.2006/jt  DYNAMIC-FUNCTION("fDispCustName"
   Version ......: M15
 ----------------  ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable CustIntEvent
@@ -660,8 +659,7 @@ PROCEDURE local-update-record:
 
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                  
       DISP
        lcCustName
@@ -787,8 +785,7 @@ END PROCEDURE.
 PROCEDURE local-disp-row:
 
    RUN local-find-others.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                               BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                               
    DISPLAY CustIntEvent.Brand
            lcCustName when AVAIL Customer

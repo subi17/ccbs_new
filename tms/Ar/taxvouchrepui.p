@@ -108,8 +108,7 @@ FUNCTION fTypeName RETURNS LOGIC
    
    IF iiPaymType = 0 
    THEN lcPaymType = "ALL".
-   ELSE lcPaymType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Payment",
+   ELSE lcPaymType = Func.Common:mTMSCodeName("Payment",
                                       "PaymType",
                                       STRING(iiPaymType)).
       

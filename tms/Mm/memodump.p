@@ -11,8 +11,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEF TEMP-TABLE ttMemo
@@ -49,9 +47,9 @@ ASSIGN
     lcOutDir = fCParam("dumpoutgoing","memodump.p")
     lcSpoolDir = fCParam("dumpspool","memodump.p")
     lcDelim = "|"
-    liToday = integer(fdatefmt(TODAY,"yyyymmdd"))
-    lcFileName = afilename + fdatefmt(TODAY,"yyyymmdd") + ".dump"
-    timeto = fmakets().
+    liToday = integer(Func.Common:mDateFmt(TODAY,"yyyymmdd"))
+    lcFileName = afilename + Func.Common:mDateFmt(TODAY,"yyyymmdd") + ".dump"
+    timeto = Func.Common:mMakeTS().
 
 case atablename:
     when "order" THEN DO:

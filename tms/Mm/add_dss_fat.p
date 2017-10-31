@@ -12,7 +12,6 @@
 gcBrand = "1".
 katun   = "CRON".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fdss.i}
 {Func/fcpfat.i}
 
@@ -51,15 +50,15 @@ ASSIGN
    ldaFromDate      = ldaPromoFromDate.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 ASSIGN
-   ldeStamp         = fMakeTS()
-   ldPeriodFrom     = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo       = fMake2Dt(ldaToDate,86399)
-   ldNextMonthStamp = fMake2Dt((ldaToDate + 1),0)
+   ldeStamp         = Func.Common:mMakeTS()
+   ldPeriodFrom     = Func.Common:mMake2DT(ldaFromDate,0)
+   ldPeriodTo       = Func.Common:mMake2DT(ldaToDate,86399)
+   ldNextMonthStamp = Func.Common:mMake2DT((ldaToDate + 1),0)
    liPeriod         = YEAR(ldaToDate) * 100 + MONTH(ldaToDate)
    lcLogFile        = lcPromotionPath + "/add_dss_fat_" + STRING(liPeriod) +
                       "_" + STRING(ldeStamp) + ".log".

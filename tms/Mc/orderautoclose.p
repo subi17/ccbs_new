@@ -11,11 +11,10 @@
 {Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE ldeCrStamp AS DECIMAL NO-UNDO.
-ldeCrStamp = fMake2Dt(TODAY - 45, 0).
+ldeCrStamp = Func.Common:mMake2DT(TODAY - 45, 0).
 
 FOR EACH order where
    order.brand = gcbrand and

@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 
@@ -30,8 +29,8 @@ DEF VAR ldeTo AS DEC NO-UNDO.
 
 ASSIGN
    ldaDate = TODAY - 1
-   ldeFrom = fHMS2TS(ldaDate, "00:00:00")
-   ldeTo = fHMS2TS(ldaDate,"23:59:59").
+   ldeFrom = Func.Common:mHMS2TS(ldaDate, "00:00:00")
+   ldeTo = Func.Common:mHMS2TS(ldaDate,"23:59:59").
 
 FORM
     oiEvents    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
@@ -64,7 +63,7 @@ FOR EACH MNPProcess NO-LOCK WHERE
        MNPProcess.FormRequest "|"
       (IF AVAIL Memo THEN Memo.Source ELSE "") "|"
       (IF AVAIL Memo THEN Memo.CreUser ELSE "") "|"
-      fts2hms(MNPProcess.UpdateTS) skip.
+      Func.Common:mTS2HMS(MNPProcess.UpdateTS) skip.
       
    oiEvents = oiEvents + 1.
    IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:

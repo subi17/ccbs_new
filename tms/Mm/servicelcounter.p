@@ -9,9 +9,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Syst/tmsconst.i}
-{Inv/nnpura.i}
  
 DEF INPUT PARAM iMSSeq    AS INT  NO-UNDO.
 DEF INPUT PARAM iiCustNum AS INT  NO-UNDO.
@@ -580,9 +578,9 @@ PROCEDURE local-find-others.
                            INT(SUBSTRING(STRING(iiPeriod),7,2)) ELSE 1),
                            INT(SUBSTRING(STRING(iiPeriod),1,4)))
         ldaEndDate = (IF iiPeriod > 999999 THEN ldaFromDate 
-                      ELSE fLastDayOfMonth(ldaFromDate))
-        ldPeriodFrom = fMake2Dt(ldaFromDate,0)
-        ldPeriodTo   = fMake2Dt(ldaEndDate,86399).
+                      ELSE Func.Common:mLastDayOfMonth(ldaFromDate))
+        ldPeriodFrom = Func.Common:mMake2DT(ldaFromDate,0)
+        ldPeriodTo   = Func.Common:mMake2DT(ldaEndDate,86399).
 
       IF ServiceLimitGroup.GroupCode BEGINS {&DSS} THEN
          FIND FIRST MServiceLimit WHERE
@@ -633,12 +631,12 @@ PROCEDURE local-find-others.
     
       CASE ServiceLimit.InclUnit:
          WHEN 1 THEN DO:
-            lcUsage = fSec2C(ServiceLCounter.Amt,9).
-            lcLimit = fSec2C(ldeLimit * 60,9).
+            lcUsage = Func.Common:mSec2C(ServiceLCounter.Amt,9).
+            lcLimit = Func.Common:mSec2C(ldeLimit * 60,9).
          END.
          WHEN 2 THEN DO:
-            lcUsage = fSec2C(ServiceLCounter.Amt,8).
-            lcLimit = fSec2C(ldeLimit,8).
+            lcUsage = Func.Common:mSec2C(ServiceLCounter.Amt,8).
+            lcLimit = Func.Common:mSec2C(ldeLimit,8).
          END.
          WHEN 4 THEN DO:
             lcUsage = STRING(ROUND(ServiceLCounter.Amt / 1024 / 1024,2)).

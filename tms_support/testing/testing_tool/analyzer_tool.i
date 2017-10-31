@@ -36,8 +36,8 @@ FUNCTION fCheckDCCLIContract RETURNS LOGICAL
              DCCLI.DcEvent = DayCampaign.DcEvent AND
              DCCLI.ValidTo >= idActDate NO-LOCK:
 
-      ASSIGN bbttAnalyzerReport.FromTS = fMake2Dt(DCCLI.ValidFrom,0)
-             bbttAnalyzerReport.EndTS  = fMake2Dt(DCCLI.ValidTo,0).
+      ASSIGN bbttAnalyzerReport.FromTS = Func.Common:mMake2DT(DCCLI.ValidFrom,0)
+             bbttAnalyzerReport.EndTS  = Func.Common:mMake2DT(DCCLI.ValidTo,0).
 
       IF DayCampaign.FeeModel > "" THEN DO:
       FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
@@ -93,7 +93,7 @@ FUNCTION fCheckServLimitContract RETURNS LOGICAL
 
    DEF BUFFER bSubMsRequest       FOR MsRequest.
 
-   ldNextMonthActStamp = fMake2Dt(fLastDayOfMonth(idActDate) + 1,0).
+   ldNextMonthActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(idActDate) + 1,0).
 
    FOR FIRST DayCampaign WHERE
              DayCampaign.Brand = gcBrand AND
@@ -111,7 +111,7 @@ FUNCTION fCheckServLimitContract RETURNS LOGICAL
              bbttAnalyzerReport.EndTS  = MServiceLimit.EndTS
              bbttAnalyzerReport.Limit  = MServiceLimit.InclAmt.
 
-      fSplitTS(MServiceLimit.FromTS,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldtActDate,OUTPUT liActTime).
 
       IF DayCampaign.FeeModel > "" THEN DO:
          FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
@@ -158,7 +158,7 @@ FUNCTION fCheckService RETURNS LOGICAL
               SubSer.MsSeq   =  iiMsSeq AND
               SubSer.SsDate  <= idActDate NO-LOCK NO-ERROR.
    IF AVAIL SubSer THEN DO:
-      bbttAnalyzerReport.FromTS = fMake2Dt(SubSer.SsDate,0).
+      bbttAnalyzerReport.FromTS = Func.Common:mMake2DT(SubSer.SsDate,0).
 
       IF CAN-FIND(FIRST MobSub WHERE
                         MobSub.MsSeq = MsRequest.MsSeq AND
@@ -221,7 +221,7 @@ PROCEDURE pContractActivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       IF LOOKUP(DayCampaign.DCType,"1,4,6") = 0 THEN
          fCheckDCCLIContract(INPUT MsRequest.ReqCparam3,
                              INPUT MsRequest.MsSeq,
@@ -295,7 +295,7 @@ PROCEDURE pContractDeactivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       IF LOOKUP(DayCampaign.DCType,"1,4,6") = 0 THEN
          fCheckDCCLIContract(INPUT MsRequest.ReqCparam3,
                              INPUT MsRequest.MsSeq,
@@ -362,7 +362,7 @@ PROCEDURE pServiceActivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       fCheckService(INPUT MsRequest.ReqCparam1,
                     INPUT MsRequest.MsSeq,
                     INPUT ldtActDate,
@@ -417,7 +417,7 @@ PROCEDURE pServiceDeactivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       fCheckService(INPUT MsRequest.ReqCparam1,
                     INPUT MsRequest.MsSeq,
                     INPUT ldtActDate,
@@ -522,7 +522,7 @@ PROCEDURE pSTC:
 
          IF bttAnalyzerReport.Remark > "" THEN NEXT.
 
-         fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+         Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
 
          IF LOOKUP(STRING(bSubMsRequest.ReqType),"8,9") > 0 THEN DO:
             FIND FIRST DayCampaign WHERE
@@ -652,7 +652,7 @@ PROCEDURE pBTC:
 
          IF bttAnalyzerReport.Remark > "" THEN NEXT.
 
-         fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+         Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
          IF LOOKUP(STRING(bSubMsRequest.ReqType),"8,9") > 0 THEN DO:
             FIND FIRST DayCampaign WHERE
                        DayCampaign.Brand = gcBrand AND

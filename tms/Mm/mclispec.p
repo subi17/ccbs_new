@@ -20,7 +20,6 @@
 {Inv/eplspec.i}
 {Func/feplstart.i}
 {Func/fsubser.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER icCLI AS CHAR NO-UNDO.
 
@@ -102,8 +101,7 @@ form
 
 ASSIGN lcMacros      = fCParamC("MacroDir") + fCParamC("MacroSpec")
        liLetterClass = fCParamI("EPLSpecClass")
-       lcMainTitle   = CAPS(DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                             "MobSub",
+       lcMainTitle   = CAPS(Func.Common:mTMSCodeName("MobSub",
                                              "RepCodes",
                                              "4")).
 
@@ -133,8 +131,7 @@ ASSIGN pvm1      = DATE(MONTH(TODAY),1,YEAR(TODAY))
        
 FOR FIRST Customer OF MobSub NO-LOCK:
    gcHelpParam = STRING(Customer.InvCust).
-   lcUser      = DYNAMIC-FUNCTION("fDispCustName" IN
-                 ghFunc1, BUFFER Customer).
+   lcUser      = Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
 PAUSE 0.
@@ -414,7 +411,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                    ITSendLog.EMail      = ""
                    ITSendLog.RepType    = "Spec" + lcRepCodes
                    ITSendLog.UserCode   = katun.
-                   ITSendLog.SendStamp  = fMakeTS().
+                   ITSendLog.SendStamp  = Func.Common:mMakeTS().
          END.
          
          MESSAGE "Specification report has been printed."

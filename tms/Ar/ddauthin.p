@@ -32,7 +32,6 @@
 {Syst/commali.i}
 {Syst/utumaa.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/email.i}
 {Ar/ddtrans.i}
 {Syst/eventval.i}
@@ -159,7 +158,7 @@ FUNCTION fCopy2Failed RETURNS LOGICAL.
           Memo.CreUser   = katun 
           Memo.MemoTitle = "Failed Authorization"
           Memo.MemoText  = HandMsg.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
         
 END FUNCTION.
 

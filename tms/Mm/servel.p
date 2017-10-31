@@ -740,13 +740,11 @@ PROCEDURE local-UPDATE-record:
       
       IF AVAILABLE ServCom THEN DO:
 
-         lcActType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                      "ServCom",
+         lcActType = Func.Common:mTMSCodeName("ServCom",
                                       "ActType",
                                       STRING(ServCom.ActType)).
 
-         lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                     "ServCom",
+         lcTarget = Func.Common:mTMSCodeName("ServCom",
                                      "Target",
                                      STRING(ServCom.Target)).
          

@@ -11,7 +11,6 @@ Customer number, MSISDN, STC date, old subs type, new subs type, billig item, nu
 
 */
 
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF VAR ldtInputDate AS DATE NO-UNDO. 
@@ -44,7 +43,7 @@ FUNCTION fReadCDRs RETURNS LOGICAL
        IF Mobcdr.errorcode NE 0        THEN NEXT.
        IF MobCDR.BillCode NE "14100001" THEN NEXT. 
 
-       ldeTime  = fMake2Dt(Mobcdr.datest, Mobcdr.TimeStart).
+       ldeTime  = Func.Common:mMake2DT(Mobcdr.datest, Mobcdr.TimeStart).
 /*       IF Mobcdr.ReadInTS < pdStartTS THEN NEXT.
        IF Mobcdr.ReadInTS > pdEndTS   THEN NEXT. */
 
@@ -68,10 +67,10 @@ END FUNCTION.
 
 
 ldtInputDate = DATE(11,1,2011).
-ldBeginStamp = fHMS2TS(ldtInputDate,"00:00:00").
-ldEndStamp = fHMS2TS(ldtInputDate,"23:59:59").
+ldBeginStamp = Func.Common:mHMS2TS(ldtInputDate,"00:00:00").
+ldEndStamp = Func.Common:mHMS2TS(ldtInputDate,"23:59:59").
 DEFINE VARIABLE ldeLastMonthLastSecond AS DECIMAL NO-UNDO. 
-ldeLastMonthLastSecond = fSecOffSet(ldBeginStamp,-1).
+ldeLastMonthLastSecond = Func.Common:mSecOffSet(ldBeginStamp,-1).
 
 OUTPUT STREAM sLog TO VALUE("/apps/yoigo/tms_support/billing/check_1st_day_gprs_rating_" + STRING(YEAR(ldtInputdate) * 10000 
          + 100 * MONTH(ldtInputdate)

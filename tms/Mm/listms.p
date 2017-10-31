@@ -6,7 +6,6 @@
   CREATED ......: 16.08-1999
   CHANGED ......: 11.10.02 jr Removed BillLevel
                   13.12.04/aam SSDate for SubSer
-                  25.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
                               removed mobsub.first + lastname 
                               now customer.custname customer.lastname
   VERSION ......: M15
@@ -34,8 +33,7 @@ FIND sim     WHERE sim.icc         = mobsub.icc     NO-LOCK.
 FIND msisdn  WHERE msisdn.CLI    = mobsub.CLI   NO-LOCK.
 FIND Customer WHERE Customer.CustNum  = mobsub.CustNum  NO-LOCK.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 FIND imsi    WHERE imsi.IMSI      = mobsub.IMSI   NO-LOCK.
 FIND BillTarg WHERE BillTarg.BillTarg   = mobsub.BillTarg  AND

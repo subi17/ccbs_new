@@ -104,7 +104,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 END.
 
-deCurTime = fMakeTs().
+deCurTime = Func.Common:mMakeTS().
 IF ttOfferItem.BeginStamp < deCurTime THEN DO:
    ttOfferItem.BeginStamp = deCurTime.
    add_timestamp(lcRespStruct, "valid_from", ttOfferItem.BeginStamp).

@@ -21,7 +21,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'SoLog'}
 {Func/solog.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/sog.i}
 {Gwy/solog_create.i}
@@ -125,7 +124,7 @@ FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF AVAIL MobSub THEN ASSIGN
    lcCLi = MobSub.CLI
    llTerminated = FALSE
-   llISDSSActive = fIsDSSActive(mobsub.custnum, fmakets()).
+   llISDSSActive = fIsDSSActive(mobsub.custnum, Func.Common:mMakeTS()).
 ELSE DO:
    llTerminated = True.
    FIND TermMobSub WHERE TermMobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
@@ -466,7 +465,7 @@ BROWSE:
        BUFFER-COPY ttSoLog except ttSoLog.SoLog ttSoLog.stat ttSoLog.activationTS
        ttSoLog.response  TO xxSoLog.
        ASSIGN
-          xxSoLog.activationTS = fmakets()
+          xxSoLog.activationTS = Func.Common:mMakeTS()
           xxSoLog.SoLog        = NEXT-VALUE(SoLog)
           ttSoLog.response     = "RE-SENT " + string(today,"99-99-9999") + " " +
                                   STRING(time,"hh:mm:ss") +  "REASON " +
@@ -474,7 +473,7 @@ BROWSE:
           ttSoLog.stat         = 2       
           xxSoLog.users        = katun  
           xxSoLog.CompletedTS  = 0.
-          xxSoLog.Timeslottms  = fMakeTS() .
+          xxSoLog.Timeslottms  = Func.Common:mMakeTS() .
        
        FIND FIRST SoLog WHERE
             RECID(SoLog) = ttSoLog.OrigRec
@@ -653,8 +652,7 @@ END PROCEDURE.
 
 PROCEDURE local-disp-row:
        RUN tt-local-find-others.
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                      BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        ttSoLog.SoLog

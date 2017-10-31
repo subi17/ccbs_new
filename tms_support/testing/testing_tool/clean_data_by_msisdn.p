@@ -172,7 +172,7 @@ FOR EACH MSISDN NO-LOCK WHERE
          MSISDN.Brand = gcBrand AND
          MSISDN.CLI   GE lcminMSISDN AND
          MSISDN.CLI   LE lcmaxMSISDN AND
-         MSISDN.ValidTo GE fMakeTS() AND
+         MSISDN.ValidTo GE Func.Common:mMakeTS() AND
          MSISDN.StatusCode < 98:
 
    FIND FIRST Order WHERE

@@ -8,8 +8,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/fsendsms.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
@@ -217,7 +215,7 @@ PROCEDURE pFinalize:
 
    fReqStatus(2,"").
 
-   ldeCurrentTS = fMakeTS().
+   ldeCurrentTS = Func.Common:mMakeTS().
 
    /* Send the SMS using Request Action Rules for DSS */
    RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
@@ -248,9 +246,9 @@ PROCEDURE pFinalize:
       YTS-8140: To extend DELETE request matching also for DSS2 */
    IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
       MsRequest.ReqCparam1 = "DELETE" AND
-      fIsDSS2Allowed(MsRequest.CustNum,0,fMakeTS(),
+      fIsDSS2Allowed(MsRequest.CustNum,0,Func.Common:mMakeTS(),
                      OUTPUT liDSSPriMsSeq,OUTPUT lcResult) AND
-      NOT fIsDSSActive(MsRequest.CustNum,fMakeTS()) AND
+      NOT fIsDSSActive(MsRequest.CustNum,Func.Common:mMakeTS()) AND
       NOT fOngoingDSSAct(MsRequest.CustNum) THEN DO:
 
       FIND FIRST lbMobSub WHERE
@@ -261,7 +259,7 @@ PROCEDURE pFinalize:
                                  "CREATE",
                                  "",
                                  "DSS2",
-                                 fMakeTS(),
+                                 Func.Common:mMakeTS(),
                                  {&REQUEST_SOURCE_DSS},
                                  "",
                                  TRUE, /* create fees */
@@ -270,8 +268,7 @@ PROCEDURE pFinalize:
                                  OUTPUT lcResult).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "DSS2 activation failed in DSS handling",
@@ -316,15 +313,14 @@ PROCEDURE pFinalize:
                                 FALSE, /* mandatory for father request */
                                 OUTPUT lcError).
                IF liRequest = 0 THEN 
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "Voip activation failed;",
                              lcError).
             END.
          END. /* IF AVAILABLE MobSub THEN DO: */
-      END. /* IF NOT fIsDSSActive(MsRequest.Custnum, fMakeTS()) THEN DO: */
+      END. /* IF NOT fIsDSSActive(MsRequest.Custnum, Func.Common:mMakeTS()) THEN DO: */
    END. /* IF MsRequest.ReqCparam3 BEGINS "DSS" AND */
 
    FIND FIRST MobSub WHERE
@@ -357,7 +353,7 @@ PROCEDURE pFinalize:
                            OUTPUT ldeDSSLimit,
                            OUTPUT lcBundleId) EQ FALSE THEN RETURN "".
       
-      fSplitTS(ldeCurrentTS, OUTPUT ldaDate, OUTPUT liTime).
+      Func.Common:mSplitTS(ldeCurrentTS, OUTPUT ldaDate, OUTPUT liTime).
       liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
       
       IF NOT fFatExists("DSSCPFREE",
@@ -375,8 +371,7 @@ PROCEDURE pFinalize:
                        999999,
                        OUTPUT lcResult). 
          IF lcResult > "" THEN 
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                           STRING(liDSSMsSeq),
                           MsRequest.Custnum,
                           "Multi SIM DSS FAT creation failed",
@@ -495,8 +490,7 @@ PROCEDURE pHandleOtherServices:
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(ttContract.MsSeq),
                           ttContract.CustNum,
                           "Periodical Contract",
@@ -522,8 +516,7 @@ PROCEDURE pHandleOtherServices:
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(ttContract.MsSeq),
                           ttContract.CustNum,
                           "Periodical Contract",

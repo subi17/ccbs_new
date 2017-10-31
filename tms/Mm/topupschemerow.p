@@ -11,7 +11,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'TopupSchemeRow'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -140,7 +139,7 @@ IF AVAILABLE TopupSchemeRow THEN ASSIGN
    Memory       = recid(TopupSchemeRow)
    must-print   = TRUE
    must-add     = FALSE
-   ldDefFrom    = fMake2DT(TODAY,0).
+   ldDefFrom    = Func.Common:mMake2DT(TODAY,0).
 ELSE DO:
    IF lcRight NE "RW" THEN DO:
       MESSAGE "No rows available" VIEW-AS ALERT-BOX INFORMATION.
@@ -150,7 +149,7 @@ ELSE DO:
       Memory       = ?
       must-print   = FALSE
       must-add     = FALSE
-      ldDefFrom    = fMake2DT(TopupScheme.FromDate,0).
+      ldDefFrom    = Func.Common:mMake2DT(TopupScheme.FromDate,0).
 END.
 
 LOOP:
@@ -188,7 +187,7 @@ REPEAT WITH FRAME sel:
               TopupSchemeRow.TopupSchemeRowID = i
               TopupSchemeRow.TopupScheme   = icTopupScheme
               TopupSchemeRow.BeginStamp = ldDefFrom.
-              TopupSchemeRow.EndStamp   = fMake2DT(12/31/2049,86399).
+              TopupSchemeRow.EndStamp   = Func.Common:mMake2DT(12/31/2049,86399).
 
            RUN local-UPDATE-record.
 
@@ -601,10 +600,10 @@ PROCEDURE local-find-others.
 
    DEF VAR liTime AS INT NO-UNDO.
    
-   fSplitTS(TopupSchemeRow.BeginStamp,
+   Func.Common:mSplitTS(TopupSchemeRow.BeginStamp,
              OUTPUT ldtFromDate,
              OUTPUT liTime).
-   fSplitTS(TopupSchemeRow.EndStamp,
+   Func.Common:mSplitTS(TopupSchemeRow.EndStamp,
             OUTPUT ldtToDate,
             OUTPUT liTime).
 
@@ -619,8 +618,8 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       ASSIGN
-         lcBegin        = fTS2HMS(TopupSchemeRow.BeginStamp)
-         lcEnd          = fTS2HMS(TopupSchemeRow.EndStamp)
+         lcBegin        = Func.Common:mTS2HMS(TopupSchemeRow.BeginStamp)
+         lcEnd          = Func.Common:mTS2HMS(TopupSchemeRow.EndStamp)
          lcBillItem     = fBillItem(TopupSchemeRow.BillCode)
          lcDiscBillItem = fBillItem(TopupSchemeRow.DiscountBillCode)
          ldPayable      = TopupSchemeRow.Amount - 
@@ -659,7 +658,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       llUpdateAmount = (NEW TopupSchemeRow OR
-                        TopupSchemeRow.BeginStamp > fMakeTS()).
+                        TopupSchemeRow.BeginStamp > Func.Common:mMakeTS()).
 
       IF NOT llUpdateAmount THEN DO:
          IF NOT CAN-FIND(FIRST OfferItem WHERE 

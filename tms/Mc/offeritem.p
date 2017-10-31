@@ -12,7 +12,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OfferItem'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 IF llDoEvent THEN DO:
@@ -112,8 +111,7 @@ FUNCTION fItemType RETURNS LOGIC
    (icItemType AS CHAR):
 
    IF icItemType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "OfferItem",
+      lcType = Func.Common:mTMSCodeName("OfferItem",
                                 "ItemType",
                                 icItemType).
    ELSE lcType = "".
@@ -246,8 +244,8 @@ IF NOT AVAILABLE Offer THEN DO:
 END.
 
 ASSIGN
-   ldOfferFrom = fMake2DT(Offer.FromDate,0)
-   ldOfferTo   = fMake2DT(Offer.ToDate,86399).
+   ldOfferFrom = Func.Common:mMake2DT(Offer.FromDate,0)
+   ldOfferTo   = Func.Common:mMake2DT(Offer.ToDate,86399).
 
 RUN local-Find-First.
 
@@ -255,7 +253,7 @@ IF AVAILABLE OfferItem THEN ASSIGN
    Memory       = recid(OfferItem)
    must-print   = TRUE
    must-add     = FALSE
-   ldDefFrom    = fMake2DT(TODAY,0).
+   ldDefFrom    = Func.Common:mMake2DT(TODAY,0).
 ELSE DO:
    IF lcRight NE "RW" THEN DO:
       MESSAGE "No items available" VIEW-AS ALERT-BOX INFORMATION.
@@ -265,7 +263,7 @@ ELSE DO:
       Memory       = ?
       must-print   = FALSE
       must-add     = FALSE
-      ldDefFrom    = fMake2DT(Offer.FromDate,0).
+      ldDefFrom    = Func.Common:mMake2DT(Offer.FromDate,0).
 END.
 
 LOOP:
@@ -297,7 +295,7 @@ REPEAT WITH FRAME sel:
               OfferItem.OfferItemID = NEXT-VALUE(OfferItemSeq)
               OfferItem.Offer   = icOffer
               OfferItem.BeginStamp = ldDefFrom.
-              OfferItem.EndStamp   = fMake2DT(12/31/2049,86399).
+              OfferItem.EndStamp   = Func.Common:mMake2DT(12/31/2049,86399).
 
            RUN local-UPDATE-record.
 
@@ -707,10 +705,10 @@ PROCEDURE local-find-others.
 
    DEF VAR liTime AS INT NO-UNDO.
    
-   fSplitTS(OfferItem.BeginStamp,
+   Func.Common:mSplitTS(OfferItem.BeginStamp,
              OUTPUT ldtFromDate,
              OUTPUT liTime).
-   fSplitTS(OfferItem.EndStamp,
+   Func.Common:mSplitTS(OfferItem.EndStamp,
             OUTPUT ldtToDate,
             OUTPUT liTime).
 
@@ -739,8 +737,8 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       ASSIGN
-         lcBegin = fTS2HMS(OfferItem.BeginStamp)
-         lcEnd   = fTS2HMS(OfferItem.EndStamp).
+         lcBegin = Func.Common:mTS2HMS(OfferItem.BeginStamp)
+         lcEnd   = Func.Common:mTS2HMS(OfferItem.EndStamp).
      
       fItemType(OfferItem.ItemType).
          

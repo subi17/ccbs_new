@@ -12,7 +12,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Mc/offer.i}
 {Func/dms.i}
 {Func/q25functions.i}
@@ -1685,12 +1684,12 @@ END.
 /*Main functionality*/
 OUTPUT STREAM sLogFile TO VALUE(icLogFile) APPEND.
 
-ldCurrentTime = fMakeTS().
+ldCurrentTime = Func.Common:mMakeTS().
 
-fLogLine("","DMS Casefile creation starts " + fTS2HMS(ldCurrentTime)).
+fLogLine("","DMS Casefile creation starts " + Func.Common:mTS2HMS(ldCurrentTime)).
 fLogLine("", "Collection period: " + 
-         STRING(idPeriodStart) + " " + fTS2HMS(idPeriodStart) + " - " + 
-         STRING(idPeriodEnd) + " " + fTS2HMS(idPeriodEnd) ).
+         STRING(idPeriodStart) + " " + Func.Common:mTS2HMS(idPeriodStart) + " - " + 
+         STRING(idPeriodEnd) + " " + Func.Common:mTS2HMS(idPeriodEnd) ).
 
 /* Create temp table to ensure that multiple order changes 
    do not produce extra documents. Only 1 doc/order is provided. */
@@ -1700,6 +1699,6 @@ DO liCaseCount = 1 TO NUM-ENTRIES(icCases):
    lcStatus = fCreateDocumentRows(ENTRY(liCaseCount,icCases)).
 END.
 
-ldCurrentTime = fMakeTS().
-fLogLine("","DMS Casefile creation ends " + fTS2HMS(ldCurrentTime)).
+ldCurrentTime = Func.Common:mMakeTS().
+fLogLine("","DMS Casefile creation ends " + Func.Common:mTS2HMS(ldCurrentTime)).
 OUTPUT STREAM sLogFile CLOSE.

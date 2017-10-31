@@ -436,8 +436,7 @@ BROWSE:
                     OrderCustomer.RowType = Order.UserRole:
 
               lcOtherData = lcOtherData + " User: " + 
-                            DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                             BUFFER OrderCustomer) +
+                            Func.Common:mDispOrderName(BUFFER OrderCustomer) +
                            (IF OrderCustomer.BirthDay NE ?
                             THEN STRING(OrderCustomer.BirthDay,"99.99.9999")
                             ELSE "").

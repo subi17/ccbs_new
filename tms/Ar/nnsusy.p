@@ -93,7 +93,6 @@
   ------------------------------------------------------------------*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Func/fapvat.i}
 {Func/faccper.i}
@@ -357,7 +356,7 @@ FUNCTION fCreateOptrans RETURNS LOGICAL
      iAmount AS DEC).
 
    CREATE OPLog.
-   ASSIGN OPLog.CreStamp    = fMakeTS()
+   ASSIGN OPLog.CreStamp    = Func.Common:mMakeTS()
           OPLog.CustNum     = Invoice.CustNum
           OPLog.EventDate   = kirjpvm
           OPLog.UserCode    = katun
@@ -1351,7 +1350,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                /* Get the voucher no. */
                lastvou = Payment.Voucher.
 
-               Payment.ImportStamp = fMakeTS().
+               Payment.ImportStamp = Func.Common:mMakeTS().
 
                /* credit loss posted */
                IF ldCLossAmt > 0 THEN Payment.PaymType = 1.

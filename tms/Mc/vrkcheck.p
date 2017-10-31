@@ -7,7 +7,7 @@
   CHANGED ......: 11.05.04 tk use table VRKQuery
                   18.05.04 tk put order on hold if deathday ne ?
                   30.06.04 tk chkerr only for invalid personid
-                  13.07.04 tk fmakets
+                  13.07.04 tk Func.Common:mMakeTS
                   04.08.04/aam write errors to log 
                   05.08.04/aam if response error is 070 -> mark status as 2
                   21.02.06/aam actual query routine to vrkcheck.i,
@@ -19,7 +19,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/vrkcheck.i}
 {Func/orderfunc.i}
@@ -44,7 +43,7 @@ FIND FIRST OrderCustomer OF Order WHERE
 IF NOT AVAILABLE OrderCustomer THEN RETURN "ERROR:Customer not available".
  
    
-ldStamp = fHMS2TS(TODAY - 1,STRING(TIME,"hh:mm:ss")).
+ldStamp = Func.Common:mHMS2TS(TODAY - 1,STRING(TIME,"hh:mm:ss")).
    
 FIND FIRST VRKQuery NO-LOCK WHERE 
            VRKQuery.PersonId = OrderCustomer.CustID AND
@@ -65,8 +64,7 @@ IF NOT AVAIL VRKQuery THEN DO:
           /* Mark timestamp as change */
           fMarkOrderStamp(Order.OrderID,"Change",0.0).
           
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                     "Order",
+          Func.Common:mWriteMemo("Order",
                      STRING(Order.OrderId),
                      0,
                      "VRK Failed",
@@ -91,8 +89,7 @@ IF VRKQuery.DeathDay NE ? THEN DO:
    /* Mark timestamp as close */
    fMarkOrderStamp(Order.OrderID,"Close",0.0).
 
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-              "Order",
+   Func.Common:mWriteMemo("Order",
               STRING(Order.OrderId),
               0,
               "VRK",

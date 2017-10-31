@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{Func/timestamp.i}
 {Func/barrfunc.i}
 
 def buffer MsRequest2 for MsRequest.
@@ -16,7 +15,7 @@ DEFINE VARIABLE lcBarrComList AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcBarrStatus AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE ldeTime AS DECIMAL NO-UNDO.
 
-ldeTime = fMakeTS().
+ldeTime = Func.Common:mMakeTS().
 
 FOR EACH mobsub where
    mobsub.brand  = gcBrand and
@@ -27,7 +26,7 @@ FOR EACH mobsub where
 /*   if i mod 750 = 0 then do:
       j = j + 1.
 */
-      ldeTime = fSecOffSet(fMakeTS(), 5 * i).
+      ldeTime = Func.Common:mSecOffSet(Func.Common:mMakeTS(), 5 * i).
 /*   end. */
 /*   lcBarring = fCheckStatus(MobSub.MsSeq). */
    run checkmsbarring(mobsub.msseq,
@@ -62,7 +61,7 @@ FOR EACH mobsub where
       mobsub.msseq " " 
       mobsub.cli " " 
       lcBarrStatus " "
-      fts2hms(ldeTime) " " 
+      Func.Common:mTS2HMS(ldeTime) " " 
       lcError skip.
    
 END.

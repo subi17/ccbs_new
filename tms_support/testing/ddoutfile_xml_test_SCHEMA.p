@@ -14,16 +14,13 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 {Func/transname.i}
-{Func/fhdrtext.i}
 {Inv/ddoutfilett.i}
 {Func/customer_address.i}
 {Syst/funcrunprocess_update.i}
 {Func/fbankdata.i}
-{Func/func.p}
 {Func/fsepa.i}
 
 /* invoices TO be printed */
@@ -300,7 +297,7 @@ PROCEDURE pInitXML:
    ASSIGN
       ldaPmtDate = TODAY
       liPmtTime = TIME
-      lcHeaderTimeStamp = fISOTimeZone(ldaPmtDate,liPmtTime).
+      lcHeaderTimeStamp = Func.Common:mISOTimeZone(ldaPmtDate,liPmtTime).
 
    IF INT(SUBSTRING(BankAccount.BankAccount,5,4)) > 0 THEN
       lcCompBIC = BankAccount.BIC.
@@ -557,7 +554,7 @@ PROCEDURE pCollectData2XML:
       ttDDItem.MandateId = Invoice.MandateID
       ttDDItem.MandateDATE = ldaMandateDate
       ttDDItem.MandateFlag = llMandateFlag
-      ttDDItem.CustNm = SUBSTRING(CAPS(fCheckSEPASpecialChar(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER Customer))),1,70)
+      ttDDItem.CustNm = SUBSTRING(CAPS(fCheckSEPASpecialChar(Func.Common:mPrintCustName(BUFFER Customer))),1,70)
       ttDDItem.CustAdd = SUBSTRING(CAPS(fCheckSEPASpecialChar(Customer.Address)),1,70)
       ttDDItem.CustZip = SUBSTRING(Customer.ZipCode + " " + CAPS(fCheckSEPASpecialChar(Customer.PostOffice)),1,70)
       ttDDItem.CustIBAN = Invoice.DDBankAcc
@@ -796,7 +793,7 @@ PROCEDURE pLogErrors:
    END.
 
    IF CAN-FIND(FIRST ttError) THEN DO:
-      ldCurrStamp = fMakeTS().
+      ldCurrStamp = Func.Common:mMakeTS().
                            
       OUTPUT STREAM slog TO VALUE(lcErrFile).
       PUT STREAM slog UNFORMATTED

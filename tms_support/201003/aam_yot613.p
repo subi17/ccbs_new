@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
 katun = "YOT-612".
-{Func/timestamp.i}
 
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -60,7 +59,7 @@ repeat:
              Memo.MemoTitle = "Información del cliente modificada"
              Memo.MemoText  = "Correos nos devuelve la carta. " + 
                               "Inhabilitamos el envío de la misma". 
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
 
       j = j + 1.
    end.

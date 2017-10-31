@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
 {Func/msreqfunc.i}
@@ -71,13 +70,13 @@ IF NOT AVAILABLE MobSub THEN DO:
    RETURN "ERROR:Subscription not available".
 END. /* IF NOT AVAILABLE MobSub THEN DO: */
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldaActivationDate,
          OUTPUT liActivationTime).
 
 IF liActivationTime > 0 THEN 
-   ldEndStamp = fMake2DT(ldaActivationDate,liActivationTime - 1).
-ELSE ldEndStamp = fMake2DT(ldaActivationDate - 1,86399).
+   ldEndStamp = Func.Common:mMake2DT(ldaActivationDate,liActivationTime - 1).
+ELSE ldEndStamp = Func.Common:mMake2DT(ldaActivationDate - 1,86399).
 
 CASE liOrigStatus:
 WHEN {&REQUEST_STATUS_NEW} THEN DO:
@@ -269,8 +268,7 @@ PROCEDURE pFinalize:
                         MsRequest.ReqCParam2,
                         OUTPUT lcError).
       IF lcError NE "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Bundle type change",
@@ -405,7 +403,7 @@ PROCEDURE pMultiSimBTC:
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.Brand        = gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
@@ -473,11 +471,11 @@ PROCEDURE pActivateDSS2:
 
    /* end old bundles to the end of previous month */
    IF DAY(idActDate) = 1 THEN
-      ASSIGN ldeEndStamp = fMake2DT(idActDate - 1,86399)
+      ASSIGN ldeEndStamp = Func.Common:mMake2DT(idActDate - 1,86399)
              ldEndDate   = (idActDate - 1).
    ELSE
-      ASSIGN ldEndDate   = fLastDayOfMonth(idActDate)
-             ldeEndStamp = fMake2DT(ldEndDate,86399).
+      ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(idActDate)
+             ldeEndStamp = Func.Common:mMake2DT(ldEndDate,86399).
 
    /* If ongoing DSS termination request then return */
    IF fOngoingDSSTerm(INPUT MobSub.CustNum,
@@ -508,8 +506,7 @@ PROCEDURE pActivateDSS2:
                                  OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MobSub.MsSeq),
                              MobSub.Custnum,
                              "DSS2 activation failed",
@@ -564,8 +561,7 @@ PROCEDURE pCloseContracts:
                                    "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MsRequest.MsSeq),
                           MsRequest.CustNum,
                           "Bundle type change",
@@ -619,8 +615,7 @@ PROCEDURE pCloseContracts:
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(Mobsub.MsSeq),
                           Mobsub.CustNum,
                           "Periodical Contract",
@@ -646,8 +641,7 @@ PROCEDURE pCloseContracts:
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Periodical Contract",
@@ -675,7 +669,7 @@ PROCEDURE pUpdateSubscription:
    
       CREATE bOwner.
       BUFFER-COPY MsOwner EXCEPT TsBegin TsEnd CLIEvent TO bOwner.
-      ASSIGN bOwner.TsBegin      = fSecOffSet(MsOwner.TsEnd,1)
+      ASSIGN bOwner.TsBegin      = Func.Common:mSecOffSet(MsOwner.TsEnd,1)
              bOwner.TsEnd        = 99999999.99999
              bOwner.TariffBundle = MsRequest.ReqCParam2.
 

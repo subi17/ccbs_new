@@ -588,8 +588,7 @@ PROCEDURE local-UPDATE-record:
          WITH FRAME lis.
 
          IF Country.FraudGroup NE "" AND
-            NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                 "Country",
+            NOT Func.Common:mTMSCodeChk("Country",
                                  "FraudGroup",
                                  Country.FraudGroup)
          THEN DO:

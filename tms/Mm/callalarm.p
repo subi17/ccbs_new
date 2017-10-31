@@ -14,9 +14,7 @@
                   17.03.04 tk assign input parameters in create
                   16.12.05 aam username removed,
                                better find-routines
-                  24.01.06 jt  DYNAMIC-FUNCTION("fDispCustName"
                   30.01.06 jp previous never tested
-                  13.02.06 aam use fTMSCodeName
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
@@ -27,7 +25,6 @@ DEF  INPUT PARAMETER    icCli     AS CHAR No-UNDO.
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
     {Func/lib/eventlog.i}
@@ -193,7 +190,7 @@ REPEAT WITH FRAME sel:
            CallAlarm.CAseq = NEXT-VALUE(CallAlarm)
            CallAlarm.Brand = lcBrand              .
            ASSIGN
-           CallAlarm.ActStamp = fMakeTS().
+           CallAlarm.ActStamp = Func.Common:mMakeTS().
            RUN local-UPDATE-record.
 
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 THEN
@@ -782,8 +779,7 @@ PROCEDURE local-find-others.
    Find Customer where Customer.CustNum = CallAlarm.CustNO NO-LOCK NO-ERROR.
        
    IF avail Customer then
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                      BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    ELSE lcCustName = "".
 
    Find Mobsub WHERE
@@ -797,13 +793,11 @@ PROCEDURE local-find-others.
    stname = entry(CallAlarm.DeliStat, stnames).
 
 
-   lcDeliType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "CallLimit",
+   lcDeliType = Func.Common:mTMSCodeName("CallLimit",
                                  "DeliType",
                                  STRING(CallAlarm.DeliType)).
 
-   lcCreditName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "CallAlarm",
+   lcCreditName = Func.Common:mTMSCodeName("CallAlarm",
                                    "CreditType",
                                    STRING(CallAlarm.CreditType)).
 
@@ -820,8 +814,8 @@ PROCEDURE local-disp-lis:
       lcDeliType
       CallAlarm.DeliStat
       stname
-      fTs2hms(CallAlarm.actstamp) @ realtime
-      fTs2hms(CallAlarm.delistamp) @ deliverytime
+      Func.Common:mTS2HMS(CallAlarm.actstamp) @ realtime
+      Func.Common:mTS2HMS(CallAlarm.delistamp) @ deliverytime
       CallAlarm.Limit      
       lcCustName when avail customer
       lcmsg
@@ -849,8 +843,8 @@ PROCEDURE local-update-record:
       lcDeliType
       CallAlarm.DeliStat
       stname
-      fTs2hms(CallAlarm.actstamp) @ realtime
-      fTs2hms(CallAlarm.delistamp) @ deliverytime
+      Func.Common:mTS2HMS(CallAlarm.actstamp) @ realtime
+      Func.Common:mTS2HMS(CallAlarm.delistamp) @ deliverytime
       CallAlarm.Limit      
       lcCustName
 
@@ -906,7 +900,7 @@ PROCEDURE local-update-record:
                    END.
                    
                    IF Avail Customer THEN 
-                   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,                                                   BUFFER Customer).
+                   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                    
                    DISP lcCustName @ lcCustName WITH FRAME lis.
                 END.
@@ -943,8 +937,7 @@ PROCEDURE local-update-record:
                    END.
 
                    lcDeliType = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "CallLimit",
+                      Func.Common:mTMSCodeName("CallLimit",
                                        "DeliType",
                                        STRING(INPUT CallAlarm.DeliType)).
                    pause 0.
@@ -963,8 +956,7 @@ PROCEDURE local-update-record:
                    END.
 
                    lcCreditName = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "CallAlarm",
+                      Func.Common:mTMSCodeName("CallAlarm",
                                        "CreditType",
                                        STRING(INPUT CallAlarm.CreditType)).
                    pause 0.

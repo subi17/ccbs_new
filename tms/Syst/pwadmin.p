@@ -12,7 +12,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE lcUsercode AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldPasswd AS CHARACTER NO-UNDO.
@@ -145,7 +144,7 @@ REPEAT:
          IF llChange THEN DO TRANS:
             FIND CURRENT tmspass EXCLUSIVE-LOCK.
             ASSIGN
-               tmspass.createts = fMakeTS()
+               tmspass.createts = Func.Common:mMakeTS()
                tmspass.creator  = katun
                tmspass.password = lcNewPasswd1.
             RELEASE tmspass. 

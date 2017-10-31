@@ -10,7 +10,6 @@
 {Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF VAR lcResult  AS CHAR NO-UNDO.
@@ -37,7 +36,7 @@ FOR EACH MobSub NO-LOCK WHERE
                         "Prod_TotalPremium_Off=0",
                         {&REQUEST_SOURCE_SCRIPT}, /* source  */
                         "", /* creator */
-                        fMakeTS(), /* activate */
+                        Func.Common:mMakeTS(), /* activate */
                         "", /* SMS */
                         OUTPUT lcResult).
 END.

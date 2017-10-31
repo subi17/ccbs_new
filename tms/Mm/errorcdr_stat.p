@@ -10,7 +10,6 @@
 &GLOBAL-DEFINE TraceLog NO
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/coinv.i}

@@ -11,11 +11,9 @@
                   12.03.03 tk SerNum and BillTarg added
                   16.04.03 kl INT(xCLIFrom) => DEC(xCLIFrom)
                   13.01.06/aam BTName removed
-                  24.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
   Version ......: M15
  --------------------------------------------------------------------------- */
 
-{Func/timestamp.i}
 {Syst/commali.i}
 {Func/cparam2.i}
 
@@ -106,8 +104,8 @@ PROCEDURE pUpdateCLI:
         RECID(CLI) = pRecId
    EXCLUSIVE-LOCK NO-ERROR.
 
-   fSplitTS(INPUT CLI.crStamp, OUTPUT lDate1, OUTPUT lTime1).
-   fSplitTS(INPUT CLI.clStamp, OUTPUT lDate2, OUTPUT lTime2).
+   Func.Common:mSplitTS(INPUT CLI.crStamp, OUTPUT lDate1, OUTPUT lTime1).
+   Func.Common:mSplitTS(INPUT CLI.clStamp, OUTPUT lDate2, OUTPUT lTime2).
 
    ASSIGN
       lOName  = CLI.Owner
@@ -134,7 +132,7 @@ PROCEDURE pUpdateCLI:
          IF KEYLABEL(LASTKEY) = "F4" THEN UNDO LOOP,LEAVE LOOP.
          IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
             IF FRAME-FIELD = "lCTime1" THEN DO:
-               IF NOT fCheckTime(INPUT FRAME frmUpdCli lCTime1) THEN DO:
+               IF NOT Func.Common:mCheckTime(INPUT FRAME frmUpdCli lCTime1) THEN DO:
                   MESSAGE 
                      "Invalid time: " + INPUT FRAME frmUpdCli lCTime1 
                   VIEW-AS ALERT-BOX error.
@@ -143,7 +141,7 @@ PROCEDURE pUpdateCLI:
                END.
             END.
             ELSE IF FRAME-FIELD = "lCTime2" THEN DO:
-               IF NOT fCheckTime(INPUT FRAME frmUpdCli lCTime2) THEN DO:
+               IF NOT Func.Common:mCheckTime(INPUT FRAME frmUpdCli lCTime2) THEN DO:
                   MESSAGE 
                      "Invalid time: " + INPUT FRAME frmUpdCli lCTime2 
                   VIEW-AS ALERT-BOX error.
@@ -171,7 +169,7 @@ PROCEDURE pUpdateCLI:
          /* add new record */
          IF ok = TRUE THEN DO:
 
-            IF CLI.crStamp = fHMS2TS(lDate1,lCTime1) THEN DO:
+            IF CLI.crStamp = Func.Common:mHMS2TS(lDate1,lCTime1) THEN DO:
                MESSAGE
                   "You can't use same validation period for new record !"
                VIEW-AS ALERT-BOX.
@@ -208,10 +206,10 @@ PROCEDURE pUpdateCLI:
             TO ttCLI. 
 
             ttCLI.Owner = lOName.
-            ttCLI.crStamp  = fHMS2TS(lDate1,lCTime1).
-            ttCLI.clStamp  = fHMS2TS(lDate2,lCTime2).
+            ttCLI.crStamp  = Func.Common:mHMS2TS(lDate1,lCTime1).
+            ttCLI.clStamp  = Func.Common:mHMS2TS(lDate2,lCTime2).
 
-            fSplitTS(ttCLI.crStamp, OUTPUT lPrevDate, OUTPUT lPrevTime).
+            Func.Common:mSplitTS(ttCLI.crStamp, OUTPUT lPrevDate, OUTPUT lPrevTime).
 
             IF lPrevTime = 0 THEN ASSIGN
                lPrevDate = lPrevDate - 1
@@ -219,7 +217,7 @@ PROCEDURE pUpdateCLI:
             ELSE ASSIGN 
                lPrevTime = lPrevTime - 1.
 
-            CLI.clStamp = fHMS2TS(lPrevDate,string(lPrevTime,"hh:mm:ss")).
+            CLI.clStamp = Func.Common:mHMS2TS(lPrevDate,string(lPrevTime,"hh:mm:ss")).
 
             CREATE bufatno.
             BUFFER-COPY ttCLI TO bufatno.
@@ -236,7 +234,7 @@ PROCEDURE pUpdateCLI:
          END.
          /* update current record */
          ELSE IF ok = FALSE THEN DO:
-            lClStamp = fHMS2TS(lDate2,lCTime2).
+            lClStamp = Func.Common:mHMS2TS(lDate2,lCTime2).
 
             FIND FIRST bufatno WHERE
                        bufatno.CLI   = CLI.CLI  AND
@@ -262,7 +260,7 @@ PROCEDURE pUpdateCLI:
 
 
             CLI.Owner = lOName.
-            CLI.clStamp  = fHMS2TS(lDate2,lCTime2).
+            CLI.clStamp  = Func.Common:mHMS2TS(lDate2,lCTime2).
          END.
          /* cancel updating */
          ELSE LEAVE LOOP.
@@ -328,11 +326,10 @@ PROCEDURE pDelSeries:
               Customer.CustNum = CLISer.CustNum
    NO-LOCK NO-ERROR.
    
-   lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+   lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
    IF lDel = 3 THEN DO: 
 
-      fSplitTS(INPUT fMakeTS(), OUTPUT lDate2, OUTPUT lTime2).   
+      Func.Common:mSplitTS(INPUT Func.Common:mMakeTS(), OUTPUT lDate2, OUTPUT lTime2).   
 
       ASSIGN   
          lCTime2 = string(lTime2,"hh:mm:ss")   
@@ -357,7 +354,7 @@ PROCEDURE pDelSeries:
             LEAVE.
          END.
          IF FRAME-FIELD = "lCTime2" THEN DO:  
-            IF NOT fCheckTime(INPUT FRAME frmUpdCLI lCTime2) THEN DO:  
+            IF NOT Func.Common:mCheckTime(INPUT FRAME frmUpdCLI lCTime2) THEN DO:  
                MESSAGE   
                   "Invalid time: " + INPUT FRAME frmUpdCLI lCTime2   
                VIEW-AS ALERT-BOX error. 
@@ -368,7 +365,7 @@ PROCEDURE pDelSeries:
          APPLY LASTKEY. 
       END.
 
-      lCLStamp = fHMS2TS(lDate2,lCTime2).  
+      lCLStamp = Func.Common:mHMS2TS(lDate2,lCTime2).  
 
    END. 
 
@@ -437,8 +434,8 @@ PROCEDURE pAddSeries:
       lCRStamp = DEC(fCParamC("DefCRStamp"))
       lCLStamp = DEC(fCParamC("DefCLStamp")).
 
-   fSplitTS(INPUT lCRStamp, OUTPUT lDate1, OUTPUT lTime1). 
-   fSplitTS(INPUT lCLStamp, OUTPUT lDate2, OUTPUT lTime2).  
+   Func.Common:mSplitTS(INPUT lCRStamp, OUTPUT lDate1, OUTPUT lTime1). 
+   Func.Common:mSplitTS(INPUT lCLStamp, OUTPUT lDate2, OUTPUT lTime2).  
 
    ASSIGN  
       lCTime1 = string(lTime1,"hh:mm:ss")  
@@ -456,8 +453,7 @@ PROCEDURE pAddSeries:
       FIND FIRST Customer WHERE
                  Customer.CustNum = xCustNum
       NO-LOCK NO-ERROR.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       DISP
          xCustNum
          lcCustName
@@ -528,8 +524,7 @@ PROCEDURE pAddSeries:
                      VIEW-AS ALERT-BOX.
                      NEXT.
                   END.
-                  lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                 BUFFER Customer).
+                  lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
                   
                   DISPLAY lcCustName WITH FRAME frmAddSeries.
@@ -635,7 +630,7 @@ PROCEDURE pAddSeries:
             END. /* xCLITo */ 
 
             IF FRAME-FIELD = "lCTime1" THEN DO: 
-               IF NOT fCheckTime(INPUT FRAME frmAddSeries lCTime1) THEN DO: 
+               IF NOT Func.Common:mCheckTime(INPUT FRAME frmAddSeries lCTime1) THEN DO: 
                   MESSAGE  
                      "Invalid time: " + INPUT FRAME frmAddSeries lCTime1  
                   VIEW-AS ALERT-BOX error. 
@@ -644,7 +639,7 @@ PROCEDURE pAddSeries:
                END.
             END.    
             ELSE IF FRAME-FIELD = "lCTime2" THEN DO: 
-               IF NOT fCheckTime(INPUT FRAME frmAddSeries lCTime2) THEN DO: 
+               IF NOT Func.Common:mCheckTime(INPUT FRAME frmAddSeries lCTime2) THEN DO: 
                   MESSAGE  
                      "Invalid time: " + INPUT FRAME frmAddSeries lCTime2  
                   VIEW-AS ALERT-BOX error. 
@@ -653,8 +648,8 @@ PROCEDURE pAddSeries:
                END.
 
                ASSIGN
-                  lCRStamp = fHMS2TS(lDate1,lCTime1)
-                  lCLStamp = fHMS2TS(lDate2,lCTime2). 
+                  lCRStamp = Func.Common:mHMS2TS(lDate1,lCTime1)
+                  lCLStamp = Func.Common:mHMS2TS(lDate2,lCTime2). 
 
                RUN Mf/nnatmu.p 
                  (INPUT  0,

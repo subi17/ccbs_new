@@ -99,14 +99,14 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 ldeActStamp = MsRequest.ActStamp.
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldtActDate,
          OUTPUT liActTime).
 
 IF liActTime > 0 THEN 
-   ldEndStamp = fMake2DT(ldtActDate,liActTime - 1).
+   ldEndStamp = Func.Common:mMake2DT(ldtActDate,liActTime - 1).
 ELSE
-   ldEndStamp = fMake2DT(ldtActDate - 1,86399).
+   ldEndStamp = Func.Common:mMake2DT(ldtActDate - 1,86399).
 
 IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
    FIND FIRST Order NO-LOCK WHERE
@@ -123,8 +123,8 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
       IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */
-         ASSIGN ldaNextMonthActDate  = (fLastDayOfMonth(ldtActDate) + 1)
-                ldNextMonthActStamp  = fMake2Dt(ldaNextMonthActDate,0).
+         ASSIGN ldaNextMonthActDate  = (Func.Common:mLastDayOfMonth(ldtActDate) + 1)
+                ldNextMonthActStamp  = Func.Common:mMake2DT(ldaNextMonthActDate,0).
          FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
          IF AVAIL MsRequest THEN DO:
             ASSIGN MsRequest.ActStamp   = ldNextMonthActStamp
@@ -256,7 +256,7 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
       fAdditionalLineSTC(MsRequest.Msrequest,
-                        fMake2Dt(ldtActDate + 1,0),
+                        Func.Common:mMake2DT(ldtActDate + 1,0),
                         "STC_FINAL").
 
    /* Remove additional line termination request when correct STC done */
@@ -618,7 +618,7 @@ PROCEDURE pUpdateSubscription:
       llUpdateMandate = TRUE.
    ELSE IF CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID} AND
       bOldType.Paytype = {&CLITYPE_PAYTYPE_PREPAID} THEN DO:
-      fSplitTS(MsRequest.CreStamp, OUTPUT ldaMandateDate, OUTPUT liManTime).
+      Func.Common:mSplitTS(MsRequest.CreStamp, OUTPUT ldaMandateDate, OUTPUT liManTime).
       fCalculateMandate(MobSub.MsSeq,
                         ldaMandateDate,
                         MsRequest.CustNum, 
@@ -647,7 +647,7 @@ PROCEDURE pUpdateSubscription:
       one starting from change time */
    ASSIGN 
       ldBegStamp = MsRequest.ActStamp
-      ldEndStamp = fSecOffSet(ldBegStamp,-1)
+      ldEndStamp = Func.Common:mSecOffSet(ldBegStamp,-1)
       lcFixedNumber = ?.
    
    IF MsRequest.ReqIParam2 > 0 THEN
@@ -677,7 +677,7 @@ PROCEDURE pUpdateSubscription:
       ldaNewBeginDate = TODAY
       liChangeTime    = TIME.   
 
-   ldeNewBeginTs = fMake2Dt(ldaNewBeginDate, liChangeTime).
+   ldeNewBeginTs = Func.Common:mMake2DT(ldaNewBeginDate, liChangeTime).
    
    FOR EACH MSOwner WHERE 
             MSOwner.MsSeq  = Mobsub.MsSeq    AND
@@ -695,14 +695,14 @@ PROCEDURE pUpdateSubscription:
          DO WHILE TRUE:
             IF NOT CAN-FIND(FIRST bOwner WHERE
                        bOwner.CLI = MSOwner.CLI AND
-                       bOwner.TSEnd = fSecOffSet(ldeNewBeginTs, liSecs))
+                       bOwner.TSEnd = Func.Common:mSecOffSet(ldeNewBeginTs, liSecs))
                THEN LEAVE.
             liSecs = liSecs - 1.
          END.
          
          ASSIGN
             ldeOrigTsEnd = MSOwner.TsEnd
-            MSOwner.TsEnd = fSecOffSet(ldeNewBeginTs, liSecs).
+            MSOwner.TsEnd = Func.Common:mSecOffSet(ldeNewBeginTs, liSecs).
          
          CREATE bOwner.
          BUFFER-COPY MsOwner EXCEPT TsBegin TsEnd CLIEvent TO bOwner.
@@ -827,8 +827,7 @@ PROCEDURE pUpdateSubscription:
             fCloseExtraLineDiscount(lELMobSub.MsSeq,
                                     lbDiscountPlan.DPRuleID,
                                     TODAY).
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                               STRING(lbDPMember.KeyValue),
                               0,
                              "ExtraLine Discount is Closed",
@@ -958,7 +957,7 @@ PROCEDURE pUpdateSubscription:
          fCloseAddLineDiscount(bMobSub.CustNum,
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
-                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN fLastDayOfMonth(TODAY)
+                               IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN Func.Common:mLastDayOfMonth(TODAY)
                                ELSE ldtActDate - 1).
       END.
    END.
@@ -994,7 +993,7 @@ PROCEDURE pUpdateSubscription:
          /* Additional Line with mobile only ALFMO-5 */
          IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) AND 
             YEAR(bMobSub.ActivationDate) = YEAR(TODAY) THEN
-            ASSIGN ldtCloseDate = fLastDayOfMonth(TODAY).
+            ASSIGN ldtCloseDate = Func.Common:mLastDayOfMonth(TODAY).
          ELSE IF MONTH(bMobSub.ActivationDate) < MONTH(TODAY) OR
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = ldtActDate - 1.
@@ -1050,11 +1049,11 @@ PROCEDURE pFinalize:
 
    ASSIGN
       ldBegStamp = MsOwner.TSBeg
-      ldEndStamp = fSecOffSet(MsOwner.TsBeg,-1)
+      ldEndStamp = Func.Common:mSecOffSet(MsOwner.TsBeg,-1)
       /* some time has already passed from subscription update */
-      ldeNow     = fMakeTS().
+      ldeNow     = Func.Common:mMakeTS().
          
-   fSplitTS(MsOwner.TsBeg,
+   Func.Common:mSplitTS(MsOwner.TsBeg,
             OUTPUT ldaNewBeginDate,
             OUTPUT liTime).
 
@@ -1167,8 +1166,7 @@ PROCEDURE pFinalize:
                                       FALSE,
                                       OUTPUT lcResult).
           IF liRequest = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.CustNum,
                        "ERROR:DEFAULT SHAPER request creation failed",
@@ -1203,8 +1201,7 @@ PROCEDURE pFinalize:
                      OUTPUT lcError).
                      
       IF lcError > "" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                     STRING(MobSub.MsSeq),
                     MobSub.CustNum,
                     "Subscription type change",
@@ -1231,8 +1228,7 @@ PROCEDURE pFinalize:
                            OUTPUT lcError).
 
          IF lcError NE "" THEN 
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MobSub.MsSeq),
                              MobSub.CustNum,
                              "Subscription type change",
@@ -1284,7 +1280,7 @@ PROCEDURE pFinalize:
                      "LANG",
                      Customer.Language,
                      "", /* param */
-                     fMakeTS(),
+                     Func.Common:mMakeTS(),
                      "", /* salesman */
                      TRUE,      /* fees */
                      FALSE,      /* sms */
@@ -1296,8 +1292,7 @@ PROCEDURE pFinalize:
       
       IF liRequest = 0 THEN                               
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "Voicemail language change failed",
@@ -1327,11 +1322,10 @@ PROCEDURE pFinalize:
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
-                            fMakeTS()).
+                            Func.Common:mMakeTS()).
 
          END.
-         ELSE DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-              "MobSub",
+         ELSE Func.Common:mWriteMemo("MobSub",
               STRING(MobSub.MsSeq),
               MobSub.Custnum,
               "Fusion order finalization failed",
@@ -1348,8 +1342,7 @@ PROCEDURE pFinalize:
       RUN pCONTM2BarringReset.
       /* write possible error to a memo */
       IF RETURN-VALUE BEGINS "ERROR" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "CONTM2 barring reset failed",
@@ -1361,14 +1354,13 @@ PROCEDURE pFinalize:
                       "Y_BPSUB=1",
                       {&REQUEST_SOURCE_STC},
                       katun,               /* creator */
-                      fSecOffSet(fMakeTS(),5),            /* activate */
+                      Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),            /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
       liRequest = 0.
       liRequest = INTEGER(lcError) NO-ERROR.
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "Y_BPSUB barring activation failed",
@@ -1572,9 +1564,9 @@ PROCEDURE pCloseContracts:
 
    /* end old bundles to the end of previous month */
    IF DAY(idaActDate) = 1 AND llOldPayType = FALSE THEN
-      idEndStamp = fMake2DT(idaActDate - 1,86399).
+      idEndStamp = Func.Common:mMake2DT(idaActDate - 1,86399).
 
-   ASSIGN ldeActStamp = fSecOffSet(idEndStamp,1)
+   ASSIGN ldeActStamp = Func.Common:mSecOffSet(idEndStamp,1)
           lcAllowedBONOSTCContracts = fCParamC("ALLOWED_BONO_STC_CONTRACTS")
           lcBONOContracts           = fCParamC("BONO_CONTRACTS")
           lcAllVoIPNativeBundles    = fCParamC("NATIVE_VOIP_BASE_BUNDLES").
@@ -1692,8 +1684,7 @@ PROCEDURE pCloseContracts:
                                         "",
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                        STRING(iiMsSeq),
                        MobSub.CustNum,
                        "Subscription type change",
@@ -1715,7 +1706,7 @@ PROCEDURE pCloseContracts:
                        "HSDPA",
                        1, /* on */
                        "",
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        "",
                        FALSE, /* fees */
                        FALSE, /* sms */
@@ -1726,8 +1717,7 @@ PROCEDURE pCloseContracts:
                        OUTPUT lcError).
 
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                     STRING(iiMsSeq),
                     MobSub.CustNum,
                     "Subscription type change",
@@ -1776,8 +1766,7 @@ PROCEDURE pCloseContracts:
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(Mobsub.MsSeq),
                           Mobsub.CustNum,
                           "Periodical Contract",
@@ -1803,8 +1792,7 @@ PROCEDURE pCloseContracts:
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Periodical Contract",
@@ -1836,8 +1824,7 @@ PROCEDURE pCloseContracts:
                                   FALSE,
                                   OUTPUT lcError).
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "VOIPVIDEO",
@@ -1923,7 +1910,7 @@ PROCEDURE pNetworkAction:
                 ErrorLog.TableName = "MsRequest"
                 ErrorLog.KeyValue = STRING(MsRequest.MsRequest)
                 ErrorLog.ActionID = "STCBalanceQuery"
-                ErrorLog.ActionTS = fMakeTS()
+                ErrorLog.ActionTS = Func.Common:mMakeTS()
                 ErrorLog.ErrorMsg = (IF RETURN-VALUE BEGINS "ERROR:" THEN
                                     ENTRY(2,RETURN-VALUE,":") ELSE RETURN-VALUE)
                 MsRequest.ReqIParam3 = 0.
@@ -1975,8 +1962,8 @@ PROCEDURE pUpdateDSSAccount:
 
    /* end old bundles to the end of previous tariff period */
    ASSIGN ldEndDate   = idActDate - 1
-          ldeEndStamp = fMake2DT(ldEndDate,86399)
-          ldeLastDayEndStamp = fMake2DT(fLastDayOfMonth(ldEndDate),86399).
+          ldeEndStamp = Func.Common:mMake2DT(ldEndDate,86399)
+          ldeLastDayEndStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldEndDate),86399).
 
    /* If ongoing DSS termination request in past then return */
    IF fOngoingDSSTerm(INPUT MobSub.CustNum,
@@ -2025,8 +2012,7 @@ PROCEDURE pUpdateDSSAccount:
                                        OUTPUT lcError).
                IF liRequest = 0 THEN
                   /* write possible error to a memo */
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                                    STRING(MobSub.MsSeq),
                                    MobSub.Custnum,
                                    "DSS2 activation failed in STC",
@@ -2074,7 +2060,7 @@ PROCEDURE pUpdateDSSAccount:
                             LOOKUP(STRING(bTerMsRequest.ReqStatus),
                                    {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
                   IF NOT AVAIL bTerMsRequest OR
-                     bTerMsRequest.ActStamp > fMakeTS() THEN DO:
+                     bTerMsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
                      RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                            INPUT Mobsub.CLI,
                                            INPUT Mobsub.CustNum,
@@ -2142,8 +2128,7 @@ PROCEDURE pUpdateDSSAccount:
                                   OUTPUT lcError) THEN DO:
                      llDSSTransferred = TRUE.
 
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                              "Customer",
+                     Func.Common:mWriteMemo("Customer",
                               STRING(Mobsub.CustNum),
                               MobSub.CustNum,
                               "DSS Bundle/UPSELL",
@@ -2152,8 +2137,7 @@ PROCEDURE pUpdateDSSAccount:
                               STRING(liDSSMsSeq)).
                   END. /* IF fTransferDSS(INPUT MobSub.MsSeq,INPUT liDSSMsSeq, */
                   ELSE
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Customer",
+                     Func.Common:mWriteMemo("Customer",
                                 STRING(Mobsub.CustNum),
                                 MobSub.CustNum,
                                 "DSS Bundle/UPSELL Transfer Failed",
@@ -2313,7 +2297,7 @@ PROCEDURE pUpdateDSSAccount:
                       LOOKUP(STRING(bTerMsRequest.ReqStatus),
                              {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
             IF NOT AVAIL bTerMsRequest OR
-               bTerMsRequest.ActStamp > fMakeTS() THEN DO:
+               bTerMsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
                RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                      INPUT Mobsub.CLI,
                                      INPUT Mobsub.CustNum,
@@ -2399,7 +2383,7 @@ PROCEDURE pMultiSimSTC:
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.Brand        = gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
@@ -2500,7 +2484,7 @@ PROCEDURE pCONTM2BarringReset:
                       "#REFRESH",
                       {&REQUEST_SOURCE_STC},
                       katun,               /* creator */
-                      fSecOffSet(fMakeTS(),2),            /* activate */
+                      Func.Common:mSecOffSet(Func.Common:mMakeTS(),2),            /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
       liRequest = 0.
@@ -2514,7 +2498,7 @@ PROCEDURE pCONTM2BarringReset:
                        (IF CLIType.CLIType EQ "CONTM2"
                         THEN "0110000"
                         ELSE "0000000"),
-                       fSecOffSet(fMakeTS(),5),
+                       Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),
                        "",
                        FALSE, /* fees */
                        FALSE, /* sms */
@@ -2532,7 +2516,7 @@ PROCEDURE pCONTM2BarringReset:
                          "Y_BPSUB=1",
                          {&REQUEST_SOURCE_STC},
                          katun,               /* creator */
-                         fSecOffSet(fMakeTS(),6),            /* activate */
+                         Func.Common:mSecOffSet(Func.Common:mMakeTS(),6),            /* activate */
                          "",                  /* sms */
                          OUTPUT lcError).
          liRequest = 0.

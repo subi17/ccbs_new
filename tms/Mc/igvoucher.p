@@ -8,7 +8,6 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -91,8 +90,7 @@ form /* seek  IGVoucher */
 FUNCTION fTypeName RETURNS CHARACTER
    (iiPaymType AS INT):
 
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "Payment",
+   RETURN Func.Common:mTMSCodeName("Payment",
                            "PaymType",
                            STRING(iiPaymType)).
    

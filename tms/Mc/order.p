@@ -110,7 +110,6 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Order'}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/finvtxt.i}
 {Func/fcustdata.i}
 {Func/fctchange.i}
@@ -118,7 +117,6 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 {Func/msisdn.i}
 {Func/forderstamp.i}
 {Func/fcontrolupd.i}
-{Func/ftmscode.i}
 {Func/transname.i}
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
@@ -575,8 +573,7 @@ FUNCTION fCheckCustomerData RETURNS LOGICAL
    END.
       
    IF bChkCustomer.CustTitle > "" AND 
-      NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                           "Customer",
+      NOT Func.Common:mTMSCodeChk("Customer",
                            "Title",
                             bChkCustomer.CustTitle)
    THEN DO:                              
@@ -885,13 +882,13 @@ BROWSE:
            IF icStatus = "" THEN DO:
               FIND LAST Order WHERE 
                         Order.Brand =  lcBrand  AND
-                        Order.CrStamp >= fHMS2TS(lDate,"00:00:00")
+                        Order.CrStamp >= Func.Common:mHMS2TS(lDate,"00:00:00")
               USE-INDEX Stamp NO-LOCK NO-ERROR.
            END.
            ELSE              
            FIND LAST Order WHERE
                      Order.Brand      =  lcBrand  AND
-                     Order.CrStamp   >= fHMS2TS(lDate,"00:00:00") AND 
+                     Order.CrStamp   >= Func.Common:mHMS2TS(lDate,"00:00:00") AND 
                      order.StatusCode = icStatus
            USE-INDEX StatusCode NO-LOCK NO-ERROR.
 
@@ -1287,8 +1284,7 @@ PROCEDURE pOrderView:
            liMultiSimOrder = lbOrder.OrderId.
         ELSE liMultiSimOrder = 0.
       
-        lcMultiSIMType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "Order",
+        lcMultiSIMType = Func.Common:mTMSCodeName("Order",
                                         "MultiSimType",
                                         STRING(Order.MultiSimType)).
         
@@ -1652,7 +1648,7 @@ END.
 
 PROCEDURE local-find-others-common.
 
-   ASSIGN lcStamp = fTS2HMS(Order.CrStamp)
+   ASSIGN lcStamp = Func.Common:mTS2HMS(Order.CrStamp)
           lcStatus = fStatusText(Order.StatusCode).
    FIND FIRST OrderCustomer OF Order WHERE
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
@@ -1728,8 +1724,7 @@ PROCEDURE local-find-others.
          IF OrderCustomer.CustNum > 0 THEN 
             FIND AgrCust WHERE AgrCust.CustNum = OrderCustomer.CustNum 
                NO-LOCK NO-ERROR.
-         lcAgrCust = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                      BUFFER OrderCustomer).
+         lcAgrCust = Func.Common:mDispOrderName(BUFFER OrderCustomer).
          ASSIGN
             lcAuthCustId     = OrderCustomer.AuthCustId
             lcAuthCustIdType = OrderCustomer.AuthCustIdType.
@@ -1739,28 +1734,25 @@ PROCEDURE local-find-others.
          
       END. 
       WHEN {&ORDERCUSTOMER_ROWTYPE_INVOICE} THEN DO:
-         lcInvCust = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                      BUFFER OrderCustomer).
+         lcInvCust = Func.Common:mDispOrderName(BUFFER OrderCustomer).
          IF Order.UserRole = 2 THEN lcUser = lcInvCust.
       END. 
       WHEN {&ORDERCUSTOMER_ROWTYPE_USER} THEN DO:
-         lcUser = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                      BUFFER OrderCustomer).
+         lcUser = Func.Common:mDispOrderName(BUFFER OrderCustomer).
       END.
       END CASE.
    END.
         
    /* timestamps */
-   ASSIGN lcCrStamp  = fTS2HMS(Order.CrStamp)
-          lcDlStamp  = fTS2HMS(fGetOrderStamp(Order.OrderID,"Delivery"))
-          lcPrtStamp = fTS2HMS(fGetOrderStamp(Order.OrderID,"Print"))
-          lcClStamp  = fTS2HMS(fGetOrderStamp(Order.OrderID,"Close")).
+   ASSIGN lcCrStamp  = Func.Common:mTS2HMS(Order.CrStamp)
+          lcDlStamp  = Func.Common:mTS2HMS(fGetOrderStamp(Order.OrderID,"Delivery"))
+          lcPrtStamp = Func.Common:mTS2HMS(fGetOrderStamp(Order.OrderID,"Print"))
+          lcClStamp  = Func.Common:mTS2HMS(fGetOrderStamp(Order.OrderID,"Close")).
    
    lcOrdPayMeth = "".
    FOR FIRST OrderPayment OF Order NO-LOCK:
    
-      lcOrdPayMeth = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "OrderPayment",
+      lcOrdPayMeth = Func.Common:mTMSCodeName("OrderPayment",
                                       "Method",
                                       OrderPayment.Method).
    END.
@@ -1771,8 +1763,7 @@ PROCEDURE local-find-others.
    THEN liDeliveryType = {&ORDER_DELTYPE_POS_SECURE}.
    ELSE liDeliveryType = Order.DeliveryType.
 
-   lcDeliveryType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Order",
+   lcDeliveryType = Func.Common:mTMSCodeName("Order",
                                    "DeliveryType",
                                    liDeliveryType).
 
@@ -2312,8 +2303,7 @@ PROCEDURE local-update-customer:
 
                ELSE IF FRAME-FIELD = "CustIDType" THEN DO:
                  
-                  lcCode = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                            "Customer",
+                  lcCode = Func.Common:mTMSCodeName("Customer",
                                             "CustIDType",
                                             INPUT INPUT FRAME fCustomer
                                                  OrderCustomer.CustIDType).

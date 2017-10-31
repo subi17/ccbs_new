@@ -75,12 +75,14 @@ PROCEDURE connect-tables:
 
    IF lddate = ? then lddate = today.
 
-   fReplaceSMS (INPUT lcalarmmess, mobsub.msseq , lddate, OUTPUT lcalarmmess).
+   Func.Common:mReplaceSMS 
+             ( IF AVAILABLE Customer THEN Customer.CustName ELSE "",
+               Mobsub.CLI, lcalarmmess, mobsub.msseq , lddate, OUTPUT lcalarmmess).
  
    
    CREATE CallAlarm.
    ASSIGN
-      CallAlarm.ActStamp   = fmakets().
+      CallAlarm.ActStamp   = Func.Common:mMakeTS().
       
    ASSIGN
       CallAlarm.CLSeq      =  0

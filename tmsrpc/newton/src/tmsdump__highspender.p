@@ -25,7 +25,6 @@
 katun = "NewtonAd".
 gcBrand = "1".
 {Func/highusage_report.i}
-{Func/timestamp.i}
 {newton/src/json_key.i}
 {Func/barrfunc.i}
 

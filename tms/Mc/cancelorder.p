@@ -95,8 +95,7 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
       lcResult = fCashInvoiceCreditnote(Order.Invnum, lcCreditReason).
       
       IF lcResult > "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                           "Order",
+         Func.Common:mWriteMemo("Order",
                            STRING(Order.OrderId),
                            Order.Custnum,
                            "CREDIT NOTE CREATION FAILED",
@@ -163,8 +162,7 @@ ELSE DO:
       lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
 
       IF lcResult > "" THEN
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
+          Func.Common:mWriteMemo("MobSub",
                             STRING(MobSub.MsSeq),
                             MobSub.Custnum,
                             "CREDIT NOTE CREATION FAILED",
@@ -185,13 +183,12 @@ ELSE DO:
                   Order.MsSeq,
                   Order.OrderId,
                   katun,
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   {&REQUEST_SOURCE_ORDER_CANCELLATION},
                   OUTPUT lcResult).
 
       IF liReq = 0 THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+        Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "RENEWAL REVERTION FAILED",
@@ -204,7 +201,7 @@ ELSE DO:
 
       ASSIGN
          liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
-         ldeTS = fSecOffSet(fMakeTS(),5).
+         ldeTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5).
       
       liError = fDeleteMsValidation(Order.MsSeq,
                                     liTermReason,
@@ -258,13 +255,12 @@ ELSE DO:
    
          IF liReq > 0 THEN
             fAdditionalLineSTC(liReq,
-                               fMake2Dt(TODAY + 1, 0),
+                               Func.Common:mMake2DT(TODAY + 1, 0),
                                "DELETE").
       END.
       
       IF lcResult > "" THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+        Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "SUBCRIPTION TERMINATION FAILED",

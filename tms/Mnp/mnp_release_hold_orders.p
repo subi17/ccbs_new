@@ -24,13 +24,13 @@ DEF VAR liReleaseCycle      AS INT NO-UNDO.
 DEF VAR ldeTimeSIMMNP       AS DEC  NO-UNDO.
 DEF VAR ldeUsedTimeStamp    AS DEC  NO-UNDO.
 
-ldeTimeStamp = fMakeTS().
+ldeTimeStamp = Func.Common:mMakeTS().
 
 ASSIGN
    lcSIMonlyMNP   = TRIM(fCParamC("SIMonlyMNPorder"))
    liReleaseCycle = fCParamI("SIMonlyReleaseHours")   /* Hold hours in state 99 */
    liReleaseCycle = liReleaseCycle + 1                /* Add one extra hour */
-   ldeTimeSIMMNP  = fOffSetTS(liReleaseCycle).        /* Count time to liReleaseCycle value */
+   ldeTimeSIMMNP  = Func.Common:mOffSetTS(liReleaseCycle).        /* Count time to liReleaseCycle value */
 
 FOR EACH Order WHERE
          Order.Brand = gcBrand AND

@@ -137,7 +137,6 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 
 {Func/cparam2.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/fcustbal.i}
 {Func/fcustcnt.i}
 {Func/fctype.i}
@@ -635,8 +634,7 @@ END FUNCTION.
 FUNCTION fDispVATUsage RETURNS LOGICAL
    (iiVATUsage AS INT).
    
-   lcVatUsage = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+   lcVatUsage = Func.Common:mTMSCodeName("Invoice",
                                  "VATUsage",
                                  STRING(iiVatUsage)).   
    
@@ -1079,7 +1077,7 @@ repeat WITH FRAME sel:
            END.
 
            ASSIGN
-              Customer.ChgStamp = fMakeTS()
+              Customer.ChgStamp = Func.Common:mMakeTS()
               Customer.Brand    = lcBrand 
               Customer.CreUser  = katun
               Customer.CreDate  = pvm  
@@ -1582,8 +1580,7 @@ repeat WITH FRAME sel:
 
         fCustSex(Customer.Sex).
        
-        lcIDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Customer",
+        lcIDType = Func.Common:mTMSCodeName("Customer",
                                     "CustIDType",
                                     Customer.CustIdType).
         fRegion(Customer.Region).
@@ -1601,8 +1598,7 @@ repeat WITH FRAME sel:
               no-lock no-error.
            if avail xCustomer then 
               lcAgrCust = lcAgrCust + " " + 
-                          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                           BUFFER xCustomer).
+                          Func.Common:mDispCustName(BUFFER xCustomer).
         END.       
 
         /* invoicing customer */
@@ -1613,8 +1609,7 @@ repeat WITH FRAME sel:
               no-lock no-error.
            if avail xCustomer then 
               lcInvCust = lcInvCust + " " + 
-                          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                           BUFFER xCustomer).
+                          Func.Common:mDispCustName(BUFFER xCustomer).
         END.
 
         CASE lcTyyppi:
@@ -2096,8 +2091,7 @@ PROCEDURE local-update-fin:
       END.
    END.
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
  
    IF lcRight = "RW" then
    ACTION: 
@@ -2105,22 +2099,18 @@ PROCEDURE local-update-fin:
 
       CLEAR FRAME fina NO-PAUSE.
 
-      lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+      lcDType = Func.Common:mTMSCodeName("Invoice",
                                  "DelType",
                                  STRING(Customer.DelType)).
-      lcCType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Customer",
+      lcCType = Func.Common:mTMSCodeName("Customer",
                                  "ChargeType",
                                  STRING(Customer.ChargeType)).
 
-      lcSType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+      lcSType = Func.Common:mTMSCodeName("Invoice",
                                  "SpecDel",
                                  STRING(Customer.SpecDel)).
       
-      lcInvTargetRule = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Customer",
+      lcInvTargetRule = Func.Common:mTMSCodeName("Customer",
                                  "InvoiceTargetRule",
                                  STRING(Customer.InvoiceTargetRule)).
 
@@ -2315,8 +2305,7 @@ PROCEDURE local-update-fin:
                   THEN NEXT. 
 
                   lcCType = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Customer",
+                     Func.Common:mTMSCodeName("Customer",
                                       "ChargeType",
                                       STRING(INPUT Customer.ChargeType)).
                   DISPLAY lcCType.
@@ -2332,8 +2321,7 @@ PROCEDURE local-update-fin:
                ELSE IF FRAME-FIELD = "DelType" THEN DO:
 
                   lcDType = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+                     Func.Common:mTMSCodeName("Invoice",
                                       "DelType",
                                       STRING(INPUT Customer.DelType)).
                   DISPLAY lcDType.
@@ -2361,8 +2349,7 @@ PROCEDURE local-update-fin:
                ELSE IF FRAME-FIELD = "InvoiceTargetRule" THEN DO:
 
                   lcInvTargetRule = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Customer",
+                     Func.Common:mTMSCodeName("Customer",
                                       "InvoiceTargetRule",
                                       STRING(INPUT Customer.InvoiceTargetRule)).
                   DISPLAY lcInvTargetRule.
@@ -2421,7 +2408,7 @@ PROCEDURE local-update-fin:
                   END. /* IF Customer.Email = "" THEN DO: */
 
                   liRequest = fEmailInvoiceRequest(
-                                       INPUT fMakeTS(),
+                                       INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
                                        INPUT katun,
                                        INPUT 0,
@@ -2485,7 +2472,7 @@ PROCEDURE local-update-fin:
 
                CREATE Memo.
                ASSIGN
-                  Memo.CreStamp  = fMakeTS()
+                  Memo.CreStamp  = Func.Common:mMakeTS()
                   Memo.Brand     = gcBrand
                   Memo.Custnum   = Customer.CustNum
                   Memo.HostTable = "Customer"
@@ -2601,8 +2588,7 @@ PROCEDURE local-disp-row:
    ASSIGN lcRoles    = STRING(llAgrCust,"X/") + " " +
                        STRING(llOthInvCust,"x/") + " " +
                        STRING(llUser,"x/")
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                     
    
    DISPLAY Customer.CustNum 

@@ -82,7 +82,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
    CREATE Memo.
    ASSIGN
       Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
@@ -230,7 +230,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                     SubSer.ServCom,
                                     liValue).
       IF ldActStamp > 0 THEN DO:
-         fSplitTS(ldActStamp,
+         Func.Common:mSplitTS(ldActStamp,
                   OUTPUT ldtActDate,
                   OUTPUT liReq).
 
@@ -238,13 +238,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
             (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
              DAY(SubSer.SSDate) NE 1)
          THEN .
-         ELSE ldActStamp = fMakeTS().
+         ELSE ldActStamp = Func.Common:mMakeTS().
       END.
-      ELSE ldActStamp = fMakeTS().
+      ELSE ldActStamp = Func.Common:mMakeTS().
 
       IF ldtActDate = TODAY
-      THEN ldActStamp = fMakeTS().
-      ELSE ldActStamp = fMake2DT(ldtActDate,1).
+      THEN ldActStamp = Func.Common:mMakeTS().
+      ELSE ldActStamp = Func.Common:mMake2DT(ldtActDate,1).
 
       IF pcParam EQ "" AND
          SubSer.ServCom NE "CF" AND /* YBU-2004 */
@@ -373,7 +373,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                               ServCom.ServCom,
                               1,
                               pcParam,
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               lcSalesman,
                               TRUE,      /* fees */
                               plSendSMS,      /* sms */

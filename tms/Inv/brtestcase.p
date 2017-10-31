@@ -135,8 +135,7 @@ END FUNCTION.
 FUNCTION fOperator RETURNS LOGIC
    (icOperator AS CHAR):
 
-   lcOperator = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "BRTestCase",
+   lcOperator = Func.Common:mTMSCodeName("BRTestCase",
                                  "RelationalOperator",
                                  icOperator).
    DISP lcOperator WITH FRAME lis.

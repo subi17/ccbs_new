@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.p}
 {Func/callquery.i}
 
    
@@ -575,8 +574,7 @@ PROCEDURE local-disp-row:
        username
        prepcdr.CLI  
        prepcdr.BillCode
-       DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-          prepcdr.gsmbnr,
+       Func.Common:mHideBSub(prepcdr.gsmbnr,
           prepcdr.custnum,
           prepcdr.bdest,
           prepcdr.BType,
@@ -591,7 +589,7 @@ PROCEDURE local-find-others.
        FIND MobSub WHERE MobSub.MsSeq = prepcdr.MsSeq NO-LOCK NO-ERROR.
        FIND Customer WHERE Customer.CustNum = prepcdr.CustNum NO-LOCK NO-ERROR.
 
-       IF Avail Customer then username = DYNAMIC-FUNCTION("fDispCustName" IN                        ghFunc1,  BUFFER Customer) .
+       IF Avail Customer then username = Func.Common:mDispCustName(BUFFER Customer) .
        FIND InvSeq where 
             InvSeq.InvSeq = prepcdr.InvSeq no-lock no-error.
        IF AVAIL InvSeq AND InvSeq.Billed = TRUE THEN Billed = TRUE.

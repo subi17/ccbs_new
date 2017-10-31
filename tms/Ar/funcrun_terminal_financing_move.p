@@ -14,7 +14,6 @@ ASSIGN
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/coinv.i}
 {Func/ftransdir.i}
@@ -72,7 +71,7 @@ IF ldaBillPeriod = ? THEN DO:
 END.   
 
 ASSIGN
-   ldaToDate = fLastDayOfMonth(ldaBillPeriod) 
+   ldaToDate = Func.Common:mLastDayOfMonth(ldaBillPeriod) 
    liBillPeriod = YEAR(ldaBillPeriod) * 100 + MONTH(ldaBillPeriod)
    lcLogDir = fCParam("TermFinance","LogDir")
    lcLogIntDir = lcLogDir + "internal/".
@@ -292,7 +291,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          ffitem.concerns[1] = YEAR(ldaNewBillPeriod) * 10000 + 
                               MONTH(ldaNewBillPeriod) * 100 + 
                               DAY(ldaNewBillPeriod)
-         ldaNewBillPeriod = fLastDayOfMonth(ldaNewBillPeriod) 
+         ldaNewBillPeriod = Func.Common:mLastDayOfMonth(ldaNewBillPeriod) 
          ffitem.concerns[2] = YEAR(ldaNewBillPeriod) * 10000 + 
                               MONTH(ldaNewBillPeriod) * 100 + 
                               DAY(ldaNewBillPeriod)

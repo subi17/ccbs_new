@@ -54,7 +54,7 @@ repeat:
       output liSimStat,
       output liQuarTime
    ).
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
 /*
    disp msisdn.cli msisdn.statuscode /*msisdn.validto*/ msrequest.reqiparam2 (if avail order then order.mnpstatus else -1) termmobsub.activationts format "99999999.99999" liMsisdnStat liQuarTime.
 */

@@ -50,7 +50,6 @@
 {Syst/eventval.i}
 {Func/msisdn.i}
 {Func/ffeecont.i}
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
 
@@ -906,7 +905,7 @@ PROCEDURE local-UPDATE-record:
                                           ttSubSer.ServCom,
                                           INPUT INPUT ttSubSer.SSStat).
                       IF ldActStamp > 0 
-                      THEN fSplitTS(ldActStamp,
+                      THEN Func.Common:mSplitTS(ldActStamp,
                                     OUTPUT ldtActDate,
                                     OUTPUT liReq).
                       ELSE ldtActDate = TODAY.             
@@ -978,7 +977,7 @@ PROCEDURE local-UPDATE-record:
                                           ttSubSer.ServCom,
                                           ttSubSer.SSStat).
             IF ldActStamp > 0 THEN DO:
-               fSplitTS(ldActStamp,
+               Func.Common:mSplitTS(ldActStamp,
                         OUTPUT ldtActDate,
                         OUTPUT liReq).
 
@@ -1159,7 +1158,7 @@ PROCEDURE local-copy-ServPac:
       IF ok THEN DO:
 
          IF ServPac.ServPac = "BB" AND
-            NOT fIsBBAllowed(Mobsub.MsSeq,fMakeTS()) THEN DO:
+            NOT fIsBBAllowed(Mobsub.MsSeq,Func.Common:mMakeTS()) THEN DO:
             MESSAGE "BB service can not be activated since subscription" skip
                     "does not have active data bundle"
             VIEW-AS ALERT-BOX ERROR.
@@ -1244,7 +1243,7 @@ PROCEDURE pUpdateSubSer:
     
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
     
-   ldCurrent = fMakeTS().
+   ldCurrent = Func.Common:mMakeTS().
    
    FOR EACH ttSubSer
    BREAK BY ttSubSer.SSStat   /* deactivations first */
@@ -1273,7 +1272,7 @@ PROCEDURE pUpdateSubSer:
 
          IF ttSubSer.ServCom = "BB" AND
             ttSubSer.SSStat  = 1    AND
-            NOT fIsBBAllowed(Mobsub.MsSeq,fMakeTS()) THEN DO:
+            NOT fIsBBAllowed(Mobsub.MsSeq,Func.Common:mMakeTS()) THEN DO:
             MESSAGE "BB service can not be activated since subscription" skip
                     "does not have active data bundle"
             VIEW-AS ALERT-BOX ERROR.
@@ -1292,7 +1291,7 @@ PROCEDURE pUpdateSubSer:
          
          IF ttSubSer.SSDate = TODAY 
          THEN ldActStamp = ldCurrent.
-         ELSE ldActStamp = fMake2DT(ttSubSer.SSDate,1).
+         ELSE ldActStamp = Func.Common:mMake2DT(ttSubSer.SSDate,1).
 
          /* create change request */
          liReq = fServiceRequest(MobSub.MsSeq,
@@ -1358,7 +1357,7 @@ PROCEDURE pUpdateSubSer:
          
          IF ttSubSerPara.SSDate = TODAY 
          THEN ldActStamp = ldCurrent.
-         ELSE ldActStamp = fMake2DT(ttSubSerPara.SSDate,1).
+         ELSE ldActStamp = Func.Common:mMake2DT(ttSubSerPara.SSDate,1).
 
          /* create change request */
          liReq = fServAttrRequest(MobSub.MsSeq,

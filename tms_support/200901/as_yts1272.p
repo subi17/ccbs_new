@@ -2,7 +2,6 @@
 katun = "anttis".
 gcBrand = "1".
 
-{Func/timestamp.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCommLine AS CHARACTER NO-UNDO. 
@@ -12,7 +11,7 @@ input from /apps/snet/200901/as_yts1272.input.
 def stream slog.
 output stream slog to /apps/snet/200901/as_yts1272.log append.
 
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 

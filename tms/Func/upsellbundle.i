@@ -8,9 +8,7 @@
        
 &GLOBAL-DEFINE upsellbundle YES
 
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fsendsms.i}
@@ -34,7 +32,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
    DEF BUFFER bMobSub       FOR MobSub. 
    DEF BUFFER DayCampaign   FOR DayCampaign.
 
-   ldTS = fMakeTS().
+   ldTS = Func.Common:mMakeTS().
 
    /* If caller is bob tool and DSS return basic bundle as DSS. */
    /* If Subs. is postpaid and DSS is active then return Basic bundle as DSS */

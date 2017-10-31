@@ -215,7 +215,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
    IF iAmt NE 0 THEN DO:
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = Payment.PaymDate
          OPLog.UserCode  = katun

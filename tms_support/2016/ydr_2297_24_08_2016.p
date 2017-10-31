@@ -75,7 +75,7 @@ DEFINE VARIABLE ldTimeStamp AS DECIMAL NO-UNDO.
              
             assign 
                ldTimeStamp = 0
-               ldTimeStamp = fmakets(). 
+               ldTimeStamp = Func.Common:mMakeTS(). 
 
             fMakeSchedSMS2(MobSub.CustNum,
                            MobSub.CLI,

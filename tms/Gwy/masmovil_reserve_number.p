@@ -1,6 +1,5 @@
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/date.i}
 {Func/masmovileif.i}
 {Mc/orderfusion.i}
 {Func/memo.i}
@@ -71,7 +70,7 @@ IF lcError EQ "OK" THEN DO:
 
    ASSIGN
       OrderFusion.FixedNumber = lcFixedNumber
-      OrderFusion.UpdateTS = fMakeTS()
+      OrderFusion.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.UpdateTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
@@ -91,7 +90,7 @@ END.
 ELSE DO:
 
    ASSIGN
-      FusionMessage.UpdateTS = fMakeTS()
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.ResponseCode = (IF lcResultCode > ""
                                   THEN lcResultCode

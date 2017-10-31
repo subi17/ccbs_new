@@ -14,7 +14,6 @@
 {Func/fcustbal.i}
 {Syst/eventval.i} 
 {Func/fbankday.i}
-{Func/fhdrtext.i}
 {Func/frefundreq.i}
 
 IF llDoEvent THEN DO:
@@ -74,7 +73,7 @@ PROCEDURE pManualPayment:
       RETURN.
    END.
    
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtAccDate,
             OUTPUT liReqCnt).
             
@@ -126,7 +125,7 @@ PROCEDURE pAdvPaym2Refund:
       ldtDate = ldtDate + 1
       liTime  = liTime - 86400. 
       
-   ldActStamp = fMake2Dt(ldtDate,liTime).
+   ldActStamp = Func.Common:mMake2DT(ldtDate,liTime).
           
    liSubReq = fRefundRequest(MsRequest.CustNum,
                              MsRequest.ReqIParam1,  /* invoice */

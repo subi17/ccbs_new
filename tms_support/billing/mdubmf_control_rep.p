@@ -1,7 +1,6 @@
 
 /* MDUB Control Report */
 
-{Func/timestamp.i}
 
 FUNCTION fGetMobSubInfo RETURNS LOGICAL 
          (INPUT piMsSeq AS INT,
@@ -86,8 +85,8 @@ IF MONTH(ldaInvDate) = 12 THEN
 ELSE
    ldaInvEnd =  DATE(MONTH(ldaInvDate) + 1 ,1,YEAR(ldaInvDate)) - 1 .
 
-ldBeginTS = fHMS2TS(ldaBegin,"00:00:00").
-ldEndTS   =  fHMS2TS(ldaEnd,"23:59:59").
+ldBeginTS = Func.Common:mHMS2TS(ldaBegin,"00:00:00").
+ldEndTS   =  Func.Common:mHMS2TS(ldaEnd,"23:59:59").
 
 
 OUTPUT STREAM sLogSum TO VALUE(lcSumFile).

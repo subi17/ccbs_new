@@ -40,7 +40,7 @@
    &THEN
    ASSIGN
       ttCall.RerateID = liRerateSeq 
-      ttCall.RerateTS = fMakeTS().
+      ttCall.RerateTS = Func.Common:mMakeTS().
    fRerateCDRBefore (MobCDR.RateCCN,
                      MobCDR.ErrorCode,
                      MobCDR.Amount,

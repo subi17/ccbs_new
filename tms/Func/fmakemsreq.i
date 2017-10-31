@@ -194,7 +194,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                            600.
       END. 
       
-      idChgStamp = fMake2DT(ldtCReqDate,
+      idChgStamp = Func.Common:mMake2DT(ldtCReqDate,
                             liCReqTime).
     
    END. 
@@ -210,7 +210,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    ASSIGN llProCustomer = fIsProSubscription(iiMsSeq).
 
    fCreateRequest(0,
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   icCreator,
                   ilCreateFees,
                   ilSendSMS).
@@ -309,7 +309,7 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
       liCReqTime = 60.
    END.
        
-   ldChgStamp = fMake2DT(ldtCReqDate,
+   ldChgStamp = Func.Common:mMake2DT(ldtCReqDate,
                          liCReqTime).
    
    IF ldChgStamp = ? THEN ldChgStamp = 0.
@@ -472,7 +472,7 @@ FUNCTION fSaldoPaymentRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.                       
 
    /* set activation time if caller has not determined it */
-   IF idChgStamp = ? THEN idChgStamp = fMakeTS().
+   IF idChgStamp = ? THEN idChgStamp = Func.Common:mMakeTS().
 
    fCreateRequest(2,
                   idChgStamp,
@@ -589,7 +589,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(6,
                   idActStamp,
@@ -648,7 +648,7 @@ FUNCTION fUserAccountRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.                       
 
    /* activation time is always immediately */
-   ldChgStamp = fMakeTS().
+   ldChgStamp = Func.Common:mMakeTS().
 
    fCreateRequest(5,
                   ldChgStamp,
@@ -689,7 +689,7 @@ FUNCTION fPerContractPIN RETURNS INTEGER
 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0
-   THEN idActStamp = fMakeTS().
+   THEN idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(7,
                   idActStamp,
@@ -750,7 +750,7 @@ FUNCTION fPCUpdateRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0. 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0
-   THEN idActStamp = fMakeTS().
+   THEN idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(8,
                   idActStamp,
@@ -851,7 +851,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
   
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0 THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(liReqtype,
                   idActStamp,
@@ -967,7 +967,7 @@ FUNCTION fPaymPlanRequest RETURNS INTEGER
    END.
    
    /* set activation time */
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(11,
                   ldActStamp,
@@ -1022,7 +1022,7 @@ FUNCTION fMarketingRequest RETURNS INTEGER
 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0
-   THEN idActStamp = fMakeTS().
+   THEN idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(12,
                   idActStamp,
@@ -1069,7 +1069,7 @@ PROCEDURE pCheckServiceLinks:
           iiNewValue  = MIN(iiNewValue,1)
           ocCreated   = "".
           
-   IF idLinkStamp = 0 THEN idLinkStamp = fMakeTS().
+   IF idLinkStamp = 0 THEN idLinkStamp = Func.Common:mMakeTS().
  
    FOR EACH ScUpdRule NO-LOCK WHERE
             ScUpdRule.Brand    = gcBrand    AND
@@ -1203,7 +1203,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0 THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN 
    DO:  
@@ -1258,7 +1258,7 @@ FUNCTION fODInvoiceRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(20,
                   idActStamp,
@@ -1303,7 +1303,7 @@ FUNCTION fSubRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(iiReqtype,
                   idActStamp,
@@ -1343,7 +1343,7 @@ FUNCTION fAfterSalesRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(46,
                   idActStamp,
@@ -1377,7 +1377,7 @@ FUNCTION fChargeCompRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_CHARGE_AND_COMPENSATION},
                   idActStamp,
@@ -1418,7 +1418,7 @@ FUNCTION fEmailSendingRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_EMAIL_SENDING},
                   idActStamp,
@@ -1459,7 +1459,7 @@ FUNCTION fRevertRenewalOrderRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_REVERT_RENEWAL_ORDER},
                   idActStamp,
@@ -1508,7 +1508,7 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.
 
    fCreateRequest({&REQTYPE_INSTALLMENT_CONTRACT_CHANGE},
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   icCreator,
                   TRUE, 
                   FALSE).   /* sms */
@@ -1565,8 +1565,7 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
                                    OUTPUT lcError).
 
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(iiMsSeq),
                           0,
                           "STC to " + lcResult + "failed",

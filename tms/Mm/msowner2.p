@@ -488,8 +488,7 @@ PROCEDURE local-find-others.
       end-txt = "Previous User".
    END.
    IF AVAIL MobSub THEN 
-      ASSIGN UserName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER Customer).
+      ASSIGN UserName = Func.Common:mDispCustName(BUFFER Customer).
                                              
    ELSE 
       ASSIGN UserName = "!! REMOVED USER !!".

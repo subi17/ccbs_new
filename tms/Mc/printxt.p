@@ -45,7 +45,6 @@
 {Func/refcode.i}
 {Func/fcustref.i}
 {Syst/utumaa.i}
-{Func/timestamp.i}
 {Func/fsubser.i}
 {Func/ftxttag.i}
 {Func/feffect.i}
@@ -452,7 +451,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
                                        ELSE "IT")
                                  ELSE "Memo"
           ITSendLog.UserCode   = katun.
-          ITSendLog.SendStamp  = fMakeTS().
+          ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 
 FUNCTION fBIName RETURNS CHARACTER
@@ -625,13 +624,11 @@ END.
 ELSE DO:
    liLanguage = Customer.Language.
    IF Customer.CustNum = Customer.AgrCust THEN
-      lcTagOwner = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcTagOwner = Func.Common:mDispCustName(BUFFER Customer).
    ELSE DO:
       FIND bOwner WHERE bOwner.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
       IF AVAILABLE bOwner THEN
-         lcTagOwner = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER bOwner).
+         lcTagOwner = Func.Common:mDispCustName(BUFFER bOwner).
    END.
 END.
 
@@ -654,8 +651,7 @@ IF iiMSSeq > 0 THEN DO:
              lcTagCLIType = MsOwner.CLIType.
 
       FIND bCLICust WHERE bCLICust.CustNum = MsOwner.CustNum NO-LOCK.
-      lcTagUser = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER bCLICust).
+      lcTagUser = Func.Common:mDispCustName(BUFFER bCLICust).
 
       FIND MobSub WHERE MobSub.MsSeq = MsOwner.MsSeq NO-LOCK NO-ERROR.
    END.
@@ -674,8 +670,7 @@ ELSE IF icCLI > "" THEN DO:
       FIRST bCLICust NO-LOCK WHERE
             bCLICust.CustNum = MsOwner.CustNum:
 
-      lcTagUser = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER bCLICust).
+      lcTagUser = Func.Common:mDispCustName(BUFFER bCLICust).
    END.
 
 END.
@@ -748,7 +743,7 @@ IF NOT llErrors THEN DO:
 
       liCustNum = 0.
       
-      fSplitTS(Order.CrStamp,
+      Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrder,
                OUTPUT liTime).
 
@@ -759,8 +754,7 @@ IF NOT llErrors THEN DO:
 
       DEF VAR ldeTaxPerc AS DEC NO-UNDO.
       IF AVAILABLE OrderCustomer THEN ASSIGN
-         lcEPLRName      = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                            BUFFER OrderCustomer)
+         lcEPLRName      = Func.Common:mDispOrderName(BUFFER OrderCustomer)
          lcEPLRCoName    = ""
          lcEPLRAddr      = OrderCustomer.Address
          lcEPLRZipCode   = OrderCustomer.ZipCode
@@ -848,8 +842,7 @@ IF NOT llErrors THEN DO:
                 OrderCustomer.OrderID = Order.OrderID AND
                 OrderCustomer.RowType = Order.UserRole:
 
-         lcTagUser = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                      BUFFER OrderCustomer).
+         lcTagUser = Func.Common:mDispOrderName(BUFFER OrderCustomer).
       END.
 
       IF Order.DeliverySecure EQ 1 OR
@@ -1004,7 +997,7 @@ IF NOT llErrors THEN DO:
             ldaDate = fMNPHoliday(ldaDate,TRUE).
          END.
 
-         lcText = REPLACE(lcText,"#DELIVERY_DATE",fDateFmt(ldaDate,"dd/mm/yy")).
+         lcText = REPLACE(lcText,"#DELIVERY_DATE",Func.Common:mDateFmt(ldaDate,"dd/mm/yy")).
       END.
 
 
@@ -1018,7 +1011,7 @@ IF NOT llErrors THEN DO:
                     OrderCustomer.RowType = 1.
          
          IF Order.PortingDate <> ? THEN
-            ldePortingTime = fMake2Dt(Order.PortingDate,0).
+            ldePortingTime = Func.Common:mMake2DT(Order.PortingDate,0).
 
          FIND FIRST OrderAccessory NO-LOCK WHERE
                     OrderAccessory.Brand = gcBrand AND
@@ -1036,9 +1029,9 @@ IF NOT llErrors THEN DO:
             lcTariffType = Order.CLIType.
 
          
-         IF ldePortingTime <= fMakeTS() THEN
+         IF ldePortingTime <= Func.Common:mMakeTS() THEN
             ldamnp = fmnpchangewindowdate(
-                                fmakets(),
+                                Func.Common:mMakeTS(),
                                 order.orderchannel,
                                 ordercustomer.region,
                                 lcProduct,
@@ -1205,8 +1198,7 @@ IF NOT llErrors THEN DO:
                          OUTPUT ldInvTot,
                          OUTPUT lcError).
             IF lcError <> "" THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(Order.OrderID),
                                 0,
                                 "Confirmation Email Cash Invoice Data Failed",
@@ -1673,8 +1665,7 @@ IF NOT llErrors THEN DO:
    IF INDEX(lcText,"#NEWOWNER") > 0 AND AVAILABLE MobSub THEN DO:
 
       FIND bCLICust WHERE bCLICust.CustNum = MobSub.AgrCust NO-LOCK.
-      lcEntry = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER bCLICust).
+      lcEntry = Func.Common:mDispCustName(BUFFER bCLICust).
 
       lcText = REPLACE(lcText,"#NEWOWNER",lcEntry).
    END.
@@ -1691,7 +1682,7 @@ IF NOT llErrors THEN DO:
                     MsRequest.ReqStat = 1 NO-ERROR.
 
       IF AVAILABLE MsRequest THEN DO:
-         fSplitTS(MsRequest.CreStamp,
+         Func.Common:mSplitTS(MsRequest.CreStamp,
                   OUTPUT ldtReqDate,
                   OUTPUT liTime).
 
@@ -1912,7 +1903,7 @@ FOR FIRST CLIType NO-LOCK WHERE
    DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
    DEFINE VARIABLE ldDiscValue  AS DEC  NO-UNDO.
    
-   llgOrderDate = fSplitTS(Order.CrStamp,
+   llgOrderDate = Func.Common:mSplitTS(Order.CrStamp,
                            OUTPUT ldtOrderDate,
                            OUTPUT ldiOrderDate).
 

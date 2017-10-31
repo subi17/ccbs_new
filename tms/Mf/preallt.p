@@ -10,7 +10,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 DEF NEW shared VAR siirto AS CHAR.
@@ -691,8 +690,8 @@ PROCEDURE local-update-record:
       Presel.CustName = asnimi.
       */
       /* Timestamps */
-      Presel.CrStamp = fMakeTS().
-      Presel.ChStamp = fMakeTS().
+      Presel.CrStamp = Func.Common:mMakeTS().
+      Presel.ChStamp = Func.Common:mMakeTS().
 
       IF new_presel AND llDoEvent 
       THEN RUN StarEventMakeCreateEvent(lhPresel).
