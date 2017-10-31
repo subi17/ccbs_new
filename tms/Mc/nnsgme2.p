@@ -58,7 +58,7 @@ form
     SMGMember.SmGroup     /* COLUMN-LABEL FORMAT */
     SMGroup.SGName     /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " Memberships of SMan " + string(Salesman) + ": " +
     substring(Salesman.SmName,1,16)
     + " " FRAME sel.
@@ -68,7 +68,7 @@ form
     help "Enter now a Salesman Group Code"
     SMGroup.SGName
 WITH  OVERLAY ROW 4 centered
-    color value(cfc) title color value(ctc) " ADD ONE GROUP "
+    color value(Syst.CUICommon:cfc) title color value(ctc) " ADD ONE GROUP "
     WITH 1 col FRAME lis.
 
 
@@ -82,7 +82,7 @@ form /* member :n haku kentällä Salesman */
     Salesman
     help "Type Group Code "
 with row 4 col 2 title color value(ctc) " FIND GROUP CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form
@@ -102,7 +102,7 @@ FIND Salesman where
      Salesman.Brand    = gcBrand AND
      Salesman.Salesman = Salesman no-lock.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember where 
@@ -476,7 +476,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.

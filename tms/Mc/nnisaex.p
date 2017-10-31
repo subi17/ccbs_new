@@ -82,7 +82,7 @@ form
      "Output File:" at 16 exFile help "Name of output file"
      skip(1)
 WITH
-   width 80 COLOR value(cfc)
+   width 80 COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT/CUSTOMER "
    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
@@ -100,7 +100,7 @@ date1 = date(month(pvm),1,year(pvm)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
     ehto = 9. RUN Syst/ufkey.p.

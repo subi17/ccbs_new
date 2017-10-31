@@ -69,7 +69,7 @@ form
     alive COLUMN-LABEL "U" FORMAT "*/"
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     "  KILLED MOBSUB  "
     + string(pvm,"99-99-99") + " "
@@ -92,7 +92,7 @@ form
     "Mobile Type .....:" MSOwner.Clitype CLIType.CliName               SKIP
     "Contract ........:" MSOwner.Contract 
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
@@ -102,23 +102,23 @@ form /* seek  CustNum */
     CustNum
     HELP "Enter Customer number "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTNO "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CLI */
     CLI
     HELP "Enter MSISDN Number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN"
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 form /* seek  CLI */
     imno
     HELP "Enter IMSI number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND IMSI "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By CustNo  ,  By Msisdn  ,  By Imsi  , By 4".
@@ -150,7 +150,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a msowner  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -394,7 +394,7 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET CustNum WITH FRAME f1.
@@ -419,7 +419,7 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
@@ -443,7 +443,7 @@ BROWSE:
     /* Search by col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        SET imno WITH FRAME f3.
@@ -497,7 +497,7 @@ BROWSE:
        /* change */
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY msowner.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).

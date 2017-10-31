@@ -31,16 +31,16 @@ form
     Contract.CustNum
     lcCLI  FORMAT "X(16)" LABEL "CLI" 
     Contract.Salesman
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " Contracts " overlay frame sel.
 
 form /* SEEK Code */
     ldtDate
     help "Enter Contract Date"
     with row 4 col 2 title color value(ctc) " FIND CONTRACT "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -205,7 +205,7 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*ldtDate*/
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ldtDate with frame hayr.
            hide frame hayr no-pause.

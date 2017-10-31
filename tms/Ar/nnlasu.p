@@ -40,7 +40,7 @@ def var int-invno as i  no-undo  format ">>>>>>>>>".
 DEF VAR TotPaid   AS DE NO-UNDO  format "->>>>>9.99".
 
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
 FIND Invoice where Invoice.InvNum = InvNum no-lock.
 
@@ -92,7 +92,7 @@ WITH FRAME PaidAmt.
    PaymSrc             
 
  WITH
-   OVERLAY ROW 3 12 DOWN COLOR value(cfc) TITLE COLOR value(ctc)
+   OVERLAY ROW 3 12 DOWN COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " PAYMENTS ON INVOICE NO. " + string(InvNum) + " " centered FRAME PaidAmt.
 
    ASSIGN rtab[FRAME-LINE] = recid(Payment).

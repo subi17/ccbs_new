@@ -114,9 +114,9 @@ form
            help "Name for output File (ASCII-format, File RepType '.txt')"
    SKIP(1) 
 with width 80 title color value(ctc) " CUSTOMER LISTS " side-labels
-   COLOR value(cfc) OVERLAY FRAME rajat.
+   COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 ASSIGN

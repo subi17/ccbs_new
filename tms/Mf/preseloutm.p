@@ -45,7 +45,7 @@ IF NOT bBatch THEN DO:
                                 ": " coun2 " transactions"       SKIP(3)
 
    WITH  OVERLAY  ROW 1 WIDTH 80
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " " + ynimi + "    EXPORT PRESELECTIONS " + STRING(pvm,"99.99.9999") + " "
     NO-LABELS 
@@ -66,7 +66,7 @@ IF NOT bBatch THEN DO:
      "          daily Limit (they shall be exported earliest tomorrow) "
 
    WITH title color value(ctc) " DAILY Limit EXCEEDED "
-           color value(cfc) overlay row 3 centered no-labels frame alert.
+           color value(Syst.CUICommon:cfc) overlay row 3 centered no-labels frame alert.
 
 
    PAUSE 0.

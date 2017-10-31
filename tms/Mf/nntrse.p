@@ -38,7 +38,7 @@ form
     Trunk.TrunkName                 column-label "CGR Name"
     Trunk.OpCode                 column-label "Op Code"
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " CGR BROWSER: SEEK FROM '"  + TrunkCode + "' " FRAME sel.
 
 
@@ -53,7 +53,7 @@ form
 with row 1 centered overlay title " SEEK Circuit Groups " FRAME alku.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST Trunk USE-INDEX ExCode no-lock no-error.
    IF NOT AVAIL Trunk THEN DO:
       BELL.

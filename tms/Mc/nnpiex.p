@@ -68,7 +68,7 @@ WITH
    ROW 1 side-labels width 80 NO-LABELS
    title color value(ctc) " " + ynimi +
    " SUMMARY OF PAYMENTS AND INVOICES " +
-   string(pvm,"99-99-99") + " " COLOR value(cfc) FRAME Limit.
+   string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME Limit.
 
 ASSIGN
    iAR     = 1

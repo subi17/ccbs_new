@@ -62,7 +62,7 @@ form
     ServAttr.SAName        column-label "Service Name" format "x(35)"
     CTServAttr.ChgAllowed  column-label "ChgA" format "Y/N"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " Attributes of Service Component '" + CTServEl.ServCom  + "'"
     FRAME sel.
@@ -78,7 +78,7 @@ form
     CTServAttr.DefValue   COLON 20 FORMAT "X(30)"   SKIP      
     CTServAttr.ChgAllowed COLON 20     SKIP
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -87,13 +87,13 @@ form /* seek CTServAttr  BY  CTServAttr */
     lcServAttr
     HELP "Enter Code of Service Attribute"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FIND CTServEl WHERE CTServEl.CTServEl = iiCTServEl NO-LOCK NO-ERROR.
 IF NOT AVAILABLE CTServEl THEN RETURN. 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -118,7 +118,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CTServAttr  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -375,7 +375,7 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcServAttr WITH FRAME f1.
@@ -463,7 +463,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCTServAttr).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CTServAttr.ServAttr.
 
        RUN local-UPDATE-record.                                  

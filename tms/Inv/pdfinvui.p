@@ -41,7 +41,7 @@ DEF STREAM sRead.
 form
    skip(17)
    WITH 
-   COLOR value(cfc) width 80 OVERLAY FRAME taka.
+   COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
 form
    InvNum1 label " Invoice number .........."
@@ -84,7 +84,7 @@ form
 
 WITH TITLE COLOR value(ctc)
    " " + ynimi + " PDF INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
-side-labels COLOR value(cfc) ROW 1 centered OVERLAY FRAME rajat.
+side-labels COLOR value(Syst.CUICommon:cfc) ROW 1 centered OVERLAY FRAME rajat.
 
 form
     "  0: Not printed, 'new' invoices            " skip
@@ -92,7 +92,7 @@ form
     "  5: PDF-file formed                        " skip
     "  6: PDF sent to customer via eMail         " skip
 with
-   title color value (ctc) " Printing Status For Invoices " color value(cfc)
+   title color value (ctc) " Printing Status For Invoices " color value(Syst.CUICommon:cfc)
    overlay centered row 14 frame statu.
 
 ASSIGN 
@@ -100,7 +100,7 @@ ASSIGN
    i-date2   = pvm
    liDelType = 2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 ehto = 9. RUN Syst/ufkey.p.

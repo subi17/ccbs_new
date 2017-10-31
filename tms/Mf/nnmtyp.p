@@ -81,7 +81,7 @@ form
    MthCall.CloseType    /*  column-label "V"      */
 WITH
    width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi +
    " Maintain monthly call counters "
    + string(pvm,"99-99-99") + " "
@@ -101,7 +101,7 @@ form
     "Closing value ....:" MthCall.CloseType
     "(1 = Limit 2 = Invoice 3 = Both)"
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH NO-LABEL
     FRAME lis.
@@ -110,13 +110,13 @@ form /*  search WITH FIELD CustNum */
     seek-cust-nr
     help "Give customer number"
     with row 4 col 2 title color value(ctc) " FIND CUSTOMER number "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD Month */
     seek-mth
     help "Give month (YYMM)"
     with row 4 col 2 title color value(ctc) " FIND MONTH "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* UPDATE whitelist FileName */
     skip(1)
@@ -127,10 +127,10 @@ form /* UPDATE whitelist FileName */
        help "Filename of the whitelist file"
     skip(1)
     WITH ROW 8 centered width 55
-    title color value(cfc) " ADD CLOSED NUMBERS TO A File "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME wl.
+    title color value(Syst.CUICommon:cfc) " ADD CLOSED NUMBERS TO A File "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME wl.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MthCall
@@ -168,7 +168,7 @@ repeat WITH FRAME sel:
 /* ADDING DISABLED !!
    IF must-add THEN DO:  /* MthCall -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 add-new:
@@ -492,7 +492,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        seek-cust-nr = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-cust-nr WITH FRAME f1.
@@ -515,7 +515,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        seek-mth = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-mth WITH FRAME f2.
@@ -710,7 +710,7 @@ BROWSE:
        IF MthCall.Printed = FALSE THEN DO:
           assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
           RUN Syst/ufkey.p.
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           FIND Customer where
                Customer.CustNum = MthCall.CustNum no-lock no-error.
           IF AVAIL Customer THEN cust-name = CustName.

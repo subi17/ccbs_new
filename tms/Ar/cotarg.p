@@ -56,7 +56,7 @@ form
     lcHandled FORMAT "x(10)" column-label "Handled" 
     CoTarg.CommStatus
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
     lcTitle
     FRAME sel.
@@ -73,7 +73,7 @@ FORM
     "Commission ID ....:" COTarg.CoTargID SKIP
     "Commission Rule ID:" COTarg.CORuleId SKIP
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) "COMMISSION INFO" 
     NO-LABELS 
     FRAME lis.
@@ -82,7 +82,7 @@ form /* seek  target */
     lcTarg
     HELP "Enter target type "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND target type "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 IF icType = "rule" THEN DO:
 FIND CoRule WHERE 
@@ -97,7 +97,7 @@ END.
 ELSE IF icType = "mobsub" THEN
    lcTitle = "COMMISSIONS FOR SUBSCRIPTION: " + STRING(iiKey).
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -327,7 +327,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
       
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        /*DISPLAY CoTarg.TargType.*/
 
        RUN local-UPDATE-record.                                  

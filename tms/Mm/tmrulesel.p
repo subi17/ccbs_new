@@ -37,7 +37,7 @@ DEFINE VARIABLE ok           AS LOGICAL format "Yes/No" NO-UNDO.
 FORM
     TMRule.Name COLUMN-LABEL "Ticket management rules"
 WITH ROW FrmRow CENTER width 42 OVERLAY FrmDown DOWN SCROLL 1
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     FRAME sel.
 
 orders = "TMC".
@@ -52,7 +52,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 LOOP:

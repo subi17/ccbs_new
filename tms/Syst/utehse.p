@@ -37,12 +37,12 @@ form
     PrintCodes.PageLength  column-label "Lines/page"
     PrintCodes.AvailLines column-label "Use lines/page"
     WITH ROW 2 col 2 centered  OVERLAY scroll 1 13 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " PRINTER '" + xPrinterId + "' EFFECTS "
     FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = xPrinterId no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.

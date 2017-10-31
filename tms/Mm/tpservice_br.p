@@ -33,7 +33,7 @@ FORM
    TPService.Operation    FORMAT "X(12)" COLUMN-LABEL "Operation"   
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcUpdatedTS            FORMAT "X(10)" COLUMN-LABEL "Updated"
-   WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(cfc) 
+   WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(ctc) "Third Party Services" FRAME sel.
 
 FORM
@@ -66,9 +66,9 @@ FORM
     "Cancellation Reason:" TPService.TermReason
     SKIP(1)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.

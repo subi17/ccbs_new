@@ -35,7 +35,7 @@ form
     Operator.OperName  format "x(30)" column-label "Operators Name"
     Operator.Operator                 column-label "OpCode" 
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " OPERATOR BROWSER: SEEK FROM '"  + Operator + "' " FRAME sel.
 
 
@@ -49,7 +49,7 @@ form
 
 with row 1 centered overlay title " SEEK OPERATORS " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST Operator USE-INDEX Operator no-lock no-error.
    IF NOT AVAIL Operator THEN DO:
       BELL.

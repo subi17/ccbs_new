@@ -110,7 +110,7 @@ form
    temp-event.oldvalue  format "x(20)" LABEL "Old"
    temp-event.newvalue  format "x(20)" LABEL "New"
    WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " VIEW AN Event " + STRING(icdate,"99-99-99") + " " + ictime
     FRAME sel.
@@ -124,7 +124,7 @@ form
     Eventlog.Key      
     muutokset VIEW-AS EDITOR size-chars 50 BY 10
 WITH  OVERLAY ROW 7 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
@@ -138,7 +138,7 @@ FORM
    EventLog.TimingTime 
 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR "TIMING INFORMATION"  ac-hdr 
     SIDE-LABELS 
     2 columns
@@ -149,15 +149,15 @@ form /* seek Eventlog  BY  TableName */
     TableName
     HELP "Enter Tablename"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TableName "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Eventlog  BY UserCode */
     UserCode
     HELP "Enter Usercode"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 view frame lis2.
 
@@ -413,7 +413,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                       
        HIDE FRAME lis. /* NO-PAUSE.*/

@@ -65,14 +65,14 @@ help "Earliest payment date"
 help "Invoice group's code, empty for all" SKIP
 "                Decimal separator .....:" exdeci help "Period/Comma" skip(2)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + ynimi + " EXCEL-SUMMARY OF ACCOUNTS " +
    string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:

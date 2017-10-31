@@ -58,7 +58,7 @@ form
     ttMenu.MenuText FORMAT "x(78)"
    
 WITH ROW FrmRow OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
@@ -67,17 +67,17 @@ form /* seek  CodeValue */
     "Code value:" liCodeValue
     HELP "Enter code value"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE VALUE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek CodeName */
     "Code Name:" lcCodeName
     HELP "Enter code name"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE NAME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */

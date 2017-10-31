@@ -12,7 +12,7 @@ FIND FeeModel WHERE
     FeeModel.Brand    = "1"  AND 
     FeeModel.FeeModel = FeeModel NO-LOCK.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 
 VIEW FRAME sel. 
 
@@ -241,7 +241,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND lcmode = "general" THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET PriceList WITH FRAME f1.
@@ -262,7 +262,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND lcmode = "general" THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET BillCode WITH FRAME f2.
@@ -339,7 +339,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFMItem).
 
        RUN local-update-record.                                  

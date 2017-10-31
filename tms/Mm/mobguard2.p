@@ -36,7 +36,7 @@ Tmscode.codename FORMAT "X(35)"  SKIP
 HELP "Earliest call date" " - " lddate2 
 HELP "Latest call date"
 VALIDATE(INPUT lddate1 <= INPUT lddate2,"Invalid order of dates !")  SKIP
-WITH CENTERED ROW 2 COLOR VALUE(cfc) TITLE 
+WITH CENTERED ROW 2 COLOR VALUE(Syst.CUICommon:cfc) TITLE 
 "BROWSE CDRS" OVERLAY side-label no-label FRAME reason .
 
 RUN local-Show-record.

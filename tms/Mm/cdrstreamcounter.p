@@ -62,7 +62,7 @@ FORM
     CDRStreamCounter.OnlineStream
     CDRStreamCounter.CDRQty
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        "  CDR STREAM COUNTERS  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -77,7 +77,7 @@ FORM
     CDRStreamCounter.OnlineStream  COLON 15
     CDRStreamCounter.CDRQty        COLON 15
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -87,10 +87,10 @@ FORM
     "Date :" ldaImportDate FORMAT "99-99-9999" 
     HELP "Enter import date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -309,7 +309,7 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
@@ -410,7 +410,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCDRStreamCounter).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CDRStreamCounter.ImportDate.
 
        RUN local-UPDATE-record.                                  

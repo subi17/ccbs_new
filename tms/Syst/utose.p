@@ -44,20 +44,20 @@ form
     MenuTree.MenuTitle
 
     WITH OVERLAY scroll 1 ROW 4 10 DOWN centered
-    color value(cfc) title color value(ctc) " BROWSE FUNCTION SHORTCUTS "
+    color value(Syst.CUICommon:cfc) title color value(ctc) " BROWSE FUNCTION SHORTCUTS "
     FRAME sel.
 
 form /* toimintotunnuksella hakua varten */
     haku
     help "Give function code or beginning of it ..."
     with row 4 col 2 title color value(ctc) " FIND FUNCTION CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* toimintonimella hakua varten */
     haku2
     help "Give function name or beginning of it ..."
     with row 4 col 2 title color value(ctc) " FIND FUNCTION name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 /* allowed tokens */
 FOR FIRST TMSUser NO-LOCK WHERE
@@ -67,8 +67,8 @@ FOR FIRST TMSUser NO-LOCK WHERE
     lctokens = UserGrp.ShowTokens + "," + UserGrp.ModifyTokens.
 END.
 
-cfc = "rajat". RUN Syst/ufcolor.p.
-assign ccc = cfc mc = index(siirto,"*") > 0.
+Syst.CUICommon:cfc = "rajat". RUN Syst/ufcolor.p.
+assign ccc = Syst.CUICommon:cfc mc = index(siirto,"*") > 0.
 
 view FRAME sel.
 
@@ -382,7 +382,7 @@ BROWSE:
 
      /* Haku tunnuksella */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku tunnuksella */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
@@ -415,7 +415,7 @@ BROWSE:
 
      /* Haku nimella */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimella */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.

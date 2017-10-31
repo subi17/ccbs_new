@@ -65,7 +65,7 @@ form
     UserSman.Salesman
     Salesman.SMName 
 WITH ROW FrmRow centered overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " USER'S SALESMAN DEFINITIONS  "
     + string(pvm,"99-99-99") + " "
@@ -81,7 +81,7 @@ form
     UserSman.Salesman   COLON 20 
         Salesman.SMName NO-LABEL SKIP
 WITH  OVERLAY ROW 6 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -103,7 +103,7 @@ ELSE DO:
    memory = ?.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Brand  ,".
@@ -119,7 +119,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a UserSman  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -384,7 +384,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(true).
        ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY UserSman.Brand.
 
        RUN local-update-record.                                  

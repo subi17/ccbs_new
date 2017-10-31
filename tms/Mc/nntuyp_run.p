@@ -117,7 +117,7 @@ form
     BillItem.AccNum     column-label "Acct"   help "Account number"
                         FORMAT ">>>>>>>9"
     BillItem.TaxClass   COLUMN-LABEL "TaxClass"
-WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(cfc)
+WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Billing Items " + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -167,7 +167,7 @@ form
     BillItem.ItemType  LABEL "Item Type ."
        HELP "Billing Item Type (0=mobile, 1=covergent)"
        FORMAT ">>9" SKIP
-WITH  OVERLAY ROW 2 CENTERED COLOR value(cfc) TITLE COLOR value(ctc)
+WITH  OVERLAY ROW 2 CENTERED COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
 {Func/brand.i}
@@ -177,21 +177,21 @@ form /* produkt :n tunnuksella hakua varten */
     "Code :" haku
     help "Give Code or its first characters"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* produkt :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give Name or its first characters"
     with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* BillCode group - haku */
     "Brand:" lcBrand skip
     "Group:" BIGroup
     help "Give GroupCode or its first characters"
     with row 4 col 2 title color value(ctc) " FIND GROUP "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku3.
 
 form /* cost accounts */
    "   TB1 Account: " BillItem.TB1AccNum SKIP
@@ -201,7 +201,7 @@ WITH
    BillItem.BillCode + " - " + BillItem.BIName OVERLAY FRAME tbacc.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -236,7 +236,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* BillItem -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD" must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD" must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
@@ -506,7 +506,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
@@ -526,7 +526,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
@@ -546,7 +546,7 @@ BROWSE:
 
      /* Haku 3 */
      if lookup(nap,"3,f3") > 0 AND icBGroup  = ? THEN DO:  /* haku sarakk. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         BIGroup = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME haku3.
@@ -715,7 +715,7 @@ BROWSE:
         
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
         DISPLAY 
         BillItem.Brand

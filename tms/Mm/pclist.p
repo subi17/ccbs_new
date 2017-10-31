@@ -118,7 +118,7 @@ FORM
     ttContract.Memo        COLUMN-LABEL "M"           FORMAT "M/"
     
     WITH ROW FrmRow CENTERED overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + lcFormHeader + " " +  " "
 FRAME sel.
 
@@ -153,7 +153,7 @@ FORM
    " Extension date..:" ttContract.RenewalDate FORMAT "99-99-9999"  
 
    WITH  overlay row 2 centered
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) ac-hdr 
    NO-LABELS SIDE-LABELS
     /*1 columns*/
@@ -163,19 +163,19 @@ form
     liMsSeq FORMAT ">>>>>>>>9" 
     HELP "Enter subscription ID"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SUBSCRIPTION ID " 
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
  
 form
     lCCli FORMAT "X(12)"
     HELP "Enter MSISDN"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN " 
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
     
 form 
      lcEvent FORMAT "X(12)"
      HELP "Enter Contract"
      WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CONTRACT "
-     COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+     COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
 /* read all mobsub periodical contracts to temp table */ 
@@ -315,7 +315,7 @@ END.
 
 IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -536,7 +536,7 @@ REPEAT WITH FRAME sel:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET liMsSeq WITH FRAME f1.
@@ -559,7 +559,7 @@ REPEAT WITH FRAME sel:
      /* Search by column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        SET lCCli WITH FRAME f2.
@@ -583,7 +583,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        SET lCEvent WITH FRAME f3.

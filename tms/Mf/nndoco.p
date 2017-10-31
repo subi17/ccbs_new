@@ -84,7 +84,7 @@ form
    help "Logfile's name,  empty: no log"                   skip
    "                Display double calls ........:" bDisp  skip(4)
 with
-   width 80 overlay color value(cfc) title color value(ctc)
+   width 80 overlay color value(Syst.CUICommon:cfc) title color value(ctc)
    " " + ynimi + " ERASE DOUBLE RETAIL CALLS " + string(pvm,"99-99-99") + " "
    no-labels frame start.
 
@@ -92,7 +92,7 @@ assign
    cadate2 = date(month(today),1,year(today)) - 1
    cadate1 = date(month(cadate2),1,year(cadate2)).
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 /* all mobile prefixes into a string ... 
 for each mobpref no-lock.

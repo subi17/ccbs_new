@@ -55,7 +55,7 @@ form /* pAAruutu, scroll */
     MenuText.MenuNum    column-label "TextNo"     help "Text's consecutive number"
     MenuText.MenuText    column-label "Text" help "Text's funktion key"
 WITH ROW 1 width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " MENU - TEXTER " FRAME sel.
 
 form
@@ -63,7 +63,7 @@ form
     ens        label "Text,  1.rad ...."
     toi        label "       2.rad ...."
     WITH  OVERLAY ROW 8 col 5
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header side-labels 1 columns
     FRAME lis.
@@ -73,21 +73,21 @@ form /* menunron hakua varten */
     help "Give a textNo"
     WITH ROW 4 col 2 TITLE
     color value(ctc) " SEEK TEXTNO "
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME puYR.
+    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puYR.
 
 form /* menunimen hakua varten */
     ha-metex
     help "Give a text"
     WITH ROW 4 col 2 TITLE
     color value(ctc) " SEEK TEXT "
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME puHE.
+    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puHE.
 
 /* Haetaan Company */
 FIND FIRST Company no-lock no-error.
 IF AVAILABLE Company THEN ASSIGN yvari = TRUE.
 ELSE ASSIGN yvari = FALSE.
 
- cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
  view FRAME sel.
  FIND FIRST MenuText no-lock no-error.
 
@@ -120,7 +120,7 @@ BROWSE:
        END.
 
        IF must-add THEN DO:
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           fr-header = " ADD ".
 add-new:
           repeat WITH FRAME lis:
@@ -254,7 +254,7 @@ add-new:
        /* haku */
        if nap = "f1"  or nap = "1" THEN DO:  /* fixmenunron haku */
           PAUSE 0 no-message.
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ha-menro = 0.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-menro WITH FRAME puyr.
@@ -288,7 +288,7 @@ add-new:
 
        else if nap = "f2" or nap = "2" THEN DO: /* fixmenutekstin haku */
           PAUSE 0 no-message.
-          cfc = "puhe". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puhe". RUN Syst/ufcolor.p.
           ha-metex = "".
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-metex WITH FRAME puhe.
@@ -416,7 +416,7 @@ add-new:
         FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(cfc) MenuText.MenuNum MenuText.
+        COLOR DISPLAY value(Syst.CUICommon:cfc) MenuText.MenuNum MenuText.
 
         FIND NEXT MenuText  no-lock no-error.
         IF AVAILABLE MenuText THEN memory = recid(MenuText).
@@ -464,7 +464,7 @@ add-new:
             toi = substring(MenuText,9,16).
           assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
           RUN Syst/ufkey.p.
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           PAUSE 0 no-message.
           DISPLAY MenuText.MenuNum WITH FRAME lis.
           UPDATE ens toi WITH FRAME lis.

@@ -57,7 +57,7 @@ form
     OPLog.EventType    column-label "T"        format ">9"
     Ttype-name         column-label "TypeName" format "x(42)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " OVERPAYMENT TRANSACTIONS OF "
     + STRING(iiCustNum) + " " 
@@ -78,7 +78,7 @@ form
 " Info ..................: " OPLog.Info FORMAT "X(40)"             SKIP
 
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
@@ -88,19 +88,19 @@ form /* seek BROWSE  BY  InvNum */
     InvNum
     HELP "Enter number of Invoice"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND number "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek BROWSE  BY EventDate */
     EventDate
     HELP "Enter Date of transaction"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
 
 lcCustName =  Func.Common:mDispCustName(BUFFER Customer).
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Invoice  ,   By Date    ,   By 3    , By 4".
@@ -326,7 +326,7 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET InvNum WITH FRAME f1.
@@ -351,7 +351,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET EventDate WITH FRAME f2.
@@ -384,7 +384,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY OPLog.InvNum.
 
        RUN local-update-record.                                  

@@ -96,7 +96,7 @@ form
     ttDSSInfo.Priority      FORMAT ">>9"  LABEL "Pr."
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " +
        " DSS Billing Information "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -117,12 +117,12 @@ form
     ttDSSInfo.BundleFeeCalc COLON 20                  LABEL "First Month Fee"
     ttDSSInfo.BundleFee     COLON 20                  LABEL "Bundle Fee"
 WITH  OVERLAY ROW 3 width 50 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -336,7 +336,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR

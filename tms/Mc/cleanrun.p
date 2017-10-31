@@ -73,7 +73,7 @@ form
 with
    overlay title color value(ctc)
    " " + ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
-   color value(cfc) width 80
+   color value(Syst.CUICommon:cfc) width 80
    frame taka.
 
 form
@@ -116,19 +116,19 @@ form
      SKIP
 
 with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   color value(cfc) row 2 centered overlay frame rajat.
+   color value(Syst.CUICommon:cfc) row 2 centered overlay frame rajat.
 
 form
     " Consecutive invoice number: " lasno  no-label           skip
     " Minimum invoicing amount .: " mininv no-label           skip
 with
-   title color value (ctc) " INVOICE GROUP DATA " color value(cfc)
+   title color value (ctc) " INVOICE GROUP DATA " color value(Syst.CUICommon:cfc)
    overlay centered row 15 frame lasno.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
 view frame taka. pause 0 no-message.
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN

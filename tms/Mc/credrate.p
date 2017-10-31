@@ -41,7 +41,7 @@ form
     with scroll 1 8 down  row 8 centered 
     title " Credit Items " overlay frame sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 
 find first creditrate no-lock where 
@@ -228,7 +228,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* CredDate */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update CredDate with frame hayr.
            hide frame hayr no-pause.

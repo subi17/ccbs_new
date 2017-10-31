@@ -367,7 +367,7 @@ DO WHILE TRUE:
              EndPeriod   LABEL  "Period To .....:"    SKIP
       
       WITH  OVERLAY ROW 5 centered
-      COLOR VALUE(cfc)
+      COLOR VALUE(Syst.CUICommon:cfc)
       TITLE COLOR VALUE(ctc) (IF llDSSActive THEN "RERATE CUSTOMER"
                               ELSE "RERATE SUBSCRIPTION")
       SIDE-LABELS

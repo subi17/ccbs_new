@@ -67,7 +67,7 @@ FORM
     ttHistory.Amount  FORMAT ">>>>9.999"
     ttHistory.Rated  FORMAT "X(8)" COLUMN-LABEL "Changed" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " Changes "
     FRAME sel.
 
@@ -92,7 +92,7 @@ form
       lcUpdateTime NO-LABEL FORMAT "X(8)" SKIP
     ttHistory.UpdateSource COLON 20  
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -103,7 +103,7 @@ RUN pInitHistory.
 lcTime = STRING(iiTimeSt,"hh:mm:ss").
 PAUSE 0.
 DISP icCLI idaDateSt lcTime lcGSMBNr WITH FRAME fHead.
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttHistory.InvCust.
 
        RUN local-UPDATE-record.                                  

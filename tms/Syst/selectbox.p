@@ -55,7 +55,7 @@ END.
 FORM
     ttOptions.Name FORMAT "x(40)" NO-LABEL 
 WITH ROW FrmRow CENTER OVERLAY WIDTH 50 FrmDown DOWN SCROLL 1
-    COLOR VALUE(cfc) TITLE " "  + pcHeader + " "
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE " "  + pcHeader + " "
     FRAME sel.
 
 orders = "TMC".
@@ -70,7 +70,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 LOOP:

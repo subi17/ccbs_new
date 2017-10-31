@@ -190,7 +190,7 @@ form
                     help "Change the state of credited events into unbilled"
                                    skip
 WITH
-   OVERLAY width 80 ROW 1 side-labels COLOR value(cfc) TITLE COLOR value(ctc)
+   OVERLAY width 80 ROW 1 side-labels COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + ynimi + "   CREDIT NOTES        " + string(pvm,"99-99-99") + " "
    FRAME rajat.
 
@@ -313,7 +313,7 @@ FUNCTION fDispReasonGrpDesc RETURNS LOGIC
     
 END FUNCTION.
 
-cfc = "sel".  RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel".  RUN Syst/ufcolor.p.
 
 /* crediting limit from user */
 FIND FIRST TMSUser NO-LOCK WHERE

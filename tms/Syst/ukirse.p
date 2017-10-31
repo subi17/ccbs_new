@@ -24,7 +24,7 @@ DEF VAR must-print  AS logic NO-UNDO.
 form
 TMSPrinter.PrinterId       /* column-label "Printer"
                           help "Printer"         */
-WITH scroll 1 11 DOWN  ROW 4 col 15 COLOR value(cfc)
+WITH scroll 1 11 DOWN  ROW 4 col 15 COLOR value(Syst.CUICommon:cfc)
 title color value(ctc) " ALL PRINTERS "
 OVERLAY FRAME sel.
 
@@ -32,7 +32,7 @@ runko:
 repeat ON ENDKEY UNDO runko, NEXT runko:
    ASSIGN
    siirto = ?
-   cfc = "lis". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 
    FIND FIRST TMSPrinter  no-lock no-error.
    IF NOT AVAILABLE TMSPrinter THEN DO:

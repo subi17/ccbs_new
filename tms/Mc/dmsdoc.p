@@ -46,17 +46,17 @@ FORM
    ttDocs.DocStatusDesc FORMAT "X(20)"  COLUMN-LABEL "Description"
    ttDocs.DMSStatusTS   FORMAT "99999999.99999"  COLUMN-LABEL "Time"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  DOCUMENTS  "  FRAME sel.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "  DOCUMENTS  "  FRAME sel.
 
 form
     ttDocs.Comment
     WITH OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Comment: " WITH NO-LABELS 1 columns
     FRAME fComment.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 fCollectDocs(iiDMSID).

@@ -31,13 +31,13 @@ form
    MedSect.Pref
    MedSect.Uniq
 WITH width 55 OVERLAY centered ROW 3 scroll 1 12 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi +
    " FTAM sections "
    + string(pvm,"99-99-99") + " "
    FRAME tlse.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -209,7 +209,7 @@ BROWSE:
 
         /* RepType */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* RepType */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            RepType = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE RepType WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

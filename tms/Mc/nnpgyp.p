@@ -80,7 +80,7 @@ form
     lcDoc1              FORMAT "X(8)" COLUMN-LABEL "Doc1"
     lcGraph             FORMAT "X(8)" COLUMN-LABEL "Graph"
     BItemGroup.InvoiceOrder
-WITH width 80 OVERLAY /* scroll 1 */ 15 DOWN COLOR value(cfc)
+WITH width 80 OVERLAY /* scroll 1 */ 15 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Billing Item Groups " + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -109,7 +109,7 @@ form
        FORMAT "X(30)"
        SKIP
     BItemGroup.InvoiceOrder COLON 20
-WITH  OVERLAY ROW 7 col 5 COLOR value(cfc) TITLE COLOR value(ctc)
+WITH  OVERLAY ROW 7 col 5 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
 {Func/brand.i}
@@ -119,19 +119,19 @@ form /* produkt :n tunnuksella hakua varten */
     "Code :" haku
     help "Give a code or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* produkt :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give a Name or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.             
 
 FUNCTION fDispDoc1 RETURNS LOGIC
@@ -163,7 +163,7 @@ FUNCTION fDispGraph RETURNS LOGIC
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST BItemGroup WHERE BItemGroup.Brand = lcBrand
@@ -201,7 +201,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* BItemGroup -ADD  */
       assign 
-         cfc = "lis" 
+         Syst.CUICommon:cfc = "lis" 
          ufkey = true 
          fr-header = " ADD" 
          must-add = FALSE.
@@ -466,7 +466,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
@@ -486,7 +486,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
@@ -598,7 +598,7 @@ BROWSE:
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
         RUN local-find-others.
         DISPLAY 

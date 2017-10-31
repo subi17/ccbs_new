@@ -58,7 +58,7 @@ form
     TMSUser.UserNum                     column-label "UserNo"
     TMSUser.UserName  format "x(16)"    column-label "Name"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
     UserGroup + " " FRAME sel.
 
 
@@ -66,19 +66,19 @@ WITH centered OVERLAY scroll 1 13 DOWN ROW 2
 form /* FIND User BY number */
     UserCode help "Enter User Id"
     with row 4 col 2 title color value(ctc) " FIND USERID "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND User BY name */
     UserName help "Enter User's name"
     with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND User BY abbreviation */
     UserNum help "Enter User No."
     with row 4 col 2 title color value(ctc) " FIND USER NO."
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 
 FIND FIRST TMSUser USE-INDEX UserCode no-lock no-error.
@@ -286,7 +286,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         UserCode = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserCode WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
@@ -304,7 +304,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p. UserNum = 0.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. UserNum = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserNum WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
@@ -322,7 +322,7 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p. UserName = "".
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. UserName = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserName WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.

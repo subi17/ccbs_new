@@ -65,7 +65,7 @@ form
 
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " Billable Mobile calls "
     + string(pvm,"99-99-99") + " "
@@ -76,7 +76,7 @@ form
     prepcdr.CustNum    /* LABEL FORMAT */
                     
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr
     SIDE-LABELS  1 columns    FRAME lis.
 
@@ -84,28 +84,28 @@ form /* seek Mobile Call  BY  DateSt */
     DateSt timest
     HELP "Enter CallDate and time"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date AND TIME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Mobile Call  BY CustNum */
     CustNum
     HELP "Enter A-Sub Customer No."
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND A-CUST "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Mobile Call  BY A-sub. */
 
     CLI FORMAT "x(12)"
     HELP "Enter calling MSISDN No."
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek Mobile Call  BY A-sub. */
     gsmbnr FORMAT "x(11)"
     HELP "Enter called b-No."
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND B-NUMBER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = 
@@ -137,7 +137,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a prepcdr  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -378,7 +378,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET DateSt timest WITH FRAME f1.
@@ -406,7 +406,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CustNum WITH FRAME f2.
@@ -429,7 +429,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        SET CLI WITH FRAME f3.
@@ -455,7 +455,7 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        SET gsmbnr WITH FRAME f4.
@@ -494,7 +494,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY prepcdr.DateSt.
 
        RUN local-UPDATE-record.                                  

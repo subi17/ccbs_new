@@ -38,7 +38,7 @@ FORM
     "Processing:" lcRoll FORMAT "x(2)"
 
     WITH ROW 6 OVERLAY 1 DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     CENTERED NO-LABEL
 FRAME Calc.
 

@@ -43,14 +43,14 @@ form
    lcStatus           FORMAT "X(12)"   COLUMN-LABEL "Status"
 
 WITH OVERLAY CENTERED  scroll 3 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " +
    " COUNTERS for " + icEvent + " " 
    + string(pvm,"99-99-99") 
    FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 IF idtFrom = ? THEN idtFrom = 12/1/2006.

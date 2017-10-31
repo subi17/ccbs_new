@@ -40,14 +40,14 @@ END.
 FORM
    ttFiles.FileName
 WITH
-   ROW 1 TITLE " Files in " + lcDirectory + " " CENTERED OVERLAY FrmDown DOWN COLOR VALUE(cfc)
+   ROW 1 TITLE " Files in " + lcDirectory + " " CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
 FRAME sel.
 
-cfc = "sel".
+Syst.CUICommon:cfc = "sel".
 
 RUN Syst/ufcolor.p.
 
-ccc = cfc.
+ccc = Syst.CUICommon:cfc.
 
 VIEW FRAME sel.
 

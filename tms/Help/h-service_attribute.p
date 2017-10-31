@@ -24,11 +24,11 @@ form
     ServAttr.ServCom   
     ServAttr.ServAttr    
     ServAttr.SAName FORMAT "X(30)" COLUMN-LABEL "Name"
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 ASSIGN
    lcServCom = gcHelpParam

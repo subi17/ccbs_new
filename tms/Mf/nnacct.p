@@ -77,13 +77,13 @@ form
   "          Customers B-number list .." bnfile no-label format "x(20)"
 
 WITH
-   color value(cfc) title color value(ctc) " Accounting Report to Excel "
+   color value(Syst.CUICommon:cfc) title color value(ctc) " Accounting Report to Excel "
    OVERLAY width 80 side-labels FRAME krit.
 
 form
    bnfile format "x(16)" NO-LABEL
 WITH
-   color value(cfc) title color value(ctc) " Seekt customer/file "
+   color value(Syst.CUICommon:cfc) title color value(ctc) " Seekt customer/file "
    fsize DOWN OVERLAY ROW 3 col 60 FRAME act.
 
 
@@ -118,7 +118,7 @@ tab = chr(9).
 
 krit:
 repeat WITH FRAME krit:
-   cfc = "sel". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
    ehto = 9. RUN Syst/ufkey.p.
    disp "<" + entry(cnum,cname) + ">" @ bnfile.
 
@@ -170,7 +170,7 @@ toimi:
       IF toimi = 8 THEN LEAVE krit.
       IF toimi = 1 THEN NEXT  krit.
       IF toimi = 4 THEN DO WITH FRAME act.
-    cfc = "lis". RUN Syst/ufcolor.p.
+    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
     CLEAR FRAME act ALL no-pause.
     DO i = 1 TO fsize WITH FRAME act.
        bnfile = entry(i,cname).

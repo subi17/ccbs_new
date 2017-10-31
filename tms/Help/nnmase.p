@@ -30,7 +30,7 @@ form
    CCN.CCN  /* column-label "Land" */ FORMAT ">>>9"
    CCNName          column-label "Name"
 WITH
-   scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+   scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " LANDCODE " OVERLAY
 FRAME tlse.
 
@@ -39,17 +39,17 @@ form
    CCNName      label "Name" SKIP(1)
 WITH
    OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
-   COLOR value(cfc) side-labels 1 col
+   COLOR value(Syst.CUICommon:cfc) side-labels 1 col
 FRAME tlli.
 
 form /* Maa :n hakua varten */
    haku
       help "Give a country's Name or beginning of it"
 with row 4 col 2 title color value(ctc) " FIND Land  "
-    COLOR value(cfc) NO-LABELS OVERLAY
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY
 FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -69,7 +69,7 @@ LOOP:
 
    IF must-add THEN DO:  /* Maa  lisays  */
       ASSIGN
-      cfc = "tlli"
+      Syst.CUICommon:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
        add-new:
@@ -244,7 +244,7 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

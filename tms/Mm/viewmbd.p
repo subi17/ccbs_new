@@ -246,7 +246,7 @@ FORMAT
 "Reason Code" ReasonC format "9"  Tmscode.codename FORMAT "X(35)"  SKIP
 "Reason Text" ReasonT format "x(60)"                     
 
-WITH CENTERED ROW 2 COLOR VALUE(cfc) TITLE 
+WITH CENTERED ROW 2 COLOR VALUE(Syst.CUICommon:cfc) TITLE 
 "SHOW B-NUMBER" OVERLAY side-label no-label FRAME reason .
 
 

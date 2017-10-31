@@ -169,7 +169,7 @@ suoritettu       label "Total payments ..." AT 2
 skip
 
 with title color value(ctc) " " + ynimi + " UPDATE AN INVOICE "
-+ string(pvm,"99-99-99") + " " COLOR value(cfc) ROW 1 col 1
++ string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
 width 80 side-LABELs
 FRAME Invoice.
 
@@ -178,7 +178,7 @@ Invoice.CustName LABEL "Customer's Name....."
 Invoice.Address  LABEL "Address ............"
 Invoice.PostOffice  LABEL "Post office ........"
 with title color value(ctc) " 9999: DIVERSE CUSTOMER "
-COLOR value(cfc) ROW 5 centered side-LABELs OVERLAY
+COLOR value(Syst.CUICommon:cfc) ROW 5 centered side-LABELs OVERLAY
 FRAME oso.
 
 FUNCTION fClaimStateName RETURNS LOGIC
@@ -192,7 +192,7 @@ FUNCTION fClaimStateName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "yri". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
 
 liDueDate = fCParamI("DueDateTrans").
 

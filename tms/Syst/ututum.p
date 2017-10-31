@@ -61,7 +61,7 @@ form
     TMSRepCfg.PrinterId  column-label "Printer"
     tnimi           column-label "Effect"
  WITH ROW 2 centered OVERLAY scroll 1 13 DOWN
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " " + TMSReport.Memo + ": PRINT PARAMETERS "
     FRAME sel.
 
@@ -73,12 +73,12 @@ form
     tnimi NO-LABEL SKIP
     TMSRepCfg.UserCode            label "User ........"
     help "User ID or empty for ALL users" SKIP
- WITH  OVERLAY ROW 8 centered COLOR value(cfc)
+ WITH  OVERLAY ROW 8 centered COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
 FIND FIRST TMSReport where TMSReport.RepName = si-tul no-lock no-error.
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
 IF AVAILABLE TMSRepCfg THEN DO:
@@ -101,7 +101,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* TMSRepCfg -ADD  */
       ASSIGN
-      cfc = "lis"
+      Syst.CUICommon:cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD, (width " + string(TMSReport.PageWidth) + ") ".
       RUN Syst/ufcolor.p.
@@ -465,7 +465,7 @@ BROWSE:
 
         ASSIGN ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
         FIND FIRST PrintCodes where 
                    PrintCodes.Effect = TMSRepCfg.Effect AND 

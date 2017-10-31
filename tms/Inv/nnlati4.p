@@ -47,7 +47,7 @@ help "Code of an External Customer Group (EMPTY = none)" SKIP
      "Agent/reseller ........:"  AT 15 Reseller
         help "One for certain, empty for all" TO 50 skip(2)
 WITH
-   width 80 COLOR value(cfc)
+   width 80 COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
@@ -75,7 +75,7 @@ FIND LAST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
     ehto = 9. RUN Syst/ufkey.p.

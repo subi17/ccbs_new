@@ -49,7 +49,7 @@ form
     lcfrom          COLUMN-LABEL "Valid from" FORMAT "x(16)"
     lhist           COLUMN-LABEL "H"
 WITH centered OVERLAY ROW 2 13 DOWN
-    color value(cfc) title color value(ctc) 
+    color value(Syst.CUICommon:cfc) title color value(ctc) 
    " A-sub.Nums Of Invoicing Target " + STRING(bt) + " Of Cust " + STRING(cust)
 FRAME sel.
 
@@ -72,11 +72,11 @@ form /* Numeron haku kentällä CustNum */
     haku-CLI 
     help "Enter A-sub no. or its FIRST digits"         
 WITH row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
-     COLOR value(cfc) NO-LABELS OVERLAY 
+     COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME haku-f1.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CLI WHERE
@@ -343,7 +343,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-CLI WITH FRAME haku-f1.

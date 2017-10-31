@@ -74,7 +74,7 @@ form
     ttSLG.ValidFrom    COLUMN-LABEL "Date" 
 
 WITH ROW FrmRow OVERLAY CENTERED FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
     " NEW ATTRIBUTES FOR PERIODICAL/SERVICE COUNTERS " 
     FRAME sel.
@@ -85,14 +85,14 @@ form
     ttSLG.CCN      LABEL "Value of attribute" 
     ttSLG.ValidFrom 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -360,7 +360,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSLG).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

@@ -79,7 +79,7 @@ form
     minne  label "New Level for submenu ............."
     help "New Level for moved fixmenus " SKIP
 
-    with color value(cfc) title color value(ctc) " MOVE SUBMENU "
+    with color value(Syst.CUICommon:cfc) title color value(ctc) " MOVE SUBMENU "
          OVERLAY centered ROW 4 FRAME siirto side-labels.
 
 
@@ -118,7 +118,7 @@ form
              help "Token code for this menu item"
 
     WITH OVERLAY ROW 6 centered side-labels
-    TITLE COLOR value(ctc) fr-header COLOR value(cfc)
+    TITLE COLOR value(ctc) fr-header COLOR value(Syst.CUICommon:cfc)
     FRAME lis.
 
 form
@@ -134,7 +134,7 @@ form
     MenuTree.State[1]   column-label "S"    format  "*/"
     MenuTree.MenuClass     /* column-label "PgCl"          */
  WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " MenuText TREE "
     + string(pvm,"99-99-99") + " "
  FRAME sel.
@@ -144,22 +144,22 @@ form /* tason hakua varten */
     haku
     help "Enter Level No"                           
     with row 4 col 1 title color value(ctc) " FIND Level "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /*  tunnuksen hakua varten */
     haku2
     help "Enter Function Code"                          
     with row 4 col 47 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  Search by module  */
     haku3
     help "Enter Module Name"                          
     with row 4 col 35 title color value(ctc) " FIND MODULE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST MenuTree no-lock no-error.
    IF AVAILABLE MenuTree THEN ASSIGN memory = recid(MenuTree)
@@ -184,7 +184,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* valikon lisays  */
-      assign cfc = "lis" ufkey = true fr-header = " LISAYS " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " LISAYS " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 add-new:
@@ -580,7 +580,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p. haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         if MenuTree.Level ne "0" THEN DO:
            IF MenuTree.MenuType = 2 THEN haku = MenuTree.Level + string(
@@ -607,7 +607,7 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
@@ -628,7 +628,7 @@ BROWSE:
 
      /* Search by module */
      if lookup(nap,"2,f2") > 0 THEN DO: 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku3 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku3 WITH FRAME hayr3.
@@ -648,7 +648,7 @@ BROWSE:
      END. /* Search by module */
 
      else if nap = "7" or nap = "f7" AND lcRight = "RW" THEN DO: /* siirto */
-        assign ufkey = true ehto = 9. cfc = "kline". RUN Syst/ufcolor.p. RUN Syst/ufkey.p.
+        assign ufkey = true ehto = 9. Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. RUN Syst/ufkey.p.
         DO TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
            assign mista = "" minne = "".
            UPDATE mista minne WITH FRAME siirto EDITING:
@@ -832,7 +832,7 @@ siirto:             repeat:
 
         ASSIGN ed-taso = MenuTree.Level ed-pka = MenuTree.Position.
         assign ufkey = true ehto = 9 fr-header = " CHANGE MenuText "
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         PAUSE 0 no-message.
 
         FIND FIRST MenuText where 

@@ -73,7 +73,7 @@ form
     ServiceLimit.SLName        FORMAT "X(40)"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " ServiceLimit Groups " + groupcode    
     FRAME sel.
@@ -102,7 +102,7 @@ form
       HELP "Last month calculation method, (F)ull or (R)elative" SKIP
     Servicelimit.web          COLON 25
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -111,13 +111,13 @@ form /* seek Billing Event Item  BY  GroupCode */
     GroupCode
     HELP "Enter Price List Code"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND P-LIST "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event Item  BY SLCode */
     SLCode
     HELP "Enter SLCode"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SLCode "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -150,7 +150,7 @@ END FUNCTION.
          
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By SLCode  ,By 3, By 4".
@@ -183,7 +183,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServiceLimit  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -555,7 +555,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           ServiceLimit.SLCode
           ServiceLimit.GroupCode

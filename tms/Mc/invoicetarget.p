@@ -61,7 +61,7 @@ FORM
    InvoiceTarget.FromDate
    InvoiceTarget.ToDate
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-   COLOR VALUE(cfc)   
+   COLOR VALUE(Syst.CUICommon:cfc)   
    TITLE COLOR VALUE(ctc) 
       " InvoiceTargets " + " "
    FRAME sel.
@@ -74,7 +74,7 @@ FORM
    InvoiceTarget.FromDate COLON 20
    InvoiceTarget.ToDate COLON 20
 WITH OVERLAY ROW 3 centered
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) ac-hdr 
    SIDE-LABELS 
    FRAME lis.
@@ -82,13 +82,13 @@ WITH OVERLAY ROW 3 centered
 form liNewITGroup
     HELP "Enter new invoice target group ID"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " MOVE TO NEW GROUP "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 IF iiMsSeq > 0 THEN ASSIGN
    FrmRow = 3
    FrmDown = 8.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 IF iiITGroupID > 0  THEN DO:
@@ -128,7 +128,7 @@ REPEAT WITH FRAME sel:
     END.
    
    IF must-add THEN DO:  /* Add a InvoiceTarget  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -449,7 +449,7 @@ REPEAT WITH FRAME sel:
        END.
  
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-VIEW-record.                                  
        HIDE FRAME lis NO-PAUSE.

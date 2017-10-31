@@ -43,7 +43,7 @@ form
 with title color value(ctc) 
   " " + ynimi + " COPY A NEW BRAND  " + 
   STRING(pvm,"99-99-99")  + " "
-  side-labels color value(cfc) 
+  side-labels color value(Syst.CUICommon:cfc) 
   OVERLAY row 1 width 80 frame main.
 
 
@@ -65,7 +65,7 @@ END.
 
 lcNewName = Brand.BRName.
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.
 
 PAUSE 0.

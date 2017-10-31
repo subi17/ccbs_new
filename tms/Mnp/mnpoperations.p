@@ -90,7 +90,7 @@ form
     MNPOperation.CreatedTS       COLUMN-LABEL "Created"
     MNPOperation.StatusCode      COLUMN-LABEL "St"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " MNP messages "
     + string(pvm,"99-99-99") + " "
@@ -109,11 +109,11 @@ form
    lcErrorHandled LABEL "Error Handled"
 
 WITH OVERLAY ROW 6 centered 1 columns 
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc) " View Message " WITH side-labels
    FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".

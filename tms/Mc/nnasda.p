@@ -29,7 +29,7 @@ form
    "     updated ....:"  Customer.UpdDate         SKIP
    "     updated by .:"  Customer.UpdUser up-name skip(1)
 WITH ROW 5 /*width 40*/ centered OVERLAY
-   NO-LABEL COLOR value(cfc) TITLE COLOR value(ctc)
+   NO-LABEL COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " Who/When Created/Changed This Customer " FRAME frm.
 
 DO FOR TMSUser:

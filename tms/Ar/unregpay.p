@@ -197,7 +197,7 @@ FORM
     UnregPaym.PaidAmt   FORMAT "->>>>>>9.99"
     UnregPaym.RefNum    FORMAT "X(17)"
     UnregPaym.BankAcc   FORMAT "x(14)"
-WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(cfc)
+WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " UNREGISTERED PAYMENTS " + STRING(pvm,"99-99-99") + " "     
     FRAME sel.
@@ -243,7 +243,7 @@ FORM
                         FORMAT "Yes/No" 
                         HELP "Calculate delay interest from payment" SKIP
     "Memo:"  UnregPaym.Memo      NO-LABEL VIEW-AS EDITOR Size 60 BY 5
-WITH  OVERLAY ROW 1 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+WITH  OVERLAY ROW 1 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
     fr-header WITH SIDE-LABELS FRAME lis.
 
 FORM
@@ -253,7 +253,7 @@ FORM
    mench[3] SKIP
    mench[4] SKIP
    mench[5]
-WITH OVERLAY ROW 6 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
    " CHOOSE BOOKING TYPE " WITH NO-LABELS FRAME f-menu.
 
 FORM
@@ -268,7 +268,7 @@ FORM
    OldSum          LABEL "Old overpayment "
    PreSum          LABEL "Booking sum ...."
    NewSum          LABEL "New overpayment "
-WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
    " OVERPAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME over.
 
 FORM
@@ -283,7 +283,7 @@ FORM
    OldSum          LABEL "Old Adv.Payment "
    PreSum          LABEL "Booking sum ...."
    NewSum          LABEL "New Adv.Payment "
-WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
    " ADVANCE PAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME AdvPaym.
 
 {Func/brand.i}
@@ -293,39 +293,39 @@ FORM /* Seek a Date */
    "Date :" haku1
    HELP "Give the payment date"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Date "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr1.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 FORM /* Seek a customer's name */
    "Brand:" lcBrand skip
    "Name :" haku2
    HELP "Give the customer's name or beginning of it"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Name "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr2.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 FORM /* Seek an amount */
    "Brand :" lcBrand skip
    "Amount:" haku3
    HELP "Give the payment amount"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND AMOUNT "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr3.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM /* Seek a reference number */
    "Brand :" lcBrand skip
    "Refnum:" haku4
    HELP "Give the reference number"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND REF.NUM. "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr4.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr4.
 
 FORM /* Seek a Bank AccNum */
    "Brand:" lcBrand skip
    "Bank :"  haku5
    HELP "Give the bank account"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Bank Account "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr5.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr5.
 
-cfc = "sel". 
+Syst.CUICommon:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN ccc = cfc.
+ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 xState = 0.
@@ -363,7 +363,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a UnregPaym  */
  
-      ASSIGN cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -637,7 +637,7 @@ REPEAT WITH FRAME sel:
          NO-LOCK.
          ASSIGN  fr-header = " SHOW MORE INFORMATION " ufkey = TRUE.
          
-         cfc = "lis". RUN Syst/ufcolor.p. 
+         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUnregPaym).
          
@@ -682,7 +682,7 @@ REPEAT WITH FRAME sel:
 
          /* Seek a Date */
          IF toimi = 1 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.p.
+            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku1 = ?.
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr1.
@@ -716,7 +716,7 @@ REPEAT WITH FRAME sel:
 
          /* Seek a customer's name */
          IF toimi = 2 THEN DO:
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku2 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr2.
@@ -748,7 +748,7 @@ REPEAT WITH FRAME sel:
 
          /* Seek an amount */
          IF toimi = 3 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.p.
+            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku3 = 0.
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr3.
@@ -780,7 +780,7 @@ REPEAT WITH FRAME sel:
 
          /* Seek a reference number */
          IF toimi = 4 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.p.
+            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku4 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr4.
@@ -812,7 +812,7 @@ REPEAT WITH FRAME sel:
 
          /* Seek a Bank AccNum */ 
          IF toimi = 5 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.p.
+            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku5 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr5.
@@ -983,7 +983,7 @@ REPEAT WITH FRAME sel:
          memory = rtab[FRAME-LINE(sel)].
          ASSIGN ufkey = TRUE ufk = 0 ehto = 3.
          RUN Syst/ufkey.p.   
-         cfc = "lis".
+         Syst.CUICommon:cfc = "lis".
          RUN Syst/ufcolor.p. 
          ON F1 BELL.
          ON F2 BELL.
@@ -1014,7 +1014,7 @@ REPEAT WITH FRAME sel:
                         ELSE "INVOICE "
             ufkey = TRUE ehto = 9.
             RUN Syst/ufkey.p.
-            cfc = "lis". RUN Syst/ufcolor.p.  
+            Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.  
             on f4 endkey. /* se toimi vain jos ei kutsutaan F9 */
 
             ASSIGN   

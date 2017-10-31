@@ -39,25 +39,25 @@ def var ok          as log format "Yes/No"    NO-UNDO.
 form
     AreaPair.NeigArea   column-label "Areanr"
     AreaName            column-label "City"  format "x(35)"
-WITH centered OVERLAY scroll 1 10 DOWN ROW 3 COLOR value(cfc)
+WITH centered OVERLAY scroll 1 10 DOWN ROW 3 COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " Neighbour areas for " + AreaCode + " "
     + this-rnom.AreaName + " " FRAME sel.
 
 form
     NeigArea label "Areanr"  AreaName NO-LABEL SKIP
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header WITH side-labels
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
 form /* angrAnsande riktnr. search WITH FIELD NeigArea */
     NeigArea
     help "Enter Areanumber"
     with row 4 col 2 title color value(ctc) " FIND AREA NUMBER "
-    COLOR value(cfc) side-labels OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f1.
 
 FIND this-rnom where this-rnom.AreaCode = AreaCode no-lock.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST AreaPair where AreaPair.AreaCode = AreaCode no-lock no-error.
@@ -86,7 +86,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* AreaPair -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       CLEAR FRAME lis no-pause.
 add-new:
@@ -407,7 +407,7 @@ BROWSE:
      /* Haku sarakk. 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-   cfc = "puyr". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
    NeigArea = "".
    ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE NeigArea WITH FRAME f1.

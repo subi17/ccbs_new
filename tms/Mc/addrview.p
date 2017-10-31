@@ -39,7 +39,7 @@ FORM
    "Km...............:" OrderCustomer.Km SKIP
    "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " Installation Address "
     NO-LABELS
     FRAME fAddr.

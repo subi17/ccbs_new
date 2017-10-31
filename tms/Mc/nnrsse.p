@@ -39,7 +39,7 @@ form
     Reseller.Reseller
     Reseller.RsName       format "x(30)"
     WITH CENTERED OVERLAY scroll 1 ROW 2 12 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Browse resellers (" + gcBrand + ") "
     + string(pvm,"99-99-99") + " "
@@ -49,13 +49,13 @@ form /*  search WITH FIELD Reseller */
     Reseller
     help "Give ...."
     with row 4 col 2 title color value(ctc) " FIND CODE"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD RsName */
     RsName
     help "Give ..."
     with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND FIRST Reseller
@@ -71,7 +71,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -293,7 +293,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Reseller WITH FRAME f1.
@@ -318,7 +318,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE RsName WITH FRAME f2.

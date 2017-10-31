@@ -27,7 +27,7 @@ DEF VAR tlli-ots    AS CHAR.
 form
    Currency.Currency  
    Currency.CurrName  column-label "Name"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " Currency CODE "
    OVERLAY FRAME tlse.
 
@@ -35,15 +35,15 @@ form
    Currency.Currency label "Code" SKIP
    Currency.CurrName label "Name" skip(1)
 WITH OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
-   COLOR value(cfc) side-labels 1 col  FRAME tlli.
+   COLOR value(Syst.CUICommon:cfc) side-labels 1 col  FRAME tlli.
 
 form 
    Currency
    help "Give a country's Name or beginning of it"
 with row 4 col 2 title color value(ctc) " FIND Code  "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -62,7 +62,7 @@ LOOP:
 
    IF must-add THEN DO:  /* Maa  lisays  */
       ASSIGN
-      cfc = "tlli"
+      Syst.CUICommon:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
 add-new:
@@ -229,7 +229,7 @@ BROWSE:
 
         /* Currency */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* Currency */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            Currency = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Currency WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

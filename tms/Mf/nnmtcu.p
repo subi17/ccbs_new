@@ -53,7 +53,7 @@ form
    MthCall.CloseDate         label "Closed"      format "99-99-99"
 WITH
    width 48 OVERLAY scroll 1 ROW 2 12 DOWN
-   centered NO-LABEL COLOR value(cfc)
+   centered NO-LABEL COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " Monthly call counters "
    FRAME sel.
 
@@ -70,7 +70,7 @@ form
        help "Date when subscription was closed"                   SKIP
 
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH NO-LABEL
     FRAME lis.
@@ -90,7 +90,7 @@ ELSE DO:
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -379,7 +379,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        ASSIGN
           Month     = MthCall.Month
           Called  = MthCall.Called

@@ -66,7 +66,7 @@ skip(1)
 "       NEW SIM (ICC) ..........:" new-icc 
 help "Enter new SERIAL Number of a SIM CARD (ICC)"                   SKIP(1)
  WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " CHANGE SIM FOR MSISDN " + MobSub.CLI + " "
     NO-LABELS 
     /*1 columns*/

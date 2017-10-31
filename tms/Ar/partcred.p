@@ -72,7 +72,7 @@ form
         HELP "Credited amount" 
     InvRow.CreditInvNum column-label "Cr Inv."    format ">>>>>>>9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
        " Lines for invoice nbr " + string(iInvNum) + " " 
        + string(pvm,"99-99-99") + " "
@@ -124,7 +124,7 @@ form
        SKIP
 
     WITH ROW 15 width 60 OVERLAY side-labels
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     FRAME crother.
 
 FORM
@@ -136,9 +136,9 @@ form /* seek InvRow  BY  InvRow */
     xBillCode
     HELP "Enter BillCode code"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -374,7 +374,7 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET xBillCode WITH FRAME f1.

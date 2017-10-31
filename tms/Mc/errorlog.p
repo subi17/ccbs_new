@@ -70,7 +70,7 @@ form
     ldtDate            FORMAT "99-99-99" COLUMN-LABEL "Date"
     ErrorLog.ErrorMsg  FORMAT "X(31)"    COLUMN-LABEL "Error"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        " ERROR LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -89,7 +89,7 @@ form
     ErrorLog.ErrorMsg   COLON 16 
        VIEW-AS EDITOR SIZE 60 BY 5
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -101,7 +101,7 @@ form /* seek  ErrorLog */
     "Action:" lcActionID
     HELP "Enter action ID "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Action ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* seek  ErrorLog */
@@ -111,7 +111,7 @@ form /* seek  ErrorLog */
     "Key .:" lcKey
        HELP "Enter key value for table"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 IF icTableName > "" THEN 
@@ -122,7 +122,7 @@ IF icTableName > "" OR icActionID > "" THEN ASSIGN
  FrmRow   = 3
  FrmDown  = 13.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -348,7 +348,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -373,7 +373,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -466,7 +466,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhErrorLog).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ErrorLog.TableName.
 
        RUN local-UPDATE-record.                                  

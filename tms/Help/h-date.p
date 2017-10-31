@@ -66,10 +66,10 @@ CREATE paiva.
 form
       paiva.paiva LABEL "" FORMAT "99-99-9999"
 
-    with scroll 1 4 down  row 4 centered color value(cfc)
+    with scroll 1 4 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " Dates " overlay frame sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 

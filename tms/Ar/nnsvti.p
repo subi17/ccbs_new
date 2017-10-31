@@ -165,7 +165,7 @@ form
    SKIP(13)
    WITH TITLE COLOR value(ctc)
    " " + ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
-COLOR value(cfc) width 80 OVERLAY FRAME taka.
+COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
 form
    " Invoice group  ..........:" lcInvGroup  NO-LABEL FORMAT "X(10)"
@@ -213,9 +213,9 @@ form
       SKIP
       
 with title color value(ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
-COLOR value(cfc) ROW 7 centered OVERLAY FRAME rajat.
+COLOR value(Syst.CUICommon:cfc) ROW 7 centered OVERLAY FRAME rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 view FRAME rajat. view FRAME statu. PAUSE 0 no-message.
@@ -225,7 +225,7 @@ ASSIGN
    i-date1  = pvm
    i-date2  = pvm
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN lano1 = 000000 lano2 = 99999999

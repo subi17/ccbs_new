@@ -74,7 +74,7 @@ form
    SLGAnalyse.Prior   FORMAT "99"
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi +
    " SLG ANALYSE " 
    + string(pvm,"99-99-99") + " "
@@ -96,7 +96,7 @@ form
    SLGAnalyse.ServiceLimitGroup  COLON 23 FORMAT "X(20)" SKIP
    SLGAnalyse.Prior              COLON 23 FORMAT "99"
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
@@ -115,7 +115,7 @@ FORM
    "  Target.......:" lcServicel            
 
 WITH OVERLAY ROW 4 centered
-COLOR value(cfc) TITLE "GENERATE ANALYSE ROWS" 
+COLOR value(Syst.CUICommon:cfc) TITLE "GENERATE ANALYSE ROWS" 
 side-label NO-LABEL
 FRAME Generate.
                           
@@ -124,9 +124,9 @@ form /*  search WITH FIELD SLGAnalyse */
     lcEvent
     help "Give ...."
     with row 4 col 2 title color value(ctc) " FIND Event "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
                      
@@ -152,7 +152,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* SLGAnalyse -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       add-new:
@@ -484,7 +484,7 @@ repeat WITH FRAME sel:
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSlganalyse).
 

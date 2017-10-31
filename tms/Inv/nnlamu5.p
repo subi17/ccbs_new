@@ -117,7 +117,7 @@ form
 WITH
    OVERLAY TITLE COLOR value(ctc)
    " " + ynimi + " DEPOSIT INVOICING " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80
+   COLOR value(Syst.CUICommon:cfc) width 80
    FRAME taka.
 
 form
@@ -146,21 +146,21 @@ form
            help "Approve all invoices automatically (Yes/No) ?" 
                                                 SKIP(1)    
 with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(cfc) ROW 3 centered OVERLAY FRAME rajat.
+   COLOR value(Syst.CUICommon:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 form
     SKIP(1)
     " Consecutive invoice number: " lcInvNum  NO-LABEL           
     SKIP(1)
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
+   title color value (ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
 IF NOT ilSilent THEN DO:
-   cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
    view FRAME taka. PAUSE 0 no-message.
 
-   cfc = "lis". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
    ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 

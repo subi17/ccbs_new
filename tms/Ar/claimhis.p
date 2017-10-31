@@ -81,7 +81,7 @@ form
     ClaimHist.Handler    format "x(8)"
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     "  CLAIMING HISTORY  "
     + string(pvm,"99-99-99") + " "
@@ -94,14 +94,14 @@ form /* seek  invoice */
     "Invoice:" lInvNum
     HELP "Enter invoice number "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND INVOICE "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  customer */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
 form /* seek  Date */
@@ -109,14 +109,14 @@ form /* seek  Date */
     "Date :" lClaimDate FORMAT "99-99-9999"
     HELP "Enter claiming date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
 form
     ClaimHist.memo
     VIEW-AS EDITOR SIZE 60 BY 5 
     with overlay row 8 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc)
     " memo: " + ClaimHist.handler + " " WITH no-labels 1 columns
     frame f4.
@@ -142,7 +142,7 @@ ELSE DO:
    RETURN.      
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -361,7 +361,7 @@ REPEAT WITH FRAME sel:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -390,7 +390,7 @@ REPEAT WITH FRAME sel:
      /* Search by column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -415,7 +415,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.

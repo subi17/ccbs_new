@@ -101,7 +101,7 @@ form
     ttSoLog.Response  format "x(10)"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Service Order LOG of MobSub " + lcCLI + " "
     FRAME sel.
@@ -110,14 +110,14 @@ form /* seek ttSoLog  BY SoSeq */
     SoLog2
     HELP "Enter OrdSeq"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ORDSEQ "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ttSoLog  BY Stat */
     stat
     HELP "Enter Status"
     "(0:NEW  1:FAIL 2: PENDING 3:OK)"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND STATUS "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
@@ -131,7 +131,7 @@ ELSE DO:
    IF AVAIL TermMobSub THEN lcCLi = TermMobSub.CLI.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By OrdSeq,By Status,By 3,By 4".
@@ -356,7 +356,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET SoLog2 WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -380,7 +380,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET Stat WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -574,7 +574,7 @@ BROWSE:
        /* change */      
        RUN local-find-this(FALSE ).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        FIND FIRST SoLog WHERE
             RECID(SoLog) = ttSoLog.OrigRec

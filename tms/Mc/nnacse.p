@@ -40,7 +40,7 @@ form
     Account.AccNum   FORMAT ">>>>>>>9"
 
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc) 
        " Account FINDING FROM (" + gcBrand + ") '" + pgseek + "' " FRAME sel.
 
@@ -55,7 +55,7 @@ form
 
 with row 1 centered overlay title " Account FINDING " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST Account USE-INDEX AccNum WHERE 
       Account.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Account THEN DO:

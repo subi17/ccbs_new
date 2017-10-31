@@ -40,7 +40,7 @@ HELP "Subscription Status, 0 for all" StatName SKIP
 "                Detailed information .:" details SKIP
 SKIP(5)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + ynimi + " SUBSCRIPTION REPORT " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME start.
 
@@ -51,7 +51,7 @@ ASSIGN
    actdate1 = date(month(actdate2),1,year(actdate2)).
 
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:

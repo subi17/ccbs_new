@@ -58,12 +58,12 @@ form
   "               Invoice group :" InvGroup 
                      help "Selected invoice group (empty for all)"      skip(4)
 WITH
-    color value(cfc) title color value(cfc) " Close all customers "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Close all customers "
     centered NO-LABEL
     OVERLAY  width 80
     FRAME frm.
 
-cfc = "kline".  RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "kline".  RUN Syst/ufcolor.p.
 
 LOOP:
 repeat WITH FRAME frm:

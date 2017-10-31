@@ -58,7 +58,7 @@ form
     ttCustomer.InvCust    FORMAT ">>>>>>>9" COLUMN-LABEL "InvCust"
     ttCustomer.ICName     FORMAT "X(12)"    COLUMN-LABEL "ICust Name"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ac-hdr + " " 
     FRAME sel.
 
@@ -66,13 +66,13 @@ form /* seek  ttCustomer */
     "Customer Nbr:" liCustNum
     HELP "Enter customer number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND number "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Name:" lcCustName
     HELP "Enter customer name"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fPickCustomer RETURNS LOGICAL
    (icType AS CHAR).
@@ -140,7 +140,7 @@ END.
 
 ELSE RETURN.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -349,7 +349,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCustNum = 0.
@@ -378,7 +378,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCustName = "".

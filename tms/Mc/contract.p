@@ -84,7 +84,7 @@ form
     Contract.CloseDate
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        " CONTRACTS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -130,7 +130,7 @@ form
        FORMAT "X(55)"
 
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -142,28 +142,28 @@ form /* seek  contract */
     "Contract:" lcContract
     HELP "Enter contract ID"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND contract "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND customer "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  Salesman */
     "Brand ..:" lcBrand skip
     "Salesman:" xSalesman
     HELP "Enter Salesman code"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Salesman "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  date */
     "Brand:" lcBrand skip
     "Date :" ldtFrom
     HELP "Enter beginning date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Beg. Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 form /* seek  date */
     "Brand:" lcBrand skip
@@ -173,10 +173,10 @@ form /* seek  date */
     "Date :" ldtTo
        HELP "Enter end date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND End Date"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Contract  ," +
@@ -218,7 +218,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a Contract  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -502,7 +502,7 @@ BROWSE:
 
        /* Search BY column 1 */
        IF toimi = 1 THEN DO:
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
@@ -524,7 +524,7 @@ BROWSE:
 
        /* Search BY column 2 */
        ELSE IF TOIMI = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
@@ -555,7 +555,7 @@ BROWSE:
        /* Search BY col 3 */
        ELSE IF toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F3.
           DISPLAY lcBrand WITH FRAME F3.
@@ -578,7 +578,7 @@ BROWSE:
        /* Search BY col 4 */
        ELSE IF toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F4.
           DISPLAY lcBrand WITH FRAME F4.
@@ -609,7 +609,7 @@ BROWSE:
 
        ELSE IF toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F5.
           DISPLAY lcBrand WITH FRAME F5.
@@ -717,7 +717,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhContract).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Contract.CustNum.
 
        RUN local-UPDATE-record.                                  

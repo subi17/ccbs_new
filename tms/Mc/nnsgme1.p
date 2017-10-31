@@ -57,7 +57,7 @@ form
     SMGMember.Salesman    
     SMGMember.SmName     column-label "Salesman's name"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " Members in Salesman Group " + SMGroup + " (" + gcBrand + ") " 
 FRAME sel.
 
@@ -65,7 +65,7 @@ form
     SMGMember.Salesman  
     SMGMember.SmName    
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     lm-ots WITH side-labels 1 columns
 FRAME lis.
@@ -74,13 +74,13 @@ form /* member :n haku kentällä Salesman */
     Salesman
     help "Enter Salesman's code "
     with row 4 col 2 title color value(ctc) " FIND Salesman "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä SmName */
     SmName
     help "Enter Salesman's Name"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
    skip(1)
@@ -99,7 +99,7 @@ FIND SMGroup where
      SMGroup.SmGroup = SMGroup no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember 
@@ -453,7 +453,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.
@@ -477,7 +477,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SmName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SmName WITH FRAME f2.

@@ -81,7 +81,7 @@ form
     FFItem.Memo[1]     column-label "Memo"    format "x(30)"
 WITH
     centered ROW 2 OVERLAY scroll 1 13 DOWN
-    color value(cfc) title color value(ctc) " " +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " " +
     substr(Customer.CustName,1,18) + " / " + icBillCode  +
     ": Invoice = " + string(iiInvNum) + ", CustNo = " +
     string(Customer.CustNum) + " "  FRAME sel.
@@ -98,19 +98,19 @@ form
     FFItem.Memo[2]                                            SKIP
 
  WITH  OVERLAY ROW 5 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header WITH NO-LABEL
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header WITH NO-LABEL
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     BillPeriod
     help "Give Period YyyyMm"
     with row 4 col 2 title color value(ctc) " FIND Period "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Memo for invoice "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Memo for invoice "
     FRAME memo.
 
 
@@ -165,7 +165,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 LOOP:
 repeat WITH FRAME sel:
@@ -358,7 +358,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
@@ -381,7 +381,7 @@ BROWSE:
 
      if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO  WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND FFItem WHERE RECID(FFItem) = ttRow.FFItem NO-LOCK.
@@ -403,7 +403,7 @@ BROWSE:
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
 
-       assign fr-header = " VIEW " cfc = "lis".  RUN Syst/ufcolor.p.
+       assign fr-header = " VIEW " Syst.CUICommon:cfc = "lis".  RUN Syst/ufcolor.p.
 
        FIND ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND FFItem WHERE RECID(FFItem) = ttRow.FFItem NO-LOCK.

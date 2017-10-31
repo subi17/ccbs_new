@@ -100,7 +100,7 @@ form
     SIM.SIMStat      format "z9" column-label "Status"
     SIMStat.SSName  format "x(26)" column-label "Status name"
 WITH width 80 OVERLAY FrmDown DOWN ROW FrmRow
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)  
      " " + ynimi +
      " Sim Cards " + string(pvm,"99-99-99") + " "
@@ -125,7 +125,7 @@ form
     SIMStat.SSName no-label at 33  format "x(30)" skip(1)
 
  WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels     FRAME lis.
 
@@ -137,7 +137,7 @@ form /* seek SIM card  BY  ICC */
     "ICC Number:" icc
     help "Enter ID"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ICC-ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SIM card  BY CustNum */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -146,7 +146,7 @@ form /* seek SIM card  BY CustNum */
     "CustNumber:" CustNum
     help "Enter Customer No."
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek SIM card  BY SimArt */
 
@@ -159,7 +159,7 @@ form /* seek SIM card  BY SimArt */
     "Imsi Number:"     IMSI
     help "Enter IMSI No."
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND IMSI "
-    COLOR VALUE(cfc) 
+    COLOR VALUE(Syst.CUICommon:cfc) 
 
     NO-LABELS OVERLAY FRAME f3.
 
@@ -180,7 +180,7 @@ form
     OVERLAY ROW 2
     CENTERED FRAME imsi.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel. 
 
 orders = "By ICC,By CustNo,By ArtCode, By 4".
@@ -213,7 +213,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a SIM  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -441,7 +441,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ICC = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       
@@ -528,7 +528,7 @@ BROWSE:
        FIND SIM WHERE recid(SIM) = rtab[FRAME-line(sel)] NO-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME  lis no-pause.
        DISPLAY SIM.ICC WITH FRAME lis.
        ASSIGN 

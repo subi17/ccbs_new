@@ -73,7 +73,7 @@ form
    ProgLimit.ValidTo     FORMAT "99-99-99" COLUMN-LABEL "To"
 
 WITH width 74 OVERLAY CENTERED scroll 1 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi + lcTitle + " "  
    + string(pvm,"99-99-99") + " "  FRAME sel.
 
@@ -89,7 +89,7 @@ form
    ProgLimit.LimitFrom     COLON 23                    SKIP
    ProgLimit.LimitTo       COLON 23                  
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
@@ -97,7 +97,7 @@ form /*  search WITH FIELD ProgLimit */
     lcEvent
     help "Give ...."
     with row 4 col 2 title color value(ctc) " FIND Event "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FIND FIRST ServiceLimit WHERE 
            ServiceLimit.SLSeq = iiSLSEq NO-LOCK NO-ERROR.
@@ -110,7 +110,7 @@ ELSE DO:
    RETURN.
 
 END.
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -133,7 +133,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* ProgLimit -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
@@ -447,7 +447,7 @@ repeat WITH FRAME sel:
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhProgLimit).
 

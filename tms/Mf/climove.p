@@ -86,7 +86,7 @@ form
    ttCLISer.vTime
       help "A Text for Customer Care"        
 WITH OVERLAY scroll 1 15 DOWN ROW 1 centered WIDTH 80
-   COLOR value(cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + string(Customer.CustNum) + " " + 
    substr(Customer.CustName,1,16) + ":  A-sub. nos. "
 FRAME sel.
@@ -103,9 +103,9 @@ FRAME frmSetTime.
 form /* FIND asub */
    asub help "Enter A-Number OR beginning of it"
 with row 4 col 2 title color value(ctc) " FIND ASUB No. "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-1.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-1.
 
-cfc = "kline". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -196,7 +196,7 @@ BROWSE:
 
       /* Search 1 */
       if lookup(nap,"F1,1") > 0 THEN DO:
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          assign
             asub  = ""
             ehto  = 9

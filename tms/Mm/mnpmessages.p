@@ -70,14 +70,14 @@ form
     MNPMessage.StatusCode      COLUMN-LABEL "St"
     lcStChange                 COLUMN-LABEL "Msg State"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " M2M messages "
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".

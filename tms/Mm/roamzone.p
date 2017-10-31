@@ -52,7 +52,7 @@ form
     RoamZone.RZName     /* column-label*/  format "X(30)" 
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     "  ROAMZONE MENU  "
     + string(pvm,"99-99-99") + " "
@@ -64,7 +64,7 @@ form
             /* label format */
 
 WITH  overlay row 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
@@ -74,11 +74,11 @@ form /* seek  RoamZone */
     RoamZone
     HELP "Enter RoamZone  "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ROAMZONE "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
  
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -105,7 +105,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a RoamZone  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -336,7 +336,7 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET RoamZone WITH FRAME f1.
@@ -417,7 +417,7 @@ BROWSE:
        /* change */
        RUN local-find-this(true).
        ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RoamZone.RoamZone.
        
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRoamZone).

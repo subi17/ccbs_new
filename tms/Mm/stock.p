@@ -75,7 +75,7 @@ form
     Stock.ZipCodeExp format "x(20)"
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " " + ynimi +
     " Stock Locations "
     + string(pvm,"99-99-99") + " "
@@ -100,7 +100,7 @@ form
     Stock.StoFile2
     Stock.StoFile3
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels 1 col
     FRAME lis.
@@ -110,16 +110,16 @@ form /* seek Stock  BY  Stock */
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Stock Code:"  Stock   help "Enter Stock Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Stock  BY StoName */
     "Brand Code:" lcBrand  HELP "Enter Brand  "
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Stock Name:" StoName help "Enter Stock Name"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -151,7 +151,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a Stock  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -379,7 +379,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Stock = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand With Frame f1.
@@ -404,7 +404,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        StoName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
@@ -490,7 +490,7 @@ BROWSE:
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis no-pause.
        DISPLAY Stock.Stock.
        RUN local-UPDATE-record.

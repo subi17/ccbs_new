@@ -43,7 +43,7 @@ FORM
 "          " lcUpdText[4]  AUTO-RETURN                         SKIP(2) 
 
 WITH  OVERLAY ROW 1 centered width 80
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " SEND SMS "   
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " SEND SMS "   
     NO-LABELS FRAME main.
 
 PAUSE 0.

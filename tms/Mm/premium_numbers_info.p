@@ -62,7 +62,7 @@ FORM
     PremiumNumber.ValidFrom
     PremiumNumber.ValidTo
 WITH ROW FrmRow width 80 centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " +
        " Premium Numbers Information "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -76,7 +76,7 @@ FORM
     PremiumNumber.ValidFrom      COLON 20
     PremiumNumber.ValidTo        COLON 20
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -86,13 +86,13 @@ FORM
     "BNumberPreFix: " lcBNumberPreFix FORMAT "X(9)" 
     HELP "Enter BNumberPreFix"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BNumberPreFix "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -122,7 +122,7 @@ REPEAT WITH FRAME sel:
    END.
 
 IF must-add THEN DO:  /* Add a PremiumNumber */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -403,7 +403,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
@@ -500,7 +500,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPremiumNumber).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PremiumNumber.BNumberPreFix.
 
        RUN local-UPDATE-record.                                  

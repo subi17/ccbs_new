@@ -167,7 +167,7 @@ FORM
    PrePaidRequest.TopUpAmt    COLUMN-LABEL "TopUpAmt" FORMAT "->>9.99"
    PrePaidRequest.VatAmt      COLUMN-LABEL "TaxAmt"   FORMAT "->>9.99"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-   COLOR VALUE(cfc)   
+   COLOR VALUE(Syst.CUICommon:cfc)   
    TITLE COLOR VALUE(ctc) " " + ynimi +
    " TOPUP REQUESTS  "
    + string(pvm,"99-99-99") + " "
@@ -245,14 +245,14 @@ FORM
        NO-LABEL 
        FORMAT "X(30)" 
 
-WITH  OVERLAY ROW 1 centered COLOR VALUE(cfc)
+WITH  OVERLAY ROW 1 centered COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr SIDE-LABELS FRAME lis.
 
 FORM /* seek  PrePaidRequest */
    lcCLI
       HELP "Enter code"
 WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY
 FRAME f1.
 
 FUNCTION fGetRequestID RETURNS INTEGER:
@@ -323,7 +323,7 @@ END FUNCTION.
 
 lcPassword = fCParamC("AdminUser").
  
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST MobSub WHERE
@@ -468,7 +468,7 @@ REPEAT WITH FRAME sel:
       END.
 
       ASSIGN
-         cfc      = "lis"
+         Syst.CUICommon:cfc = "lis"
          ufkey    = true
          ac-hdr   = " ADD "
          must-add = FALSE.
@@ -729,7 +729,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcCLI WITH FRAME f1.
@@ -840,7 +840,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPrePaidRequest).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrePaidRequest.CLI.
 
        llTaxable = (PrepaidRequest.VatAmt NE 0).

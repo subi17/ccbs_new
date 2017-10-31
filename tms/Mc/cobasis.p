@@ -66,7 +66,7 @@ form
     CoBasis.CoPerc
     
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
     lcTitle
     FRAME sel.
@@ -81,7 +81,7 @@ form
     CoBasis.CoAmt      COLON 20 
     CoBasis.CommLimit  COLON 20
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -90,7 +90,7 @@ form /* seek  target */
     lcTarg
     HELP "Enter target type "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND target type "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FIND CoRule WHERE 
@@ -103,7 +103,7 @@ ASSIGN lcTitle = " COMM. BASIS FOR: " +
                  STRING(CoRule.CCN)    + "/" +
                  STRING(CoRule.CoFrom,"99.99.99") + " ". 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By BillCode ,    ,   , By 4".
@@ -129,7 +129,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CoBasis  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -502,7 +502,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoBasis).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoBasis.BillCode.
 
        RUN local-UPDATE-record.                                  

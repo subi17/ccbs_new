@@ -113,7 +113,7 @@ form
     lcType             COLUMN-LABEL "Type"   FORMAT "X(12)"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        " PAYMENT PLANS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -150,7 +150,7 @@ form
        NO-LABEL  AT 40
        FORMAT "X(35)"
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -222,21 +222,21 @@ form /* seek  */
     "Date :" ldtDate
     HELP "Enter payment plan date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND DATE"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND customer "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  */
     "Brand :" lcBrand skip
     "Status:" liStatus
     HELP "Enter description"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND description "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
 FUNCTION fPPStatus RETURNS LOGICAL
@@ -343,7 +343,7 @@ ASSIGN lcPassword  = fCParamC("MsAddressChg")
        lcAdminPwd  = fCParamC("PaymPlanCreditControl").
 IF lcPassword = ? THEN lcPassword = "".
  
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = " By Date     ," + 
@@ -398,7 +398,7 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN DO:  /* Add a PaymPlan  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -694,7 +694,7 @@ REPEAT WITH FRAME sel:
      
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
@@ -729,7 +729,7 @@ REPEAT WITH FRAME sel:
 
         /* Search BY column 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
@@ -752,7 +752,7 @@ REPEAT WITH FRAME sel:
 
         /* Search BY column 3 */
         ELSE IF toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f3.
            DISPLAY lcBrand WITH FRAME F3.
@@ -1079,7 +1079,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPaymPlan).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PaymPlan.CustNum.
 
        RUN local-UPDATE-record.                                  

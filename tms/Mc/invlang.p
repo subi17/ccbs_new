@@ -81,7 +81,7 @@ FORM
    RepText.Language        COLUMN-LABEL "Lang" 
    RepText.ToDate          FORMAT "99-99-99" COLUMN-LABEL "Valid To"
    RepText.RepText         FORMAT "x(29)"
-WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(cfc)
+WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) " " + ynimi +
       "  TRANSLATIONS  " + STRING(pvm,"99-99-99") + " "     
    FRAME sel.
@@ -110,7 +110,7 @@ FORM
    RepText.RepText AT 3 
       NO-LABEL
       VIEW-AS EDITOR SIZE 75 BY 3
-WITH OVERLAY ROW 7 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+WITH OVERLAY ROW 7 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 {Func/brand.i}
@@ -121,7 +121,7 @@ FORM /* hakua2 varten */
    "Key Value:" haku2  FORMAT "X(16)" 
       HELP "Key value for type"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND KEY VALUE "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr1.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 FUNCTION fCheckExisting RETURNS LOGICAL:
 
@@ -153,9 +153,9 @@ IF icKeyValue > "" THEN ASSIGN
    FrmRow  = 4
    FrmDown = 8.
 
-cfc = "sel". 
+Syst.CUICommon:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN ccc = cfc.
+ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -191,7 +191,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* RepText -ADD  */
       ASSIGN 
-         cfc       = "lis" 
+         Syst.CUICommon:cfc = "lis" 
          ufkey     = true 
          fr-header = " ADD " 
          must-add  = false.
@@ -455,7 +455,7 @@ REPEAT WITH FRAME sel:
 
       /* Haku sarakk. 1 */
       IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          haku2 = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          DISPLAY lcBrand WITH FRAME hayr1.
@@ -552,7 +552,7 @@ REPEAT WITH FRAME sel:
             fr-header = " CHANGE " 
             ufkey = true
             liLength = LENGTH(RepText.RepText).
-            cfc = "lis". RUN Syst/ufcolor.p.   
+            Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.   
 
        
        FIND FIRST language WHERE

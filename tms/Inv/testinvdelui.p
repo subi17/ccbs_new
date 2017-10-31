@@ -48,7 +48,7 @@ SKIP(5)
 WITH
    OVERLAY TITLE COLOR value(ctc)
    " " + ynimi + " DELETE TEST INVOICES " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80 ROW 1 NO-LABELS
+   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1 NO-LABELS
    FRAME mainFrame.
 
 ASSIGN lcFloor        = ""

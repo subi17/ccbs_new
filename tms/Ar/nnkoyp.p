@@ -96,7 +96,7 @@ form
     CustIntEvent.Percent    column-label "Int%%"  
     CustIntEvent.Amt        column-label "Int tot"  
 WITH width 80 ROW liRow OVERLAY scroll 1 liDown DOWN
-    color value(cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
     " OVERTIME INTERESTS " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -114,7 +114,7 @@ form
     CustIntEvent.Amt           LABEL "Interest Amount" FORMAT "->>>>>>>9.99"
     CustIntEvent.BilledInvNum  LABEL "Billed on Inv.Nbr"                       
 WITH  OVERLAY ROW 3 col 3
-    COLOR value(cfc) TITLE COLOR value(ctc) ac-hdr 1 col FRAME lis.
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) ac-hdr 1 col FRAME lis.
 
 {Func/brand.i}
 
@@ -149,14 +149,14 @@ form /* Asiakasnumerohaku */
     "Customer:" haku-asno
     help "Enter number of Customer"
     with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* LAskunumerohaku */
     "Brand .:" lcBrand skip
     "Invoice:" haku-lanro
     help "Enter number of Invoice"
     with row 4 col 2 title color value(ctc) " FIND INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 IF iiCustNum > 0 THEN ASSIGN 
    liRow  = 4 
@@ -165,7 +165,7 @@ ELSE ASSIGN
    liRow  = 1
    liDown = 15.
    
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 order = 1.
@@ -196,7 +196,7 @@ repeat WITH FRAME sel:
 
 
    IF must-add THEN DO:  /* Add a BillType  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 
@@ -458,7 +458,7 @@ repeat WITH FRAME sel:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-asno = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
@@ -480,7 +480,7 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-lanro = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
@@ -583,7 +583,7 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"enter,return") > 0 THEN DO:
         ac-hdr = " VIEW ".
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         ufk = 0. ehto = 3. RUN Syst/ufkey.p. ufkey = TRUE.
 
         FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-LINE] no-lock.

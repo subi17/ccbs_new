@@ -93,7 +93,7 @@ form
     PPBatch.PaidAmt   
     lcStatus         COLUMN-LABEL "Status"     FORMAT "X(11)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
     lcTitle
     FRAME sel.
@@ -124,7 +124,7 @@ form
           FORMAT "X(30)"
     PPBatch.RefNum   COLON 20
 WITH  OVERLAY ROW 6 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -223,7 +223,7 @@ FOR EACH PPBatch OF PaymPlan NO-LOCK:
           llDivBatches    = FALSE.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = "  By Batch ,    ,   "
@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN DO:  /* Add a PPBatch  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -657,7 +657,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPPBatch).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PPBatch.PPBatch.
 
        RUN local-UPDATE-record.                                  

@@ -73,7 +73,7 @@ form
    pnplist.fromdate
    pnplist.toDate
 WITH ROW 3 WIDTH 55 CENTERED OVERLAY scroll 1 12 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + pnpgroup.name
    FRAME sel.
 
@@ -88,7 +88,7 @@ HELP "CLI number (a-number), CLI Series (045*) WHEN PNPgroup"  SKIP
    "DATA .....:" pnplist.DialTypeUsed[5]    FORMAT "X/-" SKIP
    "Valid time:" pnplist.fromdate pnplist.todate     
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header  WITH no-labels
    FRAME lis.
@@ -96,7 +96,7 @@ WITH OVERLAY ROW 4 centered
 form /*  search WITH FIELD pnplist */
    haku-pnplist help "Give ...."
 with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FORM
    "Give filename :" lFileName  FORMAT "x(40)"
@@ -104,7 +104,7 @@ WITH
    ROW 8 OVERLAY CENTERED TITLE " Import CLI list from file " 
    NO-LABELS FRAME frmImport.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -128,7 +128,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* pnplist -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD "
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD "
       
       must-add = FALSE.
       RUN Syst/ufcolor.p.
@@ -351,7 +351,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-pnplist = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-pnplist WITH FRAME haku-f1.
@@ -478,7 +478,7 @@ BROWSE:
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

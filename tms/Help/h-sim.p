@@ -26,16 +26,16 @@ form
       SIM.Stock 
       SIM.SimStat   
       SIMStat.SSName format "x(20)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " SIM CARDS BY ICC ID " overlay frame sel.
 
 form /* SEEK code */
     ICC
     help "Enter ICC ID Code of a SIM Card"
     with row 4 col 2 title color value(ctc) " FIND ICC ID "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 
 
@@ -191,7 +191,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ICC */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ICC with frame hayr.
            hide frame hayr no-pause.

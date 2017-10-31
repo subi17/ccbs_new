@@ -48,7 +48,7 @@ form
     StoBal.OrdPoint
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " Balances of Article " + p-SimArt + " "
     FRAME sel.
@@ -59,7 +59,7 @@ form
             /* LABEL FORMAT */
 
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
@@ -81,19 +81,19 @@ form /* seek Balance Record  BY  Stock */
     Stock
     help "Enter Stock Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND SCODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Balance Record  BY SimArt */
     SimArt
     help "Enter Article Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND SimArt where SimArt.SimArt = p-SimArt AND 
      SimArt.Brand = icBrand no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Code,By 3, By 4".
@@ -125,7 +125,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a StoBal  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -351,7 +351,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Stock = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Stock WITH FRAME f1.

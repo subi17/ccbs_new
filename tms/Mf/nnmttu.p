@@ -87,7 +87,7 @@ skip(3)
 "                 -limit exceeded:" b-exc
                  help "Customers with exceeded Limit / all (A/E)"        skip(3)
 WITH
-    COLOR value(cfc) TITLE COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
     " " + ynimi + " Monthly call counter report " + string(pvm,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.

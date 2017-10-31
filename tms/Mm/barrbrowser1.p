@@ -73,9 +73,9 @@ form /* Set new commands */
     HELP "Enter Barring Command"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
     "Enter Barring Command (Type #REFRESH in case of re-provisioning)"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -87,7 +87,7 @@ FORM
     ttBarrings.EventTS FORMAT "x(20)"
     WITH OVERLAY ROW 1 12 DOWN COL 1 WIDTH 80
     TITLE COLOR VALUE(ctc) " " + "Barring packages" + " "
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
 
 FRAME frTop.
 
@@ -96,7 +96,7 @@ FORM
    WITH OVERLAY ROW 17 COL 1 WIDTH 80  
 
    TITLE COLOR VALUE(ctc) " " + "Total Barring Mask" + " "
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
 
 FRAME frBottom.
 
@@ -105,7 +105,7 @@ FORM
    WITH OVERLAY ROW 10 COL 2 WIDTH 70 
    
    TITLE COLOR VALUE(ctc) "" + "Memo for barring" + " "
-   COLOR VALUE (cfc)
+   COLOR VALUE (Syst.CUICommon:cfc)
 
 FRAME frBarrMemo.
 

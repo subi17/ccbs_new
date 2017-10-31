@@ -146,7 +146,7 @@ form
     ServCom.ScName    format "x(31)" 
     ttSubSer.SSParam  format "x(13)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)  " Services of TermMobsub " + TermMobsub.CLI + " "
     FRAME sel.
 
@@ -165,7 +165,7 @@ form
                INPUT ttSubSer.SSDate >= TODAY,
               "Date is mandatory and cannot be in the past")
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
@@ -175,13 +175,13 @@ form /* seek Subscriber's Service  BY  ServCom */
     ServCom
     HELP "Enter service component code"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SERVICE COMPONENT "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Subscriber's Service  BY ServPac */
     ttSubSer.ServPac
     HELP "Enter Service Package"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SERVICE PACKAGE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND TermMobsub WHERE TermMobsub.MsSeq = iiMsSeq NO-LOCK.
@@ -189,7 +189,7 @@ FIND TermMobsub WHERE TermMobsub.MsSeq = iiMsSeq NO-LOCK.
 /* get current definitions, servpac index is sorted by date */
 RUN pSetTempTable.
         
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
@@ -425,7 +425,7 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 2 BUT ORDER IS STILL 1 !!!! */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServCom WITH FRAME f1.
@@ -449,7 +449,7 @@ REPEAT WITH FRAME sel:
      /* Search BY col 1 BUT ORDER IS 2 !!!! */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET ServPac WITH FRAME f2.
@@ -509,7 +509,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttSubSer.ServCom.
 
        RUN local-UPDATE-record.                                  

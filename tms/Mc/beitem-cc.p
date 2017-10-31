@@ -119,7 +119,7 @@ form
     FMItem.Amount        format "->,>>9.99"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Items of B-Event " + 
         FeeModel.Brand + "/" + FeeModel.FeeModel + ": " + 
@@ -140,7 +140,7 @@ form
     FMItem.Amount  FORMAT "->,>>9.99" SKIP
          
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -151,7 +151,7 @@ form /* seek Billing Event Item  BY BillCode */
     BillCode
     HELP "Enter BillCode"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillCode "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
@@ -305,7 +305,7 @@ PROCEDURE local-add-record:
             BillItem.Brand = gcBrand AND 
             BillItem.BillCode = ttable.ValueId NO-LOCK NO-ERROR.
 
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       ADD-ROW:

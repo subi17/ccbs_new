@@ -70,7 +70,7 @@ form  /* Note ! FRAME SEL has exceptionally 2 rows / record */
   SKIP
     IMSI.PIN2        AT 70
 WITH centered OVERLAY 3 DOWN ROW 2
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc)  " IMSI numbers  on SIM(ICC) " + ICC + " "
     FRAME sel.
 
@@ -84,7 +84,7 @@ form
     IMSI.PUK1
     IMSI.PUK2
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
@@ -93,15 +93,15 @@ form /* seek IMSI number  BY  IMSI */
     IMSI
     help "Enter IMSI No."
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND IMSI No. "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek IMSI number  BY CustNum */
     CustNum
     help "Enter CustoNo"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST No "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By IMSI No,By Cust No.,By 3, By 4".
@@ -137,7 +137,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a IMSI  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -356,7 +356,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        IMSI = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE IMSI WITH FRAME f1.
@@ -379,7 +379,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f2.
@@ -483,7 +483,7 @@ BROWSE:
        EXCLUSIVE-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY IMSI.IMSI.
 
 

@@ -65,7 +65,7 @@ form
     TMSReport.ChEMail   format "Y/N" Column-label "C"
     TMSReport.EMail  format "x(20)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     ynimi + " PRINTOUTS "
     + string(pvm,"99-99-99")
     FRAME sel.
@@ -86,11 +86,11 @@ form
     moremail       NO-LABEL format "x(70)"
     HELP "More E-mail addresses" SKIP
 
-    WITH  OVERLAY ROW 8 centered COLOR value(cfc)
+    WITH  OVERLAY ROW 8 centered COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 PAUSE 0 no-message.
 view FRAME sel.
 FIND FIRST TMSReport no-lock no-error.
@@ -113,7 +113,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    IF must-add THEN DO:  /* TMSReport -ADD  */
       ASSIGN
-      cfc = "lis"
+      Syst.CUICommon:cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD ".
       RUN Syst/ufcolor.p.
@@ -400,7 +400,7 @@ BROWSE:
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         moremail = SUBSTRING(TMSReport.EMail,51,50).
         DISPLAY 
             TMSReport.RepName

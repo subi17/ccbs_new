@@ -39,7 +39,7 @@ form /* Browsing list */
    HELP "Amount calls"
    nnpvti.pt-min      COLUMN-LABEL "Minutes"      FORMAT "zzzzzz9"
    nnpvti.pt-mk       COLUMN-LABEL "Sum (EUR)"    FORMAT "ZZZ,ZZZ,ZZ9.99"
-   WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(cfc)
+   WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) " " + ynimi +
    " MOBILE CALL PRODUCT STATISTICS "  + STRING(pvm1,"99.99.99") + " - " + 
                                   STRING(pvm2,"99.99.99")                      
@@ -49,7 +49,7 @@ form /* Statistics search WITH FIELD pt-tuno */
    haku-pt-tuno
    HELP "Give Productcode"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND PRODUCT "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY 
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME haku.
 
 form /* Ask period */
@@ -62,7 +62,7 @@ form /* Ask period */
    pvm2 NO-LABEL HELP "Last date to calculate"
    SKIP(1)
    WITH ROW 6 CENTERED TITLE COLOR VALUE(ctc) " MOBILE CALL PRODUCT STATISTICS "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY 
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME add-new.
 
 ufkey = TRUE.
@@ -74,8 +74,7 @@ ASSIGN pvm1 = Today
 UPDATE pvm1 pvm2 validate (input pvm2  >= input pvm1,"Invalid order !")
 WITH FRAME add-new.
 
-ASSIGN
-cfc      = "Lis"
+ASSIGN Syst.CUICommon:cfc = "Lis"
 ufkey    = TRUE.
 RUN Syst/ufcolor.p.
 
@@ -265,7 +264,7 @@ BROWSE:
 
       /* Search column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          haku-pt-tuno = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE haku-pt-tuno WITH FRAME haku.

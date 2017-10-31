@@ -151,7 +151,7 @@ form
     ttMSISDN.ValidFrom     FORMAT "99999999"
     
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " " + ynimi +
     " MSISDN Numbers "
     + string(pvm,"99-99-99") + " "
@@ -177,7 +177,7 @@ form
   "OrderID.....:" lcOrder  FORMAT "X(20)"                         SKIP
 WITH
    overlay row 4 centered NO-LABELS
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    title COLOR VALUE(ctc)
    ac-hdr WITH 
    Frame lis.
@@ -189,7 +189,7 @@ form /* seek ttMSISDN No.  by  CLI */
    "MSISDN No.:" CLI format "x(11)"
       help "Enter ttMSISDN"
    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ttMSISDN NO."
-   COLOR VALUE(cfc) no-labels overlay FRAME f1.
+   COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f1.
 
 form /* seek ttMSISDN No.  by CustNum */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -197,7 +197,7 @@ form /* seek ttMSISDN No.  by CustNum */
     "CustomerNo:" CustNum
     help "Enter Customer"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST. NO. "
-    COLOR VALUE(cfc) no-labels overlay FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
 form /* seek ttMSISDN No.  by StatusCode */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -205,7 +205,7 @@ form /* seek ttMSISDN No.  by StatusCode */
     "StatusCode:" StatusCode 
     help "Enter Status"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND STATUS "
-    COLOR VALUE(cfc) no-labels overlay FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f3.
 
 form /* seek ttMSISDN No.  by StatusCode */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -214,7 +214,7 @@ form /* seek ttMSISDN No.  by StatusCode */
     "Order Id..:" OrderId 
     help "Enter OrderId"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ORDERID "
-    COLOR VALUE(cfc) no-labels overlay FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f4.
 
 FUNCTION fVALmino RETURNS LOGICAL(CLI AS CHAR).
    /* check the validity of new ttMSISDN No. */
@@ -248,7 +248,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By ttMSISDN ,By CustNo ,By Status ,By OrderId".
@@ -274,7 +274,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ttMSISDN  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -550,7 +550,7 @@ BROWSE:
 
        if toimi = 1 then do:
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           clear frame f1.
           Disp lcBrand With FRAME f1.
@@ -585,7 +585,7 @@ BROWSE:
 
         /* Search by col 2 */
         else if toimi = 2 then do:
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           Disp lcBrand With FRAME f2.
@@ -605,7 +605,7 @@ BROWSE:
 
         /* Search by col 3 */
         else if toimi = 3 then do:
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           DISP lcBrand WITH FRAME f3.
           SET  lcBrand WHEN gcAllBrand = TRUE
@@ -623,7 +623,7 @@ BROWSE:
 
         /* Search by col 4 */
         else if toimi = 4 then do:
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            Disp lcBrand With FRAME f4.
           SET   lcBrand WHEN gcAllBrand = TRUE  
@@ -793,7 +793,7 @@ end.
           VIEW-AS ALERT-BOX TITLE " MSISDN is in use !".
        END.
        ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.

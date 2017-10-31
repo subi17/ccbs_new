@@ -59,7 +59,7 @@ form
     PrintCodes.PageLength  column-label "Lines/Page"
     PrintCodes.AvailLines column-label "Use Lines"
     WITH ROW 2 col 2 centered OVERLAY scroll 1 13 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " PRINTER '" + si-kirj + "':  EFFECTS "
     FRAME sel.
@@ -80,7 +80,7 @@ form
     PrintCodes.AvailLines label "Use lines" AT 2
     help "How many lines shall be Printed on one page before FORM FEED" SKIP
     WITH OVERLAY ROW 8 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header side-labels 
     FRAME lis.
@@ -89,12 +89,12 @@ form
     PrintCode.EffOn[2]      label "Start" AT 2 SKIP
     PrintCode.EffOff[2]     label "End  " AT 2 SKIP
     WITH OVERLAY ROW 15 width 78
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " Effect " + PrintCodes.Effect + " INTERPRETED " side-labels centered
     FRAME nakym.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = si-kirj no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = si-kirj no-lock no-error.
@@ -121,7 +121,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    IF must-add THEN DO:  /* PrintCodes -ADD  */
       ASSIGN
-      cfc = "lis"
+      Syst.CUICommon:cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD A NEW RECORD ".
 
@@ -382,14 +382,14 @@ BROWSE:
           /* PrintCode.EffOnA2A & PrintCode.EffOffA2A print-line apuframelle. */
           PAUSE 0 no-message.
           FIND PrintCodes where recid(PrintCodes) = rtab[frame-line(sel)] no-lock.
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           DISPLAY PrintCode.EffOn[2] PrintCode.EffOff[2] WITH FRAME nakym.
           pause message "Press Entrer !".               
           HIDE FRAME nakym.
      END.
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
-        cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
         delline = FRAME-LINE.
         FIND PrintCodes where recid(PrintCodes) = rtab[FRAME-LINE] no-lock.
 
@@ -444,7 +444,7 @@ BROWSE:
         ASSIGN
         fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 
             PrintCodes.Effect
             EffName 

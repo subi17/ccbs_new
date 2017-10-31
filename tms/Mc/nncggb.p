@@ -64,7 +64,7 @@ form
     memb                column-label "Member"
     CustGroup.CustGroup      /* COLUMN-LABEL FORMAT */
     CustGroup.CGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(cfc)
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " Join CustNo " + string(CustNum) + " into group(s) (" + gcBrand + ") "
     FRAME sel.
@@ -79,19 +79,19 @@ form /* Customer Group :n haku kentällä CustGroup */
     CustGroup
     help "Type Group Code"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä CGName */
     CGName
     help "Type first characters of a name"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND Customer where Customer.CustNum = CustNum no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
@@ -323,7 +323,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustGroup WITH FRAME f1.
@@ -349,7 +349,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CGName WITH FRAME f2.

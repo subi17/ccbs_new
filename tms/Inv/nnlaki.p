@@ -227,7 +227,7 @@ form
    skip(17)
    WITH TITLE COLOR value(ctc)
    " " + ynimi + " INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
-COLOR value(cfc) width 80 OVERLAY FRAME taka.
+COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
 
 form
    lano1 label " Invoice number .........."
@@ -258,7 +258,7 @@ form
       help "Print call specification reports for each invoice (Y/N)" SKIP
 
 with title color value(ctc) " INVOICE CRITERIA " side-labels
-COLOR value(cfc) ROW 3 centered OVERLAY FRAME rajat.
+COLOR value(Syst.CUICommon:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 {Inv/invsta.frm}
 
@@ -551,7 +551,7 @@ ASSIGN
    i-date1  = pvm
    i-date2  = pvm.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 ehto = 9. RUN Syst/ufkey.p.

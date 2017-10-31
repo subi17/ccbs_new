@@ -28,7 +28,7 @@ form
     Customer.Email
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " Subscriber Data "
     side-labels 1 columns FRAME subs.
 

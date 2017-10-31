@@ -51,12 +51,12 @@ RUN pInitMenu.
 form
     ttMenu.MenuText AT 2 FORMAT "x(50)"
 WITH ROW FrmRow OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " TMRule Functions " 
     CENTERED NO-LABELS 
     FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.

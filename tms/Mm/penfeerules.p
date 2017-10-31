@@ -79,7 +79,7 @@ form
    " Current penalty ..:" ldeCurrPen SKIP
    " Create penalty Fee:" DCCLI.CreateFees SKIP
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    " PENALTY FEE RULES FOR " + icEvent + " "
    WITH no-labels side-labels
@@ -89,7 +89,7 @@ WITH OVERLAY ROW 2 centered
 assign ufkey = TRUE ehto = 3.
 RUN Syst/ufkey.p.
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
 RUN LOCAL-UPDATE-RECORD.
        

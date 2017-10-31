@@ -46,7 +46,7 @@ form
     Customer.OrgId   format "x(10)" column-label "Org Code"
     Customer.PostOffice   format "x(6)"  column-label "City"
  WITH centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) 
        " SEEK CUSTOMERS (" + gcBrand + ") '" + ashaku + "' " FRAME sel.
 
@@ -62,7 +62,7 @@ form
     "  - Organization CODE   (END)"   SKIP
 with row 1 centered overlay title " SEEK CUSTOMER " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST Customer  USE-INDEX CustNum WHERE 
       Customer.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Customer THEN DO:

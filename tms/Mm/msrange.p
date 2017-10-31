@@ -84,7 +84,7 @@ form
     MSRange.ReserveDate
     MSRange.ExpireDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " MSISDN number Ranges "
     + string(pvm,"99-99-99") + " "
@@ -99,7 +99,7 @@ form
     MSRange.CustNum    /* LABEL FORMAT */
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
@@ -112,7 +112,7 @@ help "Customer to whom a MSISDN range shall be reserved "
   Customer.CustName 
 
 WITH  OVERLAY ROW 2 WITH centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " Search And Reserve a MSISDN Range "
     NO-LABELS 
     FRAME f3.
@@ -124,7 +124,7 @@ form /* seek number Range  BY  CLIFrom */
     "MsisdnFrom:" CLIFrom
     HELP "Enter MSISDN number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek number Range  BY CustNum */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -132,9 +132,9 @@ form /* seek number Range  BY CustNum */
     "CustomerNo:" CustNum
     HELP "Enter Customer No."
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By MSISDN  ,By Customer,By 3, By 4".
@@ -169,7 +169,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSRange  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -516,7 +516,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
@@ -538,7 +538,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME F2.
@@ -566,7 +566,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:  
         /* search & reserve */
-         cfc = "lis". 
+         Syst.CUICommon:cfc = "lis". 
          RUN Syst/ufcolor.p.
          ehto = 9. 
          RUN Syst/ufkey.p. 

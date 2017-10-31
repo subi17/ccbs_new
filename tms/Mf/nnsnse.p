@@ -35,7 +35,7 @@ form
     AreaPlan.TrafficArea                   /* column-label "RSO"          */
 WITH
     centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " AREACODE FINDING FROM " + rnhaku + "' " FRAME sel.
 
 
@@ -49,7 +49,7 @@ form
 
 with row 1 centered overlay title " SEEK RSO" FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST AreaPlan USE-INDEX TrafficArea no-lock no-error.
    IF NOT AVAIL AreaPlan THEN DO:
       BELL.

@@ -110,7 +110,7 @@ exname-e   = exdir + "/" + "xorinv-e.txt".
 
 form
    skip(19)
-WITH no-box COLOR value(cfc) width 80 OVERLAY FRAME bground.
+WITH no-box COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME bground.
 
 form
    skip(1)
@@ -127,7 +127,7 @@ help "Invoicing group's code, empty for all"  SKIP
 "                Decimal separator ...:" exdeci help "Period/Comma" 
 "                Invoice states ......:" state1 "-" state2 skip(1)
 WITH
-   width 73 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc) 
+   width 73 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) 
    " " + ynimi + " XOR-SUMMARY OF ACCOUNTS " +
    string(pvm,"99-99-99") + " " centered NO-LABELS FRAME start.
 
@@ -135,7 +135,7 @@ ASSIGN
    exdate2 = date(month(TODAY),1,year(TODAY)) - 1
    exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 view FRAME bground.
 PAUSE 0.

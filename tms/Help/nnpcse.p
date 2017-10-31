@@ -28,7 +28,7 @@ form
     MenuClass.MenuClass
     MenuClass.MCName  format "x(30)"
     MenuClass.Memo[1]  format "x(34)"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " Program classes " OVERLAY FRAME tlse.
 
 form
@@ -38,16 +38,16 @@ form
 
 WITH OVERLAY ROW 8 centered
     TITLE COLOR value(ctc) tlli-ots
-    COLOR value(cfc) side-labels 1 col
+    COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Program Class :n hakua varten */
     MenuClass
     help "Enter No of Class"
     with row 4 col 2 title color value(ctc) " FIND Program Class "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -65,7 +65,7 @@ LOOP:
    Repeat WITH FRAME tlse:
    IF must-add THEN DO:  /* Program Class  lisays  */
       ASSIGN
-      cfc = "tlli"
+      Syst.CUICommon:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
 add-new:
@@ -234,7 +234,7 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            MenuClass = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE MenuClass WITH FRAME hayr.

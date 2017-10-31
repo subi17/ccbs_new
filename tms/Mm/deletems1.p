@@ -141,7 +141,7 @@ FORM
       HELP "ICC status after termination (F9)" SKIP
 
 WITH
-   OVERLAY ROW 2 CENTERED COLOR VALUE(cfc)
+   OVERLAY ROW 2 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) 
       " Subscription Termination / De-activation " + MobSub.CLI + " "
    NO-LABELS  

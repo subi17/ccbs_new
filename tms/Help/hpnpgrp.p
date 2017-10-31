@@ -27,22 +27,22 @@ def var must-add    as logic                no-undo.
 form
     PNPGroup.PNPGroup
     PNPGroup.Name  format "x(20)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " PNPGroups " overlay frame sel.
 
 form /* SEEK code */
     PNPGroup
     help "Enter Code of a PNPGroup"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame f1.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* SEEK code */
     Name
     help "Enter Name of a PNPGroup"
     with row 4 col 2 title color value(ctc) " FIND NAME "
-    color value(cfc) no-labels overlay frame f2.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -237,7 +237,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* PNPGroup */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set PNPGroup with frame f1.
            hide frame f1 no-pause.
@@ -260,7 +260,7 @@ BROWSE:
         /* Seek */
 
         if lookup(nap,"2,f2") > 0 then do:  /* PNPGroup */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set Name with frame f2.
            hide frame f2 no-pause.

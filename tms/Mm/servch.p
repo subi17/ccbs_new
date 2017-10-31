@@ -53,7 +53,7 @@ form
     ttService.ScName   COLUMN-LABEL "Service name" 
     ttService.chosen   COLUMN-LABEL "CH"
 WITH ROW FrmRow centered OVERLAY 12 DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " CHOOSE SERVICES " 
     FRAME sel.
 
@@ -61,9 +61,9 @@ form /* seek ServCom by Code */
     ServCom
     help "Enter ServCom Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -293,7 +293,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ServCom = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE ServCom WITH FRAME f1.

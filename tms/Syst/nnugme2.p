@@ -58,7 +58,7 @@ form
     UserGrp.UGName     /* COLUMN-LABEL FORMAT */
     UGMember.Memo     /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " Memberships of UserID " + string(UserCode) + ": " +
     substring(TMSUser.UserName,1,16)
     + " " FRAME sel.
@@ -69,7 +69,7 @@ form
     UserGrp.UGName NO-LABEL                        SKIP
     UGMember.Memo    label "Info ...."
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " ADD ONE GROUP "
     WITH side-labels
     FRAME lis.
@@ -84,7 +84,7 @@ form /* member :n haku kentällä UserGroup */
     UserGroup
     help "Type Group Code "
 with row 4 col 2 title color value(ctc) " FIND GROUP CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form
@@ -102,7 +102,7 @@ WITH
 
 FIND TMSUser where TMSUser.UserCode = UserCode no-lock.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UGMember
@@ -448,7 +448,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.

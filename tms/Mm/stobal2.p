@@ -47,7 +47,7 @@ form
     StoBal.OrdPoint
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " Balances in Stock " + p-Stock + " "
     FRAME sel.
@@ -55,7 +55,7 @@ WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
 form
     StoBal.SimArt
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
@@ -77,20 +77,20 @@ form /* seek Balance Record  BY  Stock */
     Stock
     help "Enter Stock Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND SCODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Balance Record  BY SimArt */
     SimArt
     help "Enter Article Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND Stock where 
      Stock.Stock = p-Stock AND 
      Stock.Brand = gcBrand no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Code,By 3, By 4".
@@ -122,7 +122,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a StoBal  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -354,7 +354,7 @@ BROWSE:
      /* Search BY col 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SimArt = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SimArt WITH FRAME f2.
@@ -444,7 +444,7 @@ BROWSE:
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           StoBal.SimArt
        WITH FRAME lis.

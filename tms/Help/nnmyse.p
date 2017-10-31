@@ -39,7 +39,7 @@ form
     Salesman.SmName  format "x(30)" column-label "Salesman's Name"
     Salesman.Salesman                 column-label "SmCode" 
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) 
     " Salesman BROWSER: FROM (" + gcBrand + ") '"  + Salesman + "' " 
     FRAME sel.
@@ -56,7 +56,7 @@ form
 with row 1 centered overlay title " SEEK SALESMEN " FRAME alku.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST Salesman USE-INDEX Salesman WHERE 
       Salesman.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Salesman THEN DO:

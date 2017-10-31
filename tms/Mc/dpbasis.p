@@ -69,7 +69,7 @@ FORM
     TargName          COLUMN-LABEL "Name of Target" FORMAT "x(30)"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " +
     DPConf.DPCName + " Contains: " 
     FRAME sel.
@@ -82,7 +82,7 @@ WITH
     ROW 2 
     CENTERED
     NO-LABEL
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -92,11 +92,11 @@ FORM /* seek DPBasis  by KeyField */
     KeyField
     HELP "Enter Billing Code or CCN"             
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND DISCOUNT "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND DPConf WHERE DPConf.DPConfNum = DPConfNum NO-LOCK no-error.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.  
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.  
 VIEW FRAME sel.                              
 
 orders = "By Product,By BDestination,By 3, By 4".
@@ -129,7 +129,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPBasis  */
       ASSIGN 
-      cfc = "lis" 
+      Syst.CUICommon:cfc = "lis" 
       ufkey = true 
       ac-hdr = " ADD (F4: RETURN) " 
       must-add = false.
@@ -510,7 +510,7 @@ ASK-F1:
         REPEAT WITH FRAME F1 
         ON ENDKEY UNDO ask-f1, LEAVE ask-f1.
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f1.
           SET KeyField WITH FRAME f1.
@@ -605,7 +605,7 @@ ASK-F1:
        {Syst/uright2.i}
        RUN local-find-this(true).
        ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPBasis.BillCode DPBasis.CCN.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPBasis).

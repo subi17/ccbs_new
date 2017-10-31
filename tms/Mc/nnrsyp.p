@@ -67,7 +67,7 @@ form
     Reseller.Reseller      /* column-label format */
     Reseller.RsName     /* column-label format */
 with width 80 overlay scroll 1 15 down
-    color value(cfc)
+    color value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Resellers "
     + string(pvm,"99-99-99") + " "
@@ -84,7 +84,7 @@ form
     Reseller.email          label "Email"
     Reseller.Fuc1
     Reseller.Fuc2
-    with  overlay row 5 centered color value(cfc) title color value(ctc)
+    with  overlay row 5 centered color value(Syst.CUICommon:cfc) title color value(ctc)
     fr-header with side-labels 1 columns
     frame lis.
 
@@ -103,17 +103,17 @@ form /* serch */
     "Code :" Reseller
     help "Give reseller's code"
     with row 4 col 2 title color value(ctc) " FIND RESELLER'S CODE "
-    color value(cfc) no-labels overlay frame f1.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* reseller search with field RsName */
     "Brand:" lcBrand skip
     "Name :" RsName
     help "Give reseller's name or its first characters"
     with row 4 col 2 title color value(ctc) " FIND RESELLER'S NAME "
-    color value(cfc) no-labels overlay frame f2.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 view frame sel.
 
 find first Reseller
@@ -137,7 +137,7 @@ repeat with frame sel:
     end.
 
    if must-add then do:  /* Reseller -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
@@ -402,7 +402,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        DISP lcBrand with frame f1.
@@ -425,7 +425,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
 
@@ -539,7 +539,7 @@ BROWSE:
 
        assign fr-header = " CHANGE " ufkey = true ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        display Reseller.Reseller .
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhresell).

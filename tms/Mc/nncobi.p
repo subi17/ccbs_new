@@ -89,7 +89,7 @@ form
     lcMemoAvail        column-label "M" FORMAT "x(1)"
 WITH
     centered ROW 2 OVERLAY scroll 1 13 DOWN
-    color value(cfc) title color value(ctc) " " +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " " +
     substr(lcCustName,1,16) + " / " + substr(prod-name,1,16) +
     ": Billable ITEMS, Type = " + string(FixedFee.BillMethod) + ", intvl = " +
     string(FixedFee.Interval) + " "  FRAME sel.
@@ -101,19 +101,19 @@ form
     "Billable Payment:" FFItem.Amt                           SKIP
     "Our Own Cost ...:" FFItem.OwnCost                       SKIP
  WITH  OVERLAY ROW 7 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header WITH NO-LABEL
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header WITH NO-LABEL
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     BillPeriod
     help "Give Period YyyyMm"
     with row 4 col 2 title color value(ctc) " FIND Period "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
 FIND FixedFee where FixedFee.FFNum = FFNum no-lock.
@@ -142,7 +142,7 @@ ELSE DO:
 END.
 
 ASSIGN lcRight = "".
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 LOOP:
 repeat WITH FRAME sel:
@@ -383,7 +383,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
@@ -407,7 +407,7 @@ BROWSE:
 
      if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FFItem where recid(FFItem) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -573,7 +573,7 @@ BROWSE:
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
        
-       assign fr-header = " CHANGE " cfc = "lis".  RUN Syst/ufcolor.p.
+       assign fr-header = " CHANGE " Syst.CUICommon:cfc = "lis".  RUN Syst/ufcolor.p.
 
        run local-find-this(FALSE).
 

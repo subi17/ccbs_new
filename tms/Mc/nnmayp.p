@@ -77,7 +77,7 @@ form
     CCN.CCN    /* column-label "LOpnr"          */ FORMAT ">>>9"
     CCN.CCNName   /* column-label "Country's name" */
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " CALL CASE NUMBERS (CCN) "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -88,7 +88,7 @@ form
     CCN.CCN      FORMAT ">>>9" COLON 20
     CCN.CCNName  COLON 20
     WITH  OVERLAY ROW 8 col 5
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 
     FRAME lis.
@@ -98,23 +98,23 @@ form /* nnmaan nimi :n tunnuksella hakua varten */
     "CCN .:" haku
     help "Give CCN"
     with row 4 col 2 title color value(ctc) " FIND CCN"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* nnmaan nimi :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give CCN's Name or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* report ccn  */
     "Brand :" lcBrand skip
     "RepCCN:" haku3
     help "Give reporting CCN"
     with row 4 col 2 title color value(ctc) " FIND REPORT CCN "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST CCN WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
    IF AVAILABLE CCN THEN ASSIGN memory = recid(CCN)
@@ -133,7 +133,7 @@ LOOP:
     END.
 
    IF must-add THEN DO:  /* CCN -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
@@ -421,7 +421,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
@@ -443,7 +443,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
@@ -579,7 +579,7 @@ BROWSE:
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY CCN.Brand CCN.CCN .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCCN).

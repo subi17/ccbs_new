@@ -150,7 +150,7 @@ form
     FixedFee.CLI          column-label "MSISDN"        format "x(12)"
     lcMemoAvail           COLUMN-LABEL "M"             FORMAT "x(1)" 
 WITH centered  ROW 4 OVERLAY scroll 1 12 DOWN
-    color value(cfc) title color value(ctc) 
+    color value(Syst.CUICommon:cfc) title color value(ctc) 
     " Fixed Fees: " +  string(CustNum) + " " + 
         substr(lcCustName,1,24) + " "
     FRAME sel.
@@ -222,7 +222,7 @@ form
     lcFinancedResult NO-LABEL FORMAT "X(12)"
     FixedFee.ServiceLimitGroup NO-LABEL 
         AT 56 FORMAT "X(20)"
-WITH OVERLAY ROW 3 centered COLOR value(cfc) TITLE COLOR value(ctc)
+WITH OVERLAY ROW 3 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
      fr-header WITH SIDE-LABELS FRAME lis.
 
 form /* seek Billable item  BY  keyvalue */
@@ -232,13 +232,13 @@ form /* seek Billable item  BY  keyvalue */
     "ID ...:" lcKeyValue  
        HELP "Enter target ID"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* memo */
 WITH
     OVERLAY ROW 6 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update Invoice Text "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update Invoice Text "
     FRAME memo.
 
 form
@@ -303,7 +303,7 @@ lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -315,7 +315,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO TRANS:  /* FixedFee -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
@@ -768,7 +768,7 @@ repeat WITH FRAME sel:
      /* Haku sarakk. 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
        lcKeyValue = "". 
@@ -827,7 +827,7 @@ repeat WITH FRAME sel:
      ELSE if lookup(nap,"3,f3") > 0 THEN 
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:   /* memo */
 
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -1063,7 +1063,7 @@ repeat WITH FRAME sel:
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
 
-       assign fr-header = " FIXED FEE DATA " cfc = "lis".  RUN Syst/ufcolor.p.
+       assign fr-header = " FIXED FEE DATA " Syst.CUICommon:cfc = "lis".  RUN Syst/ufcolor.p.
 
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        no-lock.

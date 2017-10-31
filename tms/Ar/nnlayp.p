@@ -138,7 +138,7 @@ form
     Invoice.PrintState     /* column-label "S"             */
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " INVOICE File "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -151,7 +151,7 @@ form
    format "z,zzz,zz9.99" skip(1)
    " Is this OK (Y/N) ?" ok  format "Yes/No"
 WITH
-    OVERLAY ROW 3 centered COLOR value(cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 3 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " ATTENTION ! ! ! " NO-LABEL WITH FRAME unetto.
 
 {Func/brand.i}
@@ -161,14 +161,14 @@ form /* Invoicen numerohakua varten */
     "Invoice:" lcExtInvID  FORMAT "X(14)" 
     help "Give Invoice No."    
     with row 4 col 2 title color value(ctc) " FIND INVOICE No."
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* Invoicen asnolla hakua varten */
     "Brand ..:" lcBrand skip
     "Customer:" hakuCustNum
     help "Give Customer No."
     with row 4 col 2 title color value(ctc) " FIND CUST # "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hakie.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hakie.
 
 form /* Invoicen summan hakua varten */
     "Brand .......:" lcBrand skip
@@ -179,22 +179,22 @@ form /* Invoicen summan hakua varten */
     "Amount ......:" hakunetto   
        help "Give Billed Amount"   SKIP
  with row 4 col 2 title color value(ctc) " FIND AMOUNT "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* Invoicen paivayshakua varten */
     "Brand:" lcBrand skip
     "Date :" InvDate
     help "Give Date of Invoice"
     with row 4 col 2 title color value(ctc) " FIND Date "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Invoice WHERE Invoice.Brand = lcBrand USE-INDEX ExtInvID
@@ -476,7 +476,7 @@ repeat WITH FRAME sel:
 
         /* Haku 1 */
         IF toimi = 1 THEN DO:  /* haku sarakk. 1 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            lcExtInvID = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr.
@@ -505,7 +505,7 @@ repeat WITH FRAME sel:
 
         /* Haku sarakk. 2 */
         IF toimi = 2 THEN DO:  /* haku sar. 2 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            InvDate = ?.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr3.
@@ -532,7 +532,7 @@ repeat WITH FRAME sel:
 
         /* Haku 3 */
         ELSE IF toimi = 3 THEN DO:  /* haku sarakk. 3 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakuCustNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hakie.
@@ -556,7 +556,7 @@ repeat WITH FRAME sel:
         /* Haku sarakk. 4 */
         IF toimi = 4 THEN DO:  /* haku sar. 4 */
            InvDate = ?.
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakunetto = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            liPaymState = 0.
@@ -640,7 +640,7 @@ repeat WITH FRAME sel:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] 
         no-lock no-error.
 
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
         /* kysytaan linet */
         RUN Ar/nnlryp.p(Invoice.InvNum,0).

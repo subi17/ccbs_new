@@ -44,7 +44,7 @@ END.
 form
    custser.ParamCode column-label "Customer type"
    custser.CharVal column-label "Customer serie" format "x(15)"
-WITH scroll 1 rows DOWN  ROW 4 centered COLOR value(cfc)
+WITH scroll 1 rows DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " Number Series for New Customers " 
    OVERLAY FRAME tlse.
 

@@ -60,7 +60,7 @@ form
    lcAmount                            column-label "Usage"
  
 WITH OVERLAY CENTERED  scroll 1 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + /*ynimi +*/
    " COUNTERS for period " + STRING(liPeriod) + " " + icEvent + " "
    FRAME sel.
@@ -77,7 +77,7 @@ form
    "Usage ........:" lcAmount SKIP
 
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header WITH no-labels side-labels
    FRAME lis.
@@ -86,9 +86,9 @@ form /*  search WITH FIELD DCCounter */
     lcEvent
     help "Give ...."
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -137,7 +137,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* DCCounter -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       add-new:
@@ -360,7 +360,7 @@ BROWSE:
        assign fr-header = " VIEW " ufkey = TRUE ehto = 5.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

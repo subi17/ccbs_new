@@ -388,7 +388,7 @@ form
     lcRoles             format "X(5)"     column-label "A I U"   
     memochr             format "M/"       column-label "M"
 WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
-    color value(cfc) title color value(ctc) 
+    color value(Syst.CUICommon:cfc) title color value(ctc) 
        " " + ynimi + " " + lcFrmTitle + " " +
        string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -418,7 +418,7 @@ form /* Customer :n tunnuksella hakua varten */
       SKIP
    "Number ...:" CustNum help "Enter Customer Number"
 with row 4 col 2 title color value(ctc) " FIND CUST No. "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-1.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-1.
 
 form /* Customer :n nimella hakua varten */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -437,7 +437,7 @@ form /* Customer :n nimella hakua varten */
   "Company...:" lcCompany  FORMAT "X(30)"
      HELP "Company name" SKIP
   with row 4 col 2 title color value(ctc) " FIND Name "
-  COLOR value(cfc) NO-LABELS OVERLAY FRAME search-2.
+  COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-2.
  
 form /* Aakkoshakua varten */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -446,7 +446,7 @@ form /* Aakkoshakua varten */
       SKIP
    "Abbreviat.:" SearchName help "Enter abbreviation"
 with row 4 col 2 title color value(ctc) " FIND ABBREVIATION "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-3.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-3.
 
 form /* FIND zip */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -455,7 +455,7 @@ form /* FIND zip */
       SKIP
    "Zip Code .:" lcZip  help "Enter ZIP code"
 with row 4 col 2 title color value(ctc) " FIND ZIP "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-4.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-4.
 
 form /* FIND OrgCode */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -464,7 +464,7 @@ form /* FIND OrgCode */
       SKIP
    "PersonID .:" OrgId  help "Enter personID or company ID"
 with row 4 col 2 title color value(ctc) " FIND PERSONID "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-6.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-6.
 
 form /* FIND CLI # */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -473,7 +473,7 @@ form /* FIND CLI # */
       SKIP
    "CLI ......:" CLI help "Enter A-number or beginning of it"
 with row 4 col 2 title color value(ctc) " FIND CLI "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-7.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-7.
 
 
 form
@@ -776,7 +776,7 @@ mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
                       
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 ASSIGN
    month    = (year(pvm) * 100) + month(pvm)
@@ -1371,7 +1371,7 @@ repeat WITH FRAME sel:
 
         /* Search 1 */
         IF toimi = 1 THEN DO:  /* search WITH column 1 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
            PAUSE 0.
@@ -1396,7 +1396,7 @@ repeat WITH FRAME sel:
 
         /* Search WITH column 2 */
         ELSE  IF toimi = 2 THEN DO:  /* search col. 3 */
-           cfc = "puyr". RUN Syst/ufcolor.p. 
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. 
            
            ASSIGN
               lcFirstName = ""
@@ -1495,7 +1495,7 @@ repeat WITH FRAME sel:
 
         /* Search WITH column 3 */
         ELSE IF toimi = 3 THEN DO: 
-           cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-4. 
            UPDATE lcBrand WHEN gcAllBrand = TRUE 
@@ -1514,7 +1514,7 @@ repeat WITH FRAME sel:
 
         /* Search WITH column 4 */
         ELSE IF toimi = 4 THEN DO: 
-           cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-6. 
            UPDATE lcBrand WHEN gcAllBrand = TRUE 
@@ -1620,7 +1620,7 @@ repeat WITH FRAME sel:
         END CASE.
  
         ASSIGN fr-header = fr-header + " CUSTOMER DATA "  
-               cfc       = "kline" 
+               Syst.CUICommon:cfc = "kline" 
                ufkey     = TRUE.
  
         Action: 

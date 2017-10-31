@@ -57,7 +57,7 @@ form
    CLI.ValueLimit
    CLI.Active
 WITH OVERLAY ROW 3 SCROLL 1 12 DOWN CENTERED
-   COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " " +
+   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " " +
    " Customer " + STRING(liCustNum) + " Maintain A-Sub details " 
    + STRING(pvm,"99-99-99") + " " 
 FRAME sel.
@@ -75,7 +75,7 @@ form
    HELP "Day WHEN A-sub will be disconnected - DD.MM.YY" endTime
    HELP "Time WHEN A-sub will be disconnected - HH:MM:SS"         SKIP
 WITH  OVERLAY ROW 6 CENTERED
-   COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc)
    fr-header WITH NO-LABELS 
 FRAME lis.
 
@@ -83,10 +83,10 @@ form /*  search with field CLI */
    lcCLI
    HELP "Give A-Sub number"
    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND A-Sub "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY 
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -290,7 +290,7 @@ BROWSE:
 
       /* Haku 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          lcCLI = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE lcCLI WITH FRAME f1.  
@@ -410,7 +410,7 @@ BROWSE:
             ELSE ASSIGN ok = FALSE fr-header = " SHOW ".
          ASSIGN ufkey = TRUE ehto = 9.
          RUN Syst/ufkey.p.
-         cfc = "lis". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
          Func.Common:mSplitTS(INPUT CLI.CrStamp, OUTPUT begDay, OUTPUT begTimeI).
          begTime = STRING(begtimeI,"hh:mm:ss").

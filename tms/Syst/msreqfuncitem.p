@@ -70,7 +70,7 @@ FORM
     lcSelected             FORMAT "x(1)"  NO-LABEL
    
 WITH ROW FrmRow OVERLAY 15 DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
@@ -82,14 +82,14 @@ FORM "Item identifer..:" MsReqFuncItem.ItemId   SKIP
      "Int. parameter..:" MsReqFuncItem.IParam   SKIP
 
 WITH  OVERLAY ROW 4 centered
- COLOR VALUE(cfc)
+ COLOR VALUE(Syst.CUICommon:cfc)
  TITLE COLOR VALUE(ctc) " Add/Update "
  NO-LABELS 
  FRAME upd.
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -115,7 +115,7 @@ REPEAT WITH FRAME sel:
    END.
    
    IF must-add THEN DO:  /* Add a record  */
-      ASSIGN cfc = "upd" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "upd" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.   
    ADD-ROW:
       REPEAT WITH FRAME upd ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.

@@ -56,7 +56,7 @@ form
    CLIPref.CLIId
    CLIPref.State
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi +
    " Maintain operator prefixes "
    + string(pvm,"99-99-99") + " " FRAME sel.
@@ -67,7 +67,7 @@ form
    "  Identifier:" CLIPref.CLIId     SKIP
    "  State ....:" CLIPref.State  SKIP
 WITH  OVERLAY ROW 4 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header WITH NO-LABELS FRAME lis.
 
@@ -75,15 +75,15 @@ form /*  search WITH FIELD Pref */
    Pref
    help "Give prefix"
 with row 4 col 2 title color value(ctc) " FIND PREFIX "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD Pref */
    CLI 
    help "Give CLI"
 with row 4 col 2 title color value(ctc) " FIND CLI "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CLIPref
@@ -109,7 +109,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CLIPref */
-      ASSIGN cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -402,7 +402,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Pref = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Pref WITH FRAME f1.
@@ -425,7 +425,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         CLI = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CLI WITH FRAME f2.
@@ -526,7 +526,7 @@ BROWSE:
 
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           CLIPref.Pref
        WITH FRAME lis.

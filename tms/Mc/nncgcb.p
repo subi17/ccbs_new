@@ -64,23 +64,23 @@ form
     Customer.ZipCode   format "x(12)"   column-label "District"
     Customer.RepCodes format "x(6)"    column-label "Rep."
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
     CustGroup + " (" + gcBrand + ") " FRAME sel.
 
 form /* FIND Customer BY number */
     CustNum help "Enter Customer No."
     with row 4 col 2 title color value(ctc) " FIND CUST. No. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND Customer BY Name */
     CustName help "Enter Customer's name"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND Customer BY abbreviation */
     SearchName help "Enter abbreviation of name"
     with row 4 col 2 title color value(ctc) " FIND ABBREVIATION "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 form
    mess[1]  NO-LABEL SKIP
@@ -94,7 +94,7 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 
 FIND FIRST Customer  USE-INDEX CustNum  WHERE Customer.Brand = gcBrand 
@@ -303,7 +303,7 @@ print-line:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
    CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustNum WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
@@ -323,7 +323,7 @@ print-line:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". RUN Syst/ufcolor.p. SearchName = "".
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. SearchName = "".
    ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SearchName WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
@@ -343,7 +343,7 @@ print-line:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-   cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
    ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.

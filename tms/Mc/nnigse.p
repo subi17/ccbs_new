@@ -30,7 +30,7 @@ DEF VAR tlli-ots    AS CHAR.
 form
     InvGroup.InvGroup
     InvGroup.IGName  format "x(30)"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " Invoicing Groups (" + gcBrand + ") " 
     OVERLAY FRAME tlse.
 
@@ -40,16 +40,16 @@ form
 
 WITH OVERLAY ROW 8 centered
     TITLE COLOR value(ctc) tlli-ots
-    COLOR value(cfc) side-labels 1 col
+    COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Invoicing Group :n hakua varten */
     haku
     help "Enter Code of an Invoicing Group"
     with row 4 col 2 title color value(ctc) "FIND Inv.Group"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -197,7 +197,7 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            haku = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.

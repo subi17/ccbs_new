@@ -69,7 +69,7 @@ form
     membername       FORMAT "X(25)" Column-label "Target Name"  
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) "All members "
     FRAME sel.
 
@@ -84,7 +84,7 @@ form
     Membername   no-label FORMAT "x(24)"  SKIP
 
 WITH  OVERLAY ROW 3 WIDTH 60 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr
     SIDE-LABELS
 
@@ -95,17 +95,17 @@ form /* seek  MemberType */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "FAT Target:" Membertype HELP "Enter TARGET Of Fatime Group "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TARGET "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
  form
     FATGMember.Memo
 
     WITH OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Memo: " + FATGMember.FTGrp + "/" + FATGMember.FTGMember WITH NO-LABELS 1 columns
     FRAME f4.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Type  ,  By Member  ,By 3, By 4".
@@ -131,7 +131,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a FATGMember  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -366,7 +366,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
@@ -389,7 +389,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
         {Syst/uright2.i}.
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
         RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
@@ -458,7 +458,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       DISPLAY FATGMember.MemberType .  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGMember).
        RUN local-UPDATE-record.                                  

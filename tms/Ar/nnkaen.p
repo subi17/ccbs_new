@@ -95,7 +95,7 @@ FIND FIRST Company no-lock no-error.
 form
    valik NO-LABEL
    with overlay 2 down title color value(ctc) " CHOOSE ORDER FOR PRINTOUT "
-   COLOR value(cfc) ROW 6 centered FRAME rival.
+   COLOR value(Syst.CUICommon:cfc) ROW 6 centered FRAME rival.
 
 form
    skip(1)
@@ -107,7 +107,7 @@ form
    skip(11)
    WITH ROW 1 side-labels width 80
    title color value(ctc) " " + ynimi + " PAYMENT FORECAST " +
-   string(pvm,"99-99-99") + " " COLOR value(cfc) FRAME valinta.
+   string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
 
 form header
    viiva1 AT 2 SKIP
@@ -171,11 +171,11 @@ form
    pyynto  label "Notice payment behaviour" SKIP
 
    with title color value(ctc) " CRITERIA FOR PRINTOUT "  side-labels
-   COLOR value(cfc) ROW 8 centered OVERLAY FRAME rajat.
+   COLOR value(Syst.CUICommon:cfc) ROW 8 centered OVERLAY FRAME rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 view FRAME valinta.
-cfc = "puli". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 display raja pyynto "ALL" @ IGName WITH FRAME rajat.
@@ -267,7 +267,7 @@ toimi:
       IF toimi = 5 THEN DO:
          if pyynto then pytx = "PAYMENT BEHAVIOUR NOTICED".
          else           pytx = "PAYMENT BEHAVIOUR NOT NOTICED".
-         cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
+         Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   ccc = Syst.CUICommon:cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.

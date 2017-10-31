@@ -62,7 +62,7 @@ form
     Salesoffice.SOName
     Salesoffice.CostCentre /* column-label "Cct" help "Cost center" */
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    color value(cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
     " Maintain sales offices " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -75,7 +75,7 @@ form
     Salesoffice.CostCentre 
     VALIDATE(SalesOffice.CostCentre ne "000","Missing Cost Centre!")
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
@@ -85,16 +85,16 @@ form /*  search WITH FIELD Salesoffice */
     "Code :" haku-so-code
     help "Give code or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD SOName */
     "Brand:" lcBrand skip
     "Name :" haku-so-name
     help "Give Name or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -124,7 +124,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* Salesoffice -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -365,7 +365,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-so-code = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand with frame haku-f1.
@@ -388,7 +388,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-so-name = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand WITH frame haku-f2.
@@ -479,7 +479,7 @@ BROWSE:
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           Salesoffice.SalesOffice  
           Salesoffice.SOName 

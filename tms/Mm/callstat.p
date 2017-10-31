@@ -64,7 +64,7 @@ FORM
   
 
 WITH ROW 5 CENTERED width 40 OVERLAY 10  DOWN 
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " "  
     + string(pvm,"99-99-99") 
 FRAME aa.
@@ -75,7 +75,7 @@ FORM
   summa2          COLUMN-LABEL "Total price" FORMAT ">>>,>>9.99"
 
 WITH ROW 5 CENTERED width 60 OVERLAY 10  DOWN 
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " " 
     + string(pvm,"99-99-99") 
 FRAME ab.
@@ -86,7 +86,7 @@ FORM
   summa2          COLUMN-LABEL "Total price" FORMAT ">>>,>>9.99"
 
 WITH ROW 3 CENTERED width 60 OVERLAY 13  DOWN 
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " " 
     + string(pvm,"99-99-99") 
 FRAME ac.

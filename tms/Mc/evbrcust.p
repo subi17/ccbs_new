@@ -450,7 +450,7 @@ form
     temp-event.ttkey      FORMAT "X(23)"    COLUMN-LABEL "Key"
     temp-event.ttType     FORMAT ">9"       COLUMN-LABEL "Type"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " Eventlog BROWSER for Customer " + xxkey + "  "
     + string(pvm,"99.99.99") + " "
@@ -466,7 +466,7 @@ form
     temp-event.ttType
     muutokset VIEW-AS EDITOR size-chars 60 BY 10
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     2 columns
@@ -479,7 +479,7 @@ form /* seek Eventlog  BY  Date */
     lcevtime
     HELP "Enter Time 99:99:99"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date & Time"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY 
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME f1.
 
 form /* seek Eventlog  BY UserCode */
@@ -488,14 +488,14 @@ form /* seek Eventlog  BY UserCode */
     "Date.:" evdate
     HELP "Enter Date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY 
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME f2.
 
 form /* seek Eventlog  BY  TableName and keyvalue */
     "Table..:" lcTable HELP "Enter TableName or beginning of it " SKIP
     "Key....:" lcKey   HELP "Enter KeyValue or beginning of it"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table & Key "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY 
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
 FRAME f3.
 
 FIND FIRST temp-event NO-LOCK NO-ERROR.
@@ -510,7 +510,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -715,7 +715,7 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
@@ -762,7 +762,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET UserCode 
@@ -789,7 +789,7 @@ BROWSE:
 
      /* Search BY column 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        ASSIGN

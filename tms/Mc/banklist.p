@@ -41,7 +41,7 @@ FORM
     Bank.City
     Bank.Address
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " BANKS "
     + string(pvm,"99-99-99") + " "
@@ -57,7 +57,7 @@ FORM
    "Address .....:" Bank.Address      FORMAT "x(42)" SKIP
    "Updated .....:" Bank.FileDate     
 WITH OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
@@ -67,10 +67,10 @@ FORM /* seek Bank  BY BankId and BankOffice */
     "Office......:" lcBankOffice  HELP "Enter BankOffice or beginning of it"
    WITH OVERLAY row 4 col 2 
    TITLE COLOR VALUE(ctc) " FIND BANK "
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By BankId".
@@ -281,7 +281,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
@@ -325,7 +325,7 @@ BROWSE:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " BANK INFO ". 
-       cfc = "lis". 
+       Syst.CUICommon:cfc = "lis". 
        RUN Syst/ufcolor.p. 
        
        CLEAR FRAME lis NO-PAUSE.

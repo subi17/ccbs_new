@@ -44,7 +44,7 @@ skip(1)
 "          " updText[4]  AUTO-RETURN                         SKIP(2) 
 
 WITH  OVERLAY ROW 1 centered width 80
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " SMS INFORMATION FOR  " + mobsub.cli  
     NO-LABELS FRAME main.
 

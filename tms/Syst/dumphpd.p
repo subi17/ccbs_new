@@ -45,7 +45,7 @@ FORM
     DumpHPD.FinalTime         COLON 20
     DumpHPD.UnitsToDump       COLON 20
     DumpHPD.UnitType          COLON 20
-WITH  OVERLAY ROW 2 centered COLOR VALUE(cfc)
+WITH  OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
 
 FIND DumpFile NO-LOCK WHERE DumpFile.DumpID = iiDumpID NO-ERROR.

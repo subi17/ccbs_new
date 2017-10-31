@@ -21,11 +21,11 @@ DEF VAR must-print    AS logic NO-UNDO.
 form
 bank.bankid COLUMN-LABEL "Bank"
 bank.bankoffice   COLUMN-LABEL "Office"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
 title color value(ctc) " Banks (" + gcBrand + ") "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 runko:
 repeat:
 

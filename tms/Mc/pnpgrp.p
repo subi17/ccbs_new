@@ -58,7 +58,7 @@ form
    CustPNPGroup.PnpGroup COLUMN-LABEL "PNP GROUP" FORMAT "X(12)" 
    CustPNPGroup.PnPPrior
 WITH width 75 OVERLAY CENTERED scroll 1 13 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " 
    + ynimi 
    + " maintain Customer " 
@@ -72,12 +72,12 @@ form
    CustPNPGroup.PnpGroup
    CustPNPGroup.PnPPrior
 WITH  OVERLAY ROW 4 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CustPNPGroup
@@ -103,7 +103,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* CustPNPGroup -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
@@ -408,7 +408,7 @@ BROWSE:
 
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustPNPGroup).
         RUN LOCAL-UPDATE.

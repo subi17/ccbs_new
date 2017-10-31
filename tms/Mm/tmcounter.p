@@ -93,7 +93,7 @@ FORM
     ttTMCounter.Limitamt  FORMAT ">>>>>9" COLUMN-LABEL "Limit"
     ttTMCounter.LimitId   FORMAT ">9"  COLUMN-LABEL "LID"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + lcHeader + " "
     FRAME sel.
 
@@ -102,24 +102,24 @@ FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
     HELP "Enter Customer Number" SKIP
    WITH OVERLAY row 4 col 2 
    TITLE COLOR VALUE(ctc) " FIND Customer "
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f1.
 
 FORM /* seek  MSBalance */
    "Subscr.ID:" liMsSeq FORMAT ">>>>>>>9"
       HELP "Enter Subscription ID"
    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
-      COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+      COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
     "Usage exceeds....:" ldeAmount FORMAT ">>>>>>9.999"
    HELP "Enter value" SKIP
    WITH OVERLAY row 4 col 2 
    TITLE COLOR VALUE(ctc) " COUNTER FILTER "
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    NO-LABELS FRAME f3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = " By Customer    , By Subscription, By Usage       ".
@@ -340,7 +340,7 @@ BROWSE:
       /* Search BY column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f1.
          ASSIGN
@@ -373,7 +373,7 @@ BROWSE:
       ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f2.
          ASSIGN
@@ -415,7 +415,7 @@ BROWSE:
       ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f3.
          ldeAmountPrev = ldeAmount. 

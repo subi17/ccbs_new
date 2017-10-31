@@ -67,7 +67,7 @@ def var order         as int   no-undo.
 form
    valik no-label
    with overlay 2 down title color value(ctc) " CHOOSE ORDER FOR PRINTOUT "
-   color value(cfc) row 6 centered frame rival.
+   color value(Syst.CUICommon:cfc) row 6 centered frame rival.
 
 form
    "  Note : This program creates an AGE ANALYSIS of all "    skip
@@ -75,7 +75,7 @@ form
    skip(15)
    with row 1 side-labels width 80
         title color value(ctc) " " + ynimi + " AGE ANALYSIS " +
-        string(pvm,"99-99-99") + " " color value(cfc)
+        string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame valinta.
 
 form
@@ -107,11 +107,11 @@ form
    "Group 7 :" aryhma7 no-label "days overdue invoices" 
 
    with title color value(ctc) " CRITERIA FOR PRINTOUT " side-labels
-   color value(cfc) row 4 centered overlay frame rajat.
+   color value(Syst.CUICommon:cfc) row 4 centered overlay frame rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 view frame valinta.
-cfc = "puli". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign
@@ -247,7 +247,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       else if toimi = 5 then do:
          IF NOT llOnlySummary THEN DO:
             assign
-            cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
+            Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   ccc = Syst.CUICommon:cfc.
             do i = 1 to 2 with frame rival:
                valik = valikko[i].
                display valik.

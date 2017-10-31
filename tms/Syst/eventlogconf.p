@@ -62,7 +62,7 @@ FORM
     EventLogConf.FromDate
     EventLogConf.ToDate
 WITH ROW FrmRow WIDTH 80 OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " EVENTLOG CONFIGURATION " 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) " EVENTLOG CONFIGURATION " 
     FRAME sel.
 
 FORM
@@ -72,13 +72,13 @@ FORM
     EventLogConf.FromDate     COLON 20
     EventLogConf.ToDate       COLON 20
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -106,7 +106,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a EventLogConf  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       
@@ -424,7 +424,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhEventLogConf).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

@@ -60,7 +60,7 @@ form
     memb                column-label "Member"
     UserGrp.UserGroup      /* COLUMN-LABEL FORMAT */
     UserGrp.UGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(cfc)
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " Join CustNo " + string(UserCode) + " into group(s) "
     FRAME sel.
@@ -75,19 +75,19 @@ form /* Customer Group :n haku kentällä UserGroup */
     UserGroup
     help "Type Group Code"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä UGName */
     UGName
     help "Type first characters of a name"
     with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND TMSUser where TMSUser.UserCode = UserCode no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UserGrp
@@ -318,7 +318,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
@@ -341,7 +341,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UGName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UGName WITH FRAME f2.
@@ -362,7 +362,7 @@ SELAUS:
 
      else if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND UserGrp where recid(UserGrp) = rtab[frame-line(sel)]
        exclusive-lock.

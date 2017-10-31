@@ -54,7 +54,7 @@ FORm SKIP(1)
    path    LABEL  " Path and Filename ......"  FORMAT "x(40)"
 
 WITH title color value(ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
-   color value(cfc) row 4 centered overlay FRAME rajat.
+   color value(Syst.CUICommon:cfc) row 4 centered overlay FRAME rajat.
 ASSIGN
    CustNum1  = 1001
    CustNum2  = 999999999.

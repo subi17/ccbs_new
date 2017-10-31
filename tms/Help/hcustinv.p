@@ -50,7 +50,7 @@ form
     Invoice.InvType                 COLUMN-LABEL "Type"
     notes                           column-label "Memo"
 WITH CENTERED OVERLAY scroll 1 10 DOWN ROW 3
-    COLOR value(cfc) 
+    COLOR value(Syst.CUICommon:cfc) 
     TITLE COLOR value(ctc)
        " CHOOSE INVOICE " +
        " (" + STRING(CustNum) + " " + lcCustName + ") "
@@ -59,7 +59,7 @@ WITH CENTERED OVERLAY scroll 1 10 DOWN ROW 3
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
 lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -304,7 +304,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         ELSE ASSIGN
              order = ex-order
              must-print = FALSE.
-        cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
         NEXT LOOP.
      END.
 

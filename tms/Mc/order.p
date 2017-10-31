@@ -337,7 +337,7 @@ form
         "3rd:" AT 70 OrderCustomer.OutPostMarketing
 		
  WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS SIDE-LABEL FRAME fCustomer.
 
 FORM
@@ -364,7 +364,7 @@ FORM
     Order.CredOk    COLUMN-LABEL "Cred"
     memoch          LABEL "M"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi + " " +
     " ORDERS "
     + string(pvm,"99-99-99") + " "
@@ -376,7 +376,7 @@ FORM
     COLON 25 lcMultiSIMType NO-LABEL FORMAT "X(9)" SKIP
     liMultiSimOrder COLON 25 LABEL "Primary/Secondary Order" 
  WITH OVERLAY ROW 5 WIDTH 50 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Multi SIM Info" 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "Multi SIM Info" 
     SIDE-LABEL FRAME frMultiSIM.
 
 {Func/brand.i}
@@ -458,7 +458,7 @@ form
     SKIP
     
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
@@ -485,14 +485,14 @@ form /* seek  Date */
                       Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Order date:" lDate HELP "Enter date of order"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND DATE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     "Brand Code:" lcBrand  HELP "Enter Brand"
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Msisdn no :" CLI HELP "Enter CLI Number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NUMBER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  OrderId */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -501,7 +501,7 @@ form /* seek  OrderId */
     "OrderId ..:" liOrderid
     HELP "Enter Order Id"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 form /* seek  With CustId */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -513,7 +513,7 @@ form /* seek  With CustId */
     HELP "CIF N/A NIE NIF Passport"  SKIP
         
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
 form /* seek  With Fixed number */ 
@@ -524,7 +524,7 @@ form /* seek  With Fixed number */
     HELP "Fixed number" SKIP
         
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME fFixed.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME fFixed.
 
 form /* seek  PersonId */
     "Brand Code :" lcBrand  HELP "Enter Brand"
@@ -532,7 +532,7 @@ form /* seek  PersonId */
     "Contract Id:"  lcContId
     HELP "Enter Contract Id"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
@@ -626,7 +626,7 @@ IF iiOrderId > 0 THEN DO:
    LEAVE.
 END.          
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By OrgId , By Name  ,By OrderId , By Status , By OrgID , By  Cli ,  By orderid  ".
@@ -871,7 +871,7 @@ BROWSE:
 
         /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
@@ -901,7 +901,7 @@ BROWSE:
         /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F3.
         Disp lcBrand With FRAME f3.
@@ -943,7 +943,7 @@ BROWSE:
      DO ON ENDKEY UNDO, NEXT LOOP:
                lcFixedNumber = "".
                
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME fFixed.
         SET  lcBrand   WHEN gcAllBrand = TRUE
@@ -970,7 +970,7 @@ BROWSE:
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F4.
         Disp lcBrand With FRAME f4.
@@ -1005,7 +1005,7 @@ BROWSE:
         ASSIGN lcCustomerId = ""
                lcCustIdType = "".
                
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F5.
         SET  lcBrand   WHEN gcAllBrand = TRUE
@@ -1080,7 +1080,7 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F2.
         Disp lcBrand With FRAME f2.

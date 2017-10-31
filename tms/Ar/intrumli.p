@@ -83,7 +83,7 @@ exPaymFile AT 10 LABEL "File Name .."
     help "Name of Output File"
 SKIP(8)
  WITH  OVERLAY ROW 1 WIDTH 80
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
        " " + ynimi + " SEND INVOICES TO COLLECTION " + 
        STRING(pvm,"99-99-99") + " " 

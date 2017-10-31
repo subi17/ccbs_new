@@ -31,7 +31,7 @@ form
       MSISDN.ValidFrom
       MSISDN.CustNum
       MSClass.MCName format "x(8)" Column-label "MSISDN Class" 
-      with scroll 1 11 down  row 4 centered color value(cfc)
+      with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " MSISDNs " overlay frame sel.
 
 form /* SEEK Code */
@@ -39,19 +39,19 @@ form /* SEEK Code */
     CLI format "x(12)"
     help "Enter MSISDN No. "
     with row 4 col 2 title color value(ctc) " FIND MSISDN "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 
 form
     MSISDN.CustNum    label "Customer ..." Customer.CustName no-label at 25 skip
   WITH
   overlay row 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
     side-labels 
     FRAME cust.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -225,7 +225,7 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*CLI*/
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            clear frame hayr.
            disp m_pref with frame  hayr.

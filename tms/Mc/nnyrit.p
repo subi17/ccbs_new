@@ -61,10 +61,10 @@ form
    
 with title color value(ctc) " " + ynimi + " COMPANY INFORMATION "
      + string(pvm,"99-99-99") + " "
-     COLOR value(cfc) ROW 1 col 1 width 80 side-labels
+     COLOR value(Syst.CUICommon:cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.
 
-cfc = "yri". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
 
 PAUSE 0 no-message.
 
@@ -107,7 +107,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
       RUN Syst/ufkey.p.
 
       IF toimi = 1 AND lcRight = "RW" THEN DO:
-         cfc = "yri". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
          ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCompany).
@@ -129,7 +129,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCompany).
 
-         cfc = "yri". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
          PAUSE 0 no-message.
          NEXT toimi.
       END.

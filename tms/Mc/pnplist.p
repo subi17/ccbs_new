@@ -71,7 +71,7 @@ FORM
    PNPList.BDestFrom
    PNPList.BDestTo
 WITH ROW 3 CENTERED OVERLAY scroll 1 12 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " PNP numbers: " + pnpgroup.name + " " 
 FRAME sel.
 
@@ -85,7 +85,7 @@ FORM
    "BNumberTo .:" PNPList.BDestTo
       HELP "TO B-number for PNP series"   SKIP
 WITH OVERLAY ROW 6 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    fr-header  WITH no-labels
 FRAME lis.
@@ -93,7 +93,7 @@ FRAME lis.
 form /*  search WITH FIELD PNPList */
    liCustNum help "Give ...."
 with row 4 col 2 title color value(ctc) " FIND Customer "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FORM
    "Give filename :" lFileName  FORMAT "x(40)"
@@ -101,7 +101,7 @@ WITH
    ROW 8 OVERLAY CENTERED TITLE " Import CLI list from file " 
    NO-LABELS FRAME frmImport.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -132,7 +132,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* PNPList -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD "
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD "
 
       must-add = FALSE.
       RUN Syst/ufcolor.p.
@@ -356,7 +356,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        liCustNum = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE liCustNum WITH FRAME haku-f1.
@@ -478,7 +478,7 @@ BROWSE:
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPnpList).
 

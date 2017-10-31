@@ -45,12 +45,12 @@ help "Earliest call date"
 "-" exdate2 format "99-99-99" help "Latest call date"  skip
 "                Directory for output .:" exdir format "x(30)" skip(7)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + ynimi + " SUMMARY calls SMAN/PROD " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1

@@ -47,7 +47,7 @@ form
      row 8 
      centered 
      title color value(ctc) " MULTI-BRAND TMS: USER LOGIN "
-     side-labels color value(cfc) overlay frame login.
+     side-labels color value(Syst.CUICommon:cfc) overlay frame login.
 
 
 do with frame login:
@@ -57,14 +57,14 @@ do with frame login:
    IF ergo-kbd THEN display with frame f_code-ERGO.
                ELSE display with frame f_code.
 
-   cfc = "lis". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
    pause 0 no-message.
 
    ehto = 9. RUN Syst/ufkey.p.
    assign si-pvm = pvm.
 
    if katun = "" then do:
-      cfc = "tunnus". RUN Syst/ufcolor.p.
+      Syst.CUICommon:cfc = "tunnus". RUN Syst/ufcolor.p.
 
       input through value("who am i").
 

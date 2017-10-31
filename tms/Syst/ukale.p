@@ -46,13 +46,13 @@ form
   p[36] p[37] "                "                 vk[6]
 
   WITH TITLE COLOR value(ctc) kuu
-  COLOR value(cfc) ROW 9 col 50
+  COLOR value(Syst.CUICommon:cfc) ROW 9 col 50
   NO-LABEL OVERLAY FRAME kal.
 
   ASSIGN
   kk=month(si-pvm) vv=year(si-pvm) pp=day(si-pvm)
   chalku=string(pp)
-  cfc = "kal". RUN Syst/ufcolor.p.
+  Syst.CUICommon:cfc = "kal". RUN Syst/ufcolor.p.
 
 
 LOOP:

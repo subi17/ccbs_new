@@ -46,7 +46,7 @@ VALIDATE(INPUT cdate1 <= INPUT cdate2,"Invalid order of dates !")
    OVERLAY 
    ROW 3 
    WIDTH 60   CENTERED
-   COLOR VALUE(cfc) 
+   COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(ctc) 
     " " + ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
     string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.

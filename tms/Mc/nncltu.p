@@ -61,7 +61,7 @@ HELP "Customer To"                                                 skip
 HELP "Invoice Group" to 39                                         skip
 "                Margin ....:" CustLetter.LtrMargin to 39          skip(5)
 WITH
-    COLOR value(cfc) TITLE COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
     " " + ynimi + " Customer letter printing " + string(pvm,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.

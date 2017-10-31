@@ -136,7 +136,7 @@ form
     SingleFee.Billed      COLUMN-LABEL "I" FORMAT "I/" 
     SingleFee.InvNum      COLUMN-LABEL "Inv.Nbr"   
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Single Fees: " +  string(iiCustNum) + " " + 
         substr(lcCustName,1,24) + " "
@@ -201,7 +201,7 @@ form
                         SingleFee.Memo[5]  NO-LABEL AT 19
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -220,7 +220,7 @@ form
     "Amount .........:" ldFItemAmt NO-LABEL SKIP
   /*  "Period .........:" BillPeriod NO-LABEL SKIP */
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis-cctools.
@@ -233,13 +233,13 @@ form /* seek Billable item  BY  keyvalue */
     "ID ...:" lcKeyValue  
        HELP "Enter target ID"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billable item  BY BillPeriod */
     BillPeriod
     HELP "Enter Billing Period"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Period "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fValidateMsSeq RETURNS LOGIC
    (iiMsSeq AS INT):
@@ -261,7 +261,7 @@ END FUNCTION.
 FIND Customer WHERE Customer.CustNum  = iiCustNum  NO-LOCK NO-ERROR.
 lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first. 
@@ -335,7 +335,7 @@ REPEAT WITH FRAME sel:
      ELSE llUseCCTool = FALSE.  
       
      ASSIGN
-        cfc      = "lis"
+        Syst.CUICommon:cfc = "lis"
         ufkey    = true
         ac-hdr   = " ADD "
         must-add = FALSE
@@ -612,7 +612,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        
        CLEAR  FRAME f1.
@@ -653,7 +653,7 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET BillPeriod WITH FRAME f2.
@@ -767,7 +767,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SingleFee.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSingleFee).

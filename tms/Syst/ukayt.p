@@ -104,7 +104,7 @@ form /* pAAruutu, scroll */
     TMSUSer.fromdate FORMAT "99.99.9999" column-LABEL "From"
     TMSUser.toDate   FORMAT "99.99.9999" column-LABEL "Until"
 WITH
-    width 80 OVERLAY scroll 1 15 DOWN COLOR value(cfc)
+    width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " USER IDS "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -141,7 +141,7 @@ form /* lisAyksiA varten, ei scroll */
        HELP "User's e-mail address"            SKIP
     moremail       NO-LABEL format "x(75)"
        HELP "More E-mail addresses" 
-WITH  OVERLAY ROW 2 centered COLOR value(cfc)
+WITH  OVERLAY ROW 2 centered COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc) fr-header WITH side-labels
         FRAME lis.
 
@@ -150,20 +150,20 @@ form /* KAyttAjAn hakua varten */
     help "Enter User TMS ID"    
     WITH ROW 4 col 2
     title color value(ctc) " SEEK USER TMS ID "     
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME syha1.
+    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha1.
 
 form /* numeron hakua varten */
     ha-nimi format "x(20)"
     help "Enter Foreign ID"      
     with row 4 col 2 title color value(ctc) " SEEK BY FOREIGN ID "
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME syha2.
+    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha2.
 
 form /* Nimen hakua varten */
     ha-nimi FORMAT "x(30)"
     help "Enter User Name"    
     WITH ROW 4 col 2
     title color value(ctc) " SEEK USER BY NAME "     
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME syha3.
+    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha3.
 
 FORM
    "UserID :" lcUserCode
@@ -175,7 +175,7 @@ FRAME PWD.
 
 llAdminUser = fIsAdminUser(katun).
 
- cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
  view FRAME sel.
 
 order = 1.
@@ -213,7 +213,7 @@ BROWSE:
        ufkey = TRUE.
 
        IF must-add THEN DO:
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           PAUSE 0 no-message.
 add-new:
@@ -281,7 +281,7 @@ add-new:
           IF NOT can-find(FIRST TMSUser) THEN RETURN.
           must-print = TRUE.
           must-add = FALSE.
-          cfc = "sel". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
           IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTMSUser).
 
@@ -380,7 +380,7 @@ add-new:
 
        /* haku */
        if nap = "f1"  or nap = "1" THEN DO:  /* tms tunnuksen haku */
-          cfc = "haku". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha1.
           HIDE FRAME syha1.
@@ -393,7 +393,7 @@ add-new:
                 no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   cfc = "sel". RUN Syst/ufcolor.p.
+                   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
                    NEXT BROWSE.
                 END.
              END.
@@ -402,13 +402,13 @@ add-new:
              memory = recid(TMSUser)
              must-print = TRUE
              order = 1.
-             cfc = "sel". RUN Syst/ufcolor.p.
+             Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
              NEXT BROWSE.
           END. /* tunnuksen haku */
        END. /* f1 */
 
        else if nap = "f2" or nap = "2" THEN DO: /* foreign id haku */
-          cfc = "haku". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha2.
           HIDE FRAME syha2.
@@ -422,7 +422,7 @@ add-new:
                 USE-INDEX ForeignId no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   cfc = "sel". RUN Syst/ufcolor.p.
+                   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
                    NEXT BROWSE.
                 END.
              END.
@@ -430,13 +430,13 @@ add-new:
              memory = recid(TMSUser).
              must-print = TRUE.
              order = 3.
-             cfc = "sel". RUN Syst/ufcolor.p.
+             Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
              NEXT BROWSE.
           END. /* haku foreignidllä */
        END. /* f2 */
 
        else if nap = "f3" or nap = "3" THEN DO: /* nimihaku */
-          cfc = "haku". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha3.
           HIDE FRAME syha3.
@@ -450,7 +450,7 @@ add-new:
                 USE-INDEX UserName no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   cfc = "sel". RUN Syst/ufcolor.p.
+                   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
                    NEXT BROWSE.
                 END.
              END.
@@ -458,7 +458,7 @@ add-new:
              memory = recid(TMSUser).
              must-print = TRUE.
              order = 2.
-             cfc = "sel". RUN Syst/ufcolor.p.
+             Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
              NEXT BROWSE.
           END. /* nimihaku */
        END. /* f3 */
@@ -471,7 +471,7 @@ add-new:
           ASSIGN
              memory = recid(TMSUser)
              must-print = TRUE 
-             cfc = "sel".
+             Syst.CUICommon:cfc = "sel".
           RUN Syst/ufcolor.p.
           NEXT BROWSE.
        END.

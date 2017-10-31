@@ -43,7 +43,7 @@ form
     BDest.DestType
     BDest.ToDate 
 WITH centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) 
     " FIND B-DESTINATION (" + gcBrand + ") '" + bthaku + "' " FRAME sel.
 
@@ -54,9 +54,9 @@ form
     SKIP
 with row 1 centered overlay title " FIND B-DESTINATION " FRAME alku.
 
-cfc = "sel". 
+Syst.CUICommon:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN ccc = cfc.
+ASSIGN ccc = Syst.CUICommon:cfc.
 
 FIND FIRST BDest WHERE BDest.Brand = gcBrand NO-LOCK NO-ERROR.
 

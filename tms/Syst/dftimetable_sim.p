@@ -50,7 +50,7 @@ form
     lcWeekDay         FORMAT "X(9)"     COLUMN-LABEL "WeekDay"
     lcTime            FORMAT "X(8)"     COLUMN-LABEL "Time"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  TIMETABLE  "  FRAME sel.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "  TIMETABLE  "  FRAME sel.
 
 
 FIND DFTimeTable WHERE RECID(DFTimeTable) = irTimeTable NO-LOCK NO-ERROR.
@@ -75,7 +75,7 @@ FOR EACH ttDays,
    ttEvent.EventTime = ttTimes.DumpTime.
 END.    
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 lcDays = "Sun,Mon,Tues,Wednes,Thurs,Fri,Satur".

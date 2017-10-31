@@ -61,7 +61,7 @@ form
     notes                                   column-label "M"
 WITH
     width 80 OVERLAY scroll 1 14 DOWN ROW 2 centered
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " INVOICES  (" + gcBrand + ") "
     FRAME sel.
 
@@ -69,29 +69,29 @@ form
     "Invoice:" lcExtInvID  FORMAT "X(12)" 
     help "Invoice number"    
     with row 4 col 2 title color value(ctc) " FIND INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 form 
     "System Invoice:" liInvNum FORMAT ">>>>>>>9" 
     help "System invoice number"
     with row 4 col 2 title color value(ctc) " FIND SYST INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F2.
 
 form 
     "Customer:" liCustNum FORMAT ">>>>>>>9" 
     help "Customer number"
     with row 4 col 2 title color value(ctc) " FIND CUSTOMER"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F3.
 
 form 
     "Invoice Date:" ldtInvDate FORMAT "99-99-99" 
     help "Invoice date"
     with row 4 col 2 title color value(ctc) " FIND DATE"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F4.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F4.
 
 {Func/brand.i}
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 IF gcHelpParam > "" THEN DO:
@@ -341,7 +341,7 @@ print-line:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE lcExtInvID WITH FRAME F1.
@@ -360,7 +360,7 @@ print-line:
      END. 
 
      ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liInvNum WITH FRAME F2.
@@ -378,7 +378,7 @@ print-line:
      END. 
 
      ELSE IF LOOKUP(nap,"3,F3") > 0 AND ufk[3] > 0  THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liCustNum WITH FRAME F3.
@@ -397,7 +397,7 @@ print-line:
      END. 
 
      ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 THEN DO:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ldtInvDate = ?.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE ldtInvDate WITH FRAME F4.

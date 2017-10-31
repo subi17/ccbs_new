@@ -29,7 +29,7 @@ def var must-add    as logic                no-undo.
 form
     ttable.ValueId FORMAT "X(12)" 
     ttable.Description FORMAT  "x(40)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) ititle overlay with frame sel.
 
 
@@ -37,10 +37,10 @@ form /* SEEK Code */
     ob-code
     help "Enter Type "
     with row 4  col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 ovalueid = ?. 
 
 MAIN:
@@ -193,7 +193,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.

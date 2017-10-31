@@ -51,7 +51,7 @@ form
     Payment.AccDate   FORMAT "99-99-99"      COLUMN-LABEL "Created"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        " REFUND PAYMENTS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -77,7 +77,7 @@ FORM
        FORMAT ">,>>>,>>9"
        SKIP
 WITH  OVERLAY ROW 16 WIDTH 80
-    COLOR VALUE(cfc)  TITLE COLOR VALUE(ctc) " PAYMENT CONFIGURATION "
+    COLOR VALUE(Syst.CUICommon:cfc)  TITLE COLOR VALUE(ctc) " PAYMENT CONFIGURATION "
     SIDE-LABELS FRAME fBank.
 
 
@@ -98,7 +98,7 @@ form
       Payment.Posting[4] AT 15 NO-LABEL SKIP
       
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -108,13 +108,13 @@ form /* seek  ttPaym */
     "Customer:" liCustNum
     HELP "Enter customer nbr"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  ttPaym */
     "Amount:" ldAmt FORMAT "->,>>>,>>9.99"
     HELP "Enter amount"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Amount "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fDispTotal RETURNS LOGICAL.
@@ -132,7 +132,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
     
 END FUNCTION.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Customer ," +
@@ -380,7 +380,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
@@ -406,7 +406,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         UPDATE ldAmt WITH FRAME f2.
@@ -610,7 +610,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

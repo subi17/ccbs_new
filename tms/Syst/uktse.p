@@ -26,11 +26,11 @@ DEF VAR must-print  AS logic NO-UNDO.
 form
 TMSUser.UserCode  /* column-label "UserId"    */
 TMSUser.UserName /* column-label "User Name" */
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
 title color value(ctc) " USERS "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 runko:
 repeat:
 

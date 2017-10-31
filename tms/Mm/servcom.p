@@ -84,7 +84,7 @@ form
     ServCom.Target      column-label "T" 
     ServCom.FeeModel    column-label "FeeModel" format "x(7)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     "  Components of Service '" + Service + "'  "
     + " " 
@@ -147,7 +147,7 @@ form
     
     ServCom.ServiceLimit COLON 20 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -156,19 +156,19 @@ form /* seek ServCom  BY  ServCom */
     ServCom
     HELP "Enter Code of component"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ServCom  BY ScName */
     SCName
     HELP "Enter Name of component"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 form /* memo */
     ServCom.Memo
     WITH OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Memo: " + ServCom.ServCom + " " WITH NO-LABELS 1 columns
     FRAME memo.
@@ -177,7 +177,7 @@ FIND Service WHERE
      Service.Service = Service AND 
      Service.Brand   = gcBrand NO-LOCK.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -203,7 +203,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServCom  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -450,7 +450,7 @@ REPEAT WITH FRAME sel:
         
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            SET ServCom WITH FRAME f1.
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
         /* Search BY col 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            SET ScName WITH FRAME f2.
@@ -606,7 +606,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this((lcRight = "RW")).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServCom.ServCom.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServCom).

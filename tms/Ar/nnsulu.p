@@ -135,7 +135,7 @@ DEF VAR liBatch      AS INT   NO-UNDO EXTENT 2.
 form
    valik NO-LABEL
    with overlay 2 down title color value(ctc) " CHOOSE SORT ORDER "
-   COLOR value(cfc) ROW 6 centered FRAME rival.
+   COLOR value(Syst.CUICommon:cfc) ROW 6 centered FRAME rival.
 
 ASSIGN
 viiva1 = fill("=",lev)
@@ -157,7 +157,7 @@ form
 skip(13)
    WITH ROW 1 side-labels width 80
         title color value(ctc) " " + ynimi + " PAYMENT JOURNAL " +
-        string(pvm,"99-99-99") + " " COLOR value(cfc)
+        string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc)
         FRAME MAIN.
 
 form header
@@ -261,7 +261,7 @@ form
    sukoo     at 5 label "A separate Acct Summary for bookkeeping" SKIP
    xOnlySum  at 5 label "Print only the Account Summary ........" SKIP
 with title color value(ctc) " PRINTOUT PARAMETERS " side-labels
-   COLOR value(cfc) ROW 7 centered OVERLAY FRAME options.
+   COLOR value(Syst.CUICommon:cfc) ROW 7 centered OVERLAY FRAME options.
 
 FUNCTION fChgPage RETURNS LOGICAL
    (iAddLine AS INT).
@@ -279,9 +279,9 @@ FUNCTION fChgPage RETURNS LOGICAL
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 view FRAME MAIN.
-cfc = "puli". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 ASSIGN vapv = 0 kake = 0 ermk = 0 PrVou = 0 sutil = TRUE sukoo = TRUE
@@ -407,7 +407,7 @@ toimi:
 
       IF toimi = 5 THEN DO:
 
-         assign cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
+         assign Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   ccc = Syst.CUICommon:cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.

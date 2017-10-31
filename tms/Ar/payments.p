@@ -109,7 +109,7 @@ form
     Payment.PaymType   FORMAT ">9"            COLUMN-LABEL "T"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
           "  PAYMENTS  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -192,7 +192,7 @@ form
   lcTypeName[6]      FORMAT "X(23)"         NO-LABEL AT 56
 
 WITH OVERLAY ROW 1 centered
-     COLOR VALUE(cfc) TITLE  " Details (" + STRING(Payment.Voucher) + ") "
+     COLOR VALUE(Syst.CUICommon:cfc) TITLE  " Details (" + STRING(Payment.Voucher) + ") "
      side-labels FRAME lis.
 
 {Func/brand.i}
@@ -202,14 +202,14 @@ form /* seek  Voucher */
     "Voucher:" lcExtVoucher
     HELP "Enter Voucher number "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND VOUCHER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  InvNum */
     "Brand .:" lcBrand skip
     "Invoice:" lcExtInvID
     HELP "Enter Invoice Number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND INVOICE"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 form /* seek  CustNum */
@@ -217,7 +217,7 @@ form /* seek  CustNum */
     "Customer:" CustNum
     HELP "Enter Customer Number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  source & amt */
     "Brand :" lcBrand skip
@@ -227,7 +227,7 @@ form /* seek  source & amt */
        HELP "Payment amount"
        FORMAT "->>>>>>9.99" skip
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SOURCE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 
 IF icRefNum > "" THEN DO:
@@ -291,7 +291,7 @@ ELSE IF iiInvNum > 0 THEN DO:
    FRAME sel:TITLE = " PAYMENTS OF INVOICE " + Invoice.ExtInvID + " ".
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-FIRST.
@@ -524,7 +524,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -555,7 +555,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -583,7 +583,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
@@ -607,7 +607,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
@@ -662,7 +662,7 @@ BROWSE:
        RUN local-find-this(TRUE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Payment.ExtInvID.
 
        RUN local-update-record.                                  

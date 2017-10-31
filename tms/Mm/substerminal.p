@@ -78,7 +78,7 @@ form
     ttTerminal.IMEI      FORMAT "X(15)" COLUMN-LABEL "IMEI/Serial No."
     ttTerminal.OrderID   FORMAT ">>>>>>>9" COLUMN-LABEL "Order"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) lcHeader FRAME sel.
 
 form
@@ -105,7 +105,7 @@ form
     SubsTerminal.PerContractID COLON 22 LABEL "Per. Contract ID"
        lcPerContract FORMAT "X(30)" NO-LABEL 
 WITH  OVERLAY ROW 4 CENTERED
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -114,13 +114,13 @@ form
     "Subscription ID:" liMsSeq FORMAT ">>>>>>>9"
     HELP "Enter subscription ID"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form 
     "MSISDN:" lcCLI FORMAT "x(12)"
     HELP "Enter MSISDN"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fBIName RETURNS LOGIC
@@ -152,7 +152,7 @@ END FUNCTION.
 /* collect accessories to temp-table */
 RUN pFillTempTable.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -365,7 +365,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
@@ -465,7 +465,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubsTerminal).
 
        ASSIGN ac-hdr = " TERMINAL " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

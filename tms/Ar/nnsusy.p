@@ -223,7 +223,7 @@ form
  pVouch             label "Voucher"
  help "Voucher #, F9: Previous vouchers" SKIP
 with title color value(ctc) " " + ynimi + " PAYMENTS TO INVOICES "
- + string(pvm,"99-99-99") + " " COLOR value(cfc) ROW 1 col 1
+ + string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
   width 80 side-labels FRAME INV-NO.
 
 form
@@ -285,7 +285,7 @@ form
     ykorko       label "Overt. Int" AT 32        
     SKIP(1)
 with title color value(ctc) " PAYMENT "
- COLOR value(cfc) ROW 4 col 1 OVERLAY side-labels FRAME payment.
+ COLOR value(Syst.CUICommon:cfc) ROW 4 col 1 OVERLAY side-labels FRAME payment.
 
 /* acctietoja varten */
 form
@@ -304,7 +304,7 @@ form
  kre at 2 label "Credit"                                 SKIP
 WITH
  title color value(ctc) " ACCOUNT       AMOUNT "
- COLOR value(cfc) ROW 4 col 57 side-labels OVERLAY FRAME acct.
+ COLOR value(Syst.CUICommon:cfc) ROW 4 col 57 side-labels OVERLAY FRAME acct.
 
 FORM 
 SKIP(1)
@@ -332,7 +332,7 @@ SKIP(1)
    SKIP(1)
 
 WITH title color value(ctc) " USE CUSTOMER'S UNBOOKED Balance ? "
-           COLOR value(cfc) OVERLAY ROW 3 centered NO-LABELS FRAME overp.
+           COLOR value(Syst.CUICommon:cfc) OVERLAY ROW 3 centered NO-LABELS FRAME overp.
 
 
 FUNCTION fDefaultAcc RETURNS LOGICAL
@@ -406,7 +406,7 @@ ASSIGN muispvm    = pvm.
 
 fCurrLabels(""). 
 
-assign cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+assign Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME INV-NO.
 view FRAME payment.
 view FRAME acct.
@@ -1000,8 +1000,8 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
      END.  /* xdontupd = FALSE */
 
-     assign muispvm  = suopvm. cfc = "sel".
-     RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+     assign muispvm  = suopvm. Syst.CUICommon:cfc = "sel".
+     RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 
      ASSIGN lAPVatAmt = 0. 
 

@@ -76,7 +76,7 @@ FORM
    " Memo .............:" xmemo
       help "A Text for Customer Care"                        SKIP(1)
 WITH 
-   OVERLAY ROW 6 CENTERED COLOR VALUE(cfc)
+   OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) " ADD CLI SERIES " WITH NO-LABELS
 FRAME frmAddSeries.
 

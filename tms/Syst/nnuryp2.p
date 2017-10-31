@@ -64,7 +64,7 @@ form
     pcname           column-label "Name of Class" format "x(20)"
     urname           column-label "Type of Right"
 WITH centered OVERLAY scroll 1 13 DOWN  ROW 2
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + UserCode
     + ": " + usname + " - right profile "
     FRAME sel.
@@ -77,7 +77,7 @@ form
     UserRight.UsrRight urname  NO-LABEL
 
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     lm-ots WITH side-labels
     FRAME lis.
@@ -86,9 +86,9 @@ form /* seek User Right  BY MenuClass */
     MenuClass
     help "Enter Program Class No."
     with row 4 col 2 title color value(ctc) " FIND CLASS NO. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UserRight
@@ -110,7 +110,7 @@ repeat WITH FRAME sel:
     END.
 
    IF lisattava THEN DO:  /* usrightn lisäys  */
-      assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
       RUN Syst/ufcolor.p.
 ADD-ROW:
       repeat WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -407,7 +407,7 @@ BROWSE:
      /* Haku sarakk. 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        MenuClass = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MenuClass WITH FRAME f2.

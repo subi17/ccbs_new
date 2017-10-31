@@ -66,7 +66,7 @@ DEF VAR menuc AS CHAR EXTENT 9 NO-UNDO.
 FORM
 
    WITH ROW 1 17 DOWN WIDTH 80
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) " " + "ADMIN LEVEL MAINTENANCE MENU" + " "
    CENTERED
 
@@ -96,7 +96,7 @@ FORM
     lcDesc[4] FORMAT "x(56)" SKIP
 
     WITH ROW 13 COL 22 OVERLAY 
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE "      INFO      "  
     NO-LABEL
 FRAME frDesc.
@@ -106,7 +106,7 @@ FORM
     ttMaintMenu.MaintType FORMAT "x(12)"
     WITH ROW 2 OVERLAY 15 DOWN COL 2 WIDTH 20
     TITLE COLOR VALUE(ctc) " " + "MAINTENANCE TYPE" + " "
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     NO-LABEL
 
 FRAME frLeft.

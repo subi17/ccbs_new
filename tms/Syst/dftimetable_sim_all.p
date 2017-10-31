@@ -45,10 +45,10 @@ form
     ttEvent.DumpName  FORMAT "X(20)"    COLUMN-LABEL "Name"
     ttEvent.DumpMode  FORMAT "X(10)"    COLUMN-LABEL "Mode"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  TIMETABLES  "  FRAME sel.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "  TIMETABLES  "  FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 

@@ -30,16 +30,16 @@ DEF TEMP-TABLE ttPaymSrc NO-UNDO
 form
     ttPaymSrc.PaymSrc  format "x(8)"  label "Source"
     ttPaymSrc.SrcName  format "x(40)" Label "Name"
-    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " Payment Sources " OVERLAY FRAME sel.
 
 form /* SEEK code */
     lcPaymSrc
     help "Enter Name of a PaymSrc"
     with row 4 col 2 title color value(ctc) " FIND PaymSrc "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 
 lcPaymSrc = Func.Common:mTMSCodeList("Payment",
                              "PaymSrc").
@@ -208,7 +208,7 @@ repeat:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* PaymSrc */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcPaymSrc = "".
            set lcPaymSrc WITH FRAME hayr.

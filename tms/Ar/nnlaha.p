@@ -22,7 +22,7 @@ form
    nhaku
    help "Give number of an invoice"
    with title color value(ctc) " INVOICE No. "
-   ROW 2 col 2 COLOR value(cfc) NO-LABELS
+   ROW 2 col 2 COLOR value(Syst.CUICommon:cfc) NO-LABELS
    OVERLAY FRAME asno.
 
 form
@@ -30,9 +30,9 @@ form
     help "Give customer's number"           
     WITH ROW 2 col 2 TITLE
     color value(ctc) " CUSTOMER'S Number "
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME nimi.
+    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME nimi.
 
-    assign cfc = "puyr". RUN Syst/ufcolor.p.
+    assign Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
     PAUSE 0 no-message.
 
 LOOP:

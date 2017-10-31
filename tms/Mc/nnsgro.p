@@ -63,7 +63,7 @@ form
     SMGroup.SGName  
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Salesman Groups "
     + string(pvm,"99-99-99") + " "
@@ -81,7 +81,7 @@ form
     SMGroup.SmGroup
     SMGroup.SGName 
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     lm-ots WITH side-labels 1 columns
 FRAME lis.
@@ -93,16 +93,16 @@ form /* Salesman group :n haku kentällä SMGroup */
     "Group:" SMGroup
     help "Enter Code of Group"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Salesman group :n haku kentällä SGName */
     "Brand:" lcBrand skip
     "Name :" SGName
     help "Enter Name of Group"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
@@ -132,7 +132,7 @@ repeat WITH FRAME sel:
     END.
 
    IF lisattava THEN DO:  /* smgroupn lisäys  */
-      assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
       RUN Syst/ufcolor.p.
 lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
@@ -382,7 +382,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
@@ -405,7 +405,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
@@ -519,7 +519,7 @@ SELAUS:
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
          SMGroup.SmGroup
          SMGroup.SGName.

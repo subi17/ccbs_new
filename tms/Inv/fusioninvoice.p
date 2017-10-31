@@ -44,7 +44,7 @@ form
     FusionInvoice.Custnum
     FusionInvoice.InvoiceNum
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " Fusion Invoices "
     + string(pvm,"99-99-9999") + " "
@@ -76,7 +76,7 @@ form
     FusionInvoice.TotalAmt       FORMAT "-z,zz9.99"   
     FusionInvoice.TotalToPay     FORMAT "-z,zz9.99"
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     2 columns
@@ -97,7 +97,7 @@ form
     FusionInvoice.MInvAmt         
     
 WITH  OVERLAY ROW 8 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) "MOBILE INVOICE"
     SIDE-LABELS 
     2 columns
@@ -107,28 +107,28 @@ form /* seek FusionInvoice  BY  FusionInvoice */
     liCustnum
     HELP "Enter Fusion InvNum"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FuInvNo "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek FusionInvoice  BY CoName */
     liCustnum
     HELP "Enter InvDate"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND InvDate "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek FusionInvoice  BY CoName */
     liCustnum
     HELP "Enter CustomerId"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CustomerID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek FusionInvoice  BY CoName */
     liCustnum
     HELP "Enter Custnum"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Custnum "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By FuInvNum  ,By InvDate   ,By CustomerID,By CustNum   ".
@@ -354,7 +354,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET liFuInvNum WITH FRAME f1.
@@ -377,7 +377,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        ldaInvdate = DATE(MONTH(TODAY),1,YEAR(TODAY)).
@@ -401,7 +401,7 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET lcCustomerID WITH FRAME f3.
@@ -423,7 +423,7 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f4.
        SET liCustnum WITH FRAME f4.
@@ -450,7 +450,7 @@ BROWSE:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY FusionInvoice.FuInvNum.
 
        RUN local-UPDATE-record.                                  

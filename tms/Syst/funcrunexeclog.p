@@ -58,7 +58,7 @@ FORM
     lcTime                     FORMAT "X(19)" COLUMN-LABEL "Event Time"
     FuncRunExecLog.FRStatus   FORMAT "X(30)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
        " STATUS INFO OF " + lcConfName + " "
     FRAME sel.
@@ -72,7 +72,7 @@ FORM
        FuncRunExecLog.StatusStamp NO-LABEL SKIP
     FuncRunExecLog.FRStatus   COLON 20
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -94,7 +94,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -327,7 +327,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunExecLog).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

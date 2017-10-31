@@ -56,7 +56,7 @@ FORM
  
 
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) "Convergent data"
     NO-LABELS
     FRAME fData.

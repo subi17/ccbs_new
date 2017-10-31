@@ -62,7 +62,7 @@ form
     lcUsage                  FORMAT "x(9)" column-label "Usage"           
     lcBDestLimit             FORMAT "x(4)" column-label "BDestAmt"
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
     " COUNTERS for period " + STRING(iiPeriod) + " " + icEvent + " "
     FRAME sel.
@@ -84,13 +84,13 @@ form
    "Starting fees.. ..:" ldeStartingFees  SKIP
    "Unit charge.......:" ldeUnitCharge    SKIP
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc)
    " COUNTERS for period " + STRING(iiPeriod) + " " + icEvent + " "
    WITH no-labels side-labels
    FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSSeq   , By SLSeq ,By 3, By 4".
@@ -121,7 +121,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServiceLCounter  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -353,7 +353,7 @@ BROWSE:
        /* change */
        RUN local-find-this(false).
        ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. 
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
        
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.

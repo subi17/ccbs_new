@@ -82,7 +82,7 @@ FORM
    BDest.ToDate   
 WITH 
    width 80 ROW 1 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi +
       " B-DESTINATIONS " + 
       string(pvm,"99-99-99") + " " FRAME sel.
@@ -109,7 +109,7 @@ FORM
    BDest.FromDate LABEL "Valid From" COLON 20 SKIP
    BDest.ToDate LABEL "Valid To" COLON 20
 WITH  
-   OVERLAY ROW 4 centered COLOR value(cfc) TITLE COLOR value(ctc)
+   OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    fr-header WITH side-LABELs FRAME lis.
 
 {Func/brand.i}
@@ -121,7 +121,7 @@ FORM
    help "Give B-destination."                         
 WITH 
    row 4 col 2 title color value(ctc) " FIND B-DESTINATION "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 FORM 
    "Brand:" lcBrand skip
@@ -129,7 +129,7 @@ FORM
    help "Give name of B-Destination"             
 WITH 
    row 4 col 2 title color value(ctc) " FIND NAME "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 FORM 
    "Brand:" lcBrand skip
@@ -137,7 +137,7 @@ FORM
    help "Give CCN"             
 WITH 
    row 4 col 2 title color value(ctc) " FIND CCN "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM
    " Copy from :" BDest.BDest SKIP
@@ -170,7 +170,7 @@ FUNCTION fBDestClass RETURNS CHAR
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST BDest where 
@@ -210,7 +210,7 @@ repeat WITH FRAME sel:
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-MESSAGE.
-         assign cfc = "lis" ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
+         assign Syst.CUICommon:cfc = "lis" ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
          fr-header = " ADD ".
 
          DO TRANSAction ON ENDKEY UNDO add-new, LEAVE add-new:
@@ -614,7 +614,7 @@ repeat WITH FRAME sel:
 
       /* Haku 1 */
       ELSE IF lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          haku = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
@@ -645,7 +645,7 @@ repeat WITH FRAME sel:
       END. /* Haku sar. 1 */
 
       ELSE IF lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimellA */
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr2.
@@ -665,7 +665,7 @@ repeat WITH FRAME sel:
          END.
       END. /* Haku sar. 2 */
       ELSE IF lookup(nap,"3,f3") > 0 THEN DO:  /* haku nimellA */
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr3.
@@ -784,7 +784,7 @@ repeat WITH FRAME sel:
       END. /* removal */
 
       ELSE IF lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANS:
-         cfc = "lis". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
          /* change */
          fr-header = " CHANGE ".
          FIND BDest where recid(BDest) = rtab[frame-line(sel)] NO-lock.

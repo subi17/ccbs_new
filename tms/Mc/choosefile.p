@@ -47,7 +47,7 @@ form
        COLUMN-LABEL "File"
        FORMAT "X(75)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " Choose File "
     FRAME sel.
@@ -56,9 +56,9 @@ form /* seek  BY  name */
     lcFileName
     HELP "Enter name of file"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FILE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 
 IF INDEX(icFilter,"¤") > 0 
 THEN ASSIGN llHideDir = (ENTRY(2,icFilter,"¤") > "")
@@ -279,7 +279,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcFileName WITH FRAME f1.

@@ -61,7 +61,7 @@ FORM
    mnpsub.icc  LABEL "ICC" format "x(20)"
    mnpsub.portingtime LABEL "Porting Time"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " MNP Subs "
     + string(pvm,"99-99-99") + " "
@@ -73,7 +73,7 @@ FORM
     "Prefix.......:" mnpsub.Prefix      SKIP
     "Zone.........:" mnpsub.RateZone    FORMAT "9" SKIP
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
@@ -313,7 +313,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhmnpsub). 
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        RUN local-UPDATE-record.
        HIDE FRAME lis NO-PAUSE.
 

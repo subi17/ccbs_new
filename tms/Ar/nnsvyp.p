@@ -83,7 +83,7 @@ form
     DDAuth.CustName      FORMAT "x(11)" COLUMN-LABEL "Authr.Name"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi + lcHeader 
     + string(pvm,"99-99-9999") + " "
     FRAME sel.
@@ -103,7 +103,7 @@ form
     DDAuth.OldBankAcc  colon 22 FORMAT "99999999999999"    
 
 WITH  OVERLAY ROW 7 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -115,20 +115,20 @@ form /* seek ddAuth  BY  CustNum */
     "Customer:" CustNum FORMAT ">>>>>>>9"
     HELP "Give Customer Nbr."
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ddAuth  BY Archive */
     "Brand .:" lcBrand skip
     "Archive:" Archive
     HELP "Give Archive Code"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ARCHIVE CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 IF ilFailed 
 THEN lcHeader = " FAILED DD AUTHORIZATIONS ".
 ELSE lcHeader = " DIRECT DEBIT AUTHORIZATIONS ".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "Order by customer nbr,Order by archive code,By 3, By 4".
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
     END.
 
     IF must-add THEN DO:  /* Add a DDAuth  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -415,7 +415,7 @@ BROWSE:
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -439,7 +439,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -531,7 +531,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " MUUTA " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DDAuth.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDDAuth).

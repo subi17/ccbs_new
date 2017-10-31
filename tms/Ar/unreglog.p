@@ -45,7 +45,7 @@ form
     UnregLog.CustBal COLUMN-LABEL "Type"  
     UnregLog.Amount
 WITH ROW FrmRow  CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) 
     " Booked PAYMENTS "
     FRAME sel.
@@ -57,7 +57,7 @@ form
     UnregLog.CustBal
     UnregLog.Amount
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
@@ -67,15 +67,15 @@ form /* seek  BY  AccDate */
     AccDate
     help "Enter Date"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND BOOKING Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek   BY CustNum */
     CustNum
     help "Enter Customer Nbr"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Date,By Customer,By 3, By 4".
@@ -289,7 +289,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        AccDate = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE AccDate WITH FRAME f1.
@@ -312,7 +312,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f2.

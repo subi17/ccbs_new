@@ -56,7 +56,7 @@ form
     AreaPlan.AreaName     /* COLUMN-LABEL FORMAT */
              /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Traffic Areas "
     + string(pvm,"99-99-99") + " "
@@ -68,7 +68,7 @@ form
             /* LABEL FORMAT */
 
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
@@ -77,15 +77,15 @@ form /* samtrafiksomrAde search WITH FIELD TrafficArea */
     haku-st-nr
     help "Give ...."
     with row 4 col 2 title color value(ctc) " FIND Code "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* samtrafiksomrAde search WITH FIELD AreaName */
     haku-AreaName
     help "Give ..."
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST AreaPlan
@@ -115,7 +115,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* AreaPlan -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -396,7 +396,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-st-nr = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-st-nr WITH FRAME haku-f1.
@@ -419,7 +419,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-AreaName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-AreaName WITH FRAME haku-f2.
@@ -524,7 +524,7 @@ BROWSE:
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
          AreaPlan.TrafficArea
          AreaPlan.AreaName.

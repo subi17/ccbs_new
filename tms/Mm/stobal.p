@@ -67,7 +67,7 @@ form
     StoBal.OrdPoint
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80  OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " " + ynimi +
     " Stock Balances "
     + string(pvm,"99-99-99") + " "
@@ -80,7 +80,7 @@ form
             /* LABEL FORMAT */
 
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
@@ -104,7 +104,7 @@ form /* seek Balance Record  BY  Stock */
     Stock
     help "Enter Stock Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND SCODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Balance Record  BY SimArt */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -112,9 +112,9 @@ form /* seek Balance Record  BY SimArt */
     SimArt
     help "Enter Article Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -145,7 +145,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a StoBal  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -401,7 +401,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Stock = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand WITH FRAME f1.
@@ -426,7 +426,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SimArt = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SimArt WITH FRAME f2.
@@ -533,7 +533,7 @@ BROWSE:
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           StoBal.StoBal
           StoBal.SimArt.

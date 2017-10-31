@@ -110,7 +110,7 @@ form
     PriceList.Rounding     column-label "D"
     PriceList.Memo     format "x(9)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    color value(cfc) title color value(ctc) " " + ynimi +
+    color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
     " PRICE LISTS " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
@@ -137,7 +137,7 @@ form
     PriceList.Memo        LABEL "Memo .........." SKIP
 
     WITH  OVERLAY ROW 3 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 
     FRAME lis.
@@ -149,14 +149,14 @@ form /* Price List search WITH FIELD PriceList */
     "Code :" PriceList
     help "Give pricelist's code"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Price List search WITH FIELD PLName */
     "Brand:" lcBrand skip
     "Name :" PLName
     help "Give pricelist's name"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* FOR copying */
     skip(1)
@@ -180,7 +180,7 @@ with centered overlay row 3 title " COPY ENTRIES INTO " + PriceList.PriceList +
     " FROM OTHER Price LIST " FRAME plcopy.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST PriceList
@@ -210,7 +210,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* PriceList -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -530,7 +530,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PriceList = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
@@ -554,7 +554,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PLName = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
@@ -792,7 +792,7 @@ BROWSE:
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 
            PriceList.Brand
            PriceList.PriceList FORMAT "X(18)"

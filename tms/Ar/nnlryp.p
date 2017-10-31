@@ -120,7 +120,7 @@ form
     InvRow.RowType   column-label "T"          FORMAT "9"
 WITH
     OVERLAY scroll 1 13 DOWN ROW 2 centered
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " Rows in invoice nr " + string(Invoice.ExtInvID) + 
        " (VAT " + STRING(Invoice.VatIncl,"Incl./Excl.") + ") "
     FRAME sel.
@@ -135,7 +135,7 @@ form /* lisays / change */
     InvRow.Amt      label "Row net ....." format "->>>>>9.999"
 WITH
     OVERLAY ROW 4 centered side-labels 1 col
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header
     FRAME lis.
 
 FORM /* ACCOUNT DATA */
@@ -144,14 +144,14 @@ FORM /* ACCOUNT DATA */
    xVatAmt        LABEL "VAT Of Row ......."  FORMAT "->>,>>>,>>9.999"
    liVatAcc       LABEL "VAT Account......."  FORMAT ">>>>>>>9"
    WITH  OVERLAY CENTERED ROW 8 SIDE-LABELS     
-   COLOR VALUE(cfc) TITLE COLOR VALUE(cfc) " ACCOUNT DATA "
+   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:cfc) " ACCOUNT DATA "
    FRAME fmore.
 
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
 FOR EACH InvRow OF Invoice NO-LOCK WHERE
@@ -168,7 +168,7 @@ BY InvRow.FromDate:
            ttRow.Order  = i.
 END.           
            
-cfc = "kory". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "kory". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST ttRow no-error.

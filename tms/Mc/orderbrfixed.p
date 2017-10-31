@@ -54,7 +54,7 @@ form
     ttOrder.Contract    
 
 WITH ROW 4 width 80 OVERLAY 8 DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        " Customers orders "  + string(pvm,"99-99-99") + " "
     FRAME sel.

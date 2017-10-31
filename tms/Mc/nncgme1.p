@@ -69,7 +69,7 @@ form
     CGMember.Memo     /* COLUMN-LABEL FORMAT */
     Customer.PostOffice       column-label "City" format "x(12)"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " Members in a c-group " + icCustGroup + " (" + gcBrand + ") "
    FRAME sel.
@@ -78,7 +78,7 @@ form
     CGMember.CustNum     /* LABEL FORMAT */
     Customer.CustName     /* LABEL FORMAT */
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     lm-ots WITH side-labels 1 columns
     FRAME lis.
@@ -87,13 +87,13 @@ form /* member :n haku kentällä CustNum */
     CustNum
     help "Type Customer number "
     with row 4 col 2 title color value(ctc) " FIND CUST. NO. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä CustName */
     CustName
     help "Type Customer's Name"
     with row 4 col 2 title color value(ctc) " FIND CUST. Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
    skip(1)
@@ -112,7 +112,7 @@ FIND CustGroup where
      CustGroup.CustGroup = icCustGroup no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CGMember 
@@ -503,7 +503,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f1.
@@ -527,7 +527,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustName WITH FRAME f2.

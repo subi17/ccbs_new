@@ -84,7 +84,7 @@ form
     Salesman.Parent      column-label "PS-code"  format "x(8)"
 with
     width 80 overlay scroll 1 15 down row 1
-    color value(cfc)
+    color value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " Maintain salesmen "
     + string(pvm,"99-99-99") + " " frame sel.
 
@@ -99,7 +99,7 @@ form
     "E-mail address ....:" Salesman.email                           skip
     "Parent's code .....:" Salesman.Parent  p-SmName  no-label      skip
     with  overlay row 4 centered
-    color value(cfc)
+    color value(Syst.CUICommon:cfc)
     title color value(ctc)
     fr-header with  no-labels /* 1 columns */
     frame lis.
@@ -127,21 +127,21 @@ form /*  search with field Salesman */
     "Salesman:" xSalesman
     help "Give Salesman's code"
     with row 4 col 2 title color value(ctc) " FIND Salesman'S CODE "
-    color value(cfc) no-labels overlay frame f3.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f3.
 
 form /*  search with field SmName */
     "Brand:" lcBrand skip
     "Name :" SmName
     help "Give Salesman's name"
     with row 4 col 2 title color value(ctc) " FIND Salesman'S NAME "
-    color value(cfc) no-labels overlay frame f2.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
 form /*  search with field Reseller */
     "Brand ..:" lcBrand skip
     "Reseller:" xReseller
     help "Give reseller code"
     with row 4 col 2 title color value(ctc) " FIND RESELLER "
-    color value(cfc) no-labels overlay frame f1.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 FUNCTION fRsName RETURNS CHARACTER.
 
@@ -156,7 +156,7 @@ FUNCTION fRsName RETURNS CHARACTER.
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 view frame sel.
 
@@ -186,7 +186,7 @@ repeat with frame sel:
 
    if must-add then do:  /* Salesman -ADD  */
       hide frame lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
       add-new:
@@ -458,7 +458,7 @@ BROWSE:
          /* Haku sarakk. 1 */
          if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
 
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            xReseller = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F1.
@@ -481,7 +481,7 @@ BROWSE:
          /* Haku sarakk. 2 */
          else if lookup(nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            SmName = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F2.
@@ -509,7 +509,7 @@ BROWSE:
 
          /* Haku 3 */
          else if lookup(nap,"3,f3") > 0 then do on endkey undo, next LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            xSalesman = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F3.
@@ -697,7 +697,7 @@ BROWSE:
 
        assign fr-header = " CHANGE " ufkey = true ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSalesman).
 

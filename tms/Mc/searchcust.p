@@ -45,7 +45,7 @@ form
     with scroll 1 5 down  row 11 centered 
     title lctitle   overlay frame sel.
 
-   cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 END.
 
 DEF BUFFER xxCustomer FOR Customer.
@@ -312,7 +312,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* CustNum */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update CustNum with frame hayr.
            hide frame hayr no-pause.

@@ -39,12 +39,12 @@ END.
 form /* memo */
 WITH
     OVERLAY ROW 1 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update letter "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update letter "
     FRAME memo.
 
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
-   assign ehto = 9 cfc = "lis" ufkey = TRUE.
+   assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
    RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
    FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
       exclusive-lock no-error.

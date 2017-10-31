@@ -81,7 +81,7 @@ FORM
     BasName      COLUMN-LABEL "Type Name"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Discounts of Discount Plan " + DiscPlan + " " 
     FRAME sel.
@@ -106,7 +106,7 @@ WITH
     ROW 1 
     CENTERED                            
     NO-LABEL
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -130,7 +130,7 @@ WITH
     ROW 6 
     CENTERED
     NO-LABEL
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) lis2-hdr
     SIDE-LABELS 
     FRAME lis2.
@@ -144,7 +144,7 @@ WITH
     ROW 7 
     CENTERED
     NO-LABEL
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " FIXED DISCOUNT " 
     SIDE-LABELS 
     FRAME lis3.
@@ -153,17 +153,17 @@ FORM /* seek DPConf  by  ValidFrom */
     " " ValidFrom
     HELP "Enter Effective Date"
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY  FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY  FRAME f1.
 
 FORM /* seek DPConf  by DPCName */
     DPCName
     HELP "Enter name of Discount Group"
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND NAME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND DiscPlan WHERE DiscPlan.DiscPlan = DiscPlan NO-LOCK no-error.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Eff. Date  ,By Description,By 3, By 4".
@@ -192,7 +192,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPConf  */
       ASSIGN 
-      cfc = "lis" 
+      Syst.CUICommon:cfc = "lis" 
       ufkey = true 
       ac-hdr = " ADD " 
       must-add = false.
@@ -479,7 +479,7 @@ ASK-F1:
        REPEAT WITH FRAME f1 
        ON ENDKEY UNDO ASK-F1, LEAVE ASK-F1.
 
-         cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          CLEAR FRAME f1.
          SET ValidFrom WITH FRAME f1.
@@ -512,7 +512,7 @@ ASK-F2:
         REPEAT WITH FRAME f2 
         ON ENDKEY UNDO ASK-F2, LEAVE ASK-F2.
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           SET DPCName WITH FRAME f2.
@@ -617,7 +617,7 @@ ASK-F2:
        {Syst/uright2.i}
        RUN local-find-this(true).
        ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPConf.ValidFrom DPConf.ValidTo.
        DISPLAY DPConf.DPCName.
 

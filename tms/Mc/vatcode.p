@@ -73,7 +73,7 @@ form
     VATCode.AccNum     FORMAT ">>>>>>>9"
     VATCode.ToDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " " + ynimi +
          "  VAT CODES  " + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -105,7 +105,7 @@ form
     VATCode.AccNum    COLON 20  LABEL "Account" FORMAT ">>>>>>>9"
     Account.AccName   COLON 20
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr side-labels FRAME lis.
 
@@ -113,25 +113,25 @@ form /* seek VATAmt Code  BY  VATCode */
     liVATCode
     help "Enter VAT Code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek VATAmt Code  BY VCName */
     VATPercent
     help "Enter VAT Percent"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND %%% "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek VAT Code  BY taxzone */
     lcTaxZone
     help "Enter Tax zone"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ZONE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek VAT Code  BY taxzone */
     lcTaxClass
     help "Enter Tax class"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CLASS "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
 
 FUNCTION fZoneName RETURNS LOGIC
@@ -156,7 +156,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -185,7 +185,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a VATCode  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -425,7 +425,7 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        VATCode = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE liVATCode WITH FRAME f1.
@@ -448,7 +448,7 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        VATPercent = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE VATPercent WITH FRAME f2.
@@ -471,7 +471,7 @@ REPEAT WITH FRAME sel:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        VATPercent = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE lcTaxZone WITH FRAME f3.
@@ -495,7 +495,7 @@ REPEAT WITH FRAME sel:
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        VATPercent = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE lcTaxClass WITH FRAME f4.
@@ -583,7 +583,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY VATCode.VATCode.
 

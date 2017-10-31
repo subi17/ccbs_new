@@ -27,16 +27,16 @@ def var tyhja as char format "x(80)" NO-UNDO.
 form
     CustCat.Category
     CatName
-    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " CATEGORIES (" + gcBrand + ") " OVERLAY FRAME tlse.
 
 form /* Maa :n hakua varten */
     haku
     help "Give a code or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND CODE  "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -182,7 +182,7 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

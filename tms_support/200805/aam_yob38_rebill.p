@@ -137,7 +137,7 @@ form
 WITH
    OVERLAY TITLE COLOR value(ctc)
    " " + ynimi + " INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80 ROW 1
+   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
 
 form
@@ -173,7 +173,7 @@ form
    lowvalue label " Low value invoices ....."
            help "Create invoices that are below the minimum invoicing amount"
 with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(cfc) ROW 2 centered OVERLAY FRAME rajat.
+   COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
 form
     " Consecutive invoice number: " lcInvNum  NO-LABEL           SKIP
@@ -181,13 +181,13 @@ form
     " Oldest unpaid Calls ......: " upmth  NO-LABEL  
     lowvalue format "(created)/(not created)" NO-LABEL
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
+   title color value (ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN

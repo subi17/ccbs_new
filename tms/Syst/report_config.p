@@ -76,7 +76,7 @@ FORM
     ttConfig.Section     FORMAT "->>>>>9"
     ttConfig.DispDetails FORMAT "Yes/No"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
        " CONFIGURATION FOR REPORT " + STRING(icReportID) + " "
     FRAME sel.
@@ -92,7 +92,7 @@ FORM
     ttConfig.DispDetails COLON 20 FORMAT "Yes/No"
         HELP "Disp details on report"
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -112,7 +112,7 @@ FUNCTION fRowType RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST ReportConf WHERE 
@@ -359,7 +359,7 @@ REPEAT WITH FRAME sel:
        END.
  
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

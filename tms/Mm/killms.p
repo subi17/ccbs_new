@@ -82,7 +82,7 @@ form
     KillMs.ErrorMsg   FORMAT "x(6)" column-label "error"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " SCHEDULED KILL REQUESTS "
     + string(pvm,"99-99-99") + " "
@@ -106,7 +106,7 @@ form
     "Response....:" KillMs.ErrorMsg  format "x(60)"                
 
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) /*ac-hdr*/ " VIEW KILL REQUEST "
     NO-LABELS 
     /*1 columns*/
@@ -120,14 +120,14 @@ form /* seek KillMs  BY  CLI */
     CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "MSISDN No :" CLI HELP "Enter MSISDN number "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek KillMs  BY Date */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Kill Date.:" killdate HELP "Enter KILL Date"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND KILL Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek KillMs  BY Stat */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -135,9 +135,9 @@ form /* seek KillMs  BY Stat */
     stat HELP "Enter Status"
     "(1: Pending 2: Failed 3: OK)"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND STATUS "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By KillDate,By MSISDN ,By Status, By 4".
@@ -176,7 +176,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a KillMs  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -412,7 +412,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        KillDate = TODAY.
@@ -436,7 +436,7 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP lcBrand WITH FRAME f2.
@@ -464,7 +464,7 @@ BROWSE:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        DISP lcBrand WITH FRAME f3.
@@ -551,7 +551,7 @@ BROWSE:
        PAUSE 0.
        RUN local-find-this(FALSE ).
 
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        DISPLAY KillMs.CLI WITH FRAME lis. 
 

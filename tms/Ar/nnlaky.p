@@ -81,7 +81,7 @@ form
     avoinna            column-label "BalanceDue" format "->>>>>>9.99"
 
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN 
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " " + ynimi + " ALL INVOICES "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -92,17 +92,17 @@ form /* Invoicen numerohakua varten */
     "Invoice:" liInvNum
     help "Give Invoice No."    
     with row 4 col 2 title color value(ctc) " FIND INVOICE No."
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 form /* Invoicen asnolla hakua varten */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     help "Give Customer Name"
     with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F2.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -369,7 +369,7 @@ BROWSE:
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO:
 
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            liInvNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F1.
@@ -397,7 +397,7 @@ BROWSE:
 
      else if lookup(nap,"2,f2") > 0 THEN DO:
 
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            liCustNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F2.

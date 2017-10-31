@@ -38,7 +38,7 @@ form
    MedHist.Ident
    MedHist.Date
    MedHist.FileTime
-WITH width 80 OVERLAY scroll 1 15 DOWN COLOR value(cfc)
+WITH width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi + " Preprosessor configuration "
    + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -46,15 +46,15 @@ form /*  search WITH FIELD Ident */
     Ident
     help "Give Ident"
     with row 4 col 2 title color value(ctc) " FIND Ident "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD Date */
     Date
         help "Give Date"
             with row 4 col 2 title color value(ctc) " FIND Date "
-                COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+                COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MedHist
@@ -315,7 +315,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Ident = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Ident WITH FRAME haku-f1.
@@ -338,7 +338,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Date = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Date WITH FRAME haku-f2.

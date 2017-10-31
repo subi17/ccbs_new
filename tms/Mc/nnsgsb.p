@@ -59,7 +59,7 @@ form
     soname           column-label "Name of Sales Office"
 WITH
     centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     " CHOOSE MEMBERS INTO Salesman GROUP '" +
     icSMGroup + "' (" + gcBrand + ") " FRAME sel.
 
@@ -67,19 +67,19 @@ WITH
 form /* FIND Salesman BY code */
     Salesman help "Enter Salesman's Code"
     with row 4 col 2 title color value(ctc) " FIND SALESMAN "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND Salesman BY name */
     SmName help "Enter salesman's name"
     with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND Salesoffice */
     Salesoffice help "Enter code of Salesoffice "
     with row 4 col 2 title color value(ctc) " FIND OFFICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 FIND SMGroup WHERE
      SMGroup.Brand   = gcBrand AND
@@ -304,7 +304,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
    Salesman = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE Salesman WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
@@ -324,7 +324,7 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-   cfc = "puyr". RUN Syst/ufcolor.p. Salesoffice = "".
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. Salesoffice = "".
    ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE Salesoffice WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
@@ -344,7 +344,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". RUN Syst/ufcolor.p. SmName = "".
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. SmName = "".
    ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SmName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.

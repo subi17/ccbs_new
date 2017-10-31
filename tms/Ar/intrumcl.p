@@ -44,7 +44,7 @@ lcInfile AT 10 LABEL "File Name"
     help "Name of Output File"
 SKIP(5)
 WITH  OVERLAY ROW 1 WIDTH 80
-   COLOR VALUE(cfc)
+   COLOR VALUE(Syst.CUICommon:cfc)
    TITLE COLOR VALUE(ctc) 
    " " + ynimi + " CREDIT LOSS POSTING  " + STRING(pvm,"99-99-99") + " "
    SIDE-LABELS FRAME main.

@@ -63,7 +63,7 @@ form
     HdrText.te-text    /* column-label "Text"     */
         format "x(62)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " Texts at different Languages "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -73,7 +73,7 @@ form
     HdrText.te-text  label "Text"      AT 2 
        VIEW-AS EDITOR SIZE 70 BY 12
 
-    WITH  OVERLAY ROW 3 CENTERED COLOR value(cfc)
+    WITH  OVERLAY ROW 3 CENTERED COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 
     FRAME lis.
@@ -85,23 +85,23 @@ form /* HdrTextn nimi :n tunnuksella hakua varten */
     "Code :" haku
     help " Give text's code or beginning of it "
     with row 4 col 2 title color value(ctc) " TEXTCODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* HdrTextn kielikoodilla hakua varten */
     "Brand ..:" lcBrand skip
     "Language:" hakukie
     help "Give Language code (1 - 9)"
     with row 4 col 2 title color value(ctc) " LANGUAGE CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hakie.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hakie.
 
 form /* HdrTextn nimi :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Text :" hakutext
     help " Give text or beginning of it "
     with row 4 col 2 title color value(ctc) " TEXT "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST HdrText WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -134,7 +134,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* HdrText -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -437,7 +437,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
@@ -471,7 +471,7 @@ BROWSE:
 
      /* Haku 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hakie.
@@ -494,7 +494,7 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         hakutext = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
@@ -611,7 +611,7 @@ BROWSE:
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY HdrText.te-nro HdrText.te-kie HdrText.te-text.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHdrText).

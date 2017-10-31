@@ -115,7 +115,7 @@ form
    lcBdest            column-label "B"        format "x"
 WITH 
    width 80 OVERLAY scroll 1 15 DOWN ROW 1
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    title color value(ctc) " " + ynimi + lBrHdr
 FRAME sel.
 
@@ -217,7 +217,7 @@ form /* ADD */
    SPACE(1)
    SKIP
 WITH
-   WITH ROW 1 centered COLOR value(cfc) TITLE COLOR value(ctc) 
+   WITH ROW 1 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) 
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 
@@ -229,7 +229,7 @@ form /* haku PriceList:lla */
    help "Give a pricelist code"
 WITH 
    row 4 col 2 title color value(ctc) " FIND Price LIST "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr1.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 form /*  :n asno hakua varten */
    "Brand:" lcBrand skip
@@ -237,7 +237,7 @@ form /*  :n asno hakua varten */
    help "Give a CCN"
 WITH 
    row 4 col 2 title color value(ctc) " FIND CCN "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  :n asno hakua varten */
    "Brand:" lcBrand skip
@@ -245,7 +245,7 @@ form /*  :n asno hakua varten */
    help "Give customer number"
 WITH 
    row 4 col 2 title color value(ctc) " FIND Customer "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 IF irRowID NE 0 THEN DO WITH FRAME lis:
 
@@ -281,7 +281,7 @@ IF icBDest NE "" AND CAN-FIND(FIRST Tariff WHERE
 ELSE
    lBrHdr  = lBrHdr + "(CCN " + STRING(iiCCN) + ") ".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -332,7 +332,7 @@ repeat WITH FRAME sel:
    IF must-add THEN DO ON ENDKEY UNDO, LEAVE: /* Tariff -ADD  */
 
       assign
-         cfc       = "lis"
+         Syst.CUICommon:cfc = "lis"
          ufkey     = true
          fr-header = " ADD "
          must-add  = FALSE.
@@ -608,7 +608,7 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 1 */
      ELSE if LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  /* haku sar. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         plseek = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr1.
@@ -669,7 +669,7 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 2 */
      ELSE if ufk[2] > 0 AND LOOKUP(nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcCSeek = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
@@ -705,7 +705,7 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 3 */
      ELSE if ufk[3] > 0 AND LOOKUP(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         liCustSeek = 0.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr3.
@@ -836,7 +836,7 @@ repeat WITH FRAME sel:
 
         ASSIGN
            plname = ""
-           cfc    = "lis". 
+           Syst.CUICommon:cfc = "lis". 
 
         RUN Syst/ufcolor.p.
 
@@ -868,7 +868,7 @@ repeat WITH FRAME sel:
         WITH FRAME sel.
         message "Press ENTER !".
         PAUSE no-message.
-        COLOR DISPLAY value(cfc)
+        COLOR DISPLAY value(Syst.CUICommon:cfc)
            Tariff.Price[1]
            Tariff.StartCharge[1]
         WITH FRAME sel.

@@ -62,7 +62,7 @@ form /* asks MSISDN Number */
        HELP "Enter new MSISDN Number"
 
 WITH
-   OVERLAY ROW 2 centered COLOR VALUE(cfc) NO-LABELS
+   OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS
    TITLE COLOR VALUE(ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
 FRAME main.
 

@@ -111,7 +111,7 @@ form
        HELP "End time"
 WITH OVERLAY ROW FrmRow FrmDown DOWN centered 
 
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
     " KNOWN OWNERS OF MOBILE SUBSCRIPTION ID" + STRING(MSOwner.MSSeq) + " "
     FRAME sel.
@@ -154,7 +154,7 @@ form
     "Mandate .........:" Msowner.MandateID FORMAT "x(31)" NO-LABEL
                          Msowner.MandateDate FORMAT "99-99-9999" NO-LABEL SKIP
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     /*1 columns*/
@@ -213,7 +213,7 @@ FUNCTION fChkTime RETURNS LOGICAL
 END FUNCTION.                    
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 
 orders = "By Date,By 2,By 3, By 4".
 
@@ -246,7 +246,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSOwner  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -572,7 +572,7 @@ BROWSE:
        /* change */
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE ehto = 9. /*RUN Syst/ufkey.p.*/
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MSOwner.CLI.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
        RUN local-UPDATE-record.                                  

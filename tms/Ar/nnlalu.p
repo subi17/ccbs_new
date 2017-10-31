@@ -134,11 +134,11 @@ form
    
    with row 1 side-labels width 80
         title color value(ctc) " " + ynimi + "  INVOICE JOURNAL  " +
-        string(pvm,"99-99-99") + " " color value(cfc)
+        string(pvm,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame rajat.
 
 
-cfc = "puli". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign pvm2         = date(month(today),01,year(today)) - 1

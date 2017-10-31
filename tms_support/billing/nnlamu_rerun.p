@@ -97,7 +97,7 @@ form
 WITH
    OVERLAY TITLE COLOR value(ctc)
    " " + ynimi + " REGENERATION " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80 ROW 1
+   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
 
 form
@@ -119,12 +119,12 @@ form
   lowvalue label " Low value invoices ....."
            help "Create invoices that are below the minimum invoicing amount"
 with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(cfc) ROW 2 centered OVERLAY FRAME rajat.
+   COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN

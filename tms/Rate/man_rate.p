@@ -95,7 +95,7 @@ form
       llRateCCN
       HELP "Do you want re-analyse Rating CCN using Calltype and Destination"
 
-WITH OVERLAY ROW 1 WIDTH 80 COLOR VALUE(cfc) 
+WITH OVERLAY ROW 1 WIDTH 80 COLOR VALUE(Syst.CUICommon:cfc) 
    TITLE COLOR VALUE(ctc) 
       " " + ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
       string(pvm,"99.99.99") + " "  

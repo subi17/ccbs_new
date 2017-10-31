@@ -283,7 +283,7 @@ form
    ttPayment.AmtPaid   column-label "Paid"          format "->>>>,>>9.99"
    ttPayment.CustName  column-label "Cust. Name"    format "x(23)"
 with
-   overlay centered row 10 1 down color value(cfc) title color value(ctc)
+   overlay centered row 10 1 down color value(Syst.CUICommon:cfc) title color value(ctc)
    " Payments " frame log.
 
 form header

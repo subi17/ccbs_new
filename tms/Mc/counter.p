@@ -61,7 +61,7 @@ form
     Counter.EndStamp 
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) lcHeader FRAME sel.
 
 form
@@ -75,7 +75,7 @@ form
     Counter.BeginStamp   COLON 22 SKIP
     Counter.EndStamp     COLON 22 
 WITH  OVERLAY ROW 4 CENTERED
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -84,7 +84,7 @@ form
     "Counter Type:" liCType FORMAT ">>>>>>>9"
     HELP "Enter Counter Type "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Counter Type "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fCTName RETURNS LOGIC
    ( INPUT piCType AS INT):
@@ -98,7 +98,7 @@ FUNCTION fCTName RETURNS LOGIC
 
 END FUNCTION.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -311,7 +311,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liCType WITH FRAME f1.
@@ -411,7 +411,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCounter).
 
        ASSIGN ac-hdr = " COUNTER " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

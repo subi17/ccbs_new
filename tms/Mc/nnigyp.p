@@ -91,7 +91,7 @@ form
     InvGroup.MinInvAmt      column-label "MInv" format "zz9.99"
     InvGroup.TaxZone        FORMAT "X(5)" COLUMN-LABEL "TaxZ."
     WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Invoice groups "
     + string(pvm,"99-99-99") + " "
@@ -132,7 +132,7 @@ form
         help "Days from last to bill to ignore minimum invoicing amount"
     InvGroup.Banned COLON 22
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header 
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header 
     side-labels FRAME lis.
 
 form /* Invoicing Group search WITH FIELD InvGroup */
@@ -140,14 +140,14 @@ form /* Invoicing Group search WITH FIELD InvGroup */
     "Code :" haku-ig-code
     help "Give a code"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* Invoicing Group search WITH FIELD IGName */
     "Brand:" lcBrand skip
     "Name :" haku-ig-name
     help "Give a name"
     with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 FUNCTION fZoneName RETURNS LOGIC
    (icTaxZone AS CHAR):
@@ -160,7 +160,7 @@ FUNCTION fZoneName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 run pFindFirst.
@@ -189,7 +189,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* InvGroup -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       add-new:
@@ -472,7 +472,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-code = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame haku-f1.
@@ -495,7 +495,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-name = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME haku-f2.
@@ -669,7 +669,7 @@ BROWSE:
         exclusive-lock.
         ASSIGN ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         assign fr-header = " CHANGE ".
 
         fZoneName(InvGroup.TaxZone).

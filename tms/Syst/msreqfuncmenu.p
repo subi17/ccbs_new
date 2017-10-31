@@ -68,12 +68,12 @@ form
     ttMenu.MenuText FORMAT "x(50)"
    
 WITH ROW 2 OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* Empty label */

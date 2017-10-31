@@ -80,7 +80,7 @@ FORM
     Limit.ToDate    FORMAT       "99-99-9999" COLUMN-LABEL "To"
     Limit.DefValue  COLUMN-LABEL "Def" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + lcHeader + " "
     FRAME sel.
 
@@ -96,7 +96,7 @@ form
    "Default Value:" Limit.DefValue  SKIP
 
 WITH OVERLAY ROW 6 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc) " View Limit " WITH no-labels side-labels
    FRAME vlimit.
 
@@ -106,7 +106,7 @@ FORM
     ldeValue[2] AT 4 SKIP
 
 WITH  OVERLAY ROW 8 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) lcLisTitle  
     SIDE-LABELS 
     FRAME lis.
@@ -122,7 +122,7 @@ ELSE DO:
    MESSAGE "No existing values" VIEW-AS ALERT-BOX.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 LOOP:

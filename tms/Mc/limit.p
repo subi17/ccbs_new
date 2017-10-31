@@ -81,7 +81,7 @@ FORM
     Limit.FromDate  FORMAT       "99-99-9999" COLUMN-LABEL "From"
     Limit.ToDate    FORMAT       "99-99-9999" COLUMN-LABEL "To"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + lcHeader + " "
     FRAME sel.
 
@@ -92,7 +92,7 @@ form
    "Valid To ....:" Limit.ToDate FORMAT "99-99-9999" SKIP
 
 WITH OVERLAY ROW 6 centered
-   COLOR value(cfc)
+   COLOR value(Syst.CUICommon:cfc)
    TITLE COLOR value(ctc) " View Limit " WITH no-labels side-labels
    FRAME vlimit.
 
@@ -102,7 +102,7 @@ FORM
                     lcValueDesc FORMAT "x(10)" NO-LABEL SKIP
 
 WITH  OVERLAY ROW 8 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) lcLisTitle  
     SIDE-LABELS 
     FRAME lis.
@@ -110,7 +110,7 @@ WITH  OVERLAY ROW 8 centered
 orders = "By Customer    ,By Subscription".
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.

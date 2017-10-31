@@ -63,7 +63,7 @@ form
     MSClass.McName   format "x(8)"  column-label "Class"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " MSISDN Nos in Range " + CLIFrom + " - " + CLITo
     + " "
     FRAME sel.
@@ -72,7 +72,7 @@ form
    MSISDN.CLI     /* LABEL FORMAT */
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
@@ -82,7 +82,7 @@ WITH  OVERLAY ROW 4 centered
 form
     MSISDN.CustNum    label "Customer ..." Customer.CustName NO-LABEL AT 25 SKIP
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
     side-labels 
     FRAME cust.
@@ -92,12 +92,12 @@ form /* seek MSISDN number  BY  CLI */
     CLI format "x(9)"
     HELP "Enter MSISDN number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN No. "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND MSRange WHERE recid(MSRange) = ra-recid no-lock.
 CLIFrom = MSRange.CLIFrom.  CLITo = MSRange.CLITo.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
@@ -130,7 +130,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSISDN  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -363,7 +363,7 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP m_pref WITH FRAME f1.

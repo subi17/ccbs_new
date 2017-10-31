@@ -74,7 +74,7 @@ form
     SubInvoice.PaymState                      COLUMN-LABEL "PState"
     SubInvoice.ClaimState
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc)
        " SUBINVOICES OF INVOICE "  + STRING(lcExtInvID) + " "
     FRAME sel.
@@ -83,7 +83,7 @@ form /* seek  SubInvoice */
     "SubInvoice:" liSubInvNum FORMAT ">>>>9"
     HELP "Enter SubInvoice"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SubInvoice "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
    "Invoice .........:" SubInvoice.InvNum    SKIP
@@ -116,7 +116,7 @@ IF gcHelpParam > "" THEN DO:
 END.
 ELSE llHelp = FALSE.          
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -336,7 +336,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liSubInvNum WITH FRAME f1.
@@ -527,7 +527,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubInvoice).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

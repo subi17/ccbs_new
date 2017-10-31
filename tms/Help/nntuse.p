@@ -41,7 +41,7 @@ form
     BillItem.BillCode  FORMAT "X(18)"                /* column-label "Product's code" */
 
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) 
        " FIND BillItem (" + gcBrand + ") " + tuhaku + " " FRAME sel.
 
@@ -57,7 +57,7 @@ form
 with row 1 centered overlay title " SEEK BillItem " FRAME alku.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST BillItem WHERE BillItem.Brand = gcBrand 
       USE-INDEX BillCode no-lock no-error.
    IF NOT AVAIL BillItem THEN DO:

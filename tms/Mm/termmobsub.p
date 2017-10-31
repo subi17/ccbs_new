@@ -113,7 +113,7 @@ form
     KillMS.OutOp            FORMAT "x(7)"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     "  TERMINATED MOBILE SUBSCRIPTION  "
     + string(pvm,"99-99-99") + " "
@@ -124,7 +124,7 @@ form
    lcFixedNumber
    HELP "Enter Fixed Number"
    WITH row 4 col 2 TITLE COLOR VALUE(ctc)
-   "FIND FIXED NUMBER" COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
+   "FIND FIXED NUMBER" COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
 
 
 
@@ -132,7 +132,7 @@ form /* seek  TermMobsub */
     lcCli  
     HELP "Enter MSISDN  "
     WITH row 4  TITLE COLOR VALUE(ctc) " FIND Msisdn "
-    COLOR VALUE(cfc) WIDTH 24  NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer :n nimella hakua varten */
   "LastName/Company:" lcLastName FORMAT "X(30)"
@@ -141,13 +141,13 @@ form /* Customer :n nimella hakua varten */
   FORMAT "X(20)"
   HELP "First name"
   with row 4 col 2 title color value(ctc) " FIND Name "
-  COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+  COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
                   
 form /* seek  CustNum */
     liCustNum
     HELP "Enter Customer No "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer No"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
                 
 form /* Customer :n nimella hakua varten */
   "LastName/Company:" lcLastName FORMAT "X(30)"
@@ -156,33 +156,33 @@ form /* Customer :n nimella hakua varten */
   FORMAT "X(20)"
   HELP "First name"
   with row 4 col 2 title color value(ctc) " FIND AGREEMENT NAME "
-  COLOR value(cfc) NO-LABELS OVERLAY FRAME f4.
+  COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
  
 form /* seek  CustNum */
    lcPersonID
    HELP "Enter Person ID"
    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Person ID"   
-   COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
 
 form /* seek  CustNum */
     liMSStatus
     HELP "Enter Subscription Status" 
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND StatusCode " 
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f6.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f6.
                 
 form
    lcICC
    HELP "Enter Person ICC" 
    WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
-   "FIND ICC"  COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f7.
+   "FIND ICC"  COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f7.
 
 form /* seek Mobsub MsSeq */
     liMsSeq  
     HELP "Enter Subscription ID  "
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Subscription ID "
-    COLOR VALUE(cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
+    COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  , By 4".
@@ -431,7 +431,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
@@ -454,7 +454,7 @@ BROWSE:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
@@ -476,7 +476,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
@@ -500,7 +500,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f4.
        SET lcLastName lcFirstname WITH FRAME f4.
@@ -513,7 +513,7 @@ BROWSE:
     
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
@@ -526,7 +526,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
@@ -555,7 +555,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
@@ -599,7 +599,7 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND lcRight = "RW" AND 
         ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME frSearchFixed.
         SET lcFixedNumber WITH FRAME frSearchFixed.

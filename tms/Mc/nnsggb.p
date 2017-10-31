@@ -60,7 +60,7 @@ form
     memb                column-label "Member"
     SMGroup.SmGroup      /* COLUMN-LABEL FORMAT */
     SMGroup.SGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(cfc)
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     " Join SMan '" + string(Salesman) + "' " + substr(Salesman.SmName,1,16) +
     " into groups (" + gcBrand + ") "
@@ -76,13 +76,13 @@ form /* Salesman Group :n haku kentällä SMGroup */
     SMGroup
     help "Type Group Code"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Salesman Group :n haku kentällä SGName */
     SGName
     help "Type first characters of a name"
     with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND Salesman where 
@@ -90,7 +90,7 @@ FIND Salesman where
      Salesman.Salesman = Salesman no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
@@ -320,7 +320,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SMGroup WITH FRAME f1.
@@ -346,7 +346,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SGName WITH FRAME f2.
@@ -370,7 +370,7 @@ SELAUS:
 
      else if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.

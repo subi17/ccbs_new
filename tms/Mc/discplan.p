@@ -77,7 +77,7 @@ form
     discplan.DPName     /* column-label format */
              /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) " " + ynimi +
     " Discount Plans "
     + string(pvm,"99-99-99") + " "
@@ -91,7 +91,7 @@ form
     discplan.DPName    /* label format */
 
 WITH  overlay row 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     title COLOR VALUE(ctc) ac-hdr 
     side-labels 
     1 columns
@@ -102,16 +102,16 @@ form /* seek DiscPlan  by  DiscPlan */
     "Code :" DiscPlan
     help "Enter Discount Plan's code"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) no-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f1.
 
 form /* seek DiscPlan  by DPName */
     "Brand:" lcBrand skip 
     "Name :" DPName 
     help "Enter Discount Plan's name"
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
-    COLOR VALUE(cfc) no-labels overlay FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -143,7 +143,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a discplan  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -380,7 +380,7 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
@@ -402,7 +402,7 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        disp lcBrand with frame f2.
@@ -524,7 +524,7 @@ BROWSE:
        /* change */
        RUN local-find-this(true).
        ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY discplan.DiscPlan.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDiscPlan).

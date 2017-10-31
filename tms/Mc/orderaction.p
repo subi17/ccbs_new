@@ -61,7 +61,7 @@ FORM
     OrderAction.ItemKey  FORMAT "X(15)"
     lcItemName         FORMAT "X(30)"       COLUMN-LABEL "Name"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
        " ORDER ACTION ITEMS FOR ORDER " + STRING(iiOrder) + " "
     FRAME sel.
@@ -74,7 +74,7 @@ FORM
        lcItemName COLON 41 NO-LABEL FORMAT "X(30)" SKIP
     OrderAction.ItemParam COLON 20 FORMAT "X(40)"
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -103,7 +103,7 @@ FUNCTION fItemName RETURNS LOGIC
    
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST Order WHERE 
@@ -407,7 +407,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderAction).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

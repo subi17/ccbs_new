@@ -61,7 +61,7 @@ FORM
     ttField.FieldLabel  FORMAT "X(27)" COLUMN-LABEL "Label"   
     lcFieldData         FORMAT "X(20)" COLUMN-LABEL "Description"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " SELECT " + icTitle + " "
     FRAME sel.
 
@@ -70,7 +70,7 @@ form
     ttField.FieldLabel COLON 13 LABEL "Label" FORMAT "X(30)"
     ttField.FieldHelp  COLON 13 LABEL "Description" FORMAT "X(60)"
 WITH  OVERLAY ROW 6 CENTERED
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -79,7 +79,7 @@ form
     "Field:" lcField FORMAT "X(20)"
     HELP "Enter field name"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FIELD "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fSelectionResult RETURNS LOGIC:
@@ -96,7 +96,7 @@ END FUNCTION.
 llDispTable = (NUM-ENTRIES(icTable) > 1).
 IF llDispTable THEN lcFieldData:LABEL IN FRAME sel = "Table".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 DO liTable = 1 TO NUM-ENTRIES(icTable):
@@ -349,7 +349,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcField WITH FRAME f1.
@@ -456,7 +456,7 @@ REPEAT WITH FRAME sel:
        END.
   
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

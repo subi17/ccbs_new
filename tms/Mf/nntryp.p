@@ -70,7 +70,7 @@ form
     Trunk.TrInt      column-label "D"                  format "D/I" space(1)
     Trunk.TrIn       column-label "B"                  format "Y/N"
 WITH
-    width 80 OVERLAY scroll 1 15 DOWN COLOR value(cfc)
+    width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi + " CIRCUIT GROUPS "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
@@ -90,22 +90,22 @@ form
     Trunk.Memo[4]    NO-LABEL AT 19              SKIP
     Trunk.Memo[5]    NO-LABEL AT 19              SKIP 
 WITH
-    OVERLAY ROW 4 centered COLOR value(cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
 form /* Trunkgrupp search WITH FIELD ExCode */
     h-ex-code
     help "Give exchange code"
     with row 4 col 2 title color value(ctc) " FIND EXCHANGE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f1.
 
 form /* Trunkgrupp search WITH FIELD /* x */ Operator */
     h-op-code
     help "Give operator code"
     with row 4 col 2 title color value(ctc) " FIND OPERATOR "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Trunk
@@ -135,7 +135,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Trunk -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -521,7 +521,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        h-ex-code = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-ex-code WITH FRAME h-f1.
@@ -544,7 +544,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        h-op-code = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
@@ -650,7 +650,7 @@ BROWSE:
 
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        DISPLAY
          Trunk.ExCode @ h-ex-code

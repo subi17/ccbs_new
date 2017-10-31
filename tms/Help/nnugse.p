@@ -27,7 +27,7 @@ form
     UserGrp.UserGroup
     UserGrp.UGName  format "x(30)"
     UserGrp.memo[1]  format "x(20)"
-with scroll 1 11 down  row 4 centered color value(cfc)
+with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " User Groups " overlay frame tlse.
 
 form
@@ -37,16 +37,16 @@ form
 
 with overlay row 8 centered
     title color value(ctc) tlli-ots
-    color value(cfc) side-labels 1 col
+    color value(Syst.CUICommon:cfc) side-labels 1 col
     frame tlli.
 
 form /* Invoicing Group :n hakua varten */
     UserGroup
     help "Enter Code of an User Group"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -64,7 +64,7 @@ LOOP:
    Repeat with frame tlse:
    if must-add then do:  /* Invoicing Group  lisays  */
       assign
-      cfc = "tlli"
+      Syst.CUICommon:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
 add-new:
@@ -233,7 +233,7 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 then do:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            UserGroup = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update UserGroup with frame hayr.

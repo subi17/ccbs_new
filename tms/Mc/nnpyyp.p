@@ -55,7 +55,7 @@ form
     NatHoliday.HName    column-label "Explanation" 
 
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " MID-WEEK Holiday "
     + string(pvm,"99-99-99") + " "
@@ -67,7 +67,7 @@ form
 
 
     WITH  OVERLAY ROW 8 col 5
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
@@ -76,15 +76,15 @@ form /* ArkipyhA :n tunnuksella hakua varten */
     haku
     help "Give holiday's code or beginning of it"
     with row 4 col 2 title color value(ctc) " HOLIDAYCODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* ArkipyhA :n nimella hakua varten */
     haku2
     help "Give holiday's Name or beginning of it"
     with row 4 col 2 title color value(ctc) " HOLIDAYNAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST NatHoliday no-lock no-error.
 IF AVAILABLE NatHoliday THEN ASSIGN memory = recid(NatHoliday)
@@ -109,7 +109,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* NatHoliday -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -356,7 +356,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = ?.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
@@ -387,7 +387,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
@@ -486,7 +486,7 @@ BROWSE:
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY NatHoliday.Holiday.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhNatHoliday).

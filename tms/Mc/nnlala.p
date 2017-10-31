@@ -40,7 +40,7 @@ form
    skip(8)
 WITH ROW 1 side-labels width 80
    title color value(ctc) " " + ynimi + " SUMMARY OF UNPAID INVOICES " +
-   string(pvm,"99-99-99") + " " COLOR value(cfc) FRAME frm.
+   string(pvm,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME frm.
 
 form
    skip(1)
@@ -50,7 +50,7 @@ form
    "Date of latest invoice ..:" ldate  format "99-99-9999"           SKIP
    skip(1)
 WITH
-   centered ROW 5 COLOR value(cfc) TITLE COLOR value(ctc)
+   centered ROW 5 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " UNPAID INVOICES "  NO-LABELS
    OVERLAY FRAME debt.
 
@@ -85,7 +85,7 @@ message "Wait ...".
     END.
 
 
-    cfc = "lis". RUN Syst/ufcolor.p.
+    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
     DISPLAY tdebt edate ldate curr1 curr2 curr3 WITH FRAME debt.
 
 message "Press ENTER !".

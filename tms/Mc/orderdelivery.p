@@ -68,7 +68,7 @@ FORM
     "Incident info......:" OrderDelivery.IncidentInfoId lcIncidentInfoId FORMAT "x(30)" SKIP
     "Measures info......:" OrderDelivery.MeasuresInfoId lcMeasuresInfoId FORMAT "x(30)" SKIP
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
@@ -86,7 +86,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 LOOP:

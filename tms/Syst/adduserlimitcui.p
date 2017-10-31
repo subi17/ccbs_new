@@ -74,7 +74,7 @@ FORM
     TMSCodes.CodeName     COLUMN-LABEL "Description"   FORMAT "X(30)"
     lcLimitAmt            COLUMN-LABEL "Value" FORMAT "X(20)"    
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-COLOR VALUE(cfc)
+COLOR VALUE(Syst.CUICommon:cfc)
 TITLE COLOR VALUE(ctc)  "Limits for " + icLimitTarget + " " + icLimitTargetID 
 FRAME sel.
 
@@ -90,7 +90,7 @@ FORM
     UserLimit.LimitAmt LABEL "Amount " FORMAT "->>>9.99"
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -102,11 +102,11 @@ form /* SEEK Code */
     ob-code
     help "Enter Type "
     with row 4  col 2 title color value(ctc) " Find Type "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
 
 /* main */
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first. 
@@ -131,7 +131,7 @@ LOOP:
 REPEAT WITH FRAME sel:
 
  IF must-add THEN DO:  /* Add / update /delete UserLimit  */
-      ASSIGN cfc = "lis" ufkey = true  must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true  must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -312,7 +312,7 @@ REPEAT WITH FRAME sel:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.

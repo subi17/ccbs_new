@@ -79,14 +79,14 @@ form
     CommitDate          COLUMN-LABEL "Date" FORMAT "x(10)"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc) WIDTH 78 
+    COLOR VALUE(Syst.CUICommon:cfc) WIDTH 78 
     TITLE COLOR VALUE(ctc) " MEMO RECORDS OF " + fTitle + " " + KeyValue + " "
     FRAME sel.
 
 form
     memo.MemoTitle     /* LABEL FORMAT */ 
     WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     ac-hdr WITH side-labels
     FRAME lis1.
@@ -94,7 +94,7 @@ form
 form
     memo.MemoText VIEW-AS EDITOR Size 60 BY 10 SCROLLBAR-VERTICAL
     WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " memo TEXT " FRAME lis2 NO-LABELS.
 
 {Func/brand.i}
@@ -103,15 +103,15 @@ form /* seek Status Code  BY  MemoTitle */
     MemoTitle
     help "Enter Status Code"
     WITH ROW 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Status Code  BY UserCode */
     UserCode
     help "Enter Status"
     WITH ROW 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -150,7 +150,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a memo  */
-      ASSIGN cfc = "lis" ufkey = TRUE ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = TRUE ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -491,7 +491,7 @@ BROWSE:
          END. /* IF NOT AVAILABLE memo THEN DO: */
          
          ASSIGN ac-hdr = " Title ".
-         cfc = "lis". RUN Syst/ufcolor.p. 
+         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
          CLEAR FRAME lis1 NO-PAUSE.
          HIDE FRAME sel NO-PAUSE.
          DISPLAY memo.MemoTitle memo.memotype WITH FRAME lis1.

@@ -60,7 +60,7 @@ form
     MedDefTrunk.OpCode
     MedDefTrunk.Type  
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Exchange default ranges "
     + string(pvm,"99-99-99") + " "
@@ -75,7 +75,7 @@ form
     MedDefTrunk.OpCode
     MedDefTrunk.Type  
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
@@ -84,15 +84,15 @@ form /*  search WITH FIELD DefFrom */
     DefFrom
     help "Give range or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND RANGE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD DefName */
     DefName
     help "Give Name or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MedDefTrunk
@@ -117,7 +117,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* MedDefTrunk -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -440,7 +440,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        DefFrom = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE DefFrom WITH FRAME f1.
@@ -463,7 +463,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        DefName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE DefName WITH FRAME f2.
@@ -568,7 +568,7 @@ BROWSE:
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISP MedDefTrunk.Ident.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMedDefTrunk).
        UPDATE 

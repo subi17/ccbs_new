@@ -28,7 +28,7 @@ form
     Exchange.Ident  column-label "Ex.num"
     ExName          column-label "Name"
 WITH
-    scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+    scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " EXCHANGES "
     OVERLAY FRAME tlse.
 
@@ -37,9 +37,9 @@ form /* Maa :n geta varten */
     help "Give ident"
 WITH
     row 4 col 2 title color value(ctc) " FIND IDENT  "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -203,7 +203,7 @@ BROWSE:
 
         /* get */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* get */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            get = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE get WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

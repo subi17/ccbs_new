@@ -60,7 +60,7 @@ FORM
     MNPOperator.NRN
     MNPOperator.OperBrand
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " MNP OPERATORS "
     + string(pvm,"99-99-99") + " "
@@ -75,12 +75,12 @@ FORM
     MNPOperator.NRN LABEL "NRN"
     MNPOperator.Active LABEL "Active"
 WITH  OVERLAY ROW 4 centered 1 columns
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr with side-labels
     NO-LABELS 
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By OperName ,  By OperCode".
@@ -109,7 +109,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MNPOperator  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -415,7 +415,7 @@ BROWSE:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPOperator).
 
          ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-         cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       
          RUN local-UPDATE-record.
          HIDE FRAME lis NO-PAUSE.

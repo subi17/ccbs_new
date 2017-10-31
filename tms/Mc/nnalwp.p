@@ -94,14 +94,14 @@ help "Type of subscriber: (D)irect / (I)ndirect connection, (?) = ALL"
 skip(1)
 
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + ynimi + " CUSTOMER MAILING LIST " + string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
 
 cdate2 = TODAY.
 cdate1 = 1/1/1995.       
 bills  = TRUE.                      
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 
 sml = "SMLX".

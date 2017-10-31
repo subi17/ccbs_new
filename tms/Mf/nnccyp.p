@@ -52,7 +52,7 @@ form
     ClosedCust.Printed   format "*/"
     ClosedCust.Called
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Maintain closed customers "
     + string(pvm,"99-99-99") + " "
@@ -64,7 +64,7 @@ form
     ClosedCust.DateOpen
     ClosedCust.State
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
@@ -73,13 +73,13 @@ form /*  search WITH FIELD CustNum */
     CustNum
     help "Give customer number"
     with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD  */
     Date
     help "Give closing date"
     with row 4 col 2 title color value(ctc) " FIND CLOSING Date "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 form /* UPDATE whitelist FileName */
     skip(1)
@@ -90,10 +90,10 @@ form /* UPDATE whitelist FileName */
        help "Filename of the whitelist file"
     skip(1)
     WITH ROW 8 centered width 55
-    title color value(cfc) " ADD OPENED NUMBERS TO A File "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME wl.
+    title color value(Syst.CUICommon:cfc) " ADD OPENED NUMBERS TO A File "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME wl.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -120,7 +120,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* ClosedCust -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
    END.
 
@@ -411,7 +411,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME haku-f1.
@@ -433,7 +433,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Date = ?.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Date WITH FRAME haku-f2.
@@ -633,7 +633,7 @@ BROWSE:
        IF ClosedCust.Printed = FALSE THEN DO:
           assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
           RUN Syst/ufkey.p.
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           DISPLAY ClosedCust.CustNum ClosedCust.Date ClosedCust.DateOpen.
           UPDATE ClosedCust.State.
           HIDE FRAME lis no-pause.

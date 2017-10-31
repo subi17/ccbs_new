@@ -72,7 +72,7 @@ FORM
     FuncRunProcess.RunState   FORMAT "X(9)"
     FuncRunProcess.Processed  FORMAT "->>>>>>>9"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
        " PROCESSES OF " + lcConfName + "/" + STRING(iiFRExecID) + " "
     FRAME sel.
@@ -101,7 +101,7 @@ FORM
     FuncRunProcess.RunCommand    COLON 20 
        VIEW-AS EDITOR SIZE 45 BY 3
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -131,7 +131,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -472,7 +472,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunProcess).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

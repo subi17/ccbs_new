@@ -24,16 +24,16 @@ def var must-add    as logic                no-undo.
 form
       FeeModel.FeeModel FORMAT "X(16)"
       FeeModel.FeeName  format "x(50)"
-    with scroll 1 11 down  row 4 centered color value(cfc) overlay
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc) overlay
     title color value(ctc) " Billing Events " FRAME sel.                
 
 form /* SEEK Code */
     FeeModel
     help "Enter Code of a Billing Event "        
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -189,7 +189,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* FeeModel */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update FeeModel with frame hayr.
            hide frame hayr no-pause.

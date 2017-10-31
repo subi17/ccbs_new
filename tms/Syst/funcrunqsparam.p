@@ -66,7 +66,7 @@ FORM
     lcParamName  FORMAT "X(20)" COLUMN-LABEL "Parameter"
     lcParamValue FORMAT "X(20)" COLUMN-LABEL "Value"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
        " PARAMETERS FOR SCHEDULED QUEUE " + lcQueueDesc + " "
     FRAME sel.
@@ -84,7 +84,7 @@ FORM
     lcParamValue               COLON 20 
        LABEL "Value" FORMAT "X(50)" SKIP
 WITH  OVERLAY ROW liUpdateRow centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -150,7 +150,7 @@ lcQueueDesc = FuncRunQueue.QueueDesc.
 
 RUN pInitializeParams(iiFRQScheduleID).
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -383,7 +383,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunQSParam).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

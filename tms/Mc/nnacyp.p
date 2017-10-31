@@ -81,7 +81,7 @@ form
     Account.AccType             /* COLUMN-LABEL FORMAT */
     ac-type-name        column-label "TypeName" format "x(25)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " ACCOUNTS "
     + string(pvm,"99-99-99") + " "
@@ -94,7 +94,7 @@ form
     Account.AccType   /* LABEL FORMAT */
     ac-type-name         label "TypeName" format "x(30)"
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
@@ -106,22 +106,22 @@ form /* BROWSE search WITH FIELD Account */
     "Account:" haku-ac-nr FORMAT ">>>>>>>9"
     help "Give number of Account"
     with row 4 col 2 title color value(ctc) " FIND number "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* BROWSE search WITH FIELD AccName */
     "Brand:" lcBrand skip
     "Name :" haku-ac-name
     help "Give Name of Account"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Account WHERE Account.Brand = lcBrand
@@ -152,7 +152,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* Account -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -434,7 +434,7 @@ BROWSE:
 
      /* SEARCH 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-ac-nr = 0.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f1.
@@ -456,7 +456,7 @@ BROWSE:
      /* SEARCH 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-ac-name = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f2.
@@ -560,7 +560,7 @@ BROWSE:
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        /* Checks names of Account type */
        ac-type-name = paiv(AccType).
 

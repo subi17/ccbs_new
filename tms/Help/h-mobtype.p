@@ -26,16 +26,16 @@ form
       CLIType.Clitype format "x(12)"
       CLIType.CliName  format "x(30)"
       CLIType.StatusCode
-    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
+    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " CLI Type (" + gcBrand + ") " OVERLAY FRAME sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter RepType of an Object Billing RepType"
     with row 4  col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -216,7 +216,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE ob-code WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

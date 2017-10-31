@@ -29,16 +29,16 @@ form
     ServCom.SCName   COLUMN-LABEL "Service name" format "x(49)"
     addservice         COLUMN-LABEL "Addtl Service"
 
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " SERVICE COMPONENTS" overlay frame sel.
 
 form /* SEEK code */
     ServCom
     help "Enter Code of an Service components"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 
 
@@ -202,7 +202,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ServCom */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ServCom with frame hayr.
            hide frame hayr no-pause.

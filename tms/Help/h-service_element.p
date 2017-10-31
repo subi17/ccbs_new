@@ -25,16 +25,16 @@ form
     ServEl.ServPac   
     ServEl.ServCom    
     ServCom.SCName FORMAT "X(30)" COLUMN-LABEL "Name"
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 form /* SEEK Code */
     lcEvent
     help "Enter component"
     with row 4 col 2 title color value(ctc) " FIND Component "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 ASSIGN
    lcServPac = gcHelpParam
@@ -203,7 +203,7 @@ repeat:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*lcEvent*/
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.

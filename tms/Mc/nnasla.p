@@ -255,7 +255,7 @@ form
     lcPaymPlan FORMAT "X(15)" AT 44 NO-LABEL 
 with
     overlay centered width 80 row 1 side-labels
-    color value(cfc) title color value(ctc) cd-title
+    color value(Syst.CUICommon:cfc) title color value(ctc) cd-title
     frame cusdata.
 
 form
@@ -276,7 +276,7 @@ form
     Invoice.InvType    column-label "T"          FORMAT ">9"
 with
     width 80 overlay centered scroll 1 8 down row 8
-    color value(cfc) title color value(ctc) lcSelHeader frame sel.
+    color value(Syst.CUICommon:cfc) title color value(ctc) lcSelHeader frame sel.
 
 form
    "Invoice ..........:" Invoice.InvNum    no-label skip
@@ -315,7 +315,7 @@ form
     "Invoice:" lcExtInvId
        help "Give Invoice Nbr"    
     with row 7 col 2 title color value(ctc) " FIND INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 FORM
    Invoice.InvNum     COLON 18 LABEL "Invoice" SKIP
@@ -702,7 +702,7 @@ cd-title = " " +
     
 ldNetBal = ldCustOP + ldCustAP - ldCustINT - blan.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 
 PAUSE 0.
 view frame sel.
@@ -927,7 +927,7 @@ print-line:
 
      /* find */
      ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 AND keyp THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         
         lcExtInvId = "".      

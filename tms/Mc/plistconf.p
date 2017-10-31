@@ -85,7 +85,7 @@ form
    PListConf.dTo
    llActive          column-label "Act."
 with width 80 overlay scroll 1 15 down ROW 1
-   color value(cfc) title color value(ctc) " " + ynimi +
+   color value(Syst.CUICommon:cfc) title color value(ctc) " " + ynimi +
    " Pricelist history " + string(pvm,"99-99-99") + " "
    frame sel.
 
@@ -97,21 +97,21 @@ form
    "   Valid from date :" PListConf.dFrom       skip
    "   Valid to date ..:" PListConf.dTo
 with  overlay row 6 centered width 35
-   color value(cfc)
+   color value(Syst.CUICommon:cfc)
    title color value(ctc)
    fr-header with no-labels frame lis.
 
 form /* Price List search with field PList */
    PList help "Give pricelist's code"
 with row 4 col 2 title color value(ctc) " FIND CODE "
-   color value(cfc) no-labels overlay frame f1.
+   color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
 
 form /* Price List search with field PLName */
    PLName help "Give pricelist's name"
 with row 4 col 2 title color value(ctc) " FIND NAME "
-   color value(cfc) no-labels overlay frame f2.
+   color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 view frame sel.
 
 FIND FIRST RatePlan WHERE
@@ -138,7 +138,7 @@ repeat with frame sel:
     end.
 
    if must-add then do:  /* PListConf -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
       add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
@@ -369,7 +369,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PList = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         update PList with frame f1.
@@ -497,7 +497,7 @@ BROWSE:
         exclusive-lock no-error.
         assign fr-header = " CHANGE " ufkey = true ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         display PListConf.RatePlan .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPListConf).

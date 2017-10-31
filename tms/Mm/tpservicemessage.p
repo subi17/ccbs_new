@@ -50,7 +50,7 @@ FORM
    ttDocs.CreatedTS     FORMAT "99999999.99999"  COLUMN-LABEL "Created TS"
    ttDocs.UpdateTS      FORMAT "99999999.99999"  COLUMN-LABEL "Update TS"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
 
 form
     "MsSeq ............:" ttDocs.MsSeq
@@ -69,12 +69,12 @@ form
     SKIP(2)
 
     WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Message Contents " NO-LABELS 
     FRAME fDetails.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 fCollect().

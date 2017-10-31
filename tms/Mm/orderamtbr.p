@@ -58,7 +58,7 @@ form
     ttData.CodeName     FORMAT "X(30)"    
     ttData.CodeAmt
 WITH ROW FrmRow OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ac-hdr + " " 
     CENTERED FRAME sel.
 
@@ -66,13 +66,13 @@ form /* seek  CodeValue */
     "Code value:" liCodeValue
     HELP "Enter code value"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE VALUE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek CodeName */
     "Code Name:" lcCodeName
     HELP "Enter code name"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE NAME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 DO liCount = 1 TO NUM-ENTRIES(icRunParam,";"):
@@ -106,7 +106,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -325,7 +325,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCodeValue = ?.
@@ -354,7 +354,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCodeName = "".

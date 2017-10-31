@@ -63,7 +63,7 @@ form
     UserGrp.UGName      /* COLUMN-LABEL FORMAT */
     UserGrp.CreDate
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " User Groups "
     + string(pvm,"99-99-99") + " "
@@ -79,7 +79,7 @@ form
     UserGrp.CreDate
     UserGrp.CreUser
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) lm-ots WITH side-labels 1 columns
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 form
@@ -92,15 +92,15 @@ form /* User Group :n haku kentällä UserGroup */
     UserGroup
     help "Type Group Code"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* User Group :n haku kentällä UGName */
     UGName
     help "Type first characters of a name"
     with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UserGrp
@@ -122,7 +122,7 @@ repeat WITH FRAME sel:
     END.
 
    IF lisattava THEN DO:  /* ugroupn lisäys  */
-      assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
       RUN Syst/ufcolor.p.
 lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
@@ -368,7 +368,7 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
@@ -391,7 +391,7 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UGName = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UGName WITH FRAME f2.
@@ -532,13 +532,13 @@ SELAUS:
                  lm-ots = " DETAILS "
                  ufkey = TRUE.
           RUN Syst/ufkey.p.
-          cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
           IF toimi = 1 THEN DO:
 
               assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
               RUN Syst/ufkey.p.
-              cfc = "lis". RUN Syst/ufcolor.p.
+              Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
               FIND CURRENT UserGrp EXCLUSIVE-LOCK.
               IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUserGrp).
               UPDATE UserGrp.UGName.

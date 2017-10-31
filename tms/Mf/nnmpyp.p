@@ -59,7 +59,7 @@ form
     MobPref.Operator  OperName
     MobPref.Memo  
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " Prefixes for Mobile numbers "
     + string(pvm,"99-99-99") + " "
@@ -70,16 +70,16 @@ form
     MobPref.Operator
     MobPref.Memo
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header side-labels 1 columns
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) fr-header side-labels 1 columns
     FRAME lis.
 
 form /* Nat prefix search WITH FIELD Prefix */
     Prefix
     help "Give prefix"
     with row 4 col 2 title color value(ctc) " FIND PREFIX "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MobPref
@@ -108,7 +108,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* MobPref -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -434,7 +434,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Prefix = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Prefix WITH FRAME f1.
@@ -457,7 +457,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Prefix = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Prefix WITH FRAME f2.
@@ -554,7 +554,7 @@ BROWSE:
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           MobPref.Prefix
           MobPref.Operator

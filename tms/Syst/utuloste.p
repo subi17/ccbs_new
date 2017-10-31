@@ -79,7 +79,7 @@ FORm
     "Name of output file:" oso FORMAT "x(50)"
     help "Name FOR output file OR device"           skip
 
-    WITH OVERLAY ROW 6 centered COLOR value(cfc)
+    WITH OVERLAY ROW 6 centered COLOR value(Syst.CUICommon:cfc)
     title colOR value(ctc) " DESTINATION " NO-LABELS
     FRAME osoite.
 
@@ -89,7 +89,7 @@ FORM
     HELP "Receivers of this report"   SKIP
     "Enter Name for the report:" mailsubj format "x(25)" 
 
-    WITH OVERLAY ROW 6 CENTERED COLOR VALUE(cfc)
+    WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " EMail " NO-LABELS
     FRAME EMail.
 
@@ -100,7 +100,7 @@ FORm skip(1)
      "# of lines/page:" spit1  "lines" SKIP
      "- use .........:" skayt1 "lines" SKIP
      WITH TITLE COLOR value(ctc) otsi1 NO-LABELS
-     ROW 13 col 2 COLOR value(cfc) OVERLAY
+     ROW 13 col 2 COLOR value(Syst.CUICommon:cfc) OVERLAY
      FRAME kirj1.
 
 FORm skip(1)
@@ -109,7 +109,7 @@ FORm skip(1)
      "Sivun pituus :" spit2 "lineA" SKIP
      "KAytettAvissA:" skayt2 "lineA" SKIP
      WITH TITLE COLOR value(ctc) otsi2 NO-LABELS
-     ROW 13 col 43 COLOR value(cfc) OVERLAY
+     ROW 13 col 43 COLOR value(Syst.CUICommon:cfc) OVERLAY
      FRAME kirj2.
 
 FUNCTION GetFileName RETURNS CHAR.
@@ -222,7 +222,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
         rlev2   = PrintCodes.PageWidth.
    END.
 
-   cfc = "uprinter". RUN Syst/ufcolor.p.
+   Syst.CUICommon:cfc = "uprinter". RUN Syst/ufcolor.p.
    ufkey = TRUE.
 
    /* Talletetaan ufk-arvot */

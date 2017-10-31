@@ -51,12 +51,12 @@ help "Directory where summary File is to be written" SKIP
 help "Name of File where summary PaymFile is to be written"
 skip(4)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
    " " + ynimi + " CALL SUMMARY BY BillCode " + string(pvm,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1

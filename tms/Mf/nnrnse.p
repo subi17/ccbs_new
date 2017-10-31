@@ -38,7 +38,7 @@ form
     AreaCode.AreaCode                  /* column-label "Areanumber"    */
 WITH
     centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " SEARCHING AREANO FROM " + rnhaku + "' " FRAME sel.
 
 
@@ -52,7 +52,7 @@ form
 
 with row 1 centered overlay title " SEEK AREANUMBER " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
    FIND FIRST AreaCode USE-INDEX AreaCode no-lock no-error.
    IF NOT AVAIL AreaCode THEN DO:
       BELL.

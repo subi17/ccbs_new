@@ -69,7 +69,7 @@ form
     lcType               FORMAT "X(10)" COLUMN-LABEL "Name"
     ttPaymVouch.Voucher  FORMAT ">>>>>>>9" COLUMN-LABEL "Voucher"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Voucher Number Series "
     + string(pvm,"99-99-99") + " "
@@ -83,7 +83,7 @@ form
     ttPaymVouch.Voucher  FORMAT ">>>>>>>9" COLON 15 
        HELP "Last used payment voucher number" 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -124,7 +124,7 @@ FOR EACH Brand NO-LOCK WHERE
                                     ELSE 0.
 END.             
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code of Section,By Name of Section,By 3, By 4".
@@ -342,7 +342,7 @@ BROWSE:
        RUN local-find-this(TRUE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttPaymVouch.Brand.
 
        liOldVoucher = ttPaymVouch.Voucher.

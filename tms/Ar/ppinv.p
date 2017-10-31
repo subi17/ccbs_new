@@ -80,7 +80,7 @@ form
     Invoice.InvAmt  COLUMN-LABEL "Inv.Amount"
     PPInv.Amount    COLUMN-LABEL "PP Amount"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) 
     lcTitle
     FRAME sel.
@@ -90,7 +90,7 @@ form
     PPInv.InvNum  
     SKIP(1)
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -118,7 +118,7 @@ ASSIGN lcTitle     = " INVOICES IN PLAN: " +
                      STRING(PaymPlan.PPDate,"99.99.9999") + " "
        gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders   = "  By Invoice ,    ,   , By 4"
@@ -143,7 +143,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a PPInv  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:

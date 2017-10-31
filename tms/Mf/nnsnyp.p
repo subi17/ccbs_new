@@ -60,7 +60,7 @@ form
     Operator.OperName    /* column-label "Oper. name" */  format "x(16)"
     /* sd */          /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " National numberingplan "
     + string(pvm,"99-99-99") + " "
@@ -74,22 +74,22 @@ form
     NumPlan.Operator   label "Operator code ......."
     Operator.OperName  label "Operators name ......"
 WITH
-    OVERLAY ROW 4 centered COLOR value(cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels 1 columns FRAME lis.
 
 form /* Nummerserie search WITH FIELD AreaCode */
     h-rn-rnr
     help "Give areacode "
     with row 4 col 2 title color value(ctc) " FIND AREACODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f1.
 
 form /* Nummerserie search WITH FIELD Operator */
     h-op-code
     help "Give operator code"
     with row 4 col 2 title color value(ctc) " FIND OPERATOR "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST NumPlan
@@ -113,7 +113,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* NumPlan -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -425,7 +425,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        h-rn-rnr = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-rn-rnr WITH FRAME h-f1.
@@ -448,7 +448,7 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        h-op-code = "".
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
@@ -545,7 +545,7 @@ BROWSE:
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        FIND Operator where Operator.Operator = 
           NumPlan.Operator no-lock no-error.
        FIND AreaCode where AreaCode.AreaCode = 

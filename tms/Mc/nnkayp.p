@@ -108,7 +108,7 @@ form
     CustCat.pro COLUMN-LABEL "PRO"
     CustCat.segment COLUMN-LABEL "Segment" FORMAT "X(17)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     title color value(ctc) " " + ynimi +
     " CUSTOMER CATEGORIES "
     + string(pvm,"99-99-99") + " "
@@ -141,7 +141,7 @@ form
     CustCat.segment LABEL "Segment" COLON 24
       HELP "Customer segment" SKIP 
  WITH  OVERLAY ROW 7 col 5
-    COLOR value(cfc)
+    COLOR value(Syst.CUICommon:cfc)
     TITLE COLOR value(ctc)
     fr-header WITH side-labels 
     FRAME lis.
@@ -151,16 +151,16 @@ form /* kategorian tunnuksella hakua varten */
     "Code :" haku
     help "Give a code or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* kategorian nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give a Name or beginning of it"
     with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 order = 1.
 
@@ -191,7 +191,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* CustCat -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -520,7 +520,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame hayr.
@@ -542,7 +542,7 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME hayr2.

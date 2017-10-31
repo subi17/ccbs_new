@@ -71,7 +71,7 @@ form
     FATGroup.PeriodQty
     FATGroup.Priority
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " " + ynimi +
     " Free Air Time Groups "
     + string(pvm,"99-99-99") + " "
@@ -102,7 +102,7 @@ form
     FATGroup.InvMemo[2]  COLON 17 NO-LABEL 
     FATGroup.InvMemo[3]  COLON 17 NO-LABEL 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -112,7 +112,7 @@ form /* seek Billing Event  BY  FATGroup */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "FAT Group.:" FATGroup FORMAT "X(16)" HELP "Enter Fatime Group"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND GROUP "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event  BY FtgName */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -120,7 +120,7 @@ form /* seek Billing Event  BY FtgName */
     "Fat Name..:" Ftgname
     HELP "Enter Fatime Event Name"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
@@ -159,7 +159,7 @@ FUNCTION fDispQtyUnit RETURNS LOGICAL.
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "   By Code   ,   By Name   ,By 3, By 4".
@@ -185,7 +185,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a FATGroup  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -428,7 +428,7 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
@@ -450,7 +450,7 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        Disp lcBrand With FRAME f2.
@@ -567,7 +567,7 @@ REPEAT WITH FRAME sel:
        {Syst/uright2.i}
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY FATGroup.FTGrp.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGroup).
        RUN local-UPDATE-record.                                  

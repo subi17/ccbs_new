@@ -74,7 +74,7 @@ FORM
     lcchanged               COLUMN-LABEL "Last change" 
 
 WITH ROW FrmRow width 70 OVERLAY FrmDown  DOWN CENTERED
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     "  HIGH SPENDER HISTORY   "
     + string(pvm,"99-99-99") + " "
@@ -100,7 +100,7 @@ form
     
 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     NO-LABEL
     FRAME lis.
@@ -112,17 +112,17 @@ form /* seek  HighUsage */
     "Period" lihakuperiod 
     HELP "Enter Period" 
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     CLI
     HELP "Enter MSISDN Number"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "   By Customer ,   By MSISDN    ,    By amount  , By 4".
@@ -367,7 +367,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Highusage.cli   .
 
        RUN local-UPDATE-record.                                  

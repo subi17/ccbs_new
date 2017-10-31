@@ -53,7 +53,7 @@ form
                    lcresp[2] FORMAT "X(78)"                  SKIP
                    lcresp[3] FORMAT "X(78)"                  SKIP 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) /*ac-hdr*/ " VIEW SOLog " 
     NO-LABELS 
     /*1 columns*/
@@ -62,13 +62,13 @@ WITH  OVERLAY ROW 2 centered
 form
     Solog.CommLine FORMAT "X(65)" VIEW-AS EDITOR Size 76 BY 16 
     WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " VIEW SOLOG Commmand " FRAME lfCommline NO-LABELS.
 
 form
     Solog.Response FORMAT "X(65)" VIEW-AS EDITOR Size 76 BY 16
     WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " VIEW SOLOG Response " FRAME lfResponse NO-LABELS.
                    
     

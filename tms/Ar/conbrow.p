@@ -50,7 +50,7 @@ form
     ttContact.Unhandled FORMAT ">>>>>9"   COLUMN-LABEL "Unhandled"
     ttContact.Handled   FORMAT ">>>>>9"   COLUMN-LABEL "Handled"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc)
     " Contact lists "
     + string(pvm,"99-99-99") + " "
@@ -100,7 +100,7 @@ FOR EACH Contact NO-LOCK WHERE
    
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Date , By 3, By 4".

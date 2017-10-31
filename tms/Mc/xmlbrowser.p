@@ -33,7 +33,7 @@ RUN pFindFirst.
 FORM
    ttXMLSchema.XML FORMAT "X(78)"
 WITH
-   ROW 1 CENTERED OVERLAY FrmDown DOWN COLOR VALUE(cfc)
+   ROW 1 CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
    TITLE " XML Message "
 FRAME sel.
 
@@ -41,11 +41,11 @@ FORM
    ttXMLSchema.XML VIEW-AS EDITOR SIZE 70 BY 10
    WITH ROW 4 CENTERED OVERLAY TITLE " ROW DETAILS " FRAME fDetail.
    
-cfc = "sel".
+Syst.CUICommon:cfc = "sel".
 
 RUN Syst/ufcolor.p.
 
-ccc = cfc.
+ccc = Syst.CUICommon:cfc.
 
 VIEW FRAME sel.
 

@@ -24,16 +24,16 @@ def var must-add    as logic                no-undo.
 form
       RatePlan.RatePlan
       RatePlan.RPName  format "x(30)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
+    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
     title color value(ctc) " Rating Plans " overlay frame sel.
 
 form /* SEEK Code */
     RatePlan
     help "Enter Code of a Rating Plan"
     with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
@@ -187,7 +187,7 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* RatePlan */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set RatePlan with frame hayr.
            hide frame hayr no-pause.

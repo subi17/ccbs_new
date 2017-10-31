@@ -67,7 +67,7 @@ form
     DumpLog.DumpLogStatus COLUMN-LABEL "St"
     DumpLog.FileName FORMAT "X(40)" COLUMN-LABEL "Filename"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
        "DUMP LOG "  + string(pvm,"99-99-99") + " "
     FRAME sel.
@@ -83,7 +83,7 @@ form
     DumpLog.FileName COLON 20
     DumpLog.Filesize COLON 20
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
@@ -92,14 +92,14 @@ FORM
     lcLargeInfo AT 2 NO-LABEL
        VIEW-AS EDITOR SIZE-CHARS 70 BY 17
 WITH OVERLAY ROW 1 centered
-    COLOR VALUE(cfc) TITLE " VIEW INFO " 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE " VIEW INFO " 
     SIDE-LABELS FRAME fInfo.
 
 form /* seek  DumpLog */
     "DumpID:" liDumpID 
     HELP "Enter Dump ID "
     WITH row 4 col 1 TITLE COLOR VALUE(ctc) " FIND Dump ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fStatusName RETURNS LOGICAL
@@ -113,7 +113,7 @@ FUNCTION fStatusName RETURNS LOGICAL
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -303,7 +303,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY liDumpID WITH FRAME F1.
@@ -330,7 +330,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDumpLog).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

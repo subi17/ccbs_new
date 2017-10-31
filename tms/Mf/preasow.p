@@ -72,7 +72,7 @@ form
     "          " Presel.ErrText                        skip(1)
 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " PRESELECTION "
     NO-LABELS 
   /*  1 columns */
@@ -96,7 +96,7 @@ form
                                                       skip(1)
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) " PRESELECTION "
     NO-LABELS 
   /*  1 columns */
@@ -113,7 +113,7 @@ form
     pecode                    COLUMN-LABEL "Rc"
     chang                     COLUMN-LABEL "Ch"
 WITH centered OVERLAY ROW 2 13 DOWN
-    COLOR value(cfc) TITLE COLOR value(ctc) 
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(ctc) 
     " PRESELECT. OF CLI SERIES " + an1 + "-" + an2 + " " 
     FRAME sel.
 
@@ -122,7 +122,7 @@ form /* Numeron haku kentällä CustNum */
     haku-CLI 
     help "Enter A-sub no. or its first digits"         
     with row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form 
 SKIP(1)
@@ -133,7 +133,7 @@ SKIP(1)
     NO-LABELS OVERLAY FRAME saved.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 pstypes = "NATIONAL,INTERNATIONAL,NAT & INT".
@@ -416,7 +416,7 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-CLI WITH FRAME haku-f1.

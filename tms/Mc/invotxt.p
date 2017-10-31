@@ -109,7 +109,7 @@ form
     lcTitle     COLUMN-LABEL "Title"   FORMAT "X(20)"
 
 WITH CENTERED  ROW FrmRow FrmDown DOWN WIDTH 80
-    COLOR VALUE(cfc) OVERLAY
+    COLOR VALUE(Syst.CUICommon:cfc) OVERLAY
     TITLE COLOR VALUE(ctc) " " + ynimi + " Information Texts " 
         + string(pvm,"99-99-99") + " "
         FRAME sel.
@@ -153,7 +153,7 @@ form
         VIEW-AS EDITOR SIZE 75 BY 8 
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) 
        ac-hdr + "  Text ID: " + STRING(InvText.ITNum) + " "
     SIDE-LABELS
@@ -166,7 +166,7 @@ form /* seek InvText BY  Date */
     "Date :" FromDate
     HELP "Enter FromDate"      
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FromDate "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek InvText BY   */
     "Brand   :" lcBrand
@@ -177,7 +177,7 @@ form /* seek InvText BY   */
     "KeyValue:" lckeyvalue FORMAT "X(25)"
       HELP "Enter Key Value" 
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fTypeName RETURNS CHARACTER
@@ -199,7 +199,7 @@ FUNCTION fAddrTarget RETURNS CHARACTER
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By FromDate, By Target ,By 3, By 4".
@@ -230,7 +230,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a InvText  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -541,7 +541,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
@@ -573,7 +573,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
 
        ASSIGN
          lcTarget   = "SMS"
@@ -760,7 +760,7 @@ BROWSE:
              ufkey  = TRUE 
              ehto = 9. 
        RUN Syst/ufkey.p.
-       cfc = "lis". 
+       Syst.CUICommon:cfc = "lis". 
        RUN Syst/ufcolor.p. 
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY InvText.KeyValue.

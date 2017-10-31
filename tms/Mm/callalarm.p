@@ -84,7 +84,7 @@ form
 
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.CUICommon:cfc)   
     TITLE COLOR VALUE(ctc) " " + ynimi +
     "  ALARM MENU   "
     + string(pvm,"99-99-99") + " "
@@ -113,7 +113,7 @@ form
     "Limit % ......:" CallAlarm.Limit    SKIP
     "CreditType ...:" CallAlarm.CreditType lccreditname format "x(30)" 
 WITH  overlay row 3 centered
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.CUICommon:cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
     SIDE-LABELS NO-LABEL
 
@@ -126,7 +126,7 @@ form /* seek  CustNo */
     "CustomerNo:"  CustNo
     HELP "Enter Customer Number of the Call Limit "
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CLI */
    "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -135,7 +135,7 @@ form /* seek  CLI */
    "Msisdn No.:"  lcCLI
     HELP "Enter CLI of the Call Limit"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 form /* seek  CLI */
    "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -144,10 +144,10 @@ form /* seek  CLI */
    "Time......:"  ActDate ActTime
     HELP "Enter Activated Date and time"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TIMESTAMP "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,  By Stamp  , By 4".
@@ -176,7 +176,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CallAlarm  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -414,7 +414,7 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        IF CustNo > 0 THEN DO:
           MESSAGE
@@ -448,7 +448,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
@@ -473,7 +473,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        Actdate = today.
@@ -591,7 +591,7 @@ ACTION: repeat with frame lis:
 
              RUN local-find-this(true).
              ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-             cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+             Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
              DISPLAY CallAlarm.CustNO.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCallAlarm).
