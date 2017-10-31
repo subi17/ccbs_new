@@ -576,12 +576,12 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 4 THEN RUN Rate/edrhistory_one_edr.p(EDRHistory.CLI,
+      IF Syst.CUICommon:toimi = 4 THEN RUN Rate/edrhistory_one_edr.p(EDRHistory.CLI,
                                                  EDRHistory.DateSt,
                                                  EDRHistory.TimeSt,
                                                  EDRHistory.DtlSeq).
 
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

@@ -131,9 +131,9 @@ REPEAT WITH FRAME fStart:
           ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF TOIMI = 5 THEN LEAVE. 
+   IF Syst.CUICommon:toimi = 5 THEN LEAVE. 
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       HIDE FRAME fStart NO-PAUSE.
       RETURN.
    END. 

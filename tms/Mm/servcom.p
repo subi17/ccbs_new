@@ -449,7 +449,7 @@ REPEAT WITH FRAME sel:
         RUN Syst/ufkey.p.
         
         /* Search BY column 1 */
-        IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        IF Syst.CUICommon:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
@@ -473,7 +473,7 @@ REPEAT WITH FRAME sel:
         END. /* Search-1 */
 
         /* Search BY col 2 */
-        ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.

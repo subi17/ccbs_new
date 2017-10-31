@@ -448,19 +448,19 @@ BROWSE:
            ufk[8]= 8.
         RUN Syst/ufkey.p.   
         
-        IF toimi = 8 THEN DO:
+        IF Syst.CUICommon:toimi = 8 THEN DO:
         PUT SCREEN ROW 22 "                                 " .
 
            NEXT BROWSE.
         ENd.
-        IF toimi = 1 AND avail mobsub  THEN RUN Mm/solog2.p(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 1 AND avail mobsub  THEN RUN Mm/solog2.p(mobsub.msseq).
 
-        IF toimi = 2 AND avail mobsub  THEN RUN Mm/subser.p(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 2 AND avail mobsub  THEN RUN Mm/subser.p(mobsub.msseq).
 
-        IF toimi = 4 AND avail mobsub THEN RUN lockms(mobsub.msseq).         
-        IF toimi = 5 AND avail mobsub THEN RUN unlockms(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 4 AND avail mobsub THEN RUN lockms(mobsub.msseq).         
+        IF Syst.CUICommon:toimi = 5 AND avail mobsub THEN RUN unlockms(mobsub.msseq).
 
-        IF toimi = 7 AND avail mobsub then RUN Mm/mobsubsms.p(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 7 AND avail mobsub then RUN Mm/mobsubsms.p(mobsub.msseq).
 
      END.
      
@@ -484,17 +484,17 @@ BROWSE:
            ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
         RUN Syst/ufkey.p.   
 
-        IF toimi = 8 THEN DO:
+        IF Syst.CUICommon:toimi = 8 THEN DO:
            PUT SCREEN ROW 22 "                                  " .
 
            NEXT BROWSE.
         END.   
 
-        IF  toimi = 1 THEN RUN Mc/commontt.p(Invseq.CustNum).
+        IF  Syst.CUICommon:toimi = 1 THEN RUN Mc/commontt.p(Invseq.CustNum).
 
-        IF toimi = 2 THEN RUN Mc/mobilett.p(Invseq.CustNum).
+        IF Syst.CUICommon:toimi = 2 THEN RUN Mc/mobilett.p(Invseq.CustNum).
 
-        IF toimi = 4 THEN RUN Mm/mobcallis.p(highusage.Cli,invseq.invseq).        
+        IF Syst.CUICommon:toimi = 4 THEN RUN Mm/mobcallis.p(highusage.Cli,invseq.invseq).        
 
 
      END.

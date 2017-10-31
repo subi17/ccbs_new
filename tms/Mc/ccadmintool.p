@@ -16,7 +16,7 @@
         ehto      = 0.
        RUN Syst/ufkey.p .
        
-       IF toimi = 2 THEN DO:
+       IF Syst.CUICommon:toimi = 2 THEN DO:
       
           DEFINE VARIABLE lcBIGroup AS CHARACTER NO-UNDO. 
           FIND TMSParam WHERE TMSParam.Brand = "1" AND
@@ -29,7 +29,7 @@
 
        END.
 
-       IF toimi = 5 THEN DO:
+       IF Syst.CUICommon:toimi = 5 THEN DO:
           DEFINE VARIABLE liFMGroup AS INTEGER NO-UNDO. 
           FIND TMSParam WHERE TMSParam.Brand = "1" AND
                               TMSParam.ParamGroup = "CCAdminTool" AND
@@ -42,7 +42,7 @@
 
        END.
 
-       IF toimi = 8 THEN LEAVE.
+       IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
     END. /* ADMIN-CC */
 

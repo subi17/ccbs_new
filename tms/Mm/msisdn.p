@@ -546,9 +546,9 @@ BROWSE:
        ufk[8] = 8.
        RUN Syst/ufkey.p.
 
-       if toimi = 8 then next browse.
+       if Syst.CUICommon:toimi = 8 then next browse.
 
-       if toimi = 1 then do:
+       if Syst.CUICommon:toimi = 1 then do:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
@@ -584,7 +584,7 @@ BROWSE:
         END. /* Search-1 */
 
         /* Search by col 2 */
-        else if toimi = 2 then do:
+        else if Syst.CUICommon:toimi = 2 then do:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
@@ -604,7 +604,7 @@ BROWSE:
         END. /* Search-2 */
 
         /* Search by col 3 */
-        else if toimi = 3 then do:
+        else if Syst.CUICommon:toimi = 3 then do:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           DISP lcBrand WITH FRAME f3.
@@ -622,7 +622,7 @@ BROWSE:
         END. /* Search-3 */
 
         /* Search by col 4 */
-        else if toimi = 4 then do:
+        else if Syst.CUICommon:toimi = 4 then do:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            Disp lcBrand With FRAME f4.
@@ -1004,18 +1004,18 @@ PROCEDURE local-update-record:
 
          RUN Syst/ufkey.p.
       END.
-      ELSE ASSIGN toimi = 1.
+      ELSE ASSIGN Syst.CUICommon:toimi = 1.
 /*
       READKEY. 
       ASSIGN nap = keylabel(LASTKEY).
   */    
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
          RUN pUpdate.
          IF NEW ttMsisdn THEN RETURN.
          llDispMenu = TRUE.
       END.
       
-      IF toimi = 7 THEN DO:
+      IF Syst.CUICommon:toimi = 7 THEN DO:
          
          lcMenuOptions = "". 
          CASE iiStatusCode:
@@ -1065,7 +1065,7 @@ PROCEDURE local-update-record:
          NEXT UPDATE-LOOP.
       END.   
       
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE FRAME choices NO-PAUSE.
          HIDE MESSAGE.
          LEAVE UPDATE-LOOP.

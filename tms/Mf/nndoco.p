@@ -136,10 +136,10 @@ task:
    repeat with frame start:
       assign ufk = 0 ufk[1] = 7 ufk[5] = 178 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
-      if toimi = 1 then next  CRIT.
-      if toimi = 8 then leave CRIT.
+      if Syst.CUICommon:toimi = 1 then next  CRIT.
+      if Syst.CUICommon:toimi = 8 then leave CRIT.
 
-      if toimi = 5 then do:
+      if Syst.CUICommon:toimi = 5 then do:
          bell. message
          "Are You sure You want to start ERASING (Y/N) ?" update ok.
          if ok then leave TASK.

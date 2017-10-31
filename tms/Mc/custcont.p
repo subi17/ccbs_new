@@ -84,7 +84,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
@@ -256,11 +256,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
          LEAVE.
       END.
    END.
-   ELSE IF toimi = 5 AND ufk[5] > 0 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 AND ufk[5] > 0 THEN DO:
       RUN Mc/custcontact.p(customer.custnum, 5).
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

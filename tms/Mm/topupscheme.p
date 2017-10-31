@@ -650,7 +650,7 @@ PROCEDURE local-UPDATE-record:
       fPrefixName(TopupScheme.PPReqPrefix).
       fSourceName(TopupScheme.TopupSource).
       
-      IF NEW TopupScheme THEN toimi = 1.
+      IF NEW TopupScheme THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -663,7 +663,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT TopupScheme EXCLUSIVE-LOCK.
@@ -740,10 +740,10 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 4 THEN 
+      ELSE IF Syst.CUICommon:toimi = 4 THEN 
          RUN Mm/topupschemerow.p(TopupScheme.TopupScheme).
 
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

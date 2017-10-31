@@ -1029,9 +1029,9 @@ PROCEDURE local-update-record:
              
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
       
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
+      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
 
          ehto = 9.
          RUN Syst/ufkey.p.
@@ -1480,10 +1480,10 @@ PROCEDURE cctool:
               ufk[8] = 1059.
 
            IF NOT llChanged THEN ASSIGN 
-               toimi    = 1.
+               Syst.CUICommon:toimi    = 1.
            ELSE RUN Syst/ufkey.p. 
                           
-           IF toimi = 1 AND lcRight = "RW" THEN DO:
+           IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
 
                ehto = 9.
                RUN Syst/ufkey.p.
@@ -1558,9 +1558,9 @@ PROCEDURE cctool:
             LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 THEN LEAVE.
 
         NEXT.
-      END. /* end if toimi = 1*/
+      END. /* end if Syst.CUICommon:toimi = 1*/
       
-      ELSE IF toimi = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       
          IF llChanged THEN DO:
             llOk = FALSE.
@@ -1577,7 +1577,7 @@ PROCEDURE cctool:
          NEXT.
       END.
       
-      ELSE IF toimi = 5 THEN DO: 
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO: 
 
          /* create request */
          DEF VAR  liReqId    AS INT NO-UNDO.

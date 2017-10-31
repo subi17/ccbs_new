@@ -1038,7 +1038,7 @@ PROCEDURE local-UPDATE-record:
          FATime.Memo[1 FOR 2]
       WITH FRAME lis.
 
-      IF NEW Fatime THEN toimi = 1.
+      IF NEW Fatime THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
             ehto   = 0
@@ -1048,7 +1048,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
        /*  FIND CURRENT Fatime NO-LOCK. */

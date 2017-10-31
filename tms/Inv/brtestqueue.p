@@ -608,7 +608,7 @@ PROCEDURE local-UPDATE-record:
          BRTestQueue.Description   
       WITH FRAME lis.
 
-      IF NEW BRTestQueue THEN toimi = 1.
+      IF NEW BRTestQueue THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -623,7 +623,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT BRTestQueue EXCLUSIVE-LOCK.
@@ -645,19 +645,19 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Inv/brtestqresult.p (BRTestQueue.BRTestQueueID).
       END.
  
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Inv/brtestqrow.p (BRTestQueue.BRTestQueueID).
       END.
 
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
          RUN Inv/brtestcriteria.p (BRTestQueue.BRTestQueueID,0).
       END.
         
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

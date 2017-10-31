@@ -296,9 +296,9 @@ ACTION:
    REPEAT WITH FRAME range.
       ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          IF Size =  0 THEN 
          DO:
             MESSAGE
@@ -308,7 +308,7 @@ ACTION:
          END. /* IF Size = 0 */  
 
          LEAVE Action.
-      END. /* IF toimi = 5 */
+      END. /* IF Syst.CUICommon:toimi = 5 */
    END. /* REPEAT WITH FRAME range, Action */
 
    DEF VAR minMSISDN AS DEC NO-UNDO.

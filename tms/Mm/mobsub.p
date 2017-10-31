@@ -771,15 +771,15 @@ BROWSE:
              ufk[7]= 249
              ufk[8]= 8  .
           RUN Syst/ufkey.p.   
-          IF toimi = 8 THEN DO:
+          IF Syst.CUICommon:toimi = 8 THEN DO:
              LEAVE.
           ENd.
 
-          IF toimi = 1 AND
+          IF Syst.CUICommon:toimi = 1 AND
              fIsPermittedModule(mobsub.clitype, "mobsub_update") THEN
              run local-update-record(TRUE).
-          ELSE IF toimi = 2  THEN RUN Mm/persondata.p(mobsub.msseq).
-          ELSE IF toimi = 3  THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 2  THEN RUN Mm/persondata.p(mobsub.msseq).
+          ELSE IF Syst.CUICommon:toimi = 3  THEN DO:
              RUN Mm/msrequest.p(-1,
                            ?, /* reqstat ? for all */
                            MobSub.MsSeq,
@@ -799,15 +799,15 @@ BROWSE:
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
-          ELSE IF toimi = 4  AND lcRight = "RW" AND 
+          ELSE IF Syst.CUICommon:toimi = 4  AND lcRight = "RW" AND 
             fIsPermittedModule(mobsub.clitype, "subser") THEN 
                RUN Mm/subser.p(Mobsub.MsSeq).
-          ELSE IF Toimi = 5  THEN RUN Mc/memo.p(INPUT mobsub.CustNum,
+          ELSE IF Syst.CUICommon:toimi = 5  THEN RUN Mc/memo.p(INPUT mobsub.CustNum,
                                            INPUT "Mobsub",
                                            INPUT STRING(MobSub.MsSeq),
                                            INPUT "Mobsub").
 
-          ELSE IF toimi = 6 
+          ELSE IF Syst.CUICommon:toimi = 6 
              THEN DO:
        
              CALLBROWSE:
@@ -828,30 +828,30 @@ BROWSE:
 
                 RUN Syst/ufkey.p.   
         
-                IF toimi = 8 THEN DO:
+                IF Syst.CUICommon:toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN Mm/msisdniv.p(Mobsub.MsSeq).
+                IF       Syst.CUICommon:toimi = 1  THEN RUN Mm/msisdniv.p(Mobsub.MsSeq).
 
-                ELSE IF toimi = 2 AND avail mobsub  THEN
+                ELSE IF Syst.CUICommon:toimi = 2 AND avail mobsub  THEN
                    RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"PRODUCT").
        
-                ELSE IF toimi = 3 AND avail mobsub  THEN 
+                ELSE IF Syst.CUICommon:toimi = 3 AND avail mobsub  THEN 
                    RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"DATE").
        
-                ELSE IF toimi = 4 AND avail mobsub  THEN
+                ELSE IF Syst.CUICommon:toimi = 4 AND avail mobsub  THEN
                    RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"CCN").
 
-                ELSE IF toimi = 6 THEN 
+                ELSE IF Syst.CUICommon:toimi = 6 THEN 
                    RUN Mm/persondata.p(mobsub.msseq).
                    
-                ELSE IF toimi = 7 THEN
+                ELSE IF Syst.CUICommon:toimi = 7 THEN
                    RUN Gwy/ppreqbr.p(MobSub.MsSeq).
         
              END.
           END.
-          ELSE IF toimi = 7 AND avail mobsub  THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 7 AND avail mobsub  THEN DO:
              RUN Mm/mobsubdi.p(INPUT Mobsub.MSSeq, OUTPUT killed).
              
              /* refresh mobsub status / barring status */

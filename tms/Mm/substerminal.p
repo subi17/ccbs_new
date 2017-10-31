@@ -622,12 +622,12 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
          
-         IF toimi = 6 THEN DO:
+         IF Syst.CUICommon:toimi = 6 THEN DO:
             RUN Mc/eventsel.p ("SubsTerminal",STRING(SubsTerminal.TerminalID)). 
             NEXT. 
          END.
          
-         ELSE IF toimi = 8 THEN LEAVE.
+         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       END.
       
       FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.

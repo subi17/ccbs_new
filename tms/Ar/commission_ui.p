@@ -39,7 +39,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       ehto   = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 5 THEN DO:
       
       llOk = FALSE.
       MESSAGE "Start handling commissions?" 
@@ -59,7 +59,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

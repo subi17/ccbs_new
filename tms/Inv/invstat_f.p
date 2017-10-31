@@ -222,11 +222,11 @@ REPEAT with frame valinta:
       assign ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      if toimi = 1 then next  limits.
+      if Syst.CUICommon:toimi = 1 then next  limits.
 
-      if toimi = 8 then leave limits.
+      if Syst.CUICommon:toimi = 8 then leave limits.
 
-      if toimi = 5 then leave task.
+      if Syst.CUICommon:toimi = 5 then leave task.
     end.
 
 

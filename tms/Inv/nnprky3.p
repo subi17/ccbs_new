@@ -226,7 +226,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       else if lookup(nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 ehto = 5.
 RUN Syst/ufkey.p.

@@ -95,10 +95,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
-      toimi = 1
+      Syst.CUICommon:toimi = 1
       ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
 
       ehto = 9. 
       RUN Syst/ufkey.p.
@@ -145,7 +145,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       
       IF ldaEventDate = ? OR 
          (llCDRs = FALSE AND llFees = FALSE AND llFATimes = FALSE)
@@ -180,7 +180,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

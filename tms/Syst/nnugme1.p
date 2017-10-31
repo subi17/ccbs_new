@@ -134,8 +134,8 @@ ADD-USER:
      ufk[1] = 540 ufk[2] = 541 ufk[3] = 516 ufk[8] = 8.
      RUN Syst/ufkey.p.
 
-     IF toimi = 8 THEN LEAVE ADD-USER.
-     IF toimi = 1 THEN DO:
+     IF Syst.CUICommon:toimi = 8 THEN LEAVE ADD-USER.
+     IF Syst.CUICommon:toimi = 1 THEN DO:
         lm-ots = " ADD ONE User ".
 add-single:
         repeat WITH FRAME lis ON ENDKEY UNDO ADD-USER,
@@ -176,13 +176,13 @@ add-single:
          IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhUgMember).
       END.
         END.
-     END. /* toimi = 1: add a single group */
+     END. /* Syst.CUICommon:toimi = 1: add a single group */
 
-     ELSE IF toimi = 2 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
         RUN Syst/nnugcb.p(UserGrp.UserGroup).
         LEAVE add-USER.
      END.
-     ELSE IF toimi = 3 THEN DO WITH FRAME copy:
+     ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
         /* copy members */
 
         PAUSE 0.
@@ -225,7 +225,7 @@ add-single:
         PAUSE 0.
         HIDE FRAME copy.
         LEAVE add-USER.
-     END. /* toimi = 3 */
+     END. /* Syst.CUICommon:toimi = 3 */
       END. /* add-USER */
 
       /* onko yht‰‰n tietuetta ? */

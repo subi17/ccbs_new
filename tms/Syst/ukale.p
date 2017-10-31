@@ -151,7 +151,7 @@ toimi:
          LEAVE LOOP.
       END.
 
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 END. /* LOOP */
 
 RETURN.

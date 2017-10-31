@@ -14,7 +14,7 @@
                   13.05.02 aam called from brand.p
                   01.09.03 jp   TMS+
                   03.03.05 kl return correctly
-                  03.08.06 tk set qupd = true when running from find module
+                  03.08.06 tk set Syst.CUICommon:qupd = true when running from find module
 
   VERSION ......: M15
 ---------------------------------------------------------------------- */
@@ -236,9 +236,9 @@ ACTION: repeat:
          /* brand selection */
          if nap = "f11" then leave main_loop. 
 
-         toimi = minimum(lookup(nap,"1,2,3,4,5,6,7,8,return"),9).
-         if toimi = 0 then
-         toimi = lookup(nap,"f1,f2,f3,f4,f5,f6,f7,f8,enter").
+         Syst.CUICommon:toimi = minimum(lookup(nap,"1,2,3,4,5,6,7,8,return"),9).
+         if Syst.CUICommon:toimi = 0 then
+         Syst.CUICommon:toimi = lookup(nap,"f1,f2,f3,f4,f5,f6,f7,f8,enter").
          pause 0 no-message.
 
          /* hide function codes from screen */
@@ -246,11 +246,11 @@ ACTION: repeat:
          hide frame f_code-ERGO no-pause.
 
 
-         if toimi > 0 or length(nap) = 1 then leave.
+         if Syst.CUICommon:toimi > 0 or length(nap) = 1 then leave.
       end.
 
       if info then do trans:
-         if toimi < 8 then do:
+         if Syst.CUICommon:toimi < 8 then do:
 
             hide message no-pause.
             RUN Syst/nninfo.p(f_id[toimi]).
@@ -261,7 +261,7 @@ ACTION: repeat:
       end.
 
       /* in case no function key was hit .. */
-      if toimi = 0 then do on endkey undo, next f_code:
+      if Syst.CUICommon:toimi = 0 then do on endkey undo, next f_code:
          if length(nap) > 1 then undo, retry.
          assign f_code = nap firstc = true.
          pause 0 no-message.
@@ -318,7 +318,7 @@ ACTION: repeat:
          /* shall a module be run ? */
          if MenuType = 1 then do:
             assign
-               qupd   = TRUE.
+               Syst.CUICommon:qupd   = TRUE.
 
                run value(MenuTree.Module).
 
@@ -346,7 +346,7 @@ ACTION: repeat:
       end.
 
 
-      if toimi = 9 then do: /* Quick return to main level */
+      if Syst.CUICommon:toimi = 9 then do: /* Quick return to main level */
          clear frame stack no-pause.
          assign mlevel = 1 f_level = s_level.
          next MAIN_LOOP.
@@ -406,7 +406,7 @@ ACTION: repeat:
          BELL.
       else do: /* run a program module */
          assign
-            qupd   =  TRUE . 
+            Syst.CUICommon:qupd   =  TRUE . 
 
          run value(f_name[toimi]).
          /* clear screen */

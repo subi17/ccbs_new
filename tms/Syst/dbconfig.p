@@ -633,7 +633,7 @@ PROCEDURE local-UPDATE-record:
          lcState
       WITH FRAME lis.
 
-      IF NEW DBConfig THEN toimi = 1.
+      IF NEW DBConfig THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -645,7 +645,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT DBConfig EXCLUSIVE-LOCK.
@@ -712,7 +712,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

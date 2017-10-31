@@ -126,9 +126,9 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
    END.
    ELSE ASSIGN 
       llUfkey = TRUE
-      toimi   = 1.
+      Syst.CUICommon:toimi   = 1.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
    
       ASSIGN ehto = 9.
       RUN Syst/ufkey.p.
@@ -157,7 +157,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       
       IF ldAmt = 0 THEN DO:
          MESSAGE "Amount has not been given"
@@ -220,11 +220,11 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCrit NO-PAUSE.

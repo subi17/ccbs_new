@@ -150,8 +150,8 @@ ADD-CUST:
           ufk[1] = 511 ufk[2] = 513 ufk[3] = 516 ufk[4] = 529 ufk[8] = 8.
           RUN Syst/ufkey.p.
 
-          IF toimi = 8 THEN LEAVE ADD-CUST.
-          IF toimi = 1 THEN DO:
+          IF Syst.CUICommon:toimi = 8 THEN LEAVE ADD-CUST.
+          IF Syst.CUICommon:toimi = 1 THEN DO:
              lm-ots = " ADD ONE CUSTOMER ".
 
              add-single:
@@ -203,13 +203,13 @@ ADD-CUST:
                    THEN RUN StarEventMakeCreateEvent(lhCGMember).
                 END.
              END.
-          END. /* toimi = 1: add a single group */
+          END. /* Syst.CUICommon:toimi = 1: add a single group */
 
-          ELSE IF toimi = 2 THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
              RUN Mc/nncgcb.p(CustGroup.CustGroup).
              LEAVE add-cust.
           END.
-          ELSE IF toimi = 3 THEN DO WITH FRAME copy:
+          ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
              /* copy members */
 
              add-single:
@@ -270,8 +270,8 @@ ADD-CUST:
                 LEAVE add-cust.
              END. 
              HIDE FRAME copy.
-          END. /* toimi = 3 */
-          ELSE IF toimi = 4 THEN DO:
+          END. /* Syst.CUICommon:toimi = 3 */
+          ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
              RUN Mc/nncggm.p(CustGroup.CustGroup).
              LEAVE add-cust.
           END.
@@ -583,11 +583,11 @@ SELAUS:
            ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
         RUN Syst/ufkey.p.   
 
-        IF toimi = 8 THEN NEXT SELAUS.
+        IF Syst.CUICommon:toimi = 8 THEN NEXT SELAUS.
 
-        IF toimi = 1 THEN RUN Mc/commontt.p(CGMember.CustNum).
+        IF Syst.CUICommon:toimi = 1 THEN RUN Mc/commontt.p(CGMember.CustNum).
 
-        IF toimi = 2 THEN RUN Mc/mobilett.p(CGMember.CustNum).
+        IF Syst.CUICommon:toimi = 2 THEN RUN Mc/mobilett.p(CGMember.CustNum).
 
      END.
 

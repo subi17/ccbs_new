@@ -372,11 +372,11 @@ print-line:
            ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
         RUN Syst/ufkey.p.   
 
-        IF toimi = 8 THEN NEXT BROWSE.
+        IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
 
-        IF toimi = 1 THEN RUN Mc/commontt.p(Customer.CustNum).
+        IF Syst.CUICommon:toimi = 1 THEN RUN Mc/commontt.p(Customer.CustNum).
 
-        IF toimi = 2 THEN RUN Mc/mobilett.p(Customer.CustNum).
+        IF Syst.CUICommon:toimi = 2 THEN RUN Mc/mobilett.p(Customer.CustNum).
 
      END.
 

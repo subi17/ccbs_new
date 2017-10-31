@@ -248,7 +248,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
       ehto = 0.
    RUN Syst/ufkey.p.
 
-   if toimi = 1 THEN DO:
+   if Syst.CUICommon:toimi = 1 THEN DO:
    
       IF llPending THEN DO:
          MESSAGE "There are pending change requests for these parameters."
@@ -365,7 +365,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
 
    END.
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
       ldCurrStamp = Func.Common:mMakeTS().
       
@@ -422,7 +422,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
       LEAVE lAction.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE lAction.
    END.
       

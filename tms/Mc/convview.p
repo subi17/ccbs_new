@@ -100,14 +100,14 @@ REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
       ehto  = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi EQ 5 THEN DO:
+   IF Syst.CUICommon:toimi EQ 5 THEN DO:
      RUN Mc/fusionmessage.p(iiOrderID).
    END.
-   IF toimi EQ 6 THEN DO:
+   IF Syst.CUICommon:toimi EQ 6 THEN DO:
      RUN Mc/addrview.p(iiOrderId).
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. 
 

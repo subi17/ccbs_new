@@ -1279,11 +1279,11 @@ PROCEDURE local-UPDATE-record:
 
       IF llDirect THEN ASSIGN 
          llDirect = FALSE
-         toimi    = 1.
+         Syst.CUICommon:toimi    = 1.
          
       ELSE RUN Syst/ufkey.p.   
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
       
          FIND CURRENT PrePaidRequest EXCLUSIVE-LOCK.
          
@@ -1426,16 +1426,16 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* show xml */
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN pShowXML(PrePaidRequest.Response).
       END.
        
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN pShowXML(PrePaidRequest.CommLine).
       END.
       
       /* minus adjustment */
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
 
          IF PrepaidRequest.TSRequest < 20080101 THEN DO:
             MESSAGE "Minus adjustment is not allowed for previous year's"
@@ -1523,7 +1523,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* change status */  
-      ELSE IF toimi = 7 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
         
          ASSIGN
             ufk    = 0
@@ -1592,7 +1592,7 @@ PROCEDURE local-UPDATE-record:
 
       END.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
    
          lcReturn = "".
          
@@ -1608,7 +1608,7 @@ PROCEDURE local-UPDATE-record:
          RETURN lcReturn.
       END.
 
-      ELSE IF toimi = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       
          IF llChanged OR PrePaidRequest.PPStatus = 99 THEN DO:
             llOk = FALSE.

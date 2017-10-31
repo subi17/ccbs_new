@@ -1156,12 +1156,12 @@ repeat WITH FRAME sel:
              ufkey = true.
           RUN Syst/ufkey.p.
 
-          if toimi = 8 then do:
+          if Syst.CUICommon:toimi = 8 then do:
              hide frame lis no-pause.
              next.
           end.
 
-          else if toimi = 2 then do:
+          else if Syst.CUICommon:toimi = 2 then do:
 
             FIND fixedfeetf NO-LOCK WHERE
                  fixedfeetf.ffnum = fixedfee.ffnum NO-ERROR.

@@ -60,7 +60,7 @@ SKIP(1)
 WITH  OVERLAY ROW 1 centered SIDE-LABELS
 TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
  "  MOBILE SUBSCRIPTION  "
- + string(pvm,"99-99-99") + " "
+ + string(TODAY,"99-99-99") + " "
  NO-LABELS 
 FRAME lis.
 

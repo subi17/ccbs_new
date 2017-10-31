@@ -173,9 +173,9 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
             ufk[8] = 8.
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN NEXT Limit.
-         IF toimi = 8 THEN LEAVE Limit.
-         IF toimi = 5 THEN LEAVE do-it.
+         IF Syst.CUICommon:toimi = 1 THEN NEXT Limit.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE Limit.
+         IF Syst.CUICommon:toimi = 5 THEN LEAVE do-it.
    END.
 
    message "Are You sure You want to start listing (Y/N) ?"

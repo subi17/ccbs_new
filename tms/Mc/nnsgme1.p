@@ -132,8 +132,8 @@ ADD-SMAN:
      ufk[1] = 521 ufk[2] = 522 ufk[3] = 516 ufk[8] = 8.
      RUN Syst/ufkey.p.
 
-     IF toimi = 8 THEN LEAVE ADD-SMAN.
-     IF toimi = 1 THEN DO:
+     IF Syst.CUICommon:toimi = 8 THEN LEAVE ADD-SMAN.
+     IF Syst.CUICommon:toimi = 1 THEN DO:
         lm-ots = " ADD ONE Salesman ".
 
     add-single:
@@ -181,14 +181,14 @@ ADD-SMAN:
          IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhSMGMember).
       END.
         END.
-     END. /* toimi = 1: add a single group */
+     END. /* Syst.CUICommon:toimi = 1: add a single group */
 
-     ELSE IF toimi = 2 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
         RUN Mc/nnsgsb.p(SMGroup.SmGroup).
         LEAVE ADD-SMAN.
      END.
 
-     ELSE IF toimi = 3 THEN DO WITH FRAME copy:
+     ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
         /* copy members */
 
         PAUSE 0.
@@ -235,7 +235,7 @@ ADD-SMAN:
            HIDE FRAME copy.
            LEAVE ADD-SMAN.
 
-        END.   /* toimi = 3 */  
+        END.   /* Syst.CUICommon:toimi = 3 */  
       END.
    END. /* ADD-SMAN */
 

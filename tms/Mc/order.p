@@ -1182,13 +1182,13 @@ PROCEDURE pOrderView:
       ufkey = true.
       RUN Syst/ufkey.p.
   
-     IF toimi = 8 then do:
+     IF Syst.CUICommon:toimi = 8 then do:
         hide frame lis.
         leave.
      end.
   
      /* customer management */
-     ELSE IF Toimi = 2 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
 
         SUBACTION:
         repeat with frame lis:
@@ -1229,32 +1229,32 @@ PROCEDURE pOrderView:
 
            RUN Syst/ufkey.p.
 
-           IF toimi = 8 THEN LEAVE SubAction.
+           IF Syst.CUICommon:toimi = 8 THEN LEAVE SubAction.
 
-           ELSE IF toimi = 1
+           ELSE IF Syst.CUICommon:toimi = 1
            THEN RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_AGREEMENT},FALSE).
 
-           ELSE IF toimi = 2 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_INVOICE},FALSE).
            END.
 
-           ELSE IF toimi = 3 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_USER},FALSE).
            END.
 
-           ELSE IF toimi = 4 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_DELIVERY},FALSE).
            END.
 
-           ELSE IF toimi = 5 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT},FALSE).
            END.
 
-           ELSE IF toimi = 6 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER},FALSE).
            END.
 
-           ELSE IF toimi = 7 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER},FALSE).
            END.
 
@@ -1264,12 +1264,12 @@ PROCEDURE pOrderView:
      END.
 
      /* logistic address */
-     ELSE IF Toimi = 3 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
         RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_LOGISTICS},FALSE).
         NEXT Action.
      END.
 
-     else if toimi = 4 and ufk[4] > 0 then do:
+     else if Syst.CUICommon:toimi = 4 and ufk[4] > 0 then do:
 
         liMultiSimType = (IF Order.MultiSimType = 1 THEN 2 
                           ELSE IF Order.MultiSimType = 3 THEN 3 
@@ -1305,7 +1305,7 @@ PROCEDURE pOrderView:
         next action.
      end.
           
-     ELSE IF toimi = 6  AND 
+     ELSE IF Syst.CUICommon:toimi = 6  AND 
           (Order.StatusCode NE "5" OR icStatus = "") 
      THEN DO TRANSACTION ON ENDKEY UNDO, LEAVE: 
         
@@ -1322,7 +1322,7 @@ PROCEDURE pOrderView:
         LEAVE.
      END.
 
-     ELSE IF toimi = 5 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
      
         SUBACTION: 
         repeat with frame lis:
@@ -1342,17 +1342,17 @@ PROCEDURE pOrderView:
            ufkey = TRUE.
            RUN Syst/ufkey.p.
   
-           IF toimi = 8 THEN LEAVE SubAction.
+           IF Syst.CUICommon:toimi = 8 THEN LEAVE SubAction.
            
-           ELSE IF toimi = 2 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
               RUN Mc/orderaccessory.p (Order.OrderID,0).
            END.
 
-           ELSE IF toimi = 3 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
               RUN Mc/ordertopup.p (Order.OrderID).
            END.
                 
-           ELSE IF toimi = 4 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
               RUN Mc/memo.p(INPUT 0,
                        INPUT "Order",
                        INPUT STRING(Order.OrderId),
@@ -1363,7 +1363,7 @@ PROCEDURE pOrderView:
                  ufkey = true
                  must-print = true.
            END.            
-           ELSE IF toimi = 5 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
               IF liMSRequest EQ 0 THEN DO:
                  MESSAGE "Order request not found" VIEW-AS ALERT-BOX.
@@ -1376,7 +1376,7 @@ PROCEDURE pOrderView:
 
            END.
            
-           ELSE IF toimi = 7 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
               RUN local-find-this(FALSE).
               RUN Mc/orderdelivery.p(Order.OrderId).
            END.
@@ -1387,7 +1387,7 @@ PROCEDURE pOrderView:
      END.
      
      
-     ELSE IF toimi = 7 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
         find current order NO-LOCK.
         RUN Mc/orderfunc.p(INPUT order.statuscode, Order.OrderID, TRUE).       
         ASSIGN
@@ -1398,7 +1398,7 @@ PROCEDURE pOrderView:
         NEXT Action.
      END.                                                    
   
-     ELSE IF toimi = 1 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 1 THEN DO:
         RUN local-UPDATE-record(FALSE).                                  
      
         RUN local-find-this(FALSE).
@@ -2156,21 +2156,21 @@ PROCEDURE local-update-customer:
       ufkey = true.
       RUN Syst/ufkey.p.
                                                              
-      IF toimi = 8 then do:
+      IF Syst.CUICommon:toimi = 8 then do:
          hide frame fCustomer NO-PAUSE.
          ac-hdr = lcCurrHeader.
          
          LEAVE.
       end.
 
-      ELSE IF toimi = 5 AND lNew   THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 AND lNew   THEN DO:
   
          MESSAGE "Don't create here"
          VIEW-AS ALERT-BOX INFORMATION.
          
       END.
  
-      ELSE IF toimi = 1 AND lcRight = "RW" AND ufk[1] NE 0 THEN
+      ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" AND ufk[1] NE 0 THEN
       REPEAT WITH FRAME fCustomer ON ENDKEY UNDO, LEAVE:
          
          ehto = 9.

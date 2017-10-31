@@ -93,10 +93,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
    
    ELSE ASSIGN 
-      toimi = 1
+      Syst.CUICommon:toimi = 1
       ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
 
       ehto = 9. 
       RUN Syst/ufkey.p.
@@ -145,10 +145,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 3 THEN 
+   ELSE IF Syst.CUICommon:toimi = 3 THEN 
       RUN Syst/report_config.p ("BillingReport").
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       
       IF lcFile = "" OR lcFile = ? THEN DO:
          MESSAGE "File name has not been given."
@@ -172,7 +172,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

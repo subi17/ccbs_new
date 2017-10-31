@@ -775,13 +775,13 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       
-         IF toimi = 6 THEN DO: 
+         IF Syst.CUICommon:toimi = 6 THEN DO: 
             RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + OfferItem.Brand + chr(255) + OfferItem.Offer
                + chr(255) + STRING(OfferItem.OfferItemId)).
             LEAVE.
          END.   
          
-         IF toimi = 8 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       END.
 
       UpdateField:

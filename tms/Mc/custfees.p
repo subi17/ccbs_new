@@ -193,18 +193,18 @@ Action:
       RUN Syst/ufkey.p.
 
 
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
         ask-data = TRUE.
         NEXT Action.
       END.
 
-      IF toimi = 4 THEN DO:
+      IF Syst.CUICommon:toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
          RUN Mc/beitempl.p(lcFeeModel,lcPriceList).
          NEXT.
       END.
 
-      ELSE IF TOIMI = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
          find first BillTarget WHERE
                     BillTarget.CustNum    = asnro AND
@@ -235,7 +235,7 @@ Action:
          LEAVE Action. /* i.e. DO the job ... */
       END.   
 
-      ELSE IF TOIMI = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE FRAME info.
          UNDO, RETURN.
       END.

@@ -501,7 +501,7 @@ BROWSE:
        RUN Syst/ufkey.p.
 
        /* Search BY column 1 */
-       IF toimi = 1 THEN DO:
+       IF Syst.CUICommon:toimi = 1 THEN DO:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
@@ -523,7 +523,7 @@ BROWSE:
        END. /* Search-1 */
 
        /* Search BY column 2 */
-       ELSE IF TOIMI = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
@@ -553,7 +553,7 @@ BROWSE:
        END. /* Search-2 */
 
        /* Search BY col 3 */
-       ELSE IF toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.CUICommon:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -576,7 +576,7 @@ BROWSE:
        END. /* Search-3 */
 
        /* Search BY col 4 */
-       ELSE IF toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.CUICommon:toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -607,7 +607,7 @@ BROWSE:
           END.
        END. /* Search-4 */
 
-       ELSE IF toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.CUICommon:toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.

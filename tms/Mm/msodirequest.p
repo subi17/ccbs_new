@@ -95,7 +95,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 5 THEN DO:
 
       llOk = FALSE.
       MESSAGE "An on demand invoice will be created." SKIP
@@ -126,7 +126,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

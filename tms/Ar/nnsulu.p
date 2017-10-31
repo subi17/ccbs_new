@@ -298,7 +298,7 @@ toimi:
    repeat WITH FRAME MAIN ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          ehto = 9. RUN Syst/ufkey.p.
          IF tosi2  = 9999999 THEN tosi2 = 0.
          repeat:
@@ -407,7 +407,7 @@ toimi:
       END.
 
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
 
          assign Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
          DO i = 1 TO 2 WITH FRAME rival:
@@ -433,8 +433,8 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
             HIDE FRAME rival no-pause.
             LEAVE toimi.
       END.
-      IF toimi = 8 THEN RETURN.
-   END. /* toimi */
+      IF Syst.CUICommon:toimi = 8 THEN RETURN.
+   END. /* Syst.CUICommon:toimi */
 
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}

@@ -542,7 +542,7 @@ BROWSE:
            RUN Syst/ufkey.p.
             
            /* invoice number sequences */
-           IF toimi = 1 THEN DO:
+           IF Syst.CUICommon:toimi = 1 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
                  IF InvGroup.InvForm NE InvGroup.InvGroup THEN DO: 
@@ -556,14 +556,14 @@ BROWSE:
            END.
 
            /* voucher number sequences */
-           ELSE IF toimi = 2 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
                  RUN Mc/igvoucher.p(InvGroup.InvGroup).
               END.
            END.
             
-           ELSE IF toimi = 8 THEN LEAVE.
+           ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
         END.
 
         ufkey = TRUE.

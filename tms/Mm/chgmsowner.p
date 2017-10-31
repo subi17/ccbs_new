@@ -818,14 +818,14 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN toimi = 1  
+   ELSE ASSIGN Syst.CUICommon:toimi = 1  
                ufkey = TRUE.
 
    /* update new agr.customer */ 
-   IF toimi = 1 THEN RUN pUpdateNewOwner.
+   IF Syst.CUICommon:toimi = 1 THEN RUN pUpdateNewOwner.
       
    /* memo */
-   ELSE IF toimi = 2 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
       RUN Mc/memo.p(MobSub.CustNum,
                "MsRequest",
                STRING(MsRequest.MsRequest),
@@ -833,7 +833,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
    END. 
    
    /* create request */ 
-   ELSE IF toimi = 5 AND icAction = "new" THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 AND icAction = "new" THEN DO:
 
       IF ldtChgDate = ? OR 
          (lcNewLast = "" AND lcNewCompanyName = "") OR 
@@ -978,7 +978,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
 
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
 
       /* update msrequest */
       IF AVAILABLE MsRequest AND MsRequest.ReqStat = 0 THEN DO:

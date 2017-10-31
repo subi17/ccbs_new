@@ -256,11 +256,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN toimi = 1  
+   ELSE ASSIGN Syst.CUICommon:toimi = 1  
                ufkey = TRUE.
 
    /* update new inv.customer */ 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
@@ -440,7 +440,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
    END.
    
    /* copy name and address from current invoice customer  */
-   ELSE IF toimi = 3 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
    
       FIND MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
       IF NOT AVAILABLE MobSub THEN DO:
@@ -476,7 +476,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
          lcNewTel      = Customer.SMSNumber.
    END. 
    
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
 
       /* update msrequest */
       IF icAction = "change" AND AVAILABLE MsRequest THEN DO:

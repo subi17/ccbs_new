@@ -14,7 +14,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{Syst/commali.i} /* qupd = TRUE. */
+{Syst/commali.i} /* Syst.CUICommon:qupd = TRUE. */
 
 DEF INPUT PARAMETER iiEventLog AS RECID NO-UNDO.
 

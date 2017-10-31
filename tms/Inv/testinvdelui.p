@@ -107,12 +107,12 @@ REPEAT WITH FRAME mainFrame:
       ehto = 1.
    RUN Syst/ufkey.p.
    
-   IF toimi = 1 THEN NEXT mainLoop.
-   IF toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN NEXT mainLoop.
+   IF Syst.CUICommon:toimi = 5 THEN DO:
       RUN pDeleteTestInvoices.
       RETURN.
    END.
-   IF toimi = 8 THEN RETURN.
+   IF Syst.CUICommon:toimi = 8 THEN RETURN.
 
 END.
 

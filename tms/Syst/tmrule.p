@@ -790,15 +790,15 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       END.
-      ELSE ASSIGN toimi      = 1
+      ELSE ASSIGN Syst.CUICommon:toimi      = 1
                   llDispMenu = TRUE.
                   
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
          RUN pUpdate.
       END.
             
       /* select items from which counter is accumulated */   
-      ELSE IF toimi = 2 THEN DO TRANS:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO TRANS:
 
          RUN Syst/fieldselection.p ("TMQueue",
                              "COUNTER ITEMS",
@@ -888,17 +888,17 @@ PROCEDURE local-UPDATE-record:
       END.
          
       /* update item values */
-      ELSE IF toimi = 5 THEN RUN Syst/tmritemvalue.p (TMRule.TMRuleSeq).
+      ELSE IF Syst.CUICommon:toimi = 5 THEN RUN Syst/tmritemvalue.p (TMRule.TMRuleSeq).
       
       /* update limits */
-      ELSE IF toimi = 6 THEN RUN Syst/tmrlimit.p (TMRule.TMRuleSeq).
+      ELSE IF Syst.CUICommon:toimi = 6 THEN RUN Syst/tmrlimit.p (TMRule.TMRuleSeq).
                          
       /* functions */
-      ELSE IF toimi = 7 THEN do:
+      ELSE IF Syst.CUICommon:toimi = 7 THEN do:
           RUN Syst/tmrulefunc.p (TMRule.TMRuleSeq).
       end.
       
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

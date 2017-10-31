@@ -188,7 +188,7 @@ toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          ehto = 9. RUN Syst/ufkey.p.
          UPDATE InvGroup extcustgrp
             raja[1]
@@ -267,7 +267,7 @@ toimi:
          NEXT toimi.
       END.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          if pyynto then pytx = "PAYMENT BEHAVIOUR NOTICED".
          else           pytx = "PAYMENT BEHAVIOUR NOT NOTICED".
          Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
@@ -294,8 +294,8 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
             HIDE FRAME rival no-pause.
             LEAVE toimi.
       END.
-      IF toimi = 8 THEN RETURN.
-   END. /* toimi */
+      IF Syst.CUICommon:toimi = 8 THEN RETURN.
+   END. /* Syst.CUICommon:toimi */
 
 ASSIGN tila = TRUE.
 {Syst/tmsreport.i "return"}

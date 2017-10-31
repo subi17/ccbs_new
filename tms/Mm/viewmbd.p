@@ -347,19 +347,19 @@ repeat WITH FRAME cdr:
 
    RUN Syst/ufkey.p.
 
-   IF toimi = 2 THEN DO:
+   IF Syst.CUICommon:toimi = 2 THEN DO:
       RUN Rate/edrhistory_one_edr.p(ttCall.CLI,
                                ttCall.DateSt,
                                ttCall.TimeSt,
                                ttCall.DtlSeq).
    END.
    
-   ELSE IF toimi = 4 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
        /* View rate record */
        RUN Mm/nnhitt2.p(ttCall.TariffNum).
    END.
 
-   ELSE if toimi = 7 THEN DO:
+   ELSE if Syst.CUICommon:toimi = 7 THEN DO:
          
          bsub = Func.Common:mHideBSub(ttCall.Gsmbnr,
                   ttCall.custnum,
@@ -397,18 +397,18 @@ repeat WITH FRAME cdr:
       END.   
    end.
    
-   ELSE IF toimi = 6 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
       RUN Mm/viewmcdr2.p(INPUT ttCall.Datest, ttCall.Dtlseq,
                     IF ttCall.CDRTable > ""
                     THEN ttCall.CDRTable
                     ELSE "MobCdr").
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       RUN Syst/viewtable.p((BUFFER ttcall:HANDLE)).
    END.
 
-   ELSE IF toimi = 8 THEN LEAVE Action.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE Action.
 END.
 
 HIDE FRAME cdr     NO-PAUSE.

@@ -539,7 +539,7 @@ BROWSE:
           
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 AND lcRight = "RW" THEN
+         IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN
          DO:
             ufkey = TRUE. ehto = 9. RUN Syst/ufkey.p.
             RUN local-update-record.                                  
@@ -589,7 +589,7 @@ BROWSE:
 
          FIND CURRENT Memo NO-LOCK.
 
-         IF toimi = 8 THEN RUN local-find-others.
+         IF Syst.CUICommon:toimi = 8 THEN RUN local-find-others.
 
          ufkey = TRUE. ehto = 9.
          HIDE FRAME lis1 NO-PAUSE.

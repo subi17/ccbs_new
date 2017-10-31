@@ -59,11 +59,11 @@ ACTION:
       ufk[8] = 8
       ehto   = 0.  RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE MAIN.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE MAIN.
 
-      IF toimi = 1 THEN NEXT MAIN.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT MAIN.
 
-      IF toimi = 2 THEN DO:
+      IF Syst.CUICommon:toimi = 2 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND MSISDN where 
               MSISDN.CLI = arg  AND
@@ -98,7 +98,7 @@ ACTION:
        END.
 
 
-      IF toimi = 3 THEN DO:
+      IF Syst.CUICommon:toimi = 3 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND SIM where 
               SIM.ICC   = arg AND 
@@ -133,7 +133,7 @@ ACTION:
          END.   
       END.
 
-      IF toimi = 4 THEN DO:
+      IF Syst.CUICommon:toimi = 4 THEN DO:
 
          FIND IMSI where 
               IMSI.IMSI = arg no-lock no-error.
@@ -167,7 +167,7 @@ ACTION:
          END.   
       END.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND MobSub where 
               Mobsub.Brand = gcBrand AND 
@@ -183,7 +183,7 @@ ACTION:
          END.   
       END.
 
-      IF toimi = 6 THEN DO:
+      IF Syst.CUICommon:toimi = 6 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND Invoice where 
               Invoice.InvNum = integer(arg) AND
@@ -199,7 +199,7 @@ ACTION:
          END.   
       END.  
 
-      IF TOIMI = 7 THEN DO:
+      IF Syst.CUICommon:toimi = 7 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND FIRST Customer  where 
                     Customer.CustName Begins arg AND

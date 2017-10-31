@@ -672,7 +672,7 @@ PROCEDURE pMinusAdjustment:
          ehto   = 0.
       RUN Syst/ufkey.p.
            
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
             
          IF ldMinusAmt = 0 THEN DO:
             MESSAGE "Nothing to do."
@@ -743,7 +743,7 @@ PROCEDURE pMinusAdjustment:
          LEAVE.
       END.
            
-      ELSE IF toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
    END.
 
    HIDE FRAME fMinus NO-PAUSE.

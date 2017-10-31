@@ -133,8 +133,8 @@ add-group:
           ufk[8] = 8.
           RUN Syst/ufkey.p.
 
-          IF toimi = 8 THEN LEAVE add-group.
-          IF toimi = 1 THEN
+          IF Syst.CUICommon:toimi = 8 THEN LEAVE add-group.
+          IF Syst.CUICommon:toimi = 1 THEN
 add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
@@ -178,14 +178,14 @@ add-single:
 
                 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhUgMember).
              END.
-          END. /* toimi = 1: add a single group */
+          END. /* Syst.CUICommon:toimi = 1: add a single group */
 
-          ELSE IF toimi = 2 THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
              RUN Syst/nnuggb.p(TMSUser.UserCode).
              LEAVE add-group.
           END.
 
-          ELSE IF toimi = 3 THEN DO WITH FRAME copy:
+          ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
              /* copy memberships from one user TO another user */
 
              PAUSE 0.

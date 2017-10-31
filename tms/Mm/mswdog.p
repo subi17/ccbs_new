@@ -80,9 +80,9 @@ ACTION:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE main.
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          MESSAGE "Do You REALLY want to start (Y/N) ?" UPDATE ok.
          IF NOT ok THEN NEXT Action.
          ELSE LEAVE Action.

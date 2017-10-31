@@ -647,14 +647,14 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       END.
-      ELSE ASSIGN toimi      = 1
+      ELSE ASSIGN Syst.CUICommon:toimi      = 1
                   llDispMenu = TRUE.
                   
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
          RUN pUpdate.
       END.
             
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

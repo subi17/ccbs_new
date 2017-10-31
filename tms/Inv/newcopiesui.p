@@ -92,17 +92,17 @@ REPEAT WITH FRAME Main:
       DO:
           IF cKeyLabel = "F1" THEN
           DO:
-            toimi = 1.
+            Syst.CUICommon:toimi = 1.
             lFunctionKey = TRUE.
           END.
           ELSE IF cKeyLabel = "F4" THEN
           DO:
-             toimi = 4.
+             Syst.CUICommon:toimi = 4.
              lFunctionKey = TRUE.
           END.
           ELSE IF cKeyLabel = "F5" THEN
           DO:
-             toimi = 5.
+             Syst.CUICommon:toimi = 5.
              lFunctionKey = TRUE.
           END.
           ELSE IF cKeyLabel = "F8" THEN
@@ -131,7 +131,7 @@ REPEAT WITH FRAME Main:
    END. /* EDITING */
    ACTION:
    REPEAT WITH FRAME Main:
-      IF toimi <> 0 THEN
+      IF Syst.CUICommon:toimi <> 0 THEN
       DO:
          DEFINE VARIABLE lLeaveAction AS LOGICAL NO-UNDO. 
          DEFINE VARIABLE lLeaveProgram AS LOGICAL NO-UNDO. 
@@ -152,7 +152,7 @@ REPEAT WITH FRAME Main:
        lcMSISDNDir, lcInvoiceStatusDir, lcInvoiceStatisticsDir,
        lcTmpDir, lcInvoiceDir,
        lcMSISDNFile, 
-       toimi = 5,
+       Syst.CUICommon:toimi = 5,
        OUTPUT iCountCombinations, OUTPUT iCountCLI, OUTPUT iCountMonths ).
    DISP iCountCombinations iCountCLI iCountMonths WITH FRAME Main.
 
@@ -168,7 +168,7 @@ PROCEDURE pDoAction:
      plLeaveAction = FALSE
      plNextMain = FALSE
      plLeaveProgram = FALSE.
-   IF toimi = 1 THEN
+   IF Syst.CUICommon:toimi = 1 THEN
    DO:
       DEFINE VARIABLE iCountFiles AS INTEGER NO-UNDO. 
       DEFINE VARIABLE cFile AS CHARACTER NO-UNDO. 
@@ -198,13 +198,13 @@ PROCEDURE pDoAction:
       END.
    END.
 
-   IF toimi = 8 THEN
+   IF Syst.CUICommon:toimi = 8 THEN
    DO:
       plLeaveProgram = TRUE.
       RETURN.
    END.
 
-   IF toimi = 5 OR toimi = 4 THEN
+   IF Syst.CUICommon:toimi = 5 OR Syst.CUICommon:toimi = 4 THEN
    DO:
       IF lcMsisdnFile = "" THEN
       DO:

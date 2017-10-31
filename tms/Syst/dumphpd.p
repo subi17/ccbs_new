@@ -94,7 +94,7 @@ REPEAT WITH FRAME fHPD:
          
    RUN Syst/ufkey.p.
 
-   IF toimi = 1
+   IF Syst.CUICommon:toimi = 1
    THEN REPEAT WITH FRAME fHPD ON ENDKEY UNDO, LEAVE:
 
       FIND CURRENT DumpHPD EXCLUSIVE-LOCK.
@@ -167,7 +167,7 @@ REPEAT WITH FRAME fHPD:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END.
 

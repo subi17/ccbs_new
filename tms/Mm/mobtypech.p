@@ -656,11 +656,11 @@ REPEAT  WITH FRAME main:
       ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
       
-      IF toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
       
-      IF TOIMI = 5 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 5 THEN DO TRANS:
          
          RUN Mc/charge_dialog.p(
             MobSub.MsSeq,

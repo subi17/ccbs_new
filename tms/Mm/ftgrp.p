@@ -711,7 +711,7 @@ PROCEDURE local-UPDATE-record:
       fDispFatTarget().
       fDispQtyUnit().
      
-      IF NEW FatGroup THEN toimi = 1.
+      IF NEW FatGroup THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
             ehto   = 0
@@ -721,7 +721,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT FatGroup EXCLUSIVE-LOCK.

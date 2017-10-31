@@ -133,8 +133,8 @@ add-group:
           ufk[1] = 512 ufk[2] = 514 ufk[3] = 517 ufk[8] = 8.
           RUN Syst/ufkey.p.
 
-          IF toimi = 8 THEN LEAVE add-group.
-          IF toimi = 1 THEN
+          IF Syst.CUICommon:toimi = 8 THEN LEAVE add-group.
+          IF Syst.CUICommon:toimi = 1 THEN
 add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
@@ -182,14 +182,14 @@ add-single:
                 SMGMember.SmName   = Salesman.SmName.
                 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhSMGMember).
              END.
-          END. /* toimi = 1: add a single group */
+          END. /* Syst.CUICommon:toimi = 1: add a single group */
 
-          ELSE IF toimi = 2 THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
              RUN Mc/nnsggb.p(Salesman.Salesman).
              LEAVE add-group.
           END.
 
-          ELSE IF toimi = 3 THEN DO WITH FRAME copy:
+          ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
              /* copy memberships from one Salesman TO another Salesman */
 
              PAUSE 0.

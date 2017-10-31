@@ -229,7 +229,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
    DO i = 1 TO 9:
        ASSIGN vufk[i] = ufk[i].
    END.
-   ASSIGN vtoimi = toimi.
+   ASSIGN vtoimi = Syst.CUICommon:toimi.
 
    LOOP:
    REPEAT ON ENDKEY UNDO LOOP, LEAVE LOOP:
@@ -257,7 +257,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
       REPEAT:
 
          ehto = 0. RUN Syst/ufkey.p.
-         IF toimi = 1 THEN DO:     /* muutetaan kirjoitinta */
+         IF Syst.CUICommon:toimi = 1 THEN DO:     /* muutetaan kirjoitinta */
 
             RUN select-printer(INPUT-OUTPUT kirloo1).
             IF kirloo1 NE TMSPrinter.PrinterId THEN DO:
@@ -307,7 +307,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT toimi.
          END.
 
-         ELSE IF toimi = 2 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
             FIND FIRST PrintCodes WHERE 
                        PrintCodes.EffName = tehnim1 AND
                        PrintCodes.PrinterId = kirloo1 
@@ -339,7 +339,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
               NEXT toimi.
          END.
 
-         ELSE IF toimi = 3 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
             ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit1 skayt1
                       validate(skayt1 <= input spit1, "Value is TOo large !")
@@ -348,7 +348,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT LOOP.
          END.
 
-         ELSE IF toimi = 4 AND tuni2 NE "" THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 4 AND tuni2 NE "" THEN DO:
             FIND xTMSPrinter WHERE xTMSPrinter.PrinterId = kirloo2 NO-LOCK NO-ERROR.
             FIND NEXT xTMSPrinter NO-LOCK NO-ERROR.
             IF NOT AVAILABLE xTMSPrinter THEN
@@ -368,12 +368,12 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT toimi.
          END.
 
-         ELSE IF toimi = 5 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
             str1 = kirfyy1.
             LEAVE toimi.
          END.
 
-         ELSE IF toimi = 6 AND tuni2 NE "" THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 6 AND tuni2 NE "" THEN DO:
             FIND FIRST xPrintCodes WHERE 
                        xPrintCodes.EffName = tehnim2 AND
                        xPrintCodes.PrinterId = kirloo2 
@@ -396,7 +396,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
               NEXT toimi.
          END.
 
-         ELSE IF toimi = 7 AND tuni2 NE "" THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 7 AND tuni2 NE "" THEN DO:
             ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit2 skayt2
                       validate(skayt2 <= input spit2, "Value is TOo large!")
@@ -405,13 +405,13 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT LOOP.
          END.
 
-         ELSE IF toimi = 8 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
             str1 = "".
             str2 = "".
             LEAVE LOOP.
          END.
 
-      END. /* toimi */
+      END. /* Syst.CUICommon:toimi */
     END. /* IF UpdPerm */
 
     ELSE str1 = kirfyy1.
@@ -574,7 +574,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
    DO i = 1 TO 9:
        ASSIGN ufk[i] = vufk[i].
    END.
-   ASSIGN toimi = vtoimi.
+   ASSIGN Syst.CUICommon:toimi = vtoimi.
 
    IF tuni2 NE "" AND tuni2 NE "direct" THEN HIDE FRAME kirj2 no-PAUSE.
 

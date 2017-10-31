@@ -511,7 +511,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8.
          RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
          FIND CURRENT TerminalConf EXCLUSIVE-LOCK.
          ehto = 9.
@@ -529,7 +529,7 @@ PROCEDURE local-UPDATE-record:
          END.
          LEAVE.
      END.
-     ELSE IF toimi = 7 THEN DO:
+     ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
         RUN Mc/eventsel.p("TerminalConf","#BEGIN" + CHR(255) + TerminalConf.TerminalCode).
      END.
 

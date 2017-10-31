@@ -96,10 +96,10 @@ task:
    repeat WITH FRAME start:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN LEAVE task.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE task.
    END.
    message "Sorting and printing ...".
 

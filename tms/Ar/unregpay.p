@@ -678,10 +678,10 @@ REPEAT WITH FRAME sel:
          ufk[1] = 28  ufk[2] = 30 ufk[3] = 789 ufk[4] = 763
          ufk[5] = 813 ufk[8] = 8. 
          RUN Syst/ufkey.p.
-         IF toimi = 8 THEN NEXT BROWSE.
+         IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
 
          /* Seek a Date */
-         IF toimi = 1 THEN DO:
+         IF Syst.CUICommon:toimi = 1 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku1 = ?.
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -715,7 +715,7 @@ REPEAT WITH FRAME sel:
          END. /* Seek a Date */
 
          /* Seek a customer's name */
-         IF toimi = 2 THEN DO:
+         IF Syst.CUICommon:toimi = 2 THEN DO:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku2 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -747,7 +747,7 @@ REPEAT WITH FRAME sel:
          END. /* Seek a customer's name */
 
          /* Seek an amount */
-         IF toimi = 3 THEN DO:
+         IF Syst.CUICommon:toimi = 3 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku3 = 0.
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -779,7 +779,7 @@ REPEAT WITH FRAME sel:
          END. /* Seek an amount */
 
          /* Seek a reference number */
-         IF toimi = 4 THEN DO:
+         IF Syst.CUICommon:toimi = 4 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku4 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -811,7 +811,7 @@ REPEAT WITH FRAME sel:
          END. /* Seek a reference number */
 
          /* Seek a Bank AccNum */ 
-         IF toimi = 5 THEN DO:
+         IF Syst.CUICommon:toimi = 5 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku5 = "".
             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -1015,7 +1015,7 @@ REPEAT WITH FRAME sel:
             ufkey = TRUE ehto = 9.
             RUN Syst/ufkey.p.
             Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.  
-            on f4 endkey. /* se toimi vain jos ei kutsutaan F9 */
+            on f4 endkey. /* se Syst.CUICommon:toimi vain jos ei kutsutaan F9 */
 
             ASSIGN   
             unbooked   = UnregPaym.PaidAmt - UnregPaym.Booked
@@ -1773,7 +1773,7 @@ PROCEDURE local-UPDATE-record:
          lcRight = "RW" 
       THEN DO:
 
-         IF NEW UnregPaym THEN toimi = 1.
+         IF NEW UnregPaym THEN Syst.CUICommon:toimi = 1.
             
          ELSE DO:
             ASSIGN ufk    = 0
@@ -1784,7 +1784,7 @@ PROCEDURE local-UPDATE-record:
             RUN Syst/ufkey.p.
          END.
          
-         IF toimi = 1 THEN DO:
+         IF Syst.CUICommon:toimi = 1 THEN DO:
             
             ehto = 9. RUN Syst/ufkey.p.
          

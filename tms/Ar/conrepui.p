@@ -213,7 +213,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME valinta NO-PAUSE.    

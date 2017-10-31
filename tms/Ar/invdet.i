@@ -358,7 +358,7 @@ PROCEDURE pInvoiceUpdate:
          ehto   = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
 
          FIND CURRENT Invoice EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
       
@@ -549,7 +549,7 @@ PROCEDURE pInvoiceUpdate:
       END.
 
       /* memo */
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Mc/memo.p(INPUT Invoice.CustNum,
                   INPUT "Invoice",
                   INPUT STRING(Invoice.InvNum),
@@ -557,24 +557,24 @@ PROCEDURE pInvoiceUpdate:
       END.
 
       /* payments */
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
         RUN Ar/payments.p(0,
                      Invoice.InvNum,
                      "").
       END.
       
       /* subinvoices */
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Ar/subinvoice.p (Invoice.InvNum).
       END.
       
       /* invoice rows */
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
          RUN Ar/nnlryp.p(Invoice.InvNum,0).
       END.
       
       /* other actions */
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
       
          otheractions:
          REPEAT ON ENDKEY UNDO, NEXT:
@@ -592,12 +592,12 @@ PROCEDURE pInvoiceUpdate:
             RUN Syst/ufkey.p.
                
             /* reference nbr  */
-            IF toimi = 1 THEN DO: 
+            IF Syst.CUICommon:toimi = 1 THEN DO: 
                RUN Mc/showpr.p(Invoice.CustNum,
                           Invoice.InvNum).
             END.
   
-            ELSE IF toimi = 2 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
                PAUSE 0.
                DISP Invoice.BillRun WITH FRAME fBillRunID.
 
@@ -611,7 +611,7 @@ PROCEDURE pInvoiceUpdate:
             END.
 
             /* credit invoice */
-            ELSE IF toimi = 3 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
                si-recid2 = RECID(Invoice).
               
                RUN Ar/nncimu.p.
@@ -622,36 +622,36 @@ PROCEDURE pInvoiceUpdate:
             END. 
 
             /* claiming history */
-            ELSE IF toimi = 4 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
                RUN Ar/claimhis.p(0,Invoice.InvNum).
             END.
  
             /* invoice row counters */
-            ELSE IF toimi = 5 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
                RUN Inv/invrowcounter.p(0,0,Invoice.InvNum,""). 
             END. 
            
             /* interest events */ 
-            ELSE IF toimi = 6 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
                RUN Ar/nnkoyp.p (Invoice.CustNum).
             END.
              
             /* view send log */
-            ELSE IF toimi = 7 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
                RUN Mc/itsendlo.p(0,
                             Invoice.InvNum,
                             0,
                             0).
             END.
             
-            ELSE IF toimi = 8 THEN LEAVE otheractions.
+            ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE otheractions.
         
          END.  /* otheractions */
  
       END.
       
       /* show eventlog */
-      ELSE IF toimi = 7 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
          RUN Mc/eventsel.p ("Invoice",
                        STRING(iiInvNum)).
       END.

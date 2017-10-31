@@ -76,10 +76,10 @@ repeat WITH FRAME frm:
       repeat WITH FRAME LOOP:
          ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
          RUN Syst/ufkey.p.
-         IF toimi = 1 THEN NEXT  toimi.
-         IF toimi = 5 THEN LEAVE toimi.
-         IF toimi = 8 THEN LEAVE LOOP.
-      END.  /* toimi */
+         IF Syst.CUICommon:toimi = 1 THEN NEXT  toimi.
+         IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
+      END.  /* Syst.CUICommon:toimi */
 
 
   ASSIGN i1 = 0 i2 = 0.

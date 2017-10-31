@@ -1131,7 +1131,7 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p. 
                
-         IF toimi = 1 THEN DO:      
+         IF Syst.CUICommon:toimi = 1 THEN DO:      
            
             IF lcPassword > "" THEN DO:
              
@@ -1214,7 +1214,7 @@ PROCEDURE local-UPDATE-record:
          END.
 
          /* agreement customer */
-         ELSE IF toimi = 2 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
 
             RUN Mm/chgmsowner.p (MsRequest.MsSeq,
                             MsRequest.MsRequest,
@@ -1229,7 +1229,7 @@ PROCEDURE local-UPDATE-record:
 
          
          /* invoice customer */
-         ELSE IF toimi = 3 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          
             RUN Mm/ownerinvc.p (MsRequest.MsRequest,
                            IF lcRight = "RW" AND 
@@ -1240,7 +1240,7 @@ PROCEDURE local-UPDATE-record:
          END. 
           
          /* user customer */
-         ELSE IF toimi = 4 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          
             RUN Mm/owneruser.p (MsRequest.MsRequest,
                            IF lcRight = "RW" AND 
@@ -1251,7 +1251,7 @@ PROCEDURE local-UPDATE-record:
          END. 
           
          /* approve request */
-         ELSE IF TOIMI = 6 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
          
             Ok = FALSE.
             
@@ -1356,7 +1356,7 @@ PROCEDURE local-UPDATE-record:
          END. 
          
          /* cancel request */
-         ELSE IF toimi = 7 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
             ok = FALSE.
             
             MESSAGE "Request will be cancelled, i.e. it cannot be handled"
@@ -1396,7 +1396,7 @@ PROCEDURE local-UPDATE-record:
             END.    
          END.
          
-         ELSE IF toimi = 8 THEN LEAVE.
+         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       END.
       
       LEAVE.

@@ -71,7 +71,7 @@ lcInportTime
 WITH  OVERLAY ROW 1 centered SIDE-LABELS
 TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
  "  TERMINATED MOBILE SUBSCRIPTION  "
- + string(pvm,"99-99-99") + " "
+ + string(TODAY,"99-99-99") + " "
  NO-LABELS 
 FRAME lis.
 

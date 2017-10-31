@@ -150,9 +150,9 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
       IF InvNum2 = 0 OR diff = 0 THEN ufk[5] = 0.
 
       ehto = 0. RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT rajat.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
 
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          
          qty = 0.
          FOR EACH Invoice NO-LOCK USE-INDEX InvDate where
@@ -183,8 +183,8 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
          VIEW-AS ALERT-BOX.
       END. 
       
-      ELSE IF toimi = 8 THEN LEAVE rajat.
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
          ok = FALSE.
          message "Do you REALLY want to change dates with " + string(diff) +
                  " days (Y/N) ?" UPDATE ok.

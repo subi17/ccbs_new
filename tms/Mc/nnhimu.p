@@ -164,15 +164,15 @@ toimi:
    repeat WITH FRAME Limit:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  Limit.
-      IF toimi = 8 THEN LEAVE Limit.
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  Limit.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE Limit.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          BELL.
          ok = FALSE.
          message "Are You sure You want to start counting ? (Y/N) " UPDATE ok.
          IF ok THEN LEAVE toimi.
       END.
-   END.  /* toimi */
+   END.  /* Syst.CUICommon:toimi */
 
    IF pr > 0 THEN perce = 1 + (pr / 100).
    ELSE IF pr < 0 THEN perce = 1 + (-1 * pr / 100).

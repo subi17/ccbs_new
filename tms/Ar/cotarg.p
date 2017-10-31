@@ -534,7 +534,7 @@ PROCEDURE local-UPDATE-record:
           ufk[8]= 8.
       RUN Syst/ufkey.p.          
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          RUN Mc/memo.p("0",
                   INPUT "CoTarg",
                   INPUT STRING(CoTarg.COTargId),

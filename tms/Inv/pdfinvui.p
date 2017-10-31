@@ -309,9 +309,9 @@ repeat:
       ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT LOOP.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
          IF NOT llFormPDF AND NOT llSendeMail THEN DO:
             MESSAGE "At least one action must be chosen."
@@ -362,11 +362,11 @@ repeat:
          END.
 
          LEAVE toimi.
-      END. /* toimi = 5 */
+      END. /* Syst.CUICommon:toimi = 5 */
 
-      ELSE IF toimi = 8 THEN LEAVE LOOP.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
       
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
    RUN Inv/pdfinvcl.p (InvNum1, 
                  InvNum2,

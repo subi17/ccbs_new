@@ -908,9 +908,9 @@ PROCEDURE local-update-record:
            
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
         
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
         
          FIND CURRENT BDest EXCLUSIVE-LOCK.
 
@@ -1004,11 +1004,11 @@ PROCEDURE local-update-record:
       
          IF NEW BDest THEN LEAVE BDestUpdate.
       END.
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Mc/bdesttrans.p(Bdest.BdestId).
       END.
 
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
  
 END PROCEDURE.

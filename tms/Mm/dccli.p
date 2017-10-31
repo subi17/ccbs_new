@@ -535,21 +535,21 @@ REPEAT WITH FRAME sel:
            
            RUN Syst/ufkey.p.   
         
-           IF toimi = 8 THEN NEXT BROWSE.
+           IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
 
            /* termination */
-           IF toimi = 1 THEN DO:
+           IF Syst.CUICommon:toimi = 1 THEN DO:
               RUN Mm/dccliterm.p(DCCLI.MsSeq,
                             DCCLI.DCEvent,
                             DCCLI.PerContractId).
            END.
 
-           ELSE IF toimi = 5 THEN DO:  /* add */
+           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:  /* add */
               RUN Mm/dccliadd.p (iiMsSeq).
               NEXT LOOP.
            END.
 
-           ELSE IF toimi = 6 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
               
               iLoop = fGenerateCounters(INPUT DCCLI.msseq, 
                                         INPUT DCCLI.dcevent).
@@ -560,7 +560,7 @@ REPEAT WITH FRAME sel:
         
            END.
    
-           ELSE IF toimi = 7 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
               Ok = FALSE.
               MESSAGE "Remove all counters starting from today ?"
               VIEW-AS ALERT-BOX QUESTION

@@ -487,7 +487,7 @@ BROWSE:
 
      end. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND qupd
+     else if lookup(nap,"enter,return") > 0 AND Syst.CUICommon:qupd
      then do with frame lis transaction:
         /* change */
         {Syst/uright2.i}

@@ -144,9 +144,9 @@ Action:
        RUN Syst/ufkey.p.
 
 
-       IF toimi = 1 THEN NEXT rajat.
-       IF toimi = 8 THEN LEAVE rajat.
-       IF toimi = 5 THEN DO:
+       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
+       IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+       IF Syst.CUICommon:toimi = 5 THEN DO:
 
           tila = TRUE.
           {Syst/tmsreport.i "leave rajat"}

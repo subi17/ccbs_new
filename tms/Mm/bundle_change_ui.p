@@ -95,7 +95,7 @@ END.
 PAUSE 0.
 VIEW FRAME fCriter. 
 
-toimi = -1.
+Syst.CUICommon:toimi = -1.
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
 
@@ -118,7 +118,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
            ldaChangeDate
    WITH FRAME fCriter.
 
-   IF toimi < 0 THEN toimi = 1.
+   IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
    ELSE DO:
       ASSIGN
          ufk    = 0  
@@ -129,7 +129,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       RUN Syst/ufkey.p.
    END.
    
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
@@ -222,7 +222,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
       IF NOT fValidateBTC(MobSub.MsSeq,
                           lcCurrentBundle,
@@ -343,7 +343,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

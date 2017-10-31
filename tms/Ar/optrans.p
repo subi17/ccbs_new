@@ -12,7 +12,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{Syst/commali.i}  /*qupd = TRUE.*/
+{Syst/commali.i}  /*Syst.CUICommon:qupd = TRUE.*/
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'oplog'}
 

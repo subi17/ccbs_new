@@ -668,7 +668,7 @@ add-new:
              
          RUN Syst/ufkey.p.
  
-          IF toimi = 1 AND lcRight = "RW" THEN DO: /* update it */
+          IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO: /* update it */
              
              ehto = 9. RUN Syst/ufkey.p.
 
@@ -696,11 +696,11 @@ add-new:
              IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhTMSUser).
           END.
           
-          IF toimi = 3 THEN DO:
+          IF Syst.CUICommon:toimi = 3 THEN DO:
              RUN Syst/adduserlimitcui.p ("TMSUser", TMSUser.UserCode).
           END.
 
-          IF toimi = 8 THEN LEAVE.
+          IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
        END.
        

@@ -600,7 +600,7 @@ REPEAT WITH FRAME sel:
         RUN Syst/ufkey.p.
 
         /* Search BY column 1 */
-        IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        IF Syst.CUICommon:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
@@ -623,7 +623,7 @@ REPEAT WITH FRAME sel:
         END. /* Search-1 */
 
         /* Search BY column 2 */
-        ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
@@ -986,7 +986,7 @@ PROCEDURE local-UPDATE-record:
            CoRule.ActivationSMS
       WITH FRAME lis.
       
-      IF NEW CoRule THEN toimi = 1.
+      IF NEW CoRule THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
             ehto   = 0
@@ -997,7 +997,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT CoRule EXCLUSIVE-LOCK.
@@ -1185,7 +1185,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* copy to a new rule */
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
  
          ehto = 9.
          RUN Syst/ufkey.p.

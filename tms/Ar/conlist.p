@@ -676,19 +676,19 @@ REPEAT WITH FRAME sel:
                ufkey  = TRUE.
         RUN Syst/ufkey.p.
 
-        IF toimi = 3 THEN DO:
+        IF Syst.CUICommon:toimi = 3 THEN DO:
            RUN local-find-this (FALSE).
            RUN Ar/conrepui.p (IF AVAILABLE Contact THEN Contact.UserCode ELSE "",
                          IF AVAILABLE Contact THEN Contact.ConDate ELSE ?).
         END.
         
-        ELSE IF toimi = 5 THEN DO:
+        ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
            {Syst/uright2.i}
            must-add = TRUE.
            NEXT LOOP.
         END.
 
-        ELSE IF toimi = 6 THEN DO TRANS:
+        ELSE IF Syst.CUICommon:toimi = 6 THEN DO TRANS:
        
            {Syst/uright2.i}
            delrow = FRAME-LINE.

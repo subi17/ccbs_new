@@ -147,7 +147,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          RETURN.
       END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 {Syst/utuloste.i "return"}
 

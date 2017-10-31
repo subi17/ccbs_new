@@ -102,9 +102,9 @@ toimi:
    repeat:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 7  ufk[4] = 942 ufk[5] = 15 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT rajat.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
 
-      IF toimi = 4 THEN DO WITH FRAME cust.
+      IF Syst.CUICommon:toimi = 4 THEN DO WITH FRAME cust.
          ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
          UPDATE cust-nr[1 FOR 14] EDITING:
@@ -137,8 +137,8 @@ toimi:
          NEXT toimi.
       END.
 
-      IF toimi = 8 THEN UNDO rajat, LEAVE rajat.
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN UNDO rajat, LEAVE rajat.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          BELL.
          message "Are you SURE You want to create this File (Y/N) ? " UPDATE ok.
          IF ok THEN LEAVE toimi.

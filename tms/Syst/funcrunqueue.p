@@ -606,7 +606,7 @@ PROCEDURE local-UPDATE-record:
          FuncRunQueue.QueueDesc   
       WITH FRAME lis.
 
-      IF NEW FuncRunQueue THEN toimi = 1.
+      IF NEW FuncRunQueue THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -620,7 +620,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT FuncRunQueue EXCLUSIVE-LOCK.
@@ -647,15 +647,15 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN Syst/funcrunqrow.p(FuncRunQueue.FRQueueID).
       END.
  
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Syst/funcrunqschedule.p(FuncRunQueue.FRQueueID).
       END.
        
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

@@ -391,15 +391,15 @@ repeat ON ENDKEY UNDO, NEXT:
       
       RUN Syst/ufkey.p.
 
-      IF TOIMI = 1 THEN NEXT loop.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT loop.
 
-      ELSE IF TOIMI = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE FRAME rajat NO-PAUSE.
          HIDE FRAME taka  NO-PAUSE.
          RETURN.
       END.
       
-      ELSE IF TOIMI = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       
          IF llRerun THEN DO:
             ok = FALSE.
@@ -424,7 +424,7 @@ repeat ON ENDKEY UNDO, NEXT:
          
       END.
       
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 END.  /* LOOP */
 
 MESSAGE "Creating direct debit file ...".

@@ -321,7 +321,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[7] = 0  ufk[7] = 0   ufk[8] = 8   ufk[9] = 0 ehto = 0.
 
       ehto = 0. RUN Syst/ufkey.p.
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
+      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
          ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvoice).
@@ -536,7 +536,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
          NEXT toimi.
       END.
 
-      ELSE IF toimi = 3 THEN DO : /* memo */
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO : /* memo */
          RUN Mc/memo.p(INPUT Invoice.Custnum,
                   INPUT "invoice",
                   INPUT STRING(Invoice.InvNum),
@@ -544,7 +544,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
          NEXT toimi.  
       END.
 
-      ELSE IF toimi = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 AND lcRight = "RW" THEN DO:
 
          /* create claiming history for claim cancellation */
          IF Invoice.ClaimState = 15 AND ldOldClaim < 15 THEN DO:
@@ -570,12 +570,12 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
          NEXT LOOP.
       END.
-      ELSE IF toimi = 6 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 AND lcRight = "RW" THEN DO:
          CLEAR FRAME Invoice no-pause.
          UNDO LOOP, NEXT LOOP.
       END.
-      ELSE IF toimi = 8 THEN UNDO LOOP, LEAVE LOOP.
-   END. /* toimi */
+      ELSE IF Syst.CUICommon:toimi = 8 THEN UNDO LOOP, LEAVE LOOP.
+   END. /* Syst.CUICommon:toimi */
 END. /* LOOP */
 HIDE FRAME Invoice no-pause.
 

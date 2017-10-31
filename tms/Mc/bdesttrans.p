@@ -560,7 +560,7 @@ END PROCEDURE.
 /**/
 PROCEDURE local-UPDATE-record:
    
-   IF NEW bDestTrans THEN toimi = -1.
+   IF NEW bDestTrans THEN Syst.CUICommon:toimi = -1.
    
    MaintMenu:
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -575,7 +575,7 @@ PROCEDURE local-UPDATE-record:
            bdesttrans.TranslateNumber
       WITH FRAME lis.
 
-      IF toimi < 0 THEN toimi = 1.
+      IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
       ELSE DO:
          ASSIGN
             ufk    = 0
@@ -591,7 +591,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
 
-      IF toimi = 1 AND lcRight = "RW" THEN DO: 
+      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO: 
          /*REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:*/
             FIND CURRENT bDestTrans EXCLUSIVE-LOCK.
             
@@ -621,7 +621,7 @@ PROCEDURE local-UPDATE-record:
             ASSIGN bdesttrans.BDestId = iiBDestID.
             LEAVE.
          END.
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END. 
 
 

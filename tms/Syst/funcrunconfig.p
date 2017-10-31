@@ -647,7 +647,7 @@ PROCEDURE local-UPDATE-record:
          FuncRunConfig.Description   
       WITH FRAME lis.
 
-      IF NEW FuncRunConfig THEN toimi = 1.
+      IF NEW FuncRunConfig THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -661,7 +661,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT FuncRunConfig EXCLUSIVE-LOCK.
@@ -693,15 +693,15 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Syst/funcrunparam.p (FuncRunConfig.FRConfigID).
       END.
  
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Syst/funcrunexec.p (FuncRunConfig.FRConfigID,0).
       END.
        
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

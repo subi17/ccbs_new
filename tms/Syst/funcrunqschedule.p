@@ -640,9 +640,9 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
 
          UpdateField:
          REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
@@ -753,22 +753,22 @@ PROCEDURE local-UPDATE-record:
             RUN pInvoiceTypeParameters.
       END.
 
-      ELSE IF toimi = 2 THEN 
+      ELSE IF Syst.CUICommon:toimi = 2 THEN 
          RUN Mc/errorlog.p ("FuncRunQSchedule",
                          STRING(FuncRunQSchedule.FRQScheduleID),
                          "").
 
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN Syst/funcrunexec.p (0,FuncRunQSchedule.FRQScheduleID).
          IF RETURN-VALUE = "Updated" THEN 
             LEAVE. 
       END.
       
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Syst/funcrunqsparam.p (FuncRunQSchedule.FRQScheduleID).
       END.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
          RUN pUpdateStatus(FuncRunQSchedule.FRQScheduleID,
                            IF FuncRunQSchedule.RunState = "Paused"
                            THEN "Running"
@@ -777,14 +777,14 @@ PROCEDURE local-UPDATE-record:
          IF i > 0 THEN LEAVE.                  
       END.
       
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
          RUN pUpdateStatus(FuncRunQSchedule.FRQScheduleID,
                            "Cancelled",
                            OUTPUT i).
          IF i > 0 THEN LEAVE.                  
       END.
       
-      ELSE IF toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
    END.
    
 END PROCEDURE.

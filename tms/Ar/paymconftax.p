@@ -563,12 +563,12 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
          
-         IF toimi = 8 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       END.
 
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
       
          ehto = 9.
          RUN Syst/ufkey.p.

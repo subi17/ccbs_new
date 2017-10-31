@@ -729,7 +729,7 @@ PROCEDURE local-UPDATE-record:
 
    DEF VAR lcValue AS CHAR NO-UNDO.
 
-   IF NEW DiscountPlan THEN toimi = -1.
+   IF NEW DiscountPlan THEN Syst.CUICommon:toimi = -1.
    
    MaintMenu:
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -778,7 +778,7 @@ PROCEDURE local-UPDATE-record:
          llCCDisplay
       WITH FRAME lis.
 
-      IF toimi < 0 THEN toimi = 1.
+      IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
       ELSE DO:
          ASSIGN 
             ufk    = 0
@@ -794,7 +794,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT DiscountPlan EXCLUSIVE-LOCK.
@@ -924,28 +924,28 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Mc/dpsubject.p (DiscountPlan.DPId).
       END.
       
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN Mc/dptarget.p (DiscountPlan.DPId).
       END.
  
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Mc/dprate.p (DiscountPlan.DPId).
       END.
 
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
          RUN Mc/dpmember.p (DiscountPlan.DPId,"","").
       END.
       
       /* translations */
-      ELSE IF toimi = 7 THEN DO:  
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:  
          RUN Mc/invlang.p(31,STRING(DiscountPlan.DPId)).
       END.
        
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

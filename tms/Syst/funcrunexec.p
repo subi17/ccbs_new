@@ -751,9 +751,9 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
 
          UpdateField:
          REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
@@ -786,17 +786,17 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN 
+      ELSE IF Syst.CUICommon:toimi = 2 THEN 
          RUN Mc/errorlog.p ("FuncRunExec",
                          STRING(FuncRunExec.FRExecID),
                          "").
 
-      ELSE IF toimi = 3 THEN RUN Syst/funcrunexeclog.p(FuncRunExec.FRExecID).
+      ELSE IF Syst.CUICommon:toimi = 3 THEN RUN Syst/funcrunexeclog.p(FuncRunExec.FRExecID).
       
-      ELSE IF toimi = 4 THEN RUN Syst/funcrunprocess.p(FuncRunExec.FRConfigID,
+      ELSE IF Syst.CUICommon:toimi = 4 THEN RUN Syst/funcrunprocess.p(FuncRunExec.FRConfigID,
                                                   FuncRunExec.FRExecID).
         
-      ELSE IF toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
    END.
 
    RETURN lcReturn.

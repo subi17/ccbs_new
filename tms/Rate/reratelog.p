@@ -616,7 +616,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 8 THEN LEAVE.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

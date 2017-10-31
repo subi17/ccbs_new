@@ -99,11 +99,11 @@ repeat:
       ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      if toimi = 8 then do:
+      if Syst.CUICommon:toimi = 8 then do:
          next loop.
       end.
 
-      if toimi = 1 then do:
+      if Syst.CUICommon:toimi = 1 then do:
          assign ufkey = true ehto = 9.
          RUN Syst/ufkey.p.
 

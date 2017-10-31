@@ -176,7 +176,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      if toimi = 1 then do:
+      if Syst.CUICommon:toimi = 1 then do:
          ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame rajat on endkey undo, leave:
@@ -329,14 +329,14 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       end.
 
 
-      if toimi = 5 then do:
+      if Syst.CUICommon:toimi = 5 then do:
 
          leave toimi.
       end.
 
-      if toimi = 8 then return.
+      if Syst.CUICommon:toimi = 8 then return.
 
-end. /* toimi */
+end. /* Syst.CUICommon:toimi */
 
 
 IF extcustgrp = FALSE THEN 

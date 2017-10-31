@@ -614,9 +614,9 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
          
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
       
          FIND CURRENT TMSCodes EXCLUSIVE-LOCK.   
 

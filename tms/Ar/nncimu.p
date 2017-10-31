@@ -598,14 +598,14 @@ repeat WITH FRAME rajat:
       
       RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
 
-      ELSE IF toimi = 1 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 1 THEN DO:
          llNewInv = false.
          NEXT  rajat.
       END.
 
-      ELSE IF toimi = 2 THEN DO TRANS: /* memo */
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO TRANS: /* memo */
          FIND Invoice WHERE Invoice.InvNum = liInvNum
          NO-LOCK NO-ERROR.
          RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -616,7 +616,7 @@ repeat WITH FRAME rajat:
       END.
 
       /* cancel */
-      else if toimi = 7 then do:
+      else if Syst.CUICommon:toimi = 7 then do:
          liInvNum = 0.
          clear frame rajat no-pause.
          IF liCalled > 0 THEN LEAVE rajat.
@@ -624,13 +624,13 @@ repeat WITH FRAME rajat:
       end. 
 
       /* partial crediting; mark invoice lines TO be credited */
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Ar/partcred.p(liInvNum,
                       input-output table wMarked).
          fCreditAmt(). 
       END.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
          /* credited amount can't be more than invoice amount */
          IF abs(xCrAmt) GT abs(Invoice.InvAmt) THEN DO:
@@ -682,7 +682,7 @@ repeat WITH FRAME rajat:
          IF ok THEN LEAVE toimi.
 
       END.
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
    /* Ask FOR unmarking the Billed rows */
    IF NOT State AND llAllowRel AND 

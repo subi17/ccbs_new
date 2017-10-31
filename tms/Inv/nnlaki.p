@@ -719,9 +719,9 @@ repeat:
       ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT LOOP.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
          IF INPUT asno2  = 0  THEN lano2 = 99999999.
          if input asno2   = "" THEN asno2  = 999999999.
          llok = FALSE.
@@ -754,10 +754,10 @@ repeat:
          END.
 
          LEAVE toimi.
-      END. /* toimi = 5 */
+      END. /* Syst.CUICommon:toimi = 5 */
 
-      ELSE IF toimi = 8 THEN LEAVE LOOP.
-   END. /* toimi */
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
+   END. /* Syst.CUICommon:toimi */
 
 
 tila = TRUE.

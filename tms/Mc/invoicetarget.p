@@ -589,12 +589,12 @@ PROCEDURE local-VIEW-record:
       
       RUN Syst/ufkey.p.
       
-      IF toimi = 6 THEN DO: 
+      IF Syst.CUICommon:toimi = 6 THEN DO: 
          RUN Mc/eventsel.p("invoicetarget", 
                         STRING(InvoiceTarget.InvoiceTargetID)).
       END.   
    
-      IF toimi = 7 THEN do:
+      IF Syst.CUICommon:toimi = 7 THEN do:
 
          DEFINE VARIABLE lcMenuOptions AS CHARACTER NO-UNDO. 
          DEFINE VARIABLE lcSelected AS CHARACTER NO-UNDO. 
@@ -650,7 +650,7 @@ PROCEDURE local-VIEW-record:
 
       END.   
       
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       
    END.
 

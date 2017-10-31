@@ -208,23 +208,23 @@ toimi:
 
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN  NEXT  RAJAT.
-      IF toimi = 8 THEN  LEAVE RAJAT.
+      IF Syst.CUICommon:toimi = 1 THEN  NEXT  RAJAT.
+      IF Syst.CUICommon:toimi = 8 THEN  LEAVE RAJAT.
 
-      IF toimi = 4 OR toimi = 6 OR toimi = 7 THEN DO:
+      IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 6 OR Syst.CUICommon:toimi = 7 THEN DO:
          /* Ask Name FOR Excel / XOR File */
-         if toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
+         if Syst.CUICommon:toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
          ehto = 9. RUN Syst/ufkey.p.
          UPDATE exFile WITH FRAME rajat.
          if exFile = "" THEN NEXT toimi.
       END.
 
       /* refine the parameters */
-      IF toimi = 3 OR
-         toimi = 4 OR
-         toimi = 5 OR
-         toimi = 6 OR
-         toimi = 7
+      IF Syst.CUICommon:toimi = 3 OR
+         Syst.CUICommon:toimi = 4 OR
+         Syst.CUICommon:toimi = 5 OR
+         Syst.CUICommon:toimi = 6 OR
+         Syst.CUICommon:toimi = 7
       THEN DO:
 
          IF asno1 = ? THEN asno1 = 0.
@@ -236,7 +236,7 @@ toimi:
       END.
 
       /* large printout */
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          ASSIGN
          tuni1 = "nnasll"
          tuni2 = "".
@@ -258,7 +258,7 @@ toimi:
       END.
 
       /* Large Excel/ascii printout */
-      IF toimi = 6 THEN DO:
+      IF Syst.CUICommon:toimi = 6 THEN DO:
          RUN Mc/nnasle.p(CustGroup,
                     asno1,asno2,
                     myyja1,myyja2,
@@ -275,9 +275,9 @@ toimi:
       END.
 
       /* A brief list (either onto paper of Excel) */
-      IF toimi = 3 OR toimi = 4 THEN DO:
+      IF Syst.CUICommon:toimi = 3 OR Syst.CUICommon:toimi = 4 THEN DO:
 
-         IF toimi = 3 THEN DO: /* ask AND open the printer */
+         IF Syst.CUICommon:toimi = 3 THEN DO: /* ask AND open the printer */
             ASSIGN
             tuni1 = "nnasls"
             tuni2 = "".
@@ -296,13 +296,13 @@ toimi:
                      InvGroup,
                      Reseller,
                      order1,order2,
-                     (toimi = 4),
+                     (Syst.CUICommon:toimi = 4),
                      exFile).
          LEAVE TOIMI.
       END.
 
       /* EXPORT customer codes FOR XOR */
-      IF toimi = 7 THEN DO:
+      IF Syst.CUICommon:toimi = 7 THEN DO:
          IF cday NE ? THEN DO:
             message "NOTE: No call check with this function - press ENTER !".
             PAUSE no-message.
@@ -322,10 +322,10 @@ toimi:
          LEAVE toimi.
       END.
 
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
    /* CLOSE the printer STREAM IF a paper report was done */
-   IF toimi = 3 OR toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 3 OR Syst.CUICommon:toimi = 5 THEN DO:
       tila = FALSE.
       {Syst/tmsreport.i}.
    END.

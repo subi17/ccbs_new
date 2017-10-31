@@ -106,7 +106,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
       
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
+      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
          Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
          ehto = 9. RUN Syst/ufkey.p.
 
@@ -134,7 +134,7 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
          NEXT toimi.
       END.
 
-      ELSE IF toimi = 3 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 AND lcRight = "RW" THEN DO:
       
         RUN Mc/memo.p(INPUT 0,
                  INPUT "Company",
@@ -143,13 +143,13 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
       END.
 
-      ELSE IF toimi = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 AND lcRight = "RW" THEN DO:
          ASSIGN
          Syst.CUICommon:ynimi = CompName. /* common-alueelle */
          LEAVE OLRefresh.
       END.
 
-      ELSE IF toimi = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
          
          llOk = FALSE.
          MESSAGE "Do You want to leave without saving ?"
@@ -162,6 +162,6 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
          IF llOk THEN UNDO OLRefresh, LEAVE OLRefresh.
       END.
          
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 END. /* OLRefresh */
 

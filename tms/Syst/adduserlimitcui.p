@@ -514,9 +514,9 @@ PROCEDURE local-update-record:
              
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.CUICommon:toimi = 1.
       
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
+      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
        
         IF UserLimit.LimitTarget <> icLimitTarget THEN DO:
              ASSIGN ok = FALSE.
@@ -568,7 +568,7 @@ PROCEDURE local-update-record:
          
       END.
 
-      IF toimi = 3 AND lcRight = "RW" THEN DO:
+      IF Syst.CUICommon:toimi = 3 AND lcRight = "RW" THEN DO:
         
          /* we should check the the user limit correspond to same limit target */
          IF UserLimit.LimitTarget <> icLimitTarget THEN DO:

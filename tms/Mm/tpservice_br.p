@@ -297,9 +297,9 @@ REPEAT WITH FRAME sel:
 
             RUN Syst/ufkey.p. 
 
-            IF toimi = 1  THEN 
+            IF Syst.CUICommon:toimi = 1  THEN 
                 RUN Mm/tpservicemessage.p(TPService.MsSeq, TPService.ServSeq).
-            ELSE IF toimi = 8 THEN 
+            ELSE IF Syst.CUICommon:toimi = 8 THEN 
                LEAVE.
             
             ASSIGN  Memory = recid(TPService) must-print = TRUE.

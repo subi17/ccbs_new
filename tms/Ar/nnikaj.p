@@ -140,7 +140,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      if toimi = 1 then do:
+      if Syst.CUICommon:toimi = 1 then do:
          ehto = 9. RUN Syst/ufkey.p.
          update 
             day-to
@@ -244,7 +244,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 
       end.
 
-      else if toimi = 5 then do:
+      else if Syst.CUICommon:toimi = 5 then do:
          IF NOT llOnlySummary THEN DO:
             assign
             Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
@@ -277,9 +277,9 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          leave toimi.
       end.
 
-      else if toimi = 8 then return.
+      else if Syst.CUICommon:toimi = 8 then return.
 
-end. /* toimi */
+end. /* Syst.CUICommon:toimi */
 
 ehto = 5.
 RUN Syst/ufkey.p.

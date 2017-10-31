@@ -426,7 +426,7 @@ REPEAT WITH FRAME sel:
            RUN Syst/ufkey.p.
                
            /* credit invoice */
-           IF toimi = 3 THEN DO:
+           IF Syst.CUICommon:toimi = 3 THEN DO:
 
               FIND Invoice OF SubInvoice NO-LOCK. 
               ASSIGN si-recid2 = RECID(Invoice)
@@ -443,7 +443,7 @@ REPEAT WITH FRAME sel:
            END. 
     
            /* calculate estimated Interest for unpaid invoices */
-           ELSE IF toimi = 5 THEN DO:       
+           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:       
 
               ASSIGN ldDebt  = SubInvoice.InvAmt - SubInvoice.PaidAmt
                      ldtDate = TODAY.
@@ -505,7 +505,7 @@ REPEAT WITH FRAME sel:
            END.
  
             
-           ELSE IF toimi = 8 THEN LEAVE otheractions.
+           ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE otheractions.
         
         end.
         
@@ -652,7 +652,7 @@ PROCEDURE local-UPDATE-record:
          ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE FRAME fInvDet NO-PAUSE.
          LEAVE.   
       END.

@@ -167,9 +167,9 @@ toimi:
       END.
 
       RUN Syst/ufkey.p.
-      IF toimi = 8 THEN LEAVE krit.
-      IF toimi = 1 THEN NEXT  krit.
-      IF toimi = 4 THEN DO WITH FRAME act.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE krit.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  krit.
+      IF Syst.CUICommon:toimi = 4 THEN DO WITH FRAME act.
     Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
     CLEAR FRAME act ALL no-pause.
     DO i = 1 TO fsize WITH FRAME act.
@@ -189,7 +189,7 @@ toimi:
     disp "<" + bnfile + ">" @ bnfile WITH FRAME krit.
     NEXT toimi.
       END.
-      IF toimi = 5 THEN LEAVE toimi.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
    END.
 
 

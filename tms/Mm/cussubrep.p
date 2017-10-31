@@ -108,17 +108,17 @@ toimi:
                      ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 5 THEN do:
+      IF Syst.CUICommon:toimi = 5 THEN do:
          leave toimi.
       END.
 
-      IF toimi = 8 THEN do:
+      IF Syst.CUICommon:toimi = 8 THEN do:
          HIDE MESSAGE NO-PAUSE.
          HIDE FRAME rajat NO-PAUSE.
          HIDE FRAME main NO-PAUSE.
          return.
       END.
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
    /* REPORT FILE INFORMATION */
    OUTPUT STREAM EXCEL TO VALUE(PATH).

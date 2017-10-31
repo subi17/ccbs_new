@@ -93,11 +93,11 @@ REPEAT WITH FRAME stat:
    REPEAT WITH FRAME stat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[8] = 8 ufk[5] = 9033  ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN LEAVE action.
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN LEAVE action.
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          LEAVE loop.
       END.
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          MESSAGE "Status changed from " mobsub.msstatus " to " msstatus 
          VIEW-AS ALERT-BOX.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).

@@ -543,7 +543,7 @@ REPEAT WITH FRAME sel:
                  ehto   = 0.
           RUN Syst/ufkey.p.        
           
-          IF toimi = 5 AND ldtFromDate NE ? THEN DO:
+          IF Syst.CUICommon:toimi = 5 AND ldtFromDate NE ? THEN DO:
           
              RUN pCopyComponents (CTServPac.ServPac,
                                   ldtFromDate).
@@ -551,7 +551,7 @@ REPEAT WITH FRAME sel:
              LEAVE.
           END.
 
-          ELSE IF toimi = 8 THEN LEAVE.
+          ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
        END.
 
@@ -707,7 +707,7 @@ PROCEDURE local-UPDATE-record:
          ehto   = 0.
       RUN Syst/ufkey.p.
          
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
       
          ehto = 9. RUN Syst/ufkey.p.
       

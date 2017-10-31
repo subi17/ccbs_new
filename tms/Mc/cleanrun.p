@@ -299,12 +299,12 @@ toimi:
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
-      if toimi = 1 then do:
+      if Syst.CUICommon:toimi = 1 then do:
          kysy_rajat = true.
          next toimi.
       end.
 
-      if toimi = 5 then do:
+      if Syst.CUICommon:toimi = 5 then do:
 
          /* reject if lanro is ZERO */
          if lasno = "" then do:
@@ -317,14 +317,14 @@ toimi:
 
       end.
 
-      if toimi = 8 then do:
+      if Syst.CUICommon:toimi = 8 then do:
          hide message no-pause.
          hide frame rajat no-pause.
          hide frame taka no-pause.
          return.
       end.
 
-   end. /* toimi */
+   end. /* Syst.CUICommon:toimi */
 
 hide frame lasno no-pause.
 

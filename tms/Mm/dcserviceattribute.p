@@ -714,9 +714,9 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 1 THEN LEAVE.
          
-         ELSE IF toimi = 8 THEN LEAVE ActionDetails.
+         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE ActionDetails.
       END.
 
       FIND CURRENT DCServiceAttribute EXCLUSIVE-LOCK.

@@ -471,11 +471,11 @@ repeat WITH FRAME sel:
         RUN Syst/ufkey.p.
         ufkey = TRUE.
 
-        IF toimi = 8 THEN LEAVE etsi.
+        IF Syst.CUICommon:toimi = 8 THEN LEAVE etsi.
 
 
         /* Haku 1 */
-        IF toimi = 1 THEN DO:  /* haku sarakk. 1 */
+        IF Syst.CUICommon:toimi = 1 THEN DO:  /* haku sarakk. 1 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            lcExtInvID = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -504,7 +504,7 @@ repeat WITH FRAME sel:
         END. /* Haku sar. 1 */
 
         /* Haku sarakk. 2 */
-        IF toimi = 2 THEN DO:  /* haku sar. 2 */
+        IF Syst.CUICommon:toimi = 2 THEN DO:  /* haku sar. 2 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            InvDate = ?.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -531,7 +531,7 @@ repeat WITH FRAME sel:
         END. /* Haku sar. 2 */
 
         /* Haku 3 */
-        ELSE IF toimi = 3 THEN DO:  /* haku sarakk. 3 */
+        ELSE IF Syst.CUICommon:toimi = 3 THEN DO:  /* haku sarakk. 3 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakuCustNum = 0.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -554,7 +554,7 @@ repeat WITH FRAME sel:
         END. /* Haku sar. 3 */
 
         /* Haku sarakk. 4 */
-        IF toimi = 4 THEN DO:  /* haku sar. 4 */
+        IF Syst.CUICommon:toimi = 4 THEN DO:  /* haku sar. 4 */
            InvDate = ?.
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakunetto = 0.

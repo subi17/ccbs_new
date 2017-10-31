@@ -70,9 +70,9 @@ toimi:
    repeat WITH FRAME rajat:
       ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
    END.
 
    PAUSE 0.

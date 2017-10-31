@@ -222,7 +222,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       RETURN.
    END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 ehto = 5.
 RUN Syst/ufkey.p.

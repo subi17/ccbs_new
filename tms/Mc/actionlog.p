@@ -769,7 +769,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
          ehto = 9.
@@ -818,7 +818,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
         
          liInfoPos = 1.
 
@@ -853,16 +853,16 @@ PROCEDURE local-UPDATE-record:
  
             RUN Syst/ufkey.p.
         
-            IF toimi = 4 THEN NEXT. 
+            IF Syst.CUICommon:toimi = 4 THEN NEXT. 
             
-            ELSE IF toimi = 8 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
                HIDE FRAME fInfo NO-PAUSE.
                LEAVE.
             END.
          END.   
       END.
 
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

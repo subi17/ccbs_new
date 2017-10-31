@@ -790,7 +790,7 @@ PROCEDURE local-UPDATE-record:
          ehto   = 0.
       RUN Syst/ufkey.p.
          
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       ChangeType:
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 

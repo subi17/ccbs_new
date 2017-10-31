@@ -791,12 +791,12 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 1 THEN LEAVE.
          
-         ELSE IF toimi = 4 THEN 
+         ELSE IF Syst.CUICommon:toimi = 4 THEN 
             RUN Syst/requestactionrule.p(RequestAction.RequestActionID).
             
-         ELSE IF toimi = 8 THEN LEAVE ActionDetails.
+         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE ActionDetails.
       END.
 
       FIND CURRENT RequestAction EXCLUSIVE-LOCK.

@@ -564,7 +564,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
       
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

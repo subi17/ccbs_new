@@ -421,10 +421,10 @@ BROWSE:
 
         IF AVAILABLE BillTarget AND BillTarget.RatePlan NE "" THEN DO:
             /* set update-mode as prohibited */
-            ASSIGN llRight = qupd
-                   qupd    = FALSE.
+            ASSIGN llRight = Syst.CUICommon:qupd
+                   Syst.CUICommon:qupd    = FALSE.
             RUN Mc/plistconf.p(BillTarget.RatePlan).
-            qupd = llRight.
+            Syst.CUICommon:qupd = llRight.
         END.
         ELSE MESSAGE "No rating information is available."
              VIEW-AS ALERT-BOX ERROR.

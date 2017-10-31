@@ -654,13 +654,13 @@ BROWSE:
           
           RUN Syst/ufkey.p.   
           
-          IF toimi = 8 THEN DO:
+          IF Syst.CUICommon:toimi = 8 THEN DO:
              HIDE FRAME lis NO-PAUSE.
              LEAVE.
           ENd.
 
-          IF toimi = 2  THEN RUN Mm/persondata.p(TermMobsub.msseq).
-          ELSE IF toimi = 3  THEN DO:
+          IF Syst.CUICommon:toimi = 2  THEN RUN Mm/persondata.p(TermMobsub.msseq).
+          ELSE IF Syst.CUICommon:toimi = 3  THEN DO:
              RUN Mm/msrequest.p(-1,
                            ?, /* reqstat ? for all */
                            TermMobsub.MsSeq,
@@ -670,13 +670,13 @@ BROWSE:
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
-          ELSE IF toimi = 4  THEN RUN Mm/termsubser.p(TermMobsub.MsSeq).
-          ELSE IF Toimi = 5  THEN RUN Mc/memo.p(INPUT TermMobsub.CustNum,
+          ELSE IF Syst.CUICommon:toimi = 4  THEN RUN Mm/termsubser.p(TermMobsub.MsSeq).
+          ELSE IF Syst.CUICommon:toimi = 5  THEN RUN Mc/memo.p(INPUT TermMobsub.CustNum,
                                            INPUT "TermMobsub",
                                            INPUT STRING(TermMobsub.MsSeq),
                                            INPUT "TermMobsub").
 
-          ELSE IF toimi = 6 THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
        
              CALLBROWSE:
              REPEAT WITH FRAME lis ON ENDKEY UNDO, RETURN:
@@ -695,30 +695,30 @@ BROWSE:
                    ufk[8]= 8.
                 RUN Syst/ufkey.p.   
         
-                IF toimi = 8 THEN DO:
+                IF Syst.CUICommon:toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN Mm/msisdniv.p(TermMobsub.MsSeq).
+                IF       Syst.CUICommon:toimi = 1  THEN RUN Mm/msisdniv.p(TermMobsub.MsSeq).
 
-                ELSE IF toimi = 2 AND avail TermMobsub  THEN
+                ELSE IF Syst.CUICommon:toimi = 2 AND avail TermMobsub  THEN
                    RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
        
-                ELSE IF toimi = 3 AND avail TermMobsub  THEN 
+                ELSE IF Syst.CUICommon:toimi = 3 AND avail TermMobsub  THEN 
                    RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"DATE").
        
-                ELSE IF toimi = 4 AND avail TermMobsub  THEN
+                ELSE IF Syst.CUICommon:toimi = 4 AND avail TermMobsub  THEN
                    RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"CCN").
 
-                ELSE IF toimi = 6 THEN 
+                ELSE IF Syst.CUICommon:toimi = 6 THEN 
                    RUN Mm/persondata.p(TermMobsub.msseq).
         
              END.
           END.
-          ELSE IF toimi = 7 AND ufk[7] > 0 AND avail TermMobsub  THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 7 AND ufk[7] > 0 AND avail TermMobsub  THEN DO:
              RUN Mm/mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
           END.
-          ELSE IF toimi = 6 THEN 
+          ELSE IF Syst.CUICommon:toimi = 6 THEN 
              RUN Mm/persondata.p(TermMobsub.msseq).
        END.
        ASSIGN  Memory = recid(TermMobsub) must-print = TRUE.

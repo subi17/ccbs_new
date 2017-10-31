@@ -691,7 +691,7 @@ PROCEDURE local-UPDATE-record:
            ufk[8] = 8.
            ehto = 1. RUN Syst/ufkey.p.
            
-           IF toimi = 6 THEN DO:
+           IF Syst.CUICommon:toimi = 6 THEN DO:
              
               FIND OrderAccessory WHERE RECID(OrderAccessory) = 
                      ttAccessory.DbRec NO-LOCK.
@@ -701,7 +701,7 @@ PROCEDURE local-UPDATE-record:
 
            END.
            
-           ELSE IF toimi = 8 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
               LEAVE VIEW-LOOP.
            END.
          

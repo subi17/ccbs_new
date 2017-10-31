@@ -723,7 +723,7 @@ PROCEDURE local-UPDATE-record:
       fBIName(BRTestCase.BillCode).
       fOperator(BRTestCase.RelationalOperator).
 
-      IF NEW BRTestCase THEN toimi = 1.
+      IF NEW BRTestCase THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -737,7 +737,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT BRTestCase EXCLUSIVE-LOCK.
@@ -803,13 +803,13 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN RUN pCopyCriteria(BRTestCase.BRTestCaseID).
+      ELSE IF Syst.CUICommon:toimi = 2 THEN RUN pCopyCriteria(BRTestCase.BRTestCaseID).
 
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Inv/brtestcriteria.p (0,BRTestCase.BRTestCaseID).
       END.
        
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    
@@ -850,7 +850,7 @@ PROCEDURE pCopyCriteria:
          ehto = 0.
       RUN Syst/ufkey.p. 
    
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          IF liCopyBRTestCaseID = 0 OR NOT AVAILABLE bCopyFrom THEN DO:
             MESSAGE "Source for the copying has not been selected"
             VIEW-AS ALERT-BOX ERROR.
@@ -896,7 +896,7 @@ PROCEDURE pCopyCriteria:
          LEAVE.
       END.
       
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
    
    HIDE FRAME fCopy NO-PAUSE.

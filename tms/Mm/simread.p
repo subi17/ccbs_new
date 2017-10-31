@@ -327,10 +327,10 @@ REPEAT WITH FRAME Main:
       ASSIGN
       ufk =  0 ufk[1] = 7 ufk[4] = 241
       ufk[5] = 795 ufk[8] = 8 ehto = 0.  RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF toimi = 4 THEN LEAVE Action.
-      IF toimi = 5 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 4 THEN LEAVE Action.
+      IF Syst.CUICommon:toimi = 5 THEN 
       DO:
          ok = FALSE.
          message "Do You REALLY want to start the load run (Y/N) ?" UPDATE ok.
@@ -375,7 +375,7 @@ REPEAT WITH FRAME Main:
        ProcessedDir, cSIMFileNamePartNoExt, cSIMFileExtPart).
 
    PhaseLoop:
-   DO  phase = 1 TO (IF toimi = 4 THEN 1 ELSE 2):    /* 1: preceeding check;  
+   DO  phase = 1 TO (IF Syst.CUICommon:toimi = 4 THEN 1 ELSE 2):    /* 1: preceeding check;  
                                                         2: UPDATE */
       IF phase = 2 THEN 
       DO:
@@ -657,7 +657,7 @@ REPEAT WITH FRAME Main:
       IF lError THEN
       DO:
          MESSAGE lcErrorMsg VIEW-AS ALERT-BOX BUTTONS OK.
-         IF toimi = 5 THEN
+         IF Syst.CUICommon:toimi = 5 THEN
             LEAVE PhaseLoop.
       END.
 
@@ -685,7 +685,7 @@ REPEAT WITH FRAME Main:
       END.
    END. /* phase ... */
 
-   IF toimi = 4 THEN 
+   IF Syst.CUICommon:toimi = 4 THEN 
    DO:
       
       IF lError THEN 
@@ -718,10 +718,10 @@ REPEAT WITH FRAME Main:
       phase = -1. /* to prevent going back to update mode */
    END.
 
-   IF toimi = 5 AND d-icc + d-IMSI = 0 AND NOT lError THEN 
+   IF Syst.CUICommon:toimi = 5 AND d-icc + d-IMSI = 0 AND NOT lError THEN 
       lRealUpdate = TRUE.
 
-   IF toimi = 5 OR d-icc + d-IMSI > 0 THEN LEAVE Main.
+   IF Syst.CUICommon:toimi = 5 OR d-icc + d-IMSI > 0 THEN LEAVE Main.
 END. /* Main */
 
 HIDE MESSAGE.

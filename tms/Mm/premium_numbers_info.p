@@ -626,7 +626,7 @@ PROCEDURE local-UPDATE-record:
           PremiumNumber.ValidFrom
           PremiumNumber.ValidTo WITH FRAME lis.
 
-     IF NEW PremiumNumber THEN toimi = 1.
+     IF NEW PremiumNumber THEN Syst.CUICommon:toimi = 1.
      ELSE DO:
         ASSIGN 
             ufk    = 0
@@ -637,7 +637,7 @@ PROCEDURE local-UPDATE-record:
         RUN Syst/ufkey.p.
      END.
 
-     IF toimi = 1 THEN 
+     IF Syst.CUICommon:toimi = 1 THEN 
      REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT PremiumNumber EXCLUSIVE-LOCK.
@@ -686,7 +686,7 @@ PROCEDURE local-UPDATE-record:
          IF NEW PremiumNumber THEN LEAVE MaintMenu.
          LEAVE.
      END.
-     ELSE IF toimi = 8 THEN LEAVE.
+     ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
   END.
 

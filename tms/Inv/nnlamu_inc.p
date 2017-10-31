@@ -350,12 +350,12 @@ IF NOT ilSilent THEN DO:
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
       END.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
 
          /* check period */
          IF fPeriodLocked(InvDte,TRUE) THEN NEXT toimi.
@@ -377,14 +377,14 @@ IF NOT ilSilent THEN DO:
 
       END.
 
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE MESSAGE no-pause.
          HIDE FRAME rajat no-pause.
          HIDE FRAME taka no-pause.
          RETURN.
       END.
 
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
    HIDE FRAME lCustNum no-pause.
 

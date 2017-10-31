@@ -678,28 +678,28 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       END.
-      ELSE ASSIGN toimi      = 1
+      ELSE ASSIGN Syst.CUICommon:toimi      = 1
                   llDispMenu = TRUE.
                   
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
          RUN pUpdate.
       END.
             
-      ELSE IF toimi = 3 THEN RUN Mc/offercriteria.p (Offer.Offer,
+      ELSE IF Syst.CUICommon:toimi = 3 THEN RUN Mc/offercriteria.p (Offer.Offer,
                                                 ilUpdate).
       
-      ELSE IF toimi = 4 THEN RUN Mc/offeritem.p (Offer.Offer,
+      ELSE IF Syst.CUICommon:toimi = 4 THEN RUN Mc/offeritem.p (Offer.Offer,
                                             ilUpdate).
                          
-      ELSE IF toimi = 6 THEN DO: 
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO: 
          RUN Mc/eventsel.p("offer", "#BEGIN" + chr(255) + Offer.Brand + chr(255) + Offer.Offer).
       END.   
 
       /* functions */
-      ELSE IF toimi = 7 THEN do:
+      ELSE IF Syst.CUICommon:toimi = 7 THEN do:
       end.
       
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

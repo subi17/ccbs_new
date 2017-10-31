@@ -693,7 +693,7 @@ REPEAT WITH FRAME sel:
         RUN Syst/ufkey.p.
      
         /* Search BY column 1 */
-        IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        IF Syst.CUICommon:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
@@ -728,7 +728,7 @@ REPEAT WITH FRAME sel:
         END. /* Search-1 */
 
         /* Search BY column 2 */
-        ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
@@ -751,7 +751,7 @@ REPEAT WITH FRAME sel:
         END. /* Search-2 */
 
         /* Search BY column 3 */
-        ELSE IF toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        ELSE IF Syst.CUICommon:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f3.
@@ -1348,7 +1348,7 @@ PROCEDURE local-UPDATE-record:
        
          RUN Syst/ufkey.p.
          
-         IF toimi = 1 THEN DO:
+         IF Syst.CUICommon:toimi = 1 THEN DO:
         
             IF lcPassword > "" THEN DO:
              
@@ -1479,7 +1479,7 @@ PROCEDURE local-UPDATE-record:
          END.
 
          /* eventlog */
-         ELSE IF toimi = 3 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          
            IF AVAILABLE PaymPlan THEN 
            RUN Mc/eventsel.p ("PaymPlan",
@@ -1487,7 +1487,7 @@ PROCEDURE local-UPDATE-record:
          END.
          
          /* print letter */
-         ELSE IF toimi = 4 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
 
             ok = FALSE. 
 
@@ -1539,7 +1539,7 @@ PROCEDURE local-UPDATE-record:
          END.           
 
          /* accept */
-         ELSE IF toimi = 6 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
 
             ldtLast = TODAY.
             FOR EACH PPBatch OF PaymPlan NO-LOCK:
@@ -1673,7 +1673,7 @@ PROCEDURE local-UPDATE-record:
          END. 
          
          /* cancel plan */
-         ELSE IF toimi = 7 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
             ok = FALSE.
             
             MESSAGE "Payment plan will be cancelled, i.e. invoices will be"
@@ -1735,7 +1735,7 @@ PROCEDURE local-UPDATE-record:
             
          END.
  
-         ELSE IF toimi = 8 THEN LEAVE.
+         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
          
       END.
       

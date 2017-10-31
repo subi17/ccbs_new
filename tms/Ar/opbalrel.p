@@ -78,7 +78,7 @@ toimi:
          RETURN.
       END.
 
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

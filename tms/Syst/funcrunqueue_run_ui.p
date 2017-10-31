@@ -58,7 +58,7 @@ END FUNCTION.
 
 
 ASSIGN
-   toimi     = -1
+   Syst.CUICommon:toimi     = -1
    llRunMode = TRUE.
 
 CritLoop:
@@ -76,7 +76,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       fDispFuncRunQueue(liFRQueueID).
    END.
 
-   IF toimi < 0 THEN toimi = 1.
+   IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
    ELSE DO:
       ASSIGN
          ufk    = 0
@@ -87,7 +87,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       RUN Syst/ufkey.p.
    END.
    
-   IF toimi = 1 THEN 
+   IF Syst.CUICommon:toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
       ehto = 9.
@@ -161,7 +161,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    
    END.
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
    
       FIND FIRST FuncRunQSchedule WHERE 
          FuncRunQSchedule.FRQScheduleID = liFRQScheduleID 
@@ -198,7 +198,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

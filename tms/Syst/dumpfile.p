@@ -706,7 +706,7 @@ PROCEDURE local-UPDATE-record:
          DumpFile.Description   
       WITH FRAME lis.
 
-      IF NEW DumpFile THEN toimi = 1.
+      IF NEW DumpFile THEN Syst.CUICommon:toimi = 1.
 
       ELSE DO:
          ASSIGN 
@@ -723,7 +723,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT DumpFile EXCLUSIVE-LOCK.
@@ -867,7 +867,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN REPEAT WITH FRAME fAddit:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN REPEAT WITH FRAME fAddit:
       
          PAUSE 0.
          DISPLAY        
@@ -893,7 +893,7 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
       
-         IF toimi = 1 THEN 
+         IF Syst.CUICommon:toimi = 1 THEN 
          REPEAT WITH FRAME fAddit ON ENDKEY UNDO, LEAVE MaintMenu:
 
             FIND CURRENT DumpFile EXCLUSIVE-LOCK.
@@ -983,7 +983,7 @@ PROCEDURE local-UPDATE-record:
             LEAVE.
          END.
              
-         ELSE IF toimi = 4 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
 
             PAUSE 0.
             DISPLAY        
@@ -999,7 +999,7 @@ PROCEDURE local-UPDATE-record:
          
             RUN Syst/ufkey.p.
    
-            IF toimi = 1 THEN 
+            IF Syst.CUICommon:toimi = 1 THEN 
             REPEAT WITH FRAME fQuery ON ENDKEY UNDO, LEAVE:
 
                FIND CURRENT DumpFile EXCLUSIVE-LOCK.
@@ -1019,22 +1019,22 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
       
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN Syst/dffield.p (DumpFile.DumpID).
       END.
  
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Syst/dftimetable.p (DumpFile.DumpID).
       END.
       
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
          RUN Syst/dumplog.p (DumpFile.DumpID).
       END.
 
-      ELSE IF toimi = 6 AND ufk[6] > 0
+      ELSE IF Syst.CUICommon:toimi = 6 AND ufk[6] > 0
       THEN RUN Syst/dumphpd.p (DumpFile.DumpID).
 
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

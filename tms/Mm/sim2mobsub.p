@@ -109,11 +109,11 @@ REPEAT WITH FRAME lis:
    REPEAT WITH FRAME lis:
       ASSIGN ufk = 0 ufk[1] = 0 ufk[8] = 8 ufk[5] = 1967  ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN LEAVE action.
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN LEAVE action.
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          LEAVE loop.
       END.
-      ELSE IF toimi = 5 THEN DO :
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO :
          
          FIND Mobsub   WHERE
               Mobsub.msseq = msseq NO-ERROR.

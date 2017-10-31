@@ -583,11 +583,11 @@ ACTION: repeat with frame lis:
           ufkey = true.
           RUN Syst/ufkey.p.
 
-          if toimi = 8 then do:
+          if Syst.CUICommon:toimi = 8 then do:
              hide frame lis.
              next loop. 
           end.
-          else if toimi = 1 then do: 
+          else if Syst.CUICommon:toimi = 1 then do: 
 
              RUN local-find-this(true).
              ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.

@@ -11,7 +11,7 @@
 {Syst/commpaa.i}
 katun = "anttis".
 Syst.CUICommon:gcBrand = "1".
-qupd = True.
+Syst.CUICommon:qupd = True.
 */
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -530,7 +530,7 @@ PROCEDURE local-VIEW-record:
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
        
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhiprange).
 
@@ -548,7 +548,7 @@ PROCEDURE local-VIEW-record:
          
       END.   
 
-      ELSE IF toimi = 7 THEN DO: 
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO: 
      
         RUN local-find-this(FALSE).
         
@@ -558,7 +558,7 @@ PROCEDURE local-VIEW-record:
         NEXT.
       END.   
       
-      ELSE IF toimi = 8 THEN LEAVE MaintMenu.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE MaintMenu.
    END.
 
    HIDE FRAME lis NO-PAUSE.

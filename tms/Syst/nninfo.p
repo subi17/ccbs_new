@@ -50,7 +50,7 @@ DISP MenuTree.Memo[1 FOR 15] WITH FRAME info.
 
 RUN Syst/ufkey.p.
 
-IF toimi = 1 THEN DO TRANS:
+IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
    PAUSE 0.
    ehto = 9. RUN Syst/ufkey.p.
    FIND MenuTree where MenuTree.MenuId = MenuId exclusive-lock.

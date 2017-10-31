@@ -473,7 +473,7 @@ REPEAT WITH FRAME sel:
         
         RUN Syst/ufkey.p.
         
-        IF toimi = 1 THEN DO:
+        IF Syst.CUICommon:toimi = 1 THEN DO:
         
            ehto = 9. 
            RUN Syst/ufkey.p. 

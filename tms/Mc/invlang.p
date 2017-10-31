@@ -582,7 +582,7 @@ REPEAT WITH FRAME sel:
 
          RUN Syst/ufkey.p.
          
-         IF toimi = 1 THEN DO:
+         IF Syst.CUICommon:toimi = 1 THEN DO:
          
             FIND CURRENT RepText EXCLUSIVE-LOCK.
 

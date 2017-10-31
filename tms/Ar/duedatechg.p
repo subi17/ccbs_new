@@ -158,7 +158,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
       ehto   = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
@@ -170,7 +170,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
 
    END.
    
-   IF toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 5 THEN DO:
 
       llOk = FALSE.
       MESSAGE "A new due date will be set for invoice." SKIP
@@ -202,7 +202,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* lDueDate */
 

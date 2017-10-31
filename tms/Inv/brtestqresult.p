@@ -466,11 +466,11 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
       END.
 
-      IF toimi = 4 THEN DO:
+      IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Inv/brtestqresultrow.p (BRTestQResult.BRTestQResultID).
       END.
       
-      ELSE IF toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
    END.
    
 END PROCEDURE.

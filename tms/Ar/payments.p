@@ -702,7 +702,7 @@ BROWSE:
         
         RUN Syst/ufkey.p.
 
-        IF toimi = 2 THEN DO TRANS:
+        IF Syst.CUICommon:toimi = 2 THEN DO TRANS:
                 
            RUN local-find-this(FALSE).
            
@@ -739,7 +739,7 @@ BROWSE:
         END.
 
         /* eventlog */
-        ELSE IF toimi = 4 THEN DO:
+        ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
            RUN local-find-this(FALSE).
            
            IF AVAILABLE Payment THEN 
@@ -751,9 +751,9 @@ BROWSE:
         END. 
 
         /* payment source info */
-        ELSE IF toimi = 5 THEN RUN Help/h-paymsrc.p.
+        ELSE IF Syst.CUICommon:toimi = 5 THEN RUN Help/h-paymsrc.p.
         
-        ELSE IF toimi = 8 THEN NEXT LOOP.
+        ELSE IF Syst.CUICommon:toimi = 8 THEN NEXT LOOP.
      END.
 
 

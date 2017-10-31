@@ -1099,7 +1099,7 @@ PROCEDURE local-update-record:
          liLength
       WITH FRAME lis.
       
-      IF NEW InvText THEN toimi = 1.
+      IF NEW InvText THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
             ehto   = 0
@@ -1109,7 +1109,7 @@ PROCEDURE local-update-record:
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT InvText EXCLUSIVE-LOCK.

@@ -163,7 +163,7 @@ toimi:
       else if lookup(nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

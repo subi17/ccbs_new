@@ -821,7 +821,7 @@ BROWSE:
           ufk[8] = 8.
         RUN Syst/ufkey.p.
         nap = keylabel(LASTKEY).
-        IF toimi = 8 THEN NEXT BROWSE.
+        IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
 
         /* Haku 1 */
         else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
@@ -1220,7 +1220,7 @@ BROWSE:
              ufkey = true.
           RUN Syst/ufkey.p.
 
-          if toimi = 8 then do:
+          if Syst.CUICommon:toimi = 8 then do:
              hide frame lis no-pause.
              hide frame ch-info no-pause.
              next.

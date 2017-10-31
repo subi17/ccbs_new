@@ -928,7 +928,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
    fCleanEventObjects(). 
    RETURN.
 
-END.  /* toimi = 1 */
+END.  /* Syst.CUICommon:toimi = 1 */
 
 
 LOOP:
@@ -1367,10 +1367,10 @@ repeat WITH FRAME sel:
         ufk[8] = 8.
         
         RUN Syst/ufkey.p.
-        IF toimi = 8 THEN NEXT BROWSE.
+        IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
 
         /* Search 1 */
-        IF toimi = 1 THEN DO:  /* search WITH column 1 */
+        IF Syst.CUICommon:toimi = 1 THEN DO:  /* search WITH column 1 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
@@ -1395,7 +1395,7 @@ repeat WITH FRAME sel:
         END. /* Search col. 1 */
 
         /* Search WITH column 2 */
-        ELSE  IF toimi = 2 THEN DO:  /* search col. 3 */
+        ELSE  IF Syst.CUICommon:toimi = 2 THEN DO:  /* search col. 3 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. 
            
            ASSIGN
@@ -1494,7 +1494,7 @@ repeat WITH FRAME sel:
         END. /* Search col. 2 */
 
         /* Search WITH column 3 */
-        ELSE IF toimi = 3 THEN DO: 
+        ELSE IF Syst.CUICommon:toimi = 3 THEN DO: 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-4. 
@@ -1513,7 +1513,7 @@ repeat WITH FRAME sel:
         END.
 
         /* Search WITH column 4 */
-        ELSE IF toimi = 4 THEN DO: 
+        ELSE IF Syst.CUICommon:toimi = 4 THEN DO: 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-6. 
@@ -1684,7 +1684,7 @@ repeat WITH FRAME sel:
            
            RUN Syst/ufkey.p.
 
-           IF toimi = 8 THEN DO:
+           IF Syst.CUICommon:toimi = 8 THEN DO:
               if (Customer.CustName = "" AND Customer.CustIDType NE "CIF") OR
                  Customer.InvGroup = ""      OR
                  Customer.Language = 0 
@@ -1701,14 +1701,14 @@ repeat WITH FRAME sel:
            END.   
 
            /* customer info */ 
-           else IF toimi = 7 THEN DO:
+           else IF Syst.CUICommon:toimi = 7 THEN DO:
         
               RUN Mc/commontt.p(Customer.CustNum). 
         
            END.
 
 
-           ELSE IF toimi = 1 AND lcRight = "RW" THEN DO:    
+           ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:    
 
               ehto = 9. RUN Syst/ufkey.p.
 
@@ -1717,10 +1717,10 @@ repeat WITH FRAME sel:
               
               FIND CURRENT Customer NO-LOCK.
               NEXT CHG /*Action*/.
-           END.  /* toimi = 1 */
+           END.  /* Syst.CUICommon:toimi = 1 */
 
            /* view agr. customer */
-           ELSE IF toimi = 2 AND liF2Type = 1 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 2 AND liF2Type = 1 THEN DO:
               
               IF Customer.CustNum = Customer.AgrCust THEN DO:
                  MESSAGE "Agreement customer is the same"
@@ -1733,7 +1733,7 @@ repeat WITH FRAME sel:
            END. 
             
            /* browse invoicing customers */
-           ELSE IF TOIMI = 3 AND liF3Type = 1 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 3 AND liF3Type = 1 THEN DO:
               IF NOT llAgrCust THEN DO:
                  MESSAGE "This customer is not an agreement customer" 
                  VIEW-AS ALERT-BOX.
@@ -1745,8 +1745,8 @@ repeat WITH FRAME sel:
            END.
 
            /* view inv. customer */
-           ELSE IF (toimi = 3 AND liF3Type = 2) OR
-                   (toimi = 2 AND liF2Type = 2) 
+           ELSE IF (Syst.CUICommon:toimi = 3 AND liF3Type = 2) OR
+                   (Syst.CUICommon:toimi = 2 AND liF2Type = 2) 
            THEN DO:
               IF Customer.CustNum = Customer.InvCust THEN DO:
                  MESSAGE "Invoicing customer is the same"
@@ -1759,7 +1759,7 @@ repeat WITH FRAME sel:
            END. 
            
            /* browse users */
-           ELSE IF TOIMI = 4 THEN DO:
+           ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
               IF NOT llAgrCust AND NOT llOthInvCust
               THEN DO:
                  MESSAGE "This customer is an user" VIEW-AS ALERT-BOX.
@@ -1780,11 +1780,11 @@ repeat WITH FRAME sel:
            END.
             
            /* contact data */
-           ELSE IF toimi = 5 THEN DO: 
+           ELSE IF Syst.CUICommon:toimi = 5 THEN DO: 
               RUN Mc/custcont.p(Customer.CustNum).
            END.
            
-           ELSE IF toimi = 6 THEN DO: /* Financial Data */
+           ELSE IF Syst.CUICommon:toimi = 6 THEN DO: /* Financial Data */
 
               RUN local-update-fin.
               FIND CURRENT Customer NO-LOCK.
@@ -2178,12 +2178,12 @@ PROCEDURE local-update-fin:
       ufkey = true.
       RUN Syst/ufkey.p.
                                                              
-      IF toimi = 8 then do:
+      IF Syst.CUICommon:toimi = 8 then do:
          hide frame fina.
          LEAVE.
       end.
 
-      ELSE IF toimi = 1 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
       BILLDATA_CHG:
       REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
 
@@ -2502,11 +2502,11 @@ PROCEDURE local-update-fin:
       END.
       END.   
    
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Ar/custbal.p (Customer.CustNum).
       END.
       
-      ELSE IF toimi = 3 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 AND lcRight = "RW" THEN DO:
          
          REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
             
@@ -2530,7 +2530,7 @@ PROCEDURE local-update-fin:
       
       END.
 
-      ELSE IF toimi = 5 THEN DO:                 
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:                 
          RUN Mm/pclist.p("Customer",Customer.CustNum).
       END.                                        
    END. 

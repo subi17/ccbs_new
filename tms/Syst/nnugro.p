@@ -534,7 +534,7 @@ SELAUS:
           RUN Syst/ufkey.p.
           Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
-          IF toimi = 1 THEN DO:
+          IF Syst.CUICommon:toimi = 1 THEN DO:
 
               assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
               RUN Syst/ufkey.p.
@@ -549,11 +549,11 @@ SELAUS:
 
           END.
 
-          IF toimi = 3 THEN DO:
+          IF Syst.CUICommon:toimi = 3 THEN DO:
              RUN Syst/adduserlimitcui.p ("UserGroup", UserGrp.UserGroup).
           END.
 
-          IF toimi = 8 THEN LEAVE.
+          IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
        END. /* end show-group */
      

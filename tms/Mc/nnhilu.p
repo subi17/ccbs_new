@@ -102,7 +102,7 @@ toimi:
       ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
       ehto = 0. RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          ehto = 9. RUN Syst/ufkey.p.
          disp "" @ fname WITH FRAME rajat.
          UPDATE 
@@ -112,13 +112,13 @@ toimi:
          IF NOT paper THEN UPDATE fname WITH FRAME rajat.
          NEXT toimi.
       END.
-      ELSE  IF toimi = 5 THEN DO:
+      ELSE  IF Syst.CUICommon:toimi = 5 THEN DO:
          LEAVE toimi.
       END.
-      ELSE IF toimi = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
          RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
 /* Avataan striimi */
 IF paper THEN DO:

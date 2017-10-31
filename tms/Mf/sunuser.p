@@ -87,10 +87,10 @@ task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          bOk = FALSE.
          message "Are you SURE you want to add a user (Y/N) ?" UPDATE bOk.
          IF bOk THEN LEAVE task.

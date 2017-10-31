@@ -499,12 +499,12 @@ toimi:
       ehto = 0 ufk = 0
       ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
           updatemode = TRUE.
           NEXT rajat.
       END.    
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are You SURE You want to gather those customers (Y/N) ?"
          UPDATE ok.

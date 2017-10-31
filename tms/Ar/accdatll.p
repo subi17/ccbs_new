@@ -272,7 +272,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          RETURN.
       END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 /* Avataan striimi */
 IF llPaper THEN DO:

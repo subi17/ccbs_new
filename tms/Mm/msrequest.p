@@ -1357,11 +1357,11 @@ PROCEDURE local-UPDATE-record:
       RUN Syst/ufkey.p. 
 
       /* parameters */  
-      IF toimi = 2 THEN DO:
+      IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Mm/msreqparam.p(MSRequest.MSrequest).
       END.
       
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
 
          /* search main-request*/
          IF   MSRequest.origRequest > 0 
@@ -1379,7 +1379,7 @@ PROCEDURE local-UPDATE-record:
                             Msrequest.MSRequest,
                             "").
       END.
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
 
         RUN Mc/memo.p(INPUT MsRequest.CustNum,
                  INPUT "MsRequest",
@@ -1388,7 +1388,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* internal memo */
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       
             PAUSE 0.
             DISP MsRequest.Memo WITH FRAME fIntMemo.
@@ -1398,18 +1398,18 @@ PROCEDURE local-UPDATE-record:
       END.
       
       /* show eventlog */
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
 
         RUN Mc/eventsel.p("MsRequest",
                      STRING(MsRequest.MsRequest)).
       END.
 
       /* change status */
-      ELSE IF toimi = 7 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
          RUN Syst/msreqfuncmenu.p(MsRequest.MsRequest).
       END.
 
-      ELSE IF toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
    
    END.
    

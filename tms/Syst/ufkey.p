@@ -83,15 +83,15 @@ if ehto < 3 then do:
       readkey.
       apply lastkey.
       assign
-         toimi = 0
+         Syst.CUICommon:toimi = 0
          ufk_nap = keylabel(lastkey)
          ufk_nro = lookup(ufk_nap,ufk_mitka).
 
       if ufk_nro <> 0 then
-         assign toimi = integer(substring(ufk_toimi,ufk_nro,1)).
-         if toimi > 0 and ufk[toimi] = 0 then toimi = 0.
+         assign Syst.CUICommon:toimi = integer(substring(ufk_toimi,ufk_nro,1)).
+         if Syst.CUICommon:toimi > 0 and ufk[toimi] = 0 then Syst.CUICommon:toimi = 0.
 
-      if toimi = 0 then do:
+      if Syst.CUICommon:toimi = 0 then do:
          bell.
          next.
       end.

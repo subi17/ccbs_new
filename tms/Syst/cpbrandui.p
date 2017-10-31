@@ -131,14 +131,14 @@ repeat WITH FRAME main:
       ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN next LOOP.
+      IF Syst.CUICommon:toimi = 1 THEN next LOOP.
 
-      else IF toimi = 8 THEN DO:
+      else IF Syst.CUICommon:toimi = 8 THEN DO:
          llCopy = FALSE.
          leave LOOP.
       END.
 
-      else IF toimi = 5 THEN DO:
+      else IF Syst.CUICommon:toimi = 5 THEN DO:
          
          IF lcSrcBrand = "" THEN DO:
             MESSAGE "Source brand has not been selected."

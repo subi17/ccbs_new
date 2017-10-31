@@ -504,7 +504,7 @@ BROWSE:
           ufk[8] = 8
           ehto = 0.
          RUN Syst/ufkey.p.
-         IF toimi = 1 AND lcRight = "RW" THEN
+         IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN
          DO:
             ufkey = TRUE. ehto = 9. RUN Syst/ufkey.p.
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMemo).
@@ -513,7 +513,7 @@ BROWSE:
             memo.ChgStamp = Func.Common:mMakeTS().
             IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMemo).
          END.
-         IF toimi = 8 THEN RUN local-find-others.
+         IF Syst.CUICommon:toimi = 8 THEN RUN local-find-others.
          ufkey = TRUE. ehto = 9.
          HIDE FRAME lis1 NO-PAUSE.
          HIDE FRAME lis2 NO-PAUSE.

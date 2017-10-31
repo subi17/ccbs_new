@@ -1293,9 +1293,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
          ehto = 0. RUN Syst/ufkey.p.
 
-         IF toimi  = 1 THEN NEXT PaidAmt.              /* change */
+         IF Syst.CUICommon:toimi  = 1 THEN NEXT PaidAmt.              /* change */
 
-         ELSE IF toimi = 2 THEN DO:                        /* print memo */
+         ELSE IF Syst.CUICommon:toimi = 2 THEN DO:                        /* print memo */
             RUN Mc/memo.p(INPUT Invoice.CustNum,
                      INPUT "Invoice",
                      INPUT STRING(INPUT Invoice.InvNum),
@@ -1303,7 +1303,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             NEXT.
          END.
 
-         ELSE IF toimi = 3 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
 
             IF new_paym THEN DO:
                /* we have TO set some preliminary values TO following fields
@@ -1323,10 +1323,10 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             NEXT.
          END.   
 
-         ELSE IF toimi = 8 THEN UNDO LASKU, LEAVE LASKU.   /* Paluu */
-         ELSE IF toimi = 6 THEN UNDO LASKU, NEXT  LASKU.   /* En talleta */
+         ELSE IF Syst.CUICommon:toimi = 8 THEN UNDO LASKU, LEAVE LASKU.   /* Paluu */
+         ELSE IF Syst.CUICommon:toimi = 6 THEN UNDO LASKU, NEXT  LASKU.   /* En talleta */
 
-         ELSE IF toimi = 4 OR toimi = 5 THEN DO:
+         ELSE IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 5 THEN DO:
 
             /* check period */
             IF fPeriodLocked(kirjpvm,TRUE) THEN NEXT. 
@@ -1472,7 +1472,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                   Payment.AccType[ii]  = kactype[ii].
             END.
 
-            IF toimi = 4 /* korkotapahtuma */ THEN DO:
+            IF Syst.CUICommon:toimi = 4 /* korkotapahtuma */ THEN DO:
                FIND FIRST CustIntEvent where 
                           CustIntEvent.Voucher = Payment.Voucher
                exclusive-lock no-error.
@@ -1528,7 +1528,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                         (ykorko - ed-korko)).
             END.
 
-            IF toimi = 5 THEN DO:
+            IF Syst.CUICommon:toimi = 5 THEN DO:
                /* ei haluttu korkoa, mutta onko vanha CustIntEvent olemassa
                   jos nyt muutettiin vanhaa suoritusta ? */
                FIND FIRST CustIntEvent WHERE
@@ -1552,9 +1552,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             IF NOT new_paym AND llDoEvent THEN
             RUN StarEventMakeModifyEvent(lhPayment).
 
-         END.  /* toimi = 4/5 */
+         END.  /* Syst.CUICommon:toimi = 4/5 */
 
-         ELSE IF toimi = 7 THEN DO:   /* removal */
+         ELSE IF Syst.CUICommon:toimi = 7 THEN DO:   /* removal */
 
             /* check period */
             IF fPeriodLocked(kirjpvm,TRUE) THEN NEXT. 
@@ -1629,7 +1629,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
          END.
 
-         IF toimi = 4 OR toimi = 5 OR toimi = 7 THEN DO:
+         IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 5 OR Syst.CUICommon:toimi = 7 THEN DO:
             /* pAivitetAAn laskutietue */
 
             /* Lasketaan suoritusten yhteismAArA */
@@ -1686,7 +1686,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
             NEXT LASKU.
          END.
-      END. /* toimi */
+      END. /* Syst.CUICommon:toimi */
    END. /* PaidAmt */
 END. /* LASKU */
 

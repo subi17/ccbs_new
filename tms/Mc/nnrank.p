@@ -393,9 +393,9 @@ toimi:
    repeat WITH FRAME toimi:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 847 ufk[6] = 638 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 5 THEN LEAVE toimi.
-      IF toimi = 6 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
+      IF Syst.CUICommon:toimi = 6 THEN 
       DO:
          ASSIGN tila = TRUE.
          {Syst/tmsreport.i "return"}
@@ -403,7 +403,7 @@ toimi:
          VIEW STREAM tul FRAME sivuots.
          LEAVE toimi.
       END.   
-      IF toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
    END.
    ASSIGN
    date1 = Date (integer(substr(string(period1),5,2)),

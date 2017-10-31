@@ -810,7 +810,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       fEffective(DayCampaign.Effective).
       fStatusName(DayCampaign.StatusCode).
 
-      IF ilNew THEN toimi = 1.
+      IF ilNew THEN Syst.CUICommon:toimi = 1.
       
       ELSE ASSIGN 
          ehto   = 0
@@ -821,17 +821,17 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          RUN pUpdate(ilNew).
          IF RETURN-VALUE BEGINS "UNDO" THEN UNDO, LEAVE MaintMenu.
          IF ilNew THEN LEAVE MaintMenu.
       END.   
 
-      ELSE IF toimi = 2 THEN RUN pFeeData(FALSE).
+      ELSE IF Syst.CUICommon:toimi = 2 THEN RUN pFeeData(FALSE).
 
-      ELSE IF toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
+      ELSE IF Syst.CUICommon:toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
       
-      ELSE IF toimi = 8 THEN LEAVE MaintMenu.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE MaintMenu.
    END.
 
    HIDE FRAME lis NO-PAUSE.
@@ -1193,7 +1193,7 @@ PROCEDURE pFeeData:
       
       fTermFeeCalc(DayCampaign.TermFeeCalc).
 
-      IF ilNew THEN toimi = 1.
+      IF ilNew THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
             ehto   = 0
@@ -1203,7 +1203,7 @@ PROCEDURE pFeeData:
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME fFees ON ENDKEY UNDO, LEAVE FeeMenu:
 
          FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
@@ -1305,7 +1305,7 @@ PROCEDURE pFeeData:
          LEAVE.
      END.
      
-     ELSE IF toimi = 8 THEN LEAVE.
+     ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
      
   END.  
 

@@ -65,9 +65,9 @@ toimi:
    repeat with frame toimi:
       assign ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
       RUN Syst/ufkey.p.
-      if toimi = 1 then next  rajat.
-      if toimi = 8 then leave rajat.
-      if toimi = 5 then leave toimi.
+      if Syst.CUICommon:toimi = 1 then next  rajat.
+      if Syst.CUICommon:toimi = 8 then leave rajat.
+      if Syst.CUICommon:toimi = 5 then leave toimi.
    end.
 
 

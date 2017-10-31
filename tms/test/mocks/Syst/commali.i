@@ -8,11 +8,8 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-def new shared var qupd    AS lo.
-
 def new shared var katun   as char format "x(8)".
 
-def new shared var toimi   as int  format "z".
 def new shared var ehto    as int  format "z".
 def new shared var sel_t   as char format "x(8)"  EXTENT 16.
 def new shared var ufk     as int  format "z"     EXTENT 9.
@@ -46,8 +43,6 @@ END.
 
 on f21 HELP.
 status INPUT off.
-
-Syst.CUICommon:gcBrand = "1".
 
 &ENDIF
 

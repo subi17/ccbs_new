@@ -966,9 +966,9 @@ print-line:
 
         RUN Syst/ufkey.p.   
 
-        liFilter = IF toimi = 7 THEN 0 ELSE toimi.
+        liFilter = IF Syst.CUICommon:toimi = 7 THEN 0 ELSE toimi.
         
-        IF toimi >= 1 AND toimi <= 4 THEN DO:
+        IF Syst.CUICommon:toimi >= 1 AND Syst.CUICommon:toimi <= 4 THEN DO:
            RUN Ar/invfilterkey.p (INPUT TABLE ttFilter,
                              liFilter,
                              OUTPUT lcFilter).

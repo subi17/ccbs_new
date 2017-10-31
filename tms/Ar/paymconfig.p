@@ -730,14 +730,14 @@ PROCEDURE local-UPDATE-record:
          
          RUN Syst/ufkey.p.
          
-         IF toimi = 8 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       END.
       ELSE ASSIGN 
-         toimi = 1
+         Syst.CUICommon:toimi = 1
          llNew = FALSE.
          
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
       
          ehto = 9.
          RUN Syst/ufkey.p.
@@ -869,9 +869,9 @@ PROCEDURE local-UPDATE-record:
 
       END.
 
-      ELSE IF toimi = 2 THEN RUN Ar/paymconftax.p(PaymConfig.PaymConfig).
+      ELSE IF Syst.CUICommon:toimi = 2 THEN RUN Ar/paymconftax.p(PaymConfig.PaymConfig).
 
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
 
          ehto = 9.
          RUN Syst/ufkey.p.
