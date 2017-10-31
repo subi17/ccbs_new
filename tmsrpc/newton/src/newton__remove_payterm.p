@@ -55,7 +55,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* Required Params */
 ASSIGN 
    liMsSeq  = get_pos_int(pcPayTermStruct, "msseq")
-   Syst.CUICommon:Syst.CUICommon:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.CUICommon:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcCurrentPayterm = get_nonempty_string(pcPayTermStruct, "payterm_contract")
    liPerContractId  = get_int(pcPayTermStruct, "per_contract_id")
    lcAction = get_nonempty_string(pcPayTermStruct, "action")

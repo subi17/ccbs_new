@@ -118,9 +118,9 @@ IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 Syst.CUICommon:katun = pcUser.
 IF pcUserLevel EQ "Operator" THEN 
-   cCheckMsBarringSyst.CUICommon:katun = "NewtonAd". 
+   cCheckMsBarringkatun = "NewtonAd". 
 ELSE 
-   cCheckMsBarringSyst.CUICommon:katun = "NewtonCC". 
+   cCheckMsBarringkatun = "NewtonCC". 
 /*YPR-4773*/
 /*Activation is not allowed if fixed line provisioning is pending*/
 IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR 

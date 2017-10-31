@@ -190,7 +190,7 @@ IF SingleFee.OrderId > 0 THEN DO:
       RETURN appl_err("Already returned terminal").
 END.
 
-lcOrigSyst.CUICommon:katun = Syst.CUICommon:katun.
+lcOrigkatun = Syst.CUICommon:katun.
 /*YPR-3256*/
 IF lcQ25ContractId EQ "" THEN
    Syst.CUICommon:katun = "VISTA_" + lcUsername.

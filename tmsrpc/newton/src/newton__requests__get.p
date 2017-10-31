@@ -22,7 +22,6 @@
  */
 
 {newton/src/header_get.i}
-DEFINE VARIABLE Syst.CUICommon:katun AS CHARACTER NO-UNDO. 
 DEF VAR liId AS INT NO-UNDO. 
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:

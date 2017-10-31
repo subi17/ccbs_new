@@ -393,7 +393,7 @@ ELSE DO:
       lcMemoText  = lcResult.
 END.
 
-lcOrigSyst.CUICommon:katun = Syst.CUICommon:katun.
+lcOrigkatun = Syst.CUICommon:katun.
 Syst.CUICommon:katun =  "VISTA_" + lcSalesman.
 
 IF llCreateMemo THEN

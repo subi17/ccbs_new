@@ -19,8 +19,6 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEFINE VARIABLE Syst.CUICommon:katun AS CHARACTER NO-UNDO. 
-
 DEFINE VARIABLE pcTenant       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piOffset       AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE piLimit        AS INTEGER   NO-UNDO. 
