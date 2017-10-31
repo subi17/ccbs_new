@@ -16,7 +16,6 @@ gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 
 DEFINE VARIABLE lcIncDir     AS CHARACTER NO-UNDO.

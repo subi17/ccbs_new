@@ -8,9 +8,9 @@ antaa:  formin vArit common-muuttujassa cfc
 
 if opsys = "msdos" THEN DO:
    IF yvari THEN DO:
-      FIND FColor where FColor.FrameName = cfc no-lock no-error.
+      FIND FColor where FColor.FrameName = Syst.CUICommon:cfc no-lock no-error.
       IF NOT AVAILABLE FColor THEN DO:
-    message "VArimAAritys puuttuu, frame " + cfc.
+    message "VArimAAritys puuttuu, frame " + Syst.CUICommon:cfc.
     PAUSE 2 no-message.
       END.
       ELSE ASSIGN Syst.CUICommon:cfc = FColor.FrameColor Syst.CUICommon:ctc = FColor.TitleColor.

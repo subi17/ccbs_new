@@ -29,7 +29,6 @@ lcProcessMode = SESSION:PARAMETER.
 gcbrand = "1".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/lpfunctions.i}
 {Func/ftransdir.i}
@@ -365,7 +364,7 @@ PROCEDURE pSetInternetBarring:
    IF liRequest > 0 THEN DO:     
 
    Func.Common:mWriteMemoWithType("Mobsub",
-                     mobsub.MsSeq,
+                     STRING(mobsub.MsSeq),
                      mobsub.CustNum,
                      (IF lcMode EQ "ON" THEN "OTA Barring activado" 
                                         ELSE "OTA Barring desactivado"),                       /* memo title */

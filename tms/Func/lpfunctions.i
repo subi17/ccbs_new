@@ -11,7 +11,6 @@
 &THEN
 &GLOBAL-DEFINE fLPFUNCTIONS YES
 /*{Syst/commali.i}*/
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 
 /*Function creates MsRequest for Landing Page redirection settings*/

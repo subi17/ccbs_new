@@ -13,7 +13,6 @@
 gcbrand = "1".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 

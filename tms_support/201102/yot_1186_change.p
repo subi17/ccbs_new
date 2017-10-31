@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
 katun = "vikasagr".
 gcbrand = "1".
-{Func/timestamp.i}
 {Func/msisdn.i}
 
 define variable ldenow    as decimal no-undo.

@@ -16,7 +16,6 @@ https://kethor.qvantel.com/browse/MANDLP-10
 {Syst/commpaa.i}
 gcbrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/lpfunctions.i}
 {Func/barrfunc.i}

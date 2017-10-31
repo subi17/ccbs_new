@@ -12,7 +12,6 @@ ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
 {Func/ftransdir.i}
