@@ -16,6 +16,9 @@ def var arg  as c format "x(40)".
 
 DEF OUTPUT PARAMETER CustNum AS i NO-UNDO.
 DEF OUTPUT PARAMETER MsSeq AS I  NO-UNDO.
+DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
+gcBrand = Syst.CUICommon:gcBrand.
+
 form
 skip(1)
 "  NOTE:   You can find a customer with different arguments." skip
@@ -24,7 +27,7 @@ skip(1)
 "          appropriate Function Key."                         skip(1)
 "          You shall then receive customer's number if      " skip
 "          a customer could be found with that argument."     skip(1)
-"  Brand.:" Syst.CUICommon:gcBrand   HELP "Brand code (*=ALL)"               SKIP
+"  Brand.:" gcBrand   HELP "Brand code (*=ALL)"               SKIP
 "  Search:" arg                                               skip(1)
 WITH 
     centered overlay title " FIND CUSTOMER "  NO-LABELS
@@ -39,7 +42,7 @@ PAUSE 0.
 MAIN:
 repeat WITH FRAME frm:
    ehto = 9. RUN Syst/ufkey.p.
-   UPDATE Syst.CUICommon:gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE arg.
+   UPDATE gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE arg.
 
 
 ACTION:
@@ -61,10 +64,10 @@ ACTION:
       IF toimi = 1 THEN NEXT MAIN.
 
       IF toimi = 2 THEN DO:
-         IF Syst.CUICommon:gcBrand ne "*" THEN 
+         IF gcBrand ne "*" THEN 
          FIND MSISDN where 
               MSISDN.CLI = arg  AND
-              MSISDN.brand = Syst.CUICommon:gcBrand no-lock no-error.
+              MSISDN.brand = gcBrand no-lock no-error.
          ELSE
          FIND MSISDN where
               MSISDN.CLI = arg NO-LOCK NO-ERROR.
@@ -80,10 +83,10 @@ ACTION:
                NEXT Action.
             END.
                                                                                            CustNum = MSISDN.CustNum.
-            IF Syst.CUICommon:gcBrand ne "*" THEN 
+            IF gcBrand ne "*" THEN 
             FIND MobSub WHERE 
                  MobSub.CLI   = MSISDN.CLI AND 
-                 Mobsub.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                 Mobsub.Brand = gcBrand NO-LOCK NO-ERROR.
             ELSE FIND MobSub WHERE
                       MobSub.CLI   = MSISDN.CLI NO-LOCK NO-ERROR.
 
@@ -96,10 +99,10 @@ ACTION:
 
 
       IF toimi = 3 THEN DO:
-         IF Syst.CUICommon:gcBrand ne "*" THEN 
+         IF gcBrand ne "*" THEN 
          FIND SIM where 
               SIM.ICC   = arg AND 
-              SIM.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+              SIM.Brand = gcBrand no-lock no-error.
          ELSE  FIND SIM where
                     SIM.ICC   = arg  no-lock no-error.
          IF AVAIL SIM THEN DO:
@@ -138,7 +141,7 @@ ACTION:
          IF AVAIL IMSI THEN DO:
             FIND FIRST sim WHERE 
                        sim.icc  = imsi.icc AND
-                       sim.Brand = Syst.CUICommon:gcBrand 
+                       sim.Brand = gcBrand 
             NO-LOCK NO-ERROR.
        
             IF NOT AVAIL sim THEN NEXT.
@@ -165,9 +168,9 @@ ACTION:
       END.
 
       IF toimi = 5 THEN DO:
-         IF Syst.CUICommon:gcBrand ne "*" THEN 
+         IF gcBrand ne "*" THEN 
          FIND MobSub where 
-              Mobsub.Brand = Syst.CUICommon:gcBrand AND 
+              Mobsub.Brand = gcBrand AND 
               MobSub.CLI   = arg no-lock no-error.
          ELSE
          FIND MobSub where MobSub.CLI   = arg no-lock no-error.
@@ -181,10 +184,10 @@ ACTION:
       END.
 
       IF toimi = 6 THEN DO:
-         IF Syst.CUICommon:gcBrand ne "*" THEN 
+         IF gcBrand ne "*" THEN 
          FIND Invoice where 
               Invoice.InvNum = integer(arg) AND
-              Invoice.Brand  = Syst.CUICommon:gcBrand no-lock no-error.
+              Invoice.Brand  = gcBrand no-lock no-error.
          ELSE  FIND Invoice where
                     Invoice.InvNum = integer(arg) no-lock no-error.
 
@@ -197,10 +200,10 @@ ACTION:
       END.  
 
       IF TOIMI = 7 THEN DO:
-         IF Syst.CUICommon:gcBrand ne "*" THEN 
+         IF gcBrand ne "*" THEN 
          FIND FIRST Customer  where 
                     Customer.CustName Begins arg AND
-                    Customer.Brand  = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                    Customer.Brand  = gcBrand NO-LOCK NO-ERROR.
          ELSE FIND FIRST Customer where
                          Customer.CustName Begins arg  NO-LOCK NO-ERROR.
 

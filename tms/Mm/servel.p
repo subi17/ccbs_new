@@ -60,6 +60,8 @@ DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 DEF VAR lcTarget     AS CHAR                   NO-UNDO FORMAT "x(20)".
 DEF VAR lcActType    AS CHAR                   NO-UNDO FORMAT "x(20)".
+DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
+gcBrand = Syst.CUICommon:gcBrand.
 
 form
     ServEl.ServPac      /* COLUMN-LABEL FORMAT */ FORMAT "X(12)"
@@ -97,16 +99,16 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 form /* seek ServEl  BY  ServPac */
-    "Brand .:" Syst.CUICommon:gcBrand  HELP "Enter Brand"
-    VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = Syst.CUICommon:gcBrand),"Unknown brand") SKIP
+    "Brand .:" gcBrand  HELP "Enter Brand"
+    VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = gcBrand),"Unknown brand") SKIP
     "Package:" lcServPac
     HELP "Enter Code of Service Package"
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND PACKAGE "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ServEl  BY ServEl */
-    "Brand ...:" Syst.CUICommon:gcBrand  HELP "Enter Brand"
-    VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = Syst.CUICommon:gcBrand),"Unknown brand") SKIP
+    "Brand ...:" gcBrand  HELP "Enter Brand"
+    VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = gcBrand),"Unknown brand") SKIP
     "Component:" lcServCom             
     HELP "Enter Code of Service Component"
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND COMPONENT "
@@ -175,7 +177,7 @@ REPEAT WITH FRAME sel:
                     UNDO add-row, LEAVE add-row.
 
                     FIND ServPac WHERE 
-                         ServPac.Brand = Syst.CUICommon:gcBrand   AND 
+                         ServPac.Brand = gcBrand   AND 
                          ServPac.ServPac =
                     INPUT FRAME lis ServEl.ServPac NO-LOCK NO-ERROR.
 
@@ -197,7 +199,7 @@ REPEAT WITH FRAME sel:
                    END.
 
                    FIND ServCom WHERE 
-                        ServCom.Brand   = Syst.CUICommon:gcBrand AND 
+                        ServCom.Brand   = gcBrand AND 
                         ServCom.ServCom =
                    INPUT FRAME lis ServEl.ServCom NO-LOCK NO-ERROR.
                    IF NOT AVAIL ServCom THEN DO:
@@ -210,7 +212,7 @@ REPEAT WITH FRAME sel:
 
                 /* Check that there is no such record already */
                 FIND ServEl WHERE
-                     ServEl.Brand    = Syst.CUICommon:gcBrand                         AND 
+                     ServEl.Brand    = gcBrand                         AND 
                      ServEl.ServPac  = INPUT FRAME lis ServEl.ServPac  AND
                      ServEl.ServCom  = INPUT FRAME lis ServEl.ServCom
                 NO-LOCK NO-ERROR.
@@ -228,7 +230,7 @@ REPEAT WITH FRAME sel:
 
            CREATE ServEl.
            ASSIGN
-           ServEl.Brand    = Syst.CUICommon:gcBrand 
+           ServEl.Brand    = gcBrand 
            ServEl.ServPac  = caps(INPUT FRAME lis ServEl.ServPac)
            ServEl.ServCom  = CAPS(INPUT FRAME lis ServEl.ServCom).
 
@@ -249,7 +251,7 @@ REPEAT WITH FRAME sel:
 
       /* is there ANY record ? */
       FIND FIRST ServEl
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServEl THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -457,14 +459,14 @@ REPEAT WITH FRAME sel:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
-       DISP Syst.CUICommon:gcBrand WITH FRAME f1.
-       SET  Syst.CUICommon:gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
+       DISP gcBrand WITH FRAME f1.
+       SET  gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             lcServPac WITH FRAME f1.          
        HIDE FRAME f1 NO-PAUSE.
        IF lcServPac > "" THEN DO:
           FIND FIRST ServEl WHERE 
                      ServEl.ServPac >= lcServPac   AND 
-                     ServEl.Brand    = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                     ServEl.Brand    = gcBrand NO-LOCK NO-ERROR.
 
           IF NOT  fRecFound(1) THEN NEXT Browse.
 
@@ -478,8 +480,8 @@ REPEAT WITH FRAME sel:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
-       DISP Syst.CUICommon:gcBrand WITH FRAME f2.
-       SET Syst.CUICommon:gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE AND icServPac = ""
+       DISP gcBrand WITH FRAME f2.
+       SET gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE AND icServPac = ""
            lcServCom WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -489,13 +491,13 @@ REPEAT WITH FRAME sel:
           FIND FIRST ServEl Use-index servcom WHERE 
                      ServEl.ServPac  = icServPac  AND
                      ServEl.ServCom >= lcServCom  AND 
-                     ServEl.Brand    = Syst.CUICommon:gcBrand 
+                     ServEl.Brand    = gcBrand 
           NO-LOCK NO-ERROR.
  
           ELSE
           FIND FIRST ServEl Use-index servcom WHERE 
                      ServEl.ServCom >= lcServCom  AND 
-                     ServEl.Brand    = Syst.CUICommon:gcBrand 
+                     ServEl.Brand    = gcBrand 
           NO-LOCK NO-ERROR.
           
           IF NOT  fRecFound(2) THEN NEXT Browse.
@@ -509,7 +511,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(FALSE).
 
         FIND ServCom WHERE 
-             ServCom.Brand = Syst.CUICommon:gcBrand AND
+             ServCom.Brand = gcBrand AND
              ServCom.ServCom = ServEl.ServCom NO-LOCK NO-ERROR.
              
         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN 
@@ -567,7 +569,7 @@ REPEAT WITH FRAME sel:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST ServEl
-           WHERE ServEl.Brand = Syst.CUICommon:gcBrand) THEN DO:
+           WHERE ServEl.Brand = gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -652,14 +654,14 @@ PROCEDURE local-find-FIRST:
 
    IF icServPac > "" THEN DO:
       FIND FIRST ServEl WHERE
-                 ServEl.Brand   = Syst.CUICommon:gcBrand AND
+                 ServEl.Brand   = gcBrand AND
                  ServEl.ServPac = icServPac NO-LOCK NO-ERROR. 
    END.
    ELSE DO:
       IF order = 1 THEN FIND FIRST ServEl
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND FIRST ServEl USE-INDEX ServCom
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
    END.
        
 END PROCEDURE.
@@ -667,42 +669,42 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF icServPac > "" THEN DO:
       FIND LAST ServEl WHERE
-                ServEl.Brand   = Syst.CUICommon:gcBrand AND
+                ServEl.Brand   = gcBrand AND
                 ServEl.ServPac = icServPac NO-LOCK NO-ERROR. 
    END.
    ELSE DO:
       IF order = 1 THEN FIND LAST ServEl
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND LAST ServEl USE-INDEX ServCom
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
    END.   
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF icServPac > "" THEN DO:
       FIND NEXT ServEl WHERE
-                ServEl.Brand   = Syst.CUICommon:gcBrand AND
+                ServEl.Brand   = gcBrand AND
                 ServEl.ServPac = icServPac NO-LOCK NO-ERROR. 
    END.
    ELSE DO:
       IF order = 1 THEN FIND NEXT ServEl
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND NEXT ServEl USE-INDEX ServCom
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF icServPac > "" THEN DO:
       FIND PREV ServEl WHERE
-                ServEl.Brand   = Syst.CUICommon:gcBrand AND
+                ServEl.Brand   = gcBrand AND
                 ServEl.ServPac = icServPac NO-LOCK NO-ERROR. 
    END.
    ELSE DO:
       IF order = 1 THEN FIND PREV ServEl
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND PREV ServEl USE-INDEX ServCom
-      WHERE ServEl.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
    END.    
 END PROCEDURE.
 
@@ -726,7 +728,7 @@ PROCEDURE local-find-others.
        
        FIND ServCom WHERE
             ServCom.ServCom = ServEl.ServCom AND 
-            ServCom.Brand   = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+            ServCom.Brand   = gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:

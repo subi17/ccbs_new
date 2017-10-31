@@ -86,7 +86,7 @@ SKIP(1)
 "      Service Profile Code:"  def-sp-code NO-LABEL
  HELP "Press F9 for help"
  validate(CAN-FIND(FIRST servpac where
-                         servpac.Brand = gcBrand AND 
+                         servpac.Brand = Syst.CUICommon:gcBrand AND 
           servpac.servpac = def-sp-code),"Unknown service profile")
                    servpac.spname                                       SKIP
  
