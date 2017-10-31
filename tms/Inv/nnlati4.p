@@ -71,7 +71,7 @@ form header
    WITH width 114 NO-LABEL no-box FRAME sivuotsi.
 
 /* Get Date proposal */
-ASSIGN date1  = pvm.
+ASSIGN date1  = TODAY.
 FIND LAST Invoice  USE-INDEX InvDate no-lock no-error.
 IF NOT AVAIL Invoice THEN
 FIND LAST Invoice no-lock no-error.

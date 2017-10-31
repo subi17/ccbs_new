@@ -24,7 +24,6 @@ DEF NEW shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 DEF NEW shared VAR yvari AS LOG NO-UNDO.
 
 def new shared var gcHelpParam as char NO-UNDO.
-DEF NEW shared VAR si-pvm AS Date NO-UNDO.
 DEF NEW shared VAR si-recid AS RECID NO-UNDO.
 DEF NEW shared VAR si-recid2 AS RECID NO-UNDO.
 DEF NEW shared VAR helpkey AS CHAR NO-UNDO.

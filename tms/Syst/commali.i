@@ -24,7 +24,6 @@ DEF shared VAR poisnap AS CHAR.
 DEF shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 DEF shared VAR yvari AS LOG NO-UNDO.
 
-DEF shared VAR si-pvm      AS Date NO-UNDO.
 DEF shared VAR si-recid    AS RECID NO-UNDO.
 DEF shared VAR si-recid2   AS RECID NO-UNDO.
 def shared var gcHelpParam as char NO-UNDO.

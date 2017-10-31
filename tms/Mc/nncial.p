@@ -25,7 +25,7 @@ DEF TEMP-TABLE ttCust NO-UNDO
     FIELD CustNum AS INT
     INDEX CustNum CustNum.
 
-idate = pvm.
+idate = TODAY.
 
 form
   idate label "Date of next invoice ..." format "99-99-99"

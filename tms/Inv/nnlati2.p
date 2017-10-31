@@ -83,7 +83,7 @@ form header
    WITH width 114 NO-LABEL no-box FRAME sivuotsi.
 
 /* Haetaan pvm-ehdotus ensin viim. laskuttamattom., sitten viim. laskutetusta */
-ASSIGN date1  = pvm.
+ASSIGN date1  = TODAY.
 FIND FIRST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.

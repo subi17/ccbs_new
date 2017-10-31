@@ -50,7 +50,7 @@ form
   NO-LABEL OVERLAY FRAME kal.
 
   ASSIGN
-  kk=month(si-pvm) vv=year(si-pvm) pp=day(si-pvm)
+  kk=month(Syst.CUICommon:si-pvm) vv=year(Syst.CUICommon:si-pvm) pp=day(Syst.CUICommon:si-pvm)
   chalku=string(pp)
   Syst.CUICommon:cfc = "kal". RUN Syst/ufcolor.p.
 
@@ -140,13 +140,13 @@ toimi:
             IF vv > 80 AND vv < 1980 THEN vv = vv + 1900.
             ELSE IF vv > 80 THEN vv = vv + 2000.
          END.
-         si-pvm = date(kk,pp,vv).
+         Syst.CUICommon:si-pvm = date(kk,pp,vv).
          HIDE FRAME kal no-pause.
          LEAVE LOOP.
       END.
 
       else if nap = "8" or nap = "f8" THEN DO:
-         si-pvm = ?.
+         Syst.CUICommon:si-pvm = ?.
          HIDE FRAME kal no-pause.
          LEAVE LOOP.
       END.

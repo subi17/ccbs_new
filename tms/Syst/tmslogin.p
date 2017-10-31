@@ -61,7 +61,7 @@ do with frame login:
    pause 0 no-message.
 
    ehto = 9. RUN Syst/ufkey.p.
-   assign si-pvm = pvm.
+   assign Syst.CUICommon:si-pvm = TODAY.
 
    if katun = "" then do:
       Syst.CUICommon:cfc = "tunnus". RUN Syst/ufcolor.p.

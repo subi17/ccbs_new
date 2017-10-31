@@ -159,7 +159,7 @@ repeat with frame menu_frame:
 
    if first_time then do with frame login:
 
-     assign first_time = false si-pvm = pvm.
+     assign first_time = false Syst.CUICommon:si-pvm = TODAY.
 
      find TmsUser where TmsUser.UserCode = katun no-lock.
 

@@ -612,7 +612,7 @@ BROWSE:
         END.
         else message "No entries found yet in Price list" PriceList.PriceList.
 
-        vdate = pvm.
+        vdate = TODAY.
         update PriceList validate(input PriceList = "" OR
                                 can-find(fplist where 
                                          fplist.PriceList = INPUT PriceList),

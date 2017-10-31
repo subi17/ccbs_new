@@ -166,7 +166,7 @@ repeat WITH FRAME frm:
         END.
 
         /* ... IF NOT Printed into wl -file change closing Date */
-        IF MthCall.Printed = FALSE THEN ASSIGN MthCall.CloseDate = pvm.
+        IF MthCall.Printed = FALSE THEN ASSIGN MthCall.CloseDate = TODAY.
 
         /* ... IF NOT already marked AS unpaid invoices */
         IF MthCall.CloseType <= 1 THEN ASSIGN

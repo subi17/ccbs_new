@@ -157,20 +157,20 @@ else if
      END.
 
      /* check the FORMAT of the frame-field */
-     si-pvm = date(kk,pp,vv).
-     frame-value = string(si-pvm,"99-99-9999").
+     Syst.CUICommon:si-pvm = date(kk,pp,vv).
+     frame-value = string(Syst.CUICommon:si-pvm,"99-99-9999").
      IF length(frame-value) = 8 THEN ASSIGN
         df = "99-99-99".
      ELSE ASSIGN
         df = "99-99-9999".
-     frame-value = string(si-pvm,df).
+     frame-value = string(Syst.CUICommon:si-pvm,df).
 
      RUN Syst/ukale.p.
-     IF si-pvm <> ? THEN DO:
+     IF Syst.CUICommon:si-pvm <> ? THEN DO:
         PAUSE 0 no-message.
-        frame-value = string(si-pvm,df).
+        frame-value = string(Syst.CUICommon:si-pvm,df).
      END.
-     ELSE si-pvm = TODAY.
+     ELSE Syst.CUICommon:si-pvm = TODAY.
 END.
 ELSE IF lookup(frame-field,"UserCode") 
     > 0 THEN DO:

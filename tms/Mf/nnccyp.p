@@ -461,7 +461,7 @@ BROWSE:
               UPDATE ok.
            IF ok THEN DO:
               DO TRANSAction:
-                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = pvm.
+                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = TODAY.
                  ELSE                      ASSIGN ClosedCust.DateOpen = ?.
                  DISPLAY ClosedCust.DateOpen.
               END.
@@ -489,7 +489,7 @@ BROWSE:
                        ClosedCust.State   = FALSE AND
                        ClosedCust.Printed = FALSE.
 
-                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = pvm.
+                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = TODAY.
                  ELSE                      ASSIGN ClosedCust.DateOpen = ?.
 
               END.

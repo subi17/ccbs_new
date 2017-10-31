@@ -23,7 +23,6 @@ def new shared var poisnap AS CHAR.
 def new shared var TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 def new shared var yvari AS LOG NO-UNDO.
 
-def new shared var si-pvm      AS Date NO-UNDO.
 def new shared var si-recid    AS RECID NO-UNDO.
 def new shared var si-recid2   AS RECID NO-UNDO.
 def new shared var gcHelpParam as char NO-UNDO.

@@ -402,7 +402,7 @@ DO:
 END.
 
 
-ASSIGN muispvm    = pvm.
+ASSIGN muispvm    = TODAY.
 
 fCurrLabels(""). 
 

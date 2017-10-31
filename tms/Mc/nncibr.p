@@ -21,7 +21,7 @@ VERSION ........: M15
 DEF VAR idate  AS DA NO-UNDO.
 DEF VAR CustNum AS i  NO-UNDO.
 DEF VAR period  AS i  NO-UNDO.
-idate = pvm.
+idate = TODAY.
 
 DEF TEMP-TABLE ttCust NO-UNDO
     FIELD CustNum AS INT

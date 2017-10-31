@@ -72,7 +72,7 @@ WITH
 
 ASSIGN
    iAR     = 1
-   dte     = pvm.
+   dte     = TODAY.
 
 PAUSE 0.
 DISPLAY "ALL" @ InvGroup.IGName WITH FRAME limit.

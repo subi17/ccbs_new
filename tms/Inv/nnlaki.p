@@ -549,7 +549,7 @@ END FUNCTION.
 
 ASSIGN 
    i-date1  = pvm
-   i-date2  = pvm.
+   i-date2  = TODAY.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.

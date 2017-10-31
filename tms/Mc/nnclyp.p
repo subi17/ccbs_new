@@ -86,7 +86,7 @@ END.
 
 DO i = 1 TO 17 TRANS:
    IF CustLetter.LtrText[i] entered THEN DO:
-      CustLetter.ChgDate = pvm.
+      CustLetter.ChgDate = TODAY.
       LEAVE.
    END.
 END.

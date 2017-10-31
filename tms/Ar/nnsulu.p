@@ -12,7 +12,6 @@
                   16.06.95 /tt --> LisAtty siirrot PROGRESS-Tiliniekkaan
                   24.07.95 /tt --> Mahdollistettu 2 yritystA
                   28.05.96 /tt --> Jos EI kpvientiA, ei myOs tulosteta tul2
-                  27.06.97 /pt --> pvm.formaatit 99.99.9999 headerissa
                   06.11.97 /pt --> change pvm-rajoihin FOR eachissa
                   23.11.97 /pt --> laskutusryhmArajaus
                   28.07.98 /pt --> rajaus PaymDate perusteella ei AccDate
