@@ -558,7 +558,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 EMPTY TEMP-TABLE ttCall.
 IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.

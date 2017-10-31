@@ -482,7 +482,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
     
    /* Lasku was found */
    ASSIGN 
-      si-recid   = recid(Invoice)
+      Syst.CUICommon:si-recid   = recid(Invoice)
       ldPayment  = 0 
       ldPaidAmt  = 0 
       suopvm     = muispvm 

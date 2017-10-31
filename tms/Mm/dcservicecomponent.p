@@ -153,7 +153,7 @@ REPEAT WITH FRAME sel:
 
               IF KEYLABEL(LASTKEY) = "F9" THEN DO:
 
-                 gcHelpParam = DCServicePackage.ServPac.
+                 Syst.CUICommon:gcHelpParam = DCServicePackage.ServPac.
                  RUN Help/h-service_element.p.
                  IF siirto > "" THEN 
                     DISPLAY siirto @ DCServiceComponent.ServCom WITH FRAME lis.
@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
            Syst.CUICommon:ufk[4] = 0
            Syst.CUICommon:ufk[5] = 11
            Syst.CUICommon:ufk[6] = 0
@@ -435,7 +435,7 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            RUN local-find-this(FALSE).
            xRecid = RECID(DCServiceComponent).
            LEAVE LOOP.
@@ -514,7 +514,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = RECID(DCServiceComponent).
           LEAVE LOOP.
        END.
@@ -557,7 +557,7 @@ END.  /* LOOP */
 
 FINALLY:
    HIDE FRAME sel NO-PAUSE.
-   si-recid = xrecid.
+   Syst.CUICommon:si-recid = xrecid.
 
    Syst.CUICommon:ehto = 4.
    RUN Syst/ufkey.p.

@@ -376,7 +376,7 @@ REPEAT WITH FRAME sel:
 
         IF AVAILABLE PostCode THEN DO:
            ASSIGN siirto   = PostCode.ZipCode
-                  si-recid = RECID(PostCode).
+                  Syst.CUICommon:si-recid = RECID(PostCode).
            LEAVE LOOP.
         END.
      END.
@@ -395,7 +395,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         ASSIGN siirto = ""
-               si-recid = ?.
+               Syst.CUICommon:si-recid = ?.
         LEAVE LOOP.
      END.
 

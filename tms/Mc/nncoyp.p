@@ -365,7 +365,7 @@ repeat WITH FRAME sel:
                   END.
                   ASSIGN FixedFee.CustNum   = CustNum
                          FixedFee.VATIncl   = Customer.VATIncl
-                         si-recid2          = CustNum.
+                         Syst.CUICommon:si-recid2          = CustNum.
                   DISP Customer.CustName FixedFee.VATIncl
                   WITH FRAME lis.
                END.   /* CustNum */
@@ -560,7 +560,7 @@ repeat WITH FRAME sel:
              APPLY LASTKEY.
           END. /* UPDATE EDITING */
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
           /* CREATE now individual items */
           rc = fMakeContract (INPUT FixedFee.FFNum,
@@ -1232,7 +1232,7 @@ BROWSE:
           FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
           exclusive-lock.
 
-          si-recid2 = FixedFee.CustNum.
+          Syst.CUICommon:si-recid2 = FixedFee.CustNum.
 
           UPDATE
           FixedFee.Contract
@@ -1335,7 +1335,7 @@ BROWSE:
 
           END. /* EDITING */   
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
           IF FixedFee.Amt  entered OR
              FixedFee.VATIncl entered OR
@@ -1428,7 +1428,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

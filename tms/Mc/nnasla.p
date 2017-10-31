@@ -59,7 +59,7 @@
                                don't go directly into update mode with "enter"
                   09.10.03/aam fEPLStart 
                   10.10.03/aam itsendlo
-                  13.10.03/aam use si-recid2 to pass invoice to nnlaki,
+                  13.10.03/aam use Syst.CUICommon:si-recid2 to pass invoice to nnlaki,
                                crediting of invoice (nncimu)
                   02.02.04/jp  memo to customer  
                   09.02.04/aam CustNum to showpr
@@ -1007,7 +1007,7 @@ print-line:
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
         
         assign memory    = recid(ttInvoice).
-               si-recid2 = recid(Invoice).
+               Syst.CUICommon:si-recid2 = recid(Invoice).
 
         llCreaFee = (Invoice.PrintState > 0).
         
@@ -1018,7 +1018,7 @@ print-line:
         assign
         must-print = true
         ufkey      = true
-        si-recid2  = ?. 
+        Syst.CUICommon:si-recid2  = ?. 
         
         next LOOP.
      end.
@@ -1176,7 +1176,7 @@ end.  /* LOOP */
 
 hide frame sel no-pause.
 hide frame cusdata no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-DISP-row:
 

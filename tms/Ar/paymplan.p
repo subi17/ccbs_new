@@ -946,7 +946,7 @@ REPEAT WITH FRAME sel:
        THEN RUN Ar/ppinv.p (PaymPlan.PPlanID,
                        FALSE, /* automatic mode */
                        OUTPUT llMoveOn). 
-       ASSIGN gcHelpParam = ""
+       ASSIGN Syst.CUICommon:gcHelpParam = ""
               ufkey = true.
        IF llMoveOn THEN liAutoRun = 2.       
        RUN local-disp-row.           
@@ -1117,7 +1117,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

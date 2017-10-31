@@ -580,7 +580,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST SIM USE-INDEX simbatch  WHERE 

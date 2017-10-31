@@ -10,16 +10,6 @@
 def new shared var katun   as char format "x(8)".
 
 /* ufkey.p:n tarvitsemat */
-DEF NEW shared VAR yvari AS LOG NO-UNDO.
-
-def new shared var gcHelpParam as char NO-UNDO.
-DEF NEW shared VAR si-recid AS RECID NO-UNDO.
-DEF NEW shared VAR si-recid2 AS RECID NO-UNDO.
-DEF NEW shared VAR helpkey AS CHAR NO-UNDO.
-DEF NEW shared VAR ginvno  AS i NO-UNDO.
-
-
-DEF NEW SHARED VAR ergo-kbd AS LO NO-UNDO.
 
 on f1 go.
 on f2 BELL.
@@ -36,7 +26,7 @@ on f21 HELP.
 status INPUT off.
 
 
-katun = "admin".  yvari = true. Syst.CUICommon:ynimi = "!!! TESTI !!!".
+katun = "admin".  Syst.CUICommon:yvari = true. Syst.CUICommon:ynimi = "!!! TESTI !!!".
 Syst.CUICommon:gcAllBrand = TRUE.
 Syst.CUICommon:gcBrand    = "1".
 

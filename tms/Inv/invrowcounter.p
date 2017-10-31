@@ -718,7 +718,7 @@ END PROCEDURE.
 FINALLY:
 
    HIDE FRAME sel NO-PAUSE.
-   si-recid = xrecid.
+   Syst.CUICommon:si-recid = xrecid.
 
    Syst.CUICommon:ehto = 4.
    RUN Syst/ufkey.p.

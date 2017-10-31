@@ -116,7 +116,7 @@ IF NOT AVAILABLE PaymPlan THEN RETURN.
 ASSIGN lcTitle     = " INVOICES IN PLAN: " +
                      STRING(PaymPlan.CustNum) + "/" +
                      STRING(PaymPlan.PPDate,"99.99.9999") + " "
-       gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
+       Syst.CUICommon:gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
@@ -571,8 +571,8 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid
-       gcHelpParam = "".
+ASSIGN Syst.CUICommon:si-recid    = xrecid
+       Syst.CUICommon:gcHelpParam = "".
 
 
 PROCEDURE local-find-this:

@@ -146,7 +146,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             
             IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "lcDCEvent"
             THEN DO:
-               gcHelpParam = "DCType:1,4".
+               Syst.CUICommon:gcHelpParam = "DCType:1,4".
                RUN Help/h-daycamp.p.
                IF siirto NE ? THEN 
                DO: 

@@ -649,7 +649,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -782,13 +782,13 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ELSE IF FRAME-FIELD = "liInvInfo" THEN DO:
-                  ASSIGN gcHelpParam = "prt"
-                         si-recid    = 0.
+                  ASSIGN Syst.CUICommon:gcHelpParam = "prt"
+                         Syst.CUICommon:si-recid    = 0.
                   RUN Mc/nnteyp.p.
-                  gcHelpParam = "".
+                  Syst.CUICommon:gcHelpParam = "".
                   
-                  IF si-recid > 0 THEN DO:
-                     FIND HdrText WHERE RECID(HdrText) = si-recid NO-LOCK.
+                  IF Syst.CUICommon:si-recid > 0 THEN DO:
+                     FIND HdrText WHERE RECID(HdrText) = Syst.CUICommon:si-recid NO-LOCK.
                      DISPLAY HdrText.te-nro @ liInvInfo WITH FRAME lis.
                   END.
                END.

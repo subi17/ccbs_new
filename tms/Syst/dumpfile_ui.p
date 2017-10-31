@@ -101,13 +101,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "liDumpID" THEN DO:
 
             ASSIGN
-               si-recid    = ?
-               gcHelpParam = "dumpid".
+               Syst.CUICommon:si-recid    = ?
+               Syst.CUICommon:gcHelpParam = "dumpid".
             RUN Syst/dumpfile.p.
-            gcHelpParam = "".
+            Syst.CUICommon:gcHelpParam = "".
             
-            IF si-recid NE ? THEN DO:
-               FIND DumpFile WHERE RECID(DumpFile) = si-recid NO-LOCK NO-ERROR.
+            IF Syst.CUICommon:si-recid NE ? THEN DO:
+               FIND DumpFile WHERE RECID(DumpFile) = Syst.CUICommon:si-recid NO-LOCK NO-ERROR.
                IF AVAILABLE DumpFile THEN 
                   DISP DumpFile.DumpID @ liDumpID WITH FRAME fCrit.
             END.

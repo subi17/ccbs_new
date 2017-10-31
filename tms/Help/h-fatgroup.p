@@ -6,7 +6,7 @@
   AUTHOR .......: jp
   CREATED ......: 21.08.02
                   15.09.03 jp Brand                        
-  MODIFIED .....: 08.09.06/aam type selection (gcHelpParam),
+  MODIFIED .....: 08.09.06/aam type selection (Syst.CUICommon:gcHelpParam),
                                local-procedures
   Version ......: M15
   ------------------------------------------------------ */
@@ -47,15 +47,15 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst
 liType  = ?.
        
 /* filters selected */
-IF gcHelpParam > "" THEN DO i = 1 TO NUM-ENTRIES(gcHelpParam,";"):
+IF Syst.CUICommon:gcHelpParam > "" THEN DO i = 1 TO NUM-ENTRIES(Syst.CUICommon:gcHelpParam,";"):
 
-   lcValue = ENTRY(i,gcHelpParam,";").
+   lcValue = ENTRY(i,Syst.CUICommon:gcHelpParam,";").
    
    IF lcValue BEGINS "type" THEN 
       liType = INTEGER(SUBSTRING(lcValue,5)) NO-ERROR.
 END.
 
-gcHelpParam = "".
+Syst.CUICommon:gcHelpParam = "".
 
 MAIN:
 repeat:

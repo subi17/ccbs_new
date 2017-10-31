@@ -15,7 +15,7 @@
                   10.12.02 lp siirto = ?
                   15.09.03/aam brand
                   06.02.04 jp  CustNum for memo
-                  09.02.04/aam parameters from gcHelpParam
+                  09.02.04/aam parameters from Syst.CUICommon:gcHelpParam
                   14.04.04/aam index CustName replaced with CustNum 
                   18.04.06/aam use payments.p instead of nnlasu.p
                   22.03.07 kl  new param for RUN Ar/payments.p
@@ -94,10 +94,10 @@ form
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
-IF gcHelpParam > "" THEN DO:
-   liInvCust = INTEGER(ENTRY(1,gcHelpParam)) NO-ERROR.
-   IF NUM-ENTRIES(gcHelpParam) > 1
-   THEN llOnlyOpen = (ENTRY(2,gcHelpParam) = "TRUE"). 
+IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+   liInvCust = INTEGER(ENTRY(1,Syst.CUICommon:gcHelpParam)) NO-ERROR.
+   IF NUM-ENTRIES(Syst.CUICommon:gcHelpParam) > 1
+   THEN llOnlyOpen = (ENTRY(2,Syst.CUICommon:gcHelpParam) = "TRUE"). 
 END.
 
 order = 1.
@@ -469,7 +469,7 @@ print-line:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

@@ -371,7 +371,7 @@ END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
 HIDE FRAME fLimits NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 

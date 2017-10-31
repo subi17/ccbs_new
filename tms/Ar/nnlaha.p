@@ -49,15 +49,15 @@ repeat:
                      Invoice.InvNum <= nhaku
           USE-INDEX InvNum no-lock no-error.
 
-          IF AVAILABLE Invoice THEN ASSIGN si-recid = recid(Invoice).
+          IF AVAILABLE Invoice THEN ASSIGN Syst.CUICommon:si-recid = recid(Invoice).
           ELSE DO:
              message "CAN'T FIND !".
-             si-recid = ?.
+             Syst.CUICommon:si-recid = ?.
              BELL.
              PAUSE 1 no-message.
           END.
        END.
-       ELSE ASSIGN si-recid = ?.
+       ELSE ASSIGN Syst.CUICommon:si-recid = ?.
        HIDE FRAME asno no-pause.
        LEAVE LOOP.
     END.
@@ -74,15 +74,15 @@ repeat:
                      Invoice.CustNum >= liCustNum
           no-lock no-error.
 
-          IF AVAILABLE Invoice THEN ASSIGN si-recid = recid(Invoice).
+          IF AVAILABLE Invoice THEN ASSIGN Syst.CUICommon:si-recid = recid(Invoice).
           ELSE DO:
              message "CAN'T FIND !".
-             si-recid = ?.
+             Syst.CUICommon:si-recid = ?.
              BELL.
              PAUSE 1 no-message.
           END.
        END.
-       ELSE ASSIGN si-recid = ?.
+       ELSE ASSIGN Syst.CUICommon:si-recid = ?.
        HIDE FRAME nimi no-pause.
        LEAVE LOOP.
     END.

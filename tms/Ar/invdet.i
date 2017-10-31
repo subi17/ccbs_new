@@ -612,11 +612,11 @@ PROCEDURE pInvoiceUpdate:
 
             /* credit invoice */
             ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
-               si-recid2 = RECID(Invoice).
+               Syst.CUICommon:si-recid2 = RECID(Invoice).
               
                RUN Ar/nncimu.p.
 
-               si-recid2  = ?.
+               Syst.CUICommon:si-recid2  = ?.
                
                IF Invoice.CrInvNum > 0 THEN RETURN "".
             END. 

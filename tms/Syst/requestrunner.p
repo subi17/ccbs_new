@@ -93,13 +93,13 @@ IF ldaSystemDay = ? OR ldaSystemDay < TODAY THEN
 IF liQueue = 0 THEN DO:
    
    ASSIGN
-      gcHelpParam = "choose"
-      si-recid    = 0.
+      Syst.CUICommon:gcHelpParam = "choose"
+      Syst.CUICommon:si-recid    = 0.
       
    RUN Syst/requestqueue.p.
    
-   IF si-recid > 0 THEN DO:
-      FIND RequestQueue WHERE RECID(RequestQueue) = si-recid
+   IF Syst.CUICommon:si-recid > 0 THEN DO:
+      FIND RequestQueue WHERE RECID(RequestQueue) = Syst.CUICommon:si-recid
          NO-LOCK NO-ERROR.
       IF AVAILABLE RequestQueue THEN liQueue = RequestQueue.Queue.
    END.

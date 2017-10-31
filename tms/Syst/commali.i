@@ -1,6 +1,6 @@
 /* common alueen m{{ritys                                        commali.i    
             07.10.03/aam CommVarDef
-            09.02.04/aam gcHelpParam
+            09.02.04/aam Syst.CUICommon:gcHelpParam
 */
 
 &IF "{&CommVarDef}" NE "YES" 
@@ -11,17 +11,7 @@
 
 def shared var katun   as char format "x(8)".
 
-DEF shared VAR yvari AS LOG NO-UNDO.
-
-DEF shared VAR si-recid    AS RECID NO-UNDO.
-DEF shared VAR si-recid2   AS RECID NO-UNDO.
-def shared var gcHelpParam as char NO-UNDO.
-
-DEF shared VAR helpkey AS CHAR NO-UNDO.
-
 &GLOBAL-DEFINE BrandVarDefined YES
-
-DEF SHARED VAR ergo-kbd AS LO NO-UNDO.
 
 on f1 go.
 on f2 go.

@@ -317,7 +317,7 @@ BROWSE:
 END.  /* LOOP */
 PAUSE 0.
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

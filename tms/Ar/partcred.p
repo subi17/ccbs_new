@@ -529,7 +529,7 @@ HIDE FRAME sel     NO-PAUSE.
 HIDE FRAME crother NO-PAUSE. 
 HIDE FRAME fVat    NO-PAUSE.
 
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

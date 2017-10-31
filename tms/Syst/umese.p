@@ -90,8 +90,8 @@ form /* menunimen hakua varten */
 
 /* Haetaan Company */
 FIND FIRST Company no-lock no-error.
-IF AVAILABLE Company THEN ASSIGN yvari = TRUE.
-ELSE ASSIGN yvari = FALSE.
+IF AVAILABLE Company THEN ASSIGN Syst.CUICommon:yvari = TRUE.
+ELSE ASSIGN Syst.CUICommon:yvari = FALSE.
 
  Syst.CUICommon:cfc = "mese". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
  view FRAME sel.

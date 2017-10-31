@@ -109,10 +109,10 @@ ASSIGN
 
                                           
 /* used as help browser */
-IF gcHelpParam > "" THEN DO:
-   IF iiInvNum = 0 THEN iiInvNum = INTEGER(gcHelpParam) NO-ERROR.
+IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+   IF iiInvNum = 0 THEN iiInvNum = INTEGER(Syst.CUICommon:gcHelpParam) NO-ERROR.
    ASSIGN llHelp      = TRUE
-          gcHelpParam = "".
+          Syst.CUICommon:gcHelpParam = "".
 END.
 ELSE llHelp = FALSE.          
 
@@ -429,14 +429,14 @@ REPEAT WITH FRAME sel:
            IF Syst.CUICommon:toimi = 3 THEN DO:
 
               FIND Invoice OF SubInvoice NO-LOCK. 
-              ASSIGN si-recid2 = RECID(Invoice)
-                     si-recid  = RECID(SubInvoice)
+              ASSIGN Syst.CUICommon:si-recid2 = RECID(Invoice)
+                     Syst.CUICommon:si-recid  = RECID(SubInvoice)
                      memory    = RECID(SubInvoice).
               
               RUN Ar/nncimu.p.
 
-              ASSIGN si-recid2  = ?   
-                     si-recid   = ?
+              ASSIGN Syst.CUICommon:si-recid2  = ?   
+                     Syst.CUICommon:si-recid   = ?
                      ufkey      = TRUE
                      must-print = TRUE.
               LEAVE otheractions.       
@@ -561,7 +561,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 fCleanEventObjects().
 

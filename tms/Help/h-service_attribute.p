@@ -31,8 +31,8 @@ form
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 ASSIGN
-   lcServCom = gcHelpParam
-   gcHelpParam = "".
+   lcServCom = Syst.CUICommon:gcHelpParam
+   Syst.CUICommon:gcHelpParam = "".
 
 MAIN:
 repeat:

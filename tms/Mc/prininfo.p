@@ -322,17 +322,17 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 ELSE IF KEYLABEL(LASTKEY) = "F4" THEN UNDO, LEAVE.
                     
                 ELSE IF keylabel(lastkey) = "F9" THEN DO:
-                   ASSIGN gcHelpParam = "prt"
-                          si-recid    = 0.
+                   ASSIGN Syst.CUICommon:gcHelpParam = "prt"
+                          Syst.CUICommon:si-recid    = 0.
                    RUN Mc/invotxt.p ("",
                                 "").
-                   gcHelpParam = "".
+                   Syst.CUICommon:gcHelpParam = "".
                    
                    Syst.CUICommon:ehto = 9.
                    RUN Syst/ufkey.p.
        
-                   IF si-recid > 0 THEN DO:
-                      FIND InvText WHERE RECID(InvText) = si-recid 
+                   IF Syst.CUICommon:si-recid > 0 THEN DO:
+                      FIND InvText WHERE RECID(InvText) = Syst.CUICommon:si-recid 
                       NO-LOCK NO-ERROR.
                       IF AVAILABLE InvText THEN DO:
 

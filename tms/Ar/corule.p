@@ -854,7 +854,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -991,8 +991,8 @@ PROCEDURE local-UPDATE-record:
          ASSIGN 
             Syst.CUICommon:ehto   = 0
             Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
-            Syst.CUICommon:ufk[3] = 1550 WHEN lcRight = "RW" AND gcHelpParam = ""
+            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
+            Syst.CUICommon:ufk[3] = 1550 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
             Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.
@@ -1059,16 +1059,16 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF INDEX(FRAME-FIELD,"SMS") > 0 THEN DO:
                   ASSIGN
-                     gcHelpParam = "tmrlimit"
-                     si-recid    = ?
+                     Syst.CUICommon:gcHelpParam = "tmrlimit"
+                     Syst.CUICommon:si-recid    = ?
                      lcField     = FRAME-FIELD.
                
                   RUN Mc/invotxt.p("SMS","").
         
-                  gcHelpParam = "".
+                  Syst.CUICommon:gcHelpParam = "".
                         
-                  IF si-recid NE ? THEN DO:
-                     FIND InvText WHERE RECID(InvText) = si-recid
+                  IF Syst.CUICommon:si-recid NE ? THEN DO:
+                     FIND InvText WHERE RECID(InvText) = Syst.CUICommon:si-recid
                         NO-LOCK NO-ERROR.
                      IF AVAILABLE InvText THEN DO WITH FRAME lis:
                         IF lcField = "CreationSMS" THEN 

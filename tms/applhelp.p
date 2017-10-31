@@ -19,6 +19,8 @@ DEF VAR kk AS INT NO-UNDO.
 DEF VAR vv AS INT NO-UNDO.
 DEF VAR df AS c   NO-UNDO.
 DEF VAR lcCode AS CHAR NO-UNDO.
+DEF VAR helpkey AS CHAR NO-UNDO.
+
 
 
 /* talteen ufKey:n common-arvot jottei sotketa paikkoja */
@@ -28,7 +30,7 @@ DO i = 1 TO 9 :
 END.
 helpkey = keylabel(LASTKEY).
 
-gcHelpParam = "ahelp".
+Syst.CUICommon:gcHelpParam = "ahelp".
 
 if helpkey = "f31" THEN RUN istrans.p.
 else if helpkey = "f10" THEN DO:
@@ -165,7 +167,7 @@ else if
         df = "99-99-9999".
      frame-value = string(Syst.CUICommon:si-pvm,df).
 
-     RUN Syst/ukale.p.
+     RUN Syst/ukale.p(INPUT helpkey).
      IF Syst.CUICommon:si-pvm <> ? THEN DO:
         PAUSE 0 no-message.
         frame-value = string(Syst.CUICommon:si-pvm,df).
@@ -342,9 +344,9 @@ else if lookup(frame-field,"tokencode") > 0 THEN DO:
 END.
 
 else if index(frame-field,"contract") > 0 and
-     si-recid2 > 0 and si-recid2 ne ?
+     Syst.CUICommon:si-recid2 > 0 and Syst.CUICommon:si-recid2 ne ?
 then do:
-   RUN Help/h-contract.p(si-recid2).
+   RUN Help/h-contract.p(Syst.CUICommon:si-recid2).
    if siirto <> ? then frame-value = siirto.
 end.
 
@@ -470,7 +472,7 @@ END.
 /* ------------------------------------------------- */
 END.
 
-gcHelpParam = "".
+Syst.CUICommon:gcHelpParam = "".
 
 /* ja lopuksi palautetaan ufKey:n arvot */
 

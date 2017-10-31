@@ -335,7 +335,7 @@ repeat WITH FRAME sel:
             FixedFee.BillMethod = 1   /* before */
             lBelongTo           = FALSE.
 
-         si-recid2 = FixedFee.CustNum.
+         Syst.CUICommon:si-recid2 = FixedFee.CustNum.
 
          CLEAR FRAME lis no-pause.
          DISPLAY FixedFee.CustNum lcCustName WITH FRAME lis.
@@ -529,7 +529,7 @@ repeat WITH FRAME sel:
              APPLY LASTKEY.
           END. /* UPDATE EDITING */
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
           IF lBelongTo 
           THEN FixedFee.HostTable = "Customer".  
@@ -1191,7 +1191,7 @@ repeat WITH FRAME sel:
           Syst.CUICommon:ehto = 9.
           RUN Syst/ufkey.p.
 
-          si-recid2 = FixedFee.CustNum.
+          Syst.CUICommon:si-recid2 = FixedFee.CustNum.
 
           PROMPT
           FixedFee.Amt            WHEN amt-nonbilled > 0
@@ -1263,7 +1263,7 @@ repeat WITH FRAME sel:
             FIND CURRENT FixedFee NO-LOCK.
           END.
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
           IF FixedFee.Amt entered          OR
              FixedFee.BillMethod  entered  OR
@@ -1349,7 +1349,7 @@ repeat WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

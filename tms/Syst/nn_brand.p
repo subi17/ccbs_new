@@ -10,7 +10,6 @@
                   28.04.99 pt  user rights are checked
                   16.06.99 pt  TmsUser.StartMenu -> default start menu
                   03.09.99 kl  default userid from unix
-                  20.11.01 pt  common var ergo-kbd
                   13.05.02 aam called from brand.p
                   01.09.03 jp   TMS+
                   03.03.05 kl return correctly
@@ -107,7 +106,7 @@ find first Brand no-lock WHERE
 ASSIGN
    empty = fill(" ",78)
    Syst.CUICommon:ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
-   yvari = FALSE.
+   Syst.CUICommon:yvari = FALSE.
 
 
 /* start from main level */
@@ -218,8 +217,7 @@ f_code:
 
       /* show function codes */
       pause 0.
-      IF ergo-kbd THEN display f_id with frame f_code-ERGO.
-                  ELSE display f_id with frame f_code.
+      display f_id with frame f_code.
       Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
       info = false. 
 ACTION: repeat:

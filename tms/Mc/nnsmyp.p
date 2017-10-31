@@ -736,7 +736,7 @@ BROWSE:
 end.  /* LOOP */
 
 hide frame sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-prev:
 

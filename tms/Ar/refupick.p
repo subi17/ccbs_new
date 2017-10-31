@@ -441,16 +441,16 @@ REPEAT WITH FRAME sel:
 
                IF keylabel(lastkey) = "F9" AND FRAME-FIELD = "lcBankAcc"
                THEN DO:
-                   ASSIGN gcHelpParam = "bank"
-                          si-recid    = 0.
+                   ASSIGN Syst.CUICommon:gcHelpParam = "bank"
+                          Syst.CUICommon:si-recid    = 0.
                    RUN Mc/bankacc.p.
-                   gcHelpParam = "".
+                   Syst.CUICommon:gcHelpParam = "".
                    
                    Syst.CUICommon:ehto = 9.
                    RUN Syst/ufkey.p.
        
-                   IF si-recid > 0 THEN DO:
-                      FIND BankAcc WHERE RECID(BankAcc) = si-recid 
+                   IF Syst.CUICommon:si-recid > 0 THEN DO:
+                      FIND BankAcc WHERE RECID(BankAcc) = Syst.CUICommon:si-recid 
                       NO-LOCK NO-ERROR.
                       IF AVAILABLE BankAcc THEN DO:
                          lcBankAcc = BankAcc.BankAcc.
@@ -642,7 +642,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

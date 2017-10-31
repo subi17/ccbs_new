@@ -37,15 +37,15 @@ form /* SEEK Code */
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
-IF gcHelpParam > "" THEN DO:
-   IF ENTRY(1,gcHelpParam,":") = "Restricted" AND
-      NUM-ENTRIES(gcHelpParam,":") > 1 THEN 
-      lcRestricted = ENTRY(2,gcHelpParam,":").
-   ELSE IF ENTRY(1,gcHelpParam,":") = "DCType" AND
-      NUM-ENTRIES(gcHelpParam,":") > 1 THEN 
-      lcDCTypes = ENTRY(2,gcHelpParam,":").
+IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+   IF ENTRY(1,Syst.CUICommon:gcHelpParam,":") = "Restricted" AND
+      NUM-ENTRIES(Syst.CUICommon:gcHelpParam,":") > 1 THEN 
+      lcRestricted = ENTRY(2,Syst.CUICommon:gcHelpParam,":").
+   ELSE IF ENTRY(1,Syst.CUICommon:gcHelpParam,":") = "DCType" AND
+      NUM-ENTRIES(Syst.CUICommon:gcHelpParam,":") > 1 THEN 
+      lcDCTypes = ENTRY(2,Syst.CUICommon:gcHelpParam,":").
 
-   gcHelpParam = "".
+   Syst.CUICommon:gcHelpParam = "".
 END.
 
 MAIN:

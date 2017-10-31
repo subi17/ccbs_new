@@ -99,7 +99,7 @@ repeat:
             siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
             
             /* not called from applhelp */    
-            IF NOT gcHelpParam = "ahelp" THEN Syst.CUICommon:ufk[5] = 0.
+            IF NOT Syst.CUICommon:gcHelpParam = "ahelp" THEN Syst.CUICommon:ufk[5] = 0.
             
             RUN Syst/ufkey.p.
          END.

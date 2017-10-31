@@ -296,7 +296,7 @@ REPEAT WITH FRAME sel:
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
            Syst.CUICommon:ufk[5] = 11
            Syst.CUICommon:ufk[6] = 0
            Syst.CUICommon:ufk[7] = 0.
@@ -433,7 +433,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -508,7 +508,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
@@ -550,7 +550,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 Syst.CUICommon:ehto = 4.
 RUN Syst/ufkey.p.
@@ -697,15 +697,15 @@ PROCEDURE local-UPDATE-record:
              
                ELSE IF FRAME-FIELD = "Action" THEN DO:
                   ASSIGN
-                     gcHelpParam = "tmrlimit"
-                     si-recid    = ?.
+                     Syst.CUICommon:gcHelpParam = "tmrlimit"
+                     Syst.CUICommon:si-recid    = ?.
                
                   RUN Syst/requesttype.p(0).
         
-                  gcHelpParam = "".
+                  Syst.CUICommon:gcHelpParam = "".
                         
-                  IF si-recid NE ? THEN DO:
-                     FIND RequestType WHERE RECID(RequestType) = si-recid
+                  IF Syst.CUICommon:si-recid NE ? THEN DO:
+                     FIND RequestType WHERE RECID(RequestType) = Syst.CUICommon:si-recid
                         NO-LOCK NO-ERROR.
                      IF AVAILABLE RequestType THEN 
                      DISP RequestType.ReqType @ TMRLimit.Action WITH FRAME lis.
@@ -714,15 +714,15 @@ PROCEDURE local-UPDATE-record:
  
                ELSE IF FRAME-FIELD = "SMSText" THEN DO:
                   ASSIGN
-                     gcHelpParam = "tmrlimit"
-                     si-recid    = ?.
+                     Syst.CUICommon:gcHelpParam = "tmrlimit"
+                     Syst.CUICommon:si-recid    = ?.
                
                   RUN Mc/invotxt.p("SMS","").
         
-                  gcHelpParam = "".
+                  Syst.CUICommon:gcHelpParam = "".
                         
-                  IF si-recid NE ? THEN DO:
-                     FIND InvText WHERE RECID(InvText) = si-recid
+                  IF Syst.CUICommon:si-recid NE ? THEN DO:
+                     FIND InvText WHERE RECID(InvText) = Syst.CUICommon:si-recid
                         NO-LOCK NO-ERROR.
                      IF AVAILABLE InvText THEN 
                      DISP InvText.KeyValue @ TMRLimit.SMSText WITH FRAME lis.

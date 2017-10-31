@@ -54,8 +54,7 @@ do with frame login:
 
    pause 0 no-message. 
 
-   IF ergo-kbd THEN display with frame f_code-ERGO.
-               ELSE display with frame f_code.
+   display with frame f_code.
 
    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
    pause 0 no-message.
@@ -105,7 +104,6 @@ do with frame login:
 
             /* copy user id into the common variables */
             assign
-              ergo-kbd    = TmsUser.ErgoKeyb
               Syst.CUICommon:gcAllBrand  = (IF INDEX("*",TMSUser.brand) > 0 THEN TRUE 
                              ELSE FALSE).
 

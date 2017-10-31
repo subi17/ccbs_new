@@ -298,8 +298,8 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         ASSIGN order = 1.
         RUN Ar/nnlaha.p.
         ASSIGN ufkey = TRUE.
-        IF si-recid <> ? THEN
-          ASSIGN memory = si-recid
+        IF Syst.CUICommon:si-recid <> ? THEN
+          ASSIGN memory = Syst.CUICommon:si-recid
                   must-print = TRUE.
         ELSE ASSIGN
              order = ex-order
@@ -357,7 +357,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-others:
 

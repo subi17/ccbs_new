@@ -54,13 +54,13 @@
                   END. 
 
                   ELSE IF FRAME-FIELD = "lcCustZipCode" THEN DO:
-                     ASSIGN si-recid = ?
+                     ASSIGN Syst.CUICommon:si-recid = ?
                             siirto   = "".
                      RUN Help/h-postcode.p.
                      /* several rows with same zipcode */
-                     IF si-recid NE ? THEN DO:
+                     IF Syst.CUICommon:si-recid NE ? THEN DO:
                         DISPLAY siirto @ lcCustZipCode WITH FRAME lis.
-                        FIND PostCode WHERE RECID(PostCode) = si-recid
+                        FIND PostCode WHERE RECID(PostCode) = Syst.CUICommon:si-recid
                            NO-LOCK NO-ERROR.
                         IF AVAILABLE PostCode THEN DO:
                            DISPLAY PostCode.PostOffice @ lcCustPostOffice

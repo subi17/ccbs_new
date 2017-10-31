@@ -371,7 +371,7 @@ REPEAT WITH FRAME frLeft:
 END.  /* LOOP */
 
 HIDE FRAME frLeft NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

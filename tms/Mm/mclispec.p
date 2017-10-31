@@ -4,7 +4,7 @@
   APPLICATION ..: TMS
   AUTHOR .......: aam
   CREATED ......: 23.01.04 
-  MODIFIED .....: 09.02.04/aam gcHelpParam
+  MODIFIED .....: 09.02.04/aam Syst.CUICommon:gcHelpParam
                   26.10.04/aam new parameter to nnpura4: full b-numbers
                   03.01.05/aam RepCode from SubSer
                   06.06.05/aam ItSendLog
@@ -127,10 +127,10 @@ ASSIGN pvm1      = DATE(MONTH(TODAY),1,YEAR(TODAY))
        llEMail   = FALSE
        llEPL     = TRUE
        llCreaFee = TRUE
-       gcHelpParam = "".
+       Syst.CUICommon:gcHelpParam = "".
        
 FOR FIRST Customer OF MobSub NO-LOCK:
-   gcHelpParam = STRING(Customer.InvCust).
+   Syst.CUICommon:gcHelpParam = STRING(Customer.InvCust).
    lcUser      = Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
@@ -428,7 +428,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
 END. /* Syst.CUICommon:toimi */
 
-gcHelpParam = "".
+Syst.CUICommon:gcHelpParam = "".
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

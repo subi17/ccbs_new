@@ -355,5 +355,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
 HIDE FRAME alku no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

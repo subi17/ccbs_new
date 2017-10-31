@@ -476,7 +476,7 @@ END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
 HIDE MESSAGE NO-PAUSE. 
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

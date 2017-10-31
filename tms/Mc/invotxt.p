@@ -18,7 +18,7 @@
                                invotxt2.p merged to this
                   22.10.03/aam RemLevel                               
                   11.02.04/aam print (prininfo.p),
-                               gcHelpParam
+                               Syst.CUICommon:gcHelpParam
                   22.03.04/aam LetterClass, AddrTarget             
                   07.05.04/aam MainTitle
                   27.12.05/aam memo
@@ -398,7 +398,7 @@ BROWSE:
         
 
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
            Syst.CUICommon:ufk[5] = 11
            Syst.CUICommon:ufk[6] = 0
            Syst.CUICommon:ufk[7] = 0.
@@ -627,7 +627,7 @@ BROWSE:
      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.CUICommon:ufk[5] > 0
      THEN DO:  /* add */
      
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -809,8 +809,8 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid        
-       gcHelpParam = "".
+ASSIGN Syst.CUICommon:si-recid    = xrecid        
+       Syst.CUICommon:gcHelpParam = "".
 
 
 PROCEDURE local-find-this:
@@ -1104,7 +1104,7 @@ PROCEDURE local-update-record:
          ASSIGN 
             Syst.CUICommon:ehto   = 0
             Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
+            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
             Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.

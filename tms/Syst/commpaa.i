@@ -11,15 +11,6 @@ def new shared var katun   as char format "x(8)".
 
 /* ufkey.p:n tarvitsemat */
 
-DEF NEW shared VAR yvari AS LOG NO-UNDO.
-
-def new shared var gcHelpParam as char NO-UNDO.
-DEF NEW shared VAR si-recid AS RECID NO-UNDO.
-DEF NEW shared VAR si-recid2 AS RECID NO-UNDO.
-DEF NEW shared VAR helpkey AS CHAR NO-UNDO.
-
-DEF NEW SHARED VAR ergo-kbd AS LO NO-UNDO.
-
 on f1 go.
 on f2 BELL.
 on f4 BELL.

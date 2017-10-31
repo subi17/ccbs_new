@@ -489,7 +489,7 @@ VIEW-AS ALERT-BOX INFORMATION.
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

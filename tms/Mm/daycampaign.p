@@ -662,7 +662,7 @@ repeat WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
@@ -815,7 +815,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       ELSE ASSIGN 
          Syst.CUICommon:ehto   = 0
          Syst.CUICommon:ufk    = 0
-         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
          Syst.CUICommon:ufk[2] = 295
          Syst.CUICommon:ufk[4] = 253
          Syst.CUICommon:ufk[8] = 8.
@@ -1198,7 +1198,7 @@ PROCEDURE pFeeData:
          ASSIGN 
             Syst.CUICommon:ehto   = 0
             Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7 WHEN gcHelpParam = ""
+            Syst.CUICommon:ufk[1] = 7 WHEN Syst.CUICommon:gcHelpParam = ""
             Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.

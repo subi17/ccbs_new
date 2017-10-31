@@ -800,7 +800,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -1043,7 +1043,7 @@ PROCEDURE local-UPDATE-record:
          ASSIGN 
             Syst.CUICommon:ehto   = 0
             Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
+            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
             Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.

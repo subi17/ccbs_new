@@ -489,7 +489,7 @@ HIDE FRAME f1 NO-PAUSE.
 HIDE FRAME f2 NO-PAUSE.
 HIDE FRAME f3 NO-PAUSE.
 HIDE FRAME f4 NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 

@@ -402,7 +402,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 /* start TMS */
 IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:

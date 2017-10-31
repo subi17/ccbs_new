@@ -229,7 +229,7 @@ BROWSE:
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
  
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
            Syst.CUICommon:ufk[5] = 11
            Syst.CUICommon:ufk[6] = 0
            Syst.CUICommon:ufk[7] = 0.
@@ -415,7 +415,7 @@ BROWSE:
 
      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.CUICommon:ufk[5] > 0
      THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -492,7 +492,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
  
         
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
@@ -541,9 +541,9 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
-IF gcHelpParam > "" AND xrecid NE ? THEN DO:
+IF Syst.CUICommon:gcHelpParam > "" AND xrecid NE ? THEN DO:
    FIND CostCentre WHERE RECID(CostCentre) = xrecid NO-LOCK.
    siirto = CostCentre.CostCentre.
 END.

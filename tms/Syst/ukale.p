@@ -13,6 +13,8 @@
 
 {Syst/commali.i}
 
+DEFINE INPUT  PARAMETER icHelpKey AS CHARACTER NO-UNDO.
+
 def new shared var uviikko as int format "999999".
 DEF NEW shared VAR uvpvm AS Date.
 
@@ -101,7 +103,7 @@ toimi:
          ASSIGN
             Syst.CUICommon:ufk[1]=24 Syst.CUICommon:ufk[2]=25 Syst.CUICommon:ufk[3]=0 Syst.CUICommon:ufk[4]=0
             Syst.CUICommon:ufk[5]=11 Syst.CUICommon:ufk[6]=0  Syst.CUICommon:ufk[7]=0 Syst.CUICommon:ufk[8]=8 Syst.CUICommon:ehto = 3.
-         if helpkey <> "f9" THEN Syst.CUICommon:ufk[5] = 0.
+         if icHelpKey <> "f9" THEN Syst.CUICommon:ufk[5] = 0.
          RUN Syst/ufkey.p.
          uf=false.
       END.

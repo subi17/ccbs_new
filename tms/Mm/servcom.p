@@ -643,7 +643,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -812,18 +812,18 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD MATCHES("*SMSTxt")
              THEN DO WITH FRAME lis:
 
-                ASSIGN gcHelpParam = "prt"
-                       si-recid    = 0
+                ASSIGN Syst.CUICommon:gcHelpParam = "prt"
+                       Syst.CUICommon:si-recid    = 0
                        lcField     = FRAME-FIELD.
                 RUN Mc/invotxt.p ("",
                              "").
-                gcHelpParam = "".
+                Syst.CUICommon:gcHelpParam = "".
                    
                 Syst.CUICommon:ehto = 9.
                 RUN Syst/ufkey.p.
        
-                IF si-recid > 0 THEN DO:
-                   FIND InvText WHERE RECID(InvText) = si-recid 
+                IF Syst.CUICommon:si-recid > 0 THEN DO:
+                   FIND InvText WHERE RECID(InvText) = Syst.CUICommon:si-recid 
                    NO-LOCK NO-ERROR.
                    IF AVAILABLE InvText THEN DO:
 

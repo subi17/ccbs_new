@@ -811,7 +811,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -1036,7 +1036,7 @@ PROCEDURE local-update-record:
          Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
-         si-recid2 = SingleFee.CustNum.
+         Syst.CUICommon:si-recid2 = SingleFee.CustNum.
          lcCLI = "".
          
          PROMPT
@@ -1321,7 +1321,7 @@ PROCEDURE local-update-record:
 
           END.
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
           
       END.
       

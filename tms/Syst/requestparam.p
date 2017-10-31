@@ -279,7 +279,7 @@ REPEAT WITH FRAME sel:
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
            Syst.CUICommon:ufk[5] = 11
            Syst.CUICommon:ufk[6] = 0
            Syst.CUICommon:ufk[7] = 0.
@@ -439,7 +439,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -508,7 +508,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
@@ -550,7 +550,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 Syst.CUICommon:ehto = 4.
 RUN Syst/ufkey.p.

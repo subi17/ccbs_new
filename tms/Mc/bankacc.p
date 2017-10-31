@@ -5,7 +5,7 @@
   AUTHOR .......: aam
   CREATED ......: 06.05.03
   CHANGED ......: 13.10.03/aam tokens, brand
-                  31.03.04/aam gcHelpParam
+                  31.03.04/aam Syst.CUICommon:gcHelpParam
                   18.10.04/aam use fBankAcc2Data for new account
                   12.11.04/aam BankOffice
                   14.08.06/aam use UnitCode for account nbr
@@ -101,7 +101,7 @@ form /* seek  BankAccount */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BANK ACCOUNT "
     COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-IF gcHelpParam > "" THEN ASSIGN 
+IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN 
    FrmRow  = 4 
    FrmDown = 10.
    
@@ -245,7 +245,7 @@ BROWSE:
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
            Syst.CUICommon:ufk[5] = 11
            Syst.CUICommon:ufk[6] = 0.
          
@@ -406,7 +406,7 @@ BROWSE:
 
      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.CUICommon:ufk[5] > 0
      THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -511,8 +511,8 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid        
-       gcHelpParam = "".
+ASSIGN Syst.CUICommon:si-recid    = xrecid        
+       Syst.CUICommon:gcHelpParam = "".
 
 PROCEDURE local-find-this:
 

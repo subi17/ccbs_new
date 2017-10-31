@@ -10,7 +10,7 @@
                   17.09.02/jp Language validation
                   05.03.03/tk tokens
                   15.09.03/aam brand
-                  28.06.04/aam gcHelpParam
+                  28.06.04/aam Syst.CUICommon:gcHelpParam
   Version ......: M15
   ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable HdrText
@@ -260,7 +260,7 @@ BROWSE:
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
  
          /* used as help */
-         IF gcHelpParam > "" THEN ASSIGN
+         IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
             Syst.CUICommon:ufk[5] = 11
             Syst.CUICommon:ufk[6] = 0.
  
@@ -528,10 +528,10 @@ BROWSE:
      END. /* Haku sar. 3 */
 
      if (lookup(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0) OR
-        (lookup(Syst.CUICommon:nap,"enter,return") > 0 AND gcHelpParam > "")
+        (lookup(Syst.CUICommon:nap,"enter,return") > 0 AND Syst.CUICommon:gcHelpParam > "")
      THEN DO:  /* lisays */
 
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -616,7 +616,7 @@ BROWSE:
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHdrText).
 
-        IF gcHelpParam = "" THEN 
+        IF Syst.CUICommon:gcHelpParam = "" THEN 
         UPDATE HdrText.te-text
           /*   te-kie  */.
         ELSE PAUSE MESSAGE "Press ENTER to continue".
@@ -662,5 +662,5 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid    = xrecid.
+Syst.CUICommon:si-recid    = xrecid.
 

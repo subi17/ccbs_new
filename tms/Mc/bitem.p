@@ -649,7 +649,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -786,7 +786,7 @@ PROCEDURE local-update-record:
  
       IF lcRight = "RW" THEN DO:
 
-         si-recid2 = SingleFee.CustNum.
+         Syst.CUICommon:si-recid2 = SingleFee.CustNum.
 
          UPDATE
             SingleFee.Contract    WHEN NOT SingleFee.Billed
@@ -957,7 +957,7 @@ PROCEDURE local-update-record:
              APPLY LASTKEY.
           END. /* EDITING */
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
          IF new_singlefee AND
             llDoEvent THEN RUN StarEventMakeCreateEventWithMemo(

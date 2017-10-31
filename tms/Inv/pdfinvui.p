@@ -111,9 +111,9 @@ view FRAME rajat. view FRAME statu.
 
 disp "NONE" @ CustGroup.CGName WITH FRAME rajat.
 
-IF si-recid2 NE ? THEN DO:
+IF Syst.CUICommon:si-recid2 NE ? THEN DO:
 
-   FIND Invoice WHERE RECID(Invoice) = si-recid2 NO-LOCK NO-ERROR.
+   FIND Invoice WHERE RECID(Invoice) = Syst.CUICommon:si-recid2 NO-LOCK NO-ERROR.
 
    IF Invoice.DelType NE 2 THEN DO:
       MESSAGE "Invoice's delivery type is not 2 (PDF via eMail)."
@@ -133,7 +133,7 @@ IF si-recid2 NE ? THEN DO:
       CustNum2 = Customer.CustNum
       status1  = Invoice.PrintState
       status2  = Invoice.PrintState
-      si-recid2 = ?.
+      Syst.CUICommon:si-recid2 = ?.
       
    DISP 
       InvNum1   InvNum2

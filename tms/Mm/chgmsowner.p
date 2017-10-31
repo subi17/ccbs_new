@@ -1375,8 +1375,8 @@ PROCEDURE pUpdateNewOwner:
                
             RUN Help/h-postcode.p.
                
-            IF si-recid NE ? THEN DO:
-               fDispPostOffice(si-recid).
+            IF Syst.CUICommon:si-recid NE ? THEN DO:
+               fDispPostOffice(Syst.CUICommon:si-recid).
             END.   
             Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.

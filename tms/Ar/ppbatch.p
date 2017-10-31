@@ -718,7 +718,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid.
+ASSIGN Syst.CUICommon:si-recid    = xrecid.
 
 
 PROCEDURE local-find-this:

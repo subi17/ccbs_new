@@ -103,13 +103,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
             IF FRAME-FIELD = "liFRQueueID" THEN DO:
                ASSIGN
-                  si-recid    = ?
-                  gcHelpParam = "FRQueueID".
+                  Syst.CUICommon:si-recid    = ?
+                  Syst.CUICommon:gcHelpParam = "FRQueueID".
                RUN Syst/funcrunqueue.p.
-               gcHelpParam = "".
+               Syst.CUICommon:gcHelpParam = "".
             
-               IF si-recid NE ? THEN DO:
-                  FIND FuncRunQueue WHERE RECID(FuncRunQueue) = si-recid 
+               IF Syst.CUICommon:si-recid NE ? THEN DO:
+                  FIND FuncRunQueue WHERE RECID(FuncRunQueue) = Syst.CUICommon:si-recid 
                      NO-LOCK NO-ERROR.
                   IF AVAILABLE FuncRunQueue THEN 
                      DISP FuncRunQueue.FRQueueID @ liFRQueueID 
@@ -119,14 +119,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             
             ELSE IF FRAME-FIELD = "liFRQScheduleID" THEN DO:
                ASSIGN
-                  si-recid    = ?
-                  gcHelpParam = "FRQScheduleID".
+                  Syst.CUICommon:si-recid    = ?
+                  Syst.CUICommon:gcHelpParam = "FRQScheduleID".
                RUN Syst/funcrunqschedule.p (INPUT INPUT FRAME fCrit liFRQueueID).
-               gcHelpParam = "".
+               Syst.CUICommon:gcHelpParam = "".
             
-               IF si-recid NE ? THEN DO:
+               IF Syst.CUICommon:si-recid NE ? THEN DO:
                   FIND FuncRunQSchedule WHERE 
-                     RECID(FuncRunQSchedule) = si-recid NO-LOCK NO-ERROR.
+                     RECID(FuncRunQSchedule) = Syst.CUICommon:si-recid NO-LOCK NO-ERROR.
                   IF AVAILABLE FuncRunQSchedule THEN 
                      DISP FuncRunQSchedule.FRQScheduleID @ liFRQScheduleID 
                           (FuncRunQSchedule.RunMode = "Production") @ llRunMode

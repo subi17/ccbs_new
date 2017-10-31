@@ -76,7 +76,7 @@
                                sent to bank -> cancel dd-data from orig.invoice
                   11.06.03/aam message if dd-invoice is credited too late
                   15.09.03/aam brand
-                  13.10.03/aam invoice can be given in si-recid2,
+                  13.10.03/aam invoice can be given in Syst.CUICommon:si-recid2,
                                don't change invoicetype for type 3 
                   04.12.03/aam default due date = invoice date            
                   29.12.03/aam WInvDisp = true for partially credited
@@ -328,9 +328,9 @@ THEN lcCanRelease = getTMSRight("SYST").
 ELSE lcCanRelease = "".
  
 liCalled = 0. 
-IF si-recid2 NE ? THEN DO:
-   FIND Invoice NO-LOCK WHERE RECID(Invoice) = si-recid2 NO-ERROR.
-   si-recid2 = ?.
+IF Syst.CUICommon:si-recid2 NE ? THEN DO:
+   FIND Invoice NO-LOCK WHERE RECID(Invoice) = Syst.CUICommon:si-recid2 NO-ERROR.
+   Syst.CUICommon:si-recid2 = ?.
 
    IF NOT AVAILABLE Invoice THEN DO:
       MESSAGE "Unknown invoice"

@@ -72,7 +72,7 @@
                   12.08.03/aam vasrep             
                   22.08.03/aam set ws-disp = true,
                                print dd-texts with smaller font
-                  13.10.03/aam use si-recid2 to get invnum from calling prog.
+                  13.10.03/aam use Syst.CUICommon:si-recid2 to get invnum from calling prog.
                   12.12.03/aam report 4,
                                VatUsage,
                                lcMFont etc. 
@@ -562,8 +562,8 @@ view FRAME rajat. view FRAME statu.
 
 disp "NONE" @ CustGroup.CGName WITH FRAME rajat.
 
-IF si-recid2 NE ? AND si-recid2 NE 0 THEN DO:
-   FIND Invoice WHERE RECID(Invoice) = si-recid2 NO-LOCK NO-ERROR.
+IF Syst.CUICommon:si-recid2 NE ? AND Syst.CUICommon:si-recid2 NE 0 THEN DO:
+   FIND Invoice WHERE RECID(Invoice) = Syst.CUICommon:si-recid2 NO-LOCK NO-ERROR.
 
    FIND FIRST Customer no-lock where
               Customer.CustNum = Invoice.CustNum.
@@ -577,7 +577,7 @@ IF si-recid2 NE ? AND si-recid2 NE 0 THEN DO:
       asno2   = Customer.CustNum
       status1 = Invoice.PrintState
       status2 = Invoice.PrintState
-      si-recid2 = ?.
+      Syst.CUICommon:si-recid2 = ?.
 
    DISP 
       lano1   lano2
