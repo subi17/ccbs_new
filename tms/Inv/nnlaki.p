@@ -548,7 +548,7 @@ END FUNCTION.
 
 
 ASSIGN 
-   i-date1  = pvm
+   i-date1  = TODAY
    i-date2  = TODAY.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.

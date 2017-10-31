@@ -1087,7 +1087,7 @@ repeat WITH FRAME sel:
               Customer.RepCust  = Customer.CustNum
               Customer.RateCust = Customer.CustNum 
               Customer.AgrCust  = Customer.CustNum
-              Customer.ContrBeg = pvm
+              Customer.ContrBeg = TODAY
               xrecid            = recid(Customer).
 
            FIND CustCat WHERE 

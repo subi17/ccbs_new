@@ -210,7 +210,7 @@ task:
       CREATE FileExpLog.
       ASSIGN
       FileExpLog.TransType = "XOR-INV"
-      FileExpLog.TransDate = pvm
+      FileExpLog.TransDate = TODAY
       FileExpLog.TransNum   = TransFile.
    END.
 

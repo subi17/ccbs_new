@@ -1021,7 +1021,7 @@ REPEAT WITH FRAME sel:
             unbooked   = UnregPaym.PaidAmt - UnregPaym.Booked
             booksum    = unbooked
             booksumR   = unbooked
-            ldtAccDate = pvm
+            ldtAccDate = TODAY
             DelInt     = NOT llCredLoss. 
 
             DISPLAY  UnregPaym.ArchiveId UnregPaym.CustName 
@@ -1237,7 +1237,7 @@ REPEAT WITH FRAME sel:
 
             ASSIGN
             unbooked   = UnregPaym.PaidAmt - UnregPaym.Booked
-            ldtAccDate = pvm
+            ldtAccDate = TODAY
             DelInt     = FALSE. 
 
             ASSIGN  ufkey = TRUE ehto = 9.
@@ -1361,7 +1361,7 @@ REPEAT WITH FRAME sel:
 
             ASSIGN 
             unbooked   = UnregPaym.PaidAmt - UnregPaym.Booked
-            ldtAccDate = pvm
+            ldtAccDate = TODAY
             DelInt     = FALSE.
 
             ASSIGN  ufkey = TRUE ehto = 9.

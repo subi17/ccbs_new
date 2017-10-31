@@ -96,8 +96,8 @@ with
    overlay centered row 14 frame statu.
 
 ASSIGN 
-   i-date1   = pvm
-   i-date2   = pvm
+   i-date1   = TODAY
+   i-date2   = TODAY
    liDelType = 2.
 
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.

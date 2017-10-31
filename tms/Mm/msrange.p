@@ -819,7 +819,7 @@ PROCEDURE LOCAL-CREATE-MSRange:
       MSRange.CLIFrom     = CLIFrom
       MSRange.CLITo       = CLITo
       MSRange.CustNum     = CustNum
-      MSRange.ReserveDate = pvm
+      MSRange.ReserveDate = TODAY
       MSRange.ExpireDate  = ExpireDate
       MSRange.SalesMan    = ocPosCode
       Memory              = recid(MSRange).

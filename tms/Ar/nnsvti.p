@@ -222,8 +222,8 @@ view FRAME rajat. view FRAME statu. PAUSE 0 no-message.
 
 /* Haetaan pvm-ehdotus */
 ASSIGN 
-   i-date1  = pvm
-   i-date2  = pvm
+   i-date1  = TODAY
+   i-date2  = TODAY
 
 Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 ehto = 9. RUN Syst/ufkey.p.

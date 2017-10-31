@@ -103,7 +103,7 @@ repeat WITH FRAME frm:
      END.
 
      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMthCall).
-     ASSIGN MthCall.CloseDate  = pvm
+     ASSIGN MthCall.CloseDate  = TODAY
             MthCall.CloseType = MthCall.CloseType + 1
             i1 = i1 + 1.
      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMthCall).       
