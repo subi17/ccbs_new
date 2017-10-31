@@ -43,6 +43,9 @@ DO FOR TMSUser:
    fname = fChkPath(TMSUser.RepDir) + "custprices.txt".
 END.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
    skip(3)
 "   INSTRUCTION: This program prints out a list of customers prices"   skip
@@ -60,13 +63,13 @@ form
       label "File Name ......" skip(3)
 WITH
    width 80 ROW 1 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " PRINT CUSTOMER Price LIST " + string(pvm,"99-99-99") + " "
+   " " + ynimi + " PRINT CUSTOMER Price LIST " + string(pvm,"99-99-99") + " "
    side-labels FRAME rajat.
 
 
 form header
    fill ("=",lev) format "x(170)" SKIP
-   Syst.CUICommon:ynimi "PRICELIST" at 64 "Page" at 161 sl format "ZZZZ9" TO 170
+   ynimi "PRICELIST" at 64 "Page" at 161 sl format "ZZZZ9" TO 170
    SKIP
    string(pvm,"99-99-99") TO 170 SKIP
    fill ("=",lev) format "x(170)" skip(1)

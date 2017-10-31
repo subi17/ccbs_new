@@ -49,9 +49,12 @@ ASSIGN tuni1 = "memo"
        tila  = true.
 {Syst/tmsreport.i RETURN}
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 FORM HEADER                                                 
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
-   Syst.CUICommon:ynimi "MEMO/NOTE" AT 34 pvm FORMAT "99.99.99" TO 78                   SKIP
+   ynimi "MEMO/NOTE" AT 34 pvm FORMAT "99.99.99" TO 78                   SKIP
    memo.MemoTitle AT 28 "Page "  AT 71        sl FORMAT "zz9"      TO 78    SKIP
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
    WITH

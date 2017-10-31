@@ -285,9 +285,12 @@ with
    overlay centered row 10 1 down color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
    " Payments " frame log.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    fill("=",122) format "x(122)" skip
-   Syst.CUICommon:ynimi "SUMMARY OF RETURN FILE" at 45 "Page" at 113
+   ynimi "SUMMARY OF RETURN FILE" at 45 "Page" at 113
       sl format "ZZZZ9" skip
    icPaymFile AT 1 FORMAT "X(100)" 
       string(pvm,"99-99-99") to 122 skip

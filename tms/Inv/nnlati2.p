@@ -41,6 +41,9 @@ DEF WORKFILE wcountry
    FIELD wnet   AS DE
    FIELD wdiscount   AS DE.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
      skip(1)
      "  Note:  This program prints out a summary with Billed amounts  "
@@ -61,10 +64,6 @@ form
      "-"
      sm-code2 NO-LABEL 
      HELP "Salesman to" skip(5)
-
-DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
-
 WITH
    width 80 COLOR value(Syst.CUICommon:cfc)
    title color value(Syst.CUICommon:ctc) " " + ynimi +

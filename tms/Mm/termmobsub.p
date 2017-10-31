@@ -100,6 +100,9 @@ DEF VAR lcSaldoFatime AS C  NO-UNDO.
 ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
        lcDCEvent     = fCParamC("PerContractID").
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 {Mm/termmobsub.frm}
 
 form

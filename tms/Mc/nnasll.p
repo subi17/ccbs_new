@@ -99,9 +99,12 @@ IF ppvm2 > 1/1/9999 THEN fake[4] = ?. ELSE fake[4] = ppvm2.
 if cday = ? then callcheck = "NO Calls CHECKED".
 else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    fill("=",90) format "x(90)" SKIP
-   Syst.CUICommon:ynimi "LARGE CUSTOMER LIST" at 33 "Page" at 83 sl format "ZZZ9" TO 90 SKIP
+   ynimi "LARGE CUSTOMER LIST" at 33 "Page" at 83 sl format "ZZZ9" TO 90 SKIP
 
    "SORTED BY " + entry(order1,jar1) + entry(order2,jar2)  at 33 format "x(36)"
    string(pvm,"99-99-99") TO 90 SKIP
