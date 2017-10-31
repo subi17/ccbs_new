@@ -230,7 +230,7 @@ PROCEDURE pRemoveInternetBarring:
    liRequest = INTEGER(lcResult) NO-ERROR.                             
    IF liRequest > 0 THEN DO:   
       Func.Common:mWriteMemoWithType("Mobsub",
-                       mobsub.MsSeq,
+                       STRING(mobsub.MsSeq),
                        mobsub.CustNum,
                        "OTA Barring desactivado",          /* memo title */
                        "Redirection removed, reason: ICC", /* memo text  */

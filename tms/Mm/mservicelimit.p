@@ -87,7 +87,7 @@ form
    "Valid To...:" mservicelimit.endTS     lcvalidto      SKIP
 WITH OVERLAY ROW 4 centered
    COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(ctc )
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH no-labels
    FRAME lis.
 

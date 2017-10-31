@@ -155,7 +155,7 @@ ASSIGN
       END. 
    
       Func.Common:mWriteMemoWithType("Mobsub",
-                        mobsub.MsSeq,
+                        STRING(mobsub.MsSeq),
                         mobsub.CustNum,
                         lcMemoTitle,
                         lcMemoText,
