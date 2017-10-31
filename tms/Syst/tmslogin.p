@@ -36,9 +36,12 @@ Syst.CUICommon:gcBrand = "1".
 {Func/tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
 {Func/tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
 
+DEFINE VARIABLE katun AS CHARACTER NO-UNDO.
+katun = Syst.CUICommon:katun.
+
 form
    skip(1)
-   Syst.CUICommon:katun  label   "  User Id ....." 
+   katun  label   "  User Id ....." 
    help "Enter a valid TMS User ID  (EMPTY ID: QUIT)" TmsUser.UserName no-label 
    skip
    lcPassWd FORMAT "X(16)" label   "  Password ... " blank
@@ -62,31 +65,32 @@ do with frame login:
    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    assign Syst.CUICommon:si-pvm = TODAY.
 
-   if Syst.CUICommon:katun = "" then do:
+   if katun = "" then do:
       Syst.CUICommon:cfc = "tunnus". RUN Syst/ufcolor.p.
 
       input through value("who am i").
 
-      import unformatted Syst.CUICommon:katun.
+      import unformatted katun.
       input close.
-      Syst.CUICommon:katun  = ENTRY(1,Syst.CUICommon:katun," ").
-      if entry(1,Syst.CUICommon:katun," ") = "starnet" then Syst.CUICommon:katun = "eka".
 
-      disp Syst.CUICommon:katun with frame login.
+      katun  = ENTRY(1,katun," ").
+      if katun = "starnet" then katun = "eka".
+
+      disp katun with frame login.
 
       USER_LOGIN: /* ASK USER ID AND PASSWORD */
       repeat with frame login on endkey undo USER_LOGIN, RETURN:
-            update Syst.CUICommon:katun
-                   validate (input Syst.CUICommon:katun = "" or 
+            update katun
+                   validate (input katun = "" or 
                    can-find(FIRST TmsUser where 
-                                  TmsUser.UserCode = INPUT Syst.CUICommon:katun AND
+                                  TmsUser.UserCode = INPUT katun AND
                                   TmsUser.UserGroup NE "NOTinUSE"),
                              "UNKNOWN USER ID - PLEASE CHECK AND RETYPE !").
 
-            if Syst.CUICommon:katun = "" then quit.
+            if katun = "" then quit.
 
             find TmsUser where  
-                 TmsUser.UserCode = Syst.CUICommon:katun no-lock no-error.
+                 TmsUser.UserCode = katun no-lock no-error.
 
             disp TmsUser.UserName.
             PAUSE 0.
@@ -200,6 +204,8 @@ do with frame login:
             pause 0.
             leave.
       end. /* USER_LOGIN */
+
+      Syst.CUICommon:katun  = katun.
 
       if Syst.CUICommon:katun = "" then quit. 
 

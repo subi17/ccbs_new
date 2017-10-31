@@ -511,7 +511,7 @@ PROCEDURE pQ25Extension:
       liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
       lcTFBank = ""
       liPercontractId = INT(OrderAction.ItemParam).
-      lcOrigSyst.CUICommon:katun = Syst.CUICommon:katun.
+      lcOrigkatun = Syst.CUICommon:katun.
 
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
