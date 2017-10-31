@@ -130,7 +130,7 @@ repeat WITH FRAME sel:
 
 ADD-USER:
        repeat TRANS ON ENDKEY UNDO ADD-USER, LEAVE ADD-USER.
-     ASSIGN ufkey = TRUE ufk = 0 ehto = 0
+     ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 0
      ufk[1] = 540 ufk[2] = 541 ufk[3] = 516 ufk[8] = 8.
      RUN Syst/ufkey.p.
 
@@ -141,7 +141,7 @@ add-single:
         repeat WITH FRAME lis ON ENDKEY UNDO ADD-USER,
                 NEXT ADD-USER:
       PAUSE 0.
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       CLEAR FRAME lis no-pause.
       PROMPT-FOR UGMember.UserCode
       validate(input UGMember.UserCode = "" OR can-find(TMSUser where
@@ -291,7 +291,7 @@ SELAUS:
    ASSIGN
    ufk[1]= 542 ufk[2]= 30 ufk[3]= 530 ufk[4]= 518
    ufk[5]= 5   ufk[6]= 4  ufk[7]=   0 ufk[8]=   8 ufk[9]= 1
-   ehto = 3 ufkey = FALSE.
+   Syst.CUICommon:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
@@ -451,7 +451,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserCode = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserCode WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserCode <> "" THEN DO:
@@ -475,7 +475,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UserName <> "" THEN DO:
@@ -579,7 +579,7 @@ SELAUS:
        /* muutos */
        FIND UGMember where recid(UGMember) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUgMember).

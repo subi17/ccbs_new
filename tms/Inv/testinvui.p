@@ -161,7 +161,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICom
 view FRAME taka. PAUSE 0 no-message.
 
 Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -218,7 +218,7 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             liInvCode
@@ -324,7 +324,7 @@ toimi:
 
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0
                      ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+                     ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN DO:
          kysy_rajat = TRUE.

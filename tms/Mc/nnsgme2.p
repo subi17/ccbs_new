@@ -129,7 +129,7 @@ repeat WITH FRAME sel:
 
 add-group:
        repeat TRANS ON ENDKEY UNDO add-group, LEAVE add-group.
-          ASSIGN ufkey = TRUE ufk = 0 ehto = 0
+          ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 0
           ufk[1] = 512 ufk[2] = 514 ufk[3] = 517 ufk[8] = 8.
           RUN Syst/ufkey.p.
 
@@ -139,7 +139,7 @@ add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
              PAUSE 0.
-             ehto = 9. RUN Syst/ufkey.p.
+             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
              CLEAR FRAME lis no-pause.
              PROMPT-FOR SMGMember.SmGroup
              validate(input frame lis SMGMember.SmGroup = "" OR
@@ -317,7 +317,7 @@ SELAUS:
         ASSIGN
         ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 519
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 528 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -478,7 +478,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Salesman <> "" THEN DO:

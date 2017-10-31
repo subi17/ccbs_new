@@ -130,7 +130,7 @@ print-line:
          ASSIGN
          ufk = 0 ufk[1] = 718 ufk[5] = 11
          ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"6"'}
          RUN Syst/ufkey.p.
       END.
@@ -242,7 +242,7 @@ BROWSE:
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Salesoffice = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Salesoffice = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Salesoffice WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if Salesoffice <> "" THEN DO:

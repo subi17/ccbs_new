@@ -41,7 +41,7 @@ MsSeq = 0.
 PAUSE 0.
 MAIN:
 repeat WITH FRAME frm:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE arg.
 
 
@@ -57,7 +57,7 @@ ACTION:
       ufk[6] = 94   /* FIND invoice */
       ufk[7] = 93
       ufk[8] = 8
-      ehto   = 0.  RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto   = 0.  RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 8 THEN LEAVE MAIN.
 

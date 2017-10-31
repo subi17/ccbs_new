@@ -69,7 +69,7 @@ LOOP:
       IF ufkey THEN DO:
         ASSIGN
         ufk[1] = 0 
-        ufk[6] = 11 ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 ufkey = FALSE ehto = 3.
+        ufk[6] = 11 ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 ufkey = FALSE Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
      END.
 

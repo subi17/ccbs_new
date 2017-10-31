@@ -42,7 +42,7 @@ END.
 
 ldtPaymDate = MsRequest.ReqDtParam1.
 
-ehto = 9.
+Syst.CUICommon:ehto = 9.
 RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, LEAVE:

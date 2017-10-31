@@ -127,7 +127,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ServiceLCounter.MSSeq
@@ -212,7 +212,7 @@ BROWSE:
         ufk[5]= 0  ufk[6]= 0 
         ufk[7]= 925 
         ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
@@ -352,7 +352,7 @@ BROWSE:
 /*
        /* change */
        RUN local-find-this(false).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
        
        RUN local-update-record.                                  

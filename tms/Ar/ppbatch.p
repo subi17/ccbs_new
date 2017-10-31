@@ -260,7 +260,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         liBatch = 1.
         FIND LAST PPBatch OF PaymPlan NO-LOCK NO-ERROR.
@@ -386,7 +386,7 @@ REPEAT WITH FRAME sel:
          ufk[6]= (IF lcRight = "RW" AND
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 4 ELSE 0)
          ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          
          IF CAN-FIND(FIRST PPBatch OF PaymPlan) THEN ufk[2] = 0.
          
@@ -537,7 +537,7 @@ REPEAT WITH FRAME sel:
            ASSIGN liBatch     = 0  
                   ldtFromDate = ?
                   ldtToDate   = ?
-                  ehto        = 9
+                  Syst.CUICommon:ehto        = 9
                   ufkey       = TRUE.
            RUN Syst/ufkey.p.
         
@@ -802,7 +802,7 @@ PROCEDURE local-UPDATE-record:
          (PaymPlan.PPStatus < 4 OR PaymPlan.PPStatus = 7)
       THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        
          REPEAT:
          
@@ -828,7 +828,7 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.   
                END.
                                       
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

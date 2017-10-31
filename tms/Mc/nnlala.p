@@ -54,7 +54,7 @@ WITH
    " UNPAID INVOICES "  NO-LABELS
    OVERLAY FRAME debt.
 
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE Date WITH FRAME frm.
 

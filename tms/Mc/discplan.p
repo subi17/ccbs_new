@@ -149,7 +149,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis 
         ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW:
 
@@ -242,7 +242,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
         RUN Syst/ufkey.p.
       END.
 
@@ -381,7 +381,7 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
        SET lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -403,7 +403,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        disp lcBrand with frame f2.
        SET lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -523,7 +523,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY discplan.DiscPlan.
 

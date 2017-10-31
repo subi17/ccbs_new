@@ -128,7 +128,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ShaperConf.ShaperConfID
@@ -217,7 +217,7 @@ BROWSE:
         /*ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)*/
         ufk[7]= 1752 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -358,7 +358,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP ShaperConf WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -391,7 +391,7 @@ BROWSE:
        {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ShaperConf.ShaperConfID.
 
@@ -515,7 +515,7 @@ PROCEDURE local-UPDATE-record:
       pause 0.
          
       ASSIGN 
-         ehto   = 0
+         Syst.CUICommon:ehto   = 0
          ufk    = 0
          ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
          ufk[7] = 1752
@@ -525,7 +525,7 @@ PROCEDURE local-UPDATE-record:
       IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
          FIND CURRENT ShaperConf EXCLUSIVE-LOCK.
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE

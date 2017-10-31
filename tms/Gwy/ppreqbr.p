@@ -363,7 +363,7 @@ REPEAT WITH FRAME sel:
          ASSIGN
             ufk       = 0
             ufk[8]    = 8
-            ehto      = 3.
+            Syst.CUICommon:ehto      = 3.
       
          RUN Syst/ufkey.p. 
 
@@ -480,7 +480,7 @@ REPEAT WITH FRAME sel:
 
         PAUSE 0 NO-MESSAGE.
         
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            
@@ -592,7 +592,7 @@ REPEAT WITH FRAME sel:
            ufk[7] = 1079
            ufk[8] = 8
            ufk[9] = 1
-           ehto   = 3
+           Syst.CUICommon:ehto   = 3
            ufkey  = FALSE.
 
          RUN Syst/ufkey.p.
@@ -730,7 +730,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcCLI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -839,7 +839,7 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPrePaidRequest).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrePaidRequest.CLI.
 
@@ -1239,7 +1239,7 @@ PROCEDURE local-UPDATE-record:
          ufk[3] = 1088
          ufk[4] = 1121
          ufk[8] = 8
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
 
       IF lcRight = "RW" AND LOOKUP(PrePaidRequest.Source,"CC,CHARGE,COMP") > 0 THEN DO:
 
@@ -1287,7 +1287,7 @@ PROCEDURE local-UPDATE-record:
       
          FIND CURRENT PrePaidRequest EXCLUSIVE-LOCK.
          
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE. 
@@ -1469,7 +1469,7 @@ PROCEDURE local-UPDATE-record:
          ASSIGN
             ufk    = 0
             ufk[8] = 8
-            ehto   = 3.
+            Syst.CUICommon:ehto   = 3.
       
          RUN Syst/ufkey.p. 
 
@@ -1528,7 +1528,7 @@ PROCEDURE local-UPDATE-record:
          ASSIGN
             ufk    = 0
             ufk[8] = 8
-            ehto   = 3.
+            Syst.CUICommon:ehto   = 3.
       
          RUN Syst/ufkey.p. 
 

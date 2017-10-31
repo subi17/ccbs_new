@@ -144,7 +144,7 @@ repeat with frame sel:
       repeat with frame lis on endkey undo add-new, leave add-new.
          pause 0 no-message.
          clear frame lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          do transaction:
             create PListConf.
             assign PListConf.Brand    = RatePlan.Brand 
@@ -220,7 +220,7 @@ BROWSE:
          assign
          ufk[1] = 0 ufk[2] = 0 ufk[3] = 0 ufk[4] = 878
          ufk[5] = 5 ufk[6] = 4 ufk[7] = 0 ufk[8] = 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
+         Syst.CUICommon:ehto = 3 ufkey = false.
 
          {Syst/uright1.i '"5,6"'}
 
@@ -371,7 +371,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PList = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         update PList with frame f1.
         hide frame f1 no-pause.
         if PList <> "" then do:
@@ -495,7 +495,7 @@ BROWSE:
         find first PListConf where 
              recid(PListConf) = rtab[frame-line(sel)]
         exclusive-lock no-error.
-        assign fr-header = " CHANGE " ufkey = true ehto = 9.
+        assign fr-header = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         display PListConf.RatePlan .

@@ -104,7 +104,7 @@ print-line:
          assign
          ufk = 0 ufk[1] = 36 ufk[3] = 238 ufk[4] = 788 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -226,7 +226,7 @@ BROWSE:
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*CLI*/
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            clear frame hayr.
            disp m_pref with frame  hayr.
            set CLI with frame hayr.
@@ -280,9 +280,9 @@ CU-DATA:
            with frame cust.
 CU-Action:
            repeat with frame cust:
-              assign ufk = 0 ufk[8] = 8 ehto =  0.
+              assign ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto =  0.
               RUN Syst/ufkey.p.
-              case toimi:
+              case Syst.CUICommon:toimi:
                  WHEN 8 THEN do:
                     ufkey = true. 
                     hide frame cust no-pause.

@@ -340,7 +340,7 @@ repeat WITH FRAME sel:
       RUN Syst/ufcolor.p.
 
       CLEAR FRAME lis no-pause.
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
       PAUSE 0.
 
@@ -429,7 +429,7 @@ repeat WITH FRAME sel:
          ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
          ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)   
          ufk[7] = 796 ufk[8] = 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          /* no sense in finding with ccn when ccn is already chosen */
          IF iiCCN > 0 THEN ufk[2] = 0. 
@@ -610,7 +610,7 @@ repeat WITH FRAME sel:
      ELSE if LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  /* haku sar. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         plseek = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr1.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND iiCCN = 0
                plseek WITH FRAME hayr1.
@@ -671,7 +671,7 @@ repeat WITH FRAME sel:
      ELSE if ufk[2] > 0 AND LOOKUP(nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcCSeek = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND icPList = "" AND iiCust = 0
                lcCSeek WITH FRAME hayr2.
@@ -707,7 +707,7 @@ repeat WITH FRAME sel:
      ELSE if ufk[3] > 0 AND LOOKUP(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         liCustSeek = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr3.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND iiCCN = 0
                liCustSeek WITH FRAME hayr3.
@@ -828,7 +828,7 @@ repeat WITH FRAME sel:
         assign
            fr-header = " CHANGE "
            ufkey     = TRUE
-           ehto      = 9.
+           Syst.CUICommon:ehto      = 9.
 
         CLEAR FRAME lis no-pause.
 
@@ -858,7 +858,7 @@ repeat WITH FRAME sel:
         FIND FIRST Tariff where 
              recid(Tariff) = rtab[FRAME-LINE]
         NO-LOCK NO-ERROR.
-        ASSIGN ufk = 0 ufkey = TRUE ehto = 3. RUN Syst/ufkey.p.
+        ASSIGN ufk = 0 ufkey = TRUE Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
         DISPLAY
            round(Tariff.Price[1] * 60 / 100,2) @ Tariff.Price[1]
            round(Tariff.StartCharge[1] * 60 / 100,2) @ Tariff.StartCharge[1].
@@ -2147,7 +2147,7 @@ PROCEDURE pUpdate.
                          WITH FRAME lis.
                       END.
 
-                      ehto = 9.
+                      Syst.CUICommon:ehto = 9.
                       RUN Syst/ufkey.p.
                       PAUSE 0.
 

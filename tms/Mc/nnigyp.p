@@ -197,7 +197,7 @@ repeat WITH FRAME sel:
        
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          DO TRANSAction:
          
@@ -330,7 +330,7 @@ BROWSE:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -474,7 +474,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-code = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame haku-f1.
         UPDATE 
            lcBrand when Syst.CUICommon:gcAllBrand
@@ -497,7 +497,7 @@ BROWSE:
 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-name = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME haku-f2.
         UPDATE 
            lcBrand when Syst.CUICommon:gcAllBrand
@@ -538,7 +538,7 @@ BROWSE:
                   ufk[1] = 1100
                   ufk[2] = 1119
                   ufk[8] = 8
-                  ehto   = 0.
+                  Syst.CUICommon:ehto   = 0.
            RUN Syst/ufkey.p.
             
            /* invoice number sequences */
@@ -667,7 +667,7 @@ BROWSE:
 
         FIND InvGroup where recid(InvGroup) = rtab[frame-line(sel)]
         exclusive-lock.
-        ASSIGN ufkey = TRUE ehto = 9.
+        ASSIGN ufkey = TRUE Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         assign fr-header = " CHANGE ".

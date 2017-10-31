@@ -313,7 +313,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -429,7 +429,7 @@ REPEAT WITH FRAME sel:
            ufk[3]= 714  
            ufk[4]= IF iiReqStatus = ? THEN 559 ELSE 0
            ufk[8]= 8 
-           ehto = 3 ufkey = FALSE.
+           Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF iiMSSeq > 0 OR iiCustNum > 0 THEN ASSIGN
            ufk[1] = 0
@@ -582,7 +582,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -621,7 +621,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -650,7 +650,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -678,7 +678,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -1312,7 +1312,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
       
       ASSIGN ufk    = 0 
-             ehto   = 0
+             Syst.CUICommon:ehto   = 0
              ufk[2] = 1643
              ufk[4] = 927
              ufk[5] = 1697

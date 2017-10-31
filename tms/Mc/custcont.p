@@ -81,14 +81,14 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                        CustContact.Custnum = Customer.Custnum AND
                                        CustContact.CustType = 5)
       ufk[8]= 8 
-      ehto = 0.
+      Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          PROMPT Customer.Email
                 Customer.SMSNumber

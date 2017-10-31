@@ -72,7 +72,7 @@ REPEAT WITH FRAME Main:
           ufk[4] = 9812
           ufk[5] = 9813
           ufk[8] = 8
-          ehto = 3.
+          Syst.CUICommon:ehto = 3.
    RUN Syst/ufkey.p.
    UPDATE lcMSISDNFile GO-ON(F1 F4 F5)
    WITH FRAME MAIN EDITING:

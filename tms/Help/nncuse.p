@@ -123,7 +123,7 @@ print-line:
          ASSIGN
          ufk = 0 ufk[1] = 718 ufk[5] = 11
          ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"6"'}
          RUN Syst/ufkey.p.
       END.
@@ -230,7 +230,7 @@ BROWSE:
         /* Currency */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* Currency */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Currency = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Currency = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Currency WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if Currency <> "" THEN DO:

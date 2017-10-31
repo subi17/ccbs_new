@@ -188,7 +188,7 @@ BROWSE:
         ufk[5] = 927    WHEN AVAIL Limit 
         ufk[6] = 1752   WHEN AVAIL Limit 
         /*ufk[7]= 9016*/  ufk[8]= 8 
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -692,7 +692,7 @@ PROCEDURE local-UPDATE-record:
          ldeValue[2]:label   in frame lis = "Limit 2 value.".
       ELSE ldeValue[2]:label in frame lis = "               ".
       
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
   
    DO j = 1 TO i:
       DISP ldeValue[j] WITH FRAME lis.
@@ -743,7 +743,7 @@ PROCEDURE local-UPDATE-record:
    
    ELSE DO:   
       
-      ehto = 10.
+      Syst.CUICommon:ehto = 10.
       RUN Syst/ufkey.p.
       REPEAT:
          READKEY.

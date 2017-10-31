@@ -210,7 +210,7 @@ repeat WITH FRAME sel:
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-MESSAGE.
-         assign Syst.CUICommon:cfc = "lis" ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
+         assign Syst.CUICommon:cfc = "lis" Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
          fr-header = " ADD ".
 
          DO TRANSAction ON ENDKEY UNDO add-new, LEAVE add-new:
@@ -344,7 +344,7 @@ repeat WITH FRAME sel:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
          ufk[7]= 1162 ufk[8]= 8   ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
 
@@ -616,7 +616,7 @@ repeat WITH FRAME sel:
       ELSE IF lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          haku = "".
-         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
          DISPLAY lcBrand WITH FRAME hayr.
          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -647,7 +647,7 @@ repeat WITH FRAME sel:
       ELSE IF lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimellA */
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
-         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr2.
          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 hakunimi WITH FRAME hayr2.
@@ -667,7 +667,7 @@ repeat WITH FRAME sel:
       ELSE IF lookup(nap,"3,f3") > 0 THEN DO:  /* haku nimellA */
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
-         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr3.
          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 liCCN WITH FRAME hayr3.
@@ -903,7 +903,7 @@ PROCEDURE local-update-record:
             ufk[1] = 7 WHEN lcRight = "RW"
             ufk[4] = 9843 WHEN llBDestTrans
             ufk[8] = 8
-            ehto   = 0
+            Syst.CUICommon:ehto   = 0
             ufkey  = TRUE.
            
          RUN Syst/ufkey.p.
@@ -914,7 +914,7 @@ PROCEDURE local-update-record:
         
          FIND CURRENT BDest EXCLUSIVE-LOCK.
 
-         ASSIGN ufkey = TRUE ehto = 9.
+         ASSIGN ufkey = TRUE Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
    
          UPDATE
@@ -939,7 +939,7 @@ PROCEDURE local-update-record:
                IF lcCode ne "" AND lcCode NE ? THEN 
                   DISPLAY INTEGER(lcCode) ;& BDest.Class WITH FRAME lis.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

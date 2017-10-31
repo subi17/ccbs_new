@@ -138,7 +138,7 @@ lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR SMGroup.SmGroup
            VALIDATE
@@ -227,7 +227,7 @@ SELAUS:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"3,5,6"'}
         RUN Syst/ufkey.p.
       END.
@@ -384,7 +384,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               SMGroup WITH FRAME f1.
@@ -407,7 +407,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               SGName WITH FRAME f2.
@@ -517,7 +517,7 @@ SELAUS:
        {Syst/uright2.i}
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 

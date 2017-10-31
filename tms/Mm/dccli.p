@@ -155,7 +155,7 @@ REPEAT WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            
            CLEAR FRAME lis NO-PAUSE.
@@ -255,7 +255,7 @@ REPEAT WITH FRAME sel:
         ASSIGN
         ufk[1]= 209  ufk[2]= 1045 ufk[3]= 2105 ufk[4]= 1048
         ufk[5]= 2240 ufk[6]= 1046 ufk[7]= 1047 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
 
         IF iiMsSeq > 0 THEN ASSIGN
            ufk[1] = 0 
@@ -401,7 +401,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET lCCli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -432,7 +432,7 @@ REPEAT WITH FRAME sel:
      THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET lCEvent WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -511,7 +511,7 @@ REPEAT WITH FRAME sel:
            ASSIGN
            ufkey = TRUE
            ufk   = 0
-           ehto  = 0
+           Syst.CUICommon:ehto  = 0
            ufk[1] = 1049
            ufk[2] = 0
            ufk[3] = 0
@@ -603,7 +603,7 @@ REPEAT WITH FRAME sel:
 
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        
        

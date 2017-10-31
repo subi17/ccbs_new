@@ -183,7 +183,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -285,7 +285,7 @@ REPEAT WITH FRAME sel:
         ufk    = 0
         ufk[1] = 35
         ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -427,7 +427,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcBillItem WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -652,7 +652,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND FALSE
       THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          ttAccessory.IMEI    
@@ -689,7 +689,7 @@ PROCEDURE local-UPDATE-record:
            ufk = 0.
            ufk[6] = 1752.
            ufk[8] = 8.
-           ehto = 1. RUN Syst/ufkey.p.
+           Syst.CUICommon:ehto = 1. RUN Syst/ufkey.p.
            
            IF Syst.CUICommon:toimi = 6 THEN DO:
              

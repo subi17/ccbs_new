@@ -148,7 +148,7 @@ BROWSE:
          ASSIGN
          ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
+         Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
@@ -297,7 +297,7 @@ BROWSE:
      ELSE IF lookup(nap,"1,f1") > 0 THEN DO on endkey undo, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 NO-PAUSE.
         IF haku-CLI <> "" THEN DO:

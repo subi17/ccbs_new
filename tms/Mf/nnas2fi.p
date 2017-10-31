@@ -95,17 +95,17 @@ DISP wlname WITH FRAME rajat.
 
 rajat:
 repeat WITH FRAME rajat.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE wlname cust-nr1 cust-nr2 date1 date2 q.
 
 toimi:
    repeat:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7  ufk[4] = 942 ufk[5] = 15 ufk[8] = 8.
+      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7  ufk[4] = 942 ufk[5] = 15 ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
 
       IF Syst.CUICommon:toimi = 4 THEN DO WITH FRAME cust.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
          UPDATE cust-nr[1 FOR 14] EDITING:
             READKEY.

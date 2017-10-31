@@ -193,7 +193,7 @@ END.
 
 MAIN:
 REPEAT WITH FRAME range.
-   ehto = 9.  RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE 
       Size 
@@ -288,13 +288,13 @@ REPEAT WITH FRAME range.
       END. /* IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel */
 
       APPLY LASTKEY.
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
    END. /* EDITING */
 
 ACTION:
    REPEAT WITH FRAME range.
-      ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT main.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE main.

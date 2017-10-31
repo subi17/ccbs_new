@@ -127,7 +127,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -238,7 +238,7 @@ REPEAT WITH FRAME sel:
          ufk[5]= 5 
          ufk[6]= 4    
          ufk[8]= 8 
-         ehto = 3 ufkey = false.
+         Syst.CUICommon:ehto = 3 ufkey = false.
          
          RUN Syst/ufkey.p.
       END.
@@ -383,7 +383,7 @@ REPEAT WITH FRAME sel:
      
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " VIEW " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY UserSman.Brand.
 
@@ -555,7 +555,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          UserSman.Salesman  

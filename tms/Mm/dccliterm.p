@@ -210,7 +210,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                   THEN 1027 
                   ELSE 0 
          ufk[8] = 8 
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
@@ -218,7 +218,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE 

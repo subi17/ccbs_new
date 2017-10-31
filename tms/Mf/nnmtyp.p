@@ -175,7 +175,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new:
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         ASSIGN CustNum = 0 Month = 0 Limit = 0 Called = 0 CloseDate = ?.
         UPDATE CustNum Month Limit Called CloseDate WITH FRAME lis EDITING:
            READKEY.
@@ -298,7 +298,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 903 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
         ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -494,7 +494,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        seek-cust-nr = ?.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-cust-nr WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF seek-cust-nr <> ? THEN DO:
@@ -517,7 +517,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        seek-mth = ?.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-mth WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        IF seek-mth <> ? THEN DO:
@@ -571,7 +571,7 @@ BROWSE:
      /* append numbers TO monthly File where Printed is FALSE */
      if lookup(nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP: 
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         whitelist = whitelist + 
                     "wlc-" + substr(string(Month,"999999"),3) + ".dat".
 
@@ -708,7 +708,7 @@ BROWSE:
        FIND MthCall where recid(MthCall) = rtab[frame-line(sel)]
        exclusive-lock.
        IF MthCall.Printed = FALSE THEN DO:
-          assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+          assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
           RUN Syst/ufkey.p.
           Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           FIND Customer where

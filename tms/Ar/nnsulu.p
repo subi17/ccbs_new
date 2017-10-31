@@ -296,10 +296,10 @@ DISPLAY pvm1 pvm2 sutil sukoo xOnlySum
 
 toimi:
    repeat WITH FRAME MAIN ON ENDKEY UNDO toimi, NEXT toimi:
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          IF tosi2  = 9999999 THEN tosi2 = 0.
          repeat:
             UPDATE
@@ -341,7 +341,7 @@ toimi:
                         ELSE DISPLAY INTEGER(lcCode) ;& liPaymType2.
                   END.
 
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.

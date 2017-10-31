@@ -36,7 +36,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       ufk    = 0
       ufk[5] = 795
       ufk[8] = 8 
-      ehto   = 0.
+      Syst.CUICommon:ehto   = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi = 5 THEN DO:

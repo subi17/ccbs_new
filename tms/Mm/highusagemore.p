@@ -35,7 +35,7 @@ PAUSE 0.
 
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Total call amount per day            "  @ menuc[1]    SKIP 

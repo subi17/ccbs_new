@@ -121,7 +121,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[1] = 7  
       ufk[5] = 1734 
       ufk[8] = 8
-      ehto   = 0.
+      Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
@@ -130,7 +130,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF Syst.CUICommon:toimi = 1 THEN DO:
    
-      ASSIGN ehto = 9.
+      ASSIGN Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -179,7 +179,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT.
       END.
       
-      ehto = 5. 
+      Syst.CUICommon:ehto = 5. 
       RUN Syst/ufkey.p.
  
       /* 15 mins from now */

@@ -107,7 +107,7 @@ repeat WITH FRAME PaidAmt:
    IF ufkey THEN DO:
       ufkey = FALSE.
       ASSIGN ufk = 0 ufk[1] = 972 ufk[2] = 0 ufk[3] = 927 
-             ufk[7] = 1752 ufk[8] = 8 ehto = 3.
+             ufk[7] = 1752 ufk[8] = 8 Syst.CUICommon:ehto = 3.
       RUN Syst/ufkey.p.
    END.
 
@@ -155,7 +155,7 @@ repeat WITH FRAME PaidAmt:
          WITH centered ROW 16 side-labels OVERLAY FRAME TotPaid.   
 
 
-         ASSIGN ufk = 0 ufk[8] = 8 ufk[9] = 1 ehto = 0. RUN Syst/ufkey.p.
+         ASSIGN ufk = 0 ufk[8] = 8 ufk[9] = 1 Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
          ufkey = TRUE.
          HIDE FRAME acct no-pause.
          HIDE FRAME TotPaid no-pause.

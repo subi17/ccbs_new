@@ -263,7 +263,7 @@ repeat WITH FRAME sel:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DayCampaign.
@@ -342,7 +342,7 @@ repeat WITH FRAME sel:
         ufk[1]= 35  ufk[2]= 0 ufk[3]= 222 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 814
         ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -478,7 +478,7 @@ repeat WITH FRAME sel:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        lcEvent = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE lcEvent WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if lcEvent <> "" THEN DO:
@@ -626,7 +626,7 @@ repeat WITH FRAME sel:
        FIND FIRST DayCampaign where 
             recid(DayCampaign) = rtab[frame-line(sel)]
        no-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
@@ -813,7 +813,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       IF ilNew THEN Syst.CUICommon:toimi = 1.
       
       ELSE ASSIGN 
-         ehto   = 0
+         Syst.CUICommon:ehto   = 0
          ufk    = 0
          ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
          ufk[2] = 295
@@ -855,7 +855,7 @@ PROCEDURE pUpdate:
  
       FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
     
       UPDATE 
@@ -964,7 +964,7 @@ PROCEDURE pUpdate:
                END.
             END.
          
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END.
@@ -1196,7 +1196,7 @@ PROCEDURE pFeeData:
       IF ilNew THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
+            Syst.CUICommon:ehto   = 0
             ufk    = 0
             ufk[1] = 7 WHEN gcHelpParam = ""
             ufk[8] = 8.
@@ -1208,7 +1208,7 @@ PROCEDURE pFeeData:
 
          FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
     
          UPDATE 
@@ -1236,7 +1236,7 @@ PROCEDURE pFeeData:
                   END.
                END.
           
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END.

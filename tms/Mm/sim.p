@@ -219,7 +219,7 @@ ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            PROMPT-FOR SIM.ICC
            VALIDATE
@@ -307,7 +307,7 @@ BROWSE:
         ufk[1]= 206
         ufk[4]= 9808
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.          
       END.
 
@@ -443,7 +443,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ICC = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       
        DISP lcBrand WITH FRAME F1. pause 0.
        UPDATE ICC WITH FRAME f1. 
@@ -505,7 +505,7 @@ BROWSE:
                DISPLAY BillTarg.BillTarget WITH FRAME imsi.          
             VIEW FRAME imsi.
             PAUSE 0.
-            ehto = 1.
+            Syst.CUICommon:ehto = 1.
             ufk = 0.
             ufk[8] = 8.
             RUN Syst/ufkey.p.
@@ -526,7 +526,7 @@ BROWSE:
        {Syst/uright2.i}
        /* change */
        FIND SIM WHERE recid(SIM) = rtab[FRAME-line(sel)] NO-LOCK.
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME  lis no-pause.

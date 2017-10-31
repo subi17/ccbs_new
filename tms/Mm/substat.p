@@ -63,7 +63,7 @@ repeat:
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    CustomerFrom 
    CustomerTo
@@ -75,11 +75,11 @@ repeat with frame rajat:
       ufk[1] = 132
       ufk[5] = 63
       ufk[8] = 8
-      ehto = 0
+      Syst.CUICommon:ehto = 0
    ufkey = true.
 
    RUN Syst/ufkey.p.
-   case toimi:
+   case Syst.CUICommon:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.

@@ -201,7 +201,7 @@ REPEAT WITH FRAME sel:
          ASSIGN
          ufk[1]= 92   ufk[2]= 714  ufk[3]= 28 ufk[4]= 927 
          ufk[5]= 1491 ufk[6]= 4    ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
+         Syst.CUICommon:ehto = 3 ufkey = false.
          
          IF iiInvNum > 0 THEN ASSIGN 
                 ufk[1] = 0
@@ -362,7 +362,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -391,7 +391,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -416,7 +416,7 @@ REPEAT WITH FRAME sel:
      THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -468,14 +468,14 @@ REPEAT WITH FRAME sel:
         ASSIGN ufk = 0
                ufk[1] = 7
                ufk[8] = 8
-               ehto   = 0
+               Syst.CUICommon:ehto   = 0
                ufkey = true.
         
         RUN Syst/ufkey.p.
         
         IF Syst.CUICommon:toimi = 1 THEN DO:
         
-           ehto = 9. 
+           Syst.CUICommon:ehto = 9. 
            RUN Syst/ufkey.p. 
            run local-find-this(true).
 
@@ -495,7 +495,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(true).
 
         IF AVAILABLE ClaimHist THEN DO:
-           ehto = 5.
+           Syst.CUICommon:ehto = 5.
            RUN Syst/ufkey.p.
 
            /* show details */

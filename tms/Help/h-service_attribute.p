@@ -80,7 +80,7 @@ repeat:
          ufk[6] = 0  
          ufk[8] = 8  
          siirto = ? 
-         ehto  = 3 
+         Syst.CUICommon:ehto  = 3 
          ufkey = false.
          RUN Syst/ufkey.p.
       end.

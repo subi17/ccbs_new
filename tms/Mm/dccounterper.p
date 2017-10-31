@@ -130,7 +130,7 @@ BROWSE:
         ufk[8]= 8.
         
         IF iiMsseq > 0 THEN ufk[1] = 0.
-        ASSIGN ehto = 3 ufkey = FALSE.
+        ASSIGN Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 

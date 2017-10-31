@@ -231,7 +231,7 @@ BROWSE:
         ufk[6]= 2425
         ufk[7]= 555 
         ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -371,7 +371,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET HighUsage lihakuperiod  WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -404,7 +404,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -437,7 +437,7 @@ BROWSE:
         ASSIGN
            ufkey = TRUE
            ufk   = 0
-           ehto  = 1
+           Syst.CUICommon:ehto  = 1
            ufk[1] = 267 
            ufk[2] = 252
            ufk[3] = 0
@@ -477,7 +477,7 @@ BROWSE:
         ASSIGN
            ufkey = TRUE
            ufk   = 0
-           ehto  = 1
+           Syst.CUICommon:ehto  = 1
            ufk[1] = 1883 ufk[2] = 1888 
            ufk[4] = 1830 
            ufk[5]= 0  
@@ -629,7 +629,7 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
        Highusage.cli     

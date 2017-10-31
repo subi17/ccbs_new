@@ -194,7 +194,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
                         
@@ -371,7 +371,7 @@ REPEAT WITH FRAME sel:
         ufk[6] = IF liState = 1 THEN 1789 ELSE 1787
         ufk[7] = 1152
         ufk[8] = 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF iiCustNum > 0 THEN ASSIGN 
            ufk[1] = 0
@@ -518,7 +518,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
@@ -672,7 +672,7 @@ REPEAT WITH FRAME sel:
                ufk[5] = (IF lcRight = "RW" AND liState = 0 THEN 5 ELSE 0)
                ufk[6] = (IF lcRight = "RW" AND liState = 0 THEN 4 ELSE 0)
                ufk[8] = 8
-               ehto   = 0
+               Syst.CUICommon:ehto   = 0
                ufkey  = TRUE.
         RUN Syst/ufkey.p.
 
@@ -930,7 +930,7 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
 
       CLEAR FRAME lis NO-PAUSE. 
-      ehto = 5.
+      Syst.CUICommon:ehto = 5.
       RUN Syst/ufkey.p.
 
       FIND TMSUser WHERE TMSUser.UserCode = Contact.UserCode NO-LOCK NO-ERROR.

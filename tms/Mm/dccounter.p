@@ -144,7 +144,7 @@ repeat WITH FRAME sel:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 5. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DCCounter.
@@ -223,7 +223,7 @@ BROWSE:
         ufk[8]= 8.
         
         IF iiMsseq > 0 THEN ufk[1] = 0.
-        ASSIGN ehto = 3 ufkey = FALSE.
+        ASSIGN Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -357,7 +357,7 @@ BROWSE:
        FIND FIRST DCCounter where 
             recid(DCCounter) = rtab[frame-line(sel)]
        /*exclusive-lock*/ no-lock.
-       assign fr-header = " VIEW " ufkey = TRUE ehto = 5.
+       assign fr-header = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5.
        RUN Syst/ufkey.p.
 
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

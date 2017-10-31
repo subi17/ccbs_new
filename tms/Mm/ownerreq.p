@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -367,7 +367,7 @@ REPEAT WITH FRAME sel:
         ufk[6]= 927 
         ufk[7]= 1752 
         ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF iiMSSeq > 0 OR iiCustNum > 0 OR iiReqStat NE ? THEN ASSIGN
            ufk[1] = 0
@@ -530,7 +530,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -561,7 +561,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -599,7 +599,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -624,7 +624,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -1098,7 +1098,7 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.
           
           ASSIGN ufk    = 0 
-                ehto   = 0
+                Syst.CUICommon:ehto   = 0
                 ufk[2] = 1060
                 ufk[8] = 8.
          
@@ -1151,7 +1151,7 @@ PROCEDURE local-UPDATE-record:
             
             FIND CURRENT MsRequest EXCLUSIVE-LOCK.
             
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
             UPDATE
             MsRequest.CreateFees
@@ -1177,7 +1177,7 @@ PROCEDURE local-UPDATE-record:
                      WITH FRAME lis.   
                   END.
  
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
@@ -1368,7 +1368,7 @@ PROCEDURE local-UPDATE-record:
             
             IF ok THEN DO:
                REPEAT WITH FRAME fCancel ON ENDKEY UNDO, NEXT HandleRequest:
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   
                   PAUSE 0.

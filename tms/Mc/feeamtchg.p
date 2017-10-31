@@ -44,7 +44,7 @@ FORM liFee LABEL "Fees"
 WITH 1 DOWN OVERLAY ROW 15 CENTERED SIDE-LABELS FRAME fFeeQty.
 
  
-ehto = 9.
+Syst.CUICommon:ehto = 9.
 RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, RETURN:                            
@@ -107,7 +107,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
    
 END.
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 OUTPUT STREAM sLog TO VALUE(lcEventDir + "/feeamtchg_" +

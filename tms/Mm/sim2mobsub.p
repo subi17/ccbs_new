@@ -107,7 +107,7 @@ REPEAT WITH FRAME lis:
    
    action:
    REPEAT WITH FRAME lis:
-      ASSIGN ufk = 0 ufk[1] = 0 ufk[8] = 8 ufk[5] = 1967  ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 0 ufk[8] = 8 ufk[5] = 1967  Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN LEAVE action.
       IF Syst.CUICommon:toimi = 8 THEN DO:

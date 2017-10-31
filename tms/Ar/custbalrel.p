@@ -93,7 +93,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[2]= 0  ufk[3]= 0 ufk[4]= 0 
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
       pause 0.
@@ -107,7 +107,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       if lookup(nap,"1,f1") > 0 THEN DO:
 
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          repeat WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 

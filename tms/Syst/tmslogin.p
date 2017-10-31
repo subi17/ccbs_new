@@ -60,7 +60,7 @@ do with frame login:
    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
    pause 0 no-message.
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    assign Syst.CUICommon:si-pvm = TODAY.
 
    if katun = "" then do:

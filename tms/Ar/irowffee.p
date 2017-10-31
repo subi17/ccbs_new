@@ -221,7 +221,7 @@ BROWSE:
         ASSIGN
         ufk[1]= 771 ufk[2]= 0  ufk[3]= 927 ufk[4]= 0
         ufk[5]= 0   ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto  = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto  = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -360,7 +360,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF BillPeriod <> ? THEN DO:
@@ -381,7 +381,7 @@ BROWSE:
 
      if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO  WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND FFItem WHERE RECID(FFItem) = ttRow.FFItem NO-LOCK.

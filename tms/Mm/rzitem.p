@@ -164,7 +164,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PAUSE 0.
@@ -262,7 +262,7 @@ BROWSE:
         ASSIGN
         ufk[3]= 0  ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
         IF llEmpty THEN ASSIGN ufk[1]= 95
                                ufk[2]= 96.
                    ELSE ASSIGN ufk[1]= 0
@@ -407,7 +407,7 @@ BROWSE:
      ELSE IF llEmpty AND
      LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET RZItem-code WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -431,7 +431,7 @@ BROWSE:
      LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET lcCountryPrefix WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -510,7 +510,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RZItem.PLMNCode.
 

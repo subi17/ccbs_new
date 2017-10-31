@@ -195,7 +195,7 @@ add-new:
 
             CREATE MenuTree.
             ufkey = TRUE.
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
             UPDATE
                 MenuTree.Level 
@@ -391,7 +391,7 @@ BROWSE:
          ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
          ufk[7]= (IF lcRight = "RW" THEN 140 ELSE 0)
          ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -580,7 +580,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. haku = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         if MenuTree.Level ne "0" THEN DO:
            IF MenuTree.MenuType = 2 THEN haku = MenuTree.Level + string(
@@ -609,7 +609,7 @@ BROWSE:
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -630,7 +630,7 @@ BROWSE:
      if lookup(nap,"2,f2") > 0 THEN DO: 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku3 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku3 WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
         if haku3 <> "" THEN DO:
@@ -648,7 +648,7 @@ BROWSE:
      END. /* Search by module */
 
      else if nap = "7" or nap = "f7" AND lcRight = "RW" THEN DO: /* siirto */
-        assign ufkey = true ehto = 9. Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. RUN Syst/ufkey.p.
+        assign ufkey = true Syst.CUICommon:ehto = 9. Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. RUN Syst/ufkey.p.
         DO TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
            assign mista = "" minne = "".
            UPDATE mista minne WITH FRAME siirto EDITING:
@@ -831,7 +831,7 @@ siirto:             repeat:
         FIND MenuClass of MenuTree no-lock no-error.
 
         ASSIGN ed-taso = MenuTree.Level ed-pka = MenuTree.Position.
-        assign ufkey = true ehto = 9 fr-header = " CHANGE MenuText "
+        assign ufkey = true Syst.CUICommon:ehto = 9 fr-header = " CHANGE MenuText "
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         PAUSE 0 no-message.
 

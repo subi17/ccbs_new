@@ -108,7 +108,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
 "ALL" @ invgroup.IGName.
@@ -203,7 +203,7 @@ WITH FRAME main  EDITING:
    ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.

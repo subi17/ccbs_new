@@ -276,7 +276,7 @@ repeat WITH FRAME sel:
          ASSIGN  ufk = 0
          ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
          ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -465,7 +465,7 @@ repeat WITH FRAME sel:
      etsi:    
      repeat WITH FRAME sel:
 
-        ASSIGN ufk = 0 ehto = 0  ufk[8] = 8
+        ASSIGN ufk = 0 Syst.CUICommon:ehto = 0  ufk[8] = 8
                ufk[1]= 133 ufk[2]= 28  ufk[3]= 702 ufk[4]= 789.
 
         RUN Syst/ufkey.p.
@@ -478,7 +478,7 @@ repeat WITH FRAME sel:
         IF Syst.CUICommon:toimi = 1 THEN DO:  /* haku sarakk. 1 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            lcExtInvID = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   lcExtInvID WITH FRAME hayr.
@@ -507,7 +507,7 @@ repeat WITH FRAME sel:
         IF Syst.CUICommon:toimi = 2 THEN DO:  /* haku sar. 2 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            InvDate = ?.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr3.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   InvDate WITH FRAME hayr3.
@@ -534,7 +534,7 @@ repeat WITH FRAME sel:
         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:  /* haku sarakk. 3 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakuCustNum = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hakie.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   hakuCustNum WITH FRAME hakie.
@@ -558,7 +558,7 @@ repeat WITH FRAME sel:
            InvDate = ?.
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakunetto = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            liPaymState = 0.
            DISPLAY lcBrand WITH FRAME hayr2.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -728,7 +728,7 @@ repeat WITH FRAME sel:
         ASSIGN  ufk = 0
                 ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
                 ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
-                ehto = 3 ufkey = FALSE.
+                Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
      END.
 

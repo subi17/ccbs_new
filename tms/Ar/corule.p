@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -355,7 +355,7 @@ REPEAT WITH FRAME sel:
                     END.
                  END.
  
-                 ehto = 9.
+                 Syst.CUICommon:ehto = 9.
                  RUN Syst/ufkey.p.
                  NEXT. 
               END.
@@ -452,7 +452,7 @@ REPEAT WITH FRAME sel:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[8]= 8 
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -595,14 +595,14 @@ REPEAT WITH FRAME sel:
         ufk = 0
         ufk[1]= 35  ufk[2]= 717  
         ufk[8]= 8 
-        ehto = 0
+        Syst.CUICommon:ehto = 0
         ufkey = TRUE.
         RUN Syst/ufkey.p.
 
         /* Search BY column 1 */
         IF Syst.CUICommon:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -625,7 +625,7 @@ REPEAT WITH FRAME sel:
         /* Search BY column 2 */
         ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -742,7 +742,7 @@ REPEAT WITH FRAME sel:
            NEXT.
         END.
      
-        ehto = 9.
+        Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
         ufkey = TRUE.
         
@@ -989,7 +989,7 @@ PROCEDURE local-UPDATE-record:
       IF NEW CoRule THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
+            Syst.CUICommon:ehto   = 0
             ufk    = 0
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[3] = 1550 WHEN lcRight = "RW" AND gcHelpParam = ""
@@ -1002,7 +1002,7 @@ PROCEDURE local-UPDATE-record:
 
          FIND CURRENT CoRule EXCLUSIVE-LOCK.
             
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
       
          UPDATE
@@ -1078,7 +1078,7 @@ PROCEDURE local-UPDATE-record:
                   END.   
                END.
                 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
@@ -1187,7 +1187,7 @@ PROCEDURE local-UPDATE-record:
       /* copy to a new rule */
       ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
  
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
         
          REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, LEAVE:

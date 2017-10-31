@@ -126,7 +126,7 @@ BROWSE:
     ASSIGN
     ufk[1]= 1709 ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
     CHOOSE ROW SubserPara.msseq {Syst/uchoose.i} no-error WITH FRAME sel.

@@ -137,7 +137,7 @@ ADD-ROW:
       repeat WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR
               UserRight.UserCode
@@ -281,7 +281,7 @@ BROWSE:
         ufk[1]= 542  ufk[2]= 133 ufk[3]= 0 ufk[4]= 0
         ufk[5]= (IF lcRight = "RW" THEN 13 ELSE 0)  
         ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         RUN Syst/ufkey.p.
       END.
@@ -453,7 +453,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserCode = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserCode WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserCode <> "" THEN DO:
@@ -476,7 +476,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        MenuClass = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MenuClass WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        IF MenuClass <> 0 THEN DO:

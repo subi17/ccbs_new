@@ -138,7 +138,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. 
+        Syst.CUICommon:ehto = 9. 
         RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -371,7 +371,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
         ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto = 3  
+        Syst.CUICommon:ehto = 3  
         ufkey = false.
         RUN Syst/ufkey.p.
       END.
@@ -511,7 +511,7 @@ ASK-F1:
         ON ENDKEY UNDO ask-f1, LEAVE ask-f1.
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f1.
           SET KeyField WITH FRAME f1.
           LEAVE.
@@ -604,7 +604,7 @@ ASK-F1:
        /* change */
        {Syst/uright2.i}
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPBasis.BillCode DPBasis.CCN.
 

@@ -108,7 +108,7 @@ Action:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN Syst/ufkey.p. 
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. 
 
          UPDATE 
            liBillTarget 
@@ -125,7 +125,7 @@ Action:
                   RUN Help/h-billtarg.p (INPUT asnro).
                   IF siirto NE "" AND siirto NE ? THEN 
                      DISPLAY INTEGER(siirto) ;& liBillTarget.
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
             END.
@@ -188,7 +188,7 @@ Action:
       END.
 
       ASSIGN
-      ufk = 0 ufk[1] = 7 ufk[4] = 294 ufk[5] = 15 ufk[8] = 8 ehto = 0.
+      ufk = 0 ufk[1] = 7 ufk[4] = 294 ufk[5] = 15 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       if lcFeeModel = "" THEN ufk[5] = 0.
       RUN Syst/ufkey.p.
 

@@ -452,7 +452,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          ufk[1]= 7    ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 1027 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
-         ehto = 0.
+         Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
    END.
 
@@ -463,7 +463,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE ldtChgDate 
                 ldChgTime
@@ -489,7 +489,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    
                END. 
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 
@@ -636,7 +636,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                       END.
                    END. 
     
-                   ehto = 9.
+                   Syst.CUICommon:ehto = 9.
                    RUN Syst/ufkey.p.
                    NEXT.
                 END. 
@@ -873,7 +873,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          IF NOT llOk THEN NEXT.
       END.
       
-      ehto = 5.   
+      Syst.CUICommon:ehto = 5.   
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 

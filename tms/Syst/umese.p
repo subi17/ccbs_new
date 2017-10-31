@@ -176,7 +176,7 @@ add-new:
              IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhMenuText).
              ASSIGN
              memory = recid(MenuText)
-             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           END.  /* add-new */
 
           HIDE FRAME lis no-pause.
@@ -227,7 +227,7 @@ add-new:
           siirto = ?
           ufk[1] = 133  ufk[2] = 134  ufk[3] = 0    ufk[4] = 7
           ufk[5] = 5    ufk[6] = 4    ufk[7] = 11   ufk[8] = 8
-          ufkey = FALSE ehto = 3.
+          ufkey = FALSE Syst.CUICommon:ehto = 3.
           {Syst/uright1.i '"4,5,6"'}
           RUN Syst/ufkey.p.
        END.
@@ -282,7 +282,7 @@ add-new:
           PAUSE 0 no-message.
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ha-menro = 0.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-menro WITH FRAME puyr.
           HIDE FRAME puYR.
           IF ha-menro <> 0 THEN DO:
@@ -316,7 +316,7 @@ add-new:
           PAUSE 0 no-message.
           Syst.CUICommon:cfc = "puhe". RUN Syst/ufcolor.p.
           ha-metex = "".
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-metex WITH FRAME puhe.
           HIDE FRAME puhe.
           if ha-metex <> "" THEN DO:
@@ -491,7 +491,7 @@ add-new:
           ASSIGN
             ens = substring(MenuText,1,8)
             toi = substring(MenuText,9,16).
-          assign fr-header = " change fixmenuTEXT " ufkey = TRUE ehto = 9.
+          assign fr-header = " change fixmenuTEXT " ufkey = TRUE Syst.CUICommon:ehto = 9.
           RUN Syst/ufkey.p.
           Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
           PAUSE 0 no-message.
@@ -500,7 +500,7 @@ add-new:
           MenuText = caps(string(ens,"x(8)")) + caps(string(toi,"x(8)")).
           ASSIGN
           ed-metex = MenuText.MenuText.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           HIDE FRAME lis no-pause.
 
           IF MenuText <> ed-metex THEN DO:

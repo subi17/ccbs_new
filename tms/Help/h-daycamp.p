@@ -93,7 +93,7 @@ repeat:
          ufk[1] = 1045 WHEN lcRestricted = "" AND lcDCTypes = ""
          ufk[5] = 11
          ufk[6] = 0  ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -211,7 +211,7 @@ repeat:
 
            /*lcEvent*/
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:

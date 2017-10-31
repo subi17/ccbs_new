@@ -140,7 +140,7 @@ repeat WITH FRAME sel:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE ProgLimit.
@@ -226,7 +226,7 @@ repeat WITH FRAME sel:
         ASSIGN
         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF llShowHistory = TRUE THEN ufk[4]= 38.
         ELSE                         ufk[4]= 37.
@@ -444,7 +444,7 @@ repeat WITH FRAME sel:
        FIND FIRST ProgLimit where 
             recid(ProgLimit) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

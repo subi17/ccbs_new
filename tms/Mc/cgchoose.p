@@ -138,7 +138,7 @@ BROWSE:
         ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 11  
         ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -274,7 +274,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        tokencode = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE tokencode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF tokencode <> "" THEN DO:

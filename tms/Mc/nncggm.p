@@ -328,7 +328,7 @@ with frame rajat.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 IF updatemode  THEN
    UPDATE
@@ -496,7 +496,7 @@ toimi:
    repeat WITH FRAME toimi:
       PAUSE 0.
       ASSIGN
-      ehto = 0 ufk = 0
+      Syst.CUICommon:ehto = 0 ufk = 0
       ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN DO:

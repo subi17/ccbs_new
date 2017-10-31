@@ -218,7 +218,7 @@ BROWSE:
         ufk[5]= 0 /* (IF lcRight = "RW" AND NOT llTerminated THEN 261 ELSE 0)*/
         ufk[6]= 0 /* (IF lcRight = "RW" AND NOT llTerminated THEN 4 ELSE 0) */
         ufk[7]= 0 /* 1855 = FETCH RESPONSE */ ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -357,7 +357,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET SoLog2 WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF SoLog2 ENTERED THEN DO:
@@ -381,7 +381,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET Stat WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF Stat ENTERED THEN DO:
@@ -456,7 +456,7 @@ BROWSE:
           NEXT.
        END.
 
-       ASSIGN ufk = 0 ehto = 3. 
+       ASSIGN ufk = 0 Syst.CUICommon:ehto = 3. 
        RUN Syst/ufkey.p. 
 
        RUN local-find-this (TRUE).
@@ -573,7 +573,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */      
        RUN local-find-this(FALSE ).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        FIND FIRST SoLog WHERE

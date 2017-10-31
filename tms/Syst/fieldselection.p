@@ -204,7 +204,7 @@ REPEAT WITH FRAME sel:
         ufk    = 0
         ufk[1] = 816
         ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         IF INDEX(icFunctions,"h") > 0 THEN ASSIGN
@@ -350,7 +350,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcField WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.

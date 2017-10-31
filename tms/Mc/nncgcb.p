@@ -160,7 +160,7 @@ print-line:
     ASSIGN
     ufk[1]= 707 ufk[2]= 708 ufk[3]= 30 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 726 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause. IF order = 1 THEN
@@ -304,7 +304,7 @@ print-line:
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
    Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-   CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+   CustNum = 0. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustNum WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    IF CustNum <> 0 THEN DO:
@@ -324,7 +324,7 @@ print-line:
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
    Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. SearchName = "".
-   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SearchName WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
    if SearchName <> "" THEN DO:
@@ -344,7 +344,7 @@ print-line:
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
    Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
-   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.
    if CustName <> "" THEN DO:
@@ -367,7 +367,7 @@ print-line:
         ASSIGN
            ufkey = TRUE
            ufk   = 0
-           ehto  = 1
+           Syst.CUICommon:ehto  = 1
            ufk[1] = 1883 ufk[2] = 1888 
            ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
         RUN Syst/ufkey.p.   

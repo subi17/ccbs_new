@@ -53,12 +53,12 @@ Syst.CUICommon:cfc = "kline".  RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME frm:
 
-  ehto = 9. RUN Syst/ufkey.p.
+  Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
   UPDATE InvGroup WITH FRAME frm.
 
    toimi:
       repeat WITH FRAME LOOP:
-         ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
+         ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
          RUN Syst/ufkey.p.
          IF Syst.CUICommon:toimi = 1 THEN NEXT  toimi.
          IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.

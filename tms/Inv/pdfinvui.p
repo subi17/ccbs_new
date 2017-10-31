@@ -103,7 +103,7 @@ ASSIGN
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 ASSIGN InvNum1 = 000000 InvNum2 = 99999999
        CustNum1  = 0 CustNum2 = 999999999.
 
@@ -149,7 +149,7 @@ LOOP:
 repeat:
 
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    
     UPDATE
@@ -180,7 +180,7 @@ repeat:
          IF lcCode ne "" AND lcCode NE ?
          THEN DISPLAY INTEGER(lcCode) ;& liDelType WITH FRAME rajat.
                   
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
@@ -306,7 +306,7 @@ repeat:
    toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.

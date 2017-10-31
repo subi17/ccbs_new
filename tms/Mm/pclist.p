@@ -386,7 +386,7 @@ REPEAT WITH FRAME sel:
         ufk[4]= 1068 WHEN llAdmin AND
                           icKeyType eq "mobsub"
         ufk[5]= 2240 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
 
         IF icKeyType = "mobsub" THEN ASSIGN
            ufk[1] = 0 
@@ -537,7 +537,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -560,7 +560,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        SET lCCli WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -584,7 +584,7 @@ REPEAT WITH FRAME sel:
      THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        SET lCEvent WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -875,7 +875,7 @@ PROCEDURE local-update-record:
      ufk[1]= 0    ufk[2]= 0    ufk[3]= 2244
      ufk[4]= 1068 WHEN llAdmin AND NOT ttContract.SubsTerminated
      ufk[5]= 927  ufk[6]= 1752 ufk[7]= 1036 ufk[8]= 8 ufk[9]= 1
-     ehto = 3.
+     Syst.CUICommon:ehto = 3.
 
      RUN Syst/ufkey.p.
    READKEY. 

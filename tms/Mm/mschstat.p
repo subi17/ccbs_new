@@ -78,7 +78,7 @@ ac-hdr = "CHANGE".
 loop:
 repeat:
 
-   assign ufkey = true ehto = 9.
+   assign ufkey = true Syst.CUICommon:ehto = 9.
    RUN Syst/ufkey.p.
 
    update cli with frame askcli.
@@ -94,7 +94,7 @@ repeat:
 
    upd:
    repeat with frame lis trans:
-      ASSIGN ufkey = TRUE ufk = 0 ehto = 1
+      ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
       ufk[1] = 7
       ufk[8] = 8.
       RUN Syst/ufkey.p.
@@ -104,7 +104,7 @@ repeat:
       end.
 
       if Syst.CUICommon:toimi = 1 then do:
-         assign ufkey = true ehto = 9.
+         assign ufkey = true Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
 
          if llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).

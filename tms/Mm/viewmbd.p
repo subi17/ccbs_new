@@ -343,7 +343,7 @@ repeat WITH FRAME cdr:
    ufk[5] = 2421
    ufk[7] = 1772
    ufk[8] = 8 
-   ehto = 0.
+   Syst.CUICommon:ehto = 0.
 
    RUN Syst/ufkey.p.
 

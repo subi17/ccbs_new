@@ -208,7 +208,7 @@ REPEAT WITH FRAME frLeft:
            ufk[2] = 0
            ufk[5] = 11
            ufk[8] = 8 
-           ehto   = 3 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.

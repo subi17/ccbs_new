@@ -213,7 +213,7 @@ BROWSE:
 
        IF must-add THEN DO:
           Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           PAUSE 0 no-message.
 add-new:
           repeat WITH FRAME lis:
@@ -323,7 +323,7 @@ add-new:
           ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
           ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
           ufk[7] = 0   ufk[8] = 8  ufk[9] = 1
-          ufkey = FALSE ehto = 3.
+          ufkey = FALSE Syst.CUICommon:ehto = 3.
           RUN Syst/ufkey.p.
        END.
 
@@ -660,7 +660,7 @@ add-new:
             moremail 
           WITH FRAME lis.
 
-          ASSIGN ehto   = 0
+          ASSIGN Syst.CUICommon:ehto   = 0
                 ufk    = 0            
                 ufk[1] = 7  WHEN lcRight = "RW"  
                 ufk[3] = 26 WHEN lcRight = "RW" 
@@ -670,7 +670,7 @@ add-new:
  
           IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO: /* update it */
              
-             ehto = 9. RUN Syst/ufkey.p.
+             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSUser).
              

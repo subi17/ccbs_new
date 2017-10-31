@@ -182,7 +182,7 @@ BROWSE:
          ASSIGN
          ufk[1]= 92  ufk[2]= 707 ufk[3]= 927 ufk[4]= 1492
          ufk[5]= 829  ufk[6]= 0  ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -371,7 +371,7 @@ BROWSE:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            liInvNum = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liInvNum WITH FRAME F1.
@@ -399,7 +399,7 @@ BROWSE:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            liCustNum = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liCustNum WITH FRAME F2.
@@ -484,7 +484,7 @@ BROWSE:
      LP:
      REPEAT : 
 
-        ehto = 5.
+        Syst.CUICommon:ehto = 5.
         RUN Syst/ufkey.p.
         ufkey = true.
 
@@ -504,7 +504,7 @@ BROWSE:
            ufk = 0
            ufk[1] = IF lcRight = "RW" THEN 7 ELSE 0
            ufk[8] = 8
-           ehto = 3.
+           Syst.CUICommon:ehto = 3.
            RUN Syst/ufkey.p.
 
            READKEY.
@@ -512,7 +512,7 @@ BROWSE:
            if LOOKUP(KEYLABEL(LASTKEY),"1,f1") > 0 AND 
               lcRight = "RW" THEN DO:
 
-              ehto = 9.
+              Syst.CUICommon:ehto = 9.
               RUN Syst/ufkey.p.
 
               FIND Current Invoice EXCLUSIVE-LOCK.

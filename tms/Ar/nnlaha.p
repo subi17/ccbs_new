@@ -40,7 +40,7 @@ repeat:
     /* haku laskunumerolla */
     IF order = 1 THEN DO WITH FRAME asno:
        ASSIGN nhaku = 0.
-       ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        UPDATE nhaku.
        HIDE FRAME asno.
        IF nhaku NE 0 THEN DO:
@@ -65,7 +65,7 @@ repeat:
     /* haku asiakas */
     ELSE IF order = 2 THEN DO WITH FRAME nimi:
        liCustNum = 0.
-       ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        UPDATE liCustNum.
        HIDE FRAME nimi.
        if liCustNum > 0 THEN DO:

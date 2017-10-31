@@ -131,7 +131,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -232,7 +232,7 @@ REPEAT WITH FRAME sel:
         ufk    = 0
         ufk[1] = 35
         ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -372,7 +372,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -587,7 +587,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND FALSE
       THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          OrderService.ServValue    
@@ -610,7 +610,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE DO:
-         ehto = 5.
+         Syst.CUICommon:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 

@@ -59,7 +59,7 @@ DO i = 1 TO vlkm WITH FRAME valikko.
 END.
 
 repeat:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p.
+   ASSIGN ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
    CHOOSE ROW val[i] no-error auto-return WITH FRAME valikko.
    i = frame-line(valikko).
    IF lookup(keylabel(lastkey),"8,f8") > 0 OR i = vlkm THEN DO:

@@ -200,7 +200,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[1] = 132 
          ufk[5] = 795
          ufk[8] = 8 
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN Syst.CUICommon:toimi = 1
@@ -208,7 +208,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF Syst.CUICommon:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.CUICommon:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -260,7 +260,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                   END.    
                END.   
  
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

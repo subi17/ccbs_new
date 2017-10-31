@@ -285,7 +285,7 @@ REPEAT WITH FRAME sel:
            ufk[7] = 0 
            ufk[8] = 8
            ufk[9] = 1
-           ehto   = 3
+           Syst.CUICommon:ehto   = 3
            ufkey  = FALSE.
       
         RUN Syst/ufkey.p.
@@ -426,7 +426,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 BUT ORDER IS STILL 1 !!!! */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -450,7 +450,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET ServPac WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -646,7 +646,7 @@ PROCEDURE local-UPDATE-record:
          ttSubSer.SSParam 
       WITH FRAME lis. 
           
-      ehto = 5.
+      Syst.CUICommon:ehto = 5.
       RUN Syst/ufkey.p.
       PAUSE MESSAGE "Press ENTER to continue".
    

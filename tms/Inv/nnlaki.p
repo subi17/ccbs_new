@@ -554,7 +554,7 @@ ASSIGN
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 ASSIGN lano1 = 000000 lano2 = 99999999
        asno1  = 0 asno2 = 999999999.
 
@@ -594,7 +594,7 @@ PAUSE 0 no-message.
 LOOP:
 repeat:
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    UPDATE
       lano1    lano2
@@ -716,7 +716,7 @@ repeat:
    toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.

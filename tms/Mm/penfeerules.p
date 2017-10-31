@@ -86,7 +86,7 @@ WITH OVERLAY ROW 2 centered
    FRAME lis.
 
 
-assign ufkey = TRUE ehto = 3.
+assign ufkey = TRUE Syst.CUICommon:ehto = 3.
 RUN Syst/ufkey.p.
 
 Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

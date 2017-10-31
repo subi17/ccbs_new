@@ -451,7 +451,7 @@ else do:
 end.      
 
 
-ehto = 3. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
    
    /* QUIT menutext */
    RUN Syst/ufxkey.p(8,3).

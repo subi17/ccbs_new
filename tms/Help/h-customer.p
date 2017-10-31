@@ -210,7 +210,7 @@ REPEAT WITH FRAME sel:
            ufk    = 0
            ufk[5] = 11
            ufk[8] = 8 
-           ehto   = 3 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -350,7 +350,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCustNum = 0.
         UPDATE liCustNum WITH FRAME f1.
@@ -379,7 +379,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCustName = "".
         UPDATE lcCustName WITH FRAME f2.

@@ -201,7 +201,7 @@ REPEAT WITH FRAME sel:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-NEW, LEAVE ADD-NEW.
          PAUSE 0 NO-MESSAGE.
          CLEAR FRAME lis NO-PAUSE.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
                                
             IF iiTextType > 0 THEN DISPLAY iiTextType @ RepText.TextType.
@@ -312,7 +312,7 @@ REPEAT WITH FRAME sel:
          ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)
          ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0) 
          ufk[7] = 0 ufk[8] = 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
+         Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
@@ -457,7 +457,7 @@ REPEAT WITH FRAME sel:
       IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          haku2 = "".
-         ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          DISPLAY lcBrand WITH FRAME hayr1.
          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                 liType
@@ -578,7 +578,7 @@ REPEAT WITH FRAME sel:
             ufk = 0
             ufk[1] = 7
             ufk[8] = 8
-            ehto = 0.
+            Syst.CUICommon:ehto = 0.
 
          RUN Syst/ufkey.p.
          
@@ -588,7 +588,7 @@ REPEAT WITH FRAME sel:
 
             REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
             
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
             
                UPDATE 

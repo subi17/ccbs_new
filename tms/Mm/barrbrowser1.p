@@ -189,7 +189,7 @@ REPEAT WITH FRAME frTop:
            ufk[2] = 90
            ufk[5] = 0
            ufk[8] = 8 
-           ehto   = 3 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -259,7 +259,7 @@ REPEAT WITH FRAME frTop:
                   NEXT BROWSE.                 
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                 
                PAUSE 0.

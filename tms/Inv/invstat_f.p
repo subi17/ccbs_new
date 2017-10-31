@@ -129,7 +129,7 @@ limits:
 REPEAT with frame valinta:
 
 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     repeat with frame valinta on endkey undo, leave:
         UPDATE 
@@ -192,7 +192,7 @@ REPEAT with frame valinta:
                   END.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
@@ -219,7 +219,7 @@ REPEAT with frame valinta:
     task:
     repeat with frame valinta:
 
-      assign ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      assign ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       if Syst.CUICommon:toimi = 1 then next  limits.

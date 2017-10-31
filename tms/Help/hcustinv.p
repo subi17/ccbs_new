@@ -134,7 +134,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
          ufk[4]= 829
          ufk[5]= 11  
          ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"3,4,7"'}
          RUN Syst/ufkey.p.
       END.

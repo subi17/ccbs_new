@@ -182,7 +182,7 @@ REPEAT WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            CREATE CallAlarm.
@@ -263,7 +263,7 @@ BROWSE:
         ASSIGN
         ufk[1]= 702  ufk[2]= 653 ufk[3]= 0  ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
         IF icCLI > "" OR iiCustNum > 0 THEN ASSIGN 
           ufk[1] = 0
           ufk[2] = 0
@@ -415,7 +415,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        IF CustNo > 0 THEN DO:
           MESSAGE
           "Customer number search is not allowed with this functionality"
@@ -449,7 +449,7 @@ BROWSE:
      THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
        SET lcBrand WHEN Syst.CUICommon:gcAllBrand TRUE 
@@ -474,7 +474,7 @@ BROWSE:
      THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        Actdate = today.
        SET actDate ActTime WITH FRAME f3.
@@ -579,7 +579,7 @@ BROWSE:
 ACTION: repeat with frame lis:
           ASSIGN 
           ufk = 0 ufk[1] = 7 ufk[2] = 0 ufk[3] = 0 ufk[4] = 0
-          ufk[5] = 0 ufk[8] = 8 ehto = 0 
+          ufk[5] = 0 ufk[8] = 8 Syst.CUICommon:ehto = 0 
           ufkey = true.
           RUN Syst/ufkey.p.
 
@@ -590,7 +590,7 @@ ACTION: repeat with frame lis:
           else if Syst.CUICommon:toimi = 1 then do: 
 
              RUN local-find-this(true).
-             ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+             ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
              Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
              DISPLAY CallAlarm.CustNO.
 

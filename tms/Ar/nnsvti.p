@@ -226,7 +226,7 @@ ASSIGN
    i-date2  = TODAY
 
 Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN lano1 = 000000 lano2 = 99999999
        asno1 = 0      asno2 = 999999999.
@@ -243,7 +243,7 @@ LOOP:
 repeat ON ENDKEY UNDO, NEXT:
 
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -283,7 +283,7 @@ repeat ON ENDKEY UNDO, NEXT:
             END.
          END.
                 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
@@ -386,7 +386,7 @@ repeat ON ENDKEY UNDO, NEXT:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 ehto = 0.
+      ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       IF lcBankAcc = "" THEN ufk[5] = 0.
       
       RUN Syst/ufkey.p.

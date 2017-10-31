@@ -185,11 +185,11 @@ display raja pyynto "ALL" @ IGName WITH FRAME rajat.
 
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE InvGroup extcustgrp
             raja[1]
             raja[2]
@@ -242,7 +242,7 @@ toimi:
                   else do:
                      RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                      /* DISPLAY Customer groups */
-                     EHTO = 9.
+                     Syst.CUICommon:ehto = 9.
                      RUN Syst/ufkey.p.
                      FOR EACH TCustGroup.
                         dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +

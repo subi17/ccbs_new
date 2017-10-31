@@ -100,10 +100,10 @@ toimi:
       ASSIGN
       ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-      ehto = 0. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          disp "" @ fname WITH FRAME rajat.
          UPDATE 
             paper 

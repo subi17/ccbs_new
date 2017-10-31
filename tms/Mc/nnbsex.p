@@ -76,7 +76,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    DISP exName.
    UPDATE
       exName
@@ -96,7 +96,7 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.

@@ -152,7 +152,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -168,7 +168,7 @@ REPEAT WITH FRAME sel:
                  IF siirto > "" THEN 
                     DISPLAY siirto @ DCServiceAttribute.ServAttr 
                     WITH FRAME lis.
-                 ehto = 9.
+                 Syst.CUICommon:ehto = 9.
                  RUN Syst/ufkey.p.
                  NEXT. 
               END.
@@ -288,7 +288,7 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0  
         ufk[8]= 8 
-        ehto  = 3 
+        Syst.CUICommon:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDCServiceAttribute).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
@@ -564,7 +564,7 @@ FINALLY:
    HIDE FRAME sel NO-PAUSE.
    si-recid = xrecid.
 
-   ehto = 4.
+   Syst.CUICommon:ehto = 4.
    RUN Syst/ufkey.p.
 
    fCleanEventObjects().
@@ -710,7 +710,7 @@ PROCEDURE local-UPDATE-record:
             ufk    = 0
             ufk[1] = 7    WHEN lcRight = "RW"
             ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
 

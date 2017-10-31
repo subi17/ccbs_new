@@ -173,11 +173,11 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       IF extname = ""
       THEN DISPLAY "NOT SELECTED" @ extname WITH FRAME rajat.
 
-      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       if Syst.CUICommon:toimi = 1 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame rajat on endkey undo, leave:
          
@@ -254,7 +254,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      END.
                   END.
 
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
@@ -295,7 +295,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      else do:
                         RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                         /* DISPLAY Customer groups */
-                        EHTO = 9.
+                        Syst.CUICommon:ehto = 9.
                         RUN Syst/ufkey.p.
                         FOR EACH TCustGroup.
                            dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +

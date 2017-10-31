@@ -134,7 +134,7 @@ print-line:
       IF ufkey THEN DO:
          ASSIGN
          ufk = 0 ufk[1] = 35 ufk[4] = 510 ufk[5] = 11
-         ufk[8] = 8  ufk[9] = 1 siirto = ? ehto = 3 ufkey = FALSE.
+         ufk[8] = 8  ufk[9] = 1 siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"4"'}
          RUN Syst/ufkey.p.
       END.
@@ -248,7 +248,7 @@ BROWSE:
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            CustGroup = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE CustGroup WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if CustGroup <> "" THEN DO:

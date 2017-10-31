@@ -167,7 +167,7 @@ SELAUS:
    ASSIGN
    ufk[1]= 35   ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
    ufk[5]= 515  ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-   ehto = 3 ufkey = FALSE.
+   Syst.CUICommon:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
@@ -322,7 +322,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SMGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if SMGroup <> "" THEN DO:
@@ -348,7 +348,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if SGName <> "" THEN DO:
@@ -370,7 +370,7 @@ SELAUS:
 
      else if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.

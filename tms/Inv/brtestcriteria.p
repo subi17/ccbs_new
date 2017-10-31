@@ -172,7 +172,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -275,7 +275,7 @@ REPEAT WITH FRAME sel:
         ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
         ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
         ufk[8]= 8 
-        ehto  = 3 
+        Syst.CUICommon:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
@@ -496,7 +496,7 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBRTestCriteria).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
@@ -533,7 +533,7 @@ END.  /* LOOP */
 HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
-ehto = 4.
+Syst.CUICommon:ehto = 4.
 RUN Syst/ufkey.p.
 
 fCleanEventObjects().
@@ -648,7 +648,7 @@ PROCEDURE local-UPDATE-record:
             ufk    = 0
             ufk[1] = 7
             ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
       END.
@@ -660,7 +660,7 @@ PROCEDURE local-UPDATE-record:
          REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
                 
             FIND CURRENT BRTestCriteria EXCLUSIVE-LOCK.
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
          
             UPDATE
@@ -724,7 +724,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.

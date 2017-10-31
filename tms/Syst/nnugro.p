@@ -128,7 +128,7 @@ lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR UserGrp.UserGroup
            VALIDATE
@@ -213,7 +213,7 @@ SELAUS:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 1900   ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -370,7 +370,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserGroup <> "" THEN DO:
@@ -393,7 +393,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UGName <> "" THEN DO:
@@ -417,7 +417,7 @@ SELAUS:
                  INPUT STRING(UserGrp.UserGroup),
                  INPUT "UserGroup").
         ufkey = TRUE.
-        ehto = 9.
+        Syst.CUICommon:ehto = 9.
         NEXT LOOP.
      END.
      if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
@@ -524,7 +524,7 @@ SELAUS:
           WITH FRAME lis.
 
 
-          ASSIGN ehto   = 0
+          ASSIGN Syst.CUICommon:ehto   = 0
                  ufk    = 0            
                  ufk[1] = 7    
                  ufk[3] = 31  
@@ -536,7 +536,7 @@ SELAUS:
 
           IF Syst.CUICommon:toimi = 1 THEN DO:
 
-              assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+              assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
               RUN Syst/ufkey.p.
               Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
               FIND CURRENT UserGrp EXCLUSIVE-LOCK.

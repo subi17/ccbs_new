@@ -367,7 +367,7 @@ repeat WITH FRAME rajat:
              lcExtInvID  = "".
 
       IF liCalled = 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          UPDATE lcExtInvID validate(lcExtInvID = "" OR 
                           can-find(FIRST Invoice where 
@@ -512,7 +512,7 @@ repeat WITH FRAME rajat:
             END.   
          END.
                    
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
@@ -586,7 +586,7 @@ repeat WITH FRAME rajat:
 
    toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 ehto = 0 
+      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 
       ufk[1] = 91  ufk[2] = 927  ufk[3] = 0 ufk[4] = 1807
       ufk[5] = 908 ufk[7] = 1721 ufk[8] = 8.
       

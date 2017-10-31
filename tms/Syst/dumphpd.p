@@ -90,7 +90,7 @@ REPEAT WITH FRAME fHPD:
       ufk    = 0
       ufk[1] = 7    WHEN lcRight = "RW"
       ufk[8] = 8
-      ehto   = 0.
+      Syst.CUICommon:ehto   = 0.
          
    RUN Syst/ufkey.p.
 
@@ -99,7 +99,7 @@ REPEAT WITH FRAME fHPD:
 
       FIND CURRENT DumpHPD EXCLUSIVE-LOCK.
 
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
 
       UPDATE
@@ -124,7 +124,7 @@ REPEAT WITH FRAME fHPD:
             DumpHPD.UnitType = siirto.
             DISPLAY DumpHPD.UnitType WITH FRAME fHPD.
 
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
 
             NEXT.

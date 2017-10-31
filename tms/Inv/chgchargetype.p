@@ -42,7 +42,7 @@ IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
    RETURN.
 END.
 
-ehto = 9.
+Syst.CUICommon:ehto = 9.
 RUN Syst/ufkey.p.
 
 liChargeType = MsRequest.ReqIParam2.
@@ -71,7 +71,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
             WITH FRAME fCharge.   
          END.
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.

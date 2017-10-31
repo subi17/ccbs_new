@@ -151,7 +151,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ASSIGN
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3.
+         Syst.CUICommon:ehto = 3.
          RUN Syst/ufkey.p.
          READKEY.
          nap = keylabel(LASTKEY).
@@ -159,7 +159,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ELSE ufkey = TRUE.
 
       if lookup(nap,"1,f1") > 0 THEN DO:
-         ASSIGN ehto = 9 ufkey = TRUE. 
+         ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE. 
          RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
@@ -228,7 +228,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
 END. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE

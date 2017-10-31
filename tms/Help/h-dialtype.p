@@ -79,7 +79,7 @@ print-line:
          assign
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -186,7 +186,7 @@ BROWSE:
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*se-code*/
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set se-code with frame hayr.
            hide frame hayr no-pause.
            if se-code ENTERED then do:

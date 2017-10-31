@@ -85,7 +85,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk   = 0  
       ufk[5]= 1027  
       ufk[8]= 8 
-      ehto = 0.
+      Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi = 5 THEN DO:

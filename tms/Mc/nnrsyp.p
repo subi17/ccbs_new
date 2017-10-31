@@ -143,7 +143,7 @@ add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
         pause 0 no-message.
         clear frame lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         do transaction:
            prompt-for Reseller.Reseller
            validate
@@ -241,7 +241,7 @@ BROWSE:
         assign
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 2431 ufk[4]= 756
         ufk[5]= 5  ufk[6]= 4   ufk[7]= 0 ufk[8]= 8   ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
 
         {Syst/uright1.i '"5,6"'}
 
@@ -404,7 +404,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        DISP lcBrand with frame f1.
        UPDATE 
           lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -427,7 +427,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
 
        DISP lcBrand with frame f2.
        UPDATE 
@@ -537,7 +537,7 @@ BROWSE:
        find Reseller where recid(Reseller) = rtab[frame-line(sel)]
        exclusive-lock.
 
-       assign fr-header = " CHANGE " ufkey = true ehto = 9.
+       assign fr-header = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        display Reseller.Reseller .

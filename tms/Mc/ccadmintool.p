@@ -13,7 +13,7 @@
         ufk[2]    = 754 /* BILLING ITEMS */
         ufk[5]    = 401 /* EVENT MANAG */
         ufk[8]    = 8
-        ehto      = 0.
+        Syst.CUICommon:ehto      = 0.
        RUN Syst/ufkey.p .
        
        IF Syst.CUICommon:toimi = 2 THEN DO:

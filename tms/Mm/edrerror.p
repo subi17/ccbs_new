@@ -163,7 +163,7 @@ BROWSE:
         ASSIGN
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0  ufk[4]= 0 
         ufk[5]= 1961 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
@@ -303,7 +303,7 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET ErrorCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -326,7 +326,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET me-name WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -451,7 +451,7 @@ PROCEDURE pBrowseErrors:
 
     PAUSE 0.
     DISP ttEDRError.MobError WITH FRAME fLimits NO-ERROR. 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
     
     UPDATE 
        ldaFromDate 

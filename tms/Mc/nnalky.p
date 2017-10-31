@@ -134,7 +134,7 @@ WITH FRAME rajat.
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       CustGroup validate(input CustGroup = "" OR
          can-find(FIRST CustGroup where
@@ -204,7 +204,7 @@ toimi:
    repeat WITH FRAME rajat:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[3] = 807 ufk[4] = 847
                      ufk[5] = 808 ufk[6] = 847 ufk[7] = 997 ufk[8] = 8
-             ehto = 0.
+             Syst.CUICommon:ehto = 0.
 
       RUN Syst/ufkey.p.
 
@@ -214,7 +214,7 @@ toimi:
       IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 6 OR Syst.CUICommon:toimi = 7 THEN DO:
          /* Ask Name FOR Excel / XOR File */
          if Syst.CUICommon:toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE exFile WITH FRAME rajat.
          if exFile = "" THEN NEXT toimi.
       END.

@@ -64,7 +64,7 @@ PAUSE 0.
 toimi:
    REPEAT WITH FRAME valinta on ENDkey UNDO toimi, return:
          /* We ASk the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
              InvGroup
              CustNum1 CustNum2 VALIDATE(input CustNum2 >= input CustNum1,
@@ -105,7 +105,7 @@ toimi:
 
 
       ASSIGN ufk = 0 ufk[1] = 0 ufk[2] = 0   ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+                     ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 5 THEN do:

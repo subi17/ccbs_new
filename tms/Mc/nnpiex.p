@@ -87,7 +87,7 @@ END.
 Limit:
 repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       dte 
       InvGroup 
@@ -141,7 +141,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
             else do:
                RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                /* DISPLAY Customer groups */
-               EHTO = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                FOR EACH TCustGroup.
                   dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
@@ -167,7 +167,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    do-it:
       repeat WITH FRAME Limit:
-         ASSIGN ufk = 0 ehto = 0
+         ASSIGN ufk = 0 Syst.CUICommon:ehto = 0
             ufk[1] = 7 
             ufk[5] = 795
             ufk[8] = 8.

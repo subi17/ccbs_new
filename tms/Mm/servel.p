@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -316,7 +316,7 @@ REPEAT WITH FRAME sel:
         
         ASSIGN
            ufk[7]= 814 ufk[8]= 8 ufk[9]= 1
-           ehto = 3 ufkey = FALSE.
+           Syst.CUICommon:ehto = 3 ufkey = FALSE.
         
         IF icServPac > "" THEN ufk[1] = 0.
         RUN Syst/ufkey.p.
@@ -457,7 +457,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP gcBrand WITH FRAME f1.
        SET  gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
@@ -478,7 +478,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISP gcBrand WITH FRAME f2.
        SET gcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE AND icServPac = ""
@@ -763,7 +763,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
 
          UPDATE ServEl.SeValue

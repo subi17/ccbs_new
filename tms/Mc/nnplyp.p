@@ -216,7 +216,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          DO TRANSAction:
             DISPLAY lcBrand @ PriceList.Brand.
@@ -359,7 +359,7 @@ BROWSE:
          ufk[5]= (IF lcRight = "RW" THEN 5   ELSE 0)
          ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -532,7 +532,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PriceList = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                PriceList WITH FRAME f1.
@@ -556,7 +556,7 @@ BROWSE:
 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PLName = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                PLName WITH FRAME f2.
@@ -584,7 +584,7 @@ BROWSE:
      THEN DO WITH FRAME plcopy:
 
         PAUSE 0.
-        assign ufkey = true ehto = 9 PriceList = "". RUN Syst/ufkey.p.
+        assign ufkey = true Syst.CUICommon:ehto = 9 PriceList = "". RUN Syst/ufkey.p.
 
         FIND PriceList where recid(PriceList) = rtab;<frame-line(sel);> no-lock.
         
@@ -790,7 +790,7 @@ BROWSE:
 
         FIND PriceList where recid(PriceList) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 

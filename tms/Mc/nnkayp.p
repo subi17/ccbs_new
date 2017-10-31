@@ -197,7 +197,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             PROMPT-FOR CustCat.Category
             VALIDATE
@@ -245,7 +245,7 @@ add-new:
                      END.   
                   END.   
 
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
@@ -368,7 +368,7 @@ BROWSE:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -522,7 +522,7 @@ BROWSE:
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame hayr.
         UPDATE 
            lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -544,7 +544,7 @@ BROWSE:
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME hayr2.
         UPDATE 
            lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -627,7 +627,7 @@ BROWSE:
         /* change */
         FIND CustCat where recid(CustCat) = rtab[frame-line(sel)]
         exclusive-lock.
-        ASSIGN ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+        ASSIGN ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         PAUSE 0.
         DISPLAY CustCat.Category WITH FRAME lis.
@@ -669,7 +669,7 @@ BROWSE:
                      END.   
                   END.   
 
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
            END.

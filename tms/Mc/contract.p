@@ -226,7 +226,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -333,7 +333,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         RUN Syst/ufkey.p.
       END.
@@ -486,7 +486,7 @@ BROWSE:
        ASSIGN
        ufk[1]= 35   ufk[2]= 714 ufk[3]= 885 ufk[4]= 1351
        ufk[5]= 1352 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 
-       ehto = 0
+       Syst.CUICommon:ehto = 0
        ufkey = TRUE.
 
        IF iiCustNum > 0 
@@ -503,7 +503,7 @@ BROWSE:
        /* Search BY column 1 */
        IF Syst.CUICommon:toimi = 1 THEN DO:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -525,7 +525,7 @@ BROWSE:
        /* Search BY column 2 */
        ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -556,7 +556,7 @@ BROWSE:
        ELSE IF Syst.CUICommon:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F3.
           DISPLAY lcBrand WITH FRAME F3.
           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -579,7 +579,7 @@ BROWSE:
        ELSE IF Syst.CUICommon:toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F4.
           DISPLAY lcBrand WITH FRAME F4.
           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -610,7 +610,7 @@ BROWSE:
        ELSE IF Syst.CUICommon:toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F5.
           DISPLAY lcBrand WITH FRAME F5.
           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -964,7 +964,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          Contract.Salesman  WHEN icSalesman = ""
@@ -997,7 +997,7 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.   
                END.   
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

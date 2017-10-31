@@ -97,7 +97,7 @@ REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[5]= 9853
       ufk[6]= 9854
       ufk[8]= 8 
-      ehto  = 0.
+      Syst.CUICommon:ehto  = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi EQ 5 THEN DO:

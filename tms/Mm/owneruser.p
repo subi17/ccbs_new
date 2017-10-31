@@ -237,7 +237,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          ufk   = 0 
          ufk[1]= 7   
          ufk[8]= 2 
-         ehto = 0.
+         Syst.CUICommon:ehto = 0.
 
       IF liNewCust1 = 0 THEN ufk[3] = 1055.   
       IF icAction = "view" THEN ASSIGN 
@@ -255,7 +255,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          IF lcNewCategory = "" THEN lcNewCategory = lcAgrCategory.
          IF lcNewCountry  = "" THEN lcNewCountry  = lcAgrCountry.
@@ -283,7 +283,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    
                END. 
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 

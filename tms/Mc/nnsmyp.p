@@ -193,7 +193,7 @@ repeat with frame sel:
       repeat with frame lis on endkey undo add-new, leave add-new.
         pause 0 no-message.
         clear frame lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         PROMPT-FOR Salesman.Salesman.
         IF INPUT FRAME lis Salesman.Salesman = "" THEN UNDO, LEAVE add-new.
@@ -288,7 +288,7 @@ BROWSE:
         ufk[3]= 2228    ufk[4]= 1036
         ufk[5]= 5    ufk[6]= 4  ufk[7]= 0 
         ufk[8]= 8    ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
 
         {Syst/uright1.i '"4,5,6,7"'} 
 
@@ -450,7 +450,7 @@ BROWSE:
         IF icResell NE "" THEN ASSIGN 
            ufk[1] = 0 ufk[3] = 0. 
 
-        ehto = 3. ufkey = false.
+        Syst.CUICommon:ehto = 3. ufkey = false.
         RUN Syst/ufkey.p.
 
         readkey. nap = keylabel(lastkey).
@@ -460,7 +460,7 @@ BROWSE:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            xReseller = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   xReseller with frame f1.
@@ -483,7 +483,7 @@ BROWSE:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            SmName = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   SmName with frame f2.
@@ -511,7 +511,7 @@ BROWSE:
          else if lookup(nap,"3,f3") > 0 then do on endkey undo, next LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            xSalesman = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            DISPLAY lcBrand WITH FRAME F3.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   xSalesman with frame f3.
@@ -635,7 +635,7 @@ BROWSE:
         find Salesman where recid(Salesman) = rtab[frame-line(sel)] no-lock.
         pause 0.
         disp Salesman.Salesman Salesman.SmName.
-        ehto = 9. ufkey = true. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. ufkey = true. RUN Syst/ufkey.p.
         xSalesman = "". update xSalesman.
 
         IF xSalesman = Salesman.Salesman THEN DO:
@@ -695,7 +695,7 @@ BROWSE:
        find Salesman where recid(Salesman) = rtab[frame-line(sel)]
        exclusive-lock.
 
-       assign fr-header = " CHANGE " ufkey = true ehto = 9.
+       assign fr-header = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 

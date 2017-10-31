@@ -73,7 +73,7 @@ DISP liTestInvCount WITH FRAME mainFrame.
 
 mainLoop:
 REPEAT WITH FRAME mainFrame:
-   ehto = 9.
+   Syst.CUICommon:ehto = 9.
    RUN Syst/ufkey.p.
 
    UPDATE 
@@ -104,7 +104,7 @@ REPEAT WITH FRAME mainFrame:
       ufk[1] = 7   /* change    */
       ufk[5] = 795 /* start     */
       ufk[8] = 8   /* return    */
-      ehto = 1.
+      Syst.CUICommon:ehto = 1.
    RUN Syst/ufkey.p.
    
    IF Syst.CUICommon:toimi = 1 THEN NEXT mainLoop.

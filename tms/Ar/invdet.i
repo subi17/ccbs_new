@@ -355,7 +355,7 @@ PROCEDURE pInvoiceUpdate:
          ufk[6] = 1152
          ufk[7] = 1752
          ufk[8] = 8
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
@@ -369,7 +369,7 @@ PROCEDURE pInvoiceUpdate:
             RETURN "LOCKED".
          END.
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
 
          ASSIGN 
@@ -449,7 +449,7 @@ PROCEDURE pInvoiceUpdate:
                   END.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
@@ -588,7 +588,7 @@ PROCEDURE pInvoiceUpdate:
                    ufk[6] = 862
                    ufk[7] = 1796
                    ufk[8] = 8
-                   ehto   = 0.
+                   Syst.CUICommon:ehto   = 0.
             RUN Syst/ufkey.p.
                
             /* reference nbr  */
@@ -604,7 +604,7 @@ PROCEDURE pInvoiceUpdate:
                ASSIGN
                   ufk    = 0
                   ufk[8] = 8
-                  ehto   = 0.
+                  Syst.CUICommon:ehto   = 0.
                RUN Syst/ufkey.p.
             
                HIDE FRAME fBillRunID NO-PAUSE. 

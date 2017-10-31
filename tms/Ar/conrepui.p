@@ -109,7 +109,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
-         ehto = 3.
+         Syst.CUICommon:ehto = 3.
 
       RUN Syst/ufkey.p.
 
@@ -122,7 +122,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. 
+      Syst.CUICommon:ehto = 9. 
       RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
@@ -182,7 +182,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
    ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
 
-      ehto = 5.
+      Syst.CUICommon:ehto = 5.
       RUN Syst/ufkey.p.
 
       IF lcFile = "" THEN DO:

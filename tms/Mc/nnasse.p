@@ -240,7 +240,7 @@ DEF VAR x2           AS i   NO-UNDO.
 def var memochr      AS LOG NO-UNDO.
 DEF VAR CLI          LIKE CLI.CLI NO-UNDO.
 DEF VAR debug        AS LOG    NO-UNDO INIT TRUE.
-DEF VAR save-ehto    LIKE ehto NO-UNDO.
+DEF VAR save-ehto    LIKE Syst.CUICommon:ehto NO-UNDO.
 DEF VAR save-ufk     LIKE ufk  NO-UNDO.
 DEF VAR lcBankAcc    AS CHAR   NO-UNDO.
 DEF VAR llDDBank     AS LOG    NO-UNDO. 
@@ -817,7 +817,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
    FIND Customer WHERE Customer.Custnum = iiCustNum NO-LOCK NO-ERROR.
 
    fr-header = " CUSTOMER ADDRESS CHANGE ".
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    /* UPDATE Customer record */
 
@@ -979,7 +979,7 @@ repeat WITH FRAME sel:
          END. 
 
          lcInvGroup = "".
-         CLEAR FRAME lis no-pause. ehto = 9. RUN Syst/ufkey.p.
+         CLEAR FRAME lis no-pause. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          RUN Syst/ufxkey.p(5,964).
 
@@ -1206,7 +1206,7 @@ repeat WITH FRAME sel:
          ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
          ufk[7]= 0 
          ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.  
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.  
          
          IF liMainCust > 0 THEN ASSIGN
             ufk    = 0    
@@ -1361,7 +1361,7 @@ repeat WITH FRAME sel:
      THEN repeat WITH FRAME sel:
 
         ASSIGN 
-        ufkey = TRUE ufk = 0 ehto = 1
+        ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
         ufk[1] = 707  ufk[2] = 30  
         ufk[3] = 1050 ufk[4] = 812 
         ufk[8] = 8.
@@ -1372,7 +1372,7 @@ repeat WITH FRAME sel:
         /* Search 1 */
         IF Syst.CUICommon:toimi = 1 THEN DO:  /* search WITH column 1 */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           CustNum = 0. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
            PAUSE 0.
            DISP lcBrand WITH FRAME search-1. 
@@ -1404,7 +1404,7 @@ repeat WITH FRAME sel:
               lcSurName2  = ""
               lcCompany   = "".
 
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-2. 
            UPDATE
               lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
@@ -1496,7 +1496,7 @@ repeat WITH FRAME sel:
         /* Search WITH column 3 */
         ELSE IF Syst.CUICommon:toimi = 3 THEN DO: 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-4. 
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                   lcZip WITH FRAME search-4.
@@ -1515,7 +1515,7 @@ repeat WITH FRAME sel:
         /* Search WITH column 4 */
         ELSE IF Syst.CUICommon:toimi = 4 THEN DO: 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-6. 
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                   OrgId WITH FRAME search-6.
@@ -1648,7 +1648,7 @@ repeat WITH FRAME sel:
            ufk[6]   = 130  
            ufk[7]   = 1883
            ufk[8]   = 8 
-           ehto     = 0 
+           Syst.CUICommon:ehto     = 0 
            ufkey    = TRUE
            liF2Type = 0
            liF3Type = 0.
@@ -1710,7 +1710,7 @@ repeat WITH FRAME sel:
 
            ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:    
 
-              ehto = 9. RUN Syst/ufkey.p.
+              Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
               /* UPDATE Customer record */
               RUN local-update-customer.
@@ -2174,7 +2174,7 @@ PROCEDURE local-update-fin:
       ufk[3] = 1122
       ufk[5] = 1164
       ufk[8] = 8
-      ehto = 0
+      Syst.CUICommon:ehto = 0
       ufkey = true.
       RUN Syst/ufkey.p.
                                                              
@@ -2187,7 +2187,7 @@ PROCEDURE local-update-fin:
       BILLDATA_CHG:
       REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          PROMPT
@@ -2267,7 +2267,7 @@ PROCEDURE local-update-fin:
                   
                END.
      
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
@@ -2510,7 +2510,7 @@ PROCEDURE local-update-fin:
          
          REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
             
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             
             PROMPT Customer.CreditLimit.

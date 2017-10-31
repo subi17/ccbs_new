@@ -140,7 +140,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
             PROMPT-FOR HdrText.te-nro HdrText.te-kie EDITING:
                READKEY.
@@ -257,7 +257,7 @@ BROWSE:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
  
          /* used as help */
          IF gcHelpParam > "" THEN ASSIGN
@@ -439,7 +439,7 @@ BROWSE:
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku WITH FRAME hayr.
@@ -473,7 +473,7 @@ BROWSE:
      else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hakie.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                hakukie WITH FRAME hakie.
@@ -496,7 +496,7 @@ BROWSE:
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         hakutext = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                hakutext WITH FRAME hayr2.
@@ -609,7 +609,7 @@ BROWSE:
 
         FIND HdrText where recid(HdrText) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY HdrText.te-nro HdrText.te-kie HdrText.te-text.

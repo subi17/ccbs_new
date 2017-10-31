@@ -32,7 +32,7 @@ WITH
 rajat:
 REPEAT WITH FRAME rajat:
    PAUSE 0.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE 
    asno
@@ -93,7 +93,7 @@ REPEAT WITH FRAME rajat:
 
 toimi:
       REPEAT WITH FRAME toimi:
-        ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
+        ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
         RUN Syst/ufkey.p.
         IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
         IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.

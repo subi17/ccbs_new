@@ -92,7 +92,7 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    Stock1 Stock2 SIMStat SimArt icc1 icc2
@@ -190,7 +190,7 @@ REPEAT WITH FRAME main:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.

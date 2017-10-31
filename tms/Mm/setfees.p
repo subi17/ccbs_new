@@ -220,7 +220,7 @@ ACTION:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN Syst/ufkey.p. 
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. 
          UPDATE 
            FeeModel
            codate  
@@ -269,7 +269,7 @@ ACTION:
       ASSIGN
       ufk = 0 ufk[1] = 7 ufk[4] = 294 
       ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
-      ufk[8] = 8 ehto = 0.
+      ufk[8] = 8 Syst.CUICommon:ehto = 0.
       if FeeModel = "" THEN ufk[5] = 0.
       RUN Syst/ufkey.p.
 

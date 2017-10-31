@@ -194,7 +194,7 @@ BROWSE:
          ufk[5]= 0 
          ufk[6]= 0 
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -341,7 +341,7 @@ BROWSE:
       ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f1.
          ASSIGN
             lcCustnum  = 0.
@@ -374,7 +374,7 @@ BROWSE:
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f2.
          ASSIGN
                liMsSeq = 0.
@@ -416,7 +416,7 @@ BROWSE:
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f3.
          ldeAmountPrev = ldeAmount. 
          DISP ldeAmount WITH FRAME f3.

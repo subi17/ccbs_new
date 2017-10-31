@@ -216,7 +216,7 @@ REPEAT TRANSACTION:
             RUN VALUE(ENTRY(liProc,lcRun,"¤")).
          END.
          
-         ehto = 4.
+         Syst.CUICommon:ehto = 4.
          RUN Syst/ufkey.p.
             
       END.
@@ -290,7 +290,7 @@ REPEAT TRANSACTION:
                RUN VALUE(ENTRY(liProc,lcRun,"¤")).
             END.
             
-            ehto = 4.
+            Syst.CUICommon:ehto = 4.
             RUN Syst/ufkey.p.
             
          END.

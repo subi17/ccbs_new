@@ -787,7 +787,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          ufk   = 0 
          ufk[1]= 7   
          ufk[8]= 8 
-         ehto = 0.
+         Syst.CUICommon:ehto = 0.
          
       IF icAction = "new" and llReady THEN ufk[5]= 1027.   
       IF icAction = "new" and not llReady THEN ufk[5]= 0.   
@@ -934,7 +934,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          NEXT.
       END.
       
-      ehto = 5.   
+      Syst.CUICommon:ehto = 5.   
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
@@ -1111,7 +1111,7 @@ PROCEDURE pUpdateNewOwner:
    UpdateAgrCust:
    REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO, LEAVE:
          
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
       /* change time cannot be in the past */   
       IF NOT llPreActivated AND ldtChgDate <= TODAY THEN ASSIGN 
@@ -1139,7 +1139,7 @@ PROCEDURE pUpdateNewOwner:
                DISPLAY lcSalesman WITH FRAME fNewCriter.
             END.
                
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
 
@@ -1159,7 +1159,7 @@ PROCEDURE pUpdateNewOwner:
                    
             END. 
 
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END. 
@@ -1216,7 +1216,7 @@ PROCEDURE pUpdateNewOwner:
                            INPUT "ID Type",
                            INPUT "",
                            OUTPUT lcCode). 
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             lcNewCustIdType = lcCode.
             DISP lcNewCustIdType WITH FRAME fNewCriter.
@@ -1354,7 +1354,7 @@ PROCEDURE pUpdateNewOwner:
                                  "Title",  /* FieldName */
                                  "CustCare",   /* GroupCode */
                            OUTPUT lcCode).
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
                
             lcNewTitle = lcCode.
@@ -1378,7 +1378,7 @@ PROCEDURE pUpdateNewOwner:
             IF si-recid NE ? THEN DO:
                fDispPostOffice(si-recid).
             END.   
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END.
@@ -1393,7 +1393,7 @@ PROCEDURE pUpdateNewOwner:
                DISPLAY liNewLanguage WITH FRAME fNewCriter.
             END.
                
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END.

@@ -32,7 +32,7 @@ ok = false.
 LOOP:
 DO WHILE TRUE:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    REPEAT ON ENDKEY UNDO, LEAVE:
       UPDATE 
          idafromdate

@@ -90,7 +90,7 @@ print-line:
          ASSIGN
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -204,7 +204,7 @@ BROWSE:
         /* get */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* get */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           get = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           get = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE get WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if get <> "" THEN DO:

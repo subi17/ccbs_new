@@ -85,7 +85,7 @@ repeat WITH FRAME sel:
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO, LEAVE loop :
 
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE bthaku WITH FRAME alku.
           if bthaku = "" THEN LEAVE LOOP.
           /* onko numerohaku */
@@ -184,7 +184,7 @@ BROWSE:
          ASSIGN
          ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 

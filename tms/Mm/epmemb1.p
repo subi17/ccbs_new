@@ -99,7 +99,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR  EPMember.BillCode
@@ -211,7 +211,7 @@ BROWSE:
         ASSIGN
         ufk[1]= 703  ufk[2]= 0 ufk[3]= 1132 ufk[4]= 0
         ufk[5]= 5    ufk[6]= 4 ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}.
         RUN Syst/ufkey.p.
       END.
@@ -349,7 +349,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F1.
        SET BillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -454,7 +454,7 @@ VIEW-AS ALERT-BOX INFORMATION.
 
 
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           EPMember.BillCode.

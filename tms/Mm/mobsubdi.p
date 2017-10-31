@@ -128,7 +128,7 @@ DO WHILE TRUE:
       noMobile = (not avail mobsub) 
       ufk = 0 
       ufk[8] = 8 
-      ehto = 3. 
+      Syst.CUICommon:ehto = 3. 
    IF AVAIL MobSub AND Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
       noMobile = TRUE.
       llPartial = TRUE.

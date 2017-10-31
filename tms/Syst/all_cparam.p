@@ -198,7 +198,7 @@ REPEAT WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CLEAR FRAME lis NO-PAUSE.
            DISPLAY lcBrand @ TMSParam.Brand.
@@ -283,7 +283,7 @@ BROWSE:
         ufk[7]= 1752
         ufk[8]= 8
         ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -427,7 +427,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ParamCode = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ParamCode WITH FRAME f1.
@@ -450,7 +450,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ParamGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ParamGroup WITH FRAME f2.
@@ -473,7 +473,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ParamName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ParamName WITH FRAME f3.
@@ -501,7 +501,7 @@ BROWSE:
 
         IF lcRight = "RW" THEN DO:
 
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSParam).
 
            UPDATE TMSParam.Memo WITH FRAME f4.
@@ -584,7 +584,7 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO change, NEXT LOOP.
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.

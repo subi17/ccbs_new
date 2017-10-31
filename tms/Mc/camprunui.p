@@ -107,7 +107,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[1]= 7   ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 795 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
-         ehto = 3.
+         Syst.CUICommon:ehto = 3.
          RUN Syst/ufkey.p.
 
          READKEY.
@@ -120,7 +120,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN Syst/ufkey.p.
+             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcCampaign1 
                 lcCampaign2
@@ -155,7 +155,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         ehto = 5.
+         Syst.CUICommon:ehto = 5.
          RUN Syst/ufkey.p.
 
          /* collect customers */

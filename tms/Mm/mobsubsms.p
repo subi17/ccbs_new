@@ -61,7 +61,7 @@ DISP liqty WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    username = "(" + lcUserName  + ").".
 
 disp mobsub.cli   username .
@@ -123,7 +123,7 @@ WITH FRAME main EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 
       ufk[5] = 2355
       ufk[8] = 8.

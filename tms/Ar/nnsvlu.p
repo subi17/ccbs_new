@@ -73,7 +73,7 @@ VIEW FRAME fStart.
 MAIN:
 REPEAT WITH FRAME fStart:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME fStart ON ENDKEY UNDO, LEAVE:
    
@@ -112,7 +112,7 @@ REPEAT WITH FRAME fStart:
               DISPLAY lcInfile.
            END. 
 
-           ehto = 9.
+           Syst.CUICommon:ehto = 9.
            RUN Syst/ufkey.p.
 
         END. 
@@ -128,7 +128,7 @@ REPEAT WITH FRAME fStart:
           ufk[1] = 7
           ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
           ufk[8] = 8
-          ehto = 0.
+          Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi = 5 THEN LEAVE. 
@@ -164,7 +164,7 @@ ASSIGN tila = TRUE
 
 {Syst/utuloste.i "return"}
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 RUN Ar/ddauthin.p (lcInFile, 

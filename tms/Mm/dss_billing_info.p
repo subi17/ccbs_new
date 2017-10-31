@@ -193,7 +193,7 @@ REPEAT WITH FRAME sel:
         ASSIGN
            ufk    = 0
            ufk[8] = 8
-           ehto   = 3 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -335,7 +335,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
@@ -462,7 +462,7 @@ PROCEDURE local-UPDATE-record:
      WITH FRAME lis.
 
      ASSIGN 
-         ehto = 0
+         Syst.CUICommon:ehto = 0
          ufk  = 0
          ufk[8] = 8.
      RUN Syst/ufkey.p.

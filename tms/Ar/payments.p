@@ -362,7 +362,7 @@ BROWSE:
          ASSIGN
          ufk[1]= 177  ufk[2]= 92   ufk[3]= 714  ufk[4]= 1018
          ufk[5]= 927  ufk[6]= 1491 ufk[7]= 1152 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF iiCustNum > 0 OR iiInvNum > 0 THEN ASSIGN
             ufk[1] = 0
@@ -525,7 +525,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -556,7 +556,7 @@ BROWSE:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -584,7 +584,7 @@ BROWSE:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -608,7 +608,7 @@ BROWSE:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -661,7 +661,7 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Payment.ExtInvID.
 
@@ -680,7 +680,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:  /* view */
         RUN local-find-this(TRUE).
 
-        ehto = 5.
+        Syst.CUICommon:ehto = 5.
         RUN Syst/ufkey.p.
         RUN pInvoiceDetails(Payment.InvNum,
                             TRUE).
@@ -698,7 +698,7 @@ BROWSE:
            ufk[4] = 1752
            ufk[5] = 1746
            ufk[8] = 8
-           ehto   = 0.
+           Syst.CUICommon:ehto   = 0.
         
         RUN Syst/ufkey.p.
 
@@ -991,7 +991,7 @@ PROCEDURE local-update-record:
    THEN lcPaymFile = ENTRY(i,Payment.PaymFile,"/").
    ELSE lcPaymFile = Payment.PaymFile.
    
-   ehto = 5.
+   Syst.CUICommon:ehto = 5.
    RUN Syst/ufkey.p.
    
    DISP

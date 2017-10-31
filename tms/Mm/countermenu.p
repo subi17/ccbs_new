@@ -38,7 +38,7 @@ IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Service Limits              "  @ menuc[1]    SKIP

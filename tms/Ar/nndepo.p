@@ -258,7 +258,7 @@ REPEAT TRANS WITH FRAME MAIN:
    PAUSE 0.
    DISPLAY lcDispTyp WITH FRAME Main.
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       CustNum 
       invnum 
@@ -379,7 +379,7 @@ REPEAT TRANS WITH FRAME MAIN:
 TASK:
    REPEAT WITH FRAME MAIN:
       ASSIGN
-      ehto = 1 ufk = 0 
+      Syst.CUICommon:ehto = 1 ufk = 0 
       ufk[1] = 7 ufk[2] = 0 /* 992 */ ufk[4] = 806 
       ufk[5] = 15 ufk[6] = 12 ufk[7] = 185       ufk[8] = 8.
       IF amtPaid = 0 OR dAcct = 0 OR cAcct = 0

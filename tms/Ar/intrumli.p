@@ -104,7 +104,7 @@ DISPLAY ldMinDebt WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     xCustNum1 xCustNum2
@@ -114,7 +114,7 @@ REPEAT WITH FRAME main:
     Action:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 
       ufk[5] = (IF exPaymFile ne "" THEN 795 ELSE 0).
       ufk[8] = 8.

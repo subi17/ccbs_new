@@ -127,7 +127,7 @@ REPEAT WITH FRAME sel:
           ASSIGN
               ufk    = 0
               ufk[8] = 8 
-              ehto   = 3 
+              Syst.CUICommon:ehto   = 3 
               ufkey  = FALSE.
 
           RUN Syst/ufkey.p.
@@ -291,7 +291,7 @@ REPEAT WITH FRAME sel:
             ASSIGN
              ufkey  = TRUE
              ufk    = 0  
-             ehto   = 1  
+             Syst.CUICommon:ehto   = 1  
              ufk[1] = 9853
              ufk[8] = 8.      
 

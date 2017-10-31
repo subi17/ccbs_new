@@ -263,7 +263,7 @@ REPEAT WITH FRAME Main:
    UPDATE_LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
       
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
       UPDATE 
          Stock
@@ -326,7 +326,7 @@ REPEAT WITH FRAME Main:
    REPEAT WITH FRAME Main:
       ASSIGN
       ufk =  0 ufk[1] = 7 ufk[4] = 241
-      ufk[5] = 795 ufk[8] = 8 ehto = 0.  RUN Syst/ufkey.p.
+      ufk[5] = 795 ufk[8] = 8 Syst.CUICommon:ehto = 0.  RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
       IF Syst.CUICommon:toimi = 4 THEN LEAVE Action.
@@ -339,7 +339,7 @@ REPEAT WITH FRAME Main:
       END.
    END. /* Action */
 
-   ufk =  0. ehto = 3. RUN Syst/ufkey.p.
+   ufk =  0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    lError = FALSE.
 

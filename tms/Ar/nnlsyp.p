@@ -229,7 +229,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
    PAUSE 0 no-message.
    assign lasnimi = ""
           kodnim = "".
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PROMPT-FOR Invoice.InvNum /*WITH FRAME Invoice */
    VALIDATE(input InvNum = "" OR input InvNum ="0" OR
             CAN-FIND (FIRST Invoice WHERE 
@@ -318,11 +318,11 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[2] = 0 ufk[3] = 927 ufk[4] = 0 
       ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
       ufk[6] = (IF lcRight = "RW" THEN 12 ELSE 0)
-      ufk[7] = 0  ufk[7] = 0   ufk[8] = 8   ufk[9] = 0 ehto = 0.
+      ufk[7] = 0  ufk[7] = 0   ufk[8] = 8   ufk[9] = 0 Syst.CUICommon:ehto = 0.
 
-      ehto = 0. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvoice).
 
@@ -448,7 +448,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

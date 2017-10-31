@@ -140,7 +140,7 @@ LOOP:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
 
             DISPLAY lcBrand @ CCN.Brand.
@@ -251,7 +251,7 @@ BROWSE:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -423,7 +423,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku WITH FRAME hayr.
@@ -445,7 +445,7 @@ BROWSE:
      else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku2 WITH FRAME hayr2.
@@ -577,7 +577,7 @@ BROWSE:
         /* change */
         FIND CCN where recid(CCN) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY CCN.Brand CCN.CCN .

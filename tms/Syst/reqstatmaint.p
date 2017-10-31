@@ -65,7 +65,7 @@ DO WHILE TRUE:
           ufk[6] = 6970
           ufk[7] = 4
           ufk[8] = 8
-          ehto   = 3.
+          Syst.CUICommon:ehto   = 3.
 
       RUN Syst/ufkey.p.
    

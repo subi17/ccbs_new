@@ -203,7 +203,7 @@ repeat WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            IF iiCustNum = 0 THEN 
@@ -302,7 +302,7 @@ repeat WITH FRAME sel:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)   
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          
          IF iiCustNum > 0 THEN ASSIGN ufk[1] = 0
                                       ufk[2] = 0.
@@ -460,7 +460,7 @@ repeat WITH FRAME sel:
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-asno = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -482,7 +482,7 @@ repeat WITH FRAME sel:
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-lanro = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -584,7 +584,7 @@ repeat WITH FRAME sel:
      else if lookup(nap,"enter,return") > 0 THEN DO:
         ac-hdr = " VIEW ".
         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-        ufk = 0. ehto = 3. RUN Syst/ufkey.p. ufkey = TRUE.
+        ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. ufkey = TRUE.
 
         FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-LINE] no-lock.
 
@@ -611,7 +611,7 @@ repeat WITH FRAME sel:
         CustIntEvent.IntPerc CustIntEvent.IntDays CustIntEvent.IntAmt 
         WITH FRAME inter.
 
-        ASSIGN ufk =  0 ufkey = TRUE ehto = 3.
+        ASSIGN ufk =  0 ufkey = TRUE Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
         PAUSE 0.
         message "Press ENTER !".
@@ -686,7 +686,7 @@ PROCEDURE local-update-record:
                 RUN Help/hcustinv.p(CustIntEvent.CustNum, TRUE).
                 IF siirto NE ? THEN disp siirto @ 
                                CustIntEvent.InvNum with frame lis.
-                ehto = 9.  RUN Syst/ufkey.p.
+                Syst.CUICommon:ehto = 9.  RUN Syst/ufkey.p.
                 next.
              END.
 

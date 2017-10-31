@@ -71,7 +71,7 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE
   sdate1 sdate2 validate(input sdate2 >= input sdate1,"Invalid order !")
@@ -85,7 +85,7 @@ WITH FRAME main.
 Action:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.

@@ -119,7 +119,7 @@ tab = chr(9).
 krit:
 repeat WITH FRAME krit:
    Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    disp "<" + entry(cnum,cname) + ">" @ bnfile.
 
    UPDATE ticfile excfile WITH FRAME krit
@@ -157,7 +157,7 @@ repeat WITH FRAME krit:
 
 toimi:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[4] = 856 ufk[5] = 63 Ufk[8] = 8 ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 7 ufk[4] = 856 ufk[5] = 63 Ufk[8] = 8 Syst.CUICommon:ehto = 0.
 
       if search("./" + entry(cnum,cname)) = ? THEN DO:
     BELL. MESSAGE

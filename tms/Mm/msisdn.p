@@ -280,7 +280,7 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            
@@ -400,7 +400,7 @@ BROWSE:
         ufk[4]= 0
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= 1752 /* 238 */ ufk[7]= 0 /* 788 */ ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ehto = 3 ufkey = false.
         RUN Syst/ufkey.p.
       END.
 
@@ -541,7 +541,7 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN repeat with frame sel.
 
-       ASSIGN ufkey = TRUE ufk = 0 ehto = 1
+       ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
        ufk[1]= 209  ufk[2]= 702 ufk[3]= 559 ufk[4] = 2211 
        ufk[8] = 8.
        RUN Syst/ufkey.p.
@@ -551,7 +551,7 @@ BROWSE:
        if Syst.CUICommon:toimi = 1 then do:
 
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           clear frame f1.
           Disp lcBrand With FRAME f1.
           CLI = m_pref.             
@@ -586,7 +586,7 @@ BROWSE:
         /* Search by col 2 */
         else if Syst.CUICommon:toimi = 2 then do:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           Disp lcBrand With FRAME f2.
           SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
@@ -606,7 +606,7 @@ BROWSE:
         /* Search by col 3 */
         else if Syst.CUICommon:toimi = 3 then do:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           DISP lcBrand WITH FRAME f3.
           SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
                StatusCode WITH FRAME f3.
@@ -624,7 +624,7 @@ BROWSE:
         /* Search by col 4 */
         else if Syst.CUICommon:toimi = 4 then do:
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            Disp lcBrand With FRAME f4.
           SET   lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
                orderid WITH FRAME f4.
@@ -689,7 +689,7 @@ CU-DATA:
 
 CU-ACTION:
            repeat with frame cust:
-              assign ufk = 0 ufk[8] = 8 ehto =  0.
+              assign ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto =  0.
               RUN Syst/ufkey.p.
               case toimi:
                  WHEN 8 THEN do:
@@ -792,7 +792,7 @@ end.
              ttMSISDN.CustNum lcCustName
           VIEW-AS ALERT-BOX TITLE " MSISDN is in use !".
        END.
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " VIEW " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                                  
@@ -1000,7 +1000,7 @@ PROCEDURE local-update-record:
            ufk[7]= 1522
            ufk[8]= 8
            ufk[9]= 1
-           ehto = 0.
+           Syst.CUICommon:ehto = 0.
 
          RUN Syst/ufkey.p.
       END.
@@ -1082,7 +1082,7 @@ PROCEDURE pUpdate:
 
    FIND CURRENT ttMSISDN EXCLUSIVE-LOCK.
       
-   ehto = 9.
+   Syst.CUICommon:ehto = 9.
    RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -1114,7 +1114,7 @@ PROCEDURE pUpdate:
                   END.
 
                   DISP ttMSISDN.POS WITH FRAME lis.
-                  ehto = 9. RUN Syst/ufkey.p.
+                  Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                   NEXT.
                END.
             END.

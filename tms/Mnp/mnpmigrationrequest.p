@@ -17,7 +17,7 @@ DEFINE VARIABLE lcXML AS CHAR NO-UNDO. /* xml should be < 32000 chars */
 DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
      
-ehto = 10.
+Syst.CUICommon:ehto = 10.
 RUN Syst/ufkey.p.
 
 CREATE ttMigrationRequest.

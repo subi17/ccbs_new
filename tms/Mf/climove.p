@@ -174,7 +174,7 @@ BROWSE:
             ufk[6] = 508
             ufk[8] = 8 
             ufk[9] = 1
-            ehto   = 3
+            Syst.CUICommon:ehto   = 3
             ufkey  = FALSE.
 
          RUN Syst/ufkey.p.
@@ -199,7 +199,7 @@ BROWSE:
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          assign
             asub  = ""
-            ehto  = 9
+            Syst.CUICommon:ehto  = 9
             ufkey = TRUE.
          RUN Syst/ufkey.p. 
          UPDATE asub WITH FRAME search-1.
@@ -270,7 +270,7 @@ BROWSE:
          FIND ttCLISer WHERE recid(ttCLISer) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.
 
          ASSIGN
-            ehto  = 9
+            Syst.CUICommon:ehto  = 9
             ufkey = TRUE.
 
          RUN Syst/ufkey.p.

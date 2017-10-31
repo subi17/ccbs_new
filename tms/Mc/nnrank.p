@@ -200,7 +200,7 @@ DISP CGName IGName SmName RsName soname biname bigname WITH FRAME rajat.
 
 rajat:
 repeat WITH FRAME rajat.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    camt CustGroup InvGroup Salesman Reseller 
@@ -391,7 +391,7 @@ repeat WITH FRAME rajat.
 
 toimi:
    repeat WITH FRAME toimi:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 847 ufk[6] = 638 ufk[8] = 8.
+      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7 ufk[5] = 847 ufk[6] = 638 ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
       IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.

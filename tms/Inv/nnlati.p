@@ -77,7 +77,7 @@ date2 = date1.
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1
@@ -122,7 +122,7 @@ END.
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.

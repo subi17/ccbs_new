@@ -173,7 +173,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -270,7 +270,7 @@ REPEAT WITH FRAME sel:
         ASSIGN
         ufk   = 0
         ufk[8]= 8 
-        ehto  = 3 
+        Syst.CUICommon:ehto  = 3 
         ufkey = FALSE.
 
         IF iiFRQScheduleID > 0 THEN DO:
@@ -548,7 +548,7 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunExec).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
@@ -591,7 +591,7 @@ END.  /* LOOP */
 HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
-ehto = 4.
+Syst.CUICommon:ehto = 4.
 RUN Syst/ufkey.p.
 
 RETURN lcReturnValue.
@@ -747,7 +747,7 @@ PROCEDURE local-UPDATE-record:
             ufk[3] = 1182
             ufk[4] = 1183
             ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
       END.
@@ -759,7 +759,7 @@ PROCEDURE local-UPDATE-record:
          REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
                 
             FIND CURRENT FuncRunExec EXCLUSIVE-LOCK.
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
          
             UPDATE

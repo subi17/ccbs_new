@@ -245,7 +245,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
    ASSIGN
       ufk[1]= 7  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 15 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-      ehto = 0.
+      Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
    if Syst.CUICommon:toimi = 1 THEN DO:
@@ -256,7 +256,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
          NEXT. 
       END.
       
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
 
       lUpdate:  

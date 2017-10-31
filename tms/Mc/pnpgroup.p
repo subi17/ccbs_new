@@ -160,7 +160,7 @@ repeat WITH FRAME sel:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            
@@ -277,7 +277,7 @@ BROWSE:
            ufk[7] = 1765
            ufk[8] = 8
            ufk[9] = 1
-           ehto   = 3
+           Syst.CUICommon:ehto   = 3
            ufkey  = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -424,7 +424,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-PNPGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f1.
        UPDATE lcBrand 
               haku-PNPGroup WITH FRAME haku-f1.
@@ -446,7 +446,7 @@ BROWSE:
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-Name = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f2.
 
        UPDATE  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
@@ -572,7 +572,7 @@ BROWSE:
        FIND FIRST PNPGroup where 
             recid(PNPGroup) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.

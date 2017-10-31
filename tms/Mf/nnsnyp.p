@@ -119,7 +119,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR NumPlan.AreaCode
            VALIDATE
@@ -216,7 +216,7 @@ BROWSE:
         ASSIGN
         ufk[1]= 701 ufk[2]= 770 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
        /* toist.  */ ufk[5] = 0. ufk[6] = 0.
 
@@ -427,7 +427,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        h-rn-rnr = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-rn-rnr WITH FRAME h-f1.
        HIDE FRAME h-f1 no-pause.
        if h-rn-rnr <> "" THEN DO:
@@ -450,7 +450,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        h-op-code = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
        HIDE FRAME h-f2 no-pause.
        if h-op-code <> "" THEN DO:
@@ -543,7 +543,7 @@ BROWSE:
        {Syst/uright2.i}
        FIND NumPlan where recid(NumPlan) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        FIND Operator where Operator.Operator = 

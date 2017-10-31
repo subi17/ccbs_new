@@ -52,7 +52,7 @@ WITH  OVERLAY ROW 1 WIDTH 80
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     PAUSE 0.
     UPDATE
@@ -81,7 +81,7 @@ REPEAT WITH FRAME main:
               DISPLAY lcInfile.
            END. 
 
-           ehto = 9.
+           Syst.CUICommon:ehto = 9.
            RUN Syst/ufkey.p.
         END. 
 
@@ -91,7 +91,7 @@ REPEAT WITH FRAME main:
     ACTION:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 
       ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
       ufk[8] = 8.

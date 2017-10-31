@@ -7,7 +7,7 @@
   CREATED ......: 26.10.1987
   changePVM ....: 16.11.1987
                   22.04.2002/aam clear functionality from f1,f2,f4 when
-                                 buttons are cleared ("ehto = 3")
+                                 buttons are cleared ("Syst.CUICommon:ehto = 3")
                   14.06.2002/aam new type 5 for clearing buttons
                   13.08.2002/aam new type 10 
   VERSION ......: M15
@@ -33,16 +33,16 @@ form
    color display message sel_t with frame f_selh.
 
 
-if ehto = 0 or ehto = 1 or ehto = 3 or 
-   ehto = 5 or ehto = 9 or ehto = 10
+if Syst.CUICommon:ehto = 0 or Syst.CUICommon:ehto = 1 or Syst.CUICommon:ehto = 3 or 
+   Syst.CUICommon:ehto = 5 or Syst.CUICommon:ehto = 9 or Syst.CUICommon:ehto = 10
 then do:
    sel_t = " ".
-   if ehto = 9 or ehto = 10 then do:
+   if Syst.CUICommon:ehto = 9 or Syst.CUICommon:ehto = 10 then do:
       assign  sel_t[01] = "READY/GO"
               sel_t[11] = ""
               sel_t[04] = "CANCEL"
               sel_t[12] = "".
-      if ehto = 9 then assign 
+      if Syst.CUICommon:ehto = 9 then assign 
               sel_t[03] = "INSERT" 
               sel_t[07] = "PREVIOUS"
               sel_t[15] = "VALUE"
@@ -51,7 +51,7 @@ then do:
       on F4 endkey.
    end.
 
-   else if ehto ne 5 then do ufk_nro = 1 to 8:
+   else if Syst.CUICommon:ehto ne 5 then do ufk_nro = 1 to 8:
       if ufk[ufk_nro] <> 0 then do:
              find MenuText where 
                   MenuText.MenuNum = ufk[ufk_nro] 
@@ -66,7 +66,7 @@ then do:
    end.
 
    /* clear all functionality from function keys */
-   if ehto = 5 then do:
+   if Syst.CUICommon:ehto = 5 then do:
        on f1 bell.
        on f2 bell.
        on f4 bell. 
@@ -77,7 +77,7 @@ then do:
    display sel_t with frame f_selh.
 end.
 
-if ehto < 3 then do:
+if Syst.CUICommon:ehto < 3 then do:
    /* kysytAAn toimintovalinnat */
    repeat with frame f_selh:
       readkey.
@@ -89,7 +89,7 @@ if ehto < 3 then do:
 
       if ufk_nro <> 0 then
          assign Syst.CUICommon:toimi = integer(substring(ufk_toimi,ufk_nro,1)).
-         if Syst.CUICommon:toimi > 0 and ufk[toimi] = 0 then Syst.CUICommon:toimi = 0.
+         if Syst.CUICommon:toimi > 0 and ufk[Syst.CUICommon:toimi] = 0 then Syst.CUICommon:toimi = 0.
 
       if Syst.CUICommon:toimi = 0 then do:
          bell.
@@ -100,7 +100,7 @@ if ehto < 3 then do:
 end.
 
 /* lopuksi tyhjennetaan alaruudut */
-if ehto = 0 or ehto = 4 then do:
+if Syst.CUICommon:ehto = 0 or Syst.CUICommon:ehto = 4 then do:
    tyhja = fill(" ",80).
    hide message.
    put screen row 20 tyhja.

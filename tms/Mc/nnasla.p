@@ -795,7 +795,7 @@ print-line:
 
       IF ufkey THEN do:
          assign
-         ufk = 0 ufk[8]= 8 ufk[9]= 1 ehto = 3 ufkey = false.
+         ufk = 0 ufk[8]= 8 ufk[9]= 1 Syst.CUICommon:ehto = 3 ufkey = false.
          if keyp then do:
             assign
                ufk[1] = 92
@@ -928,7 +928,7 @@ print-line:
      /* find */
      ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 AND keyp THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         
         lcExtInvId = "".      
         UPDATE lcExtInvId WITH FRAME F1.     
@@ -960,13 +960,13 @@ print-line:
            ufk[4]   = 1641
            ufk[7]   = 831
            ufk[8]   = 8
-           ehto     = 0
+           Syst.CUICommon:ehto     = 0
            ufkey    = TRUE
            lcFilter = "".
 
         RUN Syst/ufkey.p.   
 
-        liFilter = IF Syst.CUICommon:toimi = 7 THEN 0 ELSE toimi.
+        liFilter = IF Syst.CUICommon:toimi = 7 THEN 0 ELSE Syst.CUICommon:toimi.
         
         IF Syst.CUICommon:toimi >= 1 AND Syst.CUICommon:toimi <= 4 THEN DO:
            RUN Ar/invfilterkey.p (INPUT TABLE ttFilter,
@@ -1038,7 +1038,7 @@ print-line:
              Invoice.PrintState
              llCredited WITH FRAME fEPL.
         
-        ASSIGN ehto  = 9
+        ASSIGN Syst.CUICommon:ehto  = 9
                ufkey = TRUE.
         RUN Syst/ufkey.p.
         REPEAT WITH FRAME fEPL ON ENDKEY UNDO, LEAVE:
@@ -1051,7 +1051,7 @@ print-line:
         IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
         KEYLABEL(lastkey) = "F4" THEN NEXT.
 
-        ehto = 5.
+        Syst.CUICommon:ehto = 5.
         RUN Syst/ufkey.p.
         
         IF fEPLStart(lcTestFlag) THEN DO:
@@ -1091,7 +1091,7 @@ print-line:
      END.
 
      else IF nap = "T" AND keyp THEN DO:
-        ASSIGN ufk = 0 ehto = 3.
+        ASSIGN ufk = 0 Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
         find ttInvoice where recid(ttInvoice) = rtab[frame-line] NO-LOCK.
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
@@ -1246,7 +1246,7 @@ PROCEDURE pCancellation.
    /* Cancel form */
    DO WHILE TRUE:
                
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p.
+      ASSIGN ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
                                
       DISPLAY   SKIP(1)
                 " 1) Cancelled by operator         " @ menuc[1]

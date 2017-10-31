@@ -206,7 +206,7 @@ BROWSE:
         ufk[5] = 927    WHEN AVAIL Limit 
         ufk[6] = 1752   WHEN AVAIL Limit 
         ufk[8]= 8 
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -566,7 +566,7 @@ PROCEDURE local-UPDATE-record:
    UPDATE-LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
   
       DISP ldeValue lcValueDesc WITH FRAME lis.
    
@@ -598,7 +598,7 @@ PROCEDURE local-UPDATE-record:
             DISPLAY ldeValue lcValueDesc WITH FRAME lis.
          END.   
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
          

@@ -406,7 +406,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -509,7 +509,7 @@ REPEAT WITH FRAME sel:
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 927
          ufk[8]= 8 ufk[9]= 1
-         ehto = 3. 
+         Syst.CUICommon:ehto = 3. 
         
          IF iiStatus > 0 THEN ASSIGN 
             ufk[1] = 0
@@ -683,7 +683,7 @@ REPEAT WITH FRAME sel:
         ufk = 0
         ufk[1]= 28  ufk[2]= 702  ufk[3]= 559
         ufk[8]= 8 
-        ehto = 0
+        Syst.CUICommon:ehto = 0
         ufkey = TRUE.
         
         IF iiCustNum > 0 OR iiInvNum > 0 THEN ASSIGN 
@@ -695,7 +695,7 @@ REPEAT WITH FRAME sel:
         /* Search BY column 1 */
         IF Syst.CUICommon:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -730,7 +730,7 @@ REPEAT WITH FRAME sel:
         /* Search BY column 2 */
         ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -753,7 +753,7 @@ REPEAT WITH FRAME sel:
         /* Search BY column 3 */
         ELSE IF Syst.CUICommon:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f3.
            DISPLAY lcBrand WITH FRAME F3.
            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -809,7 +809,7 @@ REPEAT WITH FRAME sel:
        ASSIGN liBatch     = 0  
               ldtFromDate = ?
               ldtToDate   = ?
-              ehto        = 9
+              Syst.CUICommon:ehto        = 9
               ufkey       = TRUE.
        RUN Syst/ufkey.p.
         
@@ -1327,7 +1327,7 @@ PROCEDURE local-UPDATE-record:
          WITH FRAME lis.
 
          ASSIGN ufk    = 0 
-                ehto   = 0
+                Syst.CUICommon:ehto   = 0
                 ufk[3] = 1752
                 ufk[8] = 8.
        
@@ -1368,7 +1368,7 @@ PROCEDURE local-UPDATE-record:
                IF lcAskPassWd NE lcPassword THEN NEXT. 
             END.
 
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
             FIND CURRENT PaymPlan EXCLUSIVE-LOCK.
             
@@ -1410,7 +1410,7 @@ PROCEDURE local-UPDATE-record:
                      END.
                   END.
                
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
@@ -1686,7 +1686,7 @@ PROCEDURE local-UPDATE-record:
             
             IF ok THEN DO:
                REPEAT WITH FRAME fCancel ON ENDKEY UNDO, NEXT HandlePlan:
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   
                   PAUSE 0.

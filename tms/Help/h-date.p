@@ -116,7 +116,7 @@ print-line:
          assign
          ufk = 0 ufk[1] = 0 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */

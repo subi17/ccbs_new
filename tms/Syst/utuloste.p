@@ -247,7 +247,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
          ASSIGN
          ufk = 0
          ufk[1] = 151 ufk[2] = 152 ufk[3] = 153 ufk[5] = 63
-         ufk[8] = 157 ufk[9] = 0 ehto = 0.
+         ufk[8] = 157 ufk[9] = 0 Syst.CUICommon:ehto = 0.
 
          IF tuni2 NE "" THEN ASSIGN ufk[4] = 154 ufk[6] = 155 ufk[7] = 156.
          ufkey = FALSE.
@@ -256,7 +256,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
       toimi:
       REPEAT:
 
-         ehto = 0. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
          IF Syst.CUICommon:toimi = 1 THEN DO:     /* muutetaan kirjoitinta */
 
             RUN select-printer(INPUT-OUTPUT kirloo1).
@@ -340,7 +340,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
          END.
 
          ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit1 skayt1
                       validate(skayt1 <= input spit1, "Value is TOo large !")
             WITH FRAME kirj1.
@@ -397,7 +397,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
          END.
 
          ELSE IF Syst.CUICommon:toimi = 7 AND tuni2 NE "" THEN DO:
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit2 skayt2
                       validate(skayt2 <= input spit2, "Value is TOo large!")
             WITH FRAME kirj2.
@@ -514,7 +514,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
 
       IF tuni2 NE "direct" THEN DO:
-         ufk = 0. ehto = 3. RUN Syst/ufkey.p.
+         ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
       END.
       
       /* Avataan streamit ja tulostetaan aloitustehosteet */
@@ -684,7 +684,7 @@ PROCEDURE select-printer:
       lpname[i] = xprinter.PrinterId.
    END.
 
-   ehto = 4. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 4. RUN Syst/ufkey.p.
    CLEAR FRAME psel.
    VIEW  FRAME psel.
    DISP  lpname WITH FRAME psel.

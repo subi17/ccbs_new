@@ -320,7 +320,7 @@ repeat WITH FRAME sel:
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          CREATE FixedFee.
 
          ASSIGN
@@ -367,7 +367,7 @@ repeat WITH FRAME sel:
                   DISP fixedfee.keyvalue with frame lis.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
@@ -622,7 +622,7 @@ repeat WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= (IF lcRight = "RW" THEN 187 ELSE 0)   
         ufk[8]= 8 ufk[9]= 1
-        ehto  = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto  = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -769,7 +769,7 @@ repeat WITH FRAME sel:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
        lcKeyValue = "". 
        PAUSE 0.
@@ -820,14 +820,14 @@ repeat WITH FRAME sel:
                  INPUT STRING(FixedFee.FFNum),
                  INPUT "FixedFee").
         ufkey = TRUE. 
-        ehto = 9.
+        Syst.CUICommon:ehto = 9.
         NEXT LOOP.
      END.
 
      ELSE if lookup(nap,"3,f3") > 0 THEN 
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:   /* memo */
 
-       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -1074,7 +1074,7 @@ repeat WITH FRAME sel:
        RUN Mc/nnccit.p(FixedFee.FFNum, OUTPUT amt-billed, OUTPUT amt-nonbilled).
 
        IF amt-nonbilled = 0 THEN DO:
-          ehto = 5.
+          Syst.CUICommon:ehto = 5.
           RUN Syst/ufkey.p.
           BELL.
           message "There are NONE Unbilled items left" SKIP
@@ -1152,7 +1152,7 @@ repeat WITH FRAME sel:
              ufk[1] = 7 
              ufk[2] = 9845 when CAN-FIND(first fixedfeetf of fixedfee)
              ufk[8] = 8 
-             ehto = 0 
+             Syst.CUICommon:ehto = 0 
              ufkey = true.
           RUN Syst/ufkey.p.
 
@@ -1166,7 +1166,7 @@ repeat WITH FRAME sel:
             FIND fixedfeetf NO-LOCK WHERE
                  fixedfeetf.ffnum = fixedfee.ffnum NO-ERROR.
 
-            ehto = 3. ufk = 0. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 3. ufk = 0. RUN Syst/ufkey.p.
             ufkey = true.
             DISP
                FixedFeeTF.BankDate     
@@ -1188,7 +1188,7 @@ repeat WITH FRAME sel:
             NEXT.
           end.
           
-          ehto = 9.
+          Syst.CUICommon:ehto = 9.
           RUN Syst/ufkey.p.
 
           si-recid2 = FixedFee.CustNum.

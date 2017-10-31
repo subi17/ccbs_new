@@ -200,7 +200,7 @@ REPEAT WITH FRAME sel:
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= (IF lcRight = "RW" THEN 1817 ELSE 0)
          ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -343,7 +343,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -365,7 +365,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -387,7 +387,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -492,7 +492,7 @@ REPEAT WITH FRAME sel:
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoEvent.Salesman.
 
-       ehto = IF LOOKUP(nap,"7,F7") > 0 THEN 9 ELSE 5.
+       Syst.CUICommon:ehto = IF LOOKUP(nap,"7,F7") > 0 THEN 9 ELSE 5.
        RUN Syst/ufkey.p.
        
        RUN local-UPDATE-record.                                  
@@ -642,7 +642,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" AND LOOKUP(nap,"7,F7") > 0 THEN DO:
        
-          ehto = 9. RUN Syst/ufkey.p.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
  
           UPDATE
           CoEvent.PaymDate

@@ -90,7 +90,7 @@ PROCEDURE pUserInput:
          lcMeas WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 

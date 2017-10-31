@@ -266,7 +266,7 @@ REPEAT WITH FRAME sel:
          ufk[6]= (IF lcRight = "RW" AND
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 4 ELSE 0)
          ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          
          IF ilAutoMode THEN ASSIGN ufk[5] = 0               
                                    ufk[6] = 0.
@@ -537,7 +537,7 @@ REPEAT WITH FRAME sel:
 
        RUN local-find-this(FALSE).
 
-       ehto = 5.
+       Syst.CUICommon:ehto = 5.
        RUN Syst/ufkey.p.
        
        /* show details */

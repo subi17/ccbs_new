@@ -91,7 +91,7 @@ WITH ROW 3 centered OVERLAY FRAME frm 11 DOWN.
 
 Limit:
 repeat WITH FRAME Limit:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       PriceList
@@ -162,7 +162,7 @@ repeat WITH FRAME Limit:
 
 toimi:
    repeat WITH FRAME Limit:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
+      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  Limit.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE Limit.

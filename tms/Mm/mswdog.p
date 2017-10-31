@@ -71,13 +71,13 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE xdays outfile.
 
 ACTION:
    REPEAT WITH FRAME MAIN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8 ehto = 0.
+      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 8 THEN LEAVE main.

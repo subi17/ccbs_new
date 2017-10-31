@@ -191,7 +191,7 @@ BROWSE:
       IF ufkey THEN DO:
          ASSIGN
          ufk = 0 ufk[1]= 35 ufk[2]= 717 ufk[6] = 983 ufk[5]= 11 ufk[8]= 8
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -384,7 +384,7 @@ BROWSE:
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku tunnuksella */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if haku <> "" THEN DO:
@@ -417,7 +417,7 @@ BROWSE:
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimella */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:

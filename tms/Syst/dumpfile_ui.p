@@ -84,14 +84,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[1] = 7
          ufk[5] = 795
          ufk[8] = 8 
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
    IF Syst.CUICommon:toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
     
       UPDATE liDumpId lcDumpMode lcFileNameTag WITH FRAME fCrit 
@@ -112,7 +112,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                   DISP DumpFile.DumpID @ liDumpID WITH FRAME fCrit.
             END.
             
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
 
             NEXT. 

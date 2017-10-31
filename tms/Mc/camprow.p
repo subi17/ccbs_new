@@ -193,7 +193,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -217,7 +217,7 @@ REPEAT WITH FRAME sel:
                    END.
                 END.
 
-                ehto = 9.
+                Syst.CUICommon:ehto = 9.
                 RUN Syst/ufkey.p.
                 NEXT.
                 
@@ -326,7 +326,7 @@ REPEAT WITH FRAME sel:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -652,7 +652,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        
          UPDATE
          CampRow.CRowItem
@@ -676,7 +676,7 @@ PROCEDURE local-UPDATE-record:
                    DISPLAY siirto @ CampRow.CRowItem WITH FRAME lis.
                 END.
 
-                ehto = 9.
+                Syst.CUICommon:ehto = 9.
                 RUN Syst/ufkey.p.
                 NEXT.
                 

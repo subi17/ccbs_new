@@ -74,7 +74,7 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[5]= 0
       ufk[6]= 0
       ufk[8]= 8 
-      ehto  = 0.
+      Syst.CUICommon:ehto  = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi = 8 THEN LEAVE.

@@ -137,11 +137,11 @@ with frame rajat.
 
 toimi:
 repeat with frame valinta on endkey undo toimi, next toimi:
-      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       if Syst.CUICommon:toimi = 1 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          update 
             day-to
             InvGroup
@@ -198,7 +198,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                   else do:
                      RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                      /* DISPLAY Customer groups */
-                     EHTO = 9.
+                     Syst.CUICommon:ehto = 9.
                      RUN Syst/ufkey.p.
                      FOR EACH TCustGroup.
                         dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup + ",".
@@ -281,7 +281,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 
 end. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 CREATE ttCriter.

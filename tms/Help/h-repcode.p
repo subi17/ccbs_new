@@ -99,7 +99,7 @@ repeat:
             ASSIGN
             ufk = 0 ufk[1] = 35 ufk[5] = 11
             ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-            siirto = ? ehto = 3 ufkey = FALSE.
+            siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
             
             /* not called from applhelp */    
             IF NOT gcHelpParam = "ahelp" THEN ufk[5] = 0.
@@ -209,7 +209,7 @@ repeat:
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* RepCode */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcRepCode = "".
            set lcRepCode WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

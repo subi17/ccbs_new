@@ -156,7 +156,7 @@ BROWSE:
         ASSIGN
         ufk[1] = 0  ufk[2] = 0 ufk[3] = 0 ufk[4] = 0
         ufk[5] = 0  ufk[6] = 0 ufk[7] = 0 ufk[8] = 8 ufk[9] = 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -377,7 +377,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        HIDE FRAME lis.
        FIND MthCall where recid(MthCall) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        ASSIGN

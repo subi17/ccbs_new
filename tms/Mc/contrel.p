@@ -165,7 +165,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
-         ehto = 3 
+         Syst.CUICommon:ehto = 3 
          ufkey = false.
          RUN Syst/ufkey.p.
       end.
@@ -178,7 +178,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       else assign nap = "1". 
 
       if lookup(nap,"1,f1") > 0 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame valinta on endkey undo, leave:
 
@@ -212,7 +212,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                      WITH FRAME valinta.   
                   END.   
 
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
@@ -245,7 +245,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       end.
 end. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 tila = true.

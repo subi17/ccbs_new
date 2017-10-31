@@ -84,7 +84,7 @@ print-line:
          ASSIGN
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -210,7 +210,7 @@ BROWSE:
         /* RepType */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* RepType */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           RepType = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           RepType = 0. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE RepType WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF RepType <> 0 THEN DO:

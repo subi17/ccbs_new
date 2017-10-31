@@ -120,7 +120,7 @@ REPEAT WITH FRAME sel:
    ADD-ROW:
       REPEAT WITH FRAME upd ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME upd:
            
            CLEAR FRAME upd NO-PAUSE.
@@ -206,7 +206,7 @@ REPEAT WITH FRAME sel:
            ufk[5] = 5 
            ufk[6] = 7
            ufk[8] = 8 
-           ehto   = 3 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.

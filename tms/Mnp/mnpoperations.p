@@ -193,7 +193,7 @@ BROWSE:
         ufk[6] = 2820
         ufk[7] = 2819
         ufk[8] = 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -347,7 +347,7 @@ BROWSE:
         RUN local-find-this(false).
         find mnpprocess where mnpprocess.mnpseq = MNPOperation.mnpseq NO-LOCK.
          
-        ehto = 10.
+        Syst.CUICommon:ehto = 10.
         RUN Syst/ufkey.p.
 
         copy-lob MNPOperation.XMLResponse to lcLongXML.

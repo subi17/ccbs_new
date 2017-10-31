@@ -190,7 +190,7 @@ repeat with frame menu_frame:
 
    /* search all menu items on this level */
 
-   assign item_type = 0 f_name = "" ufk = 0 ehto = 0 f_id = "" vartype = 0.
+   assign item_type = 0 f_name = "" ufk = 0 Syst.CUICommon:ehto = 0 f_id = "" vartype = 0.
    for each  MenuTree no-lock where
              MenuTree.Level = f_level and
              MenuTree.State[1] = false  /* NOT denied */:
@@ -220,7 +220,7 @@ f_code:
       pause 0.
       IF ergo-kbd THEN display f_id with frame f_code-ERGO.
                   ELSE display f_id with frame f_code.
-      ehto = 3. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
       info = false. 
 ACTION: repeat:
          readkey. nap = keylabel(lastkey).
@@ -253,7 +253,7 @@ ACTION: repeat:
          if Syst.CUICommon:toimi < 8 then do:
 
             hide message no-pause.
-            RUN Syst/nninfo.p(f_id[toimi]).
+            RUN Syst/nninfo.p(f_id[Syst.CUICommon:toimi]).
             hide frame info  no-pause.
          end.
          info = false.
@@ -266,7 +266,7 @@ ACTION: repeat:
          assign f_code = nap firstc = true.
          pause 0 no-message.
          assign ufk = 0  ufk[1] = 35 ufk[2] = 717 ufk[8] = 8
-         ehto = 3. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
          update f_code with frame f_code_search editing:
 
             if firstc then do:
@@ -352,7 +352,7 @@ ACTION: repeat:
          next MAIN_LOOP.
       end.
 
-      if item_type[toimi] = 3 then do: /* one level backwards */
+      if item_type[Syst.CUICommon:toimi] = 3 then do: /* one level backwards */
 
          if mlevel = 1 then do:
             OK = false.
@@ -381,15 +381,15 @@ ACTION: repeat:
             next MAIN_LOOP.
          end.
       end.
-      else if item_type[toimi] = 2 then do: /* move into submenu */
+      else if item_type[Syst.CUICommon:toimi] = 2 then do: /* move into submenu */
          /* save title of next menu level */
          assign
          mlevel = mlevel + 1
-         ftitle[mlevel] = f_title[toimi]
+         ftitle[mlevel] = f_title[Syst.CUICommon:toimi]
          title_width = maximum(title_width,length(ftitle[mlevel])).
 
          /* level key dor db search */
-         f_level = f_level + string(toimi).
+         f_level = f_level + string(Syst.CUICommon:toimi).
 
          /* align title width according to the longest title */
          do i = 1 to mlevel:
@@ -399,16 +399,16 @@ ACTION: repeat:
             ftitle[i] = substring(substring(empty,1,x) +
             ftitle[i] + substring(empty,1,x),1,title_width).
          end.
-         substring(ftitle[mlevel],59) = string("(" + f_id[toimi] + ")","x(10)").
+         substring(ftitle[mlevel],59) = string("(" + f_id[Syst.CUICommon:toimi] + ")","x(10)").
          next MAIN_LOOP.
       end.
-      else if item_type[toimi] EQ 0 THEN
+      else if item_type[Syst.CUICommon:toimi] EQ 0 THEN
          BELL.
       else do: /* run a program module */
          assign
             Syst.CUICommon:qupd   =  TRUE . 
 
-         run value(f_name[toimi]).
+         run value(f_name[Syst.CUICommon:toimi]).
          /* clear screen */
          hide frame menu_frame no-pause.
 

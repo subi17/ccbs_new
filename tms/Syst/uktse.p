@@ -39,7 +39,7 @@ repeat:
      ufk = 0 ufk[5] = 11
      ufk[6] = 0  ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 siirto = ?.
 
-   ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST TMSUser no-lock no-error.
    IF NOT AVAILABLE TMSUser THEN DO:

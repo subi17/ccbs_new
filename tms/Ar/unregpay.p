@@ -372,7 +372,7 @@ REPEAT WITH FRAME sel:
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
         UnregPaym.Memo:SCREEN-VALUE = "".
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -466,7 +466,7 @@ REPEAT WITH FRAME sel:
          ASSIGN
          ufk = 0  
          ufk[1] = 816 ufk[2] = 1253 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF xState = 0  THEN 
             ASSIGN 
@@ -674,7 +674,7 @@ REPEAT WITH FRAME sel:
        ***************************************/
       IF LOOKUP(nap,"1,f1") > 0 THEN REPEAT WITH FRAME sel:
          ASSIGN 
-         ufkey = TRUE ufk = 0 ehto = 1
+         ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
          ufk[1] = 28  ufk[2] = 30 ufk[3] = 789 ufk[4] = 763
          ufk[5] = 813 ufk[8] = 8. 
          RUN Syst/ufkey.p.
@@ -684,7 +684,7 @@ REPEAT WITH FRAME sel:
          IF Syst.CUICommon:toimi = 1 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku1 = ?.
-            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr1.
             UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku1 WITH FRAME hayr1.
@@ -718,7 +718,7 @@ REPEAT WITH FRAME sel:
          IF Syst.CUICommon:toimi = 2 THEN DO:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku2 = "".
-            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr2.
             UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku2 WITH FRAME hayr2.
@@ -750,7 +750,7 @@ REPEAT WITH FRAME sel:
          IF Syst.CUICommon:toimi = 3 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku3 = 0.
-            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr3.
             UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                     haku3 WITH FRAME hayr3.
@@ -782,7 +782,7 @@ REPEAT WITH FRAME sel:
          IF Syst.CUICommon:toimi = 4 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku4 = "".
-            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr4.
             UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku4 WITH FRAME hayr4.
@@ -814,7 +814,7 @@ REPEAT WITH FRAME sel:
          IF Syst.CUICommon:toimi = 5 THEN DO:
             Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
             haku5 = "".
-            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr5.
             UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                    haku5 WITH FRAME hayr5.
@@ -981,7 +981,7 @@ REPEAT WITH FRAME sel:
             NEXT LOOP.
          END.   
          memory = rtab[FRAME-LINE(sel)].
-         ASSIGN ufkey = TRUE ufk = 0 ehto = 3.
+         ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 3.
          RUN Syst/ufkey.p.   
          Syst.CUICommon:cfc = "lis".
          RUN Syst/ufcolor.p. 
@@ -1012,7 +1012,7 @@ REPEAT WITH FRAME sel:
                         IF llCredLoss 
                         THEN "CREDIT LOSS " 
                         ELSE "INVOICE "
-            ufkey = TRUE ehto = 9.
+            ufkey = TRUE Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.  
             on f4 endkey. /* se Syst.CUICommon:toimi vain jos ei kutsutaan F9 */
@@ -1240,7 +1240,7 @@ REPEAT WITH FRAME sel:
             ldtAccDate = TODAY
             DelInt     = FALSE. 
 
-            ASSIGN  ufkey = TRUE ehto = 9.
+            ASSIGN  ufkey = TRUE Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.  
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
@@ -1364,7 +1364,7 @@ REPEAT WITH FRAME sel:
             ldtAccDate = TODAY
             DelInt     = FALSE.
 
-            ASSIGN  ufkey = TRUE ehto = 9.
+            ASSIGN  ufkey = TRUE Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
@@ -1779,14 +1779,14 @@ PROCEDURE local-UPDATE-record:
             ASSIGN ufk    = 0
                    ufk[1] = 7
                    ufk[8] = 8
-                   ehto   = 0.
+                   Syst.CUICommon:ehto   = 0.
                 
             RUN Syst/ufkey.p.
          END.
          
          IF Syst.CUICommon:toimi = 1 THEN DO:
             
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
             FIND CURRENT UnregPaym EXCLUSIVE-LOCK.
             
@@ -1838,7 +1838,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE DO:
-         ehto = 5.
+         Syst.CUICommon:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END.

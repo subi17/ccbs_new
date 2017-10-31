@@ -718,7 +718,7 @@ BROWSE:
             ufk[6] = 9852
             ufk[7] = 0
             ufk[8] = 8 ufk[9]= 1
-            ehto   = 3 ufkey = FALSE.
+            Syst.CUICommon:ehto   = 3 ufkey = FALSE.
           RUN Syst/ufkey.p.
       END.
 
@@ -872,7 +872,7 @@ BROWSE:
         /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
         SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
@@ -902,7 +902,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F3.
         Disp lcBrand With FRAME f3.
         SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
@@ -944,7 +944,7 @@ BROWSE:
                lcFixedNumber = "".
                
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME fFixed.
         SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE
              lcFixedNumber 
@@ -971,7 +971,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F4.
         Disp lcBrand With FRAME f4.
         SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE 
@@ -1006,7 +1006,7 @@ BROWSE:
                lcCustIdType = "".
                
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F5.
         SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE
              lcCustomerId
@@ -1081,7 +1081,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F2.
         Disp lcBrand With FRAME f2.
         SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
@@ -1177,7 +1177,7 @@ PROCEDURE pOrderView:
       ufk[6] = 0    WHEN icStatus = ""
       ufk[7] = 2243 
       ufk[8] = 8
-      ehto = 0               
+      Syst.CUICommon:ehto = 0               
    
       ufkey = true.
       RUN Syst/ufkey.p.
@@ -1224,7 +1224,7 @@ PROCEDURE pOrderView:
                         THEN 2249 /* fixed donor (holder) */
                         ELSE 0)
               ufk[8] = 8
-              ehto = 0
+              Syst.CUICommon:ehto = 0
               ufkey = TRUE.
 
            RUN Syst/ufkey.p.
@@ -1295,7 +1295,7 @@ PROCEDURE pOrderView:
         ASSIGN 
            ufk    = 0
            ufk[8] = 8
-           ehto   = 0.
+           Syst.CUICommon:ehto   = 0.
          
         RUN Syst/ufkey.p.
         
@@ -1337,7 +1337,7 @@ PROCEDURE pOrderView:
            ufk[6] = 0
            ufk[7] = 9019 
            ufk[8] = 8
-           ehto = 0               
+           Syst.CUICommon:ehto = 0               
    
            ufkey = TRUE.
            RUN Syst/ufkey.p.
@@ -1884,7 +1884,7 @@ PROCEDURE local-UPDATE-record:
    RUN local-find-this(FALSE).
    
    CLEAR FRAME lis NO-PAUSE.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
@@ -1912,7 +1912,7 @@ PROCEDURE local-UPDATE-record:
                   lcCurrOper = siirto NO-ERROR.
                   DISPLAY lcCurrOper @ Order.CurrOper WITH FRAME lis.
                END. /* IF lcCurrOper NE "" ... */
-               ehto = 9. RUN Syst/ufkey.p.
+               Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             END.
       
             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
@@ -2152,7 +2152,7 @@ PROCEDURE local-update-customer:
          LOOKUP(Order.StatusCode,"20,21,31,73") > 0 THEN 7 ELSE 0)
       ufk[5] = 0
       ufk[8] = 8
-      ehto = 0
+      Syst.CUICommon:ehto = 0
       ufkey = true.
       RUN Syst/ufkey.p.
                                                              
@@ -2173,7 +2173,7 @@ PROCEDURE local-update-customer:
       ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" AND ufk[1] NE 0 THEN
       REPEAT WITH FRAME fCustomer ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          lcOldAddressChk = 
@@ -2281,7 +2281,7 @@ PROCEDURE local-update-customer:
                   END.      
                END.
                   
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

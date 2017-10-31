@@ -308,7 +308,7 @@ REPEAT WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
            CLEAR FRAME lis NO-PAUSE.
 
            CREATE FATime.
@@ -421,7 +421,7 @@ REPEAT WITH FRAME sel:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7] = 1752 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF iiCustNum > 0  THEN ASSIGN ufk[1] = 0
                                       ufk[5] = 0.
@@ -569,7 +569,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f1.
        SET custnum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -603,7 +603,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -642,7 +642,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
         {Syst/uright2.i}.
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. 
+        Syst.CUICommon:ehto = 9. 
         RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATime).
@@ -658,7 +658,7 @@ REPEAT WITH FRAME sel:
                  INPUT "FATime",
                  INPUT STRING(FATime.FatNum),
                  INPUT "FATime").
-        ufkey = TRUE. ehto = 9.
+        ufkey = TRUE. Syst.CUICommon:ehto = 9.
         NEXT LOOP.
      END.
 
@@ -766,7 +766,7 @@ REPEAT WITH FRAME sel:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATime).
@@ -1041,7 +1041,7 @@ PROCEDURE local-UPDATE-record:
       IF NEW Fatime THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
+            Syst.CUICommon:ehto   = 0
             ufk    = 0
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
@@ -1053,7 +1053,7 @@ PROCEDURE local-UPDATE-record:
 
        /*  FIND CURRENT Fatime NO-LOCK. */
             
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
  
          PROMPT
@@ -1076,7 +1076,7 @@ PROCEDURE local-UPDATE-record:
                 ASSIGN
                 FATime.qtyunit = INPUT FATime.Qtyunit.
                 disp FATime.qtyunit with frame lis.
-                ehto = 9. 
+                Syst.CUICommon:ehto = 9. 
                 RUN Syst/ufkey.p.
              END.
 
@@ -1092,7 +1092,7 @@ PROCEDURE local-UPDATE-record:
                    fDispFATType().
                 END.
 
-                ehto = 9. 
+                Syst.CUICommon:ehto = 9. 
                 RUN Syst/ufkey.p.
              END.
 

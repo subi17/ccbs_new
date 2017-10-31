@@ -155,7 +155,7 @@ repeat WITH FRAME sel:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR CustGroup.CustGroup
            VALIDATE
@@ -247,7 +247,7 @@ SELAUS:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 1760   ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -404,7 +404,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               CustGroup WITH FRAME f1.
@@ -427,7 +427,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               CGName WITH FRAME f2.
@@ -562,7 +562,7 @@ SELAUS:
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)] 
        exclusive-lock.
 
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY CustGroup.CustGroup
        CustGroup.EnterTask CustGroup.LeaveTask

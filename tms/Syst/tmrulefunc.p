@@ -130,7 +130,7 @@ REPEAT WITH FRAME sel:
            ufk[2] = 0
            ufk[5] = 11 
            ufk[8] = 8 
-           ehto   = 3 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -251,7 +251,7 @@ REPEAT WITH FRAME sel:
         
         IF AVAILABLE ttMenu THEN DO:
            
-           ehto = 5.
+           Syst.CUICommon:ehto = 5.
            RUN Syst/ufkey.p.
            
            RUN VALUE(ttMenu.Module)(iiTMRuleSeq,

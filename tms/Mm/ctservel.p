@@ -136,7 +136,7 @@ REPEAT WITH FRAME sel:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -309,7 +309,7 @@ REPEAT WITH FRAME sel:
         
         ASSIGN      
            ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-           ehto = 3 ufkey = FALSE.
+           Syst.CUICommon:ehto = 3 ufkey = FALSE.
            
         {Syst/uright1.i '"5,6"'}
         RUN Syst/ufkey.p.
@@ -445,7 +445,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -701,7 +701,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
       
       IF lcRight = "RW" THEN DO:
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE

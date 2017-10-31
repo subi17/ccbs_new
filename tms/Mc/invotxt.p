@@ -240,7 +240,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
-           ehto = 9. RUN Syst/ufkey.p.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
            ASSIGN InvText.InvText:SCREEN-VALUE = "". 
 
@@ -263,7 +263,7 @@ REPEAT WITH FRAME sel:
                     RUN VALUE(lcProgram).
                     IF siirto NE ? THEN DISP siirto @ InvText.KeyValue.        
 
-                    ehto = 9.
+                    Syst.CUICommon:ehto = 9.
                     RUN Syst/ufkey.p.
 
                  END.   
@@ -389,12 +389,12 @@ BROWSE:
         ufk[4]= 814 ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 555 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         
         ELSE ASSIGN
         ufk[1]= 927 ufk[2]= 938 ufk[3]= 1796 ufk[4]= 0
         ufk[5]= 0   ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 
-        ufk[9]= 1 ehto = 3 ufkey = FALSE.
+        ufk[9]= 1 Syst.CUICommon:ehto = 3 ufkey = FALSE.
         
 
         /* used as help */
@@ -542,7 +542,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
        SET lcBrand WHEN Syst.CUICommon:gcAllBrand AND icTarget = ""
@@ -579,7 +579,7 @@ BROWSE:
          lcTarget   = "SMS"
          lcKeyValue = "".
 
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME f2.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND icTarget = ""
            lcTarget validate(lctarget > "", "Enter Target!")  
@@ -721,7 +721,7 @@ BROWSE:
         RUN local-disp-row.
         
         ASSIGN ufkey = TRUE
-               ehto  = 9.
+               Syst.CUICommon:ehto  = 9.
         NEXT LOOP.
      END.
 
@@ -758,7 +758,7 @@ BROWSE:
        ASSIGN 
              ac-hdr = " CHANGE " 
              ufkey  = TRUE 
-             ehto = 9. 
+             Syst.CUICommon:ehto = 9. 
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". 
        RUN Syst/ufcolor.p. 
@@ -1102,7 +1102,7 @@ PROCEDURE local-update-record:
       IF NEW InvText THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
+            Syst.CUICommon:ehto   = 0
             ufk    = 0
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
@@ -1114,7 +1114,7 @@ PROCEDURE local-update-record:
 
          FIND CURRENT InvText EXCLUSIVE-LOCK.
             
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          CASE InvText.Target:
@@ -1196,7 +1196,7 @@ PROCEDURE local-update-record:
                   END.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.

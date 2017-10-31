@@ -224,7 +224,7 @@ REPEAT WITH FRAME sel:
         ufk    = 0
         ufk[1] = 35
         ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -366,7 +366,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -618,7 +618,7 @@ PROCEDURE local-UPDATE-record:
             ufk[1] = 7 WHEN lcRight = "RW"
             ufk[6] = 0
             ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
          
@@ -632,7 +632,7 @@ PROCEDURE local-UPDATE-record:
       
       FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
       
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
       UPDATE
          SubsTerminal.IMEI

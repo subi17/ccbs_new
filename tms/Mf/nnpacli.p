@@ -115,7 +115,7 @@ repeat WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -210,7 +210,7 @@ BROWSE:
         ASSIGN
         ufk[1] = 652 ufk[2] = 653 ufk[3] = 0 ufk[4] = 0
         ufk[5] = 5   ufk[6] = 4   ufk[7] = 0 ufk[8] = 8 ufk[9] = 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -404,7 +404,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Pref = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Pref WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Pref <>  "" THEN DO:
@@ -427,7 +427,7 @@ BROWSE:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         CLI = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CLI WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if CLI <> "" THEN DO:
@@ -524,7 +524,7 @@ BROWSE:
        FIND CLIPref where recid(CLIPref) = rtab[frame-line(sel)]
        exclusive-lock.
 
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 

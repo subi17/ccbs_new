@@ -195,7 +195,7 @@ BROWSE:
            ufk[7] = 2823 
            ufk[8] = 8
            ufk[9] = 1
-           ehto   = 3
+           Syst.CUICommon:ehto   = 3
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -384,7 +384,7 @@ BROWSE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttMNPProcess.FormRequest.
 

@@ -128,7 +128,7 @@ repeat WITH FRAME sel:
 
 ADD-SMAN:
      repeat TRANS ON ENDKEY UNDO ADD-SMAN, LEAVE ADD-SMAN.
-     ASSIGN ufkey = TRUE ufk = 0 ehto = 0
+     ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 0
      ufk[1] = 521 ufk[2] = 522 ufk[3] = 516 ufk[8] = 8.
      RUN Syst/ufkey.p.
 
@@ -140,7 +140,7 @@ ADD-SMAN:
     repeat WITH FRAME lis ON ENDKEY UNDO ADD-SMAN,
                NEXT ADD-SMAN:
       PAUSE 0.
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       CLEAR FRAME lis no-pause.
       PROMPT-FOR SMGMember.Salesman
       validate(input SMGMember.Salesman = "" OR 
@@ -299,7 +299,7 @@ SELAUS:
    ASSIGN
    ufk[1]= 885 ufk[2]= 30 ufk[3]= 0 ufk[4]= 518
    ufk[5]= 5   ufk[6]= 4  ufk[7]= 0 ufk[8]=   8 ufk[9]= 1
-   ehto = 3 ufkey = FALSE.
+   Syst.CUICommon:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
@@ -455,7 +455,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Salesman <> "" THEN DO:
@@ -479,7 +479,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        SmName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SmName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if SmName <> "" THEN DO:

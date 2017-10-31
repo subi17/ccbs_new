@@ -44,7 +44,7 @@ WITH
 
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
-   assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
+   assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
    RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
    FIND FIRST CustLetter WHERE CustLetter.Brand = Syst.CUICommon:gcBrand
       exclusive-lock no-error.

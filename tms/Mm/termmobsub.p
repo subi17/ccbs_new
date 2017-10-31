@@ -267,7 +267,7 @@ BROWSE:
             ufk[7]= 555 /* MORE */
             ufk[8]= 8
             ufk[9]= 1
-            ehto  = 3
+            Syst.CUICommon:ehto  = 3
             ufkey = FALSE.
          ELSE ASSIGN   
             ufk[1] = 1740
@@ -435,7 +435,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -458,7 +458,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
        HIDE FRAME fMsSeq NO-PAUSE.
@@ -480,7 +480,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -504,7 +504,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f4.
        SET lcLastName lcFirstname WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
@@ -517,7 +517,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
        HIDE FRAME f5 NO-PAUSE.
@@ -530,7 +530,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
        IF  liMSStatus  ne 0  THEN DO:
@@ -559,7 +559,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
        HIDE FRAME f7 NO-PAUSE.
@@ -603,7 +603,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND lcRight = "RW" AND 
         ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME frSearchFixed.
         SET lcFixedNumber WITH FRAME frSearchFixed.
         HIDE FRAME frSearchFixed NO-PAUSE.
@@ -642,7 +642,7 @@ BROWSE:
           ASSIGN
              ufkey  = TRUE
              ufk    = 0  
-             ehto   = 1  
+             Syst.CUICommon:ehto   = 1  
              ufk[1] = 0
              ufk[2] = 788
              ufk[3] = 2244 
@@ -684,7 +684,7 @@ BROWSE:
                 ASSIGN
                    ufkey = TRUE
                    ufk   = 0
-                   ehto  = 1
+                   Syst.CUICommon:ehto  = 1
                    ufk[1] = 1992
                    ufk[2] = 844
                    ufk[3] = 562

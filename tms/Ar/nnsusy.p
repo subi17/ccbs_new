@@ -414,7 +414,7 @@ view FRAME acct.
 LASKU:
 repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
    CLEAR FRAME payment.
    CLEAR FRAME acct.
@@ -826,7 +826,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
    repeat WITH FRAME payment:
 
       IF xDontUpd = FALSE THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
 
          /* old values */
@@ -1280,7 +1280,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
          ASSIGN  ufk = 0
          ufk[1] = 91 ufk[2] = 993 ufk[3] = 992 ufk[4] = 833
-         ufk[5] = 832 ufk[6] = 12 ufk[7] = 4 ufk[8] = 8 ehto = 0.
+         ufk[5] = 832 ufk[6] = 12 ufk[7] = 4 ufk[8] = 8 Syst.CUICommon:ehto = 0.
          IF new_paym THEN ufk[7] = 0.
          IF ykorko = 0 OR Invoice.InvType = 3 OR Invoice.InvType = 4
          THEN ufk[4] = 0.
@@ -1291,7 +1291,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                                 ufk[5] = 0
                                 ufk[7] = 0.
 
-         ehto = 0. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
 
          IF Syst.CUICommon:toimi  = 1 THEN NEXT PaidAmt.              /* change */
 

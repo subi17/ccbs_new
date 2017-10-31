@@ -239,7 +239,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       liOrderer 
       lcOutOper WHEN liOrderer EQ 2
@@ -288,7 +288,7 @@ REPEAT WITH FRAME main:
          END.   
 
          llHelp = TRUE. 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
@@ -311,7 +311,7 @@ REPEAT WITH FRAME main:
             llHelp = TRUE. 
          END.   
          
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       
@@ -335,7 +335,7 @@ REPEAT WITH FRAME main:
             llHelp = TRUE.
          END.   
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
          
@@ -599,7 +599,7 @@ REPEAT WITH FRAME main:
       
       ASSIGN
          ufk = 0 
-         ehto = 0
+         Syst.CUICommon:ehto = 0
          ufk[1] = 7 
          ufk[5] = 795
          ufk[8] = 8.

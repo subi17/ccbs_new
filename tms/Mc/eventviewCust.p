@@ -223,7 +223,7 @@ BROWSE:
           ufk[7]= 0 
           ufk[8]= 8 
           ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 

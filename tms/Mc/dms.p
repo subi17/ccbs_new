@@ -62,7 +62,7 @@ REPEAT WITH FRAME lis ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk   = 0  
       ufk[5]= 9850
       ufk[8]= 8 
-      ehto  = 0.
+      Syst.CUICommon:ehto  = 0.
    RUN Syst/ufkey.p.
 
    IF Syst.CUICommon:toimi = 5 AND ufk[5] > 0 THEN DO:

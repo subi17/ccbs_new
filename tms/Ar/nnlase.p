@@ -169,7 +169,7 @@ print-line:
          ASSIGN
          ufk[1]= 92  ufk[2]= 1634 ufk[3]= 707 ufk[4]= 28
          ufk[5]= 11  ufk[6]= 927 ufk[7]= 829 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF liInvCust > 0 THEN ASSIGN 
             ufk[1] = 0
@@ -343,7 +343,7 @@ print-line:
      ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE lcExtInvID WITH FRAME F1.
         HIDE FRAME F1 no-pause.
 
@@ -362,7 +362,7 @@ print-line:
      ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liInvNum WITH FRAME F2.
         HIDE FRAME F2 no-pause.
 
@@ -380,7 +380,7 @@ print-line:
      ELSE IF LOOKUP(nap,"3,F3") > 0 AND ufk[3] > 0  THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liCustNum WITH FRAME F3.
         HIDE FRAME F3 no-pause.
 
@@ -399,7 +399,7 @@ print-line:
      ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 THEN DO:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ldtInvDate = ?.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE ldtInvDate WITH FRAME F4.
         HIDE FRAME F4 no-pause.
 

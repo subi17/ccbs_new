@@ -102,7 +102,7 @@ toimi:
             ufk[7] = 0
             ufk[8] = 8 
             ufk[9] = 1
-            ehto   = 3
+            Syst.CUICommon:ehto   = 3
             ufkey  = false.
          RUN Syst/ufkey.p.
       END.
@@ -115,7 +115,7 @@ toimi:
       ELSE ASSIGN nap = "1". 
 
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. 
+         Syst.CUICommon:ehto = 9. 
          RUN Syst/ufkey.p.
          REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 

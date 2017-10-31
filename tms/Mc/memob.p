@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
       ADD-ROW:
       REPEAT WITH FRAME lis1 ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.   
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.   
         ON F4 GO.
         REPEAT TRANSACTION WITH FRAME lis1:
            CLEAR FRAME lis1 NO-PAUSE.
@@ -254,7 +254,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 991 ufk[8]= 8   ufk[9]= 1
-        ehto = 3    ufkey = FALSE.
+        Syst.CUICommon:ehto = 3    ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -502,11 +502,11 @@ BROWSE:
           ufk = 0
           ufk[1] = (IF lcRight = "RW" THEN 7 ELSE 0)
           ufk[8] = 8
-          ehto = 0.
+          Syst.CUICommon:ehto = 0.
          RUN Syst/ufkey.p.
          IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN
          DO:
-            ufkey = TRUE. ehto = 9. RUN Syst/ufkey.p.
+            ufkey = TRUE. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMemo).
             RUN local-update-record.                                  
             memo.ChgUser  = katun.
@@ -514,7 +514,7 @@ BROWSE:
             IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMemo).
          END.
          IF Syst.CUICommon:toimi = 8 THEN RUN local-find-others.
-         ufkey = TRUE. ehto = 9.
+         ufkey = TRUE. Syst.CUICommon:ehto = 9.
          HIDE FRAME lis1 NO-PAUSE.
          HIDE FRAME lis2 NO-PAUSE.
 

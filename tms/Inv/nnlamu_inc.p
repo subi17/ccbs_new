@@ -134,7 +134,7 @@ WITH
    view FRAME taka. PAUSE 0 no-message.
 
    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 
 END.
@@ -257,7 +257,7 @@ IF NOT ilSilent THEN DO:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             CustNum1 CustNum2   validate(INPUT CustNum2  >= INPUT CustNum1,
@@ -348,7 +348,7 @@ IF NOT ilSilent THEN DO:
 
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0 
                      ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+                     ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN DO:
          kysy_rajat = TRUE.

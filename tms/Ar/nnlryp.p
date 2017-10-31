@@ -241,7 +241,7 @@ BROWSE:
          ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
          ufk[6]= 1561
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF NOT may_update THEN ASSIGN ufk[5] = 0.
 
@@ -392,7 +392,7 @@ BROWSE:
              WITH FRAME fmore.
 
         ASSIGN 
-           ehto = 5
+           Syst.CUICommon:ehto = 5
            ufkey = TRUE.
         RUN Syst/ufkey.p.
         
@@ -405,7 +405,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0   /* memo */
         THEN DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
 
-        ASSIGN ehto = 9 ufkey = TRUE.
+        ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE.
         RUN Syst/ufkey.p.
         FIND ttRow WHERE RECID(ttRow) = rtab[FRAME-LINE(sel)].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow EXCLUSIVE-LOCK.

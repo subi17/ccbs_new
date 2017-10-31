@@ -298,7 +298,7 @@ REPEAT WITH FRAME sel:
          ASSIGN
             ufk       = 0
             ufk[8]    = 8
-            ehto      = 3.
+            Syst.CUICommon:ehto      = 3.
       
          RUN Syst/ufkey.p. 
 
@@ -355,7 +355,7 @@ REPEAT WITH FRAME sel:
            REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       
            PAUSE 0 NO-MESSAGE.
-           ehto = 9. RUN Syst/ufkey.p.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         
            REPEAT TRANSACTION WITH FRAME lis:
               PAUSE 0.
@@ -469,7 +469,7 @@ REPEAT WITH FRAME sel:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF icMsSeq > "" THEN ASSIGN 
            ufk[1] = 0
@@ -613,7 +613,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        
        CLEAR  FRAME f1.
        
@@ -654,7 +654,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET BillPeriod WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -1021,7 +1021,7 @@ PROCEDURE local-update-record:
       WITH FRAME lis.
 
       IF NOT NEW SingleFee THEN DO:
-         ASSIGN ehto   = 0
+         ASSIGN Syst.CUICommon:ehto   = 0
                 ufk    = 0            
                 ufk[1] = 7 WHEN lcRight = "RW" AND 
                                (NOT SingleFee.Billed OR NEW SingleFee)
@@ -1033,7 +1033,7 @@ PROCEDURE local-update-record:
       
       IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          si-recid2 = SingleFee.CustNum.
@@ -1079,7 +1079,7 @@ PROCEDURE local-update-record:
                 IF siirto NE ? THEN DO:
                    ASSIGN SingleFee.BillTarget = INT(siirto).
                    DISP SingleFee.BillTarget WITH FRAME lis.
-                   ASSIGN ehto = 9 ufkey = TRUE.
+                   ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE.
                    RUN Syst/ufkey.p.
                    NEXT.
                 END.
@@ -1342,7 +1342,7 @@ PROCEDURE cctool:
          ASSIGN
             ufk       = 0
             ufk[8]    = 8
-            ehto      = 3.
+            Syst.CUICommon:ehto      = 3.
       
          RUN Syst/ufkey.p . 
 
@@ -1472,7 +1472,7 @@ PROCEDURE cctool:
            ASSIGN 
             ufk    = 0
             ufk[8] = 8
-            ehto   = 0. 
+            Syst.CUICommon:ehto   = 0. 
 
            /* accept / cancel */
            IF llChanged THEN ASSIGN
@@ -1485,7 +1485,7 @@ PROCEDURE cctool:
                           
            IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
           
               REPEAT TRANSACTION WITH FRAME lis-cctools ON ENDKEY UNDO, LEAVE:

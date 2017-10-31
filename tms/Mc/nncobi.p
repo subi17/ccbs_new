@@ -215,7 +215,7 @@ BROWSE:
         ufk[5]= 1491   
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto  = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto  = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -385,7 +385,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF BillPeriod <> ? THEN DO:
@@ -407,7 +407,7 @@ BROWSE:
 
      if lookup(nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FFItem where recid(FFItem) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -464,7 +464,7 @@ BROWSE:
           END.
         END.  
         IF llUpdate THEN DO:
-           FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.               ehto = 9. 
+           FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.               Syst.CUICommon:ehto = 9. 
            RUN Syst/ufkey.p. 
            ufkey = TRUE.
            UPDATE
@@ -483,7 +483,7 @@ BROWSE:
      else if lookup(nap,"5,f5") > 0 THEN DO:  /* view  */
         FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] no-lock.
         IF FFItem.InvNum > 0 THEN DO:
-           ehto = 5.
+           Syst.CUICommon:ehto = 5.
            RUN Syst/ufkey.p.
            RUN pInvoiceDetails(FFItem.InvNum,
                                TRUE).
@@ -621,7 +621,7 @@ BROWSE:
             
        IF llUpdate THEN DO WITH FRAME lis ON ENDKEY UNDO, NEXT LOOP:
           run local-find-this(TRUE).
-          ehto = 9. 
+          Syst.CUICommon:ehto = 9. 
           RUN Syst/ufkey.p. 
           ufkey = TRUE.
           UPDATE
@@ -639,7 +639,7 @@ BROWSE:
           HIDE FRAME lis NO-PAUSE.
        END. /* EDITING */
        ELSE DO:
-         ehto = 9. 
+         Syst.CUICommon:ehto = 9. 
          RUN Syst/ufkey.p. 
          ufkey = TRUE.
          /* if item is the last one then allow update of end period */  

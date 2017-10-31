@@ -73,7 +73,7 @@ ASSIGN
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    DISP CustLetter.ChgDate CustLetter.LtrMargin WITH FRAME rajat.
    UPDATE
@@ -89,7 +89,7 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME rajat:
       ASSIGN
-      ufk = 0 ehto = 0
+      ufk = 0 Syst.CUICommon:ehto = 0
       ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.

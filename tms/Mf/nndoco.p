@@ -103,7 +103,7 @@ assign mobpref = substr(mobpref,1,length(mobpref) - 1).
 
 CRIT:
 repeat with frame start:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    update
       cadate1  validate(cadate1 ne ?,"Give first date !")
@@ -134,7 +134,7 @@ repeat with frame start:
    */.
 task:
    repeat with frame start:
-      assign ufk = 0 ufk[1] = 7 ufk[5] = 178 ufk[8] = 8 ehto = 0.
+      assign ufk = 0 ufk[1] = 7 ufk[5] = 178 ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       if Syst.CUICommon:toimi = 1 then next  CRIT.
       if Syst.CUICommon:toimi = 8 then leave CRIT.

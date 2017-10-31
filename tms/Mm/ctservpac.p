@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -283,7 +283,7 @@ REPEAT WITH FRAME sel:
         ufk[7]= 73  
         ufk[8]= 8 
         ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -418,7 +418,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
@@ -530,7 +530,7 @@ REPEAT WITH FRAME sel:
           to cli type */
        REPEAT ON ENDKEY UNDO, LEAVE:
                 
-          ehto = 9.
+          Syst.CUICommon:ehto = 9.
           RUN Syst/ufkey.p.
           
           PAUSE 0.
@@ -540,7 +540,7 @@ REPEAT WITH FRAME sel:
                  ufk[1] = 7
                  ufk[5] = 795
                  ufk[8] = 8
-                 ehto   = 0.
+                 Syst.CUICommon:ehto   = 0.
           RUN Syst/ufkey.p.        
           
           IF Syst.CUICommon:toimi = 5 AND ldtFromDate NE ? THEN DO:
@@ -704,12 +704,12 @@ PROCEDURE local-UPDATE-record:
          ufk = 0
          ufk[1] = 7 WHEN lcRight = "RW"
          ufk[8] = 8
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
          
       IF Syst.CUICommon:toimi = 1 THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
          FIND CURRENT CTServPac EXCLUSIVE-LOCK.
          
@@ -736,7 +736,7 @@ PROCEDURE local-UPDATE-record:
                    DISPLAY lcCode @ CTServPac.ServType WITH FRAME lis.   
                 END.   
                   
-                ehto = 9.
+                Syst.CUICommon:ehto = 9.
                 RUN Syst/ufkey.p.
                 NEXT. 
              END.

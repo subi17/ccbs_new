@@ -154,7 +154,7 @@ WITH FRAME main.
 MAIN:
 REPEAT TRANSACTION WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       new-CLI-end 
@@ -320,7 +320,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
       ASSIGN
          ufk    = 0
-         ehto   = 0
+         Syst.CUICommon:ehto   = 0
          ufk[1] = 7 
          ufk[5] = 261
          ufk[8] = 8.

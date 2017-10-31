@@ -245,7 +245,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
          ufk    = 0 
          ufk[1] = 7  
          ufk[8] = 2 
-         ehto   = 0.
+         Syst.CUICommon:ehto   = 0.
 
       IF liNewCust1 = 0 THEN ufk[3] = 1056.   
       
@@ -264,7 +264,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE liNewCust1 WHEN llUpdCustNum
          WITH FRAME fCriter EDITING:
@@ -289,7 +289,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
                    
                END. 
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 

@@ -227,7 +227,7 @@ BROWSE:
         assign
         ufk[1]= 771 ufk[2]= 0  ufk[3]= 927 ufk[4]= 0
         ufk[5]= 0   ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto  = 3 ufkey = false.
+        Syst.CUICommon:ehto  = 3 ufkey = false.
         RUN Syst/ufkey.p.
       end.
 
@@ -368,7 +368,7 @@ BROWSE:
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        update BillPeriod with frame f1.
        hide frame f1 no-pause.
        if BillPeriod <> ? then do:
@@ -389,7 +389,7 @@ BROWSE:
 
      if lookup(nap,"3,f3") > 0 then     /* memo */
      do trans with frame memo on endkey undo, next LOOP:
-       assign ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = true.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = true.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.

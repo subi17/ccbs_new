@@ -129,7 +129,7 @@ print-line:
          ASSIGN
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -236,7 +236,7 @@ BROWSE:
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            MenuClass = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE MenuClass WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF MenuClass <> 0 THEN DO:

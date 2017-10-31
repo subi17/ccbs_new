@@ -72,7 +72,7 @@ toimi:
          ASSIGN
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -80,7 +80,7 @@ toimi:
       nap = keylabel(LASTKEY).
 
       if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE CustNum1
              CustNum2 validate(input CustNum2 >= input CustNum1, "Invalid order !")
                 pvm1

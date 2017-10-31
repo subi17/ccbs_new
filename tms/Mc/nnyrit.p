@@ -102,13 +102,13 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
       ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
       ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
       ufk[8] = 8  
-      ehto   = 0. 
+      Syst.CUICommon:ehto   = 0. 
       
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
          Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCompany).
 

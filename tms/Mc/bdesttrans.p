@@ -144,7 +144,7 @@ ADD-ROW:
             ufk[6] = 0
             ufk[7] = 0
             ufk[8] = 0
-            ehto   = 3.
+            Syst.CUICommon:ehto   = 3.
        
         RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
@@ -235,7 +235,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -374,7 +374,7 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET bdesttrans WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -465,7 +465,7 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhbdesttrans).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY bdesttrans.translatenumber.
 
@@ -586,7 +586,7 @@ PROCEDURE local-UPDATE-record:
             ufk[6] = 0
             ufk[7] = 0
             ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ehto   = 0.
 
          RUN Syst/ufkey.p.
       END.
@@ -595,7 +595,7 @@ PROCEDURE local-UPDATE-record:
          /*REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:*/
             FIND CURRENT bDestTrans EXCLUSIVE-LOCK.
             
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
            
             UPDATE

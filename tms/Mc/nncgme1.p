@@ -146,7 +146,7 @@ repeat WITH FRAME sel:
 
 ADD-CUST:
        repeat TRANS ON ENDKEY UNDO ADD-CUST, LEAVE ADD-CUST.
-          ASSIGN ufkey = TRUE ufk = 0 ehto = 0
+          ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 0
           ufk[1] = 511 ufk[2] = 513 ufk[3] = 516 ufk[4] = 529 ufk[8] = 8.
           RUN Syst/ufkey.p.
 
@@ -158,7 +158,7 @@ ADD-CUST:
              repeat WITH FRAME lis ON ENDKEY UNDO ADD-CUST,
                                NEXT ADD-CUST:
                 PAUSE 0.
-                ehto = 9. RUN Syst/ufkey.p.
+                Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                 CLEAR FRAME lis no-pause.
                 PROMPT-FOR CGMember.CustNum
                 validate(INPUT CGMember.CustNum  = 0 OR 
@@ -216,7 +216,7 @@ ADD-CUST:
              repeat WITH FRAME copy ON ENDKEY UNDO ADD-CUST: 
 
                 PAUSE 0.
-                                                                                            ehto = 9. RUN Syst/ufkey.p.
+                                                                                            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                 CLEAR FRAME lis no-pause.
                 PROMPT-FOR xcg-code
                 validate(INPUT xcg-code  = "" OR 
@@ -344,7 +344,7 @@ SELAUS:
         ufk[5]= (IF lcRight = "RW" THEN 1499 ELSE 0)
         ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
         ufk[7]= 185 ufk[8]=   8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -505,7 +505,7 @@ SELAUS:
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF CustNum <> 0 THEN DO:
@@ -529,7 +529,7 @@ SELAUS:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if CustName <> "" THEN DO:
@@ -561,7 +561,7 @@ SELAUS:
 
      else if lookup(nap,"3,f3") > 0 THEN DO:  /* count # of members */
 
-        ASSIGN Qty = 0 ehto = 3 ufkey = TRUE ufk = 0. RUN Syst/ufkey.p.
+        ASSIGN Qty = 0 Syst.CUICommon:ehto = 3 ufkey = TRUE ufk = 0. RUN Syst/ufkey.p.
         message "Calculating no. of members, wait a moment please ...".
         FOR EACH CGMember OF CustGroup no-lock:
            Qty = Qty + 1.
@@ -578,7 +578,7 @@ SELAUS:
         ASSIGN
            ufkey = TRUE
            ufk   = 0
-           ehto  = 1
+           Syst.CUICommon:ehto  = 1
            ufk[1] = 1883 ufk[2] = 1888 
            ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
         RUN Syst/ufkey.p.   
@@ -655,7 +655,7 @@ SELAUS:
        /* muutos */
        FIND CGMember where recid(CGMember) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCGMember).
        UPDATE CGMember.Memo.

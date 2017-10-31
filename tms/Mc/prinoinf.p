@@ -201,7 +201,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
       ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-      ehto = 3.
+      Syst.CUICommon:ehto = 3.
       RUN Syst/ufkey.p.
 
       READKEY.
@@ -211,7 +211,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
    if lookup(nap,"1,f1") > 0 THEN DO:
    
-      ASSIGN ehto = 9.
+      ASSIGN Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -240,7 +240,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                                 "").
                    gcHelpParam = "".
                    
-                   ehto = 9.
+                   Syst.CUICommon:ehto = 9.
                    RUN Syst/ufkey.p.
        
                    IF si-recid > 0 THEN DO:
@@ -309,7 +309,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       
       IF NOT ilSilent THEN DO:      
-         ehto = 5. 
+         Syst.CUICommon:ehto = 5. 
          RUN Syst/ufkey.p.
       END.
       

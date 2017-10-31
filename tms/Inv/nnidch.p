@@ -89,7 +89,7 @@ PAUSE 0.
 
 rajat:
 repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       lcInvGroup
@@ -149,7 +149,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
              
       IF InvNum2 = 0 OR diff = 0 THEN ufk[5] = 0.
 
-      ehto = 0. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
 
       ELSE IF Syst.CUICommon:toimi = 3 THEN DO:

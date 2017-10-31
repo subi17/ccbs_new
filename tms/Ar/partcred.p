@@ -228,7 +228,7 @@ REPEAT WITH FRAME sel:
         ASSIGN
         ufk[1]= 35   ufk[2]= 1805 ufk[3]= 1809 ufk[4]= 1808
         ufk[5]= 1806 ufk[6]= 716  ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -375,7 +375,7 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET xBillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.

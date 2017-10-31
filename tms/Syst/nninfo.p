@@ -34,7 +34,7 @@ END.
 DO i = 1 TO 8:
    xfk[i] = ufk[i].
 END.
-ASSIGN ufk = 0 ufk[1] = 2 ufk[8] = 8. ehto = 0.
+ASSIGN ufk = 0 ufk[1] = 2 ufk[8] = 8. Syst.CUICommon:ehto = 0.
 
 FIND MenuTree where MenuTree.MenuId = MenuId no-lock.
 
@@ -52,7 +52,7 @@ RUN Syst/ufkey.p.
 
 IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
    PAUSE 0.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    FIND MenuTree where MenuTree.MenuId = MenuId exclusive-lock.
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuTree).
    UPDATE MenuTree.Memo[1 FOR 15] WITH FRAME info.
@@ -64,6 +64,6 @@ HIDE FRAME info  no-pause.
 DO i = 1 TO 8.
    ufk[i] = xfk[i].
 END.
-ehto = 3.
+Syst.CUICommon:ehto = 3.
 RUN Syst/ufkey.p.
 PAUSE 0.
