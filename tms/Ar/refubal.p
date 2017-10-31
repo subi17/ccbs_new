@@ -89,7 +89,7 @@ DISP Customer.CustNum
      ldDPAmt ldOPAmt ldAPAmt
 WITH FRAME fCrit. 
 
-ASSIGN nap      = "1"
+ASSIGN Syst.CUICommon:nap      = "1"
        llUfkey  = FALSE
        liAccNum = fCParamI("BankAcc").
        
@@ -118,17 +118,17 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
  
    IF llUfkey THEN DO:
       ASSIGN
-      ufk[1]= 132  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 1734 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+      Syst.CUICommon:ufk[1]= 132  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+      Syst.CUICommon:ufk[5]= 1734 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
       Syst.CUICommon:ehto = 3.
       RUN Syst/ufkey.p.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
    END.
    ELSE llUfkey = TRUE.
 
-   if lookup(nap,"1,f1") > 0 THEN DO:
+   if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
    
       ASSIGN Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
@@ -144,7 +144,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
              THEN DO WITH FRAME fCrit:
              
                 PAUSE 0.
@@ -188,7 +188,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   else if lookup(nap,"5,f5") > 0 THEN DO:
+   else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
       
       IF ldAmt = 0 THEN DO:
          MESSAGE "Amount has not been given"
@@ -223,7 +223,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   else if lookup(nap,"8,f8") > 0 THEN DO:
+   else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
       

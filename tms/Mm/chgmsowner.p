@@ -784,14 +784,14 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
    
    IF ufkey THEN DO:
       ASSIGN
-         ufk   = 0 
-         ufk[1]= 7   
-         ufk[8]= 8 
+         Syst.CUICommon:ufk   = 0 
+         Syst.CUICommon:ufk[1]= 7   
+         Syst.CUICommon:ufk[8]= 8 
          Syst.CUICommon:ehto = 0.
          
-      IF icAction = "new" and llReady THEN ufk[5]= 1027.   
-      IF icAction = "new" and not llReady THEN ufk[5]= 0.   
-      ELSE IF icAction = "view" THEN ufk[1] = 0.
+      IF icAction = "new" and llReady THEN Syst.CUICommon:ufk[5]= 1027.   
+      IF icAction = "new" and not llReady THEN Syst.CUICommon:ufk[5]= 0.   
+      ELSE IF icAction = "view" THEN Syst.CUICommon:ufk[1] = 0.
 
       ELSE IF icAction = "change" THEN DO:
       
@@ -799,21 +799,21 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
 
             /* print contract */
             IF LOOKUP(STRING(MsRequest.ReqStat),"0,11") > 0  
-            THEN ufk[3] = 1863.
+            THEN Syst.CUICommon:ufk[3] = 1863.
             
             /* confirm (contract returned) */
-            IF MsRequest.ReqStat < 12 THEN ufk[4] = 1054.
+            IF MsRequest.ReqStat < 12 THEN Syst.CUICommon:ufk[4] = 1054.
  
              /* vrk / sat */    
             IF LOOKUP(STRING(MsRequest.ReqStat),"12,13") > 0 AND
                lcNewCustId > "" 
-            THEN ASSIGN ufk[6] = 2232
-                        ufk[7] = 2234.
+            THEN ASSIGN Syst.CUICommon:ufk[6] = 2232
+                        Syst.CUICommon:ufk[7] = 2234.
              
          END.
       END.
 
-      IF AVAILABLE MsRequest THEN ufk[2] = 927.  
+      IF AVAILABLE MsRequest THEN Syst.CUICommon:ufk[2] = 927.  
       
       RUN Syst/ufkey.p.
    END.
@@ -1164,7 +1164,7 @@ PROCEDURE pUpdateNewOwner:
             NEXT.
          END. 
  
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                
             IF FRAME-FIELD = "ldtChgDate" THEN DO:
                IF NOT fChkDate(INPUT INPUT ldtChgDate) THEN NEXT. 
@@ -1222,7 +1222,7 @@ PROCEDURE pUpdateNewOwner:
             DISP lcNewCustIdType WITH FRAME fNewCriter.
          END.   
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                
             IF FRAME-FIELD = "lcNewCustIdType" THEN DO:
                   
@@ -1363,7 +1363,7 @@ PROCEDURE pUpdateNewOwner:
          END.   
             
          IF FRAME-FIELD = "lcNewZipcode" AND
-            LOOKUP(KEYLABEL(LASTKEY),poisnap) = 0 AND
+            LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) = 0 AND
             NOT KEY-LABEL(LASTKEY) = "F9" THEN DO:
               
             MESSAGE "Press F9 for options" VIEW-AS ALERT-BOX. 
@@ -1398,7 +1398,7 @@ PROCEDURE pUpdateNewOwner:
             NEXT.
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                   
             IF FRAME-FIELD = "ldaNewBirthday" THEN DO:
                   

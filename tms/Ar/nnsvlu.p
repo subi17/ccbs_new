@@ -124,10 +124,10 @@ REPEAT WITH FRAME fStart:
     
    END.
    
-   ASSIGN ufk = 0
-          ufk[1] = 7
-          ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
-          ufk[8] = 8
+   ASSIGN Syst.CUICommon:ufk = 0
+          Syst.CUICommon:ufk[1] = 7
+          Syst.CUICommon:ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
+          Syst.CUICommon:ufk[8] = 8
           Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 

@@ -118,21 +118,21 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 7    ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 795 ELSE 0)
-         ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 7    Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 795 ELSE 0)
+         Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 .
          RUN Syst/ufkey.p.
 
          READKEY.
-         ASSIGN nap = keylabel(LASTKEY).
+         ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       END.
-      ELSE ASSIGN nap  = "1"
+      ELSE ASSIGN Syst.CUICommon:nap  = "1"
                   ufkey = TRUE.
 
-      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
              Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
@@ -145,7 +145,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
 
                    IF FRAME-FIELD = "liCoRule" THEN DO:
                       fCoRule(INPUT INPUT liCoRule).
@@ -161,7 +161,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW"
       THEN DO:
 
          llOk = TRUE. 
@@ -191,7 +191,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 

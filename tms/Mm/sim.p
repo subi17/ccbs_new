@@ -295,18 +295,18 @@ PrintPage:
 
    /* IF a ROW was recently DELETEd: */
    IF delrow > 0 THEN DOWN delrow - 1.
-      ufk = 0. ASSIGN delrow = 0.
+      Syst.CUICommon:ufk = 0. ASSIGN delrow = 0.
 
 BROWSE:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
-      ufk = 0. 
+      Syst.CUICommon:ufk = 0. 
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 206
-        ufk[4]= 9808
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 206
+        Syst.CUICommon:ufk[4]= 9808
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.          
       END.
@@ -318,12 +318,12 @@ BROWSE:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
       
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
       
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -347,10 +347,10 @@ BROWSE:
         NEXT.
       END.
       
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND SIM WHERE recid(SIM) = rtab[FRAME-LINE] NO-LOCK.
            RUN local-find-prev.
@@ -375,7 +375,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND SIM WHERE recid(SIM) = rtab[FRAME-DOWN] NO-LOCK .
@@ -401,7 +401,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND SIM WHERE recid(SIM) = Memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -425,7 +425,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -440,7 +440,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ICC = "".
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -479,7 +479,7 @@ BROWSE:
      
      END. /* Search-1 */
      
-     ELSE if LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE if LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         FIND SIM where recid(SIM) = rtab[FRAME-LINE] NO-LOCK.
         ufkey = TRUE.
         FIND FIRST IMSI WHERE IMSI.ICC = SIM.ICC NO-LOCK NO-ERROR.
@@ -506,8 +506,8 @@ BROWSE:
             VIEW FRAME imsi.
             PAUSE 0.
             Syst.CUICommon:ehto = 1.
-            ufk = 0.
-            ufk[8] = 8.
+            Syst.CUICommon:ufk = 0.
+            Syst.CUICommon:ufk[8] = 8.
             RUN Syst/ufkey.p.
             ufkey = TRUE.
         END.
@@ -520,7 +520,7 @@ BROWSE:
         NEXT LOOP.
      END.   
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION:
        
        {Syst/uright2.i}
@@ -562,19 +562,19 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(SIM) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(SIM) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -749,7 +749,7 @@ REPEAT WITH FRAME LIS:
    WITH FRAME lis EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME LIS:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME LIS:
          PAUSE 0.
          IF FRAME-FIELD = "CustNum" THEN 
          DO:

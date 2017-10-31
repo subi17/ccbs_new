@@ -87,10 +87,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7 
-         ufk[5] = 795
-         ufk[8] = 8 
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 7 
+         Syst.CUICommon:ufk[5] = 795
+         Syst.CUICommon:ufk[8] = 8 
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
@@ -115,7 +115,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME fCrit:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME fCrit:
                PAUSE 0.
 
                IF FRAME-FIELD = "liCustNum" THEN DO:

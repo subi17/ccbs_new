@@ -128,8 +128,8 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 11 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3   ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -146,12 +146,12 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -180,10 +180,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = KEYLABEL(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
       /* previous line */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND DMarketing WHERE RECID(DMarketing) = rtab[1] NO-LOCK.
             IF order = 2 THEN FIND PREV DMarketing
@@ -214,7 +214,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND DMarketing WHERE RECID(DMarketing) = rtab[FRAME-DOWN] NO-LOCK .
@@ -246,7 +246,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND DMarketing WHERE RECID(DMarketing) = memory NO-LOCK NO-ERROR.
          IF order = 2 THEN FIND PREV DMarketing
@@ -281,7 +281,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -296,14 +296,14 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND DMarketing WHERE RECID(DMarketing) = rtab[FRAME-LINE] NO-LOCK.
         siirto = STRING(DirMark).
         LEAVE LOOP.
      END.
 
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST DMarketing
         USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 1 THEN FIND FIRST DMarketing
@@ -313,7 +313,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST DMarketing
         USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.CUICommon:gcBrand
         NO-LOCK NO-ERROR.
@@ -324,7 +324,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
        /* haettava = TRUE. */
         HIDE FRAME sel NO-PAUSE.
         LEAVE LOOP.

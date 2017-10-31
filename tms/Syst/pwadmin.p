@@ -104,8 +104,8 @@ REPEAT:
       
       UPDATE lcUsercode WITH FRAME passFrame EDITING:
          READKEY.
-         nap = KEYLABEL(LASTKEY).
-         IF LOOKUP(nap,"F4,F8") > 0 THEN LEAVE mainloop.
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+         IF LOOKUP(Syst.CUICommon:nap,"F4,F8") > 0 THEN LEAVE mainloop.
          APPLY LASTKEY.
       END.
       

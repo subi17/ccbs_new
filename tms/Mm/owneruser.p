@@ -234,15 +234,15 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
  
    IF ufkey THEN DO:
       ASSIGN
-         ufk   = 0 
-         ufk[1]= 7   
-         ufk[8]= 2 
+         Syst.CUICommon:ufk   = 0 
+         Syst.CUICommon:ufk[1]= 7   
+         Syst.CUICommon:ufk[8]= 2 
          Syst.CUICommon:ehto = 0.
 
-      IF liNewCust1 = 0 THEN ufk[3] = 1055.   
+      IF liNewCust1 = 0 THEN Syst.CUICommon:ufk[3] = 1055.   
       IF icAction = "view" THEN ASSIGN 
-         ufk[1] = 0
-         ufk[3] = 0.
+         Syst.CUICommon:ufk[1] = 0
+         Syst.CUICommon:ufk[3] = 0.
          
       RUN Syst/ufkey.p.
    END.
@@ -288,7 +288,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                NEXT.
             END. 
  
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
             END.
             
             APPLY LASTKEY.
@@ -363,7 +363,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
             
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                   
                IF FRAME-FIELD = "lcNewCategory" THEN DO:
                   FIND CustCat WHERE 

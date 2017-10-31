@@ -75,7 +75,7 @@ repeat:
    repeat:
      IF month(ipvm) <> kk THEN DO:
         /* choosea varten: ed. kk:n viimeinen pvA */
-        if lookup(nap,"1,f1") > 0 THEN chalku = string(day(ipvm - 1)).
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN chalku = string(day(ipvm - 1)).
         LEAVE.
      END.
 
@@ -99,19 +99,19 @@ toimi:
    repeat WITH FRAME kal:
       IF uf THEN DO:
          ASSIGN
-            ufk[1]=24 ufk[2]=25 ufk[3]=0 ufk[4]=0
-            ufk[5]=11 ufk[6]=0  ufk[7]=0 ufk[8]=8 Syst.CUICommon:ehto = 3.
-         if helpkey <> "f9" THEN ufk[5] = 0.
+            Syst.CUICommon:ufk[1]=24 Syst.CUICommon:ufk[2]=25 Syst.CUICommon:ufk[3]=0 Syst.CUICommon:ufk[4]=0
+            Syst.CUICommon:ufk[5]=11 Syst.CUICommon:ufk[6]=0  Syst.CUICommon:ufk[7]=0 Syst.CUICommon:ufk[8]=8 Syst.CUICommon:ehto = 3.
+         if helpkey <> "f9" THEN Syst.CUICommon:ufk[5] = 0.
          RUN Syst/ufkey.p.
          uf=false.
       END.
-      nap = "".
+      Syst.CUICommon:nap = "".
       CHOOSE FIELD p
       keys chalku
       COLOR value(Syst.CUICommon:ctc) no-error.
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if nap = "1" or nap = "f1" THEN DO:
+      if Syst.CUICommon:nap = "1" or Syst.CUICommon:nap = "f1" THEN DO:
          /* edellinen kuukausi */
          kk = kk - 1.
          IF kk = 0 THEN DO:
@@ -122,7 +122,7 @@ toimi:
          NEXT LOOP.
       END.
 
-      else if nap = "2" or nap = "f2" THEN DO:
+      else if Syst.CUICommon:nap = "2" or Syst.CUICommon:nap = "f2" THEN DO:
          /* seuraava kuukausi */
          kk = kk + 1.
          IF kk = 13 THEN DO:
@@ -133,7 +133,7 @@ toimi:
          chalku = "1".
          NEXT LOOP.
       END.
-      else if lookup(nap,"5,f5,enter,return") > 0  THEN DO:
+      else if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0  THEN DO:
          if frame-value = "" THEN NEXT.
          pp = integer(frame-value).
          IF vv < 100 THEN DO:
@@ -145,7 +145,7 @@ toimi:
          LEAVE LOOP.
       END.
 
-      else if nap = "8" or nap = "f8" THEN DO:
+      else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN DO:
          Syst.CUICommon:si-pvm = ?.
          HIDE FRAME kal no-pause.
          LEAVE LOOP.

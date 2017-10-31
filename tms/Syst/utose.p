@@ -190,7 +190,7 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1]= 35 ufk[2]= 717 ufk[6] = 983 ufk[5]= 11 ufk[8]= 8
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 717 Syst.CUICommon:ufk[6] = 983 Syst.CUICommon:ufk[5]= 11 Syst.CUICommon:ufk[8]= 8
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -207,13 +207,13 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1.
          IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1.
          IF order = 0 THEN order = 2.
       END.
@@ -248,10 +248,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND MenuTree where recid(MenuTree) = rtab[1] no-lock.
 
@@ -286,7 +286,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND MenuTree where recid(MenuTree) = rtab[FRAME-DOWN] no-lock .
@@ -323,7 +323,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND MenuTree where recid(MenuTree) = memory no-lock no-error.
 
@@ -365,7 +365,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "You are on the last page !".
@@ -381,7 +381,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku tunnuksella */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku tunnuksella */
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku tunnuksella */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -414,7 +414,7 @@ BROWSE:
      END. /* Haku tunnuksella */
 
      /* Haku nimella */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku nimella */
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku nimella */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -447,20 +447,20 @@ BROWSE:
      END. /* Haku nimella */
 
 
-     else if lookup(nap,"F5,5,enter,return") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"F5,5,enter,return") > 0 THEN DO:
         FIND MenuTree where recid(MenuTree) = rtab[frame-line(sel)] no-lock.
         ASSIGN siirto = MenuId.
         LEAVE LOOP.
      END.
 
-     else if lookup(nap,"F6,6,enter,return") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"F6,6,enter,return") > 0 THEN DO:
         FIND MenuTree where recid(MenuTree) = rtab[frame-line(sel)] no-lock.
         RUN Syst/nninfo.p(MenuTree.MenuId).
         NEXT LOOP.
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST MenuTree where MenuType < 3 AND
                             LOOKUP(MenuTree.TokenCode,lcTokens) > 0
         USE-INDEX MenuId no-lock no-error.
@@ -473,7 +473,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST MenuTree where MenuType < 3 AND
                             LOOKUP(MenuTree.TokenCode,lcTokens) > 0
         USE-INDEX MenuId no-lock no-error.
@@ -486,7 +486,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         siirto = "".
         LEAVE LOOP.
      END.

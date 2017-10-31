@@ -185,7 +185,7 @@ display raja pyynto "ALL" @ IGName WITH FRAME rajat.
 
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN DO:
@@ -200,8 +200,8 @@ toimi:
             validate(input raja[4] > input raja[3], "Impossible definition !")
             pyynto
          WITH FRAME rajat EDITING:
-            READKEY. nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
                if frame-field = "InvGroup" THEN DO:
                   ASSIGN FRAME rajat InvGroup.
@@ -384,8 +384,8 @@ by
 
    /* onko kjA pyytAnyt keskeytystA ? */
    READKEY PAUSE 0.
-   nap = keylabel(LASTKEY).
-   if nap = "END" THEN DO:
+   Syst.CUICommon:nap = keylabel(LASTKEY).
+   if Syst.CUICommon:nap = "END" THEN DO:
       message "Are You sure You want to cancel printing ? (Y/N) "
       UPDATE ke.
       IF ke THEN DO:

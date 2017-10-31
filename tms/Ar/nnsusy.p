@@ -551,9 +551,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
     
    /* KysytAAn tositenumero  */
    UPDATE pVouch WITH FRAME INV-NO EDITING:
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
       /* HELP tositenumerolle */
-      IF lookup(nap,"f9,!") > 0  THEN DO:
+      IF lookup(Syst.CUICommon:nap,"f9,!") > 0  THEN DO:
          RUN Ar/nnsuse.p(INPUT  Invoice.InvNum, OUTPUT i).
          IF i > 0 THEN disp i format "zzzzzzz9" @ pVouch WITH FRAME INV-NO.
          NEXT.
@@ -765,9 +765,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             UPDATE aprop oprop dprop
             WITH FRAME overp EDITING:
 
-               READKEY. nap = keylabel(LASTKEY).
+               READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-               IF lookup(nap,poisnap) > 0 THEN DO:
+               IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                   HIDE MESSAGE.
                   if frame-field = "aprop" THEN DO:
                      IF INPUT aprop > ldCustAP THEN DO:
@@ -848,13 +848,13 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                   lOrigin
          WITH FRAME payment
          EDITING:
-            READKEY. nap = keylabel(LASTKEY).
+            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-            IF lookup(nap,"F4") > 0 THEN DO:
+            IF lookup(Syst.CUICommon:nap,"F4") > 0 THEN DO:
                LEAVE PaidAmt.
             END. 
 
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
 
                IF frame-field = "suopvm" THEN DO:
@@ -956,7 +956,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                      VIEW-AS ALERT-BOX WARNING.
                END.
                
-            END. /* poisnap INNER */
+            END. /* Syst.CUICommon:poisnap INNER */
          
             APPLY LASTKEY.
 
@@ -1090,9 +1090,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             kaccno[10] kaccmk[10]
          WITH FRAME acct EDITING:
 
-            READKEY. nap = keylabel(LASTKEY).
+            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-            IF lookup(nap,poisnap) > 0 THEN DO: 
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO: 
                PAUSE 0.
                HIDE MESSAGE.
 
@@ -1278,18 +1278,18 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             extra-amt = ldOldDue - ysuoyht. 
          END.
 
-         ASSIGN  ufk = 0
-         ufk[1] = 91 ufk[2] = 993 ufk[3] = 992 ufk[4] = 833
-         ufk[5] = 832 ufk[6] = 12 ufk[7] = 4 ufk[8] = 8 Syst.CUICommon:ehto = 0.
-         IF new_paym THEN ufk[7] = 0.
+         ASSIGN  Syst.CUICommon:ufk = 0
+         Syst.CUICommon:ufk[1] = 91 Syst.CUICommon:ufk[2] = 993 Syst.CUICommon:ufk[3] = 992 Syst.CUICommon:ufk[4] = 833
+         Syst.CUICommon:ufk[5] = 832 Syst.CUICommon:ufk[6] = 12 Syst.CUICommon:ufk[7] = 4 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+         IF new_paym THEN Syst.CUICommon:ufk[7] = 0.
          IF ykorko = 0 OR Invoice.InvType = 3 OR Invoice.InvType = 4
-         THEN ufk[4] = 0.
+         THEN Syst.CUICommon:ufk[4] = 0.
 
          /* period locked */
-         IF llPLock THEN ASSIGN ufk[1] = 0
-                                ufk[4] = 0
-                                ufk[5] = 0
-                                ufk[7] = 0.
+         IF llPLock THEN ASSIGN Syst.CUICommon:ufk[1] = 0
+                                Syst.CUICommon:ufk[4] = 0
+                                Syst.CUICommon:ufk[5] = 0
+                                Syst.CUICommon:ufk[7] = 0.
 
          Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
 

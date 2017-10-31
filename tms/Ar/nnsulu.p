@@ -296,7 +296,7 @@ DISPLAY pvm1 pvm2 sutil sukoo xOnlySum
 
 toimi:
    repeat WITH FRAME MAIN ON ENDKEY UNDO toimi, NEXT toimi:
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN DO:
          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
@@ -321,9 +321,9 @@ toimi:
                 sukoo
                 xOnlySum
             WITH FRAME options EDITING:
-               READKEY. nap = keylabel(LASTKEY).
+               READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-               IF nap = "F9" AND 
+               IF Syst.CUICommon:nap = "F9" AND 
                   LOOKUP(FRAME-FIELD,"liPaymType1,liPaymType2") > 0
                THEN DO:
 
@@ -346,7 +346,7 @@ toimi:
                   NEXT. 
                END.
 
-               IF lookup(nap,poisnap) > 0 THEN DO:
+               IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
                   HIDE MESSAGE.
                   if frame-field = "InvGroup" THEN DO:

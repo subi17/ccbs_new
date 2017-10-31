@@ -75,7 +75,7 @@ ok = FALSE.
 message "Are You SURE that You want to start (Y/N) ? " UPDATE ok.
 
 IF ok THEN DO:
-   ufk = 0. Syst.CUICommon:ehto = 4. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 4. RUN Syst/ufkey.p.
    message "Calculating ...".    
    FOR EACH FixCDR no-lock where 
             FixCDR.Date >= date1 AND 

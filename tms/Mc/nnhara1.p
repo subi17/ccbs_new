@@ -102,8 +102,8 @@ repeat:
 
          /* onko kjA pyytAnyt keskeytystA ? */
          READKEY PAUSE 0.
-         nap = keylabel(LASTKEY).
-         if nap = "ESC" THEN DO:
+         Syst.CUICommon:nap = keylabel(LASTKEY).
+         if Syst.CUICommon:nap = "ESC" THEN DO:
             message "Abort printing (Y/N) ?"
             UPDATE ke.
             IF ke THEN DO:

@@ -181,7 +181,7 @@ add-new:
            EDITING:
 
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
              THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "AccType" THEN DO:
@@ -269,10 +269,10 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 36  ufk[2]= 30 ufk[3]= 927 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 36  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -288,12 +288,12 @@ BROWSE:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -320,10 +320,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND Account where recid(Account) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev Account
@@ -355,7 +355,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND Account where recid(Account) = rtab[FRAME-DOWN] no-lock .
@@ -388,7 +388,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Account where recid(Account) = memory no-lock no-error.
         IF order = 1 THEN FIND prev Account
@@ -418,7 +418,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -433,7 +433,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* SEARCH 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-ac-nr = 0.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -454,7 +454,7 @@ BROWSE:
      END. /* SEARCH 1 */
 
      /* SEARCH 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-ac-name = "".
@@ -476,7 +476,7 @@ BROWSE:
        END.
      END. /* SEARCH 2 */
 
-     if lookup(nap,"3,f3") > 0 
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 
      THEN DO TRANS: /* memo */
         FIND account where recid(account) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
@@ -488,12 +488,12 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
        {Syst/uright2.i}
        delline = FRAME-LINE.
@@ -552,7 +552,7 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        {Syst/uright2.i}
        /* change */
@@ -581,7 +581,7 @@ BROWSE:
           EDITING:
 
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
              PAUSE 0.
                IF FRAME-FIELD = "AccType" THEN DO:
                /* Checks names of Account type */
@@ -610,7 +610,7 @@ BROWSE:
        xrecid = recid(Account).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST Account
        WHERE Account.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST Account USE-INDEX AccName
@@ -619,7 +619,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST Account
        WHERE Account.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST Account USE-INDEX AccName
@@ -628,7 +628,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

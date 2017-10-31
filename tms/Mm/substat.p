@@ -71,10 +71,10 @@ repeat with frame rajat:
    llcheck .
 
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 63
-      ufk[8] = 8
+      Syst.CUICommon:ufk = 0
+      Syst.CUICommon:ufk[1] = 132
+      Syst.CUICommon:ufk[5] = 63
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto = 0
    ufkey = true.
 

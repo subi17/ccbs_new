@@ -122,7 +122,7 @@ ADD-ROW:
               UserRight.MenuClass
            WITH FRAME lis  EDITING:
               READKEY.
-              IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
 
                  if frame-field = "pc-no" THEN DO:
@@ -237,8 +237,8 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 133  ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 13   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 133  Syst.CUICommon:ufk[2]= 0   Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 13   Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -254,12 +254,12 @@ BROWSE:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -286,10 +286,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND UserRight where recid(UserRight) = rtab[1] no-lock.
            IF jarj = 1 THEN FIND prev UserRight
@@ -324,7 +324,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND UserRight where recid(UserRight) = rtab[FRAME-DOWN] no-lock .
@@ -360,7 +360,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND UserRight where recid(UserRight) = memory no-lock no-error.
         IF jarj = 1 THEN FIND prev UserRight
@@ -390,7 +390,7 @@ BROWSE:
      END. /* previoius page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -405,7 +405,7 @@ BROWSE:
      END. /* seuraava sivu */
 
      /* Haku sarakk. 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        MenuClass = 0.
@@ -428,7 +428,7 @@ BROWSE:
        END.
      END. /* Haku sar. 1 */
 
-     else if lookup(nap,"enter,return,5,f5") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,f5") > 0 THEN
      DO WITH FRAME sel TRANSAction:
        /* change */
        FIND UserRight where recid(UserRight) = rtab[frame-line(sel)]
@@ -443,7 +443,7 @@ BROWSE:
        xrecid = recid(UserRight).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST UserRight
        where UserRight.UserCode = UserCode no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST UserRight USE-INDEX MenuClass
@@ -452,7 +452,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF jarj = 1 THEN FIND LAST UserRight
        where UserRight.UserCode = UserCode no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST UserRight USE-INDEX MenuClass
@@ -461,7 +461,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

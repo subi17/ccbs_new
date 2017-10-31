@@ -224,12 +224,12 @@ repeat WITH FRAME sel:
          
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
-        IF llShowHistory = TRUE THEN ufk[4]= 38.
-        ELSE                         ufk[4]= 37.
+        IF llShowHistory = TRUE THEN Syst.CUICommon:ufk[4]= 38.
+        ELSE                         Syst.CUICommon:ufk[4]= 37.
         RUN Syst/ufkey.p.
       END.
 
@@ -244,20 +244,20 @@ repeat WITH FRAME sel:
         COLOR DISPLAY value(Syst.CUICommon:ccc) ProgLimit.validto WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
             NEXT.
          END.
       END.
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -272,7 +272,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND ProgLimit where recid(ProgLimit) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -297,7 +297,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND ProgLimit where recid(ProgLimit) = rtab[FRAME-DOWN] no-lock .
@@ -323,7 +323,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ProgLimit where recid(ProgLimit) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -347,7 +347,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -361,12 +361,12 @@ repeat WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"4,f4") > 0 THEN DO:  
+     ELSE IF lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  
 
          IF llShowHistory = FALSE THEN llShowHistory = TRUE.
          ELSE                          llShowHistory = FALSE.
@@ -378,7 +378,7 @@ repeat WITH FRAME sel:
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND ProgLimit where recid(ProgLimit) = rtab[FRAME-LINE] no-lock.
 
@@ -439,7 +439,7 @@ repeat WITH FRAME sel:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST ProgLimit where 
             recid(ProgLimit) = rtab[frame-line(sel)]
@@ -470,19 +470,19 @@ repeat WITH FRAME sel:
      
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(ProgLimit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(ProgLimit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -663,8 +663,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
           FRAME-FIELD = "ServiceLimitGroup"  THEN DO:
       END.   
       
-      nap = KEYLABEL(LASTKEY). 
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          if keylabel(lastkey) = "F4" THEN LEAVE . 
 
          IF FRAME-FIELD = "Bdest" THEN DO:

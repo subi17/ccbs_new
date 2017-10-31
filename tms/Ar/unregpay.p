@@ -464,20 +464,20 @@ REPEAT WITH FRAME sel:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0  
-         ufk[1] = 816 ufk[2] = 1253 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk = 0  
+         Syst.CUICommon:ufk[1] = 816 Syst.CUICommon:ufk[2] = 1253 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF xState = 0  THEN 
             ASSIGN 
-               ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-               ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-               ufk[7] = (IF lcRight = "RW" THEN 815 ELSE 0).
+               Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+               Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+               Syst.CUICommon:ufk[7] = (IF lcRight = "RW" THEN 815 ELSE 0).
 
         
-         IF xState > 0  THEN ASSIGN ufk[3] = 598 ufk[7] = 596.
-         IF xState = 0  THEN ASSIGN ufk[3] = 597.
-         IF xState NE 2 THEN ASSIGN ufk[4] = 1630.
+         IF xState > 0  THEN ASSIGN Syst.CUICommon:ufk[3] = 598 Syst.CUICommon:ufk[7] = 596.
+         IF xState = 0  THEN ASSIGN Syst.CUICommon:ufk[3] = 597.
+         IF xState NE 2 THEN ASSIGN Syst.CUICommon:ufk[4] = 1630.
 
          RUN Syst/ufkey.p.
 
@@ -499,10 +499,10 @@ REPEAT WITH FRAME sel:
       UnregPaym.RefNum UnregPaym.BankAcc
       WITH FRAME sel.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -510,10 +510,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 6 THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 5.
       END.
 
@@ -531,7 +531,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* previous line */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND UnregPaym WHERE RECID(UnregPaym) = rtab[1] NO-LOCK.
             RUN local-find-prev.
@@ -559,7 +559,7 @@ REPEAT WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO 
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-DOWN] NO-LOCK .
@@ -587,7 +587,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT line */            
 
       /* previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND UnregPaym WHERE RECID(UnregPaym) = memory NO-LOCK NO-ERROR.
          RUN local-find-prev.
@@ -612,7 +612,7 @@ REPEAT WITH FRAME sel:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"NEXT-page,page-DOWN,+") > 0 THEN DO 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-DOWN,+") > 0 THEN DO 
       WITH FRAME sel:
          /* cursor TO the DOWNmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
@@ -629,7 +629,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT page */
 
       /* show more information */
-      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
       DO WITH FRAME lis TRANSAction:
 
          {Syst/uright2.i}
@@ -655,7 +655,7 @@ REPEAT WITH FRAME sel:
       END. /* show more information */
 
       /* FIRST record */
-      ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
 
          RUN local-find-first.
          ASSIGN memory = RECID(UnregPaym) must-print = TRUE.
@@ -663,7 +663,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* LAST record */
-      ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO :
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO :
          RUN local-find-last.
          ASSIGN memory = RECID(UnregPaym) must-print = TRUE .
          NEXT LOOP.
@@ -672,11 +672,11 @@ REPEAT WITH FRAME sel:
       /***************************************
        * Search functions in a separate loop *
        ***************************************/
-      IF LOOKUP(nap,"1,f1") > 0 THEN REPEAT WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN REPEAT WITH FRAME sel:
          ASSIGN 
-         ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
-         ufk[1] = 28  ufk[2] = 30 ufk[3] = 789 ufk[4] = 763
-         ufk[5] = 813 ufk[8] = 8. 
+         ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 1
+         Syst.CUICommon:ufk[1] = 28  Syst.CUICommon:ufk[2] = 30 Syst.CUICommon:ufk[3] = 789 Syst.CUICommon:ufk[4] = 763
+         Syst.CUICommon:ufk[5] = 813 Syst.CUICommon:ufk[8] = 8. 
          RUN Syst/ufkey.p.
          IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
 
@@ -843,7 +843,7 @@ REPEAT WITH FRAME sel:
          END. /* Seek a Bank AccNum */
       END.
 
-      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
          no-lock.
          RUN Ar/unreglog.p(UnregPaym.UrSeq).
@@ -852,7 +852,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* display unregistered/registered */
-      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
         
          IF xState = 0 
          THEN liState = 1.
@@ -879,7 +879,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* display deleted */
-      ELSE IF LOOKUP(nap,"4,f4") > 0 AND xState NE 2 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND xState NE 2 THEN DO:
 
          FIND FIRST UnregPaym USE-INDEX PaymDate WHERE 
             UnregPaym.Brand = lcBrand AND 
@@ -898,7 +898,7 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" AND ufk[5] > 0
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.CUICommon:ufk[5] > 0
       THEN DO:  /* add */
          {Syst/uright2.i}
          must-add = TRUE.
@@ -906,7 +906,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* removal */
-      ELSE IF LOOKUP(nap,"6,f6") > 0 AND xState = 0 AND lcRight = "RW"
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND xState = 0 AND lcRight = "RW"
       THEN DO TRANSAction: 
          {Syst/uright2.i}
          delline = FRAME-LINE.
@@ -967,8 +967,8 @@ REPEAT WITH FRAME sel:
       END. /* removal */
 
       /* booking payments */
-      ELSE IF LOOKUP(nap,"7,f7") > 0 AND xState = 0 AND lcRight = "RW" AND
-           ufk[7] > 0
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND xState = 0 AND lcRight = "RW" AND
+           Syst.CUICommon:ufk[7] > 0
       THEN DO:
 
 
@@ -981,7 +981,7 @@ REPEAT WITH FRAME sel:
             NEXT LOOP.
          END.   
          memory = rtab[FRAME-LINE(sel)].
-         ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 3.
+         ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3.
          RUN Syst/ufkey.p.   
          Syst.CUICommon:cfc = "lis".
          RUN Syst/ufcolor.p. 
@@ -1483,10 +1483,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      ELSE IF LOOKUP(nap,"7,f7") > 0 AND 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND 
            xState >= 1               AND
            xState <= 2               AND
-           ufk[7] > 0 
+           Syst.CUICommon:ufk[7] > 0 
       THEN DO TRANSAction:
 
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
@@ -1543,7 +1543,7 @@ REPEAT WITH FRAME sel:
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
@@ -1776,9 +1776,9 @@ PROCEDURE local-UPDATE-record:
          IF NEW UnregPaym THEN Syst.CUICommon:toimi = 1.
             
          ELSE DO:
-            ASSIGN ufk    = 0
-                   ufk[1] = 7
-                   ufk[8] = 8
+            ASSIGN Syst.CUICommon:ufk    = 0
+                   Syst.CUICommon:ufk[1] = 7
+                   Syst.CUICommon:ufk[8] = 8
                    Syst.CUICommon:ehto   = 0.
                 
             RUN Syst/ufkey.p.
@@ -1809,7 +1809,7 @@ PROCEDURE local-UPDATE-record:
 
                READKEY.
 
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO 
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO 
                WITH FRAME lis:
                   PAUSE 0.
 

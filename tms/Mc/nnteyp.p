@@ -144,8 +144,8 @@ add-new:
          DO TRANSACTION:
             PROMPT-FOR HdrText.te-nro HdrText.te-kie EDITING:
                READKEY.
-               nap = keylabel(LASTKEY).
-               IF lookup(nap,poisnap) > 0 THEN DO:
+               Syst.CUICommon:nap = keylabel(LASTKEY).
+               IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                   HIDE MESSAGE.
                   if frame-field = "te-nro" THEN DO:
                      IF INPUT FRAME lis te-nro = 0 THEN LEAVE add-new.
@@ -253,16 +253,16 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 36 ufk[2]= 749 ufk[3]= 134 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 36 Syst.CUICommon:ufk[2]= 749 Syst.CUICommon:ufk[3]= 134 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
  
          /* used as help */
          IF gcHelpParam > "" THEN ASSIGN
-            ufk[5] = 11
-            ufk[6] = 0.
+            Syst.CUICommon:ufk[5] = 11
+            Syst.CUICommon:ufk[6] = 0.
  
          RUN Syst/ufkey.p.
       END.
@@ -283,12 +283,12 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3.
       END.
 
@@ -317,10 +317,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND HdrText where recid(HdrText) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev HdrText 
@@ -352,7 +352,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND HdrText where recid(HdrText) = rtab[FRAME-DOWN] no-lock .
@@ -385,7 +385,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND HdrText where recid(HdrText) = Memory NO-LOCK NO-ERROR.
          IF order = 1 THEN FIND prev HdrText 
@@ -420,7 +420,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -436,7 +436,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -470,7 +470,7 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -493,7 +493,7 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         hakutext = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -527,8 +527,8 @@ BROWSE:
         END.
      END. /* Haku sar. 3 */
 
-     if (lookup(nap,"5,f5") > 0 AND ufk[5] > 0) OR
-        (lookup(nap,"enter,return") > 0 AND gcHelpParam > "")
+     if (lookup(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0) OR
+        (lookup(Syst.CUICommon:nap,"enter,return") > 0 AND gcHelpParam > "")
      THEN DO:  /* lisays */
 
         IF gcHelpParam > "" THEN DO:
@@ -542,7 +542,7 @@ BROWSE:
         END. 
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND ufk[6] > 0 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 
      THEN DO TRANSACTION:  /* removal */
 
         delline = FRAME-LINE.
@@ -603,7 +603,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSACTION:
         /* change */
 
@@ -631,7 +631,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST HdrText 
            WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 2 THEN FIND FIRST HdrText USE-INDEX te-KIe
@@ -642,7 +642,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST HdrText 
            WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 2 THEN FIND LAST HdrText USE-INDEX te-KIe
@@ -653,7 +653,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         xRecid = 0.
         LEAVE LOOP.
      END. 

@@ -32,9 +32,9 @@ DO:
 END.
 
 DO i = 1 TO 8:
-   xfk[i] = ufk[i].
+   xfk[i] = Syst.CUICommon:ufk[i].
 END.
-ASSIGN ufk = 0 ufk[1] = 2 ufk[8] = 8. Syst.CUICommon:ehto = 0.
+ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 2 Syst.CUICommon:ufk[8] = 8. Syst.CUICommon:ehto = 0.
 
 FIND MenuTree where MenuTree.MenuId = MenuId no-lock.
 
@@ -62,7 +62,7 @@ END.
 HIDE FRAME info  no-pause.
 
 DO i = 1 TO 8.
-   ufk[i] = xfk[i].
+   Syst.CUICommon:ufk[i] = xfk[i].
 END.
 Syst.CUICommon:ehto = 3.
 RUN Syst/ufkey.p.

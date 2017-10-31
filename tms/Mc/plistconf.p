@@ -218,8 +218,8 @@ BROWSE:
 
       if ufkey then do:
          assign
-         ufk[1] = 0 ufk[2] = 0 ufk[3] = 0 ufk[4] = 878
-         ufk[5] = 5 ufk[6] = 4 ufk[7] = 0 ufk[8] = 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[2] = 0 Syst.CUICommon:ufk[3] = 0 Syst.CUICommon:ufk[4] = 878
+         Syst.CUICommon:ufk[5] = 5 Syst.CUICommon:ufk[6] = 4 Syst.CUICommon:ufk[7] = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = false.
 
          {Syst/uright1.i '"5,6"'}
@@ -234,12 +234,12 @@ BROWSE:
       end.
       if rtab[frame-line] = ? then next.
 
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
-      if lookup(nap,"cursor-right") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 then do:
          order = order + 1. if order > ordercount then order = 1.
       end.
-      if lookup(nap,"cursor-left") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 then do:
          order = order - 1. if order = 0 then order = ordercount.
       end.
 
@@ -264,10 +264,10 @@ BROWSE:
          next.
       end.
 
-      assign nap = keylabel(lastkey).
+      assign Syst.CUICommon:nap = keylabel(lastkey).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 then do with frame sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do with frame sel:
          if frame-line = 1 then do:
             find PListConf where recid(PListConf) = rtab[1] no-lock.
             if order = 1 then find prev PListConf of RatePlan
@@ -297,7 +297,7 @@ BROWSE:
       end. /* previous line */
 
       /* next line */
-      else if lookup(nap,"cursor-down") > 0 then do with frame sel:
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
          if frame-line = frame-down then do:
             find PListConf where recid(PListConf) = rtab[frame-down] no-lock .
 
@@ -327,7 +327,7 @@ BROWSE:
       end. /* next line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 then do:
          memory = rtab[1].
          find PListConf where recid(PListConf) = memory no-lock no-error.
          if order = 1 then find prev PListConf of RatePlan
@@ -353,7 +353,7 @@ BROWSE:
      end. /* previous page */
 
      /* next page */
-     else if lookup(nap,"next-page,page-down,+") > 0 then do with frame sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 then do with frame sel:
         /* cursor to the downmost line */
         if rtab[frame-down] = ? then do:
             message "YOU ARE ON THE LAST PAGE !".
@@ -368,7 +368,7 @@ BROWSE:
      end. /* next page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         PList = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
@@ -390,7 +390,7 @@ BROWSE:
         end.
      end. /* Haku sar. 1 */
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:  /* tariffs */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* tariffs */
         FIND PListConf where recid(PListConf) = rtab;<frame-line(sel);> 
             no-lock no-error.
 
@@ -402,7 +402,7 @@ BROWSE:
         END.
      end. 
 
-     else if lookup(nap,"5,f5") > 0 and ufk[5] > 0 then do:  /* lisays */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 and Syst.CUICommon:ufk[5] > 0 then do:  /* lisays */
 
          {Syst/uright2.i}
 
@@ -410,7 +410,7 @@ BROWSE:
          next LOOP.
      end.
 
-     else if lookup(nap,"6,f6") > 0 and ufk[6] > 0
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 and Syst.CUICommon:ufk[6] > 0
      then do transaction:  /* removal */
 
         {Syst/uright2.i}
@@ -487,7 +487,7 @@ BROWSE:
 
      end. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND Syst.CUICommon:qupd
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND Syst.CUICommon:qupd
      then do with frame lis transaction:
         /* change */
         {Syst/uright2.i}
@@ -512,21 +512,21 @@ BROWSE:
 
      end.
 
-     else if lookup(nap,"home,h") > 0 then do:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
         if order = 1 then find first PListConf of RatePlan
         use-index browse no-lock no-error.
         assign memory = recid(PListConf) must-print = true.
         next LOOP.
      end.
 
-     else if lookup(nap,"end,e") > 0 then do : /* last record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do : /* last record */
         if order = 1 then find last PListConf of RatePlan
         use-index browse no-lock no-error.
         assign memory = recid(PListConf) must-print = true.
         next LOOP.
      end.
 
-     else if lookup(nap,"8,f8") > 0 then leave LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then leave LOOP.
 
   end.  /* BROWSE */
 
@@ -552,9 +552,9 @@ procedure pLocalUpdateOthers:
    with frame lis editing:
 
       readkey.
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
-      if lookup(nap,poisnap) > 0 then do:
+      if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
          if frame-field = "PriceList" then do:
             if input frame lis PListConf.PriceList = "" then return "9".
             assign PListConf.PriceList.

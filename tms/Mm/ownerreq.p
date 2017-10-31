@@ -362,23 +362,23 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 135  ufk[2]= 653 ufk[3]= 714  ufk[4]= 559
-        ufk[5]= (IF lcRight = "RW" THEN 90 ELSE 0)
-        ufk[6]= 927 
-        ufk[7]= 1752 
-        ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 135  Syst.CUICommon:ufk[2]= 653 Syst.CUICommon:ufk[3]= 714  Syst.CUICommon:ufk[4]= 559
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 90 ELSE 0)
+        Syst.CUICommon:ufk[6]= 927 
+        Syst.CUICommon:ufk[7]= 1752 
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF iiMSSeq > 0 OR iiCustNum > 0 OR iiReqStat NE ? THEN ASSIGN
-           ufk[1] = 0
-           ufk[3] = 0
-           ufk[4] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[3] = 0
+           Syst.CUICommon:ufk[4] = 0.
         
         IF iiMSSeq > 0 OR iiCustNum > 0 THEN ASSIGN
-           ufk[2] = 0.
+           Syst.CUICommon:ufk[2] = 0.
 
         IF iiReqStat NE ? THEN DO:
-           IF iiReqStat NE 16 THEN ufk[5] = 0.
+           IF iiReqStat NE 16 THEN Syst.CUICommon:ufk[5] = 0.
         END. 
         
         RUN Syst/ufkey.p.
@@ -403,10 +403,10 @@ REPEAT WITH FRAME sel:
         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.ReqStatus WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -415,10 +415,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -436,7 +436,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -461,7 +461,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -487,7 +487,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MsRequest WHERE recid(MsRequest) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -511,7 +511,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
@@ -557,7 +557,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
@@ -595,7 +595,7 @@ REPEAT WITH FRAME sel:
 
 
      /* Search BY col 3 */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
@@ -620,7 +620,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-3 */
 
      /* Search BY col 4 */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
@@ -643,7 +643,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-4 */
 
      /* run a request immediately */
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:
      
         RUN local-find-this(FALSE).
         
@@ -697,7 +697,7 @@ REPEAT WITH FRAME sel:
      END. 
      
      /* memo */
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 THEN DO:
      
         RUN local-find-this(FALSE).
         
@@ -712,7 +712,7 @@ REPEAT WITH FRAME sel:
      END.
       
      /* eventlog */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:
      
         RUN local-find-this(FALSE).
         
@@ -724,7 +724,7 @@ REPEAT WITH FRAME sel:
                       STRING(MsRequest.MsRequest)).
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -753,19 +753,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MsRequest) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MsRequest) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -1097,37 +1097,37 @@ PROCEDURE local-UPDATE-record:
           DISPLAY MsRequest.ReqStatus
                   WITH FRAME lis.
           
-          ASSIGN ufk    = 0 
+          ASSIGN Syst.CUICommon:ufk    = 0 
                 Syst.CUICommon:ehto   = 0
-                ufk[2] = 1060
-                ufk[8] = 8.
+                Syst.CUICommon:ufk[2] = 1060
+                Syst.CUICommon:ufk[8] = 8.
          
          IF (MsRequest.ReqStatus >= 2 AND MsRequest.ReqStatus <= 4) OR
             MsRequest.ReqStatus = 16
-         THEN ufk[2] = 1053.
+         THEN Syst.CUICommon:ufk[2] = 1053.
          
          IF lcRight = "RW" AND 
             (MsRequest.ReqStatus < 2 OR MsRequest.ReqStatus > 4)
-         THEN ufk[1] = 7.
+         THEN Syst.CUICommon:ufk[1] = 7.
          
          IF LOOKUP(STRING(MsRequest.ReqStatus),"0,11") = 0 THEN DO: 
             /* invoice customer */
-            IF SUBSTRING(MsRequest.ReqCparam4,2,1) = "2" THEN ufk[3] = 2242.
+            IF SUBSTRING(MsRequest.ReqCparam4,2,1) = "2" THEN Syst.CUICommon:ufk[3] = 2242.
          
             /* user customer */
-            IF SUBSTRING(MsRequest.ReqCparam4,3,1) = "3" THEN ufk[4] = 2241.
+            IF SUBSTRING(MsRequest.ReqCparam4,3,1) = "3" THEN Syst.CUICommon:ufk[4] = 2241.
          END.
 
          /* accept request */   
          IF MsRequest.ReqStatus >= 12 AND MsRequest.ReqStatus <= 15 THEN DO:
              /* ssn is mandatory */
              IF ENTRY(11,MsRequest.ReqCParam1,";") > "" 
-             THEN ufk[6] = 1057.
+             THEN Syst.CUICommon:ufk[6] = 1057.
          END.
          
          /* cancel request */
          IF MsRequest.ReqStatus = 0 OR MsRequest.ReqStatus >= 10
-         THEN ufk[7] = 1059.
+         THEN Syst.CUICommon:ufk[7] = 1059.
          
          RUN Syst/ufkey.p. 
                
@@ -1182,7 +1182,7 @@ PROCEDURE local-UPDATE-record:
                   NEXT. 
                END.
 
-               ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
                THEN DO WITH FRAME lis:
              
                   PAUSE 0.

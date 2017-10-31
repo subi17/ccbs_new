@@ -121,10 +121,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0  
-         ufk[1] = 7
-         ufk[5] = 1027 
-         ufk[8] = 8 
+         Syst.CUICommon:ufk    = 0  
+         Syst.CUICommon:ufk[1] = 7
+         Syst.CUICommon:ufk[5] = 1027 
+         Syst.CUICommon:ufk[8] = 8 
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
@@ -158,7 +158,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                NEXT.
             END.
                 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                PAUSE 0.
 
                IF FRAME-FIELD = "lcCurrentBundle" THEN DO:

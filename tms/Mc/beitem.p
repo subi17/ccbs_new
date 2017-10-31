@@ -255,7 +255,7 @@ PROCEDURE local-update-record:
          WITH FRAME lis EDITING:
              READKEY.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
 
                 PAUSE 0.
 
@@ -409,7 +409,7 @@ PROCEDURE local-add-record:
               END.
 
 
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "PriceList" THEN DO:
                     IF INPUT FMItem.PriceList = "" THEN 

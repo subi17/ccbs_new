@@ -128,7 +128,7 @@ REPEAT WITH FRAME crit:
       WITH FRAME crit EDITING:
          READKEY.
 
-         IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+         IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
          HIDE MESSAGE.
 
             IF FRAME-FIELD = "CustNum1" THEN DO:
@@ -286,7 +286,7 @@ REPEAT WITH FRAME crit:
    task:
    REPEAT WITH FRAME crit:
 
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN NEXT  limits.

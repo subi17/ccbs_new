@@ -256,7 +256,7 @@ PROCEDURE local-set-origin:
         IF worigin.w-seq = amt-o THEN UP amt-o - 1.
         ELSE DOWN.
     END.
-    ASSIGN ufk = 0 ufk[5] = 11 ufk[8] = 8 Syst.CUICommon:ehto = 3.
+    ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[5] = 11 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3.
     RUN Syst/ufkey.p.
     CHOOSE ROW worigin.worname no-error {Syst/uchoose.i}
     WITH FRAME origin.   

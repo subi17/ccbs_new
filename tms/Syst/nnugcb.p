@@ -141,8 +141,8 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 542 ufk[2]= 543 ufk[3]= 30  ufk[4]= 0
-         ufk[5]= 515 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 542 Syst.CUICommon:ufk[2]= 543 Syst.CUICommon:ufk[3]= 30  Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 515 Syst.CUICommon:ufk[6]= 0   Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
@@ -154,10 +154,10 @@ BROWSE:
       COLOR DISPLAY value(Syst.CUICommon:ccc)
       TMSUser.UserCode TMSUser.UserNum TMSUser.UserName WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
-      nap = keylabel(LASTKEY).
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      Syst.CUICommon:nap = keylabel(LASTKEY).
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1. END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3. END.
 
       IF order <> ex-order THEN DO:
@@ -180,11 +180,11 @@ BROWSE:
          bell. message "You are on an empty row, move upwards !".
          PAUSE 1 no-message. NEXT.
       END.
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND TMSUser where recid(TMSUser) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev TMSUser
@@ -211,7 +211,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND TMSUser where recid(TMSUser) = rtab[FRAME-DOWN] no-lock .
@@ -241,7 +241,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND TMSUser where recid(TMSUser) = memory no-lock no-error.
          IF order = 1 THEN FIND prev TMSUser
@@ -272,7 +272,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -285,7 +285,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         UserCode = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserCode WITH FRAME hayr.
@@ -303,7 +303,7 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. UserNum = 0.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserNum WITH FRAME hayr3.
@@ -321,7 +321,7 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. UserName = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserName WITH FRAME hayr2.
@@ -338,7 +338,7 @@ BROWSE:
         END.
      END. /* Haku sar. 3 */
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
 
         /* ADD OR REMOVE */
@@ -364,7 +364,7 @@ BROWSE:
         END.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST TMSUser
         USE-INDEX UserCode no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST TMSUser
@@ -375,7 +375,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST TMSUser
         USE-INDEX UserCode no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST TMSUser
@@ -385,7 +385,7 @@ BROWSE:
         ASSIGN memory = recid(TMSUser) must-print = TRUE.
         NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 HIDE FRAME sel no-pause.

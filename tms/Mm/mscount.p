@@ -73,7 +73,7 @@ END.
       DOWN WITH FRAME Qty.
    END.
 
-   ASSIGN ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+   ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    message "Press ENTER to continue !".
    PAUSE no-message.

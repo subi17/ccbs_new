@@ -54,9 +54,9 @@ then do:
    end.
 
    else if Syst.CUICommon:ehto ne 5 then do ufk_nro = 1 to 8:
-      if ufk[ufk_nro] <> 0 then do:
+      if Syst.CUICommon:ufk[ufk_nro] <> 0 then do:
              find MenuText where 
-                  MenuText.MenuNum = ufk[ufk_nro] 
+                  MenuText.MenuNum = Syst.CUICommon:ufk[ufk_nro] 
              no-lock no-error.
              if available MenuText then
                 assign sel_t [ufk_nro]     = substring(MenuText,1,8)
@@ -91,7 +91,7 @@ if Syst.CUICommon:ehto < 3 then do:
 
       if ufk_nro <> 0 then
          assign Syst.CUICommon:toimi = integer(substring(ufk_toimi,ufk_nro,1)).
-         if Syst.CUICommon:toimi > 0 and ufk[Syst.CUICommon:toimi] = 0 then Syst.CUICommon:toimi = 0.
+         if Syst.CUICommon:toimi > 0 and Syst.CUICommon:ufk[Syst.CUICommon:toimi] = 0 then Syst.CUICommon:toimi = 0.
 
       if Syst.CUICommon:toimi = 0 then do:
          bell.

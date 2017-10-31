@@ -225,8 +225,8 @@ BROWSE:
 
       if ufkey then do:
         assign
-        ufk[1]= 771 ufk[2]= 0  ufk[3]= 927 ufk[4]= 0
-        ufk[5]= 0   ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 771 Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0   Syst.CUICommon:ufk[6]= 0  Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto  = 3 ufkey = false.
         RUN Syst/ufkey.p.
       end.
@@ -239,12 +239,12 @@ BROWSE:
 
       if rtab[frame-line] = ? then next.
 
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
-      if lookup(nap,"cursor-right") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 then do:
         order = order + 1. if order > ordercount then order = 1.
       end.
-      if lookup(nap,"cursor-left") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 then do:
         order = order - 1. if order = 0 then order = ordercount.
       end.
 
@@ -268,10 +268,10 @@ BROWSE:
         next.
       end.
 
-      assign nap = keylabel(lastkey).
+      assign Syst.CUICommon:nap = keylabel(lastkey).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 then do with frame sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do with frame sel:
         if frame-line = 1 then do:
            find ttRow where recid(ttRow) = rtab[1].
            if order = 1 then find prev ttRow no-error.
@@ -298,7 +298,7 @@ BROWSE:
       end. /* previous line */
 
       /* next line */
-      else if lookup(nap,"cursor-down") > 0 then do
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do
       with frame sel:
         if frame-line = frame-down then do:
            find ttRow where recid(ttRow) = rtab[frame-down].
@@ -326,7 +326,7 @@ BROWSE:
       end. /* next line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 then do:
         memory = rtab[1].
         find ttRow where recid(ttRow) = memory no-error.
         if order = 1 then find prev ttRow no-error.
@@ -350,7 +350,7 @@ BROWSE:
      end. /* previous page */
 
      /* next page */
-     else if lookup(nap,"next-page,page-down,+") > 0 then do with frame sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 then do with frame sel:
        /* cursor to the downmost line */
        if rtab[frame-down] = ? then do:
            message "YOU ARE ON THE LAST PAGE !".
@@ -365,7 +365,7 @@ BROWSE:
      end. /* next page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
@@ -387,7 +387,7 @@ BROWSE:
      end. /* Haku sar. 1 */
 
 
-     if lookup(nap,"3,f3") > 0 then     /* memo */
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 then     /* memo */
      do trans with frame memo on endkey undo, next LOOP:
        assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = true.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
@@ -406,12 +406,12 @@ BROWSE:
        disp SingleFee.Memo[1] with frame sel.
      end.
 
-     else if lookup(nap,"5,f5") > 0 and ufk[5] > 0 then do:  /* lisays */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 and Syst.CUICommon:ufk[5] > 0 then do:  /* lisays */
         must-add = true.
         next LOOP.
      end.
 
-     else if lookup(nap,"enter,return") > 0 then
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 then
      do with frame lis transaction on endkey undo, next LOOP:
        /* change */
 
@@ -463,19 +463,19 @@ BROWSE:
      end.
 
 
-     else if lookup(nap,"home,h") > 0 then do:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
        if order = 1 then find first ttRow no-error.
        assign memory = recid(ttRow) must-print = true.
        next LOOP.
      end.
 
-     else if lookup(nap,"end,e") > 0 then do : /* last record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do : /* last record */
        if order = 1 then find last ttRow no-error.
        assign memory = recid(ttRow) must-print = true.
        next LOOP.
      end.
 
-     else if lookup(nap,"8,f8") > 0 then leave LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then leave LOOP.
 
   end.  /* BROWSE */
 end.  /* LOOP */

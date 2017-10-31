@@ -139,7 +139,7 @@ repeat WITH FRAME rajat:
    tot
    EDITING:
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME rajat:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME rajat:
          HIDE MESSAGE.
          if frame-field = "acct" THEN DO:
             IF INPUT acct NE 0 THEN DO:
@@ -161,8 +161,8 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME toimi:
        ASSIGN
-       ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 91  ufk[5] = 63 ufk[8] = 8.
-       IF acct = 0 THEN ufk[5] = 0.
+       Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 91  Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+       IF acct = 0 THEN Syst.CUICommon:ufk[5] = 0.
        RUN Syst/ufkey.p.
 
 

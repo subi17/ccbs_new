@@ -154,30 +154,30 @@ FIND LAST Reseller NO-LOCK WHERE
 IF AVAILABLE Reseller THEN lcReseller[2] = Reseller.Reseller.
 
 assign ufkey = false
-       nap   = "first". 
+       Syst.CUICommon:nap   = "first". 
 
 toimi:
 repeat with frame valinta on endkey undo toimi, next toimi:
 
       if ufkey then do:
          assign
-         ufk[1]= 132 
-         ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 132 
+         Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 
          ufkey = false.
          RUN Syst/ufkey.p.
       end.
 
-      if nap ne "first" then do:
+      if Syst.CUICommon:nap ne "first" then do:
           readkey.
           ASSIGN
-          nap = keylabel(lastkey).
+          Syst.CUICommon:nap = keylabel(lastkey).
       end.
-      else assign nap = "1". 
+      else assign Syst.CUICommon:nap = "1". 
 
-      if lookup(nap,"1,f1") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:
          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame valinta on endkey undo, leave:
@@ -236,11 +236,11 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          next toimi.
       end.
 
-      else if lookup(nap,"5,f5") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 then do:
          leave toimi.
       end.
 
-      else if lookup(nap,"8,f8") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then do:
          return.
       end.
 end. /* Syst.CUICommon:toimi */

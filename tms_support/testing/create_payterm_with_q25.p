@@ -52,10 +52,10 @@ PROCEDURE pUserInput:
 
          READKEY.
 
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
 
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcCli" THEN DO:
                FIND FIRST mobsub WHERE

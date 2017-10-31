@@ -63,7 +63,7 @@ repeat with frame rajat:
 
 toimi:
    repeat with frame toimi:
-      assign ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       if Syst.CUICommon:toimi = 1 then next  rajat.
       if Syst.CUICommon:toimi = 8 then leave rajat.

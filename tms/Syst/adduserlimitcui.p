@@ -198,8 +198,8 @@ REPEAT WITH FRAME sel:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
          Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
@@ -217,13 +217,13 @@ REPEAT WITH FRAME sel:
       /* clean variable */
       llIsNew = FALSE.
 
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
       if frame-value = "" and rtab[frame-line] = ? and
-            lookup(nap,"8,f8") = 0
+            lookup(Syst.CUICommon:nap,"8,f8") = 0
       then next.
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                RUN local-find-this.
@@ -249,7 +249,7 @@ REPEAT WITH FRAME sel:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                 RUN local-find-this.
                  RUN local-find-NEXT.
@@ -275,7 +275,7 @@ REPEAT WITH FRAME sel:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
             find TMSCodes where recid(TMSCodes) = memory no-lock no-error.
             RUN local-find-prev.
             if available TMSCodes then do:
@@ -297,7 +297,7 @@ REPEAT WITH FRAME sel:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -311,7 +311,7 @@ REPEAT WITH FRAME sel:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:  /* ob-code */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
@@ -338,7 +338,7 @@ REPEAT WITH FRAME sel:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0  and lcRight = "RW" then do:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0  and lcRight = "RW" then do:
             /* change or add new */ 
             RUN local-find-this.
             RUN find-this-limit(FALSE).
@@ -352,7 +352,7 @@ REPEAT WITH FRAME sel:
         end. /* Choose */
  
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
            RUN local-find-FIRST.
            memory = recid(TMSCodes).
            must-print = true.
@@ -360,14 +360,14 @@ REPEAT WITH FRAME sel:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do : 
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do : 
            RUN local-find-LAST.
            memory = recid(TMSCodes).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave LOOP. /* Return */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave LOOP. /* Return */
 
   END.  /* BROWSE */
 
@@ -507,10 +507,10 @@ PROCEDURE local-update-record:
 
       IF NOT llIsNew THEN DO:
          ASSIGN Syst.CUICommon:ehto   = 0
-                ufk    = 0            
-                ufk[1] = 7 WHEN lcRight = "RW" AND llIsAdmin 
-                ufk[3] = 4 WHEN lcRight = "RW" AND UserLimit.LimitTarget = icLimitTarget
-                ufk[8] = 8.
+                Syst.CUICommon:ufk    = 0            
+                Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND llIsAdmin 
+                Syst.CUICommon:ufk[3] = 4 WHEN lcRight = "RW" AND UserLimit.LimitTarget = icLimitTarget
+                Syst.CUICommon:ufk[8] = 8.
              
          RUN Syst/ufkey.p.
       END.
@@ -551,7 +551,7 @@ PROCEDURE local-update-record:
             UserLimit.LimitAmt WHEN llIsAdmin
          WITH FRAME lis EDITING:
             READKEY.
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                PAUSE 0. 
                IF INT(FRAME-VALUE) < 0 THEN DO:
                    MESSAGE " Give only positive values !"

@@ -91,10 +91,10 @@ REPEAT WITH FRAME main:
     ACTION:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 Syst.CUICommon:ehto = 0
-      ufk[1] = 7 
-      ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN NEXT  main.

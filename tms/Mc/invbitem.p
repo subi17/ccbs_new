@@ -16,7 +16,7 @@ DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.
 DEF VAR  Qty        AS I  NO-UNDO.
 
 ASSIGN
-   ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST SingleFee WHERE 
               SingleFee.InvNum  = InvNum AND

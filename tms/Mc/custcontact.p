@@ -82,8 +82,8 @@ REPEAT WITH FRAME fCustContact ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       CustContact.Language lcLanguage.
 
    ASSIGN
-      ufk   = 0  
-      ufk[8]= 8 
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[8]= 8 
       Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 

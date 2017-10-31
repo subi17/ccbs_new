@@ -90,27 +90,27 @@ REPEAT:
   
       
    ASSIGN
-     ufk[1] = 816  /* FIND */
-     ufk[2] = 9033 /* UPDATE STATUS */
-     ufk[5] = 9035 /* PREV BY CLI */
-     ufk[6] = 9034 /* NEXT BY CLI */
-     ufk[8] = 8. /* RETURN */
-   IF num = 1 THEN ufk[5] = 0.
-   IF num = amt THEN ufk[6] = 0.
+     Syst.CUICommon:ufk[1] = 816  /* FIND */
+     Syst.CUICommon:ufk[2] = 9033 /* UPDATE STATUS */
+     Syst.CUICommon:ufk[5] = 9035 /* PREV BY CLI */
+     Syst.CUICommon:ufk[6] = 9034 /* NEXT BY CLI */
+     Syst.CUICommon:ufk[8] = 8. /* RETURN */
+   IF num = 1 THEN Syst.CUICommon:ufk[5] = 0.
+   IF num = amt THEN Syst.CUICommon:ufk[6] = 0.
    RUN Syst/ufkey.p.
-   ASSIGN nap = keylabel(LASTKEY).
+   ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
-   IF lookup(nap,"f1,1") > 0 THEN DO:
+   IF lookup(Syst.CUICommon:nap,"f1,1") > 0 THEN DO:
       /* find */
       RUN local-find(?).
       NEXT main.
    END.
-   ELSE IF lookup(nap,"f2,2") > 0 THEN DO:
+   ELSE IF lookup(Syst.CUICommon:nap,"f2,2") > 0 THEN DO:
       /* update status */
       UPDATE stat WITH FRAME sog TITLE "EDIT SOLOG".
       
    END.
-   ELSE IF lookup(nap,"f5,5") > 0 THEN DO:
+   ELSE IF lookup(Syst.CUICommon:nap,"f5,5") > 0 THEN DO:
       /* prev solog */
       itmp = solog.solog.
       FIND PREV solog NO-LOCK WHERE 
@@ -121,7 +121,7 @@ REPEAT:
       END.          
       NEXT.
    END.
-   ELSE IF lookup(nap,"f6,6") > 0 THEN DO:
+   ELSE IF lookup(Syst.CUICommon:nap,"f6,6") > 0 THEN DO:
       /* next solog */
       itmp = solog.solog.
       FIND NEXT solog NO-LOCK WHERE

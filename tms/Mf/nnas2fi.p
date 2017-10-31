@@ -100,7 +100,7 @@ repeat WITH FRAME rajat.
 
 toimi:
    repeat:
-      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7  ufk[4] = 942 ufk[5] = 15 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 7  Syst.CUICommon:ufk[4] = 942 Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
 
@@ -109,8 +109,8 @@ toimi:
          PAUSE 0.
          UPDATE cust-nr[1 FOR 14] EDITING:
             READKEY.
-            nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            Syst.CUICommon:nap = keylabel(LASTKEY).
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                PAUSE 0 no-message.
 
                i = frame-index.

@@ -91,7 +91,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

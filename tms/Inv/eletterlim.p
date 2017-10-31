@@ -172,7 +172,7 @@ REPEAT:
 
     task:
     repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  limits.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE limits.

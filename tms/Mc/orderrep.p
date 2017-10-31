@@ -81,10 +81,10 @@ repeat with frame rajat:
    dto.
 
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 63
-      ufk[8] = 8
+      Syst.CUICommon:ufk = 0
+      Syst.CUICommon:ufk[1] = 132
+      Syst.CUICommon:ufk[5] = 63
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto = 0
       ufkey = true.
 
@@ -146,7 +146,7 @@ for each statuscodes no-lock.
    down with frame result.
 end.
 
-ASSIGN ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
 message "Press ENTER to continue !".
 pause no-message.

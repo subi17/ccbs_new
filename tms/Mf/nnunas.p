@@ -68,7 +68,7 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME rajat:
-      ASSIGN Syst.CUICommon:ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.

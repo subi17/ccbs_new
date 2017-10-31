@@ -74,13 +74,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
            Customer.Phone.
 
    ASSIGN
-      ufk   = 0  
-      ufk[1]= 7  
-      ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[1]= 7  
+      Syst.CUICommon:ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
                                        CustContact.Brand = Syst.CUICommon:gcBrand AND
                                        CustContact.Custnum = Customer.Custnum AND
                                        CustContact.CustType = 5)
-      ufk[8]= 8 
+      Syst.CUICommon:ufk[8]= 8 
       Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
@@ -256,7 +256,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
          LEAVE.
       END.
    END.
-   ELSE IF Syst.CUICommon:toimi = 5 AND ufk[5] > 0 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 AND Syst.CUICommon:ufk[5] > 0 THEN DO:
       RUN Mc/custcontact.p(customer.custnum, 5).
    END.
    

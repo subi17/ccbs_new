@@ -146,8 +146,8 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 0   Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
@@ -172,12 +172,12 @@ BROWSE:
 */
       IF rtab[frame-line] = ? THEN NEXT.
 
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
-      IF lookup(nap,"cursor-right") > 0 THEN DO:
+      IF lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      IF lookup(nap,"cursOR-left") > 0 THEN DO:
+      IF lookup(Syst.CUICommon:nap,"cursOR-left") > 0 THEN DO:
          jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -201,10 +201,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(lastkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(lastkey).
 
       /* edellinen rivi */
-      IF lookup(nap,"cursOR-up") > 0 THEN DO WITH FRAME sel:
+      IF lookup(Syst.CUICommon:nap,"cursOR-up") > 0 THEN DO WITH FRAME sel:
          IF frame-line = 1 THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[1] NO-LOCK.
             RUN pFindPrev.
@@ -229,7 +229,7 @@ BROWSE:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      ELSE IF lookup(nap,"cursOR-down") > 0 THEN DO
+      ELSE IF lookup(Syst.CUICommon:nap,"cursOR-down") > 0 THEN DO
       WITH FRAME sel:
          IF frame-line = frame-down THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[frame-down] NO-LOCK .
@@ -255,7 +255,7 @@ BROWSE:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      ELSE IF lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      ELSE IF lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
          muisti = rtab[1].
          FIND CLI WHERE recid(CLI) = muisti NO-LOCK NO-ERROR.
          RUN pFindPrev.
@@ -279,7 +279,7 @@ BROWSE:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     ELSE IF lookup(nap,"NEXT-page,page-down") > 0 THEN DO WITH FRAME sel:
+     ELSE IF lookup(Syst.CUICommon:nap,"NEXT-page,page-down") > 0 THEN DO WITH FRAME sel:
         /* kohdistin alimmalle riville */
         IF rtab[frame-down] = ? THEN DO:
             MESSAGE "THIS IS THE LAST PAGE !".
@@ -294,7 +294,7 @@ BROWSE:
      END. /* seuraava sivu */
 /*
      /* Haku 1 */
-     ELSE IF lookup(nap,"1,f1") > 0 THEN DO on endkey undo, NEXT LOOP:
+     ELSE IF lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO on endkey undo, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
@@ -317,26 +317,26 @@ BROWSE:
      END. /* Haku sar. 1 */
 */     
 
-     ELSE IF lookup(nap,"enter,return") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
         muisti = rtab[frame-line(sel)].
         RUN pUpdateCLI IN pHandle(INPUT-OUTPUT muisti).
         must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"home") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
         RUN pFindFirst.
         ASSIGN muisti = recid(CLI) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     ELSE IF lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
         RUN pFindLast.
         ASSIGN muisti = recid(CLI) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

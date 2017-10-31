@@ -82,8 +82,8 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
          siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -103,10 +103,10 @@ BROWSE:
             MedSect.Uniq
          WITH FRAME tlse.
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND MedSect where recid(MedSect) = rtab[FRAME-LINE] no-lock.
@@ -139,7 +139,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND MedSect where recid(MedSect) = rtab[FRAME-LINE] no-lock .
                FIND NEXT MedSect no-lock no-error.
@@ -172,7 +172,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND MedSect where recid(MedSect) = ylin no-lock no-error.
             FIND prev MedSect no-lock no-error.
             IF AVAILABLE MedSect THEN DO:
@@ -194,7 +194,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "YOU ARE ON THE LAST PAGE".
@@ -208,7 +208,7 @@ BROWSE:
         END. /* NEXT page */
 
         /* RepType */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* RepType */
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* RepType */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            RepType = 0. Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE RepType WITH FRAME hayr.
@@ -231,20 +231,20 @@ BROWSE:
         END. /* RepType */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND MedSect where recid(MedSect) = rtab[FRAME-LINE] no-lock.
            siirto = string(MedSect.Type).
            LEAVE runko.
         END. /* Valinta */
 
         /* Lisays */
-        else if lookup(nap,"6,f6") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */
 
         /* EnSIMmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
            FIND FIRST MedSect no-lock.
            ylin = recid(MedSect).
            must-print = TRUE.
@@ -252,14 +252,14 @@ BROWSE:
         END. /* EnSIMmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
            FIND LAST MedSect no-lock.
            ylin = recid(MedSect).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

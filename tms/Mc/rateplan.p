@@ -221,11 +221,11 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 30 ufk[3]= 876 ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 814   
-        ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 876 Syst.CUICommon:ufk[4]= 927
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.CUICommon:ufk[7]= 814   
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = false.
         RUN Syst/ufkey.p.
       END.
@@ -242,12 +242,12 @@ REPEAT WITH FRAME sel:
 
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.CUICommon:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -271,10 +271,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTkey).
 
       /* previous row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-prev.
@@ -299,7 +299,7 @@ REPEAT WITH FRAME sel:
       END. /* previous row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -325,7 +325,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT row */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND RatePlan WHERE recid(RatePlan) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -349,7 +349,7 @@ REPEAT WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -364,7 +364,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
@@ -386,7 +386,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search by col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
@@ -409,7 +409,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* price list configuration  */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
 
         run local-find-this(false).
 
@@ -421,7 +421,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* Update Memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO: 
         run local-find-this(FALSE).
 
         RUN Mc/memo.p(INPUT 0,
@@ -432,12 +432,12 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-line.
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:  
         FIND RatePlan WHERE RECID(RatePlan) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invlang.p(11,RatePlan.RatePlan).
           
@@ -505,7 +505,7 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -537,19 +537,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(RatePlan) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(RatePlan) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN leave LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN leave LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -623,9 +623,9 @@ PROCEDURE local-update-record:
       DISP RatePlan.RPName WITH FRAME lis.
 
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7 WHEN lcRight = "RW"
-         ufk[8] = 8
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+         Syst.CUICommon:ufk[8] = 8
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
          

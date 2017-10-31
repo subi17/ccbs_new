@@ -87,9 +87,9 @@ REPEAT WITH FRAME fHPD:
    WITH FRAME fHPD.
    
    ASSIGN 
-      ufk    = 0
-      ufk[1] = 7    WHEN lcRight = "RW"
-      ufk[8] = 8
+      Syst.CUICommon:ufk    = 0
+      Syst.CUICommon:ufk[1] = 7    WHEN lcRight = "RW"
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto   = 0.
          
    RUN Syst/ufkey.p.
@@ -130,7 +130,7 @@ REPEAT WITH FRAME fHPD:
             NEXT.
          END.
 
-         ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN
          DO WITH FRAME fHPD:
 
             IF FRAME-FIELD = "UnitType" THEN DO:

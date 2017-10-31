@@ -9,10 +9,10 @@
     REPEAT:
 
       ASSIGN
-        ufk       = 0
-        ufk[2]    = 754 /* BILLING ITEMS */
-        ufk[5]    = 401 /* EVENT MANAG */
-        ufk[8]    = 8
+        Syst.CUICommon:ufk       = 0
+        Syst.CUICommon:ufk[2]    = 754 /* BILLING ITEMS */
+        Syst.CUICommon:ufk[5]    = 401 /* EVENT MANAG */
+        Syst.CUICommon:ufk[8]    = 8
         Syst.CUICommon:ehto      = 0.
        RUN Syst/ufkey.p .
        

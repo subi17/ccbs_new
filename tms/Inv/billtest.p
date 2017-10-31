@@ -24,7 +24,7 @@ ASSIGN
    lcOutDir = "/scratch/reports/billing_tests/".
 
 DO WHILE TRUE ON ENDKEY UNDO:
-   ASSIGN  ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN  Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
    hide frame fParam1 no-pause.       
    hide frame fParam2 no-pause.       
    DISPLAY 

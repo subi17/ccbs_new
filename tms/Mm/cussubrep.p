@@ -71,8 +71,8 @@ toimi:
              "Impossible !")
               path
          WITH FRAME rajat editing :
-            readkey. nap = keyLABEL(lastkey).
-            IF lookup(nap,poisnap) > 0 THEN do:
+            readkey. Syst.CUICommon:nap = keyLABEL(lastkey).
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN do:
                HIDE MESSAGE NO-PAUSE.
                IF FRAME-field = "InvGroup" THEN do:
                   ASSIGN FRAME rajat InvGroup.
@@ -104,8 +104,8 @@ toimi:
       END.
 
 
-      ASSIGN ufk = 0 ufk[1] = 0 ufk[2] = 0   ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[2] = 0   Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
+                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 5 THEN do:

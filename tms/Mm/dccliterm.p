@@ -202,14 +202,14 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0  
-         ufk[1] = 7
-         ufk[5] = IF lcMemoText > "" AND
+         Syst.CUICommon:ufk    = 0  
+         Syst.CUICommon:ufk[1] = 7
+         Syst.CUICommon:ufk[5] = IF lcMemoText > "" AND
                      ldtTermDate >= ldtFirstDate AND
                      ldtTermDate <= TODAY
                   THEN 1027 
                   ELSE 0 
-         ufk[8] = 8 
+         Syst.CUICommon:ufk[8] = 8 
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
@@ -228,7 +228,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                PAUSE 0.
         
                IF FRAME-FIELD = "ldtTermDate" THEN DO:

@@ -68,8 +68,8 @@ LOOP:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1] = 0 
-        ufk[6] = 11 ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 ufkey = FALSE Syst.CUICommon:ehto = 3.
+        Syst.CUICommon:ufk[1] = 0 
+        Syst.CUICommon:ufk[6] = 11 Syst.CUICommon:ufk[7] = 0  Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1 ufkey = FALSE Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
      END.
 
@@ -81,10 +81,10 @@ BROWSE:
          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSPrinter.PrinterId WITH FRAME sel.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if nap = "1" or nap = "f1" or nap = "cursor-up" THEN DO
+         if Syst.CUICommon:nap = "1" or Syst.CUICommon:nap = "f1" or Syst.CUICommon:nap = "cursor-up" THEN DO
          WITH FRAME sel:
             IF FRAME-LINE = 1 THEN DO:
                FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
@@ -112,7 +112,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         else if nap = "2" or nap = "f2" or nap = "cursor-down" THEN DO
+         else if Syst.CUICommon:nap = "2" or Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "cursor-down" THEN DO
          WITH FRAME sel:
 
             IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -141,7 +141,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if nap = "page-up" or nap = "prev-page" THEN DO:
+         else if Syst.CUICommon:nap = "page-up" or Syst.CUICommon:nap = "prev-page" THEN DO:
             FIND TMSPrinter where recid(TMSPrinter) = ylin no-lock no-error.
             FIND prev TMSPrinter  no-lock no-error.
 
@@ -166,7 +166,7 @@ BROWSE:
 
 
         /* NEXT page */
-        else if nap = "page-down" or nap = "next-page" THEN DO WITH FRAME sel:
+        else if Syst.CUICommon:nap = "page-down" or Syst.CUICommon:nap = "next-page" THEN DO WITH FRAME sel:
 
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
@@ -181,29 +181,29 @@ BROWSE:
         END. /* NEXT page */
 
 
-        else  if nap = "enter" or nap = "return" OR
-        nap = "f6" or nap = "6" THEN DO:
+        else  if Syst.CUICommon:nap = "enter" or Syst.CUICommon:nap = "return" OR
+        Syst.CUICommon:nap = "f6" or Syst.CUICommon:nap = "6" THEN DO:
            /* valinta */
            FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
            siirto = TMSPrinter.PrinterId.
            LEAVE runko.
         END.
 
-        else if nap = "end,e" THEN DO : /* LAST record */
+        else if Syst.CUICommon:nap = "end,e" THEN DO : /* LAST record */
            FIND LAST TMSPrinter  no-lock.
            ylin = recid(TMSPrinter).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
-        else if nap = "home,h" THEN DO:
+        else if Syst.CUICommon:nap = "home,h" THEN DO:
            FIND FIRST TMSPrinter  no-lock.
            ylin = recid(TMSPrinter).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko.
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko.
 
      END.  /* BROWSE */
    END.  /* LOOP */

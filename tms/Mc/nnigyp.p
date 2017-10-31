@@ -213,8 +213,8 @@ repeat WITH FRAME sel:
             InvGroup.TaxZone
             InvGroup.UnbilledLimit
          EDITING:
-            READKEY. nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                if frame-field = "InvGroup" THEN DO:
                   if input frame lis InvGroup.InvGroup = "" THEN 
                      UNDO, LEAVE add-new.
@@ -326,10 +326,10 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 35  ufk[2]= 30 ufk[3]= 927 ufk[4]= 1120
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 1120
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 1760 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
@@ -346,12 +346,12 @@ BROWSE:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -375,10 +375,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND InvGroup where recid(InvGroup) = rtab[1] no-lock.
             run pFindPrev.
@@ -404,7 +404,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND InvGroup where recid(InvGroup) = rtab[FRAME-DOWN] no-lock .
@@ -432,7 +432,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND InvGroup where recid(InvGroup) = memory no-lock no-error.
          run pFindPrev.
@@ -456,7 +456,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -471,7 +471,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-code = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -493,7 +493,7 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-name = "".
@@ -515,7 +515,7 @@ BROWSE:
         END.
      END. /* Haku sar. 2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0   /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0   /* memo */
      THEN DO TRANS:
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
@@ -528,16 +528,16 @@ BROWSE:
      END.
 
      /* number sequences */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:
      
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
            NO-LOCK NO-ERROR.
            
         REPEAT WITH FRAME sel:
-           ASSIGN ufk    = 0
-                  ufk[1] = 1100
-                  ufk[2] = 1119
-                  ufk[8] = 8
+           ASSIGN Syst.CUICommon:ufk    = 0
+                  Syst.CUICommon:ufk[1] = 1100
+                  Syst.CUICommon:ufk[2] = 1119
+                  Syst.CUICommon:ufk[8] = 8
                   Syst.CUICommon:ehto   = 0.
            RUN Syst/ufkey.p.
             
@@ -570,13 +570,13 @@ BROWSE:
         NEXT LOOP.        
      END.          
  
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
 
         delline = FRAME-LINE.
@@ -653,7 +653,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
         FIND InvGroup WHERE recid(InvGroup) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invotxt.p("InvGroup",InvGroup.InvGroup).
         must-print=true.
@@ -661,7 +661,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
 
@@ -703,8 +703,8 @@ BROWSE:
                   InvGroup.Banned
            WITH FRAME lis EDITING:
            
-              READKEY. nap = keylabel(LASTKEY).
-              IF lookup(nap,poisnap) > 0 THEN DO:
+              READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+              IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             
                  IF FRAME-FIELD = "InvForm" THEN DO:
                  END.
@@ -734,19 +734,19 @@ BROWSE:
         xrecid = recid(InvGroup).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         run pFindFirst.
         ASSIGN memory = recid(InvGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         run pFindLast.
         ASSIGN memory = recid(InvGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

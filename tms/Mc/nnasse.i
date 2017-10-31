@@ -21,9 +21,9 @@
 */
 
            EDITING:
-              READKEY. nap = keylabel(LASTKEY).
+              READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-              if lookup(nap,"F4") > 0 THEN UNDO, LEAVE.
+              if lookup(Syst.CUICommon:nap,"F4") > 0 THEN UNDO, LEAVE.
 
               ELSE IF KEYLABEL(LASTKEY) = "F9" AND 
                    LOOKUP(FRAME-FIELD,"CustIDType,HonTitle,lcCustZipCode") > 0
@@ -86,7 +86,7 @@
                   NEXT. 
               END.
 
-              ELSE IF lookup(nap,poisnap) > 0 THEN DO WITH FRAME lis:
+              ELSE IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  HIDE MESSAGE no-pause.
 
                 

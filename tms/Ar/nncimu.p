@@ -517,7 +517,7 @@ repeat WITH FRAME rajat:
          NEXT. 
       END.
 
-      ELSE IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      ELSE IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
 
          IF FRAME-FIELD = "hInvDate" THEN DO:
 
@@ -586,15 +586,15 @@ repeat WITH FRAME rajat:
 
    toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 
-      ufk[1] = 91  ufk[2] = 927  ufk[3] = 0 ufk[4] = 1807
-      ufk[5] = 908 ufk[7] = 1721 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 
+      Syst.CUICommon:ufk[1] = 91  Syst.CUICommon:ufk[2] = 927  Syst.CUICommon:ufk[3] = 0 Syst.CUICommon:ufk[4] = 1807
+      Syst.CUICommon:ufk[5] = 908 Syst.CUICommon:ufk[7] = 1721 Syst.CUICommon:ufk[8] = 8.
       
       /* no partial crediting for special invoices */
-      IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN ufk[4] = 0.
+      IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN Syst.CUICommon:ufk[4] = 0.
       
       /* yoigo special */
-      ufk[4] = 0.
+      Syst.CUICommon:ufk[4] = 0.
       
       RUN Syst/ufkey.p.
 

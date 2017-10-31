@@ -126,8 +126,8 @@ ELSE                    lcUserName = "".
 DO WHILE TRUE:
    ASSIGN 
       noMobile = (not avail mobsub) 
-      ufk = 0 
-      ufk[8] = 8 
+      Syst.CUICommon:ufk = 0 
+      Syst.CUICommon:ufk[8] = 8 
       Syst.CUICommon:ehto = 3. 
    IF AVAIL MobSub AND Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
       noMobile = TRUE.

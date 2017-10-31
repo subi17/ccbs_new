@@ -10,11 +10,6 @@
 def new shared var katun   as char format "x(8)".
 
 /* ufkey.p:n tarvitsemat */
-def new shared var ufk     as int  format "z"     EXTENT 9.
-
-DEF NEW shared VAR nap     AS CHAR.    /* selauksissa KEYLABEL:in arvo */
-DEF NEW shared VAR poisnap AS CHAR init
-"tab,back-tab,f1,enter,return,cursor-up,cursor-down".
 
 DEF NEW shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 DEF NEW shared VAR yvari AS LOG NO-UNDO.

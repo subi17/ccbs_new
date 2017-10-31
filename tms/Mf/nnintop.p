@@ -124,8 +124,8 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       CCN
       fname 
    WITH FRAME frm EDITING.
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          if frame-field = "op-code" THEN DO:
             ASSIGN INPUT Operator.
             if Operator ne "" THEN DO:
@@ -163,7 +163,7 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.

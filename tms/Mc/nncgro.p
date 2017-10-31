@@ -243,10 +243,10 @@ SELAUS:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 1760   ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 510
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.CUICommon:ufk[7]= 1760   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -262,12 +262,12 @@ SELAUS:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > orderlkm THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = orderlkm.
       END.
 
@@ -294,10 +294,10 @@ SELAUS:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND CustGroup where recid(CustGroup) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev CustGroup
@@ -326,7 +326,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND CustGroup where recid(CustGroup) = rtab[FRAME-DOWN] no-lock .
@@ -356,7 +356,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
         memory = rtab[1].
         FIND CustGroup where recid(CustGroup) = memory no-lock no-error.
         IF order = 1 THEN FIND prev CustGroup
@@ -386,7 +386,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -401,7 +401,7 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -423,7 +423,7 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
@@ -446,7 +446,7 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"3,f3") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
 
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)]
        no-lock.
@@ -459,19 +459,19 @@ SELAUS:
 
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
         FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
         RUN Mc/nncgme1.p(CustGroup.CustGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* poisto */
        privi = FRAME-LINE.
        FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
@@ -548,14 +548,14 @@ SELAUS:
        ELSE privi = 0. /* ei poistettukaan */
      END. /* poisto */
 
-     ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
         FIND CustGroup WHERE recid(CustGroup) = rtab[FRAME-line(sel)] NO-LOCK.
         RUN Mc/invotxt.p("CustGroup",CustGroup.CustGroup).
         ASSIGN memory = recid(CustGroup) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction ON ENDKEY UNDO, NEXT LOOP:
        /* muutos */
        {Syst/uright2.i}
@@ -598,7 +598,7 @@ SELAUS:
        xrecid = recid(CustGroup).
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST CustGroup
        WHERE CustGroup.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST CustGroup USE-INDEX CGName
@@ -607,7 +607,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF order = 1 THEN FIND LAST CustGroup
        WHERE CustGroup.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST CustGroup USE-INDEX CGName
@@ -616,7 +616,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */

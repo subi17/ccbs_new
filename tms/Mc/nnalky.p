@@ -202,8 +202,8 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[3] = 807 ufk[4] = 847
-                     ufk[5] = 808 ufk[6] = 847 ufk[7] = 997 ufk[8] = 8
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[3] = 807 Syst.CUICommon:ufk[4] = 847
+                     Syst.CUICommon:ufk[5] = 808 Syst.CUICommon:ufk[6] = 847 Syst.CUICommon:ufk[7] = 997 Syst.CUICommon:ufk[8] = 8
              Syst.CUICommon:ehto = 0.
 
       RUN Syst/ufkey.p.

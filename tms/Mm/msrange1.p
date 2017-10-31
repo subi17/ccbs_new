@@ -217,7 +217,7 @@ REPEAT WITH FRAME range.
       cLastKeyLabel = KEYLABEL(LASTKEY).
 
       /* Rank input checking when typing; description generated */
-      IF FRAME-FIELD = "lcMSCode" AND LOOKUP(cLastKeyLabel, poisnap) > 0 THEN
+      IF FRAME-FIELD = "lcMSCode" AND LOOKUP(cLastKeyLabel, Syst.CUICommon:poisnap) > 0 THEN
       DO:
           DEFINE VARIABLE inputMsCode AS CHARACTER NO-UNDO. 
           
@@ -250,7 +250,7 @@ REPEAT WITH FRAME range.
       END. /* IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel */
 
       /* POS code input checking when typing; description generated */
-      IF FRAME-FIELD = "ocPosCode" AND LOOKUP(cLastKeyLabel, poisnap) > 0 THEN
+      IF FRAME-FIELD = "ocPosCode" AND LOOKUP(cLastKeyLabel, Syst.CUICommon:poisnap) > 0 THEN
       DO:
           DEFINE VARIABLE inputOsCode AS CHARACTER NO-UNDO. 
           
@@ -294,7 +294,7 @@ REPEAT WITH FRAME range.
 
 ACTION:
    REPEAT WITH FRAME range.
-      ASSIGN Syst.CUICommon:ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] =  15 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT main.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE main.

@@ -236,14 +236,14 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         ASSIGN ufk = 0
-         ufk[1]= 0  ufk[2]= 560 ufk[3]= 927 ufk[4]= 716
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         ufk[6]= 1561
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         ASSIGN Syst.CUICommon:ufk = 0
+         Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 560 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 716
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.CUICommon:ufk[6]= 1561
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
-         IF NOT may_update THEN ASSIGN ufk[5] = 0.
+         IF NOT may_update THEN ASSIGN Syst.CUICommon:ufk[5] = 0.
 
          RUN Syst/ufkey.p.
       END.
@@ -259,10 +259,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND ttRow where recid(ttRow) = rtab[1].
             FIND prev ttRow  no-error.
@@ -290,7 +290,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -320,7 +320,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND ttRow where recid(ttRow) = memory no-error.
          FIND prev ttRow  no-error.
@@ -346,7 +346,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -364,7 +364,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* accounting data */
-     ELSE IF LOOKUP(nap,"2,f2") > 0  THEN DO: 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0  THEN DO: 
 
         FIND ttRow WHERE RECID(ttRow) = rtab[FRAME-LINE(sel)].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow NO-LOCK.
@@ -402,7 +402,7 @@ BROWSE:
      END.
 
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0   /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0   /* memo */
         THEN DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
 
         ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE.
@@ -421,7 +421,7 @@ BROWSE:
      END.
 
 
-     else if lookup(nap,"4,f4") > 0 THEN DO: 
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO: 
 
         FIND ttRow where recid(ttRow) = rtab[FRAME-LINE].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow NO-LOCK.
@@ -492,7 +492,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"F6,6") > 0 AND ufk[6] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"F6,6") > 0 AND Syst.CUICommon:ufk[6] > 0 THEN DO:
         FIND ttRow where recid(ttRow) = rtab[FRAME-LINE].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow NO-LOCK.
         FIND FIRST SubInvoice WHERE
@@ -507,7 +507,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO: /* ensimmainen tietue */
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO: /* ensimmainen tietue */
         FIND FIRST ttRow .
         ASSIGN
         memory = recid(ttRow)
@@ -515,7 +515,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         FIND LAST ttRow.
         ASSIGN
         memory = recid(ttRow)
@@ -523,7 +523,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
      
   END.  /* BROWSE */
 END.  /* LOOP */

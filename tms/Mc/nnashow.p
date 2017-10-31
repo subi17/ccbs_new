@@ -162,8 +162,8 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 36  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
-         ufk[5]= 0 /*5*/   ufk[6]= 0 /*4*/ ufk[7]= 37 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 36  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 0 /*5*/   Syst.CUICommon:ufk[6]= 0 /*4*/ Syst.CUICommon:ufk[7]= 37 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -175,12 +175,12 @@ BROWSE:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -209,10 +209,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[1] NO-LOCK.
             IF jarj = 1 THEN FIND prev CLI WHERE 
@@ -252,7 +252,7 @@ BROWSE:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[FRAME-DOWN] NO-LOCK .
@@ -293,7 +293,7 @@ BROWSE:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
          muisti = rtab[1].
          FIND CLI WHERE recid(CLI) = muisti NO-LOCK NO-ERROR.
          IF jarj = 1 THEN FIND prev CLI WHERE 
@@ -327,7 +327,7 @@ BROWSE:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
         /* kohdistin alimmalle riville */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "THIS IS THE LAST PAGE !".
@@ -342,7 +342,7 @@ BROWSE:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -369,14 +369,14 @@ BROWSE:
         END.
      END. /* Haku sar. 1 */
 
-     ELSE IF lookup(nap,"5,f5") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
 
         must-add = true.
         NEXT LOOP.
 
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME sel TRANSACTION:
         /* muutos */
         FIND CLI WHERE recid(CLI) = rtab[frame-line(sel)]
@@ -385,7 +385,7 @@ BROWSE:
         xrecid = recid(CLI).
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
         IF jarj = 1 THEN FIND FIRST CLI WHERE 
                                     CLI.CustNum = cust AND
                                     CLI.BillTarget = bt AND
@@ -396,7 +396,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
         IF jarj = 1 THEN FIND LAST CLI WHERE 
                                    CLI.CustNum = cust AND
                                    CLI.BillTarget = bt AND
@@ -407,7 +407,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
         FIND CLI WHERE recid(CLI) = rtab[frame-line(sel)].
         RUN Mf/asubhist.p(CLI.CLI).
         must-print = true.
@@ -415,7 +415,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

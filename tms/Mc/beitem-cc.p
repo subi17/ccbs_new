@@ -241,7 +241,7 @@ PROCEDURE local-update-record:
              FMItem.Amount 
              WITH FRAME lis EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
 
                 PAUSE 0.
                
@@ -332,7 +332,7 @@ PROCEDURE local-add-record:
               END.
 
 
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "lipaytype" THEN DO: 
                     IF (INPUT lipaytype) > 2 OR (INPUT lipaytype) < 1

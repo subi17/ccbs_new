@@ -48,15 +48,15 @@ repeat WITH FRAME frm:
 ACTION:
    repeat WITH FRAME frm:
       ASSIGN
-      ufk    =   0
-      ufk[1] =   7
-      ufk[2] = 209  /* MSISDN       */
-      ufk[3] = 210  /* ICC of SIM   */
-      ufk[4] = 211  /* FIND IMSI    */
-      ufk[5] = 715  /* FIND A-Sub   */
-      ufk[6] = 94   /* FIND invoice */
-      ufk[7] = 93
-      ufk[8] = 8
+      Syst.CUICommon:ufk    =   0
+      Syst.CUICommon:ufk[1] =   7
+      Syst.CUICommon:ufk[2] = 209  /* MSISDN       */
+      Syst.CUICommon:ufk[3] = 210  /* ICC of SIM   */
+      Syst.CUICommon:ufk[4] = 211  /* FIND IMSI    */
+      Syst.CUICommon:ufk[5] = 715  /* FIND A-Sub   */
+      Syst.CUICommon:ufk[6] = 94   /* FIND invoice */
+      Syst.CUICommon:ufk[7] = 93
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto   = 0.  RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 8 THEN LEAVE MAIN.

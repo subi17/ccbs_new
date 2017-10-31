@@ -126,7 +126,7 @@ repeat WITH FRAME krit:
    EDITING:
 
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
     PAUSE 0.
     if frame-field = "ticfile" THEN DO:
        ASSIGN FRAME krit ticfile.
@@ -157,12 +157,12 @@ repeat WITH FRAME krit:
 
 toimi:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[4] = 856 ufk[5] = 63 Ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[4] = 856 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
 
       if search("./" + entry(cnum,cname)) = ? THEN DO:
     BELL. MESSAGE
     "Parameterfile"  entry(cnum,cname) "missing ! - hit ENTER !".
-    ufk[5] = 0.
+    Syst.CUICommon:ufk[5] = 0.
     PAUSE no-message.
       END.
 

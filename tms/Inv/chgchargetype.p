@@ -76,7 +76,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
          NEXT. 
       END.
 
-      ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+      ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
       THEN DO WITH FRAME fCharge:
    
          IF INPUT liChargeType > 0 AND 

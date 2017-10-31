@@ -108,7 +108,7 @@ WITH FRAME main EDITING:
 
                DISP liqty WITH FRAME main.
 
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
                   IF FRAME-FIELD = "lckeyvalue" THEN DO:
                   END.
@@ -123,10 +123,10 @@ WITH FRAME main EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 Syst.CUICommon:ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 2355
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 2355
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN NEXT  main.

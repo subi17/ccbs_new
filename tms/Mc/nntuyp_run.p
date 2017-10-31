@@ -339,12 +339,12 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 35  ufk[2]= 30
-         ufk[3]= (IF icBGroup = ? THEN 973 ELSE 0 )  
-         ufk[4]= 814
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6]= (IF lcRIght = "RW" AND llCanDelete THEN 4 ELSE 0)
-         ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30
+         Syst.CUICommon:ufk[3]= (IF icBGroup = ? THEN 973 ELSE 0 )  
+         Syst.CUICommon:ufk[4]= 814
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.CUICommon:ufk[6]= (IF lcRIght = "RW" AND llCanDelete THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 1760 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -366,12 +366,12 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3.
       END.
 
@@ -395,10 +395,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND BillItem where recid(BillItem) = rtab[1] no-lock.
             RUN local-find-prev.
@@ -431,7 +431,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BillItem where recid(BillItem) = rtab[FRAME-DOWN] no-lock .
@@ -461,7 +461,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND BillItem where recid(BillItem) = memory no-lock no-error.
          RUN local-find-prev.
@@ -489,7 +489,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -505,7 +505,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -525,7 +525,7 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -545,7 +545,7 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Haku 3 */
-     if lookup(nap,"3,f3") > 0 AND icBGroup  = ? THEN DO:  /* haku sarakk. 3 */
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 AND icBGroup  = ? THEN DO:  /* haku sarakk. 3 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         BIGroup = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -566,7 +566,7 @@ BROWSE:
      END. /* Haku sar. 3 */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:  
          FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] NO-LOCK.
          RUN Mc/invlang.p(1,BillItem.BillCode).
          
@@ -574,12 +574,12 @@ BROWSE:
          NEXT LOOP.
      END.
 
-     ELSE if  lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     ELSE if  lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" AND llCanDelete
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" AND llCanDelete
      THEN DO TRANSAction:  /* removal */
         delline = FRAME-LINE.
         FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
@@ -644,7 +644,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"7,F7") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"7,F7") > 0 THEN DO:
         PAUSE 0.
         DO TRANS:
            FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
@@ -655,7 +655,7 @@ BROWSE:
      END.
 
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSAction:
 
         /* change */
@@ -764,7 +764,7 @@ BROWSE:
         LEAVE.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST BillItem 
            WHERE BillItem.Brand = lcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST BillItem USE-INDEX BIName
@@ -776,7 +776,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST BillItem 
            WHERE BillItem.Brand = lcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST BillItem USE-INDEX BIName
@@ -797,7 +797,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -915,7 +915,7 @@ PROCEDURE update-mode-general:
             
                READKEY.
                
-               IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+               IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                   HIDE MESSAGE.
                   if frame-field = "BIGroup" THEN DO:
                      FIND BItemGroup where 
@@ -1125,7 +1125,7 @@ PROCEDURE update-mode-cc:
             BillItem.BIGroup
      WITH FRAME lis EDITING:         
                READKEY.
-               IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+               IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                   HIDE MESSAGE.
                   if frame-field = "BIGroup" THEN DO:
                      IF LOOKUP(INPUT FRAME lis BillItem.BIGroup , icBGroup  ) = 0 THEN DO:

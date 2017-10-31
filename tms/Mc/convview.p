@@ -93,10 +93,10 @@ REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 9853
-      ufk[6]= 9854
-      ufk[8]= 8 
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[5]= 9853
+      Syst.CUICommon:ufk[6]= 9854
+      Syst.CUICommon:ufk[8]= 8 
       Syst.CUICommon:ehto  = 0.
    RUN Syst/ufkey.p.
 

@@ -49,10 +49,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[5] = 795
-         ufk[8] = 8 
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 132 
+         Syst.CUICommon:ufk[5] = 795
+         Syst.CUICommon:ufk[8] = 8 
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
@@ -69,9 +69,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          UPDATE lcFile WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" THEN DO:
+            IF Syst.CUICommon:nap = "F9" THEN DO:
 
                lcDir = "".
                IF INDEX(INPUT lcFile,"*") = 0 AND

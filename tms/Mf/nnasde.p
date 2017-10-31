@@ -158,10 +158,10 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 701 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 0   
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 701 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 0   
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -178,7 +178,7 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -187,10 +187,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* Previous line */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[1] NO-LOCK NO-ERROR.
             FIND PREV CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
@@ -220,7 +220,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[FRAME-DOWN] NO-LOCK .
             FIND NEXT CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
@@ -250,7 +250,7 @@ BROWSE:
       END. /* next line */
 
       /* previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND CLI WHERE recid(CLI) = Memory NO-LOCK NO-ERROR.
          FIND PREV CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
@@ -274,7 +274,7 @@ BROWSE:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
          /* cursor TO the downmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -289,7 +289,7 @@ BROWSE:
       END. /* NEXT page */
 
       /* Haku 1 */
-      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          lcCLI = "".
          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -326,7 +326,7 @@ BROWSE:
          END.
       END. /* Haku sar. 1 */
 
-      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:
          MESSAGE "ARE WE REAL WANT TO DO DELETING THERE ???"   SKIP
                  "If YES -> chang program " SKIP
                  VIEW-AS ALERT-BOX WARNING.
@@ -334,7 +334,7 @@ BROWSE:
       END.
 
 /*  when and if deleting CHECK: 1.active   2.series
-      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
          delline = FRAME-LINE.
          FIND CLI WHERE recid(CLI) = rtab[FRAME-LINE] NO-LOCK.
          IF CAN-FIND(FIRST bufcli  WHERE
@@ -400,7 +400,7 @@ BROWSE:
       END. /* removal */
 */
       /* change or only show */
-      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
       DO WITH FRAME lis TRANSACTION:
          FIND CLI WHERE recid(CLI) = rtab[frame-line(sel)] EXCLUSIVE-LOCK.
 
@@ -439,19 +439,19 @@ BROWSE:
          xrecid = recid(CLI).
       END.
 
-      ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:  /* First record */
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:  /* First record */
          FIND FIRST CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
          ASSIGN Memory = recid(CLI) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* Last record */
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* Last record */
          FIND LAST CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
          ASSIGN Memory = recid(CLI) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */

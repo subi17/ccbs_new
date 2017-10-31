@@ -194,10 +194,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7 
-         ufk[5] = 795
-         ufk[8] = 8 
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 7 
+         Syst.CUICommon:ufk[5] = 795
+         Syst.CUICommon:ufk[8] = 8 
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
@@ -225,15 +225,15 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND FRAME-FIELD = "x" THEN DO:
+            IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "x" THEN DO:
                Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "lcExtInvID" THEN DO:
                   

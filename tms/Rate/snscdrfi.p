@@ -51,8 +51,8 @@ IF ok THEN DO:
    UPDATE
       ticfile
    WITH FRAME loki EDITING.
-   READKEY. nap = keylabel(LASTKEY).
-   IF lookup(nap,poisnap) > 0 THEN DO:
+   READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+   IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
       if frame-field = "ticfile" AND search(INPUT ticfile) = ? THEN DO:
          message "File '" + input ticfile + "' can't be found !"
          VIEW-AS ALERT-BOX error.

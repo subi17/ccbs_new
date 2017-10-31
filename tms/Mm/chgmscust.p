@@ -449,9 +449,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk[1]= 7    ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 1027 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 7    Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 1027 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
    END.
@@ -494,7 +494,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                NEXT.
             END. 
  
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "ldChgTime" THEN DO:
                
@@ -641,7 +641,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    NEXT.
                 END. 
                 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                   
                   IF FRAME-FIELD = "lcNewCategory" THEN DO:
                      FIND CustCat WHERE 

@@ -710,14 +710,14 @@ BROWSE:
       IF ufkey AND iiOrderID = 0 THEN DO:
         
          IF not miscact then ASSIGN
-            ufk[1] = 28 
-            ufk[2] = 653 
-            ufk[3] = 1045 
-            ufk[4] = 2211
-            ufk[5] = 9796
-            ufk[6] = 9852
-            ufk[7] = 0
-            ufk[8] = 8 ufk[9]= 1
+            Syst.CUICommon:ufk[1] = 28 
+            Syst.CUICommon:ufk[2] = 653 
+            Syst.CUICommon:ufk[3] = 1045 
+            Syst.CUICommon:ufk[4] = 2211
+            Syst.CUICommon:ufk[5] = 9796
+            Syst.CUICommon:ufk[6] = 9852
+            Syst.CUICommon:ufk[7] = 0
+            Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
             Syst.CUICommon:ehto   = 3 ufkey = FALSE.
           RUN Syst/ufkey.p.
       END.
@@ -745,14 +745,14 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. 
         IF order > maxOrder THEN order = 1.
 
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. 
          IF order = 0 THEN order = maxOrder - 3.
       END.
@@ -777,10 +777,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -805,7 +805,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -831,7 +831,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Order WHERE recid(Order) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -855,7 +855,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -870,7 +870,7 @@ BROWSE:
      END. /* NEXT page */
 
         /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
@@ -899,7 +899,7 @@ BROWSE:
      END. /* Search-1 */
 
         /* Search BY col 3 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -939,7 +939,7 @@ BROWSE:
         END.
      END. /* Search-3 */
 
-    ELSE IF LOOKUP(nap,"6,f6") > 0 THEN 
+    ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
                lcFixedNumber = "".
                
@@ -968,7 +968,7 @@ BROWSE:
      END.
         
      /* Search BY col 4 */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -1000,7 +1000,7 @@ BROWSE:
         END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         ASSIGN lcCustomerId = ""
                lcCustIdType = "".
@@ -1078,7 +1078,7 @@ BROWSE:
         
      END.
      
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -1118,28 +1118,28 @@ BROWSE:
         END.
      END.
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
        RUN local-find-this(FALSE).
        RUN pOrderView.
        NEXT LOOP.
 
      END.
   
-  ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+  ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
      RUN local-find-FIRST.
      ASSIGN Memory = recid(Order) must-print = TRUE.
      NEXT LOOP.
   END.
 
-  ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+  ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
      RUN local-find-LAST.
      ASSIGN Memory = recid(Order) must-print = TRUE.
      NEXT LOOP.
   END.
 
-  ELSE IF LOOKUP(nap,"8,f8") > 0 AND NOT miscact THEN LEAVE LOOP.
+  ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 AND NOT miscact THEN LEAVE LOOP.
   
-  ELSE IF LOOKUP(nap,"8,f8") > 0 AND miscact THEN DO:
+  ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 AND miscact THEN DO:
      miscact = FALSE.
      ufkey = true.
      NEXT LOOP.
@@ -1164,19 +1164,19 @@ PROCEDURE pOrderView:
    repeat with frame lis:
 
       ASSIGN
-      ufk = 0
-      ufk[1] = 7             
-      ufk[2] = 2250
-      ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE 
+      Syst.CUICommon:ufk = 0
+      Syst.CUICommon:ufk[1] = 7             
+      Syst.CUICommon:ufk[2] = 2250
+      Syst.CUICommon:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE 
                                   RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS})
                THEN 9844 ELSE 0)
-      ufk[4] = (IF Order.MultiSIMId > 0 THEN 9827 ELSE 0)
-      ufk[5] = 1152
-      ufk[6] = 2208 WHEN LOOKUP(Order.Statuscode,"1") > 0
-      ufk[6] = 1957 WHEN LOOKUP(Order.Statuscode,"3") > 0
-      ufk[6] = 0    WHEN icStatus = ""
-      ufk[7] = 2243 
-      ufk[8] = 8
+      Syst.CUICommon:ufk[4] = (IF Order.MultiSIMId > 0 THEN 9827 ELSE 0)
+      Syst.CUICommon:ufk[5] = 1152
+      Syst.CUICommon:ufk[6] = 2208 WHEN LOOKUP(Order.Statuscode,"1") > 0
+      Syst.CUICommon:ufk[6] = 1957 WHEN LOOKUP(Order.Statuscode,"3") > 0
+      Syst.CUICommon:ufk[6] = 0    WHEN icStatus = ""
+      Syst.CUICommon:ufk[7] = 2243 
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto = 0               
    
       ufkey = true.
@@ -1194,36 +1194,36 @@ PROCEDURE pOrderView:
         repeat with frame lis:
 
            ASSIGN
-              ufk = 0
-              ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk = 0
+              Syst.CUICommon:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT})
                         THEN 2246 /* agreement customer */
                         ELSE 0)
-              ufk[2] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk[2] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                            RowType = {&ORDERCUSTOMER_ROWTYPE_INVOICE})
                         THEN 2242 /* invoice customer */
                         ELSE 0)
-              ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_USER})
                         THEN 2247 /* user customer */
                         ELSE 0)
-              ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY})
                         THEN 1071 /* delivery address */
                         ELSE 0)
-              ufk[5] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk[5] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT})
                         THEN 1096 /* contact data */
                         ELSE 0)
-              ufk[6] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk[6] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
                         THEN 2248 /* mobile donor (holder) */
                         ELSE 0)
-              ufk[7] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.CUICommon:ufk[7] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
                         THEN 2249 /* fixed donor (holder) */
                         ELSE 0)
-              ufk[8] = 8
+              Syst.CUICommon:ufk[8] = 8
               Syst.CUICommon:ehto = 0
               ufkey = TRUE.
 
@@ -1269,7 +1269,7 @@ PROCEDURE pOrderView:
         NEXT Action.
      END.
 
-     else if Syst.CUICommon:toimi = 4 and ufk[4] > 0 then do:
+     else if Syst.CUICommon:toimi = 4 and Syst.CUICommon:ufk[4] > 0 then do:
 
         liMultiSimType = (IF Order.MultiSimType = 1 THEN 2 
                           ELSE IF Order.MultiSimType = 3 THEN 3 
@@ -1293,8 +1293,8 @@ PROCEDURE pOrderView:
              liMultiSimOrder WITH FRAME frMultiSIM.
         
         ASSIGN 
-           ufk    = 0
-           ufk[8] = 8
+           Syst.CUICommon:ufk    = 0
+           Syst.CUICommon:ufk[8] = 8
            Syst.CUICommon:ehto   = 0.
          
         RUN Syst/ufkey.p.
@@ -1328,15 +1328,15 @@ PROCEDURE pOrderView:
         repeat with frame lis:
 
            ASSIGN
-           ufk = 0
-           ufk[1] = 0
-           ufk[2] = 1070
-           ufk[3] = 1072
-           ufk[4] = 927           
-           ufk[5] = 2851
-           ufk[6] = 0
-           ufk[7] = 9019 
-           ufk[8] = 8
+           Syst.CUICommon:ufk = 0
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[2] = 1070
+           Syst.CUICommon:ufk[3] = 1072
+           Syst.CUICommon:ufk[4] = 927           
+           Syst.CUICommon:ufk[5] = 2851
+           Syst.CUICommon:ufk[6] = 0
+           Syst.CUICommon:ufk[7] = 9019 
+           Syst.CUICommon:ufk[8] = 8
            Syst.CUICommon:ehto = 0               
    
            ufkey = TRUE.
@@ -1915,7 +1915,7 @@ PROCEDURE local-UPDATE-record:
                Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             END.
       
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                
                IF FRAME-FIELD = "CurrOper" THEN
                DO:
@@ -2146,12 +2146,12 @@ PROCEDURE local-update-customer:
      
          
       ASSIGN
-      ufk = 0
-      ufk[1] = (IF lcRight = "RW" AND 
+      Syst.CUICommon:ufk = 0
+      Syst.CUICommon:ufk[1] = (IF lcRight = "RW" AND 
          iiRole NE {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} AND
          LOOKUP(Order.StatusCode,"20,21,31,73") > 0 THEN 7 ELSE 0)
-      ufk[5] = 0
-      ufk[8] = 8
+      Syst.CUICommon:ufk[5] = 0
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto = 0
       ufkey = true.
       RUN Syst/ufkey.p.
@@ -2170,7 +2170,7 @@ PROCEDURE local-update-customer:
          
       END.
  
-      ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" AND ufk[1] NE 0 THEN
+      ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" AND Syst.CUICommon:ufk[1] NE 0 THEN
       REPEAT WITH FRAME fCustomer ON ENDKEY UNDO, LEAVE:
          
          Syst.CUICommon:ehto = 9.
@@ -2229,9 +2229,9 @@ PROCEDURE local-update-customer:
                UNDO Action, LEAVE Action.
             END.
             
-            nap = keylabel(LASTKEY).
+            Syst.CUICommon:nap = keylabel(LASTKEY).
             
-            IF nap = "F9" AND 
+            IF Syst.CUICommon:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"CustIDType,CustTitle,ZipCode") > 0
             THEN DO:
 
@@ -2286,7 +2286,7 @@ PROCEDURE local-update-customer:
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO WITH FRAME fCustomer:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME fCustomer:
 
                HIDE MESSAGE no-pause.
 

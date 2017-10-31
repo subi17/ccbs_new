@@ -273,9 +273,9 @@ repeat WITH FRAME sel:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         ASSIGN  ufk = 0
-         ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
-         ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
+         ASSIGN  Syst.CUICommon:ufk = 0
+         Syst.CUICommon:ufk[1]= 94  Syst.CUICommon:ufk[2] = 1492 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 1883
+         Syst.CUICommon:ufk[5]= 790 Syst.CUICommon:ufk[6] = 829 Syst.CUICommon:ufk[7] = 1796 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -299,12 +299,12 @@ repeat WITH FRAME sel:
       END.
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 5 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 4.
       END.
 
@@ -335,10 +335,10 @@ repeat WITH FRAME sel:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Invoice where recid(Invoice) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev Invoice USE-INDEX ExtInvID
@@ -372,7 +372,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Invoice where recid(Invoice) = rtab[FRAME-DOWN] no-lock .
@@ -406,7 +406,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Invoice where recid(Invoice) = memory no-lock no-error.
          IF order = 1 THEN FIND prev Invoice USE-INDEX ExtInvID
@@ -445,7 +445,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -461,12 +461,12 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* search functions */
-     if lookup(nap,"1,f1") > 0 THEN 
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN 
      etsi:    
      repeat WITH FRAME sel:
 
-        ASSIGN ufk = 0 Syst.CUICommon:ehto = 0  ufk[8] = 8
-               ufk[1]= 133 ufk[2]= 28  ufk[3]= 702 ufk[4]= 789.
+        ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0  Syst.CUICommon:ufk[8] = 8
+               Syst.CUICommon:ufk[1]= 133 Syst.CUICommon:ufk[2]= 28  Syst.CUICommon:ufk[3]= 702 Syst.CUICommon:ufk[4]= 789.
 
         RUN Syst/ufkey.p.
         ufkey = TRUE.
@@ -587,7 +587,7 @@ repeat WITH FRAME sel:
 
      END. /* seek */
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 THEN DO TRANS: /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,F3") > 0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE RECID(Invoice) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
         RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -598,7 +598,7 @@ repeat WITH FRAME sel:
         NEXT.
      END.
 
-     else if lookup(nap,"2,f2") > 0 THEN DO : /* claiming history */
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO : /* claiming history */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Ar/claimhis.p(0,
                      INPUT Invoice.InvNum).
@@ -606,7 +606,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO : /* payments */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO : /* payments */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
@@ -614,7 +614,7 @@ repeat WITH FRAME sel:
      END.
 
      /* view mail send log */
-     else if lookup(nap,"7,f7") > 0 THEN DO : 
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO : 
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Mc/itsendlo.p(0,
                      Invoice.InvNum,
@@ -625,7 +625,7 @@ repeat WITH FRAME sel:
      END.
 
      
-     else if lookup(nap,"T") > 0 THEN DO : /* time stamps */
+     else if lookup(Syst.CUICommon:nap,"T") > 0 THEN DO : /* time stamps */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         MESSAGE 
         "Created/Changed" Invoice.ChgStamp "Transferred" Invoice.ExpStamp.
@@ -636,7 +636,7 @@ repeat WITH FRAME sel:
      END.
 
 
-     else if lookup(nap,"5,f5") > 0 THEN DO :  /* laskulinet */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO :  /* laskulinet */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] 
         no-lock no-error.
 
@@ -649,7 +649,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
 
         FIND Invoice WHERE recid(Invoice) = rtab[frame-line(sel)]
            NO-LOCK NO-ERROR.
@@ -681,7 +681,7 @@ repeat WITH FRAME sel:
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST Invoice USE-INDEX ExtInvID
         WHERE Invoice.Brand = lcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND LAST  Invoice USE-INDEX InvDate
@@ -694,7 +694,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST Invoice USE-INDEX ExtInvID
         WHERE Invoice.Brand = lcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND FIRST Invoice USE-INDEX InvDate
@@ -719,20 +719,20 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         
         FIND Invoice where recid(Invoice) = rtab[frame-line(sel)] no-lock.
         
         RUN Mc/commontt.p(Invoice.CustNum).
         
-        ASSIGN  ufk = 0
-                ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
-                ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
+        ASSIGN  Syst.CUICommon:ufk = 0
+                Syst.CUICommon:ufk[1]= 94  Syst.CUICommon:ufk[2] = 1492 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 1883
+                Syst.CUICommon:ufk[5]= 790 Syst.CUICommon:ufk[6] = 829 Syst.CUICommon:ufk[7] = 1796 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
                 Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

@@ -130,7 +130,7 @@ Action:
                   NEXT. 
             END.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME info:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME info:
                PAUSE 0. /* clears lowest line on screen */
 
                IF FRAME-FIELD = "lcFeeModel" THEN DO:
@@ -188,8 +188,8 @@ Action:
       END.
 
       ASSIGN
-      ufk = 0 ufk[1] = 7 ufk[4] = 294 ufk[5] = 15 ufk[8] = 8 Syst.CUICommon:ehto = 0.
-      if lcFeeModel = "" THEN ufk[5] = 0.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[4] = 294 Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      if lcFeeModel = "" THEN Syst.CUICommon:ufk[5] = 0.
       RUN Syst/ufkey.p.
 
 

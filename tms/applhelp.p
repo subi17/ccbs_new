@@ -12,7 +12,7 @@
 def new shared var siirto as char format "x(75)".
 DEF VAR i AS INT NO-UNDO.
 DEF VAR save-ehto AS INT NO-UNDO.
-DEF VAR save-ufk LIKE ufk   NO-UNDO.
+DEF VAR save-ufk AS INTEGER EXTENT 9   NO-UNDO.
 DEF VAR hmod AS c NO-UNDO.
 DEF VAR pp AS INT NO-UNDO.
 DEF VAR kk AS INT NO-UNDO.
@@ -24,7 +24,7 @@ DEF VAR lcCode AS CHAR NO-UNDO.
 /* talteen ufKey:n common-arvot jottei sotketa paikkoja */
 save-ehto = Syst.CUICommon:ehto.
 DO i = 1 TO 9 :
-   save-ufk[i] = ufk[i].
+   save-ufk[i] = Syst.CUICommon:ufk[i].
 END.
 helpkey = keylabel(LASTKEY).
 
@@ -476,7 +476,7 @@ gcHelpParam = "".
 
 Syst.CUICommon:ehto = save-ehto.
 DO i = 1 TO 9:
-   ufk[i] = save-ufk[i].
+   Syst.CUICommon:ufk[i] = save-ufk[i].
 END.
 PAUSE 0.   /* KJ�H KJ�H */
 RUN Syst/ufkey.p.

@@ -258,9 +258,9 @@ repeat ON ENDKEY UNDO, NEXT:
       llRerun
    WITH FRAME rajat EDITING:
 
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF nap = "F9" AND 
+      IF Syst.CUICommon:nap = "F9" AND 
          INDEX(FRAME-FIELD,"status") > 0 
       THEN DO:
 
@@ -288,7 +288,7 @@ repeat ON ENDKEY UNDO, NEXT:
          NEXT. 
       END.
        
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
       
          PAUSE 0.
          
@@ -386,8 +386,8 @@ repeat ON ENDKEY UNDO, NEXT:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 Syst.CUICommon:ehto = 0.
-      IF lcBankAcc = "" THEN ufk[5] = 0.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[4] = 0  Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      IF lcBankAcc = "" THEN Syst.CUICommon:ufk[5] = 0.
       
       RUN Syst/ufkey.p.
 

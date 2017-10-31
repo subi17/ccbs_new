@@ -301,10 +301,10 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1] = 35 ufk[2] = 30 ufk[3] = 927 ufk[4] = 814
-         ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7] = 0   ufk[8] = 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[2] = 30 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 814
+         Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7] = 0   Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
@@ -322,13 +322,13 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT. 
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
 
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -355,10 +355,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND BItemGroup where recid(BItemGroup) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev BItemGroup 
@@ -388,7 +388,7 @@ BROWSE:
 
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:  
             FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-LINE] no-lock.             IF order = 1 THEN FIND NEXT BItemGroup
@@ -418,7 +418,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND BItemGroup where recid(BItemGroup) = memory no-lock no-error.
          IF order = 1 THEN FIND prev BItemGroup
@@ -449,7 +449,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -465,7 +465,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -485,7 +485,7 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -505,7 +505,7 @@ BROWSE:
         END.
      END. /* Haku sar. 2 */
 
-     if lookup(nap,"3,f3") > 0 
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 
      THEN DO TRANS: /* memo */
         FIND BItemGroup where recid(BItemGroup) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
@@ -520,7 +520,7 @@ BROWSE:
      END.
 
      /* translations */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:  
          FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-LINE] NO-LOCK.
          RUN Mc/invlang.p(6,BItemGroup.BIGroup).
          
@@ -529,13 +529,13 @@ BROWSE:
      END.
 
 
-     ELSE if  lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     ELSE if  lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
 
         {Syst/uright2.i}
@@ -591,7 +591,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
         FIND BItemGroup where recid(BItemGroup) = rtab[frame-line(sel)]
@@ -644,7 +644,7 @@ BROWSE:
                     NEXT. 
                  END.
 
-                 ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+                 ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
                  DO WITH FRAME lis:
                     PAUSE 0.
       
@@ -687,7 +687,7 @@ BROWSE:
         xrecid = recid(BItemGroup).                
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST BItemGroup
            WHERE BItemGroup.Brand = lcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST BItemGroup USE-INDEX BIGName
@@ -696,7 +696,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
 
         IF      order = 1 THEN FIND LAST BItemGroup 
            WHERE BItemGroup.Brand = lcBrand no-lock no-error.
@@ -714,7 +714,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 

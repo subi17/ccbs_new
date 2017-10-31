@@ -74,7 +74,7 @@ repeat WITH FRAME frm:
 
    toimi:
       repeat WITH FRAME LOOP:
-         ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
+         ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
          IF Syst.CUICommon:toimi = 1 THEN NEXT  toimi.
          IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.

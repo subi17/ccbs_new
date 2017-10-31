@@ -67,7 +67,7 @@ repeat with frame rajat:
       
       HIDE MESSAGE NO-PAUSE.
       
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "lcResell" THEN DO:
             ASSIGN lcResell.
             IF lcResell = "" THEN RETURN.
@@ -92,10 +92,10 @@ repeat with frame rajat:
    END.
    
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 795
-      ufk[8] = 8
+      Syst.CUICommon:ufk = 0
+      Syst.CUICommon:ufk[1] = 132
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto = 0.
 
    RUN Syst/ufkey.p.

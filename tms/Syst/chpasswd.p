@@ -118,16 +118,16 @@ REPEAT:
       UPDATE lcOldPass lcNewPass lcNewPass2 WITH FRAME passFrame EDITING:
          
          READKEY.
-         nap = KEYLABEL(LASTKEY).
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-         IF LOOKUP(nap,"f4,f8") > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"f4,f8") > 0 THEN DO:
             olPasswordChanged = FALSE.
             HIDE FRAME passFrame.
             RETURN.
          END.
          
          
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             
             IF FRAME-FIELD = "lcOldPass" THEN DO:
             END.

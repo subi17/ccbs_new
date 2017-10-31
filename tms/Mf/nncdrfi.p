@@ -56,8 +56,8 @@ IF ok THEN DO:
       ticfile 
       pvmlog 
    WITH FRAME loki EDITING.
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          if frame-field = "ticfile" AND search(INPUT ticfile) = ? THEN DO:
             message "File '" + input ticfile + "' can't be found !"
             VIEW-AS ALERT-BOX error.
@@ -69,7 +69,7 @@ IF ok THEN DO:
 
    if ticfile = "" OR ticfile = "OnLine" THEN LEAVE.
 
-   ufk = 0. Syst.CUICommon:ehto = 3. 
+   Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. 
    RUN Syst/ufkey.p. PAUSE 0.
 
    message "Are You SURE You want to start reading CDRs into database ?"

@@ -271,7 +271,7 @@ REPEAT TRANS WITH FRAME MAIN:
       llRefund
    WITH FRAME MAIN EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME MAIN:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME MAIN:
          HIDE MESSAGE.
 
          IF FRAME-FIELD = "CustNum" THEN DO:
@@ -379,11 +379,11 @@ REPEAT TRANS WITH FRAME MAIN:
 TASK:
    REPEAT WITH FRAME MAIN:
       ASSIGN
-      Syst.CUICommon:ehto = 1 ufk = 0 
-      ufk[1] = 7 ufk[2] = 0 /* 992 */ ufk[4] = 806 
-      ufk[5] = 15 ufk[6] = 12 ufk[7] = 185       ufk[8] = 8.
+      Syst.CUICommon:ehto = 1 Syst.CUICommon:ufk = 0 
+      Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[2] = 0 /* 992 */ Syst.CUICommon:ufk[4] = 806 
+      Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[6] = 12 Syst.CUICommon:ufk[7] = 185       Syst.CUICommon:ufk[8] = 8.
       IF amtPaid = 0 OR dAcct = 0 OR cAcct = 0
-      THEN ASSIGN ufk[4] = 0 ufk[5] = 0 ufk[7] = 0. 
+      THEN ASSIGN Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 0 Syst.CUICommon:ufk[7] = 0. 
       RUN Syst/ufkey.p.       
       IF Syst.CUICommon:toimi = 1 THEN NEXT MAIN.
 

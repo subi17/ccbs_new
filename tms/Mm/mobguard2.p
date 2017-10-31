@@ -68,7 +68,7 @@ PROCEDURE local-Show-record:
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ASSIGN ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 10. RUN Syst/ufkey.p.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 10. RUN Syst/ufkey.p.
       
       IF ilAskDates THEN ASSIGN
       ldDate1 = DATE(Month(Today),1,YEAR(Today))
@@ -109,7 +109,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

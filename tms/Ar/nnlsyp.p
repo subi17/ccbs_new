@@ -314,11 +314,11 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
               WITH FRAME Invoice.
 
       ASSIGN
-      ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0) 
-      ufk[2] = 0 ufk[3] = 927 ufk[4] = 0 
-      ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
-      ufk[6] = (IF lcRight = "RW" THEN 12 ELSE 0)
-      ufk[7] = 0  ufk[7] = 0   ufk[8] = 8   ufk[9] = 0 Syst.CUICommon:ehto = 0.
+      Syst.CUICommon:ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0) 
+      Syst.CUICommon:ufk[2] = 0 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 0 
+      Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
+      Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 12 ELSE 0)
+      Syst.CUICommon:ufk[7] = 0  Syst.CUICommon:ufk[7] = 0   Syst.CUICommon:ufk[8] = 8   Syst.CUICommon:ufk[9] = 0 Syst.CUICommon:ehto = 0.
 
       Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
@@ -356,9 +356,9 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
          WITH FRAME Invoice EDITING:
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND 
+            IF Syst.CUICommon:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,
                       "ClaimState,ClaimCancel,DelType,ChargeType,SpecDel")
                       > 0
@@ -453,7 +453,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO WITH FRAME Invoice:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME Invoice:
 
                IF FRAME-FIELD = "ClaimState" THEN DO:
                   fClaimStateName(INPUT INPUT FRAME Invoice

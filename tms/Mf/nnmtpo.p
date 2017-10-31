@@ -53,7 +53,7 @@ Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 do-it:
    repeat WITH FRAME frm:
-      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  LOOP.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.

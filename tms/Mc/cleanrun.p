@@ -199,8 +199,8 @@ toimi:
          liMinDays
          llKilled
          with frame rajat editing :
-            readkey. nap = keylabel(lastkey).
-            if lookup(nap,poisnap) > 0 then do:
+            readkey. Syst.CUICommon:nap = keylabel(lastkey).
+            if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
                hide message no-pause.
 
                if frame-field = "InvGroup" then do:
@@ -295,9 +295,9 @@ toimi:
          kysy_rajat = false.
       end.
 
-      assign ufk = 0 ufk[1] = 132 ufk[2] = 0
-                     ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2] = 0
+                     Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
+                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       if Syst.CUICommon:toimi = 1 then do:
          kysy_rajat = true.

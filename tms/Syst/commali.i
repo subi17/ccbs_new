@@ -11,11 +11,6 @@
 
 def shared var katun   as char format "x(8)".
 
-def shared var ufk     as int  format "z"     EXTENT 9.
-
-DEF shared VAR nap     AS CHAR.
-DEF shared VAR poisnap AS CHAR.
-
 DEF shared VAR TMSPrinter AS CHAR NO-UNDO.   /* kirjoittimen osoite */
 DEF shared VAR yvari AS LOG NO-UNDO.
 

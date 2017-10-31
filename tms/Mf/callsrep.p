@@ -37,8 +37,8 @@ REPEAT WITH FRAME rajat:
    UPDATE 
    asno
    WITH FRAME MAIN EDITING:
-       READKEY. nap = KEYLABEL(LASTKEY).
-       IF LOOKUP(nap,poisnap) > 0 THEN 
+       READKEY. Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+       IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN 
        DO:
            HIDE MESSAGE.
            IF FRAME-FIELD = "asno" THEN 
@@ -70,8 +70,8 @@ REPEAT WITH FRAME rajat:
          invno
          email
    WITH FRAME main EDITING:
-       READKEY. nap = KEYLABEL(LASTKEY).
-       IF LOOKUP(nap,poisnap) > 0 THEN 
+       READKEY. Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+       IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN 
        DO:
            HIDE MESSAGE.
            IF FRAME-FIELD = "invno" THEN 
@@ -93,7 +93,7 @@ REPEAT WITH FRAME rajat:
 
 toimi:
       REPEAT WITH FRAME toimi:
-        ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
+        ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
         RUN Syst/ufkey.p.
         IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
         IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.

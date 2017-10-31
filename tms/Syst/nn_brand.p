@@ -190,7 +190,7 @@ repeat with frame menu_frame:
 
    /* search all menu items on this level */
 
-   assign item_type = 0 f_name = "" ufk = 0 Syst.CUICommon:ehto = 0 f_id = "" vartype = 0.
+   assign item_type = 0 f_name = "" Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 f_id = "" vartype = 0.
    for each  MenuTree no-lock where
              MenuTree.Level = f_level and
              MenuTree.State[1] = false  /* NOT denied */:
@@ -202,7 +202,7 @@ repeat with frame menu_frame:
 
 
       ASSIGN
-      ufk    [MenuTree.Position]  = MenuNum       /* NO. of ufkey menu text */
+      Syst.CUICommon:ufk    [MenuTree.Position]  = MenuNum       /* NO. of ufkey menu text */
       f_name [MenuTree.Position]  = Module      /* name of module        */
       item_type [MenuTree.Position]  = MenuType  /* Type of Item  
                                                      module/menu/return */
@@ -213,7 +213,7 @@ repeat with frame menu_frame:
 f_code:
    repeat with frame menu_frame:
       /* wait for the user's choice */
-      assign ufk[9] = 1.
+      assign Syst.CUICommon:ufk[9] = 1.
 
 
       /* show function codes */
@@ -223,7 +223,7 @@ f_code:
       Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
       info = false. 
 ACTION: repeat:
-         readkey. nap = keylabel(lastkey).
+         readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
          if keylabel(lastkey) = "?" then do:
             info = true.
@@ -234,11 +234,11 @@ ACTION: repeat:
          end.   
 
          /* brand selection */
-         if nap = "f11" then leave main_loop. 
+         if Syst.CUICommon:nap = "f11" then leave main_loop. 
 
-         Syst.CUICommon:toimi = minimum(lookup(nap,"1,2,3,4,5,6,7,8,return"),9).
+         Syst.CUICommon:toimi = minimum(lookup(Syst.CUICommon:nap,"1,2,3,4,5,6,7,8,return"),9).
          if Syst.CUICommon:toimi = 0 then
-         Syst.CUICommon:toimi = lookup(nap,"f1,f2,f3,f4,f5,f6,f7,f8,enter").
+         Syst.CUICommon:toimi = lookup(Syst.CUICommon:nap,"f1,f2,f3,f4,f5,f6,f7,f8,enter").
          pause 0 no-message.
 
          /* hide function codes from screen */
@@ -263,9 +263,9 @@ ACTION: repeat:
       /* in case no function key was hit .. */
       if Syst.CUICommon:toimi = 0 then do on endkey undo, next f_code:
          if length(nap) > 1 then undo, retry.
-         assign f_code = nap firstc = true.
+         assign f_code = Syst.CUICommon:nap firstc = true.
          pause 0 no-message.
-         assign ufk = 0  ufk[1] = 35 ufk[2] = 717 ufk[8] = 8
+         assign Syst.CUICommon:ufk = 0  Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[2] = 717 Syst.CUICommon:ufk[8] = 8
          Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
          update f_code with frame f_code_search editing:
 
@@ -277,12 +277,12 @@ ACTION: repeat:
 
             readkey. nap=keylabel(lastkey).
 
-            if nap = "f8" then do:
+            if Syst.CUICommon:nap = "f8" then do:
                hide frame f_code_search no-pause.
                undo f_code, next MAIN_LOOP.
             end.
 
-            order = lookup(nap,"f1,f2").
+            order = lookup(Syst.CUICommon:nap,"f1,f2").
             if order > 0 then do:
                assign siirto = input f_code.
                RUN Syst/utose.p.
@@ -422,7 +422,7 @@ ACTION: repeat:
 end. /* MAIN_LOOP */
 
 /* brand selection */
-IF nap = "f11" THEN DO:
+IF Syst.CUICommon:nap = "f11" THEN DO:
    /* choose a new brand */
    RETURN. 
 END.

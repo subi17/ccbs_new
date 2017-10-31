@@ -227,7 +227,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
    /* Talletetaan ufk-arvot */
    DO i = 1 TO 9:
-       ASSIGN vufk[i] = ufk[i].
+       ASSIGN vufk[i] = Syst.CUICommon:ufk[i].
    END.
    ASSIGN vtoimi = Syst.CUICommon:toimi.
 
@@ -245,11 +245,11 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0
-         ufk[1] = 151 ufk[2] = 152 ufk[3] = 153 ufk[5] = 63
-         ufk[8] = 157 ufk[9] = 0 Syst.CUICommon:ehto = 0.
+         Syst.CUICommon:ufk = 0
+         Syst.CUICommon:ufk[1] = 151 Syst.CUICommon:ufk[2] = 152 Syst.CUICommon:ufk[3] = 153 Syst.CUICommon:ufk[5] = 63
+         Syst.CUICommon:ufk[8] = 157 Syst.CUICommon:ufk[9] = 0 Syst.CUICommon:ehto = 0.
 
-         IF tuni2 NE "" THEN ASSIGN ufk[4] = 154 ufk[6] = 155 ufk[7] = 156.
+         IF tuni2 NE "" THEN ASSIGN Syst.CUICommon:ufk[4] = 154 Syst.CUICommon:ufk[6] = 155 Syst.CUICommon:ufk[7] = 156.
          ufkey = FALSE.
       END.
 
@@ -514,7 +514,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
 
       IF tuni2 NE "direct" THEN DO:
-         ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+         Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
       END.
       
       /* Avataan streamit ja tulostetaan aloitustehosteet */
@@ -572,7 +572,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
    /* Palautetaan ufk-arvot */
    DO i = 1 TO 9:
-       ASSIGN ufk[i] = vufk[i].
+       ASSIGN Syst.CUICommon:ufk[i] = vufk[i].
    END.
    ASSIGN Syst.CUICommon:toimi = vtoimi.
 

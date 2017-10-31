@@ -500,28 +500,28 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk   = 0
-         ufk[1]= 816  
-         ufk[2]= (IF lcRight = "RW" THEN 1782 ELSE 0)  
-         ufk[3]= 1777 
-         ufk[4]= 1778
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 927
-         ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk   = 0
+         Syst.CUICommon:ufk[1]= 816  
+         Syst.CUICommon:ufk[2]= (IF lcRight = "RW" THEN 1782 ELSE 0)  
+         Syst.CUICommon:ufk[3]= 1777 
+         Syst.CUICommon:ufk[4]= 1778
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 927
+         Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3. 
         
          IF iiStatus > 0 THEN ASSIGN 
-            ufk[1] = 0
-            ufk[2] = 0
-            ufk[5] = 0
-            ufk[6] = 0.
+            Syst.CUICommon:ufk[1] = 0
+            Syst.CUICommon:ufk[2] = 0
+            Syst.CUICommon:ufk[5] = 0
+            Syst.CUICommon:ufk[6] = 0.
             
-         IF iiCustNum > 0 THEN ufk[1] = 0.
+         IF iiCustNum > 0 THEN Syst.CUICommon:ufk[1] = 0.
 
          IF iiInvNum > 0 THEN ASSIGN 
-            ufk[1] = 0
-            ufk[2] = 0.
+            Syst.CUICommon:ufk[1] = 0
+            Syst.CUICommon:ufk[2] = 0.
         
          IF liAutoRun = 0 THEN DO:
             ufkey = FALSE.
@@ -544,20 +544,20 @@ REPEAT WITH FRAME sel:
            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcStatus WITH FRAME sel.
          END.
 
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
       END.
       ELSE DO:
          CASE liAutoRun:
-         WHEN 1 THEN nap = "3".
-         WHEN 2 THEN nap = "4".
-         WHEN 9 THEN nap = "2".
+         WHEN 1 THEN Syst.CUICommon:nap = "3".
+         WHEN 2 THEN Syst.CUICommon:nap = "4".
+         WHEN 9 THEN Syst.CUICommon:nap = "2".
          OTHERWISE ASSIGN liAutoRun = 0
-                          nap       = "9".
+                          Syst.CUICommon:nap       = "9".
          END CASE.                  
       END.
       
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8,2,F2") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8,2,F2") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -566,10 +566,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -587,7 +587,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -612,7 +612,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -638,7 +638,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND PaymPlan WHERE recid(PaymPlan) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -662,7 +662,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -677,18 +677,18 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* search */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN DO:
 
         ASSIGN
-        ufk = 0
-        ufk[1]= 28  ufk[2]= 702  ufk[3]= 559
-        ufk[8]= 8 
+        Syst.CUICommon:ufk = 0
+        Syst.CUICommon:ufk[1]= 28  Syst.CUICommon:ufk[2]= 702  Syst.CUICommon:ufk[3]= 559
+        Syst.CUICommon:ufk[8]= 8 
         Syst.CUICommon:ehto = 0
         ufkey = TRUE.
         
         IF iiCustNum > 0 OR iiInvNum > 0 THEN ASSIGN 
-           ufk[2] = 0
-           ufk[3] = 0.
+           Syst.CUICommon:ufk[2] = 0
+           Syst.CUICommon:ufk[3] = 0.
          
         RUN Syst/ufkey.p.
      
@@ -776,7 +776,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* automatic creation of payment plan */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN DO TRANS:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN DO TRANS:  
        {Syst/uright2.i}
 
        ASSIGN ldtFromDate = ?
@@ -825,7 +825,7 @@ REPEAT WITH FRAME sel:
           WITH FRAME fCreate EDITING:
              READKEY.
           
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
              THEN DO WITH FRAME fCreate:
              
                 PAUSE 0.
@@ -938,7 +938,7 @@ REPEAT WITH FRAME sel:
           
      END.
  
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:  /* Invoices */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* Invoices */
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        liAutoRun = 0.
@@ -952,7 +952,7 @@ REPEAT WITH FRAME sel:
        RUN local-disp-row.           
      END.
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* batches */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* batches */
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        liAutoRun = 0.
@@ -972,13 +972,13 @@ REPEAT WITH FRAME sel:
        RUN local-disp-row.           
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
@@ -1056,7 +1056,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* memo */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:
      
         RUN local-find-this(FALSE).
         
@@ -1070,7 +1070,7 @@ REPEAT WITH FRAME sel:
                  "Payment Plan").
      END.
  
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -1099,19 +1099,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(PaymPlan) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(PaymPlan) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -1326,25 +1326,25 @@ PROCEDURE local-UPDATE-record:
               PaymPlan.Orderer lcOrdCustName
          WITH FRAME lis.
 
-         ASSIGN ufk    = 0 
+         ASSIGN Syst.CUICommon:ufk    = 0 
                 Syst.CUICommon:ehto   = 0
-                ufk[3] = 1752
-                ufk[8] = 8.
+                Syst.CUICommon:ufk[3] = 1752
+                Syst.CUICommon:ufk[8] = 8.
        
          /* change */
-         IF PaymPlan.PPStatus < 4 THEN ufk[1] = 7.
-         ELSE ufk[1] = 1068.
+         IF PaymPlan.PPStatus < 4 THEN Syst.CUICommon:ufk[1] = 7.
+         ELSE Syst.CUICommon:ufk[1] = 1068.
          
          /* print letter */
-         IF PaymPlan.PPStatus = 3 THEN ufk[4] = 938.
+         IF PaymPlan.PPStatus = 3 THEN Syst.CUICommon:ufk[4] = 938.
          /* accept */
          IF PaymPlan.PPStatus < 3 OR
             (PaymPlan.PPStatus = 7 AND iiStatus = 7)
-         THEN ufk[6] = 1062.
+         THEN Syst.CUICommon:ufk[6] = 1062.
          /* cancel plan */
          IF PaymPlan.PPStatus < 4 OR
             (PaymPlan.PPStatus = 7 AND iiStatus = 7)
-         THEN ufk[7] = 1063.
+         THEN Syst.CUICommon:ufk[7] = 1063.
        
          RUN Syst/ufkey.p.
          
@@ -1415,7 +1415,7 @@ PROCEDURE local-UPDATE-record:
                   NEXT. 
                END.
 
-               ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
                THEN DO WITH FRAME lis:
              
                   PAUSE 0.

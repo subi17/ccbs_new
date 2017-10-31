@@ -85,9 +85,9 @@ repeat WITH FRAME main:
          lcSrcBrand
       with frame main editing:
 
-         readkey. nap = keylabel(lastkey).
+         readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
-         IF lookup(nap,poisnap) > 0 THEN DO:
+         IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcSrcBrand" THEN DO WITH FRAME main:
 
@@ -127,7 +127,7 @@ repeat WITH FRAME main:
    repeat WITH FRAME main on ENDkey undo toimi, next toimi:
 
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[4] = 0  Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 
       Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 

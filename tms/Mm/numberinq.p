@@ -243,8 +243,8 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
    WITH FRAME fInquiry. 
 
    ASSIGN
-      ufk[1]= 7  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 15 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
+      Syst.CUICommon:ufk[1]= 7  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+      Syst.CUICommon:ufk[5]= 15 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
       Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
@@ -274,7 +274,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
              THEN DO WITH FRAME fInquiry:
              
                 PAUSE 0.

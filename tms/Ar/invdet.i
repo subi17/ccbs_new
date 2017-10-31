@@ -346,15 +346,15 @@ PROCEDURE pInvoiceUpdate:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
       ASSIGN
-         ufk    = 0
-         ufk[1] = IF lcUpdate = "RW" AND Invoice.PaymState NE 4 THEN 7 ELSE 0
-         ufk[2] = 927
-         ufk[3] = 829
-         ufk[4] = 1170
-         ufk[5] = 790
-         ufk[6] = 1152
-         ufk[7] = 1752
-         ufk[8] = 8
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = IF lcUpdate = "RW" AND Invoice.PaymState NE 4 THEN 7 ELSE 0
+         Syst.CUICommon:ufk[2] = 927
+         Syst.CUICommon:ufk[3] = 829
+         Syst.CUICommon:ufk[4] = 1170
+         Syst.CUICommon:ufk[5] = 790
+         Syst.CUICommon:ufk[6] = 1152
+         Syst.CUICommon:ufk[7] = 1752
+         Syst.CUICommon:ufk[8] = 8
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
 
@@ -385,9 +385,9 @@ PROCEDURE pInvoiceUpdate:
          WITH FRAME fInvDet EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND 
+            IF Syst.CUICommon:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"DelType,PrintState,DeliveryState") > 0 
             THEN DO:
 
@@ -454,7 +454,7 @@ PROCEDURE pInvoiceUpdate:
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO WITH FRAME fInvDet:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME fInvDet:
 
                IF FRAME-FIELD = "DelType" THEN DO:
                 
@@ -579,15 +579,15 @@ PROCEDURE pInvoiceUpdate:
          otheractions:
          REPEAT ON ENDKEY UNDO, NEXT:
 
-            ASSIGN ufk    = 0
-                   ufk[1] = 0 
-                   ufk[2] = 1650 
-                   ufk[3] = 908
-                   ufk[4] = 1492
-                   ufk[5] = 1561
-                   ufk[6] = 862
-                   ufk[7] = 1796
-                   ufk[8] = 8
+            ASSIGN Syst.CUICommon:ufk    = 0
+                   Syst.CUICommon:ufk[1] = 0 
+                   Syst.CUICommon:ufk[2] = 1650 
+                   Syst.CUICommon:ufk[3] = 908
+                   Syst.CUICommon:ufk[4] = 1492
+                   Syst.CUICommon:ufk[5] = 1561
+                   Syst.CUICommon:ufk[6] = 862
+                   Syst.CUICommon:ufk[7] = 1796
+                   Syst.CUICommon:ufk[8] = 8
                    Syst.CUICommon:ehto   = 0.
             RUN Syst/ufkey.p.
                
@@ -602,8 +602,8 @@ PROCEDURE pInvoiceUpdate:
                DISP Invoice.BillRun WITH FRAME fBillRunID.
 
                ASSIGN
-                  ufk    = 0
-                  ufk[8] = 8
+                  Syst.CUICommon:ufk    = 0
+                  Syst.CUICommon:ufk[8] = 8
                   Syst.CUICommon:ehto   = 0.
                RUN Syst/ufkey.p.
             

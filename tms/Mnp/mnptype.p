@@ -8,8 +8,8 @@ CHOISES:
 DO WHILE TRUE:
 
    ASSIGN
-      ufk    = 0
-      ufk[8] = 8
+      Syst.CUICommon:ufk    = 0
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto   = 3.
 
    RUN Syst/ufkey.p.

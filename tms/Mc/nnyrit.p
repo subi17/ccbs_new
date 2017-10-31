@@ -97,11 +97,11 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
    repeat:
 
       ASSIGN
-      ufk    = 0 
-      ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0)
-      ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
-      ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
-      ufk[8] = 8  
+      Syst.CUICommon:ufk    = 0 
+      Syst.CUICommon:ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0)
+      Syst.CUICommon:ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
+      Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
+      Syst.CUICommon:ufk[8] = 8  
       Syst.CUICommon:ehto   = 0. 
       
       RUN Syst/ufkey.p.

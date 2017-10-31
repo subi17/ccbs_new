@@ -129,8 +129,8 @@ repeat WITH FRAME sel:
 
 add-group:
        repeat TRANS ON ENDKEY UNDO add-group, LEAVE add-group.
-          ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 0
-          ufk[1] = 512 ufk[2] = 514 ufk[3] = 517 ufk[8] = 8.
+          ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+          Syst.CUICommon:ufk[1] = 512 Syst.CUICommon:ufk[2] = 514 Syst.CUICommon:ufk[3] = 517 Syst.CUICommon:ufk[8] = 8.
           RUN Syst/ufkey.p.
 
           IF Syst.CUICommon:toimi = 8 THEN LEAVE add-group.
@@ -315,8 +315,8 @@ SELAUS:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 519
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 528 ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 519
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 528 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -332,7 +332,7 @@ SELAUS:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
       IF jarj <> ed-jarj THEN DO:
         ASSIGN ekarivi = 0 muisti = rtab[FRAME-LINE].
         FIND SMGMember where recid(SMGMember) = muisti.
@@ -358,10 +358,10 @@ SELAUS:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND SMGMember where recid(SMGMember) = rtab[1] no-lock.
            IF jarj = 1 THEN FIND prev SMGMember
@@ -393,7 +393,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND SMGMember where recid(SMGMember) = rtab[FRAME-DOWN] no-lock .
@@ -426,7 +426,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
         muisti = rtab[1].
         FIND SMGMember where recid(SMGMember) = muisti no-lock no-error.
         IF jarj = 1 THEN FIND prev SMGMember
@@ -460,7 +460,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -475,7 +475,7 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -499,20 +499,20 @@ SELAUS:
      END. /* Haku sar. 1 */
 
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:  /* other members */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* other members */
         FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
         RUN Mc/nnsgme1.p(SMGMember.SmGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSAction:  /* poisto */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSAction:  /* poisto */
        privi = FRAME-LINE.
        FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
 
@@ -569,7 +569,7 @@ SELAUS:
        END.
        ELSE privi = 0. /* ei poistettukaan */
      END. /* poisto */
-     else if lookup(nap,"7,f7") > 0 THEN DO:  /* memo */
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:  /* memo */
         FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
         FIND SMGroup of SMGMember no-lock.
         RUN Mc/memo.p(INPUT 0,
@@ -580,7 +580,7 @@ SELAUS:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST SMGMember
        where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
@@ -591,7 +591,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST SMGMember
        where SMGMember.Brand = Syst.CUICommon:gcBrand AND 
              SMGMember.Salesman = Salesman no-lock no-error.
@@ -602,7 +602,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */

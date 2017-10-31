@@ -4,7 +4,7 @@
   SOLUTION .....: Ticket Master
   CREATED ......: 18.09.98 pt
   CHANGED ......: 09.10.98 kl inv/due DAY, InvGroup
-                  16.12.98 kl ufk[5] = 795
+                  16.12.98 kl Syst.CUICommon:ufk[5] = 795
                   04.11.02 jr Eventlog
                   05.03.03 tk tokens
                   15.09.03/aam brand
@@ -99,11 +99,11 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
       i-date e-date
    EDITING.
 
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if nap = "F4" THEN RETURN.
+      if Syst.CUICommon:nap = "F4" THEN RETURN.
 
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
          if frame-field = "lcInvGroup" THEN DO:
             if input lcInvGroup = "" then assign IGName = "ALL".
@@ -141,13 +141,13 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
 
    toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ufk = 0  
-             ufk[1] = 7 
-             ufk[3] = 1777
-             ufk[5] = 795 
-             ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0  
+             Syst.CUICommon:ufk[1] = 7 
+             Syst.CUICommon:ufk[3] = 1777
+             Syst.CUICommon:ufk[5] = 795 
+             Syst.CUICommon:ufk[8] = 8.
              
-      IF InvNum2 = 0 OR diff = 0 THEN ufk[5] = 0.
+      IF InvNum2 = 0 OR diff = 0 THEN Syst.CUICommon:ufk[5] = 0.
 
       Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.

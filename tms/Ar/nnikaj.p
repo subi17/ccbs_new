@@ -137,7 +137,7 @@ with frame rajat.
 
 toimi:
 repeat with frame valinta on endkey undo toimi, next toimi:
-      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       if Syst.CUICommon:toimi = 1 then do:
@@ -160,8 +160,8 @@ repeat with frame valinta on endkey undo toimi, next toimi:
             validate(input lryhma6 >  input aryhma6, "Impossible definition !")
 
          with frame rajat editing:
-            readkey. nap = keylabel(lastkey).
-            if lookup(nap,poisnap) > 0 then do:
+            readkey. Syst.CUICommon:nap = keylabel(lastkey).
+            if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
                hide message.
                if frame-field = "InvGroup" then do:
                   assign frame rajat InvGroup.

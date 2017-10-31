@@ -107,7 +107,7 @@ REPEAT WITH FRAME lis:
    
    action:
    REPEAT WITH FRAME lis:
-      ASSIGN ufk = 0 ufk[1] = 0 ufk[8] = 8 ufk[5] = 1967  Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[5] = 1967  Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN LEAVE action.
       IF Syst.CUICommon:toimi = 8 THEN DO:
@@ -175,7 +175,7 @@ REPEAT WITH FRAME lis:
          WITH FRAME lis EDITING:
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                PAUSE 0.
                IF FRAME-FIELD = "icc" THEN DO:
                   IF INPUT FRAME LIS MobSub.ICC = "" THEN DO:

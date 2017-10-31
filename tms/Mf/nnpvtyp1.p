@@ -139,8 +139,8 @@ BROWSE:
    PUT SCREEN ROW 19 COL 34 "  By Product ".
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 703 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 703 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 0   Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"5,6"'}
          RUN Syst/ufkey.p.
@@ -151,10 +151,10 @@ BROWSE:
          COLOR DISPLAY value(Syst.CUICommon:ccc) nnpvti.pt-tuno WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
       /* Previous line */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
 
          IF FRAME-LINE = 1 THEN DO:
             FIND nnpvti WHERE RECID(nnpvti) = rtab[1] NO-LOCK.
@@ -188,7 +188,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND nnpvti WHERE RECID(nnpvti) = rtab[FRAME-DOWN] NO-LOCK .
             FIND NEXT nnpvti USE-INDEX pt-tuno 
@@ -221,7 +221,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* Previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND nnpvti WHERE RECID(nnpvti) = memory NO-LOCK NO-ERROR.
          FIND PREV nnpvti USE-INDEX pt-tuno 
@@ -247,7 +247,7 @@ BROWSE:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
          /* cursor TO the downmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -262,7 +262,7 @@ BROWSE:
       END. /* NEXT page */
 
       /* Search column 1 */
-      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          haku-pt-tuno = "".
          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -284,21 +284,21 @@ BROWSE:
          END.
       END. /* Haku sar. 1 */
 
-      ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
          FIND FIRST nnpvti USE-INDEX pt-tuno 
           NO-LOCK NO-ERROR.
          ASSIGN memory = RECID(nnpvti). 
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO : /* LAST record */
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO : /* LAST record */
          FIND LAST nnpvti USE-INDEX pt-tuno 
           NO-LOCK NO-ERROR. 
          ASSIGN memory = RECID(nnpvti). 
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */

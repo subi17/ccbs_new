@@ -76,28 +76,28 @@ display ldtPaid1 ldtPaid2
         with frame fCrit. 
 
 ASSIGN ufkey = false
-       nap   = "first". 
+       Syst.CUICommon:nap   = "first". 
 
 toimi:
 REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
       RUN Syst/ufkey.p.
    END.
 
-   IF nap NE "first" THEN DO:
+   IF Syst.CUICommon:nap NE "first" THEN DO:
       READKEY.
       ASSIGN
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN nap = "1". 
+   ELSE ASSIGN Syst.CUICommon:nap = "1". 
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
 
       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -107,9 +107,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "InvGroup" THEN DO:
 
@@ -145,11 +145,11 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.
 
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
 

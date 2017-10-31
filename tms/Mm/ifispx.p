@@ -166,7 +166,7 @@ ADD-ROW:
             IFiSpx.Version     
          EDITING:
             READKEY.
-            IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN 
+            IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
             DO WITH FRAME lis:
                PAUSE 0.
                if  frame-field = "Mancode" THEN 
@@ -273,11 +273,11 @@ BROWSE:
       IF ufkey THEN 
       DO:
          ASSIGN
-            ufk[1]= 215  ufk[2]= 0 ufk[3]= 0   ufk[4] = 0
-            ufk[5]= 5    ufk[6]= 4 ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
+            Syst.CUICommon:ufk[1]= 215  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0   Syst.CUICommon:ufk[4] = 0
+            Syst.CUICommon:ufk[5]= 5    Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
             Syst.CUICommon:ehto = 3 ufkey = FALSE.
             {Syst/uright1.i '"5,6"'}  
-         IF NOT llIsAdmin THEN ASSIGN  ufk[5]= 0    ufk[6]= 0. 
+         IF NOT llIsAdmin THEN ASSIGN  Syst.CUICommon:ufk[5]= 0    Syst.CUICommon:ufk[6]= 0. 
          RUN Syst/ufkey.p.
       END.
 
@@ -294,13 +294,13 @@ BROWSE:
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN 
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN 
       DO:
          order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN 
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN 
       DO:
          order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
@@ -327,10 +327,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN 
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN 
       DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             RUN local-find-this(FALSE).
@@ -358,7 +358,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN 
       DO WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN 
          DO:
@@ -387,7 +387,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN 
       DO:
          Memory = rtab[1].
          FIND IFiSpx WHERE recid(IFiSpx) = Memory NO-LOCK NO-ERROR.
@@ -414,7 +414,7 @@ BROWSE:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN 
       DO WITH FRAME sel:
          /* PUT Cursor on downmost ROW */
          IF rtab[FRAME-DOWN] = ? THEN 
@@ -432,7 +432,7 @@ BROWSE:
       END. /* NEXT page */
 
       /* Search BY column 1 */
-      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN 
       DO ON ENDKEY UNDO, NEXT LOOP:
          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          Mancode = "".
@@ -453,14 +453,14 @@ BROWSE:
          END.
       END. /* Search-1 */
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 AND llIsAdmin THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND llIsAdmin THEN 
       DO:  /* add */
          {Syst/uright2.i}
          must-add = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"6,f6") > 0 AND llIsAdmin THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND llIsAdmin THEN 
       DO TRANSACTION:  /* DELETE */
          {Syst/uright2.i}
          delrow = FRAME-LINE.
@@ -510,7 +510,7 @@ BROWSE:
          ELSE delrow = 0. /* UNDO DELETE */
       END. /* DELETE */
 
-      ELSE IF LOOKUP(nap,"enter,return") > 0  AND llIsAdmin THEN
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0  AND llIsAdmin THEN
       REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
          {Syst/uright2.i}
          /* change */
@@ -534,21 +534,21 @@ BROWSE:
          LEAVE.
       END.
 
-      ELSE IF LOOKUP(nap,"home,h") > 0 THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN 
       DO:
          RUN local-find-FIRST.
          ASSIGN Memory = recid(IFiSpx) must-print = TRUE.
         NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"END,e") > 0 THEN 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN 
       DO : /* LAST record */
          RUN local-find-LAST.
          ASSIGN Memory = recid(IFiSpx) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
    END.  /* BROWSE */
 END.  /* LOOP */
 
@@ -667,7 +667,7 @@ PROCEDURE local-UPDATE-record:
       IFiSpx.Isc1
    WITH FRAME lis EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
       DO WITH FRAME lis:
          PAUSE 0.
          IF FRAME-FIELD = "SimArt" THEN 

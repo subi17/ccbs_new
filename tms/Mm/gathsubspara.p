@@ -124,8 +124,8 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
     ASSIGN
-    ufk[1]= 1709 ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
-    ufk[5]= 515 ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+    Syst.CUICommon:ufk[1]= 1709 Syst.CUICommon:ufk[2]= 717 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+    Syst.CUICommon:ufk[5]= 515 Syst.CUICommon:ufk[6]= 0   Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
     Syst.CUICommon:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
@@ -136,10 +136,10 @@ BROWSE:
       SubserPara.msseq   SubserPara.ParaValue
       WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
-      nap = keylabel(LASTKEY).
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      Syst.CUICommon:nap = keylabel(LASTKEY).
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
     order = order + 1. IF order = 5 THEN order = 1. END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
     order = order - 1. IF order = 0 THEN order = 4. END.
 
       IF order <> ex-order THEN DO:
@@ -160,11 +160,11 @@ BROWSE:
     bell. message "You are on an empty row, move upwards !".
     PAUSE 1 no-message. NEXT.
       END.
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
     IF FRAME-LINE = 1 THEN DO:
        FIND SubserPara where recid(SubserPara) = rtab[1] no-lock.
        IF order = 1 THEN FIND prev SubserPara WHERE subserpara.msseq = msseq
@@ -188,7 +188,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
     IF FRAME-LINE = FRAME-DOWN THEN DO:
        FIND SubserPara where recid(SubserPara) = rtab[FRAME-DOWN] no-lock .
@@ -213,7 +213,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
     memory = rtab[1].
     FIND SubserPara where recid(SubserPara) = memory no-lock no-error.
     IF order = 1 THEN FIND prev SubserPara WHERE subserpara.msseq = msseq
@@ -237,7 +237,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
    /* cursor TO the downmost line */
    IF rtab[FRAME-DOWN] = ? THEN DO:
        message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -249,7 +249,7 @@ BROWSE:
    END.
      END. /* NEXT page */
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
 
         /* ADD OR REMOVE */
@@ -257,20 +257,20 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST SubserPara WHERE subserpara.msseq = msseq
         USE-INDEX msseq no-lock no-error.
         ASSIGN memory = recid(SubserPara) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST SubserPara WHERE subserpara.msseq = msseq
         USE-INDEX msseq no-lock no-error.
         ASSIGN memory = recid(SubserPara) must-print = TRUE.
         NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 HIDE FRAME sel no-pause.

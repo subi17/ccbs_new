@@ -339,9 +339,9 @@ repeat WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 0 ufk[3]= 222 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 814
-        ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 222 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 814
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -356,10 +356,10 @@ repeat WITH FRAME sel:
         COLOR DISPLAY value(Syst.CUICommon:ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -367,10 +367,10 @@ repeat WITH FRAME sel:
          END.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -385,7 +385,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND DayCampaign where recid(DayCampaign) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -410,7 +410,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND DayCampaign where recid(DayCampaign) = rtab[FRAME-DOWN] no-lock .
@@ -436,7 +436,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DayCampaign where recid(DayCampaign) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -460,7 +460,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -475,7 +475,7 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        lcEvent = "".
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -496,12 +496,12 @@ repeat WITH FRAME sel:
        END.
      END. /* Haku sar. 1 */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND DayCampaign where recid(DayCampaign) = rtab[FRAME-LINE] no-lock.
 
@@ -577,7 +577,7 @@ repeat WITH FRAME sel:
      END. /* removal */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:  
         FIND DayCampaign WHERE RECID(DayCampaign) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invlang.p(14,DayCampaign.DCEvent).
           
@@ -585,7 +585,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,F3") > 0 THEN DO:
        FIND FIRST DayCampaign WHERE 
             RECID(DayCampaign) = rtab[FRAME-LINE] 
        NO-LOCK NO-ERROR.
@@ -621,7 +621,7 @@ repeat WITH FRAME sel:
        PAUSE 0.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST DayCampaign where 
             recid(DayCampaign) = rtab[frame-line(sel)]
@@ -644,19 +644,19 @@ repeat WITH FRAME sel:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(DayCampaign) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(DayCampaign) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -814,11 +814,11 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       
       ELSE ASSIGN 
          Syst.CUICommon:ehto   = 0
-         ufk    = 0
-         ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
-         ufk[2] = 295
-         ufk[4] = 253
-         ufk[8] = 8.
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
+         Syst.CUICommon:ufk[2] = 295
+         Syst.CUICommon:ufk[4] = 253
+         Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
       IF Syst.CUICommon:toimi = 1 THEN DO:
@@ -969,9 +969,9 @@ PROCEDURE pUpdate:
             NEXT.
          END.
        
-         nap = KEYLABEL(LASTKEY). 
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
 
-         IF lookup(nap,poisnap) > 0 THEN DO:
+         IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             if keylabel(lastkey) = "F4" THEN LEAVE . 
 
             IF FRAME-FIELD = "DCEvent" THEN DO:
@@ -1197,9 +1197,9 @@ PROCEDURE pFeeData:
       ELSE DO: 
          ASSIGN 
             Syst.CUICommon:ehto   = 0
-            ufk    = 0
-            ufk[1] = 7 WHEN gcHelpParam = ""
-            ufk[8] = 8.
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[1] = 7 WHEN gcHelpParam = ""
+            Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.
       
@@ -1241,9 +1241,9 @@ PROCEDURE pFeeData:
                NEXT.
             END.
 
-            nap = KEYLABEL(LASTKEY). 
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
 
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                if keylabel(lastkey) = "F4" THEN LEAVE . 
 
                IF FRAME-FIELD = "TermFeeCalc" THEN DO:

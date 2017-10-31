@@ -89,7 +89,7 @@ repeat WITH FRAME rajat:
             Salesman.Salesman = input Salesman),"Unknown Salesman !")
     exfile EDITING:
        READKEY.
-       IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME rajat:
+       IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME rajat:
           PAUSE 0.
           if frame-field = "sm-code" THEN DO:
              disp LC(exdir + "partcomm." + input Salesman + ".txt") 
@@ -105,7 +105,7 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.

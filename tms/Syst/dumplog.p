@@ -182,14 +182,14 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[8] = 8 
+        Syst.CUICommon:ufk    = 0
+        Syst.CUICommon:ufk[8] = 8 
         Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         IF iiDumpID > 0 THEN ASSIGN 
-           ufk[1] = 0
-           ufk[3] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[3] = 0.
 
         RUN Syst/ufkey.p.
       END.
@@ -198,10 +198,10 @@ REPEAT WITH FRAME sel:
       CHOOSE ROW DumpLog.DumpId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DumpLog.DumpId WITH FRAME sel.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -211,7 +211,7 @@ REPEAT WITH FRAME sel:
 
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -236,7 +236,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -262,7 +262,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND DumpLog WHERE recid(DumpLog) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -286,7 +286,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -301,7 +301,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -321,7 +321,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -346,19 +346,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(DumpLog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(DumpLog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -497,10 +497,10 @@ PROCEDURE local-UPDATE-record:
         
       ASSIGN 
          Syst.CUICommon:ehto = 0
-         ufk  = 0
-         ufk[1] = 7 WHEN lcRight = "RW"
-      /* ufk[4] = 1697 */
-         ufk[8] = 8.
+         Syst.CUICommon:ufk  = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+      /* Syst.CUICommon:ufk[4] = 1697 */
+         Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
       IF Syst.CUICommon:toimi = 1 THEN 
@@ -514,9 +514,9 @@ PROCEDURE local-UPDATE-record:
          
             READKEY.
          
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
             
-            IF nap = "F9" AND FRAME-FIELD = "DumpLogStatus" THEN DO:
+            IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "DumpLogStatus" THEN DO:
 
                RUN Help/h-tmscodes.p(INPUT "ActionLog",  /* TableName*/
                                     "ActionStatus", /* FieldName */
@@ -533,7 +533,7 @@ PROCEDURE local-UPDATE-record:
                NEXT. 
             END.
  
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "DumpLogStatus" THEN DO:
                   fStatusName(INPUT INPUT DumpLog.DumpLogStatus).

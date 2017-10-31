@@ -167,15 +167,15 @@ print-line:
       
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 92  ufk[2]= 1634 ufk[3]= 707 ufk[4]= 28
-         ufk[5]= 11  ufk[6]= 927 ufk[7]= 829 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 92  Syst.CUICommon:ufk[2]= 1634 Syst.CUICommon:ufk[3]= 707 Syst.CUICommon:ufk[4]= 28
+         Syst.CUICommon:ufk[5]= 11  Syst.CUICommon:ufk[6]= 927 Syst.CUICommon:ufk[7]= 829 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF liInvCust > 0 THEN ASSIGN 
-            ufk[1] = 0
-            ufk[2] = 0
-            ufk[3] = 0
-            ufk[4] = 0.
+            Syst.CUICommon:ufk[1] = 0
+            Syst.CUICommon:ufk[2] = 0
+            Syst.CUICommon:ufk[3] = 0
+            Syst.CUICommon:ufk[4] = 0.
 
          {Syst/uright1.i '"6,7"'}
          RUN Syst/ufkey.p.
@@ -199,20 +199,20 @@ print-line:
          COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvDate WITH FRAME sel.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF rtab[FRAME-LINE] = ? AND LOOKUP(nap,"8,F8") = 0 THEN DO:
+      IF rtab[FRAME-LINE] = ? AND LOOKUP(Syst.CUICommon:nap,"8,F8") = 0 THEN DO:
          BELL.
          message "YOU ARE ON AN EMPTY ROW, MOVE UPWARDS !".
          PAUSE 1 no-message.
          NEXT.
       END.
 
-      if nap = "cursor-right" AND liInvCust = 0 THEN DO:
+      if Syst.CUICommon:nap = "cursor-right" AND liInvCust = 0 THEN DO:
          order = order + 1.
          IF order = 5 THEN order = 1.
       END.
-      ELSE if nap = "cursor-left" AND liInvCust = 0 THEN DO:
+      ELSE if Syst.CUICommon:nap = "cursor-left" AND liInvCust = 0 THEN DO:
          order = order - 1.
          IF order = 0 THEN order = 4.
       END.
@@ -238,7 +238,7 @@ print-line:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Invoice where recid(Invoice) = rtab[1] no-lock.
             RUN local-find-prev.
@@ -266,7 +266,7 @@ print-line:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -296,7 +296,7 @@ print-line:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          
          FIND Invoice where recid(Invoice) = memory no-lock NO-ERROR.
@@ -323,7 +323,7 @@ print-line:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -340,7 +340,7 @@ print-line:
         END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,F1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -359,7 +359,7 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,F2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -377,7 +377,7 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 AND ufk[3] > 0  THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,F3") > 0 AND Syst.CUICommon:ufk[3] > 0  THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -396,7 +396,7 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,F4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ldtInvDate = ?.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -420,7 +420,7 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANS: /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE recid(Invoice) = rtab[frame-line(sel)]
            NO-LOCK NO-ERROR.
         RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -431,7 +431,7 @@ print-line:
         NEXT.
      END.
 
-     else if lookup(nap,"f7,7") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"f7,7") > 0 THEN DO:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE(sel)] 
            no-lock NO-ERROR.
         RUN Ar/payments.p(0,Invoice.InvNum,"").
@@ -439,14 +439,14 @@ print-line:
         NEXT.
      END.
 
-     else if lookup(nap,"enter,return,5,f5") > 0 THEN DO : /* valitaan tAmA */
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,f5") > 0 THEN DO : /* valitaan tAmA */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE(sel)] 
            no-lock NO-ERROR.
         siirto = string(Invoice.InvNum).
         LEAVE LOOP.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-first.
         ASSIGN
         memory = recid(Invoice)
@@ -454,7 +454,7 @@ print-line:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
      
         RUN local-find-last.
         ASSIGN
@@ -463,7 +463,7 @@ print-line:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

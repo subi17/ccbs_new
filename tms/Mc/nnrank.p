@@ -208,7 +208,7 @@ repeat WITH FRAME rajat.
    WITH FRAME rajat EDITING:
       READKEY.
 
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
          HIDE MESSAGE.
 
          if frame-field = "CustGroup" THEN DO:
@@ -391,7 +391,7 @@ repeat WITH FRAME rajat.
 
 toimi:
    repeat WITH FRAME toimi:
-      ASSIGN ufk = 0 Syst.CUICommon:ehto = 0 ufk[1] = 7 ufk[5] = 847 ufk[6] = 638 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 847 Syst.CUICommon:ufk[6] = 638 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
       IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.

@@ -94,12 +94,12 @@ repeat:
 
          IF ufkey THEN DO:
             ASSIGN
-            ufk = 0 /* ufk[1] = 35 ufk[5] = 11 */
-            ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
+            Syst.CUICommon:ufk = 0 /* Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11 */
+            Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
             siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
             
             /* not called from applhelp */    
-            IF NOT gcHelpParam = "ahelp" THEN ufk[5] = 0.
+            IF NOT gcHelpParam = "ahelp" THEN Syst.CUICommon:ufk[5] = 0.
             
             RUN Syst/ufkey.p.
          END.
@@ -113,10 +113,10 @@ repeat:
          COLOR DISPLAY value(Syst.CUICommon:ccc) ttMobsub.MsSeq WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
          WITH FRAME sel:
             IF FRAME-LINE = 1 THEN DO:
                FIND ttMobsub where recid(ttMobsub) = rtab[FRAME-LINE] no-lock.
@@ -142,7 +142,7 @@ repeat:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND ttMobsub where recid(ttMobsub) = rtab[FRAME-LINE] no-lock .
                FIND NEXT ttMobsub no-lock no-error.
@@ -168,7 +168,7 @@ repeat:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
             FIND ttMobsub where recid(ttMobsub) = memory no-lock no-error.
             FIND prev ttMobsub no-lock no-error.
             IF AVAILABLE ttMobsub THEN DO:
@@ -190,7 +190,7 @@ repeat:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "This is the last page !".
@@ -204,7 +204,7 @@ repeat:
         END. /* NEXT page */
 /*
         /* Seek */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* RepCode */
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* RepCode */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcRepCode = "".
@@ -228,14 +228,14 @@ repeat:
         END. /* Seek */
 */
         /* CHOOSE */
-        else if lookup(nap,"return,enter,5,f5") > 0 /* AND ufk[5] > 0 */ THEN DO:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 /* AND Syst.CUICommon:ufk[5] > 0 */ THEN DO:
            FIND ttMobsub where recid(ttMobsub) = rtab[FRAME-LINE] no-lock.
            siirto = string(ttMobsub.MsSeq).
            LEAVE MAIN.
         END. /* CHOOSE */
 
         /* FIRST record */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
            FIND FIRST ttMobsub no-lock.
            memory = recid(ttMobsub).
            must-print = TRUE.
@@ -243,14 +243,14 @@ repeat:
         END. /* FIRST record */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
            FIND LAST ttMobsub no-lock.
            memory = recid(ttMobsub).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE MAIN. /* RETURN */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE MAIN. /* RETURN */
 
      END.  /* BROWSE */
    END.  /* LOOP */

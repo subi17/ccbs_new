@@ -74,8 +74,8 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
          siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -89,10 +89,10 @@ BROWSE:
          COLOR DISPLAY value(Syst.CUICommon:ccc) CustCat.Category WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND CustCat where recid(CustCat) = rtab[FRAME-LINE] no-lock.
@@ -118,7 +118,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CustCat where recid(CustCat) = rtab[FRAME-LINE] no-lock .
                FIND NEXT CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
@@ -144,7 +144,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND CustCat where recid(CustCat) = ylin no-lock no-error.
             FIND prev CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE CustCat THEN DO:
@@ -167,7 +167,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "YOU ARE ON THE LAST PAGE".
@@ -181,7 +181,7 @@ BROWSE:
         END. /* NEXT page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku */
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            haku = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
@@ -206,20 +206,20 @@ BROWSE:
         END. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND CustCat where recid(CustCat) = rtab[FRAME-LINE] no-lock.
            siirto = string(CustCat.Category).
            LEAVE runko.
         END. /* Valinta */
 
         /* Lisays */
-        else if lookup(nap,"6,f6") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */
 
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
            FIND FIRST CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(CustCat).
            must-print = TRUE.
@@ -227,14 +227,14 @@ BROWSE:
         END. /* Ensimmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
            FIND LAST CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(CustCat).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

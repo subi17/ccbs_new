@@ -269,7 +269,7 @@ REPEAT WITH FRAME Main:
          Stock
       WITH FRAME MAIN EDITING:
          READKEY.
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
          DO WITH FRAME main:
             PAUSE 0.
             IF FRAME-FIELD = "Stock" THEN 
@@ -325,8 +325,8 @@ REPEAT WITH FRAME Main:
    ACTION:
    REPEAT WITH FRAME Main:
       ASSIGN
-      ufk =  0 ufk[1] = 7 ufk[4] = 241
-      ufk[5] = 795 ufk[8] = 8 Syst.CUICommon:ehto = 0.  RUN Syst/ufkey.p.
+      Syst.CUICommon:ufk =  0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[4] = 241
+      Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.  RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
       IF Syst.CUICommon:toimi = 4 THEN LEAVE Action.
@@ -339,7 +339,7 @@ REPEAT WITH FRAME Main:
       END.
    END. /* Action */
 
-   ufk =  0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk =  0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    lError = FALSE.
 

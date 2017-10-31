@@ -21,7 +21,7 @@ DEF VAR  amt       AS I   NO-UNDO.
 DEF VAR llSecret   AS LOG NO-UNDO FORMAT "Yes/No".
 DEF VAR lcCustName AS CHAR NO-UNDO.
 ASSIGN
-   ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
    lcCustName = Func.Common:mDispCustName(BUFFER Customer).

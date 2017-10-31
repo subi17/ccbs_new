@@ -229,7 +229,7 @@ REPEAT WITH FRAME main:
    WITH FRAME main EDITING:
              READKEY.
              IF LASTKEY = KEYCODE("F2") THEN NEXT.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
 
                 IF FRAME-FIELD = "lisimdeliv" THEN DO:
@@ -269,12 +269,12 @@ REPEAT WITH FRAME main:
 ACTION:                            
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 Syst.CUICommon:ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8.
 
-      IF new-icc = "" THEN ufk[5] = 0.
+      IF new-icc = "" THEN Syst.CUICommon:ufk[5] = 0.
 
       RUN Syst/ufkey.p.
 

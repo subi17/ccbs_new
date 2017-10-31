@@ -132,12 +132,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0  
-         ufk[1] = 7
-         ufk[5] = IF llCreateFees NE DCCLI.CreateFees 
+         Syst.CUICommon:ufk    = 0  
+         Syst.CUICommon:ufk[1] = 7
+         Syst.CUICommon:ufk[5] = IF llCreateFees NE DCCLI.CreateFees 
                   THEN 1027 
                   ELSE 0 
-         ufk[8] = 8 
+         Syst.CUICommon:ufk[8] = 8 
          Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.

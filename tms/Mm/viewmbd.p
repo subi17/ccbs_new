@@ -336,13 +336,13 @@ PAUSE 0.
 Action:                    
 repeat WITH FRAME cdr:    
    ASSIGN 
-   ufk = 0 
-   ufk[2] = 9790
-   ufk[4] = 1112  
-   ufk[6] = 1115 
-   ufk[5] = 2421
-   ufk[7] = 1772
-   ufk[8] = 8 
+   Syst.CUICommon:ufk = 0 
+   Syst.CUICommon:ufk[2] = 9790
+   Syst.CUICommon:ufk[4] = 1112  
+   Syst.CUICommon:ufk[6] = 1115 
+   Syst.CUICommon:ufk[5] = 2421
+   Syst.CUICommon:ufk[7] = 1772
+   Syst.CUICommon:ufk[8] = 8 
    Syst.CUICommon:ehto = 0.
 
    RUN Syst/ufkey.p.
@@ -392,7 +392,7 @@ repeat WITH FRAME cdr:
          bsub = ttCall.gsmbnr.
 
         disp bsub @ ttCall.gsmbnr WITH FRAME cdr.  PAUSE 0.
-        ufk[5] =  0.
+        Syst.CUICommon:ufk[5] =  0.
         RUN Syst/ufkey.p.
       END.   
    end.
@@ -445,7 +445,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

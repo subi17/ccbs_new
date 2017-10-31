@@ -361,8 +361,8 @@ REPEAT WITH FRAME sel:
       DO WHILE TRUE:
    
          ASSIGN
-            ufk       = 0
-            ufk[8]    = 8
+            Syst.CUICommon:ufk       = 0
+            Syst.CUICommon:ufk[8]    = 8
             Syst.CUICommon:ehto      = 3.
       
          RUN Syst/ufkey.p. 
@@ -586,12 +586,12 @@ REPEAT WITH FRAME sel:
       IF ufkey THEN DO:
 
         ASSIGN
-           ufk    = 0
-           ufk[4] = 829
-           ufk[5] = 302 WHEN lcRight = "RW"
-           ufk[7] = 1079
-           ufk[8] = 8
-           ufk[9] = 1
+           Syst.CUICommon:ufk    = 0
+           Syst.CUICommon:ufk[4] = 829
+           Syst.CUICommon:ufk[5] = 302 WHEN lcRight = "RW"
+           Syst.CUICommon:ufk[7] = 1079
+           Syst.CUICommon:ufk[8] = 8
+           Syst.CUICommon:ufk[9] = 1
            Syst.CUICommon:ehto   = 3
            ufkey  = FALSE.
 
@@ -605,12 +605,12 @@ REPEAT WITH FRAME sel:
         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PrePaidRequest.CLI WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -628,7 +628,7 @@ REPEAT WITH FRAME sel:
       END.
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,7,F7,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,7,F7,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -637,7 +637,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -662,7 +662,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -688,7 +688,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND PrePaidRequest WHERE recid(PrePaidRequest) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -712,7 +712,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -727,7 +727,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -751,7 +751,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         
         RUN local-find-this(FALSE).
         
@@ -778,7 +778,7 @@ REPEAT WITH FRAME sel:
 
      END.
 
-     ELSE IF LOOKUP(nap,"<") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"<") > 0 THEN DO:
 
         RUN local-find-this(FALSE).
      
@@ -788,7 +788,7 @@ REPEAT WITH FRAME sel:
 
      END.
      
-     ELSE IF LOOKUP(nap,">") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,">") > 0 THEN DO:
      
         RUN local-find-this(FALSE).
 
@@ -798,7 +798,7 @@ REPEAT WITH FRAME sel:
 
      END.
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
     
         IF fMatrixAnalyse("1",
                           "DENIED",
@@ -818,7 +818,7 @@ REPEAT WITH FRAME sel:
         
      END. /* ADD NEW */
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
         RUN Gwy/balancequery.p(lcMobCLI).
         INT(RETURN-VALUE) NO-ERROR.
         IF ERROR-STATUS:ERROR THEN
@@ -830,7 +830,7 @@ REPEAT WITH FRAME sel:
         VIEW-AS ALERT-BOX TITLE "Balance query".
      END. /* balance query */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -869,19 +869,19 @@ REPEAT WITH FRAME sel:
        END.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(PrePaidRequest) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(PrePaidRequest) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 
@@ -1235,21 +1235,21 @@ PROCEDURE local-UPDATE-record:
          DISPLAY 0 @ PrePaidRequest.PPStatus WITH FRAME lis.
    
       ASSIGN 
-         ufk    = 0
-         ufk[3] = 1088
-         ufk[4] = 1121
-         ufk[8] = 8
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[3] = 1088
+         Syst.CUICommon:ufk[4] = 1121
+         Syst.CUICommon:ufk[8] = 8
          Syst.CUICommon:ehto   = 0.
 
       IF lcRight = "RW" AND LOOKUP(PrePaidRequest.Source,"CC,CHARGE,COMP") > 0 THEN DO:
 
          /* udpate */   
          IF PrePaidRequest.PPStatus = 0 OR
-            PrePaidRequest.PPStatus = 99 THEN ufk[1] = 7.
+            PrePaidRequest.PPStatus = 99 THEN Syst.CUICommon:ufk[1] = 7.
 
          /* status change (cancel) */
          IF PrePaidRequest.PPStatus = 0 OR
-            PrePaidRequest.PPStatus = 3 THEN ufk[7] = 1087.
+            PrePaidRequest.PPStatus = 3 THEN Syst.CUICommon:ufk[7] = 1087.
       END.
 
       /* minus adjustment */
@@ -1268,14 +1268,14 @@ PROCEDURE local-UPDATE-record:
             ldMinus = ldMinus + bufPP.TopUpAmt.      
          END.
 
-         IF ABS(ldMinus) < PrePaidRequest.TopUpAmt THEN ufk[6] = 1086.
+         IF ABS(ldMinus) < PrePaidRequest.TopUpAmt THEN Syst.CUICommon:ufk[6] = 1086.
       END.
 
       /* accept / cancel */
       IF PrePaidRequest.PPStatus = 99 OR
          llChanged THEN ASSIGN
-         ufk[5] = 1089
-         ufk[8] = 1059.
+         Syst.CUICommon:ufk[5] = 1089
+         Syst.CUICommon:ufk[8] = 1059.
 
       IF llDirect THEN ASSIGN 
          llDirect = FALSE
@@ -1300,9 +1300,9 @@ PROCEDURE local-UPDATE-record:
 
                READKEY.
       
-               nap = keylabel(lastkey).
+               Syst.CUICommon:nap = keylabel(lastkey).
       
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
 
                   PAUSE 0.
 
@@ -1467,8 +1467,8 @@ PROCEDURE local-UPDATE-record:
          END.
 
          ASSIGN
-            ufk    = 0
-            ufk[8] = 8
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[8] = 8
             Syst.CUICommon:ehto   = 3.
       
          RUN Syst/ufkey.p. 
@@ -1526,8 +1526,8 @@ PROCEDURE local-UPDATE-record:
       ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
         
          ASSIGN
-            ufk    = 0
-            ufk[8] = 8
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[8] = 8
             Syst.CUICommon:ehto   = 3.
       
          RUN Syst/ufkey.p. 

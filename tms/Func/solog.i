@@ -108,27 +108,27 @@ PROCEDURE local-UPDATE-record:
 
       WITH FRAME lis.
       
-      ASSIGN ufk = 0 ufk[1] = 2244 ufk[2] = 9823 ufk[8]= 8 ufk[9]= 1
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 2244 Syst.CUICommon:ufk[2] = 9823 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 llRefresh = FALSE.
       RUN Syst/ufkey.p.
    END.
 
      READKEY.
-     nap = keylabel(lastkey).
+     Syst.CUICommon:nap = keylabel(lastkey).
      
-     IF LOOKUP(nap,"1,f1") > 0 THEN DO:
-        ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+     IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+        Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
         DISP solog.commline WITH FRAME lfCommline.
         HIDE FRAME lfCommline.
         llRefresh = TRUE.
      END.
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
-        ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:
+        Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
         DISP solog.response WITH FRAME lfResponse.
         HIDE FRAME lfResponse.
         llRefresh = TRUE.
      END.
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE.
    END.
    HIDE FRAME lis.
 END PROCEDURE.

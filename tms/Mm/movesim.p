@@ -99,7 +99,7 @@ REPEAT WITH FRAME main:
    WITH FRAME main EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
          HIDE MESSAGE.
 
          IF FRAME-FIELD = "stock1" THEN DO:
@@ -190,16 +190,16 @@ REPEAT WITH FRAME main:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 Syst.CUICommon:ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8.
 
       IF length(icc1) NE length(icc2) THEN DO:
          MESSAGE 
          "Both ICC ID Codes must be of same length !"
          VIEW-AS ALERT-BOX ERROR TITLE " INVALID ICC ID CODE(S) ".
-         ufk[5] = 0.
+         Syst.CUICommon:ufk[5] = 0.
       END.   
 
 

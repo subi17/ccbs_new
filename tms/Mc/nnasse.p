@@ -241,7 +241,7 @@ def var memochr      AS LOG NO-UNDO.
 DEF VAR CLI          LIKE CLI.CLI NO-UNDO.
 DEF VAR debug        AS LOG    NO-UNDO INIT TRUE.
 DEF VAR save-ehto    AS INTEGER NO-UNDO.
-DEF VAR save-ufk     LIKE ufk  NO-UNDO.
+DEF VAR save-ufk     AS INTEGER EXTENT 9 NO-UNDO.
 DEF VAR lcBankAcc    AS CHAR   NO-UNDO.
 DEF VAR llDDBank     AS LOG    NO-UNDO. 
 DEF VAR lcTyyppi     AS CHAR   NO-UNDO.
@@ -1200,17 +1200,17 @@ repeat WITH FRAME sel:
       
       IF ufkey AND iiCustnum = 0 THEN DO:
          ASSIGN 
-         ufk = 0 
-         ufk[1] = 714
-         ufk[5]= (IF lcRight = "RW" THEN 732  ELSE 0)
-         ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
-         ufk[7]= 0 
-         ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk = 0 
+         Syst.CUICommon:ufk[1] = 714
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 732  ELSE 0)
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 
+         Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.  
          
          IF liMainCust > 0 THEN ASSIGN
-            ufk    = 0    
-            ufk[8] = 8.
+            Syst.CUICommon:ufk    = 0    
+            Syst.CUICommon:ufk[8] = 8.
          
          RUN Syst/ufkey.p.
       END.
@@ -1232,20 +1232,20 @@ repeat WITH FRAME sel:
          WITH FRAME sel.
       END.
       
-      IF iiCustnum > 0 THEN nap = "enter".
-      ELSE ASSIGN nap = keylabel(LASTKEY).
+      IF iiCustnum > 0 THEN Syst.CUICommon:nap = "enter".
+      ELSE ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND 
-         LOOKUP(nap,"f5,5,f8,8") = 0
+         LOOKUP(Syst.CUICommon:nap,"f5,5,f8,8") = 0
       THEN DO:
          bell. message "Move upwards !".
          PAUSE 1 no-message. NEXT.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 5 THEN order = 1. 
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 4. 
       END.
 
@@ -1264,7 +1264,7 @@ repeat WITH FRAME sel:
       END.
 
         /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Customer where recid(Customer) = rtab[1] no-lock.
 
@@ -1288,7 +1288,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Customer where recid(Customer) = rtab[FRAME-DOWN] no-lock .
@@ -1315,7 +1315,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Customer where recid(Customer) = memory no-lock no-error.
 
@@ -1340,7 +1340,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -1357,14 +1357,14 @@ repeat WITH FRAME sel:
      * Search functions in a separate loop *
      ***************************************/
 
-     else if lookup(nap,"f1,1") > 0 AND ufk[1] > 0
+     else if lookup(Syst.CUICommon:nap,"f1,1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN repeat WITH FRAME sel:
 
         ASSIGN 
-        ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
-        ufk[1] = 707  ufk[2] = 30  
-        ufk[3] = 1050 ufk[4] = 812 
-        ufk[8] = 8.
+        ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 1
+        Syst.CUICommon:ufk[1] = 707  Syst.CUICommon:ufk[2] = 30  
+        Syst.CUICommon:ufk[3] = 1050 Syst.CUICommon:ufk[4] = 812 
+        Syst.CUICommon:ufk[8] = 8.
         
         RUN Syst/ufkey.p.
         IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
@@ -1533,7 +1533,7 @@ repeat WITH FRAME sel:
 
      END.  /* search */
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,F4") > 0 AND Syst.CUICommon:ufk[4] > 0 AND lcRight = "RW" THEN DO:
         FIND Customer WHERE recid(Customer) = rtab[FRAME-LINE] NO-LOCK.
         CustNum = Customer.CustNum.
 
@@ -1547,10 +1547,10 @@ repeat WITH FRAME sel:
         END.
      END.
 
-     else if lookup(nap,"5,f5") > 0 THEN  /* lisays */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN  /* lisays */
          MESSAGE "This function is not allowed." VIEW-AS ALERT-BOX.
 
-     else if lookup(nap,"enter,return") > 0 THEN 
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN 
      CHG: 
      REPEAT WITH FRAME lis:
      
@@ -1638,16 +1638,16 @@ repeat WITH FRAME sel:
            llDelNote[6]  = (Customer.IDelPost > "")
            llDelNote[7]  = (Customer.IDelCountry > "")
 
-           ufk      = 0 
-           ufk[1]   = 7 WHEN lcRight =  "RW"
-           ufk[1]   = 0 WHEN lcRight NE "RW"
-           ufk[2]   = 0 
-           ufk[3]   = 0  
-           ufk[4]   = 0 
-           ufk[5]   = 1096  
-           ufk[6]   = 130  
-           ufk[7]   = 1883
-           ufk[8]   = 8 
+           Syst.CUICommon:ufk      = 0 
+           Syst.CUICommon:ufk[1]   = 7 WHEN lcRight =  "RW"
+           Syst.CUICommon:ufk[1]   = 0 WHEN lcRight NE "RW"
+           Syst.CUICommon:ufk[2]   = 0 
+           Syst.CUICommon:ufk[3]   = 0  
+           Syst.CUICommon:ufk[4]   = 0 
+           Syst.CUICommon:ufk[5]   = 1096  
+           Syst.CUICommon:ufk[6]   = 130  
+           Syst.CUICommon:ufk[7]   = 1883
+           Syst.CUICommon:ufk[8]   = 8 
            Syst.CUICommon:ehto     = 0 
            ufkey    = TRUE
            liF2Type = 0
@@ -1656,28 +1656,28 @@ repeat WITH FRAME sel:
            IF liMainCust = 0 AND iiCustNum = 0 THEN DO:
 
               /* browse inv.customers f3 and users f4 */ 
-              IF llAgrCust THEN ASSIGN ufk[3]   = 2349
+              IF llAgrCust THEN ASSIGN Syst.CUICommon:ufk[3]   = 2349
                                        liF3Type = 1.
-              IF llAgrCust OR llOthInvCust THEN ufk[4] = 2351.
+              IF llAgrCust OR llOthInvCust THEN Syst.CUICommon:ufk[4] = 2351.
              
               /* view agreement customer */
               IF NOT llAgrCust THEN ASSIGN 
-                 ufk[2]   = 1025
+                 Syst.CUICommon:ufk[2]   = 1025
                  liF2Type = 1.
               
               /* view inv. customer */
               IF NOT llInvCust THEN DO:
                  IF NOT llAgrCust THEN ASSIGN
-                    ufk[3]   = 1026
+                    Syst.CUICommon:ufk[3]   = 1026
                     liF3Type = 2.
                  ELSE ASSIGN 
-                    ufk[2]   = 1026
+                    Syst.CUICommon:ufk[2]   = 1026
                     liF2Type = 2. 
               END. 
            END.
            
            /* no financial data if only user */
-           IF NOT llAgrCust AND NOT llOthInvCust THEN ufk[6] = 0.
+           IF NOT llAgrCust AND NOT llOthInvCust THEN Syst.CUICommon:ufk[6] = 0.
            
            PAUSE 0.
            DISPLAY llDelNote WITH FRAME lis.
@@ -1801,17 +1801,17 @@ repeat WITH FRAME sel:
         
      END. /* Change */
 
-     else if lookup(nap,"6,f6") > 0 THEN 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN 
          MESSAGE "This function is not allowed." VIEW-AS ALERT-BOX.
      
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
 
         RUN pFindFirst.
         ASSIGN memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
 
         RUN pFindLast.
 
@@ -1820,7 +1820,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         
         LEAVE LOOP.
      END.  
@@ -2168,12 +2168,12 @@ PROCEDURE local-update-fin:
       WITH FRAME fina. 
 
       ASSIGN
-      ufk = 0
-      ufk[1] = 7
-      ufk[2] = 1717
-      ufk[3] = 1122
-      ufk[5] = 1164
-      ufk[8] = 8
+      Syst.CUICommon:ufk = 0
+      Syst.CUICommon:ufk[1] = 7
+      Syst.CUICommon:ufk[2] = 1717
+      Syst.CUICommon:ufk[3] = 1122
+      Syst.CUICommon:ufk[5] = 1164
+      Syst.CUICommon:ufk[8] = 8
       Syst.CUICommon:ehto = 0
       ufkey = true.
       RUN Syst/ufkey.p.
@@ -2272,7 +2272,7 @@ PROCEDURE local-update-fin:
                NEXT. 
             END.
 
-            IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME fina:
+            IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME fina:
                PAUSE 0.
 
                IF FRAME-FIELD = "VATUsage" THEN DO:

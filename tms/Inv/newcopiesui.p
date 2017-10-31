@@ -67,11 +67,11 @@ WITH
 
 MainLoop:
 REPEAT WITH FRAME Main:
-   ASSIGN ufk = 0
-          ufk[1] = 7
-          ufk[4] = 9812
-          ufk[5] = 9813
-          ufk[8] = 8
+   ASSIGN Syst.CUICommon:ufk = 0
+          Syst.CUICommon:ufk[1] = 7
+          Syst.CUICommon:ufk[4] = 9812
+          Syst.CUICommon:ufk[5] = 9813
+          Syst.CUICommon:ufk[8] = 8
           Syst.CUICommon:ehto = 3.
    RUN Syst/ufkey.p.
    UPDATE lcMSISDNFile GO-ON(F1 F4 F5)
@@ -84,7 +84,7 @@ REPEAT WITH FRAME Main:
          cKeyLabel = CAPS(cKeyLabel).
          lKeybFunction = TRUE.
       END.
-      IF NOT lKeybFunction AND LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+      IF NOT lKeybFunction AND LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
       DO:
          APPLY LASTKEY.
       END.
@@ -112,7 +112,7 @@ REPEAT WITH FRAME Main:
           APPLY LASTKEY.
           lFunctionKey = FALSE.
       END.
-      ELSE IF LOOKUP(KEYLABEL(LASTKEY), poisnap) > 0 THEN
+      ELSE IF LOOKUP(KEYLABEL(LASTKEY), Syst.CUICommon:poisnap) > 0 THEN
       DO WITH FRAME Main:
          PAUSE 0.
          IF FRAME-FIELD = "lcMSISDNFile" AND lcMSISDNFile <> "" THEN

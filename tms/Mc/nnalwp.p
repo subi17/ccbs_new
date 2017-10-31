@@ -130,7 +130,7 @@ repeat WITH FRAME start:
       Category  CustNum ConnType
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
          PAUSE 0.
          if frame-field = "CustGroup" THEN DO:
             if input frame start CustGroup = "" then disp "ALL" @ CGName.
@@ -218,7 +218,7 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
       IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.

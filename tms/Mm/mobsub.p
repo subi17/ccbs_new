@@ -308,25 +308,25 @@ BROWSE:
         
         IF NOT llMore THEN
         ASSIGN
-        ufk[1]= 209  ufk[2]= 9018 ufk[3]= 2902  ufk[4]= 2903
-        ufk[5]= 2214 ufk[6]= 2901
-        ufk[7]= 555  ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 209  Syst.CUICommon:ufk[2]= 9018 Syst.CUICommon:ufk[3]= 2902  Syst.CUICommon:ufk[4]= 2903
+        Syst.CUICommon:ufk[5]= 2214 Syst.CUICommon:ufk[6]= 2901
+        Syst.CUICommon:ufk[7]= 555  Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         
         ELSE ASSIGN
-        ufk[1]= 559  ufk[2]= 1740 ufk[3]= 9852 ufk[4]= 0
-        ufk[5]= 0 ufk[6]= 0
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 559  Syst.CUICommon:ufk[2]= 1740 Syst.CUICommon:ufk[3]= 9852 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0 Syst.CUICommon:ufk[6]= 0
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         IF ictype  NE  "" THEN ASSIGN
-         UFK[1] =  0
-         UFK[2] =  0
-         UFK[3] =  0
-         UFK[4] =  0 
-         UFK[5] =  0
-         UFK[6] =  0
-         UFK[7] =  0.
+         Syst.CUICommon:ufk[1] =  0
+         Syst.CUICommon:ufk[2] =  0
+         Syst.CUICommon:ufk[3] =  0
+         Syst.CUICommon:ufk[4] =  0 
+         Syst.CUICommon:ufk[5] =  0
+         Syst.CUICommon:ufk[6] =  0
+         Syst.CUICommon:ufk[7] =  0.
          
          RUN Syst/ufkey.p.
       END.
@@ -351,12 +351,12 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -380,10 +380,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -408,7 +408,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -434,7 +434,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Mobsub WHERE recid(mobsub) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -458,7 +458,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -473,7 +473,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -496,7 +496,7 @@ BROWSE:
      END. /* Search-1 */
      
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -518,7 +518,7 @@ BROWSE:
        END.
      END. /* Search-2 */
      
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -542,7 +542,7 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -574,7 +574,7 @@ BROWSE:
        END.
      END. /* Search-4 */
     
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -587,7 +587,7 @@ BROWSE:
        END.
      END. /* Search-5 */
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        ASSIGN lcFirstName = ""
               lcSurName1  = ""
@@ -609,7 +609,7 @@ BROWSE:
        END.
      END.
      
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:
         llMore = TRUE.
         ufkey = TRUE.
         NEXT LOOP.
@@ -618,7 +618,7 @@ BROWSE:
      /********************/
      /* 2nd page options */
      /********************/
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND lcRight = "RW" AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP: 
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -641,7 +641,7 @@ BROWSE:
        ENd.
      END. 
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -674,7 +674,7 @@ BROWSE:
        END.
      END. 
      
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND lcRight = "RW" AND llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND lcRight = "RW" AND llMore AND 
         ictype = "" THEN DO:
         
         RUN local-find-this (FALSE).
@@ -714,7 +714,7 @@ BROWSE:
            END.
         END.
      END. 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND llMore AND 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -745,7 +745,7 @@ BROWSE:
           NEXT LOOP.
        END.
      END. 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
        
@@ -759,17 +759,17 @@ BROWSE:
 
           ASSIGN
              ufkey = TRUE
-             ufk   = 0  
+             Syst.CUICommon:ufk   = 0  
              Syst.CUICommon:ehto  = 1  
-             ufk[1] = 7
-             ufk[2] = 788
-             ufk[3] = 2244 
-             ufk[4] = 1990 WHEN lcRight = "RW"
-             ufk[4] = 0 WHEN lcRight NE "RW"
-             ufk[5] =  927
-             ufk[6]=  1992
-             ufk[7]= 249
-             ufk[8]= 8  .
+             Syst.CUICommon:ufk[1] = 7
+             Syst.CUICommon:ufk[2] = 788
+             Syst.CUICommon:ufk[3] = 2244 
+             Syst.CUICommon:ufk[4] = 1990 WHEN lcRight = "RW"
+             Syst.CUICommon:ufk[4] = 0 WHEN lcRight NE "RW"
+             Syst.CUICommon:ufk[5] =  927
+             Syst.CUICommon:ufk[6]=  1992
+             Syst.CUICommon:ufk[7]= 249
+             Syst.CUICommon:ufk[8]= 8  .
           RUN Syst/ufkey.p.   
           IF Syst.CUICommon:toimi = 8 THEN DO:
              LEAVE.
@@ -815,16 +815,16 @@ BROWSE:
 
                 ASSIGN
                    ufkey  = TRUE
-                   ufk    = 0
+                   Syst.CUICommon:ufk    = 0
                    Syst.CUICommon:ehto   = 1
-                   ufk[1] = 1992
-                   ufk[2] = 844
-                   ufk[3] = 562
-                   ufk[4] = 2435
-                   ufk[5] = 0
-                   ufk[6] = 0
-                   ufk[7] = 1079.
-                   ufk[8] = 8.
+                   Syst.CUICommon:ufk[1] = 1992
+                   Syst.CUICommon:ufk[2] = 844
+                   Syst.CUICommon:ufk[3] = 562
+                   Syst.CUICommon:ufk[4] = 2435
+                   Syst.CUICommon:ufk[5] = 0
+                   Syst.CUICommon:ufk[6] = 0
+                   Syst.CUICommon:ufk[7] = 1079.
+                   Syst.CUICommon:ufk[8] = 8.
 
                 RUN Syst/ufkey.p.   
         
@@ -864,19 +864,19 @@ BROWSE:
        NEXT LOOP.
     END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(mobsub) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(mobsub) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         IF llMore THEN DO:
            llMore = FALSE.
            ufkey = TRUE.
@@ -1300,7 +1300,7 @@ PROCEDURE local-UPDATE-record.
           
          END.
         
-        IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+        IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
            
             IF FRAME-FIELD = "Reseller" THEN DO:
              

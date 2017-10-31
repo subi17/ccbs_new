@@ -284,10 +284,10 @@ BROWSE:
 
       if ufkey then do:
         assign
-        ufk[1]= 816  ufk[2]= 0 
-        ufk[3]= 2228    ufk[4]= 1036
-        ufk[5]= 5    ufk[6]= 4  ufk[7]= 0 
-        ufk[8]= 8    ufk[9]= 1
+        Syst.CUICommon:ufk[1]= 816  Syst.CUICommon:ufk[2]= 0 
+        Syst.CUICommon:ufk[3]= 2228    Syst.CUICommon:ufk[4]= 1036
+        Syst.CUICommon:ufk[5]= 5    Syst.CUICommon:ufk[6]= 4  Syst.CUICommon:ufk[7]= 0 
+        Syst.CUICommon:ufk[8]= 8    Syst.CUICommon:ufk[9]= 1
         Syst.CUICommon:ehto = 3 ufkey = false.
 
         {Syst/uright1.i '"4,5,6,7"'} 
@@ -309,9 +309,9 @@ BROWSE:
         color display value(Syst.CUICommon:ccc) Salesman.Salesman with frame sel.
       end.
 
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
-      if rtab[frame-line] = ? AND lookup(nap,"5,f5,8,f8") = 0
+      if rtab[frame-line] = ? AND lookup(Syst.CUICommon:nap,"5,f5,8,f8") = 0
       then do:
         bell.
         message "You are on a empty row, move upwards !".
@@ -319,10 +319,10 @@ BROWSE:
         next.
       end.
 
-      if lookup(nap,"cursor-right") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 then do:
         order = order - 1. if order = 0 then order = ordercount.
       end.
-      if lookup(nap,"cursor-left") > 0 then do:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 then do:
         order = order + 1. if order > ordercount then order = 1.
       end.
 
@@ -340,7 +340,7 @@ BROWSE:
       end.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 then do with frame sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do with frame sel:
         if frame-line = 1 then do:
            find Salesman where recid(Salesman) = rtab[1] no-lock.
            RUN local-find-prev.
@@ -371,7 +371,7 @@ BROWSE:
       end. /* previous line */
 
       /* next line */
-      else if lookup(nap,"cursor-down") > 0 then do
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do
       with frame sel:
         if frame-line = frame-down then do:
            find Salesman where recid(Salesman) = rtab[frame-down] no-lock .
@@ -403,7 +403,7 @@ BROWSE:
       end. /* next line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 then do:
         memory = rtab[1].
         find Salesman where recid(Salesman) = memory no-lock no-error.
         RUN local-find-prev.
@@ -427,7 +427,7 @@ BROWSE:
      end. /* previous page */
 
      /* next page */
-     else if lookup(nap,"next-page,page-down,+") > 0 then do with frame sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 then do with frame sel:
        /* cursor to the downmost line */
        if rtab[frame-down] = ? then do:
            message "YOU ARE ON THE LAST PAGE !".
@@ -441,22 +441,22 @@ BROWSE:
        end.
      end. /* next page */
 
-    else if lookup(nap,"1,f1") > 0 then do:
+    else if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:
 
         assign
-        ufk[1]= 761 ufk[2]= 30 ufk[3]= 35 ufk[4]= 0
-        ufk[5]= 0    ufk[6]= 0  ufk[7]= 0  ufk[8]= 8 ufk[9]= 1.
+        Syst.CUICommon:ufk[1]= 761 Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 35 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0    Syst.CUICommon:ufk[6]= 0  Syst.CUICommon:ufk[7]= 0  Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1.
 
         IF icResell NE "" THEN ASSIGN 
-           ufk[1] = 0 ufk[3] = 0. 
+           Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[3] = 0. 
 
         Syst.CUICommon:ehto = 3. ufkey = false.
         RUN Syst/ufkey.p.
 
-        readkey. nap = keylabel(lastkey).
+        readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
          /* Haku sarakk. 1 */
-         if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
+         if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            xReseller = "".
@@ -479,7 +479,7 @@ BROWSE:
          end. /* Haku sar. 1 */
 
          /* Haku sarakk. 2 */
-         else if lookup(nap,"2,f2") > 0 then do on endkey undo, next LOOP:
+         else if lookup(Syst.CUICommon:nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            SmName = "".
@@ -508,7 +508,7 @@ BROWSE:
          end. /* Haku sar. 2 */
 
          /* Haku 3 */
-         else if lookup(nap,"3,f3") > 0 then do on endkey undo, next LOOP:
+         else if lookup(Syst.CUICommon:nap,"3,f3") > 0 then do on endkey undo, next LOOP:
            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            xSalesman = "".
            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
@@ -529,20 +529,20 @@ BROWSE:
            end.
          end. /* Haku sar. 3 */
 
-         else if lookup(nap,"8,f8") > 0 THEN DO:
+         else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
             ufkey=true.
             NEXT BROWSE.
          end.
      end.    /* FIND */
 
-     ELSE IF lookup(nap,"3,f3") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
         FIND Salesman WHERE recid(Salesman) = rtab[FRAME-line(sel)] NO-LOCK.
         RUN Mc/smname.p(Salesman.Salesman). 
         ASSIGN memory = recid(Salesman) must-print = true ufkey=true.
         NEXT LOOP.
      END.   
 
-     ELSE IF lookup(nap,"4,f4") > 0 THEN DO:
+     ELSE IF lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         FIND Salesman WHERE recid(Salesman) = rtab[FRAME-line(sel)] NO-LOCK.
         RUN Mc/contract.p(0,
                      Salesman.Salesman). 
@@ -550,7 +550,7 @@ BROWSE:
         NEXT LOOP.
      END.   
 
-     if lookup(nap,"5,f5") > 0 then do:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 then do:  /* lisays */
 
         {Syst/uright2.i}
 
@@ -558,7 +558,7 @@ BROWSE:
         next LOOP.
      end.
 
-     else if lookup(nap,"6,f6") > 0 then do transaction:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 then do transaction:  /* removal */
 
        {Syst/uright2.i}
 
@@ -627,7 +627,7 @@ BROWSE:
        else delline = 0. /* wasn't the last one */
      end. /* removal */
 
-     else if lookup(nap,"7,f7") > 0 then do with frame move TRANS: 
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 then do with frame move TRANS: 
         /* TRANSFER */
 
         {Syst/uright2.i}
@@ -688,7 +688,7 @@ BROWSE:
         hide frame move.
      end.
 
-     else if lookup(nap,"enter,return") > 0 then
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 then
      do with frame lis transaction:
        /* change */
        {Syst/uright2.i}
@@ -717,20 +717,20 @@ BROWSE:
                with frame sel.
      end.
 
-     else if lookup(nap,"home,h") > 0 then do:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
        RUN local-find-first.
        assign memory = recid(Salesman) must-print = true.
        next LOOP.
      end.
 
-     else if lookup(nap,"end,e") > 0 then do : /* last record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do : /* last record */
        RUN local-find-last.
        assign memory = recid(Salesman) must-print = true.
        next LOOP.
      end.
 
 
-     else if lookup(nap,"8,f8") > 0 then leave LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then leave LOOP.
 
   end.  /* BROWSE */
 end.  /* LOOP */
@@ -888,9 +888,9 @@ PROCEDURE local-UPDATE-record:
              Salesman.Parent 
       WITH FRAME lis EDITING :
 
-         readkey. nap = keylabel(lastkey).
+         readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
-         if lookup(nap,poisnap) > 0 then do:
+         if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
 
             if frame-field = "Reseller" then do:
                find Reseller no-lock where

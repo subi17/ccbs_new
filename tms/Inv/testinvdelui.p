@@ -84,11 +84,11 @@ REPEAT WITH FRAME mainFrame:
    editLoop:
    EDITING:
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
       
-      IF LOOKUP(nap,poisnap) > 0 THEN DO: 
+      IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO: 
 
-         IF LOOKUP(nap,"f1") > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"f1") > 0 THEN DO:
             IF INPUT llProceed THEN LEAVE editLoop.
          END.
          
@@ -100,10 +100,10 @@ REPEAT WITH FRAME mainFrame:
    IF NOT INPUT llProceed THEN RETURN.
 
    ASSIGN
-      ufk = 0      /* clear all */
-      ufk[1] = 7   /* change    */
-      ufk[5] = 795 /* start     */
-      ufk[8] = 8   /* return    */
+      Syst.CUICommon:ufk = 0      /* clear all */
+      Syst.CUICommon:ufk[1] = 7   /* change    */
+      Syst.CUICommon:ufk[5] = 795 /* start     */
+      Syst.CUICommon:ufk[8] = 8   /* return    */
       Syst.CUICommon:ehto = 1.
    RUN Syst/ufkey.p.
    

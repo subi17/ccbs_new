@@ -114,7 +114,7 @@ BY Customer.CustNum WITH FRAME asi.
 
       IF FRAME-LINE = FRAME-DOWN THEN DO:
          message "Next page, hit SPACE - break, hit ENTER".
-         READKEY. nap = keylabel(LASTKEY).
+         READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
          if lookup(keylabel(lastkey),"enter,return") > 0 THEN LEAVE.
          CLEAR FRAME asi ALL.
          up FRAME-LINE - 1.
@@ -123,7 +123,7 @@ BY Customer.CustNum WITH FRAME asi.
    END.
 END.
 
-if nap = "" THEN DO:
+if Syst.CUICommon:nap = "" THEN DO:
    message "Press any key to return !".
    PAUSE no-message.
 END.

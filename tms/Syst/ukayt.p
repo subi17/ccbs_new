@@ -317,12 +317,12 @@ add-new:
 
        IF ufkey THEN DO:
           ASSIGN
-          ufk = 0
-          ufk[1] = 9038  ufk[2] = 9039   ufk[3] = 30 
-          ufk[4] = (IF lcExclGroup = "" THEN 46 /* show only actives */ ELSE  /* show all users */ 47)
-          ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-          ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-          ufk[7] = 0   ufk[8] = 8  ufk[9] = 1
+          Syst.CUICommon:ufk = 0
+          Syst.CUICommon:ufk[1] = 9038  Syst.CUICommon:ufk[2] = 9039   Syst.CUICommon:ufk[3] = 30 
+          Syst.CUICommon:ufk[4] = (IF lcExclGroup = "" THEN 46 /* show only actives */ ELSE  /* show all users */ 47)
+          Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+          Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+          Syst.CUICommon:ufk[7] = 0   Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
           ufkey = FALSE Syst.CUICommon:ehto = 3.
           RUN Syst/ufkey.p.
        END.
@@ -347,14 +347,14 @@ add-new:
 
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-       nap = keylabel(LASTKEY).
+       Syst.CUICommon:nap = keylabel(LASTKEY).
 
-       if nap = "cursor-left" THEN DO:
+       if Syst.CUICommon:nap = "cursor-left" THEN DO:
           order = order - 1.
           IF order = 0 THEN order = 3.
        END.
 
-       if nap = "cursor-right" THEN DO:
+       if Syst.CUICommon:nap = "cursor-right" THEN DO:
           order = order + 1.
           IF order = 4 THEN order = 1.
        END.
@@ -378,7 +378,7 @@ add-new:
        END.
 
        /* haku */
-       if nap = "f1"  or nap = "1" THEN DO:  /* tms tunnuksen haku */
+       if Syst.CUICommon:nap = "f1"  or Syst.CUICommon:nap = "1" THEN DO:  /* tms tunnuksen haku */
           Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha1.
@@ -406,7 +406,7 @@ add-new:
           END. /* tunnuksen haku */
        END. /* f1 */
 
-       else if nap = "f2" or nap = "2" THEN DO: /* foreign id haku */
+       else if Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "2" THEN DO: /* foreign id haku */
           Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha2.
@@ -434,7 +434,7 @@ add-new:
           END. /* haku foreignidllä */
        END. /* f2 */
 
-       else if nap = "f3" or nap = "3" THEN DO: /* nimihaku */
+       else if Syst.CUICommon:nap = "f3" or Syst.CUICommon:nap = "3" THEN DO: /* nimihaku */
           Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha3.
@@ -462,7 +462,7 @@ add-new:
           END. /* nimihaku */
        END. /* f3 */
 
-       else if nap = "4" or nap = "f4" THEN DO:
+       else if Syst.CUICommon:nap = "4" or Syst.CUICommon:nap = "f4" THEN DO:
           IF lcExclGroup = "" THEN lcExclGroup = "NOTinUSE".
           ELSE lcExclGroup = "".
           CLEAR FRAME sel ALL no-pause.
@@ -475,7 +475,7 @@ add-new:
           NEXT BROWSE.
        END.
        /* previous line */
-       else if nap = "cursor-up" THEN DO:
+       else if Syst.CUICommon:nap = "cursor-up" THEN DO:
           IF FRAME-LINE = 1 THEN DO:
              FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
              RUN local-find-prev. 
@@ -504,7 +504,7 @@ add-new:
        END.
 
        /* NEXT line */
-       else if nap = "cursor-down" THEN DO:
+       else if Syst.CUICommon:nap = "cursor-down" THEN DO:
           IF FRAME-LINE = FRAME-DOWN THEN DO:
 
              FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
@@ -533,7 +533,7 @@ add-new:
        END.
 
        /* previous page */
-       else if lookup(nap,"page-up,prev-page,-") > 0 THEN DO:
+       else if lookup(Syst.CUICommon:nap,"page-up,prev-page,-") > 0 THEN DO:
           memory = rtab[1].
           FIND TMSUser where recid(TMSUser) = memory no-lock.
 
@@ -557,7 +557,7 @@ add-new:
        END.
 
        /* NEXT page */
-       else if lookup(nap,"page-down,next-page,+") > 0 THEN DO WITH FRAME sel:
+       else if lookup(Syst.CUICommon:nap,"page-down,next-page,+") > 0 THEN DO WITH FRAME sel:
           IF rtab[FRAME-DOWN] = ? THEN DO:
              BELL.
              message "This is the last page !".
@@ -570,13 +570,13 @@ add-new:
           END.
        END.
 
-       else if nap = "5" or nap = "f5" AND lcRight = "RW" THEN DO :  
+       else if Syst.CUICommon:nap = "5" or Syst.CUICommon:nap = "f5" AND lcRight = "RW" THEN DO :  
        /* lisAys */
           must-add = TRUE.
           NEXT BROWSE.
        END.
 
-       else if nap = "3" or nap = "f3" AND lcRight = "RW" THEN DO:
+       else if Syst.CUICommon:nap = "3" or Syst.CUICommon:nap = "f3" AND lcRight = "RW" THEN DO:
           FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
           RUN Syst/usersman.p (TMSUser.UserCode).
           
@@ -585,7 +585,7 @@ add-new:
           
        end.
               /* removal */
-       else if nap = "6" or nap = "f6" AND lcRight = "RW" THEN DO TRANS:
+       else if Syst.CUICommon:nap = "6" or Syst.CUICommon:nap = "f6" AND lcRight = "RW" THEN DO TRANS:
           FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE]
           exclusive-lock.
           COLOR DISPLAY value(Syst.CUICommon:ctc) 
@@ -633,7 +633,7 @@ add-new:
           END.
        END.
      
-     else  if nap = "enter" or nap = "return" THEN DO:
+     else  if Syst.CUICommon:nap = "enter" or Syst.CUICommon:nap = "return" THEN DO:
       FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] NO-LOCK.
       PAUSE 0 no-message.
             
@@ -661,10 +661,10 @@ add-new:
           WITH FRAME lis.
 
           ASSIGN Syst.CUICommon:ehto   = 0
-                ufk    = 0            
-                ufk[1] = 7  WHEN lcRight = "RW"  
-                ufk[3] = 26 WHEN lcRight = "RW" 
-                ufk[8] = 8.
+                Syst.CUICommon:ufk    = 0            
+                Syst.CUICommon:ufk[1] = 7  WHEN lcRight = "RW"  
+                Syst.CUICommon:ufk[3] = 26 WHEN lcRight = "RW" 
+                Syst.CUICommon:ufk[8] = 8.
              
          RUN Syst/ufkey.p.
  
@@ -711,21 +711,21 @@ add-new:
        
       END.
 
-       else if lookup(nap,"home,h") > 0 THEN DO:
+       else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
           RUN local-find-first.
           ASSIGN
           memory = recid(TMSUser)
           must-print = TRUE.
        END.
 
-       else if lookup(nap,"end,e") > 0 THEN DO:
+       else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO:
           RUN local-find-last.    
           ASSIGN
           memory = recid(TMSUser)
           must-print = TRUE.
        END.
 
-       else if nap = "8" or nap = "f8" THEN DO:
+       else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN DO:
           HIDE FRAME sel no-pause.
           RETURN.
        END.

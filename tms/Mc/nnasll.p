@@ -170,8 +170,8 @@ FOR
 
    /* onko kjA pyytAnyt keskeytystA ? */
    READKEY PAUSE 0.
-   nap = keylabel(LASTKEY).
-   if nap = "END" THEN DO:
+   Syst.CUICommon:nap = keylabel(LASTKEY).
+   if Syst.CUICommon:nap = "END" THEN DO:
       message "Do You really want to cancel (Y/N) ?"
       UPDATE ke.
       IF ke THEN DO:

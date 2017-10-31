@@ -166,9 +166,9 @@ repeat:
       llM2Cust
    WITH FRAME rajat EDITING:
       
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
 
-       IF nap = "F9" AND 
+       IF Syst.CUICommon:nap = "F9" AND 
           FRAME-FIELD = "liDelType"
        THEN DO:
 
@@ -185,7 +185,7 @@ repeat:
          NEXT. 
       END.
  
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          PAUSE 0.
 
          if frame-field = "InvNum2" THEN DO:
@@ -306,7 +306,7 @@ repeat:
    toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[4] = 0 /* 797*/ Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.

@@ -795,18 +795,18 @@ print-line:
 
       IF ufkey THEN do:
          assign
-         ufk = 0 ufk[8]= 8 ufk[9]= 1 Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1 Syst.CUICommon:ehto = 3 ufkey = false.
          if keyp then do:
             assign
-               ufk[1] = 92
-               ufk[2] = 1635.
+               Syst.CUICommon:ufk[1] = 92
+               Syst.CUICommon:ufk[2] = 1635.
                
-            IF iiOrderID > 0 THEN ufk[2] = 0.   
+            IF iiOrderID > 0 THEN Syst.CUICommon:ufk[2] = 0.   
          end.   
          else assign
-            ufk[1] = 639 
-            ufk[3] = 1020
-            ufk[4] = 1796 /* 1860 */.
+            Syst.CUICommon:ufk[1] = 639 
+            Syst.CUICommon:ufk[3] = 1020
+            Syst.CUICommon:ufk[4] = 1796 /* 1860 */.
          RUN Syst/ufkey.p.
       end.
 
@@ -814,10 +814,10 @@ print-line:
       choose row Invoice.ExtInvID {Syst/uchoose.i} no-error with frame sel.
       color DISPlay value(Syst.CUICommon:ccc) Invoice.ExtInvID with frame sel.
 
-      assign nap = keylabel(lastkey).
+      assign Syst.CUICommon:nap = keylabel(lastkey).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"2,f2,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"2,f2,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -826,7 +826,7 @@ print-line:
       END.
 
       /* previous line */
-      IF lookup(nap,"cursor-up") > 0 THEN do with frame sel:
+      IF lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN do with frame sel:
          IF frame-line = 1 THEN do:
             find ttInvoice where recid(ttInvoice) = rtab[1] no-lock.
             find prev ttInvoice no-error.
@@ -853,7 +853,7 @@ print-line:
       end. /* previous line */
 
       /* next line */
-      else IF lookup(nap,"cursor-down") > 0 THEN do
+      else IF lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN do
       with frame sel:
 
          IF frame-line = frame-down THEN do:
@@ -882,7 +882,7 @@ print-line:
       end. /* next line */
 
       /* previous page */
-      else IF lookup(nap,"prev-page,page-up") > 0 THEN do:
+      else IF lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN do:
          memory = rtab[1].
          find ttInvoice where recid(ttInvoice) = memory no-lock no-error.
          find prev ttInvoice no-error.
@@ -908,7 +908,7 @@ print-line:
      end. /* previous page */
 
      /* next page */
-     else IF lookup(nap,"next-page,page-down") > 0 THEN do with frame sel:
+     else IF lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN do with frame sel:
 
         /* cursor to the downmost line */
 
@@ -926,7 +926,7 @@ print-line:
      end. /* next page */
 
      /* find */
-     ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 AND keyp THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,F1") > 0 AND Syst.CUICommon:ufk[1] > 0 AND keyp THEN DO:  
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         
@@ -950,16 +950,16 @@ print-line:
      END.
      
      /* filtering */
-     ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 AND keyp THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,F2") > 0 AND Syst.CUICommon:ufk[2] > 0 AND keyp THEN DO:  
         
         ASSIGN 
-           ufk      = 0
-           ufk[1]   = 1636
-           ufk[2]   = 1637
-           ufk[3]   = 1638
-           ufk[4]   = 1641
-           ufk[7]   = 831
-           ufk[8]   = 8
+           Syst.CUICommon:ufk      = 0
+           Syst.CUICommon:ufk[1]   = 1636
+           Syst.CUICommon:ufk[2]   = 1637
+           Syst.CUICommon:ufk[3]   = 1638
+           Syst.CUICommon:ufk[4]   = 1641
+           Syst.CUICommon:ufk[7]   = 831
+           Syst.CUICommon:ufk[8]   = 8
            Syst.CUICommon:ehto     = 0
            ufkey    = TRUE
            lcFilter = "".
@@ -981,7 +981,7 @@ print-line:
         NEXT loop.
      END.
 
-     else IF lookup(nap,"?") > 0 THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"?") > 0 THEN DO:
 
         MESSAGE
         "A          Invoice contains Advance Payment" SKIP
@@ -1001,7 +1001,7 @@ print-line:
         NEXT.
      END.
 
-     else IF lookup(nap,"1,f1") > 0 AND NOT keyp THEN do:
+     else IF lookup(Syst.CUICommon:nap,"1,f1") > 0 AND NOT keyp THEN do:
         find ttInvoice where recid(ttInvoice) = rtab[frame-line(sel)]
         no-lock no-error.
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
@@ -1024,7 +1024,7 @@ print-line:
      end.
 
 
-     else IF lookup(nap,"3,f3") > 0 AND NOT keyp AND ufk[3] > 0
+     else IF lookup(Syst.CUICommon:nap,"3,f3") > 0 AND NOT keyp AND Syst.CUICommon:ufk[3] > 0
      THEN do:
         find ttInvoice where recid(ttInvoice) = rtab[frame-line(sel)]
         no-lock no-error.
@@ -1090,8 +1090,8 @@ print-line:
         NEXT LOOP.
      END.
 
-     else IF nap = "T" AND keyp THEN DO:
-        ASSIGN ufk = 0 Syst.CUICommon:ehto = 3.
+     else IF Syst.CUICommon:nap = "T" AND keyp THEN DO:
+        ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
         find ttInvoice where recid(ttInvoice) = rtab[frame-line] NO-LOCK.
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
@@ -1105,13 +1105,13 @@ print-line:
 
      END.
 
-     else IF lookup(nap,"F7,7") > 0 AND ufk[7] > 0 AND keyp THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"F7,7") > 0 AND Syst.CUICommon:ufk[7] > 0 AND keyp THEN DO:
         keyp = No.
         ufkey = true.
         next LOOP.
      end.        
 
-     else IF lookup(nap,"enter,return") > 0 AND keyp THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"enter,return") > 0 AND keyp THEN DO:
 
         FIND ttInvoice WHERE recid(ttInvoice) = rtab[frame-line(sel)].
 
@@ -1147,7 +1147,7 @@ print-line:
         NEXT LOOP.
      END.
 
-     else IF lookup(nap,"home,h") > 0 THEN do:
+     else IF lookup(Syst.CUICommon:nap,"home,h") > 0 THEN do:
         find first ttInvoice no-error.
         assign
         memory = recid(ttInvoice)
@@ -1155,7 +1155,7 @@ print-line:
         next LOOP.
      end.
 
-     else IF lookup(nap,"end,e") > 0 THEN do : /* last record */
+     else IF lookup(Syst.CUICommon:nap,"end,e") > 0 THEN do : /* last record */
         find last ttInvoice no-error.
         assign
         memory = recid(ttInvoice)
@@ -1163,9 +1163,9 @@ print-line:
         next LOOP.
      end.
 
-     else IF lookup(nap,"8,f8") > 0 AND keyp THEN leave LOOP.
+     else IF lookup(Syst.CUICommon:nap,"8,f8") > 0 AND keyp THEN leave LOOP.
 
-     else IF lookup(nap,"8,f8") > 0 AND NOT keyp THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"8,f8") > 0 AND NOT keyp THEN DO:
         must-print = true.
         keyp = yes.
         ufkey = true.
@@ -1246,7 +1246,7 @@ PROCEDURE pCancellation.
    /* Cancel form */
    DO WHILE TRUE:
                
-      ASSIGN ufk = 0 ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
                                
       DISPLAY   SKIP(1)
                 " 1) Cancelled by operator         " @ menuc[1]

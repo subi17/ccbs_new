@@ -182,12 +182,12 @@ BROWSE:
         RUN local-find-this(FALSE).
         
         ASSIGN
-        ufk = 0
-        ufk[3] = 2244 
-        ufk[4] = 1068   WHEN llAdmin 
-        ufk[5] = 927    WHEN AVAIL Limit 
-        ufk[6] = 1752   WHEN AVAIL Limit 
-        /*ufk[7]= 9016*/  ufk[8]= 8 
+        Syst.CUICommon:ufk = 0
+        Syst.CUICommon:ufk[3] = 2244 
+        Syst.CUICommon:ufk[4] = 1068   WHEN llAdmin 
+        Syst.CUICommon:ufk[5] = 927    WHEN AVAIL Limit 
+        Syst.CUICommon:ufk[6] = 1752   WHEN AVAIL Limit 
+        /*ufk[7]= 9016*/  Syst.CUICommon:ufk[8]= 8 
         Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
@@ -199,16 +199,16 @@ BROWSE:
       END.
       
       IF rtab[FRAME-LINE] = ? THEN DO:
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
         
-        IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
+        IF LOOKUP(Syst.CUICommon:nap,"f3") > 0 AND Syst.CUICommon:ufk[3] > 0 THEN DO: 
            RUN Mm/msrequest.p(40,?,0,piCustnum,0,"").
            must-print = true.
            ufkey = true.
            NEXT LOOP.
         END.   
          
-        IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO: 
+        IF LOOKUP(Syst.CUICommon:nap,"f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO: 
             
             RUN local-find-first.
             
@@ -243,18 +243,18 @@ BROWSE:
             END.
         END.    
         
-        IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+        IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
         
         ELSE NEXT.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
       
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -278,10 +278,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -306,7 +306,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -332,7 +332,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Limit WHERE recid(Limit) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -356,7 +356,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -370,14 +370,14 @@ BROWSE:
        END.
      END. /* NEXT page */
          
-     IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
+     IF LOOKUP(Syst.CUICommon:nap,"f3") > 0 AND Syst.CUICommon:ufk[3] > 0 THEN DO: 
         RUN Mm/msrequest.p(40,?,0,piCustnum,0,"").
         must-print = true.
         ufkey = true.
         NEXT LOOP.
      END.   
     
-      ELSE IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:
          
          IF AVAIL Limit THEN DO:
             RUN Syst/selectbox.p(
@@ -396,7 +396,7 @@ BROWSE:
          NEXT LOOP.
       END. 
       
-      ELSE IF LOOKUP(nap,"f5") > 0 AND ufk[5] > 0 THEN DO: 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO: 
          
          RUN local-find-this(FALSE).
          
@@ -411,7 +411,7 @@ BROWSE:
 
       END.   
       
-      ELSE IF LOOKUP(nap,"f6") > 0 AND ufk[5] > 0 THEN DO: 
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"f6") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO: 
       
          RUN local-find-this(FALSE).
          
@@ -426,7 +426,7 @@ BROWSE:
       END.   
 
       /* view */
-      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
 
         RUN local-view-record.
         ufkey = TRUE. 
@@ -434,19 +434,19 @@ BROWSE:
 
       END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(Limit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(Limit) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -613,7 +613,7 @@ END PROCEDURE.
 
 PROCEDURE local-view-record:
 
-   ufk = 0.
+   Syst.CUICommon:ufk = 0.
    RUN Syst/ufkey.p.
 
    RUN local-find-this(FALSE).
@@ -705,10 +705,10 @@ PROCEDURE local-UPDATE-record:
 
       READKEY.
       
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
       DEFINE VARIABLE lcNewLimits AS CHARACTER NO-UNDO.
       
-      if lookup(nap,poisnap) > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          
          
          IF ldeValue[FRAME-INDEX] ENTERED THEN DO:
@@ -733,7 +733,7 @@ PROCEDURE local-UPDATE-record:
 
          END.
    
-         IF LOOKUP(nap,"f4,f8,x") > 0 THEN UNDO, LEAVE.
+         IF LOOKUP(Syst.CUICommon:nap,"f4,f8,x") > 0 THEN UNDO, LEAVE.
 
       END.
 

@@ -120,22 +120,22 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 7   ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 795 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 7   Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 795 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 
          ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
-      IF llFirst THEN ASSIGN nap     = "1"  
+      IF llFirst THEN ASSIGN Syst.CUICommon:nap     = "1"  
                              llFirst = FALSE.
       ELSE DO:                             
          READKEY.
-         ASSIGN nap = keylabel(LASTKEY).
+         ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
       END. 
 
-      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
              Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
@@ -149,7 +149,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
 
                    IF FRAME-FIELD = "lcInvGroup" THEN DO:
                       IF INPUT lcInvGroup = "" 
@@ -214,7 +214,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
 
          llOk = FALSE. 
 
@@ -256,7 +256,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 

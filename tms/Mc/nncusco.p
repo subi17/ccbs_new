@@ -60,7 +60,7 @@ DO WITH FRAME count:
              "Unknown Invoice Group Code!").
 
 
-   ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    message "Counting ...".
    FOR EACH Customer no-lock where

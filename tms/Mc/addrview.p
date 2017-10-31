@@ -70,10 +70,10 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 0
-      ufk[6]= 0
-      ufk[8]= 8 
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[5]= 0
+      Syst.CUICommon:ufk[6]= 0
+      Syst.CUICommon:ufk[8]= 8 
       Syst.CUICommon:ehto  = 0.
    RUN Syst/ufkey.p.
 

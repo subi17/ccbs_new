@@ -150,9 +150,9 @@ REPEAT with frame valinta:
         xemail
         with frame valinta editing:
 
-            readkey. nap = keylabel(lastkey).
+            readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
-            IF nap = "F9" AND 
+            IF Syst.CUICommon:nap = "F9" AND 
                (INDEX(FRAME-FIELD,"liInvType") > 0 OR
                 INDEX(FRAME-FIELD,"xState") > 0)
             THEN DO:
@@ -198,7 +198,7 @@ REPEAT with frame valinta:
             END.
 
 
-            ELSE IF lookup(keylabel(LASTKEY),poisnap) > 0 
+            ELSE IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 
             THEN DO WITH FRAME valinta:
                HIDE MESSAGE.
 
@@ -219,7 +219,7 @@ REPEAT with frame valinta:
     task:
     repeat with frame valinta:
 
-      assign ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
       if Syst.CUICommon:toimi = 1 then next  limits.

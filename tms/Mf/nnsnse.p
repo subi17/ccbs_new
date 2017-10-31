@@ -72,9 +72,9 @@ repeat WITH FRAME sel:
 alku:  repeat WITH FRAME alku:
           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE rnhaku WITH FRAME alku EDITING:
-             READKEY. nap = keylabel(LASTKEY).
+             READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
              /* onko painettu home */
-             if nap = "home" then assign nrohaku = true nap = "enter".
+             if Syst.CUICommon:nap = "home" then assign nrohaku = true Syst.CUICommon:nap = "enter".
              APPLY keycode(nap).
           END.
 
@@ -158,8 +158,8 @@ selaus:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 0   Syst.CUICommon:ufk[2]= 0   Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 11 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -176,12 +176,12 @@ selaus:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          jarj = jarj + 1. IF jarj = 3 THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          jarj = jarj - 1. IF jarj = 0 THEN jarj = 2.
       END.
 
@@ -208,10 +208,10 @@ selaus:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND AreaPlan where recid(AreaPlan) = rtab[1] no-lock.
             IF jarj = 2 THEN FIND prev AreaPlan
@@ -240,7 +240,7 @@ selaus:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND AreaPlan where recid(AreaPlan) = rtab[FRAME-DOWN] no-lock .
@@ -270,7 +270,7 @@ selaus:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
          muisti = rtab[1].
          FIND AreaPlan where recid(AreaPlan) = muisti no-lock no-error.
          IF jarj = 2 THEN FIND prev AreaPlan
@@ -301,7 +301,7 @@ selaus:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
         /* kohdistin alimmalle riville */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -316,14 +316,14 @@ selaus:
         END.
      END. /* seuraava sivu */
 
-     else if lookup(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     else if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND AreaPlan where recid(AreaPlan) = rtab[FRAME-LINE] no-lock.
         siirto = string(AreaPlan.TrafficArea).
         LEAVE kierros.
      END.
 
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
         IF jarj = 2 THEN FIND FIRST AreaPlan
         USE-INDEX TrafficArea no-lock no-error.
         ELSE IF jarj = 1 THEN FIND FIRST AreaPlan
@@ -332,7 +332,7 @@ selaus:
         NEXT kierros.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
         IF jarj = 2 THEN FIND LAST AreaPlan
         USE-INDEX TrafficArea no-lock no-error.
         ELSE IF jarj = 1 THEN FIND LAST AreaPlan
@@ -341,7 +341,7 @@ selaus:
         NEXT kierros.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         haettava = TRUE.
         HIDE FRAME sel no-pause.
         NEXT kierros.

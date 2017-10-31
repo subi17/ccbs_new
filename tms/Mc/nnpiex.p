@@ -96,8 +96,8 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
       fname 
       exdeci 
    WITH FRAME Limit EDITING:
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          if frame-field = "InvGroup" THEN DO:
             ASSIGN InvGroup.
             if InvGroup NE "" THEN DO:
@@ -167,10 +167,10 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    do-it:
       repeat WITH FRAME Limit:
-         ASSIGN ufk = 0 Syst.CUICommon:ehto = 0
-            ufk[1] = 7 
-            ufk[5] = 795
-            ufk[8] = 8.
+         ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+            Syst.CUICommon:ufk[1] = 7 
+            Syst.CUICommon:ufk[5] = 795
+            Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
 
          IF Syst.CUICommon:toimi = 1 THEN NEXT Limit.

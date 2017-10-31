@@ -225,8 +225,8 @@ add-new:
        IF ufkey THEN DO:
           ASSIGN
           siirto = ?
-          ufk[1] = 133  ufk[2] = 134  ufk[3] = 0    ufk[4] = 7
-          ufk[5] = 5    ufk[6] = 4    ufk[7] = 11   ufk[8] = 8
+          Syst.CUICommon:ufk[1] = 133  Syst.CUICommon:ufk[2] = 134  Syst.CUICommon:ufk[3] = 0    Syst.CUICommon:ufk[4] = 7
+          Syst.CUICommon:ufk[5] = 5    Syst.CUICommon:ufk[6] = 4    Syst.CUICommon:ufk[7] = 11   Syst.CUICommon:ufk[8] = 8
           ufkey = FALSE Syst.CUICommon:ehto = 3.
           {Syst/uright1.i '"4,5,6"'}
           RUN Syst/ufkey.p.
@@ -245,13 +245,13 @@ add-new:
 
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-       nap = keylabel(LASTKEY).
+       Syst.CUICommon:nap = keylabel(LASTKEY).
 
-       if nap = "cursor-right" THEN DO:
+       if Syst.CUICommon:nap = "cursor-right" THEN DO:
           order = order + 1.
           IF order = 3 THEN order = 1.
        END.
-       if nap = "cursor-left" THEN DO:
+       if Syst.CUICommon:nap = "cursor-left" THEN DO:
           order = order - 1.
           IF order = 0 THEN order = 2.
        END.
@@ -278,7 +278,7 @@ add-new:
        END.
 
        /* haku */
-       if nap = "f1"  or nap = "1" THEN DO:  /* menunron haku */
+       if Syst.CUICommon:nap = "f1"  or Syst.CUICommon:nap = "1" THEN DO:  /* menunron haku */
           PAUSE 0 no-message.
           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
           ha-menro = 0.
@@ -312,7 +312,7 @@ add-new:
           END. /* haku menronimellA */
        END. /* f1 */
 
-       else if nap = "f2" or nap = "2" THEN DO: /* menutekstin haku */
+       else if Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "2" THEN DO: /* menutekstin haku */
           PAUSE 0 no-message.
           Syst.CUICommon:cfc = "puhe". RUN Syst/ufcolor.p.
           ha-metex = "".
@@ -346,7 +346,7 @@ add-new:
        END. /* f2 */
 
        /* previous line */
-       else if nap = "cursor-up" THEN DO:
+       else if Syst.CUICommon:nap = "cursor-up" THEN DO:
           IF FRAME-LINE = 1 THEN DO:
              FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
 
@@ -371,7 +371,7 @@ add-new:
        END.
 
        /* NEXT line */
-       else if nap = "cursor-down" THEN DO:
+       else if Syst.CUICommon:nap = "cursor-down" THEN DO:
           IF FRAME-LINE = FRAME-DOWN THEN DO:
 
              FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
@@ -394,7 +394,7 @@ add-new:
        END.
 
        /* previous page */
-       else if lookup(nap,"-,page-up,prev-page") > 0 THEN DO:
+       else if lookup(Syst.CUICommon:nap,"-,page-up,prev-page") > 0 THEN DO:
           memory = rtab[1].
           FIND MenuText where recid(MenuText) = memory no-lock.
 
@@ -420,7 +420,7 @@ add-new:
        END.
 
        /* NEXT page */
-       else if lookup(nap,"+,page-down,next-page") > 0 THEN DO WITH FRAME sel:
+       else if lookup(Syst.CUICommon:nap,"+,page-down,next-page") > 0 THEN DO WITH FRAME sel:
           IF rtab[FRAME-DOWN] = ? THEN DO:
              BELL.
              message "You are on the last page !".
@@ -433,13 +433,13 @@ add-new:
           END.
        END.
 
-       else if nap = "5" or nap = "f5" THEN DO :  /* lisAys */
+       else if Syst.CUICommon:nap = "5" or Syst.CUICommon:nap = "f5" THEN DO :  /* lisAys */
           {Syst/uright2.i}
           must-add = TRUE.
           NEXT LOOP.
        END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:  /* removal */
         {Syst/uright2.i}
         delline = FRAME-LINE.
         FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
@@ -484,7 +484,7 @@ add-new:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-       else  if nap = "4" or nap = "f4" THEN DO:  /* change */
+       else  if Syst.CUICommon:nap = "4" or Syst.CUICommon:nap = "f4" THEN DO:  /* change */
           {Syst/uright2.i}
           FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] exclusive-lock.
           IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuText).
@@ -514,13 +514,13 @@ add-new:
           IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMenuText).
        END.
 
-       else if lookup(nap,"7,f7,enter,return") > 0 THEN DO: /* valinta */
+       else if lookup(Syst.CUICommon:nap,"7,f7,enter,return") > 0 THEN DO: /* valinta */
           FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
           siirto = string(MenuNum).
           LEAVE LOOP.
        END.
 
-       else if lookup(nap,"home,h") > 0 THEN DO:
+       else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
           IF order = 1 THEN FIND FIRST MenuText no-lock.
           ELSE FIND FIRST MenuText USE-INDEX MenuText no-lock.
           ASSIGN
@@ -529,7 +529,7 @@ add-new:
        END.
 
 
-       else if lookup(nap,"end,e") > 0 THEN DO:
+       else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO:
           IF order = 1 THEN FIND LAST MenuText no-lock.
           ELSE FIND LAST MenuText USE-INDEX MenuText no-lock.
           ASSIGN
@@ -537,7 +537,7 @@ add-new:
           must-print = TRUE.
        END.
 
-       else if nap = "8" or nap = "f8" THEN LEAVE LOOP.
+       else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE LOOP.
     END.  /* LOOP */
 
 

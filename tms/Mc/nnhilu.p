@@ -98,8 +98,8 @@ ufkey = TRUE.
 toimi:
    repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+      Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+      Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
       Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
 
       IF Syst.CUICommon:toimi = 1 THEN DO:
@@ -175,8 +175,8 @@ ELSE OUTPUT STREAM tul TO value(fname).
 
          /* onko kjA pyytAnyt keskeytystA ? */
          READKEY PAUSE 0.
-         nap = keylabel(LASTKEY).
-         if nap = "END" THEN DO:
+         Syst.CUICommon:nap = keylabel(LASTKEY).
+         if Syst.CUICommon:nap = "END" THEN DO:
             message "Are You sure You want to cance printing (Y/N) ?"
             UPDATE ok.
             IF ok THEN DO:

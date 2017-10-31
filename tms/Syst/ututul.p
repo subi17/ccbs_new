@@ -210,10 +210,10 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 164 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 164 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -229,10 +229,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND TMSReport where recid(TMSReport) = rtab[1] no-lock.
             FIND prev TMSReport no-lock no-error.
@@ -260,7 +260,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -290,7 +290,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
          memory = rtab[1].
          FIND TMSReport where recid(TMSReport) = memory no-lock no-error.
          FIND prev TMSReport no-lock no-error.
@@ -316,7 +316,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -333,7 +333,7 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* lisAys */
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* lisAys */
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
         ASSIGN si-tul = TMSReport.RepName.
         RUN Syst/ututum.p.
@@ -341,12 +341,12 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisAys */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisAys */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO:  /* removal */
         delline = FRAME-LINE.
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
@@ -394,7 +394,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis:
         /* change */
         {Syst/uright2.i}
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
@@ -444,7 +444,7 @@ BROWSE:
         xrecid = recid(TMSReport).
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* LAST record */
         FIND LAST TMSReport no-lock.
         ASSIGN
         memory = recid(TMSReport)
@@ -452,7 +452,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
         FIND FIRST TMSReport no-lock.
         ASSIGN
         memory = recid(TMSReport)
@@ -460,7 +460,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */

@@ -115,7 +115,7 @@ repeat with frame start:
    /*
    editing.
       readkey.
-      if lookup(keylabel(lastkey),poisnap) > 0 then do:
+      if lookup(keylabel(lastkey),Syst.CUICommon:poisnap) > 0 then do:
          pause 0.
          if frame-field = "exasno" then do:
             assign frame start exasno.
@@ -134,7 +134,7 @@ repeat with frame start:
    */.
 task:
    repeat with frame start:
-      assign ufk = 0 ufk[1] = 7 ufk[5] = 178 ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 178 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
       if Syst.CUICommon:toimi = 1 then next  CRIT.
       if Syst.CUICommon:toimi = 8 then leave CRIT.

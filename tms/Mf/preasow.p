@@ -230,8 +230,8 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 36  ufk[2]= 0 ufk[3]= /*1500*/ 0 ufk[4]= 1501
-         ufk[5]= 1500   ufk[6]= 15 ufk[7]= 1503 ufk[8]= 8 ufk[9]= 1
+         Syst.CUICommon:ufk[1]= 36  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= /*1500*/ 0 Syst.CUICommon:ufk[4]= 1501
+         Syst.CUICommon:ufk[5]= 1500   Syst.CUICommon:ufk[6]= 15 Syst.CUICommon:ufk[7]= 1503 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
          Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
@@ -256,12 +256,12 @@ BROWSE:
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -292,10 +292,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CLI where recid(CLI) = rtab[1] no-lock.
             IF jarj = 1 THEN FIND prev CLI
@@ -328,7 +328,7 @@ BROWSE:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CLI where recid(CLI) = rtab[FRAME-DOWN] no-lock .
@@ -362,7 +362,7 @@ BROWSE:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
          muisti = rtab[1].
          FIND CLI where recid(CLI) = muisti no-lock no-error.
          IF jarj = 1 THEN FIND prev CLI
@@ -400,7 +400,7 @@ BROWSE:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
         /* kohdistin alimmalle riville */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "THIS IS THE LAST PAGE !".
@@ -415,7 +415,7 @@ BROWSE:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
@@ -436,13 +436,13 @@ BROWSE:
         END.
      END. /* Haku sar. 1 */
 
-     else if lookup(nap,"5,f5") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        RUN Mf/viewpres.p(CLI.CLI).
        ufkey = TRUE.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO: /* mark */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO: /* mark */
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK.
           /* is this CLI marked FOR Presel */
           FIND FIRST Presel WHERE Presel.CLI = CLI.CLI AND
@@ -484,7 +484,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"7,f7") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
 
         ASSIGN
         Syst.CUICommon:ehto  = 9
@@ -506,7 +506,7 @@ BROWSE:
 
      END. 
 
-     else if lookup(nap,"6,f6") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:
        FIND FIRST psel NO-LOCK NO-ERROR.
        IF NOT AVAIL psel THEN DO:
           MESSAGE 
@@ -528,7 +528,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        RUN Mf/viewpres.p(CLI.CLI).
@@ -536,7 +536,7 @@ BROWSE:
      END.
 
      /**********
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        RUN presel2.
@@ -544,7 +544,7 @@ BROWSE:
      END.
      ***********/
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
         IF jarj = 1 THEN FIND FIRST CLI
         where CLI.CLI >= an1 AND CLI.CLI <= an2 USE-INDEX CLI no-lock no-error.
    /*   ELSE IF jarj = 2 THEN FIND FIRST CLI USE-INDEX CLI
@@ -557,7 +557,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
         IF jarj = 1 THEN FIND LAST CLI
         where CLI.CLI >= an1 AND CLI.CLI <= an2 USE-INDEX CLI no-lock no-error.
   /*    ELSE IF jarj = 2 THEN FIND LAST CLI USE-INDEX CLI
@@ -570,7 +570,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         FIND FIRST psel NO-LOCK NO-ERROR.
         PAUSE 0.
         IF AVAIL psel THEN DO:
@@ -691,7 +691,7 @@ DO TRANSAction:
    EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lispres:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lispres:
       PAUSE 0.
             IF FRAME-FIELD = "dpstype" THEN DO:
                IF INPUT FRAME lispres dpstype > 3  OR

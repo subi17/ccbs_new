@@ -94,9 +94,9 @@ repeat:
 
    upd:
    repeat with frame lis trans:
-      ASSIGN ufkey = TRUE ufk = 0 Syst.CUICommon:ehto = 1
-      ufk[1] = 7
-      ufk[8] = 8.
+      ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 1
+      Syst.CUICommon:ufk[1] = 7
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
       if Syst.CUICommon:toimi = 8 then do:
