@@ -58,7 +58,7 @@ form header
       liPage FORMAT "ZZZZ9" SKIP
    lcGrpHeader AT 1 FORMAT "X(30)"
       lcDateHeader AT 35 FORMAT "X(30)"
-      pvm FORMAT "99.99.99" AT 71 SKIP
+      TODAY FORMAT "99.99.99" AT 71 SKIP
    lcLine2 AT 1 SKIP
 
    "Bank Account"    AT 7

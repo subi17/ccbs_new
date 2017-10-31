@@ -364,7 +364,7 @@ by
        IF velka = 0 THEN NEXT.
 
        /* montako pAivAA tAstA pAivAstA on maksupAivAAn ? */
-       et = Invoice.DueDate - pvm + IF pyynto THEN Customer.PaymMethod ELSE 0.
+       et = Invoice.DueDate - TODAY + IF pyynto THEN Customer.PaymMethod ELSE 0.
        /* mihin ryhmAAn summa laitetaan ? */
        ry = 1.
        DO i = 4 TO 1 BY -1.

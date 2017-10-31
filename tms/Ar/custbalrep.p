@@ -85,7 +85,7 @@ FORM header
    sl format "ZZZZ9" SKIP
    "Customer" AT 1
    Customer.Custnum AT 10 
-   pvm format "99.99.9999" AT 68 SKIP
+   TODAY FORMAT "99.99.9999" AT 68 SKIP
    line3 AT 1 SKIP(1)
 WITH width 80 NO-LABEL no-box FRAME pagehead.
 
@@ -128,7 +128,7 @@ FOR EACH Invoice NO-LOCK WHERE
    ASSIGN
       rl = rl + 1.
 
-   IF Invoice.DueDate < pvm THEN
+   IF Invoice.DueDate < TODAY THEN
       lDue = Invoice.Invamt - lPaid.
    ELSE lDue = 0.   
 
@@ -177,7 +177,7 @@ FOR EACH Invoice NO-LOCK WHERE
       lTotDebt = lTotDebt + lDebt
       lTotPaid = lTotPaid + lPaid
       lTotVal  = lTotVal  + Invoice.InvAmt.
-   IF Invoice.DueDate < pvm THEN lTotDue = lTotDue + lDue.
+   IF Invoice.DueDate < TODAY THEN lTotDue = lTotDue + lDue.
 
    PUT STREAM tul UNFORMATTED SKIP(1).
 

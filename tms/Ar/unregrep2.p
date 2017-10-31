@@ -71,7 +71,7 @@ form header
       "Unregistered Payments" AT 32
       "Page" AT 68  
       sl format "ZZZZ9" SKIP
-      pvm format "99.99.9999" AT 68 SKIP
+      TODAY FORMAT "99.99.9999" AT 68 SKIP
    viiva2 AT 1 skip(1)
 
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.

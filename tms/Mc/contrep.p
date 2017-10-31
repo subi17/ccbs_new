@@ -61,7 +61,7 @@ form header
       "Page" at 102  
       sl format "ZZZZ9" skip
    xDateHeader AT 40 FORMAT "X(30)"
-      pvm format "99-99-9999" at 103 skip
+      TODAY FORMAT "99-99-9999" at 103 skip
    viiva2 at 1 skip
    "Contract"   AT 1 
    "Customer"   TO 17

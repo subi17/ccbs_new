@@ -328,7 +328,7 @@ repeat WITH FRAME sel:
             FixedFee.FFNum      = next-value(contract)
             FixedFee.CustNum    = Customer.CustNum
             FixedFee.VATIncl    = Customer.VATIncl
-            FixedFee.BegPeriod  = year(pvm) * 100 + month(pvm)
+            FixedFee.BegPeriod  = year(TODAY) * 100 + month(TODAY)
             FixedFee.InUse      = TRUE
             FixedFee.BegDate    = TODAY
             FixedFee.Interval   = 1

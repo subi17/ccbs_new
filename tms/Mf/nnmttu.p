@@ -44,7 +44,7 @@ ynimi = Syst.CUICommon:ynimi.
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(112)" SKIP
    ynimi AT 1
-   "MONTHLY CALLS"   at 33  s-head  at 50 pvm format "99-99-99" TO 112 SKIP
+   "MONTHLY CALLS"   at 33  s-head  at 50 TODAY format "99-99-99" TO 112 SKIP
    "month" at 33 Month at 39  IGName at 50 "Page"  TO 107
       sl format "ZZZ9" TO 112 SKIP
    fill ("=",lev) format "x(112)" skip(1)
@@ -95,7 +95,7 @@ WITH
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 
-Month = (year(pvm) * 100) + month(pvm).
+Month = (year(TODAY) * 100) + month(TODAY).
 
 rajat:
 repeat WITH FRAME rajat:

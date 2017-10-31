@@ -68,7 +68,7 @@ form header
       "Page" AT 71
       liPage FORMAT "ZZ9" SKIP
    lcDateHeader AT 40 FORMAT "X(30)"
-      pvm FORMAT "99.99.99" AT 71 SKIP
+      TODAY FORMAT "99.99.99" AT 71 SKIP
    lcLine2 AT 1 SKIP
    "InvGroup"    AT 1
    "Name"        AT 10

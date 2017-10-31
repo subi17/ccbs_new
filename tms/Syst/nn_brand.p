@@ -106,7 +106,6 @@ find first Brand no-lock WHERE
            Brand.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 ASSIGN
    empty = fill(" ",78)
-   pvm   = TODAY
    Syst.CUICommon:ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
    yvari = FALSE.
 

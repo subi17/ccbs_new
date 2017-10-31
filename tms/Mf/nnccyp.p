@@ -97,7 +97,7 @@ Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst
 view FRAME sel.
 
 ASSIGN
-   Month    = (year(pvm) * 100) + month(pvm).
+   Month    = (year(TODAY) * 100) + month(TODAY).
 
 FIND FIRST ClosedCust
 /* search condition */ no-lock no-error.

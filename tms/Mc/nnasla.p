@@ -1216,7 +1216,7 @@ PROCEDURE local-DISP-row:
          END.
       END.
       ELSE IF Invoice.PaymState = 3 THEN due = "CRL".
-      ELSE IF ERA NE 0 AND Invoice.DueDate < pvm THEN due = "!!!".
+      ELSE IF ERA NE 0 AND Invoice.DueDate < TODAY THEN due = "!!!".
    END. 
 
    CLEAR FRAME sel NO-PAUSE.

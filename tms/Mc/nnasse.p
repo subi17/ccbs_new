@@ -779,7 +779,7 @@ mess[5] = "This overrides all those settings.".
 Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 ASSIGN
-   month    = (year(pvm) * 100) + month(pvm)
+   month    = (year(TODAY) * 100) + month(TODAY)
    order    = 1 .
 
 IF iiCustNum > 0 THEN lctyyppi = "INPUTCUST".
@@ -1080,7 +1080,7 @@ repeat WITH FRAME sel:
               Customer.ChgStamp = Func.Common:mMakeTS()
               Customer.Brand    = lcBrand 
               Customer.CreUser  = katun
-              Customer.CreDate  = pvm  
+              Customer.CreDate  = TODAY  
               Customer.CustNum  = INPUT FRAME lis Customer.CustNum
               Customer.InvCust  = Customer.CustNum 
               Customer.PaymCust = Customer.CustNum

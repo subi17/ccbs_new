@@ -100,7 +100,7 @@ toimi:
    PUT STREAM excel UNFORMATTED 
      "SUMMARY OF ALL Calls BY DATE/PRODUCT GROUP/PRODUCT".  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
-     "Printed by" tab katun tab pvm format "99.99.9999".  RUN Syst/uexskip.p(2).
+     "Printed by" tab katun tab TODAY format "99.99.9999".  RUN Syst/uexskip.p(2).
    DO i = 1 TO num-entries(hdr).
       PUT STREAM excel UNFORMATTED entry(i,hdr) tab.
    END.

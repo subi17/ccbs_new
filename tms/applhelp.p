@@ -133,7 +133,7 @@ else if
         lookup(frame-field,"ValidFrom,ValidTo") > 0 THEN DO:
 
      if index(frame-value," ") > 0 or frame-value = "" THEN DO:
-        ASSIGN pp = day(pvm) kk = month(pvm) vv = year(pvm).
+        ASSIGN pp = day(TODAY) kk = month(TODAY) vv = year(TODAY).
      END.
      ELSE DO:
         ASSIGN

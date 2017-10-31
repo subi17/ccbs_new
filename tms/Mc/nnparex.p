@@ -71,7 +71,7 @@ assign exfile   = exdir + "partcomm.txt".
 
 /* Make Date proposal */
 ASSIGN
-date1 = date(month(pvm),1,year(pvm)).
+date1 = date(month(TODAY),1,year(TODAY)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 

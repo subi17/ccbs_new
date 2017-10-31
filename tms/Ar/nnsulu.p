@@ -142,7 +142,7 @@ viiva1 = fill("=",lev)
 viiva2 = fill("=",lev)
 viiva3 = fill("-",lev)
 
-pvm2        = date(month(pvm),1,year(pvm)) - 1
+pvm2        = date(month(TODAY),1,year(TODAY)) - 1
 pvm1        = date(month(pvm2),1,year(pvm2))
 InvNum2     = 99999999
 tosi2       = 99999999

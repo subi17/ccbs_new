@@ -144,7 +144,7 @@ form header
       lcASubHeader[2] format "x(4)" AT 96                  /* Sivu */
       sl format "ZZZZ9" SKIP
    lcASubDateHeader AT 45 FORMAT "X(30)"
-      pvm AT 96 FORMAT "99.99.9999" SKIP
+      TODAY AT 96 FORMAT "99.99.9999" SKIP
    viiva2 AT 2 skip
    WITH width 130 NO-LABEL no-box FRAME sivuotsi.
 

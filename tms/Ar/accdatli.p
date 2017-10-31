@@ -96,7 +96,7 @@ form header
    lcAddtHead AT 1 FORMAT "X(10)"
       lcVatHeader AT 15 FORMAT "X(10)"
       xDateHeader AT 40 FORMAT "X(35)"
-      pvm format "99.99.9999" AT 81 SKIP
+      TODAY FORMAT "99.99.9999" AT 81 SKIP
    viiva2 AT 1 skip(1)
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.
 

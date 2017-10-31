@@ -39,10 +39,10 @@ skip(1)
 with row 1 title " DELETE MONTHLY CALL COUNTERS " width 80
    NO-LABELS FRAME frm.
 
-IF month(pvm) NE 1 THEN ASSIGN
-   Month = (year(pvm) * 100) + month(pvm) - 1.
+IF month(TODAY) NE 1 THEN ASSIGN
+   Month = (year(TODAY) * 100) + month(TODAY) - 1.
 ELSE ASSIGN
-   Month = ((year(pvm) * 100) - 100) + 12.
+   Month = ((year(TODAY) * 100) - 100) + 12.
 
 
 LOOP:

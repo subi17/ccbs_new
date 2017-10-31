@@ -120,7 +120,7 @@ form header
       sl FORMAT "ZZZ9" SKIP
    lcAtil at 1 FORMAT "x(15)"
       lcRep4SubHead AT 45 FORMAT "X(35)"
-      pvm at 97 FORMAT "99-99-9999" SKIP
+      TODAY at 97 FORMAT "99-99-9999" SKIP
    viiva2 AT 1 skip(1)
 WITH width 130 NO-LABEL no-box FRAME sivuotsi.
 

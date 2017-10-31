@@ -46,7 +46,7 @@ FORM HEADER
    FILL("=",116) FORMAT "x(116)"         skip
       ynimi  at 1  FORMAT "x(23)"
       "SERVICES OF MOBILE SUBSCRIPTION" at 41
-      pvm    format "99.99.9999" TO 116 skip
+      TODAY FORMAT "99.99.9999" TO 116 skip
       mobno  FORMAT "x(20)"  at 41
       "Page"            TO 112   
       pg-c format "zz9" TO 116   skip

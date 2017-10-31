@@ -114,7 +114,7 @@ repeat WITH FRAME frm:
   PAUSE 0.
   /* CLOSE ALL who haven't CommPaid their bills in defined time */
   FOR EACH Invoice no-lock where
-           Invoice.DueDate <= pvm - liClDays.
+           Invoice.DueDate <= TODAY - liClDays.
 
      /* IF invoicegroup is selected */
      if InvGroup ne "" THEN DO:

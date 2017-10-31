@@ -42,7 +42,7 @@ form header
       "Page" AT 103
       liPage FORMAT "ZZZZ9" SKIP
    icFile AT 1 FORMAT "X(50)"
-      pvm FORMAT "99.99.99" AT 105 SKIP
+      TODAY FORMAT "99.99.99" AT 105 SKIP
    lcLine2 AT 1 SKIP
 
    "Invoice"      AT 1

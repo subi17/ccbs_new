@@ -93,7 +93,7 @@ form header
       "Page" at 102  
       sl FORMAT "ZZZZ9" SKIP
    lcDateHeader AT 40 FORMAT "X(30)"
-      pvm FORMAT "99.99.9999" at 103 SKIP
+      TODAY FORMAT "99.99.9999" at 103 SKIP
    viiva2 at 1 SKIP
    "CalcDate"     AT 5
    "Point"        AT 14

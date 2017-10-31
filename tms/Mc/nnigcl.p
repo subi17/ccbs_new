@@ -83,13 +83,13 @@ repeat WITH FRAME frm:
            MthCall.CustNum = Customer.CustNum
            MthCall.Month     = Month
            MthCall.Limit   = Customer.CreditLimit
-           MthCall.CloseDate  = pvm i1 = i1 + 1.
+           MthCall.CloseDate  = TODAY i1 = i1 + 1.
         IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhMthCall).   
      END.
      ELSE
      DO:
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMthCall).
-        ASSIGN MthCall.CloseDate  = pvm i1 = i1 + 1.
+        ASSIGN MthCall.CloseDate  = TODAY i1 = i1 + 1.
         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMthCall).
      END.
   END.

@@ -58,7 +58,7 @@ FORM HEADER
       "Page" AT 68             
       sl FORMAT "ZZZZ9" SKIP
    "Posted before " + STRING(idtDate,"99.99.9999") AT 35 FORMAT "X(30)"
-      pvm FORMAT "99.99.9999" AT 68 SKIP
+      TODAY FORMAT "99.99.9999" AT 68 SKIP
    viiva2 AT 1 SKIP
    "Customer"    AT 1
       "Name"        AT 10

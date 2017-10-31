@@ -153,7 +153,7 @@ ASSIGN
 */
 
 ASSIGN
-   Month = year(pvm) * 100 + month(pvm).
+   Month = year(TODAY) * 100 + month(TODAY).
 
 LOOP:
 repeat WITH FRAME sel:

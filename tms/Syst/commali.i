@@ -9,7 +9,6 @@
 &GLOBAL-DEFINE CommVarDef YES
 
 
-def shared var pvm     as Date format "99-99-99".
 DEF shared VAR qupd    AS lo.
 
 def shared var katun   as char format "x(8)".

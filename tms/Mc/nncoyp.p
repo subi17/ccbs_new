@@ -263,7 +263,7 @@ repeat WITH FRAME sel:
          /* sequence */
          FixedFee.FFNum = NEXT-VALUE(contract)
          /* beginning Period */
-         FixedFee.BegPeriod = year(pvm) * 100 + month(pvm)
+         FixedFee.BegPeriod = year(TODAY) * 100 + month(TODAY)
          FixedFee.Brand     = lcBrand
          FixedFee.InUse     = TRUE
          FixedFee.BegDate   = TODAY

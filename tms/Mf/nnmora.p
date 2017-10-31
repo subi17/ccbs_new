@@ -61,7 +61,7 @@ view FRAME valinta.
 PAUSE 0 no-message.
 
 /* Lasketaan oletuskaudet */
-kausi1 = integer(string(year(pvm) - 2000,"99") + string(month(pvm),"99")).
+kausi1 = integer(string(year(TODAY) - 2000,"99") + string(month(TODAY),"99")).
 kausi2 = kausi1.
 
 DISPLAY kausi1 WITH FRAME rajat.

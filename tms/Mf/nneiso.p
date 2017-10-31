@@ -84,7 +84,7 @@ IF excel THEN DO:
 END.
 
 FOR EACH Customer no-lock where 
-         Customer.ContrEnd <= pvm AND
+         Customer.ContrEnd <= TODAY AND
    (if cust-name ne "" THEN index(CustName,cust-name) NE 0 ELSE TRUE),
    FIRST Salesman no-lock where
          Salesman.Salesman = Customer.Salesman

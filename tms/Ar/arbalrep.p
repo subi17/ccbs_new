@@ -68,7 +68,7 @@ form header
       "Page" AT 81  
       sl format "ZZZZ9" SKIP
    xDateHeader AT 40 FORMAT "X(30)"
-      pvm format "99.99.9999" AT 81 SKIP
+      TODAY FORMAT "99.99.9999" AT 81 SKIP
    viiva2 AT 1 skip(1)
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.
 

@@ -96,7 +96,7 @@ assign exFile   = exdir + "inv-smag.txt".
 /* Make Date proposal */
 ASSIGN
 print = FALSE
-date1 = date(month(pvm),1,year(pvm)).
+date1 = date(month(TODAY),1,year(TODAY)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
@@ -218,7 +218,7 @@ TOIMI:
          FIND Reseller where Reseller.Reseller = Customer.Reseller no-lock.
 
 form header
-      pvm format "99.99.9999" AT 62
+      TODAY FORMAT "99.99.9999" AT 62
       "Page"                  AT 83 
       sl  format "z9" 
       skip(5)

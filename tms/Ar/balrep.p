@@ -85,7 +85,7 @@ form header
       "Page" AT 103 
       sl format "ZZZZ9" SKIP
    lcDateHeader AT 45 FORMAT "X(40)"
-      pvm format "99.99.9999" AT 103 SKIP
+      TODAY FORMAT "99.99.9999" AT 103 SKIP
    viiva2 AT 1 SKIP
    "Customer"  TO 8
    "Name"      AT 10

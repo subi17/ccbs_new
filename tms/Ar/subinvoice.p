@@ -632,7 +632,7 @@ PROCEDURE local-find-others.
    ldDebt = SubInvoice.InvAmt - SubInvoice.PaidAmt.
  
    IF SubInvoice.PaymState = 3 THEN lcDue = "CRL".
-   ELSE IF ldDebt NE 0 AND ldtDueDate < pvm THEN lcDue = "!!!".
+   ELSE IF ldDebt NE 0 AND ldtDueDate < TODAY THEN lcDue = "!!!".
     
 END PROCEDURE.
 

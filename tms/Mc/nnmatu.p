@@ -37,7 +37,7 @@ ynimi = Syst.CUICommon:ynimi.
 
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(80)"       SKIP
-   ynimi at 1 "COUNTRY NUMBERS" at 31 pvm format "99-99-99" TO 78
+   ynimi at 1 "COUNTRY NUMBERS" at 31 TODAY format "99-99-99" TO 78
    "Page"       at 66 sl format "ZZZ9" SKIP
    fill ("=",lev) format "x(80)"       SKIP
 
