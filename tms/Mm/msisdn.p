@@ -789,7 +789,7 @@ end.
           MESSAGE
              "This MSISDN" ttMSISDN.CLI "is currently assigned"    SKIP
              "into a mobile subscription that belongs to customer" SKIP
-             Customer.CustNum  lcCustName 
+             ttMSISDN.CustNum lcCustName
           VIEW-AS ALERT-BOX TITLE " MSISDN is in use !".
        END.
        ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
