@@ -15,7 +15,6 @@ DEF VAR pcMsisdn     AS CHAR NO-UNDO.
 DEF VAR pcCustIdType AS CHAR NO-UNDO.
 DEF VAR pcOrgId      AS CHAR NO-UNDO.
 /* Local variable */
-DEF VAR Syst.CUICommon:gcBrand   AS CHAR NO-UNDO INIT "1".
 
 IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
 pcTenant     = get_string(param_toplevel_id, "0").

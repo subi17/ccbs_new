@@ -16,7 +16,6 @@
 
 /* Input parameters */
 DEF VAR pcCLI            AS CHAR  NO-UNDO.
-DEF VAR Syst.CUICommon:gcBrand          AS CHAR  NO-UNDO INIT "1".
 DEF VAR lcResponseStruct AS CHAR  NO-UNDO.
 DEF VAR ldeCreated       AS DEC   NO-UNDO.
 DEF VAR lrMNPProcess     AS ROWID NO-UNDO.

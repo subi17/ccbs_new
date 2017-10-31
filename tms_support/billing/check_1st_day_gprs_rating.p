@@ -16,7 +16,6 @@ Customer number, MSISDN, STC date, old subs type, new subs type, billig item, nu
 DEF VAR ldtInputDate AS DATE NO-UNDO. 
 DEF VAR ldBeginStamp AS DEC NO-UNDO. 
 DEF VAR ldEndStamp AS DEC NO-UNDO. 
-DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INITIAL "1". 
 DEF VAR liQty AS INT NO-UNDO. 
 DEF VAR ldAmt As DEC NO-UNDO.
 DEF VAR lcInvNum AS CHAR NO-UNDO. 

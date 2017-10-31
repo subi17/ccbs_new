@@ -31,7 +31,6 @@
 {Func/log.i}
 
 
-DEF VAR Syst.CUICommon:gcBrand AS CHARACTER NO-UNDO INITIAL "1" .
 DEF VAR pcSearchStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcSearchStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcTenant       AS CHARACTER NO-UNDO.

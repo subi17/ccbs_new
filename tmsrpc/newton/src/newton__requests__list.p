@@ -16,7 +16,6 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEFINE VARIABLE Syst.CUICommon:gcBrand AS CHARACTER INIT "1" NO-UNDO. 
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
 
 &SCOPED-DEFINE BrandVarDefined YES

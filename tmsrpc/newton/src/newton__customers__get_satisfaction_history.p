@@ -11,7 +11,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR Syst.CUICommon:gcBrand   AS CHAR NO-UNDO INIT "1".
 {Syst/tmsconst.i}
 {newton/src/fpindicator.i}
 

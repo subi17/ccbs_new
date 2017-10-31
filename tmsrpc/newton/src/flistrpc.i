@@ -2,7 +2,6 @@
 {Func/matrix.i}
 {Func/multitenantfunc.i}
 
-DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 

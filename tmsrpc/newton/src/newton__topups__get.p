@@ -23,7 +23,6 @@
 {Func/tsformat.i}
 {Func/xmlfunction.i}
 
-DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 

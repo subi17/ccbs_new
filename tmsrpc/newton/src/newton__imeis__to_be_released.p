@@ -9,7 +9,6 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
-DEFINE VARIABLE Syst.CUICommon:gcBrand  AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcArray AS CHARACTER NO-UNDO. 

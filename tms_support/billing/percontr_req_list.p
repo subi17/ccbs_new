@@ -5,7 +5,6 @@ def var lcfile    as char no-undo.
 def var j         as int no-undo.
 def var ldtBegin  as decimal no-undo.
 def var ldtEnd    as decimal no-undo.
-def var Syst.CUICommon:gcBrand AS CHARACTER NO-UNDO initial "1". 
 
 def stream slog.
 

@@ -29,7 +29,6 @@ DEF VAR result_array AS CHAR NO-UNDO.
 DEF VAR sub_struct   AS CHAR NO-UNDO.
 
 /* Local variables */
-DEF VAR Syst.CUICommon:gcBrand          AS CHAR NO-UNDO INIT "1".
 DEF VAR lcTmp            AS CHAR NO-UNDO.
 DEF VAR lcCallType       AS CHAR NO-UNDO.
 DEF VAR liOwner          AS INT  NO-UNDO.

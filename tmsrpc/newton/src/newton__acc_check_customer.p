@@ -38,7 +38,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR Syst.CUICommon:gcBrand   AS CHAR NO-UNDO INIT "1".
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
 

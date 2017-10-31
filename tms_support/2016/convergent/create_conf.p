@@ -21,7 +21,6 @@ FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
    DEF VAR lcBDestList AS CHAR INIT "QTY_IN,MIN_IN".
    DEF VAR lcBDestination AS CHAR.
    DEF VAR liCCN AS INT.
-   DEF VAR Syst.CUICommon:gcBrand AS CHAR INIT "1".
    DEF VAR liBDLValue AS INT.
 
    DO liBDCount = 1 TO NUM-ENTRIES(lcBDestList):

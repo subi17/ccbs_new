@@ -5,13 +5,6 @@
 
 &GLOBAL-DEFINE CommVarDef YES
 
-
-&IF "{&BrandVarDefined}" NE "YES"
-&THEN
-DEF NEW SHARED VAR Syst.CUICommon:gcBrand       like customer.brand NO-UNDO.
-&GLOBAL-DEFINE BrandVarDefined YES
-&ENDIF
-
 def new shared var cfc as char format "x(24)".
 def new shared var ctc as char format "x(24)".
 def            var ccc as char format "x(24)".

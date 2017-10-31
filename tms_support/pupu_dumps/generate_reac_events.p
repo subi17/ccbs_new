@@ -1,5 +1,3 @@
-DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO.
-
 DEF BUFFER bTermMsRequest FOR MsRequest.
 
 {Func/matrix.i}

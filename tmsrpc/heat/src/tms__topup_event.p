@@ -28,7 +28,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE VARIABLE Syst.CUICommon:gcBrand AS CHARACTER NO-UNDO INIT "1".
 {Func/xmlfunction.i}
 {Func/multitenantfunc.i}
 

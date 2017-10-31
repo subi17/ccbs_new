@@ -18,7 +18,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR Syst.CUICommon:gcBrand AS CHARACTER INIT "1".
 
 /* Input parameters */
 DEF VAR pcCLI     AS CHAR NO-UNDO.

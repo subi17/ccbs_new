@@ -24,7 +24,6 @@
 
 {Func/dataformat.i}
 
-DEF VAR Syst.CUICommon:gcBrand AS CHAR NO-UNDO INIT "1".
 DEFINE VARIABLE resp_struct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lctmcounters AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lctmcounter_struct AS CHARACTER NO-UNDO. 
