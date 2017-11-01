@@ -17,6 +17,7 @@ END.
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 DEF BUFFER bsubReq FOR MSRequest.
 DEF BUFFER bMobsub FOR Mobsub.
+DEF BUFFER bMsRequest FOR MsRequest.
 
 DEF VAR lcCategory AS CHAR.
 DEF VAR lhCustomer AS HANDLE NO-UNDO.
@@ -26,11 +27,11 @@ DEF VAR liOrigStatus AS INT NO-UNDO.
 DEF VAR liMsreq AS INT NO-UNDO.
 DEF VAR lcResult AS CHAR NO-UNDO.
 
-FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
+FIND bMsRequest WHERE bMsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
-IF NOT AVAILABLE MsRequest OR 
-   MsRequest.ReqType NE {&REQTYPE_PRO_MIGRATION} THEN RETURN "ERROR".
-liOrigStatus = MsRequest.reqstatus.
+IF NOT AVAILABLE bMsRequest OR 
+   bMsRequest.ReqType NE {&REQTYPE_PRO_MIGRATION} THEN RETURN "ERROR".
+liOrigStatus = bMsRequest.reqstatus.
 
 /* request is under work */
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -38,7 +39,7 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
 
    FIND FIRST Mobsub NO-LOCK WHERE
-              Mobsub.MsSeq = MsRequest.MsSeq NO-ERROR.
+              Mobsub.MsSeq = bMsRequest.MsSeq NO-ERROR.
    IF NOT AVAIL Mobsub THEN lcError = "ERROR: NO Mobsub".
    FIND FIRST Customer NO-LOCK WHERE
               Customer.custnum EQ Mobsub.agrcust NO-ERROR.
@@ -98,7 +99,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
 
       /* Make subrequest by orderactions and add mandatory field true for
       getting this main process wait until handled */
-      RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
+      RUN Mm/requestaction_exec.p (bMsRequest.MsRequest,
                                 Mobsub.CLIType,
                                 0,
                                 0,
@@ -125,12 +126,12 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
          RETURN.
       END.
    END.
-   IF MSRequest.origRequest EQ 0 THEN DO:
+   IF bMSRequest.origRequest EQ 0 THEN DO:
       /* Main request, check if other subscription to migrate and 
          do migration or iSTC for all */
       lcResult =  fProMigrateOtherSubs (Mobsub.agrCust, Mobsub.msseq, 
-                                        MSRequest.msrequest, 
-                                        MSRequest.salesman).
+                                        bMSRequest.msrequest, 
+                                        bMSRequest.salesman).
       IF lcResult > "" THEN DO:
         fReqStatus(3,"").
         fReqError(lcResult).
