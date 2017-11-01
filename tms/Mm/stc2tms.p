@@ -1031,7 +1031,7 @@ PROCEDURE pFinalize:
    DEF VAR llMigrationNeeded     AS LOG  NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
-
+   DEF BUFFER Order FOR Order.
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1343,7 +1343,7 @@ PROCEDURE pFinalize:
                                                  MSRequest.msrequest,
                                                  MSRequest.salesman).
             END.
-            IF lcResult > "" THEN
+            IF lcResult > "" THEN DO:
                /* write possible error to a memo */
                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                 "MobSub",
@@ -1351,7 +1351,7 @@ PROCEDURE pFinalize:
                                 MobSub.Custnum,
                                 "Migration failed",
                                 lcResult).
-
+            END.
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
