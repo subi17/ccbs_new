@@ -111,6 +111,11 @@ FOR EACH OrderAction NO-LOCK WHERE
       WHEN "ExtraLineDiscount" THEN RUN pExtraLineDiscountPlan.
       WHEN "Q25Discount"       THEN RUN pQ25Discount.
       WHEN "Q25Extension"      THEN RUN pQ25Extension.
+      WHEN "FixedPermanency"   THEN DO:
+         IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} OR
+            MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}
+            THEN RUN pPeriodicalContract.
+      END.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
@@ -232,6 +237,7 @@ PROCEDURE pPeriodicalContract:
                  (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN ideActStamp
                   ELSE IF Order.OrderChannel BEGINS "Retention" THEN fMakeTS()
+                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN fMakeTS()
                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ideActStamp).
 

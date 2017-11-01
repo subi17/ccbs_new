@@ -295,6 +295,13 @@ PROCEDURE pPeriodicalContract:
                         bFTERMOrder.OrderID EQ iiOrderID AND
                   INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0)
       THEN lcBundleId = "FTERM8-100".
+      
+      /* CCP-3 override the default fixed line permancy*/
+      IF ttAction.ActionKey BEGINS "FTERM" AND iiOrderID > 0 AND
+         CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand = gcBrand AND
+                        OrderAction.OrderID = iiOrderID AND
+                        OrderAction.ItemType = "FixedPermanency") THEN RETURN.
 
       /*End of FLP temporary change*/
 
