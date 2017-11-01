@@ -1342,6 +1342,7 @@ PROCEDURE pFinalize:
                lcResult =  fProMigrateOtherSubs (order.Custnum, order.msseq,
                                                  MSRequest.msrequest,
                                                  MSRequest.salesman).
+               FIND MSRequest WHERE MSRequest.MsRequest = iiMSRequest NO-LOCK.
             END.
             IF lcResult > "" THEN DO:
                /* write possible error to a memo */
