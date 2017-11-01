@@ -427,6 +427,9 @@ END PROCEDURE.
 PROCEDURE pDiscountPlan:
 
    DEFINE VARIABLE ldate AS DATE NO-UNDO.
+   DEF BUFFER bDiscountPlan FOR DiscountPlan.
+
+   DEF VAR lcResult AS CHAR NO-UNDO. 
 
    FIND FIRST DiscountPlan NO-LOCK WHERE
               DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
@@ -449,6 +452,25 @@ PROCEDURE pDiscountPlan:
    IF AVAIL DPMember THEN 
       RETURN "ERROR:DPMember: " + OrderAction.ItemKey + " for " + 
          STRING(Order.MsSeq) + " already exist".
+   
+   FOR EACH DPMember NO-LOCK WHERE
+            DPMember.Hosttable = "Mobsub" AND
+            DPMember.KeyValue = STRING(Order.MsSeq) AND
+            DPMember.ValidFrom <= TODAY AND
+            DPMember.ValidTo >= TODAY,
+      FIRST bDiscountPlan NO-LOCK WHERE   
+            bDiscountPlan.DPID = DPMember.DPID:
+
+      IF fMatrixAnalyse(gcBrand,
+                        "DISCOUNT-OVERRIDE",
+                        "Discount;DiscountOld",
+                        DiscountPlan.DPRuleID + ";" + bDiscountPlan.DPRuleID,
+                        OUTPUT lcResult) EQ 0 THEN
+         fCloseDiscount(bDiscountPlan.DPRuleID,
+                        Order.MsSeq,
+                        TODAY - 1,
+                        FALSE).
+   END.
 
    CREATE DPMember.
    ASSIGN DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
