@@ -1,3 +1,31 @@
+ADD FIELD "SkyTvVoucher" OF "TPService" AS character
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Voucher"
+  COLUMN-LABEL "Voucher"
+  HELP "Sky Tv Voucher"
+  ORDER 180
+
+ADD FIELD "VoucherStatus" OF "TPService" AS character
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Voucher Status"
+  COLUMN-LABEL "Voucher Status"
+  HELP "Voucher Status Code"
+  ORDER 190
+
+ADD FIELD "RedemFile" OF "TPService" AS character
+  FORMAT "X(35)"
+  INITIAL ""
+  LABEL "Redemption File"
+  COLUMN-LABEL "Redemption File"
+  HELP "Redemption File Name"
+  ORDER 200
+
+ADD INDEX "Voucher" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "SkyTvVoucher" ASCENDING
+
 DELETE INDEX "MsSeqTypeStatus" ON "TPService"
 
 ADD INDEX "MsSeqTypeStatus" ON "TPService"
