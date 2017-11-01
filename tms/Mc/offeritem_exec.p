@@ -454,6 +454,15 @@ PROCEDURE pDiscountPlanMember:
          WHEN "CONT23" THEN lcDiscPlan = "CONT23DISC".
       END CASE.
    END.
+
+   /* FP-7: Override the default Convergent offer discount  */
+   IF LOOKUP(lcDiscPlan,"CONVDISC20_3,CONVDISC") > 0 AND
+      CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                     OrderAction.Brand = gcBrand AND
+                     OrderAction.OrderID = Order.OrderID AND
+                     OrderAction.ItemType = "Discount" AND
+              LOOKUP(OrderAction.ItemKey, "DISCFH300P,DISCFH300P_PRO") > 0) 
+   THEN RETURN "".
   
   /* ADDLINE-20 If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
    IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
