@@ -12,6 +12,8 @@ gcBrand = "1".
 {Func/orderfunc.i}
 {Mc/dpmember.i}
 
+&GLOBAL-DEFINE SKYTV-DISCOUNT-PERIOD 7
+
 DEF VAR lcCustomerId AS CHAR NO-UNDO.
 
 DEFINE TEMP-TABLE ttCustomer
@@ -25,6 +27,7 @@ DEFINE TEMP-TABLE ttCustomer
     FIELD SerialNbr   AS CHAR
     FIELD StatusCode  AS CHAR
     FIELD Description AS CHAR
+    FIELD Voucher     AS CHAR
     FIELD FileName    AS CHAR
     INDEX IdxCustomerId IS UNIQUE PRIMARY CustomerId Email.
 
@@ -109,7 +112,7 @@ PROCEDURE pUpdateStatus:
                                                                       lcDiscPlan,
                                                                       ldeDiscAmt,
                                                                       TODAY,
-                                                                      0,
+                                                                      {&SKYTV-DISCOUNT-PERIOD},
                                                                       0,
                                                                       OUTPUT lcErrMsg).
 
@@ -133,6 +136,7 @@ PROCEDURE pUpdateStatus:
             fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TV_STB_VENDOR}, {&STATUS_ERROR}).
 
         ASSIGN 
+            TPService.SkyTvVoucher   = ttCustomer.Voucher    
             TPService.ResponseCode   = ttCustomer.StatusCode
             TPService.AdditionalInfo = ttCustomer.Description.    
     END.
@@ -196,7 +200,8 @@ PROCEDURE pReadFile:
             ttCustomer.Product     = ENTRY(7,lcData)
             ttCustomer.SerialNbr   = ENTRY(8,lcData)
             ttCustomer.StatusCode  = ENTRY(11,lcData)
-            ttCustomer.Description = ENTRY(12,lcData).
+            ttCustomer.Description = ENTRY(12,lcData)
+            ttCustomer.Voucher     = ENTRY(13,lcData).
 
     END.
     INPUT CLOSE.
