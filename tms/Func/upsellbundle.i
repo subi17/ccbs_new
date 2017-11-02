@@ -8,9 +8,7 @@
        
 &GLOBAL-DEFINE upsellbundle YES
 
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fsendsms.i}
@@ -34,7 +32,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
    DEF BUFFER bMobSub       FOR MobSub. 
    DEF BUFFER DayCampaign   FOR DayCampaign.
 
-   ldTS = fMakeTS().
+   ldTS = Func.Common:mMakeTS().
 
    /* If caller is bob tool and DSS return basic bundle as DSS. */
    /* If Subs. is postpaid and DSS is active then return Basic bundle as DSS */
@@ -81,7 +79,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST bServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST DayCampaign NO-LOCK WHERE
-                  DayCampaign.Brand = gcBrand AND
+                  DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   INDEX(DayCampaign.DCEvent,"UPSELL") = 0 AND
                   DayCampaign.DCEvent <> "BONO_VOIP" AND
@@ -98,7 +96,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST bServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST DayCampaign NO-LOCK WHERE
-                  DayCampaign.Brand = gcBrand AND
+                  DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
                   DayCampaign.BundleUpsell > "":
@@ -168,7 +166,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    END.
 
    IF NOT CAN-FIND (FIRST DayCampaign WHERE
-                          DayCampaign.Brand   = gcBrand   AND
+                          DayCampaign.Brand   = Syst.Var:gcBrand   AND
                           DayCampaign.DCEvent = icDCEvent AND
                           DayCampaign.ValidTo >= TODAY NO-LOCK) THEN DO:
       ocError = "Incorrect upsell type".
@@ -197,7 +195,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       RETURN FALSE.
    END.
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand    = gcBrand AND
+              DayCampaign.Brand    = Syst.Var:gcBrand AND
               DayCampaign.DCEvent  = lcBaseContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DayCampaign THEN DO:

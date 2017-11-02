@@ -9,8 +9,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun    = "NewtonAd".
-gcBrand  = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand  = "1".
 {Syst/tmsconst.i}
 {Func/vasfunc.i}
 /* Input parameters */
@@ -84,7 +84,7 @@ FOR EACH daycampaign NO-LOCK:
 
    IF llgSVA THEN 
    DO:
-      FIND FIRST FMItem WHERE FMItem.Brand     EQ gcBrand              AND 
+      FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
                               FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
                               FMItem.BillCode  <> ""                   AND 
                               FMItem.PriceList <> ""                   AND
@@ -130,7 +130,7 @@ FOR EACH daycampaign NO-LOCK:
            END.
        END.
 
-       FIND FIRST FMItem WHERE FMItem.Brand     EQ gcBrand              AND 
+       FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
                                FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
                                FMItem.BillCode  <> ""                   AND 
                                FMItem.PriceList <> ""                   AND
@@ -147,10 +147,5 @@ FOR EACH daycampaign NO-LOCK:
        add_string(top_struct, "status"    , STRING(liServStatus)).
        add_string(top_struct, "category"  , "tv").
    END.
-END.
-
-FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN 
-      DELETE OBJECT ghFunc1 NO-ERROR.
 END.
           

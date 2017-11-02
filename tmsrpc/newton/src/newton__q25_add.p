@@ -20,8 +20,7 @@ newton__q25_add.p
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -117,7 +116,7 @@ IF NOT AVAILABLE Customer THEN
 
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
-           DCCLI.Brand   = gcBrand AND
+           DCCLI.Brand   = Syst.Var:gcBrand AND
            DCCLI.DCEvent BEGINS "PAYTERM" AND
            DCCLI.MsSeq   = MobSub.MsSeq AND 
            DCCLI.PerContractId = liper_contract_id NO-ERROR.
@@ -129,7 +128,7 @@ IF DCCLI.TermDate NE ? THEN
    RETURN appl_err("Installment contract terminated").
    
 FIND SingleFee USE-INDEX Custnum WHERE
-     SingleFee.Brand       = gcBrand AND
+     SingleFee.Brand       = Syst.Var:gcBrand AND
      SingleFee.Custnum     = MobSub.CustNum AND
      SingleFee.HostTable   = "Mobsub" AND
      SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -160,21 +159,21 @@ IF TODAY < ldaMonth22Date THEN
 ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
-   ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
+   ldContractActivTS = Func.Common:mMake2DT(ldaMonth24Date,0).
 ELSE IF TODAY >= ldaMonth24Date AND 
         TODAY < ldaMonth25Date THEN 
    ASSIGN
       ldaMonth24Date = TODAY
-      ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+      ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5). /* Handle it immediately */
 /* YDR-2220 Quota 25 prorate request is created after 20th day of 25th month*/
 ELSE 
    ASSIGN
       ldaMonth25Date = TODAY
-      ldContractActivTS = fSecOffSet(fMakeTS(),5)
+      ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5)
       llNewExtension = YES . /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                  DCCLI.Brand   EQ gcBrand AND
+                  DCCLI.Brand   EQ Syst.Var:gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ MobSub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN
@@ -191,12 +190,12 @@ IF SingleFee.OrderId > 0 THEN DO:
       RETURN appl_err("Already returned terminal").
 END.
 
-lcOrigKatun = katun.
+lcOrigkatun = Syst.Var:katun.
 /*YPR-3256*/
 IF lcQ25ContractId EQ "" THEN
-   katun = "VISTA_" + lcUsername.
+   Syst.Var:katun = "VISTA_" + lcUsername.
 ELSE 
-   katun = "POS_" + lcUsername.
+   Syst.Var:katun = "POS_" + lcUsername.
 
 /*Request for Q25 extension*/
 liCreated = fPCActionRequest(
@@ -216,7 +215,7 @@ liCreated = fPCActionRequest(
    OUTPUT lcResult).   
    
 IF liCreated = 0 THEN DO:
-   katun = lcOrigKatun.
+   Syst.Var:katun = lcOrigKatun.
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 END.
@@ -260,7 +259,7 @@ IF lcSMSTxt > "" THEN DO:
    ldeFeeAmount = SingleFee.Amt.
    
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = gcBrand AND
+            DiscountPlan.Brand = Syst.Var:gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
             DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
        EACH DPMember NO-LOCK WHERE
@@ -308,20 +307,19 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
-katun = lcOrigKatun.
+Syst.Var:katun = lcOrigKatun.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

@@ -8,13 +8,12 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -52,7 +51,7 @@ ASSIGN
    lcTime      = REPLACE(STRING(TIME,"hh:mm:ss"),":","").
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END. /* IF llDoEvent THEN DO: */
@@ -74,8 +73,8 @@ FUNCTION fLocalMemo RETURNS LOG(icHostTable AS CHAR,
                                 icUserId    AS CHAR):
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.Brand     = Syst.Var:gcBrand
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
@@ -175,9 +174,9 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
                                         INPUT "Customer email is changed.").
             END. /* IF icEmail > "" AND Customer.Email <> icEmail THEN DO: */
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.Var:katun,
                                              INPUT MobSub.MsSeq,
                                              INPUT MobSub.CLI,
                                              INPUT Mobsub.Custnum,
@@ -280,7 +279,7 @@ FUNCTION fSetDetail RETURNS CHAR(INPUT icAction AS CHAR):
                            liAction,
                            (IF liAction = 1 THEN SubSer.SSParam
                             ELSE ""),
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            "",
                            FALSE,      /* fees */
                            FALSE,      /* sms */
@@ -379,7 +378,7 @@ PROCEDURE pInvoiceDeliverables:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Invalid MSISDN".
    ELSE IF MobSub.PayType THEN RETURN "ERROR:Not a postpaid subscription".
@@ -409,14 +408,14 @@ PROCEDURE pInvoiceDeliverables:
                  lcMemoContent,
                  lcMemoContent,
                  "Service",
-                 (IF lcChannel > "" THEN lcChannel ELSE katun)).
+                 (IF lcChannel > "" THEN lcChannel ELSE Syst.Var:katun)).
    ELSE
       fLocalMemo("Invoice",
                  STRING(Customer.CustNum),
                  lcMemoContent,
                  lcMemoContent,
                  "",
-                 (IF lcChannel > "" THEN lcChannel ELSE katun)).
+                 (IF lcChannel > "" THEN lcChannel ELSE Syst.Var:katun)).
 
    RETURN "OK".
 

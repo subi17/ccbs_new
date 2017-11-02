@@ -126,15 +126,13 @@ FUNCTION fCollectPayment RETURNS LOGIC:
           FIRST OrderCustomer OF Order NO-LOCK WHERE
                 OrderCustomer.RowType = Order.InvCustRole:
                 
-         ttPaym.CustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+         ttPaym.CustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
       END.                                     
 
    END.        
           
    IF ttPaym.CustName = "" THEN         
-      ttPaym.CustName   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                          BUFFER Customer).
+      ttPaym.CustName   = Func.Common:mPrintCustName(BUFFER Customer).
 
    
    IF NOT CAN-FIND(FIRST ttTaxZone WHERE ttTaxZone.TaxZone = ttPaym.TaxZone)
@@ -161,12 +159,12 @@ IF lcSpoolDir = ? OR lcSpoolDir = "" THEN lcSpoolDir = "/tmp".
 /* all invoice customers for chosen id */
 IF icCustID > "" THEN 
 FOR EACH bAgrCust NO-LOCK WHERE
-         bAgrCust.Brand    = gcBrand AND
+         bAgrCust.Brand    = Syst.Var:gcBrand AND
          bAgrCust.OrgID    = icCustID,
     EACH Customer NO-LOCK WHERE
          Customer.AgrCust = bAgrCust.CustNum,
     EACH Payment NO-LOCK USE-INDEX CustNum WHERE
-         Payment.Brand    = gcBrand          AND
+         Payment.Brand    = Syst.Var:gcBrand          AND
          Payment.CustNum  = Customer.CustNum AND
          Payment.AccDate >= idtAccDate1      AND
          Payment.AccDate <= idtAccDate2:  
@@ -176,7 +174,7 @@ END.
     
 ELSE       
 FOR EACH Payment NO-LOCK WHERE
-         Payment.Brand     = gcBrand     AND
+         Payment.Brand     = Syst.Var:gcBrand     AND
          Payment.AccDate  >= idtAccDate1 AND
          Payment.AccDate  <= idtAccDate2,
    FIRST Customer OF Payment NO-LOCK:
@@ -204,7 +202,7 @@ FOR EACH ttTaxZone:
 
    FIND TaxZone WHERE TaxZone.TaxZone = ttTaxZone.TaxZone NO-LOCK NO-ERROR.
    IF AVAILABLE TaxZone THEN DO:
-      lcZone = fTranslationName(gcBrand,
+      lcZone = fTranslationName(Syst.Var:gcBrand,
                                 7,
                                 TaxZone.TaxZone,
                                 1,
@@ -254,8 +252,7 @@ FOR EACH ttTaxZone:
       
       IF LAST-OF(ttPaym.PaymType) THEN DO:
       
-         lcTypeName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Payment",
+         lcTypeName = Func.Common:mTMSCodeName("Payment",
                                        "PaymType",
                                        STRING(ttPaym.PaymType)).
          

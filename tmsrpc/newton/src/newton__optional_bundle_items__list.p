@@ -28,12 +28,12 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
 IF NOT AVAILABLE CLIType AND lcCLIType NE "ALL_VOICE" THEN
    RETURN appl_err("CLIType not found").
 
-fListBundleQuery(INPUT gcBrand,
+fListBundleQuery(INPUT Syst.Var:gcBrand,
                  INPUT "Bundle",
                  INPUT "SubsTypeFrom;PerContract",
                  INPUT lcCLIType).

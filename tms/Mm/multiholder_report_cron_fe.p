@@ -8,10 +8,9 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
-Katun = "Cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Cron".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/dms.i}
@@ -36,7 +35,7 @@ DEF VAR lcDelim           AS CHAR NO-UNDO INIT ";".
 
 lcTableName = "Multiholder".
 lcActionID = "Multiholder_collector_cron".
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 
 
@@ -50,7 +49,7 @@ FUNCTION fReport RETURNS CHAR
    DEF VAR lcRow AS CHAR NO-UNDO.
    OUTPUT STREAM sOutFile to VALUE(lcFile) APPEND.
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand EQ gcBrand AND
+            Order.Brand EQ Syst.Var:gcBrand AND
             Order.CRStamp < idEndTS AND
             Order.CRStamp >= idStartTS:
       FIND FIRST OrderCustomer1 NO-LOCK WHERE
@@ -110,7 +109,7 @@ ASSIGN
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -123,11 +122,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -137,14 +136,14 @@ DO TRANS:
       ldCollPeriodStartTS = ActionLog.ActionTS.
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun.
+         ActionLog.UserCode     = Syst.Var:katun.
       
       RELEASE Actionlog.
    END.
 END.
 
 /*Execute read operation and assign new period end time to actionlog.*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60).
 
 /*Actual collection*/
 fReport(ldCollPeriodStartTS, ldCollPeriodEndTS).
@@ -162,7 +161,7 @@ END.
 /*Update cunrent collection period end time to actionlog*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}

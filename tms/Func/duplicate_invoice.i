@@ -34,7 +34,7 @@ FUNCTION fDuplicateInvoiceValidate RETURNS LOGICAL
       ocResult = "Customer was not found".
    
    ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-      MsRequest.Brand   = gcBrand AND
+      MsRequest.Brand   = Syst.Var:gcBrand AND
       MsRequest.ReqType = {&REQTYPE_DUPLICATE_INVOICE} AND
       MsRequest.CustNum = ibDupInvoice.CustNum AND
       MsRequest.ReqIParam1 = ibDupInvoice.InvNum AND
@@ -88,7 +88,7 @@ FUNCTION fDuplicateInvoiceRequest RETURNS INTEGER
          liDay = 10.
       END.
    
-      idActStamp = fHMS2TS(DATE(liMonth,liDay,liYear),"00:00:00").
+      idActStamp = Func.Common:mHMS2TS(DATE(liMonth,liDay,liYear),"00:00:00").
    END.
 
    fCreateRequest({&REQTYPE_DUPLICATE_INVOICE},

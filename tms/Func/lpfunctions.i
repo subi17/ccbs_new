@@ -11,7 +11,6 @@
 &THEN
 &GLOBAL-DEFINE fLPFUNCTIONS YES
 /*{Syst/commali.i}*/
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 
 /*Function creates MsRequest for Landing Page redirection settings*/
@@ -31,7 +30,7 @@ FUNCTION fMakeLPCommandRequest RETURNS LOGICAL
                             "LP",              /*servcom*/
                             1,                 /* */
                             icCommand,         /* actual cmd */
-                            fSecOffSet(fMakeTS(),5),
+                            Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),
                             "",                /* SalesMan */
                             FALSE,             /* Set fees */
                             FALSE,             /* SMS */
@@ -48,8 +47,7 @@ FUNCTION fMakeLPCommandRequest RETURNS LOGICAL
    ocErr = "LP request for: " + icCommand + " created successfully".
   
    IF icMemoTitle NE "" THEN
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                       "Mobsub",
+      Func.Common:mWriteMemoWithType("Mobsub",
                        STRING(iiMsSeq),
                        iiCustNum,
                        icMemoTitle,
@@ -67,7 +65,7 @@ FUNCTION fICCDoneRecently RETURNS LOGICAL
    (iiMsSeq AS INT):
 
    DEF VAR ldSeekPeriodStart AS DECIMAL NO-UNDO.
-   ldSeekPeriodStart = fSecOffSet(fMakeTS(), -10 * 86400). /*10 days*/
+   ldSeekPeriodStart = Func.Common:mSecOffSet(Func.Common:mMakeTS(), -10 * 86400). /*10 days*/
    FIND FIRST MsRequest NO-LOCK WHERE
               MsRequest.MsSeq EQ iiMsSeq AND
               MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/ AND

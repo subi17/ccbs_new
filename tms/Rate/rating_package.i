@@ -39,7 +39,7 @@ FUNCTION fSubscriptionTypeList RETURNS CHARACTER
 
   DEFINE BUFFER bf_ttMxItem FOR ttMxItem.
 
-  FOR EACH ttMatrix WHERE ttMatrix.Brand = gcBrand AND ttMatrix.MXKey = "PERCONTR" NO-LOCK By ttMatrix.Prior:
+  FOR EACH ttMatrix WHERE ttMatrix.Brand = Syst.Var:gcBrand AND ttMatrix.MXKey = "PERCONTR" NO-LOCK By ttMatrix.Prior:
       
       IF ttMatrix.MXRes <> 1 THEN 
           NEXT.                                           
@@ -61,7 +61,7 @@ FUNCTION fMobileSubscriptionTypeList RETURNS CHARACTER
 
     DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
 
-    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
+    FOR EACH ttCliType WHERE ttCliType.Brand = Syst.Var:gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
         
         IF ttCliType.FixedLineDownload NE ? AND ttCliType.FixedLineDownload NE "" THEN
             NEXT.
@@ -78,7 +78,7 @@ FUNCTION fConvergentSubscriptionTypeList RETURNS CHARACTER
 
     DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
 
-    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
+    FOR EACH ttCliType WHERE ttCliType.Brand = Syst.Var:gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
         
         IF ttCliType.FixedLineDownload NE ? AND ttCliType.FixedLineDownload NE "" THEN
             ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.
@@ -94,7 +94,7 @@ FUNCTION fFamilySubscriptionTypeList RETURNS CHARACTER
 
     DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
 
-    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = True AND ttCliType.PayType = 1:        
+    FOR EACH ttCliType WHERE ttCliType.Brand = Syst.Var:gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = True AND ttCliType.PayType = 1:        
         ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.    
     END. 
 
@@ -818,21 +818,21 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
             IF NOT AVAIL MServiceLimit THEN DO:
                
-               fSplitTS(CallTimeStamp,
+               Func.Common:mSplitTS(CallTimeStamp,
                         OUTPUT ldtDate,
                         OUTPUT liTime).
                
-               ldeEndTS = fMake2Dt(ldtDate,86399).
+               ldeEndTS = Func.Common:mMake2DT(ldtDate,86399).
                
                FIND LAST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq    = MSOwner.MsSeq AND
                          MServiceLimit.DialType = liDialType AND
                          MServiceLimit.SlSeq   = ttServiceLimit.SlSeq AND
                          MServiceLimit.EndTS <= ldeEndTS AND
-                         MServiceLimit.FromTS >= fMake2Dt(ldtDate,0)
+                         MServiceLimit.FromTS >= Func.Common:mMake2DT(ldtDate,0)
                USE-INDEX MsSeq NO-ERROR.
                IF AVAIL MServiceLimit THEN
-                  ldeEndTS = fSecOffSet(MServiceLimit.EndTS,-1).
+                  ldeEndTS = Func.Common:mSecOffSet(MServiceLimit.EndTS,-1).
 
                CREATE mServiceLimit.
                ASSIGN
@@ -843,13 +843,13 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   mServiceLimit.DialType = ttServiceLimit.DialType          
                   mServiceLimit.InclUnit = ttServiceLimit.InclUnit
                   mServiceLimit.InclAmt  = ttServiceLimit.InclAmt
-                  mServiceLimit.FromTS   = fMake2Dt(ldtDate,0)
+                  mServiceLimit.FromTS   = Func.Common:mMake2DT(ldtDate,0)
                   mServiceLimit.EndTS    = ldeEndTS NO-ERROR.
                IF ERROR-STATUS:ERROR THEN DELETE mServiceLimit.
                ELSE IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER mServiceLimit:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.Var:katun,
                                    "").
 
             END.

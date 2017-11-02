@@ -8,7 +8,6 @@
 --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 
 DEF INPUT PARAMETER  HostTable LIKE memo.HostTable  NO-UNDO.
@@ -40,7 +39,7 @@ DEF VAR db-name   AS C  NO-UNDO.
 /* Line Feed Char used as line separator in MemoText field */
 LF = chr(10).
 
-FIND FIRST memo WHERE memo.Brand     = gcBrand   AND
+FIND FIRST memo WHERE memo.Brand     = Syst.Var:gcBrand   AND
                       memo.HostTable = HostTable AND
                       memo.KeyValue  = KeyValue  AND 
                       memo.MemoSeq   = MemoSeq NO-LOCK NO-ERROR.
@@ -50,9 +49,12 @@ ASSIGN tuni1 = "memo"
        tila  = true.
 {Syst/tmsreport.i RETURN}
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 FORM HEADER                                                 
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
-   ynimi "MEMO/NOTE" AT 34 pvm FORMAT "99.99.99" TO 78                   SKIP
+   ynimi "MEMO/NOTE" AT 34 TODAY FORMAT "99.99.99" TO 78                   SKIP
    memo.MemoTitle AT 28 "Page "  AT 71        sl FORMAT "zz9"      TO 78    SKIP
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
    WITH
@@ -76,13 +78,13 @@ RUN Syst/ufile1.p(INPUT HostTable, OUTPUT db-name, OUTPUT tabLbl).
 FIND TMSUser WHERE TMSUser.UserCode = memo.CreUser NO-LOCK NO-ERROR.
 IF AVAIL TMSUser THEN cru-name = TMSUser.UserName.
 ELSE cru-name = "? UNKNOWN USER ?".
-CrTime = fTS2hms(memo.CreStamp).
+CrTime = Func.Common:mTS2HMS(memo.CreStamp).
 
 IF memo.ChgUser NE "" THEN DO:
    FIND TMSUser WHERE TMSUser.UserCode = memo.ChgUser NO-LOCK NO-ERROR.
    IF AVAIL TMSUser THEN mou-name = TMSUser.UserName.
    ELSE mou-name = "? UNKNOWN USER ?".
-   mo-time = fTS2hms(memo.ChgStamp).
+   mo-time = Func.Common:mTS2HMS(memo.ChgStamp).
 END.
 
 MemoTitle = "Memo belongs to   " + tabLbl + " '" + KeyValue + "'".
