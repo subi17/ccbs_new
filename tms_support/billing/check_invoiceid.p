@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "snet".
+Syst.Var:katun = "snet".
 
 def var ldtInvDate as date no-undo.
 def var liInvType  as int  no-undo init 1.

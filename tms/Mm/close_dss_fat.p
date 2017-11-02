@@ -8,8 +8,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "CRON".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "CRON".
 {Func/cparam2.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
@@ -74,7 +74,7 @@ DEF BUFFER lbMobSub FOR MobSub.
 
 FAT_LOOP:
 FOR EACH FATime WHERE
-         FATime.Brand  = Syst.CUICommon:gcBrand AND
+         FATime.Brand  = Syst.Var:gcBrand AND
          FATime.FTGrp  = "DSSCPFREE" AND
          FATime.InvNum = 0 AND
          FATime.LastPeriod > liLastMonthPeriod NO-LOCK,
@@ -97,7 +97,7 @@ FOR EACH FATime WHERE
             MobSub.Custnum = Customer.Custnum AND
             MobSub.MultiSimID > 0,
       FIRST lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand = Syst.CUICommon:gcBrand AND
+            lbMobSub.Brand = Syst.Var:gcBrand AND
             lbMobSub.MultiSImID = Mobsub.MultiSImID AND
             lbMobSub.MultiSimType NE Mobsub.MultiSIMType:
       IF Mobsub.Custnum NE lbMobSub.Custnum THEN LEAVE.
@@ -125,7 +125,7 @@ FOR EACH FATime WHERE
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                   bDayCampaign.Brand = Syst.Var:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

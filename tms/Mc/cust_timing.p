@@ -26,7 +26,7 @@ END.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -43,7 +43,7 @@ END.
 DEF INPUT PARAMETER  iicustnum  AS INT  NO-UNDO.
 
 FIND FIRST customer NO-LOCK WHERE 
-           Customer.Brand   = Syst.CUICommon:gcBrand  AND 
+           Customer.Brand   = Syst.Var:gcBrand  AND 
            customer.CustNum = iiCustNum NO-ERROR.
 
 FIND FIRST EventLog WHERE 
@@ -164,7 +164,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    
    CREATE ttCustomer. 
 
@@ -186,7 +186,7 @@ REPEAT WITH FRAME main:
    
    WITH FRAME main EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
  
                 IF frame-field = "ldaTimingDate" THEN DO:
@@ -230,7 +230,7 @@ REPEAT WITH FRAME main:
                 
                 IF FRAME-FIELD = "ttInvCust" THEN DO:
                    FIND FIRST bCustomer WHERE 
-                              bCustomer.Brand   = Syst.CUICommon:gcBrand AND 
+                              bCustomer.Brand   = Syst.Var:gcBrand AND 
                               bCustomer.CustNum = INPUT ttCustomer.TTInvCust
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL bCustomer THEN DO:
@@ -245,7 +245,7 @@ REPEAT WITH FRAME main:
                 ELSE IF FRAME-FIELD = "TTInvCode" THEN DO:
                    IF INPUT FRAME main TTInvCode ne "00" THEN DO:
                       FIND FIRST InvRunlog  WHERE 
-                                 InvRunLog.Brand    = Syst.CUICommon:gcBrand AND 
+                                 InvRunLog.Brand    = Syst.Var:gcBrand AND 
                                  InvRunLog.InvCode = INPUT ttCustomer.TTInvCode
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL InvRunLog THEN DO:
@@ -264,17 +264,17 @@ REPEAT WITH FRAME main:
 ACTION:                            
    REPEAT WITH FRAME main:
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-      Syst.CUICommon:ufk[1] = 7 
-      Syst.CUICommon:ufk[5] = 795
-      Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
 
 
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
 
          ok = FALSE.
@@ -286,7 +286,7 @@ ACTION:
          ASSIGN
            eventlog.eventdate      = TODAY                      
            eventlog.eventtime      = STRING(TIME,"HH:MM:SS")
-           eventlog.usercode       = Syst.CUICommon:katun
+           eventlog.usercode       = Syst.Var:katun
            eventlog.action         = 'Timing'.
          ASSIGN
             eventlog.KEY            = String(Customer.custnum)

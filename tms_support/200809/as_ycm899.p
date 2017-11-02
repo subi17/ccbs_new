@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 
 output to /apps/snet/200809/ycm897_all_orders.txt.
 DEFINE VARIABLE lcSep AS CHARACTER NO-UNDO INIT "|". 
@@ -33,7 +33,7 @@ DEFINE VARIABLE lcMNPTime AS CHARACTER NO-UNDO.
 OUTPUT TO /apps/snet/200809/ycm897_dextra.txt.
 
 FOR EACH SIM   NO-LOCK WHERE
-         SIM.Brand   = Syst.CUICommon:gcBrand AND
+         SIM.Brand   = Syst.Var:gcBrand AND
          SIM.SimStat = 20,
    FIRST Order NO-LOCK WHERE
          Order.MsSeq = SIM.MsSeq:
@@ -74,7 +74,7 @@ FOR EACH SIM   NO-LOCK WHERE
 END.
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = "12" AND
          Order.OrderType = 2:
     FIND MobSub WHERE MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
@@ -82,14 +82,14 @@ FOR EACH Order NO-LOCK WHERE
     DO:
        /* Do handling only after successful after sales request */
        FIND FIRST MsRequest WHERE
-         MsRequest.Brand = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = 46 AND
          MsRequest.CLI = Order.CLI AND
          MsRequest.ReqIParam1 = Order.OrderId AND
          MsRequest.ReqStatus = 2 NO-LOCK NO-ERROR.
        IF NOT AVAIL MsRequest THEN NEXT.
 
-       FIND SIM WHERE SIM.Brand = Syst.CUICommon:gcBrand AND SIM.ICC = MobSub.ICC NO-LOCK NO-ERROR.
+       FIND SIM WHERE SIM.Brand = Syst.Var:gcBrand AND SIM.ICC = MobSub.ICC NO-LOCK NO-ERROR.
        IF NOT AVAILABLE SIM THEN NEXT.
 
   /* skip those in control */

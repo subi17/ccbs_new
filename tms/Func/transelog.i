@@ -13,7 +13,7 @@ FUNCTION fTransactionLog RETURNS LOGIC
    CREATE EventLog.
    ASSIGN EventLog.TableName      = icTableName
           EventLog.Key            = icKey
-          EventLog.UserCode       = Syst.CUICommon:katun 
+          EventLog.UserCode       = Syst.Var:katun 
           EventLog.EventDate      = TODAY
           EventLog.EventTime      = STRING(TIME,"hh:mm:ss")
           EventLog.Action         = icAction

@@ -7,8 +7,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/tsformat.i}
@@ -180,7 +180,7 @@ REPEAT:
 
       /* Fill a possible gap */
       FOR EACH ActionLog NO-LOCK WHERE
-               ActionLog.Brand = Syst.CUICommon:gcBrand AND
+               ActionLog.Brand = Syst.Var:gcBrand AND
                ActionLog.ActionId = ("TF_READ_" + lcTFBank) AND
                ActionLog.ACtionStatus NE {&ACTIONLOG_STATUS_CANCELLED} AND
                ActionLog.ToDate < ldaFromDate 
@@ -195,12 +195,12 @@ REPEAT:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.ActionID     = "TF_READ_" + lcTFBank
             ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcLogFileName
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.FromDate     = ldaFromDate 
             ActionLog.Todate       = ldaToDate
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
@@ -211,7 +211,7 @@ REPEAT:
       END.
 
       FIND DumpFile NO-LOCK WHERE
-           DumpFile.Brand = Syst.CUICommon:gcBrand AND
+           DumpFile.Brand = Syst.Var:gcBrand AND
            DumpFile.DumpName = "IFSInstallmentAction" NO-ERROR.
    
       IF AVAIL DumpFile THEN
@@ -355,7 +355,7 @@ PROCEDURE pProcessData:
       END.
 
       FIND Order NO-LOCK WHERE
-           Order.Brand = Syst.CUICommon:gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderId = ttTFPayment.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN DO:
          fWriteLog(ttTFPayment.content,"ERROR:Order not found").
@@ -363,7 +363,7 @@ PROCEDURE pProcessData:
       END.
 
       FIND FixedFee NO-LOCK WHERE
-           FixedFee.Brand = Syst.CUICommon:gcBrand AND
+           FixedFee.Brand = Syst.Var:gcBrand AND
            FixedFee.Custnum = Order.Custnum AND
            FixedFee.HostTable = "MobSub" AND
            FixedFee.KeyValue = STRING(Order.MsSeq) AND
@@ -373,7 +373,7 @@ PROCEDURE pProcessData:
 
       IF NOT AVAIL FixedFee THEN
       FIND FixedFee NO-LOCK WHERE
-           FixedFee.Brand = Syst.CUICommon:gcBrand AND
+           FixedFee.Brand = Syst.Var:gcBrand AND
            FixedFee.Custnum = Order.Custnum AND
            FixedFee.HostTable = "MobSub" AND
            FixedFee.KeyValue = STRING(Order.MsSeq) AND
@@ -411,7 +411,7 @@ PROCEDURE pProcessData:
          END.
                
          FIND bResidualFee EXCLUSIVE-LOCK WHERE
-              bResidualFee.Brand = Syst.CUICommon:gcBrand AND
+              bResidualFee.Brand = Syst.Var:gcBrand AND
               bResidualFee.Custnum = FixedFee.Custnum AND
               bResidualFee.HostTable = FixedFee.HostTable AND
               bResidualFee.KeyValue = Fixedfee.KeyValue AND
@@ -500,7 +500,7 @@ PROCEDURE pProcessData:
             
          /* should not be possible but better to check */
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.Custnum = FixedFee.Custnum AND
                     SingleFee.HostTable = "MobSub" AND
                     SingleFee.KeyValue = FixedFee.KeyValue AND
@@ -577,7 +577,7 @@ PROCEDURE pProcessData:
       IF INDEX(Order.OrderChannel,"pos") > 0 AND 
          FixedFee.BillCode NE "RVTERM" THEN
       FOR FIRST OrderTimeStamp NO-LOCK WHERE
-                OrderTimeStamp.Brand = Syst.CUICommon:gcBrand AND
+                OrderTimeStamp.Brand = Syst.Var:gcBrand AND
                 OrderTimeStamp.OrderId = Order.OrderId AND
                 OrderTimeStamp.RowType = {&ORDERTIMESTAMP_DELIVERY}:
          

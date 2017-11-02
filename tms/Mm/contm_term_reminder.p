@@ -9,8 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = "CRON".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
 {Func/cparam2.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -59,7 +59,7 @@ OUTPUT STREAM Sout TO VALUE(lcLogFile).
 
 TERM_LOOP:
 FOR EACH MsRequest WHERE
-         MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand     = Syst.Var:gcBrand AND
          MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
          MsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND
          MsRequest.ActStamp  = ldeFromTS NO-LOCK,
@@ -83,7 +83,7 @@ FOR EACH MsRequest WHERE
    END.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand        = Syst.CUICommon:gcBrand AND
+              lbMobSub.Brand        = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID   = MobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               lbMobSub.Custnum      = MobSub.Custnum NO-ERROR.
@@ -95,7 +95,7 @@ FOR EACH MsRequest WHERE
    END. /* IF AVAIL lbMobSub THEN DO: */
 
    FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              TermMobSub.Brand        = Syst.CUICommon:gcBrand AND
+              TermMobSub.Brand        = Syst.Var:gcBrand AND
               TermMobSub.MultiSimID   = MobSub.MultiSimID AND
               TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               TermMobSub.Custnum      = MobSub.Custnum NO-ERROR.

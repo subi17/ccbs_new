@@ -9,14 +9,14 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "CRON".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "CRON".
 {Func/cparam2.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -65,7 +65,7 @@ EACH_DISCOUNT:
 DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
    lcIPhoneDiscountRuleId = ENTRY(liCount,lcIPhoneDiscountRuleIds).
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = lcIPhoneDiscountRuleId NO-LOCK NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN DO:
       PUT STREAM sout UNFORMATTED "ERROR:Invalid Iphone Discount: " +
@@ -93,7 +93,7 @@ DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
       ldaInvDate = Func.Common:mLastDayOfMonth(DCCLI.ValidFrom) + 1.
 
       FOR EACH Invoice WHERE
-               Invoice.Brand     = Syst.CUICommon:gcBrand AND
+               Invoice.Brand     = Syst.Var:gcBrand AND
                Invoice.CustNum   = Customer.CustNum AND
                Invoice.InvDate  >= ldaInvDate AND
                Invoice.InvType   = 1 AND

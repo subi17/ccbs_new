@@ -15,7 +15,7 @@
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -87,7 +87,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = Syst.CUICommon:gcBrand      AND    
+                  ActionLog.Brand        = Syst.Var:gcBrand      AND    
                   ActionLog.TableName    = "Invoice"    AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSPAYSTAT" AND
@@ -97,10 +97,10 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "IFSPAYSTAT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
@@ -180,7 +180,7 @@ PROCEDURE pInitialize:
 
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = Syst.CUICommon:gcBrand      AND
+            ActionLog.Brand    = Syst.Var:gcBrand      AND
             ActionLog.ActionID = "IFSPAYSTAT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -251,7 +251,7 @@ PROCEDURE pReadEvents:
       END.
 
       FIND FIRST Invoice WHERE 
-                 Invoice.Brand    = Syst.CUICommon:gcBrand AND
+                 Invoice.Brand    = Syst.Var:gcBrand AND
                  Invoice.ExtInvID = lcInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN DO:
          fError("Unknown invoice").
@@ -342,12 +342,12 @@ PROCEDURE pReadEvents:
                                             lcClaimStatus).
 
          CREATE Memo.
-         ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+         ASSIGN Memo.Brand     = Syst.Var:gcBrand
                 Memo.HostTable = "Invoice"
                 Memo.KeyValue  = STRING(Invoice.InvNum)
                 Memo.CustNum   = Invoice.CustNum
                 Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                Memo.CreUser   = Syst.CUICommon:katun
+                Memo.CreUser   = Syst.Var:katun
                 Memo.MemoTitle = "Invoice rejection"
                 Memo.MemoText  = STRING(Invoice.InvNum) +
                                  ": " + lcClaimStatus +

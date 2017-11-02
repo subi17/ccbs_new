@@ -18,8 +18,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 

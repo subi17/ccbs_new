@@ -102,7 +102,7 @@ FOR EACH HighUsage NO-LOCK WHERE
       llClaim           = FALSE.
    
    FOR EACH invoice WHERE 
-            Invoice.Brand    = Syst.CUICommon:gcBrand          AND
+            Invoice.Brand    = Syst.Var:gcBrand          AND
             Invoice.Custnum  = Invseq.CustNum   AND 
             Invoice.CrInvNum = 0  NO-LOCK.
 
@@ -118,7 +118,7 @@ FOR EACH HighUsage NO-LOCK WHERE
       ldeInvoiceAverage = 0 .
 
    FOR EACH Invoice NO-LOCK WHERE 
-            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
+            Invoice.Brand    = Syst.Var:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum AND
             Invoice.InvDate >= today - 90,
       FIRST SubInvoice OF Invoice NO-LOCK WHERE
@@ -162,7 +162,7 @@ FOR EACH HighUsage NO-LOCK WHERE
       liperiod = YEAR(Invseq.todate) * 100 + MONTH(Invseq.todate).
 
   FIND FIRST memo WHERE 
-             Memo.Brand     = Syst.CUICommon:gcBrand               AND
+             Memo.Brand     = Syst.Var:gcBrand               AND
              memo.Custnum   = Invseq.Custnum        AND 
              Memo.Hosttable = "Highusage"           AND  
              memo.keyvalue  = STRING(HighUsage.Invseq) + "|" +  

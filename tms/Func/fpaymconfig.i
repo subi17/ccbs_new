@@ -27,7 +27,7 @@ FUNCTION fGetPaymentAccounts RETURNS LOGIC
       END CASE.
       
       FOR FIRST PaymConfig NO-LOCK WHERE
-                PaymConfig.Brand     = Syst.CUICommon:gcBrand    AND
+                PaymConfig.Brand     = Syst.Var:gcBrand    AND
                 PaymConfig.PaymType  = iiPaymType AND
                 PaymConfig.PaymSrc   = lcConfSrc  AND
                 PaymConfig.FromDate <= idtAccDate AND

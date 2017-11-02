@@ -12,7 +12,7 @@
 
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 /* Input parameters */
 DEF VAR piInvnum  AS INT  NO-UNDO.

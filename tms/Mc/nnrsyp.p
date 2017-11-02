@@ -48,7 +48,7 @@ def var old-comm     as de                     no-undo.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -67,8 +67,8 @@ form
     Reseller.Reseller      /* column-label format */
     Reseller.RsName     /* column-label format */
 with width 80 overlay scroll 1 15 down
-    color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Resellers "
     + string(TODAY,"99-99-99") + " "
     frame sel.
@@ -84,7 +84,7 @@ form
     Reseller.email          label "Email"
     Reseller.Fuc1
     Reseller.Fuc2
-    with  overlay row 5 centered color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
+    with  overlay row 5 centered color value(Syst.Var:cfc) title color value(Syst.Var:ctc)
     fr-header with side-labels 1 columns
     frame lis.
 
@@ -102,18 +102,18 @@ form /* serch */
     "Brand:" lcBrand skip
     "Code :" Reseller
     help "Give reseller's code"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RESELLER'S CODE "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND RESELLER'S CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame f1.
 
 form /* reseller search with field RsName */
     "Brand:" lcBrand skip
     "Name :" RsName
     help "Give reseller's name or its first characters"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RESELLER'S NAME "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND RESELLER'S NAME "
+    color value(Syst.Var:cfc) no-labels overlay frame f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 view frame sel.
 
 find first Reseller
@@ -137,13 +137,13 @@ repeat with frame sel:
     end.
 
    if must-add then do:  /* Reseller -ADD  */
-      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
         pause 0 no-message.
         clear frame lis no-pause.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         do transaction:
            prompt-for Reseller.Reseller
            validate
@@ -165,7 +165,7 @@ add-new:
                   Reseller.Fuc2
            editing:
               readkey.
-              if lookup(keylabel(lastkey),Syst.CUICommon:poisnap) > 0 then do:
+              if lookup(keylabel(lastkey),Syst.Var:poisnap) > 0 then do:
                  hide message no-pause.
               end.
               apply lastkey.
@@ -239,9 +239,9 @@ BROWSE:
 
       if ufkey then do:
         assign
-        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 2431 Syst.CUICommon:ufk[4]= 756
-        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4   Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8   Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = false.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 2431 Syst.Var:ufk[4]= 756
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4   Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8   Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = false.
 
         {Syst/uright1.i '"5,6"'}
 
@@ -251,20 +251,20 @@ BROWSE:
       hide message no-pause.
       if order = 1 then do:
         choose row Reseller.Reseller {Syst/uchoose.i} no-error with frame sel.
-        color display value(Syst.CUICommon:ccc) Reseller.Reseller with frame sel.
+        color display value(Syst.Var:ccc) Reseller.Reseller with frame sel.
       end.
       else if order = 2 then do:
         choose row Reseller.RsName {Syst/uchoose.i} no-error with frame sel.
-        color display value(Syst.CUICommon:ccc) Reseller.RsName with frame sel.
+        color display value(Syst.Var:ccc) Reseller.RsName with frame sel.
       end.
       if rtab[frame-line] = ? then next.
 
-      Syst.CUICommon:nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 then do:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 then do:
         order = order + 1. if order > ordercount then order = 1.
       end.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 then do:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 then do:
         order = order - 1. if order = 0 then order = ordercount.
       end.
 
@@ -291,10 +291,10 @@ BROWSE:
         next.
       end.
 
-      assign Syst.CUICommon:nap = keylabel(lastkey).
+      assign Syst.Var:nap = keylabel(lastkey).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do with frame sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 then do with frame sel:
         if frame-line = 1 then do:
            find Reseller where recid(Reseller) = rtab[1] no-lock.
            if order = 1 then find prev Reseller
@@ -324,7 +324,7 @@ BROWSE:
       end. /* previous line */
 
       /* next line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 then do
       with frame sel:
         if frame-line = frame-down then do:
            find Reseller where recid(Reseller) = rtab[frame-down] no-lock .
@@ -356,7 +356,7 @@ BROWSE:
       end. /* next line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 then do:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 then do:
         memory = rtab[1].
         find Reseller where recid(Reseller) = memory no-lock no-error.
         if order = 1 then find prev Reseller
@@ -386,7 +386,7 @@ BROWSE:
      end. /* previous page */
 
      /* next page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 then do with frame sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 then do with frame sel:
        /* cursor to the downmost line */
        if rtab[frame-down] = ? then do:
            message "YOU ARE ON THE LAST PAGE !".
@@ -401,13 +401,13 @@ BROWSE:
      end. /* next page */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        DISP lcBrand with frame f1.
        UPDATE 
-          lcBrand WHEN Syst.CUICommon:gcAllBrand
+          lcBrand WHEN Syst.Var:gcAllBrand
            Reseller with frame f1.
        hide frame f1 no-pause.
 
@@ -423,15 +423,15 @@ BROWSE:
      end. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 then do on endkey undo, next LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
 
        DISP lcBrand with frame f2.
        UPDATE 
-          lcBrand WHEN Syst.CUICommon:gcAllBrand
+          lcBrand WHEN Syst.Var:gcAllBrand
           RsName with frame f2.
        hide frame f2 no-pause.
 
@@ -447,7 +447,7 @@ BROWSE:
        end.
      end. /* Haku sar. 2 */
 
-     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 then do:  /* salesmen */
+     else if lookup(Syst.Var:nap,"3,f3") > 0 then do:  /* salesmen */
 
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
@@ -456,7 +456,7 @@ BROWSE:
        ufkey = true. 
      end.
      
-     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 then do:  /* salesmen */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 then do:  /* salesmen */
 
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
@@ -465,7 +465,7 @@ BROWSE:
        ufkey = true. 
      end.
 
-     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 then do:  /* lisays */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 then do:  /* lisays */
 
         {Syst/uright2.i}
 
@@ -473,7 +473,7 @@ BROWSE:
         next LOOP.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 then do transaction:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 then do transaction:  /* removal */
 
        {Syst/uright2.i}
 
@@ -481,7 +481,7 @@ BROWSE:
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
 
        /* line to be deleted is lightened */
-       color display value(Syst.CUICommon:ctc)
+       color display value(Syst.Var:ctc)
        Reseller.Reseller Reseller.RsName.
 
        if order = 1 then find next Reseller
@@ -510,7 +510,7 @@ BROWSE:
 
        assign ok = false.
        message "DO YOU REALLY WANT TO DELETE (y/n) ? " update ok.
-       color display value(Syst.CUICommon:ccc)
+       color display value(Syst.Var:ccc)
        Reseller.Reseller Reseller.RsName.
        if ok then do:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhresell).
@@ -529,7 +529,7 @@ BROWSE:
        else delline = 0. /* wasn't the last one */
      end. /* removal */
 
-     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 then CHANGE:
+     else if lookup(Syst.Var:nap,"enter,return") > 0 then CHANGE:
      do with frame lis transaction:
        /* change */
        {Syst/uright2.i}
@@ -537,9 +537,9 @@ BROWSE:
        find Reseller where recid(Reseller) = rtab[frame-line(sel)]
        exclusive-lock.
 
-       assign fr-header = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9.
+       assign fr-header = " CHANGE " ufkey = true Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        display Reseller.Reseller .
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhresell).
@@ -550,7 +550,7 @@ BROWSE:
               Reseller.Fuc2
        editing:
               readkey.
-              if lookup(keylabel(lastkey),Syst.CUICommon:poisnap) > 0 then do:
+              if lookup(keylabel(lastkey),Syst.Var:poisnap) > 0 then do:
                  hide message no-pause.
               end.
               apply lastkey.
@@ -563,7 +563,7 @@ BROWSE:
        xrecid = recid(Reseller).
      end.
 
-     else if lookup(Syst.CUICommon:nap,"home") > 0 then do:
+     else if lookup(Syst.Var:nap,"home") > 0 then do:
        if order = 1 then find first Reseller
        WHERE Reseller.Brand = lcBrand no-lock no-error.
        else if order = 2 then find first Reseller use-index RsName
@@ -572,7 +572,7 @@ BROWSE:
        next LOOP.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"end") > 0 then do : /* last record */
+     else if lookup(Syst.Var:nap,"end") > 0 then do : /* last record */
        if order = 1 then find last Reseller
        WHERE Reseller.Brand = lcBrand no-lock no-error.
        else if order = 2 then find last Reseller use-index RsName
@@ -581,10 +581,10 @@ BROWSE:
        next LOOP.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then leave LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 then leave LOOP.
 
   end.  /* BROWSE */
 end.  /* LOOP */
 
 hide frame sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.

@@ -17,7 +17,7 @@
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -74,21 +74,21 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
            Customer.Phone.
 
    ASSIGN
-      Syst.CUICommon:ufk   = 0  
-      Syst.CUICommon:ufk[1]= 7  
-      Syst.CUICommon:ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
-                                       CustContact.Brand = Syst.CUICommon:gcBrand AND
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[1]= 7  
+      Syst.Var:ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
+                                       CustContact.Brand = Syst.Var:gcBrand AND
                                        CustContact.Custnum = Customer.Custnum AND
                                        CustContact.CustType = 5)
-      Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto = 0.
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          PROMPT Customer.Email
                 Customer.SMSNumber
@@ -170,7 +170,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
 
                   liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                    INPUT TODAY,
-                                                   INPUT Syst.CUICommon:katun,
+                                                   INPUT Syst.Var:katun,
                                                    INPUT 0, /* msseq */
                                                    INPUT "", /* cli */
                                                    INPUT Customer.CustNum,
@@ -210,7 +210,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
 
                      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                       INPUT TODAY,
-                                                      INPUT Syst.CUICommon:katun,
+                                                      INPUT Syst.Var:katun,
                                                       INPUT 0, /* msseq */
                                                       INPUT "", /* cli */
                                                       INPUT Customer.CustNum,
@@ -256,11 +256,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
          LEAVE.
       END.
    END.
-   ELSE IF Syst.CUICommon:toimi = 5 AND Syst.CUICommon:ufk[5] > 0 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 AND Syst.Var:ufk[5] > 0 THEN DO:
       RUN Mc/custcontact.p(customer.custnum, 5).
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

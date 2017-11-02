@@ -36,7 +36,7 @@ RUN Inv/lamupers.p PERSISTENT SET hInvRun.
    request separately (a bunch of requests are created with same
    activation stamp each day) */
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand     = Syst.Var:gcBrand AND
          MsRequest.ReqType   = 20      AND
          MsRequest.ReqStat   = 0       AND
          MsRequest.ActStamp <= ldActStamp:
@@ -174,7 +174,7 @@ PROCEDURE pODInvoice:
                     ?,
                     "",             /* memo */
                     FALSE,          /* no messages to screen */
-                    Syst.CUICommon:katun,
+                    Syst.Var:katun,
                     "",
                     0,
                     "",

@@ -17,7 +17,7 @@ DEF INPUT  PARAMETER icSource     AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiTerminated AS INT  NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -61,7 +61,7 @@ PROCEDURE pTerminateCommission:
    END.
 
    FOR EACH CoTarg NO-LOCK WHERE
-            CoTarg.Brand    = Syst.CUICommon:gcBrand AND
+            CoTarg.Brand    = Syst.Var:gcBrand AND
             CoTarg.TargType = "M"     AND
             CoTarg.CoTarg   = STRING(iiMsSeq):
 
@@ -105,7 +105,7 @@ PROCEDURE pTerminateCommission:
          the same order */
       IF icSource = "termination" AND CoTarg.OrderID > 0 THEN 
       FOR EACH bTarg NO-LOCK USE-INDEX OrderID WHERE
-               bTarg.Brand   = Syst.CUICommon:gcBrand AND
+               bTarg.Brand   = Syst.Var:gcBrand AND
                bTarg.OrderID = CoTarg.OrderID AND
                bTarg.CoTarg NE CoTarg.CoTarg:
          
@@ -151,7 +151,7 @@ PROCEDURE pTerminateFAT:
    olTerminated = FALSE.
    
    FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-            FATime.Brand     = Syst.CUICommon:gcBrand  AND
+            FATime.Brand     = Syst.Var:gcBrand  AND
             FATime.HostTable = "CoTarg" AND
             FATime.KeyValue  = STRING(iiCoTargID) AND
             FATime.InvNum    = 0        AND
@@ -189,7 +189,7 @@ PROCEDURE pTerminateTopUp:
    olTerminated = FALSE.
    
    FOR EACH PrepaidRequest EXCLUSIVE-LOCK USE-INDEX Reference WHERE
-            PrepaidRequest.Brand     = Syst.CUICommon:gcBrand  AND
+            PrepaidRequest.Brand     = Syst.Var:gcBrand  AND
             PrepaidRequest.Reference = STRING(iiCoTargID) AND
             PrepaidRequest.Request   = "Commission" AND
             PrepaidRequest.PPStatus  = 0:

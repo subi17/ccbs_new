@@ -8,8 +8,8 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "MNP".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "MNP".
+Syst.Var:gcBrand = "1".
 
 {Mnp/mnp.i}
 {Mnp/mnpmessages.i}
@@ -33,7 +33,7 @@ ldeNow = Func.Common:mOffSetTS(6).
 
 HANDLE_LOOP:
 FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE
-         MNPProcess.Brand = Syst.CUICommon:gcBrand AND
+         MNPProcess.Brand = Syst.Var:gcBrand AND
          MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
          MNPProcess.StatusCode = {&MNP_ST_ASOL} AND
          MNPProcess.StateFlag NE {&MNP_STATEFLAG_NOT_ANALYSED}:

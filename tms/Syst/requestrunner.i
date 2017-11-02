@@ -32,8 +32,8 @@ PROCEDURE pRunRequest:
       liTenantCount = 0. /* only current */
    
    /* user for eventlog */ 
-   ASSIGN lcTMSUser  = Syst.CUICommon:katun
-          Syst.CUICommon:katun      = icUser
+   ASSIGN lcTMSUser  = Syst.Var:katun
+          Syst.Var:katun      = icUser
           liHandled  = 0.
 
    do liLoop = 0 to liTenantCount:
@@ -42,7 +42,7 @@ PROCEDURE pRunRequest:
       /* go through all */                               
       IF iiRequestID = 0 THEN  
          FOR EACH MsRequest NO-LOCK WHERE
-                  MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
+                  MsRequest.Brand     = Syst.Var:gcBrand   AND
                   MsRequest.ReqType   = iiReqType AND     
                   MsRequest.ReqStatus = iiReqStat AND   
                   MsRequest.ActStamp <= idActTime /* scheduled or immediate */
@@ -90,6 +90,6 @@ PROCEDURE pRunRequest:
             IF MsRequest.ReqStatus = 3 THEN oiErrors = oiErrors + 1.
          END.
    END.
-   Syst.CUICommon:katun = lcTMSUser.
+   Syst.Var:katun = lcTMSUser.
    
 END PROCEDURE.

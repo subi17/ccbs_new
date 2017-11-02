@@ -83,7 +83,7 @@ FOR EACH ttInput NO-LOCK:
    END.
 
    FIND Order WHERE
-        Order.Brand = Syst.CUICommon:gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderId = MNPProcess.OrderId EXCLUSIVE-LOCK NO-ERROR.
    
    IF NOT AVAIL Order THEN DO:

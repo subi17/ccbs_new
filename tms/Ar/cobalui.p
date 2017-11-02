@@ -33,7 +33,7 @@ FORM
       HELP  "Rule from which events will be used (0/EMPTY = all)"
       VALIDATE(INPUT liCoRule = 0 OR
                CAN-FIND(CoRule WHERE 
-                        CoRule.Brand    = Syst.CUICommon:gcBrand AND
+                        CoRule.Brand    = Syst.Var:gcBrand AND
                         CoRule.CoRuleID = INPUT liCoRule),
               "Unknown rule")
 
@@ -72,7 +72,7 @@ FORM
       SKIP(9)
 
    WITH ROW 1 side-labels width 80
-        title " " + Syst.CUICommon:ynimi + " FAT FROM COMMISSION " +
+        title " " + Syst.Var:ynimi + " FAT FROM COMMISSION " +
         string(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
@@ -85,7 +85,7 @@ FUNCTION fCoRule RETURNS LOGICAL
 
    ELSE DO:
       FIND CoRule WHERE 
-           CoRule.Brand    = Syst.CUICommon:gcBrand AND
+           CoRule.Brand    = Syst.Var:gcBrand AND
            CoRule.CoRuleID = iiRuleID
       NO-LOCK NO-ERROR.
       IF AVAILABLE CoRule THEN DISPLAY CoRule.RuleDesc WITH FRAME fCriter.
@@ -96,7 +96,7 @@ END FUNCTION.
 VIEW FRAME fCriter.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST Reseller WHERE Reseller.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+FIND LAST Reseller WHERE Reseller.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 ASSIGN lcReseller2   = IF AVAILABLE Reseller THEN Reseller.Reseller ELSE ""
        ldtDate2      = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        ldtDate1      = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2))
@@ -118,24 +118,24 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 7    Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 795 ELSE 0)
-         Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 .
+         Syst.Var:ufk[1]= 7    Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 795 ELSE 0)
+         Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 .
          RUN Syst/ufkey.p.
 
          READKEY.
-         ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+         ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       END.
-      ELSE ASSIGN Syst.CUICommon:nap  = "1"
+      ELSE ASSIGN Syst.Var:nap  = "1"
                   ufkey = TRUE.
 
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 liCoRule
                 lcReseller1
@@ -145,7 +145,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                    IF FRAME-FIELD = "liCoRule" THEN DO:
                       fCoRule(INPUT INPUT liCoRule).
@@ -161,7 +161,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW"
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"
       THEN DO:
 
          llOk = TRUE. 
@@ -173,7 +173,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
 
          RUN Ar/cobal.p (liCoRule,
@@ -191,12 +191,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

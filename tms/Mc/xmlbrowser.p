@@ -33,7 +33,7 @@ RUN pFindFirst.
 FORM
    ttXMLSchema.XML FORMAT "X(78)"
 WITH
-   ROW 1 CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
+   ROW 1 CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.Var:cfc)
    TITLE " XML Message "
 FRAME sel.
 
@@ -41,11 +41,11 @@ FORM
    ttXMLSchema.XML VIEW-AS EDITOR SIZE 70 BY 10
    WITH ROW 4 CENTERED OVERLAY TITLE " ROW DETAILS " FRAME fDetail.
    
-Syst.CUICommon:cfc = "sel".
+Syst.Var:cfc = "sel".
 
 RUN Syst/ufcolor.p.
 
-Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:ccc = Syst.Var:cfc.
 
 VIEW FRAME sel.
 
@@ -105,10 +105,10 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           Syst.CUICommon:ufk    = 0
-           Syst.CUICommon:ufk[8] = 8 
-           Syst.CUICommon:ufk[9] = 1
-           Syst.CUICommon:ehto   = 3
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ufk[9] = 1
+           Syst.Var:ehto   = 3
            ufkey  = FALSE.
          
          RUN Syst/ufkey.p.
@@ -120,13 +120,13 @@ REPEAT WITH FRAME sel:
 
         CHOOSE ROW ttXMLSchema.xml {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttXMLSchema.xml WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttXMLSchema.xml WITH FRAME sel.
 
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? THEN DO:
         BELL.
@@ -135,10 +135,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN pFindThis.
            RUN pFindPrev.
@@ -163,7 +163,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN pFindThis.
            RUN pFindNext.
@@ -188,7 +188,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttXMLSchema WHERE recid(ttXMLSchema) = Memory NO-LOCK NO-ERROR.
         RUN pFindPrev.
@@ -212,7 +212,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -226,7 +226,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        RUN pFindThis. 
@@ -235,9 +235,9 @@ REPEAT WITH FRAME sel:
        DISP ttXMLSchema.XML WITH FRAME fDetail.
        
        ASSIGN
-          Syst.CUICommon:ehto   = 0
-          Syst.CUICommon:ufk    = 0
-          Syst.CUICommon:ufk[8] = 8
+          Syst.Var:ehto   = 0
+          Syst.Var:ufk    = 0
+          Syst.Var:ufk[8] = 8
           ufkey  = TRUE.
        RUN Syst/ufkey.p.   
           
@@ -246,26 +246,26 @@ REPEAT WITH FRAME sel:
      END.
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN pFindFirst.
         ASSIGN Memory = recid(ttXMLSchema) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN pFindLast.
         ASSIGN Memory = recid(ttXMLSchema) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE pFindThis:

@@ -15,8 +15,8 @@
 {Func/excel.i}
 {Func/cparam2.i}
 
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "batch".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "batch".
 
 DEF TEMP-TABLE ttService
    FIELD tmsseq    as integer

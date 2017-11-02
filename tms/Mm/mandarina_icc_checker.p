@@ -14,7 +14,7 @@ https://kethor.qvantel.com/browse/MANDLP-10
 
 /* includes */
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/lpfunctions.i}
@@ -55,7 +55,7 @@ ASSIGN
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -71,11 +71,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_first_run" SKIP.
@@ -87,7 +87,7 @@ DO TRANS:
       /*Set collection period start time to match the previous period end*/
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ldCollPeriodStartTS    = ActionLog.ActionTS.
       RELEASE Actionlog.
    END.
@@ -99,7 +99,7 @@ PUT STREAM sICCLog UNFORMATTED "Collection period: " + Func.Common:mTS2HMS(ldCol
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
+         MsRequest.Brand EQ Syst.Var:gcBrand AND
          MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
          MsRequest.UpdateStamp > ldCollPeriodStartTS AND
          MsRequest.UpdateStamp <= ldCollPeriodEndTS AND
@@ -128,7 +128,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       /* begin YDR-2668. IF Internet barring active because of Mandarina, then remove. */
       IF LOOKUP("Internet", lcBarrings) <> 0 AND
          CAN-FIND(FIRST Memo WHERE
-                        Memo.Brand EQ Syst.CUICommon:gcBrand AND
+                        Memo.Brand EQ Syst.Var:gcBrand AND
                         Memo.CustNum EQ MsRequest.CustNum AND
                         Memo.HostTable EQ "MobSub" AND
                         Memo.MemoTitle EQ "OTA Barring activado"
@@ -187,7 +187,7 @@ END.
 /*Update cunrent collection period end time to actionlog*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}
@@ -212,7 +212,7 @@ PROCEDURE pRemoveInternetBarring:
    DEF VAR lcResult  AS CHAR NO-UNDO.   
 
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               Mobsub.CLI EQ MsRequest.CLI
         USE-INDEX CLI NO-LOCK NO-ERROR.
 

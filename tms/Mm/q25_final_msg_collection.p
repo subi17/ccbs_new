@@ -8,8 +8,8 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = "CRON".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
 {Func/q25functions.i}
 {Func/ftransdir.i}
 

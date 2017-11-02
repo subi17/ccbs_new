@@ -104,9 +104,9 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " TEST INVOICING, PHASE 1 " + string(TODAY,"99-99-99") + " "
-   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
+   OVERLAY TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " TEST INVOICING, PHASE 1 " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.Var:cfc) width 80 ROW 1
    FRAME taka.
 
 form
@@ -147,21 +147,21 @@ form
    llCreateXML LABEL " Create XMLs ............" FORMAT "Yes/No"
            HELP "Create XMLs for PDF generation"
            
-with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING TEST INVOICES " side-labels
-   COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " CRITERIA FOR CREATING TEST INVOICES " side-labels
+   COLOR value(Syst.Var:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
 form
     " Consecutive invoice number: " lcInvNum  NO-LABEL           SKIP
     " Minimum invoicing amount .: " mininv NO-LABEL           SKIP
 WITH
-   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
+   title color value (Syst.Var:ctc) " INVOICE GROUP DATA " COLOR value(Syst.Var:cfc)
    OVERLAY centered ROW 16 FRAME lCustNum.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -218,7 +218,7 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             liInvCode
@@ -235,8 +235,8 @@ toimi:
          llCreateXML
          WITH FRAME rajat EDITING :
 
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE no-pause.
 
                if frame-field = "InvGroup" THEN DO:
@@ -249,7 +249,7 @@ toimi:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                       InvGroup.Brand    = Syst.Var:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -322,16 +322,16 @@ toimi:
          kysy_rajat = FALSE.
       END.
 
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2] = 0
-                     Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
-                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[2] = 0
+                     Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 795
+                     Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
       END.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
 
          /* check period */
          IF fPeriodLocked(InvDte,TRUE) THEN NEXT toimi.
@@ -347,17 +347,17 @@ toimi:
 
       END.
 
-      IF Syst.CUICommon:toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 8 THEN DO:
          HIDE MESSAGE no-pause.
          HIDE FRAME rajat no-pause.
          HIDE FRAME taka no-pause.
          RETURN.
       END.
 
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 HIDE FRAME lCustNum no-pause.
-fLog("Customer based (lamu3) started  (brand " + Syst.CUICommon:gcBrand + ")", Syst.CUICommon:katun).
+fLog("Customer based (lamu3) started  (brand " + Syst.Var:gcBrand + ")", Syst.Var:katun).
 
 ASSIGN ldBegTime = Func.Common:mMakeTS()
        liCustQty = 0.
@@ -404,7 +404,7 @@ IF useFile THEN DO:
 
    END. /* IF SEARCH(lcTestInvInputFile) <> ? THEN DO: */
    ELSE DO:
-      fLog("Problem with CUSTOMER list file (not found?)", Syst.CUICommon:katun).
+      fLog("Problem with CUSTOMER list file (not found?)", Syst.Var:katun).
 
    END.
    MESSAGE "Sorting customers and Calls, using predefined CUSTOMER list ".
@@ -434,7 +434,7 @@ ELSE DO:
 
    XCUST:
    FOR EACH Customer   no-lock  where
-            Customer.Brand     = Syst.CUICommon:gcBrand     AND 
+            Customer.Brand     = Syst.Var:gcBrand     AND 
             Customer.CustNum  >= CustNum1    AND
             Customer.CustNum  <= CustNum2    AND
             Customer.CustNum  >  unknown     AND
@@ -532,7 +532,7 @@ ldEndTime = Func.Common:mMakeTS().
 
 
 fLog("Invoice Testing Customer based (testinvui/lamu3) " +
-   "finished (brand " + Syst.CUICommon:gcBrand + ") ", Syst.CUICommon:katun).
+   "finished (brand " + Syst.Var:gcBrand + ") ", Syst.Var:katun).
 
 ok = TRUE.
 

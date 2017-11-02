@@ -35,7 +35,7 @@ form
  "         CLI .............:" CLI                                  
  skip(6)
 with row 1 width 80 NO-LABELS
-   title " " + Syst.CUICommon:ynimi + " CREATE RESELLER " + string(TODAY,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " CREATE RESELLER " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 ASSIGN
@@ -45,7 +45,7 @@ ASSIGN
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       Reseller
       Salesman1
@@ -58,7 +58,7 @@ repeat with frame rajat:
       
       HIDE MESSAGE NO-PAUSE.
       
-      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "Reseller" THEN DO:
             ASSIGN Reseller.
             IF Reseller = "" THEN DO:
@@ -66,7 +66,7 @@ repeat with frame rajat:
             END.
             ELSE DO:
                FIND FIRST Reseller NO-LOCK WHERE
-                          Reseller.Brand  = Syst.CUICommon:gcBrand AND
+                          Reseller.Brand  = Syst.Var:gcBrand AND
                           Reseller.Reseller = Reseller NO-ERROR.
                IF NOT AVAIL Reseller THEN DO:
                   MESSAGE "Unknown Reseeller !".
@@ -80,7 +80,7 @@ repeat with frame rajat:
             ASSIGN Salesman1.
             IF Salesman1 NE "" THEN DO:
                FIND FIRST Salesman NO-LOCK WHERE
-                          Salesman.Brand    = Syst.CUICommon:gcBrand AND
+                          Salesman.Brand    = Syst.Var:gcBrand AND
                           Salesman.Salesman = Salesman1 NO-ERROR.
                IF NOT AVAIL Salesman THEN DO:
                   MESSAGE "Unknown Salesman !".
@@ -99,7 +99,7 @@ repeat with frame rajat:
             ASSIGN Salesman2.
             IF Salesman2 NE "" THEN DO:
                FIND FIRST Salesman NO-LOCK WHERE
-                          Salesman.Brand    = Syst.CUICommon:gcBrand AND
+                          Salesman.Brand    = Syst.Var:gcBrand AND
                           Salesman.Salesman = Salesman2 NO-ERROR.
                IF NOT AVAIL Salesman THEN DO:
                   MESSAGE "Unknown Salesman !".
@@ -120,14 +120,14 @@ repeat with frame rajat:
    END.
    
    ASSIGN
-      Syst.CUICommon:ufk = 0
-      Syst.CUICommon:ufk[1] = 132
-      Syst.CUICommon:ufk[5] = 795
-      Syst.CUICommon:ufk[8] = 8
-      Syst.CUICommon:ehto = 0.
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 132
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0.
 
    RUN Syst/ufkey.p.
-   case Syst.CUICommon:toimi:
+   case Syst.Var:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.
@@ -157,13 +157,13 @@ put stream excel unformatted
 
 
 FOR EACH Reseller NO-LOCK WHERE
-         Reseller.Brand    = Syst.CUICommon:gcBrand AND
+         Reseller.Brand    = Syst.Var:gcBrand AND
          Reseller.Reseller = Reseller,
    EACH Salesman NO-LOCK WHERE
-        Salesman.Brand    = Syst.CUICommon:gcBrand AND
+        Salesman.Brand    = Syst.Var:gcBrand AND
         Salesman.Reseller = Reseller.Reseller,
    EACH Order NO-LOCK WHERE 
-        Order.Brand = Syst.CUICommon:gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.CrStamp <= FromStamp AND
         Order.CrStamp >= ToStamp   AND
         Order.Salesman = Salesman.Salesman:
@@ -178,11 +178,11 @@ FOR EACH Reseller NO-LOCK WHERE
    ELSE lcStatus = "".
           
    FIND MobSub NO-LOCK WHERE
-        MobSub.Brand = Syst.CUICommon:gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.MsSeq = Order.MSSeq NO-ERROR.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand       AND
               OrderCustomer.OrderID = Order.OrderID AND
               OrderCustomer.RowType = 1 NO-ERROR.
    IF NOT AVAILABLE OrderCustomer THEN NEXT.             

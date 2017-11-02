@@ -25,7 +25,7 @@ function fSMSInvoiceValidate returns logical
    DEFINE VARIABLE ldeNextMonth AS DECIMAL NO-UNDO. 
    
    IF NOT CAN-FIND(FIRST ActionLog WHERE
-              ActionLog.Brand = Syst.CUICommon:gcBrand AND
+              ActionLog.Brand = Syst.Var:gcBrand AND
               ActionLog.ActionID = "DDFILES" AND
               ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 + MONTH(idaPeriod)
               NO-LOCK) THEN DO:
@@ -45,7 +45,7 @@ function fSMSInvoiceValidate returns logical
       ldeNextMonth = liYear * 10000 + liMonth * 100 + 1.
 
       FIND FIRST MsRequest WHERE
-           MsRequest.Brand = Syst.CUICommon:gcBrand AND
+           MsRequest.Brand = Syst.Var:gcBrand AND
            MsRequest.ReqType = ({&REQTYPE_SMS_INVOICE}) AND
            MsRequest.ActStamp > ldeCurrentMonth AND
            MsRequest.ActStamp < ldeNextMonth AND

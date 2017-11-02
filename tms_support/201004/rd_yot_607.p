@@ -2,8 +2,8 @@ DEFINE VARIABLE llSimulated AS LOGICAL NO-UNDO.
 DEFINE VARIABLE cCLI AS CHARACTER NO-UNDO. 
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "rafaeldv".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 {Func/msisdn.i}
 
    llSimulated = FALSE.
@@ -11,7 +11,7 @@ Syst.CUICommon:gcBrand  = "1".
    FIND FIRST msisdnnumber where
       msisdnnumber.cli = cClI NO-LOCK.
       
-   FIND FIRST msisdn where msisdn.brand = Syst.CUICommon:gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.Var:gcBrand and 
       msisdn.cli = msisdnnumber.cli NO-LOCK NO-ERROR.
 
    /* check that no active subscription exists */

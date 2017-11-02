@@ -96,8 +96,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 {Func/finvbal.i}
 {Func/fcreditvalid.i}
 {Syst/tmsconst.i}
@@ -316,7 +316,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       ELSE
          add_string(lcInvStruct,"credit_reason_group","").
 
-      FOR EACH Memo WHERE Memo.Brand     = Syst.CUICommon:gcBrand         AND
+      FOR EACH Memo WHERE Memo.Brand     = Syst.Var:gcBrand         AND
                           Memo.CustNum   = Invoice.CustNum AND
                           Memo.HostTable = "Invoice"       AND
                           Memo.KeyValue  = STRING(Invoice.InvNum) NO-LOCK:

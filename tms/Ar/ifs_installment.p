@@ -71,21 +71,21 @@ FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 
 RequestLoop:
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand     = Syst.Var:gcBrand AND
          MsRequest.ReqType   = 8       AND
          MsRequest.ReqStatus = 2       AND
          MsRequest.ActStamp >= ldCheck AND
          MsRequest.DoneStamp >= ldFrom AND
          MsRequest.DoneStamp <= ldTo,
    FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
          DayCampaign.DCType = "5",
    FIRST DCCLI NO-LOCK WHERE
          DCCLI.MsSeq   = MsRequest.MsSeq AND
          DCCLI.DCEvent = MsRequest.ReqCParam3,
    FIRST FixedFee NO-LOCK WHERE
-         FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+         FixedFee.Brand     = Syst.Var:gcBrand AND
          FixedFee.HostTable = "MobSub" AND
          FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
          FixedFee.FeeModel  = DayCampaign.FeeModel

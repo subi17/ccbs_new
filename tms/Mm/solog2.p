@@ -27,7 +27,7 @@
 {Func/fdss.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -101,23 +101,23 @@ form
     ttSoLog.Response  format "x(10)"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Service Order LOG of MobSub " + lcCLI + " "
     FRAME sel.
 
 form /* seek ttSoLog  BY SoSeq */
     SoLog2
     HELP "Enter OrdSeq"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ORDSEQ "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND ORDSEQ "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ttSoLog  BY Stat */
     stat
     HELP "Enter Status"
     "(0:NEW  1:FAIL 2: PENDING 3:OK)"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND STATUS "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND STATUS "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
@@ -131,7 +131,7 @@ ELSE DO:
    IF AVAIL TermMobSub THEN lcCLi = TermMobSub.CLI.
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By OrdSeq,By Status,By 3,By 4".
@@ -211,34 +211,34 @@ BROWSE:
       IF ufkey THEN DO:
 
         ASSIGN
-        Syst.CUICommon:ufk[1]= 266  Syst.CUICommon:ufk[2]= 559
+        Syst.Var:ufk[1]= 266  Syst.Var:ufk[2]= 559
         
-        Syst.CUICommon:ufk[3]= (IF NOT llTerminated THEN 9816 ELSE 0)
-        Syst.CUICommon:ufk[4]= (IF NOT llTerminated AND llISDSSActive THEN 9815 ELSE 0)
-        Syst.CUICommon:ufk[5]= 0 /* (IF lcRight = "RW" AND NOT llTerminated THEN 261 ELSE 0)*/
-        Syst.CUICommon:ufk[6]= 0 /* (IF lcRight = "RW" AND NOT llTerminated THEN 4 ELSE 0) */
-        Syst.CUICommon:ufk[7]= 0 /* 1855 = FETCH RESPONSE */ Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[3]= (IF NOT llTerminated THEN 9816 ELSE 0)
+        Syst.Var:ufk[4]= (IF NOT llTerminated AND llISDSSActive THEN 9815 ELSE 0)
+        Syst.Var:ufk[5]= 0 /* (IF lcRight = "RW" AND NOT llTerminated THEN 261 ELSE 0)*/
+        Syst.Var:ufk[6]= 0 /* (IF lcRight = "RW" AND NOT llTerminated THEN 4 ELSE 0) */
+        Syst.Var:ufk[7]= 0 /* 1855 = FETCH RESPONSE */ Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttSoLog.SoLog {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSoLog.SoLog WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttSoLog.SoLog WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
         CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) xstat WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) xstat WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -262,10 +262,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -290,7 +290,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -316,7 +316,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttSoLog WHERE recid(ttSoLog) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -340,7 +340,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -355,9 +355,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET SoLog2 WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF SoLog2 ENTERED THEN DO:
@@ -378,10 +378,10 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET Stat WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF Stat ENTERED THEN DO:
@@ -398,7 +398,7 @@ BROWSE:
        END.
      END. /* Search-2 */
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0 AND
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 AND
       lcRight = "RW" AND NOT llTerminated
      THEN DO:
        
@@ -418,7 +418,7 @@ BROWSE:
          END.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 AND
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 AND
       lcRight = "RW" AND NOT llTerminated
      THEN DO:
          
@@ -439,7 +439,7 @@ BROWSE:
          END.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 AND 
          lcRight = "RW" AND NOT llTerminated
      THEN DO TRANSACTION:  /* SEND TO HLR */
        RUN local-find-this (TRUE).
@@ -456,7 +456,7 @@ BROWSE:
           NEXT.
        END.
 
-       ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3. 
+       ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 3. 
        RUN Syst/ufkey.p. 
 
        RUN local-find-this (TRUE).
@@ -471,7 +471,7 @@ BROWSE:
                                   STRING(time,"hh:mm:ss") +  "REASON " +
                                   ttSoLog.response
           ttSoLog.stat         = 2       
-          xxSoLog.users        = Syst.CUICommon:katun  
+          xxSoLog.users        = Syst.Var:katun  
           xxSoLog.CompletedTS  = 0.
           xxSoLog.Timeslottms  = Func.Common:mMakeTS() .
        
@@ -500,7 +500,7 @@ BROWSE:
      
      END.  
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 AND
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0 AND
       lcRight = "RW" AND NOT llTerminated
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
@@ -515,7 +515,7 @@ BROWSE:
        END. 
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
         ttSoLog.SoLog ttSoLog.CreatedTS ttSoLog.TimeSlotTMS ttSoLog.CompletedTS.
 
        RUN local-find-NEXT.
@@ -537,7 +537,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           ttSoLog.SoLog ttSoLog.CreatedTS ttSoLog.TimeSlotTMS ttSoLog.CompletedTS.
          IF ok THEN DO:
 
@@ -564,17 +564,17 @@ BROWSE:
 
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION: 
      END.  
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */      
        RUN local-find-this(FALSE ).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        FIND FIRST SoLog WHERE
             RECID(SoLog) = ttSoLog.OrigRec
@@ -596,25 +596,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttSoLog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttSoLog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 

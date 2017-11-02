@@ -68,7 +68,7 @@ IF NOT AVAILABLE Customer THEN RETURN "Unknown customer".
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
@@ -174,7 +174,7 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
 
       /* If Groupcode is specified then charge is usage based month */
       IF icGroupCode > "" THEN
-         ldBRAmt = fCalculateLastMonthFee(Syst.CUICommon:gcBrand,
+         ldBRAmt = fCalculateLastMonthFee(Syst.Var:gcBrand,
                                           iiMsSeq,
                                           icGroupCode,
                                           ldeOriginalFee,
@@ -194,7 +194,7 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
          /* Billed item can be changed if it is billed by test invoice */
          IF bCloseItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = Syst.CUICommon:gcBrand AND
+                            Invoice.Brand   = Syst.Var:gcBrand AND
                             Invoice.InvNum  = bCloseItem.InvNum AND
                             Invoice.InvType = 99 NO-LOCK) THEN DO:
             ASSIGN

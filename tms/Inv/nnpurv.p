@@ -43,7 +43,7 @@ rap_moduli = "Inv/nnpura" + STRING(moduli).
 
       /* Haetaan raporttitehoste */
       FIND FIRST TMSPrinter where
-                 TMSPrinter.PrinterId = Syst.CUICommon:TMSPrinter
+                 TMSPrinter.PrinterId = Syst.Var:TMSPrinter
       NO-LOCK NO-ERROR.
       if available TMSPrinter and TMSPrinter.Device ne "-" THEN DO:
          /* Haetaan raporttitehoste */

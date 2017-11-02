@@ -10,7 +10,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/email.i}
@@ -47,7 +47,7 @@ ASSIGN
        lcAddrConfDir = lcAddrConfDir + "funcrunpdfcreation.email"
        lcLogFile     = lcLogFile + "funcrun_pdf_" + lcToday + STRING(TIME) + ".log".
 
-Syst.CUICommon:katun = "VISTA_" + pcUserName.
+Syst.Var:katun = "VISTA_" + pcUserName.
 
 OUTPUT STREAM strout TO VALUE (lcLogFile).
 

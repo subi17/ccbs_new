@@ -51,10 +51,10 @@ help "Name of output file"
 skip(6)
 
  WITH  OVERLAY ROW 1 WIDTH 80
-    COLOR VALUE(Syst.CUICommon:cfc)
+    COLOR VALUE(Syst.Var:cfc)
 
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-    " " + Syst.CUICommon:ynimi + "   " + 
+    TITLE COLOR VALUE(Syst.Var:ctc) 
+    " " + Syst.Var:ynimi + "   " + 
     " REPORT OF PRESELECT CUSTOMERS    "
     + STRING(TODAY,"99-99-99") + " "
 
@@ -71,7 +71,7 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE
   sdate1 sdate2 validate(input sdate2 >= input sdate1,"Invalid order !")
@@ -85,15 +85,15 @@ WITH FRAME main.
 Action:
    REPEAT WITH FRAME main:
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-      Syst.CUICommon:ufk[1] = 7 
-      Syst.CUICommon:ufk[5] = 795
-      Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          ok = FALSE.
          MESSAGE "Do You REALLY want to CREATE REPORT (Y/N) ?" UPDATE ok.
@@ -106,7 +106,7 @@ Action:
    OUTPUT STREAM excel TO value(prerep). 
 
    PUT STREAM excel UNFORMATTED
-   Syst.CUICommon:ynimi         skip(1)
+   Syst.Var:ynimi         skip(1)
    "CARRIER PRESELECTION RECORDS" SKIP
    "Sent:"    tab 
       sdate1 format "99.99.9999" " - " sdate2 format "99.99.9999" my-nl

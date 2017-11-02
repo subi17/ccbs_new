@@ -83,7 +83,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
           lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
    IF CAN-FIND(FIRST bbMsRequest NO-LOCK WHERE
-                    bbMsRequest.Brand   = Syst.CUICommon:gcBrand AND
+                    bbMsRequest.Brand   = Syst.Var:gcBrand AND
                     bbMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
                     bbMsRequest.Custnum = MsRequest.CustNum AND
            (LOOKUP(bbMsRequest.ReqCParam3,lcALLPostpaidBundles) > 0 OR
@@ -94,7 +94,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
              "completed".
 
    IF CAN-FIND(FIRST bbMsRequest NO-LOCK WHERE
-                    bbMsRequest.Brand   = Syst.CUICommon:gcBrand AND
+                    bbMsRequest.Brand   = Syst.Var:gcBrand AND
                     bbMsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                     bbMsRequest.Custnum = MsRequest.CustNum AND
                     bbMsRequest.ReqCparam1 = "SHAPER"  AND
@@ -157,13 +157,13 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.CUICommon:katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       

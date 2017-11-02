@@ -19,7 +19,7 @@
 {Mnp/mnp.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -73,8 +73,8 @@ FORM
     MNPCal.Periods
     MNPCal.DeliveryType
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " MNP CALENDAR  "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -97,8 +97,8 @@ FORM
     HELP "Delivery Type (F9)"
     lcDeliveryType FORMAT "x(20)"
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -110,7 +110,7 @@ WITH  OVERLAY ROW 4 centered
     NO-LABELS 
     FRAME fWindow.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -135,14 +135,14 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MNPCal  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
 
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -222,37 +222,37 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk = 0
-        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0
-        Syst.CUICommon:ufk[5]= 5  WHEN llAdmin 
-        Syst.CUICommon:ufk[6]= 4  WHEN llAdmin 
-        Syst.CUICommon:ufk[7]= 9020 WHEN llSyst Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0
+        Syst.Var:ufk[5]= 5  WHEN llAdmin 
+        Syst.Var:ufk[6]= 4  WHEN llAdmin 
+        Syst.Var:ufk[7]= 9020 WHEN llSyst Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPCal.OrderChannel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPCal.OrderChannel WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPCal.OrderChannel WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MNPCal.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPCal.Region WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPCal.Region WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW MNPCal.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPCal.MessageType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPCal.MessageType WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -276,10 +276,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -304,7 +304,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -330,7 +330,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPCal WHERE recid(MNPCal) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -354,7 +354,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -369,7 +369,7 @@ BROWSE:
       END. /* NEXT page */
      
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND llAdmin
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND llAdmin
       THEN DO:
      
         must-add = TRUE.
@@ -378,7 +378,7 @@ BROWSE:
         
      END. /* ADD NEW */
          
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0  AND llAdmin 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0  AND llAdmin 
       THEN DO TRANS:
 
         RUN local-find-this(FALSE).
@@ -398,7 +398,7 @@ BROWSE:
         
         RUN local-find-this(TRUE).
         
-        COLOR DISPLAY value(Syst.CUICommon:ctc)
+        COLOR DISPLAY value(Syst.Var:ctc)
            MNPCal.OrderChannel   
            MNPCal.Region
            MNPCal.MNPProduct 
@@ -418,7 +418,7 @@ BROWSE:
            ok = FALSE.
         END.
         
-        COLOR DISPLAY value(Syst.CUICommon:ccc)
+        COLOR DISPLAY value(Syst.Var:ccc)
            MNPCal.OrderChannel
            MNPCal.Region
            MNPCal.MNPProduct 
@@ -455,14 +455,14 @@ BROWSE:
         
      END. /* DELETE */
             
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND llSyst
+      ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND llSyst
        THEN DO:
          
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
 
          FIND FIRST TMSParam WHERE
-            TMSParam.Brand = Syst.CUICommon:gcBrand AND
+            TMSParam.Brand = Syst.Var:gcBrand AND
             TMSParam.ParamCode = "MNPMinWindow" AND
             TMSParam.ParamGroup = "MNP" NO-LOCK NO-ERROR.
          
@@ -517,15 +517,15 @@ BROWSE:
          NEXT LOOP. 
       END. 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 AND llAdmin THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND llAdmin THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record(FALSE).
        HIDE FRAME lis NO-PAUSE.
@@ -541,25 +541,25 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPCal) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPCal) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -693,19 +693,19 @@ PROCEDURE local-UPDATE-record:
 
       READKEY.
       
-      Syst.CUICommon:nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
       /* IF  User Wanted TO Cancel this Change TRANSACTION */
       IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
       KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
       
       IF KEYLABEL(lastkey) = "F2" THEN NEXT.
             
-      if Syst.CUICommon:nap = "F9" THEN DO:
+      if Syst.Var:nap = "F9" THEN DO:
          CASE FRAME-FIELD:
             WHEN "OrderChannel" THEN DO:
                RUN Help/h-tmscodes.p
                   ("MNPCal","OrderChannel","MNP", OUTPUT siirto).
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                IF siirto ne "" THEN DO:
                   DISP siirto @ MNPCal.OrderChannel WITH FRAME lis.
@@ -716,7 +716,7 @@ PROCEDURE local-UPDATE-record:
             WHEN "MessageType" THEN DO:
             RUN Help/h-tmscodes.p
                   ("MNPCal","MessageType","MNP", OUTPUT siirto).
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                IF siirto ne "" THEN DO:
                   DISP siirto @ MNPCal.MessageType WITH FRAM lis.
@@ -727,7 +727,7 @@ PROCEDURE local-UPDATE-record:
             WHEN "MNPProduct" THEN DO:
             RUN Help/h-tmscodes.p
                   ("MNPCal","MNPProduct","MNP", OUTPUT siirto).
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                IF siirto ne "" AND siirto NE ? THEN DO:
                   DISP siirto @ MNPCal.MNPProduct  WITH FRAME lis.
@@ -738,7 +738,7 @@ PROCEDURE local-UPDATE-record:
             WHEN "DeliveryType" THEN DO:
             RUN Help/h-tmscodes.p
                   ("MNPCal","DeliveryType","MNP", OUTPUT siirto).
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                IF siirto ne "" AND siirto NE ? THEN DO:
                   DISP INTEGER(siirto) @ MNPCal.DeliveryType  WITH FRAME lis.
@@ -748,7 +748,7 @@ PROCEDURE local-UPDATE-record:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          
          IF FRAME-FIELD = "OrderChannel" THEN DO:
             FIND FIRST TMSCodes WHERE
@@ -832,7 +832,7 @@ PROCEDURE local-UPDATE-record:
             
             IF INPUT MNPCal.MNPTariff NE "" THEN DO:
                FIND FIRST CliType WHERE
-                  CliType.Brand   = Syst.CUICommon:gcBrand AND 
+                  CliType.Brand   = Syst.Var:gcBrand AND 
                   CliType.CliType = INPUT MNPCal.MNPTariff
                NO-LOCK NO-ERROR.
                IF NOT AVAIL Clitype THEN DO:

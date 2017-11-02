@@ -257,12 +257,12 @@ REPEAT:
    IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = Syst.CUICommon:gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "Customer"
          Memo.KeyValue  = STRING(MobSub.CustNum)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = Syst.CUICommon:katun 
+         Memo.CreUser   = Syst.Var:katun 
          Memo.MemoTitle = lcMemoTitle
          Memo.MemoText  = "Subsc.ID " + STRING(liMsSeq) + 
                           ", MSISDN " + lcCLI + 

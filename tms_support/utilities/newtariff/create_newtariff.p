@@ -10,8 +10,8 @@
 
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}

@@ -93,12 +93,12 @@ lcTypeDenied = fCParamC("InvTypeDenied").
 FIND FIRST Company no-lock no-error.
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form
    valik NO-LABEL
-   with overlay 2 down title color value(Syst.CUICommon:ctc) " CHOOSE ORDER FOR PRINTOUT "
-   COLOR value(Syst.CUICommon:cfc) ROW 6 centered FRAME rival.
+   with overlay 2 down title color value(Syst.Var:ctc) " CHOOSE ORDER FOR PRINTOUT "
+   COLOR value(Syst.Var:cfc) ROW 6 centered FRAME rival.
 
 form
    skip(1)
@@ -109,8 +109,8 @@ form
    "       will be calculated according to customer's prior payment behaviour."    SKIP
    skip(11)
    WITH ROW 1 side-labels width 80
-   title color value(Syst.CUICommon:ctc) " " + ynimi + " PAYMENT FORECAST " +
-   string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) FRAME valinta.
+   title color value(Syst.Var:ctc) " " + ynimi + " PAYMENT FORECAST " +
+   string(TODAY,"99-99-99") + " " COLOR value(Syst.Var:cfc) FRAME valinta.
 
 form header
    viiva1 AT 2 SKIP
@@ -173,23 +173,23 @@ form
                  "6. Later "                     SKIP
    pyynto  label "Notice payment behaviour" SKIP
 
-   with title color value(Syst.CUICommon:ctc) " CRITERIA FOR PRINTOUT "  side-labels
-   COLOR value(Syst.CUICommon:cfc) ROW 8 centered OVERLAY FRAME rajat.
+   with title color value(Syst.Var:ctc) " CRITERIA FOR PRINTOUT "  side-labels
+   COLOR value(Syst.Var:cfc) ROW 8 centered OVERLAY FRAME rajat.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 view FRAME valinta.
-Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "puli". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 display raja pyynto "ALL" @ IGName WITH FRAME rajat.
 
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN DO:
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE InvGroup extcustgrp
             raja[1]
             raja[2]
@@ -200,8 +200,8 @@ toimi:
             validate(input raja[4] > input raja[3], "Impossible definition !")
             pyynto
          WITH FRAME rajat EDITING:
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
                if frame-field = "InvGroup" THEN DO:
                   ASSIGN FRAME rajat InvGroup.
@@ -211,7 +211,7 @@ toimi:
                   END.
                   ELSE DO:
                      FIND InvGroup where
-                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                          InvGroup.Brand    = Syst.Var:gcBrand AND
                           InvGroup.InvGroup = InvGroup
                      no-lock no-error.
                      IF NOT AVAIL InvGroup THEN DO:
@@ -242,7 +242,7 @@ toimi:
                   else do:
                      RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                      /* DISPLAY Customer groups */
-                     Syst.CUICommon:ehto = 9.
+                     Syst.Var:ehto = 9.
                      RUN Syst/ufkey.p.
                      FOR EACH TCustGroup.
                         dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
@@ -267,10 +267,10 @@ toimi:
          NEXT toimi.
       END.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          if pyynto then pytx = "PAYMENT BEHAVIOUR NOTICED".
          else           pytx = "PAYMENT BEHAVIOUR NOT NOTICED".
-         Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+         Syst.Var:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.Var:ccc = Syst.Var:cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.
@@ -283,7 +283,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
                "Choose printing order, press ENTER !".
                READKEY PAUSE 0.
                CHOOSE ROW valik {Syst/uchoose.i} no-error.
-               COLOR DISPLAY value(Syst.CUICommon:ccc) valik WITH FRAME rival.
+               COLOR DISPLAY value(Syst.Var:ccc) valik WITH FRAME rival.
                i = FRAME-LINE.
                HIDE MESSAGE no-pause.
                ASSIGN order = i
@@ -294,8 +294,8 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
             HIDE FRAME rival no-pause.
             LEAVE toimi.
       END.
-      IF Syst.CUICommon:toimi = 8 THEN RETURN.
-   END. /* Syst.CUICommon:toimi */
+      IF Syst.Var:toimi = 8 THEN RETURN.
+   END. /* Syst.Var:toimi */
 
 ASSIGN tila = TRUE.
 {Syst/tmsreport.i "return"}
@@ -312,7 +312,7 @@ ASSIGN
 
 FOR EACH TCustGroup.
    FOR EACH cgmember WHERE
-            cgMember.Brand     = Syst.CUICommon:gcBrand AND
+            cgMember.Brand     = Syst.Var:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup
    NO-lock.
       FIND FIRST tcgmember WHERE
@@ -338,7 +338,7 @@ END.
 message "Printing in process - cancel, press 'END'".
 runko : repeat:
 for each Customer no-lock where 
-         Customer.Brand    = Syst.CUICommon:gcBrand          AND
+         Customer.Brand    = Syst.Var:gcBrand          AND
          Customer.CustNum >= cgcustno1        AND
          Customer.CustNum <= cgcustno2        AND
          (if InvGroup ne "" THEN
@@ -384,8 +384,8 @@ by
 
    /* onko kjA pyytAnyt keskeytystA ? */
    READKEY PAUSE 0.
-   Syst.CUICommon:nap = keylabel(LASTKEY).
-   if Syst.CUICommon:nap = "END" THEN DO:
+   Syst.Var:nap = keylabel(LASTKEY).
+   if Syst.Var:nap = "END" THEN DO:
       message "Are You sure You want to cancel printing ? (Y/N) "
       UPDATE ke.
       IF ke THEN DO:

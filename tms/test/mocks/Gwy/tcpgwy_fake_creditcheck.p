@@ -3,7 +3,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Func/xmlfunction.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.

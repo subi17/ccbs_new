@@ -15,7 +15,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -62,8 +62,8 @@ FORM
     BRTestQueue.Description FORMAT "X(35)"
     BRTestQueue.Active
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        "  BILLING TEST CASE  " +
        string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -76,8 +76,8 @@ FORM
     BRTestQueue.Active             COLON 25 SKIP(1)
     BRTestQueue.Description VIEW-AS EDITOR SIZE 60 BY 2
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -86,16 +86,16 @@ FORM
     "Brand:" lcBrand skip
     "Description:" lcName FORMAT "X(20)" 
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Description "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Description "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 
-IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
+IF Syst.Var:gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -124,7 +124,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a BRTestQueue  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -133,7 +133,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -222,20 +222,20 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk    = 0
-        Syst.CUICommon:ufk[1] = 816
-        Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-        Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-        Syst.CUICommon:ufk[7] = 0  
-        Syst.CUICommon:ufk[8] = 8 
-        Syst.CUICommon:ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 816
+        Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.Var:ufk[7] = 0  
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
         
         /* used as help */
-        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
-           Syst.CUICommon:ufk[5] = 11
-           Syst.CUICommon:ufk[6] = 0
-           Syst.CUICommon:ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -244,13 +244,13 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW BRTestQueue.BRTestQueueID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) BRTestQueue.BRTestQueueID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) BRTestQueue.BRTestQueueID WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -258,10 +258,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -279,7 +279,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -304,7 +304,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -330,7 +330,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND BRTestQueue WHERE recid(BRTestQueue) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -354,7 +354,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -369,14 +369,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
+       SET lcBrand WHEN Syst.Var:gcAllBrand 
            lcName WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -392,8 +392,8 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:  /* add */
-        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -404,7 +404,7 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0  
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0  
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
@@ -426,7 +426,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        BRTestQueue.BRTestQueueID BRTestQueue.Description.
         
        RUN local-find-NEXT.
@@ -448,7 +448,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           BRTestQueue.BRTestQueueID BRTestQueue.Description.
        
        IF ok THEN DO:
@@ -470,22 +470,22 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis /*  TRANSACTION */
      ON ENDKEY UNDO, LEAVE:
 
        /* change */
        RUN local-find-this(FALSE).
 
-       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBRTestQueue).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BRTestQueue.BRTestQueueID.
 
        RUN local-UPDATE-record.                                  
@@ -502,33 +502,33 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(BRTestQueue) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(BRTestQueue) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+IF Syst.Var:gcHelpParam > "" THEN DO:
    FIND FIRST BRTestQueue WHERE RECID(BRTestQueue) = xRecid NO-LOCK.
    siirto = STRING(BRTestQueue.BRTestQueueID).
 END.
    
 
-Syst.CUICommon:ehto = 4.
+Syst.Var:ehto = 4.
 RUN Syst/ufkey.p.
 
 fCleanEventObjects().
@@ -608,27 +608,27 @@ PROCEDURE local-UPDATE-record:
          BRTestQueue.Description   
       WITH FRAME lis.
 
-      IF NEW BRTestQueue THEN Syst.CUICommon:toimi = 1.
+      IF NEW BRTestQueue THEN Syst.Var:toimi = 1.
 
       ELSE DO:
          ASSIGN 
-            Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7    WHEN lcRight = "RW"
-            Syst.CUICommon:ufk[2] = 1184
-            Syst.CUICommon:ufk[4] = 1728
-            Syst.CUICommon:ufk[6] = 1998
-            Syst.CUICommon:ufk[8] = 8
-            Syst.CUICommon:ehto   = 0.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7    WHEN lcRight = "RW"
+            Syst.Var:ufk[2] = 1184
+            Syst.Var:ufk[4] = 1728
+            Syst.Var:ufk[6] = 1998
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
          RUN Syst/ufkey.p.
       END.
                   
-      IF Syst.CUICommon:toimi = 1 THEN 
+      IF Syst.Var:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT BRTestQueue EXCLUSIVE-LOCK.
       
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
    
          UPDATE
@@ -645,19 +645,19 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+      ELSE IF Syst.Var:toimi = 2 THEN DO:
          RUN Inv/brtestqresult.p (BRTestQueue.BRTestQueueID).
       END.
  
-      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
          RUN Inv/brtestqrow.p (BRTestQueue.BRTestQueueID).
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
+      ELSE IF Syst.Var:toimi = 6 THEN DO:
          RUN Inv/brtestcriteria.p (BRTestQueue.BRTestQueueID,0).
       END.
         
-      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE.  
 
    END.
    

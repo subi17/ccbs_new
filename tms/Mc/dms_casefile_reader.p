@@ -10,8 +10,8 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun   = "Cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun   = "Cron"
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
@@ -70,7 +70,7 @@ IF fDMSOnOff() NE TRUE THEN RETURN.
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -83,11 +83,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -95,7 +95,7 @@ DO TRANS:
    ELSE DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
 
       RELEASE Actionlog.
@@ -154,7 +154,7 @@ INPUT STREAM sFile CLOSE.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -226,7 +226,7 @@ PROCEDURE pUpdateDMS:
       lcDocList       = ENTRY(8,pcLine,lcSep).
       
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ Syst.CUICommon:gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderID EQ liOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "ERROR:ORDER NOT AVAILABLE:" + STRING(liOrderId).

@@ -53,7 +53,7 @@ FUNCTION fSearchOrder RETURNS CHAR
    liKey = get_int(pcSearchStruct,"order_id").
 
    FIND Order WHERE
-        Order.Brand = Syst.CUICommon:gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderId = liKey NO-LOCK NO-ERROR.
    
    IF NOT AVAIL Order THEN ocError = "order not found".

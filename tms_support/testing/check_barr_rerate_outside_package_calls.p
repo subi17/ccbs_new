@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Func/barrfunc.i}
 
 def var lltrue        as log   no-undo.

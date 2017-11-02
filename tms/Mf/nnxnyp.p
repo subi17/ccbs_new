@@ -42,8 +42,8 @@ form
     AreaName          /* column-label "A-Client's Reg/City"  */
     AreaPair.NeigArea     column-label "X-AREA"
     xx-name          /* column-label "AngrAnsande!ort/stad" */
-WITH width 80 OVERLAY scroll 1 14 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Bordering areacode "
+WITH width 80 OVERLAY scroll 1 14 DOWN COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " Bordering areacode "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -54,22 +54,22 @@ form
     xx-name        NO-LABEL SKIP
 
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) fr-header WITH side-labels
     FRAME lis.
 
 form /* angrAnsande riktnr. search WITH FIELD AreaCode */
     AreaCode
     help "Give A-client's areacode"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND A-AB. AREACODE "
-    COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND A-AB. AREACODE "
+    COLOR value(Syst.Var:cfc) side-labels OVERLAY FRAME f1.
 
 form /* angrAnsande riktnr. search WITH FIELD NeigArea */
     NeigArea
     help "Give bordering region's areacode"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND BORDERING AREA "
-    COLOR value(Syst.CUICommon:cfc) side-labels OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND BORDERING AREA "
+    COLOR value(Syst.Var:cfc) side-labels OVERLAY FRAME f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST AreaPair
@@ -99,21 +99,21 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* AreaPair -ADD  */
-      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
             assign AreaCode = "" NeigArea = "".
             UPDATE
             AreaCode
             NeigArea
             WITH FRAME lis EDITING:
-               READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-               IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+               READKEY. Syst.Var:nap = keylabel(LASTKEY).
+               IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                   PAUSE 0.
                   if frame-field = "AreaCode" THEN DO:
                      ASSIGN FRAME lis AreaCode.
@@ -243,11 +243,11 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 36 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 36 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          {Syst/uright1.i '"5,6"'}
 
@@ -257,29 +257,29 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW AreaPair.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.AreaCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) AreaPair.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.NeigArea WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
          CHOOSE ROW AreaPair.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.?? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) AreaPair.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW AreaPair.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaPair.? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) AreaPair.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -310,10 +310,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND AreaPair where recid(AreaPair) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev AreaPair
@@ -354,7 +354,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND AreaPair where recid(AreaPair) = rtab[FRAME-DOWN] no-lock .
@@ -396,7 +396,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND AreaPair where recid(AreaPair) = Memory no-lock no-error.
          IF order = 1 THEN FIND prev AreaPair
@@ -434,7 +434,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -449,10 +449,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         AreaCode = "".
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE AreaCode WITH FRAME f1.
         HIDE FRAME f1 no-pause.
         if AreaCode <> "" THEN DO:
@@ -471,11 +471,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         NeigArea = "".
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE NeigArea WITH FRAME f2.
         HIDE FRAME f2 no-pause.
         if NeigArea <> "" THEN DO:
@@ -492,20 +492,20 @@ BROWSE:
         END.
      END. /* Haku sar. 2 */
 
-     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* removal */
 
         delline = FRAME-LINE.
         FIND AreaPair where recid(AreaPair) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(Syst.CUICommon:ctc)
+        COLOR DISPLAY value(Syst.Var:ctc)
         AreaPair.AreaCode AreaPair.NeigArea AreaName xx-name.
 
         IF order = 1 THEN FIND NEXT AreaPair
@@ -542,7 +542,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(Syst.CUICommon:ccc)
+        COLOR DISPLAY value(Syst.Var:ccc)
         AreaPair.AreaCode AreaPair.NeigArea AreaName xx-name.
         IF ok THEN DO:
 
@@ -562,7 +562,7 @@ BROWSE:
      END. /* removal */
 
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST AreaPair
         /* search condition */ no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST AreaPair USE-INDEX NeigArea
@@ -575,7 +575,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST AreaPair
         /* search condition */ no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST AreaPair USE-INDEX NeigArea
@@ -588,11 +588,11 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

@@ -9,7 +9,7 @@
 
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Func/email.i}
 

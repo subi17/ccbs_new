@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 {Func/barrfunc.i}
 
 

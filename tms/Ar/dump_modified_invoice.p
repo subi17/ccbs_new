@@ -77,7 +77,7 @@ ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 /* collect only those that have been modified since last dump */
 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand = Syst.CUICommon:gcBrand:
+         Invoice.Brand = Syst.Var:gcBrand:
          
    IF fWasRecordModified(lhTable,
                          icEventSource,

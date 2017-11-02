@@ -13,7 +13,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -136,7 +136,7 @@ REPEAT:
          lcZipCode = SUBSTRING(lcLine,243,8).
         
       FIND FIRST Bank WHERE
-                 Bank.Brand      = Syst.CUICommon:gcBrand  AND
+                 Bank.Brand      = Syst.Var:gcBrand  AND
                  Bank.BankId     = lcBankID AND
                  Bank.BankOffice = lcOffice EXCLUSIVE-LOCK NO-ERROR.
                   
@@ -144,7 +144,7 @@ REPEAT:
 
          CREATE Bank.
          ASSIGN 
-            Bank.Brand      = Syst.CUICommon:gcBrand
+            Bank.Brand      = Syst.Var:gcBrand
             Bank.BankId     = lcBankID
             Bank.BankOffice = lcOffice
             oiNew           = oiNew + 1.
@@ -198,7 +198,7 @@ END.
 
 /* list all banks that were not in the file */
 FOR EACH Bank NO-LOCK WHERE
-         Bank.Brand = Syst.CUICommon:gcBrand AND
+         Bank.Brand = Syst.Var:gcBrand AND
          Bank.FileDate NE ldtFileDate:
 
    IF Bank.FileDate > ldtFileDate THEN NEXT. 

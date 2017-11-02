@@ -13,7 +13,7 @@
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
 FIND FIRST OrderCustomer NO-LOCK where
-           OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
+           OrderCustomer.Brand EQ Syst.Var:gcBrand AND
            OrderCustomer.OrderId EQ iiOrderid AND
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-ERROR.
@@ -39,8 +39,8 @@ FORM
    "Km...............:" OrderCustomer.Km SKIP
    "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " Installation Address "
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " Installation Address "
     NO-LABELS
     FRAME fAddr.
 PAUSE 0 NO-MESSAGE.
@@ -70,14 +70,14 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
    ASSIGN
-      Syst.CUICommon:ufk   = 0  
-      Syst.CUICommon:ufk[5]= 0
-      Syst.CUICommon:ufk[6]= 0
-      Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto  = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 0
+      Syst.Var:ufk[6]= 0
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto  = 0.
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. 
 

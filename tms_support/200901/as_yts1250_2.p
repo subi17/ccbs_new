@@ -9,8 +9,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msreqfunc.i}
 
 def stream sin.

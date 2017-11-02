@@ -2,8 +2,8 @@
    Change liBegin and liEnd input values to needed ones 
    MasMovil range specified to 72260 */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "qvantel".
+Syst.Var:gcBrand = "1".
 {Func/msisdn.i}
 {Func/multitenantfunc.i}
 /* Create free MSISDNs starting from begin to end. */
@@ -241,7 +241,7 @@ DO ld = liBegin TO liEnd TRANS:
 
    CREATE MSISDN.
    ASSIGN
-      MSISDN.Brand      = Syst.CUICommon:gcBrand
+      MSISDN.Brand      = Syst.Var:gcBrand
       MSISDN.CLI        = msisdnnumber.cli
       MSISDN.ValidFrom  = ldeNow
       MSISDN.POS        = "ONLINE"

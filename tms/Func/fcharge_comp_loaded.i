@@ -20,7 +20,7 @@ FUNCTION fMonthLoaded RETURN DECIMAL
    IF ilPaytype THEN DO:
       /* prepaid --------------------------------------------------------------------*/
        FOR EACH PrePaidRequest WHERE
-            PrePaidRequest.Brand      = Syst.CUICommon:gcBrand   AND
+            PrePaidRequest.Brand      = Syst.Var:gcBrand   AND
             PrePaidRequest.CLI        = icCLI    AND
             PrePaidRequest.Source     = icSource AND
             PrePaidRequest.PPStatus   < 3        AND
@@ -38,7 +38,7 @@ FUNCTION fMonthLoaded RETURN DECIMAL
       /* postpaid --------------------------------------------------------------*/
 
       FOR EACH MsRequest WHERE
-            MsRequest.Brand      = Syst.CUICommon:gcBrand  AND
+            MsRequest.Brand      = Syst.Var:gcBrand  AND
             MsRequest.ReqType    =  {&REQTYPE_CHARGE_AND_COMPENSATION} AND
             MsRequest.CLI        = icCLI    AND           
             MsRequest.ReqStatus <> 3 AND

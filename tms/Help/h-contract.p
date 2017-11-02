@@ -31,16 +31,16 @@ form
     Contract.CustNum
     lcCLI  FORMAT "X(16)" LABEL "CLI" 
     Contract.Salesman
-    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Contracts " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " Contracts " overlay frame sel.
 
 form /* SEEK Code */
     ldtDate
     help "Enter Contract Date"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CONTRACT "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CONTRACT "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 MAIN:
 repeat:
@@ -85,10 +85,10 @@ print-line:
 
       if ufkey then do:
          assign
-         Syst.CUICommon:ufk = 0 
-         Syst.CUICommon:ufk[1] = 28 Syst.CUICommon:ufk[5] = 11
-         Syst.CUICommon:ufk[6] = 0  Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 
+         Syst.Var:ufk[1] = 28 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0  Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -98,16 +98,16 @@ BROWSE:
 
          hide message no-pause.
          choose row Contract.FromDate {Syst/uchoose.i} no-error with frame sel.
-         color display value(Syst.CUICommon:ccc) Contract.FromDate with frame sel.
+         color display value(Syst.Var:ccc) Contract.FromDate with frame sel.
 
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          if frame-value = "" and rtab[frame-line] = ? and
-            lookup(Syst.CUICommon:nap,"8,f8") = 0
+            lookup(Syst.Var:nap,"8,f8") = 0
          then next.
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find Contract where recid(Contract) = rtab[frame-line] no-lock.
@@ -136,7 +136,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find Contract where recid(Contract) = rtab[frame-line] no-lock .
                find next Contract where Contract.CustNum = iiCustNum
@@ -165,7 +165,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find Contract where recid(Contract) = memory no-lock no-error.
             find prev Contract where Contract.CustNum = iiCustNum
             no-lock no-error.
@@ -189,7 +189,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -203,10 +203,10 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*ldtDate*/
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ldtDate with frame hayr.
            hide frame hayr no-pause.
            if ldtDate ENTERED then do:
@@ -229,13 +229,13 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find Contract where recid(Contract) = rtab[frame-line] no-lock.
            siirto = string(Contract.Contract).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first Contract no-lock where Contract.CustNum = iiCustNum
               no-error.
            memory = recid(Contract).
@@ -244,7 +244,7 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last Contract no-lock where Contract.CustNum = iiCustNum
               no-error.
            memory = recid(Contract).
@@ -252,7 +252,7 @@ BROWSE:
            next LOOP.
         end. /* last record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

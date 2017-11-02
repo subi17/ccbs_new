@@ -96,8 +96,8 @@ form
     ttDSSInfo.Priority      FORMAT ">>9"  LABEL "Pr."
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " +
        " DSS Billing Information "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -117,12 +117,12 @@ form
     ttDSSInfo.BundleFeeCalc COLON 20                  LABEL "First Month Fee"
     ttDSSInfo.BundleFee     COLON 20                  LABEL "Bundle Fee"
 WITH  OVERLAY ROW 3 width 50 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -191,9 +191,9 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           Syst.CUICommon:ufk    = 0
-           Syst.CUICommon:ufk[8] = 8
-           Syst.CUICommon:ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -202,17 +202,17 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttDSSInfo.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttDSSInfo.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -220,10 +220,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -241,7 +241,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -266,7 +266,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -292,7 +292,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttDSSInfo WHERE ROWID(ttDSSInfo) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -316,7 +316,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -330,13 +330,13 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
@@ -349,25 +349,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttDSSInfo) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttDSSInfo) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -462,12 +462,12 @@ PROCEDURE local-UPDATE-record:
      WITH FRAME lis.
 
      ASSIGN 
-         Syst.CUICommon:ehto = 0
-         Syst.CUICommon:ufk  = 0
-         Syst.CUICommon:ufk[8] = 8.
+         Syst.Var:ehto = 0
+         Syst.Var:ufk  = 0
+         Syst.Var:ufk[8] = 8.
      RUN Syst/ufkey.p.
 
-     IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+     IF Syst.Var:toimi = 8 THEN LEAVE.
 
   END.
 
@@ -535,7 +535,7 @@ PROCEDURE pGetDSSBillingInfo:
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode:
 
          IF CAN-FIND(FIRST ttDSSInfo WHERE
@@ -672,7 +672,7 @@ PROCEDURE pGetDSSBillingInfo:
          ELSE IF LOOKUP(bDayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN DO:
             IF bMServiceLimit.EndTS = ldPeriodTo AND
                CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                         MsRequest.Brand = Syst.CUICommon:gcBrand           AND
+                         MsRequest.Brand = Syst.Var:gcBrand           AND
                          MsRequest.ReqType = {&REQTYPE_DSS}  AND
                          MsRequest.Custnum = ttMsOwner.Custnum AND
                          MsRequest.ReqCParam1 = "DELETE"     AND
@@ -727,7 +727,7 @@ PROCEDURE pGetDSSBillingInfo:
             /* for each used because there might exist  
                same type of fixed fee in the past */
             FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                     FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                     FixedFee.Brand     = Syst.Var:gcBrand AND
                      FixedFee.HostTable = "MobSub" AND
                      FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                      FixedFee.FeeModel  = bDayCampaign.FeeModel AND
@@ -766,10 +766,10 @@ PROCEDURE pGetDSSBillingInfo:
              ldeDataAllocated = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+                DayCampaign.Brand   = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = ttDSSInfo.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -778,7 +778,7 @@ PROCEDURE pGetDSSBillingInfo:
                 FixedFee.BegDate  <= ldToDate   AND
                 FixedFee.EndPer   >= liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = Syst.CUICommon:gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate:

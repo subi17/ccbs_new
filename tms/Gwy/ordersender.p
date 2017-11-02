@@ -25,7 +25,7 @@
 {Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -74,7 +74,7 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
    
    LOOP:
    FOR EACH xxOrder NO-LOCK WHERE  
-            xxOrder.Brand      = Syst.CUICommon:gcBrand     AND
+            xxOrder.Brand      = Syst.Var:gcBrand     AND
             xxOrder.StatusCode = lcStatus
       TENANT-WHERE BUFFER-TENANT-ID(xxOrder) GE 0:
    
@@ -104,7 +104,7 @@ ELSE DO:
 
    ORDERLOOP:
    FOR FIRST Order EXCLUSIVE-LOCK WHERE  
-             Order.Brand   = Syst.CUICommon:gcBrand  AND
+             Order.Brand   = Syst.Var:gcBrand  AND
              Order.OrderId = piOrderId:
 
       {Mc/ordersender.i ORDERLOOP}

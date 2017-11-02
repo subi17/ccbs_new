@@ -198,7 +198,7 @@ IF pcActionType EQ "ORDER" THEN DO:
 
       /* YPRO-25 Segment field WITH Customer Category */
       FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                 CustCat.Brand    = Syst.Var:gcBrand AND
                  CustCat.Category = OrderCustomer.Category NO-ERROR.
       IF AVAILABLE CustCat THEN
         lcSegment = CustCat.Segment.
@@ -352,7 +352,7 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
 
    /* YPRO-25 Segment field WITH Customer Category */
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand    = Syst.CUICommon:gcBrand AND
+              CustCat.Brand    = Syst.Var:gcBrand AND
               CustCat.Category = Customer.Category NO-ERROR.
    IF AVAILABLE CustCat THEN
      lcSegment = CustCat.Segment.
@@ -389,10 +389,10 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
    /* Find TERM and PayTerm contracts from offer */
    IF Order.Offer > "" THEN
       FOR FIRST Offer WHERE
-                Offer.Brand = Syst.CUICommon:gcBrand AND
+                Offer.Brand = Syst.Var:gcBrand AND
                 Offer.Offer = Order.Offer NO-LOCK,
           EACH  OfferItem WHERE
-                OfferItem.Brand       = Syst.CUICommon:gcBrand        AND
+                OfferItem.Brand       = Syst.Var:gcBrand        AND
                 OfferItem.Offer       = Offer.Offer    AND
                 OfferItem.ItemType    = "PerContract"  AND
                (OfferItem.ItemKey BEGINS "PAYTERM" OR
@@ -409,7 +409,7 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
    /* Check Payment Method for direct channel */
    IF INDEX(Order.OrderChannel,"POS") = 0 THEN DO:
       FIND FIRST Orderpayment WHERE
-                 OrderPayment.Brand   = Syst.CUICommon:gcBrand AND
+                 OrderPayment.Brand   = Syst.Var:gcBrand AND
                  OrderPayment.OrderId = Order.OrderId NO-LOCK NO-ERROR.
       IF AVAIL OrderPayment THEN DO:
          IF OrderPayment.Method = {&ORDERPAYMENT_M_POD} THEN 

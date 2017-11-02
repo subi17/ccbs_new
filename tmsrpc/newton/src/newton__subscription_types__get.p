@@ -119,11 +119,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    IF lcProFeeContract > "" THEN
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand  = Syst.CUICommon:gcBrand AND
+                DayCampaign.Brand  = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = lcProFeeContract AND
                 DayCampaign.FeeModel > "",
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand = Syst.CUICommon:gcBrand AND
+                FMItem.Brand = Syst.Var:gcBrand AND
                 FMItem.FeeModel = DayCampaign.FeeModel AND
                 FMItem.PriceList = "PRO_" + CLIType.CLIType AND
                 FMItem.FromDate <= TODAY AND

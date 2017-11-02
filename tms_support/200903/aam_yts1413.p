@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 
 {Func/barrfunc.i}
 
@@ -40,7 +40,7 @@ repeat:
    RUN Mm/barrengine.p (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
-                      Syst.CUICommon:katun,             /* creator */
+                      Syst.Var:katun,             /* creator */
                       Func.Common:mMakeTS() + 0.0012,  /* activate */
                       "",                 /* sms-text */
                       OUTPUT lcResult).

@@ -159,7 +159,7 @@ FUNCTION fDefInvGroup RETURNS CHARACTER
       FIND Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
       IF AVAILABLE Region THEN 
       FOR FIRST InvGroup NO-LOCK WHERE
-                InvGroup.Brand   = Syst.CUICommon:gcBrand AND
+                InvGroup.Brand   = Syst.Var:gcBrand AND
                 InvGroup.TaxZone = Region.TaxZone:
          RETURN InvGroup.InvGroup.       
       END.   
@@ -167,14 +167,14 @@ FUNCTION fDefInvGroup RETURNS CHARACTER
 
    /* if nothing was found based on region then get first with empty taxzone */
    FOR FIRST InvGroup NO-LOCK WHERE
-             InvGroup.Brand   = Syst.CUICommon:gcBrand AND
+             InvGroup.Brand   = Syst.Var:gcBrand AND
              InvGroup.TaxZone = "":
       RETURN InvGroup.InvGroup.       
    END.   
 
    /* if nothing was found then just get first */
    FOR FIRST InvGroup NO-LOCK WHERE
-             InvGroup.Brand   = Syst.CUICommon:gcBrand:
+             InvGroup.Brand   = Syst.Var:gcBrand:
       RETURN InvGroup.InvGroup.       
    END.   
 
@@ -198,7 +198,7 @@ FUNCTION fGetMobsubLimit RETURNS INT
       olIsDefaultLimit = YES.
       
       FIND Custcat WHERE
-         Custcat.brand = Syst.CUICommon:gcBrand AND
+         Custcat.brand = Syst.Var:gcBrand AND
          CustCat.category = pcCustomerCategory NO-LOCK NO-ERROR.
       IF AVAIL CustCat THEN
          RETURN CustCat.MobSubLimit.
@@ -227,7 +227,7 @@ FUNCTION fGetMobsubActLimit RETURNS INT
       olIsDefaultActLimit = YES.
       
       FIND Custcat WHERE
-         Custcat.brand = Syst.CUICommon:gcBrand AND
+         Custcat.brand = Syst.Var:gcBrand AND
          CustCat.category = pcCustomerCategory NO-LOCK NO-ERROR.
       IF AVAIL CustCat THEN
          RETURN CustCat.ActivationLimit.

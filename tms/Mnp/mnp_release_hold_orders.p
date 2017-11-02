@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
 {Mnp/mnp.i}
@@ -33,13 +33,13 @@ ASSIGN
    ldeTimeSIMMNP  = Func.Common:mOffSetTS(liReleaseCycle).        /* Count time to liReleaseCycle value */
 
 FOR EACH Order WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_MNP_ON_HOLD} NO-LOCK,
    FIRST OrderCustomer OF Order WHERE
          OrderCustomer.RowType = 1 NO-LOCK:
 
    FIND FIRST OrderAccessory NO-LOCK WHERE
-              OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+              OrderAccessory.Brand = Syst.Var:gcBrand AND
               OrderAccessory.OrderId = Order.OrderID AND
               OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL OrderAccessory THEN
@@ -60,10 +60,10 @@ FOR EACH Order WHERE
       Order.MNPStatus = 1 AND
       LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
       NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
-                    OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+                    OrderAccessory.Brand = Syst.Var:gcBrand AND
                     OrderAccessory.OrderId = Order.OrderID) AND
       NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                    OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand  AND
+                    OrderTimeStamp.Brand   = Syst.Var:gcBrand  AND
                     OrderTimeStamp.OrderID = Order.OrderID AND
                     OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
       ldeUsedTimeStamp = ldeTimeSIMMNP.   /* Use longer time because hold in state 99 */

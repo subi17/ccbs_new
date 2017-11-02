@@ -7,7 +7,7 @@ DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF VAR llOK AS LOG NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -20,7 +20,7 @@ END.
 DEF BUFFER BufOrder FOR Order.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = Syst.CUICommon:gcBrand and 
+           Order.Brand   = Syst.Var:gcBrand and 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 MESSAGE "Oletko varma että palvelusopimus allekirjoitettu "

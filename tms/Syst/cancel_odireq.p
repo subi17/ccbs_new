@@ -5,7 +5,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -49,7 +49,7 @@ REPEAT WITH FRAME fCancel ON ENDKEY UNDO, LEAVE:
       IF llOk THEN DO:
    
          FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
-                  MsRequest.Brand   = Syst.CUICommon:gcBrand AND
+                  MsRequest.Brand   = Syst.Var:gcBrand AND
                   MsRequest.ReqType = 20      AND
                   MsRequest.ReqStat = 0:
                

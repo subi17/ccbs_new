@@ -1,13 +1,13 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
 {Mnp/mnp.i}
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
       {Func/lib/eventlog.i}
 END.
@@ -33,7 +33,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
          MNPProcess.statuscode = 2) EXCLUSIVE-LOCK.
 
    find order where
-        order.brand = Syst.CUICommon:gcBrand and
+        order.brand = Syst.Var:gcBrand and
         order.orderid = MNPProcess.orderid and
         order.statuscode = "12" EXCLUSIVE-LOCK.
    find OrderCustomer of order where
@@ -64,7 +64,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
   
    /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = Syst.CUICommon:gcBrand AND
+            CallAlarm.Brand = Syst.Var:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -90,10 +90,10 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
          CREATE ActionLog.
          ASSIGN
             ActionLog.ActionTS     = Func.Common:mMakeTS()
-            ActionLog.Brand        = Syst.CUICommon:gcBrand  
+            ActionLog.Brand        = Syst.Var:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = "SIMRELEASE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 2
@@ -143,7 +143,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
       IF Order.OrderChannel = "pos" THEN DO:
          
          FIND OrderAccessory WHERE
-              OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+              OrderAccessory.Brand = Syst.Var:gcBrand AND
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
          EXCLUSIVE-LOCK NO-ERROR.

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msreqfunc.i}
 
 input from /apps/snet/200905/as_yts1489.log.

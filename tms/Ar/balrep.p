@@ -76,7 +76,7 @@ ASSIGN
     viiva4                 = fill("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -147,7 +147,7 @@ IF icFile > "" THEN DO:
 END.
 
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = Syst.CUICommon:gcBrand  AND
+         InvGroup.Brand     = Syst.Var:gcBrand  AND
          InvGroup.InvGroup >= icInvGrp1 AND
          InvGroup.InvGroup <= icInvGrp2,
     EACH Customer NO-LOCK WHERE
@@ -174,7 +174,7 @@ BY Customer.CustNum:
     
     /* debt from invoices */
     FOR EACH Invoice NO-LOCK WHERE
-             Invoice.Brand       = Syst.CUICommon:gcBrand          AND
+             Invoice.Brand       = Syst.Var:gcBrand          AND
              Invoice.CustNum     = Customer.CustNum AND
              Invoice.ClaimState >= idClaimQty1      AND
              Invoice.ClaimState <= idClaimQty2      AND

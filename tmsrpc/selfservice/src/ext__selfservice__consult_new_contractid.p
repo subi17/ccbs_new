@@ -23,8 +23,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       Syst.CUICommon:gcBrand = "1".
+ASSIGN Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -80,19 +80,19 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF LOOKUP(pcDelType,"EMAIL,SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
 
 
 FOR EACH OrderCustomer WHERE 
-         OrderCustomer.Brand      = Syst.CUICommon:gcBrand   AND
+         OrderCustomer.Brand      = Syst.Var:gcBrand   AND
          OrderCustomer.CustIdType = pcDNIType AND
          OrderCustomer.CustId     = pcDNI     AND
          OrderCustomer.Rowtype    = 1 NO-LOCK,
     EACH Order WHERE
-         Order.Brand     = Syst.CUICommon:gcBrand AND
+         Order.Brand     = Syst.Var:gcBrand AND
          Order.OrderId   = OrderCustomer.OrderId AND
          Order.OrderType = 0 NO-LOCK BY Order.CrStamp DESC:
 
@@ -158,7 +158,7 @@ ELSE IF NOT llOngoing THEN DO:
       RETURN appl_err("Order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = Syst.CUICommon:gcBrand AND
+                 MobSub.Brand = Syst.Var:gcBrand AND
                  MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
          RETURN appl_err("Subscription is cancelled").
@@ -197,7 +197,7 @@ IF pcDelType = "SMS" THEN DO:
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:
    liRequest = fEmailSendingRequest(INPUT Func.Common:mMakeTS(),
-                                    INPUT Syst.CUICommon:katun,
+                                    INPUT Syst.Var:katun,
                                     INPUT 0, /* custnum */
                                     INPUT lcCLI,
                                     INPUT lcDelValue,

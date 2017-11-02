@@ -5,21 +5,21 @@ CASE icType:
 
    WHEN "AGREEMENT" THEN 
       FIND {1} Mobsub WHERE 
-               Mobsub.Brand   = Syst.CUICommon:gcBrand AND 
+               Mobsub.Brand   = Syst.Var:gcBrand AND 
                Mobsub.AgrCust = iiCustNum 
                {2}
       USE-INDEX AgrCust NO-LOCK NO-ERROR.         
       
    WHEN "INVOICE" THEN
       FIND {1} Mobsub WHERE
-               Mobsub.Brand   = Syst.CUICommon:gcBrand AND 
+               Mobsub.Brand   = Syst.Var:gcBrand AND 
                Mobsub.InvCust = iiCustNum 
                {2}
       USE-INDEX InvCust NO-LOCK NO-ERROR.
 
    WHEN "USER" THEN DO:
       FIND {1} Mobsub WHERE
-               Mobsub.Brand   = Syst.CUICommon:gcBrand AND 
+               Mobsub.Brand   = Syst.Var:gcBrand AND 
                Mobsub.CustNum = iiCustNum  
                {2}
       USE-INDEX CustNum NO-LOCK NO-ERROR.

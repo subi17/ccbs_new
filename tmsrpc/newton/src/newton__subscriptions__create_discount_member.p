@@ -14,7 +14,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Mc/dpmember.i}
 {Syst/tmsconst.i}
 {Func/fcounter.i}
@@ -54,13 +54,13 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.CUICommon:katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       
@@ -80,17 +80,17 @@ PROCEDURE pConvMainLine :
 
    for-blk:
    FOR FIRST bCustomer WHERE
-             bCustomer.Brand      = Syst.CUICommon:gcBrand AND
+             bCustomer.Brand      = Syst.Var:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
              bCustomer.CustidType = icCustIDType            AND
              bCustomer.Roles     NE "inactive"              NO-LOCK,
        EACH  bMobSub NO-LOCK WHERE
-             bMobSub.Brand   = Syst.CUICommon:gcBrand AND
+             bMobSub.Brand   = Syst.Var:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.PayType = FALSE                   AND
             (bMobSub.MsStatus = {&MSSTATUS_ACTIVE}     OR
              bMobSub.MsStatus = {&MSSTATUS_BARRED}),
-       FIRST bCliType WHERE bCliType.Brand = Syst.CUICommon:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
+       FIRST bCliType WHERE bCliType.Brand = Syst.Var:gcBrand AND bCliType.CliType = bMobSub.CliType NO-LOCK:
       
       IF bCliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN 
           NEXT.
@@ -116,17 +116,17 @@ PROCEDURE pMobOnlyMainLine :
    DEFINE BUFFER bMobSub   FOR MobSub.
 
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(icCliType, {&ADDLINE_CLITYPES}),{&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
   
    for-blk:
    FOR FIRST bCustomer WHERE
-             bCustomer.Brand      = Syst.CUICommon:gcBrand AND
+             bCustomer.Brand      = Syst.Var:gcBrand AND
              bCustomer.OrgId      = icCustID                AND
              bCustomer.CustidType = icCustIDType            AND
              bCustomer.Roles     NE "inactive"              NO-LOCK,
        EACH  bMobSub NO-LOCK WHERE
-             bMobSub.Brand   = Syst.CUICommon:gcBrand AND
+             bMobSub.Brand   = Syst.Var:gcBrand AND
              bMobSub.InvCust = bCustomer.CustNum       AND
              bMobSub.MsSeq  <> MobSub.MsSeq            AND
              bMobSub.PayType = FALSE:
@@ -171,7 +171,7 @@ IF ldeAmount <= 0 THEN RETURN appl_err("Invalid Discount amount").
 IF liValidPeriods <= 0 THEN RETURN appl_err("ValidPeriod must be one month at minimum").
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
@@ -212,7 +212,7 @@ DO:
 END.
 
 FIND FIRST DiscountPlan WHERE
-           DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+           DiscountPlan.Brand = Syst.Var:gcBrand AND
            DiscountPlan.DPRuleID = lcDPRuleID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DiscountPlan THEN
    RETURN appl_err("Unknown Discount Plan").
@@ -243,7 +243,7 @@ DO:
             DCCLI.ValidFrom <= TODAY AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
@@ -253,7 +253,7 @@ DO:
 END.
 
 FOR EACH bDiscountPlan NO-LOCK WHERE
-         bDiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+         bDiscountPlan.Brand = Syst.Var:gcBrand AND
   LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0,
   FIRST DPMember NO-LOCK WHERE
         DPMember.DPId       = bDiscountPlan.DPId   AND
@@ -284,7 +284,7 @@ Func.Common:mMonthlyStamps(TODAY,
                OUTPUT ldeMonthTo). 
 
 FOR EACH Counter NO-LOCK WHERE 
-         Counter.Brand = Syst.CUICommon:gcBrand AND
+         Counter.Brand = Syst.Var:gcBrand AND
          Counter.HostTable = "MobSub" AND
          Counter.KeyValue = STRING(MobSub.MsSeq) AND
          Counter.CounterType = {&COUNTERTYPE_DISCOUNT_AMOUNT} AND

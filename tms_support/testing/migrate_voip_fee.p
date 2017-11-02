@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
 DEF VAR ldaDate   AS DATE NO-UNDO.
@@ -18,7 +18,7 @@ OUTPUT TO "/apps/yoigo/tms_support/testing/voip_fee_change.txt" append.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+          DayCampaign.Brand = Syst.Var:gcBrand AND
           DayCampaign.DCEvent = "BONO_VOIP" NO-LOCK,
     FIRST ServiceLimit WHERE
           ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK,
@@ -57,7 +57,7 @@ FOR FIRST DayCampaign WHERE
    llclosed = FALSE.
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
+            FixedFee.Brand     = Syst.Var:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(liMsSeq) AND
             FixedFee.CalcObj   = DayCampaign.DCEvent:
@@ -72,7 +72,7 @@ FOR FIRST DayCampaign WHERE
                      TRUE,
                      liMsSeq,
                      "", /* Data bundle id */
-                     Syst.CUICommon:katun, /* eventlog.usercode */
+                     Syst.Var:katun, /* eventlog.usercode */
                      "SummerCampaign-PriceChange", /* eventlog.memo */
                      0,
                      OUTPUT ldReqAmt).
@@ -96,7 +96,7 @@ FOR FIRST DayCampaign WHERE
                   STRING(TODAY,"99.99.9999") +  /* memo */
                   "¤" +  DayCampaign.DCEvent ,  /* calcobject */
                   FALSE,              /* no messages to screen */
-                  Syst.CUICommon:katun,
+                  Syst.Var:katun,
                   "SummerCampaign-PriceChange",
                   0, /* order id */
                   "",

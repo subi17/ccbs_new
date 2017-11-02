@@ -76,7 +76,7 @@ OUTPUT STREAM sLog TO VALUE("/apps/yoigo/tms_support/billing/check_1st_day_gprs_
          + DAY(ldtInputdate)) + ".log").
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}) AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 
@@ -118,7 +118,7 @@ FOR EACH MsRequest NO-LOCK WHERE
 END.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = 81 AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 

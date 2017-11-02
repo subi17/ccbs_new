@@ -383,7 +383,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
     
    IF lcNewCategory > "" THEN DO:
       FIND CustCat WHERE 
-           CustCat.Brand    = Syst.CUICommon:gcBrand AND
+           CustCat.Brand    = Syst.Var:gcBrand AND
            CustCat.Category = lcNewCategory NO-LOCK NO-ERROR.
       IF AVAILABLE CustCat THEN lcNewCatName = CustCat.CatName.
    END. 
@@ -449,21 +449,21 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    IF ufkey THEN DO:
       ASSIGN
-         Syst.CUICommon:ufk[1]= 7    Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 1027 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 0.
+         Syst.Var:ufk[1]= 7    Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 1027 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN Syst.CUICommon:toimi = 1  
+   ELSE ASSIGN Syst.Var:toimi = 1  
                ufkey = TRUE.
 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE ldtChgDate 
                 ldChgTime
@@ -489,12 +489,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    
                END. 
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 
  
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "ldChgTime" THEN DO:
                
@@ -636,16 +636,16 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                       END.
                    END. 
     
-                   Syst.CUICommon:ehto = 9.
+                   Syst.Var:ehto = 9.
                    RUN Syst/ufkey.p.
                    NEXT.
                 END. 
                 
-                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                   
                   IF FRAME-FIELD = "lcNewCategory" THEN DO:
                      FIND CustCat WHERE 
-                          CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                          CustCat.Brand    = Syst.Var:gcBrand AND
                           CustCat.Category = INPUT lcNewCategory 
                      NO-LOCK NO-ERROR.
 
@@ -759,7 +759,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       IF ldtChgDate = ? OR lcNewLast = "" OR 
          (liNewCust2 = 0 AND liNewCust1 > 0) THEN DO:
@@ -791,7 +791,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
       IF icChgType = "invcust" AND liNewCust2 = MobSub.CustNum THEN DO:
          lcCLIList = "".
          FOR EACH bInvSub NO-LOCK WHERE 
-                  bInvSub.Brand   = Syst.CUICommon:gcBrand        AND
+                  bInvSub.Brand   = Syst.Var:gcBrand        AND
                   bInvSub.CustNum = MobSub.CustNum:
             IF bInvSub.CLI NE MobSub.CLI THEN 
                lcCLIList = lcCLIList + (IF lcCLIList > "" THEN ", " ELSE "") +
@@ -873,7 +873,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          IF NOT llOk THEN NEXT.
       END.
       
-      Syst.CUICommon:ehto = 5.   
+      Syst.Var:ehto = 5.   
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
@@ -926,7 +926,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE ChooseUser.
    END.
 

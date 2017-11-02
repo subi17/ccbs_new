@@ -39,7 +39,7 @@ DEF VAR xug-code      AS c                      NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -58,8 +58,8 @@ form
     UGMember.UserName     /* COLUMN-LABEL FORMAT */
     UGMember.Memo     /* COLUMN-LABEL FORMAT */
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     " Members in an User Group " + UserGroup + ": " +
     substring(UserGrp.UGName,1,16)
     + " " FRAME sel.
@@ -68,22 +68,22 @@ form
     UGMember.UserCode     /* LABEL FORMAT */
     TMSUser.UserName     /* LABEL FORMAT */
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 form /* member :n haku kentällä UserCode */
     UserCode
     help "Type User ID "
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND USER ID "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND USER ID "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä UserName */
     UserName
     help "Type User's Name"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND UserName "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND UserName "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
    skip(1)
@@ -100,7 +100,7 @@ WITH
 FIND UserGrp where UserGrp.UserGroup = UserGroup no-lock.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST UGMember
@@ -130,18 +130,18 @@ repeat WITH FRAME sel:
 
 ADD-USER:
        repeat TRANS ON ENDKEY UNDO ADD-USER, LEAVE ADD-USER.
-     ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-     Syst.CUICommon:ufk[1] = 540 Syst.CUICommon:ufk[2] = 541 Syst.CUICommon:ufk[3] = 516 Syst.CUICommon:ufk[8] = 8.
+     ASSIGN ufkey = TRUE Syst.Var:ufk = 0 Syst.Var:ehto = 0
+     Syst.Var:ufk[1] = 540 Syst.Var:ufk[2] = 541 Syst.Var:ufk[3] = 516 Syst.Var:ufk[8] = 8.
      RUN Syst/ufkey.p.
 
-     IF Syst.CUICommon:toimi = 8 THEN LEAVE ADD-USER.
-     IF Syst.CUICommon:toimi = 1 THEN DO:
+     IF Syst.Var:toimi = 8 THEN LEAVE ADD-USER.
+     IF Syst.Var:toimi = 1 THEN DO:
         lm-ots = " ADD ONE User ".
 add-single:
         repeat WITH FRAME lis ON ENDKEY UNDO ADD-USER,
                 NEXT ADD-USER:
       PAUSE 0.
-      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       CLEAR FRAME lis no-pause.
       PROMPT-FOR UGMember.UserCode
       validate(input UGMember.UserCode = "" OR can-find(TMSUser where
@@ -176,13 +176,13 @@ add-single:
          IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhUgMember).
       END.
         END.
-     END. /* Syst.CUICommon:toimi = 1: add a single group */
+     END. /* Syst.Var:toimi = 1: add a single group */
 
-     ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+     ELSE IF Syst.Var:toimi = 2 THEN DO:
         RUN Syst/nnugcb.p(UserGrp.UserGroup).
         LEAVE add-USER.
      END.
-     ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
+     ELSE IF Syst.Var:toimi = 3 THEN DO WITH FRAME copy:
         /* copy members */
 
         PAUSE 0.
@@ -225,7 +225,7 @@ add-single:
         PAUSE 0.
         HIDE FRAME copy.
         LEAVE add-USER.
-     END. /* Syst.CUICommon:toimi = 3 */
+     END. /* Syst.Var:toimi = 3 */
       END. /* add-USER */
 
       /* onko yhtään tietuetta ? */
@@ -289,29 +289,29 @@ SELAUS:
 
       IF ufkey THEN DO:
    ASSIGN
-   Syst.CUICommon:ufk[1]= 542 Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 530 Syst.CUICommon:ufk[4]= 518
-   Syst.CUICommon:ufk[5]= 5   Syst.CUICommon:ufk[6]= 4  Syst.CUICommon:ufk[7]=   0 Syst.CUICommon:ufk[8]=   8 Syst.CUICommon:ufk[9]= 1
-   Syst.CUICommon:ehto = 3 ufkey = FALSE.
+   Syst.Var:ufk[1]= 542 Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 530 Syst.Var:ufk[4]= 518
+   Syst.Var:ufk[5]= 5   Syst.Var:ufk[6]= 4  Syst.Var:ufk[7]=   0 Syst.Var:ufk[8]=   8 Syst.Var:ufk[9]= 1
+   Syst.Var:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
    CHOOSE ROW UGMember.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(Syst.CUICommon:ccc) UGMember.UserCode WITH FRAME sel.
+   COLOR DISPLAY value(Syst.Var:ccc) UGMember.UserCode WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
    CHOOSE ROW UGMember.UserName {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(Syst.CUICommon:ccc) UGMember.UserName WITH FRAME sel.
+   COLOR DISPLAY value(Syst.Var:ccc) UGMember.UserName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
    jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
    jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -338,10 +338,10 @@ SELAUS:
    NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
    IF FRAME-LINE = 1 THEN DO:
       FIND UGMember where recid(UGMember) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev UGMember
@@ -372,7 +372,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND UGMember where recid(UGMember) = rtab[FRAME-DOWN] no-lock .
@@ -403,7 +403,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
    muisti = rtab[1].
    FIND UGMember where recid(UGMember) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev UGMember
@@ -433,7 +433,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
       message "YOU ARE ON THE LAST PAGE !".
@@ -448,10 +448,10 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        UserCode = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserCode WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserCode <> "" THEN DO:
@@ -471,11 +471,11 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        UserName = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UserName <> "" THEN DO:
@@ -494,19 +494,19 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* other memberships */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* other memberships */
    FIND UGMember where recid(UGMember) = rtab[FRAME-LINE] no-lock.
    RUN Syst/nnugme2.p(UGMember.UserCode).
    ufkey = TRUE.
    NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* ADD */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* ADD */
    lisattava = TRUE.
    NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* count # of members */
+     else if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* count # of members */
    PAUSE 0.
    message "Calculating no. of members, wait a moment please ...".
    Qty = 0.
@@ -521,12 +521,12 @@ SELAUS:
    NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSAction:  /* poisto */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSAction:  /* poisto */
        privi = FRAME-LINE.
        FIND UGMember where recid(UGMember) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(Syst.CUICommon:ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        UGMember.UserCode UGMember.UserName UGMember.Memo.
 
        IF jarj = 1 THEN FIND NEXT UGMember
@@ -555,7 +555,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(Syst.CUICommon:ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        UGMember.UserCode UGMember.UserName UGMember.Memo.
        IF ok THEN DO:
 
@@ -575,11 +575,11 @@ SELAUS:
        ELSE privi = 0. /* ei poistettukaan */
      END. /* poisto */
 
-     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME sel TRANSAction:
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN DO WITH FRAME sel TRANSAction:
        /* muutos */
        FIND UGMember where recid(UGMember) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUgMember).
@@ -588,7 +588,7 @@ SELAUS:
        xrecid = recid(UGMember).
      END.
 
-     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST UGMember
        where UGMember.UserGroup = UserGroup no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST UGMember USE-INDEX UserName
@@ -597,7 +597,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST UGMember
        where UGMember.UserGroup = UserGroup no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST UGMember USE-INDEX UserName
@@ -606,11 +606,11 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

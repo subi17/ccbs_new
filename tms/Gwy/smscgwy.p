@@ -18,7 +18,7 @@ https://luna.starnet.fi/display/XFERA/SMSC+specifications
 
 */
 
-{Syst/commpaa.i} Syst.CUICommon:gcBrand = "1".
+{Syst/commpaa.i} Syst.Var:gcBrand = "1".
 {Func/mathfunction.i}
 {Func/cparam2.i}
 {Gwy/charset.i}

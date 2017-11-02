@@ -8,8 +8,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN Syst.CUICommon:gcBrand = "1" 
-       Syst.CUICommon:katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
@@ -45,8 +45,8 @@ END FUNCTION.
 /******** Main start ******/
 
 FIND FIRST Company WHERE
-           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcFile = fCParamC("PHouseZipCodeFile").
    

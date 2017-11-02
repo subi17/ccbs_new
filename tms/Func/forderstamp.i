@@ -57,13 +57,13 @@ FUNCTION fMarkOrderStamp RETURNS LOGICAL
    IF liStampType = 0 THEN RETURN FALSE.
    
    FIND FIRST OrderTimeStamp WHERE
-              OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
+              OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
               OrderTimeStamp.OrderID = iiOrderID AND
               OrderTimeStamp.RowType = liStampType EXCLUSIVE-LOCK NO-ERROR.
               
    IF NOT AVAILABLE OrderTimeStamp THEN DO:
       CREATE OrderTimeStamp.
-      ASSIGN OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand
+      ASSIGN OrderTimeStamp.Brand   = Syst.Var:gcBrand
              OrderTimeStamp.OrderID = iiOrderID 
              OrderTimeStamp.RowType = liStampType.
    END. 
@@ -88,7 +88,7 @@ FUNCTION fGetOrderStamp RETURNS DECIMAL
    IF liStampType = 0 THEN RETURN 0.0.
    
    FIND FIRST OrderTimeStamp WHERE
-              OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
+              OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
               OrderTimeStamp.OrderID = iiOrderID AND
               OrderTimeStamp.RowType = liStampType NO-LOCK NO-ERROR.
               

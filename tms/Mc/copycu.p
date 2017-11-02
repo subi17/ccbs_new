@@ -28,7 +28,7 @@ DEF BUFFER new-Tariff   FOR Tariff.
 DEF BUFFER new-PnpList  FOR PNPList.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -99,7 +99,7 @@ IF ok THEN DO:
              x2 = int(substr(siirto, i + 1)).
 
       FIND LAST new-Customer NO-LOCK WHERE
-                new-Customer.Brand    = Syst.CUICommon:gcBrand AND
+                new-Customer.Brand    = Syst.Var:gcBrand AND
                 new-Customer.CustNum >= x1      AND
                 new-Customer.CustNum <= x2 NO-ERROR.
       IF AVAILABLE new-Customer THEN ASSIGN
@@ -107,13 +107,13 @@ IF ok THEN DO:
 
       DO new-custNo = x1 TO x2:
          IF NOT can-find(FIRST new-Customer where
-                               new-Customer.Brand   = Syst.CUICommon:gcBrand AND
+                               new-Customer.Brand   = Syst.Var:gcBrand AND
                                new-Customer.CustNum = new-custNo) THEN LEAVE.
       END.
    END.
    ELSE DO:
       FIND LAST new-Customer NO-LOCK USE-INDEX CustNum WHERE
-                new-Customer.Brand  = Syst.CUICommon:gcBrand.
+                new-Customer.Brand  = Syst.Var:gcBrand.
       new-custNo = new-Customer.CustNum + 1.
    END.
 

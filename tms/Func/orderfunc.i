@@ -23,7 +23,7 @@
 {Func/msisdn.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -54,7 +54,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    ORDER_TRANS:
    DO TRANS:
       FIND bfOrder WHERE
-           bfOrder.Brand = Syst.CUICommon:gcBrand AND
+           bfOrder.Brand = Syst.Var:gcBrand AND
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE bfOrder THEN DO:  
@@ -92,7 +92,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   llHardBook = TRUE.
 
                FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
-                          OrderFusion.Brand = Syst.CUICommon:gcBrand AND
+                          OrderFusion.Brand = Syst.Var:gcBrand AND
                           OrderFusion.OrderID = bfOrder.OrderID AND
                    LOOKUP(OrderFusion.FusionStatus,SUBST("&1,&2",
                          {&FUSION_ORDER_STATUS_NEW},
@@ -117,7 +117,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      IF AVAIL MobSub THEN DO:
 
                         FIND FIRST MSISDN WHERE
-                                   MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                                   MSISDN.Brand = Syst.Var:gcBrand AND
                                    MSISDN.CLI   = MobSub.CLI
                         EXCLUSIVE-LOCK NO-ERROR.
                         /* No mobile created. Release MSISDN */
@@ -166,7 +166,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   RELEASE FusionMessage.
                END.
                
-               IF Syst.CUICommon:katun NE "Dextra" AND
+               IF Syst.Var:katun NE "Dextra" AND
                  (bfOrder.Logistics > "" OR llHardBook = TRUE OR
                  llCancelFusion = TRUE) THEN DO:
                   fLogisticsRequest(
@@ -189,7 +189,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                IF bfOrder.InvNum = 0 AND
                   bfOrder.OrderChannel BEGINS "retention" THEN
                   FOR FIRST OrderPayment NO-LOCK WHERE
-                            OrderPayment.Brand = Syst.CUICommon:gcBrand AND
+                            OrderPayment.Brand = Syst.Var:gcBrand AND
                             OrderPayment.OrderId = bfOrder.OrderId AND
                            (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD}
                             OR
@@ -197,7 +197,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                      CREATE ActionLog.
                      ASSIGN
-                        ActionLog.Brand     = Syst.CUICommon:gcBrand
+                        ActionLog.Brand     = Syst.Var:gcBrand
                         ActionLog.ActionID  = "OrderCancelRetention"
                         ActionLog.ActionTS  = Func.Common:mMakeTS()
                         ActionLog.TableName = "Order"
@@ -226,7 +226,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                IF bfOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
 
                   FOR FIRST bfOrder2 NO-LOCK WHERE
-                            bfOrder2.Brand = Syst.CUICommon:gcBrand AND
+                            bfOrder2.Brand = Syst.Var:gcBrand AND
                             bfOrder2.MultiSimID = bfOrder.MultiSimID AND
                             bfOrder2.MultiSimType =
                               {&MULTISIMTYPE_SECONDARY}:
@@ -237,11 +237,11 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                /* release pending secondary line orders, YDR-1089 */
                IF CAN-FIND(FIRST OrderAction WHERE
-                                 OrderAction.Brand = Syst.CUICommon:gcBrand AND
+                                 OrderAction.Brand = Syst.Var:gcBrand AND
                                  OrderAction.OrderId = bfOrder.OrderID AND
                                  OrderAction.ItemType = "BundleItem" AND
                                  CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                                CLIType.Brand = Syst.CUICommon:gcBrand AND
+                                                CLIType.Brand = Syst.Var:gcBrand AND
                                                 CLIType.CLIType = OrderAction.ItemKey AND
                                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN DO:
                
@@ -254,12 +254,12 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                         bfOrderCustomer.CustId,
                         bfOrder.OrderID) THEN
                   FOR EACH bfOrderCustomer2 NO-LOCK WHERE   
-                           bfOrderCustomer2.Brand      EQ Syst.CUICommon:gcBrand AND 
+                           bfOrderCustomer2.Brand      EQ Syst.Var:gcBrand AND 
                            bfOrderCustomer2.CustId     EQ bfOrderCustomer.CustID AND
                            bfOrderCustomer2.CustIdType EQ bfOrderCustomer.CustIdType AND
                            bfOrderCustomer2.RowType    EQ 1,
                       EACH bfOrder2 NO-LOCK WHERE
-                           bfOrder2.Brand              EQ Syst.CUICommon:gcBrand AND
+                           bfOrder2.Brand              EQ Syst.Var:gcBrand AND
                            bfOrder2.orderid            EQ bfOrderCustomer2.Orderid AND
                            ROWID(bfOrder2) NE ROWID(bfOrder) AND
                            (bfOrder2.statuscode        EQ {&ORDER_STATUS_PENDING_MAIN_LINE} OR
@@ -269,17 +269,17 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                             bfOrder2.statuscode        EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
                             bfOrder2.statuscode        EQ {&ORDER_STATUS_MNP_ON_HOLD}),
                       FIRST CLIType NO-LOCK WHERE
-                            CLIType.Brand = Syst.CUICommon:gcBrand AND
+                            CLIType.Brand = Syst.Var:gcBrand AND
                             CLIType.CLIType = bfOrder2.CLIType AND
                            (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
                             CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
 
                      IF CAN-FIND(FIRST OrderAction WHERE
-                                       OrderAction.Brand = Syst.CUICommon:gcBrand AND
+                                       OrderAction.Brand = Syst.Var:gcBrand AND
                                        OrderAction.OrderId = bfOrder2.OrderID AND
                                        OrderAction.ItemType = "BundleItem" AND
                               CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                             CLIType.Brand = Syst.CUICommon:gcBrand AND
+                                             CLIType.Brand = Syst.Var:gcBrand AND
                                              CLIType.CLIType = OrderAction.ItemKey AND
                                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN NEXT.
                      RUN Mc/closeorder.p(bfOrder2.OrderId,TRUE).
@@ -310,7 +310,7 @@ FUNCTION fSetOrderRiskCode RETURNS LOGICAL
    ORDER_TRANS:
    DO TRANS:
       FIND bfOrder WHERE
-           bfOrder.Brand = Syst.CUICommon:gcBrand AND
+           bfOrder.Brand = Syst.Var:gcBrand AND
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       /* another process is handling this */
@@ -363,7 +363,7 @@ FUNCTION fSearchStock RETURNS CHARACTER
    DEF VAR liLoop AS INT NO-UNDO. 
 
    FOR EACH Stock WHERE
-            Stock.Brand   = Syst.CUICommon:gcBrand AND
+            Stock.Brand   = Syst.Var:gcBrand AND
             Stock.StoType = icStock NO-LOCK:
       DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
         IF icZipCode MATCHES
@@ -391,12 +391,12 @@ FUNCTION fCheckMainLineForMobileOnly RETURNS INTEGER
    REPEAT liCount = 1 TO NUM-ENTRIES(lcMainLineCLITypes):
 
       FOR EACH lbOrderCustomer NO-LOCK WHERE
-               lbOrderCustomer.Brand      = Syst.CUICommon:gcBrand      AND
+               lbOrderCustomer.Brand      = Syst.Var:gcBrand      AND
                lbOrderCustomer.CustIDType = icCustIDType AND
                lbOrderCustomer.CustID     = icCustID     AND
                lbOrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
          FIRST lbOrder NO-LOCK WHERE
-               lbOrder.Brand   = Syst.CUICommon:gcBrand                                 AND
+               lbOrder.Brand   = Syst.Var:gcBrand                                 AND
                lbOrder.OrderID = lbOrderCustomer.OrderID                 AND
                lbOrder.CLIType = ENTRY(liCount,lcMainLineCLITypes)       AND 
                LOOKUP(lbOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 BY Order.CrStamp:
@@ -447,12 +447,12 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
       RETURN FALSE.
 
    FOR EACH labOrderCustomer NO-LOCK WHERE
-            labOrderCustomer.Brand      EQ Syst.CUICommon:gcBrand AND
+            labOrderCustomer.Brand      EQ Syst.Var:gcBrand AND
             labOrderCustomer.CustId     EQ icCustID                AND
             labOrderCustomer.CustIdType EQ icCustIDType            AND
             labOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
        EACH labOrder NO-LOCK WHERE
-            labOrder.Brand      EQ Syst.CUICommon:gcBrand           AND
+            labOrder.Brand      EQ Syst.Var:gcBrand           AND
             labOrder.OrderId    EQ labOrderCustomer.OrderId          AND
             labOrder.Statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
             LOOKUP(labOrder.CLIType,{&ADDLINE_CLITYPES}) > 0:
@@ -463,7 +463,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
          /* This record has to be found, to check orderaction has any additional 
             line related discount available - and - this record is used if action is CLOSE */ 
          FIND FIRST labOrderAction EXCLUSIVE-LOCK WHERE
-                    labOrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                    labOrderAction.Brand    = Syst.Var:gcBrand           AND
                     labOrderAction.OrderID  = labOrder.OrderId  AND
                     labOrderAction.ItemType = "AddLineDiscount" AND
              LOOKUP(labOrderAction.ItemKey, lcDiscList) > 0     NO-ERROR.
@@ -487,7 +487,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                                                 labOrder.CliType)                  
                    AND                                     
                    (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
-                                   labOrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                                   labOrderAction.Brand    = Syst.Var:gcBrand           AND
                                    labOrderAction.OrderID  = labOrder.OrderId  AND
                                    labOrderAction.ItemType = "AddLineDiscount" AND
                             LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)))  OR 
@@ -504,7 +504,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                                                   labOrder.CliType)
                    AND
                    (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
-                                   labOrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                                   labOrderAction.Brand    = Syst.Var:gcBrand           AND
                                    labOrderAction.OrderID  = labOrder.OrderId  AND
                                    labOrderAction.ItemType = "AddLineDiscount" AND
                             LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0))) THEN   
@@ -526,7 +526,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                                                     labOrder.CliType) 
                        AND 
                        (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
-                                       labOrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                                       labOrderAction.Brand    = Syst.Var:gcBrand           AND
                                        labOrderAction.OrderID  = labOrder.OrderId  AND
                                        labOrderAction.ItemType = "AddLineDiscount" AND
                                        LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)) THEN
@@ -666,7 +666,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
    FIND FIRST lbELOrder NO-LOCK WHERE
-              lbELOrder.Brand        EQ Syst.CUICommon:gcBrand           AND
+              lbELOrder.Brand        EQ Syst.Var:gcBrand           AND
               lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
               lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
               lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
@@ -697,7 +697,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             /* Check if Main line order is closed, If closed, 
                then close extraline ongoing order */
             FIND FIRST lbMLOrder NO-LOCK WHERE 
-                       lbMLOrder.Brand        EQ Syst.CUICommon:gcBrand AND
+                       lbMLOrder.Brand        EQ Syst.Var:gcBrand AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
                        lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
                        lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 

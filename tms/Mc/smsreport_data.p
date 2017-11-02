@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun = "cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun = "cron"
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttReport NO-UNDO
@@ -31,7 +31,7 @@ FUNCTION fSales RETURNS LOGICAL
    (ldSaleDate AS DATE):
 
    FIND FIRST SalesMan NO-LOCK WHERE
-              SalesMan.Brand = Syst.CUICommon:gcBrand AND
+              SalesMan.Brand = Syst.Var:gcBrand AND
               SalesMan.SalesMan = Order.SalesMan NO-ERROR.
 
    IF AVAIL SalesMan THEN DO:
@@ -127,7 +127,7 @@ DEFINE VARIABLE liMGMSalesToday AS INTEGER NO-UNDO.
 
 /* Today Orders */
 FOR EACH Order WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp > ldeBegin NO-LOCK:
  
    FIND FIRST OrderAccessory OF Order NO-LOCK WHERE
@@ -187,7 +187,7 @@ ldeEnd   = Func.Common:mMake2DT(TODAY,0).
 DEFINE VARIABLE liMGMSalesYesterday AS INTEGER NO-UNDO. 
 
 FOR EACH Order WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin AND
          Order.CrStamp < ldeEnd NO-LOCK:
 
@@ -211,7 +211,7 @@ DEFINE VARIABLE liSelfSalesCum AS INTEGER NO-UNDO.
 DEFINE VARIABLE liMGMSalesCum AS INTEGER NO-UNDO. 
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = Syst.CUICommon:gcBrand:
+         Order.Brand = Syst.Var:gcBrand:
 
    IF Order.PayType THEN
    liPrepaids = liPrepaids + 1.
@@ -239,7 +239,7 @@ END.
 
 /* Total Ongoing MNPs */
 FOR EACH Order WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = "12" AND
          Order.MNPStatus > 0 NO-LOCK:
    liMNPOngoing = liMNPOngoing + 1. 
@@ -258,7 +258,7 @@ ldeBegin = Func.Common:mMake2DT(TODAY,0).
 ldeEnd   = Func.Common:mMake2DT(TODAY + 1,0).
 
 FOR EACH msrequest where
-         msrequest.brand = Syst.CUICommon:gcBrand and 
+         msrequest.brand = Syst.Var:gcBrand and 
          msrequest.reqtype = 18 and
          msrequest.reqstatus = 2 and
          msrequest.actstamp >= ldeBegin and
@@ -295,7 +295,7 @@ FUNCTION fTermSubs RETURNS INT
    ldeEnd   = Func.Common:mMake2DT(idaDate + 1,0).
    
    FOR EACH MsRequest WHERE 
-            MsRequest.Brand = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.ReqType = 18 AND
             MsRequest.ReqStatus = 0 AND
             MsRequest.ActStamp >= ldeBegin AND 
@@ -304,7 +304,7 @@ FUNCTION fTermSubs RETURNS INT
    END.
 
    FOR EACH MsRequest WHERE 
-            MsRequest.Brand = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.ReqType = 18 AND
             MsRequest.ReqStatus = 2 AND
             MsRequest.ActStamp >= ldeBegin AND 
@@ -328,11 +328,11 @@ DEFINE VARIABLE liCorporatePostpaidNew AS INTEGER NO-UNDO.
 DEFINE VARIABLE liCorporatePostpaidMNP AS INTEGER NO-UNDO. 
 
 FOR EACH Order WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin NO-LOCK:
    
    FIND FIRST OrderCustomer WHERE
-              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    

@@ -25,7 +25,7 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fexternalapi.i}
@@ -66,7 +66,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 

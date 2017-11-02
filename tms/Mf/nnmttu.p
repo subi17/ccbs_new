@@ -39,7 +39,7 @@ DEF VAR InvGroup  LIKE InvGroup.InvGroup NO-UNDO.
 DEF VAR IGName  LIKE InvGroup.IGName NO-UNDO.
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(112)" SKIP
@@ -90,7 +90,7 @@ skip(3)
 "                 -limit exceeded:" b-exc
                  help "Customers with exceeded Limit / all (A/E)"        skip(3)
 WITH
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:cfc)
     " " + ynimi + " Monthly call counter report " + string(TODAY,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
@@ -100,7 +100,7 @@ Month = (year(TODAY) * 100) + month(TODAY).
 rajat:
 repeat WITH FRAME rajat:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE Month 
    InvGroup VALIDATE(CAN-FIND(invgroup WHERE
                               invgroup.invgroup = INPUT invgroup),
@@ -121,13 +121,13 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME rajat:
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-      Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
-  END.  /* Syst.CUICommon:toimi */
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
+  END.  /* Syst.Var:toimi */
 
    /* set header FOR report */
    if b-all     then s-head = "-all customers".

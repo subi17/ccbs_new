@@ -6,7 +6,7 @@
   AUTHOR .......: jp
   CREATED ......: 21.08.02
                   15.09.03 jp Brand                        
-  MODIFIED .....: 08.09.06/aam type selection (Syst.CUICommon:gcHelpParam),
+  MODIFIED .....: 08.09.06/aam type selection (Syst.Var:gcHelpParam),
                                local-procedures
   Version ......: M15
   ------------------------------------------------------ */
@@ -33,29 +33,29 @@ form
     FATGroup.Amount   FORMAT "->>>>9.99" COLUMN-LABEL "Disc.Amt"
     FATGroup.FatPerc  COLUMN-LABEL "Disc.%"
     FATGroup.PeriodQty COLUMN-LABEL "Per."
-    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " FAT Group " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " FAT Group " overlay frame sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter code of an Fatime Group"
-    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND GROUP "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
+    with row 4  col 2 title color value(Syst.Var:ctc) " FIND GROUP "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 liType  = ?.
        
 /* filters selected */
-IF Syst.CUICommon:gcHelpParam > "" THEN DO i = 1 TO NUM-ENTRIES(Syst.CUICommon:gcHelpParam,";"):
+IF Syst.Var:gcHelpParam > "" THEN DO i = 1 TO NUM-ENTRIES(Syst.Var:gcHelpParam,";"):
 
-   lcValue = ENTRY(i,Syst.CUICommon:gcHelpParam,";").
+   lcValue = ENTRY(i,Syst.Var:gcHelpParam,";").
    
    IF lcValue BEGINS "type" THEN 
       liType = INTEGER(SUBSTRING(lcValue,5)) NO-ERROR.
 END.
 
-Syst.CUICommon:gcHelpParam = "".
+Syst.Var:gcHelpParam = "".
 
 MAIN:
 repeat:
@@ -101,9 +101,9 @@ repeat:
 
          if ufkey then do:
             assign
-            Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
-            Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-            siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
+            Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+            Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+            siirto = ? Syst.Var:ehto = 3 ufkey = false.
             RUN Syst/ufkey.p.
          end.
       end. /* print-line */
@@ -113,13 +113,13 @@ repeat:
 
          hide message no-pause.
          choose row FATGroup.FTGrp {Syst/uchoose.i} no-error with frame sel.
-         color display value(Syst.CUICommon:ccc) FATGroup.FTGrp with frame sel.
+         color display value(Syst.Var:ccc) FATGroup.FTGrp with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find FATGroup where recid(FATGroup) = rtab[frame-line] no-lock.
@@ -146,7 +146,7 @@ repeat:
          end. /* previous line */
 
          /* next line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find FATGroup where recid(FATGroup) = rtab[frame-line] no-lock .
                
@@ -173,7 +173,7 @@ repeat:
          end. /* next line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find FATGroup where recid(FATGroup) = memory no-lock no-error.
 
             RUN local-find-prev.
@@ -198,7 +198,7 @@ repeat:
         end. /* previous page */
 
         /* next page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -212,22 +212,22 @@ repeat:
         end. /* next page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:  /* ob-code */
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* ob-code */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.
 
            if ob-code ENTERED then do:
               IF liType NE ? THEN
                  FIND FIRST FATGroup USE-INDEX FATType WHERE
-                            FATGroup.Brand   = Syst.CUICommon:gcBrand AND 
+                            FATGroup.Brand   = Syst.Var:gcBrand AND 
                             FATGroup.FATType = liType  AND
                             FATGroup.FTGrp  >= ob-code NO-LOCK NO-ERROR.
 
               ELSE 
                  FIND FIRST FATGroup USE-INDEX FtGrp WHERE
-                            FATGroup.Brand   = Syst.CUICommon:gcBrand AND 
+                            FATGroup.Brand   = Syst.Var:gcBrand AND 
                             FATGroup.FTGrp  >= ob-code NO-LOCK NO-ERROR.
 
               if not available FATGroup then do:
@@ -247,14 +247,14 @@ repeat:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find FATGroup where recid(FATGroup) = rtab[frame-line] no-lock.
            siirto = string(FATGroup.FTGrp).
            leave MAIN.
         end. /* Choose */
 
         /* First record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            RUN local-find-first.
            memory = recid(FATGroup).
            must-print = true.
@@ -262,14 +262,14 @@ repeat:
         end. /* First record */
 
         /* last record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            RUN local-find-last.
            memory = recid(FATGroup).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */
@@ -294,12 +294,12 @@ PROCEDURE local-find-first:
 
    IF liType = ? THEN DO:
       FIND FIRST FATGroup USE-INDEX FTGrp WHERE 
-                 FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                 FATGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND FIRST FATGroup USE-INDEX FATType WHERE 
-                 FATGroup.Brand   = Syst.CUICommon:gcBrand AND
+                 FATGroup.Brand   = Syst.Var:gcBrand AND
                  FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    
@@ -309,12 +309,12 @@ PROCEDURE local-find-last:
 
    IF liType = ? THEN DO:
       FIND LAST FATGroup USE-INDEX FTGrp WHERE 
-                FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                FATGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND LAST FATGroup USE-INDEX FATType WHERE 
-                FATGroup.Brand   = Syst.CUICommon:gcBrand AND
+                FATGroup.Brand   = Syst.Var:gcBrand AND
                 FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    
@@ -324,12 +324,12 @@ PROCEDURE local-find-prev:
 
    IF liType = ? THEN DO:
       FIND PREV FATGroup USE-INDEX FTGrp WHERE 
-                FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                FATGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND PREV FATGroup USE-INDEX FATType WHERE 
-                FATGroup.Brand   = Syst.CUICommon:gcBrand AND
+                FATGroup.Brand   = Syst.Var:gcBrand AND
                 FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    
@@ -339,12 +339,12 @@ PROCEDURE local-find-next:
 
    IF liType = ? THEN DO:
       FIND NEXT FATGroup USE-INDEX FTGrp WHERE 
-                FATGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                FATGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.
                  
    ELSE DO:
       FIND NEXT FATGroup USE-INDEX FATType WHERE 
-                FATGroup.Brand   = Syst.CUICommon:gcBrand AND
+                FATGroup.Brand   = Syst.Var:gcBrand AND
                 FATGroup.FatType = liType NO-LOCK NO-ERROR.
    END.
    

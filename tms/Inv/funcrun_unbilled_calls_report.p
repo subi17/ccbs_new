@@ -10,8 +10,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
 
 {Syst/funcrunprocess_run.i}
 {Func/direct_dbconnect.i}
@@ -56,7 +56,7 @@ ASSIGN ldaPrevDb = ?.
 
 /* Initialize current DB */
 fInitializeConnectTables("MobCDR","").
-RUN pGetCurrentDbtt(Syst.CUICommon:gcBrand,
+RUN pGetCurrentDbtt(Syst.Var:gcBrand,
                   "",
                   ldaEndPeriod,
                   ldaEndPeriod).
@@ -75,7 +75,7 @@ END.
    
 IF ldaPrevDb NE ? THEN DO:
    fInitializeConnectTables("MobCDR","old").
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "old", 
                           ldaPrevDb,
                           ldaPrevDb).

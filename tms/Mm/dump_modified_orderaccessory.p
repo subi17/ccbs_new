@@ -90,7 +90,7 @@ FOR EACH EventLog NO-LOCK where
    IF ERROR-STATUS:ERROR THEN NEXT.
    
    FOR EACH OrderAccessory NO-LOCK WHERE
-            OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+            OrderAccessory.Brand = Syst.Var:gcBrand AND
             OrderAccessory.OrderId = liOrderID:
       fCollect().
    END.

@@ -1,6 +1,6 @@
 {Syst/testpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "YoigoRequest".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "YoigoRequest".
 {Func/fcreditreq.i}
 
 session:numeric-format = "european".

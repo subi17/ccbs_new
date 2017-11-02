@@ -379,7 +379,7 @@ FUNCTION fisQ25ExtensionDone RETURNS LOGICAL
    DEF BUFFER bDCCLI FOR DCCLI.
 
    FIND FIRST bDCCLI NO-LOCK WHERE
-              bDCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
+              bDCCLI.Brand   EQ Syst.Var:gcBrand AND
               bDCCLI.DCEvent EQ "RVTERM12" AND
               bDCCLI.MsSeq   EQ iiMsseq AND
               bDCCLI.ValidTo >= TODAY NO-ERROR.
@@ -606,7 +606,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       idaStartDate = idaStartDate - 1.
 
    FOR EACH SingleFee NO-LOCK USE-INDEX BillCode WHERE
-            SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+            SingleFee.Brand       = Syst.Var:gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
             SingleFee.HostTable   = "Mobsub" AND
             SingleFee.SourceTable = "DCCLI" AND
@@ -617,7 +617,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       /* Send the SMS only for specific installments end date range */
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
                  DCCLI.PerContractId = INT(SingleFee.SourceKey) AND
-                 DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                 DCCLI.Brand   = Syst.Var:gcBrand AND
                  DCCLI.DCEvent BEGINS "PAYTERM" AND
                  DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
                  DCCLI.ValidTo >= idaStartDate AND
@@ -784,7 +784,7 @@ FUNCTION fGetMonthlyFee RETURNS DECIMAL
    (iiPerContractId AS INT,
     iiMsSeq AS INT):
          FIND FIRST FixedFee WHERE
-                    FixedFee.Brand EQ Syst.CUICommon:gcBrand AND
+                    FixedFee.Brand EQ Syst.Var:gcBrand AND
                     FixedFee.HostTable EQ "MobSub" AND
                     FixedFee.KeyValue EQ STRING(iiMsseq) AND
                     FixedFee.SourceTable EQ "DCCLI" AND
@@ -864,7 +864,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER:
          Subscriptions. If testing is ongoing, only listed subscriptions
          will be included to file. */
       FOR EACH SingleFee USE-INDEX BillCode WHERE
-               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+               SingleFee.Brand       = Syst.Var:gcBrand AND
                SingleFee.Billcode BEGINS "RVTERM" AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.SourceTable = "DCCLI" AND

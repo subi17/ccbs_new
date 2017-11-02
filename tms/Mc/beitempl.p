@@ -44,8 +44,8 @@ form
     FMItem.Amount
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " B-Event " + FeeModel + ": " + FeeModel.FeeName + " / Price List " + PriceList
     + " "
     FRAME sel.
@@ -57,8 +57,8 @@ form
     FMItem.Interval
     FMItem.Amount
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -67,16 +67,16 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Billing Event Item  BY BillCode */
     BillCode
     HELP "Enter BillCode Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BillCode "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND BillCode "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FIND FIRST FeeModel WHERE 
-           FeeModel.Brand    = Syst.CUICommon:gcBrand AND
+           FeeModel.Brand    = Syst.Var:gcBrand AND
            FeeModel.FeeModel = FeeModel NO-LOCK.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By BillCode  ,By 3, By 4".
@@ -104,13 +104,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a FMItem  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR 
@@ -118,14 +118,14 @@ ADD-ROW:
               FMItem.BillCode
            EDITING:
               READKEY.
-              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "pl-code" THEN DO:
                     IF INPUT FMItem.PriceList = "" THEN 
                     UNDO add-row, LEAVE add-row.
 
                     FIND PriceList WHERE 
-                         PriceList.Brand     = Syst.CUICommon:gcBrand AND
+                         PriceList.Brand     = Syst.Var:gcBrand AND
                          PriceList.PriceList = INPUT FMItem.PriceList
                     NO-LOCK NO-ERROR.
                     IF NOT AVAIL PriceList THEN DO:
@@ -142,7 +142,7 @@ ADD-ROW:
                        NEXT.
                     END.
                     FIND BillItem WHERE 
-                         BillItem.Brand    = Syst.CUICommon:gcBrand AND
+                         BillItem.Brand    = Syst.Var:gcBrand AND
                          BillItem.BillCode = INPUT FMItem.BillCode                                 NO-LOCK NO-ERROR.
                     IF NOT AVAIL BillItem THEN DO:
                        BELL.
@@ -155,7 +155,7 @@ ADD-ROW:
            END.   
 
            IF CAN-FIND(FIRST FMItem WHERE
-                       FMITem.Brand     = Syst.CUICommon:gcBrand AND
+                       FMITem.Brand     = Syst.Var:gcBrand AND
                        FMItem.FeeModel  = FeeModel        AND
                        FMItem.PriceList = PriceList.PriceList  AND
                        FMItem.BillCode  = BillItem.BillCode)
@@ -171,7 +171,7 @@ ADD-ROW:
 
            CREATE FMItem.
            ASSIGN
-           FMItem.Brand     = Syst.CUICommon:gcBrand 
+           FMItem.Brand     = Syst.Var:gcBrand 
            FMItem.FeeModel  = FeeModel
            FMItem.PriceList = INPUT FRAME lis FMItem.PriceList
            FMItem.BillCode  = INPUT FRAME lis FMItem.BillCode.
@@ -242,9 +242,9 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 703  Syst.CUICommon:ufk[2]= 0   Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= 0  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 703  Syst.Var:ufk[2]= 0   Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 0  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}.
         RUN Syst/ufkey.p.
       END.
@@ -252,20 +252,20 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FMItem.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FMItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FMItem.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FMItem.BillCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -289,10 +289,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -317,7 +317,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -343,7 +343,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND FMItem WHERE recid(FMItem) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -367,7 +367,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -382,16 +382,16 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY col 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F1.
        SET BillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF BillCode ENTERED THEN DO:
           FIND FIRST FMItem WHERE 
-                     FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+                     FMItem.Brand     = Syst.Var:gcBrand   AND
                      FMItem.PriceList = PriceList AND 
                      FMItem.BillCode >= BillCode  AND
                      FMItem.FeeModel = FeeModel.FeeModel  
@@ -407,25 +407,25 @@ BROWSE:
           NEXT LOOP.
        END.
      END. /* Search-1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(FMItem) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(FMItem) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -443,12 +443,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST FMItem WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND FIRST FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -456,12 +456,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST FMItem WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND LAST FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -469,12 +469,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT FMItem WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND NEXT FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -482,12 +482,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV FMItem WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel  = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
        ELSE IF order = 2 THEN FIND PREV FMItem USE-INDEX BillCode WHERE 
-          FMItem.Brand     = Syst.CUICommon:gcBrand   AND
+          FMItem.Brand     = Syst.Var:gcBrand   AND
           FMItem.PriceList = PriceList AND 
           FMItem.FeeModel = FeeModel.FeeModel NO-LOCK NO-ERROR.
 
@@ -508,7 +508,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
        FIND BillItem WHERE 
-            BillItem.Brand     = Syst.CUICommon:gcBrand AND
+            BillItem.Brand     = Syst.Var:gcBrand AND
             BillItem.BillCode  = FMItem.BillCode  NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -529,7 +529,7 @@ PROCEDURE local-update-record:
 
       WITH FRAME lis EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "bi-intv" THEN DO:
                    IF INPUT FRAME lis FMItem.BillMethod /* single */ THEN DO:

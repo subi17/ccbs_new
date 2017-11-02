@@ -76,7 +76,7 @@ PROCEDURE pDelete:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "ErrorCDR"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
@@ -93,7 +93,7 @@ PROCEDURE pDelete:
                                   "Started at " + 
                                   REPLACE(STRING(ldtStarted),"/","-")
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.FromDate     = ldaFrom
          ActionLog.ToDate       = ldaTo.
          ActionLog.ActionTS     = Func.Common:mMakeTS().

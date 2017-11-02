@@ -1044,7 +1044,7 @@ CLASS Func.Common FINAL:
        icTitle     AS CHARACTER,
        icText      AS CHARACTER).
    
-      RETURN mWriteMemoWithType(icHostTable,icKeyValue,iiCustNum,icTitle,icText,"", Syst.CUICommon:katun).
+      RETURN mWriteMemoWithType(icHostTable,icKeyValue,iiCustNum,icTitle,icText,"", Syst.Var:katun).
    END METHOD.
 
    

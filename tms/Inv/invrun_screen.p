@@ -40,8 +40,8 @@ DEFINE VARIABLE lcTransDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCallQty    AS INTEGER   NO-UNDO.
 
 ASSIGN
-   Syst.CUICommon:gcBrand      = '1'
-   Syst.CUICommon:katun        = 'cron'
+   Syst.Var:gcBrand      = '1'
+   Syst.Var:katun        = 'cron'
    lcInvRunFile = SESSION:PARAM
    lcTransDir   = fCParamC("SplitInvRunArc")
    ldeBegTime   = Func.Common:mMakeTS()
@@ -92,7 +92,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
          liCallQty = INTEGER(ENTRY(2,lcLine,CHR(9))) NO-ERROR.
                         
          FIND FIRST Customer WHERE
-                    Customer.Brand   = Syst.CUICommon:gcBrand AND 
+                    Customer.Brand   = Syst.Var:gcBrand AND 
                     Customer.CustNum = INT(ENTRY(1,lcLine,CHR(9)))
          NO-LOCK NO-ERROR.
       
@@ -142,10 +142,10 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
    
       ASSIGN
          ActionLog.ActionTS     = Func.Common:mMakeTS()
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = "BillRun"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
@@ -199,7 +199,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
    IF liInvType NE 99 THEN DO FOR ActionLog TRANS:
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand        = Syst.CUICommon:gcBrand   AND
+                 ActionLog.Brand        = Syst.Var:gcBrand   AND
                  ActionLog.TableName    = "Invoice" AND
                  ActionLog.KeyValue     = lcBillRun AND
                  ActionLog.ActionID     = "BillRun" AND
@@ -210,10 +210,10 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
    
          ASSIGN
             ActionLog.ActionTS     = Func.Common:mMakeTS()
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = "BillRun"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)

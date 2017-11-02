@@ -7,20 +7,20 @@ antaa:  formin vArit common-muuttujassa cfc
 
 
 if opsys = "msdos" THEN DO:
-   IF Syst.CUICommon:yvari THEN DO:
-      FIND FColor where FColor.FrameName = Syst.CUICommon:cfc no-lock no-error.
+   IF Syst.Var:yvari THEN DO:
+      FIND FColor where FColor.FrameName = Syst.Var:cfc no-lock no-error.
       IF NOT AVAILABLE FColor THEN DO:
-    message "VArimAAritys puuttuu, frame " + Syst.CUICommon:cfc.
+    message "VArimAAritys puuttuu, frame " + Syst.Var:cfc.
     PAUSE 2 no-message.
       END.
-      ELSE ASSIGN Syst.CUICommon:cfc = FColor.FrameColor Syst.CUICommon:ctc = FColor.TitleColor.
+      ELSE ASSIGN Syst.Var:cfc = FColor.FrameColor Syst.Var:ctc = FColor.TitleColor.
    END.
 END.
 
-if not available FColor or opsys <> "msdos" OR NOT Syst.CUICommon:yvari THEN DO:
+if not available FColor or opsys <> "msdos" OR NOT Syst.Var:yvari THEN DO:
    ASSIGN
-   Syst.CUICommon:cfc = "normal"
-   Syst.CUICommon:ctc = "messages".
+   Syst.Var:cfc = "normal"
+   Syst.Var:ctc = "messages".
 END.
 PAUSE 0.
 

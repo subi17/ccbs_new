@@ -10,8 +10,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "anttis".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "anttis".
 {Func/fcustdata.i}
 def stream sout.
 output stream sout to /apps/snet/200805/yob54.log.

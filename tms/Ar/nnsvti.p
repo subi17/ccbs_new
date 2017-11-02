@@ -163,9 +163,9 @@ form
 "  INSTRUCTION: This program creates a direct debit file" skip
 "               from invoices defined below:"
    SKIP(13)
-   WITH TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
-COLOR value(Syst.CUICommon:cfc) width 80 OVERLAY FRAME taka.
+   WITH TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
+COLOR value(Syst.Var:cfc) width 80 OVERLAY FRAME taka.
 
 form
    " Invoice group  ..........:" lcInvGroup  NO-LABEL FORMAT "X(10)"
@@ -212,10 +212,10 @@ form
       HELP "Pick invoices that have already been sent to DD"
       SKIP
       
-with title color value(Syst.CUICommon:ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
-COLOR value(Syst.CUICommon:cfc) ROW 7 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
+COLOR value(Syst.Var:cfc) ROW 7 centered OVERLAY FRAME rajat.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 view FRAME rajat. view FRAME statu. PAUSE 0 no-message.
@@ -225,8 +225,8 @@ ASSIGN
    i-date1  = TODAY
    i-date2  = TODAY
 
-Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN lano1 = 000000 lano2 = 99999999
        asno1 = 0      asno2 = 999999999.
@@ -243,7 +243,7 @@ LOOP:
 repeat ON ENDKEY UNDO, NEXT:
 
    /* KysellAAn rajaukset */
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -258,9 +258,9 @@ repeat ON ENDKEY UNDO, NEXT:
       llRerun
    WITH FRAME rajat EDITING:
 
-      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-      IF Syst.CUICommon:nap = "F9" AND 
+      IF Syst.Var:nap = "F9" AND 
          INDEX(FRAME-FIELD,"status") > 0 
       THEN DO:
 
@@ -283,12 +283,12 @@ repeat ON ENDKEY UNDO, NEXT:
             END.
          END.
                 
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
        
-      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
       
          PAUSE 0.
          
@@ -303,7 +303,7 @@ repeat ON ENDKEY UNDO, NEXT:
             IF INPUT lano1 = INPUT lano2 THEN DO:
 
                FIND FIRST Invoice NO-LOCK where
-                          Invoice.Brand   = Syst.CUICommon:gcBrand AND
+                          Invoice.Brand   = Syst.Var:gcBrand AND
                           Invoice.InvNum  = INPUT lano1.
                FIND FIRST Customer NO-LOCK where
                           Customer.CustNum = Invoice.CustNum.
@@ -333,7 +333,7 @@ repeat ON ENDKEY UNDO, NEXT:
 
              ELSE DO:
                 Find invgroup where 
-                     InvGroup.Brand   = Syst.CUICommon:gcBrand AND
+                     InvGroup.Brand   = Syst.Var:gcBrand AND
                      invgroup.InvGroup = lcInvGroup 
                    NO-LOCK NO-ERROR.
                 IF NOT AVAILABLE InvGroup THEN DO:
@@ -352,7 +352,7 @@ repeat ON ENDKEY UNDO, NEXT:
              if CustGroup = "" then disp "NONE" @ custgroup.cgname.
              ELSE DO:
                 FIND custgroup where 
-                     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+                     CustGroup.Brand     = Syst.Var:gcBrand AND
                      custgroup.custgroup = CustGroup 
                    NO-LOCK NO-ERROR.
                 IF NOT AVAIL custgroup THEN DO:
@@ -386,20 +386,20 @@ repeat ON ENDKEY UNDO, NEXT:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[4] = 0  Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
-      IF lcBankAcc = "" THEN Syst.CUICommon:ufk[5] = 0.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[4] = 0  Syst.Var:ufk[5] = 795 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      IF lcBankAcc = "" THEN Syst.Var:ufk[5] = 0.
       
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT loop.
+      IF Syst.Var:toimi = 1 THEN NEXT loop.
 
-      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          HIDE FRAME rajat NO-PAUSE.
          HIDE FRAME taka  NO-PAUSE.
          RETURN.
       END.
       
-      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
       
          IF llRerun THEN DO:
             ok = FALSE.
@@ -424,13 +424,13 @@ repeat ON ENDKEY UNDO, NEXT:
          
       END.
       
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 END.  /* LOOP */
 
 MESSAGE "Creating direct debit file ...".
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand   = Syst.CUICommon:gcBrand     AND
+         Invoice.Brand   = Syst.Var:gcBrand     AND
          Invoice.InvDate >= i-date1     AND
          Invoice.InvDate <= i-date2     AND
          Invoice.InvNum >= lano1       AND
@@ -462,7 +462,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
       /* is an ext cust group selected ? */
       if CustGroup ne "" AND
          NOT can-find(first CGMember where 
-                            CGMember.Brand     = Syst.CUICommon:gcBrand AND
+                            CGMember.Brand     = Syst.Var:gcBrand AND
                             CGMember.custgroup = CustGroup and
                             CGMember.custnum   = Customer.CustNum) 
       THEN NEXT. 

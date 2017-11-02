@@ -22,8 +22,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -153,7 +153,7 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
    lcBono = fGetCurrentSpecificBundle(Mobsub.MsSeq,"BONO").
 
    IF lcBono > "" THEN DO:
-      IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         lcBono + ";" + pcNewCLIType,
@@ -315,7 +315,7 @@ FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
                              DAY(idaCountFrom).
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     EQ Syst.CUICommon:gcBrand        AND 
+            FixedFee.Brand     EQ Syst.Var:gcBrand        AND 
             FixedFee.Custnum   EQ iiCustnum      AND
             FixedFee.HostTable EQ "MobSub"       AND
             FixedFee.KeyValue  EQ STRING(iMsSeq) AND
@@ -393,7 +393,7 @@ IF NOT MobSub.PayType THEN DO:
                               MONTH(ldaSTCDates[liLoop]).
 
          FOR EACH SingleFee USE-INDEX Custnum WHERE
-                  SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                  SingleFee.Brand       = Syst.Var:gcBrand AND
                   SingleFee.Custnum     = Mobsub.InvCust AND
                   SingleFee.HostTable   = "Mobsub" AND
                   SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -417,7 +417,7 @@ IF NOT MobSub.PayType THEN DO:
             DCCLI.ValidTo   >= ldaSTCDates[1] AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
@@ -432,7 +432,7 @@ IF NOT MobSub.PayType THEN DO:
                                           DayCampaign.TermFeeModel,
                                           TODAY).
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+                    FMItem.Brand     = Syst.Var:gcBrand       AND
                     FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                     FMItem.PriceList = lcPriceList AND
                     FMItem.FromDate <= TODAY     AND
@@ -503,7 +503,7 @@ IF NOT MobSub.PayType THEN DO:
 
    /* Mobile only additional line ALFMO-53 20% */
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) NO-LOCK NO-ERROR.
 
    IF AVAIL DiscountPlan THEN 
@@ -521,7 +521,7 @@ IF NOT MobSub.PayType THEN DO:
    /* Mobile only additional line ALFMO-53 50% */
 
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
 
    IF AVAIL DiscountPlan THEN 
@@ -540,7 +540,7 @@ IF NOT MobSub.PayType THEN DO:
    END.
 
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
 
    IF AVAIL DiscountPlan THEN 
@@ -560,22 +560,22 @@ IF NOT MobSub.PayType THEN DO:
 
    /* Check Additional Line */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand = Syst.CUICommon:gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLIType = MobSub.TariffBundle AND
                      CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) AND
       NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                         CLIType.Brand = Syst.CUICommon:gcBrand AND
+                         CLIType.Brand = Syst.Var:gcBrand AND
                          CLIType.CLIType = pcTariffBundle AND
                          CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
       MOBSUB_LOOP:
       FOR EACH lbMobSub NO-LOCK WHERE
-               lbMobSub.Brand   = Syst.CUICommon:gcBrand AND
+               lbMobSub.Brand   = Syst.Var:gcBrand AND
                lbMobSub.InvCust = Mobsub.CustNum AND
                lbMobSub.PayType = FALSE AND
                lbMobSub.MsSeq NE Mobsub.MsSeq,
          FIRST bCLIType NO-LOCK WHERE
-               bCLIType.Brand = Syst.CUICommon:gcBrand AND
+               bCLIType.Brand = Syst.Var:gcBrand AND
                bCLIType.CLIType = (IF lbMobsub.TariffBundle > ""
                                   THEN lbMobsub.TariffBundle
                                   ELSE lbMobsub.CLIType) AND

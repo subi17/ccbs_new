@@ -14,7 +14,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
 
@@ -49,7 +49,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = fgetAppUserId(INPUT lcApplicationId,
+Syst.Var:katun = fgetAppUserId(INPUT lcApplicationId,
                       INPUT lcAppEndUserId).
 
 IF pcSalesman EQ "" THEN 

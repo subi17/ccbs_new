@@ -18,7 +18,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -80,8 +80,8 @@ form
     ServFee.ToDate
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        " SERVICE FEES "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -95,7 +95,7 @@ form
     ServFee.FeeModel    COLON 20
        VALIDATE(INPUT ServFee.FeeModel = "" OR
                 CAN-FIND(FeeModel WHERE 
-                         FeeModel.Brand = Syst.CUICommon:gcBrand AND
+                         FeeModel.Brand = Syst.Var:gcBrand AND
                          FeeModel.FeeModel = INPUT ServFee.FeeModel),
                 "Unknown fee model")
        FeeModel.FeeName NO-LABEL   SKIP
@@ -113,8 +113,8 @@ form
                 INPUT ServFee.ToDate >= INPUT ServFee.FromDate,
                 "Date is mandatory, and cannot be less than begin date") SKIP
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -124,8 +124,8 @@ form /* seek  ServFee */
     "Brand:" lcBrand skip
     "Type :" lcServType
     HELP "Enter Service Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Type "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Type "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fServType RETURNS LOGICAL
    (icServType AS CHAR).
@@ -185,7 +185,7 @@ FUNCTION fServKeyHelp RETURNS LOGICAL
    
 END FUNCTION.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Type  ,".
@@ -230,7 +230,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServFee  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -238,7 +238,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -279,12 +279,12 @@ REPEAT WITH FRAME sel:
                     END.   
                  END. 
                  
-                 Syst.CUICommon:ehto = 9.
+                 Syst.Var:ehto = 9.
                  RUN Syst/ufkey.p.
                  NEXT. 
               END.
 
-              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
 
                  IF FRAME-FIELD = "ServType" THEN DO:
@@ -380,12 +380,12 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 816  Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[4] = 927
-        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 816  Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[4] = 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
         RUN Syst/ufkey.p.
       END.
@@ -393,13 +393,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ServFee.ServType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServFee.ServType WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ServFee.ServType WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -407,10 +407,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -428,7 +428,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -453,7 +453,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -479,7 +479,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ServFee WHERE recid(ServFee) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -503,7 +503,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -517,13 +517,13 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
-          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+          UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                  lcServType WITH FRAME f1.
           HIDE FRAME f1 NO-PAUSE.
 
@@ -539,7 +539,7 @@ REPEAT WITH FRAME sel:
           END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
         RUN Mc/memo.p(INPUT 0,
                  INPUT "ServFee",
@@ -548,21 +548,21 @@ REPEAT WITH FRAME sel:
         ufkey = TRUE.
         NEXT.
                                                                                      END.
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        ServFee.ServType ServFee.ServKey ServFee.EventType ServFee.FeeModel.
 
        RUN local-find-NEXT.
@@ -584,7 +584,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        ServFee.ServType ServFee.ServKey ServFee.EventType ServFee.FeeModel.
 
        IF ok THEN DO:
@@ -594,7 +594,7 @@ REPEAT WITH FRAME sel:
            DELETE ServFee.
 
            /* was LAST record DELETEd ? */
-           IF NOT CAN-FIND(FIRST ServFee WHERE ServFee.Brand = Syst.CUICommon:gcBrand) 
+           IF NOT CAN-FIND(FIRST ServFee WHERE ServFee.Brand = Syst.Var:gcBrand) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
@@ -606,7 +606,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0
      THEN REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -615,7 +615,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServFee).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -631,25 +631,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ServFee) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ServFee) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -732,7 +732,7 @@ PROCEDURE local-UPDATE-record:
 
       IF liInvInfo > 0 THEN DO:
          FIND FIRST HdrText NO-LOCK WHERE
-                    HdrText.Brand  = Syst.CUICommon:gcBrand AND
+                    HdrText.Brand  = Syst.Var:gcBrand AND
                     HdrText.te-nro = liInvInfo AND
                     HdrText.te-kie = 1 NO-ERROR.
                               
@@ -752,7 +752,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          ServFee.EventType
@@ -782,24 +782,24 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ELSE IF FRAME-FIELD = "liInvInfo" THEN DO:
-                  ASSIGN Syst.CUICommon:gcHelpParam = "prt"
-                         Syst.CUICommon:si-recid    = 0.
+                  ASSIGN Syst.Var:gcHelpParam = "prt"
+                         Syst.Var:si-recid    = 0.
                   RUN Mc/nnteyp.p.
-                  Syst.CUICommon:gcHelpParam = "".
+                  Syst.Var:gcHelpParam = "".
                   
-                  IF Syst.CUICommon:si-recid > 0 THEN DO:
-                     FIND HdrText WHERE RECID(HdrText) = Syst.CUICommon:si-recid NO-LOCK.
+                  IF Syst.Var:si-recid > 0 THEN DO:
+                     FIND HdrText WHERE RECID(HdrText) = Syst.Var:si-recid NO-LOCK.
                      DISPLAY HdrText.te-nro @ liInvInfo WITH FRAME lis.
                   END.
                END.
                
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
 
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                PAUSE 0.
 
                IF FRAME-FIELD = "ServKey" THEN DO:
@@ -835,7 +835,7 @@ PROCEDURE local-UPDATE-record:
                ELSE IF FRAME-FIELD = "liInvInfo" THEN DO:
                   IF INPUT liInvInfo > 0 THEN DO:
                      FIND FIRST HdrText NO-LOCK WHERE
-                                HdrText.Brand  = Syst.CUICommon:gcBrand AND
+                                HdrText.Brand  = Syst.Var:gcBrand AND
                                 HdrText.te-nro = INPUT liInvInfo AND
                                 HdrText.te-kie = 1  /* 1 must always exist */
                      NO-ERROR.

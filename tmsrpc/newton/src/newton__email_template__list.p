@@ -13,7 +13,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 
 DEFINE VARIABLE resp_array       AS CHARACTER NO-UNDO. 
@@ -33,7 +33,7 @@ resp_array = add_array(response_toplevel_id, "").
 {newton/src/settenant.i pcTenant}
 
 FOR EACH InvText NO-LOCK WHERE
-         InvText.Brand     = Syst.CUICommon:gcBrand AND
+         InvText.Brand     = Syst.Var:gcBrand AND
          InvText.Target    = "EMAIL" AND
          InvText.ToDate   >= TODAY AND
          InvText.FromDate <= TODAY BREAK BY InvText.KeyValue:

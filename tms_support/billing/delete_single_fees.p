@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-assign Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun = "Qvantel".
+assign Syst.Var:gcBrand = "1"
+       Syst.Var:katun = "Qvantel".
 {Syst/eventval.i}
 
 def stream sin.
@@ -16,7 +16,7 @@ DEF VAR liTermPeriod  AS INT  NO-UNDO.
 DEFINE BUFFER bMsRequest     FOR MsRequest.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
 END.
@@ -27,7 +27,7 @@ output stream sbak to /apps/yoigo/tms_support/billing/delete_single_fees.d appen
 FUNCTION fDeleteSingleFee RETURNS LOGICAL (INPUT iiTermPeriod AS INT):
 
    FIND FIRST SingleFee USE-INDEX Custnum WHERE
-              SingleFee.Brand = Syst.CUICommon:gcBrand AND
+              SingleFee.Brand = Syst.Var:gcBrand AND
               SingleFee.Custnum = MobSub.CustNum AND
               SingleFee.HostTable = "Mobsub" AND
               SingleFee.KeyValue = STRING(MobSub.MsSeq) AND
@@ -38,7 +38,7 @@ FUNCTION fDeleteSingleFee RETURNS LOGICAL (INPUT iiTermPeriod AS INT):
          IF llDoEvent THEN
             RUN StarEventMakeDeleteEventWithMemo(
                (BUFFER SingleFee:HANDLE),
-               Syst.CUICommon:katun,
+               Syst.Var:katun,
                "YOT-2783").
 
          put stream sout unformatted lcline lcdel "Single Fee deleted successfully with price: " +

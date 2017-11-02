@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Func/coinv.i}
 {Func/fvatfact.i}
@@ -78,7 +78,7 @@ OUTPUT STREAM sFile TO VALUE(lcfilename).
 /* Traverse all the Call's which are made before this billing period
    however its not billed previously but billed in this billing period */
 FOR EACH Invoice WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand        AND
+         Invoice.Brand    = Syst.Var:gcBrand        AND
          Invoice.InvDate >= ldInvFromDate  AND
          Invoice.InvDate <= ldInvToDate    AND
          Invoice.InvType  = 1 NO-LOCK,

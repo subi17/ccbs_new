@@ -151,7 +151,7 @@ PROCEDURE pCollectCounters:
    IF icExtInvID > "" THEN DO:
    
       FIND FIRST Invoice WHERE 
-                 Invoice.Brand = Syst.CUICommon:gcBrand AND
+                 Invoice.Brand = Syst.Var:gcBrand AND
                  Invoice.ExtInvID = icExtInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN 
          RETURN "ERROR:Unknown invoice".

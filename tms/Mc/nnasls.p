@@ -82,7 +82,7 @@ x-cg-code = (if CustGroup ne "" then CustGroup else "NONE").
 
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1  AT 2 SKIP
@@ -205,7 +205,7 @@ print-line:
 FOR
     EACH Customer no-lock            where
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand    = Syst.CUICommon:gcBrand AND
+                                        CGMember.Brand    = Syst.Var:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                         AND
@@ -233,7 +233,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
 
    /* asiakasta hoitavan myyjAn nimi */
    FIND Salesman where 
-        Salesman.Brand    = Syst.CUICommon:gcBrand AND
+        Salesman.Brand    = Syst.Var:gcBrand AND
         Salesman.Salesman = Customer.Salesman
    no-lock no-error.
    IF AVAIL Salesman THEN ASSIGN mynimi = Salesman.SmName.
@@ -241,7 +241,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
 
    if Customer.Reseller ne "" THEN DO:
       FIND Reseller where 
-           Reseller.Brand    = Syst.CUICommon:gcBrand AND
+           Reseller.Brand    = Syst.Var:gcBrand AND
            Reseller.Reseller = Customer.Reseller
       no-lock no-error.
       IF AVAIL Reseller THEN ASSIGN rsname = Reseller.RsName.

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 {Func/barrfunc.i}
 DEFINE VARIABLE lcCLis AS CHARACTER NO-UNDO. 
 

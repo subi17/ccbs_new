@@ -17,7 +17,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -45,8 +45,8 @@ FORM
     DumpHPD.FinalTime         COLON 20
     DumpHPD.UnitsToDump       COLON 20
     DumpHPD.UnitType          COLON 20
-WITH  OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
+WITH  OVERLAY ROW 2 centered COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
 
 FIND DumpFile NO-LOCK WHERE DumpFile.DumpID = iiDumpID NO-ERROR.
 
@@ -87,19 +87,19 @@ REPEAT WITH FRAME fHPD:
    WITH FRAME fHPD.
    
    ASSIGN 
-      Syst.CUICommon:ufk    = 0
-      Syst.CUICommon:ufk[1] = 7    WHEN lcRight = "RW"
-      Syst.CUICommon:ufk[8] = 8
-      Syst.CUICommon:ehto   = 0.
+      Syst.Var:ufk    = 0
+      Syst.Var:ufk[1] = 7    WHEN lcRight = "RW"
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto   = 0.
          
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi = 1
+   IF Syst.Var:toimi = 1
    THEN REPEAT WITH FRAME fHPD ON ENDKEY UNDO, LEAVE:
 
       FIND CURRENT DumpHPD EXCLUSIVE-LOCK.
 
-      Syst.CUICommon:ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       UPDATE
@@ -124,13 +124,13 @@ REPEAT WITH FRAME fHPD:
             DumpHPD.UnitType = siirto.
             DISPLAY DumpHPD.UnitType WITH FRAME fHPD.
 
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
 
             NEXT.
          END.
 
-         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN
          DO WITH FRAME fHPD:
 
             IF FRAME-FIELD = "UnitType" THEN DO:
@@ -167,7 +167,7 @@ REPEAT WITH FRAME fHPD:
       LEAVE.
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END.
 

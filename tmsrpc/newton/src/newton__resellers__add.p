@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 
@@ -42,11 +42,11 @@ lcStruct = validate_request(pcStruct,
  
 IF lcStruct = ? THEN RETURN.
 
-Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.Var:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 pcId = get_string(pcStruct,"id").
 
@@ -59,7 +59,7 @@ ELSE
 
 CREATE ttReseller.
 ASSIGN
-   ttReseller.Brand      = Syst.CUICommon:gcBrand
+   ttReseller.Brand      = Syst.Var:gcBrand
    ttReseller.Reseller   = pcId
    ttReseller.RsName     = get_string(pcStruct, "name")
    ttReseller.EntityCode = (IF LOOKUP("entity_code",lcStruct) > 0
@@ -77,13 +77,13 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND Reseller NO-LOCK WHERE
-     Reseller.Brand = Syst.CUICommon:gcBrand AND
+     Reseller.Brand = Syst.Var:gcBrand AND
      Reseller.Reseller = ttReseller.Reseller NO-ERROR.
 IF AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller already exists: &1", ttReseller.Reseller)).
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhReseller AS HANDLE NO-UNDO.
    lhReseller = BUFFER Reseller:HANDLE.

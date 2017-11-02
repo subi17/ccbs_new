@@ -14,8 +14,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
+Syst.Var:gcBrand = "1".
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fmakemsreq.i}
@@ -140,11 +140,11 @@ END. /* IF llUpgradeUpsell THEN DO: */
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = Syst.CUICommon:gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = Syst.CUICommon:katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Bundle Type Change"
       Memo.MemoText  = "External API bundle type change " + 
                        lcOldBundle + " --> " + pcNewBundle

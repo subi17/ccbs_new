@@ -144,12 +144,12 @@ IF lcSpoolDir = ? OR lcSpoolDir = "" THEN lcSpoolDir = "/tmp".
 /* all invoice customers for chosen id */
 IF icCustID > "" THEN 
 FOR EACH bAgrCust NO-LOCK WHERE
-         bAgrCust.Brand    = Syst.CUICommon:gcBrand AND
+         bAgrCust.Brand    = Syst.Var:gcBrand AND
          bAgrCust.OrgID    = icCustID,
     EACH Customer NO-LOCK WHERE
          Customer.AgrCust = bAgrCust.CustNum,
     EACH Invoice NO-LOCK USE-INDEX CustNum WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand          AND
+         Invoice.Brand    = Syst.Var:gcBrand          AND
          Invoice.CustNum  = Customer.CustNum AND
          Invoice.InvDate >= idtInvDate1      AND
          Invoice.InvDate <= idtInvDate2      AND
@@ -164,7 +164,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand     AND
+         Invoice.Brand    = Syst.Var:gcBrand     AND
          Invoice.InvDate >= idtInvDate1 AND
          Invoice.InvDate <= idtInvDate2 AND  
          Invoice.InvType >= iiInvType1  AND
@@ -193,7 +193,7 @@ FOR EACH ttTaxZone:
 
    FIND TaxZone WHERE TaxZone.TaxZone = ttTaxZone.TaxZone NO-LOCK NO-ERROR.
    IF AVAILABLE TaxZone THEN DO:
-      lcZone = fTranslationName(Syst.CUICommon:gcBrand,
+      lcZone = fTranslationName(Syst.Var:gcBrand,
                                 7,
                                 TaxZone.TaxZone,
                                 1,

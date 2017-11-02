@@ -66,10 +66,10 @@ CREATE paiva.
 form
       paiva.paiva LABEL "" FORMAT "99-99-9999"
 
-    with scroll 1 4 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Dates " overlay frame sel.
+    with scroll 1 4 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " Dates " overlay frame sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
@@ -114,9 +114,9 @@ print-line:
 
       if ufkey then do:
          assign
-         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[5] = 11
-         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 0 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -126,13 +126,13 @@ BROWSE:
 
          hide message no-pause.
          choose row Paiva.Paiva {Syst/uchoose.i} no-error with frame sel.
-         color display value(Syst.CUICommon:ccc) Paiva.Paiva with frame sel.
+         color display value(Syst.Var:ccc) Paiva.Paiva with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find Paiva where recid(Paiva) = rtab[frame-line] no-lock.
@@ -159,7 +159,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find Paiva where recid(Paiva) = rtab[frame-line] no-lock .
                find next Paiva
@@ -186,7 +186,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find Paiva where recid(Paiva) = memory no-lock no-error.
             find prev Paiva
             no-lock no-error.
@@ -210,7 +210,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -224,13 +224,13 @@ BROWSE:
         end. /* next page */
 
         /* Choose */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find Paiva where recid(Paiva) = rtab[frame-line] no-lock.
            siirto = string(Paiva.Paiva,"99-99-99").
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first Paiva no-lock.
            memory = recid(Paiva).
            must-print = true.
@@ -238,14 +238,14 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last Paiva no-lock.
            memory = recid(Paiva).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

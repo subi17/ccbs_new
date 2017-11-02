@@ -32,7 +32,7 @@ WITH SIDE-LABELS OVERLAY ROW 15 CENTERED TITLE " Collecting "
 FRAME fQty1.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = Syst.CUICommon:gcBrand    AND
+         Customer.Brand    = Syst.Var:gcBrand    AND
          Customer.CustNum >= iiCustNum1 AND
          Customer.CustNum <= iiCustNum2,
     EACH MobSub OF Customer NO-LOCK WHERE
@@ -52,7 +52,7 @@ FOR EACH Customer NO-LOCK WHERE
 END.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = Syst.CUICommon:gcBrand    AND
+         Customer.Brand    = Syst.Var:gcBrand    AND
          Customer.CustNum >= iiCustNum1 AND
          Customer.CustNum <= iiCustNum2,
     EACH MsOwner OF Customer NO-LOCK WHERE

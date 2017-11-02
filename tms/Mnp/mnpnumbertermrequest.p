@@ -26,7 +26,7 @@ DEF VAR lcTenant   AS CHARACTER NO-UNDO.
 ldeNow = Func.Common:mMakeTS().
    
 FIND msisdn where
-     msisdn.brand = Syst.CUICommon:gcBrand and
+     msisdn.brand = Syst.Var:gcBrand and
      msisdn.cli = icCLI AND
      msisdn.statuscode = {&MSISDN_ST_WAITING_RETURN} and
      msisdn.validto > ldeNow NO-LOCK NO-ERROR.
@@ -64,9 +64,9 @@ DO TRANS:
       MNPProcess.MNPSeq      = next-value(m2mrequest)
       MNPProcess.FormRequest = lcFormRequest 
       MNPProcess.StatusCode  = {&MNP_ST_NEW}
-      MNPProcess.Brand       = Syst.CUICommon:gcBrand
+      MNPProcess.Brand       = Syst.Var:gcBrand
       MNPProcess.MNPType     = {&MNP_TYPE_TERMINATION}
-      MNPProcess.UserCode    = Syst.CUICommon:katun
+      MNPProcess.UserCode    = Syst.Var:katun
       MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
    CREATE MNPSub.

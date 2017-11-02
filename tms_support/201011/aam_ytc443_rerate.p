@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "qvantel".
+Syst.Var:katun = "qvantel".
 
 def var i as int no-undo.
 def var j as int no-undo.

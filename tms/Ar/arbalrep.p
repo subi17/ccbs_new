@@ -59,7 +59,7 @@ ASSIGN
     viiva4 = fill("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -112,7 +112,7 @@ ASSIGN sl = 1
 
 /* overpayments AND advance payments */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = Syst.CUICommon:gcBrand  AND
+         InvGroup.Brand     = Syst.Var:gcBrand  AND
          InvGroup.InvGroup >= iInvGrp1 AND
          InvGroup.InvGroup <= iInvGrp2,
 EACH Customer NO-LOCK WHERE
@@ -152,7 +152,7 @@ ASSIGN xQty = 0.
 
 /* unregistered payments */
 FOR EACH UnregPaym NO-LOCK WHERE
-    UnregPaym.Brand = Syst.CUICommon:gcBrand AND
+    UnregPaym.Brand = Syst.Var:gcBrand AND
     UnregPaym.State = 0: /* AND 
     UnregPaym.AccDate LE iDate2:  */
 

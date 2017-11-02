@@ -47,7 +47,7 @@ DEF VAR liCount      AS INT   NO-UNDO.
     IF llQueRights THEN DO:
        
        HIDE FRAME fPassword.
-       Syst.CUICommon:ehto = 5.
+       Syst.Var:ehto = 5.
        RUN Syst/ufkey.p.
     
        IF lcTable = "Order" THEN DO:

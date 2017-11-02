@@ -39,7 +39,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
 
    FIND Reseller NO-LOCK WHERE 
-        Reseller.Brand = Syst.CUICommon:gcBrand AND
+        Reseller.Brand = Syst.Var:gcBrand AND
         Reseller.Reseller = pcID NO-ERROR.
 
    IF NOT AVAIL Reseller THEN RETURN appl_err("Reseller not found: "+ pcId).
@@ -59,7 +59,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       add_int(lcResultStruct,"entity_code", Reseller.EntityCode).  
 
    FOR EACH ResellerTF NO-LOCK WHERE
-            ResellerTF.Brand = Syst.CUICommon:gcBrand AND
+            ResellerTF.Brand = Syst.Var:gcBrand AND
             ResellerTF.Reseller = Reseller.Reseller:
 
       CREATE bank_codes.

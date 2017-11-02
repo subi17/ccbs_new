@@ -5,7 +5,7 @@
   CREATED ......: 
   MODIFIED .....: 02.12.2006 kl PING
                   08.02.2007 kl automatic resend
-                  16.02.2007 kl Syst.CUICommon:gcBrand = "1", ivr_process.i
+                  16.02.2007 kl Syst.Var:gcBrand = "1", ivr_process.i
                   14.03.2007 kl solog => bufSoLog
                   03.10.2007 kl procedure pUpdateQueue
                   18.03.2010 mk Fix pUpdateQueue handling
@@ -19,7 +19,7 @@
 {Func/log.i}
 {Func/multitenantfunc.i}
 
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE lhServer    AS HANDLE    NO-UNDO.
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO FORMAT "99.99.9999".
@@ -42,12 +42,12 @@ DEFINE VARIABLE lcURL       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE clsNagios   AS CLASS Class.nagios    NO-UNDO.
 
 ASSIGN
-   lcURL     = fCParamC4(Syst.CUICommon:gcBrand,"SOG","URL_Read")
+   lcURL     = fCParamC4(Syst.Var:gcBrand,"SOG","URL_Read")
    lcLogin   = "LOGIN yoigo toro"
    lcStatus  = "YOIGO SOG READER"
    liTimeOut = 30
    lcNagios  = "sres:Activ. Response Sender"
-   Syst.CUICommon:gcBrand   = "1".
+   Syst.Var:gcBrand   = "1".
 
 FORM 
    ldaDate

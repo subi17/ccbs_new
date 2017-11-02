@@ -75,7 +75,7 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                 IF INDEX(icSMSText,"#CLITYPE") > 0 OR
                    INDEX(icSMSText,"#NEW_BUNDLE") > 0 THEN DO:
                    lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam2).
-                   lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+                   lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                                 "BillItem",
                                                 lcReplacedTxt,
                                                 Customer.Language,
@@ -92,7 +92,7 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
 
              oiSMSType = 10.
              lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam1).
-             lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+             lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                           "BillItem",
                                           lcReplacedTxt,
                                           Customer.Language,
@@ -100,7 +100,7 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              icSMSText = REPLACE(icSMSText,"#OLD_BUNDLE",lcReplacedTxt).
       
              lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam2).
-             lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+             lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                           "BillItem",
                                           lcReplacedTxt,
                                           Customer.Language,
@@ -118,14 +118,14 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              IF LOOKUP(MsRequest.ReqCParam2,lcBundleCLITypes) > 0 AND
                 MsRequest.ReqCParam5 > "" THEN DO:
                 lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam5).
-                lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+                lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                              "BillItem",
                                              lcReplacedTxt,
                                              Customer.Language,
                                              TODAY).
              END. /* IF LOOKUP(MsRequest.ReqCParam2,lcBundleCLITypes) > 0 */
              ELSE
-                lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+                lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                              "CLIType",
                                              MsRequest.ReqCParam2,
                                              Customer.Language,

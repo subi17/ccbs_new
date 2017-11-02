@@ -77,7 +77,7 @@ DEF VAR lcExclGroup  AS CHAR               NO-UNDO INIT "NOTinUSE".
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -103,8 +103,8 @@ form /* pAAruutu, scroll */
     TMSUSer.fromdate FORMAT "99.99.9999" column-LABEL "From"
     TMSUser.toDate   FORMAT "99.99.9999" column-LABEL "Until"
 WITH
-    width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " USER IDS "
+    width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " USER IDS "
     + string(TODAY,"99-99-99") + " " FRAME sel.
 
 form /* lisAyksiA varten, ei scroll */
@@ -140,29 +140,29 @@ form /* lisAyksiA varten, ei scroll */
        HELP "User's e-mail address"            SKIP
     moremail       NO-LABEL format "x(75)"
        HELP "More E-mail addresses" 
-WITH  OVERLAY ROW 2 centered COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
+WITH  OVERLAY ROW 2 centered COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc) fr-header WITH side-labels
         FRAME lis.
 
 form /* KAyttAjAn hakua varten */
     ha-nimi FORMAT "x(20)"
     help "Enter User TMS ID"    
     WITH ROW 4 col 2
-    title color value(Syst.CUICommon:ctc) " SEEK USER TMS ID "     
-    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha1.
+    title color value(Syst.Var:ctc) " SEEK USER TMS ID "     
+    NO-LABELS COLOR value(Syst.Var:cfc) OVERLAY FRAME syha1.
 
 form /* numeron hakua varten */
     ha-nimi format "x(20)"
     help "Enter Foreign ID"      
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " SEEK BY FOREIGN ID "
-    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " SEEK BY FOREIGN ID "
+    NO-LABELS COLOR value(Syst.Var:cfc) OVERLAY FRAME syha2.
 
 form /* Nimen hakua varten */
     ha-nimi FORMAT "x(30)"
     help "Enter User Name"    
     WITH ROW 4 col 2
-    title color value(Syst.CUICommon:ctc) " SEEK USER BY NAME "     
-    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME syha3.
+    title color value(Syst.Var:ctc) " SEEK USER BY NAME "     
+    NO-LABELS COLOR value(Syst.Var:cfc) OVERLAY FRAME syha3.
 
 FORM
    "UserID :" lcUserCode
@@ -172,9 +172,9 @@ FORM
 WITH NO-LABELS CENTERED ROW 4
 FRAME PWD.
 
-llAdminUser = fIsAdminUser(Syst.CUICommon:katun).
+llAdminUser = fIsAdminUser(Syst.Var:katun).
 
- Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+ Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
  view FRAME sel.
 
 order = 1.
@@ -212,8 +212,8 @@ BROWSE:
        ufkey = TRUE.
 
        IF must-add THEN DO:
-          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           PAUSE 0 no-message.
 add-new:
           repeat WITH FRAME lis:
@@ -253,7 +253,7 @@ add-new:
             ASSIGN
                tmspass.createts = Func.Common:mMakeTS()
                tmspass.usercode = tmsuser.usercode
-               tmspass.creator = Syst.CUICommon:katun
+               tmspass.creator = Syst.Var:katun
                tmspass.password = tmsuser.password.
       
      addEMail: REPEAT WITH FRAME lis:
@@ -280,7 +280,7 @@ add-new:
           IF NOT can-find(FIRST TMSUser) THEN RETURN.
           must-print = TRUE.
           must-add = FALSE.
-          Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+          Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
           IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTMSUser).
 
@@ -317,13 +317,13 @@ add-new:
 
        IF ufkey THEN DO:
           ASSIGN
-          Syst.CUICommon:ufk = 0
-          Syst.CUICommon:ufk[1] = 9038  Syst.CUICommon:ufk[2] = 9039   Syst.CUICommon:ufk[3] = 30 
-          Syst.CUICommon:ufk[4] = (IF lcExclGroup = "" THEN 46 /* show only actives */ ELSE  /* show all users */ 47)
-          Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-          Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-          Syst.CUICommon:ufk[7] = 0   Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-          ufkey = FALSE Syst.CUICommon:ehto = 3.
+          Syst.Var:ufk = 0
+          Syst.Var:ufk[1] = 9038  Syst.Var:ufk[2] = 9039   Syst.Var:ufk[3] = 30 
+          Syst.Var:ufk[4] = (IF lcExclGroup = "" THEN 46 /* show only actives */ ELSE  /* show all users */ 47)
+          Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+          Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+          Syst.Var:ufk[7] = 0   Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+          ufkey = FALSE Syst.Var:ehto = 3.
           RUN Syst/ufkey.p.
        END.
 
@@ -331,30 +331,30 @@ add-new:
 
        IF order = 1 THEN DO:
           CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
-          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.UserCode WITH FRAME sel.
+          COLOR DISPLAY value(Syst.Var:ccc) TMSUser.UserCode WITH FRAME sel.
        END.
        IF order = 2 THEN DO:
           CHOOSE ROW TMSUser.UserName {Syst/uchoose.i}
              no-error WITH FRAME sel.
-          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.UserName WITH FRAME sel.
+          COLOR DISPLAY value(Syst.Var:ccc) TMSUser.UserName WITH FRAME sel.
        END.
        IF order = 3 THEN DO:
           CHOOSE ROW TMSUser.ForeignID {Syst/uchoose.i}
              no-error WITH FRAME sel.
-          COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.ForeignID WITH FRAME sel.
+          COLOR DISPLAY value(Syst.Var:ccc) TMSUser.ForeignID WITH FRAME sel.
        END.
 
 
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-       Syst.CUICommon:nap = keylabel(LASTKEY).
+       Syst.Var:nap = keylabel(LASTKEY).
 
-       if Syst.CUICommon:nap = "cursor-left" THEN DO:
+       if Syst.Var:nap = "cursor-left" THEN DO:
           order = order - 1.
           IF order = 0 THEN order = 3.
        END.
 
-       if Syst.CUICommon:nap = "cursor-right" THEN DO:
+       if Syst.Var:nap = "cursor-right" THEN DO:
           order = order + 1.
           IF order = 4 THEN order = 1.
        END.
@@ -378,8 +378,8 @@ add-new:
        END.
 
        /* haku */
-       if Syst.CUICommon:nap = "f1"  or Syst.CUICommon:nap = "1" THEN DO:  /* tms tunnuksen haku */
-          Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
+       if Syst.Var:nap = "f1"  or Syst.Var:nap = "1" THEN DO:  /* tms tunnuksen haku */
+          Syst.Var:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha1.
           HIDE FRAME syha1.
@@ -392,7 +392,7 @@ add-new:
                 no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+                   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
                    NEXT BROWSE.
                 END.
              END.
@@ -401,13 +401,13 @@ add-new:
              memory = recid(TMSUser)
              must-print = TRUE
              order = 1.
-             Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+             Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
              NEXT BROWSE.
           END. /* tunnuksen haku */
        END. /* f1 */
 
-       else if Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "2" THEN DO: /* foreign id haku */
-          Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
+       else if Syst.Var:nap = "f2" or Syst.Var:nap = "2" THEN DO: /* foreign id haku */
+          Syst.Var:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha2.
           HIDE FRAME syha2.
@@ -421,7 +421,7 @@ add-new:
                 USE-INDEX ForeignId no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+                   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
                    NEXT BROWSE.
                 END.
              END.
@@ -429,13 +429,13 @@ add-new:
              memory = recid(TMSUser).
              must-print = TRUE.
              order = 3.
-             Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+             Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
              NEXT BROWSE.
           END. /* haku foreignidllä */
        END. /* f2 */
 
-       else if Syst.CUICommon:nap = "f3" or Syst.CUICommon:nap = "3" THEN DO: /* nimihaku */
-          Syst.CUICommon:cfc = "haku". RUN Syst/ufcolor.p.
+       else if Syst.Var:nap = "f3" or Syst.Var:nap = "3" THEN DO: /* nimihaku */
+          Syst.Var:cfc = "haku". RUN Syst/ufcolor.p.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha3.
           HIDE FRAME syha3.
@@ -449,7 +449,7 @@ add-new:
                 USE-INDEX UserName no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+                   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
                    NEXT BROWSE.
                 END.
              END.
@@ -457,12 +457,12 @@ add-new:
              memory = recid(TMSUser).
              must-print = TRUE.
              order = 2.
-             Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+             Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
              NEXT BROWSE.
           END. /* nimihaku */
        END. /* f3 */
 
-       else if Syst.CUICommon:nap = "4" or Syst.CUICommon:nap = "f4" THEN DO:
+       else if Syst.Var:nap = "4" or Syst.Var:nap = "f4" THEN DO:
           IF lcExclGroup = "" THEN lcExclGroup = "NOTinUSE".
           ELSE lcExclGroup = "".
           CLEAR FRAME sel ALL no-pause.
@@ -470,12 +470,12 @@ add-new:
           ASSIGN
              memory = recid(TMSUser)
              must-print = TRUE 
-             Syst.CUICommon:cfc = "sel".
+             Syst.Var:cfc = "sel".
           RUN Syst/ufcolor.p.
           NEXT BROWSE.
        END.
        /* previous line */
-       else if Syst.CUICommon:nap = "cursor-up" THEN DO:
+       else if Syst.Var:nap = "cursor-up" THEN DO:
           IF FRAME-LINE = 1 THEN DO:
              FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
              RUN local-find-prev. 
@@ -504,7 +504,7 @@ add-new:
        END.
 
        /* NEXT line */
-       else if Syst.CUICommon:nap = "cursor-down" THEN DO:
+       else if Syst.Var:nap = "cursor-down" THEN DO:
           IF FRAME-LINE = FRAME-DOWN THEN DO:
 
              FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
@@ -533,7 +533,7 @@ add-new:
        END.
 
        /* previous page */
-       else if lookup(Syst.CUICommon:nap,"page-up,prev-page,-") > 0 THEN DO:
+       else if lookup(Syst.Var:nap,"page-up,prev-page,-") > 0 THEN DO:
           memory = rtab[1].
           FIND TMSUser where recid(TMSUser) = memory no-lock.
 
@@ -557,7 +557,7 @@ add-new:
        END.
 
        /* NEXT page */
-       else if lookup(Syst.CUICommon:nap,"page-down,next-page,+") > 0 THEN DO WITH FRAME sel:
+       else if lookup(Syst.Var:nap,"page-down,next-page,+") > 0 THEN DO WITH FRAME sel:
           IF rtab[FRAME-DOWN] = ? THEN DO:
              BELL.
              message "This is the last page !".
@@ -570,13 +570,13 @@ add-new:
           END.
        END.
 
-       else if Syst.CUICommon:nap = "5" or Syst.CUICommon:nap = "f5" AND lcRight = "RW" THEN DO :  
+       else if Syst.Var:nap = "5" or Syst.Var:nap = "f5" AND lcRight = "RW" THEN DO :  
        /* lisAys */
           must-add = TRUE.
           NEXT BROWSE.
        END.
 
-       else if Syst.CUICommon:nap = "3" or Syst.CUICommon:nap = "f3" AND lcRight = "RW" THEN DO:
+       else if Syst.Var:nap = "3" or Syst.Var:nap = "f3" AND lcRight = "RW" THEN DO:
           FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
           RUN Syst/usersman.p (TMSUser.UserCode).
           
@@ -585,10 +585,10 @@ add-new:
           
        end.
               /* removal */
-       else if Syst.CUICommon:nap = "6" or Syst.CUICommon:nap = "f6" AND lcRight = "RW" THEN DO TRANS:
+       else if Syst.Var:nap = "6" or Syst.Var:nap = "f6" AND lcRight = "RW" THEN DO TRANS:
           FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE]
           exclusive-lock.
-          COLOR DISPLAY value(Syst.CUICommon:ctc) 
+          COLOR DISPLAY value(Syst.Var:ctc) 
              TMSUser.UserCode 
              TMSUser.UserName 
              TMSUser.Initials
@@ -601,7 +601,7 @@ add-new:
           memory = rtab[1 + i].
           ASSIGN ok = FALSE.
           message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-          COLOR DISPLAY value(Syst.CUICommon:ccc) 
+          COLOR DISPLAY value(Syst.Var:ccc) 
              TMSUser.UserCode 
              TMSUser.UserName 
              TMSUser.Initials
@@ -614,7 +614,7 @@ add-new:
 
              /* check if limits amounts is defined individualy  */
             FIND FIRST UserLimit WHERE 
-                       UserLimit.Brand = Syst.CUICommon:gcBrand AND 
+                       UserLimit.Brand = Syst.Var:gcBrand AND 
                        UserLimit.LimitTarget = "TMSUser" AND
                        UserLimit.LimitTargetID = TMSUser.UserCode NO-LOCK NO-ERROR.
              IF AVAIL UserLimit THEN DO:
@@ -633,7 +633,7 @@ add-new:
           END.
        END.
      
-     else  if Syst.CUICommon:nap = "enter" or Syst.CUICommon:nap = "return" THEN DO:
+     else  if Syst.Var:nap = "enter" or Syst.Var:nap = "return" THEN DO:
       FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] NO-LOCK.
       PAUSE 0 no-message.
             
@@ -660,17 +660,17 @@ add-new:
             moremail 
           WITH FRAME lis.
 
-          ASSIGN Syst.CUICommon:ehto   = 0
-                Syst.CUICommon:ufk    = 0            
-                Syst.CUICommon:ufk[1] = 7  WHEN lcRight = "RW"  
-                Syst.CUICommon:ufk[3] = 26 WHEN lcRight = "RW" 
-                Syst.CUICommon:ufk[8] = 8.
+          ASSIGN Syst.Var:ehto   = 0
+                Syst.Var:ufk    = 0            
+                Syst.Var:ufk[1] = 7  WHEN lcRight = "RW"  
+                Syst.Var:ufk[3] = 26 WHEN lcRight = "RW" 
+                Syst.Var:ufk[8] = 8.
              
          RUN Syst/ufkey.p.
  
-          IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO: /* update it */
+          IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN DO: /* update it */
              
-             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSUser).
              
@@ -696,11 +696,11 @@ add-new:
              IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhTMSUser).
           END.
           
-          IF Syst.CUICommon:toimi = 3 THEN DO:
+          IF Syst.Var:toimi = 3 THEN DO:
              RUN Syst/adduserlimitcui.p ("TMSUser", TMSUser.UserCode).
           END.
 
-          IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+          IF Syst.Var:toimi = 8 THEN LEAVE.
 
        END.
        
@@ -711,21 +711,21 @@ add-new:
        
       END.
 
-       else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+       else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
           RUN local-find-first.
           ASSIGN
           memory = recid(TMSUser)
           must-print = TRUE.
        END.
 
-       else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO:
+       else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO:
           RUN local-find-last.    
           ASSIGN
           memory = recid(TMSUser)
           must-print = TRUE.
        END.
 
-       else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN DO:
+       else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN DO:
           HIDE FRAME sel no-pause.
           RETURN.
        END.

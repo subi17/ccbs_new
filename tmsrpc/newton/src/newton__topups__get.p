@@ -47,7 +47,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
    FIND PrepaidRequest NO-LOCK WHERE
-        PrepaidRequest.Brand = Syst.CUICommon:gcBrand AND
+        PrepaidRequest.Brand = Syst.Var:gcBrand AND
         PrePaidRequest.PPRequest = INT(pcID) NO-ERROR. 
 
    IF NOT AVAIL PrepaidRequest THEN RETURN appl_err("Topup not found: "+ pcId).

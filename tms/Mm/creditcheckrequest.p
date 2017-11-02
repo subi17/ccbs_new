@@ -17,7 +17,7 @@ DEF VAR ocResult      AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE 
      MsRequest.MsRequest = iiReqId AND
-     MsRequest.Brand     = Syst.CUICommon:gcBrand
+     MsRequest.Brand     = Syst.Var:gcBrand
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MsRequest THEN RETURN "ERROR, request lost!".

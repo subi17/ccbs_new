@@ -9,8 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = "CRON".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
@@ -51,7 +51,7 @@ PUT STREAM sout UNFORMATTED
 
 
 FOR EACH  MobSub WHERE
-          MobSub.Brand = Syst.CUICommon:gcBrand AND
+          MobSub.Brand = Syst.Var:gcBrand AND
           MobSub.ActivationDate < (TODAY - liConfDays) NO-LOCK:
     
     ASSIGN liReq       = 0

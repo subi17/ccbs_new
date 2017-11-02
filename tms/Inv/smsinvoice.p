@@ -102,7 +102,7 @@ ASSIGN /* 9:00-22:00 */
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 NO-LOCK:
@@ -213,7 +213,7 @@ IF lcAddrConfDir > "" THEN
 
 IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = Syst.CUICommon:gcBrand            AND
+             InvText.Brand     = Syst.Var:gcBrand            AND
              InvText.Target    = "General"          AND
              InvText.KeyValue  = "EmailConfSMSInv"  AND
              InvText.Language  = 5                  AND 

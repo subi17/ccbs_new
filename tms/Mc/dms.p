@@ -59,17 +59,17 @@ REPEAT WITH FRAME lis ON ENDKEY UNDO LOOP, NEXT LOOP:
            DMS.DMSStatusTS.
 
    ASSIGN
-      Syst.CUICommon:ufk   = 0  
-      Syst.CUICommon:ufk[5]= 9850
-      Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto  = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 9850
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto  = 0.
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi = 5 AND Syst.CUICommon:ufk[5] > 0 THEN DO:
+   IF Syst.Var:toimi = 5 AND Syst.Var:ufk[5] > 0 THEN DO:
       RUN Mc/dmsdoc.p (DMS.DMSID).
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. 
 

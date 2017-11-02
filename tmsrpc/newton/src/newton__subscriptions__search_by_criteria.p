@@ -26,8 +26,8 @@
   */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Newton".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Newton".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
@@ -211,7 +211,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    /* Check barrings */
    IF Mobsub.PayType EQ FALSE THEN DO:
       FOR EACH bMobsub NO-LOCK WHERE
-               bMobsub.Brand = Syst.CUICommon:gcBrand AND
+               bMobsub.Brand = Syst.Var:gcBrand AND
                bMobsub.AgrCust = Customer.AgrCust AND
                bMobsub.PayType = FALSE AND
                bMobsub.MsStatus = {&MSSTATUS_BARRED}:
@@ -223,7 +223,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    END.         
    
    IF CAN-FIND( FIRST Invoice NO-LOCK WHERE
-                      Invoice.Brand    = Syst.CUICommon:gcBrand            AND
+                      Invoice.Brand    = Syst.Var:gcBrand            AND
                       Invoice.Custnum  = MobSub.Custnum     AND            
                       Invoice.InvDate >= ldtFirstDay        AND
                       Invoice.InvType  = {&INV_TYPE_NORMAL} AND             
@@ -247,7 +247,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
       IF Mobsub.PayType AND
          SubsTerminal.OrderID > 0 AND
          CAN-FIND(FIRST Order NO-LOCK WHERE
-                        Order.Brand = Syst.CUICommon:gcBrand AND
+                        Order.Brand = Syst.Var:gcBrand AND
                         Order.OrderID = SubsTerminal.OrderId AND
                         Order.OrderType = 2) THEN 
       DO:
@@ -309,25 +309,25 @@ FUNCTION fPersonIdCheck RETURNS LOGICAL (INPUT liPersonIdType AS INT):
    DEFINE VAR liPersonId AS LOGICAL NO-UNDO INIT YES.
    IF liPersonIdType = 1 AND 
       NOT CAN-FIND(FIRST Customer WHERE
-                         Customer.Brand   = Syst.CUICommon:gcBrand AND
+                         Customer.Brand   = Syst.Var:gcBrand AND
                          Customer.CustNum = MobSub.CustNum AND
                          Customer.CustIdType = "NIF") THEN
       liPersonId = NO.
    ELSE IF liPersonIdType = 2 AND
         NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = Syst.CUICommon:gcBrand AND
+                           Customer.Brand   = Syst.Var:gcBrand AND
                            Customer.CustNum = MobSub.CustNum AND
                            Customer.CustIdType = "NIE") THEN
       liPersonId = NO.
    ELSE IF liPersonIdType = 3 AND
         NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = Syst.CUICommon:gcBrand AND
+                           Customer.Brand   = Syst.Var:gcBrand AND
                            Customer.CustNum = MobSub.CustNum AND
                            Customer.CustIdType = "CIF") THEN
       liPersonId = NO.
    ELSE IF liPersonIdType = 4 AND
         NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = Syst.CUICommon:gcBrand AND
+                           Customer.Brand   = Syst.Var:gcBrand AND
                            Customer.CustNum = MobSub.CustNum AND
                            Customer.CustIdType = "PASSPORT") THEN
       liPersonId = NO.
@@ -337,7 +337,7 @@ END FUNCTION.
 
 EACH_MOBSUB:
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand   = Syst.CUICommon:gcBrand AND 
+         MobSub.Brand   = Syst.Var:gcBrand AND 
          (IF pcCliType NE "" THEN MobSub.CLIType = pcCliType ELSE TRUE):
 
    /* If MobSub loop executes more than 30 seconds 
@@ -365,7 +365,7 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* pcDataBundleId > "" */
    
    IF plDebt AND NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                                    Invoice.Brand    = Syst.CUICommon:gcBrand            AND
+                                    Invoice.Brand    = Syst.Var:gcBrand            AND
                                     Invoice.Custnum  = MobSub.Custnum     AND            
                                     Invoice.InvDate >= ldtFirstDay        AND
                                     Invoice.InvType  = {&INV_TYPE_NORMAL} AND             
@@ -431,7 +431,7 @@ FOR EACH MobSub NO-LOCK WHERE
                   DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
  
             IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                              DayCampaign.Brand        = Syst.CUICommon:gcBrand            AND
+                              DayCampaign.Brand        = Syst.Var:gcBrand            AND
                               DayCampaign.DCEvent      = DCCLI.DCEvent      AND
                               DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
                               DayCampaign.TermFeeModel NE ""                AND
@@ -450,7 +450,7 @@ FOR EACH MobSub NO-LOCK WHERE
                   DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
  
             IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                              DayCampaign.Brand        = Syst.CUICommon:gcBrand            AND
+                              DayCampaign.Brand        = Syst.Var:gcBrand            AND
                               DayCampaign.DCEvent      = DCCLI.DCEvent      AND
                               DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
                               DayCampaign.TermFeeModel NE ""                AND
@@ -468,7 +468,7 @@ FOR EACH MobSub NO-LOCK WHERE
                   DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
                   
             IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                              DayCampaign.Brand        = Syst.CUICommon:gcBrand            AND
+                              DayCampaign.Brand        = Syst.Var:gcBrand            AND
                               DayCampaign.DCEvent      = DCCLI.DCEvent      AND
                               DayCampaign.DCEvent      = pcterm             AND
                               DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
@@ -490,7 +490,7 @@ FOR EACH MobSub NO-LOCK WHERE
  
    IF pcInvGroup > "" AND
       NOT CAN-FIND(FIRST Customer WHERE 
-                         Customer.brand EQ Syst.CUICommon:gcBrand AND
+                         Customer.brand EQ Syst.Var:gcBrand AND
                          Customer.custnum EQ MobSub.CustNum AND
                          Customer.invGroup EQ pcInvGroup NO-LOCK) THEN
       NEXT EACH_MOBSUB.
@@ -500,7 +500,7 @@ FOR EACH MobSub NO-LOCK WHERE
 
    /* YDA-895 Voice or Data  */
    IF NOT CAN-FIND(FIRST CliType WHERE 
-                         CliType.Brand     = Syst.CUICommon:gcBrand AND
+                         CliType.Brand     = Syst.Var:gcBrand AND
                          CliType.CliType   = MobSub.CliType AND
                          CliType.UsageType = piUsageType NO-LOCK) THEN
       NEXT EACH_MOBSUB.
@@ -546,14 +546,14 @@ FOR EACH MobSub NO-LOCK WHERE
       CASE pcOrderType:
          WHEN "sim" THEN DO:
            IF CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                             SubsTerminal.Brand = Syst.CUICommon:gcBrand AND
+                             SubsTerminal.Brand = Syst.Var:gcBrand AND
                              SubsTerminal.MsSeq = MobSub.MsSeq AND
                              SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
                              THEN NEXT EACH_MOBSUB.
          END.
          WHEN "terminal" THEN DO:
            IF NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                                 SubsTerminal.Brand = Syst.CUICommon:gcBrand AND
+                                 SubsTerminal.Brand = Syst.Var:gcBrand AND
                                  SubsTerminal.MsSeq = MobSub.MsSeq AND
                                  SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
                                  THEN NEXT EACH_MOBSUB.

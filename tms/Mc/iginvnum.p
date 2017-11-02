@@ -15,7 +15,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,8 +63,8 @@ form
     IgInvNum.SeqPrefix 
     IgInvNum.InvNum               
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
        " " + icInvGroup + ": Invoice Number Sequences  "  
     FRAME sel.
     
@@ -75,16 +75,16 @@ form
     IgInvNum.SeqPrefix COLON 22 FORMAT "X(6)"
     IgInvNum.InvNum    COLON 22 
 WITH  OVERLAY ROW 6 CENTERED
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  IgInvNum */
     "Type:" liInvType FORMAT ">>9"
     HELP "Enter type"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Type "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Type "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fTypeName RETURNS CHARACTER
    (iiInvType AS INT):
@@ -96,7 +96,7 @@ FUNCTION fTypeName RETURNS CHARACTER
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -118,7 +118,7 @@ REPEAT WITH FRAME sel:
    END.
     
    IF must-add THEN DO:  /* Add a IgInvNum  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -126,7 +126,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -135,7 +135,7 @@ REPEAT WITH FRAME sel:
            WITH FRAME lis EDITING:
            
               READKEY. 
-              Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+              Syst.Var:nap = KEYLABEL(LASTKEY).
 
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "InvType"
               THEN DO:
@@ -149,12 +149,12 @@ REPEAT WITH FRAME sel:
                     DISPLAY lcCode @ IgInvNum.InvType WITH FRAME lis.   
                  END.   
 
-                 Syst.CUICommon:ehto = 9.
+                 Syst.Var:ehto = 9.
                  RUN Syst/ufkey.p.
                  NEXT. 
               END.
 
-              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
               THEN DO WITH FRAME lis:
              
                  PAUSE 0.
@@ -173,7 +173,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST IgInvNum WHERE
-                             IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                             IgInvNum.Brand    = Syst.Var:gcBrand    AND
                              IgInvNum.InvGroup = icInvGroup 
                              USING IgInvNum.InvType AND
                                    IgInvNum.FromDate) THEN DO:
@@ -186,7 +186,7 @@ REPEAT WITH FRAME sel:
            
            
            CREATE IgInvNum.
-           ASSIGN IgInvNum.Brand    = Syst.CUICommon:gcBrand
+           ASSIGN IgInvNum.Brand    = Syst.Var:gcBrand
                   IgInvNum.InvGroup = icInvGroup
                   IgInvNum.InvType  = INPUT FRAME lis IgInvNum.InvType
                   IgInvNum.FromDate = INPUT FRAME lis IgInvNum.FromDate.
@@ -264,13 +264,13 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk    = 0
-        Syst.CUICommon:ufk[1] = 35
-        Syst.CUICommon:ufk[2] = 0
-        Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0) 
-        Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[8] = 8 
-        Syst.CUICommon:ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 35
+        Syst.Var:ufk[2] = 0
+        Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -280,13 +280,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW IgInvNum.InvType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) IgInvNum.InvType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) IgInvNum.InvType WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -295,10 +295,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -316,7 +316,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -341,7 +341,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -367,7 +367,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND IgInvNum WHERE recid(IgInvNum) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -391,7 +391,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -406,11 +406,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liInvType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -418,7 +418,7 @@ REPEAT WITH FRAME sel:
        IF liInvType > 0 THEN DO:
        
           FIND FIRST IgInvNum WHERE 
-                     IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                     IgInvNum.Brand    = Syst.Var:gcBrand    AND
                      IgInvNum.InvGroup = icInvGroup AND
                      IgInvNum.InvType >= liInvType
           NO-LOCK NO-ERROR.
@@ -437,20 +437,20 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0  
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0  
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        IgInvNum.InvType IgInvNum.InvNum IgInvNum.SeqPrefix.
 
        RUN local-find-NEXT.
@@ -472,7 +472,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        IgInvNum.InvType IgInvNum.InvNum IgInvNum.SeqPrefix.
 
        IF ok THEN DO:
@@ -494,7 +494,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -503,7 +503,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIgInvNum).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -519,25 +519,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(IgInvNum) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(IgInvNum) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -557,7 +557,7 @@ PROCEDURE local-find-FIRST:
 
        IF order = 1 THEN 
        FIND FIRST IgInvNum WHERE
-                  IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                  IgInvNum.Brand    = Syst.Var:gcBrand    AND
                   IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
          
 END PROCEDURE.
@@ -566,7 +566,7 @@ PROCEDURE local-find-LAST:
 
        IF order = 1 THEN 
        FIND LAST IgInvNum WHERE
-                 IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                 IgInvNum.Brand    = Syst.Var:gcBrand    AND
                  IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
        
 END PROCEDURE.
@@ -575,7 +575,7 @@ PROCEDURE local-find-NEXT:
 
        IF order = 1 THEN 
        FIND NEXT IgInvNum WHERE
-                 IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                 IgInvNum.Brand    = Syst.Var:gcBrand    AND
                  IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -583,7 +583,7 @@ PROCEDURE local-find-PREV:
  
        IF order = 1 THEN 
        FIND PREV IgInvNum WHERE
-                 IgInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                 IgInvNum.Brand    = Syst.Var:gcBrand    AND
                  IgInvNum.InvGroup = icInvGroup NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -625,7 +625,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          IgInvNum.SeqPrefix 
@@ -634,7 +634,7 @@ PROCEDURE local-UPDATE-record:
             
             READKEY.
  
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
             THEN DO WITH FRAME lis:
              
                PAUSE 0.
@@ -654,7 +654,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE DO:
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 

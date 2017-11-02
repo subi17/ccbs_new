@@ -1,7 +1,7 @@
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "rafaeldv".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 {Func/msisdn.i}
 {Syst/tmsconst.i}
 
@@ -51,7 +51,7 @@ FOR EACH bMSISDN NO-LOCK WHERE
          bMSISDN.POS = ({&MSISDN_STOCK_PREACTIVATED}) AND
          bMSISDN.StatusCode = 1 AND
          bMSISDN.ValidTo > ldTS  AND
-         bMSISDN.Brand = Syst.CUICommon:gcBrand :
+         bMSISDN.Brand = Syst.Var:gcBrand :
       
       lcError = fCheckMSISDN().
       IF lcError NE "" THEN DO:
@@ -73,7 +73,7 @@ FOR EACH bMSISDN NO-LOCK WHERE
 END.
 
 FOR EACH bMSISDN NO-LOCK WHERE
-         bMSISDN.Brand = Syst.CUICommon:gcBrand AND 
+         bMSISDN.Brand = Syst.Var:gcBrand AND 
          bMSISDN.CLI BEGINS "6335" AND
          bMSISDN.StatusCode = 0 AND
          bMSISDN.ValidTo > ldTS :

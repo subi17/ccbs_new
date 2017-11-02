@@ -10,8 +10,8 @@
 {Syst/commpaa.i}
 {Syst/eventlog.i}
 
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
              
 RUN Mm/highusagerep.p(INPUT Func.Common:mMake2DT(INPUT today - 90, INPUT 0),"",0).
 

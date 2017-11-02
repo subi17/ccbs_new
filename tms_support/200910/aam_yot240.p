@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 
 def var ldadate as date no-undo.
 def var lcfile as char no-undo.

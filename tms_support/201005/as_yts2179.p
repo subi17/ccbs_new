@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 
 DEFINE VARIABLE lcBarrStatus AS CHARACTER NO-UNDO. 
@@ -28,7 +28,7 @@ FOR EACH msrequest where
 
    RUN checkmsbarring(
          INPUT MobSub.msseq,
-         INPUT Syst.CUICommon:katun,
+         INPUT Syst.Var:katun,
          OUTPUT lcBarrComList,
          OUTPUT lcBarrStatus).
  

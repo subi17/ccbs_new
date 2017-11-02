@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
 {Mm/subser.i}
 {Syst/tmsconst.i}
@@ -50,7 +50,7 @@ lcStruct = validate_request(pcStruct,"itemizations,delivery_channel,invoice_targ
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 lcMemo = "Agent" + CHR(255) + "VISTA".
 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
@@ -85,7 +85,7 @@ IF pcInvoiceGrouping NE "" AND
    RETURN appl_err(SUBST("Unsupported invoice_target value &1", pcInvoiceGrouping)).
 
 {Syst/eventval.i}
-&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun   
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun   
 {Func/lib/eventlog.i}
 DEF VAR lhCustomer AS HANDLE NO-UNDO. 
 lhCustomer = BUFFER Customer:HANDLE.
@@ -104,7 +104,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
          an email to customer to activate the email service */
       liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT Syst.CUICommon:katun,
+                                       INPUT Syst.Var:katun,
                                        INPUT 0,
                                        INPUT "",
                                        INPUT Customer.Custnum,
@@ -140,7 +140,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
                                     "changed to " + STRING(Customer.DelType)).
       IF liDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN DO:
          FOR EACH MobSub WHERE
-                  MobSub.brand EQ Syst.CUICommon:gcBrand AND
+                  MobSub.brand EQ Syst.Var:gcBrand AND
                   Mobsub.custnum EQ Customer.Custnum NO-LOCK:
             fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
                            "InvDelivTypeChanged",Customer.Language,0,
@@ -249,11 +249,11 @@ IF pcReason NE '' AND llUpdate THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand 
+       Memo.Brand     = Syst.Var:gcBrand 
        Memo.HostTable = "Customer" 
        Memo.KeyValue  = STRING(piCustNum) 
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun 
+       Memo.CreUser   = Syst.Var:katun 
        Memo.MemoTitle = "Update Deliverables"
        Memo.MemoText  = pcReason
        Memo.CustNum   = piCustNum. 

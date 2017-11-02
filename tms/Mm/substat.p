@@ -46,7 +46,7 @@ form
  "         Create SoLog req.:" llcheck no-label       SKIP
  skip(4)
 with row 1 width 80 NO-LABELS
-   title " " + Syst.CUICommon:ynimi + " SUBSCRIPTION STATUS  " + string(TODAY,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " SUBSCRIPTION STATUS  " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 assign 
@@ -63,7 +63,7 @@ repeat:
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    CustomerFrom 
    CustomerTo
@@ -71,15 +71,15 @@ repeat with frame rajat:
    llcheck .
 
    ASSIGN
-      Syst.CUICommon:ufk = 0
-      Syst.CUICommon:ufk[1] = 132
-      Syst.CUICommon:ufk[5] = 63
-      Syst.CUICommon:ufk[8] = 8
-      Syst.CUICommon:ehto = 0
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 132
+      Syst.Var:ufk[5] = 63
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
    ufkey = true.
 
    RUN Syst/ufkey.p.
-   case Syst.CUICommon:toimi:
+   case Syst.Var:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.
@@ -191,7 +191,7 @@ end.
             CallAlarm.DeliPara   = lcAction
             CallAlarm.DeliMsg    = lcAction
             CallAlarm.Limit      = 100
-            CallAlarm.Brand      = Syst.CUICommon:gcBrand 
+            CallAlarm.Brand      = Syst.Var:gcBrand 
             CallAlarm.Orig       = "800622800"
             CallAlarm.CreditType = 66.
 

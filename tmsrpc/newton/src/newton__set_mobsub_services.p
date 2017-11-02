@@ -15,7 +15,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -81,14 +81,14 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
       Memo.MemoType  = "service"
-      Memo.CreUser   = Syst.CUICommon:katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
 END FUNCTION.
@@ -116,7 +116,7 @@ IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-Syst.CUICommon:katun = pcUser.
+Syst.Var:katun = pcUser.
 IF pcUserLevel EQ "Operator" THEN 
    cCheckMsBarringkatun = "NewtonAd". 
 ELSE 
@@ -175,7 +175,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
      SubSer.MsSeq = Mobsub.MsSeq AND
      SubSer.ServCom = pcServiceId,
    FIRST ServCom NO-LOCK WHERE 
-      ServCom.Brand = Syst.CUICommon:gcBrand AND
+      ServCom.Brand = Syst.Var:gcBrand AND
       ServCom.ServCom = pcServiceID:
 
       /* Check ongoing service requests */
@@ -329,7 +329,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO:
    
       FIND FIRST ServCom WHERE
-                 ServCom.Brand = Syst.CUICommon:gcBrand AND
+                 ServCom.Brand = Syst.Var:gcBrand AND
                  ServCom.ServCom = pcServiceID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServCom THEN RETURN appl_err("Invalid Service Id").
 

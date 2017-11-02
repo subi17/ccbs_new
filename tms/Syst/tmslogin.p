@@ -32,12 +32,12 @@ DEFINE VARIABLE lcPassWd  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liLoop AS INTEGER NO-UNDO. 
 
 /* use brand 1 to get tmsparams, will be selected later */
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
 {Func/tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
 
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO.
-katun = Syst.CUICommon:katun.
+katun = Syst.Var:katun.
 
 form
    skip(1)
@@ -49,8 +49,8 @@ form
    with 
      row 8 
      centered 
-     title color value(Syst.CUICommon:ctc) " MULTI-BRAND TMS: USER LOGIN "
-     side-labels color value(Syst.CUICommon:cfc) overlay frame login.
+     title color value(Syst.Var:ctc) " MULTI-BRAND TMS: USER LOGIN "
+     side-labels color value(Syst.Var:cfc) overlay frame login.
 
 
 do with frame login:
@@ -59,14 +59,14 @@ do with frame login:
 
    display with frame f_code.
 
-   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+   Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
    pause 0 no-message.
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-   assign Syst.CUICommon:si-pvm = TODAY.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+   assign Syst.Var:si-pvm = TODAY.
 
    if katun = "" then do:
-      Syst.CUICommon:cfc = "tunnus". RUN Syst/ufcolor.p.
+      Syst.Var:cfc = "tunnus". RUN Syst/ufcolor.p.
 
       input through value("who am i").
 
@@ -89,10 +89,10 @@ do with frame login:
 
             if katun = "" then quit.
             
-            Syst.CUICommon:katun = katun.
+            Syst.Var:katun = katun.
 
             find TmsUser where  
-                 TmsUser.UserCode = Syst.CUICommon:katun no-lock no-error.
+                 TmsUser.UserCode = Syst.Var:katun no-lock no-error.
 
             disp TmsUser.UserName.
             PAUSE 0.
@@ -110,7 +110,7 @@ do with frame login:
 
             /* copy user id into the common variables */
             assign
-              Syst.CUICommon:gcAllBrand  = (IF INDEX("*",TMSUser.brand) > 0 THEN TRUE 
+              Syst.Var:gcAllBrand  = (IF INDEX("*",TMSUser.brand) > 0 THEN TRUE 
                              ELSE FALSE).
 
 
@@ -207,7 +207,7 @@ do with frame login:
             leave.
       end. /* USER_LOGIN */
 
-      if Syst.CUICommon:katun = "" then quit. 
+      if Syst.Var:katun = "" then quit. 
 
    end. /* login */
 

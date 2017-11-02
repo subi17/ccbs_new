@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
 {Syst/eventlog.i}
 

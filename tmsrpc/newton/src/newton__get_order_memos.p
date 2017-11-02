@@ -16,7 +16,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE pcTenant      AS CHAR      NO-UNDO.
 DEFINE VARIABLE piOrderId     AS INTEGER   NO-UNDO. 

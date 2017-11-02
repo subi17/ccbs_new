@@ -7,8 +7,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun = "cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "cron".
 {Syst/eventlog.i}
 {Func/cparam2.i}
 
@@ -47,7 +47,7 @@ fELog("DAILY","MobCDRDoubleCheckStopped:" +
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "MobCDR"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99")  +
@@ -61,7 +61,7 @@ DO TRANS:
                                STRING(ldaReadDate,"99.99.9999") +
                                " were marked as doubles."
       ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.FromDate     = ldaReadDate
       ActionLog.ToDate       = ldaReadDate.
       ActionLog.ActionTS     = Func.Common:mMakeTS().

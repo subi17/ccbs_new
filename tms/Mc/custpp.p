@@ -18,7 +18,7 @@
 {Mc/lib/tokenchk.i 'custpp'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,8 +63,8 @@ form
     CustPP.Reseller
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     " Customers having ProdPack '" + ProdPack + "': " +  ProdPack.PPName + " "
         FRAME sel.
 
@@ -77,20 +77,20 @@ form
     CustPP.Reseller   LABEL "Reseller."  Reseller.RsName   AT 25 NO-LABEL SKIP
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek ServEl  BY  CustNum */
     CustNum
     HELP "Enter Code of Service"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND ProdPack WHERE ProdPack.ProdPack = ProdPack NO-LOCK.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By 2,By 3, By 4".
@@ -126,19 +126,19 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CustPP  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR 
               CustPP.CustNum WITH FRAME lis EDITING:
               READKEY.
-              IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  if frame-field = "as-nro" THEN DO:
                     if input CustPP.CustNum = "" THEN LEAVE add-row.
@@ -242,27 +242,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 1750 Syst.CUICommon:ufk[3]= 250  Syst.CUICommon:ufk[4]= 927
-        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[7]= 0    Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 1750 Syst.Var:ufk[3]= 250  Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0    Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CustPP.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CustPP.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CustPP.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -286,10 +286,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -314,7 +314,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -340,7 +340,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND CustPP WHERE recid(CustPP) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -364,7 +364,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -379,9 +379,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET CustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -401,7 +401,7 @@ BROWSE:
      END. /* Search-1 */
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO TRANS:  /* customer's ProdPack */
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO TRANS:  /* customer's ProdPack */
 
        FIND CustPP WHERE recid(CustPP) = rtab[frame-line(sel)] NO-LOCK.
        RUN Mc/custpp2.p(CustPP.CustNum).
@@ -409,7 +409,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO TRANS:  /* Package Contains */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO TRANS:  /* Package Contains */
        RUN local-find-this(FALSE).                                        
 
        RUN Mc/ppcomp.p(CustPP.ProdPack). 
@@ -418,7 +418,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     IF LOOKUP(Syst.CUICommon:nap,"4,F4") > 0 THEN DO TRANS: /* memo */
+     IF LOOKUP(Syst.Var:nap,"4,F4") > 0 THEN DO TRANS: /* memo */
        FIND CustPP WHERE RECID(CustPP) = rtab[FRAME-LINE(sel)]
        NO-LOCK NO-ERROR.
        RUN Mc/memo.p(INPUT custpp.custnum,
@@ -431,18 +431,18 @@ BROWSE:
 
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        CustPP.CustNum. 
 
        RUN local-find-NEXT.
@@ -464,7 +464,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        CustPP.CustNum.
        IF ok THEN DO:
 
@@ -485,13 +485,13 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CustPP.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustPP).
@@ -510,25 +510,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(CustPP) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(CustPP) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -612,7 +612,7 @@ PROCEDURE local-update-record:
             CustPP.Reseller
          WITH FRAME lis EDITING:
             READKEY.
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                PAUSE 0.
 
                IF FRAME-FIELD = "ContDate" THEN DO:

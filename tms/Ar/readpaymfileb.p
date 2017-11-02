@@ -11,8 +11,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN Syst.CUICommon:gcBrand = "1" 
-       Syst.CUICommon:katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -51,8 +51,8 @@ END FUNCTION.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 ASSIGN 
    lcReadDir  = fCParamC("PaymFiles")
@@ -103,7 +103,7 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "PaymFile"

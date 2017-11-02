@@ -26,7 +26,7 @@ WITH
 
 
 PAUSE 0.
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 UPDATE module WITH FRAME modu.
 if module ne "" THEN DO:
    HIDE FRAME modu.

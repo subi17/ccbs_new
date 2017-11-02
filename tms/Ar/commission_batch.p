@@ -11,8 +11,8 @@
 {Syst/commpaa.i}
 
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1" 
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1" 
+   Syst.Var:katun   = "Cron".
        
 {Syst/eventlog.i}
 

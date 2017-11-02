@@ -59,7 +59,7 @@ DEF TEMP-TABLE ttRow NO-UNDO
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -82,7 +82,7 @@ form
     SingleFee.Memo[1]     column-label "Memo"    format "x(26)"
 with
     centered row 2 overlay scroll 1 13 down
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " +
+    color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " " +
     substr(Customer.CustName,1,18) + " / " + substr(lcBIName,1,18) +
     ": Invoice = " + string(iiInvNum) + ", CustNo = " +
     string(Customer.CustNum) + " "  frame sel.
@@ -101,19 +101,19 @@ form
     lcOtherData FORMAT "X(50)"                              SKIP
 
  with  overlay row 5 centered
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) fr-header with no-label
+    color value(Syst.Var:cfc) title color value(Syst.Var:ctc) fr-header with no-label
     frame lis.
 
 form /*  search with field CustNum */
     BillPeriod
     help "Give Period YyyyMm"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND PERIOD "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND PERIOD "
+    color value(Syst.Var:cfc) no-labels overlay frame f1.
 
 form /* memo */
 with
     overlay row 7 centered no-label
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Memo "
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " Memo "
     frame memo.
 
 
@@ -171,7 +171,7 @@ else do:
    return.
 end.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 view frame sel.
 LOOP:
 repeat with frame sel:
@@ -225,26 +225,26 @@ BROWSE:
 
       if ufkey then do:
         assign
-        Syst.CUICommon:ufk[1]= 771 Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= 0   Syst.CUICommon:ufk[6]= 0  Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto  = 3 ufkey = false.
+        Syst.Var:ufk[1]= 771 Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 0   Syst.Var:ufk[6]= 0  Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto  = 3 ufkey = false.
         RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
       if order = 1 then do:
         choose row SingleFee.BillPeriod {Syst/uchoose.i} no-error with frame sel.
-        color display value(Syst.CUICommon:ccc) SingleFee.BillPeriod with frame sel.
+        color display value(Syst.Var:ccc) SingleFee.BillPeriod with frame sel.
       end.
 
       if rtab[frame-line] = ? then next.
 
-      Syst.CUICommon:nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 then do:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 then do:
         order = order + 1. if order > ordercount then order = 1.
       end.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 then do:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 then do:
         order = order - 1. if order = 0 then order = ordercount.
       end.
 
@@ -268,10 +268,10 @@ BROWSE:
         next.
       end.
 
-      assign Syst.CUICommon:nap = keylabel(lastkey).
+      assign Syst.Var:nap = keylabel(lastkey).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do with frame sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 then do with frame sel:
         if frame-line = 1 then do:
            find ttRow where recid(ttRow) = rtab[1].
            if order = 1 then find prev ttRow no-error.
@@ -298,7 +298,7 @@ BROWSE:
       end. /* previous line */
 
       /* next line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 then do
       with frame sel:
         if frame-line = frame-down then do:
            find ttRow where recid(ttRow) = rtab[frame-down].
@@ -326,7 +326,7 @@ BROWSE:
       end. /* next line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 then do:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 then do:
         memory = rtab[1].
         find ttRow where recid(ttRow) = memory no-error.
         if order = 1 then find prev ttRow no-error.
@@ -350,7 +350,7 @@ BROWSE:
      end. /* previous page */
 
      /* next page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 then do with frame sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 then do with frame sel:
        /* cursor to the downmost line */
        if rtab[frame-down] = ? then do:
            message "YOU ARE ON THE LAST PAGE !".
@@ -365,10 +365,10 @@ BROWSE:
      end. /* next page */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        update BillPeriod with frame f1.
        hide frame f1 no-pause.
        if BillPeriod <> ? then do:
@@ -387,9 +387,9 @@ BROWSE:
      end. /* Haku sar. 1 */
 
 
-     if lookup(Syst.CUICommon:nap,"3,f3") > 0 then     /* memo */
+     if lookup(Syst.Var:nap,"3,f3") > 0 then     /* memo */
      do trans with frame memo on endkey undo, next LOOP:
-       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = true.
+       assign Syst.Var:ehto = 9 Syst.Var:cfc = "lis" ufkey = true.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.
@@ -406,16 +406,16 @@ BROWSE:
        disp SingleFee.Memo[1] with frame sel.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 and Syst.CUICommon:ufk[5] > 0 then do:  /* lisays */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 and Syst.Var:ufk[5] > 0 then do:  /* lisays */
         must-add = true.
         next LOOP.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 then
+     else if lookup(Syst.Var:nap,"enter,return") > 0 then
      do with frame lis transaction on endkey undo, next LOOP:
        /* change */
 
-       assign fr-header = " VIEW " Syst.CUICommon:cfc = "lis".  RUN Syst/ufcolor.p.
+       assign fr-header = " VIEW " Syst.Var:cfc = "lis".  RUN Syst/ufcolor.p.
 
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.
@@ -431,7 +431,7 @@ BROWSE:
           
           
           FOR FIRST OrderCustomer NO-LOCK WHERE
-                    OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
+                    OrderCustomer.Brand   = Syst.Var:gcBrand AND
                     OrderCustomer.OrderID = Order.OrderID AND
                     OrderCustomer.RowType = Order.UserRole:
 
@@ -463,32 +463,32 @@ BROWSE:
      end.
 
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+     else if lookup(Syst.Var:nap,"home,h") > 0 then do:
        if order = 1 then find first ttRow no-error.
        assign memory = recid(ttRow) must-print = true.
        next LOOP.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do : /* last record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 then do : /* last record */
        if order = 1 then find last ttRow no-error.
        assign memory = recid(ttRow) must-print = true.
        next LOOP.
      end.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then leave LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 then leave LOOP.
 
   end.  /* BROWSE */
 end.  /* LOOP */
 
 hide frame sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
    FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.
 
    find BillItem where 
-        BillItem.Brand    = Syst.CUICommon:gcBrand AND
+        BillItem.Brand    = Syst.Var:gcBrand AND
         BillItem.BillCode = SingleFee.BillCode no-lock no-error.
    if avail BillItem then lcBIName = BillItem.BIName.
    else lcBIName = "!! UNKNOWN !!!".

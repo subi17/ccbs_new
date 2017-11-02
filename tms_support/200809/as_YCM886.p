@@ -5,12 +5,12 @@ DEFINE BUFFER bTMSPass FOR TMSPass.
 
 {Syst/commpaa.i}
 {Func/cparam.i2}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = FALSE. 
 
 {Func/log.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 
 fSetLogFileName("/apps/snet/200809/TMS+user+update+(20080916)_" + 
    STRING(YEAR(TODAY),"9999") +
@@ -147,7 +147,7 @@ FUNCTION fNew RETURNS LOGICAL
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = Syst.CUICommon:katun
+         tmspass.creator  = Syst.Var:katun
          tmspass.createts = ldeTS.
    END.
 

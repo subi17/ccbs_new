@@ -58,7 +58,7 @@ DEF BUFFER blang FOR RepText.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -81,8 +81,8 @@ FORM
    RepText.Language        COLUMN-LABEL "Lang" 
    RepText.ToDate          FORMAT "99-99-99" COLUMN-LABEL "Valid To"
    RepText.RepText         FORMAT "x(29)"
-WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+WITH WIDTH 80 ROW FrmRow OVERLAY SCROLL 1 FrmDown DOWN COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
       "  TRANSLATIONS  " + STRING(TODAY,"99-99-99") + " "     
    FRAME sel.
 
@@ -110,7 +110,7 @@ FORM
    RepText.RepText AT 3 
       NO-LABEL
       VIEW-AS EDITOR SIZE 75 BY 3
-WITH OVERLAY ROW 7 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
+WITH OVERLAY ROW 7 CENTERED COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 {Func/brand.i}
@@ -120,8 +120,8 @@ FORM /* hakua2 varten */
    "Type ....:" liType FORMAT ">>9" SKIP
    "Key Value:" haku2  FORMAT "X(16)" 
       HELP "Key value for type"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND KEY VALUE "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND KEY VALUE "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 FUNCTION fCheckExisting RETURNS LOGICAL:
 
@@ -153,9 +153,9 @@ IF icKeyValue > "" THEN ASSIGN
    FrmRow  = 4
    FrmDown = 8.
 
-Syst.CUICommon:cfc = "sel". 
+Syst.Var:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -191,7 +191,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* RepText -ADD  */
       ASSIGN 
-         Syst.CUICommon:cfc = "lis" 
+         Syst.Var:cfc = "lis" 
          ufkey     = true 
          fr-header = " ADD " 
          must-add  = false.
@@ -201,7 +201,7 @@ REPEAT WITH FRAME sel:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-NEW, LEAVE ADD-NEW.
          PAUSE 0 NO-MESSAGE.
          CLEAR FRAME lis NO-PAUSE.
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
                                
             IF iiTextType > 0 THEN DISPLAY iiTextType @ RepText.TextType.
@@ -308,24 +308,24 @@ REPEAT WITH FRAME sel:
    
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[2]  = 0 Syst.CUICommon:ufk[3] = 0 Syst.CUICommon:ufk[4] = 0
-         Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)
-         Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0) 
-         Syst.CUICommon:ufk[7] = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.Var:ufk[1] = 35 Syst.Var:ufk[2]  = 0 Syst.Var:ufk[3] = 0 Syst.Var:ufk[4] = 0
+         Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0) 
+         Syst.Var:ufk[7] = 0 Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW RepText.TextType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RepText.TextType WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) RepText.TextType WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -333,10 +333,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 2 THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 1.
       END.
 
@@ -354,7 +354,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* previous line */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND RepText WHERE RECID(RepText) = rtab[1] NO-LOCK.
             RUN local-find-prev.
@@ -381,7 +381,7 @@ REPEAT WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-DOWN") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-DOWN") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND RepText WHERE RECID(RepText) = rtab[FRAME-DOWN] NO-LOCK .
@@ -411,7 +411,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND RepText WHERE RECID(RepText) = memory NO-LOCK NO-ERROR.
          
@@ -438,7 +438,7 @@ REPEAT WITH FRAME sel:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-DOWN,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-DOWN,+") > 0 THEN DO WITH FRAME sel:
          /* cursor TO the DOWNmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -454,12 +454,12 @@ REPEAT WITH FRAME sel:
       END. /* NEXT page */
 
       /* Haku sarakk. 1 */
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN DO:  
-         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 THEN DO:  
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          haku2 = "".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          DISPLAY lcBrand WITH FRAME hayr1.
-         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+         UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                 liType
                 haku2 WITH FRAME hayr1.
 
@@ -478,18 +478,18 @@ REPEAT WITH FRAME sel:
          END.
       END. /* Haku sar. 1 */
 
-      ELSE IF  LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+      ELSE IF  LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
          must-add = true.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
+      ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
       THEN DO TRANSACTION:  /* removal */
          delline = FRAME-LINE.
          FIND RepText WHERE RECID(RepText) = rtab[FRAME-LINE] NO-LOCK.
 
          /* line to be deleted is lightened */
-         COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+         COLOR DISPLAY VALUE(Syst.Var:ctc)
             RepText.TextType
             RepText.Language
             RepText.RepText
@@ -517,7 +517,7 @@ REPEAT WITH FRAME sel:
 
          ASSIGN ok = false.
          MESSAGE " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+         COLOR DISPLAY VALUE(Syst.Var:ccc)
             RepText.TextType
             RepText.Language
             RepText.RepText
@@ -540,7 +540,7 @@ REPEAT WITH FRAME sel:
          ELSE delline = 0. /* wasn't the last one */
       END. /* removal */
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
+      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW" THEN
       DO WITH FRAME lis TRANSACTION:
          /* change */
          FIND RepText WHERE RECID(RepText) = rtab[FRAME-LINE(sel)]
@@ -552,7 +552,7 @@ REPEAT WITH FRAME sel:
             fr-header = " CHANGE " 
             ufkey = true
             liLength = LENGTH(RepText.RepText).
-            Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.   
+            Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.   
 
        
        FIND FIRST language WHERE
@@ -575,20 +575,20 @@ REPEAT WITH FRAME sel:
                WITH FRAME lis.
                
          ASSIGN
-            Syst.CUICommon:ufk = 0
-            Syst.CUICommon:ufk[1] = 7
-            Syst.CUICommon:ufk[8] = 8
-            Syst.CUICommon:ehto = 0.
+            Syst.Var:ufk = 0
+            Syst.Var:ufk[1] = 7
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto = 0.
 
          RUN Syst/ufkey.p.
          
-         IF Syst.CUICommon:toimi = 1 THEN DO:
+         IF Syst.Var:toimi = 1 THEN DO:
          
             FIND CURRENT RepText EXCLUSIVE-LOCK.
 
             REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
             
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
             
                UPDATE 
@@ -625,27 +625,27 @@ REPEAT WITH FRAME sel:
          xrecid = RECID(RepText).    
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
          RUN local-find-first.
          
          ASSIGN memory = RECID(RepText) must-print = true.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO : /* last record */
+      ELSE IF LOOKUP(Syst.Var:nap,"END,e") > 0 THEN DO : /* last record */
          RUN local-find-last.
          
          ASSIGN memory = RECID(RepText) must-print = true.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-others:
 
@@ -674,14 +674,14 @@ PROCEDURE local-find-FIRST:
 
    IF icKeyValue > "" THEN DO:
       FIND FIRST RepText WHERE
-                 RepText.Brand    = Syst.CUICommon:gcBrand    AND
+                 RepText.Brand    = Syst.Var:gcBrand    AND
                  RepText.TextType = iiTextType AND
                  RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
       IF order = 1 THEN 
-      FIND FIRST RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
+      FIND FIRST RepText WHERE RepText.Brand = Syst.Var:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
          
@@ -691,13 +691,13 @@ PROCEDURE local-find-LAST:
 
    IF icKeyValue > "" THEN DO:
       FIND LAST RepText WHERE
-                RepText.Brand    = Syst.CUICommon:gcBrand    AND
+                RepText.Brand    = Syst.Var:gcBrand    AND
                 RepText.TextType = iiTextType AND
                 RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
-      FIND LAST RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
+      FIND LAST RepText WHERE RepText.Brand = Syst.Var:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
    
@@ -707,13 +707,13 @@ PROCEDURE local-find-NEXT:
 
    IF icKeyValue > "" THEN DO:
       FIND NEXT RepText WHERE
-                RepText.Brand    = Syst.CUICommon:gcBrand    AND
+                RepText.Brand    = Syst.Var:gcBrand    AND
                 RepText.TextType = iiTextType AND
                 RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
-      FIND NEXT RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
+      FIND NEXT RepText WHERE RepText.Brand = Syst.Var:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
 
@@ -723,13 +723,13 @@ PROCEDURE local-find-PREV:
  
    IF icKeyValue > "" THEN DO:
       FIND PREV RepText WHERE
-                RepText.Brand    = Syst.CUICommon:gcBrand    AND
+                RepText.Brand    = Syst.Var:gcBrand    AND
                 RepText.TextType = iiTextType AND
                 RepText.LinkCode = icKeyValue NO-LOCK NO-ERROR.
    END.
    
    ELSE DO:
-      FIND PREV RepText WHERE RepText.Brand = Syst.CUICommon:gcBrand
+      FIND PREV RepText WHERE RepText.Brand = Syst.Var:gcBrand
          USE-INDEX LinkCode NO-LOCK NO-ERROR.
    END.
 

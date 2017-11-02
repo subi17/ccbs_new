@@ -25,27 +25,27 @@ HELP "From specific invoice or all unbilled calls = 0." invname SKIP
 "    E-mail .......:" email
 WITH
   ROW 7 WIDTH 65
-  NO-LABELS CENTERED OVERLAY COLOR VALUE(Syst.CUICommon:cfc)
-  TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "  Call specification for invoice or unbilled calls. " 
+  NO-LABELS CENTERED OVERLAY COLOR VALUE(Syst.Var:cfc)
+  TITLE COLOR VALUE(Syst.Var:ctc) " " + "  Call specification for invoice or unbilled calls. " 
   + STRING(TODAY,"99-99-99") + " " FRAME main.
 
 rajat:
 REPEAT WITH FRAME rajat:
    PAUSE 0.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE 
    asno
    WITH FRAME MAIN EDITING:
-       READKEY. Syst.CUICommon:nap = KEYLABEL(LASTKEY).
-       IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN 
+       READKEY. Syst.Var:nap = KEYLABEL(LASTKEY).
+       IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN 
        DO:
            HIDE MESSAGE.
            IF FRAME-FIELD = "asno" THEN 
            DO:
                ASSIGN FRAME MAIN asno.
                FIND FIRST customer WHERE 
-                  Customer.Brand   = Syst.CUICommon:gcBrand AND
+                  Customer.Brand   = Syst.Var:gcBrand AND
                   Customer.CustNum = asno NO-ERROR.
                IF asno = 0 OR
                NOT AVAILABLE customer THEN
@@ -70,15 +70,15 @@ REPEAT WITH FRAME rajat:
          invno
          email
    WITH FRAME main EDITING:
-       READKEY. Syst.CUICommon:nap = KEYLABEL(LASTKEY).
-       IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN 
+       READKEY. Syst.Var:nap = KEYLABEL(LASTKEY).
+       IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN 
        DO:
            HIDE MESSAGE.
            IF FRAME-FIELD = "invno" THEN 
            DO:
                ASSIGN FRAME main invno.
                FIND FIRST invoice WHERE 
-                  Invoice.Brand  = Syst.CUICommon:gcBrand AND
+                  Invoice.Brand  = Syst.Var:gcBrand AND
                   invoice.invnum = invno NO-ERROR.
                IF invno NE 0 AND
                NOT AVAILABLE invoice THEN
@@ -93,11 +93,11 @@ REPEAT WITH FRAME rajat:
 
 toimi:
       REPEAT WITH FRAME toimi:
-        ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+        ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
         RUN Syst/ufkey.p.
-        IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
-        IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-        IF Syst.CUICommon:toimi = 5 THEN 
+        IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+        IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+        IF Syst.Var:toimi = 5 THEN 
         DO:
             RUN Mf/callemail.p(asno,invno,email).
             LEAVE toimi.

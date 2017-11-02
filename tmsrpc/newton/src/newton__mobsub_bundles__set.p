@@ -16,7 +16,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -325,7 +325,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcStruct = validate_request(pcStruct,"name,value!,activations,username!,reason").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username").
+Syst.Var:katun = "VISTA_" + get_string(pcStruct,"username").
 
 piBundleAction = get_int(pcStruct,"value").
 
@@ -345,7 +345,7 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
    RETURN appl_err("Mobile line provisioning is not complete").
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF piBundleAction NE 0 AND piBundleAction NE 1 THEN
    RETURN appl_err(SUBST("incorrect action value: &1", piBundleAction)).
@@ -358,7 +358,7 @@ IF piBundleAction EQ 1 THEN
 ELSE 
     lcOnOff = "Desactivar".
 
-FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = pcBundleId NO-ERROR.
+FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = pcBundleId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err(SUBST("Invalid Bundle Id: &1", pcBundleId)).
 
@@ -432,7 +432,7 @@ Func.Common:mWriteMemoWithType("MobSub",                             /* HostTabl
                  lcMemoTitle,                          /* MemoTitle */
                  lcMemoText,                           /* MemoText  */
                  "Service",                            /* MemoType  */
-                 Syst.CUICommon:katun).
+                 Syst.Var:katun).
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 add_int(lcResultStruct,lcReturnValue,liReturnValue).

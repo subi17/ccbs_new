@@ -13,7 +13,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/duplicate_invoice.i}
 {Syst/tmsconst.i}
 
@@ -34,14 +34,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF validate_request(pcStruct, "username!,memo!") = ? THEN RETURN.
 
-Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username").
+Syst.Var:katun = "VISTA_" + get_string(pcStruct,"username").
 pcMemoStruct = get_struct(pcStruct,"memo").
 pcMemoTitle = get_string(pcMemoStruct,"title").
 pcMemoContent = get_string(pcMemoStruct,"content").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO Common Invoice InvNum piInvNum}
 

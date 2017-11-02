@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/q25functions.i}
 DEF VAR lcLogtext AS CHAR NO-UNDO.
 

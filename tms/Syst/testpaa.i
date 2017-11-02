@@ -21,20 +21,20 @@ status INPUT off.
 DEFINE VARIABLE gcTempBrand AS CHARACTER NO-UNDO.
 
 ASSIGN
-   Syst.CUICommon:katun = "admin"
-   Syst.CUICommon:yvari = TRUE
-   Syst.CUICommon:ynimi = "!!! TESTI !!!"
-   Syst.CUICommon:gcAllBrand = TRUE
-   Syst.CUICommon:gcBrand    = "1"
-   gcTempBrand = Syst.CUICommon:gcBrand
-   Syst.CUICommon:qupd = TRUE.
+   Syst.Var:katun = "admin"
+   Syst.Var:yvari = TRUE
+   Syst.Var:ynimi = "!!! TESTI !!!"
+   Syst.Var:gcAllBrand = TRUE
+   Syst.Var:gcBrand    = "1"
+   gcTempBrand = Syst.Var:gcBrand
+   Syst.Var:qupd = TRUE.
 
 update gcTempBrand label "Brand"
 with side-labels row 10 centered title " Default brand " frame tstfram.
 
 hide frame tstfram.
 
-Syst.CUICommon:gcBrand = gcTempBrand.
+Syst.Var:gcBrand = gcTempBrand.
 
 /* set propath etc. */
 RUN Syst/testbr.p.

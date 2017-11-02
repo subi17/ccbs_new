@@ -1,10 +1,10 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msisdn.i}
 
 FIND FIRST msisdn where
-   msisdn.brand = Syst.CUICommon:gcBrand and
+   msisdn.brand = Syst.Var:gcBrand and
    msisdn.cli = "622567039" EXCLUSIVE-LOCK NO-ERROR.
 FIND FIRST termmobsub where termmobsub.cli = "622567039".
 

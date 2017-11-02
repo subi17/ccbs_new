@@ -20,7 +20,7 @@ DEF INPUT PARAMETER idtConDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER iiCustNum  AS INT  NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -82,8 +82,8 @@ form
     llHandled          FORMAT "*/"            COLUMN-LABEL "H"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        " CONTACT LIST "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -97,7 +97,7 @@ FORM
        FORMAT ">,>>>,>>9"
        SKIP
 WITH  OVERLAY ROW 17 WIDTH 80
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " UNHANDLED CUSTOMERS "
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) " UNHANDLED CUSTOMERS "
     SIDE-LABELS FRAME fTotal.
 
 form
@@ -110,8 +110,8 @@ form
     Contact.CustBal  COLON 20 SKIP
     Contact.ConState COLON 20 
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -119,14 +119,14 @@ WITH  OVERLAY ROW 5 centered
 form /* seek  Contact */
     "Customer:" liCustNum
     HELP "Enter customer nbr"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  Contact */
     "Amount:" ldAmt FORMAT "->,>>>,>>9.99"
     HELP "Enter amount"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Amount "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Amount "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fDispTotal RETURNS LOGICAL.
@@ -137,7 +137,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
           liQty   = 0.
           
    FOR EACH Contact WHERE 
-            Contact.Brand    = Syst.CUICommon:gcBrand    AND
+            Contact.Brand    = Syst.Var:gcBrand    AND
             Contact.UserCode = icUserCode AND
             Contact.ConState = liState    AND
             Contact.ConDate  = idtConDate:
@@ -153,7 +153,7 @@ END FUNCTION.
 
 IF iiCustNum > 0 THEN FrmDown = 15. 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders       = "By Customer ," +
@@ -186,7 +186,7 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN DO:  /* Add a Contact  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -194,7 +194,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
                         
@@ -206,12 +206,12 @@ REPEAT WITH FRAME sel:
                            TMSUser.UserName.
            END.
            IF icUserCode = "" OR NOT AVAILABLE TMSUser
-           THEN DISPLAY Syst.CUICommon:katun @ Contact.UserCode.
+           THEN DISPLAY Syst.Var:katun @ Contact.UserCode.
 
            IF iiCustNum > 0 THEN DO WITH FRAME lis: 
                DISPLAY iiCustNum @ Contact.CustNum. 
                FIND Customer WHERE 
-                    Customer.Brand   = Syst.CUICommon:gcBrand AND
+                    Customer.Brand   = Syst.Var:gcBrand AND
                     Customer.CustNum = iiCustNum 
                NO-LOCK NO-ERROR.
                IF AVAILABLE Customer THEN DISPLAY Customer.CustName.
@@ -227,13 +227,13 @@ REPEAT WITH FRAME sel:
               
               READKEY.
 
-              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
 
                  IF FRAME-FIELD = "CustNum" THEN DO:
                     IF INPUT Contact.CustNum NE 0 THEN DO:
                        FIND Customer WHERE 
-                            Customer.Brand   = Syst.CUICommon:gcBrand AND
+                            Customer.Brand   = Syst.Var:gcBrand AND
                             Customer.CustNum = INPUT Contact.CustNum 
                        NO-LOCK NO-ERROR.
                        IF NOT AVAILABLE Customer THEN DO:
@@ -268,7 +268,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST Contact WHERE
-                             Contact.Brand    = Syst.CUICommon:gcBrand                AND
+                             Contact.Brand    = Syst.Var:gcBrand                AND
                              Contact.CustNum  = INPUT Contact.CustNum  AND
                              Contact.ConDate  = INPUT Contact.PlanDate AND
                              Contact.ConState = 0)
@@ -282,7 +282,7 @@ REPEAT WITH FRAME sel:
            
            CREATE Contact.
            ASSIGN
-           Contact.Brand    = Syst.CUICommon:gcBrand
+           Contact.Brand    = Syst.Var:gcBrand
            Contact.ConId    = NEXT-VALUE(ConID)
            Contact.CustNum  = INPUT FRAME lis Contact.CustNum
            Contact.PlanDate = INPUT FRAME lis Contact.PlanDate
@@ -363,21 +363,21 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1] = 714  
-        Syst.CUICommon:ufk[2] = 1888
-        Syst.CUICommon:ufk[3] = 1883 
-        Syst.CUICommon:ufk[4] = 927
-        Syst.CUICommon:ufk[5] = (IF lcRight = "RW" AND liState = 0 THEN 1790 ELSE 0) 
-        Syst.CUICommon:ufk[6] = IF liState = 1 THEN 1789 ELSE 1787
-        Syst.CUICommon:ufk[7] = 1152
-        Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1] = 714  
+        Syst.Var:ufk[2] = 1888
+        Syst.Var:ufk[3] = 1883 
+        Syst.Var:ufk[4] = 927
+        Syst.Var:ufk[5] = (IF lcRight = "RW" AND liState = 0 THEN 1790 ELSE 0) 
+        Syst.Var:ufk[6] = IF liState = 1 THEN 1789 ELSE 1787
+        Syst.Var:ufk[7] = 1152
+        Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
         IF iiCustNum > 0 THEN ASSIGN 
-           Syst.CUICommon:ufk[1] = 0
-           Syst.CUICommon:ufk[2] = 0
-           Syst.CUICommon:ufk[3] = 0
-           Syst.CUICommon:ufk[6] = 0.
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[3] = 0
+           Syst.Var:ufk[6] = 0.
            
         RUN Syst/ufkey.p.
       END.
@@ -385,18 +385,18 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW Contact.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contact.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contact.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Contact.CustBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contact.CustBal WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contact.CustBal WITH FRAME sel.
       END.
 
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8,7,F7,6,F6") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8,7,F7,6,F6") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -404,10 +404,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -425,7 +425,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -450,7 +450,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -476,7 +476,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Contact WHERE recid(Contact) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -500,7 +500,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -514,18 +514,18 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
 
         IF liCustNum > 0 THEN DO:
            FIND FIRST Contact WHERE 
-                      Contact.Brand    = Syst.CUICommon:gcBrand    AND
+                      Contact.Brand    = Syst.Var:gcBrand    AND
                       Contact.UserCode = icUserCOde AND
                       Contact.ConState = liState    AND
                       Contact.ConDate  = idtConDate AND
@@ -545,7 +545,7 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
@@ -555,7 +555,7 @@ REPEAT WITH FRAME sel:
         NEXT.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
@@ -565,7 +565,7 @@ REPEAT WITH FRAME sel:
         NEXT.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
         RUN Mc/memo.p(INPUT Contact.CustNum,
@@ -577,7 +577,7 @@ REPEAT WITH FRAME sel:
         NEXT.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0
      THEN DO TRANSACTION:  /* mark handled */
 
        {Syst/uright2.i}
@@ -592,7 +592,7 @@ REPEAT WITH FRAME sel:
        END.
        
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        Contact.CustNum Customer.CustName Contact.CustBal.
 
        RUN local-find-NEXT.
@@ -614,7 +614,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "Mark this row as handled ?" UPDATE ok FORMAT "Yes/No".
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        Contact.CustNum Customer.CustName Contact.CustBal.
 
        IF ok THEN DO:
@@ -623,7 +623,7 @@ REPEAT WITH FRAME sel:
            
            ASSIGN Contact.ConState = 1
                   Contact.ConDate  = TODAY
-                  Contact.UserCode = Syst.CUICommon:katun.
+                  Contact.UserCode = Syst.Var:katun.
                   Contact.ConStamp = Func.Common:mMakeTS().
 
            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhContact).
@@ -644,7 +644,7 @@ REPEAT WITH FRAME sel:
        
      END. /* handled */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
      
          IF liState = 0 THEN ASSIGN
@@ -665,30 +665,30 @@ REPEAT WITH FRAME sel:
          NEXT loop.
      END.    
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:
      
-        ASSIGN Syst.CUICommon:ufk    = 0
-               Syst.CUICommon:ufk[3] = 638
-               Syst.CUICommon:ufk[5] = (IF lcRight = "RW" AND liState = 0 THEN 5 ELSE 0)
-               Syst.CUICommon:ufk[6] = (IF lcRight = "RW" AND liState = 0 THEN 4 ELSE 0)
-               Syst.CUICommon:ufk[8] = 8
-               Syst.CUICommon:ehto   = 0
+        ASSIGN Syst.Var:ufk    = 0
+               Syst.Var:ufk[3] = 638
+               Syst.Var:ufk[5] = (IF lcRight = "RW" AND liState = 0 THEN 5 ELSE 0)
+               Syst.Var:ufk[6] = (IF lcRight = "RW" AND liState = 0 THEN 4 ELSE 0)
+               Syst.Var:ufk[8] = 8
+               Syst.Var:ehto   = 0
                ufkey  = TRUE.
         RUN Syst/ufkey.p.
 
-        IF Syst.CUICommon:toimi = 3 THEN DO:
+        IF Syst.Var:toimi = 3 THEN DO:
            RUN local-find-this (FALSE).
            RUN Ar/conrepui.p (IF AVAILABLE Contact THEN Contact.UserCode ELSE "",
                          IF AVAILABLE Contact THEN Contact.ConDate ELSE ?).
         END.
         
-        ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+        ELSE IF Syst.Var:toimi = 5 THEN DO:
            {Syst/uright2.i}
            must-add = TRUE.
            NEXT LOOP.
         END.
 
-        ELSE IF Syst.CUICommon:toimi = 6 THEN DO TRANS:
+        ELSE IF Syst.Var:toimi = 6 THEN DO TRANS:
        
            {Syst/uright2.i}
            delrow = FRAME-LINE.
@@ -702,7 +702,7 @@ REPEAT WITH FRAME sel:
            END.
        
            /* Highlight */
-           COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+           COLOR DISPLAY VALUE(Syst.Var:ctc)
            Contact.CustNum Customer.CustName Contact.CustBal.
 
            RUN local-find-NEXT.
@@ -724,7 +724,7 @@ REPEAT WITH FRAME sel:
 
            ASSIGN ok = FALSE.
            MESSAGE "Delete this row ?" UPDATE ok FORMAT "Yes/No".
-           COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+           COLOR DISPLAY VALUE(Syst.Var:ccc)
            Contact.CustNum Customer.CustName Contact.CustBal.
 
            IF ok THEN DO:
@@ -751,14 +751,14 @@ REPEAT WITH FRAME sel:
         
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0
      THEN REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -773,25 +773,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(Contact) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(Contact) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -811,7 +811,7 @@ PROCEDURE local-find-FIRST:
 
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND FIRST Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -819,7 +819,7 @@ PROCEDURE local-find-FIRST:
    
    ELSE DO:
       IF order = 1 THEN FIND FIRST Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -832,7 +832,7 @@ PROCEDURE local-find-LAST:
 
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND LAST Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -840,7 +840,7 @@ PROCEDURE local-find-LAST:
    
    ELSE DO:
       IF order = 1 THEN FIND LAST Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -853,7 +853,7 @@ PROCEDURE local-find-NEXT:
 
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND NEXT Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -861,7 +861,7 @@ PROCEDURE local-find-NEXT:
    
    ELSE DO:
       IF order = 1 THEN FIND NEXT Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -874,7 +874,7 @@ PROCEDURE local-find-PREV:
  
    IF iiCustNum > 0 THEN DO:
       IF order = 1 THEN FIND PREV Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.CustNum  = iiCustNum USE-INDEX CustNum
       NO-LOCK NO-ERROR.
     
@@ -882,7 +882,7 @@ PROCEDURE local-find-PREV:
    
    ELSE DO:
       IF order = 1 THEN FIND PREV Contact WHERE 
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.UserCode = icUserCOde AND
          Contact.ConState = liState    AND
          Contact.ConDate  = idtConDate
@@ -911,7 +911,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND Customer WHERE
-        Customer.Brand   = Syst.CUICommon:gcBrand AND
+        Customer.Brand   = Syst.Var:gcBrand AND
         Customer.CustNum = Contact.CustNum NO-LOCK NO-ERROR. 
    IF AVAILABLE Customer THEN lcPhone = Customer.Phone.
    
@@ -930,7 +930,7 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
 
       CLEAR FRAME lis NO-PAUSE. 
-      Syst.CUICommon:ehto = 5.
+      Syst.Var:ehto = 5.
       RUN Syst/ufkey.p.
 
       FIND TMSUser WHERE TMSUser.UserCode = Contact.UserCode NO-LOCK NO-ERROR.

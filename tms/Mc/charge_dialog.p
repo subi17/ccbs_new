@@ -35,7 +35,7 @@ FORM
     "Charge:" ldeCharge 
        HELP "Enter charge"
        FORMAT ">>9.99" SKIP
-    WITH CENTERED ROW 8 TITLE COLOR VALUE(Syst.CUICommon:ctc) " DEFINE CHARGE "
+    WITH CENTERED ROW 8 TITLE COLOR VALUE(Syst.Var:ctc) " DEFINE CHARGE "
     NO-LABELS OVERLAY FRAME f1.
 
 ok = FALSE.
@@ -51,7 +51,7 @@ IF NOT AVAIL Mobsub THEN DO:
 END.
 
 FIND FeeModel WHERE 
-     FeeModel.Brand = Syst.CUICommon:gcBrand AND
+     FeeModel.Brand = Syst.Var:gcBrand AND
      FeeModel.FeeModel = icOperation NO-LOCK NO-ERROR.
 IF NOT AVAIL FeeModel THEN DO:
    MESSAGE "Charge/Compensation Billing Event" icOperation "not found"
@@ -66,7 +66,7 @@ lcPriceList = fFeeModelPriceList(MobSub.Custnum,
                                  TODAY).
 
 FIND FIRST FMItem NO-LOCK  WHERE
-   FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+   FMItem.Brand     = Syst.Var:gcBrand       AND
    FMItem.FeeModel  = FeeModel.FeeModel AND
    FMItem.PriceList = lcPriceList AND
    FMItem.FromDate <= TODAY     AND
@@ -82,10 +82,10 @@ END.
 IF FMItem.Amount >= 0 THEN llNegative = FALSE.  ELSE llNegative = TRUE.
 
  /* fetch user limits for charge and compensation */
-ldChargeLimit = fUserLimitAmt(Syst.CUICommon:katun, (IF Mobsub.PayType = TRUE
+ldChargeLimit = fUserLimitAmt(Syst.Var:katun, (IF Mobsub.PayType = TRUE
                       THEN {&PREP_CHARGE_LIMIT_TYPE}
                       ELSE {&POST_CHARGE_LIMIT_TYPE})).
-ldChargeMonthLimit = fUserLimitAmt(Syst.CUICommon:katun, (IF Mobsub.PayType = TRUE
+ldChargeMonthLimit = fUserLimitAmt(Syst.Var:katun, (IF Mobsub.PayType = TRUE
                         THEN {&PREP_CHARGE_MONTHLY_LIMIT_TYPE}
                         ELSE {&POST_CHARGE_MONTHLY_LIMIT_TYPE})).
 
@@ -141,7 +141,7 @@ END.
 
 /* Change charge only for Admin users*/
 ok = false.
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 LOOP:
 REPEAT:

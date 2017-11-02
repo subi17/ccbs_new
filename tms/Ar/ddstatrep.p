@@ -59,7 +59,7 @@ ASSIGN
     SESSION:NUMERIC-FORMAT = "European".
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    lcLine1 AT 1 SKIP
@@ -115,7 +115,7 @@ VIEW FRAME fQty.
 
 /* authorization status */
 FOR EACH DDAuth NO-LOCK WHERE
-         DDAuth.Brand = Syst.CUICommon:gcBrand,
+         DDAuth.Brand = Syst.Var:gcBrand,
    FIRST Customer OF DDAuth NO-LOCK:
      
    IF DDAuth.AuthDate >= idtAuthDate1 AND
@@ -254,7 +254,7 @@ FOR EACH ttAuth:
       fChkPage(0).
    
       FIND InvGroup WHERE 
-           InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = ttAuth.InvGroup NO-LOCK.
       
       PUT STREAM tul

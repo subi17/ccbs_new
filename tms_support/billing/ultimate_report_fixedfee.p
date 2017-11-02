@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand  = "1".
 {Func/flimitreq.i}
 {Syst/tmsconst.i}
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

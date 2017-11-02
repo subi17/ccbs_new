@@ -76,8 +76,8 @@ FORM
    " Memo .............:" xmemo
       help "A Text for Customer Care"                        SKIP(1)
 WITH 
-   OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " ADD CLI SERIES " WITH NO-LABELS
+   OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " ADD CLI SERIES " WITH NO-LABELS
 FRAME frmAddSeries.
 
 FORM
@@ -130,7 +130,7 @@ PROCEDURE pUpdateCLI:
       WITH FRAME frmUpdCli EDITING:
          READKEY.
          IF KEYLABEL(LASTKEY) = "F4" THEN UNDO LOOP,LEAVE LOOP.
-         IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             IF FRAME-FIELD = "lCTime1" THEN DO:
                IF NOT Func.Common:mCheckTime(INPUT FRAME frmUpdCli lCTime1) THEN DO:
                   MESSAGE 
@@ -348,8 +348,8 @@ PROCEDURE pDelSeries:
          lCTime2 
       WITH FRAME frmDel EDITING. 
          READKEY. 
-         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
-         IF Syst.CUICommon:nap = "F4" THEN DO:
+         Syst.Var:nap = KEYLABEL(LASTKEY).
+         IF Syst.Var:nap = "F4" THEN DO:
             lDel = 0.
             LEAVE.
          END.
@@ -490,14 +490,14 @@ PROCEDURE pAddSeries:
          xmemo  
       WITH FRAME frmAddSeries EDITING:  
 
-         READKEY. Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
+         READKEY. Syst.Var:nap = KEYLABEL(LASTKEY). 
 
-         IF Syst.CUICommon:nap = "F4" THEN DO:
+         IF Syst.Var:nap = "F4" THEN DO:
             lOK = FALSE.
             UNDO LOOP, LEAVE LOOP.
          END.
 
-         IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "xBillTarg" THEN DO:
+         IF Syst.Var:nap = "F9" AND FRAME-FIELD = "xBillTarg" THEN DO:
 
             RUN Help/h-billtarg.p (INPUT xCustNum).
 
@@ -508,7 +508,7 @@ PROCEDURE pAddSeries:
 
          END.    
 
-         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "xCustNum" THEN DO:
                IF INPUT FRAME frmAddSeries xCustNum = 0 THEN LEAVE LOOP.

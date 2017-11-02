@@ -24,13 +24,13 @@ DEF VAR helpkey AS CHAR NO-UNDO.
 
 
 /* talteen ufKey:n common-arvot jottei sotketa paikkoja */
-save-ehto = Syst.CUICommon:ehto.
+save-ehto = Syst.Var:ehto.
 DO i = 1 TO 9 :
-   save-ufk[i] = Syst.CUICommon:ufk[i].
+   save-ufk[i] = Syst.Var:ufk[i].
 END.
 helpkey = keylabel(LASTKEY).
 
-Syst.CUICommon:gcHelpParam = "ahelp".
+Syst.Var:gcHelpParam = "ahelp".
 
 if helpkey = "f31" THEN RUN istrans.p.
 else if helpkey = "f10" THEN DO:
@@ -64,7 +64,7 @@ DO:
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
-else if lookup(frame-field,"Syst.CUICommon:gcBrand,Brand") > 0 OR
+else if lookup(frame-field,"Syst.Var:gcBrand,Brand") > 0 OR
      index(frame-field,"brand") > 0 
 THEN DO:
    RUN Help/h-brand.p.
@@ -159,20 +159,20 @@ else if
      END.
 
      /* check the FORMAT of the frame-field */
-     Syst.CUICommon:si-pvm = date(kk,pp,vv).
-     frame-value = string(Syst.CUICommon:si-pvm,"99-99-9999").
+     Syst.Var:si-pvm = date(kk,pp,vv).
+     frame-value = string(Syst.Var:si-pvm,"99-99-9999").
      IF length(frame-value) = 8 THEN ASSIGN
         df = "99-99-99".
      ELSE ASSIGN
         df = "99-99-9999".
-     frame-value = string(Syst.CUICommon:si-pvm,df).
+     frame-value = string(Syst.Var:si-pvm,df).
 
      RUN Syst/ukale.p(INPUT helpkey).
-     IF Syst.CUICommon:si-pvm <> ? THEN DO:
+     IF Syst.Var:si-pvm <> ? THEN DO:
         PAUSE 0 no-message.
-        frame-value = string(Syst.CUICommon:si-pvm,df).
+        frame-value = string(Syst.Var:si-pvm,df).
      END.
-     ELSE Syst.CUICommon:si-pvm = TODAY.
+     ELSE Syst.Var:si-pvm = TODAY.
 END.
 ELSE IF lookup(frame-field,"UserCode") 
     > 0 THEN DO:
@@ -344,9 +344,9 @@ else if lookup(frame-field,"tokencode") > 0 THEN DO:
 END.
 
 else if index(frame-field,"contract") > 0 and
-     Syst.CUICommon:si-recid2 > 0 and Syst.CUICommon:si-recid2 ne ?
+     Syst.Var:si-recid2 > 0 and Syst.Var:si-recid2 ne ?
 then do:
-   RUN Help/h-contract.p(Syst.CUICommon:si-recid2).
+   RUN Help/h-contract.p(Syst.Var:si-recid2).
    if siirto <> ? then frame-value = siirto.
 end.
 
@@ -472,13 +472,13 @@ END.
 /* ------------------------------------------------- */
 END.
 
-Syst.CUICommon:gcHelpParam = "".
+Syst.Var:gcHelpParam = "".
 
 /* ja lopuksi palautetaan ufKey:n arvot */
 
-Syst.CUICommon:ehto = save-ehto.
+Syst.Var:ehto = save-ehto.
 DO i = 1 TO 9:
-   Syst.CUICommon:ufk[i] = save-ufk[i].
+   Syst.Var:ufk[i] = save-ufk[i].
 END.
 PAUSE 0.   /* KJ�H KJ�H */
 RUN Syst/ufkey.p.

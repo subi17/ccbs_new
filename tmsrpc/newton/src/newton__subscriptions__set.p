@@ -80,10 +80,10 @@ END.
 
 {Syst/commpaa.i}
 {Syst/eventval.i}
-Syst.CUICommon:katun = pcUserName.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = pcUserName.
+Syst.Var:gcBrand = "1".
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 END.
 
 {Func/flimitreq.i}
@@ -203,10 +203,10 @@ ELSE lcDCEventType = "TERM".
    FOR EACH DCCLI WHERE
       DCCLI.MsSeq = Mobsub.Msseq AND
       DCCLI.ValidTo >= TODAY AND 
-      DCCLI.Brand = Syst.CUICommon:gcBrand AND
+      DCCLI.Brand = Syst.Var:gcBrand AND
       DCCLI.DCEvent BEGINS lcDCEventType NO-LOCK,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} NO-LOCK:
       
@@ -234,7 +234,7 @@ ELSE lcDCEventType = "TERM".
                              STRING(pdaTermContractValidTo), /* field values */
                              FALSE, /* create fees */
                              {&REQUEST_SOURCE_NEWTON} , /* where created */
-                             Syst.CUICommon:katun, /* who made the request */
+                             Syst.Var:katun, /* who made the request */
                              lcInfo).
    IF liReq = 0 THEN DO:
         RETURN appl_err("Request to update terminal periodical contract end date: " + lcInfo).

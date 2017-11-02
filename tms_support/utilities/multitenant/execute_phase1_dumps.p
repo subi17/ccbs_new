@@ -1,6 +1,6 @@
 /* Script for generating phase1 dumps */
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/multitenantfunc.i}
 DEF STREAM sin.
 DEF STREAM sFile.

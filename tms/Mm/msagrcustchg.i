@@ -28,12 +28,12 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
    IF NOT AVAIL bCustomerDST THEN RETURN "New customer not found".
 
    FIND FIRST bCustCatSRC NO-LOCK WHERE
-              bCustCatSRC.Brand EQ Syst.CUICommon:gcBrand AND
+              bCustCatSRC.Brand EQ Syst.Var:gcBrand AND
               bCustCatSRC.Category EQ bCustomerSRC.Category NO-ERROR.
    IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect old customer category".
 
    FIND FIRST bCustCatDST NO-LOCK WHERE
-              bCustCatDST.Brand EQ Syst.CUICommon:gcBrand AND
+              bCustCatDST.Brand EQ Syst.Var:gcBrand AND
               bCustCatDST.Category EQ bCustomerDST.Category NO-ERROR.
    IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect new customer category".
 
@@ -42,7 +42,7 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
       IF NOT bCustCatSRC.PRO AND bCustCatDST.PRO THEN
          RETURN "ACC is not allowed between PRO-NON PRO customers".
       /* Check for any active/ongoing subscriptions. If there is any, no migration possible. */
-      ELSE IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = Syst.CUICommon:gcBrand              AND 
+      ELSE IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = Syst.Var:gcBrand              AND 
                                            MobSub.AgrCust = bCustomerDST.CustNum AND 
                                            MobSub.Cli     > ""                   NO-LOCK)) OR 
               fCheckOngoingOrders(bCustomerDST.CustIdType, bCustomerDST.OrgId, 0) THEN 
@@ -68,7 +68,7 @@ FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
       RETURN "ACC is not allowed for multi SIM secondary subscription".
 
    IF CAN-FIND(FIRST CLIType WHERE
-                     CLIType.Brand = Syst.CUICommon:gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLIType = (IF MobSub.TariffBundle > ""
                                         THEN MobSub.TariffBundle
                                         ELSE MobSub.CLIType) AND
@@ -234,7 +234,7 @@ PROCEDURE pCheckTargetCustomerForACC:
    IF iiNewCustnum = 0 THEN RETURN "".
 
    FOR EACH bACCMobsub NO-LOCK WHERE
-            bACCMobsub.Brand = Syst.CUICommon:gcBrand AND
+            bACCMobsub.Brand = Syst.Var:gcBrand AND
             bACCMobsub.AgrCust = iiNewCustnum AND
             bACCMobsub.PayType = FALSE:
       lcBarrStatus = fGetActiveBarrings(bACCMobsub.MsSeq).

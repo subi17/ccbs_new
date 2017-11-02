@@ -7,8 +7,8 @@ jl
 {Func/cparam2.i}
 
 ASSIGN
-   Syst.CUICommon:katun   = "cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun   = "cron"
+   Syst.Var:gcBrand = "1".
 
 DEF STREAM sLog.
 DEF VAR lcNPStatName AS CHAR NO-UNDO. 

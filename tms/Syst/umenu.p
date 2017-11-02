@@ -37,7 +37,7 @@ def var toi         as char format "x(8)".
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -55,16 +55,16 @@ form /* pAAruutu, scroll */
     MenuText.MenuNum    column-label "TextNo"     help "Text's consecutive number"
     MenuText.MenuText    column-label "Text" help "Text's funktion key"
 WITH ROW 1 width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " MENU - TEXTER " FRAME sel.
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " MENU - TEXTER " FRAME sel.
 
 form
     MenuText.MenuNum label "TextNo ........" skip(1)
     ens        label "Text,  1.rad ...."
     toi        label "       2.rad ...."
     WITH  OVERLAY ROW 8 col 5
-    COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     fr-header side-labels 1 columns
     FRAME lis.
 
@@ -72,22 +72,22 @@ form /* menunron hakua varten */
     ha-menro
     help "Give a textNo"
     WITH ROW 4 col 2 TITLE
-    color value(Syst.CUICommon:ctc) " SEEK TEXTNO "
-    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puYR.
+    color value(Syst.Var:ctc) " SEEK TEXTNO "
+    NO-LABELS COLOR value(Syst.Var:cfc) OVERLAY FRAME puYR.
 
 form /* menunimen hakua varten */
     ha-metex
     help "Give a text"
     WITH ROW 4 col 2 TITLE
-    color value(Syst.CUICommon:ctc) " SEEK TEXT "
-    NO-LABELS COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME puHE.
+    color value(Syst.Var:ctc) " SEEK TEXT "
+    NO-LABELS COLOR value(Syst.Var:cfc) OVERLAY FRAME puHE.
 
 /* Haetaan Company */
 FIND FIRST Company no-lock no-error.
-IF AVAILABLE Company THEN ASSIGN Syst.CUICommon:yvari = TRUE.
-ELSE ASSIGN Syst.CUICommon:yvari = FALSE.
+IF AVAILABLE Company THEN ASSIGN Syst.Var:yvari = TRUE.
+ELSE ASSIGN Syst.Var:yvari = FALSE.
 
- Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+ Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
  view FRAME sel.
  FIND FIRST MenuText no-lock no-error.
 
@@ -120,7 +120,7 @@ BROWSE:
        END.
 
        IF must-add THEN DO:
-          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
           fr-header = " ADD ".
 add-new:
           repeat WITH FRAME lis:
@@ -152,7 +152,7 @@ add-new:
 
              ASSIGN
              memory = recid(MenuText)
-             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           END.  /* add-new */
 
           HIDE FRAME lis no-pause.
@@ -200,9 +200,9 @@ add-new:
 
        IF ufkey THEN DO:
           ASSIGN
-          Syst.CUICommon:ufk[1] = 133  Syst.CUICommon:ufk[2] = 134  Syst.CUICommon:ufk[3] = 0    Syst.CUICommon:ufk[4] = 0
-          Syst.CUICommon:ufk[5] = 5    Syst.CUICommon:ufk[6] = 4    Syst.CUICommon:ufk[7] = 0    Syst.CUICommon:ufk[8] = 3
-          ufkey = FALSE Syst.CUICommon:ehto = 3.
+          Syst.Var:ufk[1] = 133  Syst.Var:ufk[2] = 134  Syst.Var:ufk[3] = 0    Syst.Var:ufk[4] = 0
+          Syst.Var:ufk[5] = 5    Syst.Var:ufk[6] = 4    Syst.Var:ufk[7] = 0    Syst.Var:ufk[8] = 3
+          ufkey = FALSE Syst.Var:ehto = 3.
           RUN Syst/ufkey.p.
        END.
 
@@ -210,22 +210,22 @@ add-new:
 
        IF order = 1 THEN DO:
           CHOOSE ROW MenuNum {Syst/uchoose.i} no-error WITH FRAME sel.
-          COLOR DISPLAY value(Syst.CUICommon:ccc) MenuNum WITH FRAME sel.
+          COLOR DISPLAY value(Syst.Var:ccc) MenuNum WITH FRAME sel.
        END.
        ELSE DO:
           CHOOSE ROW MenuText {Syst/uchoose.i}    no-error WITH FRAME sel.
-          COLOR DISPLAY value(Syst.CUICommon:ccc) MenuText WITH FRAME sel.
+          COLOR DISPLAY value(Syst.Var:ccc) MenuText WITH FRAME sel.
        END.
 
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-       Syst.CUICommon:nap = keylabel(LASTKEY).
+       Syst.Var:nap = keylabel(LASTKEY).
 
-       if Syst.CUICommon:nap = "cursor-right" THEN DO:
+       if Syst.Var:nap = "cursor-right" THEN DO:
           order = order + 1.
           IF order = 3 THEN order = 1.
        END.
-       if Syst.CUICommon:nap = "cursor-left" THEN DO:
+       if Syst.Var:nap = "cursor-left" THEN DO:
           order = order - 1.
           IF order = 0 THEN order = 2.
        END.
@@ -252,11 +252,11 @@ add-new:
        END.
 
        /* haku */
-       if Syst.CUICommon:nap = "f1"  or Syst.CUICommon:nap = "1" THEN DO:  /* fixmenunron haku */
+       if Syst.Var:nap = "f1"  or Syst.Var:nap = "1" THEN DO:  /* fixmenunron haku */
           PAUSE 0 no-message.
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
           ha-menro = 0.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-menro WITH FRAME puyr.
           HIDE FRAME puYR.
           IF ha-menro <> 0 THEN DO:
@@ -286,11 +286,11 @@ add-new:
           END. /* haku menronimellA */
        END. /* f1 */
 
-       else if Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "2" THEN DO: /* fixmenutekstin haku */
+       else if Syst.Var:nap = "f2" or Syst.Var:nap = "2" THEN DO: /* fixmenutekstin haku */
           PAUSE 0 no-message.
-          Syst.CUICommon:cfc = "puhe". RUN Syst/ufcolor.p.
+          Syst.Var:cfc = "puhe". RUN Syst/ufcolor.p.
           ha-metex = "".
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-metex WITH FRAME puhe.
           HIDE FRAME puhe.
           if ha-metex <> "" THEN DO:
@@ -319,7 +319,7 @@ add-new:
        END. /* f2 */
 
        /* previous line */
-       else if Syst.CUICommon:nap = "cursor-up" THEN DO:
+       else if Syst.Var:nap = "cursor-up" THEN DO:
           IF FRAME-LINE = 1 THEN DO:
              FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
 
@@ -344,7 +344,7 @@ add-new:
        END.
 
        /* NEXT line */
-       else if Syst.CUICommon:nap = "cursor-down" THEN DO:
+       else if Syst.Var:nap = "cursor-down" THEN DO:
           IF FRAME-LINE = FRAME-DOWN THEN DO:
 
              FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
@@ -367,7 +367,7 @@ add-new:
        END.
 
        /* previous page */
-       else if lookup(Syst.CUICommon:nap,"page-up,prev-page,-") > 0 THEN DO:
+       else if lookup(Syst.Var:nap,"page-up,prev-page,-") > 0 THEN DO:
           memory = rtab[1].
           FIND MenuText where recid(MenuText) = memory no-lock.
 
@@ -393,7 +393,7 @@ add-new:
        END.
 
        /* NEXT page */
-       else if lookup(Syst.CUICommon:nap,"page-down,next-page,+") > 0 THEN DO WITH FRAME sel:
+       else if lookup(Syst.Var:nap,"page-down,next-page,+") > 0 THEN DO WITH FRAME sel:
           IF rtab[FRAME-DOWN] = ? THEN DO:
              BELL.
              message "YOU ARE ON THE LAST PAGE !".
@@ -406,17 +406,17 @@ add-new:
           END.
        END.
 
-       else if Syst.CUICommon:nap = "5" or Syst.CUICommon:nap = "f5" THEN DO :  /* lisAys */
+       else if Syst.Var:nap = "5" or Syst.Var:nap = "f5" THEN DO :  /* lisAys */
           must-add = TRUE.
           NEXT BROWSE.
        END.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO:  /* removal */
         delline = FRAME-LINE.
         FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(Syst.CUICommon:cfc) MenuText.MenuNum MenuText.
+        COLOR DISPLAY value(Syst.Var:cfc) MenuText.MenuNum MenuText.
 
         FIND NEXT MenuText  no-lock no-error.
         IF AVAILABLE MenuText THEN memory = recid(MenuText).
@@ -437,7 +437,7 @@ add-new:
 
         ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ?" UPDATE OK.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MenuText.MenuNum MenuText.
+        COLOR DISPLAY value(Syst.Var:ccc) MenuText.MenuNum MenuText.
         IF ok THEN DO:
 
             IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhMenutext).
@@ -456,22 +456,22 @@ add-new:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-       else  if Syst.CUICommon:nap = "return" or Syst.CUICommon:nap = "enter" THEN DO:  /* change */
+       else  if Syst.Var:nap = "return" or Syst.Var:nap = "enter" THEN DO:  /* change */
           FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] exclusive-lock.
           IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuText).
           ASSIGN
             ens = substring(MenuText,1,8)
             toi = substring(MenuText,9,16).
-          assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
+          assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
           RUN Syst/ufkey.p.
-          Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+          Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
           PAUSE 0 no-message.
           DISPLAY MenuText.MenuNum WITH FRAME lis.
           UPDATE ens toi WITH FRAME lis.
           MenuText = caps(string(ens,"x(8)")) + caps(string(toi,"x(8)")).
           ASSIGN
           ed-metex = MenuText.MenuText.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           HIDE FRAME lis no-pause.
 
           IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMenuText).
@@ -486,7 +486,7 @@ add-new:
           DISPLAY MenuText WITH FRAME sel.
        END.
 
-       else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+       else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
           IF order = 1 THEN FIND FIRST MenuText no-lock.
           ELSE FIND FIRST MenuText USE-INDEX MenuText no-lock.
           ASSIGN
@@ -494,7 +494,7 @@ add-new:
           must-print = TRUE.
        END.
 
-       else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO:
+       else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO:
           IF order = 1 THEN FIND LAST MenuText no-lock.
           ELSE FIND LAST MenuText USE-INDEX MenuText no-lock.
           ASSIGN
@@ -502,7 +502,7 @@ add-new:
           must-print = TRUE.
        END.
 
-       else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE BROWSE.
+       else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE BROWSE.
 
     END.  /* BROWSE */
 

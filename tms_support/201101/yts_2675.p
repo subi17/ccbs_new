@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Mnp/mnp.i}
@@ -89,7 +89,7 @@ repeat trans:
          /* Cancel possible SMS messages */
          if not llSimulate then
          FOR EACH CallAlarm WHERE
-                  CallAlarm.Brand = Syst.CUICommon:gcBrand AND
+                  CallAlarm.Brand = Syst.Var:gcBrand AND
                   CallAlarm.CLI = MNPSub.CLI AND
                   CallAlarm.DeliStat = 1 AND
                   CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:

@@ -25,7 +25,7 @@ DEF BUFFER bInv FOR Invoice.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.ActionID     = "DelState"
       ActionLog.KeyValue     = STRING(YEAR(idaInvDate),"9999") + 
@@ -33,14 +33,14 @@ DO TRANS:
                                STRING(DAY(idaInvDate),"99")
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = iiInvType
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionStatus = 0.
 
   FIND CURRENT ActionLog NO-LOCK.
 END.
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand   = Syst.CUICommon:gcBrand    AND
+         Invoice.Brand   = Syst.Var:gcBrand    AND
          Invoice.InvDate = idaInvDate AND
          Invoice.InvType = iiInvType  AND
          Invoice.DeliveryState = 0:

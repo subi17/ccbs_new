@@ -63,7 +63,7 @@ FORM
    ROW 3 CENTERED OVERLAY FRAME fCrit.
 
 FIND Customer WHERE 
-     Customer.Brand   = Syst.CUICommon:gcBrand AND
+     Customer.Brand   = Syst.Var:gcBrand AND
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    MESSAGE "Unknown customer" iiCustNum
@@ -72,7 +72,7 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-IF fTokenRights(Syst.CUICommon:katun,"SYST") = "" THEN DO:
+IF fTokenRights(Syst.Var:katun,"SYST") = "" THEN DO:
    MESSAGE "Function not allowed"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.
@@ -117,20 +117,20 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
  
    IF llUfkey THEN DO:
       ASSIGN
-      Syst.CUICommon:ufk    = 0
-      Syst.CUICommon:ufk[1] = 7  
-      Syst.CUICommon:ufk[5] = 1734 
-      Syst.CUICommon:ufk[8] = 8
-      Syst.CUICommon:ehto   = 0.
+      Syst.Var:ufk    = 0
+      Syst.Var:ufk[1] = 7  
+      Syst.Var:ufk[5] = 1734 
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
       llUfkey = TRUE
-      Syst.CUICommon:toimi   = 1.
+      Syst.Var:toimi   = 1.
 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
-      ASSIGN Syst.CUICommon:ehto = 9.
+      ASSIGN Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -142,7 +142,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME fCrit:
              
                 PAUSE 0.
@@ -157,7 +157,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF ldAmt = 0 THEN DO:
          MESSAGE "Amount has not been given"
@@ -179,7 +179,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT.
       END.
       
-      Syst.CUICommon:ehto = 5. 
+      Syst.Var:ehto = 5. 
       RUN Syst/ufkey.p.
  
       /* 15 mins from now */
@@ -220,11 +220,11 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCrit NO-PAUSE.

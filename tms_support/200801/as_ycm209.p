@@ -1,7 +1,7 @@
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 {Func/msisdn.i}
 define stream out.
 OUTPUT STREAM out TO "/apps/snet/200801/as_ycm209_msisdn.bak".

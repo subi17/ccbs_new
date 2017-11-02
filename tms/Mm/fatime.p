@@ -87,7 +87,7 @@ DEF VAR liTransPeriod AS INT                    NO-UNDO.
 DEF BUFFER xxFATime FOR FATime.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -122,8 +122,8 @@ form
     Invoiced               format "I/" column-label "I"  SPACE(0)
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " FATime "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -172,37 +172,37 @@ form
        FORMAT "X(12)"
     lcIntInvNum NO-LABEL FORMAT "X(12)"
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek Billable item  BY  CLI */
     Custnum
     HELP "Enter Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER. NO "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUSTOMER. NO "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* seek Billable item  BY  CLI */
     CLI
     HELP "Enter CLI No."
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI. NO "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CLI. NO "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Billable item  BY Period */
     period
     HELP "Enter Billing Period"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Period "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Period "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
 form
     FATime.Memo
 
     WITH OVERLAY ROW 3 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Invoice Text " WITH NO-LABELS 1 columns
     FRAME f4.
 
@@ -253,28 +253,28 @@ FUNCTION fDefaults RETURNS LOGICAL:
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "   By CustNo  ,   By MSISDN ,  By period  , By 4".
 
 IF icFatGrp > "" THEN DO:
    FIND FIRST FATime WHERE 
-              FATime.BRand = Syst.CUICommon:gcBrand AND 
+              FATime.BRand = Syst.Var:gcBrand AND 
               FATime.FtGrp = icFatGrp
    NO-LOCK NO-ERROR.
    MaxOrder = 1.
 END.
 ELSE IF iiCustNum > 0 THEN DO:
    FIND FIRST FATime WHERE 
-             FATime.Brand   = Syst.CUICommon:gcBrand AND 
+             FATime.Brand   = Syst.Var:gcBrand AND 
              FATime.CustNum = iiCustNum 
    NO-LOCK NO-ERROR.
    MaxOrder = 1.
 END.
 ELSE IF icCLI > "" THEN DO:
    FIND FIRST FATime WHERE 
-              FATime.Brand = Syst.CUICommon:gcBrand AND 
+              FATime.Brand = Syst.Var:gcBrand AND 
               FATime.CLI = icCLi AND
               FATime.MsSeq = iiMsSeq
    NO-LOCK NO-ERROR.
@@ -282,7 +282,7 @@ ELSE IF icCLI > "" THEN DO:
 END.
 
 ELSE FIND FIRST FATime  use-index InvNum
-WHERE FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+WHERE FATime.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 
 IF AVAILABLE FATime THEN ASSIGN
@@ -302,13 +302,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO TRANS:  /* Add a FATime  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
            CLEAR FRAME lis NO-PAUSE.
 
            CREATE FATime.
@@ -319,7 +319,7 @@ REPEAT WITH FRAME sel:
            FATime.QtyUnit = "Amt"
            FATime.FtGrp   = icFatGrp
            FATime.CustNum = iiCustNum
-           FATime.Brand   = Syst.CUICommon:gcBrand 
+           FATime.Brand   = Syst.Var:gcBrand 
            FATime.CLI     = icCLi
            FATime.MsSeq   = iiMsSeq
            FATime.FatType = 0.
@@ -327,7 +327,7 @@ REPEAT WITH FRAME sel:
            /* defaults from group */ 
            IF FATime.FtGrp > "" THEN DO:
               FIND FatGroup WHERE 
-                   FatGroup.Brand = Syst.CUICommon:gcBrand AND
+                   FatGroup.Brand = Syst.Var:gcBrand AND
                    FatGroup.FtGrp = FATime.FtGrp NO-LOCK.
               fDefaults().
            END.
@@ -366,7 +366,7 @@ REPEAT WITH FRAME sel:
 
       /* is there ANY record ? */
       FIND FIRST FATime
-      WHERE FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      WHERE FATime.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FATime THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -417,16 +417,16 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 714 Syst.CUICommon:ufk[2]= 209 Syst.CUICommon:ufk[3]= 2150 Syst.CUICommon:ufk[4]= 927
-        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[7] = 1752 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 714 Syst.Var:ufk[2]= 209 Syst.Var:ufk[3]= 2150 Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7] = 1752 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
-        IF iiCustNum > 0  THEN ASSIGN Syst.CUICommon:ufk[1] = 0
-                                      Syst.CUICommon:ufk[5] = 0.
-        IF icCLI     > "" THEN ASSIGN Syst.CUICommon:ufk[1] = 0
-                                      Syst.CUICommon:ufk[2] = 0.
+        IF iiCustNum > 0  THEN ASSIGN Syst.Var:ufk[1] = 0
+                                      Syst.Var:ufk[5] = 0.
+        IF icCLI     > "" THEN ASSIGN Syst.Var:ufk[1] = 0
+                                      Syst.Var:ufk[2] = 0.
 
         RUN Syst/ufkey.p.
       END.
@@ -434,19 +434,19 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW FATime.custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATime.custnum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FATime.custnum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FATime.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FATime.cli WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FATime.cli WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW liTransPeriod {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) liTransPeriod WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) liTransPeriod WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
-      IF rtab[FRAME-LINE] = ? AND LOOKUP(Syst.CUICommon:nap,"5,F5,8,F8") = 0
+      Syst.Var:nap = keylabel(LASTKEY).
+      IF rtab[FRAME-LINE] = ? AND LOOKUP(Syst.Var:nap,"5,F5,8,F8") = 0
       THEN DO:
         BELL.
         MESSAGE "You are on an empty row, move upwards !".
@@ -454,10 +454,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -500,7 +500,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND FATime WHERE recid(FATime) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -550,7 +550,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -565,11 +565,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f1.
        SET custnum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -577,12 +577,12 @@ REPEAT WITH FRAME sel:
 
           IF icFatGrp > "" THEN 
           FIND FIRST FATime WHERE 
-                     FATime.BRand = Syst.CUICommon:gcBrand AND
+                     FATime.BRand = Syst.Var:gcBrand AND
                      FATime.FtGrp    = icFatGrp AND 
                      FATime.CustNum >= CustNum
                NO-LOCK NO-ERROR.
           ELSE FIND FIRST FATime WHERE 
-                          FATime.BRand = Syst.CUICommon:gcBrand AND
+                          FATime.BRand = Syst.Var:gcBrand AND
                           FATime.CustNum >= CustNum
                NO-LOCK NO-ERROR.
 
@@ -599,11 +599,11 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -611,18 +611,18 @@ REPEAT WITH FRAME sel:
 
           IF icFatGrp > "" THEN 
           FIND FIRST FATime WHERE 
-                     FATime.BRand = Syst.CUICommon:gcBrand AND
+                     FATime.BRand = Syst.Var:gcBrand AND
                      FATime.FtGrp = icFatGrp AND 
                      FATime.CLI  >= CLI
                NO-LOCK NO-ERROR.
           ELSE IF iiCustNum > 0 THEN 
           FIND FIRST FATime WHERE
-                     FATime.BRand = Syst.CUICommon:gcBrand AND
+                     FATime.BRand = Syst.Var:gcBrand AND
                      FATime.CustNum = iiCustNum AND
                      FATime.CLI    >= CLI
                NO-LOCK NO-ERROR. 
           ELSE FIND FIRST FATime WHERE 
-                          FATime.BRand = Syst.CUICommon:gcBrand AND
+                          FATime.BRand = Syst.Var:gcBrand AND
                           FATime.CLI >= CLI
                NO-LOCK NO-ERROR.
 
@@ -639,10 +639,10 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
         {Syst/uright2.i}.
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. 
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. 
         RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATime).
@@ -651,30 +651,30 @@ REPEAT WITH FRAME sel:
         HIDE FRAME f4 NO-PAUSE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN 
      DO: /* MEMO */
         RUN local-find-this(false).
         RUN Mc/memo.p(INPUT FATime.Custnum,
                  INPUT "FATime",
                  INPUT STRING(FATime.FatNum),
                  INPUT "FATime").
-        ufkey = TRUE. Syst.CUICommon:ehto = 9.
+        ufkey = TRUE. Syst.Var:ehto = 9.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0
      THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
         liTransPeriod FATime.cli 
         FATime.FTGrp  FATime.Amt  FATime.Used FATime.Transfer   
         FATime.QtyUnit   CustName  .
@@ -707,7 +707,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        liTransPeriod .
        IF ok THEN DO:
 
@@ -740,7 +740,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* show eventlog */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO:
 
         RUN local-find-this(FALSE).
 
@@ -761,13 +761,13 @@ REPEAT WITH FRAME sel:
      END.
 
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATime).
        RUN local-UPDATE-record.                                  
@@ -782,25 +782,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(FATime) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(FATime) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -819,19 +819,19 @@ PROCEDURE local-find-FIRST:
 
    IF icFatGrp > "" THEN DO:
       FIND FIRST FATime WHERE 
-                 FATime.BRand = Syst.CUICommon:gcBrand AND
+                 FATime.BRand = Syst.Var:gcBrand AND
                  FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND FIRST FATime WHERE 
-                 FATime.BRand = Syst.CUICommon:gcBrand AND
+                 FATime.BRand = Syst.Var:gcBrand AND
                  FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND FIRST FATime WHERE 
-                 FATime.BRand = Syst.CUICommon:gcBrand AND
+                 FATime.BRand = Syst.Var:gcBrand AND
                  FATime.CLI = icCLI AND
                  FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -839,10 +839,10 @@ PROCEDURE local-find-FIRST:
    ELSE DO:
        IF order = 1 THEN 
        FIND FIRST FATime USE-INDEX InvNum WHERE 
-                  FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                  FATime.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND FIRST FATime USE-INDEX CLI WHERE
-                  FATime.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                  FATime.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END. 
 
 END PROCEDURE.
@@ -850,19 +850,19 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF icFatGrp > "" THEN DO:
       FIND LAST FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND LAST FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND LAST FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.CLI = icCLI AND
                 FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -870,10 +870,10 @@ PROCEDURE local-find-LAST:
    ELSE DO:
        IF order = 1 THEN 
        FIND LAST FATime USE-INDEX InvNum WHERE
-                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND LAST FATime USE-INDEX CLI WHERE
-                FATime.BRand = Syst.CUICommon:gcBrand
+                FATime.BRand = Syst.Var:gcBrand
        NO-LOCK NO-ERROR.
    END. 
 
@@ -883,19 +883,19 @@ PROCEDURE local-find-NEXT:
 
    IF icFatGrp > "" THEN DO:
       FIND NEXT FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND NEXT FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND NEXT FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.CLI = icCLI AND
                 FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -903,10 +903,10 @@ PROCEDURE local-find-NEXT:
    ELSE DO:
        IF order = 1 THEN 
        FIND NEXT FATime USE-INDEX InvNum WHERE
-                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND NEXT FATime USE-INDEX CLI WHERE 
-                 FATime.BRand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END. 
 
 END PROCEDURE.
@@ -915,19 +915,19 @@ PROCEDURE local-find-PREV:
 
    IF icFatGrp > "" THEN DO:
       FIND PREV FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.FtGrp = icFatGrp NO-LOCK NO-ERROR.
    END.
 
    ELSE IF iiCustNum > 0 THEN DO:
       FIND PREV FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.CustNum = iiCustNum NO-LOCK NO-ERROR.
    END.
 
    ELSE IF icCLI > "" THEN DO:
       FIND PREV FATime WHERE 
-                FATime.BRand = Syst.CUICommon:gcBrand AND
+                FATime.BRand = Syst.Var:gcBrand AND
                 FATime.CLI = icCLI AND
                 FATime.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    END.
@@ -935,10 +935,10 @@ PROCEDURE local-find-PREV:
    ELSE DO:
        IF order = 1 THEN 
        FIND PREV FATime USE-INDEX InvNum WHERE
-                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
        FIND PREV FATime USE-INDEX CLI WHERE
-                 FATime.BRand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                 FATime.BRand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END. 
 
 END PROCEDURE.
@@ -975,7 +975,7 @@ PROCEDURE local-find-others.
        ELSE payername = "FreeOfCharge".
 
        FIND FIRST FATGroup WHERE
-                  FATGroup.Brand = Syst.CUICommon:gcBrand AND 
+                  FATGroup.Brand = Syst.Var:gcBrand AND 
                   FATGroup.FTGrp = FATime.FTGrp NO-LOCK NO-ERROR.
 
        CustName = "".
@@ -1038,22 +1038,22 @@ PROCEDURE local-UPDATE-record:
          FATime.Memo[1 FOR 2]
       WITH FRAME lis.
 
-      IF NEW Fatime THEN Syst.CUICommon:toimi = 1.
+      IF NEW Fatime THEN Syst.Var:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            Syst.CUICommon:ehto   = 0
-            Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
-            Syst.CUICommon:ufk[8] = 8.
+            Syst.Var:ehto   = 0
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.Var:gcHelpParam = ""
+            Syst.Var:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.
       
-      IF Syst.CUICommon:toimi = 1 THEN 
+      IF Syst.Var:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
        /*  FIND CURRENT Fatime NO-LOCK. */
             
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
  
          PROMPT
@@ -1076,7 +1076,7 @@ PROCEDURE local-UPDATE-record:
                 ASSIGN
                 FATime.qtyunit = INPUT FATime.Qtyunit.
                 disp FATime.qtyunit with frame lis.
-                Syst.CUICommon:ehto = 9. 
+                Syst.Var:ehto = 9. 
                 RUN Syst/ufkey.p.
              END.
 
@@ -1092,11 +1092,11 @@ PROCEDURE local-UPDATE-record:
                    fDispFATType().
                 END.
 
-                Syst.CUICommon:ehto = 9. 
+                Syst.Var:ehto = 9. 
                 RUN Syst/ufkey.p.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "CLI" THEN DO:
                 
@@ -1111,7 +1111,7 @@ PROCEDURE local-UPDATE-record:
 
                    ELSE DO:
                       FIND MobSub WHERE 
-                           Mobsub.Brand = Syst.CUICommon:gcBrand AND 
+                           Mobsub.Brand = Syst.Var:gcBrand AND 
                            MobSub.Cli =
                          INPUT FRAME lis FATime.CLI  NO-LOCK NO-ERROR.
                       IF NOT AVAIL Mobsub THEN DO:
@@ -1150,7 +1150,7 @@ PROCEDURE local-UPDATE-record:
                            INPUT FATime.CustNum = 0)
                    THEN DO: 
                       FIND Customer WHERE
-                           Customer.Brand   = Syst.CUICommon:gcBrand AND 
+                           Customer.Brand   = Syst.Var:gcBrand AND 
                            Customer.CustNum = INPUT FRAME lis FATime.CustNum 
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL Customer  THEN DO:
@@ -1170,7 +1170,7 @@ PROCEDURE local-UPDATE-record:
 
                 ELSE IF FRAME-FIELD = "Ftgrp" THEN DO:
                    FIND FIRST fatgroup WHERE
-                              FAtGroup.Brand = Syst.CUICommon:gcBrand AND 
+                              FAtGroup.Brand = Syst.Var:gcBrand AND 
                               fatgroup.ftgrp =  INPUT FRAME lis FATime.FTgrp 
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL Fatgroup THEN DO:
@@ -1247,7 +1247,7 @@ PROCEDURE local-UPDATE-record:
              liCrePeriod = FATime.Period.
                 
              FIND FatGroup NO-LOCK WHERE
-                  FatGroup.Brand = Syst.CUICommon:gcBrand AND
+                  FatGroup.Brand = Syst.Var:gcBrand AND
                   FatGroup.FtGrp = INPUT FATime.FtGrp.
                   
              IF FatGroup.PeriodQty > 1 THEN 

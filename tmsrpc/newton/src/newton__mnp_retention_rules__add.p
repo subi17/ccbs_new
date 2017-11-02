@@ -13,7 +13,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 
@@ -44,7 +44,7 @@ IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF NUM-ENTRIES(lcStruct) <= 1 THEN RETURN appl_err("Rule condition is missing").
 
-Syst.CUICommon:katun = pcUsername.
+Syst.Var:katun = pcUsername.
 
 {newton/src/settenant.i pcTenant}
 
@@ -57,7 +57,7 @@ END.
 CREATE ttMNPRetentionRule.
 ASSIGN
    ttMNPRetentionRule.RetentionRuleID = liRetentionRuleID
-   ttMNPRetentionRule.Brand = Syst.CUICommon:gcBrand
+   ttMNPRetentionRule.Brand = Syst.Var:gcBrand
    ttMNPRetentionRule.Fromdate = TODAY
    ttMNPRetentionRule.Todate = 12/31/2049.
 
@@ -97,7 +97,7 @@ IF LOOKUP("sms_token",lcStruct) > 0 THEN DO:
 
    IF ttMNPRetentionRule.SMSText > "" THEN DO:
       FIND FIRST InvText NO-LOCK WHERE
-                 InvText.Brand = Syst.CUICommon:gcBrand AND
+                 InvText.Brand = Syst.Var:gcBrand AND
                  InvText.Target = "SMS" AND
                  InvText.KeyValue = ttMNPRetentionRule.SMSText AND
                  InvText.FromDate <= TODAY AND
@@ -112,7 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 CREATE MNPRetentionRule.
 BUFFER-COPY ttMNPRetentionRule TO MNPRetentionRule.
 
-IF llDoEvent THEN fMakeCreateEvent((BUFFER MNPRetentionRule:HANDLE),"",Syst.CUICommon:katun,"").
+IF llDoEvent THEN fMakeCreateEvent((BUFFER MNPRetentionRule:HANDLE),"",Syst.Var:katun,"").
 
 RELEASE MNPRetentionRule.
 

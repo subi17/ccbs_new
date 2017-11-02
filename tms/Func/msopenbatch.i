@@ -64,9 +64,9 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
                 SOLog.MsSeq        = MobSub.MsSeq   /* Mobile Subscription */
                 SOLog.CLI          = MobSub.CLI     /* MSISDN          */
                 SOLog.Stat         = 0              /* just created    */
-                Solog.Brand        = Syst.CUICommon:gcBrand 
+                Solog.Brand        = Syst.Var:gcBrand 
                 SOLog.CommLine     = lcCommLine
-                SoLog.Users        = Syst.CUICommon:katun.
+                SoLog.Users        = Syst.Var:katun.
       END.                                 
    END.                
 
@@ -86,7 +86,7 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
              CallAlarm.CASeq       = NEXT-VALUE(CallAlarm)
              CallAlarm.DeliStat    = 1            
              CallAlarm.Limit       = 100
-             CallAlarm.Brand       = Syst.CUICommon:gcBrand 
+             CallAlarm.Brand       = Syst.Var:gcBrand 
              CallAlarm.CreditType  = 66
              CallAlarm.CustNo      = bSaldoMobSub.CustNum
              CallAlarm.CLI         = bSaldoMobSub.CLI

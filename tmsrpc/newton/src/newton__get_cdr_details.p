@@ -14,8 +14,8 @@
  * @fixed_line  cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton RPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton RPC".
+Syst.Var:gcBrand = "1".
 
 {Func/cparam2.i}
 {Func/fdestcountry.i}
@@ -234,7 +234,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
 
    /* country name for roaming */
    IF LOOKUP(STRING(ihCDR::SpoCMT),{&ROAMING_CALLCASE}) > 0 THEN
-      lcCCNName = fDestCountryName(Syst.CUICommon:gcBrand,
+      lcCCNName = fDestCountryName(Syst.Var:gcBrand,
                                   1,
                                   ihCDR::SpoCMT,
                                   ihCDR::DateSt,
@@ -246,7 +246,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
    /* ServiceName for Premium Number */
    ELSE DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
+                 BillItem.Brand    = Syst.Var:gcBrand AND
                  BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
          lcCCNName = ttCall.ServiceName.
@@ -438,8 +438,8 @@ FUNCTION fCollectCdrs RETURNS LOGICAL
 EMPTY TEMP-TABLE ttCall.
    
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT Syst.CUICommon:gcBrand,
-               INPUT Syst.CUICommon:katun,
+               INPUT Syst.Var:gcBrand,
+               INPUT Syst.Var:katun,
                INPUT pdStartDate,
                INPUT pdEndDate,
                INPUT 0,

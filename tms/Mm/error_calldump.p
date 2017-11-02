@@ -4,8 +4,8 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-Syst.CUICommon:katun = "cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 
 

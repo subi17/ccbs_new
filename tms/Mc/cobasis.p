@@ -16,7 +16,7 @@
 {Mc/lib/tokenchk.i 'CoBasis'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -66,8 +66,8 @@ form
     CoBasis.CoPerc
     
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     lcTitle
     FRAME sel.
 
@@ -81,20 +81,20 @@ form
     CoBasis.CoAmt      COLON 20 
     CoBasis.CommLimit  COLON 20
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  target */
     lcTarg
     HELP "Enter target type "
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND target type "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND target type "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FIND CoRule WHERE 
-     CoRule.Brand    = Syst.CUICommon:gcBrand  AND
+     CoRule.Brand    = Syst.Var:gcBrand  AND
      CoRule.CoRuleId = iiRuleID NO-LOCK.
      
 ASSIGN lcTitle = " COMM. BASIS FOR: " +
@@ -103,7 +103,7 @@ ASSIGN lcTitle = " COMM. BASIS FOR: " +
                  STRING(CoRule.CCN)    + "/" +
                  STRING(CoRule.CoFrom,"99.99.99") + " ". 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By BillCode ,    ,   , By 4".
@@ -129,7 +129,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CoBasis  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -137,7 +137,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -146,7 +146,7 @@ REPEAT WITH FRAME sel:
            EDITING:
               READKEY.
 
-              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
 
                  IF FRAME-FIELD = "BillCode" THEN DO:
@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
                     
                     ELSE DO:
                        FIND BillItem WHERE 
-                            BillItem.Brand    = Syst.CUICommon:gcBrand  AND
+                            BillItem.Brand    = Syst.Var:gcBrand  AND
                             BillItem.BillCode = INPUT CoBasis.BillCode
                        NO-LOCK NO-ERROR.
                        IF NOT AVAILABLE BillItem THEN DO:
@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
                     
                     ELSE DO:
                        FIND CCN WHERE 
-                            CCN.Brand = Syst.CUICommon:gcBrand  AND
+                            CCN.Brand = Syst.Var:gcBrand  AND
                             CCN.CCN   = INPUT CoBasis.CCN
                        NO-LOCK NO-ERROR.
                        IF NOT AVAILABLE CCN THEN DO:
@@ -205,7 +205,7 @@ REPEAT WITH FRAME sel:
 
            IF CAN-FIND(
               FIRST CoBasis WHERE 
-                    CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
+                    CoBasis.Brand    = Syst.Var:gcBrand  AND
                     CoBasis.CoRuleid = iiRuleId AND  
                     CoBasis.BillCode = INPUT FRAME lis CoBasis.BillCode AND
                     CoBasis.CCN      = INPUT FRAME lis CoBasis.CCN)
@@ -222,7 +222,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CoBasis.
            ASSIGN
-           CoBasis.Brand    = Syst.CUICommon:gcBrand  
+           CoBasis.Brand    = Syst.Var:gcBrand  
            CoBasis.CoRuleID = iiRuleID 
            CoBasis.BillCode = INPUT FRAME lis CoBasis.BillCode
            CoBasis.CCN      = INPUT FRAME lis CoBasis.CCN.
@@ -296,24 +296,24 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= 5 
-        Syst.CUICommon:ufk[6]= 4
-        Syst.CUICommon:ufk[7]= 0  Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5 
+        Syst.Var:ufk[6]= 4
+        Syst.Var:ufk[7]= 0  Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CoBasis.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CoBasis.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CoBasis.BillCode WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -322,10 +322,10 @@ BROWSE:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -343,7 +343,7 @@ BROWSE:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -368,7 +368,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -394,7 +394,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CoBasis WHERE recid(CoBasis) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -418,7 +418,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -433,21 +433,21 @@ BROWSE:
      END. /* NEXT page */
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        CoBasis.BillCode CoBasis.CCN .
 
        RUN local-find-NEXT.
@@ -469,7 +469,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        CoBasis.BillCode CoBasis.CCN .
 
        IF ok THEN DO:
@@ -480,7 +480,7 @@ BROWSE:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST CoBasis WHERE 
-                                 CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
+                                 CoBasis.Brand    = Syst.Var:gcBrand  AND
                                  CoBasis.CoRuleId = iiRuleID) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
@@ -493,7 +493,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -502,7 +502,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoBasis).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoBasis.BillCode.
 
        RUN local-UPDATE-record.                                  
@@ -519,25 +519,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CoBasis) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CoBasis) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -555,28 +555,28 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST CoBasis
-        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.Var:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST CoBasis
-        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.Var:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT CoBasis
-        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.Var:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV CoBasis
-        WHERE CoBasis.Brand    = Syst.CUICommon:gcBrand  AND
+        WHERE CoBasis.Brand    = Syst.Var:gcBrand  AND
               CoBasis.CoRuleId = iiRuleID
         NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -603,7 +603,7 @@ PROCEDURE local-find-others.
 
    IF CoBasis.BillCode > "" AND CoBasis.CCN >= 0 THEN DO:
       FIND BillItem WHERE 
-           BillItem.Brand    = Syst.CUICommon:gcBrand  AND
+           BillItem.Brand    = Syst.Var:gcBrand  AND
            BillItem.BillCode = CoBasis.BillCode 
       NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
@@ -611,7 +611,7 @@ PROCEDURE local-find-others.
 
    IF CoBasis.CCN > 0 THEN DO:
       FIND CCN WHERE 
-           CCN.Brand = Syst.CUICommon:gcBrand  AND
+           CCN.Brand = Syst.Var:gcBrand  AND
            CCN.CCN   = CoBasis.CCN NO-LOCK NO-ERROR.
       IF AVAILABLE CCN THEN lcCCNName = CCN.CCNName.
    END.
@@ -632,7 +632,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
        
          UPDATE
          CoBasis.SubsQty WHEN NOT NEW CoBasis

@@ -30,16 +30,16 @@ DEF TEMP-TABLE ttRepCode NO-UNDO
 form
     ttRepCode.RepCode  format "x(8)"  label "Report"
     ttRepCode.RepName  format "x(40)" Label "Name"
-    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " Report Codes " OVERLAY FRAME sel.
+    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " Report Codes " OVERLAY FRAME sel.
 
 form /* SEEK code */
     lcRepCode
     help "Enter Name of a Report Code"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Code "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Code "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 
 lcRepCode = Func.Common:mTMSCodeList("MobSub",
                              "RepCodes").
@@ -97,12 +97,12 @@ repeat:
 
          IF ufkey THEN DO:
             ASSIGN
-            Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
-            Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-            siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
+            Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+            Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+            siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
             
             /* not called from applhelp */    
-            IF NOT Syst.CUICommon:gcHelpParam = "ahelp" THEN Syst.CUICommon:ufk[5] = 0.
+            IF NOT Syst.Var:gcHelpParam = "ahelp" THEN Syst.Var:ufk[5] = 0.
             
             RUN Syst/ufkey.p.
          END.
@@ -113,13 +113,13 @@ repeat:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW ttRepCode.RepCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) ttRepCode.RepCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) ttRepCode.RepCode WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME sel:
             IF FRAME-LINE = 1 THEN DO:
                FIND ttRepCode where recid(ttRepCode) = rtab[FRAME-LINE] no-lock.
@@ -145,7 +145,7 @@ repeat:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND ttRepCode where recid(ttRepCode) = rtab[FRAME-LINE] no-lock .
                FIND NEXT ttRepCode no-lock no-error.
@@ -171,7 +171,7 @@ repeat:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
             FIND ttRepCode where recid(ttRepCode) = memory no-lock no-error.
             FIND prev ttRepCode no-lock no-error.
             IF AVAILABLE ttRepCode THEN DO:
@@ -193,7 +193,7 @@ repeat:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "This is the last page !".
@@ -207,9 +207,9 @@ repeat:
         END. /* NEXT page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* RepCode */
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* RepCode */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcRepCode = "".
            set lcRepCode WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
@@ -231,14 +231,14 @@ repeat:
         END. /* Seek */
 
         /* CHOOSE */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:
            FIND ttRepCode where recid(ttRepCode) = rtab[FRAME-LINE] no-lock.
            siirto = string(ttRepCode.RepCode).
            LEAVE MAIN.
         END. /* CHOOSE */
 
         /* FIRST record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST ttRepCode no-lock.
            memory = recid(ttRepCode).
            must-print = TRUE.
@@ -246,14 +246,14 @@ repeat:
         END. /* FIRST record */
 
         /* LAST record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST ttRepCode no-lock.
            memory = recid(ttRepCode).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE MAIN. /* RETURN */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE MAIN. /* RETURN */
 
      END.  /* BROWSE */
    END.  /* LOOP */

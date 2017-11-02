@@ -11,8 +11,8 @@
 {Syst/commpaa.i}
 
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1" 
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1" 
+   Syst.Var:katun   = "Cron".
        
 {Syst/eventlog.i}
 {Syst/dftimetable.i}
@@ -121,7 +121,7 @@ END.
 llReplica = fIsThisReplica().
 
 FOR EACH DumpFile NO-LOCK WHERE
-         DumpFile.Brand  = Syst.CUICommon:gcBrand AND
+         DumpFile.Brand  = Syst.Var:gcBrand AND
          DumpFile.Active = TRUE:
 
    IF liBatchID > 0 AND DumpFile.BatchID <> liBatchID
@@ -129,7 +129,7 @@ FOR EACH DumpFile NO-LOCK WHERE
 
    /* analyse time table definitions and check if any are due now */      
    FOR EACH DFTimeTable NO-LOCK WHERE
-            DFTimeTable.Brand     = Syst.CUICommon:gcBrand         AND
+            DFTimeTable.Brand     = Syst.Var:gcBrand         AND
             DFTimeTable.DumpID    = DumpFile.DumpID AND
             DFTimeTable.ToDate   >= ldaDumpDate     AND
             DFTimeTable.FromDate <= ldaDumpDate:

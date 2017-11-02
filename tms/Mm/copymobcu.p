@@ -20,7 +20,7 @@ DEF BUFFER new-Customer FOR Customer.
 
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -53,7 +53,7 @@ ELSE ok = TRUE.
 IF ok THEN DO:
    
    FIND LAST new-Customer WHERE
-      new-Customer.Brand = Syst.CUICommon:gcBrand
+      new-Customer.Brand = Syst.Var:gcBrand
    USE-INDEX CustNum NO-LOCK NO-ERROR.
    
    new-no = new-Customer.Custnum + 1.
@@ -80,8 +80,8 @@ IF ok THEN DO:
       new-Customer.PaymCust  = new-no
       new-Customer.RepCust   = new-no
       new-Customer.AgrCust   = new-no
-      new-customer.Brand     = Syst.CUICommon:gcBrand
-      new-customer.CreUser   = Syst.CUICommon:katun
+      new-customer.Brand     = Syst.Var:gcBrand
+      new-customer.CreUser   = Syst.Var:katun
       new-customer.CreDate   = TODAY.
 
 

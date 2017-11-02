@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 {Func/create_eventlog.i}
 
 def var llcut as log no-undo.

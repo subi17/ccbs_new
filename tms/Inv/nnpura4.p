@@ -110,7 +110,7 @@ ELSE ASSIGN lev        = 106
             viiva5     = FILL(" ",4)  + fill("-",lev - 4).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -252,7 +252,7 @@ IF llPDFPrint THEN DO:
    
    /* mail to user */
    IF iiMail = 2 THEN DO:
-      FIND TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
+      FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
       IF AVAILABLE TMSUser THEN lcMailAddr = TMSUser.EMail.
    END. 
       
@@ -281,7 +281,7 @@ END.
 ELSE DO:
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = Syst.CUICommon:gcBrand  AND
+            Customer.Brand    = Syst.Var:gcBrand  AND
             Customer.CustNum >= CustNum1 AND
             Customer.CustNum <= CustNum2:
 

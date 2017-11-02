@@ -22,7 +22,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fcreatereq.i}
@@ -57,7 +57,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* Required Params */
 ASSIGN 
    liMsSeq  = get_pos_int(pcPayTermStruct, "msseq")
-   Syst.CUICommon:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.Var:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcCurrentPayterm = get_nonempty_string(pcPayTermStruct, "current_payterm")
    lcNewPayterm     = get_nonempty_string(pcPayTermStruct, "new_payterm")
    liPerContractId  = get_int(pcPayTermStruct, "per_contract_id")
@@ -68,13 +68,13 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
-           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+           DayCampaign.Brand   = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = lcNewPayterm AND
            DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} AND
            DayCampaign.ValidFrom <= TODAY AND
@@ -107,11 +107,11 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0).

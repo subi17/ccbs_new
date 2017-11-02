@@ -10,8 +10,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonRPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 
@@ -62,7 +62,7 @@ IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
 
 ELSE IF pcNumberType EQ "stc" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               MobSub.CLI EQ pcCLI NO-ERROR.
    IF NOT AVAIL Mobsub THEN 
       RETURN appl_err("Subscription not found").
@@ -85,7 +85,7 @@ END.
 /* Check Fixed number existence and orders */
 IF pcFixedNumber > "" THEN DO:
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               MobSub.FixedNumber EQ pcFixedNumber AND
               MobSub.CLI NE pcCLI NO-LOCK NO-ERROR. 
    IF AVAIL MobSub THEN
@@ -102,7 +102,7 @@ END.
 IF pcNumberType EQ "MNP" OR
    pcNumberType EQ "NEW" THEN DO:
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               MobSub.CLI EQ pcCLI NO-LOCK NO-ERROR. 
    IF AVAIL MobSub THEN
       RETURN appl_err("Subscription already exists with number|" + pcCLI).

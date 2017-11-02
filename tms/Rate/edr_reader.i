@@ -309,7 +309,7 @@ PROCEDURE pHandleEDR:
                            Order.OrderType = 2 AND
                     LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0,
                      FIRST OrderAction NO-LOCK WHERE
-                           OrderAction.Brand = Syst.CUICommon:gcBrand AND
+                           OrderAction.Brand = Syst.Var:gcBrand AND
                            OrderAction.OrderId = Order.OrderId AND
                            OrderAction.ItemType = "Promotion" AND
                            OrderAction.ItemKey  = ttEDR.CLIType,

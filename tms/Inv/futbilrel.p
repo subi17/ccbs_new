@@ -63,7 +63,7 @@ FORM
         HELP "Name of output file" 
         SKIP(3)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + Syst.CUICommon:ynimi + " FUTURE BILLING " +
+        TITLE " " + Syst.Var:ynimi + " FUTURE BILLING " +
         STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
@@ -71,11 +71,11 @@ VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
 FIND LAST InvGroup WHERE
-          InvGroup.InvGroup = Syst.CUICommon:gcBrand
+          InvGroup.InvGroup = Syst.Var:gcBrand
 NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN InvGroup[2] = InvGroup.InvGroup.
 
-FIND TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun NO-LOCK NO-ERROR.
+FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
 lcFile = (IF AVAILABLE TMSUser AND TMSUser.RepDir NE ""
           THEN TMSUser.RepDir 
           ELSE "/tmp") +
@@ -97,7 +97,7 @@ DISPLAY InvGroup
         WITH FRAME valinta. 
 
 ASSIGN lcUfkey = FALSE
-       Syst.CUICommon:nap     = "first". 
+       Syst.Var:nap     = "first". 
 
 toimi:
 REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
@@ -105,26 +105,26 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    if lcUfkey THEN DO:
 
       ASSIGN
-         Syst.CUICommon:ufk[1]= 132 
-         Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 /* 847 */
-         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 
+         Syst.Var:ufk[1]= 132 
+         Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 /* 847 */
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 
          lcUfkey = FALSE.
 
       RUN Syst/ufkey.p.
 
    END.
 
-   IF Syst.CUICommon:nap NE "first" THEN DO:
+   IF Syst.Var:nap NE "first" THEN DO:
       READKEY.
-      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN Syst.CUICommon:nap = "1". 
+   ELSE ASSIGN Syst.Var:nap = "1". 
 
-   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-      Syst.CUICommon:ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
@@ -143,7 +143,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
             READKEY.
 
-            IF LOOKUP(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
+            IF LOOKUP(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN 
             DO WITH FRAME valinta:
 
                HIDE MESSAGE.
@@ -163,17 +163,17 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       NEXT toimi.
    END.
 
-   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
-Syst.CUICommon:ehto = 5.
+Syst.Var:ehto = 5.
 RUN Syst/ufkey.p.
 
 RUN Inv/futbilrep.p  (InvGroup[1],

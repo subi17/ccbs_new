@@ -8,8 +8,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Func/cparam2.i}
 {Mm/dss_bundle_first_month_fee.i}
 
@@ -317,7 +317,7 @@ PROCEDURE pGetCustomerSubscriptions:
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                   bDayCampaign.Brand = Syst.Var:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode:
 
              IF CAN-FIND(FIRST ttDSSInfo WHERE
@@ -495,7 +495,7 @@ PROCEDURE pGetCustomerSubscriptions:
                 /* for each used because there might exist  
                    same type of fixed fee in the past */
                 FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                          FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                          FixedFee.Brand     = Syst.Var:gcBrand AND
                           FixedFee.HostTable = "MobSub" AND
                           FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                           FixedFee.FeeModel  = bDayCampaign.FeeModel AND
@@ -571,10 +571,10 @@ PROCEDURE pGetCustomerSubscriptions:
              ldeDataAllocated = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+                DayCampaign.Brand   = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = ttDSSInfo.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -584,7 +584,7 @@ PROCEDURE pGetCustomerSubscriptions:
                 FixedFee.BegDate  <= ldaToDate   AND
                 FixedFee.EndPer   >= liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = Syst.CUICommon:gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate:

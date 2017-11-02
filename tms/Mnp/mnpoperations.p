@@ -22,7 +22,7 @@
 {Mnp/mnpoperation.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -90,8 +90,8 @@ form
     MNPOperation.CreatedTS       COLUMN-LABEL "Created"
     MNPOperation.StatusCode      COLUMN-LABEL "St"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " MNP messages "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -109,11 +109,11 @@ form
    lcErrorHandled LABEL "Error Handled"
 
 WITH OVERLAY ROW 6 centered 1 columns 
-   COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(Syst.CUICommon:ctc) " View Message " WITH side-labels
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc) " View Message " WITH side-labels
    FRAME lis.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -185,31 +185,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk = 0
-        Syst.CUICommon:ufk[1] = 2821 /* WHEN lcRight = "RW" */
-        Syst.CUICommon:ufk[3] = 0 /* WHEN lcRight = "RW" */ 
-        Syst.CUICommon:ufk[4] = 0 /* 2822 */ /* WHEN lcRight = "RW" */
-        Syst.CUICommon:ufk[5] = 1968 /* WHEN lcRight = "RW" */
-        Syst.CUICommon:ufk[6] = 2820
-        Syst.CUICommon:ufk[7] = 2819
-        Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1] = 2821 /* WHEN lcRight = "RW" */
+        Syst.Var:ufk[3] = 0 /* WHEN lcRight = "RW" */ 
+        Syst.Var:ufk[4] = 0 /* 2822 */ /* WHEN lcRight = "RW" */
+        Syst.Var:ufk[5] = 1968 /* WHEN lcRight = "RW" */
+        Syst.Var:ufk[6] = 2820
+        Syst.Var:ufk[7] = 2819
+        Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPOperation.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPOperation.MessageType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPOperation.MessageType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -226,7 +226,7 @@ BROWSE:
         NEXT LOOP.
       END.
       
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
         BELL.
@@ -235,10 +235,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -263,7 +263,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -289,7 +289,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPOperation WHERE recid(MNPOperation) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -313,7 +313,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -327,8 +327,8 @@ BROWSE:
        END.
      END. /* NEXT page */
      
-     IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND lcRight = "RW" AND
-        Syst.CUICommon:ufk[1] > 0 THEN DO:
+     IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND lcRight = "RW" AND
+        Syst.Var:ufk[1] > 0 THEN DO:
         
         RUN local-find-this(false).
         RUN Mnp/mnpfunc.p(MNPOperation.mnpseq). 
@@ -341,13 +341,13 @@ BROWSE:
      END.
      
      /* for fetching result pages (used in mnp testing phase) */
-     IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND lcRight = "RW" AND
-        Syst.CUICommon:ufk[3] > 0 THEN DO:
+     IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND lcRight = "RW" AND
+        Syst.Var:ufk[3] > 0 THEN DO:
         
         RUN local-find-this(false).
         find mnpprocess where mnpprocess.mnpseq = MNPOperation.mnpseq NO-LOCK.
          
-        Syst.CUICommon:ehto = 10.
+        Syst.Var:ehto = 10.
         RUN Syst/ufkey.p.
 
         copy-lob MNPOperation.XMLResponse to lcLongXML.
@@ -375,7 +375,7 @@ BROWSE:
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND lcRight = "RW" and Syst.CUICommon:ufk[4] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND lcRight = "RW" and Syst.Var:ufk[4] > 0 THEN DO:
         
         RUN local-find-this(true).
          
@@ -390,7 +390,7 @@ BROWSE:
      END.
      
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
         
         RUN local-find-this(false).
 
@@ -432,7 +432,7 @@ BROWSE:
      END.
       
       /* view */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
        
         RUN local-find-this(false).
 
@@ -442,7 +442,7 @@ BROWSE:
 
       END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:
 
         DEF BUFFER MNPBuzon FOR MNPOperation.
 
@@ -467,7 +467,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO:
         RUN local-find-this(false).
         
         copy-lob MNPOperation.XMLRequest to lcLongXML.
@@ -480,25 +480,25 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPOperation) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPOperation) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

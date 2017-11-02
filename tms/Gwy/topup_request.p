@@ -19,8 +19,8 @@
 {Func/fmakesms.i}
 
 ASSIGN
-   Syst.CUICommon:katun   = "Cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun   = "Cron"
+   Syst.Var:gcBrand = "1".
 
 {Func/heartbeat.i}
 
@@ -127,7 +127,7 @@ PROCEDURE pPPRequests:
    
    BATCH_LOOP:
    FOR EACH PrePaidRequest NO-LOCK WHERE
-            PrePaidRequest.Brand      = Syst.CUICommon:gcBrand      AND
+            PrePaidRequest.Brand      = Syst.Var:gcBrand      AND
             PrePaidRequest.PPStatus   = 0            AND
             PrePaidRequest.TSRequest <= pdeTS        AND
             LOOKUP(PrePaidRequest.Source,lcSource) > 0:
@@ -147,7 +147,7 @@ PROCEDURE pPPRequests:
       
       IF llNext THEN NEXT.
      
-      RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,PrePaidRequest.PPRequest).
+      RUN Gwy/pp_platform.p(Syst.Var:gcBrand,PrePaidRequest.PPRequest).
       
       lcXML = RETURN-VALUE.
       
@@ -199,24 +199,24 @@ PROCEDURE pPPRequests:
                   ldeTopUpAmount = bufPP.TopUpAmt + bufPP.VatAmt.
 
                   FOR FIRST Order NO-LOCK WHERE
-                            Order.Brand     = Syst.CUICommon:gcBrand AND
+                            Order.Brand     = Syst.Var:gcBrand AND
                             Order.MSSeq     = bufPP.MSSeq AND
                             Order.OrderType < 2 AND
                             LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0,
                      FIRST Offer NO-LOCK WHERE
-                           Offer.Brand = Syst.CUICommon:gcBrand AND
+                           Offer.Brand = Syst.Var:gcBrand AND
                            Offer.Offer = Order.Offer,
                         FIRST OfferItem NO-LOCK WHERE
-                              OfferItem.Brand       = Syst.CUICommon:gcBrand AND
+                              OfferItem.Brand       = Syst.Var:gcBrand AND
                               OfferItem.Offer       = Offer.Offer AND
                               OfferItem.ItemType    = "TopUp" AND
                               OfferItem.EndStamp   >= Order.CrStamp AND
                               OfferItem.BeginStamp <= Order.CrStamp,
                            FIRST TopupScheme NO-LOCK WHERE
-                                 TopupScheme.Brand       = Syst.CUICommon:gcBrand AND
+                                 TopupScheme.Brand       = Syst.Var:gcBrand AND
                                  TopupScheme.TopupScheme = OfferItem.ItemKey,
                               FIRST TopupSchemeRow NO-LOCK WHERE
-                                    TopupSchemeRow.Brand        = Syst.CUICommon:gcBrand AND
+                                    TopupSchemeRow.Brand        = Syst.Var:gcBrand AND
                                     TopupSchemeRow.TopupScheme  = TopupScheme.TopupScheme AND
                                     TopupSchemeRow.EndStamp    >= Order.CrStamp AND
                                     TopupSchemeRow.BeginStamp  <= Order.CrStamp:

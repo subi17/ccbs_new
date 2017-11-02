@@ -144,12 +144,12 @@ IF CAN-FIND(FIRST ttError) THEN DO:
 
        /* save to db for reporting */
        CREATE ErrorLog.
-       ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
               ErrorLog.ActionID  = "DDPAYM"
               ErrorLog.TableName = "Invoice"
               ErrorLog.KeyValue  = ttError.Inv
               ErrorLog.ActionTS  = ldCurrStamp
-              ErrorLog.UserCode  = Syst.CUICommon:katun
+              ErrorLog.UserCode  = Syst.Var:katun
               ErrorLog.ErrorMsg  = ttError.ErrMsg.
     END.
 

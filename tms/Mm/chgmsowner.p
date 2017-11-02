@@ -22,7 +22,7 @@
 {Func/fuserright.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -670,7 +670,7 @@ IF icAction NE "view" THEN DO:
       
       /* 'superuser' can skip some rules */
       IF RETURN-VALUE BEGINS "CHECK" AND
-         fTokenRights(Syst.CUICommon:katun,"CCSUPER") = "RW"
+         fTokenRights(Syst.Var:katun,"CCSUPER") = "RW"
       THEN DO:
          llOk = FALSE.
          MESSAGE lcError SKIP
@@ -784,14 +784,14 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
    
    IF ufkey THEN DO:
       ASSIGN
-         Syst.CUICommon:ufk   = 0 
-         Syst.CUICommon:ufk[1]= 7   
-         Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ehto = 0.
+         Syst.Var:ufk   = 0 
+         Syst.Var:ufk[1]= 7   
+         Syst.Var:ufk[8]= 8 
+         Syst.Var:ehto = 0.
          
-      IF icAction = "new" and llReady THEN Syst.CUICommon:ufk[5]= 1027.   
-      IF icAction = "new" and not llReady THEN Syst.CUICommon:ufk[5]= 0.   
-      ELSE IF icAction = "view" THEN Syst.CUICommon:ufk[1] = 0.
+      IF icAction = "new" and llReady THEN Syst.Var:ufk[5]= 1027.   
+      IF icAction = "new" and not llReady THEN Syst.Var:ufk[5]= 0.   
+      ELSE IF icAction = "view" THEN Syst.Var:ufk[1] = 0.
 
       ELSE IF icAction = "change" THEN DO:
       
@@ -799,33 +799,33 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
 
             /* print contract */
             IF LOOKUP(STRING(MsRequest.ReqStat),"0,11") > 0  
-            THEN Syst.CUICommon:ufk[3] = 1863.
+            THEN Syst.Var:ufk[3] = 1863.
             
             /* confirm (contract returned) */
-            IF MsRequest.ReqStat < 12 THEN Syst.CUICommon:ufk[4] = 1054.
+            IF MsRequest.ReqStat < 12 THEN Syst.Var:ufk[4] = 1054.
  
              /* vrk / sat */    
             IF LOOKUP(STRING(MsRequest.ReqStat),"12,13") > 0 AND
                lcNewCustId > "" 
-            THEN ASSIGN Syst.CUICommon:ufk[6] = 2232
-                        Syst.CUICommon:ufk[7] = 2234.
+            THEN ASSIGN Syst.Var:ufk[6] = 2232
+                        Syst.Var:ufk[7] = 2234.
              
          END.
       END.
 
-      IF AVAILABLE MsRequest THEN Syst.CUICommon:ufk[2] = 927.  
+      IF AVAILABLE MsRequest THEN Syst.Var:ufk[2] = 927.  
       
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN Syst.CUICommon:toimi = 1  
+   ELSE ASSIGN Syst.Var:toimi = 1  
                ufkey = TRUE.
 
    /* update new agr.customer */ 
-   IF Syst.CUICommon:toimi = 1 THEN RUN pUpdateNewOwner.
+   IF Syst.Var:toimi = 1 THEN RUN pUpdateNewOwner.
       
    /* memo */
-   ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+   ELSE IF Syst.Var:toimi = 2 THEN DO:
       RUN Mc/memo.p(MobSub.CustNum,
                "MsRequest",
                STRING(MsRequest.MsRequest),
@@ -833,7 +833,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
    END. 
    
    /* create request */ 
-   ELSE IF Syst.CUICommon:toimi = 5 AND icAction = "new" THEN DO:
+   ELSE IF Syst.Var:toimi = 5 AND icAction = "new" THEN DO:
 
       IF ldtChgDate = ? OR 
          (lcNewLast = "" AND lcNewCompanyName = "") OR 
@@ -934,7 +934,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          NEXT.
       END.
       
-      Syst.CUICommon:ehto = 5.   
+      Syst.Var:ehto = 5.   
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
@@ -978,7 +978,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
 
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
 
       /* update msrequest */
       IF AVAILABLE MsRequest AND MsRequest.ReqStat = 0 THEN DO:
@@ -1111,7 +1111,7 @@ PROCEDURE pUpdateNewOwner:
    UpdateAgrCust:
    REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO, LEAVE:
          
-      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
       /* change time cannot be in the past */   
       IF NOT llPreActivated AND ldtChgDate <= TODAY THEN ASSIGN 
@@ -1139,7 +1139,7 @@ PROCEDURE pUpdateNewOwner:
                DISPLAY lcSalesman WITH FRAME fNewCriter.
             END.
                
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
 
@@ -1159,12 +1159,12 @@ PROCEDURE pUpdateNewOwner:
                    
             END. 
 
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END. 
  
-         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                
             IF FRAME-FIELD = "ldtChgDate" THEN DO:
                IF NOT fChkDate(INPUT INPUT ldtChgDate) THEN NEXT. 
@@ -1181,7 +1181,7 @@ PROCEDURE pUpdateNewOwner:
             ELSE IF FRAME-FIELD = "lcSalesman" THEN DO:
                 
                FIND FIRST Salesman WHERE 
-                    Salesman.Brand = Syst.CUICommon:gcBrand AND
+                    Salesman.Brand = Syst.Var:gcBrand AND
                     Salesman.Salesman = INPUT lcSalesman 
                   NO-LOCK NO-ERROR.
                IF NOT AVAIL Salesman OR
@@ -1216,13 +1216,13 @@ PROCEDURE pUpdateNewOwner:
                            INPUT "ID Type",
                            INPUT "",
                            OUTPUT lcCode). 
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             lcNewCustIdType = lcCode.
             DISP lcNewCustIdType WITH FRAME fNewCriter.
          END.   
 
-         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                
             IF FRAME-FIELD = "lcNewCustIdType" THEN DO:
                   
@@ -1248,7 +1248,7 @@ PROCEDURE pUpdateNewOwner:
                END.
 
                /* Validate, if existing customer*/   
-               FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = Syst.CUICommon:gcBrand                 AND 
+               FIND FIRST bf_NewCustomer WHERE bf_NewCustomer.Brand      = Syst.Var:gcBrand                 AND 
                                                bf_NewCustomer.CustIdType = lcNewCustIDType         AND 
                                                bf_NewCustomer.OrgId      = INPUT lcNewCustId       NO-LOCK NO-ERROR.
                IF AVAIL bf_NewCustomer THEN
@@ -1313,14 +1313,14 @@ PROCEDURE pUpdateNewOwner:
         lcNewTitle lcNewTitleLabel WITH FRAME fNewCriter.
          
       FIND FIRST bNewCust WHERE 
-                 bNewCust.Brand = Syst.CUICommon:gcBrand AND
+                 bNewCust.Brand = Syst.Var:gcBrand AND
                  bNewCust.CustIdType = lcNewCustIdType AND
                  bNewCust.OrgId = lcNewCustId AND
                  bNewCust.Roles NE "inactive" NO-LOCK NO-ERROR.
                     
       IF AVAIL bNewCust AND bNewCust.CustNum NE liNewCust1 THEN DO: 
          IF CAN-FIND(FIRST bMobSub WHERE
-                           bMobSub.Brand     = Syst.CUICommon:gcBrand AND
+                           bMobSub.Brand     = Syst.Var:gcBrand AND
                            bMobSub.MsSeq    <> MobSub.MsSeq AND
                            bMobSub.CustNum   = bNewCust.CustNum AND
                            bMobSub.PayType   = FALSE) THEN
@@ -1354,7 +1354,7 @@ PROCEDURE pUpdateNewOwner:
                                  "Title",  /* FieldName */
                                  "CustCare",   /* GroupCode */
                            OUTPUT lcCode).
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
                
             lcNewTitle = lcCode.
@@ -1363,7 +1363,7 @@ PROCEDURE pUpdateNewOwner:
          END.   
             
          IF FRAME-FIELD = "lcNewZipcode" AND
-            LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) = 0 AND
+            LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) = 0 AND
             NOT KEY-LABEL(LASTKEY) = "F9" THEN DO:
               
             MESSAGE "Press F9 for options" VIEW-AS ALERT-BOX. 
@@ -1375,10 +1375,10 @@ PROCEDURE pUpdateNewOwner:
                
             RUN Help/h-postcode.p.
                
-            IF Syst.CUICommon:si-recid NE ? THEN DO:
-               fDispPostOffice(Syst.CUICommon:si-recid).
+            IF Syst.Var:si-recid NE ? THEN DO:
+               fDispPostOffice(Syst.Var:si-recid).
             END.   
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END.
@@ -1393,12 +1393,12 @@ PROCEDURE pUpdateNewOwner:
                DISPLAY liNewLanguage WITH FRAME fNewCriter.
             END.
                
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                   
             IF FRAME-FIELD = "ldaNewBirthday" THEN DO:
                   

@@ -116,7 +116,7 @@ ldeLastDump = Func.Common:mHMS2TS(ldaEventDate, "00:00:00").
 
 IF icDumpMode = "Full" THEN DO:
    FOR EACH MsOwner NO-LOCK WHERE
-            MsOwner.Brand = Syst.CUICommon:gcBrand:
+            MsOwner.Brand = Syst.Var:gcBrand:
       lhCollect:BUFFER-CREATE.
       lhCollect:BUFFER-COPY(lhTable).
    END.
@@ -128,7 +128,7 @@ ELSE DO:
             Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
       FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand = Syst.CUICommon:gcBrand AND
+                 MsOwner.Brand = Syst.Var:gcBrand AND
                  MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                  MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
 
@@ -142,7 +142,7 @@ ELSE DO:
                /* This begin date for create is not yesterday, so continue to search a new one */
                RELEASE MSOwner.
                FIND FIRST MsOwner NO-LOCK WHERE
-                          MsOwner.Brand = Syst.CUICommon:gcBrand AND
+                          MsOwner.Brand = Syst.Var:gcBrand AND
                           MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                           MsOwner.TSBegin >= ldeLastDump AND  
                           MSOwner.TSBegin < ldeToday NO-ERROR.
@@ -156,7 +156,7 @@ ELSE DO:
          /* YTS-10342 New MSOwner-search to be able to find MSOwners 
             whose TSEnd is changed after midnight before dump start. */
          FIND FIRST MsOwner NO-LOCK WHERE
-                    MsOwner.Brand = Syst.CUICommon:gcBrand AND
+                    MsOwner.Brand = Syst.Var:gcBrand AND
                     MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                     MsOwner.TSBegin >= ldeLastDump NO-ERROR.
          IF AVAIL MsOwner THEN fCollect().

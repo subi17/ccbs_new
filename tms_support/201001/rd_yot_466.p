@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "rafaeldv".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE plSimulated AS LOGICAL NO-UNDO. 
@@ -12,7 +12,7 @@ plSimulated = FALSE.
 ldTS = Func.Common:mMakeTS(). 
 
 FOR EACH SIMbuf EXCLUSIVE-LOCK WHERE 
-         SIMbuf.Brand = Syst.CUICommon:gcBrand AND
+         SIMbuf.Brand = Syst.Var:gcBrand AND
          LOOKUP(SUBSTRING(SIMbuf.ICC,7,4) ,"0909,1009,1109,1209,0110") = 0 AND 
          SIMbuf.Stock = "RETAILER" AND 
          SIMbuf.SimStat = 1 :

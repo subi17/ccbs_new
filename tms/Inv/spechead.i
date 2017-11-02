@@ -40,7 +40,7 @@ FUNCTION fSpecBItemHeader RETURNS CHARACTER
    DEF VAR ldVAT       AS DEC  NO-UNDO.
    DEF VAR lcBItemHead AS CHAR NO-UNDO. 
 
-   lcBItemHead = fTranslationName(Syst.CUICommon:gcBrand,
+   lcBItemHead = fTranslationName(Syst.Var:gcBrand,
                                   1,
                                   icBillCode,
                                   iiLanguage,
@@ -48,7 +48,7 @@ FUNCTION fSpecBItemHeader RETURNS CHARACTER
                                   
    IF lcBItemHead = ? OR lcBItemHead = "" THEN DO:
       FIND BillItem WHERE 
-           BillItem.Brand    = Syst.CUICommon:gcBrand AND
+           BillItem.Brand    = Syst.Var:gcBrand AND
            BillItem.BillCode = icBillCode 
       NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem 
@@ -69,7 +69,7 @@ FUNCTION fSpecCCNHeader RETURNS CHARACTER
    DEF VAR lcCCNHead AS CHAR NO-UNDO. 
 
    /* country name  */
-   lcCCNHead = fTranslationName(Syst.CUICommon:gcBrand,
+   lcCCNHead = fTranslationName(Syst.Var:gcBrand,
                                 3,
                                 STRING(iiCCN),
                                 iiLanguage,
@@ -77,7 +77,7 @@ FUNCTION fSpecCCNHeader RETURNS CHARACTER
    
    if lcCCNHead = ? or lcCCNHead = "" THEN DO:
        FIND CCN WHERE 
-            CCN.Brand = Syst.CUICommon:gcBrand AND
+            CCN.Brand = Syst.Var:gcBrand AND
             CCN.CCN   = iiCCN
        NO-LOCK NO-ERROR. 
        IF AVAILABLE CCN THEN lcCCNHead = CCN.CCNName.

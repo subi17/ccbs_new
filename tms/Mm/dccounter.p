@@ -60,8 +60,8 @@ form
    lcAmount                            column-label "Usage"
  
 WITH OVERLAY CENTERED  scroll 1 15 DOWN
-   COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + /*Syst.CUICommon:ynimi +*/
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + /*Syst.Var:ynimi +*/
    " COUNTERS for period " + STRING(liPeriod) + " " + icEvent + " "
    FRAME sel.
 
@@ -77,18 +77,18 @@ form
    "Usage ........:" lcAmount SKIP
 
 WITH OVERLAY ROW 2 centered
-   COLOR value(Syst.CUICommon:cfc)
-   TITLE COLOR value(Syst.CUICommon:ctc)
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH no-labels side-labels
    FRAME lis.
 
 form /*  search WITH FIELD DCCounter */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND xxxxxxx "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND xxxxxxx "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -137,14 +137,14 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* DCCounter -ADD  */
       HIDE FRAME lis.
-      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 5. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DCCounter.
@@ -216,14 +216,14 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk   = 0
-        Syst.CUICommon:ufk[1]= 35  
-        Syst.CUICommon:ufk[5] = 11 
-        Syst.CUICommon:ufk[6]= 0 /* 4   */
-        Syst.CUICommon:ufk[8]= 8.
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[1]= 35  
+        Syst.Var:ufk[5] = 11 
+        Syst.Var:ufk[6]= 0 /* 4   */
+        Syst.Var:ufk[8]= 8.
         
-        IF iiMsseq > 0 THEN Syst.CUICommon:ufk[1] = 0.
-        ASSIGN Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        IF iiMsseq > 0 THEN Syst.Var:ufk[1] = 0.
+        ASSIGN Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -232,12 +232,12 @@ BROWSE:
       
       IF order = 1 THEN DO:
         CHOOSE ROW DCCounter.dcdate {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) DCCounter.dcdate WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) DCCounter.dcdate WITH FRAME sel.
       END. 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -245,10 +245,10 @@ BROWSE:
          END.
       END.
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -263,7 +263,7 @@ BROWSE:
       END.
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND DCCounter where recid(DCCounter) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -288,7 +288,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND DCCounter where recid(DCCounter) = rtab[FRAME-DOWN] no-lock .
@@ -314,7 +314,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DCCounter where recid(DCCounter) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -338,7 +338,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -352,15 +352,15 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     else if lookup(Syst.CUICommon:nap,"enter,return,f5") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.Var:nap,"enter,return,f5") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST DCCounter where 
             recid(DCCounter) = rtab[frame-line(sel)]
        /*exclusive-lock*/ no-lock.
-       assign fr-header = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5.
+       assign fr-header = " VIEW " ufkey = TRUE Syst.Var:ehto = 5.
        RUN Syst/ufkey.p.
 
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        
@@ -368,30 +368,30 @@ BROWSE:
 
      END.
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(DCCounter) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(DCCounter) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE 
-              BillItem.Brand    = Syst.CUICommon:gcBrand AND
+              BillItem.Brand    = Syst.Var:gcBrand AND
               BillItem.BillCode = DCCounter.BillCode 
    NO-LOCK NO-ERROR.
     
@@ -500,7 +500,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    FIND FIRST DayCampaign WHERE
-      DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+      DayCampaign.Brand = Syst.Var:gcBrand AND
       DayCampaign.DCEvent = dccli.dcevent NO-LOCK NO-ERROR.
    
    FIND FIRST TMSCodes WHERE

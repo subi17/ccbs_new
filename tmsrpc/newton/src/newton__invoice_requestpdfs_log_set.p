@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/dpl_log.i}
 
 DEF VAR top_array AS CHAR NO-UNDO.
@@ -58,7 +58,7 @@ IF LOOKUP(pcEventType, "PDF_Invoice_certified,PDF_Invoice_non_certified,PDF_Call
    THEN RETURN  appl_err("Invalid EventType").
 
 FIND FIRST Invoice NO-LOCK WHERE
-           Invoice.Brand = Syst.CUICommon:gcBrand AND
+           Invoice.Brand = Syst.Var:gcBrand AND
            Invoice.ExtInvID = pcInvNum NO-ERROR.
 
 IF NOT AVAIL Invoice THEN RETURN appl_err("Requested Invoice not available").

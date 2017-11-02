@@ -70,7 +70,7 @@ FUNCTION fActivateTARJ7Promo RETURN LOGICAL
             Order.OrderType <= 2 AND
             Order.StatusCode = {&ORDER_STATUS_DELIVERED},
       FIRST OrderAction NO-LOCK WHERE
-            OrderAction.Brand = Syst.CUICommon:gcBrand AND
+            OrderAction.Brand = Syst.Var:gcBrand AND
             OrderAction.OrderId = Order.OrderId AND
             OrderAction.ItemType = "Promotion" AND
             OrderAction.ItemKey  = "TARJ7" BY Order.CRStamp DESC:
@@ -166,7 +166,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
              liCReqTime  = TIME.
 
       /* all web requests are scheduled to 1st of next month */
-      IF Syst.CUICommon:katun = "WEB" THEN lcCReqTime = "1".
+      IF Syst.Var:katun = "WEB" THEN lcCReqTime = "1".
       
       /* should old type be closed only on last of month 
          -> set request date as the 1st of next month */
@@ -268,7 +268,7 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    /* check if there are scheduling rules for closing service */
    IF iiValue = 0 THEN DO:   
       FIND bReqComp NO-LOCK WHERE
-           bReqComp.Brand   = Syst.CUICommon:gcBrand AND
+           bReqComp.Brand   = Syst.Var:gcBrand AND
            bReqComp.ServCom = icServCom NO-ERROR.
       IF AVAILABLE bReqComp AND bReqComp.CloseTime = 1  
       THEN llSerClose = TRUE.
@@ -277,12 +277,12 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    /* otherwise check links to other components; some of them may have
       a rule for closing */
    ELSE FOR EACH ScUpdRule NO-LOCK WHERE
-                 ScUpdRule.Brand    = Syst.CUICommon:gcBrand   AND
+                 ScUpdRule.Brand    = Syst.Var:gcBrand   AND
                  ScUpdRule.ServCom  = icServCom AND
                  ScUpdRule.OldValue = 0         AND
                  ScUpdRule.NewValue = 1,
            FIRST bReqComp NO-LOCK WHERE
-                 bReqComp.Brand   = Syst.CUICommon:gcBrand AND
+                 bReqComp.Brand   = Syst.Var:gcBrand AND
                  bReqComp.ServCom = ScUpdRule.UpdServCom:
 
       IF bReqComp.CloseTime = 1 THEN DO:
@@ -377,9 +377,9 @@ FUNCTION fServiceRequest RETURNS INTEGER
    
    /* links to other components */
    IF CAN-FIND(FIRST ScUpdRule WHERE
-                     ScUpdRule.Brand   = Syst.CUICommon:gcBrand AND
+                     ScUpdRule.Brand   = Syst.Var:gcBrand AND
                      ScUpdRule.ServCom = icServCom) AND
-      LOOKUP(Syst.CUICommon:katun,"WEB,NEWTON") > 0
+      LOOKUP(Syst.Var:katun,"WEB,NEWTON") > 0
    THEN DO:
    
       liOldValue = IF iiValue > 0 THEN 0 ELSE 1. 
@@ -561,7 +561,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
    lcInvGroup  = fDefInvGroup(icRegion).
    
    FIND InvGroup WHERE
-        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+        InvGroup.Brand    = Syst.Var:gcBrand AND
         InvGroup.InvGroup = lcInvGroup NO-LOCK NO-ERROR.
    FIND Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
    
@@ -731,7 +731,7 @@ FUNCTION fPCUpdateRequest RETURNS INTEGER
    END. 
    /* validate contrat type */
    IF NOT CAN-FIND(FIRST DayCampaign WHERE 
-                         DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+                         DayCampaign.Brand   = Syst.Var:gcBrand AND
                          DayCampaign.DCEvent = icContrType)
    THEN DO:
       ocResult = "Invalid contract type".
@@ -833,7 +833,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    END. 
 
    IF NOT CAN-FIND(FIRST DayCampaign WHERE 
-                         DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+                         DayCampaign.Brand   = Syst.Var:gcBrand AND
                          DayCampaign.DCEvent = icContrType)
    THEN DO:
       ocResult = "Invalid contract type".
@@ -1072,7 +1072,7 @@ PROCEDURE pCheckServiceLinks:
    IF idLinkStamp = 0 THEN idLinkStamp = Func.Common:mMakeTS().
  
    FOR EACH ScUpdRule NO-LOCK WHERE
-            ScUpdRule.Brand    = Syst.CUICommon:gcBrand    AND
+            ScUpdRule.Brand    = Syst.Var:gcBrand    AND
             ScUpdRule.ServCom  = icServCom  AND
             ScUpdRule.OldValue = iiOldValue AND
             ScUpdRule.NewValue = iiNewValue:
@@ -1137,7 +1137,7 @@ FUNCTION fIsOrderForProCustomer RETURNS LOGICAL
 
    DEF BUFFER Order FOR Order.
 
-   FIND FIRST Order NO-LOCK WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.OrderID = iiOrderID NO-ERROR.
+   FIND FIRST Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND Order.OrderID = iiOrderID NO-ERROR.
 
    IF INDEX(Order.orderchannel,"PRO") > 0 THEN
        RETURN TRUE.
@@ -1541,7 +1541,7 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
    DEF VAR lcError   AS CHAR NO-UNDO.
    DEF VAR lcResult  AS CHAR NO-UNDO.
 
-   IF fListMatrix(Syst.CUICommon:gcBrand,
+   IF fListMatrix(Syst.Var:gcBrand,
                   "CONVFIXEDSTC",
                   "SubsTypeFrom;SubsTypeTo",
                   icCLIType,

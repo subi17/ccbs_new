@@ -10,14 +10,14 @@ DEF VAR lhBuff             AS HANDLE NO-UNDO.
 DEF VAR lcError            AS CHAR NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
 END.
 
 /* check order exist */
 /* check order exist */
 FIND Order NO-LOCK WHERE
-     Order.Brand = Syst.CUICommon:gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderId = piOrderId NO-ERROR.
 IF NOT AVAIL Order THEN 
    RETURN SUBST("Unknown Order id &1",STRING(piOrderId)).

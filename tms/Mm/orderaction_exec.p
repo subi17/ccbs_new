@@ -31,7 +31,7 @@ DEF VAR lcSHParam AS CHAR NO-UNDO.
 DEF VAR lcBundleId AS CHAR NO-UNDO.
 
 FIND FIRST MSRequest WHERE
-           MSRequest.brand EQ Syst.CUICommon:gcBrand AND
+           MSRequest.brand EQ Syst.Var:gcBrand AND
            MsRequest.msRequest = iiOrigRequest NO-ERROR.
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
@@ -41,7 +41,7 @@ FIND Customer WHERE Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN "ERROR:Customer not available".
 
 FIND Order WHERE 
-     Order.Brand   = Syst.CUICommon:gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderId = iiOrderId NO-LOCK NO-ERROR. 
 IF NOT AVAILABLE Order OR Order.MsSeq NE iiMsSeq THEN 
    RETURN "ERROR:Unknown order".
@@ -66,12 +66,12 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
 
 ORDERACTION_LOOP:
 FOR EACH OrderAction NO-LOCK WHERE
-         OrderAction.Brand     = Syst.CUICommon:gcBrand AND
+         OrderAction.Brand     = Syst.Var:gcBrand AND
          OrderAction.OrderId   = iiOrderId:
    
    IF OrderAction.ItemType = "BundleItem" THEN     
    DO:
-       FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK NO-ERROR.
+       FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK NO-ERROR.
        IF AVAIL DayCampaign THEN 
        DO:
            IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND 
@@ -129,7 +129,7 @@ IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN
 /* DSS Order Action will be executed now other */
 /* data bundle request has been created        */
 FOR EACH OrderAction NO-LOCK WHERE
-         OrderAction.Brand     = Syst.CUICommon:gcBrand AND
+         OrderAction.Brand     = Syst.Var:gcBrand AND
          OrderAction.OrderId   = iiOrderId AND
          OrderAction.ItemType = "BundleItem" AND
          OrderAction.ItemKey = {&DSS}:
@@ -149,7 +149,7 @@ END.
 /* Create flex_upsell* or dss_flex_upsell* based on dss activity 
    YPPI-1 EXTRAL-108 */
 FOR EACH OrderAction EXCLUSIVE-LOCK WHERE
-         OrderAction.Brand     = Syst.CUICommon:gcBrand AND
+         OrderAction.Brand     = Syst.Var:gcBrand AND
          OrderAction.OrderId   = iiOrderId AND
          OrderAction.ItemType = "BundleItem" AND
          OrderAction.ItemKey MATCHES "FLEX*UPSELL":
@@ -197,7 +197,7 @@ PROCEDURE pPeriodicalContract:
    DEF BUFFER bBundleContract FOR DayCampaign.
   
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = OrderAction.ItemKey
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
@@ -331,7 +331,7 @@ PROCEDURE pPeriodicalContract:
                LOOKUP(STRING(bBundleRequest.ReqStatus),
                       {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bBundleContract NO-LOCK WHERE
-                  bBundleContract.Brand = Syst.CUICommon:gcBrand AND
+                  bBundleContract.Brand = Syst.Var:gcBrand AND
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -382,7 +382,7 @@ PROCEDURE pService:
                               1, /* activate */
                               "", /* params */
                               Func.Common:mMakeTS(),
-                              Syst.CUICommon:katun,
+                              Syst.Var:katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
                               "",
@@ -397,7 +397,7 @@ PROCEDURE pService:
                               1, /* activate */
                               "", /* params */
                               Func.Common:mMakeTS(),
-                              Syst.CUICommon:katun,
+                              Syst.Var:katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
                               "",
@@ -511,13 +511,13 @@ PROCEDURE pQ25Extension:
       liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
       lcTFBank = ""
       liPercontractId = INT(OrderAction.ItemParam).
-      lcOrigkatun = Syst.CUICommon:katun.
+      lcOrigkatun = Syst.Var:katun.
 
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
 
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -549,7 +549,7 @@ PROCEDURE pQ25Extension:
       ldaDate = TODAY.
 
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN
-      Syst.CUICommon:katun = Order.OrderChannel + "_" + Order.Salesman.
+      Syst.Var:katun = Order.OrderChannel + "_" + Order.Salesman.
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
@@ -566,7 +566,7 @@ PROCEDURE pQ25Extension:
                              "",
                              OUTPUT lcResult).
 
-   Syst.CUICommon:katun = lcOrigKatun.
+   Syst.Var:katun = lcOrigKatun.
  
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
@@ -658,7 +658,7 @@ PROCEDURE pQ25Discount:
       RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)".
 
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = MobSub.Custnum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND

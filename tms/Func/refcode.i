@@ -41,7 +41,7 @@ FUNCTION fTeksti RETURNS CHARACTER
 
    /* FIND TEXT WITH CUSTOMERS LANGUAGE */
    FIND FIRST HdrText WHERE 
-              HdrText.Brand  = Syst.CUICommon:gcBrand AND
+              HdrText.Brand  = Syst.Var:gcBrand AND
               HdrText.te-nro = inro    AND
               HdrText.te-kie = ikieli NO-LOCK NO-ERROR.
    IF AVAIL HdrText THEN RETURN HdrText.te-text.
@@ -49,7 +49,7 @@ FUNCTION fTeksti RETURNS CHARACTER
    /* IF CAN'T FIND THEN USE DEFAULT LANGUAGE */
    ELSE DO:
       FIND FIRST HdrText WHERE 
-                 HdrText.Brand  = Syst.CUICommon:gcBrand AND
+                 HdrText.Brand  = Syst.Var:gcBrand AND
                  HdrText.te-nro = inro    AND  
                  HdrText.te-kie = 1 NO-LOCK NO-ERROR.
       IF AVAIL HdrText THEN RETURN te-text.

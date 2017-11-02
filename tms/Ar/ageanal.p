@@ -96,7 +96,7 @@ viiva3       = fill("-",lev)
 lcTypeDenied = fCParamC("InvTypeDenied"). 
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 at 1 skip
@@ -206,7 +206,7 @@ ELSE DO:
 
    FOR EACH TCustGroup,
        EACH cgmember NO-LOCK WHERE
-            cgMember.Brand     = Syst.CUICommon:gcBrand AND
+            cgMember.Brand     = Syst.Var:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup:
 
       FIND FIRST tcgmember WHERE 
@@ -241,7 +241,7 @@ IF ttCriter.ToFile = "" THEN ASSIGN
 
 /* preselect inv.groups */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand = Syst.CUICommon:gcBrand AND
+         InvGroup.Brand = Syst.Var:gcBrand AND
          (IF ttCriter.InvGroup = ""
           THEN TRUE
           ELSE InvGroup.InvGroup = ttCriter.InvGroup):
@@ -276,7 +276,7 @@ END.
 
 FOR EACH ttInvGroup,
     each Customer no-lock  where
-         Customer.Brand    = Syst.CUICommon:gcBrand             AND
+         Customer.Brand    = Syst.Var:gcBrand             AND
          Customer.InvGroup = ttInvGroup.InvGroup AND
          Customer.CustNum >= cgcustno1           AND
          Customer.CustNum <= cgcustno2           AND    
@@ -308,7 +308,7 @@ BY (if ttCriter.SortBy = 1
    END.
 
    for each Invoice NO-LOCK USE-INDEX CustNum WHERE
-            Invoice.Brand    = Syst.CUICommon:gcBrand          AND
+            Invoice.Brand    = Syst.Var:gcBrand          AND
             Invoice.CustNum  = Customer.CustNum AND
             Invoice.InvDate <= ttCriter.RepDate and 
             /* printing not denied */

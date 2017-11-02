@@ -7,8 +7,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/detailseq.i}
 {Func/cparam2.i}

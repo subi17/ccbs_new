@@ -23,7 +23,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i} /* fReqStatus */
 {Func/fmakemsreq.i}
@@ -104,7 +104,7 @@ IF pcmemoStruct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-Syst.CUICommon:katun = "VISTA_" + lcusername.
+Syst.Var:katun = "VISTA_" + lcusername.
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq limsseq}
 
@@ -131,7 +131,7 @@ END.
 ELSE DO: /* Cancel Quota 25 Extension */
 
    FIND DCCLI NO-LOCK WHERE
-        DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
+        DCCLI.Brand   EQ Syst.Var:gcBrand AND
         DCCLI.DCEvent EQ "RVTERM12" AND
         DCCLI.MsSeq   EQ MobSub.MsSeq AND
         DCCLI.ValidTo >= TODAY
@@ -161,7 +161,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
          llCreateFees = FALSE.
 
       FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-           FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
+           FixedFee.Brand     = Syst.Var:gcBrand   AND
            FixedFee.CustNum   = MobSub.CustNum AND
            FixedFee.HostTable = "MobSub"  AND
            FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -175,7 +175,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
       FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
          IF FFItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = Syst.CUICommon:gcBrand AND
+                            Invoice.Brand   = Syst.Var:gcBrand AND
                             Invoice.InvNum  = FFItem.InvNum AND
                             Invoice.InvType = 1 NO-LOCK) THEN NEXT.
          liLastUnBilledPeriod = FFItem.BillPeriod.
@@ -218,11 +218,11 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.

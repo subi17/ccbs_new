@@ -99,7 +99,7 @@ FORM
          HELP "Email Address, EMPTY = Only file "
    SKIP(3)   
    WITH ROW 1 SIDE-LABELS WIDTH 79
-        TITLE " " + Syst.CUICommon:ynimi + " INVOICE STATISTICS " +
+        TITLE " " + Syst.Var:ynimi + " INVOICE STATISTICS " +
         STRING(TODAY,"99-99-99") + " "                   
         FRAME valinta.
 
@@ -129,7 +129,7 @@ limits:
 REPEAT with frame valinta:
 
 
-    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     repeat with frame valinta on endkey undo, leave:
         UPDATE 
@@ -150,9 +150,9 @@ REPEAT with frame valinta:
         xemail
         with frame valinta editing:
 
-            readkey. Syst.CUICommon:nap = keylabel(lastkey).
+            readkey. Syst.Var:nap = keylabel(lastkey).
 
-            IF Syst.CUICommon:nap = "F9" AND 
+            IF Syst.Var:nap = "F9" AND 
                (INDEX(FRAME-FIELD,"liInvType") > 0 OR
                 INDEX(FRAME-FIELD,"xState") > 0)
             THEN DO:
@@ -192,13 +192,13 @@ REPEAT with frame valinta:
                   END.
                END.
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
 
-            ELSE IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 
+            ELSE IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 
             THEN DO WITH FRAME valinta:
                HIDE MESSAGE.
 
@@ -219,14 +219,14 @@ REPEAT with frame valinta:
     task:
     repeat with frame valinta:
 
-      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      assign Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      if Syst.CUICommon:toimi = 1 then next  limits.
+      if Syst.Var:toimi = 1 then next  limits.
 
-      if Syst.CUICommon:toimi = 8 then leave limits.
+      if Syst.Var:toimi = 8 then leave limits.
 
-      if Syst.CUICommon:toimi = 5 then leave task.
+      if Syst.Var:toimi = 5 then leave task.
     end.
 
 

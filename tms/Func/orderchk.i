@@ -35,7 +35,7 @@ FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
       liLimit = Limit.LimitAmt.
    ELSE DO:
       FIND FIRST CustCat WHERE
-                 CustCat.Brand = Syst.CUICommon:gcBrand AND
+                 CustCat.Brand = Syst.Var:gcBrand AND
                  CustCat.CustIdType = icIdType AND
                  CustCat.SelfEmployed = ilSelfEmployed AND
                  CustCat.pro EQ ilpro NO-LOCK NO-ERROR. 
@@ -55,7 +55,7 @@ FUNCTION fCheckRenewalData RETURNS LOGICAL:
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
    IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
-                     bOrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+                     bOrderCustomer.Brand = Syst.Var:gcBrand AND
                      bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
                      bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
                      THEN RETURN FALSE.
@@ -104,12 +104,12 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    DEF BUFFER bMobSub FOR MobSub.
 
    FOR EACH OrderCustomer NO-LOCK WHERE   
-            OrderCustomer.Brand      EQ Syst.CUICommon:gcBrand AND 
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
             OrderCustomer.CustIdType EQ pcIdType AND
             OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
       EACH  Order NO-LOCK WHERE
-            Order.Brand              EQ Syst.CUICommon:gcBrand AND
+            Order.Brand              EQ Syst.Var:gcBrand AND
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND
             Order.OrderType          NE {&ORDER_TYPE_STC} AND
@@ -136,19 +136,19 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
       oiActOrderCount = oiActOrderCount + (piOrders - 1).
 
    FOR EACH Customer NO-LOCK
-   WHERE Customer.Brand           EQ Syst.CUICommon:gcBrand
+   WHERE Customer.Brand           EQ Syst.Var:gcBrand
      AND Customer.CustIdType      EQ pcIdType
      AND Customer.OrgId           EQ pcPersonId
      AND Customer.Roles           NE "inactive",
    EACH bMobsub NO-LOCK
-   WHERE bMobSub.Brand             EQ Syst.CUICommon:gcBrand 
+   WHERE bMobSub.Brand             EQ Syst.Var:gcBrand 
      AND bMobsub.AgrCust           EQ Customer.CustNum
      AND bMobSub.SalesMan NE "GIFT":
       oiSubCount = oiSubCount + 1.
    END.
 
    FIND FIRST Customer
-   WHERE Customer.Brand           EQ Syst.CUICommon:gcBrand
+   WHERE Customer.Brand           EQ Syst.Var:gcBrand
      AND Customer.CustIdType      EQ pcIdType
      AND Customer.OrgId           EQ pcPersonId 
      AND Customer.Roles           NE "inactive"
@@ -171,7 +171,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    END. /* IF AVAIL Customer THEN DO: */
    ELSE DO:
       FIND FIRST CustCat WHERE
-                 CustCat.Brand = Syst.CUICommon:gcBrand AND
+                 CustCat.Brand = Syst.Var:gcBrand AND
                  CustCat.CustIdType = pcIdType AND
                  CustCat.SelfEmployed = plSelfEmployed NO-LOCK NO-ERROR. 
       IF AVAIL CustCat THEN
@@ -200,7 +200,7 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
    DEF BUFFER lbOtherOrder FOR Order.   
    
    FOR EACH lbOtherOrder NO-LOCK WHERE
-            lbOtherOrder.brand EQ Syst.CUICommon:gcBrand AND
+            lbOtherOrder.brand EQ Syst.Var:gcBrand AND
             lbOtherOrder.CLI EQ pcCLI AND
             LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOtherOrder.OrderType NE liExcludeOrderType:
@@ -232,7 +232,7 @@ FUNCTION fOngoingFixedOrders RETURNS CHARACTER
    FOR EACH lbOrderFusion NO-LOCK WHERE
             lbOrderFusion.FixedNumber EQ pcFixedNumber,
       EACH  lbOtherOrder NO-LOCK WHERE
-            lbOtherOrder.brand EQ Syst.CUICommon:gcBrand AND
+            lbOtherOrder.brand EQ Syst.Var:gcBrand AND
             lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
             LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOtherOrder.OrderType NE liExcludeOrderType:

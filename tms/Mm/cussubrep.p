@@ -28,7 +28,7 @@ DEF VAR ffnumber   AS CHAR No-UNDO.
 DEF VAR addserv    AS CHAR NO-UNDO.
 DEF VAR filename   AS CHAR NO-UNDO INIT "cust_subs_report.txt".
 
-Find First TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun no-lock no-error.
+Find First TMSUser WHERE TMSUser.UserCode = Syst.Var:katun no-lock no-error.
 IF AVAIL TMSUser THEN 
    path = TMSUser.repdir + "/" + filename.
 ELSE 
@@ -53,8 +53,8 @@ FORm SKIP(1)
    CustNum2   NO-LABEL HELP "Customers TO number"      FORMAT "zzzzzzzz9" skip
    path    LABEL  " Path and Filename ......"  FORMAT "x(40)"
 
-WITH title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
-   color value(Syst.CUICommon:cfc) row 4 centered overlay FRAME rajat.
+WITH title color value(Syst.Var:ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
+   color value(Syst.Var:cfc) row 4 centered overlay FRAME rajat.
 ASSIGN
    CustNum1  = 1001
    CustNum2  = 999999999.
@@ -64,15 +64,15 @@ PAUSE 0.
 toimi:
    REPEAT WITH FRAME valinta on ENDkey UNDO toimi, return:
          /* We ASk the limits */
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
              InvGroup
              CustNum1 CustNum2 VALIDATE(input CustNum2 >= input CustNum1,
              "Impossible !")
               path
          WITH FRAME rajat editing :
-            readkey. Syst.CUICommon:nap = keyLABEL(lastkey).
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN do:
+            readkey. Syst.Var:nap = keyLABEL(lastkey).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN do:
                HIDE MESSAGE NO-PAUSE.
                IF FRAME-field = "InvGroup" THEN do:
                   ASSIGN FRAME rajat InvGroup.
@@ -88,7 +88,7 @@ toimi:
                   END.
                   ELSE do: 
                      FIND invgroup WHERE 
-                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
+                          InvGroup.Brand    = Syst.Var:gcBrand AND 
                           invgroup.InvGroup = InvGroup
                      NO-LOCK NO-ERROR.
                      IF not avail invgroup THEN do:
@@ -104,21 +104,21 @@ toimi:
       END.
 
 
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[2] = 0   Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
-                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 0 Syst.Var:ufk[2] = 0   Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 795
+                     Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 5 THEN do:
+      IF Syst.Var:toimi = 5 THEN do:
          leave toimi.
       END.
 
-      IF Syst.CUICommon:toimi = 8 THEN do:
+      IF Syst.Var:toimi = 8 THEN do:
          HIDE MESSAGE NO-PAUSE.
          HIDE FRAME rajat NO-PAUSE.
          HIDE FRAME main NO-PAUSE.
          return.
       END.
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
    /* REPORT FILE INFORMATION */
    OUTPUT STREAM EXCEL TO VALUE(PATH).
@@ -134,7 +134,7 @@ toimi:
    /***** CUSTOMER SECTION ****/
 
    FOR EACH Customer WHERE
-            Customer.Brand     = Syst.CUICommon:gcBrand  AND 
+            Customer.Brand     = Syst.Var:gcBrand  AND 
             Customer.CustNum  >= CustNum1 AND
             Customer.CustNum  <= CustNum2 AND
             (IF   InvGroup NE "*" THEN 
@@ -172,12 +172,12 @@ toimi:
          Addserv = "".      
 
          FOR EACH FixedFee  where 
-                  Fixedfee.Brand     = Syst.CUICommon:gcBrand       AND
+                  Fixedfee.Brand     = Syst.Var:gcBrand       AND
                   FixedFee.Hosttable = "mobsub"      AND 
                   FixedFee.Keyvalue  = STRING(mobsub.msseq) NO-LOCK.
 
             Find first BillItem where 
-                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
+                       BillItem.Brand    = Syst.Var:gcBrand AND 
                        BillItem.BillCode = FixedFee.BillCode 
             no-lock no-error.
             addserv = addserv + BillItem.BIName + ",".

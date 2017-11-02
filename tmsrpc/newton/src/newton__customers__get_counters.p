@@ -68,7 +68,7 @@ resp_struct = add_struct(response_toplevel_id, "").
 
 /* Check ongoing limit requests */
 FIND FIRST MsRequest WHERE
-           MsRequest.Brand = Syst.CUICommon:gcBrand AND
+           MsRequest.Brand = Syst.Var:gcBrand AND
            MsRequest.Reqtype = 40 AND
            MsRequest.CustNum = piCustnum AND
            LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") >  0 
@@ -82,7 +82,7 @@ ELSE
 
 lctmcounters = add_array(resp_struct,"tmcounters").
 FOR EACH TMRule  NO-LOCK WHERE
-         TMRule.Brand = Syst.CUICommon:gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate >=  TODAY :
 

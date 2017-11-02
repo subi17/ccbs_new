@@ -12,8 +12,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun = "NewtonRPC"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun = "NewtonRPC"
+   Syst.Var:gcBrand = "1".
 {Func/callquery.i}
 
 DEF VAR resp_array AS CHAR NO-UNDO. 
@@ -37,8 +37,8 @@ resp_array = add_array(response_toplevel_id, "").
 tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT "edr",
-               INPUT Syst.CUICommon:gcBrand,
-               INPUT Syst.CUICommon:katun,
+               INPUT Syst.Var:gcBrand,
+               INPUT Syst.Var:katun,
                INPUT TODAY - 30,
                INPUT TODAY,
                INPUT 0,

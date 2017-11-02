@@ -10,8 +10,8 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun   = "Cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun   = "Cron"
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -98,7 +98,7 @@ REPEAT:
       END.
 
       FIND FIRST MobSub NO-LOCK WHERE
-                 MobSub.Brand = Syst.CUICommon:gcBrand AND
+                 MobSub.Brand = Syst.Var:gcBrand AND
                  MobSub.CLI = lcMSISDN NO-ERROR.
       IF NOT AVAILABLE MobSub THEN DO:
          fError("Unknown Subscription").
@@ -115,7 +115,7 @@ REPEAT:
 
       CREATE Limit.
       ASSIGN
-         Limit.Brand     = Syst.CUICommon:gcBrand
+         Limit.Brand     = Syst.Var:gcBrand
          Limit.MsSeq     = MobSub.MsSeq
          Limit.LimitAmt  = ldLimitAmt
          Limit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT}

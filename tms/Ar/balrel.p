@@ -104,13 +104,13 @@ form
       FORMAT "X(47)"
    SKIP(2)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + Syst.CUICommon:ynimi + " BALANCE REPORT " + STRING(TODAY,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " BALANCE REPORT " + STRING(TODAY,"99-99-99") + " "
 FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
 ASSIGN liCustNum[2]  = 999999999  
        ldClaimQty[2] = 8
@@ -120,7 +120,7 @@ ASSIGN liCustNum[2]  = 999999999
                        THEN DATE(12,1,YEAR(TODAY) - 1)
                        ELSE DATE(MONTH(TODAY) - 1,1,YEAR(TODAY))
        ufkey         = false
-       Syst.CUICommon:nap           = "1".
+       Syst.Var:nap           = "1".
 
 toimi:
 REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
@@ -132,21 +132,21 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
    IF ufkey THEN DO:
       ASSIGN
-      Syst.CUICommon:ufk[1]= 132  
-      Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-      Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ufk[9]= 1
-      Syst.CUICommon:ehto = 3 ufkey = FALSE.
+      Syst.Var:ufk[1]= 132  
+      Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+      Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 3 ufkey = FALSE.
       RUN Syst/ufkey.p.
 
       READKEY.
-      Syst.CUICommon:nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
    END.
    ELSE ufkey = TRUE.
 
-   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-      Syst.CUICommon:ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
@@ -161,9 +161,9 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          WITH FRAME valinta EDITING:
          
             READKEY. 
-            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF Syst.CUICommon:nap = "F9" AND INDEX(FRAME-FIELD,"liInvType") > 0 
+            IF Syst.Var:nap = "F9" AND INDEX(FRAME-FIELD,"liInvType") > 0 
             THEN DO:
 
                liField = FRAME-INDEX.
@@ -178,12 +178,12 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                   DISPLAY INTEGER(lcCode) ;& liInvType[liField].
                END.
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
                IF FRAME-FIELD = "" THEN DO:
                END.
@@ -196,14 +196,14 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
    END.
 
-   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
       IF lcFile = "" THEN DO:  
          tila = TRUE.
          {Syst/tmsreport.i "return"}
       END.
       ELSE DO:
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
       END. 
       
@@ -231,11 +231,11 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE       NO-PAUSE.
 HIDE FRAME valinta NO-PAUSE.

@@ -181,7 +181,7 @@ repeat:
             rc = rc + 1.
 
             FIND FIRST Invoice WHERE 
-                       Invoice.Brand  = Syst.CUICommon:gcBrand AND
+                       Invoice.Brand  = Syst.Var:gcBrand AND
                        Invoice.InvNum = ttPayment.Inv 
             NO-LOCK NO-ERROR.
             IF AVAIL Invoice AND Invoice.CrInvNum = 0 

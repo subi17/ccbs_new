@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
 {Func/memo.i}
@@ -83,7 +83,7 @@ PROCEDURE pProcessRequests:
        ELSE 
           ASSIGN liAgrCust = liSubscriptionAgrCust.
 
-       FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = Syst.CUICommon:gcBrand   AND 
+       FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = Syst.Var:gcBrand   AND 
                                       AgreeCustomer.CustNum = liAgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
            RETURN fTPServiceError(BUFFER TPService,"Agreement customer not found").

@@ -38,7 +38,7 @@
 {Func/fcustpl.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -115,8 +115,8 @@ form
    lcBdest            column-label "B"        format "x"
 WITH 
    width 80 OVERLAY scroll 1 15 DOWN ROW 1
-   COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + lBrHdr
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + lBrHdr
 FRAME sel.
 
 
@@ -217,7 +217,7 @@ form /* ADD */
    SPACE(1)
    SKIP
 WITH
-   WITH ROW 1 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) 
+   WITH ROW 1 centered COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) 
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 
@@ -228,24 +228,24 @@ form /* haku PriceList:lla */
    "Code :" plseek
    help "Give a pricelist code"
 WITH 
-   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Price LIST "
-   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND Price LIST "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 form /*  :n asno hakua varten */
    "Brand:" lcBrand skip
    "CCN .:" lcCSeek
    help "Give a CCN"
 WITH 
-   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CCN "
-   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND CCN "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  :n asno hakua varten */
    "Brand:" lcBrand skip
    "Cust :" liCustSeek
    help "Give customer number"
 WITH 
-   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Customer "
-   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND Customer "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 IF irRowID NE 0 THEN DO WITH FRAME lis:
 
@@ -281,7 +281,7 @@ IF icBDest NE "" AND CAN-FIND(FIRST Tariff WHERE
 ELSE
    lBrHdr  = lBrHdr + "(CCN " + STRING(iiCCN) + ") ".
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -332,7 +332,7 @@ repeat WITH FRAME sel:
    IF must-add THEN DO ON ENDKEY UNDO, LEAVE: /* Tariff -ADD  */
 
       assign
-         Syst.CUICommon:cfc = "lis"
+         Syst.Var:cfc = "lis"
          ufkey     = true
          fr-header = " ADD "
          must-add  = FALSE.
@@ -340,7 +340,7 @@ repeat WITH FRAME sel:
       RUN Syst/ufcolor.p.
 
       CLEAR FRAME lis no-pause.
-      Syst.CUICommon:ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
       PAUSE 0.
 
@@ -423,21 +423,21 @@ repeat WITH FRAME sel:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         ASSIGN Syst.CUICommon:ufk = 0
-         Syst.CUICommon:ufk[1] = 886 Syst.CUICommon:ufk[2]= 1163 Syst.CUICommon:ufk[3]= 0 /* 714 */
-         Syst.CUICommon:ufk[4] = (IF llShowHistory THEN 1827 ELSE 1828) 
-         Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-         Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)   
-         Syst.CUICommon:ufk[7] = 796 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         ASSIGN Syst.Var:ufk = 0
+         Syst.Var:ufk[1] = 886 Syst.Var:ufk[2]= 1163 Syst.Var:ufk[3]= 0 /* 714 */
+         Syst.Var:ufk[4] = (IF llShowHistory THEN 1827 ELSE 1828) 
+         Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+         Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)   
+         Syst.Var:ufk[7] = 796 Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          /* no sense in finding with ccn when ccn is already chosen */
-         IF iiCCN > 0 THEN Syst.CUICommon:ufk[2] = 0. 
+         IF iiCCN > 0 THEN Syst.Var:ufk[2] = 0. 
          /* if pricelist or customer chosen then pricelist & customer 
             finds are both invalid*/
          ELSE IF icPlist NE "" OR iiCust > 0
-         THEN ASSIGN Syst.CUICommon:ufk[1] = 0
-                     Syst.CUICommon:ufk[3] = 0.
+         THEN ASSIGN Syst.Var:ufk[1] = 0
+                     Syst.Var:ufk[3] = 0.
 
          {Syst/uright1.i '"5,6"'}
 
@@ -447,17 +447,17 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Tariff.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) Tariff.PriceList WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Tariff.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Tariff.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) Tariff.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Tariff.CCN WITH FRAME sel.
       END.
       
-      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND
-         LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0
+         LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0
       THEN DO:
          BELL.
          message "Cursor is on a empty row, move upwards !".
@@ -465,14 +465,14 @@ repeat WITH FRAME sel:
          NEXT.
       END.
 
-      if LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          if maxOrder > 1 then do:
             if maxOrder = 2 and order = 1 then order = 3.
             ELSE if order + 1 > maxOrder then order = 1.
             ELSE order = order + 1. 
          end. 
       END.
-      if LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          if maxorder > 1 then do:
            if order - 1 < 1 then do:
               if maxOrder = 2 then order = 3.
@@ -499,7 +499,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Tariff where recid(Tariff) = rtab[1] NO-LOCK.
 
@@ -531,7 +531,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE if LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE if LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Tariff where recid(Tariff) = rtab[FRAME-DOWN] NO-LOCK .
@@ -564,7 +564,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE if LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE if LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Tariff where recid(Tariff) = memory NO-LOCK NO-ERROR.
 
@@ -591,7 +591,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE if LOOKUP(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE if LOOKUP(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -607,12 +607,12 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* Haku sarakk. 1 */
-     ELSE if LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN DO:  /* haku sar. 1 */
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE if LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 THEN DO:  /* haku sar. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         plseek = "".
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr1.
-        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND iiCCN = 0
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND iiCCN = 0
                plseek WITH FRAME hayr1.
         HIDE FRAME hayr1 no-pause.
 
@@ -668,12 +668,12 @@ repeat WITH FRAME sel:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     ELSE if Syst.CUICommon:ufk[2] > 0 AND LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE if Syst.Var:ufk[2] > 0 AND LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         lcCSeek = 0.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND icPList = "" AND iiCust = 0
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND icPList = "" AND iiCust = 0
                lcCSeek WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 
@@ -704,12 +704,12 @@ repeat WITH FRAME sel:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     ELSE if Syst.CUICommon:ufk[3] > 0 AND LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE if Syst.Var:ufk[3] > 0 AND LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         liCustSeek = 0.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr3.
-        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand AND iiCCN = 0
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND iiCCN = 0
                liCustSeek WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
 
@@ -732,7 +732,7 @@ repeat WITH FRAME sel:
         END.
      END. /* Haku sar. 3 */
      
-     ELSE IF Syst.CUICommon:nap = "4" OR Syst.CUICommon:nap = "f4" THEN DO:
+     ELSE IF Syst.Var:nap = "4" OR Syst.Var:nap = "f4" THEN DO:
         llShowHistory = NOT llShowHistory.
         CLEAR FRAME sel ALL no-pause.
         RUN local-find-first.
@@ -743,19 +743,19 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     ELSE if LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO TRANSAction:  
+     ELSE if LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO TRANSAction:  
      /* removal */
 
         delline = FRAME-LINE.
         FIND Tariff where recid(Tariff) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(Syst.CUICommon:ctc) 
+        COLOR DISPLAY value(Syst.Var:ctc) 
            Tariff.ValidFrom
            Tariff.ValidTo
            Tariff.PriceList 
@@ -786,7 +786,7 @@ repeat WITH FRAME sel:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) 
+        COLOR DISPLAY value(Syst.Var:ccc) 
            Tariff.ValidFrom
            Tariff.ValidTo
            Tariff.PriceList
@@ -815,7 +815,7 @@ repeat WITH FRAME sel:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW"  THEN DO
+     ELSE if LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW"  THEN DO
      WITH FRAME lis TRANSACTION ON ENDKEY UNDO,leave:
 
         /* change */
@@ -828,7 +828,7 @@ repeat WITH FRAME sel:
         assign
            fr-header = " CHANGE "
            ufkey     = TRUE
-           Syst.CUICommon:ehto      = 9.
+           Syst.Var:ehto      = 9.
 
         CLEAR FRAME lis no-pause.
 
@@ -836,7 +836,7 @@ repeat WITH FRAME sel:
 
         ASSIGN
            plname = ""
-           Syst.CUICommon:cfc = "lis". 
+           Syst.Var:cfc = "lis". 
 
         RUN Syst/ufcolor.p.
 
@@ -854,11 +854,11 @@ repeat WITH FRAME sel:
         xrecid = recid(Tariff).
      END.
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO WITH FRAME sel:  /* kr/min */
+     ELSE if LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO WITH FRAME sel:  /* kr/min */
         FIND FIRST Tariff where 
              recid(Tariff) = rtab[FRAME-LINE]
         NO-LOCK NO-ERROR.
-        ASSIGN Syst.CUICommon:ufk = 0 ufkey = TRUE Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+        ASSIGN Syst.Var:ufk = 0 ufkey = TRUE Syst.Var:ehto = 3. RUN Syst/ufkey.p.
         DISPLAY
            round(Tariff.Price[1] * 60 / 100,2) @ Tariff.Price[1]
            round(Tariff.StartCharge[1] * 60 / 100,2) @ Tariff.StartCharge[1].
@@ -868,7 +868,7 @@ repeat WITH FRAME sel:
         WITH FRAME sel.
         message "Press ENTER !".
         PAUSE no-message.
-        COLOR DISPLAY value(Syst.CUICommon:cfc)
+        COLOR DISPLAY value(Syst.Var:cfc)
            Tariff.Price[1]
            Tariff.StartCharge[1]
         WITH FRAME sel.
@@ -878,7 +878,7 @@ repeat WITH FRAME sel:
         WITH FRAME sel.
      END.
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     ELSE if LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-first.
         ASSIGN
            memory     = recid(Tariff)
@@ -886,7 +886,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE if LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         RUN local-find-last.
         ASSIGN
            memory     = recid(Tariff)
@@ -894,13 +894,13 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE if LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-FIRST:
 
@@ -1766,11 +1766,11 @@ PROCEDURE pUpdate.
       WITH FRAME lis EDITING:
 
          READKEY.
-         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+         Syst.Var:nap = KEYLABEL(LASTKEY).
 
-         IF Syst.CUICommon:nap = "F4" THEN UNDO, RETURN "FALSE".
+         IF Syst.Var:nap = "F4" THEN UNDO, RETURN "FALSE".
 
-         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "CCN" THEN DO:
                ASSIGN INPUT FRAME lis Tariff.CCN.
@@ -2147,7 +2147,7 @@ PROCEDURE pUpdate.
                          WITH FRAME lis.
                       END.
 
-                      Syst.CUICommon:ehto = 9.
+                      Syst.Var:ehto = 9.
                       RUN Syst/ufkey.p.
                       PAUSE 0.
 
@@ -2167,7 +2167,7 @@ PROCEDURE pUpdate.
             NEXT.
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "ValidFrom" THEN DO:
                IF INPUT Tariff.ValidFrom = ? THEN DO:

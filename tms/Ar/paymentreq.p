@@ -17,7 +17,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -178,7 +178,7 @@ PROCEDURE pPayment:
    /* atleast two accounts are required */
    DO liReqCnt = 1 TO 2:
       FIND Account WHERE 
-           Account.Brand  = Syst.CUICommon:gcBrand AND
+           Account.Brand  = Syst.Var:gcBrand AND
            Account.AccNum = liAccount[liReqCnt] NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Account THEN DO:
          fReqError("Accounts have not been defined").
@@ -230,7 +230,7 @@ PROCEDURE pPayment:
          IF ldReqAmt NE 0 THEN DO:
          
             FIND InvGroup where 
-                 InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
+                 InvGroup.Brand    = Syst.Var:gcBrand AND 
                  InvGroup.InvGroup = Customer.InvGroup NO-LOCK.
 
             fInvoicePaymentUpdate(BUFFER Invoice,

@@ -57,7 +57,7 @@ IF NOT AVAILABLE bOrigRequest THEN RETURN "ERROR:Unknown request".
 lhRequest = BUFFER bOrigRequest:HANDLE.
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = Syst.CUICommon:gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 
@@ -85,7 +85,7 @@ Func.Common:mSplitTS(idActStamp,
 
 IF iiOrderID > 0 THEN DO:
    FIND FIRST Order WHERE
-              Order.Brand   = Syst.CUICommon:gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Order THEN RETURN "ERROR:Order not found".
 END.
@@ -141,7 +141,7 @@ PROCEDURE pRequestActions:
          NOT ttAction.ActionKey BEGINS "PAYTERM" THEN DO:
 
          IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                     OfferItem.Brand = Syst.CUICommon:gcBrand AND
+                     OfferItem.Brand = Syst.Var:gcBrand AND
                      OfferItem.Offer = Order.Offer AND
                      OfferItem.ItemType = "PerContract" AND
                      OfferItem.ItemKey = ttAction.ActionKey AND
@@ -200,7 +200,7 @@ PROCEDURE pPeriodicalContract:
    DEF BUFFER bOrder       FOR Order.
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = ttAction.ActionKey
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN RETURN "ERROR:Unknown contract".
@@ -213,7 +213,7 @@ PROCEDURE pPeriodicalContract:
         
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) = 0 AND
          CAN-FIND(FIRST DCCLI WHERE 
-                        DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                        DCCLI.Brand   = Syst.Var:gcBrand AND
                         DCCLI.DCEvent = ttAction.ActionKey AND
                         DCCLI.MsSeq   = liMsSeq AND
                         DCCLI.ValidTo > ldaReqDate)
@@ -260,7 +260,7 @@ PROCEDURE pPeriodicalContract:
                LOOKUP(STRING(bBundleRequest.ReqStatus),
                   {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bBundleContract NO-LOCK USE-INDEX DCEvent WHERE
-                  bBundleContract.Brand = Syst.CUICommon:gcBrand AND
+                  bBundleContract.Brand = Syst.Var:gcBrand AND
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -291,7 +291,7 @@ PROCEDURE pPeriodicalContract:
       IF ttAction.ActionKey EQ "FTERM12-100" AND 
          idActStamp < 20171101 AND
          CAN-FIND(FIRST bFTERMOrder NO-LOCK WHERE 
-                        bFTERMOrder.brand EQ Syst.CUICommon:gcBrand AND
+                        bFTERMOrder.brand EQ Syst.Var:gcBrand AND
                         bFTERMOrder.OrderID EQ iiOrderID AND
                   INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0)
       THEN lcBundleId = "FTERM8-100".
@@ -332,7 +332,7 @@ PROCEDURE pPeriodicalContract:
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) = 0 THEN DO:
          IF DayCampaign.DCType NE {&DCTYPE_INSTALLMENT} THEN DO:
             FIND FIRST bDCCLI WHERE 
-                       bDCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                       bDCCLI.Brand   = Syst.Var:gcBrand AND
                        bDCCLI.DCEvent = ttAction.ActionKey AND
                        bDCCLI.MsSeq   = liMsSeq AND
                        bDCCLI.ValidTo > ldaTermDate NO-LOCK NO-ERROR.
@@ -370,7 +370,7 @@ PROCEDURE pPeriodicalContract:
       IF AVAIL Order AND DayCampaign.DCType = "3" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
          CAN-FIND (FIRST OrderAction WHERE
-                         OrderAction.Brand    = Syst.CUICommon:gcBrand AND
+                         OrderAction.Brand    = Syst.Var:gcBrand AND
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
@@ -431,7 +431,7 @@ PROCEDURE pPeriodicalContract:
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
          CAN-FIND (FIRST OrderAction WHERE
-                         OrderAction.Brand    = Syst.CUICommon:gcBrand AND
+                         OrderAction.Brand    = Syst.Var:gcBrand AND
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "KeepInstallment" NO-LOCK)
       THEN RETURN.
@@ -446,7 +446,7 @@ PROCEDURE pPeriodicalContract:
 
          llFound = FALSE.
          FOR EACH bDCCLI WHERE 
-                  bDCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                  bDCCLI.Brand   = Syst.Var:gcBrand AND
                   bDCCLI.DCEvent = ttAction.ActionKey AND
                   bDCCLI.MsSeq   = liMsSeq AND
                   bDCCLI.ValidTo > ldaTermDate NO-LOCK:
@@ -466,7 +466,7 @@ PROCEDURE pPeriodicalContract:
                /* assumes that possible installment activation request
                   has not been yet created from the same order */
                FOR EACH DCCLI NO-LOCK WHERE
-                        DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
+                        DCCLI.Brand      = Syst.Var:gcBrand         AND
                         DCCLI.MsSeq      = MsRequest.MsSeq AND
                         DCCLI.ValidTo   >= ldaReqDate     AND
                         DCCLI.ValidFrom <= ldaReqDate     AND 
@@ -475,7 +475,7 @@ PROCEDURE pPeriodicalContract:
                END.             
 
                IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                                 OfferItem.Brand = Syst.CUICommon:gcBrand AND
+                                 OfferItem.Brand = Syst.Var:gcBrand AND
                                  OfferItem.Offer = Order.Offer AND
                                  OfferItem.ItemType = "PerContract" AND
                                  OfferItem.EndStamp >= Order.CrStamp AND
@@ -560,7 +560,7 @@ PROCEDURE pPeriodicalContract:
       Func.Common:mSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
       
       FIND FIRST bDCCLI WHERE 
-                 bDCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                 bDCCLI.Brand   = Syst.Var:gcBrand AND
                  bDCCLI.DCEvent = ttAction.ActionKey AND
                  bDCCLI.MsSeq   = liMsSeq AND
                  bDCCLI.ValidTo > ldaTermDate NO-LOCK NO-ERROR.
@@ -578,7 +578,7 @@ PROCEDURE pPeriodicalContract:
                                           DayCampaign.TermFeeModel,
                                           TODAY).
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+                    FMItem.Brand     = Syst.Var:gcBrand       AND
                     FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                     FMItem.PriceList = lcPriceList AND
                     FMItem.FromDate <= TODAY     AND
@@ -655,7 +655,7 @@ PROCEDURE pServicePackage:
          lcDCEvent   = "".
         
       FIND FIRST CTServPac WHERE
-                 CTServPac.Brand   = Syst.CUICommon:gcBrand AND
+                 CTServPac.Brand   = Syst.Var:gcBrand AND
                  CTServPac.CLIType = icCLIType AND
                  CTServPac.ServPac = lcActionKey AND  
                  CTServPac.ToDate >= ldaReqDate NO-LOCK NO-ERROR.
@@ -713,10 +713,10 @@ PROCEDURE pServicePackage:
       /* CTServPac should be used, but where can old clitype be retrieved
          in STC cases? */
       FOR FIRST ServPac NO-LOCK WHERE
-                ServPac.Brand   = Syst.CUICommon:gcBrand AND
+                ServPac.Brand   = Syst.Var:gcBrand AND
                 ServPac.ServPac = ttAction.ActionKey,
            EACH ServEl NO-LOCK WHERE
-                ServEl.Brand   = Syst.CUICommon:gcBrand AND
+                ServEl.Brand   = Syst.Var:gcBrand AND
                 ServEl.ServPac = ServPac.ServPac,
           FIRST SubSer NO-LOCK WHERE
                 SubSer.MsSeq   = liMsSeq AND

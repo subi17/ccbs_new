@@ -11,7 +11,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,8 +63,8 @@ form
     TCC.ErrorCode
     TCC.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  TECHNICAL CALL CASE MENU  "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -97,22 +97,22 @@ FORM
     TCC.BCC COLON 20
        CCN.CCNName NO-LABEL
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(Syst.CUICommon:cfc) side-labels FRAME lis.
+    COLOR VALUE(Syst.Var:cfc) side-labels FRAME lis.
 
 form /* seek  TCC */
     TCC
     HELP "Enter Code of code "
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  TCCName */
     TCCName
     HELP "Enter Name of the Billing Name"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Name "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 FIND FIRST TCC
@@ -140,13 +140,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a TCC  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR TCC.TCC.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
            LEAVE add-row.
            CREATE TCC.
            ASSIGN
-              TCC.Brand = Syst.CUICommon:gcBrand 
+              TCC.Brand = Syst.Var:gcBrand 
               TCC.TCC  = INPUT FRAME lis TCC.TCC
               TCC.ValidFrom = TODAY
               TCC.ValidTo = DATE(12,31,2049).
@@ -228,30 +228,30 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk = 0
-        Syst.CUICommon:ufk[1]= 35  
-        Syst.CUICommon:ufk[2]= 30 
-        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[8]= 8 
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 35  
+        Syst.Var:ufk[2]= 30 
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TCC.TCC {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TCC.TCC WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) TCC.TCC WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TCC.TCCName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TCC.TCCName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) TCC.TCCName WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -259,10 +259,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -280,7 +280,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -305,7 +305,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -331,7 +331,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND TCC WHERE recid(TCC) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -355,7 +355,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -370,9 +370,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET TCC WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -392,10 +392,10 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET TCCName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -413,7 +413,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND lcRight = "RW" THEN DO:  /* add */
 
         FIND FIRST TCC WHERE
              recid(TCC) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
@@ -424,18 +424,18 @@ REPEAT WITH FRAME sel:
                                                                                         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        TCC.TCC TCC.TCCName 
        TCC.BCC.
 
@@ -458,7 +458,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        TCC.TCC TCC.TCCName 
        TCC.BCC.
        
@@ -481,7 +481,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -489,8 +489,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTCC).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TCC.TCC 
                TCC.DURto
                TCC.BCC
@@ -510,25 +510,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(TCC) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(TCC) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -545,32 +545,32 @@ PROCEDURE local-find-this:
 END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
-       IF order = 1 THEN FIND FIRST TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand 
+       IF order = 1 THEN FIND FIRST TCC WHERE TCC.Brand = Syst.Var:gcBrand 
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST TCC USE-INDEX TCCName 
-       WHERE TCC.Brand = Syst.CUICommon:gcBrand
+       WHERE TCC.Brand = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
-       IF order = 1 THEN FIND LAST TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND LAST TCC WHERE TCC.Brand = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST TCC USE-INDEX TCCName  
-       WHERE TCC.Brand = Syst.CUICommon:gcBrand       /* srule */ NO-LOCK NO-ERROR.
+       WHERE TCC.Brand = Syst.Var:gcBrand       /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
-       IF order = 1 THEN FIND NEXT TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND NEXT TCC WHERE TCC.Brand = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT TCC USE-INDEX TCCName
-       WHERE TCC.Brand = Syst.CUICommon:gcBrand  /* srule */ NO-LOCK NO-ERROR.
+       WHERE TCC.Brand = Syst.Var:gcBrand  /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
-       IF order = 1 THEN FIND PREV TCC WHERE TCC.Brand = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND PREV TCC WHERE TCC.Brand = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV TCC USE-INDEX TCCName
-       WHERE TCC.Brand = Syst.CUICommon:gcBrand   /* srule */ NO-LOCK NO-ERROR.
+       WHERE TCC.Brand = Syst.Var:gcBrand   /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -588,12 +588,12 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND FIRST CCN WHERE 
-              CCN.Brand = Syst.CUICommon:gcBrand AND 
+              CCN.Brand = Syst.Var:gcBrand AND 
               CCN.CCN   = TCC.Bcc 
    NO-LOCK NO-ERROR.
 
    FIND FIRST BDest WHERE
-              BDest.Brand = Syst.CUICommon:gcBrand AND 
+              BDest.Brand = Syst.Var:gcBrand AND 
               BDest.BDest = TCC.BDest AND
               BDest.ToDate >= TCC.ValidFrom AND
               BDest.FromDate <= TCC.ValidTo NO-LOCK No-ERROR.
@@ -682,7 +682,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis EDITING:
           READKEY.
 
-          IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+          IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
              PAUSE 0.
 
              IF FRAME-FIELD = "ValidTo" THEN DO:

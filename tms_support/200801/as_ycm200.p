@@ -25,7 +25,7 @@ disp j.
 /*PART 2*/ 
 /*
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 {Func/msisdn.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -86,7 +86,7 @@ disp j.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 {Func/msisdn.i}
 define stream out.
 OUTPUT STREAM out TO "/home/anttis/newrange_msisdn.txt".

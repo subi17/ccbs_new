@@ -32,9 +32,9 @@ ASSIGN
    MNPProcess.FormRequest = MNPProcessFather.FormRequest
    MNPProcess.OrderId     = 0
    MNPProcess.StatusCode  = 0
-   MNPProcess.Brand       = Syst.CUICommon:gcBrand
+   MNPProcess.Brand       = Syst.Var:gcBrand
    MNPProcess.MNPType     = 6
-   MNPProcess.UserCode    = Syst.CUICommon:katun
+   MNPProcess.UserCode    = Syst.Var:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
 IF fSendMigrationNumberRequest(INPUT TABLE ttMigrationNumberRequest BY-REFERENCE) THEN RETURN "".

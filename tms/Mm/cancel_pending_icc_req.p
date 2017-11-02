@@ -9,8 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = "CRON".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -24,7 +24,7 @@ liConfDays = fCParamI("WaitingCancelICCDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 60.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -34,7 +34,7 @@ IF llDoEvent THEN DO:
 END.
 
 FOR EACH MsRequest WHERE
-         MsRequest.Brand      = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand      = Syst.Var:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_ICC_CHANGE} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_CONFIRMATION_PENDING} NO-LOCK:
 

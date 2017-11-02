@@ -49,7 +49,7 @@ ASSIGN
     viiva4 = FILL("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 FORM HEADER
    viiva1 AT 1 SKIP
@@ -94,7 +94,7 @@ ASSIGN rl = 8.
 
 CustCollect:
 FOR EACH Customer WHERE
-         Customer.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum NO-LOCK:
+         Customer.Brand = Syst.Var:gcBrand USE-INDEX CustNum NO-LOCK:
     lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                
     ldOPAmt = fGetCustBal(Customer.CustNum,"TOTAL","OP").

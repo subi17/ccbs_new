@@ -157,10 +157,10 @@ for each ttCalls NO-LOCK:
      lcCCNName = "".
 
    find ccn where 
-        CCN.Brand = Syst.CUICommon:gcBrand AND
+        CCN.Brand = Syst.Var:gcBrand AND
         ccn.ccn = ttcalls.ccn no-lock no-error.
    find billitem where 
-        BillItem.Brand    = Syst.CUICommon:gcBrand AND
+        BillItem.Brand    = Syst.Var:gcBrand AND
         billitem.billcode = ttCalls.billcode no-lock no-error.
    assign
      lcBiName  = Billitem.biname when avail billitem

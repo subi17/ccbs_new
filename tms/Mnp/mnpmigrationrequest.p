@@ -9,7 +9,7 @@
 ----------------------------------------------------------------------- */
 
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 {Mnp/mnpmessages.i}
 {Mnp/mnp.i}
 
@@ -17,7 +17,7 @@ DEFINE VARIABLE lcXML AS CHAR NO-UNDO. /* xml should be < 32000 chars */
 DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
      
-Syst.CUICommon:ehto = 10.
+Syst.Var:ehto = 10.
 RUN Syst/ufkey.p.
 
 CREATE ttMigrationRequest.
@@ -42,9 +42,9 @@ ASSIGN
    MNPProcess.FormRequest = lcFormRequest
    MNPProcess.OrderId     = 0
    MNPProcess.StatusCode  = 0
-   MNPProcess.Brand       = Syst.CUICommon:gcBrand
+   MNPProcess.Brand       = Syst.Var:gcBrand
    MNPProcess.MNPType     = 5
-   MNPProcess.UserCode    = Syst.CUICommon:katun
+   MNPProcess.UserCode    = Syst.Var:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
 IF fSendMigrationRequest(INPUT TABLE ttMigrationRequest BY-REFERENCE) THEN

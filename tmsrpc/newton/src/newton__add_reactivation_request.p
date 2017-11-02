@@ -17,7 +17,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Mnp/mnp.i}
@@ -53,12 +53,12 @@ IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
 liMsSeq  = get_pos_int(pcReacStruct, "msseq").
-Syst.CUICommon:katun = "VISTA_" + get_string(pcReacStruct, "salesman").
+Syst.Var:katun = "VISTA_" + get_string(pcReacStruct, "salesman").
 
 lcMemoTitle = get_string(pcMemoStruct, "title").
 lcMemoContent = get_string(pcMemoStruct, "content").
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 IF LOOKUP("ActStamp", pcReacStruct) GT 0 THEN
@@ -70,7 +70,7 @@ IF ldActStamp = 0 OR ldActStamp = ? THEN
 
 {newton/src/findtenant.i NO ordercanal TermMobSub MsSeq liMsSeq}
 
-lcResult = freacprecheck(INPUT liMsSeq, INPUT Syst.CUICommon:katun, INPUT FALSE).
+lcResult = freacprecheck(INPUT liMsSeq, INPUT Syst.Var:katun, INPUT FALSE).
 IF lcResult > "" THEN DO:
    lcResult = REPLACE(lcResult, CHR(10), " ").
    RETURN appl_err(lcResult).
@@ -81,7 +81,7 @@ FIND FIRST bTermMobSub WHERE
 IF AVAIL bTermMobSub AND bTermMobSub.MultiSIMId > 0 AND
    bTermMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = bTermMobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               lbMobSub.Custnum = bTermMobSub.Custnum NO-ERROR.
@@ -94,7 +94,7 @@ END. /* IF AVAIL bTermMobSub THEN DO: */
 liMsReq = fReactivationRequest(INPUT liMsSeq,
                                INPUT 0,
                                INPUT ldActStamp,
-                               INPUT Syst.CUICommon:katun,
+                               INPUT Syst.Var:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                OUTPUT lcResult).
 IF liMsReq > 0 THEN
@@ -107,11 +107,11 @@ IF lcMemoTitle > "" AND liMsReq > 0 THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(liMsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE TermMobSub THEN TermMobSub.CustNum ELSE 0).

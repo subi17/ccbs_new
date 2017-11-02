@@ -46,7 +46,7 @@
 {Func/fpaymentreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
@@ -151,7 +151,7 @@ FORM
     SKIP(1)
 
 WITH
-   OVERLAY WIDTH 80 TITLE " " + Syst.CUICommon:ynimi + " ADV.PAYMENTS & DEPOSITS " + 
+   OVERLAY WIDTH 80 TITLE " " + Syst.Var:ynimi + " ADV.PAYMENTS & DEPOSITS " + 
    STRING(TODAY,"99-99-99") + " " CENTERED NO-LABELS FRAME MAIN.
 
 FUNCTION fChooseType RETURNS INTEGER
@@ -177,7 +177,7 @@ FUNCTION fCheckAcc RETURNS LOGICAL
     IF iAcc = 0 THEN RETURN TRUE. 
 
     FIND Account WHERE 
-         Account.Brand  = Syst.CUICommon:gcBrand AND
+         Account.Brand  = Syst.Var:gcBrand AND
          Account.AccNum = iAcc NO-LOCK NO-ERROR.
     IF NOT AVAILABLE Account THEN DO:
         MESSAGE "Unknown Account" iAcc
@@ -218,7 +218,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = Payment.PaymDate
-         OPLog.UserCode  = Syst.CUICommon:katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = iType 
          OPLog.InvNum    = Payment.InvNum
          OPLog.Voucher   = Payment.Voucher
@@ -241,7 +241,7 @@ PAUSE 0.
 MAIN:
 REPEAT TRANS WITH FRAME MAIN:
 
-   IF Syst.CUICommon:toimi NE 1 THEN DO:
+   IF Syst.Var:toimi NE 1 THEN DO:
       CLEAR FRAME MAIN NO-PAUSE.
       ASSIGN 
       CustNum  = 0 
@@ -258,7 +258,7 @@ REPEAT TRANS WITH FRAME MAIN:
    PAUSE 0.
    DISPLAY lcDispTyp WITH FRAME Main.
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       CustNum 
       invnum 
@@ -271,13 +271,13 @@ REPEAT TRANS WITH FRAME MAIN:
       llRefund
    WITH FRAME MAIN EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME MAIN:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME MAIN:
          HIDE MESSAGE.
 
          IF FRAME-FIELD = "CustNum" THEN DO:
             IF INPUT CustNum = 0 THEN UNDO MAIN, LEAVE MAIN.
             FIND FIRST Customer WHERE 
-                       Customer.Brand   = Syst.CUICommon:gcBrand AND
+                       Customer.Brand   = Syst.Var:gcBrand AND
                        Customer.CustNum = INPUT CustNum 
             NO-LOCK NO-ERROR.
             IF NOT AVAIL Customer THEN DO:
@@ -291,7 +291,7 @@ REPEAT TRANS WITH FRAME MAIN:
          ELSE IF FRAME-field = "invnum" THEN DO:
             IF INPUT invnum NE 0 THEN DO:
                FIND FIRST Invoice WHERE 
-                          Invoice.Brand  = Syst.CUICommon:gcBrand AND
+                          Invoice.Brand  = Syst.Var:gcBrand AND
                           Invoice.InvNum = INPUT invnum
                NO-LOCK NO-ERROR.
                IF NOT AVAIL Invoice THEN DO:
@@ -379,15 +379,15 @@ REPEAT TRANS WITH FRAME MAIN:
 TASK:
    REPEAT WITH FRAME MAIN:
       ASSIGN
-      Syst.CUICommon:ehto = 1 Syst.CUICommon:ufk = 0 
-      Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[2] = 0 /* 992 */ Syst.CUICommon:ufk[4] = 806 
-      Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[6] = 12 Syst.CUICommon:ufk[7] = 185       Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ehto = 1 Syst.Var:ufk = 0 
+      Syst.Var:ufk[1] = 7 Syst.Var:ufk[2] = 0 /* 992 */ Syst.Var:ufk[4] = 806 
+      Syst.Var:ufk[5] = 15 Syst.Var:ufk[6] = 12 Syst.Var:ufk[7] = 185       Syst.Var:ufk[8] = 8.
       IF amtPaid = 0 OR dAcct = 0 OR cAcct = 0
-      THEN ASSIGN Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 0 Syst.CUICommon:ufk[7] = 0. 
+      THEN ASSIGN Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 0 Syst.Var:ufk[7] = 0. 
       RUN Syst/ufkey.p.       
-      IF Syst.CUICommon:toimi = 1 THEN NEXT MAIN.
+      IF Syst.Var:toimi = 1 THEN NEXT MAIN.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          IF dType = cType THEN DO:
             MESSAGE "Same type can not be used for both debet and credit"
                     "booking."
@@ -405,11 +405,11 @@ TASK:
          LEAVE TASK.
       END.
 
-      IF Syst.CUICommon:toimi = 6 THEN UNDO MAIN, NEXT MAIN.
-      IF Syst.CUICommon:toimi = 7 THEN RUN Mc/commontt.p(CustNum). /*nnastt(CustNum).*/
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE MAIN.
+      IF Syst.Var:toimi = 6 THEN UNDO MAIN, NEXT MAIN.
+      IF Syst.Var:toimi = 7 THEN RUN Mc/commontt.p(CustNum). /*nnastt(CustNum).*/
+      IF Syst.Var:toimi = 8 THEN LEAVE MAIN.
 
-      IF Syst.CUICommon:toimi = 4 THEN DO:
+      IF Syst.Var:toimi = 4 THEN DO:
          RUN Mc/memo.p(INPUT Customer.Custnum,
                   INPUT "Customer",
                   INPUT STRING(Customer.CustNum),

@@ -18,7 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Mm/fbundle.i}
 {Func/msisdn_prefix.i}
@@ -66,14 +66,14 @@ IF lcTermStruct EQ ? THEN RETURN.
 
 /* required params */
 piMsSeq     = get_pos_int(pcTermStruct, "msseq").
-Syst.CUICommon:katun = "VISTA_" + get_string(pcTermStruct, "salesman").
+Syst.Var:katun = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
 IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
    pcTermType  = get_string(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN DO:
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
 

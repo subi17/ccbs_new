@@ -46,9 +46,9 @@ VALIDATE(INPUT cdate1 <= INPUT cdate2,"Invalid order of dates !")
    OVERLAY 
    ROW 3 
    WIDTH 60   CENTERED
-   COLOR VALUE(Syst.CUICommon:cfc) 
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-    " " + Syst.CUICommon:ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
+   COLOR VALUE(Syst.Var:cfc) 
+   TITLE COLOR VALUE(Syst.Var:ctc) 
+    " " + Syst.Var:ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
     string(TODAY,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
@@ -58,7 +58,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
  cdate1 cdate2 with frame main.
@@ -69,7 +69,7 @@ IF NOT bbatch THEN DO:
 WITH FRAME main  EDITING:
       READKEY.
             
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
          PAUSE 0.
          
          if frame-field = "ig-code" then do:
@@ -82,15 +82,15 @@ WITH FRAME main  EDITING:
    ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-      Syst.CUICommon:ufk[1] = 7 
-      Syst.CUICommon:ufk[5] = 795
-      Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = false.
          MESSAGE "Do You REALLY want to MOVE tickets to error (Y/N)?" UPDATE ok.
          IF NOT ok THEN NEXT action.
@@ -137,12 +137,12 @@ DO FOR ActionLog TRANS:
    
    ASSIGN
       ActionLog.ActionTS     = Func.Common:mMakeTS()
-      ActionLog.Brand        = Syst.CUICommon:gcBrand
+      ActionLog.Brand        = Syst.Var:gcBrand
       ActionLog.TableName    = "MobCDR"
       ActionLog.KeyValue     = STRING(YEAR(cDate2),"9999") + 
                                STRING(MONTH(cDate2),"99") + 
                                STRING(DAY(cDate2),"99")
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "ERRORCLEAN"
       ActionLog.ActionPeriod = YEAR(cDate2) * 100 + 
                                MONTH(cDate2)

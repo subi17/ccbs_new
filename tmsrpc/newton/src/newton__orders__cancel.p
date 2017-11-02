@@ -9,7 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Syst/tmsconst.i}
 {Func/msisdn_prefix.i}
@@ -35,7 +35,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 ASSIGN
-   Syst.CUICommon:katun = "VISTA_" + Order.Salesman
+   Syst.Var:katun = "VISTA_" + Order.Salesman
    llCloseOrder = FALSE.
   
 /* check that order is from today and coming from POS channel */

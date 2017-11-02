@@ -56,10 +56,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
 
 FOR EACH mobsub NO-LOCK WHERE
-   mobsub.brand = Syst.CUICommon:gcBrand AND
+   mobsub.brand = Syst.Var:gcBrand AND
    mobsub.Custnum = piCustNum,
    EACH COTarg WHERE
-        COTarg.Brand      = Syst.CUICommon:gcBrand AND
+        COTarg.Brand      = Syst.Var:gcBrand AND
         COTarg.TargType   = "M" AND
         COTarg.CoTarg     = STRING(Mobsub.MsSeq) NO-LOCK,
       FIRST CORule OF COTarg NO-LOCK
@@ -84,7 +84,7 @@ FOR EACH mobsub NO-LOCK WHERE
    add_double(resp_struct, "commission_divided", CORule.CoNoInst).
    
    FIND FIRST Order WHERE 
-      Order.Brand   = Syst.CUICommon:gcBrand AND
+      Order.Brand   = Syst.Var:gcBrand AND
       Order.OrderId = COTarg.OrderId NO-LOCK NO-ERROR.
    
    IF AVAIL Order THEN
@@ -133,7 +133,7 @@ FOR EACH mobsub NO-LOCK WHERE
          fatime_array = add_array(resp_struct, "fatimes").
          
          FOR EACH Fatime WHERE
-            Fatime.Brand   = Syst.CUICommon:gcBrand AND
+            Fatime.Brand   = Syst.Var:gcBrand AND
             Fatime.HostTable = "COTarg" AND
             Fatime.KeyValue = STRING(COTarg.COTargId) AND
             Fatime.OrigFat = 0 AND
@@ -151,7 +151,7 @@ FOR EACH mobsub NO-LOCK WHERE
             /* Count total used FAT */
             ldeFatime = 0.
             FOR EACH Fatime2 WHERE
-               Fatime2.Brand     = Syst.CUICommon:gcBrand AND
+               Fatime2.Brand     = Syst.Var:gcBrand AND
                Fatime2.HostTable = "COTarg" AND
                Fatime2.KeyValue  = STRING(COTarg.COTargId) AND
                Fatime2.Period    = Fatime.Period AND
@@ -171,7 +171,7 @@ FOR EACH mobsub NO-LOCK WHERE
          topup_array = add_array(resp_struct, "topups").
          
          FOR EACH PrePaidRequest WHERE
-            PrepaidRequest.Brand       = Syst.CUICommon:gcBrand AND
+            PrepaidRequest.Brand       = Syst.Var:gcBrand AND
             PrePaidRequest.Reference   = STRING(COTarg.COTargId) AND
             PrePaidRequest.Request     = "RefillTRequest" AND
             PrePaidRequest.Source      = CoRule.PPSource NO-LOCK:

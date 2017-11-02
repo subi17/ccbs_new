@@ -32,7 +32,7 @@ FUNCTION fCheck-pl RETURNS LOGICAL
 
    DEF VAR ok AS LO  NO-UNDO.
    ok = CAN-FIND (FIRST FMItem WHERE
-                        FMItem.Brand     = Syst.CUICommon:gcBrand    AND
+                        FMItem.Brand     = Syst.Var:gcBrand    AND
                         FMItem.FeeModel  = icFeeModel AND
                         FMItem.PriceList = icPriceList).
    IF NOT ok THEN
@@ -97,7 +97,7 @@ FUNCTION fMakeContract RETURN INT
   IF DAY(FixedFee.BegDate) NE 1 THEN DO:
      liBrokenRental = 9.
      FOR FIRST bFMITemBroken NO-LOCK WHERE
-               bFMITemBroken.Brand      = Syst.CUICommon:gcBrand AND
+               bFMITemBroken.Brand      = Syst.Var:gcBrand AND
                bFMITemBroken.FeeModel   = FixedFee.FeeModel AND
                bFMITemBroken.BillCode   = FixedFee.BillCode AND
                bFMITemBroken.BillMethod = FALSE:

@@ -27,7 +27,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
    
    FIND TopupScheme NO-LOCK WHERE 
-      TopupScheme.Brand = Syst.CUICommon:gcBrand AND 
+      TopupScheme.Brand = Syst.Var:gcBrand AND 
       TopupScheme.TopupScheme = pcId NO-ERROR.
 
    IF NOT AVAIL TopupScheme THEN RETURN appl_err("Topup scheme not found: "+ pcId).

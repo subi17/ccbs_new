@@ -278,7 +278,7 @@ PROCEDURE pInvoiceDetails:
    liODIRequest = 0.
    /* odi request */
    FOR FIRST MsRequest NO-LOCK WHERE
-             MsRequest.Brand      = Syst.CUICommon:gcBrand AND
+             MsRequest.Brand      = Syst.Var:gcBrand AND
              MsRequest.ReqType    = 20      AND
              MsRequest.CustNum    = Invoice.CustNum AND
              MsRequest.ReqCParam1 = Invoice.ExtInvID:
@@ -339,26 +339,26 @@ PROCEDURE pInvoiceUpdate:
    DEF VAR liDueDate  AS INT  NO-UNDO. 
    DEF VAR lcUpdate   AS CHAR NO-UNDO.
 
-   lcUpdate = fTokenRights(Syst.CUICommon:katun,"SYST,BILL").
+   lcUpdate = fTokenRights(Syst.Var:katun,"SYST,BILL").
  
    FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK.
 
    REPEAT ON ENDKEY UNDO, LEAVE:
    
       ASSIGN
-         Syst.CUICommon:ufk    = 0
-         Syst.CUICommon:ufk[1] = IF lcUpdate = "RW" AND Invoice.PaymState NE 4 THEN 7 ELSE 0
-         Syst.CUICommon:ufk[2] = 927
-         Syst.CUICommon:ufk[3] = 829
-         Syst.CUICommon:ufk[4] = 1170
-         Syst.CUICommon:ufk[5] = 790
-         Syst.CUICommon:ufk[6] = 1152
-         Syst.CUICommon:ufk[7] = 1752
-         Syst.CUICommon:ufk[8] = 8
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = IF lcUpdate = "RW" AND Invoice.PaymState NE 4 THEN 7 ELSE 0
+         Syst.Var:ufk[2] = 927
+         Syst.Var:ufk[3] = 829
+         Syst.Var:ufk[4] = 1170
+         Syst.Var:ufk[5] = 790
+         Syst.Var:ufk[6] = 1152
+         Syst.Var:ufk[7] = 1752
+         Syst.Var:ufk[8] = 8
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
+      IF Syst.Var:toimi = 1 THEN DO TRANS:
 
          FIND CURRENT Invoice EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
       
@@ -369,7 +369,7 @@ PROCEDURE pInvoiceUpdate:
             RETURN "LOCKED".
          END.
 
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
 
          ASSIGN 
@@ -385,9 +385,9 @@ PROCEDURE pInvoiceUpdate:
          WITH FRAME fInvDet EDITING:
 
             READKEY.
-            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF Syst.CUICommon:nap = "F9" AND 
+            IF Syst.Var:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"DelType,PrintState,DeliveryState") > 0 
             THEN DO:
 
@@ -449,12 +449,12 @@ PROCEDURE pInvoiceUpdate:
                   END.
                END.
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME fInvDet:
+            ELSE IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO WITH FRAME fInvDet:
 
                IF FRAME-FIELD = "DelType" THEN DO:
                 
@@ -549,7 +549,7 @@ PROCEDURE pInvoiceUpdate:
       END.
 
       /* memo */
-      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+      ELSE IF Syst.Var:toimi = 2 THEN DO:
          RUN Mc/memo.p(INPUT Invoice.CustNum,
                   INPUT "Invoice",
                   INPUT STRING(Invoice.InvNum),
@@ -557,101 +557,101 @@ PROCEDURE pInvoiceUpdate:
       END.
 
       /* payments */
-      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+      ELSE IF Syst.Var:toimi = 3 THEN DO:
         RUN Ar/payments.p(0,
                      Invoice.InvNum,
                      "").
       END.
       
       /* subinvoices */
-      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
          RUN Ar/subinvoice.p (Invoice.InvNum).
       END.
       
       /* invoice rows */
-      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
          RUN Ar/nnlryp.p(Invoice.InvNum,0).
       END.
       
       /* other actions */
-      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
+      ELSE IF Syst.Var:toimi = 6 THEN DO:
       
          otheractions:
          REPEAT ON ENDKEY UNDO, NEXT:
 
-            ASSIGN Syst.CUICommon:ufk    = 0
-                   Syst.CUICommon:ufk[1] = 0 
-                   Syst.CUICommon:ufk[2] = 1650 
-                   Syst.CUICommon:ufk[3] = 908
-                   Syst.CUICommon:ufk[4] = 1492
-                   Syst.CUICommon:ufk[5] = 1561
-                   Syst.CUICommon:ufk[6] = 862
-                   Syst.CUICommon:ufk[7] = 1796
-                   Syst.CUICommon:ufk[8] = 8
-                   Syst.CUICommon:ehto   = 0.
+            ASSIGN Syst.Var:ufk    = 0
+                   Syst.Var:ufk[1] = 0 
+                   Syst.Var:ufk[2] = 1650 
+                   Syst.Var:ufk[3] = 908
+                   Syst.Var:ufk[4] = 1492
+                   Syst.Var:ufk[5] = 1561
+                   Syst.Var:ufk[6] = 862
+                   Syst.Var:ufk[7] = 1796
+                   Syst.Var:ufk[8] = 8
+                   Syst.Var:ehto   = 0.
             RUN Syst/ufkey.p.
                
             /* reference nbr  */
-            IF Syst.CUICommon:toimi = 1 THEN DO: 
+            IF Syst.Var:toimi = 1 THEN DO: 
                RUN Mc/showpr.p(Invoice.CustNum,
                           Invoice.InvNum).
             END.
   
-            ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+            ELSE IF Syst.Var:toimi = 2 THEN DO:
                PAUSE 0.
                DISP Invoice.BillRun WITH FRAME fBillRunID.
 
                ASSIGN
-                  Syst.CUICommon:ufk    = 0
-                  Syst.CUICommon:ufk[8] = 8
-                  Syst.CUICommon:ehto   = 0.
+                  Syst.Var:ufk    = 0
+                  Syst.Var:ufk[8] = 8
+                  Syst.Var:ehto   = 0.
                RUN Syst/ufkey.p.
             
                HIDE FRAME fBillRunID NO-PAUSE. 
             END.
 
             /* credit invoice */
-            ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
-               Syst.CUICommon:si-recid2 = RECID(Invoice).
+            ELSE IF Syst.Var:toimi = 3 THEN DO:
+               Syst.Var:si-recid2 = RECID(Invoice).
               
                RUN Ar/nncimu.p.
 
-               Syst.CUICommon:si-recid2  = ?.
+               Syst.Var:si-recid2  = ?.
                
                IF Invoice.CrInvNum > 0 THEN RETURN "".
             END. 
 
             /* claiming history */
-            ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+            ELSE IF Syst.Var:toimi = 4 THEN DO:
                RUN Ar/claimhis.p(0,Invoice.InvNum).
             END.
  
             /* invoice row counters */
-            ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+            ELSE IF Syst.Var:toimi = 5 THEN DO:
                RUN Inv/invrowcounter.p(0,0,Invoice.InvNum,""). 
             END. 
            
             /* interest events */ 
-            ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
+            ELSE IF Syst.Var:toimi = 6 THEN DO:
                RUN Ar/nnkoyp.p (Invoice.CustNum).
             END.
              
             /* view send log */
-            ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+            ELSE IF Syst.Var:toimi = 7 THEN DO:
                RUN Mc/itsendlo.p(0,
                             Invoice.InvNum,
                             0,
                             0).
             END.
             
-            ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE otheractions.
+            ELSE IF Syst.Var:toimi = 8 THEN LEAVE otheractions.
         
          END.  /* otheractions */
  
       END.
       
       /* show eventlog */
-      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+      ELSE IF Syst.Var:toimi = 7 THEN DO:
          RUN Mc/eventsel.p ("Invoice",
                        STRING(iiInvNum)).
       END.

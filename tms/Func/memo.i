@@ -13,7 +13,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL
     icCreUser   AS CHAR).
     
    CREATE Memo.
-   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = icHostTable
           Memo.KeyValue  = icKeyValue
           Memo.CustNum   = iiCustNum

@@ -31,7 +31,7 @@ DEF VAR lcTenant       AS CHAR NO-UNDO.
 DEFINE STREAM strout.
 
    FIND MsRequest WHERE
-        MsRequest.Brand     = Syst.CUICommon:gcBrand     AND
+        MsRequest.Brand     = Syst.Var:gcBrand     AND
         MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.   
   
    IF NOT AVAIL MsRequest OR
@@ -100,7 +100,7 @@ DEFINE STREAM strout.
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
    FIND FIRST DumpFile NO-LOCK WHERE 
-              DumpFile.Brand    EQ Syst.CUICommon:gcBrand AND
+              DumpFile.Brand    EQ Syst.Var:gcBrand AND
               DumpFile.DumpName EQ {&DUMP_INVOICE_PUPU} NO-ERROR.
  
    IF AVAIL DumpFile THEN DO:

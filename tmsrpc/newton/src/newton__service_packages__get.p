@@ -24,7 +24,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
 
    FIND ServPac NO-LOCK WHERE 
-        ServPac.Brand = Syst.CUICommon:gcBrand AND 
+        ServPac.Brand = Syst.Var:gcBrand AND 
         ServPac.ServPac = pcId NO-ERROR.
 
    IF NOT AVAIL ServPac THEN RETURN appl_err("Service package not found: "+ pcId).
@@ -33,7 +33,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       taking into account this ServPac contain only one component 
       with a common definition in all the CLIType where it has been created */
    FIND FIRST CTServEl  WHERE
-              CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
+              CTServEl.Brand     = Syst.Var:gcBrand   AND
               CTServEl.ServPac   = ServPac.ServPac  AND
               CTServEl.FromDate <= TODAY  NO-LOCK NO-ERROR. 
    IF NOT AVAIL CTServEl THEN RETURN appl_err("Service package is not defined in any clitype").

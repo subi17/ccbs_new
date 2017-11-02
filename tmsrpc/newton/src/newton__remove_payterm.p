@@ -17,7 +17,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/coinv.i}
@@ -55,7 +55,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* Required Params */
 ASSIGN 
    liMsSeq  = get_pos_int(pcPayTermStruct, "msseq")
-   Syst.CUICommon:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.Var:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcCurrentPayterm = get_nonempty_string(pcPayTermStruct, "payterm_contract")
    liPerContractId  = get_int(pcPayTermStruct, "per_contract_id")
    lcAction = get_nonempty_string(pcPayTermStruct, "action")
@@ -81,7 +81,7 @@ CASE lcAction:
 END.
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
-           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+           DayCampaign.Brand   = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = lcCurrentPayterm AND
            DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} NO-ERROR.
 IF NOT AVAIL DayCampaign THEN
@@ -98,7 +98,7 @@ IF NOT AVAIL DCCLI THEN
 IF lcAction EQ "canc" THEN DO:
    
    FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-        FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
+        FixedFee.Brand     = Syst.Var:gcBrand   AND
         FixedFee.CustNum   = MobSub.CustNum AND
         FixedFee.HostTable = "MobSub"  AND
         FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -115,7 +115,7 @@ IF lcAction EQ "canc" THEN DO:
    FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
       IF FFItem.Billed = TRUE AND
          CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                         Invoice.Brand   = Syst.CUICommon:gcBrand AND
+                         Invoice.Brand   = Syst.Var:gcBrand AND
                          Invoice.InvNum  = FFItem.InvNum AND
                          Invoice.InvType = 1 NO-LOCK) THEN NEXT.
       liLastUnBilledPeriod = FFItem.BillPeriod.
@@ -152,11 +152,11 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0).

@@ -20,7 +20,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -208,7 +208,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
    
    IF lcNewCategory > "" THEN DO:
       FIND CustCat WHERE 
-           CustCat.Brand    = Syst.CUICommon:gcBrand AND
+           CustCat.Brand    = Syst.Var:gcBrand AND
            CustCat.Category = lcNewCategory NO-LOCK NO-ERROR.
       IF AVAILABLE CustCat THEN lcNewCatName = CustCat.CatName.
    END. 
@@ -242,29 +242,29 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
    
    IF ufkey THEN DO:
       ASSIGN
-         Syst.CUICommon:ufk    = 0 
-         Syst.CUICommon:ufk[1] = 7  
-         Syst.CUICommon:ufk[8] = 2 
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk    = 0 
+         Syst.Var:ufk[1] = 7  
+         Syst.Var:ufk[8] = 2 
+         Syst.Var:ehto   = 0.
 
-      IF liNewCust1 = 0 THEN Syst.CUICommon:ufk[3] = 1056.   
+      IF liNewCust1 = 0 THEN Syst.Var:ufk[3] = 1056.   
       
       IF icAction = "view" THEN ASSIGN 
-         Syst.CUICommon:ufk[1] = 0
-         Syst.CUICommon:ufk[3] = 0.
+         Syst.Var:ufk[1] = 0
+         Syst.Var:ufk[3] = 0.
 
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN Syst.CUICommon:toimi = 1  
+   ELSE ASSIGN Syst.Var:toimi = 1  
                ufkey = TRUE.
 
    /* update new inv.customer */ 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE liNewCust1 WHEN llUpdCustNum
          WITH FRAME fCriter EDITING:
@@ -289,12 +289,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
                    
                END. 
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 
  
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             END.
             
             APPLY LASTKEY.
@@ -364,11 +364,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
             
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                   
                IF FRAME-FIELD = "lcNewCategory" THEN DO:
                   FIND CustCat WHERE 
-                       CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                       CustCat.Brand    = Syst.Var:gcBrand AND
                        CustCat.Category = INPUT lcNewCategory 
                   NO-LOCK NO-ERROR.
 
@@ -440,7 +440,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
    END.
    
    /* copy name and address from current invoice customer  */
-   ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+   ELSE IF Syst.Var:toimi = 3 THEN DO:
    
       FIND MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
       IF NOT AVAILABLE MobSub THEN DO:
@@ -476,7 +476,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
          lcNewTel      = Customer.SMSNumber.
    END. 
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
 
       /* update msrequest */
       IF icAction = "change" AND AVAILABLE MsRequest THEN DO:

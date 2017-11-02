@@ -57,7 +57,7 @@ with centered width 80 no-label title " Customers bills " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = Syst.CUICommon:katun.
+              TMSUser.UserCode = Syst.Var:katun.
    fname = TMSUser.RepDir + "/callamt.txt".
 END.
 
@@ -73,7 +73,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1 date2
       InvGroup 
@@ -81,10 +81,10 @@ repeat WITH FRAME frm:
       fname 
    WITH FRAME frm EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "InvGroup" THEN DO:
             FIND FIRST InvGroup WHERE 
-                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                       InvGroup.Brand    = Syst.Var:gcBrand AND
                        InvGroup.InvGroup = input InvGroup
             NO-LOCK NO-ERROR.
             IF NOT AVAIL InvGroup THEN DO:
@@ -101,12 +101,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -148,16 +148,16 @@ task:
    PUT STREAM excel UNFORMATTED my-nl.
 
    FOR EACH Customer no-lock where
-            Customer.Brand    = Syst.CUICommon:gcBrand AND
+            Customer.Brand    = Syst.Var:gcBrand AND
             Customer.CustNum  > 1000    AND
             Customer.InvGroup = InvGroup,
 
       FIRST Salesman no-lock where
-            Salesman.Brand    = Syst.CUICommon:gcBrand AND
+            Salesman.Brand    = Syst.Var:gcBrand AND
             Salesman.Salesman = Customer.Salesman,
 
       FIRST Salesoffice no-lock where
-            SalesOffice.Brand       = Syst.CUICommon:gcBrand AND
+            SalesOffice.Brand       = Syst.Var:gcBrand AND
             Salesoffice.SalesOffice = Salesman.SalesOffice.
 
       DISP 

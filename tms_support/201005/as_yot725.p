@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand  = "1".
 {Func/msreqfunc.i}
 
 input from Bono8_promotion.csv.
@@ -89,7 +89,7 @@ repeat:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Bono 8 campaign May 2010"
       Memo.CreUser   = "YOT-724"
       Memo.HostTable = "MobSub"

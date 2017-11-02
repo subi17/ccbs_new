@@ -30,7 +30,7 @@
 &SCOPED-DEFINE SEARCH_LIMIT 1000
 
 ASSIGN
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:gcBrand = "1".
 
 DEF VAR ldeStartTime AS DECIMAL NO-UNDO. 
 DEF VAR ldeEndTime AS DECIMAL NO-UNDO.  

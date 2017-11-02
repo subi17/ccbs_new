@@ -9,8 +9,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 
@@ -25,12 +25,12 @@ liReleaseCycle = fCParamI("SIMonlyReleaseHours").
 liCycleinSec = liReleaseCycle * 3600.
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_SIM_ONLY_MNP_IN}:
 
 
    FIND LAST OrderTimeStamp NO-LOCK WHERE
-             OrderTimeStamp.Brand = Syst.CUICommon:gcBrand AND
+             OrderTimeStamp.Brand = Syst.Var:gcBrand AND
              OrderTimeStamp.OrderId = Order.OrderID AND
              OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY} NO-ERROR.
    IF AVAIL OrderTimeStamp THEN DO:

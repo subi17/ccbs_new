@@ -1,8 +1,8 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
-&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
 {Func/lib/eventlog.i}
 

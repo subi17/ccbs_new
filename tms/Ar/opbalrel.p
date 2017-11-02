@@ -30,7 +30,7 @@ form
       HELP "Latest posting date of overpayments to be reported" 
    skip(9)
    WITH ROW 1 side-labels width 80
-        title " " + Syst.CUICommon:ynimi + " OVERPAYMENT BALANCE REPORT " +
+        title " " + Syst.Var:ynimi + " OVERPAYMENT BALANCE REPORT " +
         string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
@@ -49,21 +49,21 @@ toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 /* 847 */
-         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 /* 847 */
+         Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3.
          RUN Syst/ufkey.p.
 
          READKEY.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
 
-      ELSE Syst.CUICommon:nap = "1".
+      ELSE Syst.Var:nap = "1".
 
-      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-         ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE.
+         ASSIGN Syst.Var:ehto = 9 ufkey = TRUE.
          RUN Syst/ufkey.p.
          UPDATE ldtDate
                 WITH FRAME valinta.
@@ -71,14 +71,14 @@ toimi:
          NEXT toimi.
       END.
 
-      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
-      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
 
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

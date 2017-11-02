@@ -38,23 +38,23 @@ form
    MedHist.Ident
    MedHist.Date
    MedHist.FileTime
-WITH width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Preprosessor configuration "
+WITH width 80 OVERLAY scroll 1 15 DOWN COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " Preprosessor configuration "
    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 form /*  search WITH FIELD Ident */
     Ident
     help "Give Ident"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Ident "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Ident "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD Date */
     Date
         help "Give Date"
-            with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Date "
-                COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
+            with row 4 col 2 title color value(Syst.Var:ctc) " FIND Date "
+                COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST MedHist
@@ -123,38 +123,38 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 2120  Syst.CUICommon:ufk[2]= 28 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= 0  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 2120  Syst.Var:ufk[2]= 28 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 0  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MedHist.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.Ident WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MedHist.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MedHist.Date {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.Date WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MedHist.Date WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW MedHist.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MedHist.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW MedHist.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MedHist.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MedHist.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -185,10 +185,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND MedHist where recid(MedHist) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev MedHist
@@ -224,7 +224,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND MedHist where recid(MedHist) = rtab[FRAME-DOWN] no-lock .
@@ -261,7 +261,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MedHist where recid(MedHist) = Memory no-lock no-error.
         IF order = 1 THEN FIND prev MedHist
@@ -299,7 +299,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -314,10 +314,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Ident = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Ident WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if Ident <>  "" THEN DO:
@@ -336,11 +336,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Date = ?.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Date WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        IF Date <> ? THEN DO:
@@ -357,7 +357,7 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST MedHist
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST MedHist USE-INDEX Date
@@ -370,7 +370,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST MedHist
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST MedHist USE-INDEX Date
@@ -383,11 +383,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

@@ -9,8 +9,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/tmsparam4.i}
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Mc/provmaint.i}
 
 DEF VAR pcTenant       AS CHAR NO-UNDO.
@@ -37,7 +37,7 @@ END.
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand = Syst.CUICommon:gcBrand AND
+           MobSub.Brand = Syst.Var:gcBrand AND
            MobSub.CLI   = pcMsisdn NO-WAIT NO-ERROR. /* Find with MSISDN */
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err(SUBST("MSISDN not found &1", pcMsisdn)).

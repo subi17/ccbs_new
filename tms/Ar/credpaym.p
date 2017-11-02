@@ -6,7 +6,7 @@
              10.04.2002/ht  ImportStamp added
              03.05.2002/aam use PaymVouch (fvoucher.i)
              17.05.2002/aam partial credit 
-             03.06.2002/aam Syst.CUICommon:katun added TO memo
+             03.06.2002/aam Syst.Var:katun added TO memo
              26.09.2002/aam customer balances in table CustBal 
              23.10.2002/aam makepaym.p separated from this
              15.04.2003/aam makepaym returns voucher nbr
@@ -76,7 +76,7 @@ FIRST blasku exclusive-lock where
                      "",
                      "Credited with invoice " +
                         string(blasku.InvNum) +
-                        " Handler: " + Syst.CUICommon:katun,
+                        " Handler: " + Syst.Var:katun,
                      OUTPUT liVoucher
                     ).
 
@@ -109,7 +109,7 @@ FIRST blasku exclusive-lock where
                      "",
                      "Credit for invoice " +
                         string(Invoice.InvNum) +
-                        " Handler: " + Syst.CUICommon:katun,
+                        " Handler: " + Syst.Var:katun,
                      OUTPUT liVoucher
                     ).
 

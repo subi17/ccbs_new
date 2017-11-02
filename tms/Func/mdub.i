@@ -37,7 +37,7 @@ FUNCTION fGetActiveMDUB RETURNS CHAR
       lcBundle = ENTRY(i,lcBONOContracts).
       /* check if exist any bono contract valid to the future */   
       FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-               ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
+               ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
                ServiceLimitGroup.GroupCode = lcBundle,
           EACH ServiceLimit NO-LOCK WHERE 
                ServiceLimit.GroupCode = ServiceLimitGroup.GroupCode AND 
@@ -88,14 +88,14 @@ END FUNCTION.
 FUNCTION fServPackagesActive RETURNS LOGICAL :
 
    FIND FIRST CTServPac WHERE
-              CTServPac.Brand   = Syst.CUICommon:gcBrand AND
+              CTServPac.Brand   = Syst.Var:gcBrand AND
               CTServPac.CLIType = MobSub.CLIType AND
               CTServPac.ServPac = "SHAPER" AND  
               CTServPac.ToDate >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CTServPac THEN RETURN FALSE.
 
    FIND FIRST CTServPac WHERE
-              CTServPac.Brand   = Syst.CUICommon:gcBrand AND
+              CTServPac.Brand   = Syst.Var:gcBrand AND
               CTServPac.CLIType = MobSub.CLIType AND
               CTServPac.ServPac = "HSDPA" AND  
               CTServPac.ToDate >= TODAY NO-LOCK NO-ERROR.
@@ -227,10 +227,10 @@ FUNCTION fTerminateMDUBService RETURNS LOGICAL
    ldTermTS = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idtReqDate) ,"23:59:59").
 
    FOR FIRST ServPac NO-LOCK WHERE
-             ServPac.Brand   = Syst.CUICommon:gcBrand AND
+             ServPac.Brand   = Syst.Var:gcBrand AND
              ServPac.ServPac = icServPac,
         EACH ServEl NO-LOCK WHERE
-             ServEl.Brand   = Syst.CUICommon:gcBrand AND
+             ServEl.Brand   = Syst.Var:gcBrand AND
              ServEl.ServPac = ServPac.ServPac,
        FIRST SubSer NO-LOCK WHERE
              SubSer.MsSeq   = MobSub.MsSeq AND
@@ -318,10 +318,10 @@ FUNCTION fMDUBFixedFeeAmt RETURNS DECIMAL
             OUTPUT liOrderTime).
  
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND 
+             DayCampaign.Brand = Syst.Var:gcBrand AND 
              DayCampaign.DCEvent = icBundle,
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand     = Syst.CUICommon:gcBrand AND
+             FMItem.Brand     = Syst.Var:gcBrand AND
              FMItem.FeeModel  = DayCampaign.FeeModel AND
              FMItem.ToDate   >= ldaOrderDate AND
              FMItem.FromDate <= ldaOrderDate:
@@ -337,7 +337,7 @@ FUNCTION fMDUBInOrder RETURNS CHARACTER
    DEF VAR lcBundle AS CHAR NO-UNDO. 
 
    FIND FIRST Order WHERE 
-              Order.Brand   = Syst.CUICommon:gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = piOrderId NO-LOCK NO-ERROR. 
    IF NOT AVAILABLE Order THEN RETURN "".
    

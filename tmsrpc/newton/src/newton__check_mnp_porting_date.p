@@ -11,8 +11,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 {Mnp/mnp.i}
 
 /* Input parameters */

@@ -15,7 +15,7 @@
 {Func/coinv.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -171,7 +171,7 @@ PROCEDURE pMsCustChange:
          IF liNewInvCust = 0 THEN liNewInvCust = liCreated.
             
          ASSIGN bNewCust.ChgStamp   = Func.Common:mMakeTS()
-                bNewCust.CreUser    = Syst.CUICommon:katun
+                bNewCust.CreUser    = Syst.Var:katun
                 bNewCust.InvCust    = liNewInvCust
                 bNewCust.PaymCust   = MobSub.AgrCust
                 bNewCust.RepCust    = bNewCust.CustNum
@@ -192,7 +192,7 @@ PROCEDURE pMsCustChange:
                 bNewCust.ContrBeg   = TODAY.
 
          FIND CustCat WHERE 
-              CustCat.Brand    = Syst.CUICommon:gcBrand AND
+              CustCat.Brand    = Syst.Var:gcBrand AND
               CustCat.Category = bNewCust.Category 
          NO-LOCK NO-ERROR.
          IF AVAILABLE CustCat THEN bNewCust.PaymTerm = CustCat.PaymTerm.
@@ -570,7 +570,7 @@ PROCEDURE pOwnerChange:
          IF llNewCust THEN DO:
             ASSIGN 
             bNewCust.ChgStamp   = Func.Common:mMakeTS()
-            bNewCust.CreUser    = Syst.CUICommon:katun
+            bNewCust.CreUser    = Syst.Var:katun
             bNewCust.PaymCust   = liNewOwner
             bNewCust.AgrCust    = liNewOwner
             bNewCust.RepCust    = bNewCust.CustNum
@@ -581,7 +581,7 @@ PROCEDURE pOwnerChange:
             bNewCust.ContrBeg   = TODAY.
 
             FIND CustCat WHERE 
-                 CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                 CustCat.Brand    = Syst.Var:gcBrand AND
                  CustCat.Category = bNewCust.Category NO-LOCK NO-ERROR.
             IF AVAILABLE CustCat THEN bNewCust.PaymTerm = CustCat.PaymTerm.
          END.   
@@ -736,7 +736,7 @@ PROCEDURE pOwnerChange:
                     /* memo   */
                     STRING(liOldOwner) + " -> " + STRING(liNewOwner),
                     FALSE,          /* no messages to screen */
-                    Syst.CUICommon:katun,
+                    Syst.Var:katun,
                     "",
                     0,
                     "",
@@ -812,7 +812,7 @@ PROCEDURE pMsCustMove:
          ELSE DO:
         
             FIND CLIType WHERE 
-                 CLIType.Brand   = Syst.CUICommon:gcBrand AND
+                 CLIType.Brand   = Syst.Var:gcBrand AND
                  CLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN ASSIGN 
                BillTarget.BillTarget = CLIType.BillTarget
@@ -833,7 +833,7 @@ PROCEDURE pMsCustMove:
       ELSE ldtFeeTo = DATE(MONTH(ldtActDate) + 1,1,YEAR(ldtActDate)) - 1.
     
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = Syst.CUICommon:gcBrand      AND
+               FATime.Brand  = Syst.Var:gcBrand      AND
                FATime.MsSeq  = MobSub.MsSeq AND
                FATime.InvNum = 0            AND
                FATime.Period >= liFeePeriod:
@@ -890,7 +890,7 @@ PROCEDURE pMsCustMove:
              
       /* SIM */
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand = Syst.CUICommon:gcBrand   AND
+                 SIM.Brand = Syst.Var:gcBrand   AND
                  SIM.ICC   = MobSub.ICC NO-ERROR.
       IF AVAILABLE SIM THEN SIM.CustNum = iiNewUser.
    END.
@@ -913,7 +913,7 @@ PROCEDURE pMsCustMove:
                     DAY(ldtFeeDate).
                     
       FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-               FixedFee.Brand     = Syst.CUICommon:gcBrand              AND
+               FixedFee.Brand     = Syst.Var:gcBrand              AND
                FixedFee.HostTable = "MobSub"             AND 
                FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                FixedFee.InUse     = TRUE:

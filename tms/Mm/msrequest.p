@@ -31,7 +31,7 @@
 {Mc/lib/tokenchk.i 'MsRequest'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -120,8 +120,8 @@ form
     MsRequest.ReqType     COLUMN-LABEL "Type"     FORMAT ">>9"
     MsRequest.ReqStatus   COLUMN-LABEL "S"        FORMAT ">9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        "  Requests "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -160,8 +160,8 @@ form
        lcDone NO-LABEL FORMAT "X(20)" SKIP
        
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -173,29 +173,29 @@ form /* seek  MsRequest */
     "Brand .:" lcBrand skip
     "Request:" liRequest FORMAT ">>>>>>>>>9"
     HELP "Enter request ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  MsRequest */
     "Brand:" lcBrand skip
     "CLI .:" lcCLI FORMAT "X(15)"
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CLI "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum  FORMAT ">>>>>>>9"
     HELP "Enter customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  ActStamp */
     "Brand :" lcBrand skip
     "Status:" liStatus FORMAT "9"
     HELP "Enter Status"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Status "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Status "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f4.
 
 FUNCTION fReqStatus RETURNS LOGICAL
    (iiStatus AS INT).
@@ -231,13 +231,13 @@ END FUNCTION.
 FUNCTION fFrameTitle RETURNS LOGIC
   (icTitle AS CHAR).
 
-   FRAME sel:TITLE = " " + Syst.CUICommon:ynimi + "  " +
+   FRAME sel:TITLE = " " + Syst.Var:ynimi + "  " +
                      icTitle + "  " +
                      string(TODAY,"99-99-99") + " ".                               
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -253,7 +253,7 @@ END.
 
 ELSE 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = Syst.CUICommon:gcBrand,
+         RequestType.Brand = Syst.Var:gcBrand,
    FIRST MsReqStatFunc NO-LOCK WHERE
          MsReqStatFunc.ReqType = RequestType.ReqType AND
          LENGTH(MsReqStatFunc.FuncGroup) > 2:
@@ -267,7 +267,7 @@ END.
 
 IF iiReqType >= 0 THEN DO:
    FIND RequestType WHERE
-        RequestType.Brand   = Syst.CUICommon:gcBrand AND
+        RequestType.Brand   = Syst.Var:gcBrand AND
         RequestType.ReqType = iiReqType NO-LOCK NO-ERROR.
            
    IF NOT AVAILABLE RequestType THEN DO:
@@ -305,7 +305,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MsRequest  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -313,7 +313,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -352,7 +352,7 @@ REPEAT WITH FRAME sel:
               MsRequest.MSSeq    = INPUT FRAME lis MsRequest.MSSeq
               MsRequest.CLI      = MobSub.CLI
               MsRequest.CustNum  = MobSub.CustNum
-              MsRequest.UserCode = Syst.CUICommon:katun.
+              MsRequest.UserCode = Syst.Var:katun.
               MsRequest.CreStamp = Func.Common:mMakeTS().
 
            RUN local-UPDATE-record.
@@ -423,19 +423,19 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           Syst.CUICommon:ufk   = 0
-           Syst.CUICommon:ufk[1]= 135  
-           Syst.CUICommon:ufk[2]= 653 
-           Syst.CUICommon:ufk[3]= 714  
-           Syst.CUICommon:ufk[4]= IF iiReqStatus = ? THEN 559 ELSE 0
-           Syst.CUICommon:ufk[8]= 8 
-           Syst.CUICommon:ehto = 3 ufkey = FALSE.
+           Syst.Var:ufk   = 0
+           Syst.Var:ufk[1]= 135  
+           Syst.Var:ufk[2]= 653 
+           Syst.Var:ufk[3]= 714  
+           Syst.Var:ufk[4]= IF iiReqStatus = ? THEN 559 ELSE 0
+           Syst.Var:ufk[8]= 8 
+           Syst.Var:ehto = 3 ufkey = FALSE.
 
         IF iiMSSeq > 0 OR iiCustNum > 0 THEN ASSIGN
-           Syst.CUICommon:ufk[1] = 0
-           Syst.CUICommon:ufk[2] = 0
-           Syst.CUICommon:ufk[3] = 0
-           Syst.CUICommon:ufk[4] = 0.
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[3] = 0
+           Syst.Var:ufk[4] = 0.
         
         RUN Syst/ufkey.p.
         
@@ -444,21 +444,21 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MsRequest.MsRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.MsRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MsRequest.MsRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MsRequest.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MsRequest.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW MsRequest.ReqStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MsRequest.ReqStatus WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MsRequest.ReqStatus WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -467,10 +467,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -488,7 +488,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -513,7 +513,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -539,7 +539,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MsRequest WHERE recid(MsRequest) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -563,7 +563,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -578,14 +578,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               liRequest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -595,14 +595,14 @@ REPEAT WITH FRAME sel:
                MsRequest.MsRequest = liRequest
           NO-LOCK NO-ERROR.
 
-          IF NOT AVAILABLE MsRequest OR MsRequest.Brand NE Syst.CUICommon:gcBrand OR
+          IF NOT AVAILABLE MsRequest OR MsRequest.Brand NE Syst.Var:gcBrand OR
              MsRequest.ReqType NE iiReqType OR
              (iiReqStatus NE ? AND MsRequest.ReqStat NE iiReqStatus)
           THEN RELEASE MsRequest.
 
 /* This was too slow */
 /*  THEN FIND LAST MsRequest WHERE
-                         MsRequest.Brand     = Syst.CUICommon:gcBrand   AND
+                         MsRequest.Brand     = Syst.Var:gcBrand   AND
                          MsRequest.ReqType   = iiReqType AND
                          MsRequest.MsRequest > liRequest AND
                          (IF iiReqStatus NE ? 
@@ -617,14 +617,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -646,14 +646,14 @@ REPEAT WITH FRAME sel:
 
 
      /* Search BY col 3 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -674,14 +674,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-3 */
 
      /* Search BY col 4 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               liStatus WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
@@ -699,7 +699,7 @@ REPEAT WITH FRAME sel:
        NEXT LOOP.
      END. /* Search-4 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
@@ -714,7 +714,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        MsRequest.CLI MsRequest.CustNum.
 
        RUN local-find-NEXT.
@@ -736,7 +736,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        MsRequest.CLI MsRequest.CustNum .
 
        IF ok THEN DO:
@@ -759,7 +759,7 @@ REPEAT WITH FRAME sel:
      
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis 
      ON ENDKEY UNDO, LEAVE:
 
@@ -769,7 +769,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MsRequest.MSSeq.
 
        RUN local-UPDATE-record.                                  
@@ -789,25 +789,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MsRequest) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MsRequest) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -1280,7 +1280,7 @@ PROCEDURE local-UPDATE-record:
       NO-LOCK NO-ERROR.
       
       FIND RequestType WHERE
-           RequestType.Brand   = Syst.CUICommon:gcBrand AND
+           RequestType.Brand   = Syst.Var:gcBrand AND
            RequestType.ReqType = MsRequest.ReqType NO-LOCK NO-ERROR.
       IF AVAILABLE RequestType 
       THEN lcReqType = RequestType.ReqName.
@@ -1311,26 +1311,26 @@ PROCEDURE local-UPDATE-record:
            MsRequest.DoneStamp lcDone
       WITH FRAME lis.
       
-      ASSIGN Syst.CUICommon:ufk    = 0 
-             Syst.CUICommon:ehto   = 0
-             Syst.CUICommon:ufk[2] = 1643
-             Syst.CUICommon:ufk[4] = 927
-             Syst.CUICommon:ufk[5] = 1697
-             Syst.CUICommon:ufk[6] = 1752
-             Syst.CUICommon:ufk[8] = 8.
+      ASSIGN Syst.Var:ufk    = 0 
+             Syst.Var:ehto   = 0
+             Syst.Var:ufk[2] = 1643
+             Syst.Var:ufk[4] = 927
+             Syst.Var:ufk[5] = 1697
+             Syst.Var:ufk[6] = 1752
+             Syst.Var:ufk[8] = 8.
 
-      IF MSRequest.OrigReQuest > 0 THEN Syst.CUICommon:ufk[3] = 2953.
+      IF MSRequest.OrigReQuest > 0 THEN Syst.Var:ufk[3] = 2953.
       ELSE DO:
          FIND FIRST SubRequest WHERE 
                     SubRequest.OrigRequest = MSRequest.MSRequest 
          NO-LOCK NO-ERROR.
-         IF AVAIL SubRequest THEN Syst.CUICommon:ufk[3] = 2954.           
+         IF AVAIL SubRequest THEN Syst.Var:ufk[3] = 2954.           
       END.
       
       /* 2nd loop */
       IF iiMSRequest > 0 THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[3] = 0.
+         Syst.Var:ufk[3] = 0.
       END.
       
       IF lcRight = "RW" THEN DO:
@@ -1349,7 +1349,7 @@ PROCEDURE local-UPDATE-record:
                     MsReqFuncItem.ItemId = 
                     ENTRY(liLoop,MsReqStatFunc.FuncGroup,",")
                NO-ERROR.
-               IF AVAILABLE MsReqFuncItem THEN Syst.CUICommon:ufk[7] = 9074. 
+               IF AVAILABLE MsReqFuncItem THEN Syst.Var:ufk[7] = 9074. 
             END. 
          END.
       END.
@@ -1357,11 +1357,11 @@ PROCEDURE local-UPDATE-record:
       RUN Syst/ufkey.p. 
 
       /* parameters */  
-      IF Syst.CUICommon:toimi = 2 THEN DO:
+      IF Syst.Var:toimi = 2 THEN DO:
          RUN Mm/msreqparam.p(MSRequest.MSrequest).
       END.
       
-      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+      ELSE IF Syst.Var:toimi = 3 THEN DO:
 
          /* search main-request*/
          IF   MSRequest.origRequest > 0 
@@ -1379,7 +1379,7 @@ PROCEDURE local-UPDATE-record:
                             Msrequest.MSRequest,
                             "").
       END.
-      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
 
         RUN Mc/memo.p(INPUT MsRequest.CustNum,
                  INPUT "MsRequest",
@@ -1388,7 +1388,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* internal memo */
-      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
       
             PAUSE 0.
             DISP MsRequest.Memo WITH FRAME fIntMemo.
@@ -1398,18 +1398,18 @@ PROCEDURE local-UPDATE-record:
       END.
       
       /* show eventlog */
-      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
+      ELSE IF Syst.Var:toimi = 6 THEN DO:
 
         RUN Mc/eventsel.p("MsRequest",
                      STRING(MsRequest.MsRequest)).
       END.
 
       /* change status */
-      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+      ELSE IF Syst.Var:toimi = 7 THEN DO:
          RUN Syst/msreqfuncmenu.p(MsRequest.MsRequest).
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE. 
    
    END.
    

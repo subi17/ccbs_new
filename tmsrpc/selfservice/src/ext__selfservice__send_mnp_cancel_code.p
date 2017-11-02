@@ -17,8 +17,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       Syst.CUICommon:gcBrand = "1".
+ASSIGN Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.Var:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fexternalapi.i}
 {Func/fmakesms.i}
@@ -50,7 +50,7 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF Order.CLI EQ "" THEN
    RETURN appl_err("Mobile number does not exist").

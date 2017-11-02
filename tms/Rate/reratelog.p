@@ -16,7 +16,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -69,8 +69,8 @@ form
     lcStarted    FORMAT "X(8)" COLUMN-LABEL "Time" 
     RerateLog.ChangedQty   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        " RERATE LOG "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -95,8 +95,8 @@ form
       SPACE(0) ")" SKIP
     RerateLog.ChangedQty COLON 20 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -107,26 +107,26 @@ FORM
    "Brand:" lcBrand skip
    "Customer:" liCustNum
       HELP "Enter invoice customer"
-   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Invoice Customer "
-       COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Invoice Customer "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
    "Brand:" lcBrand skip
    "MSISDN:" lcCLI
       HELP "Enter MSISDN"
-   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
-       COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM
    "Brand:" lcBrand skip
    "Rated:" ldaRateDate
       HELP "Enter rating date"
-   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Rating Date "
-       COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Rating Date "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -200,12 +200,12 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk    = 0
-        Syst.CUICommon:ufk[1] = 714  
-        Syst.CUICommon:ufk[2] = 209
-        Syst.CUICommon:ufk[3] = 28
-        Syst.CUICommon:ufk[8] = 8 
-        Syst.CUICommon:ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 714  
+        Syst.Var:ufk[2] = 209
+        Syst.Var:ufk[3] = 28
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -214,21 +214,21 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW RerateLog.InvCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RerateLog.InvCust WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) RerateLog.InvCust WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW RerateLog.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RerateLog.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) RerateLog.CLI WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW RerateLog.StartDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RerateLog.StartDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) RerateLog.StartDate WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -237,10 +237,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -258,7 +258,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -283,7 +283,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -309,7 +309,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND RerateLog WHERE recid(RerateLog) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -333,7 +333,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -348,14 +348,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               liCustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -372,14 +372,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -397,14 +397,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* Search BY column 3 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        DISPLAY lcBrand WITH FRAME F3.
        
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               ldaRateDate WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -421,7 +421,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -429,8 +429,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRerateLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RerateLog.InvCust.
 
        RUN local-UPDATE-record.                                  
@@ -447,25 +447,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(RerateLog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(RerateLog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -485,15 +485,15 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN DO:
       FIND FIRST RerateLog USE-INDEX InvCust WHERE
-                 RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                 RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND FIRST RerateLog USE-INDEX CLI WHERE
-                 RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                 RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND FIRST RerateLog USE-INDEX StartDate WHERE
-                 RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                 RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -502,15 +502,15 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN DO:
       FIND LAST RerateLog USE-INDEX InvCust WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND LAST RerateLog USE-INDEX CLI WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND LAST RerateLog USE-INDEX StartDate WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -519,15 +519,15 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN DO:
       FIND NEXT RerateLog USE-INDEX InvCust WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND NEXT RerateLog USE-INDEX CLI WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND NEXT RerateLog USE-INDEX StartDate WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -536,15 +536,15 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN DO:
       FIND PREV RerateLog USE-INDEX InvCust WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.      
    ELSE IF order = 2 THEN DO:
       FIND PREV RerateLog USE-INDEX CLI WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 3 THEN DO:
       FIND PREV RerateLog USE-INDEX StartDate WHERE
-                RerateLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
+                RerateLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -611,12 +611,12 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
 
       ASSIGN 
-         Syst.CUICommon:ehto = 0
-         Syst.CUICommon:ufk  = 0
-         Syst.CUICommon:ufk[8] = 8.
+         Syst.Var:ehto = 0
+         Syst.Var:ufk  = 0
+         Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+      IF Syst.Var:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

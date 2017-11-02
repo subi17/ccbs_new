@@ -7,8 +7,8 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -19,7 +19,7 @@ Syst.CUICommon:gcBrand = "1".
 {Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 

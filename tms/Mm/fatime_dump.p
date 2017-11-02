@@ -97,7 +97,7 @@ IF icDumpMode EQ "modified" THEN DO:
       IF ERROR-STATUS:ERROR THEN NEXT FatimeLoop.
       
       FIND fatime NO-LOCK where
-           fatime.brand = Syst.CUICommon:gcBrand and
+           fatime.brand = Syst.Var:gcBrand and
            fatime.fatnum = liFatNum no-error.
       IF NOT AVAIL FAtime OR FAtime.OrigFat NE 0 THEN NEXT FatimeLoop.
    
@@ -113,7 +113,7 @@ END.
 ELSE DO:
 FatimeLoop:
 FOR EACH FATime NO-LOCK USE-INDEX CLI WHERE
-         FATime.Brand   = Syst.CUICommon:gcBrand AND
+         FATime.Brand   = Syst.Var:gcBrand AND
          FATime.OrigFat = 0
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:

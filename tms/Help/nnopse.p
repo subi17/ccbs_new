@@ -35,8 +35,8 @@ form
     Operator.OperName  format "x(30)" column-label "Operators Name"
     Operator.Operator                 column-label "OpCode" 
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
-    COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " OPERATOR BROWSER: SEEK FROM '"  + Operator + "' " FRAME sel.
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " OPERATOR BROWSER: SEEK FROM '"  + Operator + "' " FRAME sel.
 
 
 form
@@ -49,7 +49,7 @@ form
 
 with row 1 centered overlay title " SEEK OPERATORS " FRAME alku.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
    FIND FIRST Operator USE-INDEX Operator no-lock no-error.
    IF NOT AVAIL Operator THEN DO:
       BELL.
@@ -74,13 +74,13 @@ repeat WITH FRAME sel:
        ASSIGN seekit = FALSE nro = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku:
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE Operator WITH FRAME alku EDITING:
-             READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+             READKEY. Syst.Var:nap = keylabel(LASTKEY).
              /* onko painettu home */
-             if lookup(Syst.CUICommon:nap,"home") > 0 THEN 
-             assign nro = true Syst.CUICommon:nap = "enter".
-             APPLY keycode(Syst.CUICommon:nap).
+             if lookup(Syst.Var:nap,"home") > 0 THEN 
+             assign nro = true Syst.Var:nap = "enter".
+             APPLY keycode(Syst.Var:nap).
           END.
 
           if Operator = "" THEN LEAVE LOOP.
@@ -163,30 +163,30 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 0   Syst.CUICommon:ufk[2]= 0   Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 11 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 0   Syst.Var:ufk[2]= 0   Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 11 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW Operator.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) Operator.Operator WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Operator.Operator WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW Operator.OperName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) Operator.OperName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Operator.OperName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -213,10 +213,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Operator where recid(Operator) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev Operator
@@ -245,7 +245,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Operator where recid(Operator) = rtab[FRAME-DOWN] no-lock .
@@ -275,7 +275,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Operator where recid(Operator) = memory no-lock no-error.
          IF order = 2 THEN FIND prev Operator
@@ -306,7 +306,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -321,14 +321,14 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     else if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     else if lookup(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND Operator where recid(Operator) = rtab[FRAME-LINE] no-lock.
         siirto = string(Operator.Operator).
         LEAVE LOOP.
      END.
 
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST Operator
         USE-INDEX Operator no-lock no-error.
         ELSE IF order = 1 THEN FIND FIRST Operator
@@ -337,7 +337,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST Operator
         USE-INDEX Operator no-lock no-error.
         ELSE IF order = 1 THEN FIND LAST Operator
@@ -346,7 +346,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
         seekit = TRUE.
         HIDE FRAME sel no-pause.
         NEXT LOOP.
@@ -357,5 +357,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
 HIDE FRAME alku no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

@@ -85,8 +85,8 @@ IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun = "VISTA_" + pcSalesman.
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "VISTA_" + pcSalesman.
 {Func/fmakemsreq.i}
 {Func/fcharge_comp_loaded.i}
 
@@ -137,11 +137,11 @@ IF pcReason NE '' THEN DO:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = Syst.CUICommon:gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MsRequest" 
       Memo.KeyValue  = STRING(liReq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = Syst.CUICommon:katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "ICC Change Reason"
       Memo.MemoText  = pcReason
       Memo.CustNum   = MsRequest.CustNum .

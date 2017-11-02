@@ -95,7 +95,7 @@ END.
 PAUSE 0.
 VIEW FRAME fCriter. 
 
-Syst.CUICommon:toimi = -1.
+Syst.Var:toimi = -1.
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
 
@@ -103,7 +103,7 @@ MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = lcCurrentBundle NO-LOCK NO-ERROR.
 
    PAUSE 0.
@@ -118,22 +118,22 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
            ldaChangeDate
    WITH FRAME fCriter.
 
-   IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
+   IF Syst.Var:toimi < 0 THEN Syst.Var:toimi = 1.
    ELSE DO:
       ASSIGN
-         Syst.CUICommon:ufk    = 0  
-         Syst.CUICommon:ufk[1] = 7
-         Syst.CUICommon:ufk[5] = 1027 
-         Syst.CUICommon:ufk[8] = 8 
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk    = 0  
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = 1027 
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE 
@@ -146,24 +146,24 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
             
             IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "lcDCEvent"
             THEN DO:
-               Syst.CUICommon:gcHelpParam = "DCType:1,4".
+               Syst.Var:gcHelpParam = "DCType:1,4".
                RUN Help/h-daycamp.p.
                IF siirto NE ? THEN 
                DO: 
                    ASSIGN lcDCEvent = siirto.
                    DISP lcDCEvent.
                END.    
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END.
                 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                PAUSE 0.
 
                IF FRAME-FIELD = "lcCurrentBundle" THEN DO:
                   FIND FIRST DayCampaign WHERE 
-                             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                             DayCampaign.Brand = Syst.Var:gcBrand AND
                              DayCampaign.DCEvent = INPUT lcCurrentBundle 
                   NO-LOCK NO-ERROR.
                   IF NOT AVAILABLE DayCampaign THEN DO:
@@ -187,7 +187,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
                ELSE IF FRAME-FIELD = "lcDCEvent" THEN DO:
                   FIND FIRST bNewBundle WHERE 
-                             bNewBundle.Brand = Syst.CUICommon:gcBrand AND
+                             bNewBundle.Brand = Syst.Var:gcBrand AND
                              bNewBundle.DCEvent = INPUT lcDCEvent 
                   NO-LOCK NO-ERROR.
                   IF NOT AVAILABLE bNewBundle THEN DO:
@@ -222,7 +222,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       IF NOT fValidateBTC(MobSub.MsSeq,
                           lcCurrentBundle,
@@ -240,7 +240,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          Mobsub.MultiSimID > 0 THEN DO:
       
          FIND FIRST bbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                    bbMobSub.Brand = Syst.CUICommon:gcBrand AND
+                    bbMobSub.Brand = Syst.Var:gcBrand AND
                     bbMobSub.MultiSimId = Mobsub.MultiSimId AND
                     bbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                     bbMobSub.Custnum = Mobsub.Custnum NO-ERROR.
@@ -262,22 +262,22 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
         END.
       END.
       ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                             CLIType.Brand = Syst.CUICommon:gcBrand AND
+                             CLIType.Brand = Syst.Var:gcBrand AND
                              CLIType.CLIType = lcCurrentBundle AND
                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) AND
           NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                             CLIType.Brand = Syst.CUICommon:gcBrand AND
+                             CLIType.Brand = Syst.Var:gcBrand AND
                              CLIType.CLIType = lcDCEvent AND
                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
          llAddLineTerm = FALSE.
          FOR EACH bbMobSub NO-LOCK WHERE
-                  bbMobSub.Brand   = Syst.CUICommon:gcBrand AND
+                  bbMobSub.Brand   = Syst.Var:gcBrand AND
                   bbMobSub.InvCust = Mobsub.CustNum AND
                   bbMobSub.PayType = FALSE AND
                   bbMobSub.MsSeq NE Mobsub.MsSeq,
             FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = Syst.CUICommon:gcBrand ANd
+                  CLIType.Brand = Syst.Var:gcBrand ANd
                   CLIType.CLIType = (IF Mobsub.TariffBundle > ""
                                      THEN Mobsub.TariffBundle
                                      ELSE Mobsub.CLIType):
@@ -343,7 +343,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

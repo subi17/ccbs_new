@@ -48,7 +48,7 @@ ASSIGN
     lcLine4   = FILL("-",liWidth).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    lcLine1 AT 1 SKIP
@@ -106,7 +106,7 @@ VIEW FRAME fQty.
 
 /* separate loop -> info can be shown to user */
 FOR EACH Payment NO-LOCK WHERE
-         Payment.Brand       = Syst.CUICommon:gcBrand      AND
+         Payment.Brand       = Syst.Var:gcBrand      AND
          Payment.AccDate    >= idtDate1     AND
          Payment.AccDate    <= idtDate2     AND
          Payment.BankAcc  NE ""             AND
@@ -157,7 +157,7 @@ BY ttPaid.PaymSrc:
       fChkPage(2). 
 
       FIND InvGroup WHERE 
-           InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = ttPaid.InvGrp 
       NO-LOCK NO-ERROR.
 

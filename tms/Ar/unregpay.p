@@ -71,7 +71,7 @@
 {Func/fpaymentreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -197,8 +197,8 @@ FORM
     UnregPaym.PaidAmt   FORMAT "->>>>>>9.99"
     UnregPaym.RefNum    FORMAT "X(17)"
     UnregPaym.BankAcc   FORMAT "x(14)"
-WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+WITH WIDTH 80 ROW 1 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " UNREGISTERED PAYMENTS " + STRING(TODAY,"99-99-99") + " "     
     FRAME sel.
 
@@ -243,7 +243,7 @@ FORM
                         FORMAT "Yes/No" 
                         HELP "Calculate delay interest from payment" SKIP
     "Memo:"  UnregPaym.Memo      NO-LABEL VIEW-AS EDITOR Size 60 BY 5
-WITH  OVERLAY ROW 1 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
+WITH  OVERLAY ROW 1 CENTERED COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
     fr-header WITH SIDE-LABELS FRAME lis.
 
 FORM
@@ -253,7 +253,7 @@ FORM
    mench[3] SKIP
    mench[4] SKIP
    mench[5]
-WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
+WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    " CHOOSE BOOKING TYPE " WITH NO-LABELS FRAME f-menu.
 
 FORM
@@ -268,7 +268,7 @@ FORM
    OldSum          LABEL "Old overpayment "
    PreSum          LABEL "Booking sum ...."
    NewSum          LABEL "New overpayment "
-WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
+WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    " OVERPAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME over.
 
 FORM
@@ -283,7 +283,7 @@ FORM
    OldSum          LABEL "Old Adv.Payment "
    PreSum          LABEL "Booking sum ...."
    NewSum          LABEL "New Adv.Payment "
-WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
+WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    " ADVANCE PAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME AdvPaym.
 
 {Func/brand.i}
@@ -292,40 +292,40 @@ FORM /* Seek a Date */
    "Brand:" lcBrand skip
    "Date :" haku1
    HELP "Give the payment date"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr1.
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Date "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 FORM /* Seek a customer's name */
    "Brand:" lcBrand skip
    "Name :" haku2
    HELP "Give the customer's name or beginning of it"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Name "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 FORM /* Seek an amount */
    "Brand :" lcBrand skip
    "Amount:" haku3
    HELP "Give the payment amount"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND AMOUNT "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND AMOUNT "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM /* Seek a reference number */
    "Brand :" lcBrand skip
    "Refnum:" haku4
    HELP "Give the reference number"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND REF.NUM. "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr4.
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND REF.NUM. "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr4.
 
 FORM /* Seek a Bank AccNum */
    "Brand:" lcBrand skip
    "Bank :"  haku5
    HELP "Give the bank account"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Bank Account "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr5.
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Bank Account "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr5.
 
-Syst.CUICommon:cfc = "sel". 
+Syst.Var:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 xState = 0.
@@ -363,7 +363,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a UnregPaym  */
  
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -372,7 +372,7 @@ REPEAT WITH FRAME sel:
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
         UnregPaym.Memo:SCREEN-VALUE = "".
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -464,20 +464,20 @@ REPEAT WITH FRAME sel:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk = 0  
-         Syst.CUICommon:ufk[1] = 816 Syst.CUICommon:ufk[2] = 1253 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk = 0  
+         Syst.Var:ufk[1] = 816 Syst.Var:ufk[2] = 1253 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          IF xState = 0  THEN 
             ASSIGN 
-               Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-               Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-               Syst.CUICommon:ufk[7] = (IF lcRight = "RW" THEN 815 ELSE 0).
+               Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+               Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+               Syst.Var:ufk[7] = (IF lcRight = "RW" THEN 815 ELSE 0).
 
         
-         IF xState > 0  THEN ASSIGN Syst.CUICommon:ufk[3] = 598 Syst.CUICommon:ufk[7] = 596.
-         IF xState = 0  THEN ASSIGN Syst.CUICommon:ufk[3] = 597.
-         IF xState NE 2 THEN ASSIGN Syst.CUICommon:ufk[4] = 1630.
+         IF xState > 0  THEN ASSIGN Syst.Var:ufk[3] = 598 Syst.Var:ufk[7] = 596.
+         IF xState = 0  THEN ASSIGN Syst.Var:ufk[3] = 597.
+         IF xState NE 2 THEN ASSIGN Syst.Var:ufk[4] = 1630.
 
          RUN Syst/ufkey.p.
 
@@ -494,15 +494,15 @@ REPEAT WITH FRAME sel:
          CHOOSE ROW UnregPaym.RefNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 5 THEN
          CHOOSE ROW UnregPaym.BankAcc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      COLOR DISPLAY VALUE(Syst.CUICommon:ccc) 
+      COLOR DISPLAY VALUE(Syst.Var:ccc) 
       UnregPaym.PaymDate UnregPaym.CustName UnregPaym.PaidAmt 
       UnregPaym.RefNum UnregPaym.BankAcc
       WITH FRAME sel.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -510,10 +510,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 6 THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 5.
       END.
 
@@ -531,7 +531,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* previous line */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND UnregPaym WHERE RECID(UnregPaym) = rtab[1] NO-LOCK.
             RUN local-find-prev.
@@ -559,7 +559,7 @@ REPEAT WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO 
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO 
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-DOWN] NO-LOCK .
@@ -587,7 +587,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT line */            
 
       /* previous page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND UnregPaym WHERE RECID(UnregPaym) = memory NO-LOCK NO-ERROR.
          RUN local-find-prev.
@@ -612,7 +612,7 @@ REPEAT WITH FRAME sel:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-DOWN,+") > 0 THEN DO 
+      ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-DOWN,+") > 0 THEN DO 
       WITH FRAME sel:
          /* cursor TO the DOWNmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
@@ -629,7 +629,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT page */
 
       /* show more information */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
       DO WITH FRAME lis TRANSAction:
 
          {Syst/uright2.i}
@@ -637,7 +637,7 @@ REPEAT WITH FRAME sel:
          NO-LOCK.
          ASSIGN  fr-header = " SHOW MORE INFORMATION " ufkey = TRUE.
          
-         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. 
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUnregPaym).
          
@@ -655,7 +655,7 @@ REPEAT WITH FRAME sel:
       END. /* show more information */
 
       /* FIRST record */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
 
          RUN local-find-first.
          ASSIGN memory = RECID(UnregPaym) must-print = TRUE.
@@ -663,7 +663,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* LAST record */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO :
+      ELSE IF LOOKUP(Syst.Var:nap,"END,e") > 0 THEN DO :
          RUN local-find-last.
          ASSIGN memory = RECID(UnregPaym) must-print = TRUE .
          NEXT LOOP.
@@ -672,21 +672,21 @@ REPEAT WITH FRAME sel:
       /***************************************
        * Search functions in a separate loop *
        ***************************************/
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN REPEAT WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN REPEAT WITH FRAME sel:
          ASSIGN 
-         ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 1
-         Syst.CUICommon:ufk[1] = 28  Syst.CUICommon:ufk[2] = 30 Syst.CUICommon:ufk[3] = 789 Syst.CUICommon:ufk[4] = 763
-         Syst.CUICommon:ufk[5] = 813 Syst.CUICommon:ufk[8] = 8. 
+         ufkey = TRUE Syst.Var:ufk = 0 Syst.Var:ehto = 1
+         Syst.Var:ufk[1] = 28  Syst.Var:ufk[2] = 30 Syst.Var:ufk[3] = 789 Syst.Var:ufk[4] = 763
+         Syst.Var:ufk[5] = 813 Syst.Var:ufk[8] = 8. 
          RUN Syst/ufkey.p.
-         IF Syst.CUICommon:toimi = 8 THEN NEXT BROWSE.
+         IF Syst.Var:toimi = 8 THEN NEXT BROWSE.
 
          /* Seek a Date */
-         IF Syst.CUICommon:toimi = 1 THEN DO:
-            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+         IF Syst.Var:toimi = 1 THEN DO:
+            Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
             haku1 = ?.
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr1.
-            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+            UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                    haku1 WITH FRAME hayr1.
             HIDE FRAME hayr1 NO-PAUSE.
 
@@ -715,12 +715,12 @@ REPEAT WITH FRAME sel:
          END. /* Seek a Date */
 
          /* Seek a customer's name */
-         IF Syst.CUICommon:toimi = 2 THEN DO:
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+         IF Syst.Var:toimi = 2 THEN DO:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
             haku2 = "".
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr2.
-            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+            UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                    haku2 WITH FRAME hayr2.
             HIDE FRAME hayr2 NO-PAUSE.
 
@@ -747,12 +747,12 @@ REPEAT WITH FRAME sel:
          END. /* Seek a customer's name */
 
          /* Seek an amount */
-         IF Syst.CUICommon:toimi = 3 THEN DO:
-            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+         IF Syst.Var:toimi = 3 THEN DO:
+            Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
             haku3 = 0.
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr3.
-            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+            UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                     haku3 WITH FRAME hayr3.
             HIDE FRAME hayr3 NO-PAUSE.
 
@@ -779,12 +779,12 @@ REPEAT WITH FRAME sel:
          END. /* Seek an amount */
 
          /* Seek a reference number */
-         IF Syst.CUICommon:toimi = 4 THEN DO:
-            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+         IF Syst.Var:toimi = 4 THEN DO:
+            Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
             haku4 = "".
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr4.
-            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+            UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                    haku4 WITH FRAME hayr4.
             HIDE FRAME hayr4 NO-PAUSE.
 
@@ -811,12 +811,12 @@ REPEAT WITH FRAME sel:
          END. /* Seek a reference number */
 
          /* Seek a Bank AccNum */ 
-         IF Syst.CUICommon:toimi = 5 THEN DO:
-            Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+         IF Syst.Var:toimi = 5 THEN DO:
+            Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
             haku5 = "".
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr5.
-            UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+            UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                    haku5 WITH FRAME hayr5.
             HIDE FRAME hayr5 NO-PAUSE.
 
@@ -843,7 +843,7 @@ REPEAT WITH FRAME sel:
          END. /* Seek a Bank AccNum */
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO:
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
          no-lock.
          RUN Ar/unreglog.p(UnregPaym.UrSeq).
@@ -852,7 +852,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* display unregistered/registered */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
         
          IF xState = 0 
          THEN liState = 1.
@@ -879,7 +879,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* display deleted */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND xState NE 2 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND xState NE 2 THEN DO:
 
          FIND FIRST UnregPaym USE-INDEX PaymDate WHERE 
             UnregPaym.Brand = lcBrand AND 
@@ -898,7 +898,7 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.CUICommon:ufk[5] > 0
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.Var:ufk[5] > 0
       THEN DO:  /* add */
          {Syst/uright2.i}
          must-add = TRUE.
@@ -906,14 +906,14 @@ REPEAT WITH FRAME sel:
       END.
 
       /* removal */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND xState = 0 AND lcRight = "RW"
+      ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND xState = 0 AND lcRight = "RW"
       THEN DO TRANSAction: 
          {Syst/uright2.i}
          delline = FRAME-LINE.
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE] NO-LOCK.
 
          /* line TO be deleted is lightened */
-         COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+         COLOR DISPLAY VALUE(Syst.Var:ctc)
          UnregPaym.PaymDate
          UnregPaym.CustName 
          UnregPaym.PaidAmt
@@ -940,7 +940,7 @@ REPEAT WITH FRAME sel:
 
          ASSIGN ok = FALSE.
          MESSAGE " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+         COLOR DISPLAY VALUE(Syst.Var:ccc)
          UnregPaym.PaymDate 
          UnregPaym.CustName 
          UnregPaym.PaidAmt
@@ -967,8 +967,8 @@ REPEAT WITH FRAME sel:
       END. /* removal */
 
       /* booking payments */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND xState = 0 AND lcRight = "RW" AND
-           Syst.CUICommon:ufk[7] > 0
+      ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND xState = 0 AND lcRight = "RW" AND
+           Syst.Var:ufk[7] > 0
       THEN DO:
 
 
@@ -981,9 +981,9 @@ REPEAT WITH FRAME sel:
             NEXT LOOP.
          END.   
          memory = rtab[FRAME-LINE(sel)].
-         ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3.
+         ASSIGN ufkey = TRUE Syst.Var:ufk = 0 Syst.Var:ehto = 3.
          RUN Syst/ufkey.p.   
-         Syst.CUICommon:cfc = "lis".
+         Syst.Var:cfc = "lis".
          RUN Syst/ufcolor.p. 
          ON F1 BELL.
          ON F2 BELL.
@@ -1012,10 +1012,10 @@ REPEAT WITH FRAME sel:
                         IF llCredLoss 
                         THEN "CREDIT LOSS " 
                         ELSE "INVOICE "
-            ufkey = TRUE Syst.CUICommon:ehto = 9.
+            ufkey = TRUE Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
-            Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.  
-            on f4 endkey. /* se Syst.CUICommon:toimi vain jos ei kutsutaan F9 */
+            Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.  
+            on f4 endkey. /* se Syst.Var:toimi vain jos ei kutsutaan F9 */
 
             ASSIGN   
             unbooked   = UnregPaym.PaidAmt - UnregPaym.Booked
@@ -1042,7 +1042,7 @@ REPEAT WITH FRAME sel:
             NO-LOCK NO-ERROR.
 
             IF NOT AVAIL Invoice OR 
-               Invoice.Brand NE Syst.CUICommon:gcBrand
+               Invoice.Brand NE Syst.Var:gcBrand
             THEN DO:
                BELL.
                MESSAGE "Invoice number " UnregPaym.InvNum " is not available !".
@@ -1240,7 +1240,7 @@ REPEAT WITH FRAME sel:
             ldtAccDate = TODAY
             DelInt     = FALSE. 
 
-            ASSIGN  ufkey = TRUE Syst.CUICommon:ehto = 9.
+            ASSIGN  ufkey = TRUE Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.  
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
@@ -1266,7 +1266,7 @@ REPEAT WITH FRAME sel:
             IF asno  = 0 THEN LEAVE.
 
             FIND Customer WHERE Customer.CustNum = asno NO-LOCK.
-            IF Customer.Brand NE Syst.CUICommon:gcBrand
+            IF Customer.Brand NE Syst.Var:gcBrand
             THEN DO:
                MESSAGE "Unknown customer"
                VIEW-AS ALERT-BOX.
@@ -1364,7 +1364,7 @@ REPEAT WITH FRAME sel:
             ldtAccDate = TODAY
             DelInt     = FALSE.
 
-            ASSIGN  ufkey = TRUE Syst.CUICommon:ehto = 9.
+            ASSIGN  ufkey = TRUE Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
@@ -1392,7 +1392,7 @@ REPEAT WITH FRAME sel:
             IF asno = 0 THEN LEAVE.
 
             FIND Customer WHERE Customer.CustNum = asno NO-LOCK.
-            IF Customer.Brand NE Syst.CUICommon:gcBrand
+            IF Customer.Brand NE Syst.Var:gcBrand
             THEN DO:
                MESSAGE "Unknown customer"
                VIEW-AS ALERT-BOX.
@@ -1483,10 +1483,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND 
+      ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND 
            xState >= 1               AND
            xState <= 2               AND
-           Syst.CUICommon:ufk[7] > 0 
+           Syst.Var:ufk[7] > 0 
       THEN DO TRANSAction:
 
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
@@ -1543,7 +1543,7 @@ REPEAT WITH FRAME sel:
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
@@ -1633,7 +1633,7 @@ PROCEDURE WritePayment:
 END PROCEDURE.
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
@@ -1773,20 +1773,20 @@ PROCEDURE local-UPDATE-record:
          lcRight = "RW" 
       THEN DO:
 
-         IF NEW UnregPaym THEN Syst.CUICommon:toimi = 1.
+         IF NEW UnregPaym THEN Syst.Var:toimi = 1.
             
          ELSE DO:
-            ASSIGN Syst.CUICommon:ufk    = 0
-                   Syst.CUICommon:ufk[1] = 7
-                   Syst.CUICommon:ufk[8] = 8
-                   Syst.CUICommon:ehto   = 0.
+            ASSIGN Syst.Var:ufk    = 0
+                   Syst.Var:ufk[1] = 7
+                   Syst.Var:ufk[8] = 8
+                   Syst.Var:ehto   = 0.
                 
             RUN Syst/ufkey.p.
          END.
          
-         IF Syst.CUICommon:toimi = 1 THEN DO:
+         IF Syst.Var:toimi = 1 THEN DO:
             
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
             FIND CURRENT UnregPaym EXCLUSIVE-LOCK.
             
@@ -1809,7 +1809,7 @@ PROCEDURE local-UPDATE-record:
 
                READKEY.
 
-               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO 
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO 
                WITH FRAME lis:
                   PAUSE 0.
 
@@ -1838,7 +1838,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE DO:
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END.

@@ -71,7 +71,7 @@ IF AVAIL MNPProcess THEN DO:
 END.
 
 FIND FIRST OrderDelivery WHERE
-           OrderDelivery.Brand = Syst.CUICommon:gcBrand AND
+           OrderDelivery.Brand = Syst.Var:gcBrand AND
            OrderDelivery.Orderid = Order.OrderId NO-LOCK NO-ERROR.
 IF AVAIL OrderDelivery THEN
    add_int(lcResponseStruct,"logistic_status", OrderDelivery.LOStatusId).

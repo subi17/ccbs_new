@@ -22,8 +22,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonAd".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand = "1".
 {Func/highusage_report.i}
 {newton/src/json_key.i}
 {Func/barrfunc.i}

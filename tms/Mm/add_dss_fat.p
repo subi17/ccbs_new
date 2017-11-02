@@ -9,8 +9,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "CRON".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "CRON".
 {Func/cparam2.i}
 {Func/fdss.i}
 {Func/fcpfat.i}
@@ -189,7 +189,7 @@ PROCEDURE pGetCustomerSubscriptions:
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                   bDayCampaign.Brand = Syst.Var:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

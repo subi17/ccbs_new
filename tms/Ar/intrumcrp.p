@@ -33,7 +33,7 @@ ASSIGN
     lcLine4   = FILL("-",liWidth).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    lcLine1 AT 1 SKIP

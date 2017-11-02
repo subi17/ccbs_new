@@ -99,7 +99,7 @@ FORM
    SKIP(3)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + " INVOICE ROW COUNTER REPORT " + 
+     TITLE " " + Syst.Var:ynimi + " INVOICE ROW COUNTER REPORT " + 
            STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
@@ -131,7 +131,7 @@ FUNCTION fDispBillItem RETURNS LOGIC
    
    ELSE DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand = Syst.CUICommon:gcBrand AND
+                 BillItem.Brand = Syst.Var:gcBrand AND
                  BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
       ELSE lcBIName = "".
@@ -152,7 +152,7 @@ FUNCTION fDispCCN RETURNS LOGIC
       
    ELSE DO:  
       FIND FIRST CCN WHERE
-                 CCN.Brand = Syst.CUICommon:gcBrand AND
+                 CCN.Brand = Syst.Var:gcBrand AND
                  CCN.CCN   = iiCCN NO-LOCK NO-ERROR.
       IF AVAILABLE CCN THEN lcCCNName = CCN.CCNName.
       ELSE CCN.CCNName = "".
@@ -194,21 +194,21 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    
    IF ufkey THEN DO:
       ASSIGN
-         Syst.CUICommon:ufk    = 0
-         Syst.CUICommon:ufk[1] = 7 
-         Syst.CUICommon:ufk[5] = 795
-         Syst.CUICommon:ufk[8] = 8 
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 7 
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
    ELSE ASSIGN 
-      Syst.CUICommon:toimi = 1
+      Syst.Var:toimi = 1
       ufkey = TRUE.
 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      Syst.CUICommon:ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -225,21 +225,21 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "x" THEN DO:
-               Syst.CUICommon:ehto = 9.
+            IF Syst.Var:nap = "F9" AND FRAME-FIELD = "x" THEN DO:
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "lcExtInvID" THEN DO:
                   
                   IF INPUT lcExtInvID > "" THEN DO:  
                      IF NOT CAN-FIND(FIRST Invoice WHERE 
-                                           Invoice.Brand = Syst.CUICommon:gcBrand AND
+                                           Invoice.Brand = Syst.Var:gcBrand AND
                                            Invoice.ExtInvID = INPUT lcExtInvId)
                      THEN DO:
                         MESSAGE "Unknown invoice"
@@ -302,7 +302,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF ldaFromDate = ? OR ldaTodate = ? OR ldaToDate < ldaFromDate THEN DO:
          MESSAGE "Invalid period"
@@ -325,7 +325,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          END.
          
          FIND FIRST Invoice WHERE 
-                    Invoice.Brand = Syst.CUICommon:gcBrand AND
+                    Invoice.Brand = Syst.Var:gcBrand AND
                     Invoice.ExtInvID = lcExtInvId NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Invoice THEN DO:
             MESSAGE "Unknown invoice"
@@ -369,7 +369,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

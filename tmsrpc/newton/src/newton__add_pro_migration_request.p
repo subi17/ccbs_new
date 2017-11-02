@@ -13,7 +13,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/profunc.i}
@@ -36,7 +36,7 @@ IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
 piMsSeq  = get_pos_int(pcMigrStruct, "msseq").
-Syst.CUICommon:katun = "VISTA_" + get_string(pcMigrStruct, "salesman_id").
+Syst.Var:katun = "VISTA_" + get_string(pcMigrStruct, "salesman_id").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -54,7 +54,7 @@ IF NOT AVAIL Customer THEN
 
 /* Create Reactivation Request */
 liMsReq = fProMigrationRequest(INPUT piMsseq,
-                               INPUT Syst.CUICommon:katun,
+                               INPUT Syst.Var:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                0,
                                OUTPUT lcResult).

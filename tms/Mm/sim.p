@@ -42,7 +42,7 @@ DEF VAR llUseBatch AS LOGICAL INITIAL TRUE NO-UNDO.
 
 IF iiBatch EQ 0 THEN llUseBatch = false.
 
-Syst.CUICommon:gcAllBrand = true.
+Syst.Var:gcAllBrand = true.
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -75,7 +75,7 @@ DEF VAR new_sim      AS LOG                    NO-UNDO INIT FALSE.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -100,9 +100,9 @@ form
     SIM.SIMStat      format "z9" column-label "Status"
     SIMStat.SSName  format "x(26)" column-label "Status name"
 WITH width 80 OVERLAY FrmDown DOWN ROW FrmRow
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)  
-     " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)  
+     " " + Syst.Var:ynimi +
      " Sim Cards " + string(TODAY,"99-99-99") + " "
      FRAME sel.
 
@@ -125,8 +125,8 @@ form
     SIMStat.SSName no-label at 33  format "x(30)" skip(1)
 
  WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels     FRAME lis.
 
 form /* seek SIM card  BY  ICC */
@@ -136,8 +136,8 @@ form /* seek SIM card  BY  ICC */
 
     "ICC Number:" icc
     help "Enter ID"
-    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ICC-ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND ICC-ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SIM card  BY CustNum */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -145,8 +145,8 @@ form /* seek SIM card  BY CustNum */
     "Unknown brand")      SKIP
     "CustNumber:" CustNum
     help "Enter Customer No."
-    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek SIM card  BY SimArt */
 
@@ -158,8 +158,8 @@ form /* seek SIM card  BY SimArt */
 
     "Imsi Number:"     IMSI
     help "Enter IMSI No."
-    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND IMSI "
-    COLOR VALUE(Syst.CUICommon:cfc) 
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND IMSI "
+    COLOR VALUE(Syst.Var:cfc) 
 
     NO-LABELS OVERLAY FRAME f3.
 
@@ -176,11 +176,11 @@ form
     IMSI.PUK1  COLON 20 SKIP
     IMSI.PUK2  COLON 20 
     WITH SIDE-LABELS 1 DOWN 
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " IMSI number on SIM(ICC) " + ICC + " "
+    TITLE COLOR VALUE(Syst.Var:ctc) " IMSI number on SIM(ICC) " + ICC + " "
     OVERLAY ROW 2
     CENTERED FRAME imsi.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel. 
 
 orders = "By ICC,By CustNo,By ArtCode, By 4".
@@ -213,13 +213,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a SIM  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            PROMPT-FOR SIM.ICC
            VALIDATE
@@ -295,35 +295,35 @@ PrintPage:
 
    /* IF a ROW was recently DELETEd: */
    IF delrow > 0 THEN DOWN delrow - 1.
-      Syst.CUICommon:ufk = 0. ASSIGN delrow = 0.
+      Syst.Var:ufk = 0. ASSIGN delrow = 0.
 
 BROWSE:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
-      Syst.CUICommon:ufk = 0. 
+      Syst.Var:ufk = 0. 
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 206
-        Syst.CUICommon:ufk[4]= 9808
-        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 206
+        Syst.Var:ufk[4]= 9808
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.          
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SIM.ICC {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SIM.ICC WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) SIM.ICC WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
       
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
       
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -347,10 +347,10 @@ BROWSE:
         NEXT.
       END.
       
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND SIM WHERE recid(SIM) = rtab[FRAME-LINE] NO-LOCK.
            RUN local-find-prev.
@@ -375,7 +375,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND SIM WHERE recid(SIM) = rtab[FRAME-DOWN] NO-LOCK .
@@ -401,7 +401,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND SIM WHERE recid(SIM) = Memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -425,7 +425,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -440,10 +440,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        ICC = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       
        DISP lcBrand WITH FRAME F1. pause 0.
        UPDATE ICC WITH FRAME f1. 
@@ -479,7 +479,7 @@ BROWSE:
      
      END. /* Search-1 */
      
-     ELSE if LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
+     ELSE if LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:
         FIND SIM where recid(SIM) = rtab[FRAME-LINE] NO-LOCK.
         ufkey = TRUE.
         FIND FIRST IMSI WHERE IMSI.ICC = SIM.ICC NO-LOCK NO-ERROR.
@@ -488,7 +488,7 @@ BROWSE:
             FIND ImsiCustomer WHERE ImsiCustomer.CustNum =  IMSI.CustNum NO-LOCK NO-ERROR. 
 
             FIND MobSub WHERE 
-                 mobsub.brand = Syst.CUICommon:gcBrand AND
+                 mobsub.brand = Syst.Var:gcBrand AND
                  MobSub.IMSI = IMSI.IMSI NO-LOCK NO-ERROR. 
             FIND BillTarget WHERE
                  BillTarget.CustNum = ImsiCustomer.CustNum AND
@@ -505,9 +505,9 @@ BROWSE:
                DISPLAY BillTarg.BillTarget WITH FRAME imsi.          
             VIEW FRAME imsi.
             PAUSE 0.
-            Syst.CUICommon:ehto = 1.
-            Syst.CUICommon:ufk = 0.
-            Syst.CUICommon:ufk[8] = 8.
+            Syst.Var:ehto = 1.
+            Syst.Var:ufk = 0.
+            Syst.Var:ufk[8] = 8.
             RUN Syst/ufkey.p.
             ufkey = TRUE.
         END.
@@ -520,15 +520,15 @@ BROWSE:
         NEXT LOOP.
      END.   
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION:
        
        {Syst/uright2.i}
        /* change */
        FIND SIM WHERE recid(SIM) = rtab[FRAME-line(sel)] NO-LOCK.
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME  lis no-pause.
        DISPLAY SIM.ICC WITH FRAME lis.
        ASSIGN 
@@ -562,25 +562,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(SIM) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(SIM) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST SIM USE-INDEX simbatch  WHERE 
@@ -695,7 +695,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
        
    FIND SimBatch WHERE 
-        SimBatch.Brand = Syst.CUICommon:gcBrand AND
+        SimBatch.Brand = Syst.Var:gcBrand AND
         SimBatch.SimBatch = SIM.SimBatch NO-LOCK NO-ERROR.
    
    FIND FIRST MobSub WHERE MobSub.MsSeq = SIM.MsSeq NO-LOCK NO-ERROR.
@@ -706,9 +706,9 @@ PROCEDURE local-find-others.
    ELSE RELEASE Customer.  
    
    FIND SIMStat where SIMStat.SIMStat = SIM.SIMStat no-lock no-error.
-   FIND SimMan of SIM WHERE SimMan.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+   FIND SimMan of SIM WHERE SimMan.Brand = Syst.Var:gcBrand no-lock no-error.
    FIND SimArt WHERE 
-        SimArt.Brand = Syst.CUICommon:gcBrand AND
+        SimArt.Brand = Syst.Var:gcBrand AND
         SimArt.SimArt = SIM.SimArt no-lock no-error.
    FIND Stock of SIM NO-LOCK NO-ERROR.
 
@@ -749,7 +749,7 @@ REPEAT WITH FRAME LIS:
    WITH FRAME lis EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME LIS:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME LIS:
          PAUSE 0.
          IF FRAME-FIELD = "CustNum" THEN 
          DO:
@@ -774,7 +774,7 @@ REPEAT WITH FRAME LIS:
          DO:
             /* ASSIGN manufacture's code from SimMan record */
             FIND SimMan where 
-                 SimMan.Brand = Syst.CUICommon:gcBrand AND
+                 SimMan.Brand = Syst.Var:gcBrand AND
                  SimMan.Mancode = INPUT FRAME lis SIM.ManCode NO-LOCK NO-ERROR.
             IF NOT AVAIL SimMan THEN 
             DO:
@@ -789,7 +789,7 @@ REPEAT WITH FRAME LIS:
          ELSE IF FRAME-FIELD = "SimArt" THEN 
          DO:
             FIND SimArt WHERE 
-                 SimArt.Brand = Syst.CUICommon:gcBrand AND 
+                 SimArt.Brand = Syst.Var:gcBrand AND 
                  SimArt.SimArt =
                               INPUT FRAME lis SIM.SimArt 
             NO-LOCK NO-ERROR.

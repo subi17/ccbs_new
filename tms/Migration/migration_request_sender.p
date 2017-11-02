@@ -19,7 +19,7 @@
 {Syst/commpaa.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF STREAM sOut.
 DEF STREAM sLog.
@@ -70,7 +70,7 @@ PUT STREAM sLog UNFORMATTED
 
 /*Data collection*/
 FOR EACH Order EXCLUSIVE-LOCK WHERE
-         Order.Brand EQ Syst.CUICommon:gcBrand AND
+         Order.Brand EQ Syst.Var:gcBrand AND
          Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING}: 
    lcRow = Order.CLI.
    PUT STREAM sOut UNFORMATTED lcRow SKIP.

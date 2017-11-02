@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -83,7 +83,7 @@ i = 0.
 
 if lcclitype > "" then do:
    FIND FIRST clitype where
-              clitype.brand = Syst.CUICommon:gcBrand and
+              clitype.brand = Syst.Var:gcBrand and
               clitype.clitype = lcclitype NO-LOCK no-error.
    IF NOT AVAIL clitype then do:
       MESSAGE "Unknown Subscr. Type" lcclitype VIEW-AS ALERT-BOX.

@@ -75,7 +75,7 @@ PROCEDURE pTriggerEvents:
       FIRST ServiceLimit WHERE
             ServiceLimit.SlSeq = MServiceLimit.SlSeq NO-LOCK:
 
-      IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         ServiceLimit.GroupCode + ";" + icCLIType,
@@ -99,7 +99,7 @@ PROCEDURE pTriggerEvents:
       FIRST ServiceLimit WHERE
             ServiceLimit.SlSeq = MServiceLPool.SlSeq NO-LOCK:
 
-      IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         ServiceLimit.GroupCode + ";" + icCLIType,

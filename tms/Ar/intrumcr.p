@@ -41,7 +41,7 @@ DEF STREAM sRead.
 liAccNum = fCParamI("CreditLossAcc").
 
 FIND Account WHERE 
-     Account.Brand  = Syst.CUICommon:gcBrand AND
+     Account.Brand  = Syst.Var:gcBrand AND
      Account.AccNum = liAccNum
 NO-LOCK NO-ERROR.
 
@@ -85,7 +85,7 @@ REPEAT:
       IF liCust NE 0 THEN DO:
          FIND Customer WHERE Customer.CustNum = liCust NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Customer OR 
-             Customer.Brand NE Syst.CUICommon:gcBrand 
+             Customer.Brand NE Syst.Var:gcBrand 
          THEN liCust = 0.
          ELSE IF NOT Customer.CustName BEGINS lcName THEN liCust = 0.
       END.
@@ -96,7 +96,7 @@ REPEAT:
       IF liCust NE 0 THEN DO:
          FIND Customer WHERE Customer.CustNum = liCust NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Customer OR
-            Customer.Brand NE Syst.CUICommon:gcBrand
+            Customer.Brand NE Syst.Var:gcBrand
          THEN liCust = 0.
          ELSE IF NOT Customer.CustName BEGINS lcName THEN liCust = 0.
       END.
@@ -116,7 +116,7 @@ REPEAT:
       FIND FIRST Invoice EXCLUSIVE-LOCK WHERE
                  Invoice.InvNum = liInvNum NO-ERROR.
       IF AVAILABLE Invoice             AND
-         Invoice.Brand       = Syst.CUICommon:gcBrand AND
+         Invoice.Brand       = Syst.Var:gcBrand AND
          Invoice.ClaimCancel = 0
       THEN DO:
 
@@ -151,7 +151,7 @@ REPEAT:
                           "",
                           "CreditLoss" +
                           " Intrum file (" + icFile +
-                          "), Handler: " + Syst.CUICommon:katun,
+                          "), Handler: " + Syst.Var:katun,
                           OUTPUT liVoucher
                           ).
 
@@ -183,7 +183,7 @@ REPEAT:
                                           THEN " "
                                           ELSE "") + 
                                          "Intrum file " + icFile
-                   ClaimHist.Handler   = Syst.CUICommon:katun
+                   ClaimHist.Handler   = Syst.Var:katun
                    ClaimHist.ClaimAmt  = ldAmount
 
                    Invoice.ClaimCancel = liCancel.

@@ -46,8 +46,8 @@ DEF VAR ReqStat   AS INTEGER   NO-UNDO.
 FORM "New status:" ReqStat FORMAT "z9"
 
  WITH  OVERLAY ROW 4 centered
- COLOR VALUE(Syst.CUICommon:cfc)
- TITLE COLOR VALUE(Syst.CUICommon:ctc) " Add status "
+ COLOR VALUE(Syst.Var:cfc)
+ TITLE COLOR VALUE(Syst.Var:ctc) " Add status "
  NO-LABELS
  FRAME upd.
 
@@ -57,15 +57,15 @@ RUN pInitMenuText.
 /*************************** Browsing part **********************************/
 DO WHILE TRUE: 
    
-   ASSIGN Syst.CUICommon:ufk    = 0
-          Syst.CUICommon:ufk[1] = 0
-          Syst.CUICommon:ufk[2] = 0
+   ASSIGN Syst.Var:ufk    = 0
+          Syst.Var:ufk[1] = 0
+          Syst.Var:ufk[2] = 0
           
-          Syst.CUICommon:ufk[5] = 11
-          Syst.CUICommon:ufk[6] = 6970
-          Syst.CUICommon:ufk[7] = 4
-          Syst.CUICommon:ufk[8] = 8
-          Syst.CUICommon:ehto   = 3.
+          Syst.Var:ufk[5] = 11
+          Syst.Var:ufk[6] = 6970
+          Syst.Var:ufk[7] = 4
+          Syst.Var:ufk[8] = 8
+          Syst.Var:ehto   = 3.
 
       RUN Syst/ufkey.p.
    

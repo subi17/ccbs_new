@@ -24,7 +24,7 @@
 {Func/fppinv.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -113,8 +113,8 @@ form
     lcType             COLUMN-LABEL "Type"   FORMAT "X(12)"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        " PAYMENT PLANS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -123,7 +123,7 @@ form
     PaymPlan.CustNum     COLON 20   
        VALIDATE(INPUT PaymPlan.CustNum = 0 OR
                 CAN-FIND(FIRST Customer WHERE 
-                               Customer.Brand   = Syst.CUICommon:gcBrand AND
+                               Customer.Brand   = Syst.Var:gcBrand AND
                                Customer.CustNum = INPUT PaymPlan.CustNum),
                 "Unknown customer")
        lcCustName FORMAT "X(35)" NO-LABEL AT 40 SKIP
@@ -150,8 +150,8 @@ form
        NO-LABEL  AT 40
        FORMAT "X(35)"
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -166,7 +166,7 @@ FORM
       HELP "Customer to which payment plan will be made"
       VALIDATE(INPUT liCustNum = 0 OR
                CAN-FIND(Customer WHERE 
-                        Customer.Brand = Syst.CUICommon:gcBrand AND
+                        Customer.Brand = Syst.Var:gcBrand AND
                         Customer.CustNum = INPUT liCustNum),
               "Unknown customer")
    lcCustName FORMAT "X(35)" 
@@ -221,22 +221,22 @@ form /* seek  */
     "Brand:" lcBrand skip
     "Date :" ldtDate
     HELP "Enter payment plan date"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND DATE"
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND DATE"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND customer "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND customer "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  */
     "Brand :" lcBrand skip
     "Status:" liStatus
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND description "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND description "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
 FUNCTION fPPStatus RETURNS LOGICAL
@@ -302,7 +302,7 @@ FUNCTION fLetterCust RETURNS INTEGER:
       
       /* first check if invoice customer made the request */
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand      = Syst.CUICommon:gcBrand          AND
+               MsRequest.Brand      = Syst.Var:gcBrand          AND
                MsRequest.ReqType    = 11               AND
                MsRequest.CustNum    = Customer.CustNum AND
                MsRequest.ReqIParam2 = PaymPlan.PPlanID:
@@ -312,7 +312,7 @@ FUNCTION fLetterCust RETURNS INTEGER:
       /* then from agreement customer */
       IF liLetterCust = 0 THEN
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand      = Syst.CUICommon:gcBrand          AND
+               MsRequest.Brand      = Syst.Var:gcBrand          AND
                MsRequest.ReqType    = 11               AND
                MsRequest.CustNum    = Customer.AgrCust AND
                MsRequest.ReqIParam2 = PaymPlan.PPlanID:
@@ -343,7 +343,7 @@ ASSIGN lcPassword  = fCParamC("MsAddressChg")
        lcAdminPwd  = fCParamC("PaymPlanCreditControl").
 IF lcPassword = ? THEN lcPassword = "".
  
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = " By Date     ," + 
@@ -398,7 +398,7 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN DO:  /* Add a PaymPlan  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -406,7 +406,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -418,7 +418,7 @@ REPEAT WITH FRAME sel:
 
            CREATE PaymPlan.
            ASSIGN
-           PaymPlan.Brand    = Syst.CUICommon:gcBrand
+           PaymPlan.Brand    = Syst.Var:gcBrand
            PaymPlan.PPlanID  = NEXT-VALUE(PPlan)
            PaymPlan.CustNum  = INPUT FRAME lis PaymPlan.CustNum
            PaymPlan.PPDate   = TODAY
@@ -500,28 +500,28 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk   = 0
-         Syst.CUICommon:ufk[1]= 816  
-         Syst.CUICommon:ufk[2]= (IF lcRight = "RW" THEN 1782 ELSE 0)  
-         Syst.CUICommon:ufk[3]= 1777 
-         Syst.CUICommon:ufk[4]= 1778
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         Syst.CUICommon:ufk[7]= 927
-         Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3. 
+         Syst.Var:ufk   = 0
+         Syst.Var:ufk[1]= 816  
+         Syst.Var:ufk[2]= (IF lcRight = "RW" THEN 1782 ELSE 0)  
+         Syst.Var:ufk[3]= 1777 
+         Syst.Var:ufk[4]= 1778
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 927
+         Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3. 
         
          IF iiStatus > 0 THEN ASSIGN 
-            Syst.CUICommon:ufk[1] = 0
-            Syst.CUICommon:ufk[2] = 0
-            Syst.CUICommon:ufk[5] = 0
-            Syst.CUICommon:ufk[6] = 0.
+            Syst.Var:ufk[1] = 0
+            Syst.Var:ufk[2] = 0
+            Syst.Var:ufk[5] = 0
+            Syst.Var:ufk[6] = 0.
             
-         IF iiCustNum > 0 THEN Syst.CUICommon:ufk[1] = 0.
+         IF iiCustNum > 0 THEN Syst.Var:ufk[1] = 0.
 
          IF iiInvNum > 0 THEN ASSIGN 
-            Syst.CUICommon:ufk[1] = 0
-            Syst.CUICommon:ufk[2] = 0.
+            Syst.Var:ufk[1] = 0
+            Syst.Var:ufk[2] = 0.
         
          IF liAutoRun = 0 THEN DO:
             ufkey = FALSE.
@@ -533,31 +533,31 @@ REPEAT WITH FRAME sel:
       IF liAutoRun = 0 THEN DO:
          IF order = 1 THEN DO:
            CHOOSE ROW PaymPlan.PPDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-           COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PaymPlan.PPDate WITH FRAME sel.
+           COLOR DISPLAY VALUE(Syst.Var:ccc) PaymPlan.PPDate WITH FRAME sel.
          END.
          ELSE IF order = 2 THEN DO:
            CHOOSE ROW PaymPlan.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-           COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PaymPlan.CustNum WITH FRAME sel.
+           COLOR DISPLAY VALUE(Syst.Var:ccc) PaymPlan.CustNum WITH FRAME sel.
          END.
          ELSE IF order = 3 THEN DO:
            CHOOSE ROW lcStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-           COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcStatus WITH FRAME sel.
+           COLOR DISPLAY VALUE(Syst.Var:ccc) lcStatus WITH FRAME sel.
          END.
 
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
       ELSE DO:
          CASE liAutoRun:
-         WHEN 1 THEN Syst.CUICommon:nap = "3".
-         WHEN 2 THEN Syst.CUICommon:nap = "4".
-         WHEN 9 THEN Syst.CUICommon:nap = "2".
+         WHEN 1 THEN Syst.Var:nap = "3".
+         WHEN 2 THEN Syst.Var:nap = "4".
+         WHEN 9 THEN Syst.Var:nap = "2".
          OTHERWISE ASSIGN liAutoRun = 0
-                          Syst.CUICommon:nap       = "9".
+                          Syst.Var:nap       = "9".
          END CASE.                  
       END.
       
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8,2,F2") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8,2,F2") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -566,10 +566,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -587,7 +587,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -612,7 +612,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -638,7 +638,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND PaymPlan WHERE recid(PaymPlan) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -662,7 +662,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -677,28 +677,28 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* search */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 THEN DO:
 
         ASSIGN
-        Syst.CUICommon:ufk = 0
-        Syst.CUICommon:ufk[1]= 28  Syst.CUICommon:ufk[2]= 702  Syst.CUICommon:ufk[3]= 559
-        Syst.CUICommon:ufk[8]= 8 
-        Syst.CUICommon:ehto = 0
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 28  Syst.Var:ufk[2]= 702  Syst.Var:ufk[3]= 559
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto = 0
         ufkey = TRUE.
         
         IF iiCustNum > 0 OR iiInvNum > 0 THEN ASSIGN 
-           Syst.CUICommon:ufk[2] = 0
-           Syst.CUICommon:ufk[3] = 0.
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[3] = 0.
          
         RUN Syst/ufkey.p.
      
         /* Search BY column 1 */
-        IF Syst.CUICommon:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        IF Syst.Var:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   ldtDate WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
 
@@ -728,12 +728,12 @@ REPEAT WITH FRAME sel:
         END. /* Search-1 */
 
         /* Search BY column 2 */
-        ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        ELSE IF Syst.Var:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   liCustNum WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
 
@@ -751,12 +751,12 @@ REPEAT WITH FRAME sel:
         END. /* Search-2 */
 
         /* Search BY column 3 */
-        ELSE IF Syst.CUICommon:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        ELSE IF Syst.Var:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f3.
            DISPLAY lcBrand WITH FRAME F3.
-           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   liStatus WITH FRAME f3.
            HIDE FRAME f3 NO-PAUSE.
 
@@ -776,7 +776,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* automatic creation of payment plan */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN DO TRANS:  
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 THEN DO TRANS:  
        {Syst/uright2.i}
 
        ASSIGN ldtFromDate = ?
@@ -809,7 +809,7 @@ REPEAT WITH FRAME sel:
        ASSIGN liBatch     = 0  
               ldtFromDate = ?
               ldtToDate   = ?
-              Syst.CUICommon:ehto        = 9
+              Syst.Var:ehto        = 9
               ufkey       = TRUE.
        RUN Syst/ufkey.p.
         
@@ -825,7 +825,7 @@ REPEAT WITH FRAME sel:
           WITH FRAME fCreate EDITING:
              READKEY.
           
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME fCreate:
              
                 PAUSE 0.
@@ -834,7 +834,7 @@ REPEAT WITH FRAME sel:
                    INPUT FRAME fCreate liCustNum > 0 
                 THEN DO:
                    FIND Customer WHERE 
-                        Customer.Brand = Syst.CUICommon:gcBrand AND
+                        Customer.Brand = Syst.Var:gcBrand AND
                         Customer.CustNum = INPUT FRAME fCreate liCustNum 
                    NO-LOCK NO-ERROR.
                    IF AVAILABLE Customer THEN DO:
@@ -938,7 +938,7 @@ REPEAT WITH FRAME sel:
           
      END.
  
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* Invoices */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* Invoices */
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        liAutoRun = 0.
@@ -946,13 +946,13 @@ REPEAT WITH FRAME sel:
        THEN RUN Ar/ppinv.p (PaymPlan.PPlanID,
                        FALSE, /* automatic mode */
                        OUTPUT llMoveOn). 
-       ASSIGN Syst.CUICommon:gcHelpParam = ""
+       ASSIGN Syst.Var:gcHelpParam = ""
               ufkey = true.
        IF llMoveOn THEN liAutoRun = 2.       
        RUN local-disp-row.           
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* batches */
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* batches */
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        liAutoRun = 0.
@@ -972,13 +972,13 @@ REPEAT WITH FRAME sel:
        RUN local-disp-row.           
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0 
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
@@ -1014,12 +1014,12 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(TRUE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        PaymPlan.Amount PaymPlan.CustNum PaymPlan.PPDate lcStatus .
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        PaymPlan.Amount
        PaymPlan.CustNum PaymPlan.PPDate lcStatus .
 
@@ -1056,7 +1056,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* memo */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:
      
         RUN local-find-this(FALSE).
         
@@ -1070,7 +1070,7 @@ REPEAT WITH FRAME sel:
                  "Payment Plan").
      END.
  
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -1079,7 +1079,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPaymPlan).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PaymPlan.CustNum.
 
        RUN local-UPDATE-record.                                  
@@ -1099,25 +1099,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(PaymPlan) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(PaymPlan) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -1145,23 +1145,23 @@ PROCEDURE local-find-FIRST:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND FIRST PaymPlan NO-LOCK WHERE
-                  PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
+                  PaymPlan.Brand   = Syst.Var:gcBrand AND
                   PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND FIRST PaymPlan NO-LOCK WHERE
-                  PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
+                  PaymPlan.Brand    = Syst.Var:gcBrand AND
                   PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    ELSE DO:
        IF order = 1 THEN FIND FIRST PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST PaymPlan 
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND FIRST PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1179,23 +1179,23 @@ PROCEDURE local-find-LAST:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND LAST PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
+                 PaymPlan.Brand   = Syst.Var:gcBrand AND
                  PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND LAST PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
+                 PaymPlan.Brand    = Syst.Var:gcBrand AND
                  PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    ELSE DO:
        IF order = 1 THEN FIND LAST PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST PaymPlan 
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND LAST PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1208,23 +1208,23 @@ PROCEDURE local-find-NEXT:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND NEXT PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
+                 PaymPlan.Brand   = Syst.Var:gcBrand AND
                  PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND NEXT PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
+                 PaymPlan.Brand    = Syst.Var:gcBrand AND
                  PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    ELSE DO:
        IF order = 1 THEN FIND NEXT PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT PaymPlan 
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND NEXT PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1237,24 +1237,24 @@ PROCEDURE local-find-PREV:
    END.
    ELSE IF iiCustNum > 0 THEN DO:
        FIND PREV PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand   = Syst.CUICommon:gcBrand AND
+                 PaymPlan.Brand   = Syst.Var:gcBrand AND
                  PaymPlan.CustNum = iiCustNum NO-ERROR.
    END.
    ELSE IF iiStatus > 0 THEN DO:
        FIND PREV PaymPlan NO-LOCK WHERE
-                 PaymPlan.Brand    = Syst.CUICommon:gcBrand AND
+                 PaymPlan.Brand    = Syst.Var:gcBrand AND
                  PaymPlan.PPStatus = iiStatus NO-ERROR.
    END. 
    
    ELSE DO:
        IF order = 1 THEN FIND PREV PaymPlan USE-INDEX PPDate
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV PaymPlan 
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand USE-INDEX CustNum
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand USE-INDEX CustNum
         NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN FIND PREV PaymPlan USE-INDEX PPStatus
-          WHERE PaymPlan.Brand = Syst.CUICommon:gcBrand
+          WHERE PaymPlan.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
    END.
 
@@ -1326,29 +1326,29 @@ PROCEDURE local-UPDATE-record:
               PaymPlan.Orderer lcOrdCustName
          WITH FRAME lis.
 
-         ASSIGN Syst.CUICommon:ufk    = 0 
-                Syst.CUICommon:ehto   = 0
-                Syst.CUICommon:ufk[3] = 1752
-                Syst.CUICommon:ufk[8] = 8.
+         ASSIGN Syst.Var:ufk    = 0 
+                Syst.Var:ehto   = 0
+                Syst.Var:ufk[3] = 1752
+                Syst.Var:ufk[8] = 8.
        
          /* change */
-         IF PaymPlan.PPStatus < 4 THEN Syst.CUICommon:ufk[1] = 7.
-         ELSE Syst.CUICommon:ufk[1] = 1068.
+         IF PaymPlan.PPStatus < 4 THEN Syst.Var:ufk[1] = 7.
+         ELSE Syst.Var:ufk[1] = 1068.
          
          /* print letter */
-         IF PaymPlan.PPStatus = 3 THEN Syst.CUICommon:ufk[4] = 938.
+         IF PaymPlan.PPStatus = 3 THEN Syst.Var:ufk[4] = 938.
          /* accept */
          IF PaymPlan.PPStatus < 3 OR
             (PaymPlan.PPStatus = 7 AND iiStatus = 7)
-         THEN Syst.CUICommon:ufk[6] = 1062.
+         THEN Syst.Var:ufk[6] = 1062.
          /* cancel plan */
          IF PaymPlan.PPStatus < 4 OR
             (PaymPlan.PPStatus = 7 AND iiStatus = 7)
-         THEN Syst.CUICommon:ufk[7] = 1063.
+         THEN Syst.Var:ufk[7] = 1063.
        
          RUN Syst/ufkey.p.
          
-         IF Syst.CUICommon:toimi = 1 THEN DO:
+         IF Syst.Var:toimi = 1 THEN DO:
         
             IF lcPassword > "" THEN DO:
              
@@ -1368,7 +1368,7 @@ PROCEDURE local-UPDATE-record:
                IF lcAskPassWd NE lcPassword THEN NEXT. 
             END.
 
-            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       
             FIND CURRENT PaymPlan EXCLUSIVE-LOCK.
             
@@ -1410,12 +1410,12 @@ PROCEDURE local-UPDATE-record:
                      END.
                   END.
                
-                  Syst.CUICommon:ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
-               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
                THEN DO WITH FRAME lis:
              
                   PAUSE 0.
@@ -1479,7 +1479,7 @@ PROCEDURE local-UPDATE-record:
          END.
 
          /* eventlog */
-         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+         ELSE IF Syst.Var:toimi = 3 THEN DO:
          
            IF AVAILABLE PaymPlan THEN 
            RUN Mc/eventsel.p ("PaymPlan",
@@ -1487,7 +1487,7 @@ PROCEDURE local-UPDATE-record:
          END.
          
          /* print letter */
-         ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+         ELSE IF Syst.Var:toimi = 4 THEN DO:
 
             ok = FALSE. 
 
@@ -1539,7 +1539,7 @@ PROCEDURE local-UPDATE-record:
          END.           
 
          /* accept */
-         ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
+         ELSE IF Syst.Var:toimi = 6 THEN DO:
 
             ldtLast = TODAY.
             FOR EACH PPBatch OF PaymPlan NO-LOCK:
@@ -1655,7 +1655,7 @@ PROCEDURE local-UPDATE-record:
                                            ?,
                                            "",          /* memo */
                                            TRUE,        /* messages to screen */
-                                           Syst.CUICommon:katun,
+                                           Syst.Var:katun,
                                            "",
                                            0,
                                            "",
@@ -1673,7 +1673,7 @@ PROCEDURE local-UPDATE-record:
          END. 
          
          /* cancel plan */
-         ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+         ELSE IF Syst.Var:toimi = 7 THEN DO:
             ok = FALSE.
             
             MESSAGE "Payment plan will be cancelled, i.e. invoices will be"
@@ -1686,7 +1686,7 @@ PROCEDURE local-UPDATE-record:
             
             IF ok THEN DO:
                REPEAT WITH FRAME fCancel ON ENDKEY UNDO, NEXT HandlePlan:
-                  Syst.CUICommon:ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   
                   PAUSE 0.
@@ -1717,12 +1717,12 @@ PROCEDURE local-UPDATE-record:
                END.
                
                CREATE Memo.
-               ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+               ASSIGN Memo.Brand     = Syst.Var:gcBrand
                       Memo.HostTable = "PaymPlan"
                       Memo.KeyValue  = STRING(PaymPlan.PPlanID)
                       Memo.CustNum   = PaymPlan.CustNum
                       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                      Memo.CreUser   = Syst.CUICommon:katun 
+                      Memo.CreUser   = Syst.Var:katun 
                       Memo.MemoTitle = "Plan Cancelled"
                       Memo.MemoText  = lcCancelTxt.
                       Memo.CreStamp  = Func.Common:mMakeTS().
@@ -1735,7 +1735,7 @@ PROCEDURE local-UPDATE-record:
             
          END.
  
-         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+         ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
          
       END.
       

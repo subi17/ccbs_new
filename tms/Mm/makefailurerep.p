@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
 {Syst/eventlog.i}
 {Func/direct_dbconnect.i}
@@ -24,7 +24,7 @@ ASSIGN
 /* do two runs if dbs have been renewed during the week
    note; by default all dbs have been renewed at the same time, so check
    only first */
-RUN pGetDBPeriods(Syst.CUICommon:gcBrand,
+RUN pGetDBPeriods(Syst.Var:gcBrand,
                   "MobCDR",
                   ldaFromDate,
                   ldaToDate,
@@ -41,7 +41,7 @@ DO liRun = 1 TO 2:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR,McdrDtl2,ErrorCDR","").
 
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",  
                           ldaRunTo[liRun],
                           ldaRunTo[liRun]).

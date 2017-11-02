@@ -20,11 +20,11 @@ IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
    RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
 
 FIND Order EXCLUSIVE-LOCK WHERE
-     Order.Brand = Syst.CUICommon:gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderId = FusionMessage.OrderID.
 
 FIND OrderFusion EXCLUSIVE-LOCK WHERE
-     OrderFusion.Brand = Syst.CUICommon:gcBrand AND
+     OrderFusion.Brand = Syst.Var:gcBrand AND
      OrderFusion.OrderID = FusionMessage.OrderID.
 
 IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN

@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Syst/commali.i}
 {Func/cparam2.i}
@@ -128,7 +128,7 @@ FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN lcModFields = DumpFile.EventLogFields.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand = Syst.CUICommon:gcBrand
+         Customer.Brand = Syst.Var:gcBrand
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
 

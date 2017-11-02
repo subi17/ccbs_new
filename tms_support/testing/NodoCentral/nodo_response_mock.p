@@ -15,7 +15,7 @@
 {cparam2.i}
 {timestamp.i}
 {ftransdir.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 DEF INPUT PARAMETER icInput AS INT.
 /* 0 OK, 1 or 2 errors*/
 DEF STREAM sIn.

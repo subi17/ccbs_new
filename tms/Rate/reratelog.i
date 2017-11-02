@@ -15,7 +15,7 @@ FUNCTION fInitializeRerateLog RETURNS LOGIC
     
    CREATE RerateLog.
    ASSIGN 
-       RerateLog.Brand   = Syst.CUICommon:gcBrand
+       RerateLog.Brand   = Syst.Var:gcBrand
        RerateLog.InvCust = iiInvCust
        RerateLog.MsSeq   = iiMsSeq
        RerateLog.CLI     = icCli

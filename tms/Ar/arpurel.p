@@ -62,7 +62,7 @@ form
                   "Upper limit must be at least equal to lower limit")
    SKIP(4)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + Syst.CUICommon:ynimi + " AVERAGE REVENUE REPORT " +
+        TITLE " " + Syst.Var:ynimi + " AVERAGE REVENUE REPORT " +
         STRING(TODAY,"99-99-99") + " "
         frame valinta.
 
@@ -72,10 +72,10 @@ ASSIGN
    ldtDate2 = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
    ldtDate1 = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2)).
 
-FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ig-code[2] = InvGroup.InvGroup.
 
-FIND LAST CLIType WHERE CLIType.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+FIND LAST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN lcCLIType[2] = CLIType.CLIType.
 
 DISPLAY
@@ -87,35 +87,35 @@ WITH frame valinta.
 
 ASSIGN
    ufkey = false
-   Syst.CUICommon:nap   = "first". 
+   Syst.Var:nap   = "first". 
 
 toimi:
    REPEAT WITH frame valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
          ASSIGN
-            Syst.CUICommon:ufk[1] = 132 
-            Syst.CUICommon:ufk[2] = 0
-            Syst.CUICommon:ufk[3] = 0
-            Syst.CUICommon:ufk[4] = 0
-            Syst.CUICommon:ufk[5] = 63
-            Syst.CUICommon:ufk[6] = 0
-            Syst.CUICommon:ufk[7] = 0
-            Syst.CUICommon:ufk[8] = 8 
-            Syst.CUICommon:ufk[9] = 1
-            Syst.CUICommon:ehto   = 3
+            Syst.Var:ufk[1] = 132 
+            Syst.Var:ufk[2] = 0
+            Syst.Var:ufk[3] = 0
+            Syst.Var:ufk[4] = 0
+            Syst.Var:ufk[5] = 63
+            Syst.Var:ufk[6] = 0
+            Syst.Var:ufk[7] = 0
+            Syst.Var:ufk[8] = 8 
+            Syst.Var:ufk[9] = 1
+            Syst.Var:ehto   = 3
             ufkey  = false.
          RUN Syst/ufkey.p.
       END.
 
-      IF Syst.CUICommon:nap NE "first" THEN DO:
+      IF Syst.Var:nap NE "first" THEN DO:
           READKEY.
           ASSIGN
-          Syst.CUICommon:nap = keylabel(lastkey).
+          Syst.Var:nap = keylabel(lastkey).
       END.
-      ELSE ASSIGN Syst.CUICommon:nap = "1". 
+      ELSE ASSIGN Syst.Var:nap = "1". 
 
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
-         Syst.CUICommon:ehto = 9. 
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. 
          RUN Syst/ufkey.p.
          REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
@@ -129,14 +129,14 @@ toimi:
          NEXT toimi.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = true.

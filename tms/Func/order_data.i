@@ -30,7 +30,7 @@ FUNCTION fGetOrderDeliveryDateEstimation RETURNS DATE
    DEF BUFFER OrderCustomer FOR OrderCustomer.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
               OrderCustomer.OrderId = iiOrderId AND
               OrderCustomer.RowType = 1 NO-ERROR.
 
@@ -72,7 +72,7 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = Syst.CUICommon:gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.Orderid = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
@@ -99,14 +99,14 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
                                "1",
                                ldaOrderDate).
 
-   ocTariffName = fGetItemName(Syst.CUICommon:gcBrand,
+   ocTariffName = fGetItemName(Syst.Var:gcBrand,
                                "CLIType",
                                lcTariff,
                                liLanguage,
                                ldaOrderDate).
    FIND Region WHERE Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
    IF AVAIL Region THEN
-      ocTaxZone = fGetItemName(Syst.CUICommon:gcBrand,
+      ocTaxZone = fGetItemName(Syst.Var:gcBrand,
                                "TaxZone",
                                Region.TaxZone,
                                liLanguage,
@@ -123,11 +123,11 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
       odeMFWithTax EQ 9.99 THEN odeMFWithTax = 10. /* 9.99 -> 10 */ 
 
    FIND FIRST OrderAccessory NO-LOCK WHERE
-              OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+              OrderAccessory.Brand = Syst.Var:gcBrand AND
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL OrderAccessory THEN ASSIGN
-      ocDeviceName = fGetItemName(Syst.CUICommon:gcBrand,
+      ocDeviceName = fGetItemName(Syst.Var:gcBrand,
                                "BillItem",
                                OrderAccessory.ProductCode,
                                liLanguage,
@@ -161,7 +161,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
    DEF BUFFER TFConf FOR TFConf.
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = Syst.CUICommon:gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.Orderid = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
@@ -181,7 +181,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
       lcBankCode = {&TF_BANK_CETELEM}.
    ELSE
       FOR FIRST Reseller NO-LOCK WHERE
-                Reseller.Brand = Syst.CUICommon:gcBrand AND
+                Reseller.Brand = Syst.Var:gcBrand AND
                 Reseller.Reseller = Order.Reseller,
           FIRST ResellerTF NO-LOCK USE-INDEX ResellerTF WHERE
                 ResellerTF.Brand = Reseller.Brand AND
@@ -257,7 +257,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    ASSIGN lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = Syst.CUICommon:gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.OrderId = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "".
 
@@ -387,13 +387,13 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
       ". Si no nos contestas en 48h cancelaremos tu pedido".
 
    FOR FIRST OfferItem NO-LOCK WHERE
-             OfferItem.Brand = Syst.CUICommon:gcBrand AND
+             OfferItem.Brand = Syst.Var:gcBrand AND
              OfferItem.Offer  = Order.Offer AND
              OfferItem.ItemType = "DiscountPlan" AND
              OfferItem.BeginStamp <= Order.CrStamp AND
              OfferItem.EndStamp >= Order.CrStamp,
        FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+             DiscountPlan.Brand = Syst.Var:gcBrand AND
              DiscountPlan.DPRuleID = OfferItem.ItemKey:
 
       IF OfferItem.Amount > 0 AND

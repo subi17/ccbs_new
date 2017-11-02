@@ -27,16 +27,16 @@ form
     ServCom.ServCom  Column-label "Service"
     ServCom.SCName   COLUMN-LABEL "Service name" format "x(49)"
 
-    with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " BASIC SERVICE COMPONENTS" overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " BASIC SERVICE COMPONENTS" overlay frame sel.
 
 form /* SEEK code */
     ServCom
     help "Enter Code of an Service components"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 
 
@@ -44,7 +44,7 @@ MAIN:
 repeat:
 
    find first ServCom use-index ServCom WHERE 
-              ServCom.Brand  = Syst.CUICommon:gcBrand AND 
+              ServCom.Brand  = Syst.Var:gcBrand AND 
               servcom.Service = Service
    no-lock no-error.
    if not available ServCom then do:
@@ -78,7 +78,7 @@ print-line:
             rtab[frame-line] = recid(ServCom).
             down with frame sel.
             find next ServCom use-index ServCom WHERE 
-                      ServCom.Brand  = Syst.CUICommon:gcBrand AND
+                      ServCom.Brand  = Syst.Var:gcBrand AND
                       servcom.Service = Service
             no-lock no-error.
          end.
@@ -88,9 +88,9 @@ print-line:
 
       if ufkey then do:
          assign
-         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
-         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -100,18 +100,18 @@ BROWSE:
 
          hide message no-pause.
          choose row ServCom.ServCom {Syst/uchoose.i} no-error with frame sel.
-         color display value(Syst.CUICommon:ccc) ServCom.ServCom with frame sel.
+         color display value(Syst.Var:ccc) ServCom.ServCom with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find ServCom where recid(ServCom) = rtab[frame-line] no-lock.
                find prev ServCom  use-index ServCom  WHERE 
-                ServCom.Brand  = Syst.CUICommon:gcBrand AND
+                ServCom.Brand  = Syst.Var:gcBrand AND
                servcom.Service = Service
                no-lock no-error.
                if not available ServCom then do:
@@ -135,11 +135,11 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find ServCom where recid(ServCom) = rtab[frame-line] no-lock .
                find next ServCom  use-index ServCom WHERE 
-                ServCom.Brand  = Syst.CUICommon:gcBrand AND
+                ServCom.Brand  = Syst.Var:gcBrand AND
                servcom.Service = Service
                no-lock no-error.
                if not available ServCom then do:
@@ -164,17 +164,17 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find ServCom where recid(ServCom) = memory no-lock no-error.
             find prev ServCom  use-index ServCom WHERE 
-                      ServCom.Brand  = Syst.CUICommon:gcBrand AND
+                      ServCom.Brand  = Syst.Var:gcBrand AND
                       servcom.Service = Service
             no-lock no-error.
             if available ServCom then do:
 
                do i = 1 to (frame-down - 1):
                   find prev ServCom use-index ServCom WHERE 
-                   ServCom.Brand  = Syst.CUICommon:gcBrand AND
+                   ServCom.Brand  = Syst.Var:gcBrand AND
                   servcom.Service = Service
                   no-lock no-error.
                   if available ServCom then memory = recid(ServCom).
@@ -192,7 +192,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -206,14 +206,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:  /* ServCom */
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* ServCom */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ServCom with frame hayr.
            hide frame hayr no-pause.
            if ServCom ENTERED then do:
               find first ServCom where 
-                         ServCom.Brand  = Syst.CUICommon:gcBrand AND
+                         ServCom.Brand  = Syst.Var:gcBrand AND
                          ServCom.ServCom >= ServCom AND
                servcom.Service = Service
               use-index ServCom no-lock no-error.
@@ -232,30 +232,30 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find ServCom where recid(ServCom) = rtab[frame-line] no-lock.
            siirto = string(ServCom.ServCom).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first ServCom use-index ServCom WHERE
-                      ServCom.Brand = Syst.CUICommon:gcBrand no-lock.
+                      ServCom.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(ServCom).
            must-print = true.
            next LOOP.
         end. /* First record */
 
         /* last record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last ServCom use-index ServCom WHERE 
-                     Servcom.Brand  = Syst.CUICommon:gcBrand no-lock.
+                     Servcom.Brand  = Syst.Var:gcBrand no-lock.
            memory = recid(ServCom).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

@@ -11,8 +11,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN Syst.CUICommon:gcBrand = "1" 
-       Syst.CUICommon:katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -89,8 +89,8 @@ END FUNCTION.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcFile = SESSION:PARAMETER.
 
@@ -244,10 +244,10 @@ IF NUM-ENTRIES(lcPlainFile,"/") > 1 THEN
 IF llDBWrite THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = "" 
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = lcActionID
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = liPrinted
@@ -262,7 +262,7 @@ END.
 ELSE DO:
    PUT STREAM sAction UNFORMATTED
       lcFileType  "|"
-      Syst.CUICommon:katun       "|"
+      Syst.Var:katun       "|"
       lcActionID  "|"
       TODAY       "|"
       "Finished"  "|"

@@ -126,7 +126,7 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 session:system-alert-boxes = true.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -337,7 +337,7 @@ form
         "3rd:" AT 70 OrderCustomer.OutPostMarketing
 		
  WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS SIDE-LABEL FRAME fCustomer.
 
 FORM
@@ -364,8 +364,8 @@ FORM
     Order.CredOk    COLUMN-LABEL "Cred"
     memoch          LABEL "M"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " " +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi + " " +
     " ORDERS "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -376,7 +376,7 @@ FORM
     COLON 25 lcMultiSIMType NO-LABEL FORMAT "X(9)" SKIP
     liMultiSimOrder COLON 25 LABEL "Primary/Secondary Order" 
  WITH OVERLAY ROW 5 WIDTH 50 centered
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) "Multi SIM Info" 
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) "Multi SIM Info" 
     SIDE-LABEL FRAME frMultiSIM.
 
 {Func/brand.i}
@@ -458,8 +458,8 @@ form
     SKIP
     
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -484,15 +484,15 @@ form /* seek  Date */
     VALIDATE(CAN-FIND(Brand WHERE 
                       Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Order date:" lDate HELP "Enter date of order"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND DATE "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND DATE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     "Brand Code:" lcBrand  HELP "Enter Brand"
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Msisdn no :" CLI HELP "Enter CLI Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NUMBER "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND NUMBER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  OrderId */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -500,8 +500,8 @@ form /* seek  OrderId */
              CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "OrderId ..:" liOrderid
     HELP "Enter Order Id"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f4.
 
 form /* seek  With CustId */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -512,8 +512,8 @@ form /* seek  With CustId */
     "Customer ID Type ..:" lcCustIdType
     HELP "CIF N/A NIE NIF Passport"  SKIP
         
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
 form /* seek  With Fixed number */ 
@@ -523,16 +523,16 @@ form /* seek  With Fixed number */
     "Fixed number .......:" lcFixedNumber FORMAT "x(11)"
     HELP "Fixed number" SKIP
         
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME fFixed.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME fFixed.
 
 form /* seek  PersonId */
     "Brand Code :" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Contract Id:"  lcContId
     HELP "Enter Contract Id"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
@@ -619,14 +619,14 @@ END FUNCTION.
 
 IF iiOrderId > 0 THEN DO:
    FIND FIRST Order WHERE 
-              Order.Brand   = Syst.CUICommon:gcBrand  AND 
+              Order.Brand   = Syst.Var:gcBrand  AND 
               Order.OrderId = iiOrderID NO-LOCK NO-ERROR.
    RUN pOrderView.
    fCleanEventObjects().
    LEAVE.
 END.          
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By OrgId , By Name  ,By OrderId , By Status , By OrgID , By  Cli ,  By orderid  ".
@@ -710,15 +710,15 @@ BROWSE:
       IF ufkey AND iiOrderID = 0 THEN DO:
         
          IF not miscact then ASSIGN
-            Syst.CUICommon:ufk[1] = 28 
-            Syst.CUICommon:ufk[2] = 653 
-            Syst.CUICommon:ufk[3] = 1045 
-            Syst.CUICommon:ufk[4] = 2211
-            Syst.CUICommon:ufk[5] = 9796
-            Syst.CUICommon:ufk[6] = 9852
-            Syst.CUICommon:ufk[7] = 0
-            Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9]= 1
-            Syst.CUICommon:ehto   = 3 ufkey = FALSE.
+            Syst.Var:ufk[1] = 28 
+            Syst.Var:ufk[2] = 653 
+            Syst.Var:ufk[3] = 1045 
+            Syst.Var:ufk[4] = 2211
+            Syst.Var:ufk[5] = 9796
+            Syst.Var:ufk[6] = 9852
+            Syst.Var:ufk[7] = 0
+            Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+            Syst.Var:ehto   = 3 ufkey = FALSE.
           RUN Syst/ufkey.p.
       END.
 
@@ -727,32 +727,32 @@ BROWSE:
       IF iiOrderID = 0 THEN DO:
          IF order = 1 OR ORDER = 5 THEN DO:
             CHOOSE ROW lcStamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcStamp WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.Var:ccc) lcStamp WITH FRAME sel.
          END.
          ELSE IF order = 2 OR Order = 7 THEN DO:
             CHOOSE ROW Order.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Order.CLI WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.Var:ccc) Order.CLI WITH FRAME sel.
          END.
          ELSE IF order = 3 OR Order = 6 THEN DO:
             CHOOSE ROW Order.ContractID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Order.ContractID WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.Var:ccc) Order.ContractID WITH FRAME sel.
          END.
          IF order = 4 THEN DO:
             CHOOSE ROW Order.OrderId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Order.OrderId WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.Var:ccc) Order.OrderId WITH FRAME sel.
          END.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. 
         IF order > maxOrder THEN order = 1.
 
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. 
          IF order = 0 THEN order = maxOrder - 3.
       END.
@@ -777,10 +777,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -805,7 +805,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -831,7 +831,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Order WHERE recid(Order) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -855,7 +855,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -870,12 +870,12 @@ BROWSE:
      END. /* NEXT page */
 
         /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
-        SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
+        SET lcBrand WHEN Syst.Var:gcAllBrand = TRUE
             lDate WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
         IF lDate ENTERED THEN DO:
@@ -899,13 +899,13 @@ BROWSE:
      END. /* Search-1 */
 
         /* Search BY col 3 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F3.
         Disp lcBrand With FRAME f3.
-        SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
+        SET  lcBrand WHEN Syst.Var:gcAllBrand = TRUE
              CLI WITH FRAME f3.
         HIDE FRAME f3 NO-PAUSE.
         IF CLI ENTERED THEN DO:
@@ -939,14 +939,14 @@ BROWSE:
         END.
      END. /* Search-3 */
 
-    ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN 
+    ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
                lcFixedNumber = "".
                
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME fFixed.
-        SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE
+        SET  lcBrand   WHEN Syst.Var:gcAllBrand = TRUE
              lcFixedNumber 
              WITH FRAME fFixed.
         HIDE FRAME fFixed NO-PAUSE.
@@ -968,13 +968,13 @@ BROWSE:
      END.
         
      /* Search BY col 4 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F4.
         Disp lcBrand With FRAME f4.
-        SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE 
+        SET  lcBrand   WHEN Syst.Var:gcAllBrand = TRUE 
              liorderid WITH FRAME f4.
         HIDE FRAME f4 NO-PAUSE.
         IF liorderid ENTERED THEN DO:
@@ -985,12 +985,12 @@ BROWSE:
            NO-LOCK NO-ERROR.
            ELSE if icStatus = "" THEN 
            FIND FIRST Order WHERE
-                      Order.Brand   = Syst.CUICommon:gcBrand   AND 
+                      Order.Brand   = Syst.Var:gcBrand   AND 
                       Order.orderid = liorderid 
            NO-LOCK NO-ERROR.
            ELSE
            FIND FIRST Order WHERE
-                      Order.Brand      = Syst.CUICommon:gcBrand  AND 
+                      Order.Brand      = Syst.Var:gcBrand  AND 
                       Order.orderid    = liorderid  AND
                       Order.StatusCode = icStatus 
            NO-LOCK NO-ERROR.
@@ -1000,15 +1000,15 @@ BROWSE:
         END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
         ASSIGN lcCustomerId = ""
                lcCustIdType = "".
                
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F5.
-        SET  lcBrand   WHEN Syst.CUICommon:gcAllBrand = TRUE
+        SET  lcBrand   WHEN Syst.Var:gcAllBrand = TRUE
              lcCustomerId
              lcCustIdType 
              WITH FRAME f5.
@@ -1078,13 +1078,13 @@ BROWSE:
         
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F2.
         Disp lcBrand With FRAME f2.
-        SET lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
+        SET lcBrand WHEN Syst.Var:gcAllBrand = TRUE
             lcContid WITH FRAME f2.
         HIDE FRAME f2 NO-PAUSE.
         IF lcContId ENTERED THEN DO:
@@ -1118,28 +1118,28 @@ BROWSE:
         END.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
        RUN local-find-this(FALSE).
        RUN pOrderView.
        NEXT LOOP.
 
      END.
   
-  ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+  ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
      RUN local-find-FIRST.
      ASSIGN Memory = recid(Order) must-print = TRUE.
      NEXT LOOP.
   END.
 
-  ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+  ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
      RUN local-find-LAST.
      ASSIGN Memory = recid(Order) must-print = TRUE.
      NEXT LOOP.
   END.
 
-  ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 AND NOT miscact THEN LEAVE LOOP.
+  ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 AND NOT miscact THEN LEAVE LOOP.
   
-  ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 AND miscact THEN DO:
+  ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 AND miscact THEN DO:
      miscact = FALSE.
      ufkey = true.
      NEXT LOOP.
@@ -1150,7 +1150,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE pOrderView:
 
@@ -1164,97 +1164,97 @@ PROCEDURE pOrderView:
    repeat with frame lis:
 
       ASSIGN
-      Syst.CUICommon:ufk = 0
-      Syst.CUICommon:ufk[1] = 7             
-      Syst.CUICommon:ufk[2] = 2250
-      Syst.CUICommon:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE 
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 7             
+      Syst.Var:ufk[2] = 2250
+      Syst.Var:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE 
                                   RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS})
                THEN 9844 ELSE 0)
-      Syst.CUICommon:ufk[4] = (IF Order.MultiSIMId > 0 THEN 9827 ELSE 0)
-      Syst.CUICommon:ufk[5] = 1152
-      Syst.CUICommon:ufk[6] = 2208 WHEN LOOKUP(Order.Statuscode,"1") > 0
-      Syst.CUICommon:ufk[6] = 1957 WHEN LOOKUP(Order.Statuscode,"3") > 0
-      Syst.CUICommon:ufk[6] = 0    WHEN icStatus = ""
-      Syst.CUICommon:ufk[7] = 2243 
-      Syst.CUICommon:ufk[8] = 8
-      Syst.CUICommon:ehto = 0               
+      Syst.Var:ufk[4] = (IF Order.MultiSIMId > 0 THEN 9827 ELSE 0)
+      Syst.Var:ufk[5] = 1152
+      Syst.Var:ufk[6] = 2208 WHEN LOOKUP(Order.Statuscode,"1") > 0
+      Syst.Var:ufk[6] = 1957 WHEN LOOKUP(Order.Statuscode,"3") > 0
+      Syst.Var:ufk[6] = 0    WHEN icStatus = ""
+      Syst.Var:ufk[7] = 2243 
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0               
    
       ufkey = true.
       RUN Syst/ufkey.p.
   
-     IF Syst.CUICommon:toimi = 8 then do:
+     IF Syst.Var:toimi = 8 then do:
         hide frame lis.
         leave.
      end.
   
      /* customer management */
-     ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+     ELSE IF Syst.Var:toimi = 2 THEN DO:
 
         SUBACTION:
         repeat with frame lis:
 
            ASSIGN
-              Syst.CUICommon:ufk = 0
-              Syst.CUICommon:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk = 0
+              Syst.Var:ufk[1] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT})
                         THEN 2246 /* agreement customer */
                         ELSE 0)
-              Syst.CUICommon:ufk[2] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk[2] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                            RowType = {&ORDERCUSTOMER_ROWTYPE_INVOICE})
                         THEN 2242 /* invoice customer */
                         ELSE 0)
-              Syst.CUICommon:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk[3] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_USER})
                         THEN 2247 /* user customer */
                         ELSE 0)
-              Syst.CUICommon:ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk[4] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY})
                         THEN 1071 /* delivery address */
                         ELSE 0)
-              Syst.CUICommon:ufk[5] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk[5] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT})
                         THEN 1096 /* contact data */
                         ELSE 0)
-              Syst.CUICommon:ufk[6] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk[6] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
                         THEN 2248 /* mobile donor (holder) */
                         ELSE 0)
-              Syst.CUICommon:ufk[7] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
+              Syst.Var:ufk[7] = (IF CAN-FIND(FIRST OrderCustomer OF Order WHERE
                               RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
                         THEN 2249 /* fixed donor (holder) */
                         ELSE 0)
-              Syst.CUICommon:ufk[8] = 8
-              Syst.CUICommon:ehto = 0
+              Syst.Var:ufk[8] = 8
+              Syst.Var:ehto = 0
               ufkey = TRUE.
 
            RUN Syst/ufkey.p.
 
-           IF Syst.CUICommon:toimi = 8 THEN LEAVE SubAction.
+           IF Syst.Var:toimi = 8 THEN LEAVE SubAction.
 
-           ELSE IF Syst.CUICommon:toimi = 1
+           ELSE IF Syst.Var:toimi = 1
            THEN RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_AGREEMENT},FALSE).
 
-           ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+           ELSE IF Syst.Var:toimi = 2 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_INVOICE},FALSE).
            END.
 
-           ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+           ELSE IF Syst.Var:toimi = 3 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_USER},FALSE).
            END.
 
-           ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+           ELSE IF Syst.Var:toimi = 4 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_DELIVERY},FALSE).
            END.
 
-           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+           ELSE IF Syst.Var:toimi = 5 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT},FALSE).
            END.
 
-           ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
+           ELSE IF Syst.Var:toimi = 6 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER},FALSE).
            END.
 
-           ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+           ELSE IF Syst.Var:toimi = 7 THEN DO:
               RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER},FALSE).
            END.
 
@@ -1264,19 +1264,19 @@ PROCEDURE pOrderView:
      END.
 
      /* logistic address */
-     ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+     ELSE IF Syst.Var:toimi = 3 THEN DO:
         RUN local-update-customer({&ORDERCUSTOMER_ROWTYPE_LOGISTICS},FALSE).
         NEXT Action.
      END.
 
-     else if Syst.CUICommon:toimi = 4 and Syst.CUICommon:ufk[4] > 0 then do:
+     else if Syst.Var:toimi = 4 and Syst.Var:ufk[4] > 0 then do:
 
         liMultiSimType = (IF Order.MultiSimType = 1 THEN 2 
                           ELSE IF Order.MultiSimType = 3 THEN 3 
                           ELSE 1).
 
         FIND FIRST lbOrder NO-LOCK WHERE
-                   lbOrder.Brand = Syst.CUICommon:gcBrand AND
+                   lbOrder.Brand = Syst.Var:gcBrand AND
                    lbOrder.MultiSimID = Order.MultiSimId AND
                    lbOrder.MultiSimType = liMultiSimType
         NO-ERROR.
@@ -1293,9 +1293,9 @@ PROCEDURE pOrderView:
              liMultiSimOrder WITH FRAME frMultiSIM.
         
         ASSIGN 
-           Syst.CUICommon:ufk    = 0
-           Syst.CUICommon:ufk[8] = 8
-           Syst.CUICommon:ehto   = 0.
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto   = 0.
          
         RUN Syst/ufkey.p.
         
@@ -1305,7 +1305,7 @@ PROCEDURE pOrderView:
         next action.
      end.
           
-     ELSE IF Syst.CUICommon:toimi = 6  AND 
+     ELSE IF Syst.Var:toimi = 6  AND 
           (Order.StatusCode NE "5" OR icStatus = "") 
      THEN DO TRANSACTION ON ENDKEY UNDO, LEAVE: 
         
@@ -1322,37 +1322,37 @@ PROCEDURE pOrderView:
         LEAVE.
      END.
 
-     ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+     ELSE IF Syst.Var:toimi = 5 THEN DO:
      
         SUBACTION: 
         repeat with frame lis:
 
            ASSIGN
-           Syst.CUICommon:ufk = 0
-           Syst.CUICommon:ufk[1] = 0
-           Syst.CUICommon:ufk[2] = 1070
-           Syst.CUICommon:ufk[3] = 1072
-           Syst.CUICommon:ufk[4] = 927           
-           Syst.CUICommon:ufk[5] = 2851
-           Syst.CUICommon:ufk[6] = 0
-           Syst.CUICommon:ufk[7] = 9019 
-           Syst.CUICommon:ufk[8] = 8
-           Syst.CUICommon:ehto = 0               
+           Syst.Var:ufk = 0
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 1070
+           Syst.Var:ufk[3] = 1072
+           Syst.Var:ufk[4] = 927           
+           Syst.Var:ufk[5] = 2851
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 9019 
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto = 0               
    
            ufkey = TRUE.
            RUN Syst/ufkey.p.
   
-           IF Syst.CUICommon:toimi = 8 THEN LEAVE SubAction.
+           IF Syst.Var:toimi = 8 THEN LEAVE SubAction.
            
-           ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+           ELSE IF Syst.Var:toimi = 2 THEN DO:
               RUN Mc/orderaccessory.p (Order.OrderID,0).
            END.
 
-           ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+           ELSE IF Syst.Var:toimi = 3 THEN DO:
               RUN Mc/ordertopup.p (Order.OrderID).
            END.
                 
-           ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+           ELSE IF Syst.Var:toimi = 4 THEN DO:
               RUN Mc/memo.p(INPUT 0,
                        INPUT "Order",
                        INPUT STRING(Order.OrderId),
@@ -1363,7 +1363,7 @@ PROCEDURE pOrderView:
                  ufkey = true
                  must-print = true.
            END.            
-           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+           ELSE IF Syst.Var:toimi = 5 THEN DO:
 
               IF liMSRequest EQ 0 THEN DO:
                  MESSAGE "Order request not found" VIEW-AS ALERT-BOX.
@@ -1376,7 +1376,7 @@ PROCEDURE pOrderView:
 
            END.
            
-           ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+           ELSE IF Syst.Var:toimi = 7 THEN DO:
               RUN local-find-this(FALSE).
               RUN Mc/orderdelivery.p(Order.OrderId).
            END.
@@ -1387,7 +1387,7 @@ PROCEDURE pOrderView:
      END.
      
      
-     ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
+     ELSE IF Syst.Var:toimi = 7 THEN DO:
         find current order NO-LOCK.
         RUN Mc/orderfunc.p(INPUT order.statuscode, Order.OrderID, TRUE).       
         ASSIGN
@@ -1398,7 +1398,7 @@ PROCEDURE pOrderView:
         NEXT Action.
      END.                                                    
   
-     ELSE IF Syst.CUICommon:toimi = 1 THEN DO:
+     ELSE IF Syst.Var:toimi = 1 THEN DO:
         RUN local-UPDATE-record(FALSE).                                  
      
         RUN local-find-this(FALSE).
@@ -1669,15 +1669,15 @@ PROCEDURE local-find-others.
    RUN local-find-others-common.
 
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand = Syst.CUICommon:gcBrand AND
+              OrderFusion.Brand = Syst.Var:gcBrand AND
               OrderFusion.OrderID = Order.OrderID NO-ERROR.
    
    FIND FIRST OrderDelivery WHERE
-      OrderDelivery.Brand   = Syst.CUICommon:gcBrand AND
+      OrderDelivery.Brand   = Syst.Var:gcBrand AND
       OrderDelivery.OrderID = Order.OrderId NO-LOCK NO-ERROR.
    IF AVAIL OrderDelivery THEN DO:
       
-      lcLOStatus = fGetItemName(Syst.CUICommon:gcBrand, 
+      lcLOStatus = fGetItemName(Syst.Var:gcBrand, 
                "LOStatusId", 
                STRING(OrderDelivery.LOStatusId),
                5,
@@ -1884,7 +1884,7 @@ PROCEDURE local-UPDATE-record:
    RUN local-find-this(FALSE).
    
    CLEAR FRAME lis NO-PAUSE.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
@@ -1912,21 +1912,21 @@ PROCEDURE local-UPDATE-record:
                   lcCurrOper = siirto NO-ERROR.
                   DISPLAY lcCurrOper @ Order.CurrOper WITH FRAME lis.
                END. /* IF lcCurrOper NE "" ... */
-               Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+               Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             END.
       
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                
                IF FRAME-FIELD = "CurrOper" THEN
                DO:
                   FIND FIRST MNPOperator WHERE
-                             MNPOperator.Brand = Syst.CUICommon:gcBrand AND
+                             MNPOperator.Brand = Syst.Var:gcBrand AND
                              MNPOperator.OperName = INPUT Order.CurrOper AND
                              MNPOperator.Active = True
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL MNPOperator THEN
                      FIND FIRST MNPOperator WHERE
-                                MNPOperator.Brand = Syst.CUICommon:gcBrand AND
+                                MNPOperator.Brand = Syst.Var:gcBrand AND
                                 MNPOperator.OperName = INPUT Order.CurrOper
                      NO-LOCK NO-ERROR.
                   IF AVAILABlE MNPOperator THEN
@@ -2028,13 +2028,13 @@ PROCEDURE local-update-customer:
       (iiRole = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} OR
        ( iiRole = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
          NOT CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
+                OrderCustomer.Brand   = Syst.Var:gcBrand       AND
                 OrderCustomer.OrderID = Order.OrderID AND
                 OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})))
    THEN llCustIDUpdateOK = TRUE.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand       AND
               OrderCustomer.OrderID = Order.OrderID AND
               OrderCustomer.RowType = iiRole NO-ERROR.
    IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -2056,13 +2056,13 @@ PROCEDURE local-update-customer:
    
          IF LENGTH(OrderCustomer.BankCode) = 24 THEN
             FIND FIRST Bank WHERE
-                       Bank.Brand      = Syst.CUICommon:gcBrand AND
+                       Bank.Brand      = Syst.Var:gcBrand AND
                        Bank.BankID     = SUBSTRING(OrderCustomer.BankCode,5,4) AND
                        Bank.BankOffice = SUBSTRING(OrderCustomer.BankCode,9,4) 
             NO-LOCK NO-ERROR.
          ELSE
             FIND FIRST Bank WHERE
-                       Bank.Brand      = Syst.CUICommon:gcBrand AND
+                       Bank.Brand      = Syst.Var:gcBrand AND
                        Bank.BankID     = SUBSTRING(OrderCustomer.BankCode,1,4) AND
                        Bank.BankOffice = SUBSTRING(OrderCustomer.BankCode,5,4) 
             NO-LOCK NO-ERROR.
@@ -2096,7 +2096,7 @@ PROCEDURE local-update-customer:
       END.
       	  
       FIND FIRST orderpayment NO-LOCK WHERE
-                 orderpayment.brand = Syst.CUICommon:gcBrand AND
+                 orderpayment.brand = Syst.Var:gcBrand AND
                  orderpayment.orderid = Order.OrderID
                  NO-ERROR.
       DISP 
@@ -2146,34 +2146,34 @@ PROCEDURE local-update-customer:
      
          
       ASSIGN
-      Syst.CUICommon:ufk = 0
-      Syst.CUICommon:ufk[1] = (IF lcRight = "RW" AND 
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = (IF lcRight = "RW" AND 
          iiRole NE {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} AND
          LOOKUP(Order.StatusCode,"20,21,31,73") > 0 THEN 7 ELSE 0)
-      Syst.CUICommon:ufk[5] = 0
-      Syst.CUICommon:ufk[8] = 8
-      Syst.CUICommon:ehto = 0
+      Syst.Var:ufk[5] = 0
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
       ufkey = true.
       RUN Syst/ufkey.p.
                                                              
-      IF Syst.CUICommon:toimi = 8 then do:
+      IF Syst.Var:toimi = 8 then do:
          hide frame fCustomer NO-PAUSE.
          ac-hdr = lcCurrHeader.
          
          LEAVE.
       end.
 
-      ELSE IF Syst.CUICommon:toimi = 5 AND lNew   THEN DO:
+      ELSE IF Syst.Var:toimi = 5 AND lNew   THEN DO:
   
          MESSAGE "Don't create here"
          VIEW-AS ALERT-BOX INFORMATION.
          
       END.
  
-      ELSE IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" AND Syst.CUICommon:ufk[1] NE 0 THEN
+      ELSE IF Syst.Var:toimi = 1 AND lcRight = "RW" AND Syst.Var:ufk[1] NE 0 THEN
       REPEAT WITH FRAME fCustomer ON ENDKEY UNDO, LEAVE:
          
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          lcOldAddressChk = 
@@ -2229,9 +2229,9 @@ PROCEDURE local-update-customer:
                UNDO Action, LEAVE Action.
             END.
             
-            Syst.CUICommon:nap = keylabel(LASTKEY).
+            Syst.Var:nap = keylabel(LASTKEY).
             
-            IF Syst.CUICommon:nap = "F9" AND 
+            IF Syst.Var:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"CustIDType,CustTitle,ZipCode") > 0
             THEN DO:
 
@@ -2260,15 +2260,15 @@ PROCEDURE local-update-customer:
                END. 
 
                ELSE IF FRAME-FIELD = "ZipCode" THEN DO:
-                  ASSIGN Syst.CUICommon:si-recid = ?
+                  ASSIGN Syst.Var:si-recid = ?
                          siirto   = "".
                   RUN Help/h-postcode.p.
 
                   /* several rows with same zipcode */
-                  IF Syst.CUICommon:si-recid NE ? THEN DO:
+                  IF Syst.Var:si-recid NE ? THEN DO:
                      DISPLAY siirto @ OrderCustomer.ZipCode 
                         WITH FRAME fCustomer.
-                     FIND PostCode WHERE RECID(PostCode) = Syst.CUICommon:si-recid
+                     FIND PostCode WHERE RECID(PostCode) = Syst.Var:si-recid
                         NO-LOCK NO-ERROR.
                      IF AVAILABLE PostCode THEN DO:
                         DISPLAY PostCode.PostOffice @ OrderCustomer.PostOffice
@@ -2281,12 +2281,12 @@ PROCEDURE local-update-customer:
                   END.      
                END.
                   
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME fCustomer:
+            ELSE IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO WITH FRAME fCustomer:
 
                HIDE MESSAGE no-pause.
 

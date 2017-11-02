@@ -8,8 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -83,7 +83,7 @@ REPEAT:
    
       /* To prevent duplicate file handling (YTS-5280) */
       IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand = Syst.CUICommon:gcBrand AND
+                         ActionLog.Brand = Syst.Var:gcBrand AND
                          ActionLog.TableName = "Cron" AND
                          ActionLog.KeyValue = lcFileName AND
                          ActionLog.ActionID = "upsellBOB" AND
@@ -92,7 +92,7 @@ REPEAT:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = Syst.CUICommon:gcBrand   
+            ActionLog.Brand        = Syst.Var:gcBrand   
             ActionLog.TableName    = "Cron"  
             ActionLog.KeyValue     = lcFileName
             ActionLog.ActionID     = "upsellBOB"
@@ -183,7 +183,7 @@ PROCEDURE pBobCheckUpsell:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = Syst.CUICommon:gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub OR MobSub.PayType = TRUE THEN 
       RETURN "ERROR:TARJ contract or Invalid MSISDN".
@@ -273,7 +273,7 @@ PROCEDURE pBobCheckUpsell:
                     lcMemoTitle,                          /* MemoTitle */
                     lcMemoText,                           /* MemoText  */
                     "Service",                            /* MemoType  */
-                    Syst.CUICommon:katun + "_" + Mobsub.Cli).
+                    Syst.Var:katun + "_" + Mobsub.Cli).
 
    RETURN "OK".
 

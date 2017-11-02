@@ -40,7 +40,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 19 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -116,7 +116,7 @@ PROCEDURE pChangeMSISDN:
               MSISDN.ValidTo > Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
 
    FIND FIRST MSRange WHERE 
-              MSRange.Brand    = Syst.CUICommon:gcBrand    AND 
+              MSRange.Brand    = Syst.Var:gcBrand    AND 
               MSRange.CLIFrom <= MSISDN.CLI AND
               MSRange.CLITo   >= MSISDN.CLI
    NO-LOCK NO-ERROR.
@@ -160,14 +160,14 @@ PROCEDURE pChangeMSISDN:
       MSOwner.BillTarget  = Mobsub.BillTarget
       MSOwner.MsSeq       = MobSub.MsSeq 
       MSowner.imsi        = mobsub.imsi
-      MSowner.brand       = Syst.CUICommon:gcBrand 
+      MSowner.brand       = Syst.Var:gcBrand 
       MSOWner.TSEnd       = 99999999.99999
       MsOwner.CliType     = mobsub.clitype
       MsOwner.CLIEvent    = "CLI".
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                       "",
-                                      Syst.CUICommon:katun,
+                                      Syst.Var:katun,
                                       "").
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
@@ -203,7 +203,7 @@ PROCEDURE pChangeMSISDN:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = Syst.CUICommon:katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = liLogType 
          OPLog.InvNum    = 0
          OPLog.Voucher   = 0
@@ -220,7 +220,7 @@ PROCEDURE pChangeMSISDN:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = Syst.CUICommon:katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = liLogType
          OPLog.InvNum    = 0
          OPLog.Voucher   = 0
@@ -262,11 +262,11 @@ PROCEDURE pChangeMSISDN:
          CREATE Memo.
          ASSIGN
             Memo.CreStamp  = Func.Common:mMakeTS() 
-            Memo.Brand     = Syst.CUICommon:gcBrand                 
+            Memo.Brand     = Syst.Var:gcBrand                 
             Memo.HostTable = "MobSub"                
             Memo.KeyValue  = STRING(DCCLI.MsSeq)     
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = Syst.CUICommon:katun 
+         Memo.CreUser   = Syst.Var:katun 
          Memo.Memotitle = "Per.Contract Msisdn Changed" 
          Memo.MemoText  = "Periodical contract msisdn was changed due to " +
                           "subscription msisdn change.".

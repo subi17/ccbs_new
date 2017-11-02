@@ -59,7 +59,7 @@
 {Mc/lib/tokenchk.i 'invrow'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -120,7 +120,7 @@ form
     InvRow.RowType   column-label "T"          FORMAT "9"
 WITH
     OVERLAY scroll 1 13 DOWN ROW 2 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
     " Rows in invoice nr " + string(Invoice.ExtInvID) + 
        " (VAT " + STRING(Invoice.VatIncl,"Incl./Excl.") + ") "
     FRAME sel.
@@ -135,7 +135,7 @@ form /* lisays / change */
     InvRow.Amt      label "Row net ....." format "->>>>>9.999"
 WITH
     OVERLAY ROW 4 centered side-labels 1 col
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) fr-header
     FRAME lis.
 
 FORM /* ACCOUNT DATA */
@@ -144,14 +144,14 @@ FORM /* ACCOUNT DATA */
    xVatAmt        LABEL "VAT Of Row ......."  FORMAT "->>,>>>,>>9.999"
    liVatAcc       LABEL "VAT Account......."  FORMAT ">>>>>>>9"
    WITH  OVERLAY CENTERED ROW 8 SIDE-LABELS     
-   COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:cfc) " ACCOUNT DATA "
+   COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:cfc) " ACCOUNT DATA "
    FRAME fmore.
 
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " Update memo "
     FRAME memo.
 
 FOR EACH InvRow OF Invoice NO-LOCK WHERE
@@ -168,7 +168,7 @@ BY InvRow.FromDate:
            ttRow.Order  = i.
 END.           
            
-Syst.CUICommon:cfc = "kory". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "kory". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST ttRow no-error.
@@ -236,21 +236,21 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         ASSIGN Syst.CUICommon:ufk = 0
-         Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 560 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 716
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         Syst.CUICommon:ufk[6]= 1561
-         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         ASSIGN Syst.Var:ufk = 0
+         Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 560 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 716
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.Var:ufk[6]= 1561
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
-         IF NOT may_update THEN ASSIGN Syst.CUICommon:ufk[5] = 0.
+         IF NOT may_update THEN ASSIGN Syst.Var:ufk[5] = 0.
 
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW InvRow.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(Syst.CUICommon:ccc) InvRow.BillCode WITH FRAME sel.
+      COLOR DISPLAY value(Syst.Var:ccc) InvRow.BillCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -259,10 +259,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND ttRow where recid(ttRow) = rtab[1].
             FIND prev ttRow  no-error.
@@ -290,7 +290,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -320,7 +320,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND ttRow where recid(ttRow) = memory no-error.
          FIND prev ttRow  no-error.
@@ -346,7 +346,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -364,7 +364,7 @@ BROWSE:
      END. /* NEXT page */
 
      /* accounting data */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0  THEN DO: 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0  THEN DO: 
 
         FIND ttRow WHERE RECID(ttRow) = rtab[FRAME-LINE(sel)].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow NO-LOCK.
@@ -392,7 +392,7 @@ BROWSE:
              WITH FRAME fmore.
 
         ASSIGN 
-           Syst.CUICommon:ehto = 5
+           Syst.Var:ehto = 5
            ufkey = TRUE.
         RUN Syst/ufkey.p.
         
@@ -402,10 +402,10 @@ BROWSE:
      END.
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0   /* memo */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0   /* memo */
         THEN DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
 
-        ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE.
+        ASSIGN Syst.Var:ehto = 9 ufkey = TRUE.
         RUN Syst/ufkey.p.
         FIND ttRow WHERE RECID(ttRow) = rtab[FRAME-LINE(sel)].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow EXCLUSIVE-LOCK.
@@ -421,7 +421,7 @@ BROWSE:
      END.
 
 
-     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO: 
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO: 
 
         FIND ttRow where recid(ttRow) = rtab[FRAME-LINE].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow NO-LOCK.
@@ -492,7 +492,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"F6,6") > 0 AND Syst.CUICommon:ufk[6] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"F6,6") > 0 AND Syst.Var:ufk[6] > 0 THEN DO:
         FIND ttRow where recid(ttRow) = rtab[FRAME-LINE].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow NO-LOCK.
         FIND FIRST SubInvoice WHERE
@@ -507,7 +507,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO: /* ensimmainen tietue */
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO: /* ensimmainen tietue */
         FIND FIRST ttRow .
         ASSIGN
         memory = recid(ttRow)
@@ -515,7 +515,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         FIND LAST ttRow.
         ASSIGN
         memory = recid(ttRow)
@@ -523,13 +523,13 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
      
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

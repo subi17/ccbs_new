@@ -53,7 +53,7 @@ IF AVAILABLE Order THEN DO:
           OR
          (OrderAccessory.ProductCode > "" AND 
           CAN-FIND(FIRST BillItem WHERE
-                         BillItem.Brand    = Syst.CUICommon:gcBrand AND
+                         BillItem.Brand    = Syst.Var:gcBrand AND
                          BillItem.BillCode = OrderAccessory.ProductCode AND
                          BillItem.BIGroup  = "7")) 
       THEN DO:
@@ -75,7 +75,7 @@ IF lcCampaign = ? THEN lcCampaign = "".
 
 /* add initial topup for prepaid subscriptions */
 FOR EACH CampRow NO-LOCK WHERE
-         CampRow.Brand    = Syst.CUICommon:gcBrand        AND
+         CampRow.Brand    = Syst.Var:gcBrand        AND
          CampRow.CLIType  = MobSub.CLIType AND
          CampRow.CRowType = 5,
    FIRST Campaign OF CampRow NO-LOCK WHERE
@@ -85,18 +85,18 @@ FOR EACH CampRow NO-LOCK WHERE
           THEN Campaign.Campaign = lcCampaign
           ELSE TRUE),
     EACH FMItem NO-LOCK WHERE
-         FMItem.Brand     = Syst.CUICommon:gcBrand               AND
+         FMItem.Brand     = Syst.Var:gcBrand               AND
          FMItem.FeeModel  = CampRow.CRowItem      AND
          FMItem.PriceList = "TopUp"               AND
          FMItem.ToDate   >= ldaOrderDate AND
          FMItem.FromDate <= ldaOrderDate,
    FIRST BillItem NO-LOCK WHERE
-         BillItem.Brand    = Syst.CUICommon:gcBrand AND
+         BillItem.Brand    = Syst.Var:gcBrand AND
          BillItem.BillCode = FMItem.BillCode:
          
    /* take vat out from amount */
    FIND PriceList WHERE
-        PriceList.Brand     = Syst.CUICommon:gcBrand AND
+        PriceList.Brand     = Syst.Var:gcBrand AND
         PriceList.PriceList = FMItem.PriceList NO-LOCK.
            
    /* taxcode */

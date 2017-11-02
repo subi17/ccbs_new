@@ -99,6 +99,6 @@ WITH
 
 
    ASSIGN
-   Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
+   Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0. RUN Syst/ufkey.p.
 
    HIDE FRAME Presel NO-PAUSE.

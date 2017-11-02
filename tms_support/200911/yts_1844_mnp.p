@@ -2,8 +2,8 @@
 
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "rafaeldv".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand = "1".
 {Func/service.i}
 
 DEFINE STREAM sout.
@@ -26,7 +26,7 @@ FIND FIRST ServPac WHERE
 OUTPUT STREAM sout TO fix_mnp_smsbundle2.log . 
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = Syst.CUICommon:gcBrand AND
+         MobSub.Brand = Syst.Var:gcBrand AND
          LOOKUP(MobSub.CliType,"TARJ,TARJ4") > 0 AND
          MobSub.ActivationTS > ldTS AND
          Mobsub.ActivationTS < 20091123.00000  AND 

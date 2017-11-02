@@ -25,7 +25,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    {newton/src/settenant.i pcTenant}
       
-   FIND CustCat WHERE CustCat.Brand = Syst.CUICommon:gcBrand AND 
+   FIND CustCat WHERE CustCat.Brand = Syst.Var:gcBrand AND 
                       CustCat.Category = pcId NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN
    DO:

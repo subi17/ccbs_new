@@ -28,7 +28,7 @@ FUNCTION fAmtUnBilledFFItem RETURNS DECIMAL
                        MONTH(idtEnd).
 
    FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.Brand       = Syst.CUICommon:gcBrand                 AND 
+            FixedFee.Brand       = Syst.Var:gcBrand                 AND 
             FixedFee.HostTable   = "MobSub"                AND
             FixedFee.KeyValue    = STRING(iMsSeq)          AND
             FixedFee.CustNum     = iCustNum                AND
@@ -106,7 +106,7 @@ FUNCTION fGetFixedFeeInfo RETURNS LOGICAL
                              MONTH(idaCountFrom).
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
+            FixedFee.Brand     = Syst.Var:gcBrand   AND 
             FixedFee.Custnum   = iiCustnum AND
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(iMsSeq) AND
@@ -150,7 +150,7 @@ FUNCTION fGetFixedFeeInfo RETURNS LOGICAL
          ELSE oiOrderId = 0.
       
          FOR FIRST SingleFee NO-LOCK WHERE
-                   SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                   SingleFee.Brand       = Syst.Var:gcBrand AND
                    SingleFee.Custnum     = FixedFee.CustNum AND
                    SingleFee.HostTable   = FixedFee.HostTable AND
                    SingleFee.KeyValue    = FixedFee.KeyValue AND

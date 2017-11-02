@@ -24,7 +24,7 @@ DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 fInitializeConnectTables("MobCDR","").
 
-RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                        "",
                        TODAY - 1,
                        TODAY - 1).

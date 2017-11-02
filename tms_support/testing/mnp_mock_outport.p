@@ -10,8 +10,8 @@ Version ......: Yoigo
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun = "Qvantel"
-      Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun = "Qvantel"
+      Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/tmsconst.i}
@@ -83,15 +83,15 @@ PROCEDURE pUserInput:
       UPDATE lcCLI liCustNum WITH FRAME lis EDITING:
 
          IF ufkey THEN DO:
-            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
 
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
-         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF INPUT lcCLI > "" AND FRAME-FIELD = "lcCLI" THEN DO:
                FIND FIRST MobSub WHERE

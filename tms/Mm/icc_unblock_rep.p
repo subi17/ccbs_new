@@ -7,8 +7,8 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -56,14 +56,14 @@ OUTPUT STREAM sLog TO VALUE(lcLogFile).
 fBatchLog("START", lcLogFile).
 
 FOR EACH ActionLog WHERE
-   ActionLog.Brand = Syst.CUICommon:gcBrand AND
+   ActionLog.Brand = Syst.Var:gcBrand AND
    ActionLog.ActionID = "SIMRELEASE" AND
    ActionLog.ActionTS >= ldeTimeFrom AND
    ActionLog.ActionTS < ldeTimeTo AND
    ActionLog.ActionStatus = 2 NO-LOCK:
 
    FIND Order WHERE
-      Order.Brand = Syst.CUICommon:gcBrand AND
+      Order.Brand = Syst.Var:gcBrand AND
       Order.OrderId = INT(ActionLog.KeyValue) NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN NEXT.
 

@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -49,7 +49,7 @@ pcUserName = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
@@ -135,7 +135,7 @@ IF gi_xmlrpc_error NE 0 THEN DO:
 END.
 
 FIND Offer WHERE
-     Offer.Brand = Syst.CUICommon:gcBrand AND 
+     Offer.Brand = Syst.Var:gcBrand AND 
      Offer.Offer = ttOfferItem.Offer NO-LOCK NO-ERROR.
 IF NOT AVAIL Offer THEN DO:
    RETURN appl_err("Offer " + ttOfferItem.Offer + " does not exist").
@@ -161,7 +161,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 
    FIND FIRST TopupScheme WHERE 
-      TopupScheme.Brand = Syst.CUICommon:gcBrand AND
+      TopupScheme.Brand = Syst.Var:gcBrand AND
       TopupScheme.TopupScheme = ttOfferItem.ItemKey NO-LOCK NO-ERROR.
    IF AVAIL TopupScheme THEN
    DO:

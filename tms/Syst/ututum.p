@@ -41,7 +41,7 @@ DEF BUFFER xxrepcfg FOR TMSRepCfg.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -61,7 +61,7 @@ form
     TMSRepCfg.PrinterId  column-label "Printer"
     tnimi           column-label "Effect"
  WITH ROW 2 centered OVERLAY scroll 1 13 DOWN
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
     " " + TMSReport.Memo + ": PRINT PARAMETERS "
     FRAME sel.
 
@@ -73,12 +73,12 @@ form
     tnimi NO-LABEL SKIP
     TMSRepCfg.UserCode            label "User ........"
     help "User ID or empty for ALL users" SKIP
- WITH  OVERLAY ROW 8 centered COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc) fr-header WITH side-labels
+ WITH  OVERLAY ROW 8 centered COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc) fr-header WITH side-labels
     FRAME lis.
 
 FIND FIRST TMSReport where TMSReport.RepName = si-tul no-lock no-error.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 FIND FIRST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
 IF AVAILABLE TMSRepCfg THEN DO:
@@ -101,7 +101,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* TMSRepCfg -ADD  */
       ASSIGN
-      Syst.CUICommon:cfc = "lis"
+      Syst.Var:cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD, (width " + string(TMSReport.PageWidth) + ") ".
       RUN Syst/ufcolor.p.
@@ -109,7 +109,7 @@ add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          assign tnimi = "".
 
          CREATE TMSRepCfg.
@@ -142,7 +142,7 @@ add-new:
             END.
 
             if frame-field = "UserCode" AND
-            lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                if CAN-FIND(xxRepcfg WHERE
                            xxRepCfg.Repname   = TMSRepCfg.Repname   AND
@@ -162,14 +162,14 @@ add-new:
 
 
             if frame-field = "PrinterId" AND
-            lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                if input TMSRepCfg.PrinterId = "" THEN UNDO, LEAVE add-new.
                ASSIGN si-kirj = INPUT TMSRepCfg.PrinterId.
                APPLY LASTKEY.
             END.
 
             else if frame-field = "Effect" AND
-            lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                ASSIGN TMSRepCfg.Effect = INPUT TMSRepCfg.Effect.
                TMSRepCfg.Effect = caps(TMSRepCfg.Effect).
                if input TMSRepCfg.Effect = "" then TMSRepCfg.Effect = "E".
@@ -268,17 +268,17 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW TMSRepCfg.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(Syst.CUICommon:ccc) TMSRepCfg.UserCode WITH FRAME sel.
+      COLOR DISPLAY value(Syst.Var:ccc) TMSRepCfg.UserCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -287,10 +287,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND TMSRepCfg where recid(TMSRepCfg) = rtab[1] no-lock.
             FIND prev TMSRepCfg where TMSRepCfg.RepName = si-tul 
@@ -322,7 +322,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -356,7 +356,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
          memory = rtab[1].
          FIND TMSRepCfg where recid(TMSRepCfg) = memory no-lock no-error.
          FIND prev TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
@@ -383,7 +383,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -400,17 +400,17 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisAys */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisAys */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
         delline = FRAME-LINE.
         FIND TMSRepCfg where recid(TMSRepCfg) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(Syst.CUICommon:ctc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
+        COLOR DISPLAY value(Syst.Var:ctc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
                                  tnimi WITH FRAME sel.
 
         FIND NEXT TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
@@ -433,7 +433,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
+        COLOR DISPLAY value(Syst.Var:ccc) TMSRepCfg.UserCode TMSRepCfg.PrinterId
                                  tnimi WITH FRAME sel.
         IF ok THEN DO:
 
@@ -453,7 +453,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW"
      THEN DO WITH FRAME lis:
         /* change */
         FIND TMSRepCfg where recid(TMSRepCfg) = rtab[frame-line(sel)]
@@ -463,9 +463,9 @@ BROWSE:
                            + string(TMSReport.PageWidth) 
                                     + ")".
 
-        ASSIGN ufkey = TRUE Syst.CUICommon:ehto = 9.
+        ASSIGN ufkey = TRUE Syst.Var:ehto = 9.
         RUN Syst/ufkey.p.
-        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
         FIND FIRST PrintCodes where 
                    PrintCodes.Effect = TMSRepCfg.Effect AND 
@@ -506,12 +506,12 @@ BROWSE:
             END.
 
             if frame-field = "PrinterId" AND
-            lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                ASSIGN si-kirj = INPUT TMSRepCfg.PrinterId.
                APPLY LASTKEY.
             END.
             else if frame-field = "Effect" AND
-            lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                ASSIGN TMSRepCfg.Effect = INPUT TMSRepCfg.Effect.
                TMSRepCfg.Effect = caps(TMSRepCfg.Effect).
                if input TMSRepCfg.Effect = "" then TMSRepCfg.Effect = "E".
@@ -557,7 +557,7 @@ BROWSE:
         xrecid = recid(TMSRepCfg).
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* LAST record */
         FIND LAST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock.
         ASSIGN
         memory = recid(TMSRepCfg)
@@ -565,7 +565,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
         FIND FIRST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock.
         ASSIGN
         memory = recid(TMSRepCfg)
@@ -573,11 +573,11 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

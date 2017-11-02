@@ -63,8 +63,8 @@ PROCEDURE pCollectCDRs:
    EMPTY TEMP-TABLE ttCall.
   
    fMobCDRCollect(INPUT "post",
-                  INPUT Syst.CUICommon:gcBrand,
-                  INPUT Syst.CUICommon:katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT InvSeq.FromDate,   
                   INPUT InvSeq.ToDate,
                   INPUT 0,

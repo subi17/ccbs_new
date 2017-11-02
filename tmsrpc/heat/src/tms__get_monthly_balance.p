@@ -23,7 +23,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
 
-FOR FIRST MobSub WHERE MobSub.Brand = Syst.CUICommon:gcBrand AND MobSub.Cli = pcCLI TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+FOR FIRST MobSub WHERE MobSub.Brand = Syst.Var:gcBrand AND MobSub.Cli = pcCLI TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
     ASSIGN lcTenant = BUFFER-TENANT-NAME(MobSub).                
 END.
 

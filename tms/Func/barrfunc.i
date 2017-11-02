@@ -460,7 +460,7 @@ FUNCTION fExistBarredSubForCustomer RETURNS LOGICAL
    DEF BUFFER MobSub FOR MobSub.
 
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand = Syst.CUICommon:gcBrand AND 
+            MobSub.Brand = Syst.Var:gcBrand AND 
             MobSub.CustNum = piCustNum AND 
             MobSub.MsStatus = 8 : 
       lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).

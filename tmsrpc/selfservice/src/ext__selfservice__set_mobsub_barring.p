@@ -26,8 +26,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 {Func/fexternalapi.i}
@@ -74,7 +74,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 /*YPR-4774*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
@@ -173,7 +173,7 @@ IF liReq > 0 THEN DO:
 
    /*YPR-1966, add different memo writing*/
    IF lcApplicationId EQ "701" THEN DO:
-      lcItemName = fGetItemName(Syst.CUICommon:gcBrand,
+      lcItemName = fGetItemName(Syst.Var:gcBrand,
                                 "BarringCode",
                                 pcBCode,
                                 5, /*en*/
@@ -191,7 +191,7 @@ IF liReq > 0 THEN DO:
                     lcDetailedUser).
    END.
    ELSE DO:
-      lcItemName = fGetItemName(Syst.CUICommon:gcBrand,
+      lcItemName = fGetItemName(Syst.Var:gcBrand,
                                 "BarringCode",
                                 pcBCode,
                                 1, /*es*/

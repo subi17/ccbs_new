@@ -76,7 +76,7 @@ for each payment no-lock use-index paymtype where
        
           
    create bpaym.
-   bpaym.voucher = fGetAndUpdVoucher(Syst.CUICommon:gcBrand,2).
+   bpaym.voucher = fGetAndUpdVoucher(Syst.Var:gcBrand,2).
 
    buffer-copy payment except voucher extvoucher to bpaym.
 
@@ -103,7 +103,7 @@ for each payment no-lock use-index paymtype where
       bpaym.extvoucher           skip.
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "payment"
           Memo.KeyValue  = STRING(bPaym.Voucher)
           Memo.CustNum   = Payment.CustNum

@@ -71,18 +71,18 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 IF NOT bbatch THEN DO:
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE xdays outfile.
 
 ACTION:
    REPEAT WITH FRAME MAIN:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 15 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 5 THEN DO:
          MESSAGE "Do You REALLY want to start (Y/N) ?" UPDATE ok.
          IF NOT ok THEN NEXT Action.
          ELSE LEAVE Action.
@@ -96,7 +96,7 @@ END.  /* bbatch */
    
    /* Headers TO the PaymFile */
    PUT STREAM excel UNFORMATTED
-   Syst.CUICommon:ynimi " " 
+   Syst.Var:ynimi " " 
    "Watchdog Report of Mobile Subscribers, Printed out "
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
@@ -104,7 +104,7 @@ END.  /* bbatch */
    RUN Syst/uexskip.p(2).                           
 
    PUT STREAM fraud UNFORMATTED
-   Syst.CUICommon:ynimi " Credit balance report of mobile subscribers, Printed out " 
+   Syst.Var:ynimi " Credit balance report of mobile subscribers, Printed out " 
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
    DAY  (TODAY) FORMAT "99" my-nl my-nl
@@ -123,7 +123,7 @@ END.  /* bbatch */
 
    FOR
    EACH MobSub NO-LOCK WHERE 
-        MobSub.Brand = Syst.CUICommon:gcBrand .
+        MobSub.Brand = Syst.Var:gcBrand .
 
       ASSIGN
       nocont   = FALSE

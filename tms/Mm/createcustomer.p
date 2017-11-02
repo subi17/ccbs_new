@@ -18,7 +18,7 @@
 {Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -47,7 +47,7 @@ DEF BUFFER bOrderCustomer FOR OrderCustomer.
 DEF BUFFER bMobSub FOR MobSub.
 
 FIND FIRST Order WHERE
-           Order.Brand   = Syst.CUICommon:gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderId = iiOrderId 
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
@@ -65,7 +65,7 @@ IF iiRole = 2 AND Order.InvCustRole NE 2 THEN RETURN.
 IF iiRole = 3 AND Order.UserRole NE 3    THEN RETURN.
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand   AND
            OrderCustomer.OrderID = iiOrderID AND
            OrderCustomer.RowType = iiRole NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -103,7 +103,7 @@ END.
 ELSE IF iiRole = 2 THEN DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = 1 NO-ERROR.
  
@@ -131,7 +131,7 @@ END.
 ELSE IF iiRole = 3 THEN  DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = Order.InvCustRole NO-ERROR.
    
@@ -217,7 +217,7 @@ ELSE DO:
       RETURN "ERROR:Customer not found".
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand   AND
               OrderCustomer.OrderID = iiOrderID AND
               OrderCustomer.RowType = iiRole  NO-ERROR.
 
@@ -260,7 +260,7 @@ ELSE DO:
    ELSE DO:
 
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand   = Syst.CUICommon:gcBrand   AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand   AND
                  OrderCustomer.OrderID = iiOrderID AND
                  OrderCustomer.RowType = iiRole  NO-ERROR.
 
@@ -280,7 +280,7 @@ ELSE DO:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
 
          FIND FIRST MobSub NO-LOCK WHERE
-                    MobSub.Brand   = Syst.CUICommon:gcBrand AND
+                    MobSub.Brand   = Syst.Var:gcBrand AND
                     MobSub.MsSeq   = Order.MsSeq AND
                     MobSub.CustNum = Customer.CustNum NO-ERROR.
 
@@ -289,7 +289,7 @@ ELSE DO:
             IF MobSub.PayType = FALSE THEN
             DO:
                 IF CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = Syst.CUICommon:gcBrand          AND
+                                  bMobSub.Brand     = Syst.Var:gcBrand          AND
                                   bMobSub.MsSeq    <> MobSub.MsSeq     AND
                                   bMobSub.CustNum   = Customer.CustNum AND
                                   bMobSub.PayType   = FALSE)           THEN
@@ -302,7 +302,7 @@ ELSE DO:
             IF Order.PayType = FALSE THEN 
             DO:
                 IF CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = Syst.CUICommon:gcBrand          AND
+                                  bMobSub.Brand     = Syst.Var:gcBrand          AND
                                   bMobSub.MsSeq    <> Order.MsSeq      AND
                                   bMobSub.CustNum   = Customer.CustNum AND
                                   bMobSub.PayType   = FALSE)           THEN
@@ -392,7 +392,7 @@ ELSE DO:
 
    IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
                            lhCustomer,
-                           Syst.CUICommon:katun,
+                           Syst.Var:katun,
                            lcMemo).
    
    RELEASE Customer.

@@ -11,8 +11,8 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
 {Func/cparam2.i}
 {Func/heartbeat.i}
@@ -119,13 +119,13 @@ FUNCTION fErrorLog RETURNS LOGIC
  
    /* save to db for reporting */
    CREATE ErrorLog.
-   ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+   ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
           ErrorLog.ActionID  = "TMQUEUE"
           ErrorLog.TableName = "Customer"
           ErrorLog.KeyValue  = STRING(iiCustnum)
           ErrorLog.ErrorChar = icCLI
           ErrorLog.ErrorMsg  = icError
-          ErrorLog.UserCode  = Syst.CUICommon:katun.
+          ErrorLog.UserCode  = Syst.Var:katun.
           ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.
@@ -606,7 +606,7 @@ PROCEDURE pAnalyseQueueRow:
                      LEAVE FieldCheck.
                   END.
 
-                  lcCountry = fDestCountry(Syst.CUICommon:gcBrand,
+                  lcCountry = fDestCountry(Syst.Var:gcBrand,
                                            TMQueue.SpoCMT,
                                            TMQueue.DateSt,
                                            TMQueue.EventId,
@@ -895,7 +895,7 @@ PROCEDURE pUpdateTempTables:
  
    GetRules:
    FOR EACH TMRule NO-LOCK WHERE
-            TMRule.Brand     = Syst.CUICommon:gcBrand AND
+            TMRule.Brand     = Syst.Var:gcBrand AND
             TMRule.FromDate <= TODAY   AND
             TMRule.ToDate   >= TODAY:
             
@@ -1031,7 +1031,7 @@ PROCEDURE pUpdateTempTables:
    IF ldDone > 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Analysis"  
          ActionLog.KeyValue     = STRING(TODAY,"99.99.99") 
          ActionLog.ActionID     = "TMQUEUE"

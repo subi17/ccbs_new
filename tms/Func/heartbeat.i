@@ -86,7 +86,7 @@ FUNCTION fNagios RETURNS LOGICAL
       
    /* nagios URL */
    FIND FIRST TMSParam WHERE
-              TMSParam.Brand      = Syst.CUICommon:gcBrand  AND
+              TMSParam.Brand      = Syst.Var:gcBrand  AND
               TMSParam.ParamGroup = "NAGIOS" AND
               TMSParam.ParamCode  = "URL"
    NO-LOCK NO-ERROR.
@@ -176,12 +176,12 @@ FUNCTION fGetRequestNagiosToken RETURNS CHAR
    DEF BUFFER RequestQueue FOR RequestQueue.
 
    FIND RequestType NO-LOCK WHERE
-        RequestType.Brand = Syst.CUICommon:gcBrand AND
+        RequestType.Brand = Syst.Var:gcBrand AND
         RequestType.ReqType = piReqType NO-ERROR.
    IF NOT AVAIL RequestType THEN RETURN "".
 
    FIND RequestQueue NO-LOCK WHERE
-        RequestQueue.Brand = Syst.CUICommon:gcBrand AND
+        RequestQueue.Brand = Syst.Var:gcBrand AND
         RequestQueue.Queue = RequestType.Queue NO-ERROR.
    IF NOT AVAIL RequestQueue THEN RETURN "".
 

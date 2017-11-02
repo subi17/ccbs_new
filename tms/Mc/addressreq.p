@@ -21,7 +21,7 @@ FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 6 THEN RETURN "ERROR".
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -71,7 +71,7 @@ PROCEDURE pAddressChange:
    END.
 
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = Syst.CUICommon:gcBrand AND
+            MobSub.Brand   = Syst.Var:gcBrand AND
             MobSub.AgrCust = MsRequest.CustNum,
       FIRST bACC NO-LOCK WHERE
             bACC.MsSeq   = MobSub.MsSeq AND

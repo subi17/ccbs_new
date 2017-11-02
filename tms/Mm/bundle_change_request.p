@@ -38,7 +38,7 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD CLI      AS CHAR.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -119,7 +119,7 @@ PROCEDURE pBundleChange:
       RETURN "ERROR:Not a bundle".
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam1 AND
               LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 
       NO-LOCK NO-ERROR.
@@ -127,7 +127,7 @@ PROCEDURE pBundleChange:
       RETURN "ERROR:Current bundle is unknown".
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam2 AND
               LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 
       NO-LOCK NO-ERROR.
@@ -387,7 +387,7 @@ PROCEDURE pMultiSimBTC:
            Mobsub.MultiSimID > 0) THEN RETURN.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = MobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
               lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -404,10 +404,10 @@ PROCEDURE pMultiSimBTC:
    CREATE ActionLog.
    ASSIGN
       ActionLog.ActionTS     = Func.Common:mMakeTS()
-      ActionLog.Brand        = Syst.CUICommon:gcBrand
+      ActionLog.Brand        = Syst.Var:gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "MultiSIMTermination"
       ActionLog.ActionPeriod = YEAR(idaActivationDate - 1) * 100 +
                                MONTH(idaActivationDate - 1)
@@ -611,7 +611,7 @@ PROCEDURE pCloseContracts:
 
    FOR EACH ttContract:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+                 DayCampaign.Brand   = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
@@ -680,7 +680,7 @@ PROCEDURE pUpdateSubscription:
          
       IF llDoEvent THEN fMakeCreateEvent((BUFFER bOwner:HANDLE),
                                          "",
-                                         Syst.CUICommon:katun,
+                                         Syst.Var:katun,
                                          "").
 
       RELEASE bOwner.

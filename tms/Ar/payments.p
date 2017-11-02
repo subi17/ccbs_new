@@ -48,7 +48,7 @@
 {Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -109,8 +109,8 @@ form
     Payment.PaymType   FORMAT ">9"            COLUMN-LABEL "T"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
           "  PAYMENTS  "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -192,7 +192,7 @@ form
   lcTypeName[6]      FORMAT "X(23)"         NO-LABEL AT 56
 
 WITH OVERLAY ROW 1 centered
-     COLOR VALUE(Syst.CUICommon:cfc) TITLE  " Details (" + STRING(Payment.Voucher) + ") "
+     COLOR VALUE(Syst.Var:cfc) TITLE  " Details (" + STRING(Payment.Voucher) + ") "
      side-labels FRAME lis.
 
 {Func/brand.i}
@@ -201,23 +201,23 @@ form /* seek  Voucher */
     "Brand .:" lcBrand skip
     "Voucher:" lcExtVoucher
     HELP "Enter Voucher number "
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND VOUCHER "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND VOUCHER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  InvNum */
     "Brand .:" lcBrand skip
     "Invoice:" lcExtInvID
     HELP "Enter Invoice Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND INVOICE"
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND INVOICE"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" CustNum
     HELP "Enter Customer Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  source & amt */
     "Brand :" lcBrand skip
@@ -226,8 +226,8 @@ form /* seek  source & amt */
     "Amount:" ldPaymAmt 
        HELP "Payment amount"
        FORMAT "->>>>>>9.99" skip
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SOURCE "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND SOURCE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f4.
 
 
 IF icRefNum > "" THEN DO:
@@ -243,7 +243,7 @@ IF icRefNum > "" THEN DO:
    END.
    
    FIND FIRST PrePaidRequest WHERE
-              PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND 
+              PrePaidRequest.Brand     = Syst.Var:gcBrand AND 
               PrePaidRequest.PPRequest = INT(icRefNum)
    NO-LOCK NO-ERROR.
 
@@ -291,7 +291,7 @@ ELSE IF iiInvNum > 0 THEN DO:
    FRAME sel:TITLE = " PAYMENTS OF INVOICE " + Invoice.ExtInvID + " ".
 END.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-FIRST.
@@ -360,16 +360,16 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 177  Syst.CUICommon:ufk[2]= 92   Syst.CUICommon:ufk[3]= 714  Syst.CUICommon:ufk[4]= 1018
-         Syst.CUICommon:ufk[5]= 927  Syst.CUICommon:ufk[6]= 1491 Syst.CUICommon:ufk[7]= 1152 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 177  Syst.Var:ufk[2]= 92   Syst.Var:ufk[3]= 714  Syst.Var:ufk[4]= 1018
+         Syst.Var:ufk[5]= 927  Syst.Var:ufk[6]= 1491 Syst.Var:ufk[7]= 1152 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          IF iiCustNum > 0 OR iiInvNum > 0 THEN ASSIGN
-            Syst.CUICommon:ufk[1] = 0
-            Syst.CUICommon:ufk[3] = 0
-            Syst.CUICommon:ufk[4] = 0.
+            Syst.Var:ufk[1] = 0
+            Syst.Var:ufk[3] = 0
+            Syst.Var:ufk[4] = 0.
 
-         IF iiInvNum > 0 THEN Syst.CUICommon:ufk[2] = 0.
+         IF iiInvNum > 0 THEN Syst.Var:ufk[2] = 0.
          
          RUN Syst/ufkey.p.
       END.
@@ -377,32 +377,32 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Payment.ExtVoucher {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.ExtVoucher WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Payment.ExtVoucher WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Payment.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.ExtInvID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Payment.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW Payment.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Payment.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW Payment.PaymSrc  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Payment.PaymSrc WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Payment.PaymSrc WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         IF MaxOrder > 1 THEN DO:
            order = order + 1. 
            IF order > maxOrder THEN order = 1.
         END. 
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         IF MaxOrder > 1 THEN DO:
            order = order - 1. 
            IF order = 0 THEN order = maxOrder.
@@ -429,10 +429,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -457,7 +457,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -483,7 +483,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Payment WHERE recid(Payment) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -507,7 +507,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -522,13 +522,13 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcExtVoucher WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -552,14 +552,14 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcExtInvID WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -580,14 +580,14 @@ BROWSE:
      END. /* Search-2 */
 
      /* Search BY col 3 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               CustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -604,14 +604,14 @@ BROWSE:
      END. /* Search-3 */
 
      /* Search BY col 4 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcPaymSrc
               ldPaymAmt WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
@@ -642,7 +642,7 @@ BROWSE:
      END. /* Search-4 */
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
 
         RUN local-find-this(TRUE).
 
@@ -655,14 +655,14 @@ BROWSE:
         next.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Payment.ExtInvID.
 
        RUN local-update-record.                                  
@@ -677,10 +677,10 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO:  /* view */
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:  /* view */
         RUN local-find-this(TRUE).
 
-        Syst.CUICommon:ehto = 5.
+        Syst.Var:ehto = 5.
         RUN Syst/ufkey.p.
         RUN pInvoiceDetails(Payment.InvNum,
                             TRUE).
@@ -689,20 +689,20 @@ BROWSE:
      END.
 
      /* other actions */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN REPEAT:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN REPEAT:
 
         ASSIGN
-           Syst.CUICommon:ufk    = 0
+           Syst.Var:ufk    = 0
            ufkey  = true
-           Syst.CUICommon:ufk[2] = 67 WHEN llPPReq = FALSE
-           Syst.CUICommon:ufk[4] = 1752
-           Syst.CUICommon:ufk[5] = 1746
-           Syst.CUICommon:ufk[8] = 8
-           Syst.CUICommon:ehto   = 0.
+           Syst.Var:ufk[2] = 67 WHEN llPPReq = FALSE
+           Syst.Var:ufk[4] = 1752
+           Syst.Var:ufk[5] = 1746
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto   = 0.
         
         RUN Syst/ufkey.p.
 
-        IF Syst.CUICommon:toimi = 2 THEN DO TRANS:
+        IF Syst.Var:toimi = 2 THEN DO TRANS:
                 
            RUN local-find-this(FALSE).
            
@@ -739,7 +739,7 @@ BROWSE:
         END.
 
         /* eventlog */
-        ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+        ELSE IF Syst.Var:toimi = 4 THEN DO:
            RUN local-find-this(FALSE).
            
            IF AVAILABLE Payment THEN 
@@ -751,32 +751,32 @@ BROWSE:
         END. 
 
         /* payment source info */
-        ELSE IF Syst.CUICommon:toimi = 5 THEN RUN Help/h-paymsrc.p.
+        ELSE IF Syst.Var:toimi = 5 THEN RUN Help/h-paymsrc.p.
         
-        ELSE IF Syst.CUICommon:toimi = 8 THEN NEXT LOOP.
+        ELSE IF Syst.Var:toimi = 8 THEN NEXT LOOP.
      END.
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(Payment) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(Payment) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -794,7 +794,7 @@ PROCEDURE local-find-FIRST:
 
    IF icRefNum > "" THEN 
       FIND FIRST Payment USE-INDEX RefNum WHERE
-                 Payment.Brand    = Syst.CUICommon:gcBrand  AND
+                 Payment.Brand    = Syst.Var:gcBrand  AND
                  Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -826,7 +826,7 @@ PROCEDURE local-find-LAST:
 
    IF icRefNum > "" THEN 
       FIND LAST Payment USE-INDEX RefNum WHERE
-                Payment.Brand    = Syst.CUICommon:gcBrand  AND
+                Payment.Brand    = Syst.Var:gcBrand  AND
                 Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -859,7 +859,7 @@ PROCEDURE local-find-NEXT:
 
    IF icRefNum > "" THEN 
       FIND NEXT Payment USE-INDEX RefNum WHERE
-                Payment.Brand    = Syst.CUICommon:gcBrand  AND
+                Payment.Brand    = Syst.Var:gcBrand  AND
                 Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -892,7 +892,7 @@ PROCEDURE local-find-PREV:
 
    IF icRefNum > "" THEN 
       FIND PREV Payment USE-INDEX RefNum WHERE
-                Payment.Brand    = Syst.CUICommon:gcBrand  AND
+                Payment.Brand    = Syst.Var:gcBrand  AND
                 Payment.RefNum   = icRefNum NO-LOCK NO-ERROR.
  
    ELSE IF iiCustNum > 0 THEN DO:
@@ -991,7 +991,7 @@ PROCEDURE local-update-record:
    THEN lcPaymFile = ENTRY(i,Payment.PaymFile,"/").
    ELSE lcPaymFile = Payment.PaymFile.
    
-   Syst.CUICommon:ehto = 5.
+   Syst.Var:ehto = 5.
    RUN Syst/ufkey.p.
    
    DISP

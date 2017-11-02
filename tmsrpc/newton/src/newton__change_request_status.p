@@ -33,8 +33,8 @@ IF NOT AVAIL MsRequest THEN RETURN
    appl_err(SUBST("MsRequest &1 not found!",piMsRequest)).
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Newton".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Newton".
 {Func/msreqfunc.i}
 
 FIND MsReqStatFunc NO-LOCK WHERE

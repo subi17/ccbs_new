@@ -143,7 +143,7 @@ END.
 
 ELSE 
 FOR FIRST ServFee NO-LOCK WHERE           
-          ServFee.Brand     = Syst.CUICommon:gcBrand     AND
+          ServFee.Brand     = Syst.Var:gcBrand     AND
           ServFee.ServType  = icServType  AND
           ServFee.ServKey   = icServKey   AND
           ServFee.EventType = iiEventType AND
@@ -183,7 +183,7 @@ PROCEDURE pCreateFees:
    BY ttBillTarget.BillTarget:
 
       /* contract */
-      lcContract = fFeeContract(Syst.CUICommon:gcBrand,
+      lcContract = fFeeContract(Syst.Var:gcBrand,
                                 iiCustNum,
                                 lcSalesman,  /* if empty then
                                                 take salesman from user */

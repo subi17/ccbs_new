@@ -89,7 +89,7 @@ END.
 iCount = 0.
 RequestLoop:
 FOR EACH MsRequest USE-INDEX ReqType WHERE 
-    MsRequest.Brand eq Syst.CUICommon:gcBrand AND 
+    MsRequest.Brand eq Syst.Var:gcBrand AND 
     MsRequest.ReqType eq piType AND
     MsRequest.ReqStatus eq piStatus NO-LOCK:
     IF iCount >= piOffset + piLimit THEN 

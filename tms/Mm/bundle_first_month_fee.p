@@ -108,7 +108,7 @@ PROCEDURE pGetCustomerSubscriptions:
                   MsRequest.ActStamp >= ldPeriodFrom AND
                   MsRequest.ActStamp <= ldPeriodTo USE-INDEX MsSeq,
              FIRST DayCampaign NO-LOCK WHERE
-                   DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                   DayCampaign.Brand = Syst.Var:gcBrand AND
                    DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
                    LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
              
@@ -116,7 +116,7 @@ PROCEDURE pGetCustomerSubscriptions:
                       OUTPUT ldaMsReqDate).
 
              FIND FIRST FMItem NO-LOCK WHERE
-                        FMItem.Brand        = Syst.CUICommon:gcBrand              AND
+                        FMItem.Brand        = Syst.Var:gcBrand              AND
                         FMItem.FeeModel     = DayCampaign.FeeModel AND
                         FMItem.FromDate    <= ldaMsReqDate         AND
                         FMItem.ToDate      >= ldaMsReqDate         AND
@@ -160,13 +160,13 @@ PROCEDURE pGetAllSubscriptions:
       liReqStatus = INT(ENTRY(liCount, lcReqStatuses)).
 
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand = Syst.CUICommon:gcBrand AND
+               MsRequest.Brand = Syst.Var:gcBrand AND
                MsRequest.ReqType = 8     AND
                MsRequest.ReqStat = liReqStatus    AND
                MsRequest.ActStamp >= ldPeriodFrom AND
                MsRequest.ActStamp <= ldPeriodTo,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+               DayCampaign.Brand = Syst.Var:gcBrand AND
                DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
                LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST MsOwner WHERE 
@@ -178,7 +178,7 @@ PROCEDURE pGetAllSubscriptions:
                   OUTPUT ldaMsReqDate).
 
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand        = Syst.CUICommon:gcBrand              AND
+                    FMItem.Brand        = Syst.Var:gcBrand              AND
                     FMItem.FeeModel     = DayCampaign.FeeModel AND
                     FMItem.FromDate    <= ldaMsReqDate         AND
                     FMItem.ToDate      >= ldaMsReqDate         AND
@@ -302,10 +302,10 @@ PROCEDURE pCalculateFees:
 
    FOR EACH ttSub,
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand   = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = ttSub.ServiceLimit,
       FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+            FixedFee.Brand     = Syst.Var:gcBrand AND
             FixedFee.HostTable = "MobSub" AND
             FixedFee.KeyValue  = STRING(ttSub.MsSeq) AND
             FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -315,7 +315,7 @@ PROCEDURE pCalculateFees:
             FixedFee.BegDate  <= idaToDate AND
             FixedFee.EndPer   >= liPeriod,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = Syst.CUICommon:gcBrand AND
+            FMItem.Brand     = Syst.Var:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate AND
@@ -326,7 +326,7 @@ PROCEDURE pCalculateFees:
       IF NOT AVAILABLE FFItem OR 
          (FFItem.Billed AND icRunMode NE "test") THEN NEXT. 
     
-      ldFeeAmount = fCalculateFirstMonthFee(Syst.CUICommon:gcBrand,
+      ldFeeAmount = fCalculateFirstMonthFee(Syst.Var:gcBrand,
                                             ttSub.MsSeq,
                                             ttSub.ServiceLimit,
                                             FixedFee.Amt,
@@ -364,7 +364,7 @@ PROCEDURE pCalculateFees:
    IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "FixedFee"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
@@ -383,7 +383,7 @@ PROCEDURE pCalculateFees:
                                   STRING(oiHandled) + 
                                   " first month fees were updated"
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.FromDate     = idaFromDate
          ActionLog.ToDate       = idaToDate.
          ActionLog.ActionTS     = Func.Common:mMakeTS().

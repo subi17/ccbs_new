@@ -85,7 +85,7 @@ DO liCnt = 1 TO NUM-ENTRIES(icEventSource,"|"):
                TMSCodes.TableName = "MsRequest" AND
                TMSCodes.FieldName = "ReqStatus",
           EACH MsRequest NO-LOCK USE-INDEX UpdateStamp WHERE
-               MsRequest.Brand       = Syst.CUICommon:gcBrand AND
+               MsRequest.Brand       = Syst.Var:gcBrand AND
                MsRequest.ReqStatus   = INTEGER(TMSCodes.CodeValue) AND
                MsRequest.UpdateStamp >= idLastDump:
                  

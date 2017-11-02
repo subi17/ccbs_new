@@ -63,10 +63,10 @@ ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "VISTA_" + pcUserName.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "VISTA_" + pcUserName.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Syst/eventval.i}
 {Func/lib/eventlog.i}
 {Func/order.i}
@@ -85,14 +85,14 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES} + ",73") > 0 THEN
 IF NOT llUpdateImeiOnly THEN DO:
 
 FIND Offer WHERE 
-     Offer.Brand = Syst.CUICommon:gcBrand AND 
+     Offer.Brand = Syst.Var:gcBrand AND 
      Offer.Offer = pcOfferId NO-LOCK NO-ERROR.
 IF NOT AVAIL Offer THEN
    RETURN appl_err("Offer " + pcOfferId + " is not defined").
 
 /* payterm must match with original and new order YDR-328 */
 FIND FIRST OfferItem WHERE
-           OfferItem.Brand = Syst.CUICommon:gcBrand AND
+           OfferItem.Brand = Syst.Var:gcBrand AND
            OfferItem.Offer = Offer.Offer AND
            OfferItem.ItemType = "PerContract" AND
            OfferItem.ItemKey BEGINS "PAYTERM" AND
@@ -100,7 +100,7 @@ FIND FIRST OfferItem WHERE
            OfferItem.EndStamp >= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
 FIND FIRST bOfferItem WHERE
-           bOfferItem.Brand = Syst.CUICommon:gcBrand AND
+           bOfferItem.Brand = Syst.Var:gcBrand AND
            bOfferItem.Offer = Order.Offer AND
            bOfferItem.ItemType = "PerContract" AND
            bOfferItem.ItemKey BEGINS "PAYTERM" AND
@@ -134,13 +134,13 @@ END.
 i = 0.
 RELEASE OfferItem.
 FOR EACH bOfferItem NO-LOCK WHERE
-         bOfferItem.Brand = Syst.CUICommon:gcBrand AND
+         bOfferItem.Brand = Syst.Var:gcBrand AND
          bOfferItem.Offer = Offer.Offer AND
          bOfferItem.ItemType = "PerContract" AND
          bOfferItem.EndStamp >= Func.Common:mMakeTS() AND
          bOfferItem.BeginStamp <= Func.Common:mMakeTS() USE-INDEX ItemType,
    FIRST DayCampaign NO-LOCK WHERE
-         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DcEvent = bOfferItem.ItemKey AND
          DayCampaign.DcType = {&DCTYPE_DISCOUNT}:
 
@@ -168,7 +168,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
    IF NOT AVAIL MobSub THEN RETURN appl_err("Subcription not found").
    
    FIND SubsTerminal EXCLUSIVE-LOCK WHERE
-        SubsTerminal.Brand = Syst.CUICommon:gcBrand AND
+        SubsTerminal.Brand = Syst.Var:gcBrand AND
         SubsTerminal.OrderId = Order.OrderId AND
         SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -203,7 +203,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
       END.
 
       ASSIGN
-         SubsTerminal.Brand = Syst.CUICommon:gcBrand
+         SubsTerminal.Brand = Syst.Var:gcBrand
          SubsTerminal.OrderId = Order.OrderId
          SubsTerminal.IMEI = pcIMEI
          SubsTerminal.MsSeq = MobSub.MsSeq
@@ -223,7 +223,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
             DCCLI.ValidFrom <= TODAY AND
             DCCLI.ValidTo >= TODAY,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} 
       NO-LOCK BY DCCLI.ValidFrom DESC:
@@ -326,7 +326,7 @@ END.
 ELSE DO:
 
    FIND OrderAccessory EXCLUSIVE-LOCK WHERE
-        OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+        OrderAccessory.Brand = Syst.Var:gcBrand AND
         OrderAccessory.OrderId = Order.OrderId AND
         OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -363,7 +363,7 @@ ELSE DO:
       ELSE DO:
          CREATE OrderAccessory.
          ASSIGN
-            OrderAccessory.Brand = Syst.CUICommon:gcBrand
+            OrderAccessory.Brand = Syst.Var:gcBrand
             OrderAccessory.OrderId = Order.OrderID.
             OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}.
       END.

@@ -17,7 +17,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
@@ -66,7 +66,7 @@ ASSIGN
    pcOldBundle = get_string(pcStruct,"old_bundle")
    pcNewBundle = get_string(pcStruct,"new_bundle")
    pdaActDate = get_date(pcStruct,"date")
-   Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username")
+   Syst.Var:katun = "VISTA_" + get_string(pcStruct,"username")
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
       WHEN LOOKUP("upgrade_upsell", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
@@ -99,11 +99,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+           DayCampaign.Brand = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = pcNewBundle NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 ASSIGN
     lcBONOContracts = fCParamC("BONO_CONTRACTS")
@@ -214,7 +214,7 @@ Func.Common:mWriteMemoWithType("MobSub",                             /* HostTabl
                  "Bono modificado",                    /* MemoTitle */
                  pcMemoContent + " " + pcOldBundle + " --> " + pcNewBundle,  /* MemoText */
                  lcMemoType,                           /* MemoType */
-                 Syst.CUICommon:katun).
+                 Syst.Var:katun).
 
 
 lcResultStruct = add_struct(response_toplevel_id, "").

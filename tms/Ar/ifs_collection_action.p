@@ -63,13 +63,13 @@ FUNCTION fError RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "COLLACTION"
              ErrorLog.TableName = "MobSub"
              ErrorLog.KeyValue  = STRING(liMsSeq)
              ErrorLog.ErrorChar = lcPlainFile
              ErrorLog.ErrorMsg  = lcReadLine + CHR(10) + icMessage
-             ErrorLog.UserCode  = Syst.CUICommon:katun.
+             ErrorLog.UserCode  = Syst.Var:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
@@ -84,7 +84,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = Syst.CUICommon:gcBrand      AND    
+                  ActionLog.Brand        = Syst.Var:gcBrand      AND    
                   ActionLog.TableName    = "MobSub"     AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSCOLLECT" AND
@@ -94,10 +94,10 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "MobSub"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "IFSCOLLECT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
@@ -172,7 +172,7 @@ PROCEDURE pInitialize:
  
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = Syst.CUICommon:gcBrand      AND
+            ActionLog.Brand    = Syst.Var:gcBrand      AND
             ActionLog.ActionID = "IFSCOLLECT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -388,7 +388,7 @@ PROCEDURE pSetBarring:
       END.   
 
       lcBarring = ENTRY(1,icBarrCommand,"=").
-      lcBarrTrans = fGetItemName(Syst.CUICommon:gcBrand,
+      lcBarrTrans = fGetItemName(Syst.Var:gcBrand,
                                  "BarringCode",
                                  lcBarring,
                                  5,
@@ -398,7 +398,7 @@ PROCEDURE pSetBarring:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = Syst.CUICommon:gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum

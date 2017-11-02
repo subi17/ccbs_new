@@ -23,8 +23,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       Syst.CUICommon:gcBrand = "1".
+ASSIGN Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -74,7 +74,7 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF LOOKUP(pcDelType,"SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
@@ -95,7 +95,7 @@ FOR EACH Order WHERE
    Func.Common:mSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
               Ordercustomer.OrderID EQ Order.OrderId AND
               OrderCustomer.Rowtype EQ 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN 
@@ -142,7 +142,7 @@ ELSE IF NOT llOngoing THEN DO:
       RETURN appl_err("Renewal order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = Syst.CUICommon:gcBrand AND
+                 MobSub.Brand = Syst.Var:gcBrand AND
                  MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
          RETURN appl_err("Subscription is cancelled"). 

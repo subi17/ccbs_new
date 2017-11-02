@@ -295,7 +295,7 @@
         
          liccn = 0.
          FOR FIRST BDest NO-LOCK WHERE
-                   BDest.Brand  = Syst.CUICommon:gcBrand AND
+                   BDest.Brand  = Syst.Var:gcBrand AND
                    BDest.Bdest  = ttCall.BDest AND
                    BDest.DestType = ttCall.BType AND
                    BDest.Class  = 2       AND

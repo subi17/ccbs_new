@@ -62,8 +62,8 @@ form /* asks MSISDN Number */
        HELP "Enter new MSISDN Number"
 
 WITH
-   OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
+   OVERLAY ROW 2 centered COLOR VALUE(Syst.Var:cfc) NO-LABELS
+   TITLE COLOR VALUE(Syst.Var:ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
 FRAME main.
 
 {Func/tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.
@@ -130,7 +130,7 @@ IF NOT AVAIL msisdn THEN DO:
 END.
 
 FIND FIRST MSRange WHERE 
-           MSRange.Brand    = Syst.CUICommon:gcBrand    AND 
+           MSRange.Brand    = Syst.Var:gcBrand    AND 
            MSRange.CLIFrom <= MSISDN.CLI AND
            MSRange.CLITo   >= MSISDN.CLI
 NO-LOCK NO-ERROR.
@@ -154,7 +154,7 @@ WITH FRAME main.
 MAIN:
 REPEAT TRANSACTION WITH FRAME main:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       new-CLI-end 
@@ -162,7 +162,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
                 
          PAUSE 0.
 
@@ -190,7 +190,7 @@ REPEAT TRANSACTION WITH FRAME main:
             END.
             
             FIND FIRST new-MSISDN WHERE  
-                       new-MSISDN.Brand   = Syst.CUICommon:gcBrand  AND
+                       new-MSISDN.Brand   = Syst.Var:gcBrand  AND
                        new-MSISDN.CLI     = new-CLI  
                        USE-INDEX CLI
             EXCLUSIVE-LOCK NO-ERROR.
@@ -207,7 +207,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
                /* Check double timestamp  */ 
                FIND FIRST active-MSISDN WHERE  
-                          active-MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                          active-MSISDN.Brand = Syst.Var:gcBrand AND
                           active-MSISDN.CLI = new-CLI  AND
                           active-MSISDN.ValidTo > Func.Common:mMakeTS() AND
                           recid(active-msisdn) ne recid(new-msisdn)
@@ -319,19 +319,19 @@ REPEAT TRANSACTION WITH FRAME main:
    REPEAT WITH FRAME main:
 
       ASSIGN
-         Syst.CUICommon:ufk    = 0
-         Syst.CUICommon:ehto   = 0
-         Syst.CUICommon:ufk[1] = 7 
-         Syst.CUICommon:ufk[5] = 261
-         Syst.CUICommon:ufk[8] = 8.
+         Syst.Var:ufk    = 0
+         Syst.Var:ehto   = 0
+         Syst.Var:ufk[1] = 7 
+         Syst.Var:ufk[5] = 261
+         Syst.Var:ufk[8] = 8.
       
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
 
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          
          RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
@@ -354,7 +354,7 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  Mobsub.Cli,
                     INPUT  Mobsub.CustNum,
                     INPUT  liStatusCode,
-                    INPUT  Syst.CUICommon:katun,
+                    INPUT  Syst.Var:katun,
                     INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEMSISDN",
                     INPUT  new-cli,

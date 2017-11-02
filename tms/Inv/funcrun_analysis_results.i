@@ -24,7 +24,7 @@ DEFINE INPUT PARAMETER iiUpdateInterval AS INT  NO-UNDO.
       ttResult.TestResult = "Invoice not created".
 
       FOR EACH Invoice NO-LOCK USE-INDEX CustNum WHERE
-               Invoice.Brand = Syst.CUICommon:gcBrand AND
+               Invoice.Brand = Syst.Var:gcBrand AND
                Invoice.CustNum = ttResult.InvCust AND
                Invoice.InvDate = idaInvDate AND
                Invoice.InvType = iiInvType,
@@ -139,7 +139,7 @@ DEFINE INPUT PARAMETER iiBRTestQueueID AS INT NO-UNDO.
          BRTestQResult.BRTestQResultID = liResultID
          BRTestQResult.BRTestQueueID = iiBRTestQueueID
          BRTestQResult.TestRunStamp  = ldResultStamp
-         BRTestQResult.UserCode = Syst.CUICommon:katun.
+         BRTestQResult.UserCode = Syst.Var:katun.
 
       RELEASE BRTestQueue.
       RELEASE BRTestQResult.

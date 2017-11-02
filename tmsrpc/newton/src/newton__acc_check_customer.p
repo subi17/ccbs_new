@@ -59,7 +59,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST Customer WHERE
-           Customer.Brand EQ Syst.CUICommon:gcBrand
+           Customer.Brand EQ Syst.Var:gcBrand
        AND Customer.CustIdType EQ pcIdType
        AND Customer.OrgId EQ pcPersonId 
        AND Customer.Roles NE "inactive" 

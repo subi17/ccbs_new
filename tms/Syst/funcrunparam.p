@@ -13,7 +13,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -64,8 +64,8 @@ FORM
     FuncRunParam.ParamName
     lcParamValue      FORMAT "X(20)" COLUMN-LABEL "Default Value"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
        " PARAMETERS OF " + lcConfName + " "
     FRAME sel.
 
@@ -80,8 +80,8 @@ FORM
        HELP "Default value"
        FORMAT "X(50)"
 WITH  OVERLAY ROW liUpdateRow centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -95,7 +95,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -123,7 +123,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a FuncRunParam  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -132,7 +132,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -222,18 +222,18 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk   = 0
-        Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-        Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-        Syst.CUICommon:ufk[8]= 8 
-        Syst.CUICommon:ehto  = 3 
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
-           Syst.CUICommon:ufk[5] = 11
-           Syst.CUICommon:ufk[6] = 0
-           Syst.CUICommon:ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -241,13 +241,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW FuncRunParam.ParamSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FuncRunParam.ParamSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FuncRunParam.ParamSeq WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -255,10 +255,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -276,7 +276,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -301,7 +301,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -327,7 +327,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND FuncRunParam WHERE recid(FuncRunParam) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -351,7 +351,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */       
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -365,8 +365,8 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:  /* add */
-        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -377,13 +377,13 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0 
      THEN DO TRANS:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
           FuncRunParam.ParamSeq
           FuncRunParam.ParamName.
 
@@ -406,7 +406,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           FuncRunParam.ParamSeq
           FuncRunParam.ParamName.
        
@@ -429,21 +429,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANS
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunParam).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -459,27 +459,27 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(FuncRunParam) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(FuncRunParam) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-Syst.CUICommon:ehto = 4.
+Syst.Var:ehto = 4.
 RUN Syst/ufkey.p.
 
 fCleanEventObjects().
@@ -553,22 +553,22 @@ PROCEDURE local-UPDATE-record:
 
       IF NOT NEW FuncRunParam THEN DO:
          ASSIGN 
-            Syst.CUICommon:ufk    = 0
-            Syst.CUICommon:ufk[1] = 7
-            Syst.CUICommon:ufk[8] = 8
-            Syst.CUICommon:ehto   = 0.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
          RUN Syst/ufkey.p.
       END.
-      ELSE Syst.CUICommon:toimi = 1.
+      ELSE Syst.Var:toimi = 1.
       
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
 
          UpdateField:
          REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
                 
             FIND CURRENT FuncRunParam EXCLUSIVE-LOCK.
-            Syst.CUICommon:ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
          
             UPDATE
@@ -591,7 +591,7 @@ PROCEDURE local-UPDATE-record:
                   IF lcCode ne "" AND lcCode NE ? THEN
                      DISPLAY lcCode @ FuncRunParam.ParamType WITH FRAME lis.
 
-                  Syst.CUICommon:ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT.
                END.
@@ -609,12 +609,12 @@ PROCEDURE local-UPDATE-record:
                   IF lcCode ne "" AND lcCode NE ? THEN
                      DISPLAY lcCode @ FuncRunParam.DefaultValue WITH FRAME lis.
 
-                  Syst.CUICommon:ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
-               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
+               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
                DO WITH FRAME lis:
                   PAUSE 0.
 
@@ -652,7 +652,7 @@ PROCEDURE local-UPDATE-record:
          
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE. 
    END.
    
 END PROCEDURE.

@@ -15,8 +15,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN Syst.CUICommon:gcBrand = "1" 
-       Syst.CUICommon:katun   = "RetFile".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "RetFile".
        
 {Func/cparam.i2}
 {Syst/utumaa.i "new"}
@@ -81,17 +81,17 @@ END FUNCTION.
 
 
 /* payment configuration not done */
-IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = Syst.CUICommon:gcBrand) THEN RETURN.
+IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = Syst.Var:gcBrand) THEN RETURN.
 
 FIND FIRST Company WHERE
-           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 fELog("READPAYM","Started").
 
 /* read all possible origins */
 FOR EACH PaymCfg WHERE
-         PaymCfg.Brand = Syst.CUICommon:gcBrand NO-LOCK:
+         PaymCfg.Brand = Syst.Var:gcBrand NO-LOCK:
 
    IF SEARCH(PaymCfg.ConvMod + ".r") = ? THEN NEXT. 
    
@@ -203,13 +203,13 @@ FOR EACH ttFiles:
    /* update log */
    fCreateArplog(ttFiles.PaymFile,
                  ttFiles.PaymCfg,
-                 Syst.CUICommon:katun). 
+                 Syst.Var:katun). 
 
     
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "DDRetFile"

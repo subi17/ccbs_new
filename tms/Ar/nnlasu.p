@@ -40,7 +40,7 @@ def var int-invno as i  no-undo  format ">>>>>>>>>".
 DEF VAR TotPaid   AS DE NO-UNDO  format "->>>>>9.99".
 
 
-Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
 FIND Invoice where Invoice.InvNum = InvNum no-lock.
 
@@ -92,7 +92,7 @@ WITH FRAME PaidAmt.
    PaymSrc             
 
  WITH
-   OVERLAY ROW 3 12 DOWN COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+   OVERLAY ROW 3 12 DOWN COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    " PAYMENTS ON INVOICE NO. " + string(InvNum) + " " centered FRAME PaidAmt.
 
    ASSIGN rtab[FRAME-LINE] = recid(Payment).
@@ -106,8 +106,8 @@ repeat WITH FRAME PaidAmt:
  
    IF ufkey THEN DO:
       ufkey = FALSE.
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 972 Syst.CUICommon:ufk[2] = 0 Syst.CUICommon:ufk[3] = 927 
-             Syst.CUICommon:ufk[7] = 1752 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 972 Syst.Var:ufk[2] = 0 Syst.Var:ufk[3] = 927 
+             Syst.Var:ufk[7] = 1752 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3.
       RUN Syst/ufkey.p.
    END.
 
@@ -155,7 +155,7 @@ repeat WITH FRAME PaidAmt:
          WITH centered ROW 16 side-labels OVERLAY FRAME TotPaid.   
 
 
-         ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9] = 1 Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
+         ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ufk[9] = 1 Syst.Var:ehto = 0. RUN Syst/ufkey.p.
          ufkey = TRUE.
          HIDE FRAME acct no-pause.
          HIDE FRAME TotPaid no-pause.

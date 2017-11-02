@@ -193,7 +193,7 @@ END.
 
 MAIN:
 REPEAT WITH FRAME range.
-   Syst.CUICommon:ehto = 9.  RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE 
       Size 
@@ -217,7 +217,7 @@ REPEAT WITH FRAME range.
       cLastKeyLabel = KEYLABEL(LASTKEY).
 
       /* Rank input checking when typing; description generated */
-      IF FRAME-FIELD = "lcMSCode" AND LOOKUP(cLastKeyLabel, Syst.CUICommon:poisnap) > 0 THEN
+      IF FRAME-FIELD = "lcMSCode" AND LOOKUP(cLastKeyLabel, Syst.Var:poisnap) > 0 THEN
       DO:
           DEFINE VARIABLE inputMsCode AS CHARACTER NO-UNDO. 
           
@@ -250,7 +250,7 @@ REPEAT WITH FRAME range.
       END. /* IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel */
 
       /* POS code input checking when typing; description generated */
-      IF FRAME-FIELD = "ocPosCode" AND LOOKUP(cLastKeyLabel, Syst.CUICommon:poisnap) > 0 THEN
+      IF FRAME-FIELD = "ocPosCode" AND LOOKUP(cLastKeyLabel, Syst.Var:poisnap) > 0 THEN
       DO:
           DEFINE VARIABLE inputOsCode AS CHARACTER NO-UNDO. 
           
@@ -288,17 +288,17 @@ REPEAT WITH FRAME range.
       END. /* IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel */
 
       APPLY LASTKEY.
-      Syst.CUICommon:ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
    END. /* EDITING */
 
 ACTION:
    REPEAT WITH FRAME range.
-      ASSIGN Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] =  15 Syst.CUICommon:ufk[8] = 8.
+      ASSIGN Syst.Var:ehto = 0 Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] =  15 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT main.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
          IF Size =  0 THEN 
          DO:
             MESSAGE
@@ -308,7 +308,7 @@ ACTION:
          END. /* IF Size = 0 */  
 
          LEAVE Action.
-      END. /* IF Syst.CUICommon:toimi = 5 */
+      END. /* IF Syst.Var:toimi = 5 */
    END. /* REPEAT WITH FRAME range, Action */
 
    DEF VAR minMSISDN AS DEC NO-UNDO.
@@ -521,7 +521,7 @@ PROCEDURE MarkRankedMSISDNInRange:
          x-MSISDN.CLI         <=  icEndCLI     AND
          x-MSISDN.StatusCode  >= iBeginStatus  AND
          x-MSISDN.StatusCode  <= iEndStatus    AND
-         x-MSISDN.Brand        = Syst.CUICommon:gcBrand       AND 
+         x-MSISDN.Brand        = Syst.Var:gcBrand       AND 
          x-MSISDN.ValidTo      > Func.Common:mMakeTS()     AND 
          x-MSISDN.pos          = ""
       BREAK BY x-MSISDN.CLI:

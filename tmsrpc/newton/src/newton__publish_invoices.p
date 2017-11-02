@@ -11,7 +11,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/publish_invoice.i}
 
@@ -31,12 +31,12 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-Syst.CUICommon:katun = "VISTA_" + pcUserName.
+Syst.Var:katun = "VISTA_" + pcUserName.
 
 liRequestID = fPublishInvoiceRequest 
                         (Func.Common:mMakeTS(),  /* when request should be handled */
                          DATE(MONTH(TODAY),1,YEAR(TODAY)),
-                         Syst.CUICommon:katun, /* creator */
+                         Syst.Var:katun, /* creator */
                          {&REQUEST_SOURCE_NEWTON},
                          OUTPUT lcError).
 

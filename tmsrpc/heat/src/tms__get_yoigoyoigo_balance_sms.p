@@ -11,8 +11,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "XMLRPC-Heat".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "XMLRPC-Heat".
+Syst.Var:gcBrand = "1".
 {Func/fcreatereq.i}
 
 FUNCTION fReqStat RETURNS LOGICAL

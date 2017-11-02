@@ -7,7 +7,7 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/q25functions.i}
 {Func/ftransdir.i}
@@ -40,7 +40,7 @@ fInitHRLPParameters().
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -53,11 +53,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       QUIT. /*No reporting in first time.*/
@@ -65,7 +65,7 @@ DO TRANS:
    ELSE IF (liHRLPTestLevel EQ {&Q25_HRLP_NO_TEST}) THEN DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
 
       RELEASE Actionlog.
@@ -114,7 +114,7 @@ END.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  Syst.CUICommon:gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -190,7 +190,7 @@ PROCEDURE pReadFileData:
       END.
       ELSE DO:
          FIND FIRST SingleFee WHERE
-                    SingleFee.Brand       EQ Syst.CUICommon:gcBrand AND
+                    SingleFee.Brand       EQ Syst.Var:gcBrand AND
                     SingleFee.CustNum     EQ liCustNum AND
                     SingleFee.HostTable   EQ "Mobsub" AND
                     SingleFee.Keyvalue    EQ STRING(Mobsub.msseq) AND
@@ -226,7 +226,7 @@ PROCEDURE pReadFileData:
             END.
             FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
                        DCCLI.PerContractId = INT(Singlefee.sourcekey) AND
-                       DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                       DCCLI.Brand   = Syst.Var:gcBrand AND
                        DCCLI.DCEvent BEGINS "PAYTERM" AND
                        DCCLI.MsSeq   = liMsseq AND
                        DCCLI.ValidTo >= ldaStartDate AND

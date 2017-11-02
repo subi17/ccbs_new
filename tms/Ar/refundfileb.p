@@ -11,8 +11,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN Syst.CUICommon:gcBrand = "1" 
-       Syst.CUICommon:katun   = "rfndfile".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "rfndfile".
        
 {Func/cparam2.i}
 {Syst/eventlog.i}

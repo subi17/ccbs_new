@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEF VAR lcResult  AS CHAR NO-UNDO.
@@ -18,7 +18,7 @@ DEF VAR lcResult  AS CHAR NO-UNDO.
 IF SESSION:BATCH AND DAY(TODAY) = 1 THEN RETURN.
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = Syst.CUICommon:gcBrand and
+         MobSub.Brand = Syst.Var:gcBrand and
          MobSub.MsStatus = {&MSSTATUS_BARRED} and
          MobSub.ActivationDate < TODAY - 90 AND
          MobSub.ActivationDate > TODAY - 95 AND

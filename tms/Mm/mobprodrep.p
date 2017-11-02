@@ -39,8 +39,8 @@ form /* Browsing list */
    HELP "Amount calls"
    nnpvti.pt-min      COLUMN-LABEL "Minutes"      FORMAT "zzzzzz9"
    nnpvti.pt-mk       COLUMN-LABEL "Sum (EUR)"    FORMAT "ZZZ,ZZZ,ZZ9.99"
-   WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+   WITH WIDTH 80 OVERLAY SCROLL 1 15 DOWN COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
    " MOBILE CALL PRODUCT STATISTICS "  + STRING(pvm1,"99.99.99") + " - " + 
                                   STRING(pvm2,"99.99.99")                      
 FRAME sel.
@@ -48,8 +48,8 @@ FRAME sel.
 form /* Statistics search WITH FIELD pt-tuno */
    haku-pt-tuno
    HELP "Give Productcode"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND PRODUCT "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND PRODUCT "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY 
 FRAME haku.
 
 form /* Ask period */
@@ -61,12 +61,12 @@ form /* Ask period */
    "-"
    pvm2 NO-LABEL HELP "Last date to calculate"
    SKIP(1)
-   WITH ROW 6 CENTERED TITLE COLOR VALUE(Syst.CUICommon:ctc) " MOBILE CALL PRODUCT STATISTICS "
-   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY 
+   WITH ROW 6 CENTERED TITLE COLOR VALUE(Syst.Var:ctc) " MOBILE CALL PRODUCT STATISTICS "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY 
 FRAME add-new.
 
 ufkey = TRUE.
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN pvm1 = Today
        pvm2 = TODAY - 1.
@@ -74,7 +74,7 @@ ASSIGN pvm1 = Today
 UPDATE pvm1 pvm2 validate (input pvm2  >= input pvm1,"Invalid order !")
 WITH FRAME add-new.
 
-ASSIGN Syst.CUICommon:cfc = "Lis"
+ASSIGN Syst.Var:cfc = "Lis"
 ufkey    = TRUE.
 RUN Syst/ufcolor.p.
 
@@ -84,7 +84,7 @@ MESSAGE " ARE YOU SURE YOU WANT TO START (Y/N) ? " UPDATE ok.
 HIDE FRAME add-new.
 IF NOT ok THEN RETURN.
 
-Syst.CUICommon:ehto = 5.
+Syst.Var:ehto = 5.
 RUN Syst/ufkey.p.
 
 RUN Mm/mobprodrep1.p(INPUT pvm1, INPUT pvm2).
@@ -106,7 +106,7 @@ REPEAT WITH FRAME sel:
       IF AVAILABLE nnpvti THEN DO:
          IF pt-tuno = "TOTAL" THEN tunimi = "". ELSE DO:
             FIND BillItem WHERE 
-                 BillItem.Brand    = Syst.CUICommon:gcBrand AND 
+                 BillItem.Brand    = Syst.Var:gcBrand AND 
                  BillItem.BillCode = pt-tuno NO-LOCK NO-ERROR.
             IF AVAIL BillItem THEN tunimi = BillItem.BIName.
             ELSE tunimi = "!! Unknown !!".
@@ -136,22 +136,22 @@ BROWSE:
    PUT SCREEN ROW 19 COL 34 "  By Product ".
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 703 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 0   Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 703 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 0   Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"5,6"'}
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
          CHOOSE ROW nnpvti.pt-tuno {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) nnpvti.pt-tuno WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) nnpvti.pt-tuno WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
 
       /* Previous line */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
 
          IF FRAME-LINE = 1 THEN DO:
             FIND nnpvti WHERE RECID(nnpvti) = rtab[1] NO-LOCK.
@@ -168,7 +168,7 @@ BROWSE:
                SCROLL DOWN.
                IF pt-tuno = "TOTAL" THEN tunimi = "". ELSE DO:
                   FIND BillItem WHERE 
-                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
+                       BillItem.Brand    = Syst.Var:gcBrand AND 
                        BillItem.BillCode = pt-tuno NO-LOCK NO-ERROR.
                   IF AVAIL BillItem THEN tunimi = BillItem.BIName.
                   ELSE tunimi = "!! Unknown !!".
@@ -187,7 +187,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND nnpvti WHERE RECID(nnpvti) = rtab[FRAME-DOWN] NO-LOCK .
             FIND NEXT nnpvti USE-INDEX pt-tuno 
@@ -203,7 +203,7 @@ BROWSE:
                SCROLL UP.
                IF pt-tuno = "TOTAL" THEN tunimi = "". ELSE DO:
                   FIND BillItem WHERE 
-                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
+                       BillItem.Brand    = Syst.Var:gcBrand AND 
                        BillItem.BillCode = pt-tuno NO-LOCK NO-ERROR.
                   IF AVAIL BillItem THEN tunimi = BillItem.BIName.
                   ELSE tunimi = "!! Unknown !!".
@@ -222,7 +222,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* Previous page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND nnpvti WHERE RECID(nnpvti) = memory NO-LOCK NO-ERROR.
          FIND PREV nnpvti USE-INDEX pt-tuno 
@@ -248,7 +248,7 @@ BROWSE:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
          /* cursor TO the downmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -263,10 +263,10 @@ BROWSE:
       END. /* NEXT page */
 
       /* Search column 1 */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+      ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          haku-pt-tuno = "".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE haku-pt-tuno WITH FRAME haku.
          HIDE FRAME haku NO-PAUSE.
          IF haku-pt-tuno <> "" THEN DO:
@@ -285,25 +285,25 @@ BROWSE:
          END.
       END. /* Haku sar. 1 */
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
          FIND FIRST nnpvti USE-INDEX pt-tuno 
           NO-LOCK NO-ERROR.
          ASSIGN memory = RECID(nnpvti). 
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO : /* LAST record */
+      ELSE IF LOOKUP(Syst.Var:nap,"END,e") > 0 THEN DO : /* LAST record */
          FIND LAST nnpvti USE-INDEX pt-tuno 
           NO-LOCK NO-ERROR. 
          ASSIGN memory = RECID(nnpvti). 
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

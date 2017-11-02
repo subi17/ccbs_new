@@ -43,7 +43,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -91,8 +91,8 @@ form
     InvGroup.MinInvAmt      column-label "MInv" format "zz9.99"
     InvGroup.TaxZone        FORMAT "X(5)" COLUMN-LABEL "TaxZ."
     WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
-    COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Invoice groups "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -108,7 +108,7 @@ form
        HELP "Use invoice number sequence from this group"
        VALIDATE(INPUT InvGroup.InvForm = INPUT InvGroup.InvGroup OR
                 CAN-FIND(InvGroup WHERE
-                         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                         InvGroup.Brand    = Syst.Var:gcBrand AND
                          InvGroup.InvGroup = INPUT InvGroup.InvForm),
                 "Unknown group") 
     InvGroup.CompName   /* LABEL FORMAT */ COLON 22
@@ -132,22 +132,22 @@ form
         help "Days from last to bill to ignore minimum invoicing amount"
     InvGroup.Banned COLON 22
 WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) fr-header 
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) fr-header 
     side-labels FRAME lis.
 
 form /* Invoicing Group search WITH FIELD InvGroup */
     "Brand:" lcBrand skip       
     "Code :" haku-ig-code
     help "Give a code"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* Invoicing Group search WITH FIELD IGName */
     "Brand:" lcBrand skip
     "Name :" haku-ig-name
     help "Give a name"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 FUNCTION fZoneName RETURNS LOGIC
    (icTaxZone AS CHAR):
@@ -160,7 +160,7 @@ FUNCTION fZoneName RETURNS LOGIC
 END FUNCTION.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 run pFindFirst.
@@ -189,7 +189,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* InvGroup -ADD  */
-      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       add-new:
@@ -197,7 +197,7 @@ repeat WITH FRAME sel:
        
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          DO TRANSAction:
          
@@ -213,8 +213,8 @@ repeat WITH FRAME sel:
             InvGroup.TaxZone
             InvGroup.UnbilledLimit
          EDITING:
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                if frame-field = "InvGroup" THEN DO:
                   if input frame lis InvGroup.InvGroup = "" THEN 
                      UNDO, LEAVE add-new.
@@ -326,11 +326,11 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 1120
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         Syst.CUICommon:ufk[7]= 1760 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 1120
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 1760 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -338,20 +338,20 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW InvGroup.InvGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) InvGroup.InvGroup WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) InvGroup.InvGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW InvGroup.IGName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) InvGroup.IGName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) InvGroup.IGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -375,10 +375,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND InvGroup where recid(InvGroup) = rtab[1] no-lock.
             run pFindPrev.
@@ -404,7 +404,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND InvGroup where recid(InvGroup) = rtab[FRAME-DOWN] no-lock .
@@ -432,7 +432,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND InvGroup where recid(InvGroup) = memory no-lock no-error.
          run pFindPrev.
@@ -456,7 +456,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -471,13 +471,13 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-code = "".
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame haku-f1.
         UPDATE 
-           lcBrand when Syst.CUICommon:gcAllBrand
+           lcBrand when Syst.Var:gcAllBrand
            haku-ig-code WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-ig-code <> "" THEN DO:
@@ -493,14 +493,14 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-name = "".
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME haku-f2.
         UPDATE 
-           lcBrand when Syst.CUICommon:gcAllBrand
+           lcBrand when Syst.Var:gcAllBrand
            haku-ig-name WITH FRAME haku-f2.
         HIDE FRAME haku-f2 no-pause.
         if haku-ig-name <> "" THEN DO:
@@ -515,7 +515,7 @@ BROWSE:
         END.
      END. /* Haku sar. 2 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0   /* memo */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0   /* memo */
      THEN DO TRANS:
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
@@ -528,21 +528,21 @@ BROWSE:
      END.
 
      /* number sequences */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:
      
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
            NO-LOCK NO-ERROR.
            
         REPEAT WITH FRAME sel:
-           ASSIGN Syst.CUICommon:ufk    = 0
-                  Syst.CUICommon:ufk[1] = 1100
-                  Syst.CUICommon:ufk[2] = 1119
-                  Syst.CUICommon:ufk[8] = 8
-                  Syst.CUICommon:ehto   = 0.
+           ASSIGN Syst.Var:ufk    = 0
+                  Syst.Var:ufk[1] = 1100
+                  Syst.Var:ufk[2] = 1119
+                  Syst.Var:ufk[8] = 8
+                  Syst.Var:ehto   = 0.
            RUN Syst/ufkey.p.
             
            /* invoice number sequences */
-           IF Syst.CUICommon:toimi = 1 THEN DO:
+           IF Syst.Var:toimi = 1 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
                  IF InvGroup.InvForm NE InvGroup.InvGroup THEN DO: 
@@ -556,34 +556,34 @@ BROWSE:
            END.
 
            /* voucher number sequences */
-           ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
+           ELSE IF Syst.Var:toimi = 2 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
                  RUN Mc/igvoucher.p(InvGroup.InvGroup).
               END.
            END.
             
-           ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+           ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
         END.
 
         ufkey = TRUE.
         NEXT LOOP.        
      END.          
  
-     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
 
         delline = FRAME-LINE.
         FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(Syst.CUICommon:ctc) 
+        COLOR DISPLAY value(Syst.Var:ctc) 
            InvGroup.Brand 
            InvGroup.InvGroup 
            InvGroup.IGName 
@@ -612,7 +612,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "DO YOU REALLY WANT TO ERASE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) 
+        COLOR DISPLAY value(Syst.Var:ccc) 
            InvGroup.InvGroup 
            InvGroup.IGName 
            InvGroup.BillPerm 
@@ -623,7 +623,7 @@ BROWSE:
         IF ok THEN DO:
 
             FIND FIRST Customer WHERE 
-                       Customer.Brand = Syst.CUICommon:gcBrand AND
+                       Customer.Brand = Syst.Var:gcBrand AND
                        Customer.InvGroup = InvGroup.InvGroup
             no-lock no-error.
             IF AVAIL Customer THEN DO:
@@ -653,7 +653,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
+     ELSE IF lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:
         FIND InvGroup WHERE recid(InvGroup) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invotxt.p("InvGroup",InvGroup.InvGroup).
         must-print=true.
@@ -661,15 +661,15 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
 
         FIND InvGroup where recid(InvGroup) = rtab[frame-line(sel)]
         exclusive-lock.
-        ASSIGN ufkey = TRUE Syst.CUICommon:ehto = 9.
+        ASSIGN ufkey = TRUE Syst.Var:ehto = 9.
         RUN Syst/ufkey.p.
-        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
         assign fr-header = " CHANGE ".
 
         fZoneName(InvGroup.TaxZone).
@@ -703,8 +703,8 @@ BROWSE:
                   InvGroup.Banned
            WITH FRAME lis EDITING:
            
-              READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-              IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+              READKEY. Syst.Var:nap = keylabel(LASTKEY).
+              IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
             
                  IF FRAME-FIELD = "InvForm" THEN DO:
                  END.
@@ -734,25 +734,25 @@ BROWSE:
         xrecid = recid(InvGroup).
      END.
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         run pFindFirst.
         ASSIGN memory = recid(InvGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         run pFindLast.
         ASSIGN memory = recid(InvGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

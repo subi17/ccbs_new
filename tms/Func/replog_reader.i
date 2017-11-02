@@ -174,7 +174,7 @@ FUNCTION fNagios RETURNS LOGICAL
    /* nagios URL */
    IF pcURL = "" THEN RETURN FALSE.
    FIND FIRST TMSParam WHERE
-              TMSParam.Brand      = Syst.CUICommon:gcBrand  AND
+              TMSParam.Brand      = Syst.Var:gcBrand  AND
               TMSParam.ParamGroup = "NAGIOS" AND
               TMSParam.ParamCode  = "URL"
    NO-LOCK NO-ERROR.

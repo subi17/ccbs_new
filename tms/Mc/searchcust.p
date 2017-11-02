@@ -45,7 +45,7 @@ form
     with scroll 1 5 down  row 11 centered 
     title lctitle   overlay frame sel.
 
-   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 END.
 
 DEF BUFFER xxCustomer FOR Customer.
@@ -72,7 +72,7 @@ IF icCriteria BEGINS "ORGID" OR
    END.
     
    for each customer no-lock where 
-            customer.brand = Syst.CUICommon:gcBrand and
+            customer.brand = Syst.Var:gcBrand and
             customer.orgid = icValue and
             Customer.Roles NE "inactive":
 
@@ -195,10 +195,10 @@ print-line:
 
       if ufkey then do:
          assign
-         Syst.CUICommon:ufk = 0 
-         Syst.CUICommon:ufk[4] = 5
-         Syst.CUICommon:ufk[5] = 11 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-         Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 
+         Syst.Var:ufk[4] = 5
+         Syst.Var:ufk[5] = 11 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -208,17 +208,17 @@ BROWSE:
 
          hide message no-pause.
          choose row ttCustomer.CustNum {Syst/uchoose.i} no-error with frame sel.
-         color display value(Syst.CUICommon:ccc) ttCustomer.CustNum with frame sel.
+         color display value(Syst.Var:ccc) ttCustomer.CustNum with frame sel.
 
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
-         if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+         if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find ttCustomer where recid(ttCustomer) = rtab[frame-line] no-lock.
@@ -246,7 +246,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
             find ttCustomer where recid(ttCustomer) = rtab[frame-line] no-lock .
                find next ttCustomer  WHERE no-lock no-error.
@@ -275,7 +275,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find ttCustomer where recid(ttCustomer) = memory no-lock no-error.
             find prev ttCustomer  WHERE no-lock no-error.
             if available ttCustomer then do:
@@ -297,7 +297,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -311,9 +311,9 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:  /* CustNum */
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* CustNum */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update CustNum with frame hayr.
            hide frame hayr no-pause.
            if CustNum ENTERED then do:
@@ -335,7 +335,7 @@ BROWSE:
         end. /* Seek */
 
         /* First record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first ttCustomer no-lock.
 
            memory = recid(ttCustomer).
@@ -344,7 +344,7 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last ttCustomer no-lock.
 
            memory = recid(ttCustomer).
@@ -352,7 +352,7 @@ BROWSE:
            next LOOP.
         end. /* last record */
 
-        else if Syst.CUICommon:nap = "5" or Syst.CUICommon:nap = "f5" then do:
+        else if Syst.Var:nap = "5" or Syst.Var:nap = "f5" then do:
            find ttCustomer where recid(ttCustomer) = rtab[frame-line] no-lock.
 
            oiCustNum = ttCustomer.CustNum.
@@ -360,12 +360,12 @@ BROWSE:
            leave main.
         
         end.
-        ELSE IF Syst.CUICommon:nap = "4" OR Syst.CUICommon:nap = "f4" THEN DO:
+        ELSE IF Syst.Var:nap = "4" OR Syst.Var:nap = "f4" THEN DO:
             oiCustNum = 0 .
             LEAVE main.
         END.
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

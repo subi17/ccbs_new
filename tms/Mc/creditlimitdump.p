@@ -21,7 +21,7 @@ OUTPUT STREAM sOut TO VALUE(icFile).
 
 IF icDumpMode = "Full" THEN
    FOR EACH Limit NO-LOCK WHERE
-            Limit.Brand      = Syst.CUICommon:gcBrand                 AND
+            Limit.Brand      = Syst.Var:gcBrand                 AND
             Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
             Limit.ToDate    >= TODAY:
       PUT STREAM sOut UNFORMATTED 
@@ -32,7 +32,7 @@ IF icDumpMode = "Full" THEN
    END.
 ELSE
    FOR EACH Limit NO-LOCK WHERE
-            Limit.Brand      = Syst.CUICommon:gcBrand                 AND
+            Limit.Brand      = Syst.Var:gcBrand                 AND
             Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
             Limit.FromDate   = TODAY - 1               AND
             Limit.ToDate    >= TODAY:

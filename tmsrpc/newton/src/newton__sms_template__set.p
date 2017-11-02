@@ -12,7 +12,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcReqList    AS CHARACTER NO-UNDO. 
@@ -61,7 +61,7 @@ DO TRANSACTION:
        pcSMSContent = TRIM(pcSMSContent). 
 
        FIND InvText NO-LOCK WHERE
-            InvText.Brand     = Syst.CUICommon:gcBrand AND
+            InvText.Brand     = Syst.Var:gcBrand AND
             InvText.Target    = "SMS" AND
             InvText.KeyValue  = pcKeyValue AND
             InvText.Language  = 1 AND
@@ -84,7 +84,7 @@ DO TRANSACTION:
 
        IF piLanguage > 1 THEN DO:
           FIND RepText EXCLUSIVE-LOCK WHERE
-               RepText.Brand     = Syst.CUICommon:gcBrand AND
+               RepText.Brand     = Syst.Var:gcBrand AND
                RepText.TextType  = {&REPTEXT_SMS} AND
                RepText.LinkCode  = STRING(InvText.ITNum) AND
                RepText.Language  = piLanguage AND
@@ -95,7 +95,7 @@ DO TRANSACTION:
              
              CREATE RepText.
              ASSIGN
-                RepText.Brand    = Syst.CUICommon:gcBrand
+                RepText.Brand    = Syst.Var:gcBrand
                 Reptext.Language = piLanguage
                 RepText.TextType = {&REPTEXT_SMS}
                 RepText.LinkCode = STRING(InvText.ITNum)

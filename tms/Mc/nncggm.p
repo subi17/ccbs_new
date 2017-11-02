@@ -25,7 +25,7 @@ DEF BUFFER rcust FOR Customer.
 DEF BUFFER new-cgmember FOR CGMember.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -193,7 +193,7 @@ skip
 WITH
    centered OVERLAY NO-LABEL ROW 1
    title " Gather members into customer group '" + CustGroup + "' " +
-         "(" + Syst.CUICommon:gcBrand + ") "
+         "(" + Syst.Var:gcBrand + ") "
    FRAME rajat.
 
 form
@@ -216,7 +216,7 @@ llEMail = FALSE.
 PAUSE 0.
 
 FIND FIRST custgroup WHERE
-           CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+           CustGroup.Brand     = Syst.Var:gcBrand AND
            custgroup.custgroup = custgroup
 EXCLUSIVE-LOCK NO-ERROR.           
 
@@ -287,22 +287,22 @@ with frame rajat.
 pause 0.
 
 FIND custgroup where  
-     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+     CustGroup.Brand     = Syst.Var:gcBrand AND
      custgroup.custgroup = xcustgroup   NO-LOCK NO-ERROR.
 FIND CustCat where
-     CustCat.Brand    = Syst.CUICommon:gcBrand AND
+     CustCat.Brand    = Syst.Var:gcBrand AND
      CustCat.Category = Category     NO-LOCK NO-ERROR.
 FIND PriceList where 
-     PriceList.Brand     = Syst.CUICommon:gcBrand AND
+     PriceList.Brand     = Syst.Var:gcBrand AND
      PriceList.PriceList = Pricelist    NO-LOCK NO-ERROR.
 FIND invgroup where 
-     InvGroup.Brand     = Syst.CUICommon:gcBrand AND
+     InvGroup.Brand     = Syst.Var:gcBrand AND
      InvGroup.InvGroup  = invgroup     NO-LOCK NO-ERROR.
 FIND salesman where 
-     Salesman.Brand     = Syst.CUICommon:gcBrand AND
+     Salesman.Brand     = Syst.Var:gcBrand AND
      Salesman.SalesMan  = salesman     NO-LOCK NO-ERROR.
 FIND Reseller where
-     Reseller.Brand    = Syst.CUICommon:gcBrand AND
+     Reseller.Brand    = Syst.Var:gcBrand AND
      Reseller.reseller = reseller     NO-LOCK NO-ERROR.
 FIND rcust where rcust.CustNum         = rd-cust-nr   NO-LOCK NO-ERROR.
 
@@ -328,7 +328,7 @@ with frame rajat.
 
 rajat:
 repeat WITH FRAME rajat:
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 IF updatemode  THEN
    UPDATE
@@ -341,7 +341,7 @@ IF updatemode  THEN
    lleMail 
    WITH FRAME rajat EDITING:
       READKEY.
-      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME rajat:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME rajat:
          HIDE MESSAGE.
 
 
@@ -350,7 +350,7 @@ IF updatemode  THEN
               "ALL CUSTOMERS" @ CustGroup.CGName.
             ELSE DO:
                FIND CustGroup where 
-                    CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+                    CustGroup.Brand     = Syst.Var:gcBrand AND
                     CustGroup.CustGroup = INPUT xCustGroup
                no-lock no-error.
                IF NOT AVAIL CustGroup THEN DO:
@@ -369,7 +369,7 @@ IF updatemode  THEN
             if input Category = "" then disp "ALL" @ CustCat.CatName.
             ELSE DO:
                FIND CustCat where 
-                    CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                    CustCat.Brand    = Syst.Var:gcBrand AND
                     CustCat.Category = INPUT Category 
                no-lock no-error.
                IF NOT AVAIL CustCat THEN DO:
@@ -383,7 +383,7 @@ IF updatemode  THEN
             if input InvGroup = "" then disp "ALL" @ InvGroup.Igname.
             ELSE DO:                        
                FIND InvGroup where 
-                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                    InvGroup.Brand    = Syst.Var:gcBrand AND
                     InvGroup.InvGroup = INPUT InvGroup
                no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -397,7 +397,7 @@ IF updatemode  THEN
             if input PriceList = "" then disp "ALL" @ PriceList.PLName.
             ELSE DO:
                FIND PriceList where 
-                    PriceList.Brand     = Syst.CUICommon:gcBrand AND
+                    PriceList.Brand     = Syst.Var:gcBrand AND
                     PriceList.PriceList = INPUT PriceList no-lock no-error.
                IF NOT AVAIL PriceList THEN DO:
                   bell. message "UNKNOWN !". NEXT.
@@ -422,7 +422,7 @@ IF updatemode  THEN
             if input Salesman = "" then disp "ALL" @ Salesman.SmName.
             ELSE DO:
                FIND Salesman where 
-                    Salesman.Brand     = Syst.CUICommon:gcBrand AND
+                    Salesman.Brand     = Syst.Var:gcBrand AND
                     Salesman.SalesMan = INPUT Salesman
                no-lock no-error.
                IF NOT AVAIL Salesman THEN DO:
@@ -436,7 +436,7 @@ IF updatemode  THEN
             if input Reseller = "" then disp "ALL" @ Reseller.rsName.
             ELSE DO:
                FIND Reseller where 
-                    Reseller.Brand    = Syst.CUICommon:gcBrand AND
+                    Reseller.Brand    = Syst.Var:gcBrand AND
                     Reseller.reseller = INPUT Reseller
                no-lock no-error.
                IF NOT AVAIL Reseller THEN DO:
@@ -471,7 +471,7 @@ IF updatemode  THEN
 
                IF lcCheck NE "Fixed" AND
                   NOT CAN-FIND(CLIType WHERE 
-                               CLIType.Brand   = Syst.CUICommon:gcBrand AND
+                               CLIType.Brand   = Syst.Var:gcBrand AND
                                CLIType.CLIType = lcCheck)
                THEN DO:
                   liCount = 99.
@@ -496,15 +496,15 @@ toimi:
    repeat WITH FRAME toimi:
       PAUSE 0.
       ASSIGN
-      Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk = 0
-      Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ehto = 0 Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 15 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
           updatemode = TRUE.
           NEXT rajat.
       END.    
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are You SURE You want to gather those customers (Y/N) ?"
          UPDATE ok.
@@ -527,11 +527,11 @@ toimi:
    /* seek Customers AND accept those matching WITH given parameters */
    if xCustGroup ne "" THEN DO:
       FIND FIRST CGMember where 
-                 CGMember.Brand     = Syst.CUICommon:gcBrand AND
+                 CGMember.Brand     = Syst.Var:gcBrand AND
                  CGMember.CustGroup = xCustGroup no-lock no-error.
       FIND Customer WHERE Customer.CustNum = CGMember.CustNum no-lock no-error.
    END.
-   ELSE FIND FIRST Customer WHERE Customer.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+   ELSE FIND FIRST Customer WHERE Customer.Brand = Syst.Var:gcBrand no-lock no-error.
 
 
 
@@ -718,7 +718,7 @@ Customer:
 
       if xCustGroup ne "" THEN DO:
          FIND NEXT CGMember where 
-                   CGMember.Brand     = Syst.CUICommon:gcBrand AND
+                   CGMember.Brand     = Syst.Var:gcBrand AND
                    CGMember.CustGroup = xCustGroup
          no-lock no-error.
          IF NOT AVAIL CGMember THEN LEAVE Customer.
@@ -727,7 +727,7 @@ Customer:
               Customer.CustNum =  CGMember.CustNum no-lock no-error.
       END.
       ELSE FIND NEXT Customer WHERE 
-         Customer.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+         Customer.Brand = Syst.Var:gcBrand no-lock no-error.
 
    END. /* Customer */
    PAUSE 0.
@@ -742,7 +742,7 @@ Customer:
    MESSAGE "Do You Want to Save Used Criteria?" update ok.    
    IF OK THEN DO:
       Find FIRST CustGroup WHERE
-                 CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+                 CustGroup.Brand     = Syst.Var:gcBrand AND
                  CustGroup.CustGroup = CustGroup
       EXCLUSIVE-LOCK No-ERROR.
 

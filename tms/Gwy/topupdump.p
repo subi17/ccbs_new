@@ -9,8 +9,8 @@
    --------------------------------------------------- */               
                                                                 
 {Syst/commpaa.i} 
-Syst.CUICommon:katun = "cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/eventlog.i}
 {Func/cparam2.i}
@@ -58,7 +58,7 @@ OUTPUT STREAM excel TO VALUE(lcspooldir + lcfilename).
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
 FOR EACH PrepaidRequest NO-LOCK WHERE
-         PrepaidRequest.Brand = Syst.CUICommon:gcBrand AND
+         PrepaidRequest.Brand = Syst.Var:gcBrand AND
          PrepaidRequest.TSRequest > Func.Common:mMake2DT(TODAY - 1,1800) AND
          PrepaidRequest.TSRequest < Func.Common:mMake2DT(TODAY, 1799):
    

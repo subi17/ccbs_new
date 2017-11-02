@@ -31,7 +31,7 @@ IF NOT AVAILABLE bOrigRequest THEN RETURN "ERROR:Unknown request".
 lhRequest = BUFFER bOrigRequest:HANDLE.
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = Syst.CUICommon:gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 

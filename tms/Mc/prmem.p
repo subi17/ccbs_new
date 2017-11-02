@@ -39,7 +39,7 @@ DEF VAR db-name   AS C  NO-UNDO.
 /* Line Feed Char used as line separator in MemoText field */
 LF = chr(10).
 
-FIND FIRST memo WHERE memo.Brand     = Syst.CUICommon:gcBrand   AND
+FIND FIRST memo WHERE memo.Brand     = Syst.Var:gcBrand   AND
                       memo.HostTable = HostTable AND
                       memo.KeyValue  = KeyValue  AND 
                       memo.MemoSeq   = MemoSeq NO-LOCK NO-ERROR.
@@ -50,7 +50,7 @@ ASSIGN tuni1 = "memo"
 {Syst/tmsreport.i RETURN}
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 FORM HEADER                                                 
    FILL ("=",78) FORMAT "x(78)"                                          SKIP

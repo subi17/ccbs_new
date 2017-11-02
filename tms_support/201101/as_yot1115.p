@@ -9,8 +9,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -26,7 +26,7 @@ disp order.statuscode mnpprocess.statuscode order.mnpstatus.
          
 /* Cancel pending SMS messages */
 FOR EACH CallAlarm WHERE
-         CallAlarm.Brand = Syst.CUICommon:gcBrand AND
+         CallAlarm.Brand = Syst.Var:gcBrand AND
          CallAlarm.CLI = Order.CLI AND
          CallAlarm.DeliStat = 1 AND
          CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:

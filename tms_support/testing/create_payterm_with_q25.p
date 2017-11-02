@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 DEF VAR lccli AS CHAR NO-UNDO format "x(10)".
@@ -46,16 +46,16 @@ PROCEDURE pUserInput:
       WITH FRAME lis EDITING:
 
          IF ufkey THEN DO:
-            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
 
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
 
-         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcCli" THEN DO:
                FIND FIRST mobsub WHERE
@@ -70,7 +70,7 @@ PROCEDURE pUserInput:
 
             IF FRAME-FIELD = "lcPayterm" THEN DO:
                FIND FIRST DayCampaign WHERE
-                          DayCampaign.Brand = Syst.CUICommon:gcBrand and
+                          DayCampaign.Brand = Syst.Var:gcBrand and
                           DayCampaign.DcEvent begins "PAYTERM" and
                           DayCampaign.DcEvent eq INPUT lcPayterm
                NO-LOCK NO-ERROR.

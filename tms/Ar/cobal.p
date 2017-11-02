@@ -18,7 +18,7 @@
 {Func/fcpfat.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFatime AS HANDLE NO-UNDO.
@@ -49,7 +49,7 @@ liFromPer = YEAR(TODAY) * 100 + MONTH(TODAY).
 
 /* unpaid commission events */
 FOR EACH CoEvent NO-LOCK WHERE
-         CoEvent.Brand     = Syst.CUICommon:gcBrand  AND
+         CoEvent.Brand     = Syst.Var:gcBrand  AND
          CoEvent.CalcDate >= idtDate1 AND
          CoEvent.CalcDate <= idtDate2 AND
          CoEvent.PaymDate  = ?,

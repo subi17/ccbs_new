@@ -22,7 +22,7 @@ FUNCTION fManualPaymentRequest RETURNS INTEGER
 
    /* another request already pending */
    IF CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
-                     MsRequest.Brand      = Syst.CUICommon:gcBrand           AND
+                     MsRequest.Brand      = Syst.Var:gcBrand           AND
                      MsRequest.ReqType    = 34                AND
                      MsRequest.CustNum    = Customer.CustNum  AND
                      LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") > 0)

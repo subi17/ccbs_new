@@ -10,8 +10,8 @@
 {Syst/commpaa.i}
 
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1" 
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1" 
+   Syst.Var:katun   = "Cron".
        
 {Syst/eventlog.i}
 
@@ -33,7 +33,7 @@ ttStatus.RunState = "Running".
 
 FOR EACH ttStatus,
     EACH FuncRunExec NO-LOCK WHERE
-         FuncRunExec.Brand    = Syst.CUICommon:gcBrand AND
+         FuncRunExec.Brand    = Syst.Var:gcBrand AND
          FuncRunExec.RunState = ttStatus.RunState
 BY FuncRunExec.FRExecID:
 
@@ -49,12 +49,12 @@ BY FuncRunExec.FRExecID:
       IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
          CREATE ErrorLog.
          ASSIGN 
-            ErrorLog.Brand     = Syst.CUICommon:gcBrand
+            ErrorLog.Brand     = Syst.Var:gcBrand
             ErrorLog.ActionID  = "FREXECRUN" + STRING(FuncRunExec.FRExecID)
             ErrorLog.TableName = "FuncRunExec"
             ErrorLog.KeyValue  = STRING(FuncRunExec.FRExecID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
-            ErrorLog.UserCode  = Syst.CUICommon:katun.
+            ErrorLog.UserCode  = Syst.Var:katun.
             ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 
