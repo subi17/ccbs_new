@@ -136,9 +136,10 @@ PROCEDURE pUpdateStatus:
             fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TV_STB_VENDOR}, {&STATUS_ERROR}).
 
         ASSIGN 
-            TPService.SkyTvVoucher   = ttCustomer.Voucher    
-            TPService.ResponseCode   = ttCustomer.StatusCode
-            TPService.AdditionalInfo = ttCustomer.Description.    
+            TPService.SkyTvVoucher    = ttCustomer.Voucher 
+            TPService.VoucherActiveDt = TODAY   
+            TPService.ResponseCode    = ttCustomer.StatusCode
+            TPService.AdditionalInfo  = ttCustomer.Description.    
     END.
     OUTPUT CLOSE.
     RELEASE TPService.
