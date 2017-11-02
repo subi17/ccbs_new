@@ -284,6 +284,7 @@ REPEAT WITH FRAME sel:
              TPService.Product
              TPService.Offer
              TPService.SerialNbr
+             TPService.SkyTvVoucher
              lcVoucherStatus
              TPService.MessageId
              TPService.ServStatus
