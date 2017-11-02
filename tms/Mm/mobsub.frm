@@ -58,7 +58,7 @@ lcInPortTime FORMAT "x(40)"
 "Salesman......:" AT 46 Mobsub.SalesMan FORMAT "x(15)"
 SKIP(1)
 WITH  OVERLAY ROW 1 centered SIDE-LABELS
-TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
  "  MOBILE SUBSCRIPTION  "
  + string(TODAY,"99-99-99") + " "
  NO-LABELS 
@@ -75,12 +75,12 @@ SKIP(1)
 "      Service Profile Code:"  def-sp-code NO-LABEL
  HELP "Press F9 for help"
  validate(CAN-FIND(FIRST servpac where
-                         servpac.Brand = Syst.CUICommon:gcBrand AND 
+                         servpac.Brand = Syst.Var:gcBrand AND 
           servpac.servpac = def-sp-code),"Unknown service profile")
                    servpac.spname                                       SKIP
  
- WITH OVERLAY CENTERED row 5  TITLE COLOR VALUE(Syst.CUICommon:ctc) " SERVICE PROFILE "
- COLOR VALUE(Syst.CUICommon:cfc) NO-labels  FRAME profi.
+ WITH OVERLAY CENTERED row 5  TITLE COLOR VALUE(Syst.Var:ctc) " SERVICE PROFILE "
+ COLOR VALUE(Syst.Var:cfc) NO-labels  FRAME profi.
  
  
 FORM
